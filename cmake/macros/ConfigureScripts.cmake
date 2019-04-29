@@ -25,7 +25,7 @@ endfunction()
 
 # Returns the base path to the script directory in the source directory
 function(GetScriptsBasePath variable)
-  set(${variable} "${CMAKE_SOURCE_DIR}/src/scripts" PARENT_SCOPE)
+  set(${variable} "${CMAKE_SOURCE_DIR}/src/server/scripts" PARENT_SCOPE)
 endfunction()
 
 # Stores the absolut path of the given module in the variable
