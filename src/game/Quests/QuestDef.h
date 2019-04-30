@@ -323,7 +323,7 @@ class TC_GAME_API Quest
 
         std::vector<uint32> DependentPreviousQuests;
         std::vector<uint32> DependentBreadcrumbQuests;
-        WorldPacket QueryData[TOTAL_LOCALES];
+        WorldPacket QueryData[MAX_LOCALE];
 
         // cached data
     private:

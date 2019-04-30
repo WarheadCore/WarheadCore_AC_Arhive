@@ -91,7 +91,7 @@ enum LocaleConstant : uint8
     LOCALE_esMX = 7,
     LOCALE_ruRU = 8,
 
-    TOTAL_LOCALES
+    MAX_LOCALE
 };
 
 #define DEFAULT_LOCALE LOCALE_enUS
@@ -99,7 +99,7 @@ enum LocaleConstant : uint8
 #define MAX_LOCALES 8
 #define MAX_ACCOUNT_TUTORIAL_VALUES 8
 
-TC_COMMON_API extern char const* localeNames[TOTAL_LOCALES];
+TC_COMMON_API extern char const* localeNames[MAX_LOCALE];
 
 TC_COMMON_API LocaleConstant GetLocaleByName(std::string const& name);
 

@@ -687,7 +687,7 @@ struct ItemTemplate
     uint32 MinMoneyLoot;
     uint32 MaxMoneyLoot;
     uint32 FlagsCu;
-    WorldPacket QueryData[TOTAL_LOCALES];
+    WorldPacket QueryData[MAX_LOCALE];
 
     // helpers
     bool CanChangeEquipStateInCombat() const;

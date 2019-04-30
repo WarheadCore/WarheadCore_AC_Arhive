@@ -46,7 +46,7 @@
 
 void GameObjectTemplate::InitializeQueryData()
 {
-    for (uint8 loc = LOCALE_enUS; loc < TOTAL_LOCALES; ++loc)
+    for (uint8 loc = LOCALE_enUS; loc < MAX_LOCALE; ++loc)
         QueryData[loc] = BuildQueryData(static_cast<LocaleConstant>(loc));
 }
 

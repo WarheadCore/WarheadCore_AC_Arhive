@@ -300,7 +300,7 @@ struct AccountInfo
         if (Expansion > world_expansion)
             Expansion = world_expansion;
 
-        if (Locale >= TOTAL_LOCALES)
+        if (Locale >= MAX_LOCALE)
             Locale = LOCALE_enUS;
     }
 };

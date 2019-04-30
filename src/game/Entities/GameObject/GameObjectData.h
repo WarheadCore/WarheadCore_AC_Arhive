@@ -418,7 +418,7 @@ struct GameObjectTemplate
 
     std::string AIName;
     uint32 ScriptId;
-    WorldPacket QueryData[TOTAL_LOCALES];
+    WorldPacket QueryData[MAX_LOCALE];
 
     // helpers
     bool IsDespawnAtAction() const

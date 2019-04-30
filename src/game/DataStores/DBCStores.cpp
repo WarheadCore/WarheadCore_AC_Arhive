@@ -135,7 +135,7 @@ DBCStorage <MovieEntry> sMovieStore(MovieEntryfmt);
 
 DBCStorage<NamesProfanityEntry> sNamesProfanityStore(NamesProfanityEntryfmt);
 DBCStorage<NamesReservedEntry> sNamesReservedStore(NamesReservedEntryfmt);
-typedef std::array<std::vector<Trinity::wregex>, TOTAL_LOCALES> NameValidationRegexContainer;
+typedef std::array<std::vector<Trinity::wregex>, MAX_LOCALE> NameValidationRegexContainer;
 NameValidationRegexContainer NamesProfaneValidators;
 NameValidationRegexContainer NamesReservedValidators;
 
@@ -233,7 +233,7 @@ inline void LoadDBC(uint32& availableDbcLocales, StoreProblemList& errors, DBCSt
 
     if (storage.Load(dbcFilename.c_str()))
     {
-        for (uint8 i = 0; i < TOTAL_LOCALES; ++i)
+        for (uint8 i = 0; i < MAX_LOCALE; ++i)
         {
             if (!(availableDbcLocales & (1 << i)))
                 continue;
@@ -440,7 +440,7 @@ void LoadDBCStores(const std::string& dataPath)
 
     for (NamesProfanityEntry const* namesProfanity : sNamesProfanityStore)
     {
-        ASSERT(namesProfanity->Language < TOTAL_LOCALES || namesProfanity->Language == -1);
+        ASSERT(namesProfanity->Language < MAX_LOCALE || namesProfanity->Language == -1);
         std::wstring wname;
         bool conversionResult = Utf8toWStr(namesProfanity->Name, wname);
         ASSERT(conversionResult);
@@ -448,13 +448,13 @@ void LoadDBCStores(const std::string& dataPath)
         if (namesProfanity->Language != -1)
             NamesProfaneValidators[namesProfanity->Language].emplace_back(wname, Trinity::regex::perl | Trinity::regex::icase | Trinity::regex::optimize);
         else
-            for (uint32 i = 0; i < TOTAL_LOCALES; ++i)
+            for (uint32 i = 0; i < MAX_LOCALE; ++i)
                 NamesProfaneValidators[i].emplace_back(wname, Trinity::regex::perl | Trinity::regex::icase | Trinity::regex::optimize);
     }
 
     for (NamesReservedEntry const* namesReserved : sNamesReservedStore)
     {
-        ASSERT(namesReserved->Language < TOTAL_LOCALES || namesReserved->Language == -1);
+        ASSERT(namesReserved->Language < MAX_LOCALE || namesReserved->Language == -1);
         std::wstring wname;
         bool conversionResult = Utf8toWStr(namesReserved->Name, wname);
         ASSERT(conversionResult);
@@ -462,7 +462,7 @@ void LoadDBCStores(const std::string& dataPath)
         if (namesReserved->Language != -1)
             NamesReservedValidators[namesReserved->Language].emplace_back(wname, Trinity::regex::perl | Trinity::regex::icase | Trinity::regex::optimize);
         else
-            for (uint32 i = 0; i < TOTAL_LOCALES; ++i)
+            for (uint32 i = 0; i < MAX_LOCALE; ++i)
                 NamesReservedValidators[i].emplace_back(wname, Trinity::regex::perl | Trinity::regex::icase | Trinity::regex::optimize);
     }
 
@@ -945,14 +945,14 @@ SkillRaceClassInfoEntry const* GetSkillRaceClassInfo(uint32 skill, uint8 race, u
 
 ResponseCodes ValidateName(std::wstring const& name, LocaleConstant locale)
 {
-    if (locale >= TOTAL_LOCALES)
+    if (locale >= MAX_LOCALE)
         return RESPONSE_FAILURE;
 
     for (Trinity::wregex const& regex : NamesProfaneValidators[locale])
         if (Trinity::regex_search(name, regex))
             return CHAR_NAME_PROFANE;
 
-    // regexes at TOTAL_LOCALES are loaded from NamesReserved which is not locale specific
+    // regexes at MAX_LOCALE are loaded from NamesReserved which is not locale specific
     for (Trinity::wregex const& regex : NamesReservedValidators[locale])
         if (Trinity::regex_search(name, regex))
             return CHAR_NAME_RESERVED;

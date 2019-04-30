@@ -31,7 +31,7 @@ class CreatureTextLocalizer
 public:
     CreatureTextLocalizer(Builder const& builder, ChatMsg msgType) : _builder(builder), _msgType(msgType)
     {
-        _packetCache.resize(TOTAL_LOCALES, nullptr);
+        _packetCache.resize(MAX_LOCALE, nullptr);
     }
 
     ~CreatureTextLocalizer()

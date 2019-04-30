@@ -89,7 +89,7 @@ namespace Trainer
         Type _type;
         uint32 _requirement;
         std::vector<Spell> _spells;
-        std::array<std::string, TOTAL_LOCALES> _greeting;
+        std::array<std::string, MAX_LOCALE> _greeting;
     };
 }
 

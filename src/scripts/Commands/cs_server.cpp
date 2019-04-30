@@ -222,7 +222,7 @@ public:
         LocaleConstant defaultLocale = sWorld->GetDefaultDbcLocale();
         uint32 availableLocalesMask = (1 << defaultLocale);
 
-        for (uint8 i = 0; i < TOTAL_LOCALES; ++i)
+        for (uint8 i = 0; i < MAX_LOCALE; ++i)
         {
             LocaleConstant locale = static_cast<LocaleConstant>(i);
             if (locale == defaultLocale)
@@ -233,13 +233,13 @@ public:
         }
 
         std::string availableLocales;
-        for (uint8 i = 0; i < TOTAL_LOCALES; ++i)
+        for (uint8 i = 0; i < MAX_LOCALE; ++i)
         {
             if (!(availableLocalesMask & (1 << i)))
                 continue;
 
             availableLocales += localeNames[i];
-            if (i != TOTAL_LOCALES - 1)
+            if (i != MAX_LOCALE - 1)
                 availableLocales += " ";
         }
 

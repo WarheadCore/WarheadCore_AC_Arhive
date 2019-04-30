@@ -105,7 +105,7 @@ struct LinkValidator<LinkTags::achievement>
     {
         if (!len)
             return false;
-        for (uint8 i = 0; i < TOTAL_LOCALES; ++i)
+        for (uint8 i = 0; i < MAX_LOCALE; ++i)
             if (equal_with_len(data.Achievement->Title[i], pos, len))
                 return true;
         return false;
@@ -140,7 +140,7 @@ struct LinkValidator<LinkTags::item>
                 return false;
         }
 
-        for (uint8 i = 0; i < TOTAL_LOCALES; ++i)
+        for (uint8 i = 0; i < MAX_LOCALE; ++i)
         {
             if (!locale && i != DEFAULT_LOCALE)
                 continue;
@@ -176,7 +176,7 @@ struct LinkValidator<LinkTags::quest>
         if (!locale)
             return equal_with_len(data.Quest->GetTitle().c_str(), pos, len);
 
-        for (uint8 i = 0; i < TOTAL_LOCALES; ++i)
+        for (uint8 i = 0; i < MAX_LOCALE; ++i)
         {
             std::string const& name = (i == DEFAULT_LOCALE) ? data.Quest->GetTitle() : locale->Title[i];
             if (name.empty())
@@ -202,7 +202,7 @@ struct LinkValidator<LinkTags::spell>
 {
     static bool IsTextValid(SpellInfo const* info, char const* pos, size_t len)
     {
-        for (uint8 i = 0; i < TOTAL_LOCALES; ++i)
+        for (uint8 i = 0; i < MAX_LOCALE; ++i)
             if (equal_with_len(info->SpellName[i], pos, len))
                 return true;
         return false;
@@ -231,7 +231,7 @@ struct LinkValidator<LinkTags::enchant>
             if (!skill)
                 return false;
 
-            for (uint8 i = 0; i < TOTAL_LOCALES; ++i)
+            for (uint8 i = 0; i < MAX_LOCALE; ++i)
             {
                 char const* skillName = skill->name[i];
                 size_t skillLen = strlen(skillName);
