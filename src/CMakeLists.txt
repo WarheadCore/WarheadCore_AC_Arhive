@@ -18,10 +18,10 @@ if(WIN32)
     ${CMAKE_SOURCE_DIR}/src/common/Debugging/WheatyExceptionReport.h
   )
 
-  list(APPEND sources_windows
+  set(sources_windows_service
     ${CMAKE_SOURCE_DIR}/src/common/Platform/ServiceWin32.cpp
     ${CMAKE_SOURCE_DIR}/src/common/Platform/ServiceWin32.h
-  )
+  )  
 endif(WIN32)
 
 add_subdirectory(authserver)
