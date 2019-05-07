@@ -27,8 +27,7 @@ services:
   - mysql
 
 before_install:
-  - git config user.email "travis@build.bot" && git config user.name "Travis CI"
-  - git tag -a -m "Travis build" init
+  - source ./ci/ci-webhook.sh progress $WEBHOOK_URL
 
 install:
   - mysql -uroot -e 'create database test_mysql;'
@@ -53,3 +52,9 @@ script:
   - cd check_install/bin
   - ./authserver --version
   - ./worldserver --version
+
+after_success:
+  - source ./ci/ci-webhook.sh success $WEBHOOK_URL
+
+after_failure:
+  - source ./ci/ci-webhook.sh failure $WEBHOOK_URL
