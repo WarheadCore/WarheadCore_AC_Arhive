@@ -16,13 +16,6 @@ endif()
 message("")
 
 # Show infomation about the options selected during configuration
-
-if( SERVERS )
-  message("* Build world/auth       : Yes (default)")
-else()
-  message("* Build world/authserver : No")
-endif()
-
 if(SCRIPTS AND (NOT SCRIPTS STREQUAL "none"))
   message("* Build with scripts     : Yes (${SCRIPTS})")
 else()
