@@ -200,7 +200,7 @@ class spell_mother_shahraz_fatal_attraction : public SpellScript
 
     void FilterTargets(std::list<WorldObject*>& targets)
     {
-        targets.remove_if(Trinity::UnitAuraCheck(true, SPELL_SABER_LASH_IMMUNITY));
+        targets.remove_if(Warhead::UnitAuraCheck(true, SPELL_SABER_LASH_IMMUNITY));
     }
 
     void SetDest(SpellDestination& dest)

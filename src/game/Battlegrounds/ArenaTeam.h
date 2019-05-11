@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITYCORE_ARENATEAM_H
-#define TRINITYCORE_ARENATEAM_H
+#ifndef WARHEADCORE_ARENATEAM_H
+#define WARHEADCORE_ARENATEAM_H
 
 #include "QueryResult.h"
 #include "ObjectGuid.h"
@@ -85,7 +85,7 @@ enum ArenaTeamTypes
     ARENA_TEAM_5v5      = 5
 };
 
-struct TC_GAME_API ArenaTeamMember
+struct WC_GAME_API ArenaTeamMember
 {
     ObjectGuid Guid;
     std::string Name;
@@ -113,7 +113,7 @@ struct ArenaTeamStats
 
 #define MAX_ARENA_SLOT 3                                    // 0..2 slots
 
-class TC_GAME_API ArenaTeam
+class WC_GAME_API ArenaTeam
 {
     public:
         ArenaTeam();

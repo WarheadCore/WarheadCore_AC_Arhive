@@ -36,7 +36,7 @@ class NodeCreatorFunc = NodeCreator<Node>,
 class BoundsFunc = BoundsTrait<T>,
 class PositionFunc = PositionTrait<T>
 >
-class TC_COMMON_API RegularGrid2D
+class WC_COMMON_API RegularGrid2D
 {
 public:
 
@@ -83,7 +83,7 @@ public:
 
     void remove(const T& value)
     {
-        for (auto& p : Trinity::Containers::MapEqualRange(memberTable, &value))
+        for (auto& p : Warhead::Containers::MapEqualRange(memberTable, &value))
             p.second->remove(value);
         // Remove the member
         memberTable.erase(&value);

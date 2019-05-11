@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITYCORE_GUILD_H
-#define TRINITYCORE_GUILD_H
+#ifndef WARHEADCORE_GUILD_H
+#define WARHEADCORE_GUILD_H
 
 #include "DatabaseEnvFwd.h"
 #include "ObjectGuid.h"
@@ -212,7 +212,7 @@ enum GuildMemberFlags
 };
 
 // Emblem info
-class TC_GAME_API EmblemInfo
+class WC_GAME_API EmblemInfo
 {
     public:
         EmblemInfo() : m_style(0), m_color(0), m_borderStyle(0), m_borderColor(0), m_backgroundColor(0) { }
@@ -268,7 +268,7 @@ typedef std::vector <GuildBankRightsAndSlots> GuildBankRightsAndSlotsVec;
 
 typedef std::set <uint8> SlotIds;
 
-class TC_GAME_API Guild
+class WC_GAME_API Guild
 {
     private:
         // Class representing guild member

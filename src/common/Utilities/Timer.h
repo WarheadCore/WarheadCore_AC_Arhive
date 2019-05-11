@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_TIMER_H
-#define TRINITY_TIMER_H
+#ifndef WARHEAD_TIMER_H
+#define WARHEAD_TIMER_H
 
 #include "Define.h"
 #include <chrono>

@@ -3,7 +3,7 @@ Copyright (C) 2008-2019 TrinityCore (https://www.trinitycore.org/)
 
 =========================================================
 WARNING: THIS DOCUMENTATION IS NOT ALWAYS UP TO DATE.
-FOR MORE UP-TO-DATE INFORMATION, CHECK THE TRINITY WIKI.
+FOR MORE UP-TO-DATE INFORMATION, CHECK THE WARHEAD WIKI.
 =========================================================
 
 CHECK https://www.trinitycore.info/ FOR FURTHER HELP.

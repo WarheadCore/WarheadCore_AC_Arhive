@@ -205,7 +205,7 @@ struct boss_reliquary_of_souls : public BossAI
             return;
 
         //Get random creatures
-        Trinity::Containers::RandomShuffle(_worldTriggerList);
+        Warhead::Containers::RandomShuffle(_worldTriggerList);
         _worldTriggerList.resize(21);
 
         for (uint8 i = 0; i < 21; i++)

@@ -166,7 +166,7 @@ public:
         if (!*args)
             return false;
 
-        sWorld->SendServerMessage(SERVER_MSG_STRING, Trinity::StringFormat(handler->GetTrinityString(LANG_SYSTEMMESSAGE), args).c_str());
+        sWorld->SendServerMessage(SERVER_MSG_STRING, Warhead::StringFormat(handler->GetTrinityString(LANG_SYSTEMMESSAGE), args).c_str());
         return true;
     }
     // announce to logged in GMs

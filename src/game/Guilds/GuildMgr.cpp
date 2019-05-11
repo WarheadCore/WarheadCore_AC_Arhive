@@ -45,7 +45,7 @@ ObjectGuid::LowType GuildMgr::GenerateGuildId()
 {
     if (NextGuildId >= 0xFFFFFFFE)
     {
-        TC_LOG_ERROR("guild", "Guild ids overflow!! Can't continue, shutting down server. ");
+        WC_LOG_ERROR("guild", "Guild ids overflow!! Can't continue, shutting down server. ");
         World::StopNow(ERROR_EXIT_CODE);
     }
     return NextGuildId++;
@@ -101,7 +101,7 @@ Guild* GuildMgr::GetGuildByLeader(ObjectGuid guid) const
 void GuildMgr::LoadGuilds()
 {
     // 1. Load all guilds
-    TC_LOG_INFO("server.loading", "Loading guilds definitions...");
+    WC_LOG_INFO("server.loading", "Loading guilds definitions...");
     {
         uint32 oldMSTime = getMSTime();
 
@@ -113,7 +113,7 @@ void GuildMgr::LoadGuilds()
 
         if (!result)
         {
-            TC_LOG_INFO("server.loading", ">> Loaded 0 guild definitions. DB table `guild` is empty.");
+            WC_LOG_INFO("server.loading", ">> Loaded 0 guild definitions. DB table `guild` is empty.");
             return;
         }
         else
@@ -136,12 +136,12 @@ void GuildMgr::LoadGuilds()
             }
             while (result->NextRow());
 
-            TC_LOG_INFO("server.loading", ">> Loaded %u guild definitions in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+            WC_LOG_INFO("server.loading", ">> Loaded %u guild definitions in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
         }
     }
 
     // 2. Load all guild ranks
-    TC_LOG_INFO("server.loading", "Loading guild ranks...");
+    WC_LOG_INFO("server.loading", "Loading guild ranks...");
     {
         uint32 oldMSTime = getMSTime();
 
@@ -153,7 +153,7 @@ void GuildMgr::LoadGuilds()
 
         if (!result)
         {
-            TC_LOG_INFO("server.loading", ">> Loaded 0 guild ranks. DB table `guild_rank` is empty.");
+            WC_LOG_INFO("server.loading", ">> Loaded 0 guild ranks. DB table `guild_rank` is empty.");
         }
         else
         {
@@ -170,12 +170,12 @@ void GuildMgr::LoadGuilds()
             }
             while (result->NextRow());
 
-            TC_LOG_INFO("server.loading", ">> Loaded %u guild ranks in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+            WC_LOG_INFO("server.loading", ">> Loaded %u guild ranks in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
         }
     }
 
     // 3. Load all guild members
-    TC_LOG_INFO("server.loading", "Loading guild members...");
+    WC_LOG_INFO("server.loading", "Loading guild members...");
     {
         uint32 oldMSTime = getMSTime();
 
@@ -192,7 +192,7 @@ void GuildMgr::LoadGuilds()
                                                      "LEFT JOIN characters c ON c.guid = gm.guid ORDER BY guildid ASC");
 
         if (!result)
-            TC_LOG_INFO("server.loading", ">> Loaded 0 guild members. DB table `guild_member` is empty.");
+            WC_LOG_INFO("server.loading", ">> Loaded 0 guild members. DB table `guild_member` is empty.");
         else
         {
             uint32 count = 0;
@@ -209,12 +209,12 @@ void GuildMgr::LoadGuilds()
             }
             while (result->NextRow());
 
-            TC_LOG_INFO("server.loading", ">> Loaded %u guild members in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+            WC_LOG_INFO("server.loading", ">> Loaded %u guild members in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
         }
     }
 
     // 4. Load all guild bank tab rights
-    TC_LOG_INFO("server.loading", "Loading bank tab rights...");
+    WC_LOG_INFO("server.loading", "Loading bank tab rights...");
     {
         uint32 oldMSTime = getMSTime();
 
@@ -226,7 +226,7 @@ void GuildMgr::LoadGuilds()
 
         if (!result)
         {
-            TC_LOG_INFO("server.loading", ">> Loaded 0 guild bank tab rights. DB table `guild_bank_right` is empty.");
+            WC_LOG_INFO("server.loading", ">> Loaded 0 guild bank tab rights. DB table `guild_bank_right` is empty.");
         }
         else
         {
@@ -243,12 +243,12 @@ void GuildMgr::LoadGuilds()
             }
             while (result->NextRow());
 
-            TC_LOG_INFO("server.loading", ">> Loaded %u bank tab rights in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+            WC_LOG_INFO("server.loading", ">> Loaded %u bank tab rights in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
         }
     }
 
     // 5. Load all event logs
-    TC_LOG_INFO("server.loading", "Loading guild event logs...");
+    WC_LOG_INFO("server.loading", "Loading guild event logs...");
     {
         uint32 oldMSTime = getMSTime();
 
@@ -259,7 +259,7 @@ void GuildMgr::LoadGuilds()
 
         if (!result)
         {
-            TC_LOG_INFO("server.loading", ">> Loaded 0 guild event logs. DB table `guild_eventlog` is empty.");
+            WC_LOG_INFO("server.loading", ">> Loaded 0 guild event logs. DB table `guild_eventlog` is empty.");
         }
         else
         {
@@ -276,12 +276,12 @@ void GuildMgr::LoadGuilds()
             }
             while (result->NextRow());
 
-            TC_LOG_INFO("server.loading", ">> Loaded %u guild event logs in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+            WC_LOG_INFO("server.loading", ">> Loaded %u guild event logs in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
         }
     }
 
     // 6. Load all bank event logs
-    TC_LOG_INFO("server.loading", "Loading guild bank event logs...");
+    WC_LOG_INFO("server.loading", "Loading guild bank event logs...");
     {
         uint32 oldMSTime = getMSTime();
 
@@ -293,7 +293,7 @@ void GuildMgr::LoadGuilds()
 
         if (!result)
         {
-            TC_LOG_INFO("server.loading", ">> Loaded 0 guild bank event logs. DB table `guild_bank_eventlog` is empty.");
+            WC_LOG_INFO("server.loading", ">> Loaded 0 guild bank event logs. DB table `guild_bank_eventlog` is empty.");
         }
         else
         {
@@ -310,12 +310,12 @@ void GuildMgr::LoadGuilds()
             }
             while (result->NextRow());
 
-            TC_LOG_INFO("server.loading", ">> Loaded %u guild bank event logs in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+            WC_LOG_INFO("server.loading", ">> Loaded %u guild bank event logs in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
         }
     }
 
     // 7. Load all guild bank tabs
-    TC_LOG_INFO("server.loading", "Loading guild bank tabs...");
+    WC_LOG_INFO("server.loading", "Loading guild bank tabs...");
     {
         uint32 oldMSTime = getMSTime();
 
@@ -327,7 +327,7 @@ void GuildMgr::LoadGuilds()
 
         if (!result)
         {
-            TC_LOG_INFO("server.loading", ">> Loaded 0 guild bank tabs. DB table `guild_bank_tab` is empty.");
+            WC_LOG_INFO("server.loading", ">> Loaded 0 guild bank tabs. DB table `guild_bank_tab` is empty.");
         }
         else
         {
@@ -344,12 +344,12 @@ void GuildMgr::LoadGuilds()
             }
             while (result->NextRow());
 
-            TC_LOG_INFO("server.loading", ">> Loaded %u guild bank tabs in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+            WC_LOG_INFO("server.loading", ">> Loaded %u guild bank tabs in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
         }
     }
 
     // 8. Fill all guild bank tabs
-    TC_LOG_INFO("guild", "Filling bank tabs with items...");
+    WC_LOG_INFO("guild", "Filling bank tabs with items...");
     {
         uint32 oldMSTime = getMSTime();
 
@@ -363,7 +363,7 @@ void GuildMgr::LoadGuilds()
 
         if (!result)
         {
-            TC_LOG_INFO("server.loading", ">> Loaded 0 guild bank tab items. DB table `guild_bank_item` or `item_instance` is empty.");
+            WC_LOG_INFO("server.loading", ">> Loaded 0 guild bank tab items. DB table `guild_bank_item` or `item_instance` is empty.");
         }
         else
         {
@@ -380,12 +380,12 @@ void GuildMgr::LoadGuilds()
             }
             while (result->NextRow());
 
-            TC_LOG_INFO("server.loading", ">> Loaded %u guild bank tab items in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+            WC_LOG_INFO("server.loading", ">> Loaded %u guild bank tab items in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
         }
     }
 
     // 9. Validate loaded guild data
-    TC_LOG_INFO("guild", "Validating data of loaded guilds...");
+    WC_LOG_INFO("guild", "Validating data of loaded guilds...");
     {
         uint32 oldMSTime = getMSTime();
 
@@ -397,7 +397,7 @@ void GuildMgr::LoadGuilds()
                 delete guild;
         }
 
-        TC_LOG_INFO("server.loading", ">> Validated data of loaded guilds in %u ms", GetMSTimeDiffToNow(oldMSTime));
+        WC_LOG_INFO("server.loading", ">> Validated data of loaded guilds in %u ms", GetMSTimeDiffToNow(oldMSTime));
     }
 }
 

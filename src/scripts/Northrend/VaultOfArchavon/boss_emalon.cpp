@@ -145,7 +145,7 @@ class boss_emalon : public CreatureScript
                         case EVENT_OVERCHARGE:
                             if (!summons.empty())
                             {
-                                Creature* minion = ObjectAccessor::GetCreature(*me, Trinity::Containers::SelectRandomContainerElement(summons));
+                                Creature* minion = ObjectAccessor::GetCreature(*me, Warhead::Containers::SelectRandomContainerElement(summons));
                                 if (minion && minion->IsAlive())
                                 {
                                     minion->CastSpell(me, SPELL_OVERCHARGED, true);

@@ -83,7 +83,7 @@ class Unit;
 class WorldPacket;
 struct GossipMenuItems;
 
-class TC_GAME_API OPvPCapturePoint
+class WC_GAME_API OPvPCapturePoint
 {
     public:
 
@@ -182,7 +182,7 @@ class TC_GAME_API OPvPCapturePoint
 };
 
 // base class for specific outdoor pvp handlers
-class TC_GAME_API OutdoorPvP : public ZoneScript
+class WC_GAME_API OutdoorPvP : public ZoneScript
 {
     friend class OutdoorPvPMgr;
 

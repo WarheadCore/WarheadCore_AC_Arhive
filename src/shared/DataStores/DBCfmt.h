@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_DBCSFRM_H
-#define TRINITY_DBCSFRM_H
+#ifndef WARHEAD_DBCSFRM_H
+#define WARHEAD_DBCSFRM_H
 
 char constexpr Achievementfmt[]       = "niixssssssssssssssssxxxxxxxxxxxxxxxxxxiixixxxxxxxxxxxxxxxxxxii";
 char constexpr CustomAchievementfmt[] = "pppaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaapapaaaaaaaaaaaaaaaaaapp";

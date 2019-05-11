@@ -31,7 +31,7 @@ struct IpLocationRecord
     std::string CountryName;
 };
 
-class TC_COMMON_API IpLocationStore
+class WC_COMMON_API IpLocationStore
 {
     public:
         IpLocationStore();

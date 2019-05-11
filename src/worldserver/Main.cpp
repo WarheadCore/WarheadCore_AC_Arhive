@@ -16,7 +16,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/// \addtogroup Trinityd Trinity Daemon
+/// \addtogroup Warheadd Warhead Daemon
 /// @{
 /// \file
 
@@ -62,8 +62,8 @@
 using namespace boost::program_options;
 namespace fs = boost::filesystem;
 
-#ifndef _TRINITY_CORE_CONFIG
-    #define _TRINITY_CORE_CONFIG  "worldserver.conf"
+#ifndef _WARHEAD_CORE_CONFIG
+    #define _WARHEAD_CORE_CONFIG  "worldserver.conf"
 #endif
 
 #define WORLD_SLEEP_CONST 50
@@ -71,8 +71,8 @@ namespace fs = boost::filesystem;
 #ifdef _WIN32
 #include "ServiceWin32.h"
 char serviceName[] = "worldserver";
-char serviceLongName[] = "TrinityCore world service";
-char serviceDescription[] = "TrinityCore World of Warcraft emulator world service";
+char serviceLongName[] = "WarheadCore world service";
+char serviceDescription[] = "WarheadCore World of Warcraft emulator world service";
 /*
  * -1 - not in service mode
  *  0 - stopped
@@ -85,7 +85,7 @@ int m_ServiceStatus = -1;
 class FreezeDetector
 {
     public:
-    FreezeDetector(Trinity::Asio::IoContext& ioContext, uint32 maxCoreStuckTime)
+    FreezeDetector(Warhead::Asio::IoContext& ioContext, uint32 maxCoreStuckTime)
         : _timer(ioContext), _worldLoopCounter(0), _lastChangeMsTime(getMSTime()), _maxCoreStuckTimeInMs(maxCoreStuckTime) { }
 
         static void Start(std::shared_ptr<FreezeDetector> const& freezeDetector)
@@ -97,28 +97,28 @@ class FreezeDetector
         static void Handler(std::weak_ptr<FreezeDetector> freezeDetectorRef, boost::system::error_code const& error);
 
     private:
-        Trinity::Asio::DeadlineTimer _timer;
+        Warhead::Asio::DeadlineTimer _timer;
         uint32 _worldLoopCounter;
         uint32 _lastChangeMsTime;
         uint32 _maxCoreStuckTimeInMs;
 };
 
 void SignalHandler(boost::system::error_code const& error, int signalNumber);
-AsyncAcceptor* StartRaSocketAcceptor(Trinity::Asio::IoContext& ioContext);
+AsyncAcceptor* StartRaSocketAcceptor(Warhead::Asio::IoContext& ioContext);
 bool StartDB();
 void StopDB();
 void WorldUpdateLoop();
 void ClearOnlineAccounts();
 void ShutdownCLIThread(std::thread* cliThread);
-bool LoadRealmInfo(Trinity::Asio::IoContext& ioContext);
+bool LoadRealmInfo(Warhead::Asio::IoContext& ioContext);
 variables_map GetConsoleArguments(int argc, char** argv, fs::path& configFile, std::string& cfg_service);
 
-/// Launch the Trinity server
+/// Launch the Warhead server
 extern int main(int argc, char** argv)
 {
-    signal(SIGABRT, &Trinity::AbortHandler);
+    signal(SIGABRT, &Warhead::AbortHandler);
 
-    auto configFile = fs::absolute(_TRINITY_CORE_CONFIG);
+    auto configFile = fs::absolute(_WARHEAD_CORE_CONFIG);
     std::string configService;
 
     auto vm = GetConsoleArguments(argc, argv, configFile, configService);
@@ -144,22 +144,22 @@ extern int main(int argc, char** argv)
         return 1;
     }
 
-    std::shared_ptr<Trinity::Asio::IoContext> ioContext = std::make_shared<Trinity::Asio::IoContext>();
+    std::shared_ptr<Warhead::Asio::IoContext> ioContext = std::make_shared<Warhead::Asio::IoContext>();
 
     sLog->RegisterAppender<AppenderDB>();
     // If logs are supposed to be handled async then we need to pass the IoContext into the Log singleton
     sLog->Initialize(sConfigMgr->GetBoolDefault("Log.Async.Enable", false) ? ioContext.get() : nullptr);
 
-    Trinity::Banner::Show("worldserver-daemon",
+    Warhead::Banner::Show("worldserver-daemon",
         [](char const* text)
         {
-            TC_LOG_INFO("server.worldserver", "%s", text);
+            WC_LOG_INFO("server.worldserver", "%s", text);
         },
         []()
         {
-            TC_LOG_INFO("server.worldserver", "Using configuration file %s.", sConfigMgr->GetFilename().c_str());
-            TC_LOG_INFO("server.worldserver", "Using SSL version: %s (library: %s)", OPENSSL_VERSION_TEXT, SSLeay_version(SSLEAY_VERSION));
-            TC_LOG_INFO("server.worldserver", "Using Boost version: %i.%i.%i", BOOST_VERSION / 100000, BOOST_VERSION / 100 % 1000, BOOST_VERSION % 100);
+            WC_LOG_INFO("server.worldserver", "Using configuration file %s.", sConfigMgr->GetFilename().c_str());
+            WC_LOG_INFO("server.worldserver", "Using SSL version: %s (library: %s)", OPENSSL_VERSION_TEXT, SSLeay_version(SSLEAY_VERSION));
+            WC_LOG_INFO("server.worldserver", "Using Boost version: %i.%i.%i", BOOST_VERSION / 100000, BOOST_VERSION / 100 % 1000, BOOST_VERSION % 100);
         }
     );
 
@@ -177,17 +177,17 @@ extern int main(int argc, char** argv)
     if (!pidFile.empty())
     {
         if (uint32 pid = CreatePIDFile(pidFile))
-            TC_LOG_INFO("server.worldserver", "Daemon PID: %u\n", pid);
+            WC_LOG_INFO("server.worldserver", "Daemon PID: %u\n", pid);
         else
         {
-            TC_LOG_ERROR("server.worldserver", "Cannot create PID file %s.\n", pidFile.c_str());
+            WC_LOG_ERROR("server.worldserver", "Cannot create PID file %s.\n", pidFile.c_str());
             return 1;
         }
     }
 
     // Set signal handlers (this must be done before starting IoContext threads, because otherwise they would unblock and exit)
     boost::asio::signal_set signals(*ioContext, SIGINT, SIGTERM);
-#if TRINITY_PLATFORM == TRINITY_PLATFORM_WINDOWS
+#if WARHEAD_PLATFORM == WARHEAD_PLATFORM_WINDOWS
     signals.add(SIGBREAK);
 #endif
     signals.async_wait(SignalHandler);
@@ -228,14 +228,14 @@ extern int main(int argc, char** argv)
 
     sMetric->Initialize(realm.Name, *ioContext, []()
     {
-        TC_METRIC_VALUE("online_players", sWorld->GetPlayerCount());
+        WC_METRIC_VALUE("online_players", sWorld->GetPlayerCount());
     });
 
-    TC_METRIC_EVENT("events", "Worldserver started", "");
+    WC_METRIC_EVENT("events", "Worldserver started", "");
 
     std::shared_ptr<void> sMetricHandle(nullptr, [](void*)
     {
-        TC_METRIC_EVENT("events", "Worldserver shutdown", "");
+        WC_METRIC_EVENT("events", "Worldserver shutdown", "");
         sMetric->Unload();
     });
 
@@ -284,14 +284,14 @@ extern int main(int argc, char** argv)
 
     if (networkThreads <= 0)
     {
-        TC_LOG_ERROR("server.worldserver", "Network.Threads must be greater than 0");
+        WC_LOG_ERROR("server.worldserver", "Network.Threads must be greater than 0");
         World::StopNow(ERROR_EXIT_CODE);
         return 1;
     }
 
     if (!sWorldSocketMgr.StartWorldNetwork(*ioContext, worldListener, worldPort, networkThreads))
     {
-        TC_LOG_ERROR("server.worldserver", "Failed to initialize network");
+        WC_LOG_ERROR("server.worldserver", "Failed to initialize network");
         World::StopNow(ERROR_EXIT_CODE);
         return 1;
     }
@@ -329,10 +329,10 @@ extern int main(int argc, char** argv)
     {
         freezeDetector = std::make_shared<FreezeDetector>(*ioContext, coreStuckTime * 1000);
         FreezeDetector::Start(freezeDetector);
-        TC_LOG_INFO("server.worldserver", "Starting up anti-freeze thread (%u seconds max stuck time)...", coreStuckTime);
+        WC_LOG_INFO("server.worldserver", "Starting up anti-freeze thread (%u seconds max stuck time)...", coreStuckTime);
     }
 
-    TC_LOG_INFO("server.worldserver", "%s (worldserver-daemon) ready...", GitRevision::GetFullVersion());
+    WC_LOG_INFO("server.worldserver", "%s (worldserver-daemon) ready...", GitRevision::GetFullVersion());
 
     sScriptMgr->OnStartup();
 
@@ -348,11 +348,11 @@ extern int main(int argc, char** argv)
     // set server offline
     LoginDatabase.DirectPExecute("UPDATE realmlist SET flag = flag | %u WHERE id = '%d'", REALM_FLAG_OFFLINE, realm.Id.Realm);
 
-    TC_LOG_INFO("server.worldserver", "Halting process...");
+    WC_LOG_INFO("server.worldserver", "Halting process...");
 
     // 0 - normal shutdown
     // 1 - shutdown at error
-    // 2 - restart command used, this code can be used by restarter for restart Trinityd
+    // 2 - restart command used, this code can be used by restarter for restart Warheadd
 
     return World::GetExitCode();
 }
@@ -374,7 +374,7 @@ void ShutdownCLIThread(std::thread* cliThread)
             if (!formatReturnCode)
                 errorBuffer = "Unknown error";
 
-            TC_LOG_DEBUG("server.worldserver", "Error cancelling I/O of CliThread, error code %u, detail: %s", uint32(errorCode), errorBuffer);
+            WC_LOG_DEBUG("server.worldserver", "Error cancelling I/O of CliThread, error code %u, detail: %s", uint32(errorCode), errorBuffer);
 
             if (!formatReturnCode)
                 LocalFree(errorBuffer);
@@ -473,7 +473,7 @@ void FreezeDetector::Handler(std::weak_ptr<FreezeDetector> freezeDetectorRef, bo
             // possible freeze
             else if (getMSTimeDiff(freezeDetector->_lastChangeMsTime, curtime) > freezeDetector->_maxCoreStuckTimeInMs)
             {
-                TC_LOG_ERROR("server.worldserver", "World Thread hangs, kicking out server!");
+                WC_LOG_ERROR("server.worldserver", "World Thread hangs, kicking out server!");
                 ABORT();
             }
 
@@ -483,7 +483,7 @@ void FreezeDetector::Handler(std::weak_ptr<FreezeDetector> freezeDetectorRef, bo
     }
 }
 
-AsyncAcceptor* StartRaSocketAcceptor(Trinity::Asio::IoContext& ioContext)
+AsyncAcceptor* StartRaSocketAcceptor(Warhead::Asio::IoContext& ioContext)
 {
     uint16 raPort = uint16(sConfigMgr->GetIntDefault("Ra.Port", 3443));
     std::string raListener = sConfigMgr->GetStringDefault("Ra.IP", "0.0.0.0");
@@ -491,7 +491,7 @@ AsyncAcceptor* StartRaSocketAcceptor(Trinity::Asio::IoContext& ioContext)
     AsyncAcceptor* acceptor = new AsyncAcceptor(ioContext, raListener, raPort);
     if (!acceptor->Bind())
     {
-        TC_LOG_ERROR("server.worldserver", "Failed to bind RA socket acceptor");
+        WC_LOG_ERROR("server.worldserver", "Failed to bind RA socket acceptor");
         delete acceptor;
         return nullptr;
     }
@@ -500,7 +500,7 @@ AsyncAcceptor* StartRaSocketAcceptor(Trinity::Asio::IoContext& ioContext)
     return acceptor;
 }
 
-bool LoadRealmInfo(Trinity::Asio::IoContext& ioContext)
+bool LoadRealmInfo(Warhead::Asio::IoContext& ioContext)
 {
     QueryResult result = LoginDatabase.PQuery("SELECT id, name, address, localAddress, localSubnetMask, port, icon, flag, timezone, allowedSecurityLevel, population, gamebuild FROM realmlist WHERE id = %u", realm.Id.Realm);
     if (!result)
@@ -510,32 +510,32 @@ bool LoadRealmInfo(Trinity::Asio::IoContext& ioContext)
 
     Field* fields = result->Fetch();
     realm.Name = fields[1].GetString();
-    Optional<boost::asio::ip::tcp::endpoint> externalAddress = Trinity::Net::Resolve(resolver, boost::asio::ip::tcp::v4(), fields[2].GetString(), "");
+    Optional<boost::asio::ip::tcp::endpoint> externalAddress = Warhead::Net::Resolve(resolver, boost::asio::ip::tcp::v4(), fields[2].GetString(), "");
     if (!externalAddress)
     {
-        TC_LOG_ERROR("server.worldserver", "Could not resolve address %s", fields[2].GetString().c_str());
+        WC_LOG_ERROR("server.worldserver", "Could not resolve address %s", fields[2].GetString().c_str());
         return false;
     }
 
-    realm.ExternalAddress = Trinity::make_unique<boost::asio::ip::address>(externalAddress->address());
+    realm.ExternalAddress = Warhead::make_unique<boost::asio::ip::address>(externalAddress->address());
 
-    Optional<boost::asio::ip::tcp::endpoint> localAddress = Trinity::Net::Resolve(resolver, boost::asio::ip::tcp::v4(), fields[3].GetString(), "");
+    Optional<boost::asio::ip::tcp::endpoint> localAddress = Warhead::Net::Resolve(resolver, boost::asio::ip::tcp::v4(), fields[3].GetString(), "");
     if (!localAddress)
     {
-        TC_LOG_ERROR("server.worldserver", "Could not resolve address %s", fields[3].GetString().c_str());
+        WC_LOG_ERROR("server.worldserver", "Could not resolve address %s", fields[3].GetString().c_str());
         return false;
     }
 
-    realm.LocalAddress = Trinity::make_unique<boost::asio::ip::address>(localAddress->address());
+    realm.LocalAddress = Warhead::make_unique<boost::asio::ip::address>(localAddress->address());
 
-    Optional<boost::asio::ip::tcp::endpoint> localSubmask = Trinity::Net::Resolve(resolver, boost::asio::ip::tcp::v4(), fields[4].GetString(), "");
+    Optional<boost::asio::ip::tcp::endpoint> localSubmask = Warhead::Net::Resolve(resolver, boost::asio::ip::tcp::v4(), fields[4].GetString(), "");
     if (!localSubmask)
     {
-        TC_LOG_ERROR("server.worldserver", "Could not resolve address %s", fields[4].GetString().c_str());
+        WC_LOG_ERROR("server.worldserver", "Could not resolve address %s", fields[4].GetString().c_str());
         return false;
     }
 
-    realm.LocalSubnetMask = Trinity::make_unique<boost::asio::ip::address>(localSubmask->address());
+    realm.LocalSubnetMask = Warhead::make_unique<boost::asio::ip::address>(localSubmask->address());
 
     realm.Port = fields[5].GetUInt16();
     realm.Type = fields[6].GetUInt8();
@@ -566,11 +566,11 @@ bool StartDB()
     realm.Id.Realm = sConfigMgr->GetIntDefault("RealmID", 0);
     if (!realm.Id.Realm)
     {
-        TC_LOG_ERROR("server.worldserver", "Realm ID not defined in configuration file");
+        WC_LOG_ERROR("server.worldserver", "Realm ID not defined in configuration file");
         return false;
     }
 
-    TC_LOG_INFO("server.worldserver", "Realm running as realm ID %d", realm.Id.Realm);
+    WC_LOG_INFO("server.worldserver", "Realm running as realm ID %d", realm.Id.Realm);
 
     ///- Clean the database before starting
     ClearOnlineAccounts();
@@ -580,7 +580,7 @@ bool StartDB()
 
     sWorld->LoadDBVersion();
 
-    TC_LOG_INFO("server.worldserver", "Using World DB: %s", sWorld->GetDBVersion());
+    WC_LOG_INFO("server.worldserver", "Using World DB: %s", sWorld->GetDBVersion());
     return true;
 }
 
@@ -617,7 +617,7 @@ variables_map GetConsoleArguments(int argc, char** argv, fs::path& configFile, s
     all.add_options()
         ("help,h", "print usage message")
         ("version,v", "print version build info")
-        ("config,c", value<fs::path>(&configFile)->default_value(fs::absolute(_TRINITY_CORE_CONFIG)),
+        ("config,c", value<fs::path>(&configFile)->default_value(fs::absolute(_WARHEAD_CORE_CONFIG)),
                      "use <arg> as configuration file")
         ("update-databases-only,u", "updates databases only")
         ;

@@ -287,7 +287,7 @@ struct LFGDungeonData
     uint32 Entry() const { return id + (type << 24); }
 };
 
-class TC_GAME_API LFGMgr
+class WC_GAME_API LFGMgr
 {
     private:
         LFGMgr();

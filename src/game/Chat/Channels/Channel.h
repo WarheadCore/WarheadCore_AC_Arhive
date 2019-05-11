@@ -115,7 +115,7 @@ enum ChannelMemberFlags
     // 0x80
 };
 
-class TC_GAME_API Channel
+class WC_GAME_API Channel
 {
     struct PlayerInfo
     {

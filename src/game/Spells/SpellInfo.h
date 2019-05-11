@@ -204,7 +204,7 @@ enum SpellCustomAttributes
 
 uint32 GetTargetFlagMask(SpellTargetObjectTypes objType);
 
-class TC_GAME_API SpellImplicitTargetInfo
+class WC_GAME_API SpellImplicitTargetInfo
 {
 private:
     Targets _target;
@@ -235,7 +235,7 @@ private:
     static StaticData _data[TOTAL_SPELL_TARGETS];
 };
 
-class TC_GAME_API SpellEffectInfo
+class WC_GAME_API SpellEffectInfo
 {
     SpellInfo const* _spellInfo;
     uint8 _effIndex;
@@ -299,7 +299,7 @@ private:
     static StaticData _data[TOTAL_SPELL_EFFECTS];
 };
 
-struct TC_GAME_API SpellDiminishInfo
+struct WC_GAME_API SpellDiminishInfo
 {
     DiminishingGroup DiminishGroup = DIMINISHING_NONE;
     DiminishingReturnsType DiminishReturnType = DRTYPE_NONE;
@@ -307,7 +307,7 @@ struct TC_GAME_API SpellDiminishInfo
     int32 DiminishDurationLimit = 0;
 };
 
-struct TC_GAME_API ImmunityInfo
+struct WC_GAME_API ImmunityInfo
 {
     uint32 SchoolImmuneMask = 0;
     uint32 ApplyHarmfulAuraImmuneMask = 0;
@@ -319,7 +319,7 @@ struct TC_GAME_API ImmunityInfo
     boost::container::flat_set<SpellEffects> SpellEffectImmune;
 };
 
-class TC_GAME_API SpellInfo
+class WC_GAME_API SpellInfo
 {
     friend class SpellMgr;
 

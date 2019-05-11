@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_CONTAINERS_H
-#define TRINITY_CONTAINERS_H
+#ifndef WARHEAD_CONTAINERS_H
+#define WARHEAD_CONTAINERS_H
 
 #include "Define.h"
 #include "Random.h"
@@ -26,7 +26,7 @@
 #include <utility>
 #include <vector>
 
-namespace Trinity
+namespace Warhead
 {
     template<class T>
     constexpr inline T* AddressOrSelf(T* ptr)
@@ -88,7 +88,7 @@ namespace Trinity
         template<class C>
         void RandomResize(C& container, std::size_t requestedSize)
         {
-            static_assert(std::is_base_of<std::forward_iterator_tag, typename std::iterator_traits<typename C::iterator>::iterator_category>::value, "Invalid container passed to Trinity::Containers::RandomResize");
+            static_assert(std::is_base_of<std::forward_iterator_tag, typename std::iterator_traits<typename C::iterator>::iterator_category>::value, "Invalid container passed to Warhead::Containers::RandomResize");
             if (Size(container) <= requestedSize)
                 return;
             auto keepIt = std::begin(container), curIt = std::begin(container);
@@ -179,7 +179,7 @@ namespace Trinity
         }
 
         /**
-         * @fn void Trinity::Containers::RandomShuffle(C& container)
+         * @fn void Warhead::Containers::RandomShuffle(C& container)
          *
          * @brief Reorder the elements of the container randomly.
          *
@@ -192,7 +192,7 @@ namespace Trinity
         }
 
         /**
-         * @fn bool Trinity::Containers::Intersects(Iterator first1, Iterator last1, Iterator first2, Iterator last2)
+         * @fn bool Warhead::Containers::Intersects(Iterator first1, Iterator last1, Iterator first2, Iterator last2)
          *
          * @brief Checks if two SORTED containers have a common element
          *
@@ -244,6 +244,6 @@ namespace Trinity
     }
     //! namespace Containers
 }
-//! namespace Trinity
+//! namespace Warhead
 
-#endif //! #ifdef TRINITY_CONTAINERS_H
+#endif //! #ifdef WARHEAD_CONTAINERS_H

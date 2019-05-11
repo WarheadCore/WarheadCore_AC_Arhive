@@ -224,7 +224,7 @@ public:
     void QueueForDelayedDelete(T&& any)
     {
         _delayed_delete_queue.push_back(
-            Trinity::make_unique<
+            Warhead::make_unique<
                 DeleteableObject<typename std::decay<T>::type>
             >(std::forward<T>(any))
         );
@@ -284,7 +284,7 @@ public:
     {
         // See if the script is using the same memory as another script. If this happens, it means that
         // someone forgot to allocate new memory for a script.
-        TC_LOG_ERROR("scripts", "Script '%s' has same memory pointer as '%s'.",
+        WC_LOG_ERROR("scripts", "Script '%s' has same memory pointer as '%s'.",
             first->GetName().c_str(), second->GetName().c_str());
     }
 };
@@ -781,7 +781,7 @@ public:
                 if (stored_script.second->GetName() == script->GetName())
                 {
                     // If the script is already assigned -> delete it!
-                    TC_LOG_ERROR("scripts", "Script '%s' already assigned with the same script name, "
+                    WC_LOG_ERROR("scripts", "Script '%s' already assigned with the same script name, "
                         "so the script can't work.", script->GetName().c_str());
 
                     // Error that should be fixed ASAP.
@@ -802,7 +802,7 @@ public:
         else
         {
             // The script uses a script name from database, but isn't assigned to anything.
-            TC_LOG_ERROR("sql.sql", "Script named '%s' does not have a script name assigned in database.",
+            WC_LOG_ERROR("sql.sql", "Script named '%s' does not have a script name assigned in database.",
                 script->GetName().c_str());
 
             // Avoid calling "delete script;" because we are currently in the script constructor
@@ -1022,7 +1022,7 @@ void ScriptMgr::Initialize()
 
     LoadDatabase();
 
-    TC_LOG_INFO("server.loading", "Loading C++ scripts");
+    WC_LOG_INFO("server.loading", "Loading C++ scripts");
 
     FillSpellSummary();
 
@@ -1063,11 +1063,11 @@ void ScriptMgr::Initialize()
         if (scriptName.empty())
             continue;
 
-        TC_LOG_ERROR("sql.sql", "ScriptName '%s' exists in database, "
+        WC_LOG_ERROR("sql.sql", "ScriptName '%s' exists in database, "
                      "but no core script found!", scriptName.c_str());
     }
 
-    TC_LOG_INFO("server.loading", ">> Loaded %u C++ scripts in %u ms",
+    WC_LOG_INFO("server.loading", ">> Loaded %u C++ scripts in %u ms",
         GetScriptCount(), GetMSTimeDiffToNow(oldMSTime));
 }
 
@@ -1096,7 +1096,7 @@ void ScriptMgr::ReleaseScriptContext(std::string const& context)
 std::shared_ptr<ModuleReference>
     ScriptMgr::AcquireModuleReferenceOfScriptName(std::string const& scriptname) const
 {
-#ifdef TRINITY_API_USE_DYNAMIC_LINKING
+#ifdef WARHEAD_API_USE_DYNAMIC_LINKING
     // Returns the reference to the module of the given scriptname
     return ScriptReloadMgr::AcquireModuleReferenceOfContext(
         sScriptRegistryCompositum->GetScriptContextOfScriptName(scriptname));
@@ -1105,7 +1105,7 @@ std::shared_ptr<ModuleReference>
     // Something went wrong when this function is used in
     // a static linked context.
     WPAbort();
-#endif // #ifndef TRINITY_API_USE_DYNAMIC_LINKING
+#endif // #ifndef WARHEAD_API_USE_DYNAMIC_LINKING
 }
 
 void ScriptMgr::Unload()
@@ -2140,10 +2140,10 @@ WorldMapScript::WorldMapScript(char const* name, uint32 mapId)
     : ScriptObject(name), MapScript<Map>(sMapStore.LookupEntry(mapId))
 {
     if (!GetEntry())
-        TC_LOG_ERROR("scripts", "Invalid WorldMapScript for %u; no such map ID.", mapId);
+        WC_LOG_ERROR("scripts", "Invalid WorldMapScript for %u; no such map ID.", mapId);
 
     if (GetEntry() && !GetEntry()->IsWorldMap())
-        TC_LOG_ERROR("scripts", "WorldMapScript for map %u is invalid.", mapId);
+        WC_LOG_ERROR("scripts", "WorldMapScript for map %u is invalid.", mapId);
 
     ScriptRegistry<WorldMapScript>::Instance()->AddScript(this);
 }
@@ -2152,10 +2152,10 @@ InstanceMapScript::InstanceMapScript(char const* name, uint32 mapId)
     : ScriptObject(name), MapScript<InstanceMap>(sMapStore.LookupEntry(mapId))
 {
     if (!GetEntry())
-        TC_LOG_ERROR("scripts", "Invalid InstanceMapScript for %u; no such map ID.", mapId);
+        WC_LOG_ERROR("scripts", "Invalid InstanceMapScript for %u; no such map ID.", mapId);
 
     if (GetEntry() && !GetEntry()->IsDungeon())
-        TC_LOG_ERROR("scripts", "InstanceMapScript for map %u is invalid.", mapId);
+        WC_LOG_ERROR("scripts", "InstanceMapScript for map %u is invalid.", mapId);
 
     ScriptRegistry<InstanceMapScript>::Instance()->AddScript(this);
 }
@@ -2164,10 +2164,10 @@ BattlegroundMapScript::BattlegroundMapScript(char const* name, uint32 mapId)
     : ScriptObject(name), MapScript<BattlegroundMap>(sMapStore.LookupEntry(mapId))
 {
     if (!GetEntry())
-        TC_LOG_ERROR("scripts", "Invalid BattlegroundMapScript for %u; no such map ID.", mapId);
+        WC_LOG_ERROR("scripts", "Invalid BattlegroundMapScript for %u; no such map ID.", mapId);
 
     if (GetEntry() && !GetEntry()->IsBattleground())
-        TC_LOG_ERROR("scripts", "BattlegroundMapScript for map %u is invalid.", mapId);
+        WC_LOG_ERROR("scripts", "BattlegroundMapScript for map %u is invalid.", mapId);
 
     ScriptRegistry<BattlegroundMapScript>::Instance()->AddScript(this);
 }
@@ -2296,29 +2296,29 @@ GroupScript::GroupScript(char const* name)
 }
 
 // Specialize for each script type class like so:
-template class TC_GAME_API ScriptRegistry<SpellScriptLoader>;
-template class TC_GAME_API ScriptRegistry<ServerScript>;
-template class TC_GAME_API ScriptRegistry<WorldScript>;
-template class TC_GAME_API ScriptRegistry<FormulaScript>;
-template class TC_GAME_API ScriptRegistry<WorldMapScript>;
-template class TC_GAME_API ScriptRegistry<InstanceMapScript>;
-template class TC_GAME_API ScriptRegistry<BattlegroundMapScript>;
-template class TC_GAME_API ScriptRegistry<ItemScript>;
-template class TC_GAME_API ScriptRegistry<CreatureScript>;
-template class TC_GAME_API ScriptRegistry<GameObjectScript>;
-template class TC_GAME_API ScriptRegistry<AreaTriggerScript>;
-template class TC_GAME_API ScriptRegistry<BattlegroundScript>;
-template class TC_GAME_API ScriptRegistry<OutdoorPvPScript>;
-template class TC_GAME_API ScriptRegistry<CommandScript>;
-template class TC_GAME_API ScriptRegistry<WeatherScript>;
-template class TC_GAME_API ScriptRegistry<AuctionHouseScript>;
-template class TC_GAME_API ScriptRegistry<ConditionScript>;
-template class TC_GAME_API ScriptRegistry<VehicleScript>;
-template class TC_GAME_API ScriptRegistry<DynamicObjectScript>;
-template class TC_GAME_API ScriptRegistry<TransportScript>;
-template class TC_GAME_API ScriptRegistry<AchievementCriteriaScript>;
-template class TC_GAME_API ScriptRegistry<PlayerScript>;
-template class TC_GAME_API ScriptRegistry<GuildScript>;
-template class TC_GAME_API ScriptRegistry<GroupScript>;
-template class TC_GAME_API ScriptRegistry<UnitScript>;
-template class TC_GAME_API ScriptRegistry<AccountScript>;
+template class WC_GAME_API ScriptRegistry<SpellScriptLoader>;
+template class WC_GAME_API ScriptRegistry<ServerScript>;
+template class WC_GAME_API ScriptRegistry<WorldScript>;
+template class WC_GAME_API ScriptRegistry<FormulaScript>;
+template class WC_GAME_API ScriptRegistry<WorldMapScript>;
+template class WC_GAME_API ScriptRegistry<InstanceMapScript>;
+template class WC_GAME_API ScriptRegistry<BattlegroundMapScript>;
+template class WC_GAME_API ScriptRegistry<ItemScript>;
+template class WC_GAME_API ScriptRegistry<CreatureScript>;
+template class WC_GAME_API ScriptRegistry<GameObjectScript>;
+template class WC_GAME_API ScriptRegistry<AreaTriggerScript>;
+template class WC_GAME_API ScriptRegistry<BattlegroundScript>;
+template class WC_GAME_API ScriptRegistry<OutdoorPvPScript>;
+template class WC_GAME_API ScriptRegistry<CommandScript>;
+template class WC_GAME_API ScriptRegistry<WeatherScript>;
+template class WC_GAME_API ScriptRegistry<AuctionHouseScript>;
+template class WC_GAME_API ScriptRegistry<ConditionScript>;
+template class WC_GAME_API ScriptRegistry<VehicleScript>;
+template class WC_GAME_API ScriptRegistry<DynamicObjectScript>;
+template class WC_GAME_API ScriptRegistry<TransportScript>;
+template class WC_GAME_API ScriptRegistry<AchievementCriteriaScript>;
+template class WC_GAME_API ScriptRegistry<PlayerScript>;
+template class WC_GAME_API ScriptRegistry<GuildScript>;
+template class WC_GAME_API ScriptRegistry<GroupScript>;
+template class WC_GAME_API ScriptRegistry<UnitScript>;
+template class WC_GAME_API ScriptRegistry<AccountScript>;

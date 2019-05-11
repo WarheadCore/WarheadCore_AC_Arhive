@@ -94,7 +94,7 @@ class MotionMasterDelayedAction
         uint8 Type;
 };
 
-class TC_GAME_API MotionMaster
+class WC_GAME_API MotionMaster
 {
     public:
         explicit MotionMaster(Unit* unit);

@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_G3DPOSITION_HPP
-#define TRINITY_G3DPOSITION_HPP
+#ifndef WARHEAD_G3DPOSITION_HPP
+#define WARHEAD_G3DPOSITION_HPP
 
 #include "Position.h"
 #include <G3D/Vector3.h>

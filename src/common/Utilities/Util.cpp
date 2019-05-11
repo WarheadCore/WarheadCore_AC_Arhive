@@ -28,7 +28,7 @@
 #include <cstdarg>
 #include <ctime>
 
-#if TRINITY_COMPILER == TRINITY_COMPILER_GNU
+#if WARHEAD_COMPILER == WARHEAD_COMPILER_GNU
   #include <sys/socket.h>
   #include <netinet/in.h>
   #include <arpa/inet.h>
@@ -194,7 +194,7 @@ bool IsIPAddress(char const* ipaddress)
         return false;
 
     boost::system::error_code error;
-    Trinity::Net::make_address(ipaddress, error);
+    Warhead::Net::make_address(ipaddress, error);
     return !error;
 }
 
@@ -262,7 +262,7 @@ bool Utf8toWStr(char const* utf8str, size_t csize, wchar_t* wstr, size_t& wsize)
 {
     try
     {
-        Trinity::CheckedBufferOutputIterator<wchar_t> out(wstr, wsize);
+        Warhead::CheckedBufferOutputIterator<wchar_t> out(wstr, wsize);
         out = utf8::utf8to16(utf8str, utf8str+csize, out);
         wsize -= out.remaining(); // remaining unused space
         wstr[wsize] = L'\0';
@@ -413,7 +413,7 @@ std::wstring GetMainPartOfName(std::wstring const& wname, uint32 declension)
 
 bool utf8ToConsole(const std::string& utf8str, std::string& conStr)
 {
-#if TRINITY_PLATFORM == TRINITY_PLATFORM_WINDOWS
+#if WARHEAD_PLATFORM == WARHEAD_PLATFORM_WINDOWS
     std::wstring wstr;
     if (!Utf8toWStr(utf8str, wstr))
         return false;
@@ -430,7 +430,7 @@ bool utf8ToConsole(const std::string& utf8str, std::string& conStr)
 
 bool consoleToUtf8(const std::string& conStr, std::string& utf8str)
 {
-#if TRINITY_PLATFORM == TRINITY_PLATFORM_WINDOWS
+#if WARHEAD_PLATFORM == WARHEAD_PLATFORM_WINDOWS
     std::wstring wstr;
     wstr.resize(conStr.size());
     OemToCharBuffW(&conStr[0], &wstr[0], uint32(conStr.size()));
@@ -469,7 +469,7 @@ void utf8printf(FILE* out, const char *str, ...)
 
 void vutf8printf(FILE* out, const char *str, va_list* ap)
 {
-#if TRINITY_PLATFORM == TRINITY_PLATFORM_WINDOWS
+#if WARHEAD_PLATFORM == WARHEAD_PLATFORM_WINDOWS
     char temp_buf[32 * 1024];
     wchar_t wtemp_buf[32 * 1024];
 

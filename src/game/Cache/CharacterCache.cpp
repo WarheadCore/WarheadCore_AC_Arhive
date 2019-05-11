@@ -74,7 +74,7 @@ void CharacterCache::LoadCharacterCacheStorage()
     QueryResult result = CharacterDatabase.Query("SELECT guid, name, account, race, gender, class, level FROM characters");
     if (!result)
     {
-        TC_LOG_INFO("server.loading", "No character name data loaded, empty query");
+        WC_LOG_INFO("server.loading", "No character name data loaded, empty query");
         return;
     }
 
@@ -85,7 +85,7 @@ void CharacterCache::LoadCharacterCacheStorage()
             fields[4].GetUInt8() /*gender*/, fields[3].GetUInt8() /*race*/, fields[5].GetUInt8() /*class*/, fields[6].GetUInt8() /*level*/);
     } while (result->NextRow());
 
-    TC_LOG_INFO("server.loading", "Loaded character infos for " SZFMTD " characters in %u ms", _characterCacheStore.size(), GetMSTimeDiffToNow(oldMSTime));
+    WC_LOG_INFO("server.loading", "Loaded character infos for " SZFMTD " characters in %u ms", _characterCacheStore.size(), GetMSTimeDiffToNow(oldMSTime));
 }
 
 /*

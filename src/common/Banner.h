@@ -15,17 +15,17 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TrinityCore_Banner_h__
-#define TrinityCore_Banner_h__
+#ifndef _BANNER_H
+#define _BANNER_H
 
 #include "Define.h"
 
-namespace Trinity
+namespace Warhead
 {
     namespace Banner
     {
-        TC_COMMON_API void Show(char const* applicationName, void(*log)(char const* text), void(*logExtraInfo)());
+        WC_COMMON_API void Show(char const* applicationName, void(*log)(char const* text), void(*logExtraInfo)());
     }
 }
 
-#endif // TrinityCore_Banner_h__
+#endif // _BANNER_H

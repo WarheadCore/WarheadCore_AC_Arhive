@@ -74,7 +74,7 @@ if (BUILD_SHARED_LIBS)
 
   target_link_libraries(efsw
     PRIVATE
-      trinity-dependency-interface
+      warhead-dependency-interface
     PUBLIC
       threads
       ${OPTIONAL_MAC_LINK_LIBRARIES})

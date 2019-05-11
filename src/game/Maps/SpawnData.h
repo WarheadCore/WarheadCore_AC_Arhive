@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_SPAWNDATA_H
-#define TRINITY_SPAWNDATA_H
+#ifndef WARHEAD_SPAWNDATA_H
+#define WARHEAD_SPAWNDATA_H
 
 #include "Position.h"
 

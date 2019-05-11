@@ -48,7 +48,7 @@ target_compile_definitions(fmt
 
 target_link_libraries(fmt
   PRIVATE
-    trinity-dependency-interface)
+    warhead-dependency-interface)
 
 set_target_properties(fmt
   PROPERTIES

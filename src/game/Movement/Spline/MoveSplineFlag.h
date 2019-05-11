@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITYSERVER_MOVESPLINEFLAG_H
-#define TRINITYSERVER_MOVESPLINEFLAG_H
+#ifndef WARHEADSERVER_MOVESPLINEFLAG_H
+#define WARHEADSERVER_MOVESPLINEFLAG_H
 
 #include "MovementTypedefs.h"
 
@@ -134,4 +134,4 @@ namespace Movement
 #pragma pack(pop)
 }
 
-#endif // TRINITYSERVER_MOVESPLINEFLAG_H
+#endif // WARHEADSERVER_MOVESPLINEFLAG_H

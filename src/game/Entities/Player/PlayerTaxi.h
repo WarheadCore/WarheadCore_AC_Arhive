@@ -26,7 +26,7 @@
 class ByteBuffer;
 struct FactionTemplateEntry;
 
-class TC_GAME_API PlayerTaxi
+class WC_GAME_API PlayerTaxi
 {
     public:
         PlayerTaxi() : m_flightMasterFactionId(0) { m_taximask.fill(0); }

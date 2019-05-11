@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_ABSTRACTFOLLOWER_H
-#define TRINITY_ABSTRACTFOLLOWER_H
+#ifndef WARHEAD_ABSTRACTFOLLOWER_H
+#define WARHEAD_ABSTRACTFOLLOWER_H
 
 class Unit;
 

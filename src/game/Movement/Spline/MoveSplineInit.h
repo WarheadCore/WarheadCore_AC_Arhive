@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef TRINITYSERVER_MOVESPLINEINIT_H
-#define TRINITYSERVER_MOVESPLINEINIT_H
+#ifndef WARHEADSERVER_MOVESPLINEINIT_H
+#define WARHEADSERVER_MOVESPLINEINIT_H
 
 #include "MoveSplineInitArgs.h"
 
@@ -34,7 +34,7 @@ namespace Movement
     };
 
     // Transforms coordinates from global to transport offsets
-    class TC_GAME_API TransportPathTransform
+    class WC_GAME_API TransportPathTransform
     {
     public:
         TransportPathTransform(Unit* owner, bool transformForTransport)
@@ -48,7 +48,7 @@ namespace Movement
 
     /*  Initializes and launches spline movement
      */
-    class TC_GAME_API MoveSplineInit
+    class WC_GAME_API MoveSplineInit
     {
     public:
 
@@ -175,4 +175,4 @@ namespace Movement
 
     inline void MoveSplineInit::DisableTransportPathTransformations() { args.TransformForTransport = false; }
 }
-#endif // TRINITYSERVER_MOVESPLINEINIT_H
+#endif // WARHEADSERVER_MOVESPLINEINIT_H

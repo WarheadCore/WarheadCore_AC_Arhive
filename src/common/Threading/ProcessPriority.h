@@ -24,6 +24,6 @@
 #define CONFIG_PROCESSOR_AFFINITY "UseProcessors"
 #define CONFIG_HIGH_PRIORITY "ProcessPriority"
 
-void TC_COMMON_API SetProcessPriority(std::string const& logChannel, uint32 affinity, bool highPriority);
+void WC_COMMON_API SetProcessPriority(std::string const& logChannel, uint32 affinity, bool highPriority);
 
 #endif

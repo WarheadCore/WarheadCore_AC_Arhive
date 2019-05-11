@@ -941,7 +941,7 @@ class spell_gatewatcher_subboss_trigger : public SpellScriptLoader
                 if (!targetList.empty())
                 {
                     // If there are, pick one of them at random
-                    target = Trinity::Containers::SelectRandomContainerElement(targetList);
+                    target = Warhead::Containers::SelectRandomContainerElement(targetList);
                 }
                 // And hit only that one
                 targetList.clear();

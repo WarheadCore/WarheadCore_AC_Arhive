@@ -94,7 +94,7 @@ Channel::Channel(std::string const& name, uint32 team /*= 0*/) :
                     ObjectGuid banned_guid(uint64(atoull(token)));
                     if (banned_guid)
                     {
-                        TC_LOG_DEBUG("chat.system", "Channel(%s) loaded player %s into bannedStore", name.c_str(), banned_guid.ToString().c_str());
+                        WC_LOG_DEBUG("chat.system", "Channel(%s) loaded player %s into bannedStore", name.c_str(), banned_guid.ToString().c_str());
                         _bannedStore.insert(banned_guid);
                     }
                 }
@@ -106,7 +106,7 @@ Channel::Channel(std::string const& name, uint32 team /*= 0*/) :
             stmt->setString(0, name);
             stmt->setUInt32(1, _channelTeam);
             CharacterDatabase.Execute(stmt);
-            TC_LOG_DEBUG("chat.system", "Channel(%s) saved in database", name.c_str());
+            WC_LOG_DEBUG("chat.system", "Channel(%s) saved in database", name.c_str());
         }
 
         _persistentChannel = true;
@@ -121,9 +121,9 @@ void Channel::GetChannelName(std::string& channelName, uint32 channelId, LocaleC
         if (!(channelEntry->flags & CHANNEL_DBC_FLAG_GLOBAL))
         {
             if (channelEntry->flags & CHANNEL_DBC_FLAG_CITY_ONLY)
-                channelName = Trinity::StringFormat(channelEntry->pattern[locale], sObjectMgr->GetTrinityString(LANG_CHANNEL_CITY, locale));
+                channelName = Warhead::StringFormat(channelEntry->pattern[locale], sObjectMgr->GetTrinityString(LANG_CHANNEL_CITY, locale));
             else
-                channelName = Trinity::StringFormat(channelEntry->pattern[locale], ASSERT_NOTNULL(zoneEntry)->area_name[locale]);
+                channelName = Warhead::StringFormat(channelEntry->pattern[locale], ASSERT_NOTNULL(zoneEntry)->area_name[locale]);
         }
         else
             channelName = channelEntry->pattern[locale];
@@ -157,7 +157,7 @@ void Channel::UpdateChannelInDB() const
         stmt->setUInt32(5, _channelTeam);
         CharacterDatabase.Execute(stmt);
 
-        TC_LOG_DEBUG("chat.system", "Channel(%s) updated in database", _channelName.c_str());
+        WC_LOG_DEBUG("chat.system", "Channel(%s) updated in database", _channelName.c_str());
     }
 }
 
@@ -177,7 +177,7 @@ void Channel::CleanOldChannelsInDB()
         stmt->setUInt32(0, sWorld->getIntConfig(CONFIG_PRESERVE_CUSTOM_CHANNEL_DURATION) * DAY);
         CharacterDatabase.Execute(stmt);
 
-        TC_LOG_DEBUG("chat.system", "Cleaned out unused custom chat channels.");
+        WC_LOG_DEBUG("chat.system", "Cleaned out unused custom chat channels.");
     }
 }
 
@@ -640,7 +640,7 @@ void Channel::List(Player const* player) const
     }
 
     std::string channelName = GetName(player->GetSession()->GetSessionDbcLocale());
-    TC_LOG_DEBUG("chat.system", "SMSG_CHANNEL_LIST %s Channel: %s",
+    WC_LOG_DEBUG("chat.system", "SMSG_CHANNEL_LIST %s Channel: %s",
         player->GetSession()->GetPlayerInfo().c_str(), channelName.c_str());
 
     WorldPacket data(SMSG_CHANNEL_LIST, 1 + (channelName.size() + 1) + 1 + 4 + _playersStore.size() * (8 + 1));
@@ -899,7 +899,7 @@ void Channel::LeaveNotify(ObjectGuid guid) const
 template<class Builder>
 void Channel::SendToAll(Builder& builder, ObjectGuid guid /*= ObjectGuid::Empty*/) const
 {
-    Trinity::LocalizedPacketDo<Builder> localizer(builder);
+    Warhead::LocalizedPacketDo<Builder> localizer(builder);
 
     for (PlayerContainer::const_iterator i = _playersStore.begin(); i != _playersStore.end(); ++i)
         if (Player* player = ObjectAccessor::FindConnectedPlayer(i->first))
@@ -910,7 +910,7 @@ void Channel::SendToAll(Builder& builder, ObjectGuid guid /*= ObjectGuid::Empty*
 template<class Builder>
 void Channel::SendToAllButOne(Builder& builder, ObjectGuid who) const
 {
-    Trinity::LocalizedPacketDo<Builder> localizer(builder);
+    Warhead::LocalizedPacketDo<Builder> localizer(builder);
 
     for (PlayerContainer::const_iterator i = _playersStore.begin(); i != _playersStore.end(); ++i)
         if (i->first != who)
@@ -921,7 +921,7 @@ void Channel::SendToAllButOne(Builder& builder, ObjectGuid who) const
 template<class Builder>
 void Channel::SendToOne(Builder& builder, ObjectGuid who) const
 {
-    Trinity::LocalizedPacketDo<Builder> localizer(builder);
+    Warhead::LocalizedPacketDo<Builder> localizer(builder);
 
     if (Player* player = ObjectAccessor::FindConnectedPlayer(who))
         localizer(player);

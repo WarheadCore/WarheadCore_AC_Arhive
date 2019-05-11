@@ -31,7 +31,7 @@ enum TradeSlots
 class Item;
 class Player;
 
-class TC_GAME_API TradeData
+class WC_GAME_API TradeData
 {
 public:
     TradeData(Player* player, Player* trader) :

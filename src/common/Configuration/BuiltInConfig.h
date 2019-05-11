@@ -27,16 +27,16 @@ namespace BuiltInConfig
 {
     /// Returns the CMake command when any is specified in the config,
     /// returns the built-in path otherwise
-    TC_COMMON_API std::string GetCMakeCommand();
+    WC_COMMON_API std::string GetCMakeCommand();
     /// Returns the build directory path when any is specified in the config,
     /// returns the built-in one otherwise
-    TC_COMMON_API std::string GetBuildDirectory();
+    WC_COMMON_API std::string GetBuildDirectory();
     /// Returns the source directory path when any is specified in the config,
     /// returns the built-in one otherwise
-    TC_COMMON_API std::string GetSourceDirectory();
+    WC_COMMON_API std::string GetSourceDirectory();
     /// Returns the path to the mysql executable (`mysql`) when any is specified
     /// in the config, returns the built-in one otherwise
-    TC_COMMON_API std::string GetMySQLExecutable();
+    WC_COMMON_API std::string GetMySQLExecutable();
 
 } // namespace BuiltInConfig
 

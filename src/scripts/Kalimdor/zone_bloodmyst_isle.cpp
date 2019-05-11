@@ -758,8 +758,8 @@ public:
 
                     //Find Sironas and make it respawn if needed
                     Creature* sironas = nullptr;
-                    Trinity::AllCreaturesOfEntryInRange check(me, NPC_SIRONAS, SIZE_OF_GRIDS);
-                    Trinity::CreatureSearcher<Trinity::AllCreaturesOfEntryInRange> searcher(me, sironas, check);
+                    Warhead::AllCreaturesOfEntryInRange check(me, NPC_SIRONAS, SIZE_OF_GRIDS);
+                    Warhead::CreatureSearcher<Warhead::AllCreaturesOfEntryInRange> searcher(me, sironas, check);
                     Cell::VisitAllObjects(me, searcher, SIZE_OF_GRIDS);
 
                     if (sironas)

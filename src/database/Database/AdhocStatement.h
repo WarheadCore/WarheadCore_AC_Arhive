@@ -23,7 +23,7 @@
 #include "SQLOperation.h"
 
 /*! Raw, ad-hoc query. */
-class TC_DATABASE_API BasicStatementTask : public SQLOperation
+class WC_DATABASE_API BasicStatementTask : public SQLOperation
 {
     public:
         BasicStatementTask(char const* sql, bool async = false);

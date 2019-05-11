@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_FLIGHTPATHMOVEMENTGENERATOR_H
-#define TRINITY_FLIGHTPATHMOVEMENTGENERATOR_H
+#ifndef WARHEAD_FLIGHTPATHMOVEMENTGENERATOR_H
+#define WARHEAD_FLIGHTPATHMOVEMENTGENERATOR_H
 
 #include "DBCStructure.h"
 #include "MovementGenerator.h"
@@ -68,4 +68,4 @@ class FlightPathMovementGenerator : public MovementGeneratorMedium<Player, Fligh
         std::deque<TaxiNodeChangeInfo> _pointsForPathSwitch; //! node indexes and costs where TaxiPath changes
 };
 
-#endif // TRINITY_FLIGHTPATHMOVEMENTGENERATOR_H
+#endif // WARHEAD_FLIGHTPATHMOVEMENTGENERATOR_H

@@ -15,14 +15,14 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_AIEXCEPTION_H
-#define TRINITY_AIEXCEPTION_H
+#ifndef WARHEAD_AIEXCEPTION_H
+#define WARHEAD_AIEXCEPTION_H
 
 #include "Define.h"
 #include <exception>
 #include <string>
 
-class TC_GAME_API InvalidAIException : public std::exception
+class WC_GAME_API InvalidAIException : public std::exception
 {
 public:
     InvalidAIException(char const* msg) : msg_(msg) {}

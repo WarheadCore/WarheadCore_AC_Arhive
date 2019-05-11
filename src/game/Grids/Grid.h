@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_GRID_H
-#define TRINITY_GRID_H
+#ifndef WARHEAD_GRID_H
+#define WARHEAD_GRID_H
 
 /*
   @class Grid

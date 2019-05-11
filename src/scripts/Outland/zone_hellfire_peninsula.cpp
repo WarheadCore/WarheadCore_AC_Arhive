@@ -159,7 +159,7 @@ public:
             if (creature->GetOwner() && creature->GetOwner()->GetTypeId() == TYPEID_PLAYER)
                 Start(false, false, creature->GetOwner()->GetGUID());
             else
-                TC_LOG_ERROR("scripts", "TRINITY: npc_ancestral_wolf can not obtain owner or owner is not a player.");
+                WC_LOG_ERROR("scripts", "WARHEAD: npc_ancestral_wolf can not obtain owner or owner is not a player.");
 
             creature->SetSpeedRate(MOVE_WALK, 1.5f);
             Reset();
@@ -1097,8 +1097,8 @@ struct npc_watch_commander_leonus : public ScriptedAI
                 case EVENT_INFERNAL_RAIN_ATTACK:
                 {
                     std::list<Creature*> infernalrainList;
-                    Trinity::AllCreaturesOfEntryInRange checkerInfernalrain(me, NPC_INFERNAL_RAIN, 200.0f);
-                    Trinity::CreatureListSearcher<Trinity::AllCreaturesOfEntryInRange> searcherInfernal(me, infernalrainList, checkerInfernalrain);
+                    Warhead::AllCreaturesOfEntryInRange checkerInfernalrain(me, NPC_INFERNAL_RAIN, 200.0f);
+                    Warhead::CreatureListSearcher<Warhead::AllCreaturesOfEntryInRange> searcherInfernal(me, infernalrainList, checkerInfernalrain);
                     Cell::VisitAllObjects(me, searcherInfernal, 200.0f);
 
                     for (Creature* infernal : infernalrainList)
@@ -1110,8 +1110,8 @@ struct npc_watch_commander_leonus : public ScriptedAI
                 case EVENT_FEAR_CONTROLLER_CAST:
                 {
                     std::list<Creature*> fearcontrollerList;
-                    Trinity::AllCreaturesOfEntryInRange checkerFear(me, NPC_FEAR_CONTROLLER, 200.0f);
-                    Trinity::CreatureListSearcher<Trinity::AllCreaturesOfEntryInRange> searcherFear(me, fearcontrollerList, checkerFear);
+                    Warhead::AllCreaturesOfEntryInRange checkerFear(me, NPC_FEAR_CONTROLLER, 200.0f);
+                    Warhead::CreatureListSearcher<Warhead::AllCreaturesOfEntryInRange> searcherFear(me, fearcontrollerList, checkerFear);
                     Cell::VisitAllObjects(me, searcherFear, 200.0f);
 
                     for (Creature* fearController : fearcontrollerList)
@@ -1172,13 +1172,13 @@ struct npc_infernal_rain_hellfire : public ScriptedAI
                 case EVENT_INFERNAL_RAIN_CAST:
                 {
                     std::list<Creature*> infernalrainList;
-                    Trinity::AllCreaturesOfEntryInRange checker(me, NPC_INFERNAL_RAIN, 200.0f);
-                    Trinity::CreatureListSearcher<Trinity::AllCreaturesOfEntryInRange> searcher(me, infernalrainList, checker);
+                    Warhead::AllCreaturesOfEntryInRange checker(me, NPC_INFERNAL_RAIN, 200.0f);
+                    Warhead::CreatureListSearcher<Warhead::AllCreaturesOfEntryInRange> searcher(me, infernalrainList, checker);
                     Cell::VisitAllObjects(me, searcher, 200.0f);
 
                     if (!infernalrainList.empty())
                     {
-                        Creature* random = Trinity::Containers::SelectRandomContainerElement(infernalrainList);
+                        Creature* random = Warhead::Containers::SelectRandomContainerElement(infernalrainList);
                         if (random->isMoving() && random->GetPositionZ() < 118.0f)
                         {
                             CastSpellExtraArgs args;

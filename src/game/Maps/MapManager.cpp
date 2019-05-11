@@ -177,10 +177,10 @@ Map::EnterState MapManager::PlayerCannotEnter(uint32 mapid, Player* player, bool
             if (!corpseMap)
                 return Map::CANNOT_ENTER_CORPSE_IN_DIFFERENT_INSTANCE;
 
-            TC_LOG_DEBUG("maps", "MAP: Player '%s' has corpse in instance '%s' and can enter.", player->GetName().c_str(), mapName);
+            WC_LOG_DEBUG("maps", "MAP: Player '%s' has corpse in instance '%s' and can enter.", player->GetName().c_str(), mapName);
         }
         else
-            TC_LOG_DEBUG("maps", "Map::CanPlayerEnter - player '%s' is dead but does not have a corpse!", player->GetName().c_str());
+            WC_LOG_DEBUG("maps", "Map::CanPlayerEnter - player '%s' is dead but does not have a corpse!", player->GetName().c_str());
     }
 
     //Get instance where player's group is bound & its map
@@ -235,7 +235,7 @@ void MapManager::DoDelayedMovesAndRemoves() { }
 
 bool MapManager::ExistMapAndVMap(uint32 mapid, float x, float y)
 {
-    GridCoord p = Trinity::ComputeGridCoord(x, y);
+    GridCoord p = Warhead::ComputeGridCoord(x, y);
 
     int gx = (MAX_NUMBER_OF_GRIDS - 1) - p.x_coord;
     int gy = (MAX_NUMBER_OF_GRIDS - 1) - p.y_coord;
@@ -333,7 +333,7 @@ uint32 MapManager::GenerateInstanceId()
 {
     if (_nextInstanceId == 0xFFFFFFFF)
     {
-        TC_LOG_ERROR("maps", "Instance ID overflow!! Can't continue, shutting down server. ");
+        WC_LOG_ERROR("maps", "Instance ID overflow!! Can't continue, shutting down server. ");
         World::StopNow(ERROR_EXIT_CODE);
         return _nextInstanceId;
     }

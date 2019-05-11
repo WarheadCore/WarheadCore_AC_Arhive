@@ -81,7 +81,7 @@ struct WorldSafeLocsEntry;
 typedef std::vector<BfGraveyard*> GraveyardVect;
 typedef std::map<ObjectGuid, time_t> PlayerTimerMap;
 
-class TC_GAME_API BfCapturePoint
+class WC_GAME_API BfCapturePoint
 {
     public:
         BfCapturePoint(Battlefield* bf);
@@ -149,7 +149,7 @@ class TC_GAME_API BfCapturePoint
         ObjectGuid m_capturePointGUID;
 };
 
-class TC_GAME_API BfGraveyard
+class WC_GAME_API BfGraveyard
 {
     public:
         BfGraveyard(Battlefield* Bf);
@@ -196,7 +196,7 @@ class TC_GAME_API BfGraveyard
         Battlefield* m_Bf;
 };
 
-class TC_GAME_API Battlefield : public ZoneScript
+class WC_GAME_API Battlefield : public ZoneScript
 {
     friend class BattlefieldMgr;
 

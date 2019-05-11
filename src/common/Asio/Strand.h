@@ -25,7 +25,7 @@
 #include <boost/asio/bind_executor.hpp>
 #endif
 
-namespace Trinity
+namespace Warhead
 {
     namespace Asio
     {

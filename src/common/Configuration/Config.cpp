@@ -88,12 +88,12 @@ T ConfigMgr::GetValueDefault(std::string const& name, T def) const
     }
     catch (bpt::ptree_bad_path const&)
     {
-        TC_LOG_WARN("server.loading", "Missing name %s in config file %s, add \"%s = %s\" to this file",
+        WC_LOG_WARN("server.loading", "Missing name %s in config file %s, add \"%s = %s\" to this file",
             name.c_str(), _filename.c_str(), name.c_str(), std::to_string(def).c_str());
     }
     catch (bpt::ptree_bad_data const&)
     {
-        TC_LOG_ERROR("server.loading", "Bad value defined for name %s in config file %s, going to use %s instead",
+        WC_LOG_ERROR("server.loading", "Bad value defined for name %s in config file %s, going to use %s instead",
             name.c_str(), _filename.c_str(), std::to_string(def).c_str());
     }
 
@@ -109,12 +109,12 @@ std::string ConfigMgr::GetValueDefault<std::string>(std::string const& name, std
     }
     catch (bpt::ptree_bad_path const&)
     {
-        TC_LOG_WARN("server.loading", "Missing name %s in config file %s, add \"%s = %s\" to this file",
+        WC_LOG_WARN("server.loading", "Missing name %s in config file %s, add \"%s = %s\" to this file",
             name.c_str(), _filename.c_str(), name.c_str(), def.c_str());
     }
     catch (bpt::ptree_bad_data const&)
     {
-        TC_LOG_ERROR("server.loading", "Bad value defined for name %s in config file %s, going to use %s instead",
+        WC_LOG_ERROR("server.loading", "Bad value defined for name %s in config file %s, going to use %s instead",
             name.c_str(), _filename.c_str(), def.c_str());
     }
 

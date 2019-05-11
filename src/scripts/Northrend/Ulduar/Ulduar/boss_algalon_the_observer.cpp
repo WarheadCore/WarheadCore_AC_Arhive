@@ -578,7 +578,7 @@ struct boss_algalon_the_observer : public BossAI
                     me->GetCreatureListWithEntryInGrid(stalkers, NPC_ALGALON_STALKER, 200.0f);
                     if (!stalkers.empty())
                     {
-                        Unit* stalker = Trinity::Containers::SelectRandomContainerElement(stalkers);
+                        Unit* stalker = Warhead::Containers::SelectRandomContainerElement(stalkers);
                         stalker->m_Events.AddEventAtOffset(new ActivateLivingConstellation(stalker), 45s, 50s);
                     }
                     break;

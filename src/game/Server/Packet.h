@@ -22,7 +22,7 @@
 
 namespace WorldPackets
 {
-    class TC_GAME_API Packet
+    class WC_GAME_API Packet
     {
     public:
         Packet(WorldPacket&& worldPacket);
@@ -42,7 +42,7 @@ namespace WorldPackets
         WorldPacket _worldPacket;
     };
 
-    class TC_GAME_API ServerPacket : public Packet
+    class WC_GAME_API ServerPacket : public Packet
     {
     public:
         ServerPacket(OpcodeServer opcode, size_t initialSize = 200);
@@ -56,7 +56,7 @@ namespace WorldPackets
         OpcodeServer GetOpcode() const { return OpcodeServer(_worldPacket.GetOpcode()); }
     };
 
-    class TC_GAME_API ClientPacket : public Packet
+    class WC_GAME_API ClientPacket : public Packet
     {
     public:
         ClientPacket(WorldPacket&& packet);

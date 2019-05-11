@@ -104,9 +104,9 @@ typedef std::map<ObjectGuid, LfgLockMap> LfgLockPartyMap;
 typedef std::map<ObjectGuid, uint8> LfgRolesMap;
 typedef std::map<ObjectGuid, ObjectGuid> LfgGroupsMap;
 
-TC_GAME_API std::string ConcatenateDungeons(LfgDungeonSet const& dungeons);
-TC_GAME_API std::string GetRolesString(uint8 roles);
-TC_GAME_API std::string GetStateString(LfgState state);
+WC_GAME_API std::string ConcatenateDungeons(LfgDungeonSet const& dungeons);
+WC_GAME_API std::string GetRolesString(uint8 roles);
+WC_GAME_API std::string GetStateString(LfgState state);
 
 } // namespace lfg
 

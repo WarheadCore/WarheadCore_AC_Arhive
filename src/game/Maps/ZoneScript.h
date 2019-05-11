@@ -27,7 +27,7 @@ class Unit;
 class WorldObject;
 struct CreatureData;
 
-class TC_GAME_API ZoneScript
+class WC_GAME_API ZoneScript
 {
     public:
         ZoneScript() { }

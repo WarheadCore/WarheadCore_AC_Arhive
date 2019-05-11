@@ -747,7 +747,7 @@ class spell_skadi_reset_check : public SpellScriptLoader
 
             void CountTargets(std::list<WorldObject*>& targets)
             {
-                targets.remove_if(Trinity::UnitAuraCheck(false, SPELL_UTGARDE_PINNACLE_GAUNTLET_EFFECT));
+                targets.remove_if(Warhead::UnitAuraCheck(false, SPELL_UTGARDE_PINNACLE_GAUNTLET_EFFECT));
                 _targetCount = targets.size();
             }
 

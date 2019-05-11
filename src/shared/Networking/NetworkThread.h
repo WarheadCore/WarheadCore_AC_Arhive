@@ -120,13 +120,13 @@ protected:
 
     void Run()
     {
-        TC_LOG_DEBUG("misc", "Network Thread Starting");
+        WC_LOG_DEBUG("misc", "Network Thread Starting");
 
         _updateTimer.expires_from_now(boost::posix_time::milliseconds(10));
         _updateTimer.async_wait(std::bind(&NetworkThread<SocketType>::Update, this));
         _ioContext.run();
 
-        TC_LOG_DEBUG("misc", "Network Thread exits");
+        WC_LOG_DEBUG("misc", "Network Thread exits");
         _newSockets.clear();
         _sockets.clear();
     }
@@ -171,9 +171,9 @@ private:
     std::mutex _newSocketsLock;
     SocketContainer _newSockets;
 
-    Trinity::Asio::IoContext _ioContext;
+    Warhead::Asio::IoContext _ioContext;
     tcp::socket _acceptSocket;
-    Trinity::Asio::DeadlineTimer _updateTimer;
+    Warhead::Asio::DeadlineTimer _updateTimer;
 };
 
 #endif // NetworkThread_h__

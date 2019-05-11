@@ -28,7 +28,7 @@ using namespace boost::process;
 using namespace boost::process::initializers;
 using namespace boost::iostreams;
 
-namespace Trinity
+namespace Warhead
 {
 
 template<typename T>
@@ -71,7 +71,7 @@ static int CreateChildProcess(T waiter, std::string const& executable,
 
     if (!secure)
     {
-        TC_LOG_TRACE(logger, "Starting process \"%s\" with arguments: \"%s\".",
+        WC_LOG_TRACE(logger, "Starting process \"%s\" with arguments: \"%s\".",
                 executable.c_str(), boost::algorithm::join(args, " ").c_str());
     }
 
@@ -106,12 +106,12 @@ static int CreateChildProcess(T waiter, std::string const& executable,
 
     auto outInfo = MakeTCLogSink([&](std::string msg)
     {
-        TC_LOG_INFO(logger, "%s", msg.c_str());
+        WC_LOG_INFO(logger, "%s", msg.c_str());
     });
 
     auto outError = MakeTCLogSink([&](std::string msg)
     {
-        TC_LOG_ERROR(logger, "%s", msg.c_str());
+        WC_LOG_ERROR(logger, "%s", msg.c_str());
     });
 
     copy(outFd, outInfo);
@@ -123,7 +123,7 @@ static int CreateChildProcess(T waiter, std::string const& executable,
 
     if (!secure)
     {
-        TC_LOG_TRACE(logger, ">> Process \"%s\" finished with return value %i.",
+        WC_LOG_TRACE(logger, ">> Process \"%s\" finished with return value %i.",
                 executable.c_str(), result);
     }
 
@@ -255,4 +255,4 @@ std::string SearchExecutableInPath(std::string const& filename)
     }
 }
 
-} // namespace Trinity
+} // namespace Warhead

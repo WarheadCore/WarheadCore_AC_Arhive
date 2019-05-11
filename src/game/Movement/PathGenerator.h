@@ -50,7 +50,7 @@ enum PathType
     PATHFIND_SHORT          = 0x20,   // path is longer or equal to its limited path length
 };
 
-class TC_GAME_API PathGenerator
+class WC_GAME_API PathGenerator
 {
     public:
         explicit PathGenerator(Unit const* owner);

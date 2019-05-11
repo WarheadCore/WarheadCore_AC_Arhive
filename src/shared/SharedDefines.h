@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_SHAREDDEFINES_H
-#define TRINITY_SHAREDDEFINES_H
+#ifndef WARHEAD_SHAREDDEFINES_H
+#define WARHEAD_SHAREDDEFINES_H
 
 #include "Define.h"
 #include "DetourNavMesh.h"
@@ -3055,38 +3055,38 @@ enum SkillCategory
 
 enum TotemCategory
 {
-    TC_SKINNING_SKIFE_OLD          = 1,
-    TC_EARTH_TOTEM                 = 2,
-    TC_AIR_TOTEM                   = 3,
-    TC_FIRE_TOTEM                  = 4,
-    TC_WATER_TOTEM                 = 5,
-    TC_COPPER_ROD                  = 6,
-    TC_SILVER_ROD                  = 7,
-    TC_GOLDEN_ROD                  = 8,
-    TC_TRUESILVER_ROD              = 9,
-    TC_ARCANITE_ROD                = 10,
-    TC_MINING_PICK_OLD             = 11,
-    TC_PHILOSOPHERS_STONE          = 12,
-    TC_BLACKSMITH_HAMMER_OLD       = 13,
-    TC_ARCLIGHT_SPANNER            = 14,
-    TC_GYROMATIC_MA                = 15,
-    TC_MASTER_TOTEM                = 21,
-    TC_FEL_IRON_ROD                = 41,
-    TC_ADAMANTITE_ROD              = 62,
-    TC_ETERNIUM_ROD                = 63,
-    TC_HOLLOW_QUILL                = 81,
-    TC_RUNED_AZURITE_ROD           = 101,
-    TC_VIRTUOSO_INKING_SET         = 121,
-    TC_DRUMS                       = 141,
-    TC_GNOMISH_ARMY_KNIFE          = 161,
-    TC_BLACKSMITH_HAMMER           = 162,
-    TC_MINING_PICK                 = 165,
-    TC_SKINNING_KNIFE              = 166,
-    TC_HAMMER_PICK                 = 167,
-    TC_BLADED_PICKAXE              = 168,
-    TC_FLINT_AND_TINDER            = 169,
-    TC_RUNED_COBALT_ROD            = 189,
-    TC_RUNED_TITANIUM_ROD          = 190
+    WC_SKINNING_SKIFE_OLD          = 1,
+    WC_EARTH_TOTEM                 = 2,
+    WC_AIR_TOTEM                   = 3,
+    WC_FIRE_TOTEM                  = 4,
+    WC_WATER_TOTEM                 = 5,
+    WC_COPPER_ROD                  = 6,
+    WC_SILVER_ROD                  = 7,
+    WC_GOLDEN_ROD                  = 8,
+    WC_TRUESILVER_ROD              = 9,
+    WC_ARCANITE_ROD                = 10,
+    WC_MINING_PICK_OLD             = 11,
+    WC_PHILOSOPHERS_STONE          = 12,
+    WC_BLACKSMITH_HAMMER_OLD       = 13,
+    WC_ARCLIGHT_SPANNER            = 14,
+    WC_GYROMATIC_MA                = 15,
+    WC_MASTER_TOTEM                = 21,
+    WC_FEL_IRON_ROD                = 41,
+    WC_ADAMANTITE_ROD              = 62,
+    WC_ETERNIUM_ROD                = 63,
+    WC_HOLLOW_QUILL                = 81,
+    WC_RUNED_AZURITE_ROD           = 101,
+    WC_VIRTUOSO_INKING_SET         = 121,
+    WC_DRUMS                       = 141,
+    WC_GNOMISH_ARMY_KNIFE          = 161,
+    WC_BLACKSMITH_HAMMER           = 162,
+    WC_MINING_PICK                 = 165,
+    WC_SKINNING_KNIFE              = 166,
+    WC_HAMMER_PICK                 = 167,
+    WC_BLADED_PICKAXE              = 168,
+    WC_FLINT_AND_TINDER            = 169,
+    WC_RUNED_COBALT_ROD            = 189,
+    WC_RUNED_TITANIUM_ROD          = 190
 };
 
 enum UnitDynFlags

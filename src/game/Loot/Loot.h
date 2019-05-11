@@ -122,7 +122,7 @@ enum LootSlotType
     LOOT_SLOT_TYPE_OWNER        = 4                         // ignore binding confirmation and etc, for single player looting
 };
 
-struct TC_GAME_API LootItem
+struct WC_GAME_API LootItem
 {
     uint32  itemid;
     uint32  randomSuffix;
@@ -200,7 +200,7 @@ struct LootView;
 ByteBuffer& operator<<(ByteBuffer& b, LootItem const& li);
 ByteBuffer& operator<<(ByteBuffer& b, LootView const& lv);
 
-struct TC_GAME_API Loot
+struct WC_GAME_API Loot
 {
     friend ByteBuffer& operator<<(ByteBuffer& b, LootView const& lv);
 

@@ -45,7 +45,7 @@ else()
 
   target_link_libraries(zlib
     PRIVATE
-      trinity-dependency-interface)
+      warhead-dependency-interface)
 
   set_target_properties(zlib
       PROPERTIES

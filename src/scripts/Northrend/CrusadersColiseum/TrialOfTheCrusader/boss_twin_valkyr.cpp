@@ -142,7 +142,7 @@ class OrbsDespawner : public BasicEvent
 
         bool Execute(uint64 /*currTime*/, uint32 /*diff*/) override
         {
-            Trinity::CreatureWorker<OrbsDespawner> worker(_creature, *this);
+            Warhead::CreatureWorker<OrbsDespawner> worker(_creature, *this);
             Cell::VisitGridObjects(_creature, worker, SIZE_OF_GRIDS);
             return true;
         }

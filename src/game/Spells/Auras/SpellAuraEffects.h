@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_SPELLAURAEFFECTS_H
-#define TRINITY_SPELLAURAEFFECTS_H
+#ifndef WARHEAD_SPELLAURAEFFECTS_H
+#define WARHEAD_SPELLAURAEFFECTS_H
 
 #include "SpellAuras.h"
 
@@ -26,7 +26,7 @@ class Unit;
 
 typedef void(AuraEffect::*pAuraEffectHandler)(AuraApplication const* aurApp, uint8 mode, bool apply) const;
 
-class TC_GAME_API AuraEffect
+class WC_GAME_API AuraEffect
 {
     friend void Aura::_InitEffects(uint8 effMask, Unit* caster, int32 const* baseAmount);
     friend Aura::~Aura();
@@ -311,7 +311,7 @@ class TC_GAME_API AuraEffect
         void HandleRaidProcFromChargeWithValueAuraProc(AuraApplication* aurApp, ProcEventInfo& eventInfo);
 };
 
-namespace Trinity
+namespace Warhead
 {
     // Binary predicate for sorting the priority of absorption aura effects
     class AbsorbAuraOrderPred

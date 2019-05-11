@@ -72,7 +72,7 @@ namespace VMAP
         Optional<LiquidInfo> liquidInfo;
     };
     //===========================================================
-    class TC_COMMON_API IVMapManager
+    class WC_COMMON_API IVMapManager
     {
         private:
             bool iEnableLineOfSightCalc;

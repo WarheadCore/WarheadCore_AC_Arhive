@@ -20,7 +20,7 @@ endif()
 
 GroupSources(${CMAKE_CURRENT_SOURCE_DIR})
 
-add_definitions(-DTRINITY_API_EXPORT_SHARED)
+add_definitions(-DWARHEAD_API_EXPORT_SHARED)
 
 add_library(shared
   ${PRIVATE_PCH_SOURCE}
@@ -41,7 +41,7 @@ target_include_directories(shared
 
 target_link_libraries(shared
   PRIVATE
-    trinity-core-interface
+    warhead-core-interface
   PUBLIC
     database)
 

@@ -20,7 +20,7 @@
 
 #include "SQLOperation.h"
 
-class TC_DATABASE_API SQLQueryHolder
+class WC_DATABASE_API SQLQueryHolder
 {
     friend class SQLQueryHolderTask;
     private:
@@ -34,7 +34,7 @@ class TC_DATABASE_API SQLQueryHolder
         void SetPreparedResult(size_t index, PreparedResultSet* result);
 };
 
-class TC_DATABASE_API SQLQueryHolderTask : public SQLOperation
+class WC_DATABASE_API SQLQueryHolderTask : public SQLOperation
 {
     private:
         SQLQueryHolder* m_holder;

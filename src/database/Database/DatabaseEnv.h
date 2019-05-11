@@ -33,10 +33,10 @@
 #include "Transaction.h"
 
 /// Accessor to the world database
-TC_DATABASE_API extern DatabaseWorkerPool<WorldDatabaseConnection> WorldDatabase;
+WC_DATABASE_API extern DatabaseWorkerPool<WorldDatabaseConnection> WorldDatabase;
 /// Accessor to the character database
-TC_DATABASE_API extern DatabaseWorkerPool<CharacterDatabaseConnection> CharacterDatabase;
+WC_DATABASE_API extern DatabaseWorkerPool<CharacterDatabaseConnection> CharacterDatabase;
 /// Accessor to the realm/login database
-TC_DATABASE_API extern DatabaseWorkerPool<LoginDatabaseConnection> LoginDatabase;
+WC_DATABASE_API extern DatabaseWorkerPool<LoginDatabaseConnection> LoginDatabase;
 
 #endif

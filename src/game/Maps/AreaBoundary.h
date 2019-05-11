@@ -15,12 +15,12 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_AREA_BOUNDARY_H
-#define TRINITY_AREA_BOUNDARY_H
+#ifndef WARHEAD_AREA_BOUNDARY_H
+#define WARHEAD_AREA_BOUNDARY_H
 
 #include "Position.h"
 
-class TC_GAME_API AreaBoundary
+class WC_GAME_API AreaBoundary
 {
     public:
         bool IsWithinBoundary(Position const* pos) const { return pos && (IsWithinBoundaryArea(pos) != _isInvertedBoundary); }
@@ -72,7 +72,7 @@ class TC_GAME_API AreaBoundary
         bool _isInvertedBoundary;
 };
 
-class TC_GAME_API RectangleBoundary : public AreaBoundary
+class WC_GAME_API RectangleBoundary : public AreaBoundary
 {
     public:
         // X axis is north/south, Y axis is east/west, larger values are northwest
@@ -85,7 +85,7 @@ class TC_GAME_API RectangleBoundary : public AreaBoundary
         float const _minX, _maxX, _minY, _maxY;
 };
 
-class TC_GAME_API CircleBoundary : public AreaBoundary
+class WC_GAME_API CircleBoundary : public AreaBoundary
 {
     public:
         CircleBoundary(Position const& center, double radius, bool isInverted = false);
@@ -99,7 +99,7 @@ class TC_GAME_API CircleBoundary : public AreaBoundary
         double const _radiusSq;
 };
 
-class TC_GAME_API EllipseBoundary : public AreaBoundary
+class WC_GAME_API EllipseBoundary : public AreaBoundary
 {
     public:
         EllipseBoundary(Position const& center, double radiusX, double radiusY, bool isInverted = false);
@@ -112,7 +112,7 @@ class TC_GAME_API EllipseBoundary : public AreaBoundary
         double const _radiusYSq, _scaleXSq;
 };
 
-class TC_GAME_API TriangleBoundary : public AreaBoundary
+class WC_GAME_API TriangleBoundary : public AreaBoundary
 {
     public:
         TriangleBoundary(Position const& pointA, Position const& pointB, Position const& pointC, bool isInverted = false);
@@ -125,7 +125,7 @@ class TC_GAME_API TriangleBoundary : public AreaBoundary
         double const _abx, _bcx, _cax, _aby, _bcy, _cay;
 };
 
-class TC_GAME_API ParallelogramBoundary : public AreaBoundary
+class WC_GAME_API ParallelogramBoundary : public AreaBoundary
 {
     public:
         // Note: AB must be orthogonal to AD
@@ -139,7 +139,7 @@ class TC_GAME_API ParallelogramBoundary : public AreaBoundary
         double const _abx, _dax, _aby, _day;
 };
 
-class TC_GAME_API ZRangeBoundary : public AreaBoundary
+class WC_GAME_API ZRangeBoundary : public AreaBoundary
 {
     public:
         ZRangeBoundary(float minZ, float maxZ, bool isInverted = false);
@@ -151,7 +151,7 @@ class TC_GAME_API ZRangeBoundary : public AreaBoundary
         float const _minZ, _maxZ;
 };
 
-class TC_GAME_API BoundaryUnionBoundary : public AreaBoundary
+class WC_GAME_API BoundaryUnionBoundary : public AreaBoundary
 {
     public:
         BoundaryUnionBoundary(AreaBoundary const* b1, AreaBoundary const* b2, bool isInverted = false);
@@ -165,4 +165,4 @@ class TC_GAME_API BoundaryUnionBoundary : public AreaBoundary
         AreaBoundary const* const _b2;
 };
 
-#endif //TRINITY_AREA_BOUNDARY_H
+#endif //WARHEAD_AREA_BOUNDARY_H

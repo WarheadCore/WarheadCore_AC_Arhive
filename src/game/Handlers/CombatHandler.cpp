@@ -31,7 +31,7 @@ void WorldSession::HandleAttackSwingOpcode(WorldPacket& recvData)
     ObjectGuid guid;
     recvData >> guid;
 
-    TC_LOG_DEBUG("network", "WORLD: Recvd CMSG_ATTACKSWING Message %s", guid.ToString().c_str());
+    WC_LOG_DEBUG("network", "WORLD: Recvd CMSG_ATTACKSWING Message %s", guid.ToString().c_str());
 
     Unit* pEnemy = ObjectAccessor::GetUnit(*_player, guid);
 
@@ -76,11 +76,11 @@ void WorldSession::HandleSetSheathedOpcode(WorldPacket& recvData)
     uint32 sheathed;
     recvData >> sheathed;
 
-    //TC_LOG_DEBUG("network", "WORLD: Recvd CMSG_SETSHEATHED Message guidlow:%u value1:%u", GetPlayer()->GetGUID().GetCounter(), sheathed);
+    //WC_LOG_DEBUG("network", "WORLD: Recvd CMSG_SETSHEATHED Message guidlow:%u value1:%u", GetPlayer()->GetGUID().GetCounter(), sheathed);
 
     if (sheathed >= MAX_SHEATH_STATE)
     {
-        TC_LOG_ERROR("network", "Unknown sheath state %u ??", sheathed);
+        WC_LOG_ERROR("network", "Unknown sheath state %u ??", sheathed);
         return;
     }
 

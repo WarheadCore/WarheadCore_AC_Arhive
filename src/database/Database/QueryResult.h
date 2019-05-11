@@ -23,7 +23,7 @@
 #include "DatabaseEnvFwd.h"
 #include <vector>
 
-class TC_DATABASE_API ResultSet
+class WC_DATABASE_API ResultSet
 {
     public:
         ResultSet(MYSQL_RES* result, MYSQL_FIELD* fields, uint64 rowCount, uint32 fieldCount);
@@ -50,7 +50,7 @@ class TC_DATABASE_API ResultSet
         ResultSet& operator=(ResultSet const& right) = delete;
 };
 
-class TC_DATABASE_API PreparedResultSet
+class WC_DATABASE_API PreparedResultSet
 {
     public:
         PreparedResultSet(MYSQL_STMT* stmt, MYSQL_RES* result, uint64 rowCount, uint32 fieldCount);

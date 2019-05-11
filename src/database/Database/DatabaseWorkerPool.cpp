@@ -55,8 +55,8 @@ DatabaseWorkerPool<T>::DatabaseWorkerPool()
       _async_threads(0), _synch_threads(0)
 {
     WPFatal(mysql_thread_safe(), "Used MySQL library isn't thread-safe.");
-    WPFatal(mysql_get_client_version() >= MIN_MYSQL_CLIENT_VERSION, "TrinityCore does not support MySQL versions below 5.1");
-    WPFatal(mysql_get_client_version() == MYSQL_VERSION_ID, "Used MySQL library version (%s) does not match the version used to compile TrinityCore (%s). Search on forum for TCE00011.",
+    WPFatal(mysql_get_client_version() >= MIN_MYSQL_CLIENT_VERSION, "WarheadCore does not support MySQL versions below 5.1");
+    WPFatal(mysql_get_client_version() == MYSQL_VERSION_ID, "Used MySQL library version (%s) does not match the version used to compile WarheadCore (%s). Search on forum for TCE00011.",
         mysql_get_client_info(), MYSQL_SERVER_VERSION);
 }
 
@@ -70,7 +70,7 @@ template <class T>
 void DatabaseWorkerPool<T>::SetConnectionInfo(std::string const& infoString,
     uint8 const asyncThreads, uint8 const synchThreads)
 {
-    _connectionInfo = Trinity::make_unique<MySQLConnectionInfo>(infoString);
+    _connectionInfo = Warhead::make_unique<MySQLConnectionInfo>(infoString);
 
     _async_threads = asyncThreads;
     _synch_threads = synchThreads;
@@ -81,7 +81,7 @@ uint32 DatabaseWorkerPool<T>::Open()
 {
     WPFatal(_connectionInfo.get(), "Connection info was not set!");
 
-    TC_LOG_INFO("sql.driver", "Opening DatabasePool '%s'. "
+    WC_LOG_INFO("sql.driver", "Opening DatabasePool '%s'. "
         "Asynchronous connections: %u, synchronous connections: %u.",
         GetDatabaseName(), _async_threads, _synch_threads);
 
@@ -94,7 +94,7 @@ uint32 DatabaseWorkerPool<T>::Open()
 
     if (!error)
     {
-        TC_LOG_INFO("sql.driver", "DatabasePool '%s' opened successfully. " SZFMTD
+        WC_LOG_INFO("sql.driver", "DatabasePool '%s' opened successfully. " SZFMTD
                     " total connections running.", GetDatabaseName(),
                     (_connections[IDX_SYNCH].size() + _connections[IDX_ASYNC].size()));
     }
@@ -105,12 +105,12 @@ uint32 DatabaseWorkerPool<T>::Open()
 template <class T>
 void DatabaseWorkerPool<T>::Close()
 {
-    TC_LOG_INFO("sql.driver", "Closing down DatabasePool '%s'.", GetDatabaseName());
+    WC_LOG_INFO("sql.driver", "Closing down DatabasePool '%s'.", GetDatabaseName());
 
     //! Closes the actualy MySQL connection.
     _connections[IDX_ASYNC].clear();
 
-    TC_LOG_INFO("sql.driver", "Asynchronous connections on DatabasePool '%s' terminated. "
+    WC_LOG_INFO("sql.driver", "Asynchronous connections on DatabasePool '%s' terminated. "
                 "Proceeding with synchronous connections.",
         GetDatabaseName());
 
@@ -120,7 +120,7 @@ void DatabaseWorkerPool<T>::Close()
     //! meaning there can be no concurrent access at this point.
     _connections[IDX_SYNCH].clear();
 
-    TC_LOG_INFO("sql.driver", "All connections on DatabasePool '%s' closed.", GetDatabaseName());
+    WC_LOG_INFO("sql.driver", "All connections on DatabasePool '%s' closed.", GetDatabaseName());
 }
 
 template <class T>
@@ -242,22 +242,22 @@ SQLTransaction DatabaseWorkerPool<T>::BeginTransaction()
 template <class T>
 void DatabaseWorkerPool<T>::CommitTransaction(SQLTransaction transaction)
 {
-#ifdef TRINITY_DEBUG
+#ifdef WARHEAD_DEBUG
     //! Only analyze transaction weaknesses in Debug mode.
     //! Ideally we catch the faults in Debug mode and then correct them,
     //! so there's no need to waste these CPU cycles in Release mode.
     switch (transaction->GetSize())
     {
     case 0:
-        TC_LOG_DEBUG("sql.driver", "Transaction contains 0 queries. Not executing.");
+        WC_LOG_DEBUG("sql.driver", "Transaction contains 0 queries. Not executing.");
         return;
     case 1:
-        TC_LOG_DEBUG("sql.driver", "Warning: Transaction only holds 1 query, consider removing Transaction context in code.");
+        WC_LOG_DEBUG("sql.driver", "Warning: Transaction only holds 1 query, consider removing Transaction context in code.");
         break;
     default:
         break;
     }
-#endif // TRINITY_DEBUG
+#endif // WARHEAD_DEBUG
 
     Enqueue(new TransactionTask(transaction));
 }
@@ -341,9 +341,9 @@ uint32 DatabaseWorkerPool<T>::OpenConnections(InternalIndex type, uint8 numConne
             switch (type)
             {
             case IDX_ASYNC:
-                return Trinity::make_unique<T>(_queue.get(), *_connectionInfo);
+                return Warhead::make_unique<T>(_queue.get(), *_connectionInfo);
             case IDX_SYNCH:
-                return Trinity::make_unique<T>(*_connectionInfo);
+                return Warhead::make_unique<T>(*_connectionInfo);
             default:
                 ABORT();
             }
@@ -357,7 +357,7 @@ uint32 DatabaseWorkerPool<T>::OpenConnections(InternalIndex type, uint8 numConne
         }
         else if (mysql_get_server_version(connection->GetHandle()) < MIN_MYSQL_SERVER_VERSION)
         {
-            TC_LOG_ERROR("sql.driver", "TrinityCore does not support MySQL versions below 5.1");
+            WC_LOG_ERROR("sql.driver", "WarheadCore does not support MySQL versions below 5.1");
             return 1;
         }
         else
@@ -413,7 +413,7 @@ char const* DatabaseWorkerPool<T>::GetDatabaseName() const
 template <class T>
 void DatabaseWorkerPool<T>::Execute(char const* sql)
 {
-    if (Trinity::IsFormatEmptyOrNull(sql))
+    if (Warhead::IsFormatEmptyOrNull(sql))
         return;
 
     BasicStatementTask* task = new BasicStatementTask(sql);
@@ -430,7 +430,7 @@ void DatabaseWorkerPool<T>::Execute(PreparedStatement* stmt)
 template <class T>
 void DatabaseWorkerPool<T>::DirectExecute(char const* sql)
 {
-    if (Trinity::IsFormatEmptyOrNull(sql))
+    if (Warhead::IsFormatEmptyOrNull(sql))
         return;
 
     T* connection = GetFreeConnection();
@@ -467,6 +467,6 @@ void DatabaseWorkerPool<T>::ExecuteOrAppend(SQLTransaction& trans, PreparedState
         trans->Append(stmt);
 }
 
-template class TC_DATABASE_API DatabaseWorkerPool<LoginDatabaseConnection>;
-template class TC_DATABASE_API DatabaseWorkerPool<WorldDatabaseConnection>;
-template class TC_DATABASE_API DatabaseWorkerPool<CharacterDatabaseConnection>;
+template class WC_DATABASE_API DatabaseWorkerPool<LoginDatabaseConnection>;
+template class WC_DATABASE_API DatabaseWorkerPool<WorldDatabaseConnection>;
+template class WC_DATABASE_API DatabaseWorkerPool<CharacterDatabaseConnection>;

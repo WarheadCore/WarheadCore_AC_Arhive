@@ -41,7 +41,7 @@ void Position::RelocateOffset(Position const& offset)
 
 bool Position::IsPositionValid() const
 {
-    return Trinity::IsValidMapCoord(m_positionX, m_positionY, m_positionZ, m_orientation);
+    return Warhead::IsValidMapCoord(m_positionX, m_positionY, m_positionZ, m_orientation);
 }
 
 void Position::GetPositionOffsetTo(Position const& endPos, Position& retOffset) const

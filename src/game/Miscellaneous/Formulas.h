@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_FORMULAS_H
-#define TRINITY_FORMULAS_H
+#ifndef WARHEAD_FORMULAS_H
+#define WARHEAD_FORMULAS_H
 
 #include "DBCStores.h"
 #include "Creature.h"
@@ -28,7 +28,7 @@
 #include "SharedDefines.h"
 #include "World.h"
 
-namespace Trinity
+namespace Warhead
 {
     namespace Honor
     {
@@ -43,7 +43,7 @@ namespace Trinity
         {
             return uint32(ceil(hk_honor_at_level_f(level, multiplier)));
         }
-    } // namespace Trinity::Honor
+    } // namespace Warhead::Honor
 
     namespace XP
     {
@@ -133,7 +133,7 @@ namespace Trinity
                     nBaseExp = 580;
                     break;
                 default:
-                    TC_LOG_ERROR("misc", "BaseGain: Unsupported content level %u", content);
+                    WC_LOG_ERROR("misc", "BaseGain: Unsupported content level %u", content);
                     nBaseExp = 45;
                     break;
             }
@@ -238,7 +238,7 @@ namespace Trinity
             sScriptMgr->OnGroupRateCalculation(rate, count, isRaid);
             return rate;
         }
-    } // namespace Trinity::XP
-} // namespace Trinity
+    } // namespace Warhead::XP
+} // namespace Warhead
 
 #endif

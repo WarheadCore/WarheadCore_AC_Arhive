@@ -62,7 +62,7 @@ struct AISpellInfoType
 
 AISpellInfoType* GetAISpellInfo(uint32 i);
 
-TC_GAME_API bool InstanceHasScript(WorldObject const* obj, char const* scriptName);
+WC_GAME_API bool InstanceHasScript(WorldObject const* obj, char const* scriptName);
 
 template <class AI, class T>
 AI* GetInstanceAI(T* obj, char const* scriptName)

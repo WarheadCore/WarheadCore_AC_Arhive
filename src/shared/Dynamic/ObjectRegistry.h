@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_OBJECTREGISTRY_H
-#define TRINITY_OBJECTREGISTRY_H
+#ifndef WARHEAD_OBJECTREGISTRY_H
+#define WARHEAD_OBJECTREGISTRY_H
 
 #include "Define.h"
 

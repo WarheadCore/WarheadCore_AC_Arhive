@@ -189,7 +189,7 @@ class instance_zulaman : public InstanceMapScript
                 }
                 else
                 {
-                    TC_LOG_ERROR("scripts", "Zul'aman: corrupted save data.");
+                    WC_LOG_ERROR("scripts", "Zul'aman: corrupted save data.");
                     return;
                 }
 

@@ -24,7 +24,7 @@ class Player;
 class Unit;
 class Group;
 
-class TC_GAME_API KillRewarder
+class WC_GAME_API KillRewarder
 {
 public:
     KillRewarder(Player* killer, Unit* victim, bool isBattleGround);

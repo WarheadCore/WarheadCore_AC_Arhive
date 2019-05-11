@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
- #ifndef TRINITY_THREATMANAGER_H
- #define TRINITY_THREATMANAGER_H
+ #ifndef WARHEAD_THREATMANAGER_H
+ #define WARHEAD_THREATMANAGER_H
 
 #include "Common.h"
 #include "IteratorPair.h"
@@ -83,7 +83,7 @@ struct CompareThreatLessThan
 };
 
 // Please check Game/Combat/ThreatManager.h for documentation on how this class works!
-class TC_GAME_API ThreatManager
+class WC_GAME_API ThreatManager
 {
     public:
         typedef boost::heap::fibonacci_heap<ThreatReference const*, boost::heap::compare<CompareThreatLessThan>> threat_list_heap;
@@ -124,11 +124,11 @@ class TC_GAME_API ThreatManager
         size_t GetThreatListSize() const { return _sortedThreatList.size(); }
         // fastest of the three threat list getters - gets the threat list in "arbitrary" order
         // iterators will invalidate on adding/removing entries from the threat list; slightly less finicky than GetSorted.
-        Trinity::IteratorPair<ThreatListIterator> GetUnsortedThreatList() const { return { _myThreatListEntries.begin(), _myThreatListEntries.end() }; }
+        Warhead::IteratorPair<ThreatListIterator> GetUnsortedThreatList() const { return { _myThreatListEntries.begin(), _myThreatListEntries.end() }; }
         // slightly slower than GetUnsorted, but, well...sorted - only use it if you need the sorted property, of course
         // this iterator pair will invalidate on any modification (even indirect) of the threat list; spell casts and similar can all induce this!
         // note: current tank is NOT guaranteed to be the first entry in this list - check GetCurrentVictim separately if you want that!
-        Trinity::IteratorPair<threat_list_heap::ordered_iterator> GetSortedThreatList() const { return { _sortedThreatList.ordered_begin(), _sortedThreatList.ordered_end() }; }
+        Warhead::IteratorPair<threat_list_heap::ordered_iterator> GetSortedThreatList() const { return { _sortedThreatList.ordered_begin(), _sortedThreatList.ordered_end() }; }
         // slowest of the three threat list getters (by far), but lets you modify the threat references - this is also sorted
         std::vector<ThreatReference*> GetModifiableThreatList() const;
 
@@ -250,7 +250,7 @@ class TC_GAME_API ThreatManager
 };
 
 // Please check Game/Combat/ThreatManager.h for documentation on how this class works!
-class TC_GAME_API ThreatReference
+class WC_GAME_API ThreatReference
 {
     public:
         enum TauntState : uint32 { TAUNT_STATE_DETAUNT = 0, TAUNT_STATE_NONE = 1, TAUNT_STATE_TAUNT = 2 };

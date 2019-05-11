@@ -275,8 +275,8 @@ enum UnitMoveType
 
 #define MAX_MOVE_TYPE     9
 
-TC_GAME_API extern float baseMoveSpeed[MAX_MOVE_TYPE];
-TC_GAME_API extern float playerBaseMoveSpeed[MAX_MOVE_TYPE];
+WC_GAME_API extern float baseMoveSpeed[MAX_MOVE_TYPE];
+WC_GAME_API extern float playerBaseMoveSpeed[MAX_MOVE_TYPE];
 
 enum CombatRating
 {
@@ -391,7 +391,7 @@ struct CleanDamage
 struct CalcDamageInfo;
 struct SpellNonMeleeDamage;
 
-class TC_GAME_API DamageInfo
+class WC_GAME_API DamageInfo
 {
     private:
         Unit* const m_attacker;
@@ -434,7 +434,7 @@ class TC_GAME_API DamageInfo
         uint32 GetHitMask() const;
 };
 
-class TC_GAME_API HealInfo
+class WC_GAME_API HealInfo
 {
     private:
         Unit* const _healer;
@@ -463,7 +463,7 @@ class TC_GAME_API HealInfo
         uint32 GetHitMask() const;
 };
 
-class TC_GAME_API ProcEventInfo
+class WC_GAME_API ProcEventInfo
 {
     public:
         ProcEventInfo(Unit* actor, Unit* actionTarget, Unit* procTarget, uint32 typeMask,
@@ -528,7 +528,7 @@ struct CalcDamageInfo
 };
 
 // Spell damage info structure based on structure sending in SMSG_SPELLNONMELEEDAMAGELOG opcode
-struct TC_GAME_API SpellNonMeleeDamage
+struct WC_GAME_API SpellNonMeleeDamage
 {
     SpellNonMeleeDamage(Unit* _attacker, Unit* _target, uint32 _SpellID, uint32 _schoolMask)
         : target(_target), attacker(_attacker), SpellID(_SpellID), damage(0), overkill(0), schoolMask(_schoolMask),
@@ -636,7 +636,7 @@ enum ActionBarIndex
 
 #define MAX_UNIT_ACTION_BAR_INDEX (ACTION_BAR_INDEX_END-ACTION_BAR_INDEX_START)
 
-struct TC_GAME_API CharmInfo
+struct WC_GAME_API CharmInfo
 {
     public:
         explicit CharmInfo(Unit* unit);
@@ -737,7 +737,7 @@ enum PlayerTotemType
 #define ATTACK_DISPLAY_DELAY 200
 #define MAX_PLAYER_STEALTH_DETECT_RANGE 30.0f               // max distance for detection targets by player
 
-class TC_GAME_API Unit : public WorldObject
+class WC_GAME_API Unit : public WorldObject
 {
     public:
         typedef std::set<Unit*> AttackerSet;
@@ -1819,7 +1819,7 @@ class TC_GAME_API Unit : public WorldObject
         SpellHistory* m_spellHistory;
 };
 
-namespace Trinity
+namespace Warhead
 {
     // Binary predicate for sorting Units based on percent value of a power
     class PowerPctOrderPred

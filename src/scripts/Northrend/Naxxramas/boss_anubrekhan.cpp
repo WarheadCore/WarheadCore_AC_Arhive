@@ -196,7 +196,7 @@ public:
                     case EVENT_SCARABS:
                         if (!guardCorpses.empty())
                         {
-                            if (ObjectGuid target = Trinity::Containers::SelectRandomContainerElement(guardCorpses))
+                            if (ObjectGuid target = Warhead::Containers::SelectRandomContainerElement(guardCorpses))
                                 if (Creature* creatureTarget = ObjectAccessor::GetCreature(*me, target))
                                 {
                                     creatureTarget->CastSpell(creatureTarget, SPELL_SUMMON_CORPSE_SCARABS_MOB, me->GetGUID());

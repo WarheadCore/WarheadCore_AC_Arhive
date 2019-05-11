@@ -20,7 +20,7 @@ target_include_directories(gsoap
 
 target_link_libraries(gsoap
   PRIVATE
-    trinity-dependency-interface)
+    warhead-dependency-interface)
 
 set_target_properties(gsoap
     PROPERTIES

@@ -44,7 +44,7 @@ void PetitionMgr::LoadPetitions()
     QueryResult result = CharacterDatabase.Query("SELECT petitionguid, ownerguid, name, type FROM petition");
     if (!result)
     {
-        TC_LOG_INFO("server.loading", ">> Loaded 0 petitions.");
+        WC_LOG_INFO("server.loading", ">> Loaded 0 petitions.");
         return;
     }
 
@@ -56,7 +56,7 @@ void PetitionMgr::LoadPetitions()
         ++count;
     } while (result->NextRow());
 
-    TC_LOG_INFO("server.loading", ">> Loaded %u petitions in: %u ms.", count, GetMSTimeDiffToNow(oldMSTime));
+    WC_LOG_INFO("server.loading", ">> Loaded %u petitions in: %u ms.", count, GetMSTimeDiffToNow(oldMSTime));
 }
 
 void PetitionMgr::LoadSignatures()
@@ -66,7 +66,7 @@ void PetitionMgr::LoadSignatures()
     QueryResult result = CharacterDatabase.Query("SELECT petitionguid, player_account, playerguid FROM petition_sign");
     if (!result)
     {
-        TC_LOG_INFO("server.loading", ">> Loaded 0 Petition signs!");
+        WC_LOG_INFO("server.loading", ">> Loaded 0 Petition signs!");
         return;
     }
 
@@ -83,7 +83,7 @@ void PetitionMgr::LoadSignatures()
         ++count;
     } while (result->NextRow());
 
-    TC_LOG_INFO("server.loading", ">> Loaded %u Petition signs in %u ms.", count, GetMSTimeDiffToNow(oldMSTime));
+    WC_LOG_INFO("server.loading", ">> Loaded %u Petition signs in %u ms.", count, GetMSTimeDiffToNow(oldMSTime));
 }
 
 void PetitionMgr::AddPetition(ObjectGuid petitionGuid, ObjectGuid ownerGuid, std::string const& name, CharterTypes type, bool isLoading)

@@ -62,7 +62,7 @@ struct WardenInitModuleRequest
 class WorldSession;
 class Warden;
 
-class TC_GAME_API WardenWin : public Warden
+class WC_GAME_API WardenWin : public Warden
 {
     public:
         WardenWin();

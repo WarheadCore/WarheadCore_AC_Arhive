@@ -15,15 +15,15 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_CHATCOMMANDARGS_H
-#define TRINITY_CHATCOMMANDARGS_H
+#ifndef WARHEAD_CHATCOMMANDARGS_H
+#define WARHEAD_CHATCOMMANDARGS_H
 
 #include "ChatCommandHelpers.h"
 #include "ChatCommandTags.h"
 
 struct GameTele;
 
-namespace Trinity
+namespace Warhead
 {
 namespace ChatCommands
 {
@@ -111,21 +111,21 @@ struct ArgInfo<T, std::enable_if_t<advstd::is_base_of_v<ContainerTag, T>>>
 
 // AchievementEntry* from numeric id or link
 template <>
-struct TC_GAME_API ArgInfo<AchievementEntry const*>
+struct WC_GAME_API ArgInfo<AchievementEntry const*>
 {
     static char const* TryConsume(AchievementEntry const*&, char const*);
 };
 
 // GameTele* from string name or link
 template <>
-struct TC_GAME_API ArgInfo<GameTele const*>
+struct WC_GAME_API ArgInfo<GameTele const*>
 {
     static char const* TryConsume(GameTele const*&, char const*);
 };
 
 // bool from 1/0 or on/off
 template <>
-struct TC_GAME_API ArgInfo<bool>
+struct WC_GAME_API ArgInfo<bool>
 {
     static char const* TryConsume(bool&, char const*);
 };

@@ -297,7 +297,7 @@ class instance_trial_of_the_crusader : public InstanceMapScript
 
                 if (type < EncounterCount)
                 {
-                    TC_LOG_DEBUG("scripts", "[ToCr] BossState(type %u) %u = state %u;", type, GetBossState(type), state);
+                    WC_LOG_DEBUG("scripts", "[ToCr] BossState(type %u) %u = state %u;", type, GetBossState(type), state);
                     if (state == FAIL)
                     {
                         if (instance->IsHeroic())

@@ -15,13 +15,13 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_CHATCOMMANDHELPERS_H
-#define TRINITY_CHATCOMMANDHELPERS_H
+#ifndef WARHEAD_CHATCOMMANDHELPERS_H
+#define WARHEAD_CHATCOMMANDHELPERS_H
 
 #include "advstd.h"
 #include <type_traits>
 
-namespace Trinity
+namespace Warhead
 {
 namespace ChatCommands
 {

@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_OBJECTACCESSOR_H
-#define TRINITY_OBJECTACCESSOR_H
+#ifndef WARHEAD_OBJECTACCESSOR_H
+#define WARHEAD_OBJECTACCESSOR_H
 
 #include "ObjectGuid.h"
 #include <unordered_map>
@@ -40,7 +40,7 @@ namespace boost
 }
 
 template <class T>
-class TC_GAME_API HashMapHolder
+class WC_GAME_API HashMapHolder
 {
     //Non instanceable only static
     HashMapHolder() { }
@@ -63,31 +63,31 @@ public:
 namespace ObjectAccessor
 {
     // these functions return objects only if in map of specified object
-    TC_GAME_API WorldObject* GetWorldObject(WorldObject const&, ObjectGuid const&);
-    TC_GAME_API Object* GetObjectByTypeMask(WorldObject const&, ObjectGuid const&, uint32 typemask);
-    TC_GAME_API Corpse* GetCorpse(WorldObject const& u, ObjectGuid const& guid);
-    TC_GAME_API GameObject* GetGameObject(WorldObject const& u, ObjectGuid const& guid);
-    TC_GAME_API Transport* GetTransport(WorldObject const& u, ObjectGuid const& guid);
-    TC_GAME_API DynamicObject* GetDynamicObject(WorldObject const& u, ObjectGuid const& guid);
-    TC_GAME_API Unit* GetUnit(WorldObject const&, ObjectGuid const& guid);
-    TC_GAME_API Creature* GetCreature(WorldObject const& u, ObjectGuid const& guid);
-    TC_GAME_API Pet* GetPet(WorldObject const&, ObjectGuid const& guid);
-    TC_GAME_API Player* GetPlayer(Map const*, ObjectGuid const& guid);
-    TC_GAME_API Player* GetPlayer(WorldObject const&, ObjectGuid const& guid);
-    TC_GAME_API Creature* GetCreatureOrPetOrVehicle(WorldObject const&, ObjectGuid const&);
+    WC_GAME_API WorldObject* GetWorldObject(WorldObject const&, ObjectGuid const&);
+    WC_GAME_API Object* GetObjectByTypeMask(WorldObject const&, ObjectGuid const&, uint32 typemask);
+    WC_GAME_API Corpse* GetCorpse(WorldObject const& u, ObjectGuid const& guid);
+    WC_GAME_API GameObject* GetGameObject(WorldObject const& u, ObjectGuid const& guid);
+    WC_GAME_API Transport* GetTransport(WorldObject const& u, ObjectGuid const& guid);
+    WC_GAME_API DynamicObject* GetDynamicObject(WorldObject const& u, ObjectGuid const& guid);
+    WC_GAME_API Unit* GetUnit(WorldObject const&, ObjectGuid const& guid);
+    WC_GAME_API Creature* GetCreature(WorldObject const& u, ObjectGuid const& guid);
+    WC_GAME_API Pet* GetPet(WorldObject const&, ObjectGuid const& guid);
+    WC_GAME_API Player* GetPlayer(Map const*, ObjectGuid const& guid);
+    WC_GAME_API Player* GetPlayer(WorldObject const&, ObjectGuid const& guid);
+    WC_GAME_API Creature* GetCreatureOrPetOrVehicle(WorldObject const&, ObjectGuid const&);
 
     // these functions return objects if found in whole world
     // ACCESS LIKE THAT IS NOT THREAD SAFE
-    TC_GAME_API Player* FindPlayer(ObjectGuid const&);
-    TC_GAME_API Player* FindPlayerByName(std::string const& name);
-    TC_GAME_API Player* FindPlayerByLowGUID(ObjectGuid::LowType lowguid);
+    WC_GAME_API Player* FindPlayer(ObjectGuid const&);
+    WC_GAME_API Player* FindPlayerByName(std::string const& name);
+    WC_GAME_API Player* FindPlayerByLowGUID(ObjectGuid::LowType lowguid);
 
     // this returns Player even if he is not in world, for example teleporting
-    TC_GAME_API Player* FindConnectedPlayer(ObjectGuid const&);
-    TC_GAME_API Player* FindConnectedPlayerByName(std::string const& name);
+    WC_GAME_API Player* FindConnectedPlayer(ObjectGuid const&);
+    WC_GAME_API Player* FindConnectedPlayerByName(std::string const& name);
 
     // when using this, you must use the hashmapholder's lock
-    TC_GAME_API HashMapHolder<Player>::MapType const& GetPlayers();
+    WC_GAME_API HashMapHolder<Player>::MapType const& GetPlayers();
 
     template<class T>
     void AddObject(T* object)
@@ -107,7 +107,7 @@ namespace ObjectAccessor
     template<>
     void RemoveObject(Player* player);
 
-    TC_GAME_API void SaveAllPlayers();
+    WC_GAME_API void SaveAllPlayers();
 };
 
 #endif

@@ -16,14 +16,14 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_MAP_INSTANCED_H
-#define TRINITY_MAP_INSTANCED_H
+#ifndef WARHEAD_MAP_INSTANCED_H
+#define WARHEAD_MAP_INSTANCED_H
 
 #include "Map.h"
 #include "InstanceSaveMgr.h"
 #include "DBCEnums.h"
 
-class TC_GAME_API MapInstanced : public Map
+class WC_GAME_API MapInstanced : public Map
 {
     friend class MapManager;
     public:

@@ -36,10 +36,10 @@ uint8 Field::GetUInt8() const
     if (!data.value)
         return 0;
 
-#ifdef TRINITY_STRICT_DATABASE_TYPE_CHECKS
+#ifdef WARHEAD_STRICT_DATABASE_TYPE_CHECKS
     if (!IsType(DatabaseFieldTypes::Int8))
     {
-        TC_LOG_WARN("sql.sql", "Warning: GetUInt8() on non-tinyint field %s.%s (%s.%s) at index %u. Using type: %s.",
+        WC_LOG_WARN("sql.sql", "Warning: GetUInt8() on non-tinyint field %s.%s (%s.%s) at index %u. Using type: %s.",
             meta.TableAlias, meta.Alias, meta.TableName, meta.Name, meta.Index, meta.Type);
         return 0;
     }
@@ -55,10 +55,10 @@ int8 Field::GetInt8() const
     if (!data.value)
         return 0;
 
-#ifdef TRINITY_STRICT_DATABASE_TYPE_CHECKS
+#ifdef WARHEAD_STRICT_DATABASE_TYPE_CHECKS
     if (!IsType(DatabaseFieldTypes::Int8))
     {
-        TC_LOG_WARN("sql.sql", "Warning: GetInt8() on non-tinyint field %s.%s (%s.%s) at index %u. Using type: %s.",
+        WC_LOG_WARN("sql.sql", "Warning: GetInt8() on non-tinyint field %s.%s (%s.%s) at index %u. Using type: %s.",
             meta.TableAlias, meta.Alias, meta.TableName, meta.Name, meta.Index, meta.Type);
         return 0;
     }
@@ -74,10 +74,10 @@ uint16 Field::GetUInt16() const
     if (!data.value)
         return 0;
 
-#ifdef TRINITY_STRICT_DATABASE_TYPE_CHECKS
+#ifdef WARHEAD_STRICT_DATABASE_TYPE_CHECKS
     if (!IsType(DatabaseFieldTypes::Int16))
     {
-        TC_LOG_WARN("sql.sql", "Warning: GetUInt16() on non-smallint field %s.%s (%s.%s) at index %u. Using type: %s.",
+        WC_LOG_WARN("sql.sql", "Warning: GetUInt16() on non-smallint field %s.%s (%s.%s) at index %u. Using type: %s.",
             meta.TableAlias, meta.Alias, meta.TableName, meta.Name, meta.Index, meta.Type);
         return 0;
     }
@@ -93,10 +93,10 @@ int16 Field::GetInt16() const
     if (!data.value)
         return 0;
 
-#ifdef TRINITY_STRICT_DATABASE_TYPE_CHECKS
+#ifdef WARHEAD_STRICT_DATABASE_TYPE_CHECKS
     if (!IsType(DatabaseFieldTypes::Int16))
     {
-        TC_LOG_WARN("sql.sql", "Warning: GetInt16() on non-smallint field %s.%s (%s.%s) at index %u. Using type: %s.",
+        WC_LOG_WARN("sql.sql", "Warning: GetInt16() on non-smallint field %s.%s (%s.%s) at index %u. Using type: %s.",
             meta.TableAlias, meta.Alias, meta.TableName, meta.Name, meta.Index, meta.Type);
         return 0;
     }
@@ -112,10 +112,10 @@ uint32 Field::GetUInt32() const
     if (!data.value)
         return 0;
 
-#ifdef TRINITY_STRICT_DATABASE_TYPE_CHECKS
+#ifdef WARHEAD_STRICT_DATABASE_TYPE_CHECKS
     if (!IsType(DatabaseFieldTypes::Int32))
     {
-        TC_LOG_WARN("sql.sql", "Warning: GetUInt32() on non-(medium)int field %s.%s (%s.%s) at index %u. Using type: %s.",
+        WC_LOG_WARN("sql.sql", "Warning: GetUInt32() on non-(medium)int field %s.%s (%s.%s) at index %u. Using type: %s.",
             meta.TableAlias, meta.Alias, meta.TableName, meta.Name, meta.Index, meta.Type);
         return 0;
     }
@@ -131,10 +131,10 @@ int32 Field::GetInt32() const
     if (!data.value)
         return 0;
 
-#ifdef TRINITY_STRICT_DATABASE_TYPE_CHECKS
+#ifdef WARHEAD_STRICT_DATABASE_TYPE_CHECKS
     if (!IsType(DatabaseFieldTypes::Int32))
     {
-        TC_LOG_WARN("sql.sql", "Warning: GetInt32() on non-(medium)int field %s.%s (%s.%s) at index %u. Using type: %s.",
+        WC_LOG_WARN("sql.sql", "Warning: GetInt32() on non-(medium)int field %s.%s (%s.%s) at index %u. Using type: %s.",
             meta.TableAlias, meta.Alias, meta.TableName, meta.Name, meta.Index, meta.Type);
         return 0;
     }
@@ -150,10 +150,10 @@ uint64 Field::GetUInt64() const
     if (!data.value)
         return 0;
 
-#ifdef TRINITY_STRICT_DATABASE_TYPE_CHECKS
+#ifdef WARHEAD_STRICT_DATABASE_TYPE_CHECKS
     if (!IsType(DatabaseFieldTypes::Int64))
     {
-        TC_LOG_WARN("sql.sql", "Warning: GetUInt64() on non-bigint field %s.%s (%s.%s) at index %u. Using type: %s.",
+        WC_LOG_WARN("sql.sql", "Warning: GetUInt64() on non-bigint field %s.%s (%s.%s) at index %u. Using type: %s.",
             meta.TableAlias, meta.Alias, meta.TableName, meta.Name, meta.Index, meta.Type);
         return 0;
     }
@@ -169,10 +169,10 @@ int64 Field::GetInt64() const
     if (!data.value)
         return 0;
 
-#ifdef TRINITY_STRICT_DATABASE_TYPE_CHECKS
+#ifdef WARHEAD_STRICT_DATABASE_TYPE_CHECKS
     if (!IsType(DatabaseFieldTypes::Int64))
     {
-        TC_LOG_WARN("sql.sql", "Warning: GetInt64() on non-bigint field %s.%s (%s.%s) at index %u. Using type: %s.",
+        WC_LOG_WARN("sql.sql", "Warning: GetInt64() on non-bigint field %s.%s (%s.%s) at index %u. Using type: %s.",
             meta.TableAlias, meta.Alias, meta.TableName, meta.Name, meta.Index, meta.Type);
         return 0;
     }
@@ -188,10 +188,10 @@ float Field::GetFloat() const
     if (!data.value)
         return 0.0f;
 
-#ifdef TRINITY_STRICT_DATABASE_TYPE_CHECKS
+#ifdef WARHEAD_STRICT_DATABASE_TYPE_CHECKS
     if (!IsType(DatabaseFieldTypes::Float))
     {
-        TC_LOG_WARN("sql.sql", "Warning: GetFloat() on non-float field %s.%s (%s.%s) at index %u. Using type: %s.",
+        WC_LOG_WARN("sql.sql", "Warning: GetFloat() on non-float field %s.%s (%s.%s) at index %u. Using type: %s.",
             meta.TableAlias, meta.Alias, meta.TableName, meta.Name, meta.Index, meta.Type);
         return 0.0f;
     }
@@ -207,10 +207,10 @@ double Field::GetDouble() const
     if (!data.value)
         return 0.0f;
 
-#ifdef TRINITY_STRICT_DATABASE_TYPE_CHECKS
+#ifdef WARHEAD_STRICT_DATABASE_TYPE_CHECKS
     if (!IsType(DatabaseFieldTypes::Double) && !IsType(DatabaseFieldTypes::Decimal))
     {
-        TC_LOG_WARN("sql.sql", "Warning: GetDouble() on non-double/non-decimal field %s.%s (%s.%s) at index %u. Using type: %s.",
+        WC_LOG_WARN("sql.sql", "Warning: GetDouble() on non-double/non-decimal field %s.%s (%s.%s) at index %u. Using type: %s.",
             meta.TableAlias, meta.Alias, meta.TableName, meta.Name, meta.Index, meta.Type);
         return 0.0f;
     }
@@ -226,10 +226,10 @@ char const* Field::GetCString() const
     if (!data.value)
         return nullptr;
 
-#ifdef TRINITY_STRICT_DATABASE_TYPE_CHECKS
+#ifdef WARHEAD_STRICT_DATABASE_TYPE_CHECKS
     if (IsNumeric() && data.raw)
     {
-        TC_LOG_WARN("sql.sql", "Error: GetCString() on numeric field %s.%s (%s.%s) at index %u. Using type: %s.",
+        WC_LOG_WARN("sql.sql", "Error: GetCString() on numeric field %s.%s (%s.%s) at index %u. Using type: %s.",
             meta.TableAlias, meta.Alias, meta.TableName, meta.Name, meta.Index, meta.Type);
         return nullptr;
     }
@@ -302,7 +302,7 @@ bool Field::IsNumeric() const
         data.type == DatabaseFieldTypes::Double);
 }
 
-#ifdef TRINITY_STRICT_DATABASE_TYPE_CHECKS
+#ifdef WARHEAD_STRICT_DATABASE_TYPE_CHECKS
 
 #ifdef _WIN32 // hack for broken mysql.h not including the correct winsock header for SOCKET definition, fixed in 5.7
 #include <winsock2.h>

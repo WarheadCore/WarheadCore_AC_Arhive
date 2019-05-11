@@ -23,7 +23,7 @@
 #include <string>
 #include <ctime>
 
-struct TC_COMMON_API LogMessage
+struct WC_COMMON_API LogMessage
 {
     LogMessage(LogLevel _level, std::string const& _type, std::string&& _text);
     LogMessage(LogLevel _level, std::string const& _type, std::string&& _text, std::string&& _param1);

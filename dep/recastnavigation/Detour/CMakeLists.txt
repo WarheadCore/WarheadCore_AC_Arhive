@@ -26,7 +26,7 @@ target_include_directories(Detour
 
 target_link_libraries(Detour
   PRIVATE
-    trinity-dependency-interface
+    warhead-dependency-interface
   PUBLIC
     zlib)
 

@@ -113,7 +113,7 @@ enum SpellRangeFlag
     SPELL_RANGE_RANGED              = 2      //hunter range and ranged weapon
 };
 
-struct TC_GAME_API SpellDestination
+struct WC_GAME_API SpellDestination
 {
     SpellDestination();
     SpellDestination(float x, float y, float z, float orientation = 0.0f, uint32 mapId = MAPID_INVALID);
@@ -128,7 +128,7 @@ struct TC_GAME_API SpellDestination
     Position _transportOffset;
 };
 
-class TC_GAME_API SpellCastTargets
+class WC_GAME_API SpellCastTargets
 {
     public:
         SpellCastTargets();
@@ -253,7 +253,7 @@ typedef std::vector<std::pair<uint32, ObjectGuid>> DispelList;
 
 static const uint32 SPELL_INTERRUPT_NONPLAYER = 32747;
 
-class TC_GAME_API Spell
+class WC_GAME_API Spell
 {
     friend class SpellScript;
     public:
@@ -789,9 +789,9 @@ class TC_GAME_API Spell
         Spell& operator=(Spell const& right) = delete;
 };
 
-namespace Trinity
+namespace Warhead
 {
-    struct TC_GAME_API WorldObjectSpellTargetCheck
+    struct WC_GAME_API WorldObjectSpellTargetCheck
     {
         protected:
             WorldObject* _caster;
@@ -808,7 +808,7 @@ namespace Trinity
             bool operator()(WorldObject* target) const;
     };
 
-    struct TC_GAME_API WorldObjectSpellNearbyTargetCheck : public WorldObjectSpellTargetCheck
+    struct WC_GAME_API WorldObjectSpellNearbyTargetCheck : public WorldObjectSpellTargetCheck
     {
         float _range;
         Position const* _position;
@@ -818,7 +818,7 @@ namespace Trinity
         bool operator()(WorldObject* target);
     };
 
-    struct TC_GAME_API WorldObjectSpellAreaTargetCheck : public WorldObjectSpellTargetCheck
+    struct WC_GAME_API WorldObjectSpellAreaTargetCheck : public WorldObjectSpellTargetCheck
     {
         float _range;
         Position const* _position;
@@ -828,7 +828,7 @@ namespace Trinity
         bool operator()(WorldObject* target) const;
     };
 
-    struct TC_GAME_API WorldObjectSpellConeTargetCheck : public WorldObjectSpellAreaTargetCheck
+    struct WC_GAME_API WorldObjectSpellConeTargetCheck : public WorldObjectSpellAreaTargetCheck
     {
         float _coneAngle;
         WorldObjectSpellConeTargetCheck(float coneAngle, float range, WorldObject* caster,
@@ -837,7 +837,7 @@ namespace Trinity
         bool operator()(WorldObject* target) const;
     };
 
-    struct TC_GAME_API WorldObjectSpellTrajTargetCheck : public WorldObjectSpellTargetCheck
+    struct WC_GAME_API WorldObjectSpellTrajTargetCheck : public WorldObjectSpellTargetCheck
     {
         float _range;
         Position const* _position;

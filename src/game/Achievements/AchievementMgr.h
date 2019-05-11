@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __TRINITY_ACHIEVEMENTMGR_H
-#define __TRINITY_ACHIEVEMENTMGR_H
+#ifndef __WARHEAD_ACHIEVEMENTMGR_H
+#define __WARHEAD_ACHIEVEMENTMGR_H
 
 #include "DatabaseEnvFwd.h"
 #include "DBCEnums.h"
@@ -220,7 +220,7 @@ struct AchievementCriteriaData
     bool Meets(uint32 criteria_id, Player const* source, WorldObject const* target, uint32 miscValue1 = 0, uint32 miscValue2 = 0) const;
 };
 
-struct TC_GAME_API AchievementCriteriaDataSet
+struct WC_GAME_API AchievementCriteriaDataSet
 {
         AchievementCriteriaDataSet() : criteria_id(0) { }
         typedef std::vector<AchievementCriteriaData> Storage;
@@ -270,7 +270,7 @@ enum ProgressType
     PROGRESS_HIGHEST
 };
 
-class TC_GAME_API AchievementMgr
+class WC_GAME_API AchievementMgr
 {
     public:
         AchievementMgr(Player* player);
@@ -314,7 +314,7 @@ class TC_GAME_API AchievementMgr
         TimedAchievementMap m_timedAchievements;      // Criteria id/time left in MS
 };
 
-class TC_GAME_API AchievementGlobalMgr
+class WC_GAME_API AchievementGlobalMgr
 {
         AchievementGlobalMgr() { }
         ~AchievementGlobalMgr() { }

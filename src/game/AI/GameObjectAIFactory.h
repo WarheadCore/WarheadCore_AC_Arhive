@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_GAMEOBJECTAIFACTORY_H
-#define TRINITY_GAMEOBJECTAIFACTORY_H
+#ifndef WARHEAD_GAMEOBJECTAIFACTORY_H
+#define WARHEAD_GAMEOBJECTAIFACTORY_H
 
 #include "ObjectRegistry.h"
 #include "SelectableAI.h"

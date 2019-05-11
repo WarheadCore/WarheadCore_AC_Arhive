@@ -445,7 +445,7 @@ class boss_gothik : public CreatureScript
                         {
                             if (RAID_MODE(waves10,waves25).size() <= _waveCount) // bounds check
                             {
-                                TC_LOG_INFO("scripts", "GothikAI: Wave count %d is out of range for difficulty %d.", _waveCount, GetDifficulty());
+                                WC_LOG_INFO("scripts", "GothikAI: Wave count %d is out of range for difficulty %d.", _waveCount, GetDifficulty());
                                 break;
                             }
 
@@ -980,7 +980,7 @@ class spell_gothik_shadow_bolt_volley : public SpellScriptLoader
 
             void FilterTargets(std::list<WorldObject*>& targets)
             {
-                targets.remove_if(Trinity::UnitAuraCheck(false, SPELL_SHADOW_MARK));
+                targets.remove_if(Warhead::UnitAuraCheck(false, SPELL_SHADOW_MARK));
             }
 
             void Register() override

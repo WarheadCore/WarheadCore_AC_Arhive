@@ -21,7 +21,7 @@
 #include "Define.h"
 #include <utility>
 
-namespace Trinity
+namespace Warhead
 {
     /**
      * @class IteratorPair
@@ -53,6 +53,6 @@ namespace Trinity
     }
     //! namespace Containers
 }
-//! namespace Trinity
+//! namespace Warhead
 
 #endif // IteratorPair_h__

@@ -45,13 +45,13 @@ void BattlefieldMgr::InitBattlefield()
     // respawn, init variables
     if (!wg->SetupBattlefield())
     {
-        TC_LOG_INFO("bg.battlefield", "Battlefield: Wintergrasp init failed.");
+        WC_LOG_INFO("bg.battlefield", "Battlefield: Wintergrasp init failed.");
         delete wg;
     }
     else
     {
         _battlefieldSet.push_back(wg);
-        TC_LOG_INFO("bg.battlefield", "Battlefield: Wintergrasp successfully initiated.");
+        WC_LOG_INFO("bg.battlefield", "Battlefield: Wintergrasp successfully initiated.");
     }
 
     /*
@@ -60,13 +60,13 @@ void BattlefieldMgr::InitBattlefield()
     // respawn, init variables
     if (!tb->SetupBattlefield())
     {
-        TC_LOG_DEBUG("bg.battlefield", "Battlefield: Tol Barad init failed.");
+        WC_LOG_DEBUG("bg.battlefield", "Battlefield: Tol Barad init failed.");
         delete tb;
     }
     else
     {
         _battlefieldSet.push_back(tb);
-        TC_LOG_DEBUG("bg.battlefield", "Battlefield: Tol Barad successfully initiated.");
+        WC_LOG_DEBUG("bg.battlefield", "Battlefield: Tol Barad successfully initiated.");
     }
     */
 }
@@ -87,7 +87,7 @@ void BattlefieldMgr::HandlePlayerEnterZone(Player* player, uint32 zoneId)
         return;
 
     bf->HandlePlayerEnterZone(player, zoneId);
-    TC_LOG_DEBUG("bg.battlefield", "Player %u entered battlefield id %u", player->GetGUID().GetCounter(), bf->GetTypeId());
+    WC_LOG_DEBUG("bg.battlefield", "Player %u entered battlefield id %u", player->GetGUID().GetCounter(), bf->GetTypeId());
 }
 
 void BattlefieldMgr::HandlePlayerLeaveZone(Player* player, uint32 zoneId)
@@ -101,7 +101,7 @@ void BattlefieldMgr::HandlePlayerLeaveZone(Player* player, uint32 zoneId)
         return;
 
     itr->second->HandlePlayerLeaveZone(player, zoneId);
-    TC_LOG_DEBUG("bg.battlefield", "Player %u left battlefield id %u", player->GetGUID().GetCounter(), itr->second->GetTypeId());
+    WC_LOG_DEBUG("bg.battlefield", "Player %u left battlefield id %u", player->GetGUID().GetCounter(), itr->second->GetTypeId());
 }
 
 Battlefield* BattlefieldMgr::GetBattlefieldToZoneId(uint32 zoneId)

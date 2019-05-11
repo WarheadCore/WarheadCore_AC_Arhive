@@ -28,7 +28,7 @@ class ProducerConsumerQueue;
 class MySQLConnection;
 class SQLOperation;
 
-class TC_DATABASE_API DatabaseWorker
+class WC_DATABASE_API DatabaseWorker
 {
     public:
         DatabaseWorker(ProducerConsumerQueue<SQLOperation*>* newQueue, MySQLConnection* connection);

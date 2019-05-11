@@ -20,7 +20,7 @@
 #include "SmartEnum.h"
 #include <stdexcept>
 
-namespace Trinity
+namespace Warhead
 {
 namespace Impl
 {
@@ -29,7 +29,7 @@ namespace Impl
 |* data for enum 'CreatureFlagsExtra' in 'CreatureData.h' auto-generated *|
 \*************************************************************************/
 template <>
-TC_API_EXPORT EnumText EnumUtils<CreatureFlagsExtra>::ToString(CreatureFlagsExtra value)
+WC_API_EXPORT EnumText EnumUtils<CreatureFlagsExtra>::ToString(CreatureFlagsExtra value)
 {
     switch (value)
     {
@@ -70,10 +70,10 @@ TC_API_EXPORT EnumText EnumUtils<CreatureFlagsExtra>::ToString(CreatureFlagsExtr
 }
 
 template <>
-TC_API_EXPORT size_t EnumUtils<CreatureFlagsExtra>::Count() { return 32; }
+WC_API_EXPORT size_t EnumUtils<CreatureFlagsExtra>::Count() { return 32; }
 
 template <>
-TC_API_EXPORT CreatureFlagsExtra EnumUtils<CreatureFlagsExtra>::FromIndex(size_t index)
+WC_API_EXPORT CreatureFlagsExtra EnumUtils<CreatureFlagsExtra>::FromIndex(size_t index)
 {
     switch (index)
     {

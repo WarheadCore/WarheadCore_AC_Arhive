@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_SMARTSCRIPTMGR_H
-#define TRINITY_SMARTSCRIPTMGR_H
+#ifndef WARHEAD_SMARTSCRIPTMGR_H
+#define WARHEAD_SMARTSCRIPTMGR_H
 
 #include "Define.h"
 #include "ObjectGuid.h"
@@ -1549,7 +1549,7 @@ class ObjectGuidVector
 };
 typedef std::unordered_map<uint32, ObjectGuidVector> ObjectVectorMap;
 
-class TC_GAME_API SmartWaypointMgr
+class WC_GAME_API SmartWaypointMgr
 {
     public:
         static SmartWaypointMgr* instance();
@@ -1578,7 +1578,7 @@ typedef std::unordered_map<int32, SmartAIEventList> SmartAIEventMap;
 typedef std::map<uint32 /*entry*/, std::pair<uint32 /*spellId*/, SpellEffIndex /*effIndex*/> > CacheSpellContainer;
 typedef std::pair<CacheSpellContainer::const_iterator, CacheSpellContainer::const_iterator> CacheSpellContainerBounds;
 
-class TC_GAME_API SmartAIMgr
+class WC_GAME_API SmartAIMgr
 {
     private:
         SmartAIMgr() { }

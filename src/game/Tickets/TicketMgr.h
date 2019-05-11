@@ -87,7 +87,7 @@ enum TicketType
     TICKET_TYPE_CHARACTER_DELETED = 2,
 };
 
-class TC_GAME_API GmTicket
+class WC_GAME_API GmTicket
 {
 public:
     GmTicket();
@@ -172,7 +172,7 @@ private:
 };
 typedef std::map<uint32, GmTicket*> GmTicketList;
 
-class TC_GAME_API TicketMgr
+class WC_GAME_API TicketMgr
 {
 private:
     TicketMgr();

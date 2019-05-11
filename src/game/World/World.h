@@ -533,7 +533,7 @@ enum WorldStates
 };
 
 /// Storage class for commands issued for delayed execution
-struct TC_GAME_API CliCommandHolder
+struct WC_GAME_API CliCommandHolder
 {
     typedef void(*Print)(void*, char const*);
     typedef void(*CommandFinished)(void*, bool success);
@@ -566,7 +566,7 @@ struct CharacterInfo
 };
 
 /// The World
-class TC_GAME_API World
+class WC_GAME_API World
 {
     public:
         static World* instance();
@@ -882,7 +882,7 @@ class TC_GAME_API World
         time_t _warnShutdownTime;
 };
 
-TC_GAME_API extern Realm realm;
+WC_GAME_API extern Realm realm;
 
 #define sWorld World::instance()
 

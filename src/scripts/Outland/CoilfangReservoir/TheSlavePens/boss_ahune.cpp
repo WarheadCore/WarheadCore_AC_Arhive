@@ -762,7 +762,7 @@ class spell_ice_spear_target_picker : public SpellScript
         if (targets.empty())
             return;
 
-        WorldObject* target = Trinity::Containers::SelectRandomContainerElement(targets);
+        WorldObject* target = Warhead::Containers::SelectRandomContainerElement(targets);
         targets.clear();
         targets.push_back(target);
     }

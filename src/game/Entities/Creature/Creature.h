@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITYCORE_CREATURE_H
-#define TRINITYCORE_CREATURE_H
+#ifndef WARHEADCORE_CREATURE_H
+#define WARHEADCORE_CREATURE_H
 
 #include "Unit.h"
 #include "Common.h"
@@ -58,7 +58,7 @@ typedef std::list<VendorItemCount> VendorItemCounts;
 typedef std::vector<uint8> CreatureTextRepeatIds;
 typedef std::unordered_map<uint8, CreatureTextRepeatIds> CreatureTextRepeatGroup;
 
-class TC_GAME_API Creature : public Unit, public GridObject<Creature>, public MapObject
+class WC_GAME_API Creature : public Unit, public GridObject<Creature>, public MapObject
 {
     public:
         explicit Creature(bool isWorldObject = false);
@@ -444,7 +444,7 @@ class TC_GAME_API Creature : public Unit, public GridObject<Creature>, public Ma
         bool _regenerateHealthLock; // Dynamically set
 };
 
-class TC_GAME_API AssistDelayEvent : public BasicEvent
+class WC_GAME_API AssistDelayEvent : public BasicEvent
 {
     public:
         AssistDelayEvent(ObjectGuid victim, Unit& owner) : BasicEvent(), m_victim(victim), m_owner(owner) { }
@@ -459,7 +459,7 @@ class TC_GAME_API AssistDelayEvent : public BasicEvent
         Unit&             m_owner;
 };
 
-class TC_GAME_API ForcedDespawnDelayEvent : public BasicEvent
+class WC_GAME_API ForcedDespawnDelayEvent : public BasicEvent
 {
     public:
         ForcedDespawnDelayEvent(Creature& owner, Seconds respawnTimer) : BasicEvent(), m_owner(owner), m_respawnTimer(respawnTimer) { }

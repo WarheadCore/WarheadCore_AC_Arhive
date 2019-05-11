@@ -1827,7 +1827,7 @@ class spell_mimiron_fire_search : public SpellScriptLoader
                 if (_noTarget)
                     return;
 
-                WorldObject* target = Trinity::Containers::SelectRandomContainerElement(targets);
+                WorldObject* target = Warhead::Containers::SelectRandomContainerElement(targets);
                 targets.clear();
                 targets.push_back(target);
             }
@@ -1988,12 +1988,12 @@ class spell_mimiron_napalm_shell : public SpellScriptLoader
                 if (targets.empty())
                     return;
 
-                WorldObject* target = Trinity::Containers::SelectRandomContainerElement(targets);
+                WorldObject* target = Warhead::Containers::SelectRandomContainerElement(targets);
 
-                targets.remove_if(Trinity::AllWorldObjectsInRange(GetCaster(), 15.0f));
+                targets.remove_if(Warhead::AllWorldObjectsInRange(GetCaster(), 15.0f));
 
                 if (!targets.empty())
-                    target = Trinity::Containers::SelectRandomContainerElement(targets);
+                    target = Warhead::Containers::SelectRandomContainerElement(targets);
 
                 targets.clear();
                 targets.push_back(target);
@@ -2346,12 +2346,12 @@ class spell_mimiron_rocket_strike_target_select : public SpellScriptLoader
                 if (targets.empty())
                     return;
 
-                WorldObject* target = Trinity::Containers::SelectRandomContainerElement(targets);
+                WorldObject* target = Warhead::Containers::SelectRandomContainerElement(targets);
 
-                targets.remove_if(Trinity::AllWorldObjectsInRange(GetCaster(), 15.0f));
+                targets.remove_if(Warhead::AllWorldObjectsInRange(GetCaster(), 15.0f));
 
                 if (!targets.empty())
-                    target = Trinity::Containers::SelectRandomContainerElement(targets);
+                    target = Warhead::Containers::SelectRandomContainerElement(targets);
 
                 targets.clear();
                 targets.push_back(target);
@@ -2660,12 +2660,12 @@ class spell_mimiron_summon_frost_bomb_target : public SpellScriptLoader
                 if (targets.empty())
                     return;
 
-                targets.remove_if(Trinity::AllWorldObjectsInRange(GetCaster(), 15.0f));
+                targets.remove_if(Warhead::AllWorldObjectsInRange(GetCaster(), 15.0f));
 
                 if (targets.empty())
                     return;
 
-                WorldObject* target = Trinity::Containers::SelectRandomContainerElement(targets);
+                WorldObject* target = Warhead::Containers::SelectRandomContainerElement(targets);
 
                 targets.clear();
                 targets.push_back(target);

@@ -49,7 +49,7 @@ typedef std::map<uint32, rbac::RBACPermission*> RBACPermissionsContainer;
 typedef std::map<uint8, rbac::RBACPermissionContainer> RBACDefaultPermissionsContainer;
 }
 
-class TC_GAME_API AccountMgr
+class WC_GAME_API AccountMgr
 {
     private:
         AccountMgr();

@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_CONDITIONMGR_H
-#define TRINITY_CONDITIONMGR_H
+#ifndef WARHEAD_CONDITIONMGR_H
+#define WARHEAD_CONDITIONMGR_H
 
 #include "Define.h"
 #include "Hash.h"
@@ -170,7 +170,7 @@ enum MaxConditionTargets
     MAX_CONDITION_TARGETS = 3
 };
 
-struct TC_GAME_API ConditionSourceInfo
+struct WC_GAME_API ConditionSourceInfo
 {
     WorldObject* mConditionTargets[MAX_CONDITION_TARGETS]; // an array of targets available for conditions
     Condition const* mLastFailedCondition;
@@ -183,7 +183,7 @@ struct TC_GAME_API ConditionSourceInfo
     }
 };
 
-struct TC_GAME_API Condition
+struct WC_GAME_API Condition
 {
     ConditionSourceType     SourceType;        //SourceTypeOrReferenceId
     uint32                  SourceGroup;
@@ -235,7 +235,7 @@ typedef std::unordered_map<uint32, ConditionsByEntryMap> ConditionEntriesByCreat
 typedef std::unordered_map<std::pair<int32, uint32 /*SAI source_type*/>, ConditionsByEntryMap> SmartEventConditionContainer;
 typedef std::unordered_map<uint32, ConditionContainer> ConditionReferenceContainer;//only used for references
 
-class TC_GAME_API ConditionMgr
+class WC_GAME_API ConditionMgr
 {
     private:
         ConditionMgr();

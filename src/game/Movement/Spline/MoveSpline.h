@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITYSERVER_MOVEPLINE_H
-#define TRINITYSERVER_MOVEPLINE_H
+#ifndef WARHEADSERVER_MOVEPLINE_H
+#define WARHEADSERVER_MOVEPLINE_H
 
 #include "Spline.h"
 #include "MoveSplineInitArgs.h"
@@ -38,7 +38,7 @@ namespace Movement
     // MoveSpline represents smooth catmullrom or linear curve and point that moves belong it
     // curve can be cyclic - in this case movement will be cyclic
     // point can have vertical acceleration motion componemt(used in fall, parabolic movement)
-    class TC_GAME_API MoveSpline
+    class WC_GAME_API MoveSpline
     {
     public:
         typedef Spline<int32> MySpline;
@@ -126,4 +126,4 @@ namespace Movement
         std::string ToString() const;
     };
 }
-#endif // TRINITYSERVER_MOVEPLINE_H
+#endif // WARHEADSERVER_MOVEPLINE_H

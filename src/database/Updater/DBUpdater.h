@@ -33,7 +33,7 @@ namespace boost
     }
 }
 
-class TC_DATABASE_API UpdateException : public std::exception
+class WC_DATABASE_API UpdateException : public std::exception
 {
 public:
     UpdateException(std::string const& msg) : _msg(msg) { }
@@ -63,7 +63,7 @@ private:
 };
 
 template <class T>
-class TC_DATABASE_API DBUpdater
+class WC_DATABASE_API DBUpdater
 {
 public:
     using Path = boost::filesystem::path;

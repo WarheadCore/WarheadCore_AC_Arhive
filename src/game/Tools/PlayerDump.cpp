@@ -200,7 +200,7 @@ inline void MarkDependentColumn(TableStruct& tableStruct, std::string const& col
     auto itr = FindColumnByName(tableStruct, columnName);
     if (itr == tableStruct.TableFields.end())
     {
-        TC_LOG_FATAL("server.loading", "Column `%s` declared in table `%s` marked as dependent but doesn't exist, PlayerDump will not work properly, please update table definitions",
+        WC_LOG_FATAL("server.loading", "Column `%s` declared in table `%s` marked as dependent but doesn't exist, PlayerDump will not work properly, please update table definitions",
             columnName.c_str(), tableStruct.TableName.c_str());
         ABORT();
         return;
@@ -208,7 +208,7 @@ inline void MarkDependentColumn(TableStruct& tableStruct, std::string const& col
 
     if (itr->IsDependentField)
     {
-        TC_LOG_FATAL("server.loading", "Attempt to mark column `%s` in table `%s` as dependent column but already marked! please check your code.",
+        WC_LOG_FATAL("server.loading", "Attempt to mark column `%s` in table `%s` as dependent column but already marked! please check your code.",
             columnName.c_str(), tableStruct.TableName.c_str());
         ABORT();
         return;
@@ -225,7 +225,7 @@ inline void MarkWhereField(TableStruct& tableStruct, std::string const& whereFie
     auto whereFieldItr = FindColumnByName(tableStruct, whereField);
     if (whereFieldItr == tableStruct.TableFields.end())
     {
-        TC_LOG_FATAL("server.loading", "Column name `%s` set as 'WHERE' column for table `%s` doesn't exist. PlayerDump won't work properly",
+        WC_LOG_FATAL("server.loading", "Column name `%s` set as 'WHERE' column for table `%s` doesn't exist. PlayerDump won't work properly",
             whereField.c_str(), tableStruct.TableName.c_str());
         ABORT();
         return;
@@ -304,7 +304,7 @@ void PlayerDump::InitializeTables()
                 // item0 - item18
                 for (uint32 j = 0; j < EQUIPMENT_SLOT_END; ++j)
                 {
-                    std::string itColumn = Trinity::StringFormat("item%u", j);
+                    std::string itColumn = Warhead::StringFormat("item%u", j);
                     MarkDependentColumn(t, itColumn, GUID_TYPE_ITEM);
                 }
                 break;
@@ -352,7 +352,7 @@ void PlayerDump::InitializeTables()
                 MarkDependentColumn(t, "guid", GUID_TYPE_PET);
                 break;
             default:
-                TC_LOG_FATAL("server.loading", "Wrong dump table type %u, probably added a new table type without updating code", uint32(dumpTable.Type));
+                WC_LOG_FATAL("server.loading", "Wrong dump table type %u, probably added a new table type without updating code", uint32(dumpTable.Type));
                 ABORT();
                 return;
         }
@@ -365,7 +365,7 @@ void PlayerDump::InitializeTables()
     {
         if (tableStruct.WhereFieldName.empty())
         {
-            TC_LOG_FATAL("server.loading", "Table `%s` defined in player dump doesn't have a WHERE query field", tableStruct.TableName.c_str());
+            WC_LOG_FATAL("server.loading", "Table `%s` defined in player dump doesn't have a WHERE query field", tableStruct.TableName.c_str());
             ABORT();
         }
     }
@@ -375,7 +375,7 @@ void PlayerDump::InitializeTables()
 
     ASSERT(CharacterTables.size() == DUMP_TABLE_COUNT);
 
-    TC_LOG_INFO("server.loading", ">> Initialized tables for PlayerDump in %u ms.", GetMSTimeDiffToNow(oldMSTime));
+    WC_LOG_INFO("server.loading", ">> Initialized tables for PlayerDump in %u ms.", GetMSTimeDiffToNow(oldMSTime));
 }
 
 // Low level functions
@@ -435,7 +435,7 @@ inline bool ValidateFields(TableStruct const& ts, std::string const& str, size_t
     s = str.find("` (`");
     if (s == std::string::npos)
     {
-        TC_LOG_ERROR("misc", "LoadPlayerDump: (line " UI64FMTD ") dump format not recognized.", lineNumber);
+        WC_LOG_ERROR("misc", "LoadPlayerDump: (line " UI64FMTD ") dump format not recognized.", lineNumber);
         return false;
     }
     s += 4;
@@ -444,7 +444,7 @@ inline bool ValidateFields(TableStruct const& ts, std::string const& str, size_t
     std::string::size_type e = str.find('`', s);
     if (e == std::string::npos || valPos == std::string::npos)
     {
-        TC_LOG_ERROR("misc", "LoadPlayerDump: (line " UI64FMTD ") unexpected end of line", lineNumber);
+        WC_LOG_ERROR("misc", "LoadPlayerDump: (line " UI64FMTD ") unexpected end of line", lineNumber);
         return false;
     }
 
@@ -454,7 +454,7 @@ inline bool ValidateFields(TableStruct const& ts, std::string const& str, size_t
         int32 columnIndex = GetColumnIndexByName(ts, column);
         if (columnIndex == -1)
         {
-            TC_LOG_ERROR("misc", "LoadPlayerDump: (line " UI64FMTD ") unknown column name `%s` for table `%s`, aborting due to incompatible DB structure.", lineNumber, column.c_str(), ts.TableName.c_str());
+            WC_LOG_ERROR("misc", "LoadPlayerDump: (line " UI64FMTD ") unknown column name `%s` for table `%s`, aborting due to incompatible DB structure.", lineNumber, column.c_str(), ts.TableName.c_str());
             return false;
         }
 
@@ -849,7 +849,7 @@ DumpReturn PlayerDumpReader::LoadDump(std::string const& file, uint32 account, s
         std::string tn = GetTableName(line);
         if (tn.empty())
         {
-            TC_LOG_ERROR("misc", "LoadPlayerDump: (line " UI64FMTD ") Can't extract table name!", lineNumber);
+            WC_LOG_ERROR("misc", "LoadPlayerDump: (line " UI64FMTD ") Can't extract table name!", lineNumber);
             return DUMP_FILE_BROKEN;
         }
 
@@ -866,7 +866,7 @@ DumpReturn PlayerDumpReader::LoadDump(std::string const& file, uint32 account, s
 
         if (i == DUMP_TABLE_COUNT)
         {
-            TC_LOG_ERROR("misc", "LoadPlayerDump: (line " UI64FMTD ") Unknown table: `%s`!", lineNumber, tn.c_str());
+            WC_LOG_ERROR("misc", "LoadPlayerDump: (line " UI64FMTD ") Unknown table: `%s`!", lineNumber, tn.c_str());
             return DUMP_FILE_BROKEN;
         }
 

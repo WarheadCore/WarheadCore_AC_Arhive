@@ -26,7 +26,7 @@
 class Appender;
 struct LogMessage;
 
-class TC_COMMON_API Logger
+class WC_COMMON_API Logger
 {
     public:
         Logger(std::string const& name, LogLevel level);

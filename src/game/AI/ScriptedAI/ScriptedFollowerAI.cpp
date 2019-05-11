@@ -167,7 +167,7 @@ void FollowerAI::EnterEvadeMode(EvadeReason /*why*/)
 
     if (HasFollowState(STATE_FOLLOW_INPROGRESS))
     {
-        TC_LOG_DEBUG("scripts", "FollowerAI left combat, returning to CombatStartPosition.");
+        WC_LOG_DEBUG("scripts", "FollowerAI left combat, returning to CombatStartPosition.");
 
         if (me->GetMotionMaster()->GetCurrentMovementGeneratorType() == CHASE_MOTION_TYPE)
         {
@@ -193,7 +193,7 @@ void FollowerAI::UpdateAI(uint32 uiDiff)
         {
             if (HasFollowState(STATE_FOLLOW_COMPLETE) && !HasFollowState(STATE_FOLLOW_POSTEVENT))
             {
-                TC_LOG_DEBUG("scripts", "FollowerAI is set completed, despawns.");
+                WC_LOG_DEBUG("scripts", "FollowerAI is set completed, despawns.");
                 me->DespawnOrUnsummon();
                 return;
             }
@@ -204,7 +204,7 @@ void FollowerAI::UpdateAI(uint32 uiDiff)
             {
                 if (HasFollowState(STATE_FOLLOW_RETURNING))
                 {
-                    TC_LOG_DEBUG("scripts", "FollowerAI is returning to leader.");
+                    WC_LOG_DEBUG("scripts", "FollowerAI is returning to leader.");
 
                     RemoveFollowState(STATE_FOLLOW_RETURNING);
                     me->GetMotionMaster()->MoveFollow(player, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
@@ -232,7 +232,7 @@ void FollowerAI::UpdateAI(uint32 uiDiff)
 
             if (bIsMaxRangeExceeded)
             {
-                TC_LOG_DEBUG("scripts", "FollowerAI failed because player/group was to far away or not found");
+                WC_LOG_DEBUG("scripts", "FollowerAI failed because player/group was to far away or not found");
                 me->DespawnOrUnsummon();
                 return;
             }
@@ -275,13 +275,13 @@ void FollowerAI::StartFollow(Player* player, uint32 factionForFollower, Quest co
 {
     if (me->GetVictim())
     {
-        TC_LOG_DEBUG("scripts", "FollowerAI attempt to StartFollow while in combat.");
+        WC_LOG_DEBUG("scripts", "FollowerAI attempt to StartFollow while in combat.");
         return;
     }
 
     if (HasFollowState(STATE_FOLLOW_INPROGRESS))
     {
-        TC_LOG_ERROR("scripts", "FollowerAI attempt to StartFollow while already following.");
+        WC_LOG_ERROR("scripts", "FollowerAI attempt to StartFollow while already following.");
         return;
     }
 
@@ -297,7 +297,7 @@ void FollowerAI::StartFollow(Player* player, uint32 factionForFollower, Quest co
     {
         me->GetMotionMaster()->Clear();
         me->GetMotionMaster()->MoveIdle();
-        TC_LOG_DEBUG("scripts", "FollowerAI start with WAYPOINT_MOTION_TYPE, set to MoveIdle.");
+        WC_LOG_DEBUG("scripts", "FollowerAI start with WAYPOINT_MOTION_TYPE, set to MoveIdle.");
     }
 
     me->SetUInt32Value(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_NONE);
@@ -306,7 +306,7 @@ void FollowerAI::StartFollow(Player* player, uint32 factionForFollower, Quest co
 
     me->GetMotionMaster()->MoveFollow(player, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
 
-    TC_LOG_DEBUG("scripts", "FollowerAI start follow %s (%s)", player->GetName().c_str(), m_uiLeaderGUID.ToString().c_str());
+    WC_LOG_DEBUG("scripts", "FollowerAI start follow %s (%s)", player->GetName().c_str(), m_uiLeaderGUID.ToString().c_str());
 }
 
 Player* FollowerAI::GetLeaderForFollower()
@@ -324,7 +324,7 @@ Player* FollowerAI::GetLeaderForFollower()
                     Player* member = groupRef->GetSource();
                     if (member && me->IsWithinDistInMap(member, MAX_PLAYER_DISTANCE) && member->IsAlive())
                     {
-                        TC_LOG_DEBUG("scripts", "FollowerAI GetLeader changed and returned new leader.");
+                        WC_LOG_DEBUG("scripts", "FollowerAI GetLeader changed and returned new leader.");
                         m_uiLeaderGUID = member->GetGUID();
                         return member;
                     }
@@ -333,7 +333,7 @@ Player* FollowerAI::GetLeaderForFollower()
         }
     }
 
-    TC_LOG_DEBUG("scripts", "FollowerAI GetLeader can not find suitable leader.");
+    WC_LOG_DEBUG("scripts", "FollowerAI GetLeader can not find suitable leader.");
     return nullptr;
 }
 

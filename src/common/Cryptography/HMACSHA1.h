@@ -28,7 +28,7 @@ class BigNumber;
 
 #define SEED_KEY_SIZE 16
 
-class TC_COMMON_API HmacHash
+class WC_COMMON_API HmacHash
 {
     public:
         HmacHash(uint32 len, uint8* seed);

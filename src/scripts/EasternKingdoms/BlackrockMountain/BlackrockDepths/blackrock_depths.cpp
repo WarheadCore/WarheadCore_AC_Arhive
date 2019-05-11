@@ -230,7 +230,7 @@ public:
                 case 5:
                     instance->UpdateEncounterStateForKilledCreature(NPC_GRIMSTONE, me);
                     instance->SetData(TYPE_RING_OF_LAW, DONE);
-                    TC_LOG_DEBUG("scripts", "npc_grimstone: event reached end and set complete.");
+                    WC_LOG_DEBUG("scripts", "npc_grimstone: event reached end and set complete.");
                     break;
             }
         }

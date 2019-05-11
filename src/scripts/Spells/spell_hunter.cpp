@@ -982,8 +982,8 @@ class spell_hun_pet_carrion_feeder : public SpellScriptLoader
                 float max_range = GetSpellInfo()->GetMaxRange(false);
                 WorldObject* result = nullptr;
                 // search for nearby enemy corpse in range
-                Trinity::AnyDeadUnitSpellTargetInRangeCheck check(caster, max_range, GetSpellInfo(), TARGET_CHECK_ENEMY);
-                Trinity::WorldObjectSearcher<Trinity::AnyDeadUnitSpellTargetInRangeCheck> searcher(caster, result, check);
+                Warhead::AnyDeadUnitSpellTargetInRangeCheck check(caster, max_range, GetSpellInfo(), TARGET_CHECK_ENEMY);
+                Warhead::WorldObjectSearcher<Warhead::AnyDeadUnitSpellTargetInRangeCheck> searcher(caster, result, check);
                 Cell::VisitWorldObjects(caster, searcher, max_range);
                 if (!result)
                     Cell::VisitGridObjects(caster, searcher, max_range);

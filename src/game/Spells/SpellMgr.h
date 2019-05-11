@@ -425,7 +425,7 @@ enum EffectRadiusIndex
 };
 
 // Spell pet auras
-class TC_GAME_API PetAura
+class WC_GAME_API PetAura
 {
     private:
         typedef std::unordered_map<uint32, uint32> PetAuraMap;
@@ -472,7 +472,7 @@ class TC_GAME_API PetAura
 };
 typedef std::map<uint32, PetAura> SpellPetAuraMap;
 
-struct TC_GAME_API SpellArea
+struct WC_GAME_API SpellArea
 {
     uint32 spellId;
     uint32 areaId;                                          // zone/subzone/or 0 is not limited to zone
@@ -577,7 +577,7 @@ inline bool IsProfessionOrRidingSkill(uint32 skill)
 
 bool IsPartOfSkillLine(uint32 skillId, uint32 spellId);
 
-class TC_GAME_API SpellMgr
+class WC_GAME_API SpellMgr
 {
     // Constructors
     private:
@@ -608,7 +608,7 @@ class TC_GAME_API SpellMgr
         uint32 GetSpellWithRank(uint32 spell_id, uint32 rank, bool strict = false) const;
 
         // Spell Required table
-        Trinity::IteratorPair<SpellRequiredMap::const_iterator> GetSpellsRequiredForSpellBounds(uint32 spell_id) const;
+        Warhead::IteratorPair<SpellRequiredMap::const_iterator> GetSpellsRequiredForSpellBounds(uint32 spell_id) const;
         SpellsRequiringSpellMapBounds GetSpellsRequiringSpellBounds(uint32 spell_id) const;
         bool IsSpellRequiringSpell(uint32 spellid, uint32 req_spellid) const;
 

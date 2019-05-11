@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_SMARTENUM_H
-#define TRINITY_SMARTENUM_H
+#ifndef WARHEAD_SMARTENUM_H
+#define WARHEAD_SMARTENUM_H
 
 #include "IteratorPair.h"
 #include <iterator>
@@ -32,7 +32,7 @@ struct EnumText
     char const* const Description;
 };
 
-namespace Trinity
+namespace Warhead
 {
     namespace Impl
     {
@@ -50,11 +50,11 @@ class EnumUtils
 {
     public:
         template <typename Enum>
-        static size_t Count() { return Trinity::Impl::EnumUtils<Enum>::Count(); }
+        static size_t Count() { return Warhead::Impl::EnumUtils<Enum>::Count(); }
         template <typename Enum>
-        static EnumText ToString(Enum value) { return Trinity::Impl::EnumUtils<Enum>::ToString(value); }
+        static EnumText ToString(Enum value) { return Warhead::Impl::EnumUtils<Enum>::ToString(value); }
         template <typename Enum>
-        static Enum FromIndex(size_t index) { return Trinity::Impl::EnumUtils<Enum>::FromIndex(index); }
+        static Enum FromIndex(size_t index) { return Warhead::Impl::EnumUtils<Enum>::FromIndex(index); }
 
         template <typename Enum>
         class Iterator
@@ -101,7 +101,7 @@ class EnumUtils
         static Iterator<Enum> End() { return Iterator<Enum>(); }
 
         template <typename Enum>
-        static Trinity::IteratorPair<Iterator<Enum>> Iterate() { return { Begin<Enum>(), End<Enum>() }; }
+        static Warhead::IteratorPair<Iterator<Enum>> Iterate() { return { Begin<Enum>(), End<Enum>() }; }
 
         template <typename Enum>
         static char const* ToConstant(Enum value) { return ToString(value).Constant; }

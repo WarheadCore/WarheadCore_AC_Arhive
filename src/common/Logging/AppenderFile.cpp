@@ -28,7 +28,7 @@ AppenderFile::AppenderFile(uint8 id, std::string const& name, LogLevel level, Ap
     _fileSize(0)
 {
     if (extraArgs.empty())
-        throw InvalidAppenderArgsException(Trinity::StringFormat("Log::CreateAppenderFromConfig: Missing file name for appender %s\n", name.c_str()));
+        throw InvalidAppenderArgsException(Warhead::StringFormat("Log::CreateAppenderFromConfig: Missing file name for appender %s\n", name.c_str()));
 
     _fileName = extraArgs[0];
 
@@ -66,8 +66,8 @@ void AppenderFile::_write(LogMessage const* message)
 
     if (_dynamicName)
     {
-        char namebuf[TRINITY_PATH_MAX];
-        snprintf(namebuf, TRINITY_PATH_MAX, _fileName.c_str(), message->param1.c_str());
+        char namebuf[WARHEAD_PATH_MAX];
+        snprintf(namebuf, WARHEAD_PATH_MAX, _fileName.c_str(), message->param1.c_str());
         // always use "a" with dynamic name otherwise it could delete the log we wrote in last _write() call
         FILE* file = OpenFile(namebuf, "a", _backup || exceedMaxSize);
         if (!file)

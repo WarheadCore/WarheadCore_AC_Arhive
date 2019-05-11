@@ -111,7 +111,7 @@ enum class CreatureRandomMovementType : uint8
     Max
 };
 
-struct TC_GAME_API CreatureMovementData
+struct WC_GAME_API CreatureMovementData
 {
     CreatureMovementData() : Ground(CreatureGroundMovementType::Run), Flight(CreatureFlightMovementType::None), Swim(true), Rooted(false), Chase(CreatureChaseMovementType::Run),
         Random(CreatureRandomMovementType::Walk) { }
@@ -144,7 +144,7 @@ static const uint32 MAX_CREATURE_QUEST_ITEMS = 6;
 static const uint32 MAX_CREATURE_SPELLS = 8;
 
 // from `creature_template` table
-struct TC_GAME_API CreatureTemplate
+struct WC_GAME_API CreatureTemplate
 {
     uint32  Entry;
     uint32  DifficultyEntry[MAX_DIFFICULTY - 1];
@@ -243,7 +243,7 @@ struct TC_GAME_API CreatureTemplate
 #pragma pack(push, 1)
 
 // Defines base stats for creatures (used to calculate HP/mana/armor/attackpower/rangedattackpower/all damage).
-struct TC_GAME_API CreatureBaseStats
+struct WC_GAME_API CreatureBaseStats
 {
     uint32 BaseHealth[MAX_EXPANSIONS];
     uint32 BaseMana;

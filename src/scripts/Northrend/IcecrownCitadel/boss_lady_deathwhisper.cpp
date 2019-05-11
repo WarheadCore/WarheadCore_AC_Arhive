@@ -564,7 +564,7 @@ class boss_lady_deathwhisper : public CreatureScript
                 if (_cultistQueue.empty())
                     return;
 
-                _cultistGUID = Trinity::Containers::SelectRandomContainerElement(_cultistQueue);
+                _cultistGUID = Warhead::Containers::SelectRandomContainerElement(_cultistQueue);
                 _cultistQueue.remove(_cultistGUID);
                 Creature* cultist = ObjectAccessor::GetCreature(*me, _cultistGUID);
                 if (!cultist)

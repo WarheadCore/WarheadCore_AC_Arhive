@@ -66,7 +66,7 @@ enum class DatabaseFieldTypes : uint8
     | SUM, AVG | DECIMAL           |
     | COUNT    | BIGINT            |
 */
-class TC_DATABASE_API Field
+class WC_DATABASE_API Field
 {
     friend class ResultSet;
     friend class PreparedResultSet;
@@ -136,7 +136,7 @@ class TC_DATABASE_API Field
         bool IsNumeric() const;
 
     private:
-        #ifdef TRINITY_STRICT_DATABASE_TYPE_CHECKS
+        #ifdef WARHEAD_STRICT_DATABASE_TYPE_CHECKS
         void SetMetadata(MYSQL_FIELD* field, uint32 fieldIndex);
         Metadata meta;
         #endif

@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITYCORE_PET_H
-#define TRINITYCORE_PET_H
+#ifndef WARHEADCORE_PET_H
+#define WARHEADCORE_PET_H
 
 #include "PetDefines.h"
 #include "TemporarySummon.h"
@@ -37,7 +37,7 @@ typedef std::vector<uint32> AutoSpellList;
 class Player;
 class PetAura;
 
-class TC_GAME_API Pet : public Guardian
+class WC_GAME_API Pet : public Guardian
 {
     public:
         explicit Pet(Player* owner, PetType type = MAX_PET_TYPE);

@@ -35,7 +35,7 @@ EndScriptData */
 #include "Util.h"
 #include "WorldSession.h"
 
-using namespace Trinity::ChatCommands;
+using namespace Warhead::ChatCommands;
 class go_commandscript : public CommandScript
 {
 public:

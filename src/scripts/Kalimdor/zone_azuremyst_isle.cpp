@@ -576,8 +576,8 @@ public:
         {
             float radius = 50.0f;
             std::list<Player*> players;
-            Trinity::AnyPlayerInObjectRangeCheck checker(me, radius);
-            Trinity::PlayerListSearcher<Trinity::AnyPlayerInObjectRangeCheck> searcher(me, players, checker);
+            Warhead::AnyPlayerInObjectRangeCheck checker(me, radius);
+            Warhead::PlayerListSearcher<Warhead::AnyPlayerInObjectRangeCheck> searcher(me, players, checker);
             Cell::VisitWorldObjects(me, searcher, radius);
 
             for (std::list<Player*>::const_iterator itr = players.begin(); itr != players.end(); ++itr)
@@ -601,7 +601,7 @@ public:
                 }
             }
             else
-                TC_LOG_ERROR("scripts", "SD2 ERROR: FlagList is empty!");
+                WC_LOG_ERROR("scripts", "SD2 ERROR: FlagList is empty!");
         }
 
         void UpdateAI(uint32 diff) override

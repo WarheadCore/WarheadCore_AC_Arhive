@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_WAYPOINTDEFINES_H
-#define TRINITY_WAYPOINTDEFINES_H
+#ifndef WARHEAD_WAYPOINTDEFINES_H
+#define WARHEAD_WAYPOINTDEFINES_H
 
 #include "Define.h"
 #include <vector>

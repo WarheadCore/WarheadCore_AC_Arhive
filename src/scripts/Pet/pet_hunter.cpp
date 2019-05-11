@@ -115,7 +115,7 @@ class npc_pet_hunter_snake_trap : public CreatureScript
 
                     if (!targets.empty())
                     {
-                        Unit* target = Trinity::Containers::SelectRandomContainerElement(targets);
+                        Unit* target = Warhead::Containers::SelectRandomContainerElement(targets);
                         me->GetThreatManager().FixateTarget(target);
                     }
                 }

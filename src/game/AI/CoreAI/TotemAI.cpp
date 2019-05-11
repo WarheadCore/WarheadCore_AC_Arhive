@@ -72,8 +72,8 @@ void TotemAI::UpdateAI(uint32 /*diff*/)
         me->IsFriendlyTo(victim) || !me->CanSeeOrDetect(victim))
     {
         victim = nullptr;
-        Trinity::NearestAttackableUnitInObjectRangeCheck u_check(me, me->GetCharmerOrOwnerOrSelf(), max_range);
-        Trinity::UnitLastSearcher<Trinity::NearestAttackableUnitInObjectRangeCheck> checker(me, victim, u_check);
+        Warhead::NearestAttackableUnitInObjectRangeCheck u_check(me, me->GetCharmerOrOwnerOrSelf(), max_range);
+        Warhead::UnitLastSearcher<Warhead::NearestAttackableUnitInObjectRangeCheck> checker(me, victim, u_check);
         Cell::VisitAllObjects(me, checker, max_range);
     }
 

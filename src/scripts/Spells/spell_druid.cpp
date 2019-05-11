@@ -1602,7 +1602,7 @@ class spell_dru_starfall_dummy : public SpellScriptLoader
 
             void FilterTargets(std::list<WorldObject*>& targets)
             {
-                Trinity::Containers::RandomResize(targets, 2);
+                Warhead::Containers::RandomResize(targets, 2);
             }
 
             void HandleDummy(SpellEffIndex /*effIndex*/)
@@ -2192,7 +2192,7 @@ class spell_dru_t10_restoration_4p_bonus : public SpellScriptLoader
                         return;
                     }
 
-                    Unit* target = Trinity::Containers::SelectRandomContainerElement(tempTargets);
+                    Unit* target = Warhead::Containers::SelectRandomContainerElement(tempTargets);
                     targets.clear();
                     targets.push_back(target);
                 }
@@ -2306,7 +2306,7 @@ class spell_dru_wild_growth : public SpellScriptLoader
 
                 if (targets.size() > maxTargets)
                 {
-                    targets.sort(Trinity::HealthPctOrderPred());
+                    targets.sort(Warhead::HealthPctOrderPred());
                     targets.resize(maxTargets);
                 }
 

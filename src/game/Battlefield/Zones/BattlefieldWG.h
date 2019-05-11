@@ -45,7 +45,7 @@ typedef std::vector<WintergraspWorkshop*> WorkshopVect;
 extern uint32 const ClockWorldState[];
 
 // used in zone_wintergrasp.cpp
-TC_GAME_API extern uint32 const WintergraspFaction[];
+WC_GAME_API extern uint32 const WintergraspFaction[];
 
 enum WintergraspSpells
 {
@@ -243,7 +243,7 @@ class WintergraspCapturePoint : public BfCapturePoint
  * WinterGrasp Battlefield   *
  * ######################### */
 
-class TC_GAME_API BattlefieldWG : public Battlefield
+class WC_GAME_API BattlefieldWG : public Battlefield
 {
     public:
         ~BattlefieldWG();
@@ -545,7 +545,7 @@ enum WintergraspGameObject
 // ********************************************************************
 
 // Structure for different buildings that can be destroyed during battle
-struct TC_GAME_API BfWGGameObjectBuilding
+struct WC_GAME_API BfWGGameObjectBuilding
 {
 private:
     // WG object
@@ -598,7 +598,7 @@ public:
 };
 
 // Structure for the 6 workshop
-struct TC_GAME_API WintergraspWorkshop
+struct WC_GAME_API WintergraspWorkshop
 {
 private:
     BattlefieldWG* _wg;                             // Pointer to wintergrasp

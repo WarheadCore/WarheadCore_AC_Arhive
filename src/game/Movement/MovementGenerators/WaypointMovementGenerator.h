@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_WAYPOINTMOVEMENTGENERATOR_H
-#define TRINITY_WAYPOINTMOVEMENTGENERATOR_H
+#ifndef WARHEAD_WAYPOINTMOVEMENTGENERATOR_H
+#define WARHEAD_WAYPOINTMOVEMENTGENERATOR_H
 
 #include "MovementGenerator.h"
 #include "PathMovementBase.h"

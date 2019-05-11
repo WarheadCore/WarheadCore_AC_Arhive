@@ -1,5 +1,5 @@
 ################################################
-# Trinity Core World Server configuration file #
+# Warhead Core World Server configuration file #
 ################################################
 [worldserver]
 
@@ -68,7 +68,7 @@ RealmID = 1
 #    DataDir
 #        Description: Data directory setting.
 #        Important:   DataDir needs to be quoted, as the string might contain space characters.
-#        Example:     "@prefix@/share/trinitycore"
+#        Example:     "@prefix@/share/warheadcore"
 #        Default:     "."
 
 DataDir = "."
@@ -93,9 +93,9 @@ LogsDir = ""
 #                                                                 section my.ini)
 #                     ".;/path/to/unix_socket;username;password;database" - (use Unix sockets on
 #                                                                           Unix/Linux)
-#        Default:     "127.0.0.1;3306;trinity;trinity;auth"       - (LoginDatabaseInfo)
-#                     "127.0.0.1;3306;trinity;trinity;world"      - (WorldDatabaseInfo)
-#                     "127.0.0.1;3306;trinity;trinity;characters" - (CharacterDatabaseInfo)
+#        Default:     "127.0.0.1;3306;warhead;warhead;auth"       - (LoginDatabaseInfo)
+#                     "127.0.0.1;3306;warhead;warhead;world"      - (WorldDatabaseInfo)
+#                     "127.0.0.1;3306;warhead;warhead;characters" - (CharacterDatabaseInfo)
 #
 #    Don't change hostname unless you are hosting MySQL on a different machine, if you need help
 #    with configuration allowing to connect from different machine than the one running server
@@ -103,9 +103,9 @@ LogsDir = ""
 #    Don't open port on firewall to external connections (it belongs to MySQL, not to wow server).
 #    The username you choose must have permissions to create/alter/rename tables.
 
-LoginDatabaseInfo     = "127.0.0.1;3306;trinity;trinity;auth"
-WorldDatabaseInfo     = "127.0.0.1;3306;trinity;trinity;world"
-CharacterDatabaseInfo = "127.0.0.1;3306;trinity;trinity;characters"
+LoginDatabaseInfo     = "127.0.0.1;3306;warhead;warhead;auth"
+WorldDatabaseInfo     = "127.0.0.1;3306;warhead;warhead;world"
+CharacterDatabaseInfo = "127.0.0.1;3306;warhead;warhead;characters"
 
 #
 #    LoginDatabase.WorkerThreads
@@ -183,16 +183,16 @@ CMakeCommand  = ""
 #    BuildDirectory
 #        Description: The path to your build directory.
 #                     If the path is left empty, the built-in CMAKE_BINARY_DIR is used.
-#        Example:     "../TrinityCore"
+#        Example:     "../WarheadCore"
 #        Default:     ""
 
 BuildDirectory  = ""
 
 #
 #    SourceDirectory
-#        Description: The path to your TrinityCore source directory.
+#        Description: The path to your WarheadCore source directory.
 #                     If the path is left empty, the built-in CMAKE_SOURCE_DIR is used.
-#        Example:     "../TrinityCore"
+#        Example:     "../WarheadCore"
 #        Default:     ""
 
 SourceDirectory  = ""
@@ -211,8 +211,8 @@ MySQLExecutable = ""
 #
 #    IPLocationFile
 #        Description: The path to your IP2Location database CSV file.
-#        Example:     "C:/Trinity/IP2LOCATION-LITE-DB1.CSV"
-#                     "/home/trinity/IP2LOCATION-LITE-DB1.CSV"
+#        Example:     "C:/Warhead/IP2LOCATION-LITE-DB1.CSV"
+#                     "/home/warhead/IP2LOCATION-LITE-DB1.CSV"
 #        Default:     ""  - (Disabled)
 
 IPLocationFile = ""
@@ -1197,10 +1197,10 @@ BeepAtStart = 1
 #
 #    Motd
 #        Description: Message of the Day, displayed at login. Use '@' for a newline.
-#        Example:     "Welcome to John's Server!@This server is proud to be powered by Trinity Core."
-#        Default:     "Welcome to a Trinity Core server."
+#        Example:     "Welcome to John's Server!@This server is proud to be powered by Warhead Core."
+#        Default:     "Welcome to a Warhead Core server."
 
-Motd = "Welcome to a Trinity Core server."
+Motd = "Welcome to a Warhead Core server."
 
 #
 #    Server.LoginInfo
@@ -1273,7 +1273,7 @@ Account.PasswordChangeSecurity = 0
 #
 #   BirthdayTime
 #        Description: Set to date of project's birth in UNIX time. By default the date when
-#                     TrinityCore was started (Thu Oct 2, 2008)
+#                     WarheadCore was started (Thu Oct 2, 2008)
 #        Default:     1222964635
 #
 #

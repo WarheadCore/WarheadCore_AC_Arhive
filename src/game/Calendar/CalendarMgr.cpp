@@ -96,7 +96,7 @@ void CalendarMgr::LoadFromDB()
         }
         while (result->NextRow());
 
-    TC_LOG_INFO("server.loading", ">> Loaded %u calendar events in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+    WC_LOG_INFO("server.loading", ">> Loaded %u calendar events in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
     count = 0;
     oldMSTime = getMSTime();
 
@@ -124,7 +124,7 @@ void CalendarMgr::LoadFromDB()
         }
         while (result->NextRow());
 
-    TC_LOG_INFO("server.loading", ">> Loaded %u calendar invites in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+    WC_LOG_INFO("server.loading", ">> Loaded %u calendar invites in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
 
     for (uint64 i = 1; i < _maxEventId; ++i)
         if (!GetEvent(i))
@@ -306,7 +306,7 @@ CalendarEvent* CalendarMgr::GetEvent(uint64 eventId) const
         if ((*itr)->GetEventId() == eventId)
             return *itr;
 
-    TC_LOG_DEBUG("calendar", "CalendarMgr::GetEvent: [" UI64FMTD "] not found!", eventId);
+    WC_LOG_DEBUG("calendar", "CalendarMgr::GetEvent: [" UI64FMTD "] not found!", eventId);
     return nullptr;
 }
 
@@ -317,7 +317,7 @@ CalendarInvite* CalendarMgr::GetInvite(uint64 inviteId) const
             if ((*itr2)->GetInviteId() == inviteId)
                 return *itr2;
 
-    TC_LOG_DEBUG("calendar", "CalendarMgr::GetInvite: [" UI64FMTD "] not found!", inviteId);
+    WC_LOG_DEBUG("calendar", "CalendarMgr::GetInvite: [" UI64FMTD "] not found!", inviteId);
     return nullptr;
 }
 

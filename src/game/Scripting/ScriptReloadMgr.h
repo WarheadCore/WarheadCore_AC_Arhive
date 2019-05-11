@@ -49,7 +49,7 @@ public:
 /// informs the ScriptMgr about changes which were made.
 /// The ScriptReloadMgr is also responsible for watching the source directory
 /// and to invoke a build on changes.
-class TC_GAME_API ScriptReloadMgr
+class WC_GAME_API ScriptReloadMgr
 {
 protected:
     ScriptReloadMgr() { }

@@ -38,7 +38,7 @@ bool WorldSession::CanOpenMailBox(ObjectGuid guid)
     {
         if (!HasPermission(rbac::RBAC_PERM_COMMAND_MAILBOX))
         {
-            TC_LOG_WARN("cheat", "%s attempted to open mailbox by using a cheat.", _player->GetName().c_str());
+            WC_LOG_WARN("cheat", "%s attempted to open mailbox by using a cheat.", _player->GetName().c_str());
             return false;
         }
     }
@@ -111,7 +111,7 @@ void WorldSession::HandleSendMail(WorldPacket& recvData)
 
     if (!receiverGuid)
     {
-        TC_LOG_INFO("network", "Player %u is sending mail to %s (GUID: non-existing!) with subject %s "
+        WC_LOG_INFO("network", "Player %u is sending mail to %s (GUID: non-existing!) with subject %s "
             "and body %s includes %u items, %u copper and %u COD copper with unk1 = %u, unk2 = %u",
             player->GetGUID().GetCounter(), receiverName.c_str(), subject.c_str(), body.c_str(),
             items_count, money, COD, stationery, package);
@@ -119,7 +119,7 @@ void WorldSession::HandleSendMail(WorldPacket& recvData)
         return;
     }
 
-    TC_LOG_INFO("network", "Player %u is sending mail to %s (%s) with subject %s and body %s "
+    WC_LOG_INFO("network", "Player %u is sending mail to %s (%s) with subject %s and body %s "
         "including %u items, %u copper and %u COD copper with unk1 = %u, unk2 = %u",
         player->GetGUID().GetCounter(), receiverName.c_str(), receiverGuid.ToString().c_str(), subject.c_str(),
         body.c_str(), items_count, money, COD, stationery, package);
@@ -753,7 +753,7 @@ void WorldSession::HandleMailCreateTextItem(WorldPacket& recvData)
 
     bodyItem->SetFlag(ITEM_FIELD_FLAGS, ITEM_FLAG_MAIL_TEXT_MASK);
 
-    TC_LOG_INFO("network", "HandleMailCreateTextItem mailid=%u", mailId);
+    WC_LOG_INFO("network", "HandleMailCreateTextItem mailid=%u", mailId);
 
     ItemPosCountVec dest;
     uint8 msg = _player->CanStoreItem(NULL_BAG, NULL_SLOT, dest, bodyItem, false);

@@ -21,7 +21,7 @@
 #include "Define.h"
 #include <boost/asio/ip/address.hpp>
 
-namespace Trinity
+namespace Warhead
 {
     namespace Net
     {

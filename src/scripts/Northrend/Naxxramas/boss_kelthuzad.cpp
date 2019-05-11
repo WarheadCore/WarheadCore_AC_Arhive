@@ -181,7 +181,7 @@ class KelThuzadCharmedPlayerAI : public SimpleCharmedPlayerAI
                 if (pTarget->HasBreakableByDamageCrowdControlAura())
                     return false;
                 // We _really_ dislike healers. So we hit them in the face. Repeatedly. Exclusively.
-                return Trinity::Helpers::Entity::IsPlayerHealer(pTarget);
+                return Warhead::Helpers::Entity::IsPlayerHealer(pTarget);
             }
         };
 

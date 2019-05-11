@@ -35,7 +35,7 @@ add_executable(worldserver
 
 if( NOT WIN32 )
   set_target_properties(worldserver PROPERTIES
-    COMPILE_DEFINITIONS _TRINITY_CORE_CONFIG="${CONF_DIR}/worldserver.conf"
+    COMPILE_DEFINITIONS _WARHEAD_CORE_CONFIG="${CONF_DIR}/worldserver.conf"
   )
 endif()
 
@@ -47,7 +47,7 @@ set_target_properties(worldserver PROPERTIES LINK_FLAGS "${worldserver_LINK_FLAG
 
 target_link_libraries(worldserver
   PRIVATE
-    trinity-core-interface
+    warhead-core-interface
   PUBLIC
     scripts
     game

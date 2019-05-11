@@ -29,7 +29,7 @@ endif (USE_COREPCH)
 
 GroupSources(${CMAKE_CURRENT_SOURCE_DIR})
 
-add_definitions(-DTRINITY_API_EXPORT_COMMON)
+add_definitions(-DWARHEAD_API_EXPORT_COMMON)
 
 add_library(common
   ${PRIVATE_SOURCES}
@@ -61,7 +61,7 @@ target_include_directories(common
 target_link_libraries(common
   PRIVATE
     process
-    trinity-core-interface
+    warhead-core-interface
   PUBLIC
     boost
     fmt
@@ -77,9 +77,9 @@ target_link_libraries(common
 add_dependencies(common revision_data.h)
 
 set_target_properties(common
-    PROPERTIES
-      FOLDER
-        "server")
+  PROPERTIES
+    FOLDER
+      "common")
 
 if( BUILD_SHARED_LIBS )
   if( UNIX )

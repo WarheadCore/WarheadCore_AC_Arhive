@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __TRINITY_CHANNELMGR_H
-#define __TRINITY_CHANNELMGR_H
+#ifndef __WARHEAD_CHANNELMGR_H
+#define __WARHEAD_CHANNELMGR_H
 
 #include "Define.h"
 #include "Hash.h"
@@ -28,7 +28,7 @@ class Player;
 class WorldPacket;
 struct AreaTableEntry;
 
-class TC_GAME_API ChannelMgr
+class WC_GAME_API ChannelMgr
 {
     typedef std::unordered_map<std::wstring, Channel*> CustomChannelContainer; // custom channels only differ in name
     typedef std::unordered_map<std::pair<uint32 /*channelId*/, uint32 /*zoneId*/>, Channel*> BuiltinChannelContainer; //identify builtin (DBC) channels by zoneId instead, since name changes by client locale

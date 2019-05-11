@@ -20,7 +20,7 @@
 #include "SmartEnum.h"
 #include <stdexcept>
 
-namespace Trinity
+namespace Warhead
 {
 namespace Impl
 {
@@ -29,7 +29,7 @@ namespace Impl
 |* data for enum 'UnitFlags' in 'UnitDefines.h' auto-generated *|
 \***************************************************************/
 template <>
-TC_API_EXPORT EnumText EnumUtils<UnitFlags>::ToString(UnitFlags value)
+WC_API_EXPORT EnumText EnumUtils<UnitFlags>::ToString(UnitFlags value)
 {
     switch (value)
     {
@@ -70,10 +70,10 @@ TC_API_EXPORT EnumText EnumUtils<UnitFlags>::ToString(UnitFlags value)
 }
 
 template <>
-TC_API_EXPORT size_t EnumUtils<UnitFlags>::Count() { return 32; }
+WC_API_EXPORT size_t EnumUtils<UnitFlags>::Count() { return 32; }
 
 template <>
-TC_API_EXPORT UnitFlags EnumUtils<UnitFlags>::FromIndex(size_t index)
+WC_API_EXPORT UnitFlags EnumUtils<UnitFlags>::FromIndex(size_t index)
 {
     switch (index)
     {
@@ -117,7 +117,7 @@ TC_API_EXPORT UnitFlags EnumUtils<UnitFlags>::FromIndex(size_t index)
 |* data for enum 'NPCFlags' in 'UnitDefines.h' auto-generated *|
 \**************************************************************/
 template <>
-TC_API_EXPORT EnumText EnumUtils<NPCFlags>::ToString(NPCFlags value)
+WC_API_EXPORT EnumText EnumUtils<NPCFlags>::ToString(NPCFlags value)
 {
     switch (value)
     {
@@ -153,10 +153,10 @@ TC_API_EXPORT EnumText EnumUtils<NPCFlags>::ToString(NPCFlags value)
 }
 
 template <>
-TC_API_EXPORT size_t EnumUtils<NPCFlags>::Count() { return 27; }
+WC_API_EXPORT size_t EnumUtils<NPCFlags>::Count() { return 27; }
 
 template <>
-TC_API_EXPORT NPCFlags EnumUtils<NPCFlags>::FromIndex(size_t index)
+WC_API_EXPORT NPCFlags EnumUtils<NPCFlags>::FromIndex(size_t index)
 {
     switch (index)
     {

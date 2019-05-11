@@ -247,7 +247,7 @@ ThreatManager& UnitAI::GetThreatManager()
 
 void UnitAI::SortByDistance(std::list<Unit*> list, bool ascending)
 {
-    list.sort(Trinity::ObjectDistanceOrderPred(me, ascending));
+    list.sort(Warhead::ObjectDistanceOrderPred(me, ascending));
 }
 
 std::string UnitAI::GetDebugInfo() const

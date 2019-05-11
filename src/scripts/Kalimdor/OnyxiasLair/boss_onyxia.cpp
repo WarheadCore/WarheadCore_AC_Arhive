@@ -357,8 +357,8 @@ public:
                             DoCastVictim(SPELL_BELLOWING_ROAR);
                             // Eruption
                             GameObject* Floor = nullptr;
-                            Trinity::GameObjectInRangeCheck check(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 15);
-                            Trinity::GameObjectLastSearcher<Trinity::GameObjectInRangeCheck> searcher(me, Floor, check);
+                            Warhead::GameObjectInRangeCheck check(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 15);
+                            Warhead::GameObjectLastSearcher<Warhead::GameObjectInRangeCheck> searcher(me, Floor, check);
                             Cell::VisitGridObjects(me, searcher, 30.0f);
                             if (Floor)
                                 instance->SetGuidData(DATA_FLOOR_ERUPTION_GUID, Floor->GetGUID());

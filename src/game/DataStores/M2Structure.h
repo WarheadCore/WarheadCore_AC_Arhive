@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_M2STRUCTURE_H
-#define TRINITY_M2STRUCTURE_H
+#ifndef WARHEAD_M2STRUCTURE_H
+#define WARHEAD_M2STRUCTURE_H
 
 #include <G3D/Vector3.h>
 #include <G3D/AABox.h>

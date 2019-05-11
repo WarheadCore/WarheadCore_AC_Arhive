@@ -79,7 +79,7 @@ namespace boost
     }
 }
 
-namespace Trinity
+namespace Warhead
 {
     namespace Asio
     {

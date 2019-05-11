@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_SPLINECHAINMOVEMENTGENERATOR_H
-#define TRINITY_SPLINECHAINMOVEMENTGENERATOR_H
+#ifndef WARHEAD_SPLINECHAINMOVEMENTGENERATOR_H
+#define WARHEAD_SPLINECHAINMOVEMENTGENERATOR_H
 
 #include "SplineChain.h"
 #include "MovementGenerator.h"
@@ -25,7 +25,7 @@
 
 class Unit;
 
-class TC_GAME_API SplineChainMovementGenerator : public MovementGenerator
+class WC_GAME_API SplineChainMovementGenerator : public MovementGenerator
 {
     public:
         explicit SplineChainMovementGenerator(uint32 id, std::vector<SplineChainLink> const& chain, bool walk = false);

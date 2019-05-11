@@ -460,7 +460,7 @@ class spell_send_mug_target_picker : public SpellScript
     {
         Unit* caster = GetCaster();
 
-        targets.remove_if(Trinity::UnitAuraCheck(true, SPELL_HAS_DARK_BREWMAIDENS_BREW));
+        targets.remove_if(Warhead::UnitAuraCheck(true, SPELL_HAS_DARK_BREWMAIDENS_BREW));
 
         if (targets.size() > 1)
             targets.remove_if([caster](WorldObject* obj)
@@ -473,7 +473,7 @@ class spell_send_mug_target_picker : public SpellScript
         if (targets.empty())
             return;
 
-        WorldObject* target = Trinity::Containers::SelectRandomContainerElement(targets);
+        WorldObject* target = Warhead::Containers::SelectRandomContainerElement(targets);
         targets.clear();
         targets.push_back(target);
     }

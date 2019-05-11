@@ -25,7 +25,7 @@ bool SQLQueryHolder::SetPreparedQuery(size_t index, PreparedStatement* stmt)
 {
     if (m_queries.size() <= index)
     {
-        TC_LOG_ERROR("sql.sql", "Query index (%u) out of range (size: %u) for prepared statement", uint32(index), (uint32)m_queries.size());
+        WC_LOG_ERROR("sql.sql", "Query index (%u) out of range (size: %u) for prepared statement", uint32(index), (uint32)m_queries.size());
         return false;
     }
 

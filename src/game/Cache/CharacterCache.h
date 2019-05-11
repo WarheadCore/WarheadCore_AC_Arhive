@@ -35,7 +35,7 @@ struct CharacterCacheEntry
     uint32 ArenaTeamId[3];
 };
 
-class TC_GAME_API CharacterCache
+class WC_GAME_API CharacterCache
 {
     public:
         CharacterCache();

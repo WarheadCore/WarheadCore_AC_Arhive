@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_CHATCOMMANDTAGS_H
-#define TRINITY_CHATCOMMANDTAGS_H
+#ifndef WARHEAD_CHATCOMMANDTAGS_H
+#define WARHEAD_CHATCOMMANDTAGS_H
 
 #include "ChatCommandHelpers.h"
 #include "Hyperlinks.h"
@@ -29,7 +29,7 @@
 #include <type_traits>
 #include <utility>
 
-namespace Trinity
+namespace Warhead
 {
 namespace ChatCommands
 {
@@ -91,7 +91,7 @@ struct Hyperlink : public ContainerTag
 
         char const* TryConsume(char const* pos)
         {
-            Trinity::Hyperlinks::HyperlinkInfo info = Trinity::Hyperlinks::ParseHyperlink(pos);
+            Warhead::Hyperlinks::HyperlinkInfo info = Warhead::Hyperlinks::ParseHyperlink(pos);
             // invalid hyperlinks cannot be consumed
             if (!info)
                 return nullptr;
@@ -119,7 +119,7 @@ struct Hyperlink : public ContainerTag
 };
 
 // pull in link tags for user convenience
-using namespace ::Trinity::Hyperlinks::LinkTags;
+using namespace ::Warhead::Hyperlinks::LinkTags;
 
 /************************** VARIANT TAG LOGIC *********************************\
 |* This has some special handling over in ChatCommand.h                       *|

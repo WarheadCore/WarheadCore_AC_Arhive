@@ -26,7 +26,7 @@
 #include <boost/asio/ip/network_v6.hpp>
 #endif
 
-namespace Trinity
+namespace Warhead
 {
     namespace Net
     {

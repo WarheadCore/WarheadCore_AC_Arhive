@@ -32,7 +32,7 @@ enum MapObjectCellMoveState
     MAP_OBJECT_CELL_MOVE_INACTIVE, //in move list but should not move
 };
 
-class TC_GAME_API MapObject
+class WC_GAME_API MapObject
 {
     friend class Map; //map for moving creatures
     friend class ObjectGridLoader; //grid loader for loading creatures

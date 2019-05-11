@@ -45,11 +45,11 @@ target_include_directories(database
   PRIVATE
     ${CMAKE_CURRENT_BINARY_DIR})
 
-add_definitions(-DTRINITY_API_EXPORT_DATABASE)
+add_definitions(-DWARHEAD_API_EXPORT_DATABASE)
 
 target_link_libraries(database
   PRIVATE
-    trinity-core-interface
+    warhead-core-interface
   PUBLIC
     common
     mysql)

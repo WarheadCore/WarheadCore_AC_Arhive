@@ -39,7 +39,7 @@ boost::asio::ip::tcp_endpoint Realm::GetAddressForClient(boost::asio::ip::addres
     }
     else
     {
-        if (clientAddr.is_v4() && Trinity::Net::IsInNetwork(LocalAddress->to_v4(), LocalSubnetMask->to_v4(), clientAddr.to_v4()))
+        if (clientAddr.is_v4() && Warhead::Net::IsInNetwork(LocalAddress->to_v4(), LocalSubnetMask->to_v4(), clientAddr.to_v4()))
             realmIp = *LocalAddress;
         else
             realmIp = *ExternalAddress;

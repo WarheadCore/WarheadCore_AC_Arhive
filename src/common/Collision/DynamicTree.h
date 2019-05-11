@@ -31,7 +31,7 @@ namespace G3D
 class GameObjectModel;
 struct DynTreeImpl;
 
-class TC_COMMON_API DynamicMapTree
+class WC_COMMON_API DynamicMapTree
 {
     DynTreeImpl *impl;
 

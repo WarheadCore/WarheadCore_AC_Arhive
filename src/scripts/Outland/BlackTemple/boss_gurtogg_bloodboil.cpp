@@ -326,7 +326,7 @@ class spell_gurtogg_bloodboil_bloodboil : public SpellScript
             return;
 
         // Sort the list of players
-        targets.sort(Trinity::ObjectDistanceOrderPred(GetCaster(), false));
+        targets.sort(Warhead::ObjectDistanceOrderPred(GetCaster(), false));
         // Resize so we only get top 5
         targets.resize(5);
     }
@@ -349,7 +349,7 @@ class spell_gurtogg_bloodboil_insignificance : public SpellScript
 
     void FilterTargets(std::list<WorldObject*>& targets)
     {
-        targets.remove_if(Trinity::UnitAuraCheck(true, SPELL_FEL_RAGE_TARGET));
+        targets.remove_if(Warhead::UnitAuraCheck(true, SPELL_FEL_RAGE_TARGET));
     }
 
     void Register() override

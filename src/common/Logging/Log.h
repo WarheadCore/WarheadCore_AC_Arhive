@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITYCORE_LOG_H
-#define TRINITYCORE_LOG_H
+#ifndef WARHEADCORE_LOG_H
+#define WARHEADCORE_LOG_H
 
 #include "Define.h"
 #include "AsioHacksFwd.h"
@@ -32,7 +32,7 @@ class Appender;
 class Logger;
 struct LogMessage;
 
-namespace Trinity
+namespace Warhead
 {
     namespace Asio
     {
@@ -50,7 +50,7 @@ Appender* CreateAppender(uint8 id, std::string const& name, LogLevel level, Appe
     return new AppenderImpl(id, name, level, flags, std::forward<std::vector<char const*>>(extraArgs));
 }
 
-class TC_COMMON_API Log
+class WC_COMMON_API Log
 {
     typedef std::unordered_map<std::string, Logger> LoggerMap;
 
@@ -65,7 +65,7 @@ class TC_COMMON_API Log
     public:
         static Log* instance();
 
-        void Initialize(Trinity::Asio::IoContext* ioContext);
+        void Initialize(Warhead::Asio::IoContext* ioContext);
         void SetSynchronous();  // Not threadsafe - should only be called from main() after all threads are joined
         void LoadFromConfig();
         void Close();
@@ -75,7 +75,7 @@ class TC_COMMON_API Log
         template<typename Format, typename... Args>
         inline void outMessage(std::string const& filter, LogLevel const level, Format&& fmt, Args&&... args)
         {
-            outMessage(filter, level, Trinity::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
+            outMessage(filter, level, Warhead::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
         }
 
         template<typename Format, typename... Args>
@@ -84,7 +84,7 @@ class TC_COMMON_API Log
             if (!ShouldLog("commands.gm", LOG_LEVEL_INFO))
                 return;
 
-            outCommand(Trinity::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...), std::to_string(account));
+            outCommand(Warhead::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...), std::to_string(account));
         }
 
         void outCharDump(char const* str, uint32 account_id, uint64 guid, char const* name);
@@ -125,8 +125,8 @@ class TC_COMMON_API Log
         std::string m_logsDir;
         std::string m_logsTimestamp;
 
-        Trinity::Asio::IoContext* _ioContext;
-        Trinity::Asio::Strand* _strand;
+        Warhead::Asio::IoContext* _ioContext;
+        Warhead::Asio::Strand* _strand;
 };
 
 #define sLog Log::instance()
@@ -145,13 +145,13 @@ class TC_COMMON_API Log
     }
 
 #ifdef PERFORMANCE_PROFILING
-#define TC_LOG_MESSAGE_BODY(filterType__, level__, ...) ((void)0)
-#elif TRINITY_PLATFORM != TRINITY_PLATFORM_WINDOWS
+#define WC_LOG_MESSAGE_BODY(filterType__, level__, ...) ((void)0)
+#elif WARHEAD_PLATFORM != WARHEAD_PLATFORM_WINDOWS
 void check_args(char const*, ...) ATTR_PRINTF(1, 2);
 void check_args(std::string const&, ...);
 
 // This will catch format errors on build time
-#define TC_LOG_MESSAGE_BODY(filterType__, level__, ...)                 \
+#define WC_LOG_MESSAGE_BODY(filterType__, level__, ...)                 \
         do {                                                            \
             if (sLog->ShouldLog(filterType__, level__))                 \
             {                                                           \
@@ -162,7 +162,7 @@ void check_args(std::string const&, ...);
             }                                                           \
         } while (0)
 #else
-#define TC_LOG_MESSAGE_BODY(filterType__, level__, ...)                 \
+#define WC_LOG_MESSAGE_BODY(filterType__, level__, ...)                 \
         __pragma(warning(push))                                         \
         __pragma(warning(disable:4127))                                 \
         do {                                                            \
@@ -172,22 +172,22 @@ void check_args(std::string const&, ...);
         __pragma(warning(pop))
 #endif
 
-#define TC_LOG_TRACE(filterType__, ...) \
-    TC_LOG_MESSAGE_BODY(filterType__, LOG_LEVEL_TRACE, __VA_ARGS__)
+#define WC_LOG_TRACE(filterType__, ...) \
+    WC_LOG_MESSAGE_BODY(filterType__, LOG_LEVEL_TRACE, __VA_ARGS__)
 
-#define TC_LOG_DEBUG(filterType__, ...) \
-    TC_LOG_MESSAGE_BODY(filterType__, LOG_LEVEL_DEBUG, __VA_ARGS__)
+#define WC_LOG_DEBUG(filterType__, ...) \
+    WC_LOG_MESSAGE_BODY(filterType__, LOG_LEVEL_DEBUG, __VA_ARGS__)
 
-#define TC_LOG_INFO(filterType__, ...)  \
-    TC_LOG_MESSAGE_BODY(filterType__, LOG_LEVEL_INFO, __VA_ARGS__)
+#define WC_LOG_INFO(filterType__, ...)  \
+    WC_LOG_MESSAGE_BODY(filterType__, LOG_LEVEL_INFO, __VA_ARGS__)
 
-#define TC_LOG_WARN(filterType__, ...)  \
-    TC_LOG_MESSAGE_BODY(filterType__, LOG_LEVEL_WARN, __VA_ARGS__)
+#define WC_LOG_WARN(filterType__, ...)  \
+    WC_LOG_MESSAGE_BODY(filterType__, LOG_LEVEL_WARN, __VA_ARGS__)
 
-#define TC_LOG_ERROR(filterType__, ...) \
-    TC_LOG_MESSAGE_BODY(filterType__, LOG_LEVEL_ERROR, __VA_ARGS__)
+#define WC_LOG_ERROR(filterType__, ...) \
+    WC_LOG_MESSAGE_BODY(filterType__, LOG_LEVEL_ERROR, __VA_ARGS__)
 
-#define TC_LOG_FATAL(filterType__, ...) \
-    TC_LOG_MESSAGE_BODY(filterType__, LOG_LEVEL_FATAL, __VA_ARGS__)
+#define WC_LOG_FATAL(filterType__, ...) \
+    WC_LOG_MESSAGE_BODY(filterType__, LOG_LEVEL_FATAL, __VA_ARGS__)
 
 #endif

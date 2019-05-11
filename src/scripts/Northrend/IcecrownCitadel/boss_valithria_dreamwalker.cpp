@@ -218,7 +218,7 @@ class ValithriaDespawner : public BasicEvent
 
         bool Execute(uint64 /*currTime*/, uint32 /*diff*/) override
         {
-            Trinity::CreatureWorker<ValithriaDespawner> worker(_creature, *this);
+            Warhead::CreatureWorker<ValithriaDespawner> worker(_creature, *this);
             Cell::VisitGridObjects(_creature, worker, 333.0f);
             return true;
         }
@@ -1097,8 +1097,8 @@ class npc_dream_cloud : public CreatureScript
                         case EVENT_CHECK_PLAYER:
                         {
                             Player* player = nullptr;
-                            Trinity::AnyPlayerInObjectRangeCheck check(me, 5.0f);
-                            Trinity::PlayerSearcher<Trinity::AnyPlayerInObjectRangeCheck> searcher(me, player, check);
+                            Warhead::AnyPlayerInObjectRangeCheck check(me, 5.0f);
+                            Warhead::PlayerSearcher<Warhead::AnyPlayerInObjectRangeCheck> searcher(me, player, check);
                             Cell::VisitWorldObjects(me, searcher, 7.5f);
                             _events.ScheduleEvent(player ? EVENT_EXPLODE : EVENT_CHECK_PLAYER, 1000);
                             break;
@@ -1219,11 +1219,11 @@ class spell_dreamwalker_summoner : public SpellScriptLoader
 
             void FilterTargets(std::list<WorldObject*>& targets)
             {
-                targets.remove_if(Trinity::UnitAuraCheck(true, SPELL_RECENTLY_SPAWNED));
+                targets.remove_if(Warhead::UnitAuraCheck(true, SPELL_RECENTLY_SPAWNED));
                 if (targets.empty())
                     return;
 
-                WorldObject* target = Trinity::Containers::SelectRandomContainerElement(targets);
+                WorldObject* target = Warhead::Containers::SelectRandomContainerElement(targets);
                 targets.clear();
                 targets.push_back(target);
             }
@@ -1287,7 +1287,7 @@ class spell_dreamwalker_summon_suppresser : public SpellScriptLoader
 
                 uint8 suppresserNumber = caster->GetAI()->GetData(DATA_SUPPRESSERS_COUNT);
                 for (uint8 i = 0; i < suppresserNumber; ++i)
-                    caster->CastSpell(Trinity::Containers::SelectRandomContainerElement(summoners), SPELL_SUMMON_SUPPRESSER, true);
+                    caster->CastSpell(Warhead::Containers::SelectRandomContainerElement(summoners), SPELL_SUMMON_SUPPRESSER, true);
             }
 
             void Register() override

@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_BATTLEGROUND_SCORE_H
-#define TRINITY_BATTLEGROUND_SCORE_H
+#ifndef WARHEAD_BATTLEGROUND_SCORE_H
+#define WARHEAD_BATTLEGROUND_SCORE_H
 
 #include "Errors.h"
 #include "ObjectGuid.h"
@@ -122,4 +122,4 @@ struct BattlegroundScore
         uint32 HealingDone;
 };
 
-#endif // TRINITY_BATTLEGROUND_SCORE_H
+#endif // WARHEAD_BATTLEGROUND_SCORE_H

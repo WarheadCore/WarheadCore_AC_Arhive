@@ -54,12 +54,12 @@ WorldSocketMgr& WorldSocketMgr::Instance()
     return instance;
 }
 
-bool WorldSocketMgr::StartWorldNetwork(Trinity::Asio::IoContext& ioContext, std::string const& bindIp, uint16 port, int threadCount)
+bool WorldSocketMgr::StartWorldNetwork(Warhead::Asio::IoContext& ioContext, std::string const& bindIp, uint16 port, int threadCount)
 {
     _tcpNoDelay = sConfigMgr->GetBoolDefault("Network.TcpNodelay", true);
 
-    int const max_connections = TRINITY_MAX_LISTEN_CONNECTIONS;
-    TC_LOG_DEBUG("misc", "Max allowed socket connections %d", max_connections);
+    int const max_connections = WARHEAD_MAX_LISTEN_CONNECTIONS;
+    WC_LOG_DEBUG("misc", "Max allowed socket connections %d", max_connections);
 
     // -1 means use default
     _socketSystemSendBufferSize = sConfigMgr->GetIntDefault("Network.OutKBuff", -1);
@@ -68,7 +68,7 @@ bool WorldSocketMgr::StartWorldNetwork(Trinity::Asio::IoContext& ioContext, std:
 
     if (_socketApplicationSendBufferSize <= 0)
     {
-        TC_LOG_ERROR("misc", "Network.OutUBuff is wrong in your config file");
+        WC_LOG_ERROR("misc", "Network.OutUBuff is wrong in your config file");
         return false;
     }
 
@@ -99,7 +99,7 @@ void WorldSocketMgr::OnSocketOpen(tcp::socket&& sock, uint32 threadIndex)
         sock.set_option(boost::asio::socket_base::send_buffer_size(_socketSystemSendBufferSize), err);
         if (err && err != boost::system::errc::not_supported)
         {
-            TC_LOG_ERROR("misc", "WorldSocketMgr::OnSocketOpen sock.set_option(boost::asio::socket_base::send_buffer_size) err = %s", err.message().c_str());
+            WC_LOG_ERROR("misc", "WorldSocketMgr::OnSocketOpen sock.set_option(boost::asio::socket_base::send_buffer_size) err = %s", err.message().c_str());
             return;
         }
     }
@@ -111,7 +111,7 @@ void WorldSocketMgr::OnSocketOpen(tcp::socket&& sock, uint32 threadIndex)
         sock.set_option(boost::asio::ip::tcp::no_delay(true), err);
         if (err)
         {
-            TC_LOG_ERROR("misc", "WorldSocketMgr::OnSocketOpen sock.set_option(boost::asio::ip::tcp::no_delay) err = %s", err.message().c_str());
+            WC_LOG_ERROR("misc", "WorldSocketMgr::OnSocketOpen sock.set_option(boost::asio::ip::tcp::no_delay) err = %s", err.message().c_str());
             return;
         }
     }

@@ -36,7 +36,7 @@ void WorldSession::HandleLearnTalentOpcode(WorldPacket& recvData)
 
 void WorldSession::HandleLearnPreviewTalents(WorldPacket& recvPacket)
 {
-    TC_LOG_DEBUG("network", "CMSG_LEARN_PREVIEW_TALENTS");
+    WC_LOG_DEBUG("network", "CMSG_LEARN_PREVIEW_TALENTS");
 
     uint32 talentsCount;
     recvPacket >> talentsCount;
@@ -60,14 +60,14 @@ void WorldSession::HandleLearnPreviewTalents(WorldPacket& recvPacket)
 
 void WorldSession::HandleTalentWipeConfirmOpcode(WorldPacket& recvData)
 {
-    TC_LOG_DEBUG("network", "MSG_TALENT_WIPE_CONFIRM");
+    WC_LOG_DEBUG("network", "MSG_TALENT_WIPE_CONFIRM");
     ObjectGuid guid;
     recvData >> guid;
 
     Creature* unit = GetPlayer()->GetNPCIfCanInteractWith(guid, UNIT_NPC_FLAG_TRAINER);
     if (!unit)
     {
-        TC_LOG_DEBUG("network", "WORLD: HandleTalentWipeConfirmOpcode - %s not found or you can't interact with him.", guid.ToString().c_str());
+        WC_LOG_DEBUG("network", "WORLD: HandleTalentWipeConfirmOpcode - %s not found or you can't interact with him.", guid.ToString().c_str());
         return;
     }
 

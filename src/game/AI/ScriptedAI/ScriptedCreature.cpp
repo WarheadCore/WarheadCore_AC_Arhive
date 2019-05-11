@@ -193,7 +193,7 @@ void ScriptedAI::DoPlaySoundToSet(WorldObject* source, uint32 soundId)
 
     if (!sSoundEntriesStore.LookupEntry(soundId))
     {
-        TC_LOG_ERROR("scripts", "Invalid soundId %u used in DoPlaySoundToSet (Source: TypeId %u, GUID %u)", soundId, source->GetTypeId(), source->GetGUID().GetCounter());
+        WC_LOG_ERROR("scripts", "Invalid soundId %u used in DoPlaySoundToSet (Source: TypeId %u, GUID %u)", soundId, source->GetTypeId(), source->GetGUID().GetCounter());
         return;
     }
 
@@ -355,7 +355,7 @@ void ScriptedAI::DoTeleportPlayer(Unit* unit, float x, float y, float z, float o
     if (Player* player = unit->ToPlayer())
         player->TeleportTo(unit->GetMapId(), x, y, z, o, TELE_TO_NOT_LEAVE_COMBAT);
     else
-        TC_LOG_ERROR("scripts", "Creature %s Tried to teleport non-player unit (%s) to x: %f y:%f z: %f o: %f. Aborted.",
+        WC_LOG_ERROR("scripts", "Creature %s Tried to teleport non-player unit (%s) to x: %f y:%f z: %f o: %f. Aborted.",
             me->GetGUID().ToString().c_str(), unit->GetGUID().ToString().c_str(), x, y, z, o);
 }
 
@@ -375,8 +375,8 @@ void ScriptedAI::DoTeleportAll(float x, float y, float z, float o)
 Unit* ScriptedAI::DoSelectLowestHpFriendly(float range, uint32 minHPDiff)
 {
     Unit* unit = nullptr;
-    Trinity::MostHPMissingInRange u_check(me, range, minHPDiff);
-    Trinity::UnitLastSearcher<Trinity::MostHPMissingInRange> searcher(me, unit, u_check);
+    Warhead::MostHPMissingInRange u_check(me, range, minHPDiff);
+    Warhead::UnitLastSearcher<Warhead::MostHPMissingInRange> searcher(me, unit, u_check);
     Cell::VisitAllObjects(me, searcher, range);
 
     return unit;
@@ -385,8 +385,8 @@ Unit* ScriptedAI::DoSelectLowestHpFriendly(float range, uint32 minHPDiff)
 Unit* ScriptedAI::DoSelectBelowHpPctFriendlyWithEntry(uint32 entry, float range, uint8 minHPDiff, bool excludeSelf)
 {
     Unit* unit = nullptr;
-    Trinity::FriendlyBelowHpPctEntryInRange u_check(me, entry, range, minHPDiff, excludeSelf);
-    Trinity::UnitLastSearcher<Trinity::FriendlyBelowHpPctEntryInRange> searcher(me, unit, u_check);
+    Warhead::FriendlyBelowHpPctEntryInRange u_check(me, entry, range, minHPDiff, excludeSelf);
+    Warhead::UnitLastSearcher<Warhead::FriendlyBelowHpPctEntryInRange> searcher(me, unit, u_check);
     Cell::VisitAllObjects(me, searcher, range);
 
     return unit;
@@ -395,8 +395,8 @@ Unit* ScriptedAI::DoSelectBelowHpPctFriendlyWithEntry(uint32 entry, float range,
 std::list<Creature*> ScriptedAI::DoFindFriendlyCC(float range)
 {
     std::list<Creature*> list;
-    Trinity::FriendlyCCedInRange u_check(me, range);
-    Trinity::CreatureListSearcher<Trinity::FriendlyCCedInRange> searcher(me, list, u_check);
+    Warhead::FriendlyCCedInRange u_check(me, range);
+    Warhead::CreatureListSearcher<Warhead::FriendlyCCedInRange> searcher(me, list, u_check);
     Cell::VisitAllObjects(me, searcher, range);
 
     return list;
@@ -405,8 +405,8 @@ std::list<Creature*> ScriptedAI::DoFindFriendlyCC(float range)
 std::list<Creature*> ScriptedAI::DoFindFriendlyMissingBuff(float range, uint32 uiSpellid)
 {
     std::list<Creature*> list;
-    Trinity::FriendlyMissingBuffInRange u_check(me, range, uiSpellid);
-    Trinity::CreatureListSearcher<Trinity::FriendlyMissingBuffInRange> searcher(me, list, u_check);
+    Warhead::FriendlyMissingBuffInRange u_check(me, range, uiSpellid);
+    Warhead::CreatureListSearcher<Warhead::FriendlyMissingBuffInRange> searcher(me, list, u_check);
     Cell::VisitAllObjects(me, searcher, range);
 
     return list;
@@ -416,8 +416,8 @@ Player* ScriptedAI::GetPlayerAtMinimumRange(float minimumRange)
 {
     Player* player = nullptr;
 
-    Trinity::PlayerAtMinimumRangeAway check(me, minimumRange);
-    Trinity::PlayerSearcher<Trinity::PlayerAtMinimumRangeAway> searcher(me, player, check);
+    Warhead::PlayerAtMinimumRangeAway check(me, minimumRange);
+    Warhead::PlayerSearcher<Warhead::PlayerAtMinimumRangeAway> searcher(me, player, check);
     Cell::VisitWorldObjects(me, searcher, minimumRange);
 
     return player;
@@ -569,7 +569,7 @@ void BossAI::_DespawnAtEvade(Seconds delayToRespawn, Creature* who)
 {
     if (delayToRespawn < Seconds(2))
     {
-        TC_LOG_ERROR("scripts", "_DespawnAtEvade called with delay of %ld seconds, defaulting to 2.", delayToRespawn.count());
+        WC_LOG_ERROR("scripts", "_DespawnAtEvade called with delay of %ld seconds, defaulting to 2.", delayToRespawn.count());
         delayToRespawn = Seconds(2);
     }
 
@@ -578,7 +578,7 @@ void BossAI::_DespawnAtEvade(Seconds delayToRespawn, Creature* who)
 
     if (TempSummon* whoSummon = who->ToTempSummon())
     {
-        TC_LOG_WARN("scripts", "_DespawnAtEvade called on a temporary summon.");
+        WC_LOG_WARN("scripts", "_DespawnAtEvade called on a temporary summon.");
         whoSummon->UnSummon();
         return;
     }

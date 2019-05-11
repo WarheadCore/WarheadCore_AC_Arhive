@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_MAIL_H
-#define TRINITY_MAIL_H
+#ifndef WARHEAD_MAIL_H
+#define WARHEAD_MAIL_H
 
 #include "Common.h"
 #include "DatabaseEnvFwd.h"
@@ -80,7 +80,7 @@ enum MailShowFlags
     MAIL_SHOW_RETURN  = 0x0010
 };
 
-class TC_GAME_API MailSender
+class WC_GAME_API MailSender
 {
     public:                                                 // Constructors
         MailSender(MailMessageType messageType, ObjectGuid::LowType sender_guidlow_or_entry, MailStationery stationery = MAIL_STATIONERY_DEFAULT)
@@ -102,7 +102,7 @@ class TC_GAME_API MailSender
         MailStationery m_stationery;
 };
 
-class TC_GAME_API MailReceiver
+class WC_GAME_API MailReceiver
 {
     public:                                                 // Constructors
         explicit MailReceiver(ObjectGuid::LowType receiver_lowguid) : m_receiver(nullptr), m_receiver_lowguid(receiver_lowguid) { }
@@ -116,7 +116,7 @@ class TC_GAME_API MailReceiver
         ObjectGuid::LowType  m_receiver_lowguid;
 };
 
-class TC_GAME_API MailDraft
+class WC_GAME_API MailDraft
 {
     typedef std::map<ObjectGuid::LowType, Item*> MailItemMap;
 
@@ -164,7 +164,7 @@ struct MailItemInfo
 };
 typedef std::vector<MailItemInfo> MailItemInfoVec;
 
-struct TC_GAME_API Mail
+struct WC_GAME_API Mail
 {
     uint32 messageID;
     uint8 messageType;

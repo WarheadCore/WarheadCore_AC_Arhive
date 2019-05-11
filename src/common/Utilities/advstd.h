@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_ADVSTD_H
-#define TRINITY_ADVSTD_H
+#ifndef WARHEAD_ADVSTD_H
+#define WARHEAD_ADVSTD_H
 
 #include <cstddef>
 #include <tuple>

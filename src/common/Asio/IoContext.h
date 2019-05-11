@@ -31,7 +31,7 @@
 #define IoContextBase io_service
 #endif
 
-namespace Trinity
+namespace Warhead
 {
     namespace Asio
     {

@@ -26,7 +26,7 @@
 #include <queue>
 #include <utility>
 
-class TC_DATABASE_API QueryCallback
+class WC_DATABASE_API QueryCallback
 {
 public:
     explicit QueryCallback(QueryResultFuture&& result);

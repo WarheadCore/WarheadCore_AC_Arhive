@@ -26,7 +26,7 @@
 
 class InstanceScript;
 
-class TC_GAME_API SummonList
+class WC_GAME_API SummonList
 {
 public:
     typedef GuidList StorageType;
@@ -99,7 +99,7 @@ public:
     {
         // We need to use a copy of SummonList here, otherwise original SummonList would be modified
         StorageType listCopy = storage_;
-        Trinity::Containers::RandomResize<StorageType, Predicate>(listCopy, std::forward<Predicate>(predicate), max);
+        Warhead::Containers::RandomResize<StorageType, Predicate>(listCopy, std::forward<Predicate>(predicate), max);
         DoActionImpl(info, listCopy);
     }
 
@@ -114,7 +114,7 @@ private:
     StorageType storage_;
 };
 
-class TC_GAME_API EntryCheckPredicate
+class WC_GAME_API EntryCheckPredicate
 {
     public:
         EntryCheckPredicate(uint32 entry) : _entry(entry) { }
@@ -124,13 +124,13 @@ class TC_GAME_API EntryCheckPredicate
         uint32 _entry;
 };
 
-class TC_GAME_API DummyEntryCheckPredicate
+class WC_GAME_API DummyEntryCheckPredicate
 {
     public:
         bool operator()(ObjectGuid) { return true; }
 };
 
-struct TC_GAME_API ScriptedAI : public CreatureAI
+struct WC_GAME_API ScriptedAI : public CreatureAI
 {
     explicit ScriptedAI(Creature* creature);
     virtual ~ScriptedAI() { }
@@ -300,7 +300,7 @@ struct TC_GAME_API ScriptedAI : public CreatureAI
         bool _isHeroic;
 };
 
-class TC_GAME_API BossAI : public ScriptedAI
+class WC_GAME_API BossAI : public ScriptedAI
 {
     public:
         BossAI(Creature* creature, uint32 bossId);
@@ -346,7 +346,7 @@ class TC_GAME_API BossAI : public ScriptedAI
         uint32 const _bossId;
 };
 
-class TC_GAME_API WorldBossAI : public ScriptedAI
+class WC_GAME_API WorldBossAI : public ScriptedAI
 {
     public:
         WorldBossAI(Creature* creature);

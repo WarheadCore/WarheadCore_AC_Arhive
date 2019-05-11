@@ -25,7 +25,7 @@
 
 class Guild;
 
-class TC_GAME_API GuildMgr
+class WC_GAME_API GuildMgr
 {
 private:
     GuildMgr();

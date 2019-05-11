@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_FOLLOWMOVEMENTGENERATOR_H
-#define TRINITY_FOLLOWMOVEMENTGENERATOR_H
+#ifndef WARHEAD_FOLLOWMOVEMENTGENERATOR_H
+#define WARHEAD_FOLLOWMOVEMENTGENERATOR_H
 
 #include "AbstractFollower.h"
 #include "MovementDefines.h"

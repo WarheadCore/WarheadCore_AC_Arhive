@@ -25,7 +25,6 @@ services:
   - mysql
 
 before_install:
-  # - chmod +x ./ci/travis-webhook-discord.sh
   - source ./ci/travis-webhook-discord.sh progress
 
 after_success:

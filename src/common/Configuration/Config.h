@@ -23,7 +23,7 @@
 #include <string>
 #include <vector>
 
-class TC_COMMON_API ConfigMgr
+class WC_COMMON_API ConfigMgr
 {
     ConfigMgr() = default;
     ConfigMgr(ConfigMgr const&) = delete;

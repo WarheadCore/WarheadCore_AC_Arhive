@@ -34,7 +34,7 @@ enum EscortState : uint32
     STATE_ESCORT_PAUSED     = 0x04  // escort is paused, wont continue with next waypoint
 };
 
-struct TC_GAME_API EscortAI : public ScriptedAI
+struct WC_GAME_API EscortAI : public ScriptedAI
 {
     public:
         explicit EscortAI(Creature* creature);

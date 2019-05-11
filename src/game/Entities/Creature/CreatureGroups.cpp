@@ -50,11 +50,11 @@ void FormationMgr::AddCreatureToGroup(ObjectGuid::LowType leaderSpawnId, Creatur
     if (itr != map->CreatureGroupHolder.end())
     {
         //Add member to an existing group
-        TC_LOG_DEBUG("entities.unit", "Group found: %u, inserting creature GUID: %u, Group InstanceID %u", leaderSpawnId, creature->GetGUID().GetCounter(), creature->GetInstanceId());
+        WC_LOG_DEBUG("entities.unit", "Group found: %u, inserting creature GUID: %u, Group InstanceID %u", leaderSpawnId, creature->GetGUID().GetCounter(), creature->GetInstanceId());
 
         // With dynamic spawn the creature may have just respawned
         // we need to find previous instance of creature and delete it from the formation, as it'll be invalidated
-        auto bounds = Trinity::Containers::MapEqualRange(map->GetCreatureBySpawnIdStore(), creature->GetSpawnId());
+        auto bounds = Warhead::Containers::MapEqualRange(map->GetCreatureBySpawnIdStore(), creature->GetSpawnId());
         for (auto const& pair : bounds)
         {
             Creature* other = pair.second;
@@ -68,7 +68,7 @@ void FormationMgr::AddCreatureToGroup(ObjectGuid::LowType leaderSpawnId, Creatur
     else
     {
         //Create new group
-        TC_LOG_DEBUG("entities.unit", "Group not found: %u. Creating new group.", leaderSpawnId);
+        WC_LOG_DEBUG("entities.unit", "Group not found: %u. Creating new group.", leaderSpawnId);
         CreatureGroup* group = new CreatureGroup(leaderSpawnId);
         std::tie(itr, std::ignore) = map->CreatureGroupHolder.emplace(leaderSpawnId, group);
     }
@@ -78,14 +78,14 @@ void FormationMgr::AddCreatureToGroup(ObjectGuid::LowType leaderSpawnId, Creatur
 
 void FormationMgr::RemoveCreatureFromGroup(CreatureGroup* group, Creature* member)
 {
-    TC_LOG_DEBUG("entities.unit", "Deleting member pointer to GUID: %u from group %u", group->GetLeaderSpawnId(), member->GetSpawnId());
+    WC_LOG_DEBUG("entities.unit", "Deleting member pointer to GUID: %u from group %u", group->GetLeaderSpawnId(), member->GetSpawnId());
     group->RemoveMember(member);
 
     if (group->IsEmpty())
     {
         Map* map = member->GetMap();
 
-        TC_LOG_DEBUG("entities.unit", "Deleting group with InstanceID %u", member->GetInstanceId());
+        WC_LOG_DEBUG("entities.unit", "Deleting group with InstanceID %u", member->GetInstanceId());
         auto itr = map->CreatureGroupHolder.find(group->GetLeaderSpawnId());
         ASSERT(itr != map->CreatureGroupHolder.end(), "Not registered group %u in map %u", group->GetLeaderSpawnId(), map->GetId());
         map->CreatureGroupHolder.erase(itr);
@@ -101,7 +101,7 @@ void FormationMgr::LoadCreatureFormations()
     QueryResult result = WorldDatabase.Query("SELECT leaderGUID, memberGUID, dist, angle, groupAI, point_1, point_2 FROM creature_formations ORDER BY leaderGUID");
     if (!result)
     {
-        TC_LOG_INFO("server.loading", ">>  Loaded 0 creatures in formations. DB table `creature_formations` is empty!");
+        WC_LOG_INFO("server.loading", ">>  Loaded 0 creatures in formations. DB table `creature_formations` is empty!");
         return;
     }
 
@@ -133,13 +133,13 @@ void FormationMgr::LoadCreatureFormations()
         {
             if (!sObjectMgr->GetCreatureData(member.LeaderSpawnId))
             {
-                TC_LOG_ERROR("sql.sql", "creature_formations table leader guid %u incorrect (not exist)", member.LeaderSpawnId);
+                WC_LOG_ERROR("sql.sql", "creature_formations table leader guid %u incorrect (not exist)", member.LeaderSpawnId);
                 continue;
             }
 
             if (!sObjectMgr->GetCreatureData(memberSpawnId))
             {
-                TC_LOG_ERROR("sql.sql", "creature_formations table member guid %u incorrect (not exist)", memberSpawnId);
+                WC_LOG_ERROR("sql.sql", "creature_formations table member guid %u incorrect (not exist)", memberSpawnId);
                 continue;
             }
 
@@ -154,7 +154,7 @@ void FormationMgr::LoadCreatureFormations()
     {
         if (!_creatureGroupMap.count(leaderSpawnId))
         {
-            TC_LOG_ERROR("sql.sql", "creature_formation contains leader spawn %u which is not included on its formation, removing", leaderSpawnId);
+            WC_LOG_ERROR("sql.sql", "creature_formation contains leader spawn %u which is not included on its formation, removing", leaderSpawnId);
             for (auto itr = _creatureGroupMap.begin(); itr != _creatureGroupMap.end();)
             {
                 if (itr->second.LeaderSpawnId == leaderSpawnId)
@@ -168,12 +168,12 @@ void FormationMgr::LoadCreatureFormations()
         }
     }
 
-    TC_LOG_INFO("server.loading", ">> Loaded %u creatures in formations in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+    WC_LOG_INFO("server.loading", ">> Loaded %u creatures in formations in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
 }
 
 FormationInfo* FormationMgr::GetFormationInfo(ObjectGuid::LowType spawnId)
 {
-    return Trinity::Containers::MapGetValuePtr(_creatureGroupMap, spawnId);
+    return Warhead::Containers::MapGetValuePtr(_creatureGroupMap, spawnId);
 }
 
 void FormationMgr::AddFormationMember(ObjectGuid::LowType spawnId, float followAng, float followDist, ObjectGuid::LowType leaderSpawnId, uint32 groupAI)
@@ -199,12 +199,12 @@ CreatureGroup::~CreatureGroup()
 
 void CreatureGroup::AddMember(Creature* member)
 {
-    TC_LOG_DEBUG("entities.unit", "CreatureGroup::AddMember: Adding unit GUID: %u.", member->GetGUID().GetCounter());
+    WC_LOG_DEBUG("entities.unit", "CreatureGroup::AddMember: Adding unit GUID: %u.", member->GetGUID().GetCounter());
 
     //Check if it is a leader
     if (member->GetSpawnId() == _leaderSpawnId)
     {
-        TC_LOG_DEBUG("entities.unit", "Unit GUID: %u is formation leader. Adding group.", member->GetGUID().GetCounter());
+        WC_LOG_DEBUG("entities.unit", "Unit GUID: %u is formation leader. Adding group.", member->GetGUID().GetCounter());
         _leader = member;
     }
 
@@ -269,7 +269,7 @@ void CreatureGroup::FormationReset(bool dismiss)
                 pair.first->GetMotionMaster()->Initialize();
             else
                 pair.first->GetMotionMaster()->MoveIdle();
-            TC_LOG_DEBUG("entities.unit", "CreatureGroup::FormationReset: Set %s movement for member GUID: %u", dismiss ? "default" : "idle", pair.first->GetGUID().GetCounter());
+            WC_LOG_DEBUG("entities.unit", "CreatureGroup::FormationReset: Set %s movement for member GUID: %u", dismiss ? "default" : "idle", pair.first->GetGUID().GetCounter());
         }
     }
 
@@ -311,8 +311,8 @@ void CreatureGroup::LeaderMoveTo(Position const& destination, uint32 id /*= 0*/,
         float dy = pos.GetPositionY() + std::sin(angle + pathangle) * dist;
         float dz = pos.GetPositionZ();
 
-        Trinity::NormalizeMapCoord(dx);
-        Trinity::NormalizeMapCoord(dy);
+        Warhead::NormalizeMapCoord(dx);
+        Warhead::NormalizeMapCoord(dy);
 
         if (!member->IsFlying())
             member->UpdateGroundPositionZ(dx, dy, dz);

@@ -26,7 +26,7 @@
 #include <vector>
 
 /*! Transactions, high level class. */
-class TC_DATABASE_API Transaction
+class WC_DATABASE_API Transaction
 {
     friend class TransactionTask;
     friend class MySQLConnection;
@@ -43,7 +43,7 @@ class TC_DATABASE_API Transaction
         template<typename Format, typename... Args>
         void PAppend(Format&& sql, Args&&... args)
         {
-            Append(Trinity::StringFormat(std::forward<Format>(sql), std::forward<Args>(args)...).c_str());
+            Append(Warhead::StringFormat(std::forward<Format>(sql), std::forward<Args>(args)...).c_str());
         }
 
         std::size_t GetSize() const { return m_queries.size(); }
@@ -58,7 +58,7 @@ class TC_DATABASE_API Transaction
 };
 
 /*! Low level class*/
-class TC_DATABASE_API TransactionTask : public SQLOperation
+class WC_DATABASE_API TransactionTask : public SQLOperation
 {
     template <class T> friend class DatabaseWorkerPool;
     friend class DatabaseWorker;

@@ -58,7 +58,7 @@ struct Petition
     void RemoveSignatureBySigner(ObjectGuid playerGuid);
 };
 
-class TC_GAME_API PetitionMgr
+class WC_GAME_API PetitionMgr
 {
     public:
         PetitionMgr() { }

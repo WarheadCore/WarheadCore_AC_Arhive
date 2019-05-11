@@ -24,7 +24,7 @@
 
 #define AVG_DIFF_COUNT 500
 
-class TC_GAME_API UpdateTime
+class WC_GAME_API UpdateTime
 {
     using DiffTableArray = std::array<uint32, AVG_DIFF_COUNT>;
 
@@ -56,7 +56,7 @@ class TC_GAME_API UpdateTime
         uint32 _recordedTime;
 };
 
-class TC_GAME_API WorldUpdateTime : public UpdateTime
+class WC_GAME_API WorldUpdateTime : public UpdateTime
 {
     public:
         WorldUpdateTime() : UpdateTime(), _recordUpdateTimeInverval(0), _recordUpdateTimeMin(0), _lastRecordTime(0) { }
@@ -71,6 +71,6 @@ class TC_GAME_API WorldUpdateTime : public UpdateTime
         uint32 _lastRecordTime;
 };
 
-TC_GAME_API extern WorldUpdateTime sWorldUpdateTime;
+WC_GAME_API extern WorldUpdateTime sWorldUpdateTime;
 
 #endif

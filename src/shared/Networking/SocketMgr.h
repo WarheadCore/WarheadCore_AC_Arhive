@@ -35,7 +35,7 @@ public:
         ASSERT(!_threads && !_acceptor && !_threadCount, "StopNetwork must be called prior to SocketMgr destruction");
     }
 
-    virtual bool StartNetwork(Trinity::Asio::IoContext& ioContext, std::string const& bindIp, uint16 port, int threadCount)
+    virtual bool StartNetwork(Warhead::Asio::IoContext& ioContext, std::string const& bindIp, uint16 port, int threadCount)
     {
         ASSERT(threadCount > 0);
 
@@ -46,13 +46,13 @@ public:
         }
         catch (boost::system::system_error const& err)
         {
-            TC_LOG_ERROR("network", "Exception caught in SocketMgr.StartNetwork (%s:%u): %s", bindIp.c_str(), port, err.what());
+            WC_LOG_ERROR("network", "Exception caught in SocketMgr.StartNetwork (%s:%u): %s", bindIp.c_str(), port, err.what());
             return false;
         }
 
         if (!acceptor->Bind())
         {
-            TC_LOG_ERROR("network", "StartNetwork failed to bind socket acceptor");
+            WC_LOG_ERROR("network", "StartNetwork failed to bind socket acceptor");
             delete acceptor;
             return false;
         }
@@ -104,7 +104,7 @@ public:
         }
         catch (boost::system::system_error const& err)
         {
-            TC_LOG_WARN("network", "Failed to retrieve client's remote address %s", err.what());
+            WC_LOG_WARN("network", "Failed to retrieve client's remote address %s", err.what());
         }
     }
 

@@ -108,7 +108,7 @@ struct npc_cameron : public ScriptedAI
             { -9377.477f, -67.8297f, 69.201965f, 0.296706f }
         };
 
-        Trinity::Containers::RandomShuffle(MovePosPositions);
+        Warhead::Containers::RandomShuffle(MovePosPositions);
 
         // first we break formation because children will need to move on their own now
         for (auto guid : _childrenGUIDs)

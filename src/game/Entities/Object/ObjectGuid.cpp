@@ -94,7 +94,7 @@ ByteBuffer& operator>>(ByteBuffer& buf, PackedGuidReader const& guid)
 
 void ObjectGuidGeneratorBase::HandleCounterOverflow(HighGuid high)
 {
-    TC_LOG_ERROR("misc", "%s guid overflow!! Can't continue, shutting down server. ", ObjectGuid::GetTypeName(high));
+    WC_LOG_ERROR("misc", "%s guid overflow!! Can't continue, shutting down server. ", ObjectGuid::GetTypeName(high));
     World::StopNow(ERROR_EXIT_CODE);
 }
 
@@ -107,7 +107,7 @@ void ObjectGuidGeneratorBase::CheckGuidTrigger(ObjectGuid::LowType guidlow)
 }
 
 #define GUID_TRAIT_INSTANTIATE_GUID( HIGH_GUID ) \
-    template class TC_GAME_API ObjectGuidGenerator< HIGH_GUID >;
+    template class WC_GAME_API ObjectGuidGenerator< HIGH_GUID >;
 
 GUID_TRAIT_INSTANTIATE_GUID(HighGuid::Container)
 GUID_TRAIT_INSTANTIATE_GUID(HighGuid::Player)

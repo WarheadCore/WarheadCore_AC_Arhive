@@ -70,7 +70,7 @@ static uint32 SizeForType(MYSQL_FIELD* field)
             MYSQL_TYPE_SET:
             */
         default:
-            TC_LOG_WARN("sql.sql", "SQL::SizeForType(): invalid field type %u", uint32(field->type));
+            WC_LOG_WARN("sql.sql", "SQL::SizeForType(): invalid field type %u", uint32(field->type));
             return 0;
     }
 }
@@ -112,7 +112,7 @@ DatabaseFieldTypes MysqlTypeToFieldType(enum_field_types type)
         case MYSQL_TYPE_VAR_STRING:
             return DatabaseFieldTypes::Binary;
         default:
-            TC_LOG_WARN("sql.sql", "MysqlTypeToFieldType(): invalid field type %u", uint32(type));
+            WC_LOG_WARN("sql.sql", "MysqlTypeToFieldType(): invalid field type %u", uint32(type));
             break;
     }
 
@@ -126,7 +126,7 @@ _result(result),
 _fields(fields)
 {
     _currentRow = new Field[_fieldCount];
-#ifdef TRINITY_STRICT_DATABASE_TYPE_CHECKS
+#ifdef WARHEAD_STRICT_DATABASE_TYPE_CHECKS
     for (uint32 i = 0; i < _fieldCount; i++)
         _currentRow[i].SetMetadata(&_fields[i], i);
 #endif
@@ -164,7 +164,7 @@ m_metadataResult(result)
     //- This is where we store the (entire) resultset
     if (mysql_stmt_store_result(m_stmt))
     {
-        TC_LOG_WARN("sql.sql", "%s:mysql_stmt_store_result, cannot bind result from MySQL server. Error: %s", __FUNCTION__, mysql_stmt_error(m_stmt));
+        WC_LOG_WARN("sql.sql", "%s:mysql_stmt_store_result, cannot bind result from MySQL server. Error: %s", __FUNCTION__, mysql_stmt_error(m_stmt));
         delete[] m_rBind;
         delete[] m_isNull;
         delete[] m_length;
@@ -199,7 +199,7 @@ m_metadataResult(result)
     //- This is where we bind the bind the buffer to the statement
     if (mysql_stmt_bind_result(m_stmt, m_rBind))
     {
-        TC_LOG_WARN("sql.sql", "%s:mysql_stmt_bind_result, cannot bind result from MySQL server. Error: %s", __FUNCTION__, mysql_stmt_error(m_stmt));
+        WC_LOG_WARN("sql.sql", "%s:mysql_stmt_bind_result, cannot bind result from MySQL server. Error: %s", __FUNCTION__, mysql_stmt_error(m_stmt));
         mysql_stmt_free_result(m_stmt);
         CleanUp();
         delete[] m_isNull;
@@ -253,7 +253,7 @@ m_metadataResult(result)
                     *m_rBind[fIndex].length);
             }
 
-#ifdef TRINITY_STRICT_DATABASE_TYPE_CHECKS
+#ifdef WARHEAD_STRICT_DATABASE_TYPE_CHECKS
             m_rows[uint32(m_rowPosition) * m_fieldCount + fIndex].SetMetadata(&field[fIndex], fIndex);
 #endif
         }
@@ -292,7 +292,7 @@ bool ResultSet::NextRow()
     unsigned long* lengths = mysql_fetch_lengths(_result);
     if (!lengths)
     {
-        TC_LOG_WARN("sql.sql", "%s:mysql_fetch_lengths, cannot retrieve value lengths. Error %s.", __FUNCTION__, mysql_error(_result->handle));
+        WC_LOG_WARN("sql.sql", "%s:mysql_fetch_lengths, cannot retrieve value lengths. Error %s.", __FUNCTION__, mysql_error(_result->handle));
         CleanUp();
         return false;
     }

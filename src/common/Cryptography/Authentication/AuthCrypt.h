@@ -23,7 +23,7 @@
 
 class BigNumber;
 
-class TC_COMMON_API AuthCrypt
+class WC_COMMON_API AuthCrypt
 {
     public:
         AuthCrypt();

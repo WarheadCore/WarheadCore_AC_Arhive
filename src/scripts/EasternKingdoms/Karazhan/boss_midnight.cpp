@@ -185,7 +185,7 @@ public:
                     }
 
                     if (!target_list.empty())
-                        target = Trinity::Containers::SelectRandomContainerElement(target_list);
+                        target = Warhead::Containers::SelectRandomContainerElement(target_list);
 
                     DoCast(target, SPELL_CHARGE);
                     task.Repeat(Seconds(10), Seconds(25));

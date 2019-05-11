@@ -556,9 +556,9 @@ class instance_halls_of_reflection : public InstanceMapScript
                                 ObjectGuid bossGuid = i <= 3 ? FalricGUID : MarwynGUID;
 
                                 if (!i)
-                                    Trinity::Containers::RandomResize(tempList, 3);
+                                    Warhead::Containers::RandomResize(tempList, 3);
                                 else if (i < 6 && i != 3)
-                                    Trinity::Containers::RandomResize(tempList, 4);
+                                    Warhead::Containers::RandomResize(tempList, 4);
 
                                 for (uint32 entry : tempList)
                                 {

@@ -71,7 +71,7 @@ void WorldSession::HandleNameQueryOpcode(WorldPacket& recvData)
     recvData >> guid;
 
     // This is disable by default to prevent lots of console spam
-    // TC_LOG_INFO("network", "HandleNameQueryOpcode %u", guid);
+    // WC_LOG_INFO("network", "HandleNameQueryOpcode %u", guid);
 
     SendNameQueryOpcode(guid);
 }
@@ -94,7 +94,7 @@ void WorldSession::HandleCreatureQueryOpcode(WorldPackets::Query::QueryCreature&
 {
     if (CreatureTemplate const* ci = sObjectMgr->GetCreatureTemplate(query.CreatureID))
     {
-        TC_LOG_DEBUG("network", "WORLD: CMSG_CREATURE_QUERY '%s' - Entry: %u.", ci->Name.c_str(), query.CreatureID);
+        WC_LOG_DEBUG("network", "WORLD: CMSG_CREATURE_QUERY '%s' - Entry: %u.", ci->Name.c_str(), query.CreatureID);
         if (sWorld->getBoolConfig(CONFIG_CACHE_DATA_QUERIES))
             SendPacket(&ci->QueryData[static_cast<uint32>(GetSessionDbLocaleIndex())]);
         else
@@ -102,17 +102,17 @@ void WorldSession::HandleCreatureQueryOpcode(WorldPackets::Query::QueryCreature&
             WorldPacket response = ci->BuildQueryData(GetSessionDbLocaleIndex());
             SendPacket(&response);
         }
-        TC_LOG_DEBUG("network", "WORLD: Sent SMSG_CREATURE_QUERY_RESPONSE");
+        WC_LOG_DEBUG("network", "WORLD: Sent SMSG_CREATURE_QUERY_RESPONSE");
     }
     else
     {
-        TC_LOG_DEBUG("network", "WORLD: CMSG_CREATURE_QUERY - NO CREATURE INFO! (%s, ENTRY: %u)",
+        WC_LOG_DEBUG("network", "WORLD: CMSG_CREATURE_QUERY - NO CREATURE INFO! (%s, ENTRY: %u)",
             query.Guid.ToString().c_str(), query.CreatureID);
 
         WorldPackets::Query::QueryCreatureResponse response;
         response.CreatureID = query.CreatureID;
         SendPacket(response.Write());
-        TC_LOG_DEBUG("network", "WORLD: Sent SMSG_CREATURE_QUERY_RESPONSE");
+        WC_LOG_DEBUG("network", "WORLD: Sent SMSG_CREATURE_QUERY_RESPONSE");
     }
 }
 
@@ -128,17 +128,17 @@ void WorldSession::HandleGameObjectQueryOpcode(WorldPackets::Query::QueryGameObj
             WorldPacket response = info->BuildQueryData(GetSessionDbLocaleIndex());
             SendPacket(&response);
         }
-        TC_LOG_DEBUG("network", "WORLD: Sent SMSG_GAMEOBJECT_QUERY_RESPONSE");
+        WC_LOG_DEBUG("network", "WORLD: Sent SMSG_GAMEOBJECT_QUERY_RESPONSE");
     }
     else
     {
-        TC_LOG_DEBUG("network", "WORLD: CMSG_GAMEOBJECT_QUERY - Missing gameobject info for (%s, ENTRY: %u)",
+        WC_LOG_DEBUG("network", "WORLD: CMSG_GAMEOBJECT_QUERY - Missing gameobject info for (%s, ENTRY: %u)",
             query.Guid.ToString().c_str(), query.GameObjectID);
 
         WorldPackets::Query::QueryGameObjectResponse response;
         response.GameObjectID = query.GameObjectID;
         SendPacket(response.Write());
-        TC_LOG_DEBUG("network", "WORLD: Sent SMSG_GAMEOBJECT_QUERY_RESPONSE");
+        WC_LOG_DEBUG("network", "WORLD: Sent SMSG_GAMEOBJECT_QUERY_RESPONSE");
     }
 }
 
@@ -196,7 +196,7 @@ void WorldSession::HandleNpcTextQueryOpcode(WorldPacket& recvData)
     uint64 guid;
 
     recvData >> textID;
-    TC_LOG_DEBUG("network", "WORLD: CMSG_NPC_TEXT_QUERY TextId: %u", textID);
+    WC_LOG_DEBUG("network", "WORLD: CMSG_NPC_TEXT_QUERY TextId: %u", textID);
 
     recvData >> guid;
 
@@ -277,7 +277,7 @@ void WorldSession::HandleNpcTextQueryOpcode(WorldPacket& recvData)
 /// Only _static_ data is sent in this packet !!!
 void WorldSession::HandlePageTextQueryOpcode(WorldPacket& recvData)
 {
-    TC_LOG_DEBUG("network", "WORLD: Received CMSG_PAGE_TEXT_QUERY");
+    WC_LOG_DEBUG("network", "WORLD: Received CMSG_PAGE_TEXT_QUERY");
 
     uint32 pageID;
     recvData >> pageID;
@@ -311,13 +311,13 @@ void WorldSession::HandlePageTextQueryOpcode(WorldPacket& recvData)
         }
         SendPacket(&data);
 
-        TC_LOG_DEBUG("network", "WORLD: Sent SMSG_PAGE_TEXT_QUERY_RESPONSE");
+        WC_LOG_DEBUG("network", "WORLD: Sent SMSG_PAGE_TEXT_QUERY_RESPONSE");
     }
 }
 
 void WorldSession::HandleCorpseMapPositionQuery(WorldPacket& recvData)
 {
-    TC_LOG_DEBUG("network", "WORLD: Recv CMSG_CORPSE_MAP_POSITION_QUERY");
+    WC_LOG_DEBUG("network", "WORLD: Recv CMSG_CORPSE_MAP_POSITION_QUERY");
 
     uint32 unk;
     recvData >> unk;

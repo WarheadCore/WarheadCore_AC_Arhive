@@ -24,7 +24,7 @@
 
 int main(int argc, char* argv[])
 {
-    Trinity::Banner::Show("VMAP assembler", [](char const* text) { std::cout << text << std::endl; }, nullptr);
+    Warhead::Banner::Show("VMAP assembler", [](char const* text) { std::cout << text << std::endl; }, nullptr);
 
     std::string src = "Buildings";
     std::string dest = "vmaps";

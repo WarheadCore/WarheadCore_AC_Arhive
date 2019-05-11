@@ -303,7 +303,7 @@ class boss_general_vezax : public CreatureScript
                 if (size < playersMin)
                     return nullptr;
 
-                return Trinity::Containers::SelectRandomContainerElement(PlayerList);
+                return Warhead::Containers::SelectRandomContainerElement(PlayerList);
             }
         };
 

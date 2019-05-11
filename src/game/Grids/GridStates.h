@@ -16,40 +16,40 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_GRIDSTATES_H
-#define TRINITY_GRIDSTATES_H
+#ifndef WARHEAD_GRIDSTATES_H
+#define WARHEAD_GRIDSTATES_H
 
 #include "GridDefines.h"
 #include "NGrid.h"
 
 class Map;
 
-class TC_GAME_API GridState
+class WC_GAME_API GridState
 {
     public:
         virtual ~GridState() { };
         virtual void Update(Map &, NGridType&, GridInfo &, uint32 t_diff) const = 0;
 };
 
-class TC_GAME_API InvalidState : public GridState
+class WC_GAME_API InvalidState : public GridState
 {
     public:
         void Update(Map &, NGridType &, GridInfo &, uint32 t_diff) const override;
 };
 
-class TC_GAME_API ActiveState : public GridState
+class WC_GAME_API ActiveState : public GridState
 {
     public:
         void Update(Map &, NGridType &, GridInfo &, uint32 t_diff) const override;
 };
 
-class TC_GAME_API IdleState : public GridState
+class WC_GAME_API IdleState : public GridState
 {
     public:
         void Update(Map &, NGridType &, GridInfo &, uint32 t_diff) const override;
 };
 
-class TC_GAME_API RemovalState : public GridState
+class WC_GAME_API RemovalState : public GridState
 {
     public:
         void Update(Map &, NGridType &, GridInfo &, uint32 t_diff) const override;

@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_SPELLDEFINES_H
-#define TRINITY_SPELLDEFINES_H
+#ifndef WARHEAD_SPELLDEFINES_H
+#define WARHEAD_SPELLDEFINES_H
 
 #include "Define.h"
 #include "ObjectGuid.h"
@@ -157,7 +157,7 @@ enum TriggerCastFlags : uint32
     TRIGGERED_FULL_DEBUG_MASK                       = 0xFFFFFFFF
 };
 
-struct TC_GAME_API CastSpellExtraArgs
+struct WC_GAME_API CastSpellExtraArgs
 {
     CastSpellExtraArgs() {}
     CastSpellExtraArgs(bool triggered) : TriggerFlags(triggered ? TRIGGERED_FULL_MASK : TRIGGERED_NONE) {}

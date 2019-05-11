@@ -86,7 +86,7 @@ struct TransportTemplate
 typedef std::map<uint32, TransportAnimationEntry const*> TransportPathContainer;
 typedef std::map<uint32, TransportRotationEntry const*> TransportPathRotationContainer;
 
-struct TC_GAME_API TransportAnimation
+struct WC_GAME_API TransportAnimation
 {
     TransportAnimation() : TotalTime(0) { }
 
@@ -100,7 +100,7 @@ struct TC_GAME_API TransportAnimation
 
 typedef std::map<uint32, TransportAnimation> TransportAnimationContainer;
 
-class TC_GAME_API TransportMgr
+class WC_GAME_API TransportMgr
 {
     public:
         static TransportMgr* instance();

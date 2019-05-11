@@ -23,7 +23,7 @@
 
 class QueryCallback;
 
-class TC_DATABASE_API QueryCallbackProcessor
+class WC_DATABASE_API QueryCallbackProcessor
 {
 public:
     QueryCallbackProcessor();

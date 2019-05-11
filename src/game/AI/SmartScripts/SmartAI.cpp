@@ -46,7 +46,7 @@ void SmartAI::StartPath(bool run/* = false*/, uint32 pathId/* = 0*/, bool repeat
 {
     if (me->IsInCombat()) // no wp movement in combat
     {
-        TC_LOG_ERROR("scripts.ai.sai", "SmartAI::StartPath: Creature entry %u wanted to start waypoint movement (%u) while in combat, ignoring.", me->GetEntry(), pathId);
+        WC_LOG_ERROR("scripts.ai.sai", "SmartAI::StartPath: Creature entry %u wanted to start waypoint movement (%u) while in combat, ignoring.", me->GetEntry(), pathId);
         return;
     }
 
@@ -99,8 +99,8 @@ bool SmartAI::LoadPath(uint32 entry)
     _path.nodes = path->nodes;
     for (WaypointNode& waypoint : _path.nodes)
     {
-        Trinity::NormalizeMapCoord(waypoint.x);
-        Trinity::NormalizeMapCoord(waypoint.y);
+        Warhead::NormalizeMapCoord(waypoint.x);
+        Warhead::NormalizeMapCoord(waypoint.y);
         waypoint.moveType = mRun ? WAYPOINT_MOVE_TYPE_RUN : WAYPOINT_MOVE_TYPE_WALK;
     }
 
@@ -123,7 +123,7 @@ void SmartAI::PausePath(uint32 delay, bool forced)
 
     if (HasEscortState(SMART_ESCORT_PAUSED))
     {
-        TC_LOG_ERROR("scripts.ai.sai", "SmartAI::PausePath: Creature entry %u wanted to pause waypoint (current waypoint: %u) movement while already paused, ignoring.", me->GetEntry(), _currentWaypointNode);
+        WC_LOG_ERROR("scripts.ai.sai", "SmartAI::PausePath: Creature entry %u wanted to pause waypoint (current waypoint: %u) movement while already paused, ignoring.", me->GetEntry(), _currentWaypointNode);
         return;
     }
 
@@ -1092,7 +1092,7 @@ class SmartTrigger : public AreaTriggerScript
             if (!player->IsAlive())
                 return false;
 
-            TC_LOG_DEBUG("scripts.ai", "AreaTrigger %u is using SmartTrigger script", trigger->id);
+            WC_LOG_DEBUG("scripts.ai", "AreaTrigger %u is using SmartTrigger script", trigger->id);
             SmartScript script;
             script.OnInitialize(nullptr, trigger);
             script.ProcessEventsFor(SMART_EVENT_AREATRIGGER_ONTRIGGER, player, trigger->id);

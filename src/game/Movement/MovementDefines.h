@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_MOVEMENTDEFINES_H
-#define TRINITY_MOVEMENTDEFINES_H
+#ifndef WARHEAD_MOVEMENTDEFINES_H
+#define WARHEAD_MOVEMENTDEFINES_H
 
 #include "Common.h"
 
@@ -72,7 +72,7 @@ enum RotateDirection : uint8
     ROTATE_DIRECTION_RIGHT
 };
 
-struct TC_GAME_API ChaseRange
+struct WC_GAME_API ChaseRange
 {
     ChaseRange(float range);
     ChaseRange(float _minRange, float _maxRange);
@@ -85,7 +85,7 @@ struct TC_GAME_API ChaseRange
     float MaxTolerance; // ...and if we are, we will move into this range
 };
 
-struct TC_GAME_API ChaseAngle
+struct WC_GAME_API ChaseAngle
 {
     ChaseAngle(float angle, float _tolerance = M_PI_4);
 

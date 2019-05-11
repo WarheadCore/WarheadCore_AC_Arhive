@@ -81,16 +81,16 @@ enum eTradeskill
 };
 
 class Creature;
-uint32 TC_GAME_API GetGossipActionFor(Player* player, uint32 gossipListId);
-void TC_GAME_API ClearGossipMenuFor(Player* player);
+uint32 WC_GAME_API GetGossipActionFor(Player* player, uint32 gossipListId);
+void WC_GAME_API ClearGossipMenuFor(Player* player);
 // Using provided text, not from DB
-void TC_GAME_API AddGossipItemFor(Player* player, uint32 icon, std::string const& text, uint32 sender, uint32 action);
+void WC_GAME_API AddGossipItemFor(Player* player, uint32 icon, std::string const& text, uint32 sender, uint32 action);
 // Using provided texts, not from DB
-void TC_GAME_API AddGossipItemFor(Player* player, uint32 icon, std::string const& text, uint32 sender, uint32 action, std::string const& popupText, uint32 popupMoney, bool coded);
+void WC_GAME_API AddGossipItemFor(Player* player, uint32 icon, std::string const& text, uint32 sender, uint32 action, std::string const& popupText, uint32 popupMoney, bool coded);
 // Uses gossip item info from DB
-void TC_GAME_API AddGossipItemFor(Player* player, uint32 gossipMenuID, uint32 gossipMenuItemID, uint32 sender, uint32 action);
-void TC_GAME_API SendGossipMenuFor(Player* player, uint32 npcTextID, ObjectGuid const& guid);
-void TC_GAME_API SendGossipMenuFor(Player* player, uint32 npcTextID, Creature const* creature);
-void TC_GAME_API CloseGossipMenuFor(Player* player);
+void WC_GAME_API AddGossipItemFor(Player* player, uint32 gossipMenuID, uint32 gossipMenuItemID, uint32 sender, uint32 action);
+void WC_GAME_API SendGossipMenuFor(Player* player, uint32 npcTextID, ObjectGuid const& guid);
+void WC_GAME_API SendGossipMenuFor(Player* player, uint32 npcTextID, Creature const* creature);
+void WC_GAME_API CloseGossipMenuFor(Player* player);
 
 #endif

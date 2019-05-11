@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_FACTORY_HOLDER
-#define TRINITY_FACTORY_HOLDER
+#ifndef WARHEAD_FACTORY_HOLDER
+#define WARHEAD_FACTORY_HOLDER
 
 #include "Define.h"
 #include "ObjectRegistry.h"

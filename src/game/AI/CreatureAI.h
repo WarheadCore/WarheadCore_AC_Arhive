@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_CREATUREAI_H
-#define TRINITY_CREATUREAI_H
+#ifndef WARHEAD_CREATUREAI_H
+#define WARHEAD_CREATUREAI_H
 
 #include "UnitAI.h"
 #include "Common.h"
@@ -69,7 +69,7 @@ enum SCEquip
     EQUIP_UNEQUIP   = 0
 };
 
-class TC_GAME_API CreatureAI : public UnitAI
+class WC_GAME_API CreatureAI : public UnitAI
 {
     protected:
         Creature* const me;

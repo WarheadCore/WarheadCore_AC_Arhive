@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_RANDOMMOTIONGENERATOR_H
-#define TRINITY_RANDOMMOTIONGENERATOR_H
+#ifndef WARHEAD_RANDOMMOTIONGENERATOR_H
+#define WARHEAD_RANDOMMOTIONGENERATOR_H
 
 #include "MovementGenerator.h"
 #include "Position.h"

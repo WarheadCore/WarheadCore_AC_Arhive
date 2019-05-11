@@ -26,7 +26,7 @@
 #include <memory>
 #include <string>
 
-namespace Trinity
+namespace Warhead
 {
     namespace Asio
     {
@@ -55,14 +55,14 @@ struct MetricData
     std::string Text;
 };
 
-class TC_COMMON_API Metric
+class WC_COMMON_API Metric
 {
 private:
     std::iostream& GetDataStream() { return *_dataStream; }
     std::unique_ptr<std::iostream> _dataStream;
     MPSCQueue<MetricData> _queuedData;
-    std::unique_ptr<Trinity::Asio::DeadlineTimer> _batchTimer;
-    std::unique_ptr<Trinity::Asio::DeadlineTimer> _overallStatusTimer;
+    std::unique_ptr<Warhead::Asio::DeadlineTimer> _batchTimer;
+    std::unique_ptr<Warhead::Asio::DeadlineTimer> _overallStatusTimer;
     int32 _updateInterval = 0;
     int32 _overallStatusTimerInterval = 0;
     bool _enabled = false;
@@ -95,7 +95,7 @@ public:
     ~Metric();
     static Metric* instance();
 
-    void Initialize(std::string const& realmName, Trinity::Asio::IoContext& ioContext, std::function<void()> overallStatusLogger);
+    void Initialize(std::string const& realmName, Warhead::Asio::IoContext& ioContext, std::function<void()> overallStatusLogger);
     void LoadFromConfigs();
     void Update();
 
@@ -122,21 +122,21 @@ public:
 #define sMetric Metric::instance()
 
 #ifdef PERFORMANCE_PROFILING
-#define TC_METRIC_EVENT(category, title, description) ((void)0)
-#define TC_METRIC_VALUE(category, value) ((void)0)
-#elif TRINITY_PLATFORM != TRINITY_PLATFORM_WINDOWS
-#define TC_METRIC_EVENT(category, title, description)                    \
+#define WC_METRIC_EVENT(category, title, description) ((void)0)
+#define WC_METRIC_VALUE(category, value) ((void)0)
+#elif WARHEAD_PLATFORM != WARHEAD_PLATFORM_WINDOWS
+#define WC_METRIC_EVENT(category, title, description)                    \
         do {                                                            \
             if (sMetric->IsEnabled())                              \
                 sMetric->LogEvent(category, title, description);   \
         } while (0)
-#define TC_METRIC_VALUE(category, value)                                 \
+#define WC_METRIC_VALUE(category, value)                                 \
         do {                                                            \
             if (sMetric->IsEnabled())                              \
                 sMetric->LogValue(category, value);                \
         } while (0)
 #else
-#define TC_METRIC_EVENT(category, title, description)                    \
+#define WC_METRIC_EVENT(category, title, description)                    \
         __pragma(warning(push))                                         \
         __pragma(warning(disable:4127))                                 \
         do {                                                            \
@@ -144,7 +144,7 @@ public:
                 sMetric->LogEvent(category, title, description);   \
         } while (0)                                                     \
         __pragma(warning(pop))
-#define TC_METRIC_VALUE(category, value)                                 \
+#define WC_METRIC_VALUE(category, value)                                 \
         __pragma(warning(push))                                         \
         __pragma(warning(disable:4127))                                 \
         do {                                                            \

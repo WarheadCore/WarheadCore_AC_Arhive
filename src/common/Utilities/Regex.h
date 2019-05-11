@@ -15,25 +15,25 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TrinityCore_Regex_h__
-#define TrinityCore_Regex_h__
+#ifndef _WC_REGEX_H_
+#define _WC_REGEX_H_
 
-#ifndef TC_HAS_BROKEN_WSTRING_REGEX
+#ifndef WC_HAS_BROKEN_WSTRING_REGEX
 #include <regex>
-#define TC_REGEX_NAMESPACE std
+#define WC_REGEX_NAMESPACE std
 #else
 #include <boost/regex.hpp>
-#define TC_REGEX_NAMESPACE boost
+#define WC_REGEX_NAMESPACE boost
 #endif
 
 // regex compatibility layer, required for clang building with libstdc++-4.9
-namespace Trinity
+namespace Warhead
 {
-    using regex = TC_REGEX_NAMESPACE :: regex;
-    using wregex = TC_REGEX_NAMESPACE :: wregex;
+    using regex = WC_REGEX_NAMESPACE :: regex;
+    using wregex = WC_REGEX_NAMESPACE :: wregex;
 
-    using :: TC_REGEX_NAMESPACE :: regex_match;
-    using :: TC_REGEX_NAMESPACE :: regex_search;
+    using :: WC_REGEX_NAMESPACE :: regex_match;
+    using :: WC_REGEX_NAMESPACE :: regex_search;
 }
 
-#endif // TrinityCore_Regex_h__
+#endif // _WC_REGEX_H_

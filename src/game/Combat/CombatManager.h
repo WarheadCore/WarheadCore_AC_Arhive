@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_COMBATMANAGER_H
-#define TRINITY_COMBATMANAGER_H
+#ifndef WARHEAD_COMBATMANAGER_H
+#define WARHEAD_COMBATMANAGER_H
 
 #include "Common.h"
 #include "ObjectGuid.h"
@@ -51,7 +51,7 @@ class Unit;
 \********************************************************************************************************************************************************/
 
 // Please check Game/Combat/CombatManager.h for documentation on how this class works!
-struct TC_GAME_API CombatReference
+struct WC_GAME_API CombatReference
 {
     Unit* const first;
     Unit* const second;
@@ -70,7 +70,7 @@ protected:
 };
 
 // Please check Game/Combat/CombatManager.h for documentation on how this class works!
-struct TC_GAME_API PvPCombatReference : public CombatReference
+struct WC_GAME_API PvPCombatReference : public CombatReference
 {
     static const uint32 PVP_COMBAT_TIMEOUT = 5 * IN_MILLISECONDS;
 
@@ -94,7 +94,7 @@ private:
 };
 
 // please check Game/Combat/CombatManager.h for documentation on how this class works!
-class TC_GAME_API CombatManager
+class WC_GAME_API CombatManager
 {
     public:
         static bool CanBeginCombat(Unit const* a, Unit const* b);

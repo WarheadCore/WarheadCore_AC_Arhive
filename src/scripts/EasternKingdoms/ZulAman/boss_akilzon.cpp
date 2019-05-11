@@ -161,8 +161,8 @@ class boss_akilzon : public CreatureScript
                         bp0 *= 2;
 
                     std::list<Unit*> tempUnitMap;
-                    Trinity::AnyAoETargetUnitInObjectRangeCheck u_check(me, me, SIZE_OF_GRIDS);
-                    Trinity::UnitListSearcher<Trinity::AnyAoETargetUnitInObjectRangeCheck> searcher(me, tempUnitMap, u_check);
+                    Warhead::AnyAoETargetUnitInObjectRangeCheck u_check(me, me, SIZE_OF_GRIDS);
+                    Warhead::UnitListSearcher<Warhead::AnyAoETargetUnitInObjectRangeCheck> searcher(me, tempUnitMap, u_check);
                     Cell::VisitAllObjects(me, searcher, SIZE_OF_GRIDS);
 
                     // deal damage

@@ -23,7 +23,7 @@ endif()
 
 target_link_libraries(vmap4assembler
   PRIVATE
-    trinity-core-interface
+    warhead-core-interface
   PUBLIC
     common
     zlib)

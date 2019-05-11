@@ -16,14 +16,14 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_GUARDAI_H
-#define TRINITY_GUARDAI_H
+#ifndef WARHEAD_GUARDAI_H
+#define WARHEAD_GUARDAI_H
 
 #include "ScriptedCreature.h"
 
 class Creature;
 
-class TC_GAME_API GuardAI : public ScriptedAI
+class WC_GAME_API GuardAI : public ScriptedAI
 {
     public:
         explicit GuardAI(Creature* creature);

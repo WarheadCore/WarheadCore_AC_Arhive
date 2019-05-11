@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef TRINITY_SPELLAURADEFINES_H
-#define TRINITY_SPELLAURADEFINES_H
+#ifndef WARHEAD_SPELLAURADEFINES_H
+#define WARHEAD_SPELLAURADEFINES_H
 
 #include "Define.h"
 #include "ObjectGuid.h"
@@ -440,7 +440,7 @@ enum ShapeshiftForm
     FORM_SPIRITOFREDEMPTION = 0x20
 };
 
-struct TC_GAME_API AuraCreateInfo
+struct WC_GAME_API AuraCreateInfo
 {
     friend class Aura;
     friend class UnitAura;

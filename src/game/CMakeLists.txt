@@ -20,7 +20,7 @@ endif ()
 
 GroupSources(${CMAKE_CURRENT_SOURCE_DIR})
 
-add_definitions(-DTRINITY_API_EXPORT_GAME)
+add_definitions(-DWARHEAD_API_EXPORT_GAME)
 
 CollectIncludeDirectories(
   ${CMAKE_CURRENT_SOURCE_DIR}
@@ -50,7 +50,7 @@ target_include_directories(game
 
 target_link_libraries(game
   PRIVATE
-    trinity-core-interface
+    warhead-core-interface
     efsw
   PUBLIC
     game-interface)

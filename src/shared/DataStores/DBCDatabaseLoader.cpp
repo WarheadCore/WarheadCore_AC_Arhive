@@ -56,7 +56,7 @@ static char const* nullStr = "";
 
 char* DBCDatabaseLoader::Load(uint32& records, char**& indexTable)
 {
-    std::string query = Trinity::StringFormat("SELECT * FROM %s ORDER BY %s DESC;", _sqlTableName, _indexName);
+    std::string query = Warhead::StringFormat("SELECT * FROM %s ORDER BY %s DESC;", _sqlTableName, _indexName);
 
     // no error if empty set
     QueryResult result = WorldDatabase.Query(query.c_str());
@@ -82,8 +82,8 @@ char* DBCDatabaseLoader::Load(uint32& records, char**& indexTable)
         indexTable = tmpIdxTable;
     }
 
-    std::unique_ptr<char[]> dataTable = Trinity::make_unique<char[]>(result->GetRowCount() * _recordSize);
-    std::unique_ptr<uint32[]> newIndexes = Trinity::make_unique<uint32[]>(result->GetRowCount());
+    std::unique_ptr<char[]> dataTable = Warhead::make_unique<char[]>(result->GetRowCount() * _recordSize);
+    std::unique_ptr<uint32[]> newIndexes = Warhead::make_unique<uint32[]>(result->GetRowCount());
     uint32 newRecords = 0;
 
     // Insert sql data into the data array

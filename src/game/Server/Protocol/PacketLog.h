@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_PACKETLOG_H
-#define TRINITY_PACKETLOG_H
+#ifndef WARHEAD_PACKETLOG_H
+#define WARHEAD_PACKETLOG_H
 
 #include "Common.h"
 
@@ -31,7 +31,7 @@ enum Direction
 
 class WorldPacket;
 
-class TC_GAME_API PacketLog
+class WC_GAME_API PacketLog
 {
     private:
         PacketLog();

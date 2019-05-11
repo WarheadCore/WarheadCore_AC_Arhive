@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITYCORE_ITEM_H
-#define TRINITYCORE_ITEM_H
+#ifndef WARHEADCORE_ITEM_H
+#define WARHEADCORE_ITEM_H
 
 #include "Object.h"
 #include "Common.h"
@@ -59,7 +59,7 @@ enum ItemUpdateState
 
 bool ItemCanGoIntoBag(ItemTemplate const* proto, ItemTemplate const* pBagProto);
 
-class TC_GAME_API Item : public Object
+class WC_GAME_API Item : public Object
 {
     friend void AddItemToUpdateQueueOf(Item* item, Player* player);
     friend void RemoveItemFromUpdateQueueOf(Item* item, Player* player);

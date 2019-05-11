@@ -30,7 +30,7 @@
 #include <map>
 #include <unordered_map>
 
-namespace Trinity
+namespace Warhead
 {
     // Helpers
     // Insert helpers

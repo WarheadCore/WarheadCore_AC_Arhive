@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_M2STORES_H
-#define TRINITY_M2STORES_H
+#ifndef WARHEAD_M2STORES_H
+#define WARHEAD_M2STORES_H
 
 #include "Define.h"
 #include "Position.h"
@@ -28,8 +28,8 @@ struct FlyByCamera
     Position locations;
 };
 
-TC_GAME_API void LoadM2Cameras(std::string const& dataPath);
+WC_GAME_API void LoadM2Cameras(std::string const& dataPath);
 
-TC_GAME_API std::vector<FlyByCamera> const* GetFlyByCameras(uint32 cinematicCameraId);
+WC_GAME_API std::vector<FlyByCamera> const* GetFlyByCameras(uint32 cinematicCameraId);
 
 #endif

@@ -16,7 +16,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/// \addtogroup Trinityd
+/// \addtogroup Warheadd
 /// @{
 /// \file
 
@@ -29,7 +29,7 @@
 #include "Log.h"
 #include "Util.h"
 
-#if TRINITY_PLATFORM != TRINITY_PLATFORM_WINDOWS
+#if WARHEAD_PLATFORM != WARHEAD_PLATFORM_WINDOWS
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "Chat.h"
@@ -86,7 +86,7 @@ int cli_hook_func()
 
 void utf8print(void* /*arg*/, char const* str)
 {
-#if TRINITY_PLATFORM == TRINITY_PLATFORM_WINDOWS
+#if WARHEAD_PLATFORM == WARHEAD_PLATFORM_WINDOWS
     wchar_t wtemp_buf[6000];
     size_t wtemp_len = 6000-1;
     if (!Utf8toWStr(str, strlen(str), wtemp_buf, wtemp_len))
@@ -126,8 +126,8 @@ int kb_hit_return()
 void CliThread()
 {
     ///- Display the list of available CLI functions then beep
-    //TC_LOG_INFO("server.worldserver", "");
-#if TRINITY_PLATFORM != TRINITY_PLATFORM_WINDOWS
+    //WC_LOG_INFO("server.worldserver", "");
+#if WARHEAD_PLATFORM != WARHEAD_PLATFORM_WINDOWS
     rl_attempted_completion_function = cli_completion;
     rl_event_hook = cli_hook_func;
 #endif
@@ -146,7 +146,7 @@ void CliThread()
 
         std::string command;
 
-#if TRINITY_PLATFORM == TRINITY_PLATFORM_WINDOWS
+#if WARHEAD_PLATFORM == WARHEAD_PLATFORM_WINDOWS
         wchar_t commandbuf[256];
         if (fgetws(commandbuf, sizeof(commandbuf), stdin))
         {
@@ -173,7 +173,7 @@ void CliThread()
             {
                 if (nextLineIndex == 0)
                 {
-#if TRINITY_PLATFORM == TRINITY_PLATFORM_WINDOWS
+#if WARHEAD_PLATFORM == WARHEAD_PLATFORM_WINDOWS
                     printf("TC>");
 #endif
                     continue;
@@ -184,7 +184,7 @@ void CliThread()
 
             fflush(stdout);
             sWorld->QueueCliCommand(new CliCommandHolder(nullptr, command.c_str(), &utf8print, &commandFinished));
-#if TRINITY_PLATFORM != TRINITY_PLATFORM_WINDOWS
+#if WARHEAD_PLATFORM != WARHEAD_PLATFORM_WINDOWS
             add_history(command.c_str());
 #endif
         }

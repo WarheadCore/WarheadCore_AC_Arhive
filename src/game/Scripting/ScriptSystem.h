@@ -28,7 +28,7 @@
 class Creature;
 struct SplineChainLink;
 
-class TC_GAME_API SystemMgr
+class WC_GAME_API SystemMgr
 {
     public:
         static SystemMgr* instance();

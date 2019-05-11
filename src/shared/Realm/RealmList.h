@@ -33,7 +33,7 @@ namespace boost
     }
 }
 
-namespace Trinity
+namespace Warhead
 {
     namespace Asio
     {
@@ -43,7 +43,7 @@ namespace Trinity
 }
 
 /// Storage object for the list of realms on the server
-class TC_SHARED_API RealmList
+class WC_SHARED_API RealmList
 {
 public:
     typedef std::map<RealmHandle, Realm> RealmMap;
@@ -52,7 +52,7 @@ public:
 
     ~RealmList();
 
-    void Initialize(Trinity::Asio::IoContext& ioContext, uint32 updateInterval);
+    void Initialize(Warhead::Asio::IoContext& ioContext, uint32 updateInterval);
     void Close();
 
     RealmMap const& GetRealms() const { return _realms; }
@@ -68,7 +68,7 @@ private:
 
     RealmMap _realms;
     uint32 _updateInterval;
-    std::unique_ptr<Trinity::Asio::DeadlineTimer> _updateTimer;
+    std::unique_ptr<Warhead::Asio::DeadlineTimer> _updateTimer;
     std::unique_ptr<boost::asio::ip::tcp_resolver> _resolver;
 };
 

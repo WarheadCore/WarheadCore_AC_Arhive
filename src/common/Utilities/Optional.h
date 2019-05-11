@@ -15,11 +15,11 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TrinityCore_Optional_h__
-#define TrinityCore_Optional_h__
+#ifndef _WC_OPTIONAL_H_
+#define _WC_OPTIONAL_H_
 
 #include "OptionalFwd.h"
 #include <boost/optional.hpp>
 #include <boost/utility/in_place_factory.hpp>
 
-#endif // TrinityCore_Optional_h__
+#endif // _WC_OPTIONAL_H_

@@ -238,11 +238,11 @@ class boss_janalai : public CreatureScript
                 float x, y, z;
                 me->GetPosition(x, y, z);
 
-                Trinity::AllCreaturesOfEntryInRange check(me, NPC_EGG, 100);
-                Trinity::CreatureListSearcher<Trinity::AllCreaturesOfEntryInRange> searcher(me, templist, check);
+                Warhead::AllCreaturesOfEntryInRange check(me, NPC_EGG, 100);
+                Warhead::CreatureListSearcher<Warhead::AllCreaturesOfEntryInRange> searcher(me, templist, check);
                 Cell::VisitGridObjects(me, searcher, me->GetGridActivationRange());
 
-                //TC_LOG_ERROR("scripts", "Eggs %d at middle", templist.size());
+                //WC_LOG_ERROR("scripts", "Eggs %d at middle", templist.size());
                 if (templist.empty())
                     return false;
 
@@ -262,8 +262,8 @@ class boss_janalai : public CreatureScript
                 float x, y, z;
                 me->GetPosition(x, y, z);
 
-                Trinity::AllCreaturesOfEntryInRange check(me, NPC_FIRE_BOMB, 100);
-                Trinity::CreatureListSearcher<Trinity::AllCreaturesOfEntryInRange> searcher(me, templist, check);
+                Warhead::AllCreaturesOfEntryInRange check(me, NPC_FIRE_BOMB, 100);
+                Warhead::CreatureListSearcher<Warhead::AllCreaturesOfEntryInRange> searcher(me, templist, check);
                 Cell::VisitGridObjects(me, searcher, me->GetGridActivationRange());
 
                 for (std::list<Creature*>::const_iterator i = templist.begin(); i != templist.end(); ++i)
@@ -512,11 +512,11 @@ class npc_janalai_hatcher : public CreatureScript
                 float x, y, z;
                 me->GetPosition(x, y, z);
 
-                Trinity::AllCreaturesOfEntryInRange check(me, 23817, 50);
-                Trinity::CreatureListSearcher<Trinity::AllCreaturesOfEntryInRange> searcher(me, templist, check);
+                Warhead::AllCreaturesOfEntryInRange check(me, 23817, 50);
+                Warhead::CreatureListSearcher<Warhead::AllCreaturesOfEntryInRange> searcher(me, templist, check);
                 Cell::VisitGridObjects(me, searcher, me->GetGridActivationRange());
 
-                //TC_LOG_ERROR("scripts", "Eggs %d at %d", templist.size(), side);
+                //WC_LOG_ERROR("scripts", "Eggs %d at %d", templist.size(), side);
 
                 for (std::list<Creature*>::const_iterator i = templist.begin(); i != templist.end() && num > 0; ++i)
                     if ((*i)->GetDisplayId() != 11686)

@@ -852,9 +852,9 @@ public:
                     }
                     case EVENT_FIRE:
                     {
-                        if (std::vector<Position> const* positions = Trinity::Containers::MapGetValuePtr(PositionsByZoneMap, me->GetZoneId()))
+                        if (std::vector<Position> const* positions = Warhead::Containers::MapGetValuePtr(PositionsByZoneMap, me->GetZoneId()))
                         {
-                            Position const& rndpos = Trinity::Containers::SelectRandomContainerElement(*positions);
+                            Position const& rndpos = Warhead::Containers::SelectRandomContainerElement(*positions);
                             float rndrot = frand(-1.0000000f, 1.0000000f);
                             float rndrot2 = frand(-1.0000000f, 1.0000000f);
 

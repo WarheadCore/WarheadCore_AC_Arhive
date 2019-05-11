@@ -81,7 +81,7 @@ typedef std::map<ObjectGuid, LfgQueueData> LfgQueueDataContainer;
 /**
     Stores all data related to queue
 */
-class TC_GAME_API LFGQueue
+class WC_GAME_API LFGQueue
 {
     public:
 

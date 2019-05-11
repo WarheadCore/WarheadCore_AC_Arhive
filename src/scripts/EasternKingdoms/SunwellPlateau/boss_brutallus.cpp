@@ -164,7 +164,7 @@ public:
             else
             {
                 // Madrigosa not found, end intro
-                TC_LOG_ERROR("scripts", "Madrigosa was not found");
+                WC_LOG_ERROR("scripts", "Madrigosa was not found");
                 EndIntro();
             }
         }

@@ -43,7 +43,7 @@ class HyperlinkDataTokenizer
         else
             _empty = true;
 
-        return Trinity::Hyperlinks::LinkTags::base_tag::StoreTo(val, firstPos, thisLen);
+        return Warhead::Hyperlinks::LinkTags::base_tag::StoreTo(val, firstPos, thisLen);
     }
 
     bool IsEmpty() { return _empty; }
@@ -54,7 +54,7 @@ class HyperlinkDataTokenizer
     bool _empty;
 };
 
-bool Trinity::Hyperlinks::LinkTags::achievement::StoreTo(AchievementLinkData& val, char const* pos, size_t len)
+bool Warhead::Hyperlinks::LinkTags::achievement::StoreTo(AchievementLinkData& val, char const* pos, size_t len)
 {
     HyperlinkDataTokenizer t(pos, len);
     uint32 achievementId;
@@ -66,7 +66,7 @@ bool Trinity::Hyperlinks::LinkTags::achievement::StoreTo(AchievementLinkData& va
         t.TryConsumeTo(val.Criteria[1]) && t.TryConsumeTo(val.Criteria[2]) && t.TryConsumeTo(val.Criteria[3]) && t.IsEmpty();
 }
 
-bool Trinity::Hyperlinks::LinkTags::enchant::StoreTo(SpellInfo const*& val, char const* pos, size_t len)
+bool Warhead::Hyperlinks::LinkTags::enchant::StoreTo(SpellInfo const*& val, char const* pos, size_t len)
 {
     HyperlinkDataTokenizer t(pos, len);
     uint32 spellId;
@@ -75,7 +75,7 @@ bool Trinity::Hyperlinks::LinkTags::enchant::StoreTo(SpellInfo const*& val, char
     return (val = sSpellMgr->GetSpellInfo(spellId)) && val->HasAttribute(SPELL_ATTR0_TRADESPELL);
 }
 
-bool Trinity::Hyperlinks::LinkTags::glyph::StoreTo(GlyphLinkData& val, char const* pos, size_t len)
+bool Warhead::Hyperlinks::LinkTags::glyph::StoreTo(GlyphLinkData& val, char const* pos, size_t len)
 {
     HyperlinkDataTokenizer t(pos, len);
     uint32 slot, prop;
@@ -88,7 +88,7 @@ bool Trinity::Hyperlinks::LinkTags::glyph::StoreTo(GlyphLinkData& val, char cons
     return true;
 }
 
-bool Trinity::Hyperlinks::LinkTags::item::StoreTo(ItemLinkData& val, char const* pos, size_t len)
+bool Warhead::Hyperlinks::LinkTags::item::StoreTo(ItemLinkData& val, char const* pos, size_t len)
 {
     HyperlinkDataTokenizer t(pos, len);
     uint32 itemId, dummy;
@@ -100,7 +100,7 @@ bool Trinity::Hyperlinks::LinkTags::item::StoreTo(ItemLinkData& val, char const*
         t.TryConsumeTo(val.RenderLevel) && t.IsEmpty() && !dummy;
 }
 
-bool Trinity::Hyperlinks::LinkTags::quest::StoreTo(QuestLinkData& val, char const* pos, size_t len)
+bool Warhead::Hyperlinks::LinkTags::quest::StoreTo(QuestLinkData& val, char const* pos, size_t len)
 {
     HyperlinkDataTokenizer t(pos, len);
     uint32 questId;
@@ -109,7 +109,7 @@ bool Trinity::Hyperlinks::LinkTags::quest::StoreTo(QuestLinkData& val, char cons
     return (val.Quest = sObjectMgr->GetQuestTemplate(questId)) && t.TryConsumeTo(val.QuestLevel) && t.IsEmpty();
 }
 
-bool Trinity::Hyperlinks::LinkTags::spell::StoreTo(SpellInfo const*& val, char const* pos, size_t len)
+bool Warhead::Hyperlinks::LinkTags::spell::StoreTo(SpellInfo const*& val, char const* pos, size_t len)
 {
     HyperlinkDataTokenizer t(pos, len);
     uint32 spellId;
@@ -118,7 +118,7 @@ bool Trinity::Hyperlinks::LinkTags::spell::StoreTo(SpellInfo const*& val, char c
     return !!(val = sSpellMgr->GetSpellInfo(spellId));
 }
 
-bool Trinity::Hyperlinks::LinkTags::talent::StoreTo(TalentLinkData& val, char const* pos, size_t len)
+bool Warhead::Hyperlinks::LinkTags::talent::StoreTo(TalentLinkData& val, char const* pos, size_t len)
 {
     HyperlinkDataTokenizer t(pos, len);
     uint32 talentId;
@@ -135,7 +135,7 @@ bool Trinity::Hyperlinks::LinkTags::talent::StoreTo(TalentLinkData& val, char co
     return true;
 }
 
-bool Trinity::Hyperlinks::LinkTags::trade::StoreTo(TradeskillLinkData& val, char const* pos, size_t len)
+bool Warhead::Hyperlinks::LinkTags::trade::StoreTo(TradeskillLinkData& val, char const* pos, size_t len)
 {
     HyperlinkDataTokenizer t(pos, len);
     uint32 spellId;

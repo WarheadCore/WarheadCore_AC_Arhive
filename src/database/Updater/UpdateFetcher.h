@@ -33,7 +33,7 @@ namespace boost
     }
 }
 
-struct TC_DATABASE_API UpdateResult
+struct WC_DATABASE_API UpdateResult
 {
     UpdateResult()
         : updated(0), recent(0), archived(0) { }
@@ -46,7 +46,7 @@ struct TC_DATABASE_API UpdateResult
     size_t archived;
 };
 
-class TC_DATABASE_API UpdateFetcher
+class WC_DATABASE_API UpdateFetcher
 {
     typedef boost::filesystem::path Path;
 

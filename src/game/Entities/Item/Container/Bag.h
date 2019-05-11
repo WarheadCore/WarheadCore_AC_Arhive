@@ -16,15 +16,15 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_BAG_H
-#define TRINITY_BAG_H
+#ifndef WARHEAD_BAG_H
+#define WARHEAD_BAG_H
 
 // Maximum 36 Slots ((CONTAINER_END - CONTAINER_FIELD_SLOT_1)/2
 #define MAX_BAG_SIZE 36                                     // 2.0.12
 
 #include "Item.h"
 
-class TC_GAME_API Bag : public Item
+class WC_GAME_API Bag : public Item
 {
     public:
         Bag();

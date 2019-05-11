@@ -22,8 +22,8 @@
 
 namespace MySQL
 {
-    void TC_DATABASE_API Library_Init();
-    void TC_DATABASE_API Library_End();
+    void WC_DATABASE_API Library_Init();
+    void WC_DATABASE_API Library_End();
 }
 
 #endif

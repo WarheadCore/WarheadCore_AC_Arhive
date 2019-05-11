@@ -202,7 +202,7 @@ enum AuctionBotConfigFloatValues
 };
 
 // All basic config data used by other AHBot classes for self-configure.
-class TC_GAME_API AuctionBotConfig
+class WC_GAME_API AuctionBotConfig
 {
 private:
     AuctionBotConfig(): _itemsPerCycleBoost(1000), _itemsPerCycleNormal(20) {}
@@ -281,7 +281,7 @@ typedef AuctionHouseBotStatusInfoPerType AuctionHouseBotStatusInfo[MAX_AUCTION_H
 
 // This class handle both Selling and Buying method
 // (holder of AuctionBotBuyer and AuctionBotSeller objects)
-class TC_GAME_API AuctionHouseBot
+class WC_GAME_API AuctionHouseBot
 {
 private:
     AuctionHouseBot();

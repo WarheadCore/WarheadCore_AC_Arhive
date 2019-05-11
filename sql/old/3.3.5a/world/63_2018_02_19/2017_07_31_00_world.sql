@@ -189,7 +189,7 @@ DELETE FROM `spawn_group` WHERE `groupId` != 3 AND `spawnType`=0 AND `spawnId` I
 DELETE FROM `spawn_group` WHERE `groupId` != 4 AND `spawnType`=1 AND `spawnId` IN (SELECT `spawnId` FROM (SELECT `spawnId` FROM `spawn_group` WHERE `groupId`=4  AND `spawnType`=1) as `temp`);
 
 
--- Update trinity strings for various cs_list strings, to support showing spawn ID and guid.
+-- Update warhead strings for various cs_list strings, to support showing spawn ID and guid.
 UPDATE `trinity_string`
 SET `content_default` = '%d (Entry: %d) - |cffffffff|Hgameobject:%d|h[%s X:%f Y:%f Z:%f MapId:%d]|h|r %s %s'
 WHERE `entry` = 517;
@@ -206,7 +206,7 @@ UPDATE `trinity_string`
 SET `content_default` = '%d - %s X:%f Y:%f Z:%f MapId:%d %s %s'
 WHERE `entry` = 1110;
 
--- Add new trinity strings for extra npc/gobject info lines
+-- Add new warhead strings for extra npc/gobject info lines
 DELETE FROM `trinity_string` WHERE `entry` BETWEEN 5070 AND 5082;
 INSERT INTO `trinity_string` (`entry`, `content_default`) VALUES
 (5070, 'Spawn group: %s (ID: %u, Flags: %u, Active: %u)'),

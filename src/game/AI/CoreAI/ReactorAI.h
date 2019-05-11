@@ -16,12 +16,12 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_REACTORAI_H
-#define TRINITY_REACTORAI_H
+#ifndef WARHEAD_REACTORAI_H
+#define WARHEAD_REACTORAI_H
 
 #include "CreatureAI.h"
 
-class TC_GAME_API ReactorAI : public CreatureAI
+class WC_GAME_API ReactorAI : public CreatureAI
 {
     public:
 

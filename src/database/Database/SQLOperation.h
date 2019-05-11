@@ -51,7 +51,7 @@ union SQLResultSetUnion
 
 class MySQLConnection;
 
-class TC_DATABASE_API SQLOperation
+class WC_DATABASE_API SQLOperation
 {
     public:
         SQLOperation(): m_conn(nullptr) { }

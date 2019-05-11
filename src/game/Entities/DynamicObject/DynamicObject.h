@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITYCORE_DYNAMICOBJECT_H
-#define TRINITYCORE_DYNAMICOBJECT_H
+#ifndef WARHEADCORE_DYNAMICOBJECT_H
+#define WARHEADCORE_DYNAMICOBJECT_H
 
 #include "Object.h"
 #include "MapObject.h"
@@ -33,7 +33,7 @@ enum DynamicObjectType
     DYNAMIC_OBJECT_FARSIGHT_FOCUS   = 0x2
 };
 
-class TC_GAME_API DynamicObject : public WorldObject, public GridObject<DynamicObject>, public MapObject
+class WC_GAME_API DynamicObject : public WorldObject, public GridObject<DynamicObject>, public MapObject
 {
     public:
         DynamicObject(bool isWorldObject);

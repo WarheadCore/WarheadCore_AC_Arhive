@@ -55,7 +55,7 @@ DELETE FROM `command` WHERE `name` IN (
 );
 
 INSERT INTO `command` (`name`, `security`, `help`) VALUES
-('server exit',4,'Syntax: .server exit\r\n\r\nTerminate trinity-core NOW. Exit code 0.'),
+('server exit',4,'Syntax: .server exit\r\n\r\nTerminate warhead-core NOW. Exit code 0.'),
 ('server idleshutdown',3,'Syntax: .server idleshutdown #delay [#exist_code]\r\n\r\nShut the server down after #delay seconds if no active connections are present (no players). Use #exist_code or 0 as program exist code.'),
 ('server idleshutdown cancel',3,'Syntax: .server idleshutdown cancel\r\n\r\nCancel the restart/shutdown timer if any.'),
 ('server idlerestart',3,'Syntax: .server idlerestart #delay\r\n\r\nRestart the server after #delay seconds if no active connections are present (no players). Use #exist_code or 2 as program exist code.'),

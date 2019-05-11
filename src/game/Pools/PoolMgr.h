@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_POOLHANDLER_H
-#define TRINITY_POOLHANDLER_H
+#ifndef WARHEAD_POOLHANDLER_H
+#define WARHEAD_POOLHANDLER_H
 
 #include "Define.h"
 #include "Creature.h"
@@ -44,7 +44,7 @@ class Pool                                                  // for Pool of Pool 
 typedef std::set<ObjectGuid::LowType> ActivePoolObjects;
 typedef std::map<uint32, uint32> ActivePoolPools;
 
-class TC_GAME_API ActivePoolData
+class WC_GAME_API ActivePoolData
 {
     public:
         template<typename T>
@@ -67,7 +67,7 @@ class TC_GAME_API ActivePoolData
 };
 
 template <class T>
-class TC_GAME_API PoolGroup
+class WC_GAME_API PoolGroup
 {
     typedef std::vector<PoolObject> PoolObjectList;
     public:
@@ -101,7 +101,7 @@ typedef std::multimap<uint32, uint32> PooledQuestRelation;
 typedef std::pair<PooledQuestRelation::const_iterator, PooledQuestRelation::const_iterator> PooledQuestRelationBounds;
 typedef std::pair<PooledQuestRelation::iterator, PooledQuestRelation::iterator> PooledQuestRelationBoundsNC;
 
-class TC_GAME_API PoolMgr
+class WC_GAME_API PoolMgr
 {
     private:
         PoolMgr();

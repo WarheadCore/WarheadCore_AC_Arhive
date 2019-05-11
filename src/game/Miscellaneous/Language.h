@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __TRINITY_LANGUAGE_H
-#define __TRINITY_LANGUAGE_H
+#ifndef __WARHEAD_LANGUAGE_H
+#define __WARHEAD_LANGUAGE_H
 
 enum BroadcastTextIds
 {
@@ -956,7 +956,7 @@ enum TrinityStrings
     LANG_COMMAND_TICKETLISTRESPONSE       = 2029,
     LANG_COMMAND_TICKETCOMPLETED          = 2030,
 
-    // Trinity strings                      5000-9999
+    // Warhead strings                      5000-9999
     LANG_COMMAND_FREEZE                   = 5000,
     LANG_COMMAND_FREEZE_ERROR             = 5001,
     LANG_COMMAND_FREEZE_WRONG             = 5002,
@@ -1051,7 +1051,7 @@ enum TrinityStrings
     LANG_LIST_RESPAWNS_GAMEOBJECTS        = 5082,
     LANG_OBJECTINFO_AITYPE                = 5083,
 
-    // Room for more Trinity strings        5084-6603
+    // Room for more Warhead strings        5084-6603
 
     // Level requirement notifications
     LANG_SAY_REQ                          = 6604,

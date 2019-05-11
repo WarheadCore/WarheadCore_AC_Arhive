@@ -28,7 +28,7 @@ target_include_directories(mapextractor
 
 target_link_libraries(mapextractor
   PRIVATE
-    trinity-core-interface
+    warhead-core-interface
   PUBLIC
     common
     mpq)

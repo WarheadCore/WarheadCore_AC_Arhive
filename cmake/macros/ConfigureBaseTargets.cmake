@@ -9,15 +9,15 @@
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 # An interface library to make the target com available to other targets
-add_library(trinity-compile-option-interface INTERFACE)
+add_library(warhead-compile-option-interface INTERFACE)
 
 # Use -std=c++11 instead of -std=gnu++11
 set(CXX_EXTENSIONS OFF)
 
 # An interface library to make the target features available to other targets
-add_library(trinity-feature-interface INTERFACE)
+add_library(warhead-feature-interface INTERFACE)
 
-target_compile_features(trinity-feature-interface
+target_compile_features(warhead-feature-interface
   INTERFACE
     cxx_alias_templates
     cxx_auto_type
@@ -35,45 +35,45 @@ target_compile_features(trinity-feature-interface
 
 # An interface library to make the warnings level available to other targets
 # This interface taget is set-up through the platform specific script
-add_library(trinity-warning-interface INTERFACE)
+add_library(warhead-warning-interface INTERFACE)
 
 # An interface used for all other interfaces
-add_library(trinity-default-interface INTERFACE)
-target_link_libraries(trinity-default-interface
+add_library(warhead-default-interface INTERFACE)
+target_link_libraries(warhead-default-interface
   INTERFACE
-    trinity-compile-option-interface
-    trinity-feature-interface)
+    warhead-compile-option-interface
+    warhead-feature-interface)
 
 # An interface used for silencing all warnings
-add_library(trinity-no-warning-interface INTERFACE)
+add_library(warhead-no-warning-interface INTERFACE)
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-  target_compile_options(trinity-no-warning-interface
+  target_compile_options(warhead-no-warning-interface
     INTERFACE
       /W0)
 else()
-  target_compile_options(trinity-no-warning-interface
+  target_compile_options(warhead-no-warning-interface
     INTERFACE
       -w)
 endif()
 
 # An interface library to change the default behaviour
 # to hide symbols automatically.
-add_library(trinity-hidden-symbols-interface INTERFACE)
+add_library(warhead-hidden-symbols-interface INTERFACE)
 
 # An interface amalgamation which provides the flags and definitions
 # used by the dependency targets.
-add_library(trinity-dependency-interface INTERFACE)
-target_link_libraries(trinity-dependency-interface
+add_library(warhead-dependency-interface INTERFACE)
+target_link_libraries(warhead-dependency-interface
   INTERFACE
-    trinity-default-interface
-    trinity-no-warning-interface
-    trinity-hidden-symbols-interface)
+    warhead-default-interface
+    warhead-no-warning-interface
+    warhead-hidden-symbols-interface)
 
 # An interface amalgamation which provides the flags and definitions
 # used by the core targets.
-add_library(trinity-core-interface INTERFACE)
-target_link_libraries(trinity-core-interface
+add_library(warhead-core-interface INTERFACE)
+target_link_libraries(warhead-core-interface
   INTERFACE
-    trinity-default-interface
-    trinity-warning-interface)
+    warhead-default-interface
+    warhead-warning-interface)

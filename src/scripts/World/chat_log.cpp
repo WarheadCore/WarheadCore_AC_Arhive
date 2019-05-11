@@ -32,17 +32,17 @@ class ChatLogScript : public PlayerScript
             switch (type)
             {
                 case CHAT_MSG_SAY:
-                    TC_LOG_DEBUG("chat.log.say", "Player %s says (language %u): %s",
+                    WC_LOG_DEBUG("chat.log.say", "Player %s says (language %u): %s",
                         player->GetName().c_str(), lang, msg.c_str());
                     break;
 
                 case CHAT_MSG_EMOTE:
-                    TC_LOG_DEBUG("chat.log.emote", "Player %s emotes: %s",
+                    WC_LOG_DEBUG("chat.log.emote", "Player %s emotes: %s",
                         player->GetName().c_str(), msg.c_str());
                     break;
 
                 case CHAT_MSG_YELL:
-                    TC_LOG_DEBUG("chat.log.yell", "Player %s yells (language %u): %s",
+                    WC_LOG_DEBUG("chat.log.yell", "Player %s yells (language %u): %s",
                         player->GetName().c_str(), lang, msg.c_str());
                     break;
             }
@@ -51,10 +51,10 @@ class ChatLogScript : public PlayerScript
         void OnChat(Player* player, uint32 /*type*/, uint32 lang, std::string& msg, Player* receiver) override
         {
             if (lang != LANG_ADDON)
-                TC_LOG_DEBUG("chat.log.whisper", "Player %s tells %s: %s",
+                WC_LOG_DEBUG("chat.log.whisper", "Player %s tells %s: %s",
                     player->GetName().c_str(), receiver ? receiver->GetName().c_str() : "<unknown>", msg.c_str());
             else
-                TC_LOG_DEBUG("chat.log.addon.whisper", "Player %s tells %s: %s",
+                WC_LOG_DEBUG("chat.log.addon.whisper", "Player %s tells %s: %s",
                     player->GetName().c_str(), receiver ? receiver->GetName().c_str() : "<unknown>", msg.c_str());
         }
 
@@ -66,48 +66,48 @@ class ChatLogScript : public PlayerScript
             {
                 case CHAT_MSG_PARTY:
                     if (lang != LANG_ADDON)
-                        TC_LOG_DEBUG("chat.log.party", "Player %s tells group with leader %s: %s",
+                        WC_LOG_DEBUG("chat.log.party", "Player %s tells group with leader %s: %s",
                             player->GetName().c_str(), group ? group->GetLeaderName() : "<unknown>", msg.c_str());
                     else
-                        TC_LOG_DEBUG("chat.log.addon.party", "Player %s tells group with leader %s: %s",
+                        WC_LOG_DEBUG("chat.log.addon.party", "Player %s tells group with leader %s: %s",
                             player->GetName().c_str(), group ? group->GetLeaderName() : "<unknown>", msg.c_str());
                     break;
 
                 case CHAT_MSG_PARTY_LEADER:
-                    TC_LOG_DEBUG("chat.log.party", "Leader %s tells group: %s",
+                    WC_LOG_DEBUG("chat.log.party", "Leader %s tells group: %s",
                         player->GetName().c_str(), msg.c_str());
                     break;
 
                 case CHAT_MSG_RAID:
                     if (lang != LANG_ADDON)
-                        TC_LOG_DEBUG("chat.log.raid", "Player %s tells raid with leader %s: %s",
+                        WC_LOG_DEBUG("chat.log.raid", "Player %s tells raid with leader %s: %s",
                             player->GetName().c_str(), group ? group->GetLeaderName() : "<unknown>", msg.c_str());
                     else
-                        TC_LOG_DEBUG("chat.log.addon.raid", "Player %s tells raid with leader %s: %s",
+                        WC_LOG_DEBUG("chat.log.addon.raid", "Player %s tells raid with leader %s: %s",
                             player->GetName().c_str(), group ? group->GetLeaderName() : "<unknown>", msg.c_str());
                     break;
 
                 case CHAT_MSG_RAID_LEADER:
-                    TC_LOG_DEBUG("chat.log.raid", "Leader player %s tells raid: %s",
+                    WC_LOG_DEBUG("chat.log.raid", "Leader player %s tells raid: %s",
                         player->GetName().c_str(), msg.c_str());
                     break;
 
                 case CHAT_MSG_RAID_WARNING:
-                    TC_LOG_DEBUG("chat.log.raid", "Leader player %s warns raid with: %s",
+                    WC_LOG_DEBUG("chat.log.raid", "Leader player %s warns raid with: %s",
                         player->GetName().c_str(), msg.c_str());
                     break;
 
                 case CHAT_MSG_BATTLEGROUND:
                     if (lang != LANG_ADDON)
-                        TC_LOG_DEBUG("chat.log.bg", "Player %s tells battleground with leader %s: %s",
+                        WC_LOG_DEBUG("chat.log.bg", "Player %s tells battleground with leader %s: %s",
                             player->GetName().c_str(), group ? group->GetLeaderName() : "<unknown>", msg.c_str());
                     else
-                        TC_LOG_DEBUG("chat.log.addon.bg", "Player %s tells battleground with leader %s: %s",
+                        WC_LOG_DEBUG("chat.log.addon.bg", "Player %s tells battleground with leader %s: %s",
                             player->GetName().c_str(), group ? group->GetLeaderName() : "<unknown>", msg.c_str());
                     break;
 
                 case CHAT_MSG_BATTLEGROUND_LEADER:
-                    TC_LOG_DEBUG("chat.log.bg", "Leader player %s tells battleground: %s",
+                    WC_LOG_DEBUG("chat.log.bg", "Leader player %s tells battleground: %s",
                         player->GetName().c_str(), msg.c_str());
                     break;
             }
@@ -119,15 +119,15 @@ class ChatLogScript : public PlayerScript
             {
                 case CHAT_MSG_GUILD:
                     if (lang != LANG_ADDON)
-                        TC_LOG_DEBUG("chat.log.guild", "Player %s tells guild %s: %s",
+                        WC_LOG_DEBUG("chat.log.guild", "Player %s tells guild %s: %s",
                             player->GetName().c_str(), guild ? guild->GetName().c_str() : "<unknown>", msg.c_str());
                     else
-                        TC_LOG_DEBUG("chat.log.addon.guild", "Player %s sends to guild %s: %s",
+                        WC_LOG_DEBUG("chat.log.addon.guild", "Player %s sends to guild %s: %s",
                             player->GetName().c_str(), guild ? guild->GetName().c_str() : "<unknown>", msg.c_str());
                     break;
 
                 case CHAT_MSG_OFFICER:
-                    TC_LOG_DEBUG("chat.log.guild.officer", "Player %s tells guild %s officers: %s",
+                    WC_LOG_DEBUG("chat.log.guild.officer", "Player %s tells guild %s officers: %s",
                         player->GetName().c_str(), guild ? guild->GetName().c_str() : "<unknown>", msg.c_str());
                     break;
             }
@@ -142,12 +142,12 @@ class ChatLogScript : public PlayerScript
                              channel->HasFlag(CHANNEL_FLAG_LFG));
 
             if (isSystem)
-                TC_LOG_DEBUG("chat.log.system", "Player %s tells channel %s: %s",
+                WC_LOG_DEBUG("chat.log.system", "Player %s tells channel %s: %s",
                     player->GetName().c_str(), channel->GetName().c_str(), msg.c_str());
             else
             {
                 std::string channelName = channel ? channel->GetName() : "<unknown>";
-                TC_LOG_DEBUG("chat.log.channel." + channelName, "Player %s tells channel %s: %s",
+                WC_LOG_DEBUG("chat.log.channel." + channelName, "Player %s tells channel %s: %s",
                     player->GetName().c_str(), channelName.c_str(), msg.c_str());
             }
         }

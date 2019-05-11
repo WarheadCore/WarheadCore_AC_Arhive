@@ -153,7 +153,7 @@ class boss_moam : public CreatureScript
                                         targetList.push_back(ref->GetVictim());
                             }
 
-                            Trinity::Containers::RandomResize(targetList, 5);
+                            Warhead::Containers::RandomResize(targetList, 5);
 
                             for (std::list<Unit*>::iterator itr = targetList.begin(); itr != targetList.end(); ++itr)
                                 DoCast(*itr, SPELL_DRAIN_MANA);

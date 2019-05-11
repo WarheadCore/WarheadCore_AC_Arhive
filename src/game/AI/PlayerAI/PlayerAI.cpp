@@ -393,9 +393,9 @@ enum Spells
 };
 
 PlayerAI::PlayerAI(Player* player) : UnitAI(player), me(player),
-    _selfSpec(Trinity::Helpers::Entity::GetPlayerSpecialization(player)),
-    _isSelfHealer(Trinity::Helpers::Entity::IsPlayerHealer(player)),
-    _isSelfRangedAttacker(Trinity::Helpers::Entity::IsPlayerRangedAttacker(player))
+    _selfSpec(Warhead::Helpers::Entity::GetPlayerSpecialization(player)),
+    _isSelfHealer(Warhead::Helpers::Entity::IsPlayerHealer(player)),
+    _isSelfRangedAttacker(Warhead::Helpers::Entity::IsPlayerRangedAttacker(player))
 {
 }
 
@@ -408,17 +408,17 @@ Creature* PlayerAI::GetCharmer() const
 
 uint8 PlayerAI::GetSpec(Player const * who) const
 {
-    return (!who || who == me) ? _selfSpec : Trinity::Helpers::Entity::GetPlayerSpecialization(who);
+    return (!who || who == me) ? _selfSpec : Warhead::Helpers::Entity::GetPlayerSpecialization(who);
 }
 
 bool PlayerAI::IsHealer(Player const * who) const
 {
-    return (!who || who == me) ? _isSelfHealer : Trinity::Helpers::Entity::IsPlayerHealer(who);
+    return (!who || who == me) ? _isSelfHealer : Warhead::Helpers::Entity::IsPlayerHealer(who);
 }
 
 bool PlayerAI::IsRangedAttacker(Player const * who) const
 {
-    return (!who || who == me) ? _isSelfRangedAttacker : Trinity::Helpers::Entity::IsPlayerRangedAttacker(who);
+    return (!who || who == me) ? _isSelfRangedAttacker : Warhead::Helpers::Entity::IsPlayerRangedAttacker(who);
 }
 
 PlayerAI::TargetedSpell PlayerAI::VerifySpellCast(uint32 spellId, Unit* target)

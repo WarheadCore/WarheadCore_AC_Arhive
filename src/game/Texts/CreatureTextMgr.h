@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_CREATURE_TEXT_MGR_H
-#define TRINITY_CREATURE_TEXT_MGR_H
+#ifndef WARHEAD_CREATURE_TEXT_MGR_H
+#define WARHEAD_CREATURE_TEXT_MGR_H
 
 #include "Common.h"
 #include "SharedDefines.h"
@@ -80,7 +80,7 @@ typedef std::unordered_map<uint32, CreatureTextHolder> CreatureTextMap;     // a
 
 typedef std::map<CreatureTextId, CreatureTextLocale> LocaleCreatureTextMap;
 
-class TC_GAME_API CreatureTextMgr
+class WC_GAME_API CreatureTextMgr
 {
     private:
         CreatureTextMgr() { }

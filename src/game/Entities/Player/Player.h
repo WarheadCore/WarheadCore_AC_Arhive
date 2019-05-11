@@ -92,7 +92,7 @@ enum SpellModType : uint8
     SPELLMOD_PCT          = SPELL_AURA_ADD_PCT_MODIFIER
 };
 
-// 2^n values, Player::m_isunderwater is a bitmask. These are Trinity internal values, they are never send to any client
+// 2^n values, Player::m_isunderwater is a bitmask. These are Warhead internal values, they are never send to any client
 enum PlayerUnderwaterState
 {
     UNDERWATER_NONE                     = 0x00,
@@ -752,7 +752,7 @@ enum PlayerDelayedOperations
 // Player summoning auto-decline time (in secs)
 #define MAX_PLAYER_SUMMON_DELAY                   (2*MINUTE)
 // Maximum money amount : 2^31 - 1
-TC_GAME_API extern uint32 const MAX_MONEY_AMOUNT;
+WC_GAME_API extern uint32 const MAX_MONEY_AMOUNT;
 
 enum BindExtensionState
 {
@@ -876,7 +876,7 @@ struct ResurrectionData
 
 #define SPELL_DK_RAISE_ALLY 46619
 
-class TC_GAME_API Player : public Unit, public GridObject<Player>
+class WC_GAME_API Player : public Unit, public GridObject<Player>
 {
     friend class WorldSession;
     friend class CinematicMgr;
@@ -2472,7 +2472,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         WorldLocation _corpseLocation;
 };
 
-TC_GAME_API void AddItemsSetItem(Player* player, Item* item);
-TC_GAME_API void RemoveItemsSetItem(Player* player, ItemTemplate const* proto);
+WC_GAME_API void AddItemsSetItem(Player* player, Item* item);
+WC_GAME_API void RemoveItemsSetItem(Player* player, ItemTemplate const* proto);
 
 #endif

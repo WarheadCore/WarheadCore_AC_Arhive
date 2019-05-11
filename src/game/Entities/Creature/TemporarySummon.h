@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITYCORE_TEMPSUMMON_H
-#define TRINITYCORE_TEMPSUMMON_H
+#ifndef WARHEADCORE_TEMPSUMMON_H
+#define WARHEADCORE_TEMPSUMMON_H
 
 #include "Creature.h"
 
@@ -33,7 +33,7 @@ enum PetEntry : uint32
 
 struct SummonPropertiesEntry;
 
-class TC_GAME_API TempSummon : public Creature
+class WC_GAME_API TempSummon : public Creature
 {
     public:
         explicit TempSummon(SummonPropertiesEntry const* properties, Unit* owner, bool isWorldObject);
@@ -62,7 +62,7 @@ class TC_GAME_API TempSummon : public Creature
         ObjectGuid m_summonerGUID;
 };
 
-class TC_GAME_API Minion : public TempSummon
+class WC_GAME_API Minion : public TempSummon
 {
     public:
         Minion(SummonPropertiesEntry const* properties, Unit* owner, bool isWorldObject);
@@ -88,7 +88,7 @@ class TC_GAME_API Minion : public TempSummon
         float m_followAngle;
 };
 
-class TC_GAME_API Guardian : public Minion
+class WC_GAME_API Guardian : public Minion
 {
     public:
         Guardian(SummonPropertiesEntry const* properties, Unit* owner, bool isWorldObject);
@@ -114,7 +114,7 @@ class TC_GAME_API Guardian : public Minion
         float   m_statFromOwner[MAX_STATS];
 };
 
-class TC_GAME_API Puppet : public Minion
+class WC_GAME_API Puppet : public Minion
 {
     public:
         Puppet(SummonPropertiesEntry const* properties, Unit* owner);
@@ -124,7 +124,7 @@ class TC_GAME_API Puppet : public Minion
         void RemoveFromWorld() override;
 };
 
-class TC_GAME_API ForcedUnsummonDelayEvent : public BasicEvent
+class WC_GAME_API ForcedUnsummonDelayEvent : public BasicEvent
 {
 public:
     ForcedUnsummonDelayEvent(TempSummon& owner) : BasicEvent(), m_owner(owner) { }

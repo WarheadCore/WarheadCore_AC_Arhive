@@ -353,12 +353,12 @@ bool ChatHandler::SetDataForCommandInTable(std::vector<ChatCommand>& table, char
         // expected subcommand by full name DB content
         else if (*text)
         {
-            TC_LOG_ERROR("sql.sql", "Table `command` contains an unexpected subcommand '%s' in command '%s', skipped.", text, fullcommand.c_str());
+            WC_LOG_ERROR("sql.sql", "Table `command` contains an unexpected subcommand '%s' in command '%s', skipped.", text, fullcommand.c_str());
             return false;
         }
 
         if (table[i].Permission != permission)
-            TC_LOG_INFO("misc", "Table `command` overwrite for command '%s' default permission (%u) by %u", fullcommand.c_str(), table[i].Permission, permission);
+            WC_LOG_INFO("misc", "Table `command` overwrite for command '%s' default permission (%u) by %u", fullcommand.c_str(), table[i].Permission, permission);
 
         table[i].Permission = permission;
         table[i].Help          = help;
@@ -369,9 +369,9 @@ bool ChatHandler::SetDataForCommandInTable(std::vector<ChatCommand>& table, char
     if (!cmd.empty())
     {
         if (&table == &getCommandTable())
-            TC_LOG_ERROR("sql.sql", "Table `command` contains a non-existing command '%s', skipped.", cmd.c_str());
+            WC_LOG_ERROR("sql.sql", "Table `command` contains a non-existing command '%s', skipped.", cmd.c_str());
         else
-            TC_LOG_ERROR("sql.sql", "Table `command` contains a non-existing subcommand '%s' in command '%s', skipped.", cmd.c_str(), fullcommand.c_str());
+            WC_LOG_ERROR("sql.sql", "Table `command` contains a non-existing subcommand '%s' in command '%s', skipped.", cmd.c_str(), fullcommand.c_str());
     }
 
     return false;
@@ -797,8 +797,8 @@ GameObject* ChatHandler::GetNearbyGameObject()
 
     Player* pl = m_session->GetPlayer();
     GameObject* obj = nullptr;
-    Trinity::NearestGameObjectCheck check(*pl);
-    Trinity::GameObjectLastSearcher<Trinity::NearestGameObjectCheck> searcher(pl, obj, check);
+    Warhead::NearestGameObjectCheck check(*pl);
+    Warhead::GameObjectLastSearcher<Warhead::NearestGameObjectCheck> searcher(pl, obj, check);
     Cell::VisitGridObjects(pl, searcher, SIZE_OF_GRIDS);
     return obj;
 }
@@ -1213,7 +1213,7 @@ int CliHandler::GetSessionDbLocaleIndex() const
 
 bool AddonChannelCommandHandler::ParseCommands(char const* str)
 {
-    if (memcmp(str, "TrinityCore\t", 12))
+    if (memcmp(str, "WarheadCore\t", 12))
         return false;
     char opcode = str[12];
     if (!opcode) // str[12] is opcode
@@ -1262,7 +1262,7 @@ void AddonChannelCommandHandler::Send(std::string const& msg)
 void AddonChannelCommandHandler::SendAck() // a Command acknowledged, no body
 {
     ASSERT(echo);
-    char ack[18] = "TrinityCore\ta";
+    char ack[18] = "WarheadCore\ta";
     memcpy(ack+13, echo, 4);
     ack[17] = '\0';
     Send(ack);
@@ -1272,7 +1272,7 @@ void AddonChannelCommandHandler::SendAck() // a Command acknowledged, no body
 void AddonChannelCommandHandler::SendOK() // o Command OK, no body
 {
     ASSERT(echo);
-    char ok[18] = "TrinityCore\to";
+    char ok[18] = "WarheadCore\to";
     memcpy(ok+13, echo, 4);
     ok[17] = '\0';
     Send(ok);
@@ -1281,7 +1281,7 @@ void AddonChannelCommandHandler::SendOK() // o Command OK, no body
 void AddonChannelCommandHandler::SendFailed() // f Command failed, no body
 {
     ASSERT(echo);
-    char fail[18] = "TrinityCore\tf";
+    char fail[18] = "WarheadCore\tf";
     memcpy(fail + 13, echo, 4);
     fail[17] = '\0';
     Send(fail);
@@ -1294,7 +1294,7 @@ void AddonChannelCommandHandler::SendSysMessage(char const* str, bool escapeChar
     if (!hadAck)
         SendAck();
 
-    std::string msg = "TrinityCore\tm";
+    std::string msg = "WarheadCore\tm";
     msg.append(echo, 4);
     std::string body(str);
     if (escapeCharacters)

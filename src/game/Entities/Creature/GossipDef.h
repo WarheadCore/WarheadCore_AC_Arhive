@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITYCORE_GOSSIP_H
-#define TRINITYCORE_GOSSIP_H
+#ifndef WARHEADCORE_GOSSIP_H
+#define WARHEADCORE_GOSSIP_H
 
 #include "Common.h"
 #include "ObjectGuid.h"
@@ -159,7 +159,7 @@ struct QuestMenuItem
 
 typedef std::vector<QuestMenuItem> QuestMenuItemList;
 
-class TC_GAME_API GossipMenu
+class WC_GAME_API GossipMenu
 {
     public:
         GossipMenu();
@@ -224,7 +224,7 @@ class TC_GAME_API GossipMenu
         LocaleConstant _locale;
 };
 
-class TC_GAME_API QuestMenu
+class WC_GAME_API QuestMenu
 {
     public:
         QuestMenu();
@@ -254,7 +254,7 @@ class TC_GAME_API QuestMenu
         QuestMenuItemList _questMenuItems;
 };
 
-class TC_GAME_API PlayerMenu
+class WC_GAME_API PlayerMenu
 {
     public:
         explicit PlayerMenu(WorldSession* session);

@@ -159,16 +159,16 @@ struct DynamicTreeIntersectionCallback_WithLogger
     uint32 phase_mask;
     DynamicTreeIntersectionCallback_WithLogger(uint32 phasemask) : did_hit(false), phase_mask(phasemask)
     {
-        TC_LOG_DEBUG("maps", "Dynamic Intersection log");
+        WC_LOG_DEBUG("maps", "Dynamic Intersection log");
     }
     bool operator()(G3D::Ray const& r, GameObjectModel const& obj, float& distance)
     {
-        TC_LOG_DEBUG("maps", "testing intersection with %s", obj.name.c_str());
+        WC_LOG_DEBUG("maps", "testing intersection with %s", obj.name.c_str());
         bool hit = obj.intersectRay(r, distance, true, phase_mask, VMAP::ModelIgnoreFlags::Nothing);
         if (hit)
         {
             did_hit = true;
-            TC_LOG_DEBUG("maps", "result: intersects");
+            WC_LOG_DEBUG("maps", "result: intersects");
         }
         return hit;
     }

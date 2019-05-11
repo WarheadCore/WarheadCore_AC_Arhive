@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_CHASEMOVEMENTGENERATOR_H
-#define TRINITY_CHASEMOVEMENTGENERATOR_H
+#ifndef WARHEAD_CHASEMOVEMENTGENERATOR_H
+#define WARHEAD_CHASEMOVEMENTGENERATOR_H
 
 #include "AbstractFollower.h"
 #include "MovementDefines.h"

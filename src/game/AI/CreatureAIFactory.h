@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRINITY_CREATUREAIFACTORY_H
-#define TRINITY_CREATUREAIFACTORY_H
+#ifndef WARHEAD_CREATUREAIFACTORY_H
+#define WARHEAD_CREATUREAIFACTORY_H
 
 #include "ObjectRegistry.h"
 #include "SelectableAI.h"

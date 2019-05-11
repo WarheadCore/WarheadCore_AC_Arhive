@@ -1,5 +1,5 @@
 ###############################################
-# Trinity Core Auth Server configuration file #
+# Warhead Core Auth Server configuration file #
 ###############################################
 [authserver]
 
@@ -148,9 +148,9 @@ BanExpiryCheckInterval = 60
 
 #
 #    SourceDirectory
-#        Description: The path to your TrinityCore source directory.
+#        Description: The path to your WarheadCore source directory.
 #                     If the path is left empty, the built-in CMAKE_SOURCE_DIR is used.
-#        Example:     "../TrinityCore"
+#        Example:     "../WarheadCore"
 #        Default:     ""
 
 SourceDirectory  = ""
@@ -169,8 +169,8 @@ MySQLExecutable = ""
 #
 #    IPLocationFile
 #        Description: The path to your IP2Location database CSV file.
-#        Example:     "C:/Trinity/IP2LOCATION-LITE-DB1.CSV"
-#                     "/home/trinity/IP2LOCATION-LITE-DB1.CSV"
+#        Example:     "C:/Warhead/IP2LOCATION-LITE-DB1.CSV"
+#                     "/home/warhead/IP2LOCATION-LITE-DB1.CSV"
 #        Default:     ""  - (Disabled)
 
 IPLocationFile = ""
@@ -189,9 +189,9 @@ IPLocationFile = ""
 #                                                                 section my.ini)
 #                     ".;/path/to/unix_socket;username;password;database" - (use Unix sockets on
 #                                                                           Unix/Linux)
-#        Default:     "127.0.0.1;3306;trinity;trinity;auth"
+#        Default:     "127.0.0.1;3306;warhead;warhead;auth"
 
-LoginDatabaseInfo = "127.0.0.1;3306;trinity;trinity;auth"
+LoginDatabaseInfo = "127.0.0.1;3306;warhead;warhead;auth"
 
 #
 #    LoginDatabase.WorkerThreads

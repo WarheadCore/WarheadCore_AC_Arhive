@@ -41,7 +41,7 @@ UpdateFetcher::UpdateFetcher(Path const& sourceDirectory,
     std::function<void(std::string const&)> const& apply,
     std::function<void(Path const& path)> const& applyFile,
     std::function<QueryResult(std::string const&)> const& retrieve) :
-        _sourceDirectory(Trinity::make_unique<Path>(sourceDirectory)), _apply(apply), _applyFile(applyFile),
+        _sourceDirectory(Warhead::make_unique<Path>(sourceDirectory)), _apply(apply), _applyFile(applyFile),
         _retrieve(retrieve)
 {
 }
@@ -74,7 +74,7 @@ void UpdateFetcher::FillFileListRecursively(Path const& path, LocaleFileStorage&
         }
         else if (itr->path().extension() == ".sql")
         {
-            TC_LOG_TRACE("sql.updates", "Added locale file \"%s\".", itr->path().filename().generic_string().c_str());
+            WC_LOG_TRACE("sql.updates", "Added locale file \"%s\".", itr->path().filename().generic_string().c_str());
 
             LocaleFileEntry const entry = { itr->path(), state };
 
@@ -82,7 +82,7 @@ void UpdateFetcher::FillFileListRecursively(Path const& path, LocaleFileStorage&
             // Because elements are only compared by their filenames, this is ok
             if (storage.find(entry) != storage.end())
             {
-                TC_LOG_FATAL("sql.updates", "Duplicate filename \"%s\" occurred. Because updates are ordered " \
+                WC_LOG_FATAL("sql.updates", "Duplicate filename \"%s\" occurred. Because updates are ordered " \
                     "by their filenames, every name needs to be unique!", itr->path().generic_string().c_str());
 
                 throw UpdateException("Updating failed, see the log for details.");
@@ -113,14 +113,14 @@ UpdateFetcher::DirectoryStorage UpdateFetcher::ReceiveIncludedDirectories() cons
 
         if (!is_directory(p))
         {
-            TC_LOG_WARN("sql.updates", "DBUpdater: Given update include directory \"%s\" does not exist, skipped!", p.generic_string().c_str());
+            WC_LOG_WARN("sql.updates", "DBUpdater: Given update include directory \"%s\" does not exist, skipped!", p.generic_string().c_str());
             continue;
         }
 
         DirectoryEntry const entry = { p, AppliedFileEntry::StateConvert(fields[1].GetString()) };
         directories.push_back(entry);
 
-        TC_LOG_TRACE("sql.updates", "Added applied file \"%s\" from remote.", p.filename().generic_string().c_str());
+        WC_LOG_TRACE("sql.updates", "Added applied file \"%s\" from remote.", p.filename().generic_string().c_str());
 
     } while (result->NextRow());
 
@@ -154,7 +154,7 @@ std::string UpdateFetcher::ReadSQLUpdate(boost::filesystem::path const& file) co
     std::ifstream in(file.c_str());
     if (!in.is_open())
     {
-        TC_LOG_FATAL("sql.updates", "Failed to open the sql update \"%s\" for reading! "
+        WC_LOG_FATAL("sql.updates", "Failed to open the sql update \"%s\" for reading! "
                      "Stopping the server to keep the database integrity, "
                      "try to identify and solve the issue or disable the database updater.",
                      file.generic_string().c_str());
@@ -199,7 +199,7 @@ UpdateResult UpdateFetcher::Update(bool const redundancyChecks,
 
     for (auto const& availableQuery : available)
     {
-        TC_LOG_DEBUG("sql.updates", "Checking update \"%s\"...", availableQuery.first.filename().generic_string().c_str());
+        WC_LOG_DEBUG("sql.updates", "Checking update \"%s\"...", availableQuery.first.filename().generic_string().c_str());
 
         AppliedFileStorage::const_iterator iter = applied.find(availableQuery.first.filename().string());
         if (iter != applied.end())
@@ -207,7 +207,7 @@ UpdateResult UpdateFetcher::Update(bool const redundancyChecks,
             // If redundancy is disabled, skip it, because the update is already applied.
             if (!redundancyChecks)
             {
-                TC_LOG_DEBUG("sql.updates", ">> Update is already applied, skipping redundancy checks.");
+                WC_LOG_DEBUG("sql.updates", ">> Update is already applied, skipping redundancy checks.");
                 applied.erase(iter);
                 continue;
             }
@@ -215,7 +215,7 @@ UpdateResult UpdateFetcher::Update(bool const redundancyChecks,
             // If the update is in an archived directory and is marked as archived in our database, skip redundancy checks (archived updates never change).
             if (!archivedRedundancy && (iter->second.state == ARCHIVED) && (availableQuery.second == ARCHIVED))
             {
-                TC_LOG_DEBUG("sql.updates", ">> Update is archived and marked as archived in database, skipping redundancy checks.");
+                WC_LOG_DEBUG("sql.updates", ">> Update is archived and marked as archived in database, skipping redundancy checks.");
                 applied.erase(iter);
                 continue;
             }
@@ -242,7 +242,7 @@ UpdateResult UpdateFetcher::Update(bool const redundancyChecks,
                 // Conflict!
                 if (localeIter != available.end())
                 {
-                    TC_LOG_WARN("sql.updates", ">> It seems like the update \"%s\" \'%s\' was renamed, but the old file is still there! " \
+                    WC_LOG_WARN("sql.updates", ">> It seems like the update \"%s\" \'%s\' was renamed, but the old file is still there! " \
                         "Treating it as a new file! (It is probably an unmodified copy of the file \"%s\")",
                             availableQuery.first.filename().string().c_str(), hash.substr(0, 7).c_str(),
                                 localeIter->first.filename().string().c_str());
@@ -250,7 +250,7 @@ UpdateResult UpdateFetcher::Update(bool const redundancyChecks,
                 // It is safe to treat the file as renamed here
                 else
                 {
-                    TC_LOG_INFO("sql.updates", ">> Renaming update \"%s\" to \"%s\" \'%s\'.",
+                    WC_LOG_INFO("sql.updates", ">> Renaming update \"%s\" to \"%s\" \'%s\'.",
                         hashIter->second.c_str(), availableQuery.first.filename().string().c_str(), hash.substr(0, 7).c_str());
 
                     RenameEntry(hashIter->second, availableQuery.first.filename().string());
@@ -261,7 +261,7 @@ UpdateResult UpdateFetcher::Update(bool const redundancyChecks,
             // Apply the update if it was never seen before.
             else
             {
-                TC_LOG_INFO("sql.updates", ">> Applying update \"%s\" \'%s\'...",
+                WC_LOG_INFO("sql.updates", ">> Applying update \"%s\" \'%s\'...",
                     availableQuery.first.filename().string().c_str(), hash.substr(0, 7).c_str());
             }
         }
@@ -270,7 +270,7 @@ UpdateResult UpdateFetcher::Update(bool const redundancyChecks,
         {
             mode = MODE_REHASH;
 
-            TC_LOG_INFO("sql.updates", ">> Re-hashing update \"%s\" \'%s\'...", availableQuery.first.filename().string().c_str(),
+            WC_LOG_INFO("sql.updates", ">> Re-hashing update \"%s\" \'%s\'...", availableQuery.first.filename().string().c_str(),
                 hash.substr(0, 7).c_str());
         }
         else
@@ -278,7 +278,7 @@ UpdateResult UpdateFetcher::Update(bool const redundancyChecks,
             // If the hash of the files differs from the one stored in our database, reapply the update (because it changed).
             if (iter->second.hash != hash)
             {
-                TC_LOG_INFO("sql.updates", ">> Reapplying update \"%s\" \'%s\' -> \'%s\' (it changed)...", availableQuery.first.filename().string().c_str(),
+                WC_LOG_INFO("sql.updates", ">> Reapplying update \"%s\" \'%s\' -> \'%s\' (it changed)...", availableQuery.first.filename().string().c_str(),
                     iter->second.hash.substr(0, 7).c_str(), hash.substr(0, 7).c_str());
             }
             else
@@ -286,13 +286,13 @@ UpdateResult UpdateFetcher::Update(bool const redundancyChecks,
                 // If the file wasn't changed and just moved, update its state (if necessary).
                 if (iter->second.state != availableQuery.second)
                 {
-                    TC_LOG_DEBUG("sql.updates", ">> Updating the state of \"%s\" to \'%s\'...",
+                    WC_LOG_DEBUG("sql.updates", ">> Updating the state of \"%s\" to \'%s\'...",
                         availableQuery.first.filename().string().c_str(), AppliedFileEntry::StateConvert(availableQuery.second).c_str());
 
                     UpdateState(availableQuery.first.filename().string(), availableQuery.second);
                 }
 
-                TC_LOG_DEBUG("sql.updates", ">> Update is already applied and matches the hash \'%s\'.", hash.substr(0, 7).c_str());
+                WC_LOG_DEBUG("sql.updates", ">> Update is already applied and matches the hash \'%s\'.", hash.substr(0, 7).c_str());
 
                 applied.erase(iter);
                 continue;
@@ -326,18 +326,18 @@ UpdateResult UpdateFetcher::Update(bool const redundancyChecks,
 
         for (auto const& entry : applied)
         {
-            TC_LOG_WARN("sql.updates", ">> The file \'%s\' was applied to the database, but is missing in" \
+            WC_LOG_WARN("sql.updates", ">> The file \'%s\' was applied to the database, but is missing in" \
                 " your update directory now!", entry.first.c_str());
 
             if (doCleanup)
-                TC_LOG_INFO("sql.updates", "Deleting orphaned entry \'%s\'...", entry.first.c_str());
+                WC_LOG_INFO("sql.updates", "Deleting orphaned entry \'%s\'...", entry.first.c_str());
         }
 
         if (doCleanup)
             CleanUp(applied);
         else
         {
-            TC_LOG_ERROR("sql.updates", "Cleanup is disabled! There were  " SZFMTD " dirty files applied to your database, " \
+            WC_LOG_ERROR("sql.updates", "Cleanup is disabled! There were  " SZFMTD " dirty files applied to your database, " \
                 "but they are now missing in your source directory!", applied.size());
         }
     }

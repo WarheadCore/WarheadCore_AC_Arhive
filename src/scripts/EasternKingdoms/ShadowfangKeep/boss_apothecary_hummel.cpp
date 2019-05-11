@@ -412,7 +412,7 @@ class spell_apothecary_lingering_fumes : public SpellScriptLoader
 
                 std::list<Creature*> triggers;
                 caster->GetCreatureListWithEntryInGrid(triggers, NPC_VIAL_BUNNY, 100.0f);
-                Creature* trigger = Trinity::Containers::SelectRandomContainerElement(triggers);
+                Creature* trigger = Warhead::Containers::SelectRandomContainerElement(triggers);
                 caster->GetMotionMaster()->MovePoint(0, trigger->GetPosition());
 
             }
@@ -448,11 +448,11 @@ class spell_apothecary_validate_area : public SpellScriptLoader
 
             void FilterTargets(std::list<WorldObject*>& targets)
             {
-                targets.remove_if(Trinity::UnitAuraCheck(true, SPELL_BUNNY_LOCKDOWN));
+                targets.remove_if(Warhead::UnitAuraCheck(true, SPELL_BUNNY_LOCKDOWN));
                 if (targets.empty())
                     return;
 
-                WorldObject* target = Trinity::Containers::SelectRandomContainerElement(targets);
+                WorldObject* target = Warhead::Containers::SelectRandomContainerElement(targets);
                 targets.clear();
                 targets.push_back(target);
             }
