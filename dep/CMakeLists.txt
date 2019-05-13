@@ -24,6 +24,7 @@ add_subdirectory(mysql)
 add_subdirectory(readline)
 add_subdirectory(gsoap)
 add_subdirectory(efsw)
+add_subdirectory(poco)
 
 if (TOOLS)
   add_subdirectory(bzip2)
