@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # Build
 cd bin
 make -j 4 -k && make install

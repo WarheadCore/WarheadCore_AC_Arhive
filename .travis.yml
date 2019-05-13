@@ -37,6 +37,5 @@ install:
   - source ./ci/travis-configure.sh
 
 script:
-  - source ./ci/travis-configure.sh
   - source ./ci/travis-install-db.sh
   - source ./ci/travis-build-core.sh

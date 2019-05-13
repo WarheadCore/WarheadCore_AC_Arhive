@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 chmod +x contrib/check_updates.sh
 
 # Create DB
