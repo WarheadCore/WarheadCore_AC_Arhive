@@ -202,7 +202,7 @@ bool SpellClickInfo::IsFitToRequirements(Unit const* clicker, Unit const* clicke
     Unit const* summoner = nullptr;
     // Check summoners for party
     if (clickee->IsSummon())
-        summoner = clickee->ToTempSummon()->GetSummoner();
+        summoner = clickee->ToTempSummon()->GetSummonerUnit();
     if (!summoner)
         summoner = clickee;
 
@@ -2371,6 +2371,12 @@ void ObjectMgr::LoadGameObjects()
         {
             WC_LOG_ERROR("sql.sql", "Table `gameobject` has gameobject (GUID: %u Entry: %u) with invalid coordinates, skip", guid, data.id);
             continue;
+        }
+
+        if (!data.rotation.isUnit())
+        {
+            WC_LOG_ERROR("sql.sql", "Table `gameobject` has gameobject (GUID: %u Entry: %u) with invalid rotation quaternion (non-unit), defaulting to orientation on Z axis only", guid, data.id);
+            data.rotation = QuaternionData::fromEulerAnglesZYX(data.spawnPoint.GetOrientation(), 0.0f, 0.0f);
         }
 
         if (data.phaseMask == 0)

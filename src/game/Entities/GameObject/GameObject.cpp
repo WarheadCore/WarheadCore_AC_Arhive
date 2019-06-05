@@ -117,6 +117,7 @@ GameObject::GameObject() : WorldObject(false), MapObject(),
     m_respawnTime = 0;
     m_respawnDelayTime = 300;
     m_despawnDelay = 0;
+    m_despawnRespawnTime = 0s;
     m_lootState = GO_NOT_READY;
     m_spawnedByDefault = true;
     m_usetimes = 0;
@@ -754,7 +755,9 @@ void GameObject::Update(uint32 diff)
                     m_usetimes = 0;
                 }
 
-                SetGoState(GO_STATE_READY);
+                // Only goobers with a lock id or a reset time may reset their go state
+                if (GetGOInfo()->GetLockId() || GetGOInfo()->GetAutoCloseTime())
+                    SetGoState(GO_STATE_READY);
 
                 //any return here in case battleground traps
                 if (GameObjectOverride const* goOverride = GetGameObjectOverride())
@@ -1428,6 +1431,9 @@ void GameObject::Use(Unit* user)
 
     if (Player* playerUser = user->ToPlayer())
     {
+        if (m_goInfo->CannotBeUsedUnderImmunity() && playerUser->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE))
+            return;
+
         if (!m_goInfo->IsUsableMounted())
             playerUser->RemoveAurasByType(SPELL_AURA_MOUNTED);
 
@@ -2640,7 +2646,7 @@ bool GameObject::IsAtInteractDistance(Player const* player, SpellInfo const* spe
         if (GetGoType() == GAMEOBJECT_TYPE_SPELL_FOCUS)
             return maxRange * maxRange >= GetExactDistSq(player);
 
-        if (GameObjectDisplayInfoEntry const* displayInfo = sGameObjectDisplayInfoStore.LookupEntry(GetGOInfo()->displayId))
+        if (sGameObjectDisplayInfoStore.LookupEntry(GetGOInfo()->displayId))
             return IsAtInteractDistance(*player, maxRange);
     }
 
@@ -2670,6 +2676,7 @@ bool GameObject::IsAtInteractDistance(Position const& pos, float radius) const
 
     return GetExactDist(&pos) <= radius;
 }
+
 bool GameObject::IsWithinDistInMap(Player const* player) const
 {
     return IsInMap(this) && InSamePhase(this) && IsAtInteractDistance(player);

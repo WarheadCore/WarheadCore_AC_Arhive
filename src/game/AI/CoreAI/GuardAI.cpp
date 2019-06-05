@@ -61,7 +61,7 @@ void GuardAI::EnterEvadeMode(EvadeReason /*why*/)
         return;
     }
 
-    WC_LOG_DEBUG("entities.unit", "Guard entry: %u enters evade mode.", me->GetEntry());
+    WC_LOG_TRACE("scritps.ai", "GuardAI::EnterEvadeMode: %s enters evade mode.", me->GetGUID().ToString().c_str());
 
     me->RemoveAllAuras();
     me->GetThreatManager().ClearAllThreat();

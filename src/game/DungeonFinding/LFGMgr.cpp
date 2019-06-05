@@ -1442,7 +1442,7 @@ void LFGMgr::FinishDungeon(ObjectGuid gguid, const uint32 dungeonId, Map const* 
         }
 
         player->RemoveAurasDueToSpell(LFG_SPELL_DUNGEON_COOLDOWN);
-        
+
         LFGDungeonData const* dungeonDone = GetLFGDungeon(dungeonId);
         uint32 mapId = dungeonDone ? uint32(dungeonDone->map) : 0;
 

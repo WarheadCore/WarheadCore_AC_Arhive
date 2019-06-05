@@ -369,6 +369,7 @@ void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
 
         caster = _player;
     }
+
     // client provided targets
     SpellCastTargets targets;
     targets.Read(recvPacket, caster);
