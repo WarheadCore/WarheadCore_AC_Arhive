@@ -73,73 +73,60 @@ POCO_SOURCES( SRCS zlib
 # Get source from Util
 #
 
-# Sources Util
-file(GLOB SRCS_G "Util/src/*.cpp")
-POCO_SOURCES_AUTO( SRCS ${SRCS_G})
+# # Sources Util
+# file(GLOB SRCS_G "Util/src/*.cpp")
+# POCO_SOURCES_AUTO( SRCS ${SRCS_G})
 
-# Headers Util
-file(GLOB_RECURSE HDRS_G "Util/include/*.h" )
-POCO_HEADERS_AUTO( SRCS ${HDRS_G})
+# # Headers Util
+# file(GLOB_RECURSE HDRS_G "Util/include/*.h" )
+# POCO_HEADERS_AUTO( SRCS ${HDRS_G})
 
-POCO_SOURCES_AUTO_PLAT( SRCS WIN32
-  Util/src/WinRegistryConfiguration.cpp
-  Util/src/WinRegistryKey.cpp
-  Util/src/WinService.cpp
-)
+# POCO_SOURCES_AUTO_PLAT( SRCS WIN32
+#   Util/src/WinRegistryConfiguration.cpp
+#   Util/src/WinRegistryKey.cpp
+#   Util/src/WinService.cpp
+# )
 
 #
 # Get source from XML
 #
 
-# Sources XML
-file(GLOB SRCS_G "XML/src/*.cpp")
-POCO_SOURCES_AUTO( SRCS ${SRCS_G})
+# # Sources XML
+# file(GLOB SRCS_G "XML/src/*.cpp")
+# POCO_SOURCES_AUTO( SRCS ${SRCS_G})
 
-# Headers XML
-file(GLOB_RECURSE HDRS_G "XML/include/*.h" )
-POCO_HEADERS_AUTO( SRCS ${HDRS_G})
+# # Headers XML
+# file(GLOB_RECURSE HDRS_G "XML/include/*.h" )
+# POCO_HEADERS_AUTO( SRCS ${HDRS_G})
 
-POCO_SOURCES(SRCS expat
-  XML/src/xmlparse.cpp
-  XML/src/xmlrole.c
-  XML/src/xmltok.c
-  XML/src/xmltok_impl.c
-  XML/src/xmltok_ns.c)
+# POCO_SOURCES(SRCS expat
+#   XML/src/xmlparse.cpp
+#   XML/src/xmlrole.c
+#   XML/src/xmltok.c
+#   XML/src/xmltok_impl.c
+#   XML/src/xmltok_ns.c)
 
 #
 # Get source from JSON
 #
 
-# Sources JSON
-file(GLOB SRCS_G "JSON/src/*.cpp")
-POCO_SOURCES_AUTO( SRCS ${SRCS_G})
-POCO_SOURCES(SRCS pdjson JSON/src/pdjson.c)
+# # Sources JSON
+# file(GLOB SRCS_G "JSON/src/*.cpp")
+# POCO_SOURCES_AUTO( SRCS ${SRCS_G})
+# POCO_SOURCES(SRCS pdjson JSON/src/pdjson.c)
 
-# Headers JSON
-file(GLOB_RECURSE HDRS_G "JSON/include/*.h" )
-POCO_HEADERS_AUTO( SRCS ${HDRS_G})
+# # Headers JSON
+# file(GLOB_RECURSE HDRS_G "JSON/include/*.h" )
+# POCO_HEADERS_AUTO( SRCS ${HDRS_G})
 
 # Create static Library
 add_library(Poco STATIC 
   ${SRCS})
 
-# An interface used for silencing all warnings
-add_library(poco-no-warning-interface INTERFACE)
-
-if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-  target_compile_options(poco-no-warning-interface
-    INTERFACE
-      /W0)
-else()
-  target_compile_options(poco-no-warning-interface
-    INTERFACE
-      -w)
-endif()
-
 target_link_libraries(Poco
   PRIVATE
     warhead-default-interface
-    poco-no-warning-interface)
+    warhead-no-warning-interface)
 
 if(WIN32)
 target_link_libraries(Poco
@@ -150,22 +137,24 @@ endif()
 target_include_directories(Poco
   PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/Foundation/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/Util/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/JSON/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/XML/include
+    # ${CMAKE_CURRENT_SOURCE_DIR}/Util/include
+    # ${CMAKE_CURRENT_SOURCE_DIR}/JSON/include
+    # ${CMAKE_CURRENT_SOURCE_DIR}/XML/include
   PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/Foundation/src
-    ${CMAKE_CURRENT_SOURCE_DIR}/Util/src
-    ${CMAKE_CURRENT_SOURCE_DIR}/JSON/src
-    ${CMAKE_CURRENT_SOURCE_DIR}/XML/src)
+    # ${CMAKE_CURRENT_SOURCE_DIR}/Util/src
+    # ${CMAKE_CURRENT_SOURCE_DIR}/JSON/src
+    # ${CMAKE_CURRENT_SOURCE_DIR}/XML/src
+    )
 
 target_compile_definitions(Poco
   PUBLIC
     POCO_STATIC
-    XML_DTD
+    # XML_DTD
   PRIVATE
-    xmltok_ns
-    HAVE_EXPAT_CONFIG_H)
+    # xmltok_ns
+    # HAVE_EXPAT_CONFIG_H
+    )
 
 if (MINGW)
   target_compile_definitions(Poco
@@ -178,25 +167,26 @@ if (MINGW)
       POCO_THREAD_STACK_SIZE)
 endif()
 
-if(WIN32)
-  #TODO: Is XML_STATIC only required with Windows? What does it do?
-  target_compile_definitions(Poco 
-    PUBLIC
-      XML_STATIC)
-endif()
+# if(WIN32)
+#   #TODO: Is XML_STATIC only required with Windows? What does it do?
+#   target_compile_definitions(Poco 
+#     PUBLIC
+#       XML_STATIC)
+# endif()
 
-if(MSVC)
-  set_property(TARGET Poco 
-    PROPERTY C_STANDARD 99)
-else()
-  target_compile_features(Poco
-    PUBLIC
-      c_variadic_macros)
-endif()
+# if(MSVC)
+#   set_property(TARGET Poco 
+#     PROPERTY C_STANDARD 99)
+# else()
+#   target_compile_features(Poco
+#     PUBLIC
+#       c_variadic_macros)
+# endif()
 
 set_target_properties(Poco
   PROPERTIES
     DEFINE_SYMBOL Foundation_EXPORTS
-    DEFINE_SYMBOL Util_EXPORTS
-    DEFINE_SYMBOL JSON_EXPORTS
-    DEFINE_SYMBOL XML_EXPORTS)
+    # DEFINE_SYMBOL Util_EXPORTS
+    # DEFINE_SYMBOL JSON_EXPORTS
+    # DEFINE_SYMBOL XML_EXPORTS
+    )
