@@ -62,7 +62,7 @@ target_link_libraries(common
   PRIVATE
     process
     warhead-core-interface
-  PUBLIC
+  PUBLIC    
     boost
     fmt
     g3dlib

@@ -18,17 +18,40 @@
 #ifndef LogCommon_h__
 #define LogCommon_h__
 
+enum ColorTypes : uint8
+{
+    BLACK,
+    RED,
+    GREEN,
+    BROWN,
+    BLUE,
+    MAGENTA,
+    CYAN,
+    GREY,
+    YELLOW,
+    LRED,
+    LGREEN,
+    LBLUE,
+    LMAGENTA,
+    LCYAN,
+    WHITE,
+
+    COLOR_TYPE_END
+};
+
 enum LogLevel
 {
-    LOG_LEVEL_DISABLED                           = 0,
-    LOG_LEVEL_TRACE                              = 1,
-    LOG_LEVEL_DEBUG                              = 2,
-    LOG_LEVEL_INFO                               = 3,
-    LOG_LEVEL_WARN                               = 4,
-    LOG_LEVEL_ERROR                              = 5,
-    LOG_LEVEL_FATAL                              = 6,
+    LOG_LEVEL_DISABLED,
+    LOG_LEVEL_FATAL,
+    LOG_LEVEL_CRITICAL,
+    LOG_LEVEL_ERROR,
+    LOG_LEVEL_WARNING,
+    LOG_LEVEL_NOTICE,
+    LOG_LEVEL_INFO,
+    LOG_LEVEL_DEBUG,
+    LOG_LEVEL_TRACE,
 
-    NUM_ENABLED_LOG_LEVELS                       = 6
+    LOG_LEVEL_MAX
 };
 
 enum AppenderType : uint8

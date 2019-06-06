@@ -19,175 +19,130 @@
 #ifndef WARHEADCORE_LOG_H
 #define WARHEADCORE_LOG_H
 
-#include "Define.h"
-#include "AsioHacksFwd.h"
+#include "Common.h"
 #include "LogCommon.h"
 #include "StringFormat.h"
-
 #include <memory>
 #include <unordered_map>
 #include <vector>
+#include "Poco/FormattingChannel.h"
 
-class Appender;
-class Logger;
-struct LogMessage;
-
-namespace Warhead
-{
-    namespace Asio
-    {
-        class IoContext;
-    }
-}
-
-#define LOGGER_ROOT "root"
-
-typedef Appender*(*AppenderCreatorFn)(uint8 id, std::string const& name, LogLevel level, AppenderFlags flags, std::vector<char const*>&& extraArgs);
-
-template <class AppenderImpl>
-Appender* CreateAppender(uint8 id, std::string const& name, LogLevel level, AppenderFlags flags, std::vector<char const*>&& extraArgs)
-{
-    return new AppenderImpl(id, name, level, flags, std::forward<std::vector<char const*>>(extraArgs));
-}
+using Poco::FormattingChannel;
 
 class WC_COMMON_API Log
 {
-    typedef std::unordered_map<std::string, Logger> LoggerMap;
+public:
+    Log();
+    ~Log();
 
-    private:
-        Log();
-        ~Log();
-        Log(Log const&) = delete;
-        Log(Log&&) = delete;
-        Log& operator=(Log const&) = delete;
-        Log& operator=(Log&&) = delete;
+    static Log* instance();
 
-    public:
-        static Log* instance();
+    void Initialize();
 
-        void Initialize(Warhead::Asio::IoContext* ioContext);
-        void SetSynchronous();  // Not threadsafe - should only be called from main() after all threads are joined
-        void LoadFromConfig();
-        void Close();
-        bool ShouldLog(std::string const& type, LogLevel level) const;
-        bool SetLogLevel(std::string const& name, char const* level, bool isLogger = true);
+    void SetColor(bool stdout_stream, ColorTypes color);
+    void ResetColor(bool stdout_stream);
+    
+    bool ShouldLog(std::string const& type, LogLevel level) const;
 
-        template<typename Format, typename... Args>
-        inline void outMessage(std::string const& filter, LogLevel const level, Format&& fmt, Args&&... args)
-        {
-            outMessage(filter, level, Warhead::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
-        }
+    template<typename Format, typename... Args>
+    inline void outMessage(std::string const& filter, LogLevel const level, Format&& fmt, Args&& ... args)
+    {
+        outMessage(filter, level, Warhead::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
+    }
 
-        template<typename Format, typename... Args>
-        void outCommand(uint32 account, Format&& fmt, Args&&... args)
-        {
-            if (!ShouldLog("commands.gm", LOG_LEVEL_INFO))
-                return;
+    template<typename Format, typename... Args>
+    void outCommand(uint32 account, Format&& fmt, Args&& ... args)
+    {
+        outCommand(Warhead::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...), std::to_string(account));
+    }
 
-            outCommand(Warhead::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...), std::to_string(account));
-        }
+    void outCharDump(char const* str, uint32 accountId, uint64 guid, char const* name);
 
-        void outCharDump(char const* str, uint32 account_id, uint64 guid, char const* name);
+    std::string const& GetLogsDir() const { return m_logsDir; }
 
-        void SetRealmId(uint32 id);
+    // For bad loading config
+    template<typename Format, typename... Args>
+    inline void outError(Format&& fmt, Args&& ... args)
+    {
+        outError(Warhead::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
+    }
+private:
+    typedef std::unordered_map<std::string, FormattingChannel*> ChannelMapFiles;
+    typedef std::unordered_map<std::string, FormattingChannel*> ChannelMapConsole;
 
-        template<class AppenderImpl>
-        void RegisterAppender()
-        {
-            using Index = typename AppenderImpl::TypeIndex;
-            RegisterAppender(Index::value, &CreateAppender<AppenderImpl>);
-        }
+    FormattingChannel* GetFileChannel(std::string ChannelName);
+    FormattingChannel* GetConsoleChannel();
+    void AddFileChannel(std::string ChannelName, FormattingChannel* channel);
+    void AddConsoleChannel(std::string ChannelName, FormattingChannel* channel);
+    void ClearnAllChannels();
+    std::string GetChannelFromLogger(std::string LoggerName);
 
-        std::string const& GetLogsDir() const { return m_logsDir; }
-        std::string const& GetLogsTimestamp() const { return m_logsTimestamp; }
+    void _Write(std::string const& filter, LogLevel const level, std::string const& message);
+    void _writeCommand(std::string const message, std::string const accountid);
 
-    private:
-        static std::string GetTimestampStr();
-        void write(std::unique_ptr<LogMessage>&& msg) const;
+    void outMessage(std::string const& filter, LogLevel const level, std::string&& message);
+    void outCommand(std::string&& message, std::string&& AccountID);
+    void outError(std::string&& message);
+    std::string GetDynamicFileName(std::string ChannelName, std::string Arg);
 
-        Logger const* GetLoggerByType(std::string const& type) const;
-        Appender* GetAppenderByName(std::string const& name);
-        uint8 NextAppenderId();
-        void CreateAppenderFromConfig(std::string const& name);
-        void CreateLoggerFromConfig(std::string const& name);
-        void ReadAppendersFromConfig();
-        void ReadLoggersFromConfig();
-        void RegisterAppender(uint8 index, AppenderCreatorFn appenderCreateFn);
-        void outMessage(std::string const& filter, LogLevel level, std::string&& message);
-        void outCommand(std::string&& message, std::string&& param1);
+    void CreateLoggerFromConfig(std::string const& ConfigLoggerName);
+    void CreateChannelsFromConfig(std::string const& LogChannelName);
+    void ReadLoggersFromConfig();
+    void ReadChannelsFromConfig();
+    void LoadFromConfig();
 
-        std::unordered_map<uint8, AppenderCreatorFn> appenderFactory;
-        std::unordered_map<uint8, std::unique_ptr<Appender>> appenders;
-        std::unordered_map<std::string, std::unique_ptr<Logger>> loggers;
-        uint8 AppenderId;
-        LogLevel lowestLogLevel;
+    // For console logger
+    void InitColorsForConsoleLogger(std::string ListColors);
+    bool IsColored() { return _Colored; }
+    ColorTypes GetColorForLevel(LogLevel Level);
+    bool            _Colored;
+    ColorTypes      _Colors[LOG_LEVEL_MAX];
+    std::string _consoleChannel;
 
-        std::string m_logsDir;
-        std::string m_logsTimestamp;
+    void InitLogsDir();
+    void CreateLogger(std::string Name, LogLevel level, std::string FileChannelName);
+    std::string m_logsDir;
 
-        Warhead::Asio::IoContext* _ioContext;
-        Warhead::Asio::Strand* _strand;
+    ChannelMapFiles _ChannelMapFiles;
+    ChannelMapConsole _ChannelMapConsole;
+
+    std::string GetPositionOptions(std::string Options, uint8 Position);
 };
 
 #define sLog Log::instance()
 
-#define LOG_EXCEPTION_FREE(filterType__, level__, ...) \
-    { \
-        try \
-        { \
-            sLog->outMessage(filterType__, level__, __VA_ARGS__); \
-        } \
-        catch (std::exception& e) \
-        { \
-            sLog->outMessage("server", LOG_LEVEL_ERROR, "Wrong format occurred (%s) at %s:%u.", \
-                e.what(), __FILE__, __LINE__); \
-        } \
-    }
+#define LOG_EXCEPTION_FREE(filterType__, level__, ...) sLog->outMessage(filterType__, level__, __VA_ARGS__)
 
-#ifdef PERFORMANCE_PROFILING
-#define WC_LOG_MESSAGE_BODY(filterType__, level__, ...) ((void)0)
-#elif WARHEAD_PLATFORM != WARHEAD_PLATFORM_WINDOWS
-void check_args(char const*, ...) ATTR_PRINTF(1, 2);
-void check_args(std::string const&, ...);
-
-// This will catch format errors on build time
-#define WC_LOG_MESSAGE_BODY(filterType__, level__, ...)                 \
-        do {                                                            \
-            if (sLog->ShouldLog(filterType__, level__))                 \
-            {                                                           \
-                if (false)                                              \
-                    check_args(__VA_ARGS__);                            \
-                                                                        \
-                LOG_EXCEPTION_FREE(filterType__, level__, __VA_ARGS__); \
-            }                                                           \
-        } while (0)
-#else
-#define WC_LOG_MESSAGE_BODY(filterType__, level__, ...)                 \
-        __pragma(warning(push))                                         \
-        __pragma(warning(disable:4127))                                 \
-        do {                                                            \
-            if (sLog->ShouldLog(filterType__, level__))                 \
-                LOG_EXCEPTION_FREE(filterType__, level__, __VA_ARGS__); \
-        } while (0)                                                     \
-        __pragma(warning(pop))
-#endif
-
-#define WC_LOG_TRACE(filterType__, ...) \
-    WC_LOG_MESSAGE_BODY(filterType__, LOG_LEVEL_TRACE, __VA_ARGS__)
-
-#define WC_LOG_DEBUG(filterType__, ...) \
-    WC_LOG_MESSAGE_BODY(filterType__, LOG_LEVEL_DEBUG, __VA_ARGS__)
-
-#define WC_LOG_INFO(filterType__, ...)  \
-    WC_LOG_MESSAGE_BODY(filterType__, LOG_LEVEL_INFO, __VA_ARGS__)
-
-#define WC_LOG_WARN(filterType__, ...)  \
-    WC_LOG_MESSAGE_BODY(filterType__, LOG_LEVEL_WARN, __VA_ARGS__)
-
-#define WC_LOG_ERROR(filterType__, ...) \
-    WC_LOG_MESSAGE_BODY(filterType__, LOG_LEVEL_ERROR, __VA_ARGS__)
-
+// Fatal - 1
 #define WC_LOG_FATAL(filterType__, ...) \
-    WC_LOG_MESSAGE_BODY(filterType__, LOG_LEVEL_FATAL, __VA_ARGS__)
+    LOG_EXCEPTION_FREE(filterType__, LOG_LEVEL_FATAL, __VA_ARGS__)
+
+// Critical - 2
+#define WC_LOG_CRIT(filterType__, ...) \
+    LOG_EXCEPTION_FREE(filterType__, LOG_LEVEL_CRITICAL, __VA_ARGS__)
+
+// Error - 3
+#define WC_LOG_ERROR(filterType__, ...) \
+    LOG_EXCEPTION_FREE(filterType__, LOG_LEVEL_ERROR, __VA_ARGS__)
+
+// Warning - 4
+#define WC_LOG_WARN(filterType__, ...)  \
+    LOG_EXCEPTION_FREE(filterType__, LOG_LEVEL_WARNING, __VA_ARGS__)
+
+// Notice - 5
+#define WC_LOG_NOTICE(filterType__, ...)  \
+    LOG_EXCEPTION_FREE(filterType__, LOG_LEVEL_WARNING, __VA_ARGS__)
+
+// Info - 6
+#define WC_LOG_INFO(filterType__, ...)  \
+    LOG_EXCEPTION_FREE(filterType__, LOG_LEVEL_INFO, __VA_ARGS__)
+
+// Debug - 7
+#define WC_LOG_DEBUG(filterType__, ...) \
+    LOG_EXCEPTION_FREE(filterType__, LOG_LEVEL_DEBUG, __VA_ARGS__)
+
+// Trace - 8
+#define WC_LOG_TRACE(filterType__, ...) \
+    LOG_EXCEPTION_FREE(filterType__, LOG_LEVEL_TRACE, __VA_ARGS__)
 
 #endif

@@ -22,7 +22,6 @@
 #include "Errors.h"
 #include "GitRevision.h"
 #include "Log.h"
-#include "LogMessage.h"
 #include "MapTree.h"
 #include "ModelInstance.h"
 #include "Util.h"

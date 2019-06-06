@@ -457,7 +457,7 @@ void World::LoadConfigSettings(bool reload)
             WC_LOG_ERROR("misc", "World settings reload fail: %s.", configError.c_str());
             return;
         }
-        sLog->LoadFromConfig();
+        //sLog->LoadFromConfig();
         sMetric->LoadFromConfigs();
     }
 
@@ -2156,8 +2156,8 @@ void World::SetInitialWorldSettings()
 
     WC_METRIC_EVENT("events", "World initialized", "World initialized in " + std::to_string(startupDuration / 60000) + " minutes " + std::to_string((startupDuration % 60000) / 1000) + " seconds");
 
-    if (uint32 realmId = sConfigMgr->GetIntDefault("RealmID", 0)) // 0 reserved for auth
-        sLog->SetRealmId(realmId);
+    //if (uint32 realmId = sConfigMgr->GetIntDefault("RealmID", 0)) // 0 reserved for auth
+        //sLog->SetRealmId(realmId);
 }
 
 void World::DetectDBCLang()

@@ -54,7 +54,7 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 else()
   target_compile_options(warhead-no-warning-interface
     INTERFACE
-      -w)
+      -Wno-everything)
 endif()
 
 # An interface library to change the default behaviour

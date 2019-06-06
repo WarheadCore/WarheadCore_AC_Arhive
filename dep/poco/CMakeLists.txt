@@ -123,9 +123,29 @@ POCO_HEADERS_AUTO( SRCS ${HDRS_G})
 add_library(Poco STATIC 
   ${SRCS})
 
+# An interface used for silencing all warnings
+add_library(poco-no-warning-interface INTERFACE)
+
+if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+  target_compile_options(poco-no-warning-interface
+    INTERFACE
+      /W0)
+else()
+  target_compile_options(poco-no-warning-interface
+    INTERFACE
+      -w)
+endif()
+
 target_link_libraries(Poco
   PRIVATE
-    warhead-default-interface)
+    warhead-default-interface
+    poco-no-warning-interface)
+
+if(WIN32)
+target_link_libraries(Poco
+  PRIVATE
+    iphlpapi)
+endif()
 
 target_include_directories(Poco
   PUBLIC

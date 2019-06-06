@@ -141,7 +141,8 @@ public:
 		}
 	#endif // TODO: demangle other compilers
 #endif
-		return name;
+        (void)full;
+        return name;
 	}
 
 	static std::string backtrace(int skipEnd = 1, int skipBegin = 0, int stackSize = 128, int bufSize = 1024);

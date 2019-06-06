@@ -21,7 +21,6 @@
 /// \file
 
 #include "Common.h"
-#include "AppenderDB.h"
 #include "AsyncAcceptor.h"
 #include "Banner.h"
 #include "BattlegroundMgr.h"
@@ -66,7 +65,7 @@ namespace fs = boost::filesystem;
     #define _WARHEAD_CORE_CONFIG  "worldserver.conf"
 #endif
 
-#define WORLD_SLEEP_CONST 50
+#define WORLD_SLEEP_CONST 10
 
 #ifdef _WIN32
 #include "ServiceWin32.h"
@@ -141,14 +140,13 @@ extern int main(int argc, char** argv)
                                  configError))
     {
         printf("Error in config file: %s\n", configError.c_str());
+        std::this_thread::sleep_for(std::chrono::seconds(5));
         return 1;
     }
 
     std::shared_ptr<Warhead::Asio::IoContext> ioContext = std::make_shared<Warhead::Asio::IoContext>();
 
-    sLog->RegisterAppender<AppenderDB>();
-    // If logs are supposed to be handled async then we need to pass the IoContext into the Log singleton
-    sLog->Initialize(sConfigMgr->GetBoolDefault("Log.Async.Enable", false) ? ioContext.get() : nullptr);
+    sLog->Initialize();
 
     Warhead::Banner::Show("worldserver-daemon",
         [](char const* text)
@@ -340,8 +338,6 @@ extern int main(int argc, char** argv)
 
     // Shutdown starts here
     threadPool.reset();
-
-    sLog->SetSynchronous();
 
     sScriptMgr->OnShutdown();
 

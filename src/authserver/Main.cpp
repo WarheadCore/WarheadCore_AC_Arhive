@@ -24,7 +24,6 @@
 * authentication server
 */
 
-#include "AppenderDB.h"
 #include "AuthSocketMgr.h"
 #include "Banner.h"
 #include "Config.h"
@@ -103,13 +102,13 @@ int main(int argc, char** argv)
                                  configError))
     {
         printf("Error in config file: %s\n", configError.c_str());
+        std::this_thread::sleep_for(std::chrono::seconds(5));
         return 1;
     }
 
-    sLog->RegisterAppender<AppenderDB>();
-    sLog->Initialize(nullptr);
+    sLog->Initialize();
 
-    Warhead::Banner::Show("authserver",
+    Warhead::Banner::Show("authserver-daemon",
         [](char const* text)
         {
             WC_LOG_INFO("server.authserver", "%s", text);
@@ -238,7 +237,6 @@ bool StartDB()
         return false;
 
     WC_LOG_INFO("server.authserver", "Started auth database connection pool.");
-    sLog->SetRealmId(0); // Enables DB appenders when realm is set.
     return true;
 }
 
