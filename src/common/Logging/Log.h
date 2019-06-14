@@ -32,16 +32,10 @@ using Poco::FormattingChannel;
 class WC_COMMON_API Log
 {
 public:
-    Log();
-    ~Log();
-
     static Log* instance();
 
     void Initialize();
 
-    void SetColor(bool stdout_stream, ColorTypes color);
-    void ResetColor(bool stdout_stream);
-    
     bool ShouldLog(std::string const& type, LogLevel level) const;
 
     template<typename Format, typename... Args>
@@ -53,10 +47,10 @@ public:
     template<typename Format, typename... Args>
     void outCommand(uint32 account, Format&& fmt, Args&& ... args)
     {
-        outCommand(Warhead::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...), std::to_string(account));
+        outCommand(std::to_string(account), Warhead::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
     }
 
-    void outCharDump(char const* str, uint32 accountId, uint64 guid, char const* name);
+    void outCharDump(std::string const& str, uint32 accountId, uint64 guid, std::string const& name);
 
     std::string const& GetLogsDir() const { return m_logsDir; }
 
@@ -81,10 +75,11 @@ private:
     void _writeCommand(std::string const message, std::string const accountid);
 
     void outMessage(std::string const& filter, LogLevel const level, std::string&& message);
-    void outCommand(std::string&& message, std::string&& AccountID);
+    void outCommand(std::string&& AccountID, std::string&& message);
     void outError(std::string&& message);
     std::string GetDynamicFileName(std::string ChannelName, std::string Arg);
 
+    void CreateLogger(std::string Name, LogLevel level, std::string FileChannelName);
     void CreateLoggerFromConfig(std::string const& ConfigLoggerName);
     void CreateChannelsFromConfig(std::string const& LogChannelName);
     void ReadLoggersFromConfig();
@@ -92,21 +87,32 @@ private:
     void LoadFromConfig();
 
     // For console logger
+    void SetColor(bool stdout_stream, ColorTypes color);
+    void ResetColor(bool stdout_stream);
     void InitColorsForConsoleLogger(std::string ListColors);
     bool IsColored() { return _Colored; }
     ColorTypes GetColorForLevel(LogLevel Level);
-    bool            _Colored;
-    ColorTypes      _Colors[LOG_LEVEL_MAX];
+    bool _Colored;
+    ColorTypes _Colors[LOG_LEVEL_MAX];
     std::string _consoleChannel;
 
     void InitLogsDir();
-    void CreateLogger(std::string Name, LogLevel level, std::string FileChannelName);
     std::string m_logsDir;
 
     ChannelMapFiles _ChannelMapFiles;
     ChannelMapConsole _ChannelMapConsole;
 
     std::string GetPositionOptions(std::string Options, uint8 Position);
+
+    // Const loggers name
+    std::string const LOGGER_ROOT = "root";
+    std::string const LOGGER_GM = "commands.gm";
+    std::string const LOGGER_GM_DYNAMIC = "commands.gm.dynamic";
+    std::string const LOGGER_PLAYER_DUMP = "entities.player.dump";
+
+    // Prefix's
+    std::string const PREFIX_LOGGER = "Logger.";
+    std::string const PREFIX_CHANNEL = "LogChannel.";
 };
 
 #define sLog Log::instance()
@@ -144,5 +150,11 @@ private:
 // Trace - 8
 #define WC_LOG_TRACE(filterType__, ...) \
     LOG_EXCEPTION_FREE(filterType__, LOG_LEVEL_TRACE, __VA_ARGS__)
+
+#define WC_LOG_CHAR_DUMP(message__, accountId__, guid__, name__) \
+    sLog->outCharDump(message__, accountId__, guid__, name__)
+
+#define WC_LOG_GM(accountId__, ...) \
+    sLog->outCommand(accountId__, __VA_ARGS__)
 
 #endif

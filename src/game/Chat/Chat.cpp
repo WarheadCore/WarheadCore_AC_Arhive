@@ -296,7 +296,7 @@ bool ChatHandler::ExecuteCommandInTable(std::vector<ChatCommand> const& table, c
                         zoneName = zone->area_name[locale];
                 }
 
-                sLog->outCommand(m_session->GetAccountId(), "Command: %s [Player: %s (%s) (Account: %u) X: %f Y: %f Z: %f Map: %u (%s) Area: %u (%s) Zone: %s Selected: %s (%s)]",
+                WC_LOG_GM(m_session->GetAccountId(), "Command: %s [Player: %s (%s) (Account: %u) X: %f Y: %f Z: %f Map: %u (%s) Area: %u (%s) Zone: %s Selected: %s (%s)]",
                     fullcmd.c_str(), player->GetName().c_str(), player->GetGUID().ToString().c_str(),
                     m_session->GetAccountId(), player->GetPositionX(), player->GetPositionY(),
                     player->GetPositionZ(), player->GetMapId(),

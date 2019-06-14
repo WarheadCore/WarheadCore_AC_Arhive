@@ -31,16 +31,6 @@
 
 using namespace Poco;
 
-Log::Log()
-{
-
-}
-
-Log::~Log()
-{
-
-}
-
 Log* Log::instance()
 {
     static Log instance;
@@ -52,51 +42,73 @@ void Log::Initialize()
     LoadFromConfig();
 }
 
-void Log::InitColorsForConsoleLogger(std::string ListColors)
+void Log::LoadFromConfig()
 {
-    if (ListColors.empty())
-    {
-        _Colored = false;
-        return;
-    }
+    Logger::shutdown();
 
-    int color[LOG_LEVEL_MAX];
-
-    std::istringstream ss(ListColors);
-
-    for (uint8 i = 1; i < LOG_LEVEL_MAX; ++i)
-    {
-        ss >> color[i];
-
-        if (!ss)
-            return;
-
-        if (color[i] < 0 || color[i] >= COLOR_TYPE_END)
-            return;
-    }
-
-    for (uint8 i = 0; i < LOG_LEVEL_MAX; ++i)
-        _Colors[i] = ColorTypes(color[i]);
-
-    _Colored = true;
+    ClearnAllChannels();
+    InitLogsDir();
+    ReadChannelsFromConfig();
+    ReadLoggersFromConfig();
 }
 
-ColorTypes Log::GetColorForLevel(LogLevel Level)
+void Log::InitLogsDir()
 {
-    if (_Colored)
-        return _Colors[Level];
+    m_logsDir = sConfigMgr->GetStringDefault("LogsDir", "");
 
-    return ColorTypes::WHITE;
+    if (!m_logsDir.empty())
+        if ((m_logsDir.at(m_logsDir.length() - 1) != '/') && (m_logsDir.at(m_logsDir.length() - 1) != '\\'))
+            m_logsDir.push_back('/');
+
+    Path path(m_logsDir);
+
+    if (!path.isDirectory())
+        m_logsDir = "";
+}
+
+void Log::ReadLoggersFromConfig()
+{
+    std::vector<std::string> keys = sConfigMgr->GetKeysByString(PREFIX_LOGGER);
+    for (std::string const& loggerName : keys)
+        CreateLoggerFromConfig(loggerName);
+}
+
+void Log::ReadChannelsFromConfig()
+{
+    std::vector<std::string> keys = sConfigMgr->GetKeysByString(PREFIX_CHANNEL);
+    for (std::string const& channelName : keys)
+        CreateChannelsFromConfig(channelName);
+}
+
+std::string Log::GetPositionOptions(std::string Options, uint8 Position)
+{
+    Tokenizer tokens(Options, ',');
+    if (tokens.size() < Position + 1)
+        return "";
+
+    return tokens[Position];
+}
+
+bool Log::ShouldLog(std::string const& type, LogLevel level) const
+{
+    std::string _filter = type;
+
+    if (!Logger::has(_filter))
+        _filter = LOGGER_ROOT;
+
+    return Logger::get(_filter).getLevel() >= level;
 }
 
 void Log::_Write(std::string const& filter, LogLevel const level, std::string const& message)
 {
-    if (!ShouldLog(filter, level))
-        return;
-
     bool stdout_stream = (level != LOG_LEVEL_ERROR || level != LOG_LEVEL_FATAL || level != LOG_LEVEL_CRITICAL);
 
-    Logger& logger = Logger::get(filter);
+    std::string _filter = filter;
+
+    if (!Logger::has(_filter))
+        _filter = LOGGER_ROOT;
+
+    Logger& logger = Logger::get(_filter);
 
     try
     {
@@ -144,14 +156,11 @@ void Log::_Write(std::string const& filter, LogLevel const level, std::string co
 
 std::string Log::GetDynamicFileName(std::string ChannelName, std::string Arg)
 {
-    Tokenizer tokens(sConfigMgr->GetStringDefault("LogChannel." + ChannelName, ""), ',');
-
-    // If bad file name or bad config option
-    if (tokens.size() < 3)
+    if (ChannelName.empty())
         return "";
 
     char namebuf[WARHEAD_PATH_MAX];
-    snprintf(namebuf, WARHEAD_PATH_MAX, tokens[3], Arg.c_str());
+    snprintf(namebuf, WARHEAD_PATH_MAX, GetPositionOptions(sConfigMgr->GetStringDefault(PREFIX_CHANNEL + ChannelName, ""), 3).c_str(), Arg.c_str());
 
     return namebuf;
 }
@@ -196,11 +205,7 @@ void Log::ClearnAllChannels()
 
 std::string Log::GetChannelFromLogger(std::string LoggerName)
 {
-    std::string Temp = LoggerName;
-    if (Temp.empty())
-        Temp = "root";
-
-    std::string LoggerOption = sConfigMgr->GetStringDefault("Logger." + Temp, "6,Server");
+    std::string LoggerOption = sConfigMgr->GetStringDefault(PREFIX_LOGGER + LoggerName, "6,Server");
 
     Tokenizer tokens(LoggerOption, ',');
 
@@ -210,35 +215,210 @@ std::string Log::GetChannelFromLogger(std::string LoggerName)
     return "";
 }
 
+void Log::CreateLogger(std::string Name, LogLevel level, std::string FileChannelName)
+{
+    AutoPtr<SplitterChannel> _Channel(new SplitterChannel);
+
+    // Add console channel (default)
+    _Channel->addChannel(GetConsoleChannel());
+
+    // Add file channel if exist
+    if (GetFileChannel(FileChannelName))
+        _Channel->addChannel(GetFileChannel(FileChannelName));
+
+    try
+    {
+        Logger::create(Name, _Channel, (uint8)level);
+    }
+    catch (const std::exception& e)
+    {
+        outError("%s", e.what());
+    }
+}
+
+void Log::CreateLoggerFromConfig(std::string const& ConfigLoggerName)
+{
+    if (ConfigLoggerName.empty())
+        return;
+
+    std::string options = sConfigMgr->GetStringDefault(ConfigLoggerName, "");
+    std::string LoggerName = ConfigLoggerName.substr(PREFIX_LOGGER.length());
+
+    if (options.empty())
+    {
+        outError("Log::CreateLoggerFromConfig: Missing config option Logger.%s\n", LoggerName.c_str());
+        return;
+    }
+
+    Tokenizer tokens(options, ',');
+
+    if (!tokens.size() || tokens.size() > LOGGER_OPTIONS_CHANNEL_NAME + 1)
+    {
+        outError("Bad config for Logger (%s)", LoggerName.c_str());
+        return;
+    }
+
+    LogLevel level = LogLevel(atoi(GetPositionOptions(options, LOGGER_OPTIONS_LOG_LEVEL).c_str()));
+    if (level >= LOG_LEVEL_MAX)
+    {
+        outError("Log::CreateLoggerFromConfig: Wrong Log Level for logger %s", LoggerName.c_str());
+        return;
+    }
+
+    std::string FileChannelName = GetPositionOptions(options, LOGGER_OPTIONS_CHANNEL_NAME);
+
+    CreateLogger(LoggerName, level, FileChannelName);
+}
+
+void Log::CreateChannelsFromConfig(std::string const& LogChannelName)
+{
+    if (LogChannelName.empty())
+        return;
+
+    std::string options = sConfigMgr->GetStringDefault(LogChannelName, "");
+    std::string ChannelName = LogChannelName.substr(PREFIX_CHANNEL.length());
+    
+    if (options.empty())
+    {
+        outError("Log::CreateLoggerFromConfig: Missing config option LogChannel.%s", ChannelName.c_str());
+        return;
+    }
+
+    Tokenizer tokens(options, ',');
+
+    if (tokens.size() < CHANNEL_OPTIONS_PATTERN + 1)
+    {
+        //fprintf(stderr, "Log::CreateLoggerFromConfig: Wrong config option Logger.%s=%s\n", LoggerName.c_str(), options.c_str());
+        outError("Log::CreateLoggerFromConfig: Wrong config option (< CHANNEL_OPTIONS_PATTERN) LogChannel.%s=%s\n", ChannelName.c_str(), options.c_str());
+        return;
+    }
+
+    if (tokens.size() > CHANNEL_OPTIONS_OPTION_4 + 1)
+    {
+        //fprintf(stderr, "Log::CreateLoggerFromConfig: Wrong config option Logger.%s=%s\n", LoggerName.c_str(), options.c_str());
+        outError("Log::CreateLoggerFromConfig: Wrong config option (> CHANNEL_OPTIONS_OPTION_4) LogChannel.%s=%s\n", ChannelName.c_str(), options.c_str());
+        return;
+    }
+
+    uint8 ChannelType = atoi(GetPositionOptions(options, CHANNEL_OPTIONS_TYPE).c_str());
+    if (ChannelType > CHANNEL_OPTIONS_TYPE_FILE)
+    {
+        outError("Log::CreateLoggerFromConfig: Wrong channel type for LogChannel.%s\n", ChannelName.c_str());
+        return;
+    }
+
+    std::string Times = GetPositionOptions(options, CHANNEL_OPTIONS_TIMES);
+    if (Times.empty())
+    {
+        outError("Log::CreateLoggerFromConfig: Empty times for LogChannel.%s", ChannelName.c_str());
+        return;
+    }
+    
+    std::string Pattern = GetPositionOptions(options, CHANNEL_OPTIONS_PATTERN);
+    if (Pattern.empty())
+    {
+        outError("Log::CreateLoggerFromConfig: Empty pattern for LogChannel.%s", ChannelName.c_str());
+        return;
+    }
+
+    // Start configuration pattern channel
+    AutoPtr<PatternFormatter> _pattern(new PatternFormatter);
+
+    try
+    {
+        _pattern->setProperty("pattern", Pattern);
+        _pattern->setProperty("times", Times);
+    }
+    catch (const std::exception& e)
+    {
+        outError("%s\n", e.what());
+    }
+
+    if (ChannelType == CHANNEL_OPTIONS_TYPE_CONSOLE)
+    {
+        // Configuration console channel
+        AutoPtr<ConsoleChannel> _channel(new ConsoleChannel);
+
+        // Init Colors
+        InitColorsForConsoleLogger(GetPositionOptions(options, CHANNEL_OPTIONS_OPTION_1));
+
+        if (_consoleChannel.empty())
+        {
+            _consoleChannel = ChannelName;
+
+            AddConsoleChannel(ChannelName, new FormattingChannel(_pattern, _channel));
+        }
+    }
+    else if (ChannelType == CHANNEL_OPTIONS_TYPE_FILE)
+    {
+        if (tokens.size() < CHANNEL_OPTIONS_OPTION_1 + 1)
+        {
+            outError("Bad file name for LogChannel.%s", ChannelName.c_str());
+            return;
+        }
+
+        std::string FileName = GetPositionOptions(options, CHANNEL_OPTIONS_OPTION_1);
+        std::string RotateOnOpen = GetPositionOptions(options, CHANNEL_OPTIONS_OPTION_2);
+        std::string Rotation = GetPositionOptions(options, CHANNEL_OPTIONS_OPTION_3);
+        std::string Archive = GetPositionOptions(options, CHANNEL_OPTIONS_OPTION_4);
+
+        if (FileName.find("%s") == std::string::npos)
+        {
+            // Configuration file channel
+            AutoPtr<FileChannel> _channel(new FileChannel);
+
+            try
+            {
+                _channel->setProperty("path", m_logsDir + FileName);
+                _channel->setProperty("times", Times);
+
+                if (!RotateOnOpen.empty())
+                    _channel->setProperty("rotateOnOpen", RotateOnOpen);
+
+                if (!Rotation.empty())
+                    _channel->setProperty("rotation", Rotation);
+
+                if (!Archive.empty())
+                    _channel->setProperty("archive", Archive);
+            }
+            catch (const std::exception& e)
+            {
+                outError("%s\n", e.what());
+            }
+
+            AddFileChannel(ChannelName, new FormattingChannel(_pattern, _channel));
+        }
+    }
+}
+
 void Log::_writeCommand(std::string const message, std::string const accountid)
 {
-    std::string LoggerGMCommands = "commands.gm";
-    std::string GMChannelName = GetChannelFromLogger(LoggerGMCommands);
+    std::string GMChannelName = GetChannelFromLogger(LOGGER_GM);
 
     // If dynamic file for GM commands
     if (!GetFileChannel(GMChannelName))
     {
-        std::string LoggerOption = sConfigMgr->GetStringDefault("LogChannel." + GMChannelName, "");
+        std::string LoggerOption = sConfigMgr->GetStringDefault(PREFIX_CHANNEL + GMChannelName, "");
         if (LoggerOption.empty())
             return;
 
         Tokenizer tokens(LoggerOption, ',');
-        if (tokens.size() < 2)
+        if (tokens.size() < LOGGER_OPTIONS_CHANNEL_NAME + 1)
             return;
 
         // Get options
-        std::string Times = GetPositionOptions(LoggerOption, 1);
-        std::string Pattern = GetPositionOptions(LoggerOption, 2);
-        std::string RotateOnOpen = GetPositionOptions(LoggerOption, 4);
-        std::string Rotation = GetPositionOptions(LoggerOption, 5);
-        std::string Archive = GetPositionOptions(LoggerOption, 6);
+        std::string Times = GetPositionOptions(LoggerOption, CHANNEL_OPTIONS_TIMES);
+        std::string Pattern = GetPositionOptions(LoggerOption, CHANNEL_OPTIONS_PATTERN);
+        std::string RotateOnOpen = GetPositionOptions(LoggerOption, CHANNEL_OPTIONS_OPTION_2);
+        std::string Rotation = GetPositionOptions(LoggerOption, CHANNEL_OPTIONS_OPTION_3);
+        std::string Archive = GetPositionOptions(LoggerOption, CHANNEL_OPTIONS_OPTION_4);
 
         // Get filename
         std::string DynamicFileName = GetDynamicFileName(GMChannelName, accountid);
 
         // Configuration pattern channel        
         AutoPtr<PatternFormatter> _pattern(new PatternFormatter);
-        
+
         try
         {
             _pattern->setProperty("pattern", Pattern);
@@ -285,9 +465,10 @@ void Log::_writeCommand(std::string const message, std::string const accountid)
 
         try
         {
-            Logger::create("commands.gm.dynamic", SplitShannel);
-            _Write("commands.gm.dynamic", LOG_LEVEL_INFO, message);
-            Logger::destroy("commands.gm.dynamic");
+            Logger::create(LOGGER_GM_DYNAMIC, SplitShannel);
+            outMessage(LOGGER_GM_DYNAMIC, LOG_LEVEL_INFO, message);
+            //_Write(LOGGER_GM_DYNAMIC, LOG_LEVEL_INFO, message);
+            Logger::destroy(LOGGER_GM_DYNAMIC);
         }
         catch (const std::exception& e)
         {
@@ -298,13 +479,82 @@ void Log::_writeCommand(std::string const message, std::string const accountid)
     {
         try
         {
-            Logger::get("commands.gm").information(message);
+            Logger::get(LOGGER_GM).information(message);
         }
         catch (const std::exception& e)
         {
             outError("%s", e.what());
         }
     }
+}
+
+void Log::outMessage(std::string const& filter, LogLevel const level, std::string&& message)
+{
+    if (!ShouldLog(filter, level))
+        return;
+
+    _Write(filter, level, message);
+}
+
+void Log::outCommand(std::string&& message, std::string&& AccountID)
+{
+    if (!ShouldLog(LOGGER_GM, LOG_LEVEL_INFO))
+        return;
+
+    _writeCommand(message, AccountID);
+}
+
+void Log::outError(std::string&& message)
+{
+    sLog->SetColor(false, ColorTypes::RED);
+    printf("%s\n", message.c_str());
+    sLog->ResetColor(false);
+}
+
+void Log::outCharDump(std::string const& str, uint32 accountId, uint64 guid, std::string const& name)
+{
+    if (str.empty() || !ShouldLog(LOGGER_PLAYER_DUMP, LOG_LEVEL_INFO))
+        return;
+
+    _Write(LOGGER_PLAYER_DUMP, LOG_LEVEL_INFO, Warhead::StringFormat("== START DUMP ==\n(Account: %u. Guid: %u. Name: %s)\n%s\n== END DUMP ==\n", accountId, guid, name, str));
+}
+
+// Color console
+void Log::InitColorsForConsoleLogger(std::string ListColors)
+{
+    if (ListColors.empty())
+    {
+        _Colored = false;
+        return;
+    }
+
+    int color[LOG_LEVEL_MAX];
+
+    std::istringstream ss(ListColors);
+
+    for (uint8 i = 1; i < LOG_LEVEL_MAX; ++i)
+    {
+        ss >> color[i];
+
+        if (!ss)
+            return;
+
+        if (color[i] < 0 || color[i] >= COLOR_TYPE_END)
+            return;
+    }
+
+    for (uint8 i = 0; i < LOG_LEVEL_MAX; ++i)
+        _Colors[i] = ColorTypes(color[i]);
+
+    _Colored = true;
+}
+
+ColorTypes Log::GetColorForLevel(LogLevel Level)
+{
+    if (_Colored)
+        return _Colors[Level];
+
+    return ColorTypes::WHITE;
 }
 
 void Log::SetColor(bool stdout_stream, ColorTypes color)
@@ -384,290 +634,4 @@ void Log::ResetColor(bool stdout_stream)
     fprintf(( stdout_stream ? stdout : stderr ), "\x1b[0m");
 #endif
 }
-
-void Log::outMessage(std::string const& filter, LogLevel const level, std::string&& message)
-{
-    _Write(filter, level, message);
-}
-
-void Log::outCommand(std::string&& message, std::string&& AccountID)
-{
-    _writeCommand(message, AccountID);
-}
-
-void Log::CreateLogger(std::string Name, LogLevel level, std::string FileChannelName)
-{
-    AutoPtr<SplitterChannel> _SC(new SplitterChannel);
-
-    //Add console channel (default)
-    _SC->addChannel(GetConsoleChannel());
-
-    // Add file channel
-    if (GetFileChannel(FileChannelName))
-        _SC->addChannel(GetFileChannel(FileChannelName));
-
-    try
-    {
-        Logger::create(Name, _SC, (uint8)level);
-    }
-    catch (const std::exception& e)
-    {
-        outError("%s", e.what());
-    }
-}
-
-void Log::CreateLoggerFromConfig(std::string const& ConfigLoggerName)
-{
-    if (ConfigLoggerName.empty())
-        return;
-
-    enum LoggerOptions
-    {
-        LOGGER_OPTIONS_LOG_LEVEL,
-        LOGGER_OPTIONS_CHANNEL_NAME
-    };
-
-    std::string options = sConfigMgr->GetStringDefault(ConfigLoggerName, "");
-    std::string LoggerName = ConfigLoggerName.substr(7);
-    if (LoggerName == "root")
-        LoggerName = "";
-
-    if (Logger::has(LoggerName))
-    {
-        outError("Is exist - %s\n", LoggerName.c_str());
-        return;
-    }
-
-    if (options.empty())
-    {
-        outError("Log::CreateLoggerFromConfig: Missing config option Logger.%s\n", LoggerName.c_str());
-        return;
-    }
-
-    Tokenizer tokens(options, ',');
-
-    if (!tokens.size() || tokens.size() > LOGGER_OPTIONS_CHANNEL_NAME + 1)
-    {
-        //fprintf(stderr, "Log::CreateLoggerFromConfig: Wrong config option Logger.%s=%s\n", LoggerName.c_str(), options.c_str());
-        outError("Bad config for Logger (%s)", LoggerName.c_str());
-        return;
-    }
-
-    LogLevel level = LogLevel(atoi(GetPositionOptions(options, LOGGER_OPTIONS_LOG_LEVEL).c_str()));
-    if (level >= LOG_LEVEL_MAX)
-    {
-        //fprintf(stderr, "Log::CreateLoggerFromConfig: Wrong Log Level for logger %s\n", LoggerName.c_str());
-        outError("Log::CreateLoggerFromConfig: Wrong Log Level for logger %s", LoggerName.c_str());
-        return;
-    }
-
-    std::string FileChannelName = GetPositionOptions(options, LOGGER_OPTIONS_CHANNEL_NAME);
-
-    CreateLogger(LoggerName, level, FileChannelName);
-}
-
-std::string Log::GetPositionOptions(std::string Options, uint8 Position)
-{
-    Tokenizer tokens(Options, ',');
-    if (tokens.size() < Position + 1)
-        return "";
-
-    return tokens[Position];
-}
-
-void Log::CreateChannelsFromConfig(std::string const& LogChannelName)
-{
-    if (LogChannelName.empty())
-        return;
-
-    enum ChannelOptions
-    {
-        CHANNEL_OPTIONS_TYPE,
-        CHANNEL_OPTIONS_TIMES,
-        CHANNEL_OPTIONS_PATTERN,
-        CHANNEL_OPTIONS_OPTION_1,
-        CHANNEL_OPTIONS_OPTION_2,
-        CHANNEL_OPTIONS_OPTION_3,
-        CHANNEL_OPTIONS_OPTION_4
-    };
-
-    enum ChannelOptionsType
-    {
-        CHANNEL_OPTIONS_TYPE_CONSOLE = 1,
-        CHANNEL_OPTIONS_TYPE_FILE
-    };
-
-    std::string options = sConfigMgr->GetStringDefault(LogChannelName, "");
-    std::string ChannelName = LogChannelName.substr(11);
-    
-    if (options.empty())
-    {
-        outError("Log::CreateLoggerFromConfig: Missing config option LogChannel.%s", ChannelName.c_str());
-        return;
-    }
-
-    Tokenizer tokens(options, ',');
-
-    if (tokens.size() < CHANNEL_OPTIONS_PATTERN + 1)
-    {
-        //fprintf(stderr, "Log::CreateLoggerFromConfig: Wrong config option Logger.%s=%s\n", LoggerName.c_str(), options.c_str());
-        outError("Log::CreateLoggerFromConfig: Wrong config option (< CHANNEL_OPTIONS_PATTERN) LogChannel.%s=%s\n", ChannelName.c_str(), options.c_str());
-        return;
-    }
-
-    if (tokens.size() > CHANNEL_OPTIONS_OPTION_4 + 1)
-    {
-        //fprintf(stderr, "Log::CreateLoggerFromConfig: Wrong config option Logger.%s=%s\n", LoggerName.c_str(), options.c_str());
-        outError("Log::CreateLoggerFromConfig: Wrong config option (> CHANNEL_OPTIONS_OPTION_4) LogChannel.%s=%s\n", ChannelName.c_str(), options.c_str());
-        return;
-    }
-
-    uint8 ChannelType = atoi(GetPositionOptions(options, CHANNEL_OPTIONS_TYPE).c_str());
-    if (ChannelType > CHANNEL_OPTIONS_TYPE_FILE)
-    {
-        outError("Log::CreateLoggerFromConfig: Wrong channel type for LogChannel.%s\n", ChannelName.c_str());
-        return;
-    }
-
-    std::string Times = GetPositionOptions(options, CHANNEL_OPTIONS_TIMES);
-    if (Times.empty())
-    {
-        outError("Log::CreateLoggerFromConfig: Empty times for LogChannel.%s", ChannelName.c_str());
-        return;
-    }
-    
-    std::string Pattern = GetPositionOptions(options, CHANNEL_OPTIONS_PATTERN);
-    if (Pattern.empty())
-    {
-        outError("Log::CreateLoggerFromConfig: Empty pattern for LogChannel.%s", ChannelName.c_str());
-        return;
-    }
-
-    // Start configuration pattern channel
-    AutoPtr<PatternFormatter> _pattern(new PatternFormatter);
-
-    try
-    {
-        _pattern->setProperty("pattern", Pattern);
-        _pattern->setProperty("times", Times);
-    }
-    catch (const std::exception& e)
-    {
-        outError("%s\n", e.what());
-    }
-
-    if (ChannelType == CHANNEL_OPTIONS_TYPE_CONSOLE)
-    {
-        // Configuration console channel
-        AutoPtr<ConsoleChannel> _channel(new ConsoleChannel);
-
-        // Init Colors
-        InitColorsForConsoleLogger(GetPositionOptions(options, CHANNEL_OPTIONS_OPTION_1));
-
-        if (_consoleChannel.empty())
-        {
-            _consoleChannel = ChannelName;
-
-            AddConsoleChannel(ChannelName, new FormattingChannel(_pattern, _channel));
-        }
-    }
-    else if (ChannelType == CHANNEL_OPTIONS_TYPE_FILE)
-    {
-        if (tokens.size() < 4)
-        {
-            outError("Bad file name for LogChannel.%s", ChannelName.c_str());
-            return;
-        }
-
-        std::string FileName = GetPositionOptions(options, CHANNEL_OPTIONS_OPTION_1);
-        std::string RotateOnOpen = GetPositionOptions(options, CHANNEL_OPTIONS_OPTION_2);
-        std::string Rotation = GetPositionOptions(options, CHANNEL_OPTIONS_OPTION_3);
-        std::string Archive = GetPositionOptions(options, CHANNEL_OPTIONS_OPTION_4);
-
-        if (FileName.find("%s") == std::string::npos)
-        {
-            // Configuration file channel
-            AutoPtr<FileChannel> _channel(new FileChannel);
-
-            try
-            {
-                _channel->setProperty("path", m_logsDir + FileName);
-                _channel->setProperty("times", Times);
-
-                if (!RotateOnOpen.empty())
-                    _channel->setProperty("rotateOnOpen", RotateOnOpen);
-
-                if (!Rotation.empty())
-                    _channel->setProperty("rotation", Rotation);
-
-                if (!Archive.empty())
-                    _channel->setProperty("archive", Archive);
-            }
-            catch (const std::exception& e)
-            {
-                outError("%s\n", e.what());
-            }
-
-            AddFileChannel(ChannelName, new FormattingChannel(_pattern, _channel));
-        }
-    }
-}
-
-void Log::ReadLoggersFromConfig()
-{
-    std::vector<std::string> keys = sConfigMgr->GetKeysByString("Logger.");
-    for (std::string const& loggerName : keys)
-        CreateLoggerFromConfig(loggerName);
-}
-
-void Log::ReadChannelsFromConfig()
-{
-    std::vector<std::string> keys = sConfigMgr->GetKeysByString("LogChannel.");
-    for (std::string const& channelName : keys)
-        CreateChannelsFromConfig(channelName);
-}
-
-void Log::LoadFromConfig()
-{
-    Logger::shutdown();
-
-    ClearnAllChannels();
-    InitLogsDir();
-    ReadChannelsFromConfig();
-    ReadLoggersFromConfig();    
-}
-
-void Log::InitLogsDir()
-{
-    m_logsDir = sConfigMgr->GetStringDefault("LogsDir", "");
-
-    if (!m_logsDir.empty())
-        if ((m_logsDir.at(m_logsDir.length() - 1) != '/') && (m_logsDir.at(m_logsDir.length() - 1) != '\\'))
-            m_logsDir.push_back('/');
-
-    Path path(m_logsDir);
-
-    if (!path.isDirectory())
-        m_logsDir = "";
-}
-
-bool Log::ShouldLog(std::string const& type, LogLevel level) const
-{
-    LogLevel logLevel = (LogLevel)Logger::get(type).getLevel();
-    return logLevel != LOG_LEVEL_DISABLED && logLevel >= level;
-}
-
-void Log::outError(std::string&& message)
-{
-    sLog->SetColor(false, ColorTypes::RED);
-    printf("%s\n", message.c_str());
-    sLog->ResetColor(false);
-}
-
-void Log::outCharDump(char const* str, uint32 accountId, uint64 guid, char const* name)
-{
-    if (!str)
-        return;
-
-    _Write("entities.player.dump", LOG_LEVEL_INFO, Warhead::StringFormat("== START DUMP ==\n(Account: %u. Guid: %u. Name: %s)\n%s\n== END DUMP ==\n", accountId, guid, name, str));
-}
+// End color console

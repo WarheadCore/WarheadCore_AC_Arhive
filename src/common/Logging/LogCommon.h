@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LogCommon_h__
-#define LogCommon_h__
+#ifndef _LOG_COMMON_
+#define _LOG_COMMON_
 
 enum ColorTypes : uint8
 {
@@ -72,4 +72,29 @@ enum AppenderFlags
     APPENDER_FLAGS_MAKE_FILE_BACKUP              = 0x10
 };
 
-#endif // LogCommon_h__
+// For create LogChannel
+enum ChannelOptions : uint8
+{
+    CHANNEL_OPTIONS_TYPE,
+    CHANNEL_OPTIONS_TIMES,
+    CHANNEL_OPTIONS_PATTERN,
+    CHANNEL_OPTIONS_OPTION_1,
+    CHANNEL_OPTIONS_OPTION_2,
+    CHANNEL_OPTIONS_OPTION_3,
+    CHANNEL_OPTIONS_OPTION_4
+};
+
+enum ChannelOptionsType : uint8
+{
+    CHANNEL_OPTIONS_TYPE_CONSOLE = 1,
+    CHANNEL_OPTIONS_TYPE_FILE
+};
+
+// For create Logger
+enum LoggerOptions
+{
+    LOGGER_OPTIONS_LOG_LEVEL,
+    LOGGER_OPTIONS_CHANNEL_NAME
+};
+
+#endif // _LOG_COMMON_
