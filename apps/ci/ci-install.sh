@@ -2,20 +2,13 @@
 
 set -e
 
-echo "install OS deps (apt-get)"
+echo "--> Install OS deps (apt-get)"
 bash ./acore.sh "install-deps"
 
-if [ "$TRAVIS_BUILD_ID" = "1" ]
-then
-  echo "install clang-6.0"
-  sudo apt-get install clang-6.0
-elif [ "$TRAVIS_BUILD_ID" = "2" ]
-then
-  echo "install clang-7"
-  sudo apt-get install clang-7
-fi
+echo "--> Install clang-7"
+sudo apt-get install clang-7
 
-echo "create config.sh"
+echo "--> Create config.sh"
 cat >>conf/config.sh <<CONFIG_SH
 CCOMPILERC=$CCOMPILERC
 CCOMPILERCXX=$CCOMPILERCXX
@@ -23,12 +16,12 @@ MTHREADS=$(expr $(grep -c ^processor /proc/cpuinfo) + 2)
 CWARNINGS=ON
 CDEBUG=OFF
 CTYPE=Release
-CSCRIPTS=$1
+CSCRIPTS=ON
 CSERVERS=ON
 CTOOLS=ON
-CSCRIPTPCH=OFF
-CCOREPCH=OFF
-CCUSTOMOPTIONS='-DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_C_FLAGS="-Werror" -DCMAKE_CXX_FLAGS="-Werror"'
+CSCRIPTPCH=ON
+CCOREPCH=ON
+CCUSTOMOPTIONS='-DCMAKE_C_FLAGS="-Werror" -DCMAKE_CXX_FLAGS="-Werror"'
 DB_CHARACTERS_CONF="MYSQL_USER='root'; MYSQL_PASS='$DB_RND_NAME'; MYSQL_HOST='localhost';"
 DB_AUTH_CONF="MYSQL_USER='root'; MYSQL_PASS='$DB_RND_NAME'; MYSQL_HOST='localhost';"
 DB_WORLD_CONF="MYSQL_USER='root'; MYSQL_PASS='$DB_RND_NAME'; MYSQL_HOST='localhost';"

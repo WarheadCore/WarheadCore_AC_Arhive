@@ -2,8 +2,5 @@
 
 set -e
 
-echo "compile core"
-export CCACHE_CPP2=true
-ccache -s
+echo "--> Compile core"
 timeout 2700 bash ./acore.sh "compiler" "all"
-ccache -s
