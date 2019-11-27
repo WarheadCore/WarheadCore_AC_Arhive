@@ -75,6 +75,8 @@ add_library(Foundation STATIC
 
 add_library(Poco::Foundation ALIAS Foundation)
 
+set_target_properties(Foundation PROPERTIES LINKER_LANGUAGE CXX)
+
 target_link_libraries(Foundation
   PRIVATE
     acore-dependency-interface)
@@ -89,44 +91,44 @@ target_compile_features(Foundation
     cxx_defaulted_move_initializers)
   
 if(WIN32)
-  target_compile_definitions(Foundation PRIVATE POCO_OS_FAMILY_WINDOWS UNICODE _UNICODE)
+  target_compile_definitions(Foundation PUBLIC POCO_NO_UNWINDOWS POCO_NO_AUTOMATIC_LIBS)
   target_link_libraries(Foundation PRIVATE iphlpapi)
 endif()
 
-# if (UNIX )
-#   target_compile_definitions(Foundation 
-#     PUBLIC 
-#       POCO_OS_FAMILY_UNIX)
+if (UNIX)
+  target_compile_definitions(Foundation 
+    PRIVATE
+      POCO_OS_FAMILY_UNIX)
   
-#   if (APPLE)
-#   target_compile_definitions(Foundation 
-#     PUBLIC 
-#       POCO_HAVE_IPv6 
-#       POCO_NO_STAT64)
+  if (APPLE)
+  target_compile_definitions(Foundation 
+    PRIVATE 
+      POCO_HAVE_IPv6 
+      POCO_NO_STAT64)
   
-#   target_link_libraries(Foundation 
-#     PUBLIC 
-#       ${CMAKE_DL_LIBS})
-#   else()
-#   target_compile_definitions(Foundation 
-#     PUBLIC 
-#       _REENTRANT 
-#       _THREAD_SAFE 
-#       _LARGEFILE64_SOURCE 
-#       _FILE_OFFSET_BITS=64)
+  target_link_libraries(Foundation 
+    PRIVATE 
+      ${CMAKE_DL_LIBS})
+  else()
+  target_compile_definitions(Foundation 
+    PRIVATE 
+      _REENTRANT 
+      _THREAD_SAFE 
+      _LARGEFILE64_SOURCE 
+      _FILE_OFFSET_BITS=64)
 
-#   target_compile_definitions(Foundation 
-#     PUBLIC
-#       _XOPEN_SOURCE=500
-#       POCO_HAVE_FD_EPOLL)
+  target_compile_definitions(Foundation 
+    PRIVATE
+      _XOPEN_SOURCE=500
+      POCO_HAVE_FD_EPOLL)
 
-#   target_link_libraries(Foundation
-#    PUBLIC 
-#     pthread 
-#     ${CMAKE_DL_LIBS} 
-#     rt)
-#   endif(APPLE)
-# endif(UNIX)
+  target_link_libraries(Foundation
+    PRIVATE 
+      pthread 
+      ${CMAKE_DL_LIBS} 
+      rt)
+  endif(APPLE)
+endif(UNIX)
 
 if(CMAKE_COMPILER_IS_MINGW)
   target_compile_definitions(Foundation
@@ -161,4 +163,4 @@ if (MINGW)
       POCO_THREAD_STACK_SIZE)
 endif()
 
-set_target_properties(Foundation PROPERTIES LINKER_LANGUAGE CXX)
+
