@@ -62,7 +62,7 @@ namespace MMAP
         }
 
         // load and init dtNavMesh - read parameters from file
-        std::string fileName = ACORE::StringFormat(MAP_FILE_NAME_FORMAT, sConfigMgr->GetStringDefault("DataDir", ".").c_str(), mapId);
+        std::string fileName = acore::StringFormat(MAP_FILE_NAME_FORMAT, sConfigMgr->GetStringDefault("DataDir", ".").c_str(), mapId);
         FILE* file = fopen(fileName.c_str(), "rb");
         if (!file)
         {
@@ -125,7 +125,7 @@ namespace MMAP
         }
 
         // load this tile :: mmaps/MMMXXYY.mmtile
-        std::string fileName = ACORE::StringFormat(TILE_FILE_NAME_FORMAT, sConfigMgr->GetStringDefault("DataDir", ".").c_str(), mapId, x, y);
+        std::string fileName = acore::StringFormat(TILE_FILE_NAME_FORMAT, sConfigMgr->GetStringDefault("DataDir", ".").c_str(), mapId, x, y);
         FILE* file = fopen(fileName.c_str(), "rb");
         if (!file)
         {
