@@ -4,8 +4,8 @@
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  */
 
-#ifndef TRINITY_DISABLEMGR_H
-#define TRINITY_DISABLEMGR_H
+#ifndef ACORE_DISABLEMGR_H
+#define ACORE_DISABLEMGR_H
 
 #include "Define.h"
 #include "Map.h"
@@ -49,4 +49,4 @@ namespace DisableMgr
     bool IsPathfindingEnabled(const Map* map);
 }
 
-#endif //TRINITY_DISABLEMGR_H
+#endif //ACORE_DISABLEMGR_H

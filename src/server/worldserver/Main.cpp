@@ -17,8 +17,8 @@
 #include "Log.h"
 #include "Master.h"
 
-#ifndef _TRINITY_CORE_CONFIG
-#define _TRINITY_CORE_CONFIG  "worldserver.conf"
+#ifndef _ACORE_CORE_CONFIG
+# define _ACORE_CORE_CONFIG  "worldserver.conf"
 #endif
 
 #ifdef _WIN32
@@ -55,7 +55,7 @@ void usage(const char* prog)
 extern int main(int argc, char** argv)
 {
     ///- Command line parsing to get the configuration file name
-    char const* cfg_file = _TRINITY_CORE_CONFIG;
+    char const* cfg_file = _ACORE_CORE_CONFIG;
     int c = 1;
     while (c < argc)
     {
@@ -112,7 +112,7 @@ extern int main(int argc, char** argv)
         ++c;
     }
 
-    std::string cfg_def_file=_TRINITY_CORE_CONFIG;
+    std::string cfg_def_file=_ACORE_CORE_CONFIG;
     cfg_def_file += ".dist";
 
     if (!sConfigMgr->LoadInitial(cfg_def_file.c_str())) {

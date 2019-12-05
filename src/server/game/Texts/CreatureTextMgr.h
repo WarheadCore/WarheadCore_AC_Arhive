@@ -4,8 +4,8 @@
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  */
 
-#ifndef TRINITY_CREATURE_TEXT_MGR_H
-#define TRINITY_CREATURE_TEXT_MGR_H
+#ifndef ACORE_CREATURE_TEXT_MGR_H
+#define ACORE_CREATURE_TEXT_MGR_H
 
 #include "Creature.h"
 #include "GridNotifiers.h"
@@ -239,7 +239,7 @@ void CreatureTextMgr::SendChatPacket(WorldObject* source, Builder const& builder
     if (msgType == CHAT_MSG_RAID_BOSS_EMOTE && source->GetMap()->IsDungeon())
         dist = 250.0f;
 
-    Trinity::PlayerDistWorker<CreatureTextLocalizer<Builder> > worker(source, dist, localizer);
+    acore::PlayerDistWorker<CreatureTextLocalizer<Builder> > worker(source, dist, localizer);
     source->VisitNearbyWorldObject(dist, worker);
 }
 
