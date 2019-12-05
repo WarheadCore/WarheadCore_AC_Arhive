@@ -9,24 +9,24 @@ CollectSourceFiles(
 # Group sources
 GroupSources(${CMAKE_CURRENT_SOURCE_DIR})
 
-add_library(shared 
+add_library(database
   ${PRIVATE_SOURCES})
 
 CollectIncludeDirectories(
   ${CMAKE_CURRENT_SOURCE_DIR}
   PUBLIC_INCLUDES)
 
-target_include_directories(shared
+target_include_directories(database
   PUBLIC
     ${PUBLIC_INCLUDES}
   PRIVATE
     ${CMAKE_CURRENT_BINARY_DIR})
 
-target_link_libraries(shared
+target_link_libraries(database
   PUBLIC
-    database)
+    common)
 
-set_target_properties(shared
+set_target_properties(database
   PROPERTIES
     FOLDER
       "server")

@@ -89,13 +89,8 @@ target_include_directories(scripts-interface
   INTERFACE
     ${PUBLIC_INCLUDES})
 
-target_link_libraries(scripts-interface
-  INTERFACE
-    common)
-
 add_library(scripts STATIC
-  ${scripts_STAT_SRCS}
-)
+  ${scripts_STAT_SRCS})
 
 target_include_directories(scripts
   PRIVATE

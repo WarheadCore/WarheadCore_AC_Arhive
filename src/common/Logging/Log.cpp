@@ -10,7 +10,6 @@
 #include "Config.h"
 #include "Util.h"
 #include "SHA1.h"
-#include "DatabaseEnv.h"
 #include <stdarg.h>
 #include <stdio.h>
 #include <ace/Stack_Trace.h>
@@ -347,18 +346,6 @@ std::string Log::GetTimestampStr()
     char buf[20];
     snprintf(buf, 20, "%04d-%02d-%02d_%02d-%02d-%02d", aTm.tm_year+1900, aTm.tm_mon+1, aTm.tm_mday, aTm.tm_hour, aTm.tm_min, aTm.tm_sec);
     return std::string(buf);
-}
-
-void Log::outDB(LogTypes type, const char * str)
-{
-    if(!str || std::string(str).empty() || type >= MAX_LOG_TYPES)
-        return;
-
-    std::string new_str(str);
-    LoginDatabase.EscapeString(new_str);
-
-    LoginDatabase.PExecute("INSERT INTO logs (time, realm, type, string) "
-        "VALUES (" UI64FMTD ", %u, %u, '%s');", uint64(time(0)), realm, (uint32)type, new_str.c_str());
 }
 
 void Log::outString(const char * str, ...)
