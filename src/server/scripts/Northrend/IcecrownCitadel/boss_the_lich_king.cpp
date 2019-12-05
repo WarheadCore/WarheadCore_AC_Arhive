@@ -2418,7 +2418,7 @@ class spell_the_lich_king_defile : public SpellScriptLoader
             void CorrectRange(std::list<WorldObject*>& targets)
             {
                 targets.remove_if(VehicleCheck());
-                targets.remove_if(Trinity::AllWorldObjectsInExactRange(GetCaster(), 10.0f * GetCaster()->GetObjectScale(), true));
+                targets.remove_if(acore::AllWorldObjectsInExactRange(GetCaster(), 10.0f * GetCaster()->GetObjectScale(), true));
                 uint32 strangulatedAura[4] = {68980, 74325, 74296, 74297};
                 targets.remove_if(acore::UnitAuraCheck(true, strangulatedAura[GetCaster()->GetMap()->GetDifficulty()]));
             }

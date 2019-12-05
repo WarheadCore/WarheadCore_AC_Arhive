@@ -190,5 +190,5 @@ bool Position::HasInArc(float arc, const Position* obj, float targetRadius) cons
 
 bool Position::IsPositionValid() const
 {
-    return Trinity::IsValidMapCoord(m_positionX, m_positionY, m_positionZ, m_orientation);
+    return acore::IsValidMapCoord(m_positionX, m_positionY, m_positionZ, m_orientation);
 }
