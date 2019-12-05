@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
+# Copyright (C) 2019+     WarheadCore
 #
 
 # Sources
@@ -53,11 +53,11 @@ POCO_SOURCES(SRCS pcre
   src/pcre_xclass.c)
 
 # zlib
-POCO_HEADERS( SRCS zlib
+POCO_HEADERS(SRCS zlib
   include/Poco/zconf.h
   include/Poco/zlib.h)
 
-POCO_SOURCES( SRCS zlib
+POCO_SOURCES(SRCS zlib
   src/adler32.c
   src/compress.c
   src/crc32.c
@@ -84,7 +84,8 @@ target_link_libraries(Foundation
 target_compile_definitions(Foundation
   PUBLIC
     $<$<CONFIG:Debug>:_DEBUG>
-    $<$<CONFIG:RelWithDebInfo>:_DEBUG>)
+    $<$<CONFIG:RelWithDebInfo>:_DEBUG>
+    POCO_ENABLE_CPP14)
 
 target_compile_features(Foundation
   PUBLIC
