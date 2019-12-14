@@ -10,6 +10,7 @@
 #include "Log.h"
 #include "Errors.h"
 #include "TypeList.h"
+#include <ace/Task.h>
 #include "SFMT.h"
 #include "Errors.h" // for ASSERT
 #include <ace/TSS_T.h>

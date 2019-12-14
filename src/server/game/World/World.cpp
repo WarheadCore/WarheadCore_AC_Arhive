@@ -478,7 +478,7 @@ void World::LoadConfigSettings(bool reload)
     // Reload log levels and filters
     // doing it again to allow sScriptMgr
     // to change log confs at start
-    sLog->ReloadConfig();
+    //sLog->ReloadConfig();
 
     ///- Read the player limit and the Message of the day from the config file
     if (!reload)
@@ -2013,7 +2013,7 @@ void World::SetInitialWorldSettings()
     if (sConfigMgr->GetBoolDefault("EnableLogDB", false))
     {
         sLog->outString("Enabling database logging...");
-        sLog->SetLogDB(true);
+        sLog->SetRealmID(realmID);
     }
 
     if (sConfigMgr->isDryRun()) {
@@ -2572,7 +2572,7 @@ void World::ShutdownMsg(bool show, Player* player)
 
         SendServerMessage(msgid, str.c_str(), player);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-        sLog->outStaticDebug("Server is %s in %s", (m_ShutdownMask & SHUTDOWN_MASK_RESTART ? "restart" : "shuttingdown"), str.c_str());
+        LOG_DEBUG("server", "Server is %s in %s", (m_ShutdownMask & SHUTDOWN_MASK_RESTART ? "restart" : "shuttingdown"), str.c_str());
 #endif
     }
 }
@@ -2592,7 +2592,7 @@ void World::ShutdownCancel()
     SendServerMessage(msgid);
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outStaticDebug("Server %s cancelled.", (m_ShutdownMask & SHUTDOWN_MASK_RESTART ? "restart" : "shuttingdown"));
+    LOG_DEBUG("server", "Server %s cancelled.", (m_ShutdownMask & SHUTDOWN_MASK_RESTART ? "restart" : "shuttingdown"));
 #endif
 
     sScriptMgr->OnShutdownCancel();

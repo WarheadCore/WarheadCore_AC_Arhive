@@ -70,6 +70,6 @@ void RARunnable::run()
     }
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outStaticDebug("Trinity RA thread exiting");
+    LOG_DEBUG("server", "Trinity RA thread exiting");
 #endif
 }

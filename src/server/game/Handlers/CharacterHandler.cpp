@@ -600,7 +600,7 @@ void WorldSession::HandleCharCreateCallback(PreparedQueryResult result, Characte
                 uint8 unk;
                 createInfo->Data >> unk;
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                sLog->outDebug(LOG_FILTER_NETWORKIO, "Character creation %s (account %u) has unhandled tail data: [%u]", createInfo->Name.c_str(), GetAccountId(), unk);
+                LOG_DEBUG("network", "Character creation %s (account %u) has unhandled tail data: [%u]", createInfo->Name.c_str(), GetAccountId(), unk);
 #endif
             }
 
@@ -737,11 +737,11 @@ void WorldSession::HandleCharDeleteOpcode(WorldPacket& recvData)
     sScriptMgr->OnPlayerDelete(guid, initAccountId); // To prevent race conditioning, but as it also makes sense, we hand the accountId over for successful delete.
     // Shouldn't interfere with character deletion though
 
-    if (sLog->IsOutCharDump())                                // optimize GetPlayerDump call
+    if (sLog->ShouldLog("entities.player.dump", LOG_LEVEL_INFO))                                // optimize GetPlayerDump call
     {
         std::string dump;
         if (PlayerDumpWriter().GetDump(GUID_LOPART(guid), dump))
-            sLog->outCharDump(dump.c_str(), GetAccountId(), GUID_LOPART(guid), name.c_str());
+            LOG_CHAR_DUMP(dump, GetAccountId(), GUID_LOPART(guid), name);
     }
 
     sCalendarMgr->RemoveAllPlayerEventsAndInvites(guid);
@@ -919,7 +919,7 @@ void WorldSession::HandlePlayerLoginFromDB(LoginQueryHolder* holder)
             chH.PSendSysMessage("%s", GitRevision::GetFullVersion());
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-        sLog->outStaticDebug("WORLD: Sent server info");
+        LOG_DEBUG("server", "WORLD: Sent server info");
 #endif
     }
 
@@ -1236,7 +1236,7 @@ void WorldSession::HandlePlayerLoginToCharInWorld(Player* pCurrChar)
             chH.PSendSysMessage("%s", GitRevision::GetFullVersion());
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-        sLog->outStaticDebug("WORLD: Sent server info");
+        LOG_DEBUG("server", "WORLD: Sent server info");
 #endif
     }
 
@@ -1337,7 +1337,7 @@ void WorldSession::HandlePlayerLoginToCharOutOfWorld(Player*  /*pCurrChar*/)
 void WorldSession::HandleSetFactionAtWar(WorldPacket& recvData)
 {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outStaticDebug("WORLD: Received CMSG_SET_FACTION_ATWAR");
+    LOG_DEBUG("server", "WORLD: Received CMSG_SET_FACTION_ATWAR");
 #endif
 
     uint32 repListID;
@@ -1387,7 +1387,7 @@ void WorldSession::HandleTutorialReset(WorldPacket & /*recvData*/)
 void WorldSession::HandleSetWatchedFactionOpcode(WorldPacket& recvData)
 {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outStaticDebug("WORLD: Received CMSG_SET_WATCHED_FACTION");
+    LOG_DEBUG("server", "WORLD: Received CMSG_SET_WATCHED_FACTION");
 #endif
     uint32 fact;
     recvData >> fact;
@@ -1397,7 +1397,7 @@ void WorldSession::HandleSetWatchedFactionOpcode(WorldPacket& recvData)
 void WorldSession::HandleSetFactionInactiveOpcode(WorldPacket & recvData)
 {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outStaticDebug("WORLD: Received CMSG_SET_FACTION_INACTIVE");
+    LOG_DEBUG("server", "WORLD: Received CMSG_SET_FACTION_INACTIVE");
 #endif
     uint32 replistid;
     uint8 inactive;
@@ -1409,7 +1409,7 @@ void WorldSession::HandleSetFactionInactiveOpcode(WorldPacket & recvData)
 void WorldSession::HandleShowingHelmOpcode(WorldPacket& recvData)
 {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outStaticDebug("CMSG_SHOWING_HELM for %s", _player->GetName().c_str());
+    LOG_DEBUG("server", "CMSG_SHOWING_HELM for %s", _player->GetName().c_str());
 #endif
     recvData.read_skip<uint8>(); // unknown, bool?
     _player->ToggleFlag(PLAYER_FLAGS, PLAYER_FLAGS_HIDE_HELM);
@@ -1418,7 +1418,7 @@ void WorldSession::HandleShowingHelmOpcode(WorldPacket& recvData)
 void WorldSession::HandleShowingCloakOpcode(WorldPacket& recvData)
 {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outStaticDebug("CMSG_SHOWING_CLOAK for %s", _player->GetName().c_str());
+    LOG_DEBUG("server", "CMSG_SHOWING_CLOAK for %s", _player->GetName().c_str());
 #endif
     recvData.read_skip<uint8>(); // unknown, bool?
     _player->ToggleFlag(PLAYER_FLAGS, PLAYER_FLAGS_HIDE_CLOAK);
@@ -1638,7 +1638,7 @@ void WorldSession::HandleSetPlayerDeclinedNames(WorldPacket& recvData)
 void WorldSession::HandleAlterAppearance(WorldPacket& recvData)
 {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "CMSG_ALTER_APPEARANCE");
+    LOG_DEBUG("network", "CMSG_ALTER_APPEARANCE");
 #endif
 
     uint32 Hair, Color, FacialHair, SkinColor;
@@ -1717,7 +1717,7 @@ void WorldSession::HandleRemoveGlyph(WorldPacket& recvData)
     if (slot >= MAX_GLYPH_SLOT_INDEX)
     {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-        sLog->outDebug(LOG_FILTER_NETWORKIO, "Client sent wrong glyph slot number in opcode CMSG_REMOVE_GLYPH %u", slot);
+        LOG_DEBUG("network", "Client sent wrong glyph slot number in opcode CMSG_REMOVE_GLYPH %u", slot);
 #endif
         return;
     }
@@ -1879,7 +1879,7 @@ void WorldSession::HandleCharCustomize(WorldPacket& recvData)
 void WorldSession::HandleEquipmentSetSave(WorldPacket &recvData)
 {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "CMSG_EQUIPMENT_SET_SAVE");
+    LOG_DEBUG("network", "CMSG_EQUIPMENT_SET_SAVE");
 #endif
 
     uint64 setGuid;
@@ -1940,7 +1940,7 @@ void WorldSession::HandleEquipmentSetSave(WorldPacket &recvData)
 void WorldSession::HandleEquipmentSetDelete(WorldPacket &recvData)
 {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "CMSG_EQUIPMENT_SET_DELETE");
+    LOG_DEBUG("network", "CMSG_EQUIPMENT_SET_DELETE");
 #endif
 
     uint64 setGuid;
@@ -1952,7 +1952,7 @@ void WorldSession::HandleEquipmentSetDelete(WorldPacket &recvData)
 void WorldSession::HandleEquipmentSetUse(WorldPacket &recvData)
 {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "CMSG_EQUIPMENT_SET_USE");
+    LOG_DEBUG("network", "CMSG_EQUIPMENT_SET_USE");
 #endif
 
     for (uint32 i = 0; i < EQUIPMENT_SLOT_END; ++i)
@@ -1964,7 +1964,7 @@ void WorldSession::HandleEquipmentSetUse(WorldPacket &recvData)
         recvData >> srcbag >> srcslot;
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-        sLog->outDebug(LOG_FILTER_PLAYER_ITEMS, "Item " UI64FMTD ": srcbag %u, srcslot %u", itemGuid, srcbag, srcslot);
+        LOG_DEBUG("entities.player.items", "Item " UI64FMTD ": srcbag %u, srcslot %u", itemGuid, srcbag, srcslot);
 #endif
 
         // check if item slot is set to "ignored" (raw value == 1), must not be unequipped then

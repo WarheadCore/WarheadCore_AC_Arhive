@@ -2366,7 +2366,7 @@ int32 SpellInfo::CalcPowerCost(Unit const* caster, SpellSchoolMask schoolMask, S
             case POWER_RUNE:
             case POWER_RUNIC_POWER:
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "CalculateManaCost: Not implemented yet!");
+                LOG_DEBUG("spells.aura", "CalculateManaCost: Not implemented yet!");
 #endif
                 break;
             default:

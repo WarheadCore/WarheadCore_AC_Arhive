@@ -51,8 +51,7 @@ target_link_libraries(common
   PUBLIC
     acore-core-interface
     ace
-    Poco::Net
-    Poco::Util
+    Poco::Foundation
     mysql
     g3dlib
     Detour

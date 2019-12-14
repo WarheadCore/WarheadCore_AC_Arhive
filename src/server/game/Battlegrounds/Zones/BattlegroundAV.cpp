@@ -61,7 +61,7 @@ void BattlegroundAV::HandleKillPlayer(Player* player, Player* killer)
 void BattlegroundAV::HandleKillUnit(Creature* unit, Player* killer)
 {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_BATTLEGROUND, "bg_av HandleKillUnit %i", unit->GetEntry());
+    LOG_DEBUG("bg", "bg_av HandleKillUnit %i", unit->GetEntry());
 #endif
     if (GetStatus() != STATUS_IN_PROGRESS)
         return;
@@ -144,7 +144,7 @@ void BattlegroundAV::HandleQuestComplete(uint32 questid, Player* player)
     TeamId teamId = player->GetTeamId();
     //TODO add reputation, events (including quest not available anymore, next quest availabe, go/npc de/spawning)and maybe honor
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_BATTLEGROUND, "BG_AV Quest %i completed", questid);
+    LOG_DEBUG("bg", "BG_AV Quest %i completed", questid);
 #endif
     switch (questid)
     {
@@ -156,7 +156,7 @@ void BattlegroundAV::HandleQuestComplete(uint32 questid, Player* player)
             if (m_Team_QuestStatus[teamId][0] == 500 || m_Team_QuestStatus[teamId][0] == 1000 || m_Team_QuestStatus[teamId][0] == 1500) //25, 50, 75 turn ins
             {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                sLog->outDebug(LOG_FILTER_BATTLEGROUND, "BG_AV Quest %i completed starting with unit upgrading..", questid);
+                LOG_DEBUG("bg", "BG_AV Quest %i completed starting with unit upgrading..", questid);
 #endif
                 for (BG_AV_Nodes i = BG_AV_NODES_FIRSTAID_STATION; i <= BG_AV_NODES_FROSTWOLF_HUT; ++i)
                     if (m_Nodes[i].OwnerId == player->GetTeamId() && m_Nodes[i].State == POINT_CONTROLED)
@@ -173,7 +173,7 @@ void BattlegroundAV::HandleQuestComplete(uint32 questid, Player* player)
             RewardReputationToTeam(teamId, 1, teamId);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
             if (m_Team_QuestStatus[teamId][1] == 30)
-                sLog->outDebug(LOG_FILTER_BATTLEGROUND, "BG_AV Quest %i completed (need to implement some events here", questid);
+                LOG_DEBUG("bg", "BG_AV Quest %i completed (need to implement some events here", questid);
 #endif
             break;
         case AV_QUEST_A_COMMANDER2:
@@ -182,7 +182,7 @@ void BattlegroundAV::HandleQuestComplete(uint32 questid, Player* player)
             RewardReputationToTeam(teamId, 1, teamId);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
             if (m_Team_QuestStatus[teamId][2] == 60)
-                sLog->outDebug(LOG_FILTER_BATTLEGROUND, "BG_AV Quest %i completed (need to implement some events here", questid);
+                LOG_DEBUG("bg", "BG_AV Quest %i completed (need to implement some events here", questid);
 #endif
             break;
         case AV_QUEST_A_COMMANDER3:
@@ -191,7 +191,7 @@ void BattlegroundAV::HandleQuestComplete(uint32 questid, Player* player)
             RewardReputationToTeam(teamId, 1, teamId);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
             if (m_Team_QuestStatus[teamId][3] == 120)
-                sLog->outDebug(LOG_FILTER_BATTLEGROUND, "BG_AV Quest %i completed (need to implement some events here", questid);
+                LOG_DEBUG("bg", "BG_AV Quest %i completed (need to implement some events here", questid);
 #endif
             break;
         case AV_QUEST_A_BOSS1:
@@ -202,7 +202,7 @@ void BattlegroundAV::HandleQuestComplete(uint32 questid, Player* player)
             m_Team_QuestStatus[teamId][4]++;
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
             if (m_Team_QuestStatus[teamId][4] >= 200)
-                sLog->outDebug(LOG_FILTER_BATTLEGROUND, "BG_AV Quest %i completed (need to implement some events here", questid);
+                LOG_DEBUG("bg", "BG_AV Quest %i completed (need to implement some events here", questid);
 #endif
             break;
         case AV_QUEST_A_NEAR_MINE:
@@ -211,10 +211,10 @@ void BattlegroundAV::HandleQuestComplete(uint32 questid, Player* player)
             if (m_Team_QuestStatus[teamId][5] == 28)
             {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                sLog->outDebug(LOG_FILTER_BATTLEGROUND, "BG_AV Quest %i completed (need to implement some events here", questid);
+                LOG_DEBUG("bg", "BG_AV Quest %i completed (need to implement some events here", questid);
 
                 if (m_Team_QuestStatus[teamId][6] == 7)
-                    sLog->outDebug(LOG_FILTER_BATTLEGROUND, "BG_AV Quest %i completed (need to implement some events here - ground assault ready", questid);
+                    LOG_DEBUG("bg", "BG_AV Quest %i completed (need to implement some events here - ground assault ready", questid);
 #endif
             }
             break;
@@ -224,10 +224,10 @@ void BattlegroundAV::HandleQuestComplete(uint32 questid, Player* player)
             if (m_Team_QuestStatus[teamId][6] == 7)
             {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                sLog->outDebug(LOG_FILTER_BATTLEGROUND, "BG_AV Quest %i completed (need to implement some events here", questid);
+                LOG_DEBUG("bg", "BG_AV Quest %i completed (need to implement some events here", questid);
 
                 if (m_Team_QuestStatus[teamId][5] == 20)
-                    sLog->outDebug(LOG_FILTER_BATTLEGROUND, "BG_AV Quest %i completed (need to implement some events here - ground assault ready", questid);
+                    LOG_DEBUG("bg", "BG_AV Quest %i completed (need to implement some events here - ground assault ready", questid);
 #endif
             }
             break;
@@ -237,10 +237,10 @@ void BattlegroundAV::HandleQuestComplete(uint32 questid, Player* player)
             if (m_Team_QuestStatus[teamId][7] == 25)
             {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                sLog->outDebug(LOG_FILTER_BATTLEGROUND, "BG_AV Quest %i completed (need to implement some events here", questid);
+                LOG_DEBUG("bg", "BG_AV Quest %i completed (need to implement some events here", questid);
 
                 if (m_Team_QuestStatus[teamId][8] == 25)
-                    sLog->outDebug(LOG_FILTER_BATTLEGROUND, "BG_AV Quest %i completed (need to implement some events here - rider assault ready", questid);
+                    LOG_DEBUG("bg", "BG_AV Quest %i completed (need to implement some events here - rider assault ready", questid);
 #endif
             }
             break;
@@ -250,16 +250,16 @@ void BattlegroundAV::HandleQuestComplete(uint32 questid, Player* player)
             if (m_Team_QuestStatus[teamId][8] == 25)
             {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                sLog->outDebug(LOG_FILTER_BATTLEGROUND, "BG_AV Quest %i completed (need to implement some events here", questid);
+                LOG_DEBUG("bg", "BG_AV Quest %i completed (need to implement some events here", questid);
 
                 if (m_Team_QuestStatus[teamId][7] == 25)
-                    sLog->outDebug(LOG_FILTER_BATTLEGROUND, "BG_AV Quest %i completed (need to implement some events here - rider assault ready", questid);
+                    LOG_DEBUG("bg", "BG_AV Quest %i completed (need to implement some events here - rider assault ready", questid);
 #endif
             }
             break;
         default:
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-            sLog->outDebug(LOG_FILTER_BATTLEGROUND, "BG_AV Quest %i completed but is not interesting at all", questid);
+            LOG_DEBUG("bg", "BG_AV Quest %i completed but is not interesting at all", questid);
 #endif
             return; //was no interesting quest at all
             break;
@@ -444,7 +444,7 @@ void BattlegroundAV::StartingEventCloseDoors()
 void BattlegroundAV::StartingEventOpenDoors()
 {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_BATTLEGROUND, "BG_AV: start spawning mine stuff");
+    LOG_DEBUG("bg", "BG_AV: start spawning mine stuff");
 #endif
     for (uint16 i= BG_AV_OBJECT_MINE_SUPPLY_N_MIN; i <= BG_AV_OBJECT_MINE_SUPPLY_N_MAX; i++)
         SpawnBGObject(i, RESPAWN_IMMEDIATELY);
@@ -593,7 +593,7 @@ void BattlegroundAV::EventPlayerDestroyedPoint(BG_AV_Nodes node)
 {
     uint32 object = GetObjectThroughNode(node);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_BATTLEGROUND, "bg_av: player destroyed point node %i object %i", node, object);
+    LOG_DEBUG("bg", "bg_av: player destroyed point node %i object %i", node, object);
 #endif
 
     //despawn banner
@@ -668,7 +668,7 @@ void BattlegroundAV::ChangeMineOwner(uint8 mine, TeamId teamId, bool initial)
     if (!initial)
     {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-        sLog->outDebug(LOG_FILTER_BATTLEGROUND, "bg_av depopulating mine %i (0=north, 1=south)", mine);
+        LOG_DEBUG("bg", "bg_av depopulating mine %i (0=north, 1=south)", mine);
 #endif
         if (mine == AV_SOUTH_MINE)
             for (uint16 i=AV_CPLACE_MINE_S_S_MIN; i <= AV_CPLACE_MINE_S_S_MAX; i++)
@@ -681,7 +681,7 @@ void BattlegroundAV::ChangeMineOwner(uint8 mine, TeamId teamId, bool initial)
     SendMineWorldStates(mine);
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_BATTLEGROUND, "bg_av populating mine %i (0=north, 1=south)", mine);
+    LOG_DEBUG("bg", "bg_av populating mine %i (0=north, 1=south)", mine);
 #endif
     uint16 miner;
     //also neutral team exists.. after a big time, the neutral team tries to conquer the mine
@@ -705,7 +705,7 @@ void BattlegroundAV::ChangeMineOwner(uint8 mine, TeamId teamId, bool initial)
             miner = AV_NPC_S_MINE_N_1;
        //vermin
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-        sLog->outDebug(LOG_FILTER_BATTLEGROUND, "spawning vermin");
+        LOG_DEBUG("bg", "spawning vermin");
 #endif
         if (teamId == TEAM_ALLIANCE)
             cinfo = AV_NPC_S_MINE_A_3;
@@ -825,7 +825,7 @@ void BattlegroundAV::DePopulateNode(BG_AV_Nodes node)
 BG_AV_Nodes BattlegroundAV::GetNodeThroughObject(uint32 object)
 {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_BATTLEGROUND, "bg_AV getnodethroughobject %i", object);
+    LOG_DEBUG("bg", "bg_AV getnodethroughobject %i", object);
 #endif
     if (object <= BG_AV_OBJECT_FLAG_A_STONEHEART_BUNKER)
         return BG_AV_Nodes(object);
@@ -849,7 +849,7 @@ BG_AV_Nodes BattlegroundAV::GetNodeThroughObject(uint32 object)
 uint32 BattlegroundAV::GetObjectThroughNode(BG_AV_Nodes node)
 { //this function is the counterpart to GetNodeThroughObject()
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_BATTLEGROUND, "bg_AV GetObjectThroughNode %i", node);
+    LOG_DEBUG("bg", "bg_AV GetObjectThroughNode %i", node);
 #endif
     if (m_Nodes[node].OwnerId == TEAM_ALLIANCE)
     {
@@ -932,7 +932,7 @@ void BattlegroundAV::EventPlayerDefendsPoint(Player* player, uint32 object)
         return;
     }
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_BATTLEGROUND, "player defends point object: %i node: %i", object, node);
+    LOG_DEBUG("bg", "player defends point object: %i node: %i", object, node);
 #endif
     if (m_Nodes[node].PrevOwnerId != teamId)
     {
@@ -996,7 +996,7 @@ void BattlegroundAV::EventPlayerAssaultsPoint(Player* player, uint32 object)
     TeamId prevOwnerId = m_Nodes[node].OwnerId;
     TeamId teamId  = player->GetTeamId();
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_BATTLEGROUND, "bg_av: player assaults point object %i node %i", object, node);
+    LOG_DEBUG("bg", "bg_av: player assaults point object %i node %i", object, node);
 #endif
     if (prevOwnerId == teamId || teamId == m_Nodes[node].TotalOwnerId)
         return; //surely a gm used this object
@@ -1352,7 +1352,7 @@ bool BattlegroundAV::SetupBattleground()
 
     uint16 i;
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_BATTLEGROUND, "Alterac Valley: entering state STATUS_WAIT_JOIN ...");
+    LOG_DEBUG("bg", "Alterac Valley: entering state STATUS_WAIT_JOIN ...");
 #endif
     // Initial Nodes
     for (i = 0; i < BG_AV_OBJECT_MAX; i++)
@@ -1403,7 +1403,7 @@ bool BattlegroundAV::SetupBattleground()
 
     //creatures
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_BATTLEGROUND, "BG_AV start poputlating nodes");
+    LOG_DEBUG("bg", "BG_AV start poputlating nodes");
 #endif
     for (i = BG_AV_NODES_FIRSTAID_STATION; i < BG_AV_NODES_MAX; ++i)
     {
@@ -1412,19 +1412,19 @@ bool BattlegroundAV::SetupBattleground()
     }
     //all creatures which don't get despawned through the script are static
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_BATTLEGROUND, "BG_AV: start spawning static creatures");
+    LOG_DEBUG("bg", "BG_AV: start spawning static creatures");
 #endif
     for (i = 0; i < AV_STATICCPLACE_MAX; i++)
         AddAVCreature(0, i + AV_CPLACE_MAX);
     //mainspiritguides:
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_BATTLEGROUND, "BG_AV: start spawning spiritguides creatures");
+    LOG_DEBUG("bg", "BG_AV: start spawning spiritguides creatures");
 #endif
     AddSpiritGuide(7, BG_AV_CreaturePos[7][0], BG_AV_CreaturePos[7][1], BG_AV_CreaturePos[7][2], BG_AV_CreaturePos[7][3], TEAM_ALLIANCE);
     AddSpiritGuide(8, BG_AV_CreaturePos[8][0], BG_AV_CreaturePos[8][1], BG_AV_CreaturePos[8][2], BG_AV_CreaturePos[8][3], TEAM_HORDE);
     //spawn the marshals (those who get deleted, if a tower gets destroyed)
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_BATTLEGROUND, "BG_AV: start spawning marshal creatures");
+    LOG_DEBUG("bg", "BG_AV: start spawning marshal creatures");
 #endif
     for (i = AV_NPC_A_MARSHAL_SOUTH; i <= AV_NPC_H_MARSHAL_WTOWER; i++)
         AddAVCreature(i, AV_CPLACE_A_MARSHAL_SOUTH + (i - AV_NPC_A_MARSHAL_SOUTH));

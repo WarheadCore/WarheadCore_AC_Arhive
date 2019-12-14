@@ -351,9 +351,9 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
             catch(ByteBufferException const&)
             {
                 sLog->outError("WorldSession::Update ByteBufferException occured while parsing a packet (opcode: %u) from client %s, accountid=%i. Skipped packet.", packet->GetOpcode(), GetRemoteAddress().c_str(), GetAccountId());
-                if (sLog->IsOutDebug())
+                if (sLog->ShouldLog("network", LOG_LEVEL_DEBUG))
                 {
-                    sLog->outDebug(LOG_FILTER_NETWORKIO, "Dumping error causing packet:");
+                    LOG_DEBUG("network", "Dumping error causing packet:");
                     packet->hexlike();
                 }
             }
@@ -860,7 +860,7 @@ void WorldSession::ReadMovementInfo(WorldPacket &data, MovementInfo* mi)
     { \
         if (check) \
         { \
-            sLog->outDebug(LOG_FILTER_UNITS, "WorldSession::ReadMovementInfo: Violation of MovementFlags found (%s). " \
+            LOG_DEBUG("entities.units", "WorldSession::ReadMovementInfo: Violation of MovementFlags found (%s). " \
                 "MovementFlags: %u, MovementFlags2: %u for player GUID: %u. Mask %u will be removed.", \
                 STRINGIZE(check), mi->GetMovementFlags(), mi->GetExtraMovementFlags(), GetPlayer()->GetGUIDLow(), maskToRemove); \
             mi->RemoveMovementFlag((maskToRemove)); \

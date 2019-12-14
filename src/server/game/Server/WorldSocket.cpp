@@ -53,7 +53,7 @@ struct ServerPktHeader
         uint8 headerIndex=0;
         if (isLargePacket())
         {
-            sLog->outDebug(LOG_FILTER_NETWORKIO, "initializing large server to client packet. Size: %u, cmd: %u", size, cmd);
+            LOG_DEBUG("network", "initializing large server to client packet. Size: %u, cmd: %u", size, cmd);
             header[headerIndex++] = 0x80|(0xFF &(size>>16));
         }
         header[headerIndex++] = 0xFF &(size>>8);
@@ -122,7 +122,7 @@ bool WorldSocket::IsClosed(void) const
 void WorldSocket::CloseSocket(std::string const& reason)
 {
     if (!reason.empty())
-        sLog->outDebug(LOG_FILTER_CLOSE_SOCKET, "Socket closed because of: %s", reason.c_str());
+        LOG_DEBUG("network", "Socket closed because of: %s", reason.c_str());
 
     {
         ACE_GUARD (LockType, Guard, m_OutBufferLock);
@@ -289,7 +289,7 @@ int WorldSocket::handle_input(ACE_HANDLE)
             }
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-            sLog->outStaticDebug("WorldSocket::handle_input: Peer error closing connection errno = %s", ACE_OS::strerror (errno));
+            LOG_DEBUG("server", "WorldSocket::handle_input: Peer error closing connection errno = %s", ACE_OS::strerror (errno));
 #endif
 
             errno = ECONNRESET;
@@ -298,7 +298,7 @@ int WorldSocket::handle_input(ACE_HANDLE)
         case 0:
         {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-            sLog->outStaticDebug("WorldSocket::handle_input: Peer has closed connection");
+            LOG_DEBUG("server", "WorldSocket::handle_input: Peer has closed connection");
 #endif
 
             errno = ECONNRESET;
@@ -714,9 +714,9 @@ int WorldSocket::ProcessIncoming(WorldPacket* new_pct)
     catch (ByteBufferException const&)
     {
         sLog->outError("WorldSocket::ProcessIncoming ByteBufferException occured while parsing an instant handled packet (opcode: %u) from client %s, accountid=%i. Disconnected client.", opcode, GetRemoteAddress().c_str(), m_Session?m_Session->GetAccountId():-1);
-        if (sLog->IsOutDebug())
+        if (sLog->ShouldLog("network", LOG_LEVEL_DEBUG))
         {
-            sLog->outDebug(LOG_FILTER_NETWORKIO, "Dumping error causing packet:");
+            LOG_DEBUG("network", "Dumping error causing packet:");
             new_pct->hexlike();
         }
 
@@ -910,7 +910,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     // Check locked state for server
     AccountTypes allowedAccountType = sWorld->GetPlayerSecurityLimit();
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "Allowed Level: %u Player Level %u", allowedAccountType, AccountTypes(security));
+    LOG_DEBUG("network", "Allowed Level: %u Player Level %u", allowedAccountType, AccountTypes(security));
 #endif
     if (AccountTypes(security) < allowedAccountType)
     {
@@ -949,7 +949,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     }
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outStaticDebug("WorldSocket::HandleAuthSession: Client '%s' authenticated successfully from %s.",
+    LOG_DEBUG("server", "WorldSocket::HandleAuthSession: Client '%s' authenticated successfully from %s.",
                 account.c_str(),
                 address.c_str());
 #endif

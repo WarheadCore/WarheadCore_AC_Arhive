@@ -18,6 +18,7 @@
 #include "TOTP.h"
 #include "SHA1.h"
 #include "openssl/crypto.h"
+#include "Util.h"
 
 #define ChunkSize 2048
 
@@ -199,7 +200,7 @@ void AuthSocket::OnAccept(void)
 void AuthSocket::OnClose(void)
 {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "AuthSocket::OnClose");
+    LOG_DEBUG("network", "AuthSocket::OnClose");
 #endif
 }
 
@@ -246,13 +247,13 @@ void AuthSocket::OnRead()
             if ((uint8)table[i].cmd == _cmd && (table[i].status == _status))
             {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                sLog->outDebug(LOG_FILTER_NETWORKIO, "Got data for cmd %u recv length %u", (uint32)_cmd, (uint32)socket().recv_len());
+                LOG_DEBUG("network", "Got data for cmd %u recv length %u", (uint32)_cmd, (uint32)socket().recv_len());
 #endif
 
                 if (!(*this.*table[i].handler)())
                 {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                    sLog->outDebug(LOG_FILTER_NETWORKIO, "Command handler failed for cmd %u recv length %u", (uint32)_cmd, (uint32)socket().recv_len());
+                    LOG_DEBUG("network", "Command handler failed for cmd %u recv length %u", (uint32)_cmd, (uint32)socket().recv_len());
 #endif
                     return;
                 }
@@ -264,7 +265,7 @@ void AuthSocket::OnRead()
         if (i == AUTH_TOTAL_COMMANDS)
         {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-            sLog->outDebug(LOG_FILTER_NETWORKIO, "Got unknown packet from '%s'", socket().getRemoteAddress().c_str());
+            LOG_DEBUG("network", "Got unknown packet from '%s'", socket().getRemoteAddress().c_str());
 #endif
             socket().shutdown();
             return;
@@ -319,7 +320,7 @@ ACE_Thread_Mutex LastLoginAttemptMutex;
 bool AuthSocket::_HandleLogonChallenge()
 {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "Entering _HandleLogonChallenge");
+    LOG_DEBUG("network", "Entering _HandleLogonChallenge");
 #endif
     if (socket().recv_len() < sizeof(sAuthLogonChallenge_C))
         return false;
@@ -361,7 +362,7 @@ bool AuthSocket::_HandleLogonChallenge()
 
     uint16 remaining = ((sAuthLogonChallenge_C *)&buf[0])->size;
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "[AuthChallenge] got header, body is %#04x bytes", remaining);
+    LOG_DEBUG("network", "[AuthChallenge] got header, body is %#04x bytes", remaining);
 #endif
 
     if ((remaining < sizeof(sAuthLogonChallenge_C) - buf.size()) || (socket().recv_len() < remaining))
@@ -375,8 +376,8 @@ bool AuthSocket::_HandleLogonChallenge()
     // Read the remaining of the packet
     socket().recv((char *)&buf[4], remaining);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "[AuthChallenge] got full packet, %#04x bytes", ch->size);
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "[AuthChallenge] name(%d): '%s'", ch->I_len, ch->I);
+    LOG_DEBUG("network", "[AuthChallenge] got full packet, %#04x bytes", ch->size);
+    LOG_DEBUG("network", "[AuthChallenge] name(%d): '%s'", ch->I_len, ch->I);
 #endif
 
     // BigEndian code, nop in little endian case
@@ -416,7 +417,7 @@ bool AuthSocket::_HandleLogonChallenge()
     {
         pkt << uint8(WOW_FAIL_BANNED);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-        sLog->outDebug(LOG_FILTER_NETWORKIO, "'%s:%d' [AuthChallenge] Banned ip tries to login!",socket().getRemoteAddress().c_str(), socket().getRemotePort());
+        LOG_DEBUG("network", "'%s:%d' [AuthChallenge] Banned ip tries to login!",socket().getRemoteAddress().c_str(), socket().getRemotePort());
 #endif
     }
     else
@@ -435,24 +436,24 @@ bool AuthSocket::_HandleLogonChallenge()
             bool locked = false;
             if (fields[2].GetUInt8() == 1)                  // if ip is locked
             {
-                sLog->outDebug(LOG_FILTER_NETWORKIO, "[AuthChallenge] Account '%s' is locked to IP - '%s'", _login.c_str(), fields[3].GetCString());
-                sLog->outDebug(LOG_FILTER_NETWORKIO, "[AuthChallenge] Player address is '%s'", ip_address.c_str());
+                LOG_DEBUG("network", "[AuthChallenge] Account '%s' is locked to IP - '%s'", _login.c_str(), fields[3].GetCString());
+                LOG_DEBUG("network", "[AuthChallenge] Player address is '%s'", ip_address.c_str());
 
                 if (strcmp(fields[4].GetCString(), ip_address.c_str()) != 0)
                 {
-                    sLog->outDebug(LOG_FILTER_NETWORKIO, "[AuthChallenge] Account IP differs");
+                    LOG_DEBUG("network", "[AuthChallenge] Account IP differs");
                     pkt << uint8(WOW_FAIL_LOCKED_ENFORCED);
                     locked = true;
                 }
                 else
-                    sLog->outDebug(LOG_FILTER_NETWORKIO, "[AuthChallenge] Account IP matches");
+                    LOG_DEBUG("network", "[AuthChallenge] Account IP matches");
             }
             else
             {
-                sLog->outDebug(LOG_FILTER_NETWORKIO, "[AuthChallenge] Account '%s' is not locked to ip", _login.c_str());
+                LOG_DEBUG("network", "[AuthChallenge] Account '%s' is not locked to ip", _login.c_str());
                 std::string accountCountry = fields[3].GetString();
                 if (accountCountry.empty() || accountCountry == "00")
-                    sLog->outDebug(LOG_FILTER_NETWORKIO, "[AuthChallenge] Account '%s' is not locked to country", _login.c_str());
+                    LOG_DEBUG("network", "[AuthChallenge] Account '%s' is not locked to country", _login.c_str());
                 else if (!accountCountry.empty())
                 {
                     uint32 ip = inet_addr(ip_address.c_str());
@@ -463,18 +464,18 @@ bool AuthSocket::_HandleLogonChallenge()
                     if (PreparedQueryResult sessionCountryQuery = LoginDatabase.Query(stmt))
                     {
                         std::string loginCountry = (*sessionCountryQuery)[0].GetString();
-                        sLog->outDebug(LOG_FILTER_NETWORKIO, "[AuthChallenge] Account '%s' is locked to country: '%s' Player country is '%s'", _login.c_str(), accountCountry.c_str(), loginCountry.c_str());
+                        LOG_DEBUG("network", "[AuthChallenge] Account '%s' is locked to country: '%s' Player country is '%s'", _login.c_str(), accountCountry.c_str(), loginCountry.c_str());
                         if (loginCountry != accountCountry)
                         {
-                            sLog->outDebug(LOG_FILTER_NETWORKIO, "[AuthChallenge] Account country differs.");
+                            LOG_DEBUG("network", "[AuthChallenge] Account country differs.");
                             pkt << uint8(WOW_FAIL_UNLOCKABLE_LOCK);
                             locked = true;
                         }
                         else
-                            sLog->outDebug(LOG_FILTER_NETWORKIO, "[AuthChallenge] Account country matches");
+                            LOG_DEBUG("network", "[AuthChallenge] Account country matches");
                     }
                     else
-                        sLog->outDebug(LOG_FILTER_NETWORKIO, "[AuthChallenge] IP2NATION Table empty");
+                        LOG_DEBUG("network", "[AuthChallenge] IP2NATION Table empty");
                 }
             }
 
@@ -492,12 +493,12 @@ bool AuthSocket::_HandleLogonChallenge()
                     if ((*banresult)[0].GetUInt32() == (*banresult)[1].GetUInt32())
                     {
                         pkt << uint8(WOW_FAIL_BANNED);
-                        sLog->outDebug(LOG_FILTER_NETWORKIO, "'%s:%d' [AuthChallenge] Banned account %s tried to login!", socket().getRemoteAddress().c_str(), socket().getRemotePort(), _login.c_str ());
+                        LOG_DEBUG("network", "'%s:%d' [AuthChallenge] Banned account %s tried to login!", socket().getRemoteAddress().c_str(), socket().getRemotePort(), _login.c_str ());
                     }
                     else
                     {
                         pkt << uint8(WOW_FAIL_SUSPENDED);
-                        sLog->outDebug(LOG_FILTER_NETWORKIO, "'%s:%d' [AuthChallenge] Temporarily banned account %s tried to login!", socket().getRemoteAddress().c_str(), socket().getRemotePort(), _login.c_str ());
+                        LOG_DEBUG("network", "'%s:%d' [AuthChallenge] Temporarily banned account %s tried to login!", socket().getRemoteAddress().c_str(), socket().getRemotePort(), _login.c_str ());
                     }
                 }
                 else
@@ -510,7 +511,7 @@ bool AuthSocket::_HandleLogonChallenge()
                     std::string databaseS = fields[7].GetString();
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                    sLog->outDebug(LOG_FILTER_NETWORKIO, "database authentication values: v='%s' s='%s'", databaseV.c_str(), databaseS.c_str());
+                    LOG_DEBUG("network", "database authentication values: v='%s' s='%s'", databaseV.c_str(), databaseS.c_str());
 #endif
 
                     // multiply with 2 since bytes are stored as hexstring
@@ -601,7 +602,7 @@ bool AuthSocket::_HandleLogonChallenge()
 bool AuthSocket::_HandleLogonProof()
 {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "Entering _HandleLogonProof");
+    LOG_DEBUG("network", "Entering _HandleLogonProof");
 #endif
     // Read the packet
     sAuthLogonProof_C lp;
@@ -616,7 +617,7 @@ bool AuthSocket::_HandleLogonProof()
     {
         // Check if we have the appropriate patch on the disk
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-        sLog->outDebug(LOG_FILTER_NETWORKIO, "Client with invalid version, patching is not implemented");
+        LOG_DEBUG("network", "Client with invalid version, patching is not implemented");
 #endif
         socket().shutdown();
         return true;
@@ -702,7 +703,7 @@ bool AuthSocket::_HandleLogonProof()
     if (!memcmp(M.AsByteArray().get(), lp.M1, 20))
     {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-        sLog->outDebug(LOG_FILTER_NETWORKIO, "'%s:%d' User '%s' successfully authenticated", socket().getRemoteAddress().c_str(), socket().getRemotePort(), _login.c_str());
+        LOG_DEBUG("network", "'%s:%d' User '%s' successfully authenticated", socket().getRemoteAddress().c_str(), socket().getRemotePort(), _login.c_str());
 #endif
 
         // Update the sessionkey, last_ip, last login time and reset number of failed logins in the account table for this account
@@ -773,7 +774,7 @@ bool AuthSocket::_HandleLogonProof()
         socket().send(data, sizeof(data));
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-        sLog->outDebug(LOG_FILTER_NETWORKIO, "'%s:%d' [AuthChallenge] account %s tried to login with invalid password!", socket().getRemoteAddress().c_str(), socket().getRemotePort(), _login.c_str());
+        LOG_DEBUG("network", "'%s:%d' [AuthChallenge] account %s tried to login with invalid password!", socket().getRemoteAddress().c_str(), socket().getRemotePort(), _login.c_str());
 #endif
 
         uint32 MaxWrongPassCount = sConfigMgr->GetIntDefault("WrongPass.MaxCount", 0);
@@ -817,7 +818,7 @@ bool AuthSocket::_HandleLogonProof()
                         LoginDatabase.Execute(stmt);
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                        sLog->outDebug(LOG_FILTER_NETWORKIO, "'%s:%d' [AuthChallenge] account %s got banned for '%u' seconds because it failed to authenticate '%u' times", socket().getRemoteAddress().c_str(), socket().getRemotePort(), _login.c_str(), WrongPassBanTime, failed_logins);
+                        LOG_DEBUG("network", "'%s:%d' [AuthChallenge] account %s got banned for '%u' seconds because it failed to authenticate '%u' times", socket().getRemoteAddress().c_str(), socket().getRemotePort(), _login.c_str(), WrongPassBanTime, failed_logins);
 #endif
                     }
                     else
@@ -828,7 +829,7 @@ bool AuthSocket::_HandleLogonProof()
                         LoginDatabase.Execute(stmt);
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                        sLog->outDebug(LOG_FILTER_NETWORKIO, "'%s:%d' [AuthChallenge] IP %s got banned for '%u' seconds because account %s failed to authenticate '%u' times",
+                        LOG_DEBUG("network", "'%s:%d' [AuthChallenge] IP %s got banned for '%u' seconds because account %s failed to authenticate '%u' times",
                             socket().getRemoteAddress().c_str(), socket().getRemotePort(), socket().getRemoteAddress().c_str(), WrongPassBanTime, _login.c_str(), failed_logins);
 #endif
                     }
@@ -844,7 +845,7 @@ bool AuthSocket::_HandleLogonProof()
 bool AuthSocket::_HandleReconnectChallenge()
 {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "Entering _HandleReconnectChallenge");
+    LOG_DEBUG("network", "Entering _HandleReconnectChallenge");
 #endif
     if (socket().recv_len() < sizeof(sAuthLogonChallenge_C))
         return false;
@@ -859,7 +860,7 @@ bool AuthSocket::_HandleReconnectChallenge()
 
     uint16 remaining = ((sAuthLogonChallenge_C *)&buf[0])->size;
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "[ReconnectChallenge] got header, body is %#04x bytes", remaining);
+    LOG_DEBUG("network", "[ReconnectChallenge] got header, body is %#04x bytes", remaining);
 #endif
 
     if ((remaining < sizeof(sAuthLogonChallenge_C) - buf.size()) || (socket().recv_len() < remaining))
@@ -876,8 +877,8 @@ bool AuthSocket::_HandleReconnectChallenge()
     // Read the remaining of the packet
     socket().recv((char *)&buf[4], remaining);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "[ReconnectChallenge] got full packet, %#04x bytes", ch->size);
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "[ReconnectChallenge] name(%d): '%s'", ch->I_len, ch->I);
+    LOG_DEBUG("network", "[ReconnectChallenge] got full packet, %#04x bytes", ch->size);
+    LOG_DEBUG("network", "[ReconnectChallenge] name(%d): '%s'", ch->I_len, ch->I);
 #endif
 
     _login = (const char*)ch->I;
@@ -929,7 +930,7 @@ bool AuthSocket::_HandleReconnectChallenge()
 bool AuthSocket::_HandleReconnectProof()
 {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "Entering _HandleReconnectProof");
+    LOG_DEBUG("network", "Entering _HandleReconnectProof");
 #endif
     // Read the packet
     sAuthReconnectProof_C lp;
@@ -998,7 +999,7 @@ ACE_INET_Addr const& AuthSocket::GetAddressForClient(Realm const& realm, ACE_INE
 bool AuthSocket::_HandleRealmList()
 {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "Entering _HandleRealmList");
+    LOG_DEBUG("network", "Entering _HandleRealmList");
 #endif
     if (socket().recv_len() < 5)
         return false;
@@ -1130,7 +1131,7 @@ bool AuthSocket::_HandleRealmList()
 bool AuthSocket::_HandleXferResume()
 {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "Entering _HandleXferResume");
+    LOG_DEBUG("network", "Entering _HandleXferResume");
 #endif
     // Check packet length and patch existence
     if (socket().recv_len() < 9 || !pPatch) // FIXME: pPatch is never used
@@ -1153,7 +1154,7 @@ bool AuthSocket::_HandleXferResume()
 bool AuthSocket::_HandleXferCancel()
 {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "Entering _HandleXferCancel");
+    LOG_DEBUG("network", "Entering _HandleXferCancel");
 #endif
 
     // Close and delete the socket
@@ -1167,7 +1168,7 @@ bool AuthSocket::_HandleXferCancel()
 bool AuthSocket::_HandleXferAccept()
 {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "Entering _HandleXferAccept");
+    LOG_DEBUG("network", "Entering _HandleXferAccept");
 #endif
 
     // Check packet length and patch existence
@@ -1255,7 +1256,7 @@ void Patcher::LoadPatchMD5(char *szFileName)
     path += szFileName;
     FILE* pPatch = fopen(path.c_str(), "rb");
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "Loading patch info from %s\n", path.c_str());
+    LOG_DEBUG("network", "Loading patch info from %s\n", path.c_str());
 #endif
 
     if (!pPatch)

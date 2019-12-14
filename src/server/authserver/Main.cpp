@@ -63,8 +63,8 @@ public:
 /// Print out the usage string for this program on the console.
 void usage(const char* prog)
 {
-    sLog->outString("Usage: \n %s [<options>]\n"
-        "    -c config_file           use config_file as configuration file\n\r",
+    SYS_LOG_INFO("Usage: \n %s [<options>]\n"
+                 "    -c config_file           use config_file as configuration file\n\r",
         prog);
 }
 
@@ -104,25 +104,27 @@ extern int main(int argc, char** argv)
         printf("Verify that the file exists and has \'[authserver]\' written in the top of the file!\n");
     }
 
-    sLog->outString("%s (authserver)", GitRevision::GetFullVersion());
-    sLog->outString("<Ctrl-C> to stop.\n");
+    // Init all logs
+    sLog->Initialize();
 
-    sLog->outString("   █████╗ ███████╗███████╗██████╗  ██████╗ ████████╗██╗  ██╗");           
-    sLog->outString("  ██╔══██╗╚══███╔╝██╔════╝██╔══██╗██╔═══██╗╚══██╔══╝██║  ██║");           
-    sLog->outString("  ███████║  ███╔╝ █████╗  ██████╔╝██║   ██║   ██║   ███████║");           
-    sLog->outString("  ██╔══██║ ███╔╝  ██╔══╝  ██╔══██╗██║   ██║   ██║   ██╔══██║");           
-    sLog->outString("  ██║  ██║███████╗███████╗██║  ██║╚██████╔╝   ██║   ██║  ██║");           
-    sLog->outString("  ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝ ╚═════╝    ╚═╝   ╚═╝  ╚═╝");
-    sLog->outString("                                ██████╗ ██████╗ ██████╗ ███████╗");
-    sLog->outString("                                ██╔════╝██╔═══██╗██╔══██╗██╔═══╝");
-    sLog->outString("                                ██║     ██║   ██║██████╔╝█████╗");  
-    sLog->outString("                                ██║     ██║   ██║██╔══██╗██╔══╝");  
-    sLog->outString("                                ╚██████╗╚██████╔╝██║  ██║███████╗");
-    sLog->outString("                                 ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝\n");
+    LOG_INFO("server.authserver", "%s (authserver)", GitRevision::GetFullVersion());
+    LOG_INFO("server.authserver", "<Ctrl-C> to stop.\n");
 
-    sLog->outString("  	  AzerothCore 3.3.5a  -  www.azerothcore.org\n");
+    LOG_INFO("server.authserver", "   █████╗ ███████╗███████╗██████╗  ██████╗ ████████╗██╗  ██╗");           
+    LOG_INFO("server.authserver", "  ██╔══██╗╚══███╔╝██╔════╝██╔══██╗██╔═══██╗╚══██╔══╝██║  ██║");           
+    LOG_INFO("server.authserver", "  ███████║  ███╔╝ █████╗  ██████╔╝██║   ██║   ██║   ███████║");           
+    LOG_INFO("server.authserver", "  ██╔══██║ ███╔╝  ██╔══╝  ██╔══██╗██║   ██║   ██║   ██╔══██║");           
+    LOG_INFO("server.authserver", "  ██║  ██║███████╗███████╗██║  ██║╚██████╔╝   ██║   ██║  ██║");           
+    LOG_INFO("server.authserver", "  ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝ ╚═════╝    ╚═╝   ╚═╝  ╚═╝");
+    LOG_INFO("server.authserver", "                                ██████╗ ██████╗ ██████╗ ███████╗");
+    LOG_INFO("server.authserver", "                                ██╔════╝██╔═══██╗██╔══██╗██╔═══╝");
+    LOG_INFO("server.authserver", "                                ██║     ██║   ██║██████╔╝█████╗");  
+    LOG_INFO("server.authserver", "                                ██║     ██║   ██║██╔══██╗██╔══╝");  
+    LOG_INFO("server.authserver", "                                ╚██████╗╚██████╔╝██║  ██║███████╗");
+    LOG_INFO("server.authserver", "                                 ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝\n");
 
-    sLog->outString("Using configuration file %s.", configFile);
+    LOG_INFO("server.authserver", "  	  AzerothCore 3.3.5a  -  www.azerothcore.org\n");
+    LOG_INFO("server.authserver", "Using configuration file %s.", configFile);    
 
     sLog->outDetail("%s (Library: %s)", OPENSSL_VERSION_TEXT, SSLeay_version(SSLEAY_VERSION));
 
@@ -150,10 +152,6 @@ extern int main(int argc, char** argv)
     // Initialize the database connection
     if (!StartDB())
         return 1;
-
-    // Initialize the log database
-    sLog->SetLogDB(false);
-    sLog->SetRealmID(0);                                               // ensure we've set realm to 0 (authserver realmid)
 
     // Get the list of realms for the server
     sRealmList->Initialize(sConfigMgr->GetIntDefault("RealmsStateUpdateDelay", 20));
@@ -183,7 +181,7 @@ extern int main(int argc, char** argv)
         return 1;
     }
 
-    sLog->outString("Authserver listening to %s:%d", bind_ip.c_str(), rmport);
+    LOG_INFO("server.authserver", "Authserver listening to %s:%d", bind_ip.c_str(), rmport);
 
     // Initialize the signal handlers
     AuthServerSignalHandler SignalINT, SignalTERM;
@@ -215,7 +213,7 @@ extern int main(int argc, char** argv)
             if (!currentAffinity)
                 sLog->outError("server.authserver", "Processors marked in UseProcessors bitmask (hex) %x are not accessible for the authserver. Accessible processors bitmask (hex): %x", affinity, appAff);
             else if (SetProcessAffinityMask(hProcess, currentAffinity))
-                sLog->outString("server.authserver", "Using processors (bitmask, hex): %x", currentAffinity);
+                LOG_INFO("server.authserver", "server.authserver", "Using processors (bitmask, hex): %x", currentAffinity);
             else
                 sLog->outError("server.authserver", "Can't set used processors (hex): %x", currentAffinity);
         }
@@ -224,7 +222,7 @@ extern int main(int argc, char** argv)
     if (highPriority)
     {
         if (SetPriorityClass(hProcess, HIGH_PRIORITY_CLASS))
-            sLog->outString("server.authserver", "authserver process priority class set to HIGH");
+            LOG_INFO("server.authserver", "server.authserver", "authserver process priority class set to HIGH");
         else
             sLog->outError("server.authserver", "Can't set authserver process priority class.");
     }
@@ -246,7 +244,7 @@ extern int main(int argc, char** argv)
         {
             CPU_ZERO(&mask);
             sched_getaffinity(0, sizeof(mask), &mask);
-            sLog->outString("Using processors (bitmask, hex): %lx", *(__cpu_mask*)(&mask));
+            LOG_INFO("server.authserver", "Using processors (bitmask, hex): %lx", *(__cpu_mask*)(&mask));
         }
     }
 
@@ -255,7 +253,7 @@ extern int main(int argc, char** argv)
         if (setpriority(PRIO_PROCESS, 0, PROCESS_HIGH_PRIORITY))
             sLog->outError("Can't set authserver process priority class, error: %s", strerror(errno));
         else
-            sLog->outString("authserver process priority class set to %i", getpriority(PRIO_PROCESS, 0));
+            LOG_INFO("server.authserver", "authserver process priority class set to %i", getpriority(PRIO_PROCESS, 0));
     }
     
 #endif
@@ -268,8 +266,8 @@ extern int main(int argc, char** argv)
     // possibly enable db logging; avoid massive startup spam by doing it here.
     if (sConfigMgr->GetBoolDefault("EnableLogDB", false))
     {
-        sLog->outString("Enabling database logging...");
-        sLog->SetLogDB(true);
+        LOG_INFO("server.authserver", "Enabling database logging...");
+        sLog->SetRealmID(0, false);
     }
 
     // Wait for termination signal
@@ -292,7 +290,7 @@ extern int main(int argc, char** argv)
     // Close the Database Pool and library
     StopDB();
 
-    sLog->outString("Halting process...");
+    LOG_INFO("server.authserver", "Halting process...");
     return 0;
 }
 
@@ -329,7 +327,7 @@ bool StartDB()
         return false;
     }
 
-    sLog->outString("Started auth database connection pool.");
+    LOG_INFO("server.authserver", "Started auth database connection pool.");
     return true;
 }
 

@@ -354,7 +354,7 @@ void PoolGroup<Creature>::Spawn1Object(PoolObject* obj)
         if (!map->Instanceable() && map->IsGridLoaded(data->posX, data->posY))
         {
             Creature* creature = new Creature;
-            //sLog->outDebug(LOG_FILTER_POOLSYS, "Spawning creature %u", guid);
+            //LOG_DEBUG("pool", "Spawning creature %u", guid);
             if (!creature->LoadCreatureFromDB(obj->guid, map))
             {
                 delete creature;
@@ -378,7 +378,7 @@ void PoolGroup<GameObject>::Spawn1Object(PoolObject* obj)
         if (!map->Instanceable() && map->IsGridLoaded(data->posX, data->posY))
         {
             GameObject* pGameobject = sObjectMgr->IsGameObjectStaticTransport(data->id) ? new StaticTransport() : new GameObject();
-            //sLog->outDebug(LOG_FILTER_POOLSYS, "Spawning gameobject %u", guid);
+            //LOG_DEBUG("pool", "Spawning gameobject %u", guid);
             if (!pGameobject->LoadGameObjectFromDB(obj->guid, map, false))
             {
                 delete pGameobject;
@@ -410,7 +410,7 @@ void PoolGroup<Quest>::Spawn1Object(PoolObject* obj)
     for (PooledQuestRelation::iterator itr = qr.first; itr != qr.second; ++itr)
     {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-        sLog->outDebug(LOG_FILTER_POOLSYS, "PoolGroup<Quest>: Adding quest %u to creature %u", itr->first, itr->second);
+        LOG_DEBUG("pool", "PoolGroup<Quest>: Adding quest %u to creature %u", itr->first, itr->second);
 #endif
         questMap->insert(QuestRelations::value_type(itr->second, itr->first));
     }
@@ -421,7 +421,7 @@ void PoolGroup<Quest>::Spawn1Object(PoolObject* obj)
     for (PooledQuestRelation::iterator itr = qr.first; itr != qr.second; ++itr)
     {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-        sLog->outDebug(LOG_FILTER_POOLSYS, "PoolGroup<Quest>: Adding quest %u to GO %u", itr->first, itr->second);
+        LOG_DEBUG("pool", "PoolGroup<Quest>: Adding quest %u to GO %u", itr->first, itr->second);
 #endif
         questMap->insert(QuestRelations::value_type(itr->second, itr->first));
     }
@@ -431,7 +431,7 @@ template <>
 void PoolGroup<Quest>::SpawnObject(ActivePoolData& spawns, uint32 limit, uint32 triggerFrom)
 {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_POOLSYS, "PoolGroup<Quest>: Spawning pool %u", poolId);
+    LOG_DEBUG("pool", "PoolGroup<Quest>: Spawning pool %u", poolId);
 #endif
     // load state from db
     if (!triggerFrom)

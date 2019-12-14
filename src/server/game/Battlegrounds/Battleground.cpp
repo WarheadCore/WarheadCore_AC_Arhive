@@ -306,7 +306,7 @@ inline void Battleground::_CheckSafePositions(uint32 diff)
             if (pos.GetExactDistSq(x, y, z) > maxDist)
             {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                sLog->outDebug(LOG_FILTER_BATTLEGROUND, "BATTLEGROUND: Sending %s back to start location (map: %u) (possible exploit)", itr->second->GetName().c_str(), GetMapId());
+                LOG_DEBUG("bg", "BATTLEGROUND: Sending %s back to start location (map: %u) (possible exploit)", itr->second->GetName().c_str(), GetMapId());
 #endif
                 itr->second->TeleportTo(GetMapId(), x, y, z, o);
             }

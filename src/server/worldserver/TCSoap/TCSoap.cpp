@@ -35,7 +35,7 @@ void TCSoapRunnable::run()
             continue;   // ran into an accept timeout
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-        sLog->outDebug(LOG_FILTER_NETWORKIO, "TCSoap: accepted connection from IP=%d.%d.%d.%d", (int)(soap.ip>>24)&0xFF, (int)(soap.ip>>16)&0xFF, (int)(soap.ip>>8)&0xFF, (int)soap.ip&0xFF);
+        LOG_DEBUG("network", "TCSoap: accepted connection from IP=%d.%d.%d.%d", (int)(soap.ip>>24)&0xFF, (int)(soap.ip>>16)&0xFF, (int)(soap.ip>>8)&0xFF, (int)soap.ip&0xFF);
 #endif
         struct soap* thread_soap = soap_copy(&soap);// make a safe copy
 
@@ -72,7 +72,7 @@ int ns1__executeCommand(soap* soap, char* command, char** result)
     if (!soap->userid || !soap->passwd)
     {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-        sLog->outDebug(LOG_FILTER_NETWORKIO, "TCSoap: Client didn't provide login information");
+        LOG_DEBUG("network", "TCSoap: Client didn't provide login information");
 #endif
         return 401;
     }
@@ -81,7 +81,7 @@ int ns1__executeCommand(soap* soap, char* command, char** result)
     if (!accountId)
     {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-        sLog->outDebug(LOG_FILTER_NETWORKIO, "TCSoap: Client used invalid username '%s'", soap->userid);
+        LOG_DEBUG("network", "TCSoap: Client used invalid username '%s'", soap->userid);
 #endif
         return 401;
     }
@@ -89,7 +89,7 @@ int ns1__executeCommand(soap* soap, char* command, char** result)
     if (!AccountMgr::CheckPassword(accountId, soap->passwd))
     {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-        sLog->outDebug(LOG_FILTER_NETWORKIO, "TCSoap: invalid password for account '%s'", soap->userid);
+        LOG_DEBUG("network", "TCSoap: invalid password for account '%s'", soap->userid);
 #endif
         return 401;
     }
@@ -97,7 +97,7 @@ int ns1__executeCommand(soap* soap, char* command, char** result)
     if (AccountMgr::GetSecurity(accountId) < SEC_ADMINISTRATOR)
     {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-        sLog->outDebug(LOG_FILTER_NETWORKIO, "TCSoap: %s's gmlevel is too low", soap->userid);
+        LOG_DEBUG("network", "TCSoap: %s's gmlevel is too low", soap->userid);
 #endif
         return 403;
     }
@@ -106,7 +106,7 @@ int ns1__executeCommand(soap* soap, char* command, char** result)
         return soap_sender_fault(soap, "Command can not be empty", "The supplied command was an empty string");
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "TCSoap: got command '%s'", command);
+    LOG_DEBUG("network", "TCSoap: got command '%s'", command);
 #endif
     SOAPCommand connection;
 

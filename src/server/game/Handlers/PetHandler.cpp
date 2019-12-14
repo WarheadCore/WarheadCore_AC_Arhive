@@ -357,7 +357,7 @@ void WorldSession::HandleDismissCritter(WorldPacket &recvData)
     recvData >> guid;
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_DISMISS_CRITTER for GUID " UI64FMTD, guid);
+    LOG_DEBUG("network", "WORLD: Received CMSG_DISMISS_CRITTER for GUID " UI64FMTD, guid);
 #endif
 
     Unit* pet = ObjectAccessor::GetCreatureOrPetOrVehicle(*_player, guid);
@@ -365,7 +365,7 @@ void WorldSession::HandleDismissCritter(WorldPacket &recvData)
     if (!pet)
     {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-        sLog->outDebug(LOG_FILTER_NETWORKIO, "Vanitypet (guid: %u) does not exist - player '%s' (guid: %u / account: %u) attempted to dismiss it (possibly lagged out)", uint32(GUID_LOPART(guid)), GetPlayer()->GetName().c_str(), GetPlayer()->GetGUIDLow(), GetAccountId());
+        LOG_DEBUG("network", "Vanitypet (guid: %u) does not exist - player '%s' (guid: %u / account: %u) attempted to dismiss it (possibly lagged out)", uint32(GUID_LOPART(guid)), GetPlayer()->GetName().c_str(), GetPlayer()->GetGUIDLow(), GetAccountId());
 #endif
         return;
     }
@@ -448,7 +448,7 @@ void WorldSession::HandlePetStopAttack(WorldPacket &recvData)
     recvData >> guid;
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_PET_STOP_ATTACK for GUID " UI64FMTD "", guid);
+    LOG_DEBUG("network", "WORLD: Received CMSG_PET_STOP_ATTACK for GUID " UI64FMTD "", guid);
 #endif
 
     Unit* pet = ObjectAccessor::GetCreatureOrPetOrVehicle(*_player, guid);
@@ -957,7 +957,7 @@ bool WorldSession::CheckStableMaster(uint64 guid)
         if (!GetPlayer()->IsGameMaster() && !GetPlayer()->HasAuraType(SPELL_AURA_OPEN_STABLE))
         {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-            sLog->outStaticDebug("Player (GUID:%u) attempt open stable in cheating way.", GUID_LOPART(guid));
+            LOG_DEBUG("server", "Player (GUID:%u) attempt open stable in cheating way.", GUID_LOPART(guid));
 #endif
             return false;
         }
@@ -968,7 +968,7 @@ bool WorldSession::CheckStableMaster(uint64 guid)
         if (!GetPlayer()->GetNPCIfCanInteractWith(guid, UNIT_NPC_FLAG_STABLEMASTER))
         {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-            sLog->outStaticDebug("Stablemaster (GUID:%u) not found or you can't interact with him.", GUID_LOPART(guid));
+            LOG_DEBUG("server", "Stablemaster (GUID:%u) not found or you can't interact with him.", GUID_LOPART(guid));
 #endif
             return false;
         }
@@ -1288,7 +1288,7 @@ void WorldSession::HandlePetSpellAutocastOpcode(WorldPacket& recvPacket)
 void WorldSession::HandlePetCastSpellOpcode(WorldPacket& recvPacket)
 {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_PET_CAST_SPELL");
+    LOG_DEBUG("network", "WORLD: CMSG_PET_CAST_SPELL");
 #endif
 
     uint64 guid;
@@ -1299,7 +1299,7 @@ void WorldSession::HandlePetCastSpellOpcode(WorldPacket& recvPacket)
     recvPacket >> guid >> castCount >> spellId >> castFlags;
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_PET_CAST_SPELL, guid: " UI64FMTD ", castCount: %u, spellId %u, castFlags %u", guid, castCount, spellId, castFlags);
+    LOG_DEBUG("network", "WORLD: CMSG_PET_CAST_SPELL, guid: " UI64FMTD ", castCount: %u, spellId %u, castFlags %u", guid, castCount, spellId, castFlags);
 #endif
 
     // This opcode is also sent from charmed and possessed units (players and creatures)
@@ -1409,7 +1409,7 @@ void WorldSession::SendPetNameInvalid(uint32 error, const std::string& name, Dec
 void WorldSession::HandlePetLearnTalent(WorldPacket & recvData)
 {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_PET_LEARN_TALENT");
+    LOG_DEBUG("network", "WORLD: CMSG_PET_LEARN_TALENT");
 #endif
 
     uint64 guid;
@@ -1423,7 +1423,7 @@ void WorldSession::HandlePetLearnTalent(WorldPacket & recvData)
 void WorldSession::HandleLearnPreviewTalentsPet(WorldPacket & recvData)
 {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "CMSG_LEARN_PREVIEW_TALENTS_PET");
+    LOG_DEBUG("network", "CMSG_LEARN_PREVIEW_TALENTS_PET");
 #endif
 
     uint64 guid;

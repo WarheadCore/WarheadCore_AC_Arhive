@@ -40,14 +40,14 @@ uint32 realmID;                                             ///< Id of the realm
 /// Print out the usage string for this program on the console.
 void usage(const char* prog)
 {
-    printf("Usage:\n");
-    printf(" %s [<options>]\n", prog);
-    printf("    -c config_file           use config_file as configuration file\n");
+    SYS_LOG_INFO("Usage:\n");
+    SYS_LOG_INFO(" %s [<options>]\n", prog);
+    SYS_LOG_INFO("    -c config_file           use config_file as configuration file\n");
 #ifdef _WIN32
-    printf("    Running as service functions:\n");
-    printf("    --service                run as service\n");
-    printf("    -s install               install service\n");
-    printf("    -s uninstall             uninstall service\n");
+    SYS_LOG_INFO("    Running as service functions:\n");
+    SYS_LOG_INFO("    --service                run as service\n");
+    SYS_LOG_INFO("    -s install               install service\n");
+    SYS_LOG_INFO("    -s uninstall             uninstall service\n");
 #endif
 }
 
@@ -68,7 +68,7 @@ extern int main(int argc, char** argv)
         {
             if (++c >= argc)
             {
-                printf("Runtime-Error: -c option requires an input argument");
+                SYS_LOG_INFO("Runtime-Error: -c option requires an input argument");
                 usage(argv[0]);
                 return 1;
             }
@@ -81,7 +81,7 @@ extern int main(int argc, char** argv)
         {
             if (++c >= argc)
             {
-                printf("Runtime-Error: -s option requires an input argument");
+                SYS_LOG_INFO("Runtime-Error: -s option requires an input argument");
                 usage(argv[0]);
                 return 1;
             }
@@ -89,18 +89,18 @@ extern int main(int argc, char** argv)
             if (strcmp(argv[c], "install") == 0)
             {
                 if (WinServiceInstall())
-                    printf("Installing service\n");
+                    SYS_LOG_INFO("Installing service\n");
                 return 1;
             }
             else if (strcmp(argv[c], "uninstall") == 0)
             {
                 if (WinServiceUninstall())
-                    printf("Uninstalling service\n");
+                    SYS_LOG_INFO("Uninstalling service\n");
                 return 1;
             }
             else
             {
-                printf("Runtime-Error: unsupported option %s", argv[c]);
+                SYS_LOG_INFO("Runtime-Error: unsupported option %s", argv[c]);
                 usage(argv[0]);
                 return 1;
             }
@@ -116,15 +116,18 @@ extern int main(int argc, char** argv)
     cfg_def_file += ".dist";
 
     if (!sConfigMgr->LoadInitial(cfg_def_file.c_str())) {
-        printf("ERROR: Invalid or missing default configuration file : %s\n", cfg_def_file.c_str());
+        SYS_LOG_INFO("ERROR: Invalid or missing default configuration file : %s\n", cfg_def_file.c_str());
         return 1;
     }
 
     if (!sConfigMgr->LoadMore(cfg_file))
     {
-        printf("WARNING: Invalid or missing configuration file : %s\n", cfg_file);
-        printf("Verify that the file exists and has \'[worldserver]' written in the top of the file!\n");
+        SYS_LOG_INFO("WARNING: Invalid or missing configuration file : %s\n", cfg_file);
+        SYS_LOG_INFO("Verify that the file exists and has \'[worldserver]' written in the top of the file!\n");
     }
+
+    // Init all logs
+    sLog->Initialize();
 
     sLog->outString("Using configuration file %s.", cfg_file);
 

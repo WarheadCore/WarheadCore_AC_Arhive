@@ -909,7 +909,7 @@ bool BfCapturePoint::SetCapturePointData(GameObject* capturePoint)
     ASSERT(capturePoint);
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_BATTLEFIELD, "Creating capture point %u", capturePoint->GetEntry());
+    LOG_DEBUG("bg.bf", "Creating capture point %u", capturePoint->GetEntry());
 #endif
 
     m_capturePoint = capturePoint->GetGUID();

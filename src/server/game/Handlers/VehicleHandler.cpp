@@ -15,7 +15,7 @@
 void WorldSession::HandleDismissControlledVehicle(WorldPacket &recvData)
 {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Recvd CMSG_DISMISS_CONTROLLED_VEHICLE");
+    LOG_DEBUG("network", "WORLD: Recvd CMSG_DISMISS_CONTROLLED_VEHICLE");
 #endif
 
     uint64 vehicleGUID = _player->GetCharmGUID();
@@ -50,7 +50,7 @@ void WorldSession::HandleDismissControlledVehicle(WorldPacket &recvData)
 void WorldSession::HandleChangeSeatsOnControlledVehicle(WorldPacket &recvData)
 {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Recvd CMSG_CHANGE_SEATS_ON_CONTROLLED_VEHICLE");
+    LOG_DEBUG("network", "WORLD: Recvd CMSG_CHANGE_SEATS_ON_CONTROLLED_VEHICLE");
 #endif
 
     Unit* vehicle_base = GetPlayer()->GetVehicleBase();
@@ -221,7 +221,7 @@ void WorldSession::HandleEjectPassenger(WorldPacket &data)
 void WorldSession::HandleRequestVehicleExit(WorldPacket& /*recvData*/)
 {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Recvd CMSG_REQUEST_VEHICLE_EXIT");
+    LOG_DEBUG("network", "WORLD: Recvd CMSG_REQUEST_VEHICLE_EXIT");
 #endif
 
     if (Vehicle* vehicle = GetPlayer()->GetVehicle())

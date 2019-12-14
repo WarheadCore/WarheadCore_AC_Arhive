@@ -320,7 +320,7 @@ Corpse* ObjectAccessor::ConvertCorpseForPlayer(uint64 player_guid, bool insignia
     }
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outStaticDebug("Deleting Corpse and spawned bones.");
+    LOG_DEBUG("server", "Deleting Corpse and spawned bones.");
 #endif
 
     // Map can be NULL

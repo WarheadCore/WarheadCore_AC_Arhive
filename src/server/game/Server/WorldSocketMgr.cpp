@@ -274,8 +274,8 @@ WorldSocketMgr::StartReactiveIO (uint16 port, const char* address)
 int
 WorldSocketMgr::StartNetwork (uint16 port, const char* address)
 {
-    if (!sLog->IsOutDebug())
-        ACE_Log_Msg::instance()->priority_mask (LM_ERROR, ACE_Log_Msg::PROCESS);
+    if (!sLog->ShouldLog("network", LOG_LEVEL_DEBUG))
+        ACE_Log_Msg::instance()->priority_mask(LM_ERROR, ACE_Log_Msg::PROCESS);
 
     if (StartReactiveIO(port, address) == -1)
         return -1;

@@ -9,7 +9,7 @@ add_subdirectory(Foundation)
 # add_subdirectory(Encodings)
 
 # Add lib Poco::Net
-add_subdirectory(Net)
+# add_subdirectory(Net)
 
 # Add lib Poco::Util
-add_subdirectory(Util)
+# add_subdirectory(Util)

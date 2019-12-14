@@ -1104,7 +1104,7 @@ void SmartGameObjectAI::Reset()
 bool SmartGameObjectAI::GossipHello(Player* player, bool reportUse)
 {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_DATABASE_AI, "SmartGameObjectAI::GossipHello");
+    LOG_DEBUG("scripts.ai", "SmartGameObjectAI::GossipHello");
 #endif
     GetScript()->ProcessEventsFor(SMART_EVENT_GOSSIP_HELLO, player, (uint32)reportUse, 0, false, NULL, go);
     return false;
@@ -1187,7 +1187,7 @@ class SmartTrigger : public AreaTriggerScript
                 return false;
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-            sLog->outDebug(LOG_FILTER_DATABASE_AI, "AreaTrigger %u is using SmartTrigger script", trigger->entry);
+            LOG_DEBUG("scripts.ai", "AreaTrigger %u is using SmartTrigger script", trigger->entry);
 #endif
             SmartScript script;
             script.OnInitialize(NULL, trigger);
