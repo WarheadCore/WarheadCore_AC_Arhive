@@ -84,7 +84,6 @@ target_link_libraries(Foundation
 target_compile_definitions(Foundation
   PUBLIC
     $<$<CONFIG:Debug>:_DEBUG>
-    $<$<CONFIG:RelWithDebInfo>:_DEBUG>
     POCO_ENABLE_CPP14)
 
 target_compile_features(Foundation
