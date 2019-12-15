@@ -38,7 +38,7 @@ bool ConfigMgr::GetValueHelper(const char* name, ACE_TString &result)
     return false;
 }
 
-bool ConfigMgr::LoadInitial(char const* file)
+bool ConfigMgr::LoadInitial(char const* file, std::string applicationName /*= "worldserver"*/)
 {
     ASSERT(file);
 
@@ -46,46 +46,55 @@ bool ConfigMgr::LoadInitial(char const* file)
 
     _config.reset(new ACE_Configuration_Heap());
     if (_config->open() == 0)
-        if (LoadData(file))
+        if (LoadData(file, applicationName))
             return true;
+
+    SYS_LOG_INFO("Initial load config error. Invalid or missing configuration file: %s\n", file);
+    SYS_LOG_INFO("Verify that the file exists and has \'[%s]' written in the top of the file!\n", applicationName.c_str());
 
     _config.reset();
     return false;
 }
 
-bool ConfigMgr::LoadMore(char const* file)
+bool ConfigMgr::LoadMore(char const* file, std::string applicationName /*= "worldserver"*/)
 {
     ASSERT(file);
     ASSERT(_config);
 
     GuardType guard(_configLock);
 
-    return LoadData(file);
+    return LoadData(file, applicationName);
 }
 
 bool ConfigMgr::Reload()
 {
-    for(std::vector<std::string>::iterator it = _confFiles.begin(); it != _confFiles.end(); ++it) {
-        if (it==_confFiles.begin()) {
-            if (!LoadInitial((*it).c_str()))
+    for (std::vector<std::string>::const_iterator itr = _confFiles.begin(); itr != _confFiles.end(); ++itr)
+    {
+        if (itr == _confFiles.begin())
+        {
+            if (!LoadInitial((*itr).c_str()))
                 return false;
-        } else {
-            LoadMore((*it).c_str());
+        }
+        else
+        {
+            LoadMore((*itr).c_str());
         }
     }
 
     return true;
 }
 
-bool ConfigMgr::LoadData(char const* file)
+bool ConfigMgr::LoadData(char const* file, std::string applicationName /*= "worldserver"*/)
 {
-    if(std::find(_confFiles.begin(), _confFiles.end(), file) == _confFiles.end()) {
+    if(std::find(_confFiles.begin(), _confFiles.end(), file) == _confFiles.end())
         _confFiles.push_back(file);
-    }
 
     ACE_Ini_ImpExp config_importer(*_config.get());
     if (config_importer.import_config(file) == 0)
         return true;
+
+    SYS_LOG_INFO("Load config error. Invalid or missing configuration file: %s", file);
+    SYS_LOG_INFO("Verify that the file exists and has \'[%s]' written in the top of the file!\n", applicationName.c_str());
 
     return false;
 }
@@ -115,8 +124,7 @@ bool ConfigMgr::GetBoolDefault(std::string const& name, bool def, bool logUnused
         return def;
     }
 
-    return (val == "true" || val == "TRUE" || val == "yes" || val == "YES" ||
-        val == "1");
+    return (val == "true" || val == "TRUE" || val == "yes" || val == "YES" || val == "1");
 }
 
 int ConfigMgr::GetIntDefault(std::string const& name, int def, bool logUnused /*= true*/)

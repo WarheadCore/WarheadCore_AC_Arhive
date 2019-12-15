@@ -322,16 +322,9 @@ extern int main(int argc, char** argv)
     cfg_def_file += ".dist";
 
     if (!sConfigMgr->LoadInitial(cfg_def_file.c_str()))
-    {
-        SYS_LOG_INFO("ERROR: Invalid or missing default configuration file : %s\n", cfg_def_file.c_str());
         return 1;
-    }
 
-    if (!sConfigMgr->LoadMore(configFile))
-    {
-        SYS_LOG_INFO("WARNING: Invalid or missing configuration file : %s\n", configFile);
-        SYS_LOG_INFO("Verify that the file exists and has \'[worldserver]' written in the top of the file!\n");
-    }
+    sConfigMgr->LoadMore(configFile);
 
     // Init all logs
     sLog->Initialize();

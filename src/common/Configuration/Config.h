@@ -28,7 +28,7 @@ public:
     static ConfigMgr* instance();
     
     /// Method used only for loading main configuration files (authserver.conf and worldserver.conf)
-    bool LoadInitial(char const* file);
+    bool LoadInitial(char const* file, std::string applicationName = "worldserver");
 
     /**
      * This method loads additional configuration files
@@ -36,7 +36,7 @@ public:
      *
      * @return true if loading was successful
      */
-    bool LoadMore(char const* file);
+    bool LoadMore(char const* file, std::string applicationName = "worldserver");
 
     bool Reload();
 
@@ -47,14 +47,14 @@ public:
 
     std::list<std::string> GetKeysByString(std::string const& name);
 
-    bool isDryRun() { return this->dryRun; }
-    void setDryRun(bool mode) { this->dryRun = mode; }
+    bool isDryRun() { return dryRun; }
+    void setDryRun(bool mode) { dryRun = mode; }
 
 private:
     bool dryRun = false;
 
     bool GetValueHelper(const char* name, ACE_TString &result);
-    bool LoadData(char const* file);
+    bool LoadData(char const* file, std::string applicationName = "worldserver");
 
     typedef ACE_Thread_Mutex LockType;
     typedef ACE_Guard<LockType> GuardType;
