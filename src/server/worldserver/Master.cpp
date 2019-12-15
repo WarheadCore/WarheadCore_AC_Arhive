@@ -18,7 +18,6 @@
 #include "Config.h"
 #include "DatabaseEnv.h"
 #include "DatabaseWorkerPool.h"
-
 #include "CliRunnable.h"
 #include "Log.h"
 #include "Master.h"
@@ -117,24 +116,6 @@ int Master::Run()
     OpenSSLCrypto::threadsSetup();
     BigNumber seed1;
     seed1.SetRand(16 * 8);
-
-    sLog->outString("%s (worldserver-daemon)", GitRevision::GetFullVersion());
-    sLog->outString("<Ctrl-C> to stop.\n");
-
-    sLog->outString("   █████╗ ███████╗███████╗██████╗  ██████╗ ████████╗██╗  ██╗");           
-    sLog->outString("  ██╔══██╗╚══███╔╝██╔════╝██╔══██╗██╔═══██╗╚══██╔══╝██║  ██║");           
-    sLog->outString("  ███████║  ███╔╝ █████╗  ██████╔╝██║   ██║   ██║   ███████║");           
-    sLog->outString("  ██╔══██║ ███╔╝  ██╔══╝  ██╔══██╗██║   ██║   ██║   ██╔══██║");           
-    sLog->outString("  ██║  ██║███████╗███████╗██║  ██║╚██████╔╝   ██║   ██║  ██║");           
-    sLog->outString("  ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝ ╚═════╝    ╚═╝   ╚═╝  ╚═╝");                                                                
-    sLog->outString("                                ██████╗ ██████╗ ██████╗ ███████╗");
-    sLog->outString("                                ██╔════╝██╔═══██╗██╔══██╗██╔═══╝");
-    sLog->outString("                                ██║     ██║   ██║██████╔╝█████╗");  
-    sLog->outString("                                ██║     ██║   ██║██╔══██╗██╔══╝");  
-    sLog->outString("                                ╚██████╗╚██████╔╝██║  ██║███████╗");
-    sLog->outString("                                 ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝\n");
-
-    sLog->outString("  	  AzerothCore 3.3.5a  -  www.azerothcore.org\n");
 
     /// worldserver PID file creation
     std::string pidFile = sConfigMgr->GetStringDefault("PidFile", "");

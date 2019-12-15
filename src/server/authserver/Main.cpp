@@ -28,6 +28,7 @@
 #include "SignalHandler.h"
 #include "RealmList.h"
 #include "RealmAcceptor.h"
+#include "Logo.h"
 
 #ifdef __linux__
 #include <sched.h>
@@ -107,26 +108,7 @@ extern int main(int argc, char** argv)
     // Init all logs
     sLog->Initialize();
 
-    LOG_INFO("server.authserver", "%s (authserver)", GitRevision::GetFullVersion());
-    LOG_INFO("server.authserver", "<Ctrl-C> to stop.\n");
-
-    LOG_INFO("server.authserver", "   █████╗ ███████╗███████╗██████╗  ██████╗ ████████╗██╗  ██╗");           
-    LOG_INFO("server.authserver", "  ██╔══██╗╚══███╔╝██╔════╝██╔══██╗██╔═══██╗╚══██╔══╝██║  ██║");           
-    LOG_INFO("server.authserver", "  ███████║  ███╔╝ █████╗  ██████╔╝██║   ██║   ██║   ███████║");           
-    LOG_INFO("server.authserver", "  ██╔══██║ ███╔╝  ██╔══╝  ██╔══██╗██║   ██║   ██║   ██╔══██║");           
-    LOG_INFO("server.authserver", "  ██║  ██║███████╗███████╗██║  ██║╚██████╔╝   ██║   ██║  ██║");           
-    LOG_INFO("server.authserver", "  ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝ ╚═════╝    ╚═╝   ╚═╝  ╚═╝");
-    LOG_INFO("server.authserver", "                                ██████╗ ██████╗ ██████╗ ███████╗");
-    LOG_INFO("server.authserver", "                                ██╔════╝██╔═══██╗██╔══██╗██╔═══╝");
-    LOG_INFO("server.authserver", "                                ██║     ██║   ██║██████╔╝█████╗");  
-    LOG_INFO("server.authserver", "                                ██║     ██║   ██║██╔══██╗██╔══╝");  
-    LOG_INFO("server.authserver", "                                ╚██████╗╚██████╔╝██║  ██║███████╗");
-    LOG_INFO("server.authserver", "                                 ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝\n");
-
-    LOG_INFO("server.authserver", "  	  AzerothCore 3.3.5a  -  www.azerothcore.org\n");
-    LOG_INFO("server.authserver", "Using configuration file %s.", configFile);    
-
-    sLog->outDetail("%s (Library: %s)", OPENSSL_VERSION_TEXT, SSLeay_version(SSLEAY_VERSION));
+    acore::Logo::Show("server.authserver", "authserver", configFile);
 
 #if defined (ACE_HAS_EVENT_POLL) || defined (ACE_HAS_DEV_POLL)
     ACE_Reactor::instance(new ACE_Reactor(new ACE_Dev_Poll_Reactor(ACE::max_handles(), 1), 1), true);
@@ -134,7 +116,7 @@ extern int main(int argc, char** argv)
     ACE_Reactor::instance(new ACE_Reactor(new ACE_TP_Reactor(), true), true);
 #endif
 
-    sLog->outBasic("Max allowed open files is %d", ACE::max_handles());
+    LOG_DEBUG("server.authserver", "Max allowed open files is %d", ACE::max_handles());
 
     // authserver PID file creation
     std::string pidFile = sConfigMgr->GetStringDefault("PidFile", "");

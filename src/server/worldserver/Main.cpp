@@ -8,14 +8,12 @@
 /// @{
 /// \file
 
-#include <openssl/opensslv.h>
-#include <openssl/crypto.h>
-#include <ace/Version.h>
 #include "Common.h"
 #include "DatabaseEnv.h"
 #include "Config.h"
 #include "Log.h"
 #include "Master.h"
+#include "Logo.h"
 
 #ifndef _ACORE_CORE_CONFIG
 # define _ACORE_CORE_CONFIG  "worldserver.conf"
@@ -55,7 +53,7 @@ void usage(const char* prog)
 extern int main(int argc, char** argv)
 {
     ///- Command line parsing to get the configuration file name
-    char const* cfg_file = _ACORE_CORE_CONFIG;
+    char const* configFile = _ACORE_CORE_CONFIG;
     int c = 1;
     while (c < argc)
     {
@@ -73,7 +71,7 @@ extern int main(int argc, char** argv)
                 return 1;
             }
             else
-                cfg_file = argv[c];
+                configFile = argv[c];
         }
 
         #ifdef _WIN32
@@ -115,24 +113,22 @@ extern int main(int argc, char** argv)
     std::string cfg_def_file=_ACORE_CORE_CONFIG;
     cfg_def_file += ".dist";
 
-    if (!sConfigMgr->LoadInitial(cfg_def_file.c_str())) {
+    if (!sConfigMgr->LoadInitial(cfg_def_file.c_str()))
+    {
         SYS_LOG_INFO("ERROR: Invalid or missing default configuration file : %s\n", cfg_def_file.c_str());
         return 1;
     }
 
-    if (!sConfigMgr->LoadMore(cfg_file))
+    if (!sConfigMgr->LoadMore(configFile))
     {
-        SYS_LOG_INFO("WARNING: Invalid or missing configuration file : %s\n", cfg_file);
+        SYS_LOG_INFO("WARNING: Invalid or missing configuration file : %s\n", configFile);
         SYS_LOG_INFO("Verify that the file exists and has \'[worldserver]' written in the top of the file!\n");
     }
 
     // Init all logs
     sLog->Initialize();
 
-    sLog->outString("Using configuration file %s.", cfg_file);
-
-    sLog->outString("Using SSL version: %s (library: %s)", OPENSSL_VERSION_TEXT, SSLeay_version(SSLEAY_VERSION));
-    sLog->outString("Using ACE version: %s", ACE_VERSION);
+    acore::Logo::Show("server.authserver", "authserver", configFile);
 
     ///- and run the 'Master'
     /// @todo Why do we need this 'Master'? Can't all of this be in the Main as for Realmd?
