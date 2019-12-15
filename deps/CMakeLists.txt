@@ -20,6 +20,7 @@ add_subdirectory(threads)
 add_subdirectory(acelite)
 add_subdirectory(fmt)
 add_subdirectory(poco)
+add_subdirectory(boost)
 
 if(SERVERS OR TOOLS)
   add_subdirectory(zlib)
