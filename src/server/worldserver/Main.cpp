@@ -15,7 +15,6 @@
 #include "Logo.h"
 #include "GitRevision.h"
 #include "SignalHandler.h"
-#include "WorldRunnable.h"
 #include "WorldSocket.h"
 #include "WorldSocketMgr.h"
 #include "CliRunnable.h"
@@ -25,7 +24,17 @@
 #include "ScriptMgr.h"
 #include "BigNumber.h"
 #include "OpenSSLCrypto.h"
+#include "World.h"
+#include "BattlegroundMgr.h"
+#include "MapManager.h"
+#include "OutdoorPvPMgr.h"
+#include "AvgDiffTracker.h"
+#include "AsyncAuctionListing.h"
 #include <ace/Sig_Handler.h>
+
+#ifdef ELUNA
+#include "LuaEngine.h"
+#endif
 
 #if AC_PLATFORM == AC_PLATFORM_WINDOWS
 #include "ServiceWin32.h"
@@ -52,6 +61,8 @@ uint32 realmID;                                             ///< Id of the realm
 #ifndef _ACORE_CORE_CONFIG
 #define _ACORE_CORE_CONFIG  "worldserver.conf"
 #endif
+
+#define WORLD_SLEEP_CONST 10
 
 /// Print out the usage string for this program on the console.
 void usage(const char* prog)
@@ -135,7 +146,117 @@ bool _StartDB();
 void _StopDB();
 void ClearOnlineAccounts();
 
-/// Launch the Trinity server
+/// Heartbeat thread for the World
+class WorldRunnable : public acore::Runnable
+{
+public:
+    /// Heartbeat for the World
+    void run()
+    {
+        uint32 realCurrTime = 0;
+        uint32 realPrevTime = getMSTime();
+
+        ///- While we have not World::m_stopEvent, update the world
+        while (!World::IsStopped())
+        {
+            ++World::m_worldLoopCounter;
+            realCurrTime = getMSTime();
+
+            uint32 diff = getMSTimeDiff(realPrevTime, realCurrTime);
+
+            sWorld->Update(diff);
+            realPrevTime = realCurrTime;
+
+            uint32 executionTimeDiff = getMSTimeDiff(realCurrTime, getMSTime());
+            devDiffTracker.Update(executionTimeDiff);
+            avgDiffTracker.Update(executionTimeDiff > WORLD_SLEEP_CONST ? executionTimeDiff : WORLD_SLEEP_CONST);
+
+            if (executionTimeDiff < WORLD_SLEEP_CONST)
+                acore::Thread::Sleep(WORLD_SLEEP_CONST - executionTimeDiff);
+
+#if AC_PLATFORM == AC_PLATFORM_WINDOWS
+            if (m_ServiceStatus == 0)
+                World::StopNow(SHUTDOWN_EXIT_CODE);
+
+            while (m_ServiceStatus == 2)
+                Sleep(1000);
+#endif
+        }
+
+        sLog->SetRealmID(0, false);
+
+        sScriptMgr->OnShutdown();
+
+        sWorld->KickAll();                                       // save and kick all players
+        sWorld->UpdateSessions(1);                             // real players unload required UpdateSessions call
+
+        // unload battleground templates before different singletons destroyed
+        sBattlegroundMgr->DeleteAllBattlegrounds();
+        sWorldSocketMgr->StopNetwork();
+        sMapMgr->UnloadAll();                     // unload all grids (including locked in memory)
+        sObjectAccessor->UnloadAll();             // unload 'i_player2corpse' storage and remove from world
+        sScriptMgr->Unload();
+        sOutdoorPvPMgr->Die();
+#ifdef ELUNA
+        Eluna::Uninitialize();
+#endif
+    }
+};
+
+class AuctionListRunnable : public acore::Runnable
+{
+public:
+    void run()
+    {
+        LOG_INFO("auctionHouse", "Starting up Auction House Listing thread...");
+
+        while (!World::IsStopped())
+        {
+            if (AsyncAuctionListingMgr::IsAuctionListingAllowed())
+            {
+                uint32 diff = AsyncAuctionListingMgr::GetDiff();
+                AsyncAuctionListingMgr::ResetDiff();
+
+                if (AsyncAuctionListingMgr::GetTempList().size() || AsyncAuctionListingMgr::GetList().size())
+                {
+                    ACORE_GUARD(ACE_Thread_Mutex, AsyncAuctionListingMgr::GetLock());
+
+                    {
+                        ACORE_GUARD(ACE_Thread_Mutex, AsyncAuctionListingMgr::GetTempLock());
+
+                        for (auto itr : AsyncAuctionListingMgr::GetTempList())
+                            AsyncAuctionListingMgr::GetList().push_back(itr);
+
+                        AsyncAuctionListingMgr::GetTempList().clear();
+                    }
+
+                    for (auto itr : AsyncAuctionListingMgr::GetList())//std::list<AuctionListItemsDelayEvent>::iterator itr = AsyncAuctionListingMgr::GetList().begin(); itr != AsyncAuctionListingMgr::GetList().end(); ++itr)
+                    {
+                        if (itr._msTimer <= diff)
+                            itr._msTimer = 0;
+                        else
+                            itr._msTimer -= diff;
+                    }
+
+                    for (std::list<AuctionListItemsDelayEvent>::iterator itr = AsyncAuctionListingMgr::GetList().begin(); itr != AsyncAuctionListingMgr::GetList().end(); ++itr)
+                    if ((*itr)._msTimer == 0)
+                    {
+                        if ((*itr).Execute())
+                            AsyncAuctionListingMgr::GetList().erase(itr);
+
+                        break;
+                    }
+                }
+            }
+
+            acore::Thread::Sleep(1);
+        }
+
+        LOG_INFO("auctionHouse", "Auction House Listing thread exiting without problems.");
+    }
+};
+
+/// Launch the server
 extern int main(int argc, char** argv)
 {
     ///- Command line parsing to get the configuration file name
@@ -215,7 +336,7 @@ extern int main(int argc, char** argv)
     // Init all logs
     sLog->Initialize();
 
-    acore::Logo::Show("server.authserver", "authserver", configFile);
+    acore::Logo::Show("server.worldserver", "worldserver", configFile);
 
     ///- and run the 'Master'
     /// @todo Why do we need this 'Master'? Can't all of this be in the Main as for Realmd?
@@ -266,11 +387,17 @@ extern int main(int argc, char** argv)
 #endif
     //handle.register_handler(SIGSEGV, &signalSEGV);
 
-    ///- Launch WorldRunnable thread
+    ///- Launch Runnable's thread
     acore::Thread worldThread(new WorldRunnable);
-    worldThread.setPriority(acore::Priority_Highest);
+    acore::Thread rarThread(new RARunnable);
+    acore::Thread auctionLising_thread(new AuctionListRunnable);
+    acore::Thread* cliThread = nullptr;   
+    acore::Thread* soapThread = nullptr;
+    acore::Thread* freezeThread = nullptr;
 
-    acore::Thread* cliThread = NULL;
+    // Set thread priority
+    worldThread.setPriority(acore::Priority_Highest);
+    auctionLising_thread.setPriority(acore::Priority_High);
 
 #if AC_PLATFORM == AC_PLATFORM_WINDOWS
     if (sConfigMgr->GetBoolDefault("Console.Enable", true) && (m_ServiceStatus == -1)/* need disable console in service mode*/)
@@ -280,13 +407,7 @@ extern int main(int argc, char** argv)
     {
         ///- Launch CliRunnable thread
         cliThread = new acore::Thread(new CliRunnable);
-    }
-
-    acore::Thread rarThread(new RARunnable);
-
-    // pussywizard:
-    acore::Thread auctionLising_thread(new AuctionListingRunnable);
-    auctionLising_thread.setPriority(acore::Priority_High);
+    }    
 
 #if defined(_WIN32) || defined(__linux__)
 
@@ -355,9 +476,7 @@ extern int main(int argc, char** argv)
 
 #endif
 #endif
-
-    // Start soap serving thread
-    acore::Thread* soapThread = NULL;
+    // Start soap serving thread    
     if (sConfigMgr->GetBoolDefault("SOAP.Enabled", false))
     {
         TCSoapRunnable* runnable = new TCSoapRunnable();
@@ -365,8 +484,7 @@ extern int main(int argc, char** argv)
         soapThread = new acore::Thread(runnable);
     }
 
-    // Start up freeze catcher thread
-    acore::Thread* freezeThread = NULL;
+    // Start up freeze catcher thread    
     if (uint32 freezeDelay = sConfigMgr->GetIntDefault("MaxCoreStuckTime", 0))
     {
         FreezeDetectorRunnable* runnable = new FreezeDetectorRunnable(freezeDelay * 1000);
@@ -380,8 +498,7 @@ extern int main(int argc, char** argv)
     if (sWorldSocketMgr->StartNetwork(worldPort, bindIp.c_str()) == -1)
     {
         sLog->outError("Failed to start network");
-        World::StopNow(ERROR_EXIT_CODE);
-        // go down and shutdown the server
+        World::StopNow(ERROR_EXIT_CODE); // go down and shutdown the server        
     }
 
     // set server online (allow connecting now)

@@ -519,8 +519,6 @@ struct CliCommandHolder
 
 typedef std::unordered_map<uint32, WorldSession*> SessionMap;
 
-#define WORLD_SLEEP_CONST 10
-
 // xinef: global storage
 struct GlobalPlayerData
 {
