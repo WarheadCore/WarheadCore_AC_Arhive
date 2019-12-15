@@ -63,8 +63,10 @@ class MySQLConnection
         MySQLConnection(ACE_Activation_Queue* queue, MySQLConnectionInfo& connInfo);  //! Constructor for asynchronous connections.
         virtual ~MySQLConnection();
 
-        virtual bool Open();
+        virtual uint32 Open();
         void Close();
+
+        bool PrepareStatements();
 
     public:
         bool Execute(const char* sql);
@@ -79,7 +81,7 @@ class MySQLConnection
         void CommitTransaction();
         bool ExecuteTransaction(SQLTransaction& transaction);
 
-        operator bool () const { return m_Mysql != NULL; }
+        operator bool () const { return m_Mysql != nullptr; }
         void Ping() { mysql_ping(m_Mysql); }
 
         uint32 GetLastError() { return mysql_errno(m_Mysql); }
@@ -98,11 +100,9 @@ class MySQLConnection
             m_Mutex.release();
         }
 
-        MYSQL* GetHandle()  { return m_Mysql; }
+        MYSQL* GetHandle() { return m_Mysql; }
         MySQLPreparedStatement* GetPreparedStatement(uint32 index);
         void PrepareStatement(uint32 index, const char* sql, ConnectionFlags flags);
-
-        bool PrepareStatements();
         virtual void DoPrepareStatements() = 0;
 
     protected:

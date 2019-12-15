@@ -66,10 +66,9 @@ void MySQLConnection::Close()
     delete this;
 }
 
-bool MySQLConnection::Open()
+uint32 MySQLConnection::Open()
 {
-    MYSQL *mysqlInit;
-    mysqlInit = mysql_init(NULL);
+    MYSQL* mysqlInit = mysql_init(nullptr);
     if (!mysqlInit)
     {
         sLog->outError("Could not initialize Mysql connection to database `%s`", m_connectionInfo.database.c_str());
@@ -116,7 +115,8 @@ bool MySQLConnection::Open()
     uint32 const SECONDS = 10;
 
     uint32 count = 0;
-    do {
+    do
+    {
         m_Mysql = mysql_real_connect(
             mysqlInit,
             m_connectionInfo.host.c_str(),
@@ -146,7 +146,7 @@ bool MySQLConnection::Open()
             // set connection properties to UTF8 to properly handle locales for different
             // server configs - core sends data in UTF8, so MySQL must expect UTF8 too
             mysql_set_character_set(m_Mysql, "utf8");
-            return PrepareStatements();
+            return 0;
         }
         else
         {
@@ -157,13 +157,10 @@ bool MySQLConnection::Open()
         }
     } while (!m_Mysql && count < ATTEMPTS);
 
-    sLog->outError(
-        "Could not connect to MySQL database at %s: %s after %d attempts\n",
-        m_connectionInfo.host.c_str(),
-        mysql_error(mysqlInit),
-        ATTEMPTS);
+    LOG_ERROR("sql.sql", "Could not connect to MySQL database at %s: %s", m_connectionInfo.host.c_str(), mysql_error(mysqlInit));
+    uint32 errorCode = mysql_errno(mysqlInit);
     mysql_close(mysqlInit);
-    return false;
+    return errorCode;
 }
 
 bool MySQLConnection::PrepareStatements()
