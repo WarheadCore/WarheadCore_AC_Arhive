@@ -31,7 +31,7 @@ void PetitionMgr::LoadPetitions()
     QueryResult result = CharacterDatabase.Query("SELECT ownerguid, petitionguid, name, type FROM petition");
     if (!result)
     {
-        sLog->outString(">>  Loaded 0 Petitions!");
+        sLog->outString(">> Loaded 0 Petitions!");
         sLog->outString();
         return;
     }
@@ -56,7 +56,7 @@ void PetitionMgr::LoadSignatures()
     QueryResult result = CharacterDatabase.Query("SELECT petitionguid, playerguid, player_account FROM petition_sign");
     if (!result)
     {
-        sLog->outString(">>  Loaded 0 Petition signs!");
+        sLog->outString(">> Loaded 0 Petition signs!");
         sLog->outString();
         return;
     }

@@ -31,7 +31,7 @@ void LootItemStorage::LoadStorageFromDB()
     PreparedQueryResult result = CharacterDatabase.Query(stmt);
     if (!result)
     {
-        sLog->outString(">>  Loaded 0 stored items!");
+        sLog->outString(">> Loaded 0 stored items!");
         sLog->outString();
         return;
     }

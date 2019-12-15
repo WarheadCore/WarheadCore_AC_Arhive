@@ -85,7 +85,7 @@ void FormationMgr::LoadCreatureFormations()
 
     if (!result)
     {
-        sLog->outErrorDb(">>  Loaded 0 creatures in formations. DB table `creature_formations` is empty!");
+        sLog->outErrorDb(">> Loaded 0 creatures in formations. DB table `creature_formations` is empty!");
         sLog->outString();
         return;
     }

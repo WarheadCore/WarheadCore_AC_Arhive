@@ -181,7 +181,7 @@ ScriptMgr* ScriptMgr::instance()
 void ScriptMgr::Initialize()
 {
     AddScripts();
-    sLog->outString("Loading C++ scripts");
+    LOG_INFO("server.loading", "> Loading C++ scripts");
 }
 
 void ScriptMgr::Unload()

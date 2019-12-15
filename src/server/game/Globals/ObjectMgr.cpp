@@ -525,6 +525,7 @@ void ObjectMgr::LoadCreatureTemplates()
     }
 
     sLog->outString(">> Loaded %u creature definitions in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+    LOG_INFO("server.loading", "");
 }
 
 void ObjectMgr::LoadCreatureTemplateAddons()
@@ -1640,6 +1641,7 @@ void ObjectMgr::LoadTempSummons()
     } while (result->NextRow());
 
     sLog->outString(">> Loaded %u temp summons in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+    sLog->outString();
 }
 
 void ObjectMgr::LoadCreatures()
@@ -3288,6 +3290,7 @@ void ObjectMgr::LoadPlayerInfo()
             while (result->NextRow());
 
             sLog->outString(">> Loaded %u player create definitions in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+            sLog->outString();
         }
     }
 
@@ -3423,6 +3426,7 @@ void ObjectMgr::LoadPlayerInfo()
             while (result->NextRow());
 
             sLog->outString(">> Loaded %u player create spells in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+            sLog->outString();
         }
     }
 
@@ -5509,9 +5513,13 @@ void ObjectMgr::ReturnOrDeleteOldMails(bool serverUp)
 
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_EXPIRED_MAIL);
     stmt->setUInt32(0, curTime);
+    
     PreparedQueryResult result = CharacterDatabase.Query(stmt);
     if (!result)
+    {
+        sLog->outString();
         return;
+    }
 
     std::map<uint32 /*messageId*/, MailItemInfoVec> itemsCache;
     stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_EXPIRED_MAIL_ITEMS);
@@ -6957,6 +6965,7 @@ void ObjectMgr::LoadReputationRewardRate()
     while (result->NextRow());
 
     sLog->outString(">> Loaded %u reputation_reward_rate in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+    sLog->outString();
 }
 
 void ObjectMgr::LoadReputationOnKill()
@@ -7413,7 +7422,6 @@ void ObjectMgr::LoadQuestRelationsHelper(QuestRelations& map, std::string const&
     } while (result->NextRow());
 
     sLog->outString(">> Loaded %u quest relations from %s in %u ms", count, table.c_str(), GetMSTimeDiffToNow(oldMSTime));
-    sLog->outString();
 }
 
 void ObjectMgr::LoadGameobjectQuestStarters()
@@ -7759,7 +7767,7 @@ bool ObjectMgr::LoadAcoreStrings()
     QueryResult result = WorldDatabase.PQuery("SELECT entry, content_default, content_loc1, content_loc2, content_loc3, content_loc4, content_loc5, content_loc6, content_loc7, content_loc8 FROM acore_string");
     if (!result)
     {
-        sLog->outString(">> Loaded 0 trinity strings. DB table `acore_strings` is empty.");
+        sLog->outString(">> Loaded 0 azeroth strings. DB table `acore_strings` is empty.");
         sLog->outString();
         return false;
     }
@@ -8238,7 +8246,7 @@ void ObjectMgr::LoadTrainerSpell()
 
     if (!result)
     {
-        sLog->outErrorDb(">>  Loaded 0 Trainers. DB table `npc_trainer` is empty!");
+        sLog->outErrorDb(">> Loaded 0 Trainers. DB table `npc_trainer` is empty!");
         sLog->outString();
         return;
     }
@@ -8320,7 +8328,7 @@ void ObjectMgr::LoadVendors()
     if (!result)
     {
         sLog->outString();
-        sLog->outErrorDb(">>  Loaded 0 Vendors. DB table `npc_vendor` is empty!");
+        sLog->outErrorDb(">> Loaded 0 Vendors. DB table `npc_vendor` is empty!");
         return;
     }
 
@@ -9205,6 +9213,7 @@ void ObjectMgr::LoadGameObjectQuestItems()
     while (result->NextRow());
 
     sLog->outString(">> Loaded %u gameobject quest items in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+    sLog->outString();
 }
 
 void ObjectMgr::LoadCreatureQuestItems()
@@ -9235,4 +9244,5 @@ void ObjectMgr::LoadCreatureQuestItems()
     while (result->NextRow());
 
     sLog->outString(">> Loaded %u creature quest items in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+    sLog->outString();
 }

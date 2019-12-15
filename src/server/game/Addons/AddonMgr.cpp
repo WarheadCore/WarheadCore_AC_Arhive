@@ -54,6 +54,7 @@ void LoadFromDB()
     while (result->NextRow());
 
     sLog->outString(">> Loaded %u known addons in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+    sLog->outString();
 
     oldMSTime = getMSTime();
     result = CharacterDatabase.Query("SELECT id, name, version, UNIX_TIMESTAMP(timestamp) FROM banned_addons");

@@ -80,6 +80,7 @@ void TransportMgr::LoadTransportTemplates()
     } while (result->NextRow());
 
     sLog->outString(">> Loaded %u transport templates in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+    LOG_INFO("server.loading", "");
 }
 
 class SplineRawInitializer
@@ -463,6 +464,8 @@ void TransportMgr::SpawnContinentTransports()
             sLog->outString(">> Preloaded grids for %u continent static transports in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
         }
     }
+
+    sLog->outString();
 }
 
 void TransportMgr::CreateInstanceTransports(Map* map)

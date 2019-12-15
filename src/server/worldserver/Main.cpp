@@ -369,7 +369,7 @@ extern int main(int argc, char** argv)
     WorldServerSignalHandler signalINT, signalTERM; //, signalSEGV
 #if AC_PLATFORM == AC_PLATFORM_WINDOWS
     WorldServerSignalHandler signalBREAK;
-#endif /* _WIN32 */
+#endif /* AC_PLATFORM == AC_PLATFORM_WINDOWS */
 
     ///- Register worldserver's signal handlers
     ACE_Sig_Handler handle;
@@ -402,7 +402,7 @@ extern int main(int argc, char** argv)
         cliThread = new acore::Thread(new CliRunnable);
     }    
 
-#if defined(_WIN32) || defined(__linux__)
+#if defined(AC_PLATFORM_WINDOWS) || defined(AC_PLATFORM_UNIX)
 
     ///- Handle affinity for multiple processors and process priority
     uint32 affinity = sConfigMgr->GetIntDefault("UseProcessors", 0);
@@ -683,7 +683,9 @@ bool _StartDB()
         sLog->outError("Realm ID must range from 1 to 255");
         return false;
     }
-    sLog->outString("Realm running as realm ID %d", realmID);
+
+    LOG_INFO("server.loading", "Loading world information...");
+    LOG_INFO("server.loading", "> RealmID:              %u", realmID);
 
     ///- Clean the database before starting
     ClearOnlineAccounts();
@@ -693,7 +695,9 @@ bool _StartDB()
 
     sWorld->LoadDBVersion();
 
-    sLog->outString("Using World DB: %s", sWorld->GetDBVersion());
+    LOG_INFO("server.loading", "> Version DB world:     %s", sWorld->GetDBVersion());
+    LOG_INFO("server.loading", "");
+
     return true;
 }
 

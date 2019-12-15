@@ -3098,6 +3098,7 @@ Logger.module= 6,Server
 #Logger.cheat=6,Server
 #Logger.commands.ra=6,Server
 #Logger.condition=6,Server
+#Logger.diff=6,Server
 #Logger.entities.faction=6,Server
 #Logger.entities.gameobject=6,Server
 #Logger.entities.pet=6,Server

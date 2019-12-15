@@ -985,7 +985,7 @@ void World::LoadConfigSettings(bool reload)
 
     m_int_configs[CONFIG_LOGDB_CLEARTIME] = sConfigMgr->GetIntDefault("LogDB.Opt.ClearTime", 1209600); // 14 days default
 
-    sLog->outString("Will clear `logs` table of entries older than %i seconds every %u minutes.",
+    LOG_TRACE("server.loading", "Will clear `logs` table of entries older than %i seconds every %u minutes.",
         m_int_configs[CONFIG_LOGDB_CLEARTIME], m_int_configs[CONFIG_LOGDB_CLEARINTERVAL]);
 
     m_int_configs[CONFIG_TELEPORT_TIMEOUT_NEAR] = sConfigMgr->GetIntDefault("TeleportTimeoutNear", 25); // pussywizard
@@ -1223,7 +1223,7 @@ void World::LoadConfigSettings(bool reload)
     else
     {
         m_dataPath = dataPath;
-        sLog->outString("Using DataDir %s", m_dataPath.c_str());
+        
     }
 
     m_bool_configs[CONFIG_VMAP_INDOOR_CHECK] = sConfigMgr->GetBoolDefault("vmap.enableIndoorCheck", 0);
@@ -1237,7 +1237,27 @@ void World::LoadConfigSettings(bool reload)
 
     VMAP::VMapFactory::createOrGetVMapManager()->setEnableLineOfSightCalc(enableLOS);
     VMAP::VMapFactory::createOrGetVMapManager()->setEnableHeightCalc(enableHeight);
-    sLog->outString("WORLD: VMap support included. LineOfSight:%i, getHeight:%i, indoorCheck:%i PetLOS:%i", enableLOS, enableHeight, enableIndoor, enablePetLOS);
+
+    if (!reload)
+    {
+        auto VMAPBoolToString = [](bool value) -> std::string
+        {
+            if (value)
+                return "Enable";
+
+            return "Disable";
+        };
+
+        LOG_INFO("server.loading", "");
+        LOG_INFO("server.loading", "Loading data configurations...");
+        LOG_INFO("server.loading", "> Using DataDir:        %s", m_dataPath.c_str());
+        LOG_INFO("server.loading", "");
+        LOG_INFO("server.loading", "Loading VMap support configurations...");
+        LOG_INFO("server.loading", "> Line Of Sight:        %s", VMAPBoolToString(enableLOS).c_str());
+        LOG_INFO("server.loading", "> Get Height:           %s", VMAPBoolToString(enableHeight).c_str());
+        LOG_INFO("server.loading", "> Indoor Check:         %s", VMAPBoolToString(enableIndoor).c_str());
+        LOG_INFO("server.loading", "> Pet LOS:              %s", VMAPBoolToString(enablePetLOS).c_str());
+    }
 
     m_bool_configs[CONFIG_PET_LOS] = sConfigMgr->GetBoolDefault("vmap.petLOS", true);
     m_bool_configs[CONFIG_START_ALL_SPELLS] = sConfigMgr->GetBoolDefault("PlayerStart.AllSpells", false);
@@ -1348,7 +1368,7 @@ void World::SetInitialWorldSettings()
     ///- Initialize detour memory management
     dtAllocSetCustom(dtCustomAlloc, dtCustomFree);
     
-    sLog->outString("Initializing Scripts...");
+    LOG_INFO("server.loading", "Initializing Scripts...");
     sScriptMgr->Initialize();
 
     ///- Initialize VMapManager function pointers (to untangle game/collision circular deps)
@@ -1392,7 +1412,7 @@ void World::SetInitialWorldSettings()
 
     ///- Loading strings. Getting no records means core load has to be canceled because no error message can be output.
     sLog->outString();
-    sLog->outString("Loading Trinity strings...");
+    sLog->outString("Loading Azeroth strings...");
     if (!sObjectMgr->LoadAcoreStrings())
         exit(1);                                            // Error message displayed in function already
 
@@ -1622,6 +1642,7 @@ void World::SetInitialWorldSettings()
 
     sLog->outString("Loading Quests Starters and Enders...");
     sObjectMgr->LoadQuestStartersAndEnders();                    // must be after quest load
+    sLog->outString();
 
     sLog->outString("Loading Objects Pooling Data...");
     sPoolMgr->LoadFromDB();
@@ -1816,7 +1837,8 @@ void World::SetInitialWorldSettings()
     AddonMgr::LoadFromDB();
 
     // pussywizard:
-    sLog->outString("Deleting invalid mail items...\n");
+    sLog->outString("Deleting invalid mail items...");
+    sLog->outString();
     CharacterDatabase.Query("DELETE mi FROM mail_items mi LEFT JOIN item_instance ii ON mi.item_guid = ii.guid WHERE ii.guid IS NULL");
     CharacterDatabase.Query("DELETE mi FROM mail_items mi LEFT JOIN mail m ON mi.mail_id = m.id WHERE m.id IS NULL");
     CharacterDatabase.Query("UPDATE mail m LEFT JOIN mail_items mi ON m.id = mi.mail_id SET m.has_items=0 WHERE m.has_items<>0 AND mi.mail_id IS NULL");
@@ -1949,6 +1971,7 @@ void World::SetInitialWorldSettings()
 
     sLog->outString("Calculate Guild cap reset time...");
     InitGuildResetTime();
+    sLog->outString();
 
     sLog->outString("Load Petitions...");
     sPetitionMgr->LoadPetitions();
@@ -1997,9 +2020,10 @@ void World::SetInitialWorldSettings()
     }
     
     uint32 startupDuration = GetMSTimeDiffToNow(startupBegin);
-    sLog->outString();
-    sLog->outError("WORLD: World initialized in %u minutes %u seconds", (startupDuration / 60000), ((startupDuration % 60000) / 1000));
-    sLog->outString();
+    
+    LOG_INFO("server.loading", "");
+    LOG_INFO("server.loading", "World initialized in %u minutes %u seconds", (startupDuration / 60000), ((startupDuration % 60000) / 1000));
+    LOG_INFO("server.loading", "");
 
     // possibly enable db logging; avoid massive startup spam by doing it here.
     if (sConfigMgr->GetBoolDefault("EnableLogDB", false))
@@ -2008,7 +2032,8 @@ void World::SetInitialWorldSettings()
         sLog->SetRealmID(realmID);
     }
 
-    if (sConfigMgr->isDryRun()) {
+    if (sConfigMgr->isDryRun()) 
+    {
         sLog->outString("AzerothCore dry run completed, terminating.");
         exit(0);
     }
@@ -2072,6 +2097,7 @@ void World::LoadAutobroadcasts()
     if (!result)
     {
         sLog->outString(">> Loaded 0 autobroadcasts definitions. DB table `autobroadcast` is empty for this realm!");
+        sLog->outString();
         return;
     }
 
@@ -2101,7 +2127,7 @@ void World::Update(uint32 diff)
         m_updateTimeSum += diff;
         if (m_updateTimeSum > m_int_configs[CONFIG_INTERVAL_LOG_UPDATE])
         {
-            sLog->outBasic("Average update time diff: %u. Players online: %u.", avgDiffTracker.getAverage(), (uint32)GetActiveSessionCount());
+            LOG_INFO("diff", "Average update time diff: %u. Players online: %u.", avgDiffTracker.getAverage(), (uint32)GetActiveSessionCount());
             m_updateTimeSum = 0;
         }
     }
