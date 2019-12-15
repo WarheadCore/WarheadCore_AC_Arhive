@@ -48,6 +48,8 @@ target_include_directories(common
     ${CMAKE_CURRENT_BINARY_DIR})
 
 target_link_libraries(common
+  PRIVATE
+    process
   PUBLIC
     acore-core-interface
     ace
