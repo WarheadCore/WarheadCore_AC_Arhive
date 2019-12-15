@@ -20,7 +20,7 @@
     #include <errno.h>
 #endif
 
-#include "Database/DatabaseEnv.h"
+#include "DatabaseEnv.h"
 
 enum NavTerrain
 {
