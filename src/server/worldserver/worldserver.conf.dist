@@ -433,6 +433,23 @@ PacketLogFile = ""
 #                     1 - (Enabled)
 
 EnableLogDB = 0
+
+#
+#    LogDB.Opt.ClearInterval
+#        Description: Time (in minutes) for the WUPDATE_CLEANDB timer that clears the `logs` table
+#                     of old entries.
+#        Default:     10 - (10 minutes)
+#                     1+
+
+LogDB.Opt.ClearInterval = 10
+
+#
+#    LogDB.Opt.ClearTime
+#        Description: Time (in seconds) for keeping old `logs` table entries.
+#        Default:     1209600 - (Enabled, 14 days)
+#                     0       - (Disabled, Do not clear entries)
+
+LogDB.Opt.ClearTime = 1209600
 ###################################################################################################
 
 ###################################################################################################
