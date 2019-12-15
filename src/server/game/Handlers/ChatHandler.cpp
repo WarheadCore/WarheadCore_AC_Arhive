@@ -112,14 +112,16 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recvData)
         // also check SPELL_AURA_COMPREHEND_LANGUAGE (client offers option to speak in that language)
         Unit::AuraEffectList const& langAuras = sender->GetAuraEffectsByType(SPELL_AURA_COMPREHEND_LANGUAGE);
         bool foundAura = false;
-        for (Unit::AuraEffectList::const_iterator i = langAuras.begin(); i != langAuras.end(); ++i)
+
+        for (auto const& itr : langAuras)
         {
-            if ((*i)->GetMiscValue() == int32(lang))
+            if (itr->GetMiscValue() == int32(lang))
             {
                 foundAura = true;
                 break;
             }
         }
+
         if (!foundAura)
         {
             SendNotification(LANG_NOT_LEARNED_LANGUAGE);
@@ -137,29 +139,6 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recvData)
             case CHAT_MSG_RAID:
             case CHAT_MSG_GUILD:
             case CHAT_MSG_BATTLEGROUND:
-	            // check if addon messages are disabled
-	            if (!sWorld->getBoolConfig(CONFIG_ADDON_CHANNEL))
-		        {
-			        recvData.rfinish();
-			        return;
-		        }
-
-	            if (sWorld->getBoolConfig(CONFIG_CHATLOG_ADDON))
-		        {
-			        std::string msg;
-			        recvData >> msg;
-
-                    if (msg.empty())
-                        return;
-
-                    sScriptMgr->OnPlayerChat(sender, type, lang, msg);
-#ifdef ELUNA
-                    if (!sEluna->OnChat(sender, type, lang, msg))
-                        return;
-#endif
-                }
-
-		        break;
             case CHAT_MSG_WHISPER:
 	            // check if addon messages are disabled
 	            if (!sWorld->getBoolConfig(CONFIG_ADDON_CHANNEL))
@@ -167,30 +146,16 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recvData)
 		            recvData.rfinish();
 		            return;
 	            }
-
-	            if (sWorld->getBoolConfig(CONFIG_CHATLOG_ADDON))
-	            {
-		            std::string to, msg;
-		            recvData >> to >> msg;
-		            Player* receiver = ObjectAccessor::FindPlayerByName(to, false);
-
-		            if (msg.empty())
-			            return;
-
-		            sScriptMgr->OnPlayerChat(sender, type, lang, msg, receiver);
-	            }
-
 	            break;
             default:
-                sLog->outError("Player %s (GUID: %u) sent a chatmessage with an invalid language/message type combination", 
-                                                     GetPlayer()->GetName().c_str(), GetPlayer()->GetGUIDLow());
+                LOG_ERROR("chat", "Player %s (GUID: %u) sent a chatmessage with an invalid language/message type combination", 
+                                   GetPlayer()->GetName().c_str(), GetPlayer()->GetGUIDLow());
 
                 recvData.rfinish();
                 return;
         }
-    }
-    // LANG_ADDON should not be changed nor be affected by flood control
-    else
+    }    
+    else // LANG_ADDON should not be changed nor be affected by flood control
     {
         uint32 specialMessageLimit = 0;
         // send in universal language if player in .gmon mode (ignore spell effects)
@@ -230,6 +195,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recvData)
                     break;
                 }
             }
+
             // but overwrite it by SPELL_AURA_MOD_LANGUAGE auras (only single case used)
             Unit::AuraEffectList const& ModLangAuras = sender->GetAuraEffectsByType(SPELL_AURA_MOD_LANGUAGE);
             if (!ModLangAuras.empty())
