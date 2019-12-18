@@ -4,8 +4,8 @@
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  */
 
-#ifndef _CALLBACK_H
-#define _CALLBACK_H
+#ifndef _QUERY_CALLBACK_H
+#define _QUERY_CALLBACK_H
 
 #include <ace/Future.h>
 #include <ace/Future_Set.h>

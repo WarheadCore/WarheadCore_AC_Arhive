@@ -16,8 +16,7 @@
 #include <ace/Atomic_Op.h>
 #include "SharedDefines.h"
 #include "QueryResult.h"
-#include "Callback.h"
-
+#include "QueryCallback.h"
 #include <map>
 #include <set>
 #include <list>
