@@ -3124,6 +3124,7 @@ void World::LoadGlobalPlayerDataStore()
     if (!result)
     {
         sLog->outString(">> Loaded 0 Players data.");
+        sLog->outString();
         return;
     }
 

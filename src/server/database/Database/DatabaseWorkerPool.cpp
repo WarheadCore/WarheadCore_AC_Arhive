@@ -39,7 +39,7 @@ uint32 DatabaseWorkerPool<T>::Open()
 {
     WPFatal(_connectionInfo.get(), "Connection info was not set!");
 
-    LOG_INFO("sql.driver", "Opening DatabasePool '%s'. "
+    LOG_INFO("sql.driver", "Try opening DatabasePool '%s'. "
         "Asynchronous connections: %u, synchronous connections: %u.",
         GetDatabaseName(), _async_threads, _synch_threads);
 
@@ -52,9 +52,11 @@ uint32 DatabaseWorkerPool<T>::Open()
 
     if (!error)
     {
-        LOG_INFO("sql.driver", "DatabasePool '%s' opened successfully. " SZFMTD
+        LOG_INFO("sql.driver", "> DatabasePool '%s' opened successfully. " SZFMTD
             " total connections running.", GetDatabaseName(),
             (_connections[IDX_SYNCH].size() + _connections[IDX_ASYNC].size()));
+
+        LOG_INFO("sql.driver", "");
     }
 
     return error;

@@ -52,12 +52,13 @@ m_connectionFlags(CONNECTION_ASYNC)
 
 MySQLConnection::~MySQLConnection()
 {
-    ASSERT (m_Mysql); /// MySQL context must be present at this point
+    m_stmts.clear();
 
-    for (size_t i = 0; i < m_stmts.size(); ++i)
-        delete m_stmts[i];
-
-    mysql_close(m_Mysql);
+    if (m_Mysql)
+    {
+        mysql_close(m_Mysql);
+        m_Mysql = nullptr;
+    }
 }
 
 void MySQLConnection::Close()
@@ -110,52 +111,37 @@ uint32 MySQLConnection::Open()
     }
     #endif
 
-    // Possible improvement for future: make ATTEMPTS and SECONDS configurable values
-    uint32 const ATTEMPTS = 180;
-    uint32 const SECONDS = 10;
+    m_Mysql = mysql_real_connect(
+        mysqlInit,
+        m_connectionInfo.host.c_str(),
+        m_connectionInfo.user.c_str(),
+        m_connectionInfo.password.c_str(),
+        m_connectionInfo.database.c_str(),
+        port,
+        unix_socket,
+        0);
 
-    uint32 count = 0;
-    do
+    if (m_Mysql)
     {
-        m_Mysql = mysql_real_connect(
-            mysqlInit,
-            m_connectionInfo.host.c_str(),
-            m_connectionInfo.user.c_str(),
-            m_connectionInfo.password.c_str(),
-            m_connectionInfo.database.c_str(),
-            port,
-            unix_socket,
-            0);
-
-        if (m_Mysql)
+        if (!m_reconnecting)
         {
-            if (!m_reconnecting)
-            {
-                sLog->outSQLDriver("MySQL client library: %s", mysql_get_client_info());
-                sLog->outSQLDriver("MySQL server ver: %s ", mysql_get_server_info(m_Mysql));
-                // MySQL version above 5.1 IS required in both client and server and there is no known issue with different versions above 5.1
-                // if (mysql_get_server_version(m_Mysql) != mysql_get_client_version())
-                //     sLog->outInfo(LOG_FILTER_SQL, "[WARNING] MySQL client/server version mismatch; may conflict with behaviour of prepared statements.");
-            }
+            sLog->outSQLDriver("> MySQL client library: %s", mysql_get_client_info());
+            sLog->outSQLDriver("> MySQL server ver: %s ", mysql_get_server_info(m_Mysql));
+            // MySQL version above 5.1 IS required in both client and server and there is no known issue with different versions above 5.1
+            // if (mysql_get_server_version(m_Mysql) != mysql_get_client_version())
+            //     sLog->outInfo(LOG_FILTER_SQL, "[WARNING] MySQL client/server version mismatch; may conflict with behaviour of prepared statements.");
+        }
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-            sLog->outDetail("Connected to MySQL database at %s", m_connectionInfo.host.c_str());
+        sLog->outDetail("Connected to MySQL database at %s", m_connectionInfo.host.c_str());
 #endif
-            mysql_autocommit(m_Mysql, 1);
+        mysql_autocommit(m_Mysql, 1);
 
-            // set connection properties to UTF8 to properly handle locales for different
-            // server configs - core sends data in UTF8, so MySQL must expect UTF8 too
-            mysql_set_character_set(m_Mysql, "utf8");
-            return 0;
-        }
-        else
-        {
-            count++;
-            sLog->outError("Could not connect to MySQL database at %s: %s\n", m_connectionInfo.host.c_str(), mysql_error(mysqlInit));
-            sLog->outError("Retrying in 10 seconds...\n\n");
-            sleep_for(seconds(SECONDS));
-        }
-    } while (!m_Mysql && count < ATTEMPTS);
+        // set connection properties to UTF8 to properly handle locales for different
+        // server configs - core sends data in UTF8, so MySQL must expect UTF8 too
+        mysql_set_character_set(m_Mysql, "utf8");
+        return 0;
+    }
 
     LOG_ERROR("sql.sql", "Could not connect to MySQL database at %s: %s", m_connectionInfo.host.c_str(), mysql_error(mysqlInit));
     uint32 errorCode = mysql_errno(mysqlInit);
