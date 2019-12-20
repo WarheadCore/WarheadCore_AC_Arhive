@@ -20,9 +20,6 @@ class ConfigMgr
 {
     friend class ConfigLoader;
 
-    ConfigMgr() { }
-    ~ConfigMgr() { }
-
 public:
 
     static ConfigMgr* instance();
@@ -63,8 +60,10 @@ private:
     Config _config;
     LockType _configLock;
 
-    ConfigMgr(ConfigMgr const&);
-    ConfigMgr& operator=(ConfigMgr const&);
+    ConfigMgr() = default;
+    ConfigMgr(ConfigMgr const&) = delete;
+    ConfigMgr& operator=(ConfigMgr const&) = delete;
+    ~ConfigMgr() = default;
 };
 
 #define sConfigMgr ConfigMgr::instance()
