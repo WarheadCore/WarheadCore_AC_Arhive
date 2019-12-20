@@ -25,8 +25,6 @@
 #include "WorldModel.h"
 #include <G3D/Vector3.h>
 #include <ace/Null_Mutex.h>
-#include "DisableMgr.h"
-#include "DBCStores.h"
 #include "Log.h"
 #include "VMapDefinitions.h"
 #include "Errors.h"
