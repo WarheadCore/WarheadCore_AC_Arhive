@@ -58,8 +58,6 @@ int m_ServiceStatus = -1;
 #define PROCESS_HIGH_PRIORITY -15 // [-20, 19], default is 0
 #endif
 
-uint32 realmID;                                             ///< Id of the realm
-
 #ifndef _ACORE_CORE_CONFIG
 #define _ACORE_CORE_CONFIG  "worldserver.conf"
 #endif

@@ -92,6 +92,8 @@ float World::m_MaxVisibleDistanceOnContinents = DEFAULT_VISIBILITY_DISTANCE;
 float World::m_MaxVisibleDistanceInInstances  = DEFAULT_VISIBILITY_INSTANCE;
 float World::m_MaxVisibleDistanceInBGArenas   = DEFAULT_VISIBILITY_BGARENAS;
 
+uint32 realmID; ///< Id of the realm
+
 /// World constructor
 World::World()
 {
@@ -2315,6 +2317,8 @@ void World::Update(uint32 diff)
 
     SavingSystemMgr::Update(diff);
 }
+
+
 
 void World::ForceGameEventUpdate()
 {
