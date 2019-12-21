@@ -37,12 +37,25 @@
 #endif
 
 #ifndef _ACORE_REALM_CONFIG
-# define _ACORE_REALM_CONFIG  "authserver.conf"
+#define _ACORE_REALM_CONFIG  "authserver.conf"
+#endif
+
+#if AC_PLATFORM == AC_PLATFORM_WINDOWS
+#include "ServiceWin32.h"
+char serviceName[] = "authserver";
+char serviceLongName[] = "AzerothCore auth service";
+char serviceDescription[] = "AzerothCore World of Warcraft emulator auth service";
+/*
+ * -1 - not in service mode
+ *  0 - stopped
+ *  1 - running
+ *  2 - paused
+ */
+int m_ServiceStatus = -1;
 #endif
 
 bool StartDB();
 void StopDB();
-
 bool stopEvent = false;                                     // Setting it to true stops the server
 
 /// Handle authserver's termination signals
