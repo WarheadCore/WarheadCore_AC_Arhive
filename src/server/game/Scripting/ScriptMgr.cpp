@@ -14,6 +14,7 @@
 #include "ScriptSystem.h"
 #include "Transport.h"
 #include "Vehicle.h"
+#include "SmartAI.h"
 #include "SpellInfo.h"
 #include "SpellScript.h"
 #include "GossipDef.h"
@@ -249,6 +250,8 @@ void ScriptMgr::LoadDatabase()
     ScriptRegistry<AchievementCriteriaScript>::AddALScripts();
 
     FillSpellSummary();
+
+    AddSC_SmartScripts();
 
     CheckIfScriptsInDatabaseExist();
 
