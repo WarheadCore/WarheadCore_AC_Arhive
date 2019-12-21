@@ -4633,7 +4633,7 @@ void ObjectMgr::LoadScripts(ScriptsType type)
     if (tableName.empty())
         return;
 
-    if (sScriptMgr->IsScriptScheduled())                    // function cannot be called when scripts are in use.
+    if (sMapMgr->IsScriptScheduled())                    // function cannot be called when scripts are in use.
         return;
 
     sLog->outString("Loading %s...", tableName.c_str());

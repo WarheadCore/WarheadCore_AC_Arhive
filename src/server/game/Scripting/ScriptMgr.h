@@ -1455,6 +1455,7 @@ class ScriptMgr
         void OnGroupDisband(Group* group);
 
     public: /* GlobalScript */
+
         void OnGlobalItemDelFromDB(SQLTransaction& trans, uint32 itemGuid);
         void OnGlobalMirrorImageDisplayItem(const Item *item, uint32 &display);
         void OnBeforeUpdateArenaPoints(ArenaTeam* at, std::map<uint32, uint32> &ap);
@@ -1464,14 +1465,6 @@ class ScriptMgr
         void OnInitializeLockedDungeons(Player* player, uint8& level, uint32& lockData);
         void OnAfterInitializeLockedDungeons(Player* player);
         void OnAfterUpdateEncounterState(Map* map, EncounterCreditType type, uint32 creditEntry, Unit* source, Difficulty difficulty_fixed, DungeonEncounterList const* encounters, uint32 dungeonCompleted, bool updated);
-
-
-    public: /* Scheduled scripts */
-
-        uint32 IncreaseScheduledScriptsCount() { return ++_scheduledScripts; }
-        uint32 DecreaseScheduledScriptCount() { return --_scheduledScripts; }
-        uint32 DecreaseScheduledScriptCount(size_t count) { return _scheduledScripts -= count; }
-        bool IsScriptScheduled() const { return _scheduledScripts > 0; }
 
     public: /* UnitScript */
 
@@ -1528,9 +1521,6 @@ class ScriptMgr
     private:
 
         uint32 _scriptCount;
-
-        //atomic op counter for active scripts amount
-        std::atomic<long> _scheduledScripts;
 
         ScriptLoaderCallbackType _script_loader_callback;
 };
