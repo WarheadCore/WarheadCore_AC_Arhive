@@ -15,7 +15,6 @@
 #include "Chat.h"
 #include "Spell.h"
 #include "BattlegroundMgr.h"
-#include "CreatureAI.h"
 #include "MapManager.h"
 #include "BattlegroundIC.h"
 #include "BattlefieldWG.h"
@@ -3229,8 +3228,6 @@ void SpellMgr::LoadSpellCustomAttr()
         if (overrideAttr && allNonBinary)
             spellInfo->AttributesCu &= ~SPELL_ATTR0_CU_BINARY_SPELL;
     }
-
-    CreatureAI::FillAISpellInfo();
 
     sLog->outString(">> Loaded spell custom attributes in %u ms", GetMSTimeDiffToNow(oldMSTime));
     sLog->outString();
