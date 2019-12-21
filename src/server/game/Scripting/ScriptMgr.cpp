@@ -10,7 +10,6 @@
 #include "DBCStores.h"
 #include "ObjectMgr.h"
 #include "OutdoorPvPMgr.h"
-#include "ScriptLoader.h"
 #include "ScriptSystem.h"
 #include "Transport.h"
 #include "Vehicle.h"
@@ -164,7 +163,7 @@ class ScriptRegistry
 };*/
 
 ScriptMgr::ScriptMgr()
-    : _scriptCount(0), _scheduledScripts(0)
+    : _scriptCount(0), _scheduledScripts(0), _script_loader_callback(nullptr)
 {
 
 }
@@ -181,8 +180,12 @@ ScriptMgr* ScriptMgr::instance()
 
 void ScriptMgr::Initialize()
 {
-    AddScripts();
     LOG_INFO("server.loading", "> Loading C++ scripts");
+    
+    ASSERT(_script_loader_callback,
+           "Script loader callback wasn't registered!");
+
+    _script_loader_callback();
 }
 
 void ScriptMgr::Unload()
@@ -257,6 +260,11 @@ void ScriptMgr::LoadDatabase()
 
     sLog->outString(">> Loaded %u C++ scripts in %u ms", GetScriptCount(), GetMSTimeDiffToNow(oldMSTime));
     sLog->outString();
+
+    ASSERT(_script_loader_callback,
+           "Script loader callback wasn't registered!");
+
+    _script_loader_callback();
 }
 
 struct TSpellSummary

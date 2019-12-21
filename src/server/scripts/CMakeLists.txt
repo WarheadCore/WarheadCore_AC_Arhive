@@ -89,28 +89,17 @@ endif ()
 # Group sources
 GroupSources(${CMAKE_CURRENT_SOURCE_DIR})
 
-add_library(scripts-interface INTERFACE)
-
-CollectIncludeDirectories(
-  ${CMAKE_CURRENT_SOURCE_DIR}
-  PUBLIC_INCLUDES
-  # Exclude
-  ${CMAKE_CURRENT_SOURCE_DIR}/PrecompiledHeaders)
-
-target_include_directories(scripts-interface
-  INTERFACE
-    ${PUBLIC_INCLUDES})
-
 add_library(scripts STATIC
   ${scripts_STAT_SRCS})
 
 target_include_directories(scripts
+  PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
   PRIVATE
     ${CMAKE_CURRENT_BINARY_DIR})
 
 target_link_libraries(scripts
-  PRIVATE
-    scripts-interface
+  PUBLIC
     game-interface)
 
 set_target_properties(scripts

@@ -50,9 +50,8 @@ target_include_directories(game
     ${CMAKE_CURRENT_BINARY_DIR})
 
 target_link_libraries(game
-  PRIVATE
-    game-interface
-    scripts-interface)
+  PUBLIC
+    game-interface)
 
 set_target_properties(game
   PROPERTIES

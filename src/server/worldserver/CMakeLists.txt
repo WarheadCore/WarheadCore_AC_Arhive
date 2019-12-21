@@ -58,13 +58,10 @@ target_include_directories(worldserver
     ${CMAKE_CURRENT_BINARY_DIR})
 
 target_link_libraries(worldserver
-  PRIVATE
-    game-interface
-    scripts-interface
   PUBLIC
     game
-    shared
     scripts
+    shared
     gsoap
     readline
     ${GPERFTOOLS_LIBRARIES})

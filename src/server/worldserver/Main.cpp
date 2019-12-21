@@ -31,6 +31,7 @@
 #include "AvgDiffTracker.h"
 #include "AsyncAuctionListing.h"
 #include "DatabaseLoader.h"
+#include "ScriptLoader.h"
 #include <ace/Sig_Handler.h>
 
 #ifdef ELUNA
@@ -362,6 +363,7 @@ extern int main(int argc, char** argv)
     sWorld->SetConfigFileList(CONFIG_FILE_LIST);
 
     ///- Initialize the World
+    sScriptMgr->SetScriptLoader(AddScripts);
     sWorld->SetInitialWorldSettings();
 
     sScriptMgr->OnStartup();
