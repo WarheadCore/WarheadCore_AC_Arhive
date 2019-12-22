@@ -9,7 +9,9 @@ CollectSourceFiles(
 # Group sources
 GroupSources(${CMAKE_CURRENT_SOURCE_DIR})
 
-add_library(shared STATIC
+add_definitions(-DACORE_API_EXPORT_SHARED)
+
+add_library(shared
   ${PRIVATE_SOURCES})
 
 CollectIncludeDirectories(
@@ -32,3 +34,15 @@ set_target_properties(shared
   PROPERTIES
     FOLDER
       "server")
+
+if( BUILD_SHARED_LIBS )
+  if( UNIX )
+    install(TARGETS shared
+      LIBRARY
+        DESTINATION lib)
+  elseif( WIN32 )
+    install(TARGETS shared
+      RUNTIME
+        DESTINATION "${CMAKE_INSTALL_PREFIX}")
+  endif()
+endif()
