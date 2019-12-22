@@ -50,6 +50,8 @@ target_include_directories(game
     ${CMAKE_CURRENT_BINARY_DIR})
 
 target_link_libraries(game
+  PRIVATE
+    acore-core-interface
   PUBLIC
     game-interface)
 

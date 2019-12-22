@@ -99,6 +99,8 @@ target_include_directories(scripts
     ${CMAKE_CURRENT_BINARY_DIR})
 
 target_link_libraries(scripts
+  PRIVATE
+    acore-core-interface
   PUBLIC
     game-interface)
 

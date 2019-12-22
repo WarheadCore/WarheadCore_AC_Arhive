@@ -58,6 +58,8 @@ target_include_directories(worldserver
     ${CMAKE_CURRENT_BINARY_DIR})
 
 target_link_libraries(worldserver
+  PRIVATE
+    acore-core-interface
   PUBLIC
     game
     scripts

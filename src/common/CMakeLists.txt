@@ -51,8 +51,8 @@ target_include_directories(common
 target_link_libraries(common
   PRIVATE
     process
-  PUBLIC
     acore-core-interface
+  PUBLIC
     ace
     boost
     Poco::Foundation
