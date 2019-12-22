@@ -9,7 +9,7 @@ CollectSourceFiles(
 # Group sources
 GroupSources(${CMAKE_CURRENT_SOURCE_DIR})
 
-add_library(database
+add_library(database STATIC
   ${PRIVATE_SOURCES})
 
 CollectIncludeDirectories(
