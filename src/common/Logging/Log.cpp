@@ -659,8 +659,8 @@ void Log::outMessage(std::string const& filter, LogLevel const level, std::strin
 {
     _Write(filter, level, message);
 
-    if (m_enableLogDB && !message.empty())
-        _writeDB(filter, level, message);
+    //if (m_enableLogDB && !message.empty())
+        //_writeDB(filter, level, message);
 }
 
 void Log::outCommand(std::string&& AccountID, std::string&& message)

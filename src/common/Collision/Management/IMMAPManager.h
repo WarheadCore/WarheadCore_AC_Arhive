@@ -20,7 +20,7 @@ namespace MMAP
         MMAP_LOAD_RESULT_IGNORED,
     };
 
-    class IMMapManager
+    class AC_COMMON_API IMMapManager
     {
         private:
             bool iEnablePathFinding;

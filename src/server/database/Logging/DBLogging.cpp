@@ -7,11 +7,11 @@
 #include "Log.h"
 #include "DatabaseEnv.h"
 
-void Log::_writeDB(std::string const& filter, LogLevel const level, std::string const& message)
-{
-    std::string new_message(message);
-    LoginDatabase.EscapeString(new_message);
-
-    LoginDatabase.PExecute("INSERT INTO logs (Time, Filter, RealmID, LogLevel, Message) VALUES (" UI64FMTD ", '%s', %u, %u, '%s')",
-        uint64(time(nullptr)), filter.c_str(), m_realmID, (uint8)level, new_message.c_str());
-}
+//void Log::_writeDB(std::string const& filter, LogLevel const level, std::string const& message)
+//{
+//    std::string new_message(message);
+//    LoginDatabase.EscapeString(new_message);
+//
+//    LoginDatabase.PExecute("INSERT INTO logs (Time, Filter, RealmID, LogLevel, Message) VALUES (" UI64FMTD ", '%s', %u, %u, '%s')",
+//        uint64(time(nullptr)), filter.c_str(), m_realmID, (uint8)level, new_message.c_str());
+//}

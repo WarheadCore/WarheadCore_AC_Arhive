@@ -25,7 +25,7 @@ namespace MMAP
     // static class
     // holds all mmap global data
     // access point to MMapManager singleton
-    class MMapFactory
+    class AC_COMMON_API MMapFactory
     {
         public:
             static MMapManager* createOrGetMMapManager();

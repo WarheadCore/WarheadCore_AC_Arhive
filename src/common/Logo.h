@@ -11,7 +11,7 @@ namespace acore
 {
     namespace Logo
     {
-        void Show(std::string const& logger, std::string const& applicationName, std::string configName);
+        AC_COMMON_API void Show(std::string const& logger, std::string const& applicationName, std::string configName);
     }
 }
 

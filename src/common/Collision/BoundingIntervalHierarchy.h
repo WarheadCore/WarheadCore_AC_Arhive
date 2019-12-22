@@ -55,7 +55,7 @@ struct AABound
     Copyright (c) 2003-2007 Christopher Kulla
 */
 
-class BIH
+class AC_COMMON_API BIH
 {
     private:
         void init_empty()
@@ -344,7 +344,7 @@ class BIH
             float tfar;
         };
 
-        class BuildStats
+        class AC_COMMON_API BuildStats
         {
             private:
                 int numNodes;

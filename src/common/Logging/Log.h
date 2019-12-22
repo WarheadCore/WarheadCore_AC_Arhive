@@ -68,7 +68,7 @@ enum LoggerOptions
 
 using Poco::FormattingChannel;
 
-class Log
+class AC_COMMON_API Log
 {
 private:
     Log();
@@ -197,7 +197,7 @@ private:
 
     void _Write(std::string const& filter, LogLevel const level, std::string const& message);
     void _writeCommand(std::string const message, std::string const accountid);
-    void _writeDB(std::string const& filter, LogLevel const level, std::string const& message);
+    //void _writeDB(std::string const& filter, LogLevel const level, std::string const& message);
 
     void outMessage(std::string const& filter, LogLevel const level, std::string&& message);
     void outCommand(std::string&& AccountID, std::string&& message);

@@ -7,15 +7,15 @@
 #ifndef THREADING_H
 #define THREADING_H
 
+#include "Define.h"
 #include <thread>
 #include <atomic>
-
 #include <thread>
 #include <atomic>
 
 namespace acore
 {
-    class Runnable
+    class AC_COMMON_API Runnable
     {
         public:
             virtual ~Runnable() {}
@@ -42,7 +42,7 @@ namespace acore
         Priority_Realtime,
     };
 
-    class Thread
+    class AC_COMMON_API Thread
     {
         public:
             Thread();

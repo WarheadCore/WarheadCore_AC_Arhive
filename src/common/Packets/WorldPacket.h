@@ -10,7 +10,7 @@
 #include "Common.h"
 #include "ByteBuffer.h"
 
-class WorldPacket : public ByteBuffer
+class AC_COMMON_API WorldPacket : public ByteBuffer
 {
     public:
                                                             // just container for later use

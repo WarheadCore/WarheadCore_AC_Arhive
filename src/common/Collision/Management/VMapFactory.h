@@ -17,7 +17,7 @@ namespace VMAP
 {
     //===========================================================
 
-    class VMapFactory
+    class AC_COMMON_API VMapFactory
     {
         public:
             static IVMapManager* createOrGetVMapManager();

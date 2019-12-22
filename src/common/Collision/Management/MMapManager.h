@@ -31,7 +31,7 @@ namespace MMAP
     typedef std::unordered_map<uint32, dtNavMeshQuery*> NavMeshQuerySet;
 
     // dummy struct to hold map's mmap data
-    struct MMapData
+    struct AC_COMMON_API MMapData
     {
         MMapData(dtNavMesh* mesh) : navMesh(mesh) {}
         ~MMapData()
@@ -54,7 +54,7 @@ namespace MMAP
 
     // singleton class
     // holds all all access to mmap loading unloading and meshes
-    class MMapManager
+    class AC_COMMON_API MMapManager
     {
         public:
             MMapManager() : loadedTiles(0), thread_safe_environment(true) {}

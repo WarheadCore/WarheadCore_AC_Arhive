@@ -11,7 +11,7 @@
 
 class BigNumber;
 
-class AuthCrypt
+class AC_COMMON_API AuthCrypt
 {
     public:
         AuthCrypt();

@@ -170,10 +170,10 @@ const uint8 TOTAL_LOCALES = 9;
 #define MAX_LOCALES 8
 #define MAX_ACCOUNT_TUTORIAL_VALUES 8
 
-extern char const* localeNames[TOTAL_LOCALES];
+extern AC_COMMON_API char const* localeNames[TOTAL_LOCALES];
 
-LocaleConstant GetLocaleByName(const std::string& name);
-void CleanStringForMysqlQuery(std::string& str);
+AC_COMMON_API LocaleConstant GetLocaleByName(const std::string& name);
+AC_COMMON_API void CleanStringForMysqlQuery(std::string& str);
 
 typedef std::vector<std::string> StringVector;
 

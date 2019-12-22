@@ -7,6 +7,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#include "Define.h"
 #include <string>
 #include <list>
 #include <vector>
@@ -16,7 +17,7 @@
 
 typedef acore::AutoPtr<ACE_Configuration_Heap, ACE_Null_Mutex> Config;
 
-class ConfigMgr
+class AC_COMMON_API ConfigMgr
 {
     friend class ConfigLoader;
 

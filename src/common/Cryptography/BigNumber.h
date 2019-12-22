@@ -12,7 +12,7 @@
 
 struct bignum_st;
 
-class BigNumber
+class AC_COMMON_API BigNumber
 {
     public:
         BigNumber();
