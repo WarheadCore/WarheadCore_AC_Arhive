@@ -387,6 +387,6 @@ void DBUpdater<T>::ApplyFile(DatabaseWorkerPool<T>& pool, std::string const& hos
     }
 }
 
-template class DBUpdater<LoginDatabaseConnection>;
-template class DBUpdater<WorldDatabaseConnection>;
-template class DBUpdater<CharacterDatabaseConnection>;
+template class AC_DATABASE_API DBUpdater<LoginDatabaseConnection>;
+template class AC_DATABASE_API DBUpdater<WorldDatabaseConnection>;
+template class AC_DATABASE_API DBUpdater<CharacterDatabaseConnection>;

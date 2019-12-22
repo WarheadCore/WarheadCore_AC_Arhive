@@ -27,12 +27,12 @@
 #include "WorldDatabase.h"
 
 /// Accessor to the world database
-extern WorldDatabaseWorkerPool WorldDatabase;
+AC_DATABASE_API extern WorldDatabaseWorkerPool WorldDatabase;
 
 /// Accessor to the character database
-extern CharacterDatabaseWorkerPool CharacterDatabase;
+AC_DATABASE_API extern CharacterDatabaseWorkerPool CharacterDatabase;
 
 /// Accessor to the realm/login database
-extern LoginDatabaseWorkerPool LoginDatabase;
+AC_DATABASE_API extern LoginDatabaseWorkerPool LoginDatabase;
 
 #endif

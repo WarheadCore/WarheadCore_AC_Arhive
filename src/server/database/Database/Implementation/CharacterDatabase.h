@@ -10,7 +10,7 @@
 #include "DatabaseWorkerPool.h"
 #include "MySQLConnection.h"
 
-class CharacterDatabaseConnection : public MySQLConnection
+class AC_DATABASE_API CharacterDatabaseConnection : public MySQLConnection
 {
     public:
         //- Constructors for sync and async connections

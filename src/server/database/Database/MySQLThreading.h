@@ -9,7 +9,7 @@
 
 #include "Log.h"
 
-class MySQL
+class AC_DATABASE_API MySQL
 {
     public:
         /*! Create a thread on the MySQL server to mirrior the calling thread,

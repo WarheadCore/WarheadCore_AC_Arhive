@@ -59,7 +59,7 @@ struct PreparedStatementData
 class MySQLPreparedStatement;
 
 //- Upper-level class that is used in code
-class PreparedStatement
+class AC_DATABASE_API PreparedStatement
 {
     friend class PreparedStatementTask;
     friend class MySQLPreparedStatement;
@@ -95,7 +95,7 @@ class PreparedStatement
 //- Class of which the instances are unique per MySQLConnection
 //- access to these class objects is only done when a prepared statement task
 //- is executed.
-class MySQLPreparedStatement
+class AC_DATABASE_API MySQLPreparedStatement
 {
     friend class MySQLConnection;
     friend class PreparedStatement;
@@ -139,7 +139,7 @@ class MySQLPreparedStatement
 typedef ACE_Future<PreparedQueryResult> PreparedQueryResultFuture;
 
 //- Lower-level class, enqueuable operation
-class PreparedStatementTask : public SQLOperation
+class AC_DATABASE_API PreparedStatementTask : public SQLOperation
 {
     public:
         PreparedStatementTask(PreparedStatement* stmt);

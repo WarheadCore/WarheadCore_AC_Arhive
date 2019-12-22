@@ -9,7 +9,7 @@
 
 #include <ace/Future.h>
 
-class SQLQueryHolder
+class AC_DATABASE_API SQLQueryHolder
 {
     friend class SQLQueryHolderTask;
     private:
@@ -30,7 +30,7 @@ class SQLQueryHolder
 
 typedef ACE_Future<SQLQueryHolder*> QueryResultHolderFuture;
 
-class SQLQueryHolderTask : public SQLOperation
+class AC_DATABASE_API SQLQueryHolderTask : public SQLOperation
 {
     private:
         SQLQueryHolder * m_holder;

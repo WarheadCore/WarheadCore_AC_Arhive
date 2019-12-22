@@ -18,7 +18,7 @@
 #endif
 #include <mysql.h>
 
-class ResultSet
+class AC_DATABASE_API ResultSet
 {
     public:
         ResultSet(MYSQL_RES* result, MYSQL_FIELD* fields, uint64 rowCount, uint32 fieldCount);
@@ -50,7 +50,7 @@ class ResultSet
 
 typedef acore::AutoPtr<ResultSet, ACE_Thread_Mutex> QueryResult;
 
-class PreparedResultSet
+class AC_DATABASE_API PreparedResultSet
 {
     public:
         PreparedResultSet(MYSQL_STMT* stmt, MYSQL_RES* result, uint64 rowCount, uint32 fieldCount);

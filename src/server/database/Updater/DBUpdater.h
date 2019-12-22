@@ -33,7 +33,7 @@ namespace boost
     }
 }
 
-class UpdateException : public std::exception
+class AC_DATABASE_API UpdateException : public std::exception
 {
 public:
     UpdateException(std::string const& msg) : _msg(msg) { }
@@ -51,7 +51,7 @@ enum BaseLocation
     LOCATION_DOWNLOAD
 };
 
-class DBUpdaterUtil
+class AC_DATABASE_API DBUpdaterUtil
 {
 public:
     static std::string GetCorrectedMySQLExecutable();
@@ -63,7 +63,7 @@ private:
 };
 
 template <class T>
-class DBUpdater
+class AC_DATABASE_API DBUpdater
 {
 public:
     using Path = boost::filesystem::path;

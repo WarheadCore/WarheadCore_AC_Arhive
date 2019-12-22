@@ -33,7 +33,7 @@ namespace boost
     }
 }
 
-struct UpdateResult
+struct AC_DATABASE_API UpdateResult
 {
     UpdateResult()
         : updated(0), recent(0), archived(0) { }
@@ -46,7 +46,7 @@ struct UpdateResult
     size_t archived;
 };
 
-class UpdateFetcher
+class AC_DATABASE_API UpdateFetcher
 {
     typedef boost::filesystem::path Path;
 

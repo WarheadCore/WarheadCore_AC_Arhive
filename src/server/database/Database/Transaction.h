@@ -42,7 +42,7 @@ class Transaction
 typedef acore::AutoPtr<Transaction, ACE_Thread_Mutex> SQLTransaction;
 
 /*! Low level class*/
-class TransactionTask : public SQLOperation
+class AC_DATABASE_API TransactionTask : public SQLOperation
 {
     template <class T> friend class DatabaseWorkerPool;
     friend class DatabaseWorker;

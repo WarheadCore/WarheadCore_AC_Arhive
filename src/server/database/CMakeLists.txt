@@ -9,7 +9,9 @@ CollectSourceFiles(
 # Group sources
 GroupSources(${CMAKE_CURRENT_SOURCE_DIR})
 
-add_library(database STATIC
+add_definitions(-DACORE_API_EXPORT_DATABASE)
+
+add_library(database
   ${PRIVATE_SOURCES})
 
 CollectIncludeDirectories(
@@ -32,3 +34,15 @@ set_target_properties(database
   PROPERTIES
     FOLDER
       "server")
+
+if( BUILD_SHARED_LIBS )
+  if( UNIX )
+    install(TARGETS database
+      LIBRARY
+        DESTINATION lib)
+  elseif( WIN32 )
+    install(TARGETS database
+      RUNTIME
+        DESTINATION "${CMAKE_INSTALL_PREFIX}")
+  endif()
+endif()

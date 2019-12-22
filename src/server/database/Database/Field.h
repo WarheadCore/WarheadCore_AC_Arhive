@@ -12,7 +12,7 @@
 
 #include <mysql.h>
 
-class Field
+class AC_DATABASE_API Field
 {
     friend class ResultSet;
     friend class PreparedResultSet;

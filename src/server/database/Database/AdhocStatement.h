@@ -11,8 +11,9 @@
 #include "SQLOperation.h"
 
 typedef ACE_Future<QueryResult> QueryResultFuture;
+
 /*! Raw, ad-hoc query. */
-class BasicStatementTask : public SQLOperation
+class AC_DATABASE_API BasicStatementTask : public SQLOperation
 {
     public:
         BasicStatementTask(const char* sql);
