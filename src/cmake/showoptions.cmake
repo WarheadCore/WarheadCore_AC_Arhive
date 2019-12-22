@@ -138,5 +138,14 @@ else()
   message("* Show source tree                : No (For UNIX default)")
 endif()
 
+if (BUILD_SHARED_LIBS)
+  message("")
+  message(" *** WITH_DYNAMIC_LINKING - INFO!")
+  message(" *** Will link against shared libraries!")
+  message(" *** Please note that this is an experimental feature!")
+  
+  add_definitions(-DACORE_API_USE_DYNAMIC_LINKING)
+endif()
+
 message("")
 

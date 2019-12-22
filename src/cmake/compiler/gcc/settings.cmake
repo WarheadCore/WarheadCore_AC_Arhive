@@ -8,7 +8,7 @@ target_compile_definitions(acore-compile-option-interface
   INTERFACE
     -D_BUILD_DIRECTIVE="${CMAKE_BUILD_TYPE}")
 
-set(GCC_EXPECTED_VERSION 4.8.2)
+set(GCC_EXPECTED_VERSION 7.0.0)
 
 if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS GCC_EXPECTED_VERSION)
   message(FATAL_ERROR "GCC: This project requires version ${GCC_EXPECTED_VERSION} to build but found ${CMAKE_CXX_COMPILER_VERSION}")
@@ -46,4 +46,22 @@ if( WITH_COREDEBUG )
   INTERFACE
     -g3)
   message(STATUS "GCC: Debug-flags set (-g3)")
+endif()
+
+if (BUILD_SHARED_LIBS)
+  target_compile_options(acore-compile-option-interface
+    INTERFACE
+      -fPIC
+      -Wno-attributes)
+
+  target_compile_options(acore-hidden-symbols-interface
+    INTERFACE
+      -fvisibility=hidden)
+
+  # Should break the build when there are TRINITY_*_API macros missing
+  # but it complains about missing references in precompiled headers.
+  # set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wl,--no-undefined")
+  # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--no-undefined")
+
+  message(STATUS "GCC: Enabled shared linking")
 endif()
