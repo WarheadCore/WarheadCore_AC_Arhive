@@ -1,4 +1,4 @@
-sudo: required
+# sudo: required
 dist: bionic # (18.04)
 
 language: cpp
@@ -7,7 +7,18 @@ compiler:
 
 addons:
   apt:
-    update: true
+    sources:
+      - sourceline: 'ppa:mhier/libboost-latest'
+    packages:
+      - libace-6.4.5
+      - libace-dev
+      - boost1.67
+      - libssl-dev
+      - libmysqlclient-dev
+      - libreadline6-dev
+      - zlib1g-dev
+      - libbz2-dev
+      - g++-6
 
 services:
   - mysql
@@ -15,27 +26,29 @@ services:
 git:
   depth: 10
 
-stages:
-  - run
+before_install:
+  - git config user.email "travis@build.bot" && git config user.name "Travis CI"
+  - git tag -a -m "Travis build" init
 
-jobs:
-  include:
-    - stage: run
-      before_install:
-          - git config user.email "azerothcorebot@gmail.com" && git config user.name "AzerothCoreBot"
-          - if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then cd bin/; fi
-          # import pending sql
-          - if [ "$TRAVIS_PULL_REQUEST" = "false" ] && [ "$TRAVIS_BRANCH" = "master" ]; then source acore-db-pendings; fi
-          - if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then cd ..; fi
-          # push changes to git if any
-          - if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then git fetch --unshallow; fi
-          - if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then git checkout $TRAVIS_BRANCH; fi
-          - if [ "$TRAVIS_PULL_REQUEST" = "false" ] && [[ -n "$GITHUB_API_KEY" ]]; then git add -A . && git diff --cached --quiet || git commit -am "Import pending SQL update file..." -m "Referenced commit(s):$COMMIT_HASH" && git push https://$GITHUB_API_KEY@github.com/$TRAVIS_REPO_SLUG.git $TRAVIS_BRANCH; fi
-          # sync staging with master
-          - source ./apps/ci/ci-before_install.sh
-      install:
-        - source ./apps/ci/ci-install.sh
-        - source ./apps/ci/ci-import-db.sh
-      script:
-        - source ./apps/ci/ci-compile.sh
-        - source ./apps/ci/ci-worldserver-dry-run.sh
+install:
+  # - mysql -uroot -e 'create database test_mysql;'
+  - mkdir build
+  - cd build
+  - cmake ../ -DNOJEM=0 -DCMAKE_INSTALL_PREFIX=check_install -DWITH_DYNAMIC_LINKING=1
+  - cd ..
+  
+script:
+  - $CXX --version
+  # - mysql -uroot < sql/create/create_mysql.sql
+  # - mysql -utrinity -ptrinity auth < sql/base/auth_database.sql
+  # - ./contrib/check_updates.sh auth 3.3.5 auth localhost
+  # - mysql -utrinity -ptrinity characters < sql/base/characters_database.sql
+  # - ./contrib/check_updates.sh characters 3.3.5 characters localhost
+  # - mysql -utrinity -ptrinity world < sql/base/dev/world_database.sql
+  # - cat sql/updates/world/3.3.5/*.sql | mysql -utrinity -ptrinity world
+  # - mysql -uroot < sql/create/drop_mysql.sql
+  - cd build
+  - make -j 4 -k && make install
+  - cd check_install/bin
+  # - ./authserver --version
+  # - ./worldserver --version
