@@ -61,8 +61,8 @@ target_link_libraries(worldserver
   PRIVATE
     acore-core-interface
   PUBLIC
-    game
     scripts
+    game
     shared
     gsoap
     readline
