@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
+ * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>, released under GNU GPL v2 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-GPL2
  * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  */
 
-#ifndef _TCSOAP_H
-#define _TCSOAP_H
+#ifndef _ACSOAP_H
+#define _ACSOAP_H
 
 #include "Define.h"
 #include "AccountMgr.h"
@@ -14,10 +14,10 @@
 #include <ace/Task.h>
 #include <Threading.h>
 
-class TCSoapRunnable : public acore::Runnable
+class ACSoapRunnable : public acore::Runnable
 {
     public:
-        TCSoapRunnable() : _port(0) { }
+        ACSoapRunnable() : _port(0) { }
 
         void run();
 
@@ -37,14 +37,9 @@ class TCSoapRunnable : public acore::Runnable
 class SOAPCommand
 {
     public:
-        SOAPCommand():
-            pendingCommands(0, USYNC_THREAD, "pendingCommands"), m_success(false)
-        {
-        }
+        SOAPCommand(): pendingCommands(0, USYNC_THREAD, "pendingCommands"), m_success(false) {}
 
-        ~SOAPCommand()
-        {
-        }
+        ~SOAPCommand() { }
 
         void appendToPrintBuffer(const char* msg)
         {
