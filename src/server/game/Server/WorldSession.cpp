@@ -596,7 +596,7 @@ void WorldSession::LogoutPlayer(bool save)
         WorldPacket data(SMSG_LOGOUT_COMPLETE, 0);
         SendPacket(&data);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-        sLog->outDebug(LOG_FILTER_NETWORKIO, "SESSION: Sent SMSG_LOGOUT_COMPLETE Message");
+        LOG_DEBUG("network", "SESSION: Sent SMSG_LOGOUT_COMPLETE Message");
 #endif
 
         //! Since each account can only have one online character at any given time, ensure all characters for active account are marked as offline
@@ -1058,12 +1058,12 @@ void WorldSession::ReadAddonsInfo(WorldPacket &data)
         uint32 currentTime;
         addonInfo >> currentTime;
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-        sLog->outDebug(LOG_FILTER_NETWORKIO, "ADDON: CurrentTime: %u", currentTime);
+        LOG_DEBUG("network", "ADDON: CurrentTime: %u", currentTime);
 #endif
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
         if (addonInfo.rpos() != addonInfo.size())
-            sLog->outDebug(LOG_FILTER_NETWORKIO, "packet under-read!");
+            LOG_DEBUG("network", "packet under-read!");
 #endif
     }
     else

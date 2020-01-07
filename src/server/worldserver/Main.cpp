@@ -19,7 +19,7 @@
 #include "WorldSocketMgr.h"
 #include "CliRunnable.h"
 #include "RARunnable.h"
-#include "TCSoap.h"
+#include "ACSoap.h"
 #include "RealmList.h"
 #include "ScriptMgr.h"
 #include "BigNumber.h"
@@ -473,7 +473,7 @@ extern int main(int argc, char** argv)
     // Start soap serving thread    
     if (sConfigMgr->GetBoolDefault("SOAP.Enabled", false))
     {
-        TCSoapRunnable* runnable = new TCSoapRunnable();
+        ACSoapRunnable* runnable = new ACSoapRunnable();
         runnable->SetListenArguments(sConfigMgr->GetStringDefault("SOAP.IP", "127.0.0.1"), uint16(sConfigMgr->GetIntDefault("SOAP.Port", 7878)));
         soapThread = new acore::Thread(runnable);
     }

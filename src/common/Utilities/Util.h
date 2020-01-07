@@ -80,7 +80,7 @@ AC_COMMON_API double rand_norm();
 /* Return a random double from 0.0 to 100.0 (exclusive). */
 AC_COMMON_API double rand_chance();
 
-uint32 urandweighted(size_t count, double const* chances);
+AC_COMMON_API uint32 urandweighted(size_t count, double const* chances);
 
 /* Return true if a random roll fits in the specified chance (range 0-100). */
 inline bool roll_chance_f(float chance)
