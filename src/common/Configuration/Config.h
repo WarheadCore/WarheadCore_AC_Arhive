@@ -16,9 +16,14 @@
 
 typedef acore::AutoPtr<ACE_Configuration_Heap, ACE_Null_Mutex> Config;
 
-class ConfigMgr
+class AC_COMMON_API ConfigMgr
 {
     friend class ConfigLoader;
+
+    ConfigMgr() = default;
+    ConfigMgr(ConfigMgr const&) = delete;
+    ConfigMgr& operator=(ConfigMgr const&) = delete;
+    ~ConfigMgr() = default;
 
 public:
     static ConfigMgr* instance();
@@ -64,11 +69,6 @@ private:
     std::string _initConfigFile;
     Config _config;
     LockType _configLock;
-
-    ConfigMgr() = default;
-    ConfigMgr(ConfigMgr const&) = delete;
-    ConfigMgr& operator=(ConfigMgr const&) = delete;
-    ~ConfigMgr() = default;
 };
 
 #define sConfigMgr ConfigMgr::instance()
