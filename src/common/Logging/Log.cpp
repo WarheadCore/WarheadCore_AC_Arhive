@@ -677,10 +677,10 @@ void Log::outSys(LogLevel level, std::string&& message)
         switch (level)
         {
         case LOG_LEVEL_ERROR:
-            logger.error("--> " + message);
+            logger.error("" + message);
             break;
         case LOG_LEVEL_INFO:
-            logger.information("--> " + message);
+            logger.information("" + message);
             break;
         default:
             break;

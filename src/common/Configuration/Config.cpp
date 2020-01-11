@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
+ * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>, released under GNU GPL v2 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-GPL2
  * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  */
@@ -7,6 +7,7 @@
 #include "Config.h"
 #include "Errors.h"
 #include "Log.h"
+#include "Util.h"
 
 ConfigMgr* ConfigMgr::instance()
 {
@@ -15,91 +16,77 @@ ConfigMgr* ConfigMgr::instance()
 }
 
 // Defined here as it must not be exposed to end-users.
-bool ConfigMgr::GetValueHelper(const char* name, ACE_TString &result)
+bool ConfigMgr::GetValueHelper(const char* name, ACE_TString& result)
 {
     GuardType guard(_configLock);
 
-    if (_config.get() == 0)
+    if (!_config.get())
         return false;
 
     ACE_TString section_name;
     ACE_Configuration_Section_Key section_key;
-    const ACE_Configuration_Section_Key &root_key = _config->root_section();
+    const ACE_Configuration_Section_Key& root_key = _config->root_section();
 
     int i = 0;
-    while (_config->enumerate_sections(root_key, i, section_name) == 0)
+
+    while (!_config->enumerate_sections(root_key, i, section_name))
     {
         _config->open_section(root_key, section_name.c_str(), 0, section_key);
-        if (_config->get_string_value(section_key, name, result) == 0)
+
+        if (!_config->get_string_value(section_key, name, result))
             return true;
+
         ++i;
     }
 
     return false;
 }
 
-bool ConfigMgr::LoadInitial(char const* file, std::string applicationName /*= "worldserver"*/)
+bool ConfigMgr::LoadInitial(std::string const& file)
 {
-    ASSERT(file);
+    ASSERT(file.c_str());
 
     GuardType guard(_configLock);
 
     _config.reset(new ACE_Configuration_Heap());
-    if (_config->open() == 0)
-        if (LoadData(file, applicationName))
+    if (!_config->open())
+        if (LoadData(file))
             return true;
-
-    SYS_LOG_INFO("Initial load config error. Invalid or missing configuration file: %s\n", file);
-    SYS_LOG_INFO("Verify that the file exists and has \'[%s]' written in the top of the file!\n", applicationName.c_str());
 
     _config.reset();
     return false;
 }
 
-bool ConfigMgr::LoadMore(char const* file, std::string applicationName /*= "worldserver"*/)
+bool ConfigMgr::LoadMore(std::string const& file)
 {
-    ASSERT(file);
+    ASSERT(file.c_str());
     ASSERT(_config);
 
     GuardType guard(_configLock);
 
-    return LoadData(file, applicationName);
+    return LoadData(file);
 }
 
 bool ConfigMgr::Reload()
 {
-    for (std::vector<std::string>::const_iterator itr = _confFiles.begin(); itr != _confFiles.end(); ++itr)
-    {
-        if (itr == _confFiles.begin())
-        {
-            if (!LoadInitial((*itr).c_str()))
-                return false;
-        }
-        else
-        {
-            LoadMore((*itr).c_str());
-        }
-    }
+    if (!LoadAppConfigs())
+        return false;
+
+    LoadModulesConfigs();
 
     return true;
 }
 
-bool ConfigMgr::LoadData(char const* file, std::string applicationName /*= "worldserver"*/)
+bool ConfigMgr::LoadData(std::string const& file)
 {
-    if(std::find(_confFiles.begin(), _confFiles.end(), file) == _confFiles.end())
-        _confFiles.push_back(file);
-
     ACE_Ini_ImpExp config_importer(*_config.get());
-    if (config_importer.import_config(file) == 0)
+    if (!config_importer.import_config(file.c_str()))
         return true;
-
-    SYS_LOG_INFO("Load config error. Invalid or missing configuration file: %s", file);
-    SYS_LOG_INFO("Verify that the file exists and has \'[%s]' written in the top of the file!\n", applicationName.c_str());
 
     return false;
 }
 
-std::string ConfigMgr::GetStringDefault(std::string const& name, const std::string &def, bool logUnused /*= true*/)
+std::string ConfigMgr::GetStringDefault(std::string const& name, const std::string& def, bool logUnused /*= true*/)
 {
     ACE_TString val;
 
@@ -108,7 +95,8 @@ std::string ConfigMgr::GetStringDefault(std::string const& name, const std::stri
     else
     {
         if (logUnused)
-            SYS_LOG_ERROR("-> Not found option '%s'. The default value is used (%s)", name, def.c_str());
+            sLog->outError("-> Not found option '%s'. The default value is used (%s)", name.c_str(), def.c_str());
+
         return def;
     }
 }
@@ -120,7 +108,8 @@ bool ConfigMgr::GetBoolDefault(std::string const& name, bool def, bool logUnused
     if (!GetValueHelper(name.c_str(), val))
     {
         if (logUnused)
-            def ? SYS_LOG_ERROR("-> Not found option '%s'. The default value is used (Yes)", name) : SYS_LOG_ERROR("-> Not found option '%s'. The default value is used (No)", name);
+            def ? sLog->outError("-> Not found option '%s'. The default value is used (Yes)", name.c_str()) : sLog->outError("-> Not found option '%s'. The default value is used (No)", name.c_str());
+
         return def;
     }
 
@@ -136,7 +125,8 @@ int ConfigMgr::GetIntDefault(std::string const& name, int def, bool logUnused /*
     else
     {
         if (logUnused)
-            SYS_LOG_ERROR("-> Not found option '%s'. The default value is used (%i)", name, def);
+            sLog->outError("-> Not found option '%s'. The default value is used (%i)", name.c_str(), def);
+
         return def;
     }
 }
@@ -150,7 +140,8 @@ float ConfigMgr::GetFloatDefault(std::string const& name, float def, bool logUnu
     else
     {
         if (logUnused)
-            SYS_LOG_ERROR("-> Not found option '%s'. The default value is used (%f)", name, def);
+            sLog->outError("-> Not found option '%s'. The default value is used (%f)", name.c_str(), def);
+
         return def;
     }
 }
@@ -160,22 +151,25 @@ std::list<std::string> ConfigMgr::GetKeysByString(std::string const& name)
     GuardType guard(_configLock);
 
     std::list<std::string> keys;
-    if (_config.get() == 0)
+    if (!_config.get())
         return keys;
 
     ACE_TString section_name;
     ACE_Configuration_Section_Key section_key;
-    const ACE_Configuration_Section_Key &root_key = _config->root_section();
+    const ACE_Configuration_Section_Key& root_key = _config->root_section();
 
     int i = 0;
-    while (_config->enumerate_sections(root_key, i++, section_name) == 0)
+
+    while (!_config->enumerate_sections(root_key, i++, section_name))
     {
         _config->open_section(root_key, section_name.c_str(), 0, section_key);
 
         ACE_TString key_name;
         ACE_Configuration::VALUETYPE type;
+
         int j = 0;
-        while (_config->enumerate_values(section_key, j++, key_name, type) == 0)
+
+        while (!_config->enumerate_values(section_key, j++, key_name, type))
         {
             std::string temp = key_name.c_str();
 
@@ -185,4 +179,117 @@ std::list<std::string> ConfigMgr::GetKeysByString(std::string const& name)
     }
 
     return keys;
+}
+
+void ConfigMgr::SetConfigList(std::string const& fileName, std::string const& modulesConfigList /*= ""*/)
+{
+    _initConfigFile = fileName;
+
+    if (modulesConfigList.empty())
+        return;
+
+    // Clean config list before load
+    _modulesConfigFiles.clear();
+
+    Tokenizer configFileList(modulesConfigList, ',');
+    for (auto const& itr : configFileList)
+        _modulesConfigFiles.push_back(itr);
+}
+
+bool ConfigMgr::LoadAppConfigs(std::string const& applicationName /*= "worldserver"*/)
+{
+    // #1 - Load init config file .conf.dist
+    if (!sConfigMgr->LoadInitial(_initConfigFile + ".dist"))
+    {
+        printf("Load config error. Invalid or missing dist configuration file: %s", std::string(_initConfigFile + ".dist").c_str());
+        printf("Verify that the file exists and has \'[%s]' written in the top of the file!", applicationName.c_str());
+
+        return false;
+    }
+
+    // #2 - Load .conf file
+    if (!sConfigMgr->LoadMore(_initConfigFile))
+    {
+        sLog->outString("");
+        sLog->outString("Load config error. Invalid or missing configuration file: %s", _initConfigFile.c_str());
+        sLog->outString("Verify that the file exists and has \'[%s]' written in the top of the file!", applicationName.c_str());
+
+        return false;
+    }
+
+    return true;
+}
+
+bool ConfigMgr::LoadModulesConfigs()
+{
+    // If not modules config - load failed
+    if (_modulesConfigFiles.empty())
+        return false;
+
+    // Start loading module configs
+    std::unordered_map<std::string /*module name*/, std::string /*config variant*/> moduleConfigFiles;
+
+    moduleConfigFiles.clear();
+
+    std::string configPath = _CONF_DIR;
+    std::string applicationName = "worldserver";
+
+    for (auto const& itr : _modulesConfigFiles)
+    {
+        bool IsExistDefaultConfig = true;
+        bool IsExistDistConfig = true;
+
+        std::string moduleName = itr;
+        std::string configFile = std::string(itr) + std::string(".conf");
+        std::string defaultConfig = configPath + "/" + configFile;
+
+#if AC_PLATFORM == AC_PLATFORM_WINDOWS
+        defaultConfig = configFile;
+#endif
+
+        std::string ConfigFileDist = configFile + std::string(".dist");
+
+        // Load .conf.dist config
+        if (!sConfigMgr->LoadMore(ConfigFileDist.c_str()))
+        {
+            IsExistDistConfig = false;
+
+            sLog->outString("");
+            sLog->outError("Load config error. Invalid or missing dist configuration file: %s", ConfigFileDist.c_str());
+            sLog->outError("Verify that the file exists and has \'[%s]' written in the top of the file!", applicationName.c_str());
+        }
+
+        // Load .conf config
+        if (!sConfigMgr->LoadMore(defaultConfig.c_str()))
+        {
+            IsExistDefaultConfig = false;
+
+            sLog->outString("");
+            sLog->outString("Load config error. Invalid or missing configuration file: %s", _initConfigFile.c_str());
+            sLog->outString("Verify that the file exists and has \'[%s]' written in the top of the file!", applicationName.c_str());
+        }
+
+        // #1 - Not exist .conf and exist .conf.dist
+        if (!IsExistDefaultConfig && IsExistDistConfig)
+            moduleConfigFiles.insert(std::make_pair(moduleName, ConfigFileDist));
+        else if (!IsExistDefaultConfig && !IsExistDistConfig) // #2 - Not exist .conf and not exist .conf.dist
+            moduleConfigFiles.insert(std::make_pair(moduleName, "default hardcoded settings"));
+        else if (IsExistDefaultConfig && IsExistDistConfig)
+            moduleConfigFiles.insert(std::make_pair(moduleName, defaultConfig));
+    }
+
+    // If module configs exist and not load all
+    if (moduleConfigFiles.empty())
+        return false;
+
+    // Print modules configurations
+    sLog->outString();
+    sLog->outString("Using configuration for modules:");
+
+    for (auto const& itr : moduleConfigFiles)
+        sLog->outString("> Module (%s) using (%s)", itr.first.c_str(), itr.second.c_str());
+
+    sLog->outString();
+
+    return true;
 }

@@ -105,13 +105,10 @@ extern int main(int argc, char** argv)
         ++count;
     }
 
-    std::string cfg_def_file=_ACORE_REALM_CONFIG;
-    cfg_def_file += ".dist";
+    sConfigMgr->SetConfigList(std::string(configFile));
 
-    if (!sConfigMgr->LoadInitial(cfg_def_file.c_str(), std::string("authserver")))
+    if (!sConfigMgr->LoadAppConfigs("authserver"))
         return 1;
-
-    sConfigMgr->LoadMore(configFile);
 
     // Init all logs
     sLog->Initialize();

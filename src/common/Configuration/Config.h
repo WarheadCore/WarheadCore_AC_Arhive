@@ -7,7 +7,6 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#include "Define.h"
 #include <string>
 #include <list>
 #include <vector>
@@ -17,16 +16,15 @@
 
 typedef acore::AutoPtr<ACE_Configuration_Heap, ACE_Null_Mutex> Config;
 
-class AC_COMMON_API ConfigMgr
+class ConfigMgr
 {
     friend class ConfigLoader;
 
 public:
-
     static ConfigMgr* instance();
-    
+
     /// Method used only for loading main configuration files (authserver.conf and worldserver.conf)
-    bool LoadInitial(char const* file, std::string applicationName = "worldserver");
+    bool LoadInitial(std::string const& file);
 
     /**
      * This method loads additional configuration files
@@ -34,9 +32,12 @@ public:
      *
      * @return true if loading was successful
      */
-    bool LoadMore(char const* file, std::string applicationName = "worldserver");
+    bool LoadMore(std::string const& file);
 
     bool Reload();
+
+    bool LoadAppConfigs(std::string const& applicationName = "worldserver");
+    bool LoadModulesConfigs();
 
     std::string GetStringDefault(std::string const& name, const std::string& def, bool logUnused = true);
     bool GetBoolDefault(std::string const& name, bool def, bool logUnused = true);
@@ -48,16 +49,19 @@ public:
     bool isDryRun() { return dryRun; }
     void setDryRun(bool mode) { dryRun = mode; }
 
+    void SetConfigList(std::string const& fileName, std::string const& modulesConfigList = "");
+
 private:
     bool dryRun = false;
 
-    bool GetValueHelper(const char* name, ACE_TString &result);
-    bool LoadData(char const* file, std::string applicationName = "worldserver");
+    bool GetValueHelper(const char* name, ACE_TString& result);
+    bool LoadData(std::string const& file);
 
     typedef ACE_Thread_Mutex LockType;
     typedef ACE_Guard<LockType> GuardType;
 
-    std::vector<std::string> _confFiles;
+    std::vector<std::string> _modulesConfigFiles;
+    std::string _initConfigFile;
     Config _config;
     LockType _configLock;
 

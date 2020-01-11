@@ -318,18 +318,17 @@ extern int main(int argc, char** argv)
         ++c;
     }
 
-    std::string cfg_def_file = _ACORE_CORE_CONFIG;
-    cfg_def_file += ".dist";
+    sConfigMgr->SetConfigList(std::string(configFile), std::string(CONFIG_FILE_LIST));
 
-    if (!sConfigMgr->LoadInitial(cfg_def_file.c_str()))
+    if (!sConfigMgr->LoadAppConfigs())
         return 1;
-
-    sConfigMgr->LoadMore(configFile);
 
     // Init all logs
     sLog->Initialize();
 
     acore::Logo::Show("server.worldserver", "worldserver", configFile);
+
+    sConfigMgr->LoadModulesConfigs();
 
     ///- and run the 'Master'
     /// @todo Why do we need this 'Master'? Can't all of this be in the Main as for Realmd?
@@ -356,9 +355,6 @@ extern int main(int argc, char** argv)
 
     // set server offline (not connectable)
     LoginDatabase.DirectPExecute("UPDATE realmlist SET flag = (flag & ~%u) | %u WHERE id = '%d'", REALM_FLAG_OFFLINE, REALM_FLAG_INVALID, realmID);
-
-    //set module config file list
-    sWorld->SetConfigFileList(CONFIG_FILE_LIST);
 
     ///- Initialize the World
     sScriptMgr->SetScriptLoader(AddScripts);
