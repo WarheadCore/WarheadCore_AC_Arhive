@@ -14,7 +14,6 @@
 #include <ace/OS_NS_string.h>
 #include <ace/Reactor.h>
 #include <ace/Auto_Ptr.h>
-
 #include "WorldSocket.h"
 #include "Common.h"
 #include "Player.h"
@@ -33,6 +32,8 @@
 #include "PacketLog.h"
 #include "ScriptMgr.h"
 #include "AccountMgr.h"
+#include "GameTime.h"
+
 #ifdef ELUNA
 #include "LuaEngine.h"
 #endif
@@ -842,7 +843,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     //! Negative mutetime indicates amount of seconds to be muted effective on next login - which is now.
     if (mutetime < 0)
     {
-        mutetime = time(NULL) + llabs(mutetime);
+        mutetime = GameTime::GetGameTime() + llabs(mutetime);
 
         PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPD_MUTE_TIME_LOGIN);
 

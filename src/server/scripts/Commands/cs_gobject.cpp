@@ -22,6 +22,7 @@ EndScriptData */
 #include "Opcodes.h"
 #include "Transport.h"
 #include "GameObject.h"
+#include "GameTime.h"
 
 class gobject_commandscript : public CommandScript
 {
@@ -310,7 +311,7 @@ public:
 
         if (target)
         {
-            int32 curRespawnDelay = int32(target->GetRespawnTimeEx() - time(nullptr));
+            int32 curRespawnDelay = int32(target->GetRespawnTimeEx() - GameTime::GetGameTime());
             if (curRespawnDelay < 0)
                 curRespawnDelay = 0;
 

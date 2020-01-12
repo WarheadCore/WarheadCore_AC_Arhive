@@ -18,6 +18,7 @@
 #include "Warden.h"
 #include "AccountMgr.h"
 #include "BanManager.h"
+#include "GameTime.h"
 
 Warden::Warden() : _session(NULL), _inputCrypto(16), _outputCrypto(16), _checkTimer(10000/*10 sec*/), _clientResponseTimer(0),
                    _dataSent(false), _previousTimestamp(0), _module(NULL), _initialized(false)
@@ -89,7 +90,7 @@ void Warden::Update()
 {
     if (_initialized)
     {
-        uint32 currentTimestamp = World::GetGameTimeMS();
+        uint32 currentTimestamp = GameTime::GetGameTimeMS();
         uint32 diff = getMSTimeDiff(_previousTimestamp, currentTimestamp);
         _previousTimestamp = currentTimestamp;
 

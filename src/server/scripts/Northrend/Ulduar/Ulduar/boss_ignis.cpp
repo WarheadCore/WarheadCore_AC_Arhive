@@ -10,6 +10,7 @@
 #include "SpellAuras.h"
 #include "SpellAuraEffects.h"
 #include "Player.h"
+#include "GameTime.h"
 
 #define SPELL_FLAME_JETS_10             62680
 #define SPELL_FLAME_JETS_25             63472
@@ -261,10 +262,10 @@ public:
             if (id == 1337)
             {
                 if (lastShatterMSTime)
-                    if (getMSTimeDiff(lastShatterMSTime, World::GetGameTimeMS()) <= 5000)
+                    if (getMSTimeDiff(lastShatterMSTime, GameTime::GetGameTimeMS()) <= 5000)
                         bShattered = true;
 
-                lastShatterMSTime = World::GetGameTimeMS();
+                lastShatterMSTime = GameTime::GetGameTimeMS();
             }
         }
 

@@ -7,6 +7,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#include "Define.h"
 #include <string>
 #include <list>
 #include <vector>

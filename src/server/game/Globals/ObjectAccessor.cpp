@@ -24,7 +24,7 @@
 #include "Vehicle.h"
 #include "World.h"
 #include "WorldPacket.h"
-
+#include "GameTime.h"
 #include <cmath>
 
 ObjectAccessor::ObjectAccessor()
@@ -387,7 +387,7 @@ Corpse* ObjectAccessor::ConvertCorpseForPlayer(uint64 player_guid, bool insignia
 
 void ObjectAccessor::RemoveOldCorpses()
 {
-    time_t now = time(NULL);
+    time_t now = GameTime::GetGameTime();
     Player2CorpsesMapType::iterator next;
     for (Player2CorpsesMapType::iterator itr = i_player2corpse.begin(); itr != i_player2corpse.end(); itr = next)
     {

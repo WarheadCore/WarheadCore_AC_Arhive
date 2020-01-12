@@ -12,6 +12,7 @@
 #include "LFGMgr.h"
 #include "PassiveAI.h"
 #include "CellImpl.h"
+#include "GameTime.h"
 
 ///////////////////////////////////////
 ////// GOS
@@ -436,7 +437,7 @@ public:
                     {
                         if (Aura* aur = player->GetAura(SPELL_RAM_AURA))
                         {
-                            int32 diff = aur->GetApplyTime() - (time(NULL)-(HOUR*18)+spellCooldown);
+                            int32 diff = aur->GetApplyTime() - (GameTime::GetGameTime()-(HOUR*18)+spellCooldown);
                             if (diff > 10) // aura applied later
                                 return;
 
@@ -844,7 +845,7 @@ public:
 
         bool AllowStart()
         {
-            time_t curtime = time(NULL);
+            time_t curtime = GameTime::GetGameTime();
             tm strDate;
             ACE_OS::localtime_r(&curtime, &strDate);
 

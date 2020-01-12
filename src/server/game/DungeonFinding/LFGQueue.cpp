@@ -25,9 +25,13 @@
 #include "ObjectMgr.h"
 #include "World.h"
 #include "GroupMgr.h"
+#include "GameTime.h"
 
 namespace lfg
 {
+
+LfgQueueData::LfgQueueData() : joinTime(GameTime::GetGameTime()), lastRefreshTime(joinTime), tanks(LFG_TANKS_NEEDED), healers(LFG_HEALERS_NEEDED), dps(LFG_DPS_NEEDED)
+{ }
 
 void LFGQueue::AddToQueue(uint64 guid, bool failedProposal)
 {
@@ -409,7 +413,7 @@ LfgCompatibility LFGQueue::CheckCompatibility(Lfg5Guids const& checkWith, const 
         return LFG_COMPATIBILITY_PENDING;
 
     // Create a new proposal
-    proposal.cancelTime = time(NULL) + LFG_TIME_PROPOSAL;
+    proposal.cancelTime = GameTime::GetGameTime() + LFG_TIME_PROPOSAL;
     proposal.state = LFG_PROPOSAL_INITIATING;
     proposal.leader = 0;
     proposal.dungeonId = acore::Containers::SelectRandomContainerElement(proposalDungeons);
@@ -445,7 +449,7 @@ LfgCompatibility LFGQueue::CheckCompatibility(Lfg5Guids const& checkWith, const 
 
 void LFGQueue::UpdateQueueTimers(uint32 diff)
 {
-    time_t currTime = time(NULL);
+    time_t currTime = GameTime::GetGameTime();
     bool sendQueueStatus = false;
 
     if (m_QueueStatusTimer > LFG_QUEUEUPDATE_INTERVAL)

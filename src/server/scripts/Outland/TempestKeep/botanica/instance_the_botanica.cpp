@@ -5,6 +5,7 @@
 #include "ScriptMgr.h"
 #include "InstanceScript.h"
 #include "the_botanica.h"
+#include "GameTime.h"
 
 class instance_the_botanica : public InstanceMapScript
 {
@@ -150,7 +151,7 @@ class spell_botanica_shift_form : public SpellScriptLoader
             {
                 if (SpellInfo const* spellInfo = eventInfo.GetDamageInfo()->GetSpellInfo())
                 {
-                    if ((spellInfo->GetSchoolMask() & _lastSchool) && _swapTime > time(NULL))
+                    if ((spellInfo->GetSchoolMask() & _lastSchool) && _swapTime > GameTime::GetGameTime())
                         return false;
 
                     uint32 form = 0;
@@ -166,7 +167,7 @@ class spell_botanica_shift_form : public SpellScriptLoader
 
                     if (form)
                     {
-                        _swapTime = time(NULL) + 6;
+                        _swapTime = GameTime::GetGameTime() + 6;
                         _lastSchool = spellInfo->GetSchoolMask();
                         GetUnitOwner()->RemoveAurasDueToSpell(_lastForm);
                         _lastForm = form;

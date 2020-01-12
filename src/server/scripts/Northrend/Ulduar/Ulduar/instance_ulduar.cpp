@@ -10,6 +10,7 @@
 #include "WorldPacket.h"
 #include "WorldSession.h"
 #include "Transport.h"
+#include "GameTime.h"
 
 class instance_ulduar : public InstanceMapScript
 {
@@ -896,10 +897,10 @@ public:
             }
             else if (unit->GetTypeId() == TYPEID_UNIT && unit->GetAreaId() == 4656 /*Conservatory of Life*/)
             {
-                if (time(NULL) > (m_conspeedatoryAttempt + DAY))
+                if (GameTime::GetGameTime() > (m_conspeedatoryAttempt + DAY))
                 {
                     DoStartTimedAchievement(ACHIEVEMENT_TIMED_TYPE_EVENT, 21597 /*CON-SPEED-ATORY_TIMED_CRITERIA*/);
-                    m_conspeedatoryAttempt = time(NULL);
+                    m_conspeedatoryAttempt = GameTime::GetGameTime();
                     SaveToDB();
                 }
             }

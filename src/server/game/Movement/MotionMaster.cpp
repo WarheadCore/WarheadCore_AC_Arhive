@@ -19,6 +19,7 @@
 #include "EscortMovementGenerator.h"
 #include "MoveSpline.h"
 #include "MoveSplineInit.h"
+#include "GameTime.h"
 #include <cassert>
 
 inline bool isStatic(MovementGenerator *mv)
@@ -535,7 +536,7 @@ void MotionMaster::MoveFall(uint32 id /*=0*/, bool addFlagForNPC)
     {
         _owner->AddUnitMovementFlag(MOVEMENTFLAG_FALLING);
         _owner->m_movementInfo.SetFallTime(0);
-        _owner->ToPlayer()->SetFallInformation(time(NULL), _owner->GetPositionZ());
+        _owner->ToPlayer()->SetFallInformation(GameTime::GetGameTime(), _owner->GetPositionZ());
     }
     else if (_owner->GetTypeId() == TYPEID_UNIT && addFlagForNPC) // pussywizard
     {
