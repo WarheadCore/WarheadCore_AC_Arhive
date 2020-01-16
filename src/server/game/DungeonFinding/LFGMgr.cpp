@@ -24,11 +24,12 @@
 #include "WorldSession.h"
 #include "Opcodes.h"
 #include "GameTime.h"
+#include "GameConfig.h"
 
 namespace lfg
 {
 
-LFGMgr::LFGMgr(): m_lfgProposalId(1), m_options(sWorld->getIntConfig(CONFIG_LFG_OPTIONSMASK))
+LFGMgr::LFGMgr(): m_lfgProposalId(1), m_options(sGameConfig->GetIntConfig("DungeonFinder.OptionsMask"))
 {
     new LFGPlayerScript();
     new LFGGroupScript();
@@ -128,10 +129,10 @@ void LFGMgr::LoadRewards()
             continue;
         }
 
-        if (!maxLevel || maxLevel > sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL))
+        if (!maxLevel || maxLevel > sGameConfig->GetIntConfig("MaxPlayerLevel"))
         {
             sLog->outError("Level %u specified for dungeon %u in table `lfg_dungeon_rewards` can never be reached!", maxLevel, dungeonId);
-            maxLevel = sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL);
+            maxLevel = sGameConfig->GetIntConfig("MaxPlayerLevel");
         }
 
         if (!firstQuestId || !sObjectMgr->GetQuestTemplate(firstQuestId))
@@ -2404,7 +2405,7 @@ void LFGMgr::SetLeader(uint64 gguid, uint64 leader)
 
 void LFGMgr::SetTeam(uint64 guid, TeamId teamId)
 {
-    if (sWorld->getBoolConfig(CONFIG_ALLOW_TWO_SIDE_INTERACTION_GROUP))
+    if (sGameConfig->GetBoolConfig("AllowTwoSide.Interaction.Group"))
         teamId = TEAM_ALLIANCE; // @Not Sure About That TeamId is supposed to be uint8 Team = 0(@TrinityCore)
 
     PlayersStore[guid].SetTeam(teamId);

@@ -15,6 +15,7 @@
 #include "UpdateData.h"
 #include "ObjectAccessor.h"
 #include "SpellInfo.h"
+#include "GameConfig.h"
 
 void WorldSession::HandleSplitItemOpcode(WorldPacket & recvData)
 {
@@ -701,7 +702,7 @@ void WorldSession::HandleSellItemOpcode(WorldPacket & recvData)
         {
             if (pProto->SellPrice > 0)
             {
-                if (sWorld->getBoolConfig(CONFIG_ITEMDELETE_VENDOR))
+                if (sGameConfig->GetBoolConfig("ItemDelete.Vendor"))
                     recoveryItem(pItem);
 
                 if (count < pItem->GetCount())               // need split items
@@ -784,7 +785,7 @@ void WorldSession::HandleBuybackItem(WorldPacket & recvData)
         InventoryResult msg = _player->CanStoreItem(NULL_BAG, NULL_SLOT, dest, pItem, false);
         if (msg == EQUIP_ERR_OK)
         {
-            if (sWorld->getBoolConfig(CONFIG_ITEMDELETE_VENDOR))
+            if (sGameConfig->GetBoolConfig("ItemDelete.Vendor"))
             {
                 PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_RECOVERY_ITEM);
                 stmt->setUInt32(0, _player->GetGUID());
@@ -1704,9 +1705,9 @@ bool WorldSession::CanUseBank(uint64 bankerGUID) const
 
 bool WorldSession::recoveryItem(Item* pItem)
 {
-    if (sWorld->getBoolConfig(CONFIG_ITEMDELETE_METHOD)
-        && pItem->GetTemplate()->Quality >= sWorld->getIntConfig(CONFIG_ITEMDELETE_QUALITY)
-        && pItem->GetTemplate()->ItemLevel >= sWorld->getIntConfig(CONFIG_ITEMDELETE_ITEM_LEVEL))
+    if (sGameConfig->GetBoolConfig("ItemDelete.Method")
+        && pItem->GetTemplate()->Quality >= sGameConfig->GetIntConfig("ItemDelete.Quality")
+        && pItem->GetTemplate()->ItemLevel >= sGameConfig->GetIntConfig("ItemDelete.ItemLevel"))
     {
         PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_RECOVERY_ITEM);
 

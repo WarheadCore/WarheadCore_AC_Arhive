@@ -18,7 +18,7 @@ Script Data End */
 #include "Player.h"
 #include "WorldSession.h"
 #include "ScriptedEscortAI.h"
-#include "World.h"
+#include "GameConfig.h"
 
 // Ours
 class npc_steam_powered_auctioneer : public CreatureScript
@@ -559,8 +559,7 @@ class npc_minigob_manabonk : public CreatureScript
 
             void UpdateAI(uint32 diff)
             {
-
-                if (!sWorld->getBoolConfig(CONFIG_MINIGOB_MANABONK))
+                if (!sGameConfig->GetBoolConfig("Minigob.Manabonk.Enable"))
                     return;
 
                 events.Update(diff);

@@ -8,10 +8,10 @@
 #include "Errors.h"
 #include "Creature.h"
 #include "CreatureAI.h"
-#include "World.h"
 #include "MoveSplineInit.h"
 #include "MoveSpline.h"
 #include "Player.h"
+#include "GameConfig.h"
 
 //----- Point Movement Generator
 template<class T>
@@ -150,7 +150,7 @@ void AssistanceMovementGenerator::Finalize(Unit* unit)
     unit->ToCreature()->SetNoCallAssistance(false);
     unit->ToCreature()->CallAssistance();
     if (unit->IsAlive())
-        unit->GetMotionMaster()->MoveSeekAssistanceDistract(sWorld->getIntConfig(CONFIG_CREATURE_FAMILY_ASSISTANCE_DELAY));
+        unit->GetMotionMaster()->MoveSeekAssistanceDistract(sGameConfig->GetIntConfig("CreatureFamilyAssistanceDelay"));
 }
 
 bool EffectMovementGenerator::Update(Unit* unit, uint32)

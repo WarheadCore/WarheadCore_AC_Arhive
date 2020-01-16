@@ -6,12 +6,12 @@
 
 #include "DatabaseEnv.h"
 #include "Log.h"
-#include "World.h"
 #include "Util.h"
 #include "SkillDiscovery.h"
 #include "SpellMgr.h"
 #include "Player.h"
 #include "SpellInfo.h"
+#include "GameConfig.h"
 #include <map>
 
 struct SkillDiscoveryEntry
@@ -211,7 +211,7 @@ uint32 GetSkillDiscoverySpell(uint32 skillId, uint32 spellId, Player* player)
     {
         for (SkillDiscoveryList::const_iterator item_iter = tab->second.begin(); item_iter != tab->second.end(); ++item_iter)
         {
-            if (roll_chance_f(item_iter->chance * sWorld->getRate(RATE_SKILL_DISCOVERY)) &&
+            if (roll_chance_f(item_iter->chance * sGameConfig->GetFloatConfig("Rate.Skill.Discovery")) &&
                 item_iter->reqSkillValue <= skillvalue &&
                 !player->HasSpell(item_iter->spellId))
                 return item_iter->spellId;
@@ -229,7 +229,7 @@ uint32 GetSkillDiscoverySpell(uint32 skillId, uint32 spellId, Player* player)
     {
         for (SkillDiscoveryList::const_iterator item_iter = tab->second.begin(); item_iter != tab->second.end(); ++item_iter)
         {
-            if (roll_chance_f(item_iter->chance * sWorld->getRate(RATE_SKILL_DISCOVERY)) &&
+            if (roll_chance_f(item_iter->chance * sGameConfig->GetFloatConfig("Rate.Skill.Discovery")) &&
                 item_iter->reqSkillValue <= skillvalue &&
                 !player->HasSpell(item_iter->spellId))
                 return item_iter->spellId;

@@ -14,7 +14,6 @@
 #include "MapInstanced.h"
 #include "InstanceScript.h"
 #include "Config.h"
-#include "World.h"
 #include "CellImpl.h"
 #include "Corpse.h"
 #include "ObjectMgr.h"
@@ -27,6 +26,8 @@
 #include "LFGMgr.h"
 #include "Chat.h"
 #include "AvgDiffTracker.h"
+#include "GameConfig.h"
+
 #ifdef ELUNA
 #include "LuaEngine.h"
 #endif
@@ -34,7 +35,7 @@
 MapManager::MapManager()
     : _nextInstanceId(0), _scheduledScripts(0)
 {
-    i_timer[3].SetInterval(sWorld->getIntConfig(CONFIG_INTERVAL_MAPUPDATE));
+    i_timer[3].SetInterval(sGameConfig->GetIntConfig("MapUpdateInterval"));
     mapUpdateStep = 0;
 }
 
@@ -50,7 +51,7 @@ MapManager* MapManager::instance()
 
 void MapManager::Initialize()
 {
-    int num_threads(sWorld->getIntConfig(CONFIG_NUMTHREADS));
+    int num_threads(sGameConfig->GetIntConfig("MapUpdate.Threads"));
 
     // Start mtmaps if needed.
     if (num_threads > 0 && m_updater.activate(num_threads) == -1)
@@ -156,7 +157,7 @@ bool MapManager::CanPlayerEnter(uint32 mapid, Player* player, bool loginCheck)
     if (entry->IsRaid())
     {
         // can only enter in a raid group
-        if ((!group || !group->isRaidGroup()) && !sWorld->getBoolConfig(CONFIG_INSTANCE_IGNORE_RAID))
+        if ((!group || !group->isRaidGroup()) && !sGameConfig->GetBoolConfig("Instance.IgnoreRaid"))
         {
             // probably there must be special opcode, because client has this string constant in GlobalStrings.lua
             // TODO: this is not a good place to send the message

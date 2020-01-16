@@ -9,7 +9,6 @@
 #include "WorldPacket.h"
 #include "Opcodes.h"
 #include "Log.h"
-#include "World.h"
 #include "Object.h"
 #include "Creature.h"
 #include "Player.h"
@@ -41,6 +40,7 @@
 #include "Chat.h"
 #include "DynamicVisibility.h"
 #include "GameTime.h"
+#include "GameConfig.h"
 
 #ifdef ELUNA
 #include "LuaEngine.h"
@@ -1759,9 +1759,9 @@ void WorldObject::MonsterSay(const char* text, uint32 language, WorldObject cons
 
     acore::MonsterCustomChatBuilder say_build(this, CHAT_MSG_MONSTER_SAY, text, language, target);
     acore::LocalizedPacketDo<acore::MonsterCustomChatBuilder> say_do(say_build);
-    acore::PlayerDistWorker<acore::LocalizedPacketDo<acore::MonsterCustomChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_SAY), say_do);
+    acore::PlayerDistWorker<acore::LocalizedPacketDo<acore::MonsterCustomChatBuilder> > say_worker(this, sGameConfig->GetFloatConfig("ListenRange.Say"), say_do);
     TypeContainerVisitor<acore::PlayerDistWorker<acore::LocalizedPacketDo<acore::MonsterCustomChatBuilder> >, WorldTypeMapContainer > message(say_worker);
-    cell.Visit(p, message, *GetMap(), *this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_SAY));
+    cell.Visit(p, message, *GetMap(), *this, sGameConfig->GetFloatConfig("ListenRange.Say"));
 }
 
 void WorldObject::MonsterSay(int32 textId, uint32 language, WorldObject const* target)
@@ -1773,9 +1773,9 @@ void WorldObject::MonsterSay(int32 textId, uint32 language, WorldObject const* t
 
     acore::MonsterChatBuilder say_build(this, CHAT_MSG_MONSTER_SAY, textId, language, target);
     acore::LocalizedPacketDo<acore::MonsterChatBuilder> say_do(say_build);
-    acore::PlayerDistWorker<acore::LocalizedPacketDo<acore::MonsterChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_SAY), say_do);
+    acore::PlayerDistWorker<acore::LocalizedPacketDo<acore::MonsterChatBuilder> > say_worker(this, sGameConfig->GetFloatConfig("ListenRange.Say"), say_do);
     TypeContainerVisitor<acore::PlayerDistWorker<acore::LocalizedPacketDo<acore::MonsterChatBuilder> >, WorldTypeMapContainer > message(say_worker);
-    cell.Visit(p, message, *GetMap(), *this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_SAY));
+    cell.Visit(p, message, *GetMap(), *this, sGameConfig->GetFloatConfig("ListenRange.Say"));
 }
 
 void WorldObject::MonsterYell(const char* text, uint32 language, WorldObject const* target)
@@ -1787,9 +1787,9 @@ void WorldObject::MonsterYell(const char* text, uint32 language, WorldObject con
 
     acore::MonsterCustomChatBuilder say_build(this, CHAT_MSG_MONSTER_YELL, text, language, target);
     acore::LocalizedPacketDo<acore::MonsterCustomChatBuilder> say_do(say_build);
-    acore::PlayerDistWorker<acore::LocalizedPacketDo<acore::MonsterCustomChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_YELL), say_do);
+    acore::PlayerDistWorker<acore::LocalizedPacketDo<acore::MonsterCustomChatBuilder> > say_worker(this, sGameConfig->GetFloatConfig("ListenRange.Yell"), say_do);
     TypeContainerVisitor<acore::PlayerDistWorker<acore::LocalizedPacketDo<acore::MonsterCustomChatBuilder> >, WorldTypeMapContainer > message(say_worker);
-    cell.Visit(p, message, *GetMap(), *this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_YELL));
+    cell.Visit(p, message, *GetMap(), *this, sGameConfig->GetFloatConfig("ListenRange.Yell"));
 }
 
 void WorldObject::MonsterYell(int32 textId, uint32 language, WorldObject const* target)
@@ -1801,9 +1801,9 @@ void WorldObject::MonsterYell(int32 textId, uint32 language, WorldObject const* 
 
     acore::MonsterChatBuilder say_build(this, CHAT_MSG_MONSTER_YELL, textId, language, target);
     acore::LocalizedPacketDo<acore::MonsterChatBuilder> say_do(say_build);
-    acore::PlayerDistWorker<acore::LocalizedPacketDo<acore::MonsterChatBuilder> > say_worker(this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_YELL), say_do);
+    acore::PlayerDistWorker<acore::LocalizedPacketDo<acore::MonsterChatBuilder> > say_worker(this, sGameConfig->GetFloatConfig("ListenRange.Yell"), say_do);
     TypeContainerVisitor<acore::PlayerDistWorker<acore::LocalizedPacketDo<acore::MonsterChatBuilder> >, WorldTypeMapContainer > message(say_worker);
-    cell.Visit(p, message, *GetMap(), *this, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_YELL));
+    cell.Visit(p, message, *GetMap(), *this, sGameConfig->GetFloatConfig("ListenRange.Yell"));
 }
 
 void WorldObject::MonsterTextEmote(const char* text, WorldObject const* target, bool IsBossEmote)
@@ -1811,7 +1811,7 @@ void WorldObject::MonsterTextEmote(const char* text, WorldObject const* target, 
     WorldPacket data;
     ChatHandler::BuildChatPacket(data, IsBossEmote ? CHAT_MSG_RAID_BOSS_EMOTE : CHAT_MSG_MONSTER_EMOTE, LANG_UNIVERSAL,
                                  this, target, text);
-    SendMessageToSetInRange(&data, (IsBossEmote ? 200.0f : sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_TEXTEMOTE)), true);
+    SendMessageToSetInRange(&data, (IsBossEmote ? 200.0f : sGameConfig->GetFloatConfig("ListenRange.TextEmote")), true);
 }
 
 void WorldObject::MonsterTextEmote(int32 textId, WorldObject const* target, bool IsBossEmote)
@@ -1823,9 +1823,9 @@ void WorldObject::MonsterTextEmote(int32 textId, WorldObject const* target, bool
 
     acore::MonsterChatBuilder say_build(this, IsBossEmote ? CHAT_MSG_RAID_BOSS_EMOTE : CHAT_MSG_MONSTER_EMOTE, textId, LANG_UNIVERSAL, target);
     acore::LocalizedPacketDo<acore::MonsterChatBuilder> say_do(say_build);
-    acore::PlayerDistWorker<acore::LocalizedPacketDo<acore::MonsterChatBuilder> > say_worker(this, (IsBossEmote ? 200.0f : sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_TEXTEMOTE)), say_do);
+    acore::PlayerDistWorker<acore::LocalizedPacketDo<acore::MonsterChatBuilder> > say_worker(this, (IsBossEmote ? 200.0f : sGameConfig->GetFloatConfig("ListenRange.TextEmote")), say_do);
     TypeContainerVisitor<acore::PlayerDistWorker<acore::LocalizedPacketDo<acore::MonsterChatBuilder> >, WorldTypeMapContainer > message(say_worker);
-    cell.Visit(p, message, *GetMap(), *this, (IsBossEmote ? 200.0f : sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_TEXTEMOTE)));
+    cell.Visit(p, message, *GetMap(), *this, (IsBossEmote ? 200.0f : sGameConfig->GetFloatConfig("ListenRange.TextEmote")));
 }
 
 void WorldObject::MonsterWhisper(const char* text, Player const* target, bool IsBossWhisper)
@@ -2354,7 +2354,7 @@ void WorldObject::GetNearPoint(WorldObject const* searcher, float &x, float &y, 
         UpdateAllowedPositionZ(x, y, z);
 
     // if detection disabled, return first point
-    if (!sWorld->getBoolConfig(CONFIG_DETECT_POS_COLLISION))
+    if (!sGameConfig->GetBoolConfig("DetectPosCollision"))
         return;
 
     // return if the point is already in LoS

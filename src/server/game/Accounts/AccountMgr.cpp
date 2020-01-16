@@ -12,10 +12,10 @@
 #include "Util.h"
 #include "SHA1.h"
 #include "WorldSession.h"
+#include "GameConfig.h"
 
 namespace AccountMgr
 {
-
     AccountOpResult CreateAccount(std::string username, std::string password)
     {
         if (utf8length(username) > MAX_ACCOUNT_STR)
@@ -34,7 +34,7 @@ namespace AccountMgr
 
         stmt->setString(0, username);
         stmt->setString(1, CalculateShaPassHash(username, password));
-        stmt->setInt8(2, uint8(sWorld->getIntConfig(CONFIG_EXPANSION)));
+        stmt->setInt8(2, uint8(sGameConfig->GetIntConfig("Expansion")));
 
         LoginDatabase.Execute(stmt);
 

@@ -18,6 +18,7 @@
 #include "Item.h"
 #include "AccountMgr.h"
 #include "GameTime.h"
+#include "GameConfig.h"
 
 bool WorldSession::CanOpenMailBox(uint64 guid)
 {
@@ -90,9 +91,9 @@ void WorldSession::HandleSendMail(WorldPacket & recvData)
 
     Player* player = _player;
 
-    if (player->getLevel() < sWorld->getIntConfig(CONFIG_MAIL_LEVEL_REQ))
+    if (player->getLevel() < sGameConfig->GetIntConfig("LevelReq.Mail"))
     {
-        SendNotification(GetAcoreString(LANG_MAIL_SENDER_REQ), sWorld->getIntConfig(CONFIG_MAIL_LEVEL_REQ));
+        SendNotification(GetAcoreString(LANG_MAIL_SENDER_REQ), sGameConfig->GetIntConfig("LevelReq.Mail"));
         return;
     }
 
@@ -182,7 +183,7 @@ void WorldSession::HandleSendMail(WorldPacket & recvData)
         ? receive->GetSession()->GetAccountId()
         : sObjectMgr->GetPlayerAccountIdByGUID(rc);
 
-    if (/*!accountBound*/ GetAccountId() != rc_account && !sWorld->getBoolConfig(CONFIG_ALLOW_TWO_SIDE_INTERACTION_MAIL) && player->GetTeamId() != rc_teamId && AccountMgr::IsPlayerAccount(GetSecurity()))
+    if (/*!accountBound*/ GetAccountId() != rc_account && !sGameConfig->GetBoolConfig("AllowTwoSide.Interaction.Mail") && player->GetTeamId() != rc_teamId && AccountMgr::IsPlayerAccount(GetSecurity()))
     {
         player->SendMailResult(0, MAIL_SEND, MAIL_ERR_NOT_YOUR_TEAM);
         return;
@@ -283,7 +284,7 @@ void WorldSession::HandleSendMail(WorldPacket & recvData)
     }
 
     // If theres is an item, there is a one hour delivery delay if sent to another account's character.
-    uint32 deliver_delay = needItemDelay ? sWorld->getIntConfig(CONFIG_MAIL_DELIVERY_DELAY) : 0;
+    uint32 deliver_delay = needItemDelay ? sGameConfig->GetIntConfig("MailDeliveryDelay") : 0;
   
     // don't ask for COD if there are no items
     if (items_count == 0)

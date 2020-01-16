@@ -10,11 +10,12 @@
 #include "DatabaseEnv.h"
 #include "SpellMgr.h"
 #include "DBCStores.h"
+#include "GameConfig.h"
 
 void CharacterDatabaseCleaner::CleanDatabase()
 {
     // config to disable
-    if (!sWorld->getBoolConfig(CONFIG_CLEAN_CHARACTER_DB))
+    if (!sGameConfig->GetBoolConfig("CleanCharacterDB"))
         return;
 
     sLog->outString("Cleaning character database...");
@@ -46,7 +47,7 @@ void CharacterDatabaseCleaner::CleanDatabase()
 
     // NOTE: In order to have persistentFlags be set in worldstates for the next cleanup,
     // you need to define them at least once in worldstates.
-    flags &= sWorld->getIntConfig(CONFIG_PERSISTENT_CHARACTER_CLEAN_FLAGS);
+    flags &= sGameConfig->GetIntConfig("PersistentCharacterCleanFlags");
     CharacterDatabase.DirectPExecute("UPDATE worldstates SET value = %u WHERE entry = %d", flags, WS_CLEANING_FLAGS);
 
     sWorld->SetCleaningFlags(flags);

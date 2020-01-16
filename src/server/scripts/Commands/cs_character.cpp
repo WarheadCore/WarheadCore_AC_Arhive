@@ -18,7 +18,8 @@ EndScriptData */
 #include "Player.h"
 #include "ReputationMgr.h"
 #include "ScriptMgr.h"
-#include "Implementation/CharacterDatabase.h"
+#include "CharacterDatabase.h"
+#include "GameConfig.h"
 
 class character_commandscript : public CommandScript
 {
@@ -638,7 +639,7 @@ public:
      */
     static bool HandleCharacterDeletedOldCommand(ChatHandler* /*handler*/, char const* args)
     {
-        int32 keepDays = sWorld->getIntConfig(CONFIG_CHARDELETE_KEEP_DAYS);
+        int32 keepDays = sGameConfig->GetIntConfig("CharDelete.KeepDays");
 
         char* daysStr = strtok((char*)args, " ");
         if (daysStr)

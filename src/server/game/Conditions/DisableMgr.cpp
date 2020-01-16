@@ -11,7 +11,7 @@
 #include "SpellMgr.h"
 #include "Player.h"
 #include "SpellInfo.h"
-#include "World.h"
+#include "GameConfig.h"
 
 namespace DisableMgr
 {
@@ -372,7 +372,7 @@ bool IsPathfindingEnabled(const Map* map)
     if (!map)
         return false;
 
-    return !MMAP::MMapFactory::forbiddenMaps[map->GetId()] && (sWorld->getBoolConfig(CONFIG_ENABLE_MMAPS) ? true : map->IsBattlegroundOrArena());
+    return !MMAP::MMapFactory::forbiddenMaps[map->GetId()] && (sGameConfig->GetBoolConfig("MoveMaps.Enable") ? true : map->IsBattlegroundOrArena());
 }
 
 } // Namespace

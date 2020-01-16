@@ -22,9 +22,9 @@
 #include "Pet.h"
 #include "Player.h"
 #include "Vehicle.h"
-#include "World.h"
 #include "WorldPacket.h"
 #include "GameTime.h"
+#include "GameConfig.h"
 #include <cmath>
 
 ObjectAccessor::ObjectAccessor()
@@ -340,7 +340,7 @@ Corpse* ObjectAccessor::ConvertCorpseForPlayer(uint64 player_guid, bool insignia
     // ignore bones creating option in case insignia
 
     if (map && corpse->IsPositionValid() && inWorld && (insignia ||
-        (map->IsBattlegroundOrArena() ? sWorld->getBoolConfig(CONFIG_DEATH_BONES_BG_OR_ARENA) : sWorld->getBoolConfig(CONFIG_DEATH_BONES_WORLD))) &&
+        (map->IsBattlegroundOrArena() ? sGameConfig->GetBoolConfig("Death.Bones.BattlegroundOrArena") : sGameConfig->GetBoolConfig("Death.Bones.World"))) &&
         !map->IsRemovalGrid(corpse->GetPositionX(), corpse->GetPositionY()))
     {
         // Create bones, don't change Corpse

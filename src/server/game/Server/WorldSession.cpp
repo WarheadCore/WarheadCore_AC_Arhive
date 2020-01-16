@@ -36,6 +36,7 @@
 #include "SavingSystem.h"
 #include "AccountMgr.h"
 #include "GameTime.h"
+#include "GameConfig.h"
 
 #ifdef ELUNA
 #include "LuaEngine.h"
@@ -256,7 +257,7 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
         
         /// If necessary, kick the player because the client didn't send anything for too long
         /// (or they've been idling in character select)
-        if (sWorld->getBoolConfig(CONFIG_CLOSE_IDLE_CONNECTIONS) && IsConnectionIdle())
+        if (sGameConfig->GetBoolConfig("CloseIdleConnections") && IsConnectionIdle())
             m_Socket->CloseSocket("Client didn't send anything for too long");
     }
 
@@ -425,13 +426,13 @@ void WorldSession::HandleTeleportTimeout(bool updateInSessions)
         time_t currTime = GameTime::GetGameTime();
         if (updateInSessions) // session update from World::UpdateSessions
         {
-            if (GetPlayer()->IsBeingTeleportedFar() && GetPlayer()->GetSemaphoreTeleportFar()+sWorld->getIntConfig(CONFIG_TELEPORT_TIMEOUT_FAR) < currTime)
+            if (GetPlayer()->IsBeingTeleportedFar() && GetPlayer()->GetSemaphoreTeleportFar()+sGameConfig->GetIntConfig("TeleportTimeoutFar") < currTime)
                 while (GetPlayer() && GetPlayer()->IsBeingTeleportedFar())
                     HandleMoveWorldportAckOpcode();
         }
         else // session update from Map::Update
         {
-            if (GetPlayer()->IsBeingTeleportedNear() && GetPlayer()->GetSemaphoreTeleportNear()+sWorld->getIntConfig(CONFIG_TELEPORT_TIMEOUT_NEAR) < currTime)
+            if (GetPlayer()->IsBeingTeleportedNear() && GetPlayer()->GetSemaphoreTeleportNear()+sGameConfig->GetIntConfig("TeleportTimeoutNear") < currTime)
                 while (GetPlayer() && GetPlayer()->IsInWorld() && GetPlayer()->IsBeingTeleportedNear())
                 {
                     Player* plMover = GetPlayer()->m_mover->ToPlayer();
@@ -501,7 +502,7 @@ void WorldSession::LogoutPlayer(bool save)
                 _player->RemoveBattlegroundQueueId(bgQueueTypeId);
                 sBattlegroundMgr->GetBattlegroundQueue(bgQueueTypeId).RemovePlayer(_player->GetGUID(), false, i);
                 // track if player logs out after invited to join BG
-                if(_player->IsInvitedForBattlegroundInstance() && sWorld->getBoolConfig(CONFIG_BATTLEGROUND_TRACK_DESERTERS))
+                if(_player->IsInvitedForBattlegroundInstance() && sGameConfig->GetBoolConfig("Battleground.TrackDeserters.Enable"))
                 {
                     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_DESERTER_TRACK);
                     stmt->setUInt32(0, _player->GetGUIDLow());
@@ -1336,4 +1337,25 @@ void WorldSession::InitWarden(BigNumber* k, std::string const& os)
         // _warden = new WardenMac();
         // _warden->Init(this, k);
     }
+}
+
+void WorldSession::UpdateTimeOutTime(uint32 diff)
+{
+    if (time_t(diff) > m_timeOutTime)
+        m_timeOutTime = 0;
+    else
+        m_timeOutTime -= diff;
+}
+
+void WorldSession::ResetTimeOutTime(bool onlyActive)
+{
+    if (GetPlayer())
+        m_timeOutTime = int32(sGameConfig->GetIntConfig("SocketTimeOutTimeActive"));
+    else if (!onlyActive)
+        m_timeOutTime = int32(sGameConfig->GetIntConfig("SocketTimeOutTime"));
+}
+
+bool WorldSession::IsConnectionIdle() const
+{
+    return (m_timeOutTime <= 0 && !m_inQueue);
 }

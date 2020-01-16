@@ -12,8 +12,7 @@
 #include "TransportMgr.h"
 #include "DBCfmt.h"
 #include "BattlegroundMgr.h"
-#include "World.h"
-
+#include "GameConfig.h"
 #include <map>
 
 typedef std::map<uint16, uint32> AreaFlagByAreaID;
@@ -786,7 +785,7 @@ PvPDifficultyEntry const* GetBattlegroundBracketById(uint32 mapid, BattlegroundB
 
 bool IsSharedDifficultyMap(uint32 mapid)
 { 
-    return sWorld->getBoolConfig(CONFIG_INSTANCE_SHARED_ID) && (mapid == 631 || mapid == 724); 
+    return sGameConfig->GetBoolConfig("Instance.SharedNormalHeroicId") && (mapid == 631 || mapid == 724); 
 }
 
 uint32 GetLiquidFlags(uint32 liquidType)

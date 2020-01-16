@@ -20,6 +20,7 @@ EndScriptData */
 #include "ReputationMgr.h"
 #include "ScriptMgr.h"
 #include "SpellInfo.h"
+#include "GameConfig.h"
 
 class lookup_commandscript : public CommandScript
 {
@@ -81,7 +82,7 @@ public:
 
         bool found = false;
         uint32 count = 0;
-        uint32 maxResults = sWorld->getIntConfig(CONFIG_MAX_RESULTS_LOOKUP_COMMANDS);
+        uint32 maxResults = sGameConfig->GetIntConfig("Command.LookupMaxResults");
 
         // converting string that we try to find to lower case
         wstrToLower(wNamePart);
@@ -159,7 +160,7 @@ public:
 
         bool found = false;
         uint32 count = 0;
-        uint32 maxResults = sWorld->getIntConfig(CONFIG_MAX_RESULTS_LOOKUP_COMMANDS);
+        uint32 maxResults = sGameConfig->GetIntConfig("Command.LookupMaxResults");
 
         CreatureTemplateContainer const* ctc = sObjectMgr->GetCreatureTemplates();
         for (CreatureTemplateContainer::const_iterator itr = ctc->begin(); itr != ctc->end(); ++itr)
@@ -237,7 +238,7 @@ public:
 
         bool found = false;
         uint32 count = 0;
-        uint32 maxResults = sWorld->getIntConfig(CONFIG_MAX_RESULTS_LOOKUP_COMMANDS);
+        uint32 maxResults = sGameConfig->GetIntConfig("Command.LookupMaxResults");
 
         GameEventMgr::GameEventDataMap const& events = sGameEventMgr->GetEventMap();
         GameEventMgr::ActiveEvents const& activeEvents = sGameEventMgr->GetActiveEventList();
@@ -295,7 +296,7 @@ public:
 
         bool found = false;
         uint32 count = 0;
-        uint32 maxResults = sWorld->getIntConfig(CONFIG_MAX_RESULTS_LOOKUP_COMMANDS);
+        uint32 maxResults = sGameConfig->GetIntConfig("Command.LookupMaxResults");
 
         for (uint32 id = 0; id < sFactionStore.GetNumRows(); ++id)
         {
@@ -394,7 +395,7 @@ public:
 
         bool found = false;
         uint32 count = 0;
-        uint32 maxResults = sWorld->getIntConfig(CONFIG_MAX_RESULTS_LOOKUP_COMMANDS);
+        uint32 maxResults = sGameConfig->GetIntConfig("Command.LookupMaxResults");
 
         // Search in `item_template`
         ItemTemplateContainer const* its = sObjectMgr->GetItemTemplateStore();
@@ -476,7 +477,7 @@ public:
 
         bool found = false;
         uint32 count = 0;
-        uint32 maxResults = sWorld->getIntConfig(CONFIG_MAX_RESULTS_LOOKUP_COMMANDS);
+        uint32 maxResults = sGameConfig->GetIntConfig("Command.LookupMaxResults");
 
         // Search in ItemSet.dbc
         for (uint32 id = 0; id < sItemSetStore.GetNumRows(); id++)
@@ -547,7 +548,7 @@ public:
 
         bool found = false;
         uint32 count = 0;
-        uint32 maxResults = sWorld->getIntConfig(CONFIG_MAX_RESULTS_LOOKUP_COMMANDS);
+        uint32 maxResults = sGameConfig->GetIntConfig("Command.LookupMaxResults");
 
         GameObjectTemplateContainer const* gotc = sObjectMgr->GetGameObjectTemplates();
         for (GameObjectTemplateContainer::const_iterator itr = gotc->begin(); itr != gotc->end(); ++itr)
@@ -627,7 +628,7 @@ public:
 
         bool found = false;
         uint32 count = 0;
-        uint32 maxResults = sWorld->getIntConfig(CONFIG_MAX_RESULTS_LOOKUP_COMMANDS);
+        uint32 maxResults = sGameConfig->GetIntConfig("Command.LookupMaxResults");
 
         ObjectMgr::QuestMap const& qTemplates = sObjectMgr->GetQuestTemplates();
         for (ObjectMgr::QuestMap::const_iterator iter = qTemplates.begin(); iter != qTemplates.end(); ++iter)
@@ -703,7 +704,7 @@ public:
 
         bool found = false;
         uint32 count = 0;
-        uint32 maxResults = sWorld->getIntConfig(CONFIG_MAX_RESULTS_LOOKUP_COMMANDS);
+        uint32 maxResults = sGameConfig->GetIntConfig("Command.LookupMaxResults");
 
         // Search in SkillLine.dbc
         for (uint32 id = 0; id < sSkillLineStore.GetNumRows(); id++)
@@ -791,7 +792,7 @@ public:
 
         bool found = false;
         uint32 count = 0;
-        uint32 maxResults = sWorld->getIntConfig(CONFIG_MAX_RESULTS_LOOKUP_COMMANDS);
+        uint32 maxResults = sGameConfig->GetIntConfig("Command.LookupMaxResults");
 
         // Search in Spell.dbc
         for (uint32 id = 0; id < sSpellMgr->GetSpellInfoStoreSize(); id++)
@@ -988,7 +989,7 @@ public:
 
         bool found = false;
         uint32 count = 0;
-        uint32 maxResults = sWorld->getIntConfig(CONFIG_MAX_RESULTS_LOOKUP_COMMANDS);
+        uint32 maxResults = sGameConfig->GetIntConfig("Command.LookupMaxResults");
 
         // Search in TaxiNodes.dbc
         for (uint32 id = 0; id < sTaxiNodesStore.GetNumRows(); id++)
@@ -1070,7 +1071,7 @@ public:
 
         std::ostringstream reply;
         uint32 count = 0;
-        uint32 maxResults = sWorld->getIntConfig(CONFIG_MAX_RESULTS_LOOKUP_COMMANDS);
+        uint32 maxResults = sGameConfig->GetIntConfig("Command.LookupMaxResults");
         bool limitReached = false;
 
         GameTeleContainer const & teleMap = sObjectMgr->GetGameTeleMap();
@@ -1125,7 +1126,7 @@ public:
         wstrToLower(wNamePart);
 
         uint32 counter = 0;                                     // Counter for figure out that we found smth.
-        uint32 maxResults = sWorld->getIntConfig(CONFIG_MAX_RESULTS_LOOKUP_COMMANDS);
+        uint32 maxResults = sGameConfig->GetIntConfig("Command.LookupMaxResults");
 
         // Search in CharTitles.dbc
         for (uint32 id = 0; id < sCharTitlesStore.GetNumRows(); id++)
@@ -1202,7 +1203,7 @@ public:
         wstrToLower(wNamePart);
 
         uint32 counter = 0;
-        uint32 maxResults = sWorld->getIntConfig(CONFIG_MAX_RESULTS_LOOKUP_COMMANDS);
+        uint32 maxResults = sGameConfig->GetIntConfig("Command.LookupMaxResults");
         uint8 locale = handler->GetSession() ? handler->GetSession()->GetSessionDbcLocale() : sWorld->GetDefaultDbcLocale();
 
         // search in Map.dbc
@@ -1334,7 +1335,7 @@ public:
 
         int32 counter = 0;
         uint32 count = 0;
-        uint32 maxResults = sWorld->getIntConfig(CONFIG_MAX_RESULTS_LOOKUP_COMMANDS);
+        uint32 maxResults = sGameConfig->GetIntConfig("Command.LookupMaxResults");
 
         const char* name_races[RACE_DRAENEI] = {"Human", "Orc", "Dwarf", "Night Elf", "Undead", "Tauren", "Gnome", "Troll", "", "Blood Elf", "Draenei"};
         const char* name_classes[CLASS_DRUID] = {"Warrior", "Paladin", "Hunter", "Rogue", "Priest", "Death Knight", "Shaman", "Mage", "Warlock", "", "Druid"};

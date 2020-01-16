@@ -16,6 +16,7 @@ EndScriptData */
 #include "Player.h"
 #include "ReputationMgr.h"
 #include "ScriptMgr.h"
+#include "GameConfig.h"
 
 class quest_commandscript : public CommandScript
 {
@@ -232,7 +233,7 @@ public:
             player->ModifyMoney(-ReqOrRewMoney);
 
         // check if Quest Tracker is enabled
-        if (sWorld->getBoolConfig(CONFIG_QUEST_ENABLE_QUEST_TRACKER))
+        if (sGameConfig->GetBoolConfig("Quests.EnableQuestTracker"))
         {
             // prepare Quest Tracker datas
             PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_QUEST_TRACK_GM_COMPLETE);

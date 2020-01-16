@@ -22,6 +22,7 @@ EndScriptData */
 #include "Player.h"
 #include "Pet.h"
 #include "GameTime.h"
+#include "GameConfig.h"
 
 struct NpcFlagText
 {
@@ -423,7 +424,7 @@ public:
             return false;
 
         uint8 lvl = (uint8) atoi((char*)args);
-        if (lvl < 1 || lvl > sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL) + 3)
+        if (lvl < 1 || lvl > sGameConfig->GetIntConfig("MaxPlayerLevel") + 3)
         {
             handler->SendSysMessage(LANG_BAD_VALUE);
             handler->SetSentErrorMessage(true);

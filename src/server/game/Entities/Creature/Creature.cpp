@@ -181,7 +181,7 @@ m_homePosition(), m_transportHomePosition(), m_creatureInfo(NULL), m_creatureDat
     m_CreatureSpellCooldowns.clear();
     DisableReputationGain = false;
 
-    m_SightDistance = sWorld->getFloatConfig(CONFIG_SIGHT_MONSTER);
+    m_SightDistance = sGameConfig->GetFloatConfig("MonsterSight");
     m_CombatDistance = 0.0f;
 
     ResetLootMode(); // restore default loot mode
@@ -665,7 +665,7 @@ void Creature::Regenerate(Powers power)
         case POWER_FOCUS:
         {
             // For hunter pets.
-            addvalue = 24 * sWorld->getRate(RATE_POWER_FOCUS);
+            addvalue = 24 * sGameConfig->GetFloatConfig("Rate.Focus");
             break;
         }
         case POWER_ENERGY:
@@ -685,7 +685,7 @@ void Creature::Regenerate(Powers power)
                 }
                 else if (!IsUnderLastManaUseEffect())
                 {
-                    float ManaIncreaseRate = sWorld->getRate(RATE_POWER_MANA);
+                    float ManaIncreaseRate = sGameConfig->GetFloatConfig("Rate.Mana");
                     float Spirit = GetStat(STAT_SPIRIT);
 
                     addvalue = uint32((Spirit / 5.0f + 17.0f) * ManaIncreaseRate);
@@ -729,7 +729,7 @@ void Creature::RegenerateHealth()
         addvalue = maxValue/3;
     else //if (GetCharmerOrOwnerGUID())
     {
-        float HealthIncreaseRate = sWorld->getRate(RATE_HEALTH);
+        float HealthIncreaseRate = sGameConfig->GetFloatConfig("Rate.Health");
         float Spirit = GetStat(STAT_SPIRIT);
 
         if (GetPower(POWER_MANA) > 0)
@@ -757,7 +757,7 @@ void Creature::DoFleeToGetAssistance()
     if (HasAuraType(SPELL_AURA_PREVENTS_FLEEING))
         return;
 
-    float radius = sWorld->getFloatConfig(CONFIG_CREATURE_FAMILY_FLEE_ASSISTANCE_RADIUS);
+    float radius = sGameConfig->GetFloatConfig("CreatureFamilyFleeAssistanceRadius");
     if (radius >0)
     {
         Creature* creature = NULL;
@@ -776,7 +776,7 @@ void Creature::DoFleeToGetAssistance()
         UpdateSpeed(MOVE_RUN, false);
 
         if (!creature)
-            //SetFeared(true, GetVictim()->GetGUID(), 0, sWorld->getIntConfig(CONFIG_CREATURE_FAMILY_FLEE_DELAY));
+            //SetFeared(true, GetVictim()->GetGUID(), 0, sGameConfig->GetIntConfig("CreatureFamilyFleeDelay"));
             //TODO: use 31365
             SetControlled(true, UNIT_STATE_FLEEING);
         else
@@ -856,23 +856,23 @@ bool Creature::Create(uint32 guidlow, Map* map, uint32 phaseMask, uint32 Entry, 
     switch (GetCreatureTemplate()->rank)
     {
         case CREATURE_ELITE_RARE:
-            m_corpseDelay = sWorld->getIntConfig(CONFIG_CORPSE_DECAY_RARE);
+            m_corpseDelay = sGameConfig->GetIntConfig("Corpse.Decay.RARE");
             break;
         case CREATURE_ELITE_ELITE:
-            m_corpseDelay = sWorld->getIntConfig(CONFIG_CORPSE_DECAY_ELITE);
+            m_corpseDelay = sGameConfig->GetIntConfig("Corpse.Decay.ELITE");
             break;
         case CREATURE_ELITE_RAREELITE:
-            m_corpseDelay = sWorld->getIntConfig(CONFIG_CORPSE_DECAY_RAREELITE);
+            m_corpseDelay = sGameConfig->GetIntConfig("Corpse.Decay.RAREELITE");
             break;
         case CREATURE_ELITE_WORLDBOSS:
             // Xinef: Reduce corpse delay for bossess outside of instance
             if (!GetInstanceId())
-                m_corpseDelay = sWorld->getIntConfig(CONFIG_CORPSE_DECAY_ELITE)*2;
+                m_corpseDelay = sGameConfig->GetIntConfig("Corpse.Decay.ELITE")*2;
             else
-                m_corpseDelay = sWorld->getIntConfig(CONFIG_CORPSE_DECAY_WORLDBOSS);
+                m_corpseDelay = sGameConfig->GetIntConfig("Corpse.Decay.WORLDBOSS");
             break;
         default:
-            m_corpseDelay = sWorld->getIntConfig(CONFIG_CORPSE_DECAY_NORMAL);
+            m_corpseDelay = sGameConfig->GetIntConfig("Corpse.Decay.NORMAL");
             break;
     }
 
@@ -1200,17 +1200,17 @@ float Creature::_GetHealthMod(int32 Rank)
     switch (Rank)                                           // define rates for each elite rank
     {
         case CREATURE_ELITE_NORMAL:
-            return sWorld->getRate(RATE_CREATURE_NORMAL_HP);
+            return sGameConfig->GetFloatConfig("Rate.Creature.Normal.HP");
         case CREATURE_ELITE_ELITE:
-            return sWorld->getRate(RATE_CREATURE_ELITE_ELITE_HP);
+            return sGameConfig->GetFloatConfig("Rate.Creature.Elite.Elite.HP");
         case CREATURE_ELITE_RAREELITE:
-            return sWorld->getRate(RATE_CREATURE_ELITE_RAREELITE_HP);
+            return sGameConfig->GetFloatConfig("Rate.Creature.Elite.RAREELITE.HP");
         case CREATURE_ELITE_WORLDBOSS:
-            return sWorld->getRate(RATE_CREATURE_ELITE_WORLDBOSS_HP);
+            return sGameConfig->GetFloatConfig("Rate.Creature.Elite.WORLDBOSS.HP");
         case CREATURE_ELITE_RARE:
-            return sWorld->getRate(RATE_CREATURE_ELITE_RARE_HP);
+            return sGameConfig->GetFloatConfig("Rate.Creature.Elite.RARE.HP");
         default:
-            return sWorld->getRate(RATE_CREATURE_ELITE_ELITE_HP);
+            return sGameConfig->GetFloatConfig("Rate.Creature.Elite.Elite.HP");
     }
 }
 
@@ -1219,17 +1219,17 @@ float Creature::_GetDamageMod(int32 Rank)
     switch (Rank)                                           // define rates for each elite rank
     {
         case CREATURE_ELITE_NORMAL:
-            return sWorld->getRate(RATE_CREATURE_NORMAL_DAMAGE);
+            return sGameConfig->GetFloatConfig("Rate.Creature.Normal.Damage");
         case CREATURE_ELITE_ELITE:
-            return sWorld->getRate(RATE_CREATURE_ELITE_ELITE_DAMAGE);
+            return sGameConfig->GetFloatConfig("Rate.Creature.Elite.Elite.Damage");
         case CREATURE_ELITE_RAREELITE:
-            return sWorld->getRate(RATE_CREATURE_ELITE_RAREELITE_DAMAGE);
+            return sGameConfig->GetFloatConfig("Rate.Creature.Elite.RAREELITE.Damage");
         case CREATURE_ELITE_WORLDBOSS:
-            return sWorld->getRate(RATE_CREATURE_ELITE_WORLDBOSS_DAMAGE);
+            return sGameConfig->GetFloatConfig("Rate.Creature.Elite.WORLDBOSS.Damage");
         case CREATURE_ELITE_RARE:
-            return sWorld->getRate(RATE_CREATURE_ELITE_RARE_DAMAGE);
+            return sGameConfig->GetFloatConfig("Rate.Creature.Elite.RARE.Damage");
         default:
-            return sWorld->getRate(RATE_CREATURE_ELITE_ELITE_DAMAGE);
+            return sGameConfig->GetFloatConfig("Rate.Creature.Elite.Elite.Damage");
     }
 }
 
@@ -1238,17 +1238,17 @@ float Creature::GetSpellDamageMod(int32 Rank)
     switch (Rank)                                           // define rates for each elite rank
     {
         case CREATURE_ELITE_NORMAL:
-            return sWorld->getRate(RATE_CREATURE_NORMAL_SPELLDAMAGE);
+            return sGameConfig->GetFloatConfig("Rate.Creature.Normal.SpellDamage");
         case CREATURE_ELITE_ELITE:
-            return sWorld->getRate(RATE_CREATURE_ELITE_ELITE_SPELLDAMAGE);
+            return sGameConfig->GetFloatConfig("Rate.Creature.Elite.Elite.SpellDamage");
         case CREATURE_ELITE_RAREELITE:
-            return sWorld->getRate(RATE_CREATURE_ELITE_RAREELITE_SPELLDAMAGE);
+            return sGameConfig->GetFloatConfig("Rate.Creature.Elite.RAREELITE.SpellDamage");
         case CREATURE_ELITE_WORLDBOSS:
-            return sWorld->getRate(RATE_CREATURE_ELITE_WORLDBOSS_SPELLDAMAGE);
+            return sGameConfig->GetFloatConfig("Rate.Creature.Elite.WORLDBOSS.SpellDamage");
         case CREATURE_ELITE_RARE:
-            return sWorld->getRate(RATE_CREATURE_ELITE_RARE_SPELLDAMAGE);
+            return sGameConfig->GetFloatConfig("Rate.Creature.Elite.RARE.SpellDamage");
         default:
-            return sWorld->getRate(RATE_CREATURE_ELITE_ELITE_SPELLDAMAGE);
+            return sGameConfig->GetFloatConfig("Rate.Creature.Elite.Elite.SpellDamage");
     }
 }
 
@@ -1524,7 +1524,7 @@ bool Creature::CanStartAttack(Unit const* who) const
     bool assist = false;
     if (who->IsInCombat() && IsWithinDist(who, ATTACK_DISTANCE))
         if (Unit* victim = who->getAttackerForHelper())
-            if (IsWithinDistInMap(victim, sWorld->getFloatConfig(CONFIG_CREATURE_FAMILY_ASSISTANCE_RADIUS)))
+            if (IsWithinDistInMap(victim, sGameConfig->GetFloatConfig("CreatureFamilyAssistanceRadius")))
                 assist = true;
 
     if (!assist)
@@ -1920,7 +1920,7 @@ void Creature::CallAssistance()
     {
         SetNoCallAssistance(true);
 
-        float radius = sWorld->getFloatConfig(CONFIG_CREATURE_FAMILY_ASSISTANCE_RADIUS);
+        float radius = sGameConfig->GetFloatConfig("CreatureFamilyAssistanceRadius");
 
         if (radius > 0)
         {
@@ -1948,7 +1948,7 @@ void Creature::CallAssistance()
                     e->AddAssistant((*assistList.begin())->GetGUID());
                     assistList.pop_front();
                 }
-                m_Events.AddEvent(e, m_Events.CalculateTime(sWorld->getIntConfig(CONFIG_CREATURE_FAMILY_ASSISTANCE_DELAY)));
+                m_Events.AddEvent(e, m_Events.CalculateTime(sGameConfig->GetIntConfig("CreatureFamilyAssistanceDelay")));
             }
         }
     }
@@ -2451,7 +2451,7 @@ void Creature::AllLootRemovedFromCorpse()
         float decayRate;
         CreatureTemplate const* cinfo = GetCreatureTemplate();
 
-        decayRate = sWorld->getRate(RATE_CORPSE_DECAY_LOOTED);
+        decayRate = sGameConfig->GetFloatConfig("Rate.Corpse.Decay.Looted");
         uint32 diff = uint32((m_corpseRemoveTime - now) * decayRate);
 
         m_respawnTime -= diff;
@@ -2469,7 +2469,7 @@ uint8 Creature::getLevelForTarget(WorldObject const* target) const
     if (!isWorldBoss() || !target->ToUnit())
         return Unit::getLevelForTarget(target);
 
-    uint16 level = target->ToUnit()->getLevel() + sWorld->getIntConfig(CONFIG_WORLD_BOSS_LEVEL_DIFF);
+    uint16 level = target->ToUnit()->getLevel() + sGameConfig->GetIntConfig("WorldBossLevelDiff");
     if (level < 1)
         return 1;
     if (level > 255)
@@ -2730,7 +2730,7 @@ float Creature::GetAggroRange(Unit const* target) const
     // Determines the aggro range for creatures
     // Based on data from wowwiki due to lack of 3.3.5a data
 
-    float aggroRate = sWorld->getRate(RATE_CREATURE_AGGRO);
+    float aggroRate = sGameConfig->GetFloatConfig("Rate.Creature.Aggro");
     if (aggroRate == 0)
         return 0.0f;
 
@@ -2831,7 +2831,7 @@ void Creature::ReleaseFocus(Spell const* focusSpell)
 
 float Creature::GetAttackDistance(Unit const* player) const
 {
-    float aggroRate = sWorld->getRate(RATE_CREATURE_AGGRO);
+    float aggroRate = sGameConfig->GetFloatConfig("Rate.Creature.Aggro");
 
     if (aggroRate == 0)
         return 0.0f;
@@ -2855,7 +2855,7 @@ float Creature::GetAttackDistance(Unit const* player) const
     // radius grow if playlevel < creaturelevel
     retDistance -= static_cast<float>(levelDiff);
 
-    if (creatureLevel + 5 <= sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL))
+    if (creatureLevel + 5 <= sGameConfig->GetIntConfig("MaxPlayerLevel"))
     {
         // detect range auras
         retDistance += static_cast<float>( GetTotalAuraModifier(SPELL_AURA_MOD_DETECT_RANGE) );

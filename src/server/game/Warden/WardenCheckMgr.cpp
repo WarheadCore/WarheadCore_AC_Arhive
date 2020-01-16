@@ -12,6 +12,7 @@
 #include "Util.h"
 #include "WardenCheckMgr.h"
 #include "Warden.h"
+#include "GameConfig.h"
 
 WardenCheckMgr::WardenCheckMgr()
 {
@@ -35,7 +36,7 @@ WardenCheckMgr* WardenCheckMgr::instance()
 void WardenCheckMgr::LoadWardenChecks()
 {
     // Check if Warden is enabled by config before loading anything
-    if (!sWorld->getBoolConfig(CONFIG_WARDEN_ENABLED))
+    if (!sGameConfig->GetBoolConfig("Warden.Enabled"))
     {
         sLog->outString(">> Warden disabled, loading checks skipped.");
         sLog->outString();
@@ -79,7 +80,7 @@ void WardenCheckMgr::LoadWardenChecks()
         wardenCheck->CheckId = id;
 
         // Initialize action with default action from config
-        wardenCheck->Action = WardenActions(sWorld->getIntConfig(CONFIG_WARDEN_CLIENT_FAIL_ACTION));
+        wardenCheck->Action = WardenActions(sGameConfig->GetIntConfig("Warden.ClientCheckFailAction"));
 
         if (checkType == PAGE_CHECK_A || checkType == PAGE_CHECK_B || checkType == DRIVER_CHECK)
         {
@@ -146,7 +147,7 @@ void WardenCheckMgr::LoadWardenChecks()
 void WardenCheckMgr::LoadWardenOverrides()
 {
     // Check if Warden is enabled by config before loading anything
-    if (!sWorld->getBoolConfig(CONFIG_WARDEN_ENABLED))
+    if (!sGameConfig->GetBoolConfig("Warden.Enabled"))
     {
         sLog->outString(">> Warden disabled, loading check overrides skipped.");
         sLog->outString();

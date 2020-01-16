@@ -32,6 +32,7 @@
 #include "World.h"
 #include "WorldPacket.h"
 #include "GameTime.h"
+#include "GameConfig.h"
 
 namespace acore
 {
@@ -427,7 +428,7 @@ bool AchievementCriteriaData::Meets(uint32 criteria_id, Player const* source, Un
             return source->GetMapId() == map_id.mapId;
         case ACHIEVEMENT_CRITERIA_DATA_TYPE_NTH_BIRTHDAY:
         {
-            time_t birthday_start = time_t(sWorld->getIntConfig(CONFIG_BIRTHDAY_TIME));
+            time_t birthday_start = time_t(sGameConfig->GetIntConfig("BirthdayTime"));
             tm birthday_tm;
             ACE_OS::localtime_r(&birthday_start, &birthday_tm);
 
@@ -694,9 +695,9 @@ void AchievementMgr::SendAchievementEarned(AchievementEntry const* achievement) 
 
         acore::AchievementChatBuilder say_builder(*GetPlayer(), CHAT_MSG_ACHIEVEMENT, LANG_ACHIEVEMENT_EARNED, achievement->ID);
         acore::LocalizedPacketDo<acore::AchievementChatBuilder> say_do(say_builder);
-        acore::PlayerDistWorker<acore::LocalizedPacketDo<acore::AchievementChatBuilder> > say_worker(GetPlayer(), sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_SAY), say_do);
+        acore::PlayerDistWorker<acore::LocalizedPacketDo<acore::AchievementChatBuilder> > say_worker(GetPlayer(), sGameConfig->GetFloatConfig("ListenRange.Say"), say_do);
         TypeContainerVisitor<acore::PlayerDistWorker<acore::LocalizedPacketDo<acore::AchievementChatBuilder> >, WorldTypeMapContainer > message(say_worker);
-        cell.Visit(p, message, *GetPlayer()->GetMap(), *GetPlayer(), sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_SAY));
+        cell.Visit(p, message, *GetPlayer()->GetMap(), *GetPlayer(), sGameConfig->GetFloatConfig("ListenRange.Say"));
     }
 
     WorldPacket data(SMSG_ACHIEVEMENT_EARNED, 8+4+8);
@@ -704,7 +705,7 @@ void AchievementMgr::SendAchievementEarned(AchievementEntry const* achievement) 
     data << uint32(achievement->ID);
     data.AppendPackedTime(GameTime::GetGameTime());
     data << uint32(0);
-    GetPlayer()->SendMessageToSetInRange(&data, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_SAY), true);
+    GetPlayer()->SendMessageToSetInRange(&data, sGameConfig->GetFloatConfig("ListenRange.Say"), true);
 }
 
 void AchievementMgr::SendCriteriaUpdate(AchievementCriteriaEntry const* entry, CriteriaProgress const* progress, uint32 timeElapsed, bool timedCompleted) const

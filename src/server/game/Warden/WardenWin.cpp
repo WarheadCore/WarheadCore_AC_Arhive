@@ -4,17 +4,15 @@
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  */
 
+#include "Common.h"
 #include "HMACSHA1.h"
 #include "WardenKeyGeneration.h"
-#include "Common.h"
 #include "WorldPacket.h"
 #include "WorldSession.h"
 #include "Log.h"
 #include "Opcodes.h"
 #include "ByteBuffer.h"
-#include <openssl/md5.h>
 #include "DatabaseEnv.h"
-#include "World.h"
 #include "Player.h"
 #include "Util.h"
 #include "WardenWin.h"
@@ -22,6 +20,8 @@
 #include "WardenCheckMgr.h"
 #include "AccountMgr.h"
 #include "GameTime.h"
+#include "GameConfig.h"
+#include <openssl/md5.h>
 
 WardenWin::WardenWin() : Warden(), _serverTicks(0) { }
 
@@ -208,7 +208,7 @@ void WardenWin::RequestData()
     _currentChecks.clear();
 
     // Build check request
-    for (uint32 i = 0; i < sWorld->getIntConfig(CONFIG_WARDEN_NUM_MEM_CHECKS); ++i)
+    for (uint32 i = 0; i < sGameConfig->GetIntConfig("Warden.NumMemChecks"); ++i)
     {
         // If todo list is done break loop (will be filled on next Update() run)
         if (_memChecksTodo.empty())
@@ -229,7 +229,7 @@ void WardenWin::RequestData()
 
     ACE_READ_GUARD(ACE_RW_Mutex, g, sWardenCheckMgr->_checkStoreLock);
 
-    for (uint32 i = 0; i < sWorld->getIntConfig(CONFIG_WARDEN_NUM_OTHER_CHECKS); ++i)
+    for (uint32 i = 0; i < sGameConfig->GetIntConfig("Warden.NumOtherChecks"); ++i)
     {
         // If todo list is done break loop (will be filled on next Update() run)
         if (_otherChecksTodo.empty())
@@ -553,6 +553,6 @@ void WardenWin::HandleData(ByteBuffer &buff)
     }
 
     // Set hold off timer, minimum timer should at least be 1 second
-    uint32 holdOff = sWorld->getIntConfig(CONFIG_WARDEN_CLIENT_CHECK_HOLDOFF);
+    uint32 holdOff = sGameConfig->GetIntConfig("Warden.ClientCheckHoldOff");
     _checkTimer = (holdOff < 1 ? 1 : holdOff) * IN_MILLISECONDS;
 }

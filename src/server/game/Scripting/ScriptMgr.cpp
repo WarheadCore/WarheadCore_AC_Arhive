@@ -198,6 +198,7 @@ ScriptMgr* ScriptMgr::instance()
 void ScriptMgr::Initialize()
 {
     LOG_INFO("server.loading", "> Loading C++ scripts");
+    LOG_INFO("server.loading", "");
     
     ASSERT(_script_loader_callback,
            "Script loader callback wasn't registered!");

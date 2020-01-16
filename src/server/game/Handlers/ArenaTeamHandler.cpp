@@ -9,13 +9,13 @@
 #include "WorldPacket.h"
 #include "WorldSession.h"
 #include "DatabaseEnv.h"
-
 #include "ArenaTeam.h"
 #include "Log.h"
 #include "ObjectMgr.h"
 #include "SocialMgr.h"
 #include "ArenaTeamMgr.h"
 #include "Opcodes.h"
+#include "GameConfig.h"
 
 void WorldSession::HandleInspectArenaTeamsOpcode(WorldPacket & recvData)
 {
@@ -98,7 +98,7 @@ void WorldSession::HandleArenaTeamInviteOpcode(WorldPacket & recvData)
         return;
     }
 
-    if (player->getLevel() < sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL))
+    if (player->getLevel() < sGameConfig->GetIntConfig("MaxPlayerLevel"))
     {
         SendArenaTeamCommandResult(ERR_ARENA_TEAM_CREATE_S, "", invitedName, ERR_ARENA_TEAM_TARGET_TOO_LOW_S);
         return;
@@ -121,7 +121,7 @@ void WorldSession::HandleArenaTeamInviteOpcode(WorldPacket & recvData)
     if (player->GetSocial()->HasIgnore(GetPlayer()->GetGUIDLow()))
         return;
 
-    if (!sWorld->getBoolConfig(CONFIG_ALLOW_TWO_SIDE_INTERACTION_GUILD) && player->GetTeamId() != GetPlayer()->GetTeamId())
+    if (!sGameConfig->GetBoolConfig("AllowTwoSide.Interaction.Guild") && player->GetTeamId() != GetPlayer()->GetTeamId())
     {
         SendArenaTeamCommandResult(ERR_ARENA_TEAM_INVITE_SS, "", "", ERR_ARENA_TEAM_NOT_ALLIED);
         return;
@@ -179,7 +179,7 @@ void WorldSession::HandleArenaTeamAcceptOpcode(WorldPacket & /*recvData*/)
     }
 
     // Only allow members of the other faction to join the team if cross faction interaction is enabled
-    if (!sWorld->getBoolConfig(CONFIG_ALLOW_TWO_SIDE_INTERACTION_GUILD) && _player->GetTeamId() != sObjectMgr->GetPlayerTeamIdByGUID(arenaTeam->GetCaptain()))
+    if (!sGameConfig->GetBoolConfig("AllowTwoSide.Interaction.Guild") && _player->GetTeamId() != sObjectMgr->GetPlayerTeamIdByGUID(arenaTeam->GetCaptain()))
     {
         SendArenaTeamCommandResult(ERR_ARENA_TEAM_CREATE_S, "", "", ERR_ARENA_TEAM_NOT_ALLIED);
         return;

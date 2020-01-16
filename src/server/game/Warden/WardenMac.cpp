@@ -236,7 +236,7 @@ void WardenMac::HandleData(ByteBuffer &buff)
     //if (!IsValidCheckSum(Checksum, buff.contents() + buff.rpos(), Length))
     //{
     //    buff.rpos(buff.wpos());
-    //    if (sWorld->getBoolConfig(CONFIG_BOOL_WARDEN_KICK))
+    //    if (sGameConfig->GetBoolConfig(CONFIG_BOOL_WARDEN_KICK))
     //        Client->KickPlayer();
     //    return;
     //}

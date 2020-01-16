@@ -30,6 +30,7 @@ EndScriptData */
 #include "WardenCheckMgr.h"
 #include "WaypointManager.h"
 #include "GameGraveyard.h"
+#include "GameConfig.h"
 
 class reload_commandscript : public CommandScript
 {
@@ -727,7 +728,7 @@ public:
 
     static bool HandleReloadWardenactionCommand(ChatHandler* handler, const char* /*args*/)
     {
-        if (!sWorld->getBoolConfig(CONFIG_WARDEN_ENABLED))
+        if (!sGameConfig->GetBoolConfig("Warden.Enabled"))
         {
             handler->SendSysMessage("Warden system disabled by config - reloading warden_action skipped.");
             handler->SetSentErrorMessage(true);

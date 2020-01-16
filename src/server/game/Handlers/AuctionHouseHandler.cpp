@@ -19,6 +19,7 @@
 #include "Chat.h"
 #include "AsyncAuctionListing.h"
 #include "GameTime.h"
+#include "GameConfig.h"
 
 //void called when player click on auctioneer npc
 void WorldSession::HandleAuctionHelloOpcode(WorldPacket & recvData)
@@ -45,9 +46,9 @@ void WorldSession::HandleAuctionHelloOpcode(WorldPacket & recvData)
 //this void causes that auction window is opened
 void WorldSession::SendAuctionHello(uint64 guid, Creature* unit)
 {
-    if (GetPlayer()->getLevel() < sWorld->getIntConfig(CONFIG_AUCTION_LEVEL_REQ))
+    if (GetPlayer()->getLevel() < sGameConfig->GetIntConfig("LevelReq.Auction"))
     {
-        SendNotification(GetAcoreString(LANG_AUCTION_REQ), sWorld->getIntConfig(CONFIG_AUCTION_LEVEL_REQ));
+        SendNotification(GetAcoreString(LANG_AUCTION_REQ), sGameConfig->GetIntConfig("LevelReq.Auction"));
         return;
     }
 
@@ -247,7 +248,7 @@ void WorldSession::HandleAuctionSellItem(WorldPacket & recvData)
     {
         Item* item = items[i];
 
-        uint32 auctionTime = uint32(etime * sWorld->getRate(RATE_AUCTION_TIME));
+        uint32 auctionTime = uint32(etime * sGameConfig->GetFloatConfig("Rate.Auction.Time"));
         AuctionHouseObject* auctionHouse = sAuctionMgr->GetAuctionsMap(creature->getFaction());
 
         uint32 deposit = sAuctionMgr->GetAuctionDeposit(auctionHouseEntry, etime, item, finalCount);
@@ -262,7 +263,7 @@ void WorldSession::HandleAuctionSellItem(WorldPacket & recvData)
         AuctionEntry* AH = new AuctionEntry;
         AH->Id = sObjectMgr->GenerateAuctionID();
 
-        if (sWorld->getBoolConfig(CONFIG_ALLOW_TWO_SIDE_INTERACTION_AUCTION))
+        if (sGameConfig->GetBoolConfig("AllowTwoSide.Interaction.Auction"))
             AH->auctioneer = 23442;
         else
             AH->auctioneer = GUID_LOPART(auctioneer);

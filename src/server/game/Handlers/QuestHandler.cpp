@@ -9,7 +9,6 @@
 #include "WorldPacket.h"
 #include "WorldSession.h"
 #include "Opcodes.h"
-#include "World.h"
 #include "ObjectMgr.h"
 #include "Player.h"
 #include "GossipDef.h"
@@ -20,6 +19,8 @@
 #include "BattlegroundAV.h"
 #include "ScriptMgr.h"
 #include "GameObjectAI.h"
+#include "GameConfig.h"
+
 #ifdef ELUNA
 #include "LuaEngine.h"
 #endif
@@ -428,7 +429,7 @@ void WorldSession::HandleQuestLogRemoveQuest(WorldPacket& recvData)
             sLog->outDetail("Player %u abandoned quest %u", _player->GetGUIDLow(), questId);
 #endif
             // check if Quest Tracker is enabled
-            if (sWorld->getBoolConfig(CONFIG_QUEST_ENABLE_QUEST_TRACKER))
+            if (sGameConfig->GetBoolConfig("Quests.EnableQuestTracker"))
             {
                 // prepare Quest Tracker datas
                 PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_QUEST_TRACK_ABANDON_TIME);

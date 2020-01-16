@@ -17,6 +17,7 @@
 #include "Vehicle.h"
 #include "WorldSession.h"
 #include "GameTime.h"
+#include "GameConfig.h"
 
 BattlefieldWG::~BattlefieldWG()
 {
@@ -37,13 +38,13 @@ bool BattlefieldWG::SetupBattlefield()
     // init stalker AFTER setting map id... we spawn it at map=random memory value?...
     InitStalker(BATTLEFIELD_WG_NPC_STALKER, WintergraspStalkerPos[0], WintergraspStalkerPos[1], WintergraspStalkerPos[2], WintergraspStalkerPos[3]);
 
-    m_MaxPlayer = sWorld->getIntConfig(CONFIG_WINTERGRASP_PLR_MAX);
-    m_IsEnabled = sWorld->getBoolConfig(CONFIG_WINTERGRASP_ENABLE);
-    m_MinPlayer = sWorld->getIntConfig(CONFIG_WINTERGRASP_PLR_MIN);
-    m_MinLevel = sWorld->getIntConfig(CONFIG_WINTERGRASP_PLR_MIN_LVL);
-    m_BattleTime = sWorld->getIntConfig(CONFIG_WINTERGRASP_BATTLETIME) * MINUTE * IN_MILLISECONDS;
-    m_NoWarBattleTime = sWorld->getIntConfig(CONFIG_WINTERGRASP_NOBATTLETIME) * MINUTE * IN_MILLISECONDS;
-    m_RestartAfterCrash = sWorld->getIntConfig(CONFIG_WINTERGRASP_RESTART_AFTER_CRASH) * MINUTE * IN_MILLISECONDS;
+    m_MaxPlayer = sGameConfig->GetIntConfig("Wintergrasp.PlayerMax");
+    m_IsEnabled = sGameConfig->GetBoolConfig("Wintergrasp.Enable");
+    m_MinPlayer = sGameConfig->GetIntConfig("Wintergrasp.PlayerMin");
+    m_MinLevel = sGameConfig->GetIntConfig("Wintergrasp.PlayerMinLvl");
+    m_BattleTime = sGameConfig->GetIntConfig("Wintergrasp.BattleTimer") * MINUTE * IN_MILLISECONDS;
+    m_NoWarBattleTime = sGameConfig->GetIntConfig("Wintergrasp.NoBattleTimer") * MINUTE * IN_MILLISECONDS;
+    m_RestartAfterCrash = sGameConfig->GetIntConfig("Wintergrasp.CrashRestartTimer") * MINUTE * IN_MILLISECONDS;
 
     m_TimeForAcceptInvite = 20;
     m_StartGroupingTimer = 15 * MINUTE * IN_MILLISECONDS;
@@ -279,7 +280,7 @@ void BattlefieldWG::OnBattleStart()
     m_tenacityStack = 0;
     m_tenacityUpdateTimer = 20000;
 
-    if (sWorld->getBoolConfig(CONFIG_BATTLEGROUND_QUEUE_ANNOUNCER_ENABLE))
+    if (sGameConfig->GetBoolConfig("QueueAnnouncer.Enable"))
         sWorld->SendWorldText(BATTLEFIELD_WG_WORLD_START_MESSAGE);
 }
 

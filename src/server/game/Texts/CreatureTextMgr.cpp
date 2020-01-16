@@ -13,6 +13,7 @@
 #include "GridNotifiers.h"
 #include "GridNotifiersImpl.h"
 #include "CreatureTextMgr.h"
+#include "GameConfig.h"
 
 class CreatureTextBuilder
 {
@@ -301,15 +302,15 @@ uint32 CreatureTextMgr::SendChat(Creature* source, uint8 textGroup, WorldObject 
 
 float CreatureTextMgr::GetRangeForChatType(ChatMsg msgType) const
 {
-    float dist = sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_SAY);
+    float dist = sGameConfig->GetFloatConfig("ListenRange.Say");
     switch (msgType)
     {
         case CHAT_MSG_MONSTER_YELL:
-            dist = sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_YELL);
+            dist = sGameConfig->GetFloatConfig("ListenRange.Yell");
             break;
         case CHAT_MSG_MONSTER_EMOTE:
         case CHAT_MSG_RAID_BOSS_EMOTE:
-            dist = sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_TEXTEMOTE);
+            dist = sGameConfig->GetFloatConfig("ListenRange.TextEmote");
             break;
         default:
             break;

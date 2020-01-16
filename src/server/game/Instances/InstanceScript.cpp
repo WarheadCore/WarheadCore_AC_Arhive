@@ -18,6 +18,7 @@
 #include "WorldSession.h"
 #include "Opcodes.h"
 #include "Spell.h"
+#include "GameConfig.h"
 
 void InstanceScript::SaveToDB()
 {
@@ -465,4 +466,9 @@ std::string InstanceScript::GetBossStateName(uint8 state)
         default:
             return "INVALID";
     }
+}
+
+bool InstanceScript::ServerAllowsTwoSideGroups() const
+{
+    return sGameConfig->GetBoolConfig("AllowTwoSide.Interaction.Group");
 }

@@ -9,6 +9,7 @@
 #include "InstanceScript.h"
 #include "MoveSpline.h"
 #include "MapManager.h"
+#include "GameConfig.h"
 
 TransportTemplate::~TransportTemplate()
 {
@@ -414,7 +415,7 @@ void TransportMgr::SpawnContinentTransports()
     oldMSTime = getMSTime();
     QueryResult result;
 
-    if (sWorld->getBoolConfig(CONFIG_ENABLE_CONTINENT_TRANSPORT))
+    if (sGameConfig->GetBoolConfig("IsContinentTransport.Enabled"))
     {
         result = WorldDatabase.Query("SELECT guid, entry FROM transports");
         if (result)
@@ -435,7 +436,7 @@ void TransportMgr::SpawnContinentTransports()
 
         sLog->outString(">> Spawned %u continent motion transports in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
 
-        if (sWorld->getBoolConfig(CONFIG_ENABLE_CONTINENT_TRANSPORT_PRELOADING))
+        if (sGameConfig->GetBoolConfig("IsPreloadedContinentTransport.Enabled"))
         {
             // pussywizard: preload grids for continent static transports
             oldMSTime = getMSTime();

@@ -33,6 +33,7 @@
 #include "ScriptMgr.h"
 #include "AccountMgr.h"
 #include "GameTime.h"
+#include "GameConfig.h"
 
 #ifdef ELUNA
 #include "LuaEngine.h"
@@ -745,7 +746,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     WorldPacket packet, SendAddonPacked;
 
     BigNumber k;
-    bool wardenActive = sWorld->getBoolConfig(CONFIG_WARDEN_ENABLED);
+    bool wardenActive = sGameConfig->GetBoolConfig("Warden.Enabled");
 
     if (sWorld->IsClosed())
     {
@@ -797,7 +798,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     Field* fields = result->Fetch();
 
     uint8 expansion = fields[5].GetUInt8();
-    uint32 world_expansion = sWorld->getIntConfig(CONFIG_EXPANSION);
+    uint32 world_expansion = sGameConfig->GetIntConfig("Expansion");
     if (expansion > world_expansion)
         expansion = world_expansion;
 
@@ -1014,7 +1015,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
         m_Session->InitWarden(&k, os);
 
     // Sleep this Network thread for
-    uint32 sleepTime = sWorld->getIntConfig(CONFIG_SESSION_ADD_DELAY);
+    uint32 sleepTime = sGameConfig->GetIntConfig("SessionAddDelay");
     ACE_OS::sleep (ACE_Time_Value (0, sleepTime));
 
     sWorld->AddSession (m_Session);
@@ -1044,7 +1045,7 @@ int WorldSocket::HandlePing(WorldPacket& recvPacket)
         {
             ++m_OverSpeedPings;
 
-            uint32 max_count = sWorld->getIntConfig (CONFIG_MAX_OVERSPEED_PINGS);
+            uint32 max_count = sGameConfig->GetIntConfig("MaxOverspeedPings");
 
             if (max_count && m_OverSpeedPings > max_count)
             {

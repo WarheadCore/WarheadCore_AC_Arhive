@@ -12,10 +12,10 @@
 #include "WorldPacket.h"
 #include "WorldSession.h"
 #include "Chat.h"
-#include "World.h"
 #include "Player.h"
 #include "Opcodes.h"
 #include "GameTime.h"
+#include "GameConfig.h"
 
 inline float GetAge(uint64 t) { return float(GameTime::GetGameTime() - t) / DAY; }
 
@@ -256,7 +256,7 @@ TicketMgr* TicketMgr::instance()
     return &instance;
 }
 
-void TicketMgr::Initialize() { SetStatus(sWorld->getBoolConfig(CONFIG_ALLOW_TICKETS)); }
+void TicketMgr::Initialize() { SetStatus(sGameConfig->GetBoolConfig("AllowTickets")); }
 
 void TicketMgr::ResetTickets()
 {

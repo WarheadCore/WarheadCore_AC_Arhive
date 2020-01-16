@@ -20,6 +20,7 @@ EndScriptData */
 #include "ScriptMgr.h"
 #include "BanManager.h"
 #include "GameTime.h"
+#include "GameConfig.h"
 
 /// Ban function modes
 enum BanMode
@@ -113,12 +114,12 @@ public:
         case BAN_SUCCESS:
             if (atoi(durationStr) > 0)
             {
-                if (!sWorld->getBoolConfig(CONFIG_SHOW_BAN_IN_WORLD))
+                if (!sGameConfig->GetBoolConfig("ShowBanInWorld"))
                     handler->PSendSysMessage(LANG_BAN_YOUBANNED, name.c_str(), secsToTimeString(TimeStringToSecs(durationStr), true).c_str(), reasonStr);
             }
             else
             {
-                if (!sWorld->getBoolConfig(CONFIG_SHOW_BAN_IN_WORLD))
+                if (!sGameConfig->GetBoolConfig("ShowBanInWorld"))
                     handler->PSendSysMessage(LANG_BAN_YOUPERMBANNED, name.c_str(), reasonStr);
             }
             break;
@@ -208,12 +209,12 @@ public:
             case BAN_SUCCESS:
                 if (atoi(durationStr) > 0)
                 {
-                    if (!sWorld->getBoolConfig(CONFIG_SHOW_BAN_IN_WORLD)) 
+                    if (!sGameConfig->GetBoolConfig("ShowBanInWorld")) 
                         handler->PSendSysMessage(LANG_BAN_YOUBANNED, nameOrIP.c_str(), secsToTimeString(TimeStringToSecs(durationStr), true).c_str(), reasonStr);
                 }
                 else
                 {
-                    if (!sWorld->getBoolConfig(CONFIG_SHOW_BAN_IN_WORLD))
+                    if (!sGameConfig->GetBoolConfig("ShowBanInWorld"))
                         handler->PSendSysMessage(LANG_BAN_YOUPERMBANNED, nameOrIP.c_str(), reasonStr);
                 }
                 break;

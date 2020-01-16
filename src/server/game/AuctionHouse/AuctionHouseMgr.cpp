@@ -21,6 +21,7 @@
 #include "AvgDiffTracker.h"
 #include "AsyncAuctionListing.h"
 #include "GameTime.h"
+#include "GameConfig.h"
 #include <vector>
 
 enum eAuctionHouse
@@ -46,7 +47,7 @@ AuctionHouseMgr* AuctionHouseMgr::instance()
 
 AuctionHouseObject* AuctionHouseMgr::GetAuctionsMap(uint32 factionTemplateId)
 {
-    if (sWorld->getBoolConfig(CONFIG_ALLOW_TWO_SIDE_INTERACTION_AUCTION))
+    if (sGameConfig->GetBoolConfig("AllowTwoSide.Interaction.Auction"))
         return &mNeutralAuctions;
 
     // team have linked auction houses
@@ -66,11 +67,11 @@ uint32 AuctionHouseMgr::GetAuctionDeposit(AuctionHouseEntry const* entry, uint32
     uint32 MSV = pItem->GetTemplate()->SellPrice;
 
     if (MSV <= 0)
-        return AH_MINIMUM_DEPOSIT * sWorld->getRate(RATE_AUCTION_DEPOSIT);
+        return AH_MINIMUM_DEPOSIT * sGameConfig->GetFloatConfig("Rate.Auction.Deposit");
 
     float multiplier = CalculatePct(float(entry->depositPercent), 3);
     uint32 timeHr = (((time / 60) / 60) / 12);
-    uint32 deposit = uint32(((multiplier * MSV * count / 3) * timeHr * 3) * sWorld->getRate(RATE_AUCTION_DEPOSIT));
+    uint32 deposit = uint32(((multiplier * MSV * count / 3) * timeHr * 3) * sGameConfig->GetFloatConfig("Rate.Auction.Deposit"));
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("auctionHouse", "MSV:        %u", MSV);
@@ -79,8 +80,8 @@ uint32 AuctionHouseMgr::GetAuctionDeposit(AuctionHouseEntry const* entry, uint32
     LOG_DEBUG("auctionHouse", "Deposit:    %u", deposit);
 #endif
 
-    if (deposit < AH_MINIMUM_DEPOSIT * sWorld->getRate(RATE_AUCTION_DEPOSIT))
-        return AH_MINIMUM_DEPOSIT * sWorld->getRate(RATE_AUCTION_DEPOSIT);
+    if (deposit < AH_MINIMUM_DEPOSIT * sGameConfig->GetFloatConfig("Rate.Auction.Deposit"))
+        return AH_MINIMUM_DEPOSIT * sGameConfig->GetFloatConfig("Rate.Auction.Deposit");
     else
         return deposit;
 }
@@ -156,7 +157,7 @@ void AuctionHouseMgr::SendAuctionSuccessfulMail(AuctionEntry* auction, SQLTransa
 
         MailDraft(auction->BuildAuctionMailSubject(AUCTION_SUCCESSFUL), AuctionEntry::BuildAuctionMailBody(auction->bidder, auction->bid, auction->buyout, auction->deposit, auction->GetAuctionCut()))
             .AddMoney(profit)
-            .SendMailTo(trans, MailReceiver(owner, auction->owner), auction, MAIL_CHECK_MASK_COPIED, sWorld->getIntConfig(CONFIG_MAIL_DELIVERY_DELAY));
+            .SendMailTo(trans, MailReceiver(owner, auction->owner), auction, MAIL_CHECK_MASK_COPIED, sGameConfig->GetIntConfig("MailDeliveryDelay"));
 
         if (auction->bid >= 500*GOLD)
             if (const GlobalPlayerData* gpd = sWorld->GetGlobalPlayerData(auction->bidder))
@@ -372,7 +373,7 @@ AuctionHouseEntry const* AuctionHouseMgr::GetAuctionHouseEntry(uint32 factionTem
 {
     uint32 houseid = 7; // goblin auction house
 
-    if (!sWorld->getBoolConfig(CONFIG_ALLOW_TWO_SIDE_INTERACTION_AUCTION))
+    if (!sGameConfig->GetBoolConfig("AllowTwoSide.Interaction.Auction"))
     {
         //FIXME: found way for proper auctionhouse selection by another way
         // AuctionHouse.dbc have faction field with _player_ factions associated with auction house races.
@@ -684,7 +685,7 @@ bool AuctionEntry::BuildAuctionInfo(WorldPacket& data) const
 
 uint32 AuctionEntry::GetAuctionCut() const
 {
-    int32 cut = int32(CalculatePct(bid, auctionHouseEntry->cutPercent) * sWorld->getRate(RATE_AUCTION_CUT));
+    int32 cut = int32(CalculatePct(bid, auctionHouseEntry->cutPercent) * sGameConfig->GetFloatConfig("Rate.Auction.Cut"));
     return std::max(cut, 0);
 }
 

@@ -29,8 +29,8 @@
 #include "Player.h"
 #include "PoolMgr.h"
 #include "GameGraveyard.h"
-#include "World.h"
 #include "GameTime.h"
+#include "GameConfig.h"
 
 #define GOSSIP_HELLO_DEMO1  "Build catapult."
 #define GOSSIP_HELLO_DEMO2  "Build demolisher."
@@ -277,7 +277,7 @@ class npc_wg_queue : public CreatureScript
 
         bool OnGossipHello(Player* player, Creature* creature) override
         {
-            if (!sWorld->getBoolConfig(CONFIG_MINIGOB_MANABONK))
+            if (!sGameConfig->GetBoolConfig("Minigob.Manabonk.Enable"))
                 return false;
 
             if (creature->IsQuestGiver())
@@ -342,7 +342,7 @@ class npc_wg_queue : public CreatureScript
 
             void UpdateAI(uint32 diff) override
             {
-                if (CONFIG_WINTERGRASP_ENABLE == false)
+                if (!sGameConfig->GetBoolConfig("Wintergrasp.Enable"))
                     return;
 
                 ScriptedAI::UpdateAI(diff);
@@ -662,7 +662,7 @@ class npc_wg_quest_giver : public CreatureScript
                         {
                             if (quest->IsAutoComplete())
                                 result2 = DIALOG_STATUS_REWARD_REP;
-                            else if (player->getLevel() <= (player->GetQuestLevel(quest) + sWorld->getIntConfig(CONFIG_QUEST_LOW_LEVEL_HIDE_DIFF)))
+                            else if (player->getLevel() <= (player->GetQuestLevel(quest) + sGameConfig->GetIntConfig("Quests.LowLevelHideDiff")))
                             {
                                 if (quest->IsDaily())
                                     result2 = DIALOG_STATUS_AVAILABLE_REP;

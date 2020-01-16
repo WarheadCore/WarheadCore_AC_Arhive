@@ -29,6 +29,7 @@
 #include "MapManager.h"
 #include "GameGraveyard.h"
 #include "GameTime.h"
+#include "GameConfig.h"
 
 class misc_commandscript : public CommandScript
 {
@@ -690,7 +691,7 @@ public:
             else if (map->IsDungeon())
             {
                 // Allow GM to summon players or only other GM accounts inside instances.
-                if (!sWorld->getBoolConfig(CONFIG_INSTANCE_GMSUMMON_PLAYER))
+                if (!sGameConfig->GetIntConfig("Instance.GMSummonPlayer"))
                 {
                     // pussywizard: prevent unbinding normal player's perm bind by just summoning him >_>
                     if (!target->GetSession()->GetSecurity())
@@ -877,7 +878,7 @@ public:
 
         if (target->IsAlive())
         {
-            if (sWorld->getBoolConfig(CONFIG_DIE_COMMAND_MODE))
+            if (sGameConfig->GetBoolConfig("Die.Command.Mode"))
             {
                 if (target->GetTypeId() == TYPEID_UNIT && handler->GetSession()->GetSecurity() == SEC_CONSOLE) // pussywizard
                     target->ToCreature()->LowerPlayerDamageReq(target->GetMaxHealth());
@@ -1130,7 +1131,7 @@ public:
         if (handler->HasLowerSecurity(target, 0))
             return false;
 
-        if (sWorld->getBoolConfig(CONFIG_SHOW_KICK_IN_WORLD))
+        if (sGameConfig->GetBoolConfig("ShowKickInWorld"))
             sWorld->SendWorldText(LANG_COMMAND_KICKMESSAGE, playerName.c_str());
         else
             handler->PSendSysMessage(LANG_COMMAND_KICKMESSAGE, playerName.c_str());
@@ -1628,7 +1629,7 @@ public:
             return false;
 
         // Weather is OFF
-        if (!sWorld->getBoolConfig(CONFIG_WEATHER))
+        if (!sGameConfig->GetBoolConfig("ActivateWeather"))
         {
             handler->SendSysMessage(LANG_WEATHER_DISABLED);
             handler->SetSentErrorMessage(true);
@@ -2015,7 +2016,7 @@ public:
         handler->PSendSysMessage(LANG_PINFO_ACC_IP, lastIp.c_str(), locked ? handler->GetAcoreString(LANG_YES) : handler->GetAcoreString(LANG_NO));
 
         // Output X. LANG_PINFO_CHR_LEVEL
-        if (level != sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL))
+        if (level != sGameConfig->GetIntConfig("MaxPlayerLevel"))
             handler->PSendSysMessage(LANG_PINFO_CHR_LEVEL_LOW, level, xp, xptotal, (xptotal - xp));
         else
             handler->PSendSysMessage(LANG_PINFO_CHR_LEVEL_HIGH, level);

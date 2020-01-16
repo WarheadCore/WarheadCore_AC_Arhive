@@ -44,6 +44,7 @@
 #include "Spell.h"
 #include "WhoListCache.h"
 #include "GameTime.h"
+#include "GameConfig.h"
 
 #ifdef ELUNA
 #include "LuaEngine.h"
@@ -286,8 +287,8 @@ void WorldSession::HandleWhoOpcode(WorldPacket& recvData)
 
     uint32 team = _player->GetTeamId();
     uint32 security = GetSecurity();
-    bool allowTwoSideWhoList = sWorld->getBoolConfig(CONFIG_ALLOW_TWO_SIDE_WHO_LIST);
-    uint32 gmLevelInWhoList = sWorld->getIntConfig(CONFIG_GM_LEVEL_IN_WHO_LIST);
+    bool allowTwoSideWhoList = sGameConfig->GetBoolConfig("AllowTwoSide.WhoList");
+    uint32 gmLevelInWhoList = sGameConfig->GetIntConfig("GM.InWhoList.Level");
     uint32 displaycount = 0;
 
     WorldPacket data(SMSG_WHO, 50);                       // guess size
@@ -300,7 +301,7 @@ void WorldSession::HandleWhoOpcode(WorldPacket& recvData)
     {
         if (AccountMgr::IsPlayerAccount(security))
         {
-            // player can see member of other team only if CONFIG_ALLOW_TWO_SIDE_WHO_LIST
+            // player can see member of other team only if "AllowTwoSide.WhoList"
             if (itr->second->GetTeamId() != team  && !allowTwoSideWhoList)
                 continue;
 
@@ -391,7 +392,7 @@ void WorldSession::HandleWhoOpcode(WorldPacket& recvData)
 
         // 49 is maximum player count sent to client - can be overridden
         // through config, but is unstable
-        if ((matchcount++) >= 50 /*sWorld->getIntConfig(CONFIG_MAX_WHO)*/)
+        if ((matchcount++) >= 50 /*sGameConfig->GetIntConfig(CONFIG_MAX_WHO)*/)
             continue;
 
         data << pname;                                    // player name
@@ -422,13 +423,13 @@ void WorldSession::HandleLogoutRequestOpcode(WorldPacket & /*recv_data*/)
     if (uint64 lguid = GetPlayer()->GetLootGUID())
         DoLootRelease(lguid);
 
-    bool instantLogout = ((GetSecurity() >= 0 && uint32(GetSecurity()) >= sWorld->getIntConfig(CONFIG_INSTANT_LOGOUT))
+    bool instantLogout = ((GetSecurity() >= 0 && uint32(GetSecurity()) >= sGameConfig->GetIntConfig("InstantLogout"))
         || (GetPlayer()->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING) && !GetPlayer()->IsInCombat())) || GetPlayer()->IsInFlight();
 
-    bool preventAfkSanctuaryLogout = sWorld->getIntConfig(CONFIG_AFK_PREVENT_LOGOUT) == 1
+    bool preventAfkSanctuaryLogout = sGameConfig->GetIntConfig("PreventAFKLogout") == 1
         && GetPlayer()->isAFK() && sAreaTableStore.LookupEntry(GetPlayer()->GetAreaId())->IsSanctuary();
 
-    bool preventAfkLogout = sWorld->getIntConfig(CONFIG_AFK_PREVENT_LOGOUT) == 2
+    bool preventAfkLogout = sGameConfig->GetIntConfig("PreventAFKLogout") == 2
         && GetPlayer()->isAFK();
 
     /// TODO: Possibly add RBAC permission to log out in combat
@@ -611,13 +612,13 @@ void WorldSession::HandleAddFriendOpcode(WorldPacket & recv_data)
     TeamId teamId = Player::TeamIdForRace(playerData->race);
     FriendsResult friendResult = FRIEND_NOT_FOUND;
 
-    if (!AccountMgr::IsPlayerAccount(GetSecurity()) || sWorld->getBoolConfig(CONFIG_ALLOW_GM_FRIEND) || AccountMgr::IsPlayerAccount(AccountMgr::GetSecurity(friendAccountId, realmID)))
+    if (!AccountMgr::IsPlayerAccount(GetSecurity()) || sGameConfig->GetBoolConfig("GM.AllowFriend") || AccountMgr::IsPlayerAccount(AccountMgr::GetSecurity(friendAccountId, realmID)))
     {
         if (friendGuid)
         {
             if (friendGuid == GetPlayer()->GetGUID())
                 friendResult = FRIEND_SELF;
-            else if (GetPlayer()->GetTeamId() != teamId && !sWorld->getBoolConfig(CONFIG_ALLOW_TWO_SIDE_ADD_FRIEND)  && AccountMgr::IsPlayerAccount(GetSecurity()))
+            else if (GetPlayer()->GetTeamId() != teamId && !sGameConfig->GetBoolConfig("AllowTwoSide.AddFriend")  && AccountMgr::IsPlayerAccount(GetSecurity()))
                 friendResult = FRIEND_ENEMY;
             else if (GetPlayer()->GetSocial()->HasFriend(guidLow))
                 friendResult = FRIEND_ALREADY;
@@ -1265,7 +1266,7 @@ void WorldSession::HandleInspectOpcode(WorldPacket& recv_data)
     WorldPacket data(SMSG_INSPECT_TALENT, guid_size+4+talent_points);
     data.append(player->GetPackGUID());
 
-    if (sWorld->getBoolConfig(CONFIG_TALENTS_INSPECTING) || _player->IsGameMaster())
+    if (sGameConfig->GetBoolConfig("TalentsInspecting") || _player->IsGameMaster())
     {
         player->BuildPlayerTalentsInfoData(&data);
     }

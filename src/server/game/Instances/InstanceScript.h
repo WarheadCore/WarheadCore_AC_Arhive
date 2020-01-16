@@ -8,10 +8,7 @@
 #define ACORE_INSTANCE_DATA_H
 
 #include "ZoneScript.h"
-#include "World.h"
 #include "ObjectMgr.h"
-//#include "GameObject.h"
-//#include "Map.h"
 
 #define OUT_SAVE_INST_DATA             LOG_DEBUG("tscr", "TSCR: Saving Instance Data for Instance %s (Map %d, Instance Id %d)", instance->GetMapName(), instance->GetId(), instance->GetInstanceId())
 #define OUT_SAVE_INST_DATA_COMPLETE    LOG_DEBUG("tscr", "TSCR: Saving Instance Data for Instance %s (Map %d, Instance Id %d) completed.", instance->GetMapName(), instance->GetId(), instance->GetInstanceId())
@@ -184,7 +181,7 @@ class InstanceScript : public ZoneScript
         void DoCastSpellOnPlayers(uint32 spell);
 
         // Return wether server allow two side groups or not
-        bool ServerAllowsTwoSideGroups() { return sWorld->getBoolConfig(CONFIG_ALLOW_TWO_SIDE_INTERACTION_GROUP); }
+        bool ServerAllowsTwoSideGroups() const;
 
         virtual bool SetBossState(uint32 id, EncounterState state);
         EncounterState GetBossState(uint32 id) const { return id < bosses.size() ? bosses[id].state : TO_BE_DECIDED; }

@@ -12,6 +12,7 @@
 #include "MoveSplineInit.h"
 #include "MoveSpline.h"
 #include "Spell.h"
+#include "GameConfig.h"
 
 template<>
 void RandomMovementGenerator<Creature>::_setRandomLocation(Creature* creature)
@@ -187,7 +188,7 @@ void RandomMovementGenerator<Creature>::_setRandomLocation(Creature* creature)
     init.SetWalk(true);
     init.Launch();
 
-    if (sWorld->getBoolConfig(CONFIG_DONT_CACHE_RANDOM_MOVEMENT_PATHS))
+    if (sGameConfig->GetBoolConfig("DontCacheRandomMovementPaths"))
         _preComputedPaths.erase(pathIdx);
 
     //Call for creature group update

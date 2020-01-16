@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
  * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
@@ -8,7 +8,6 @@
 #include "Language.h"
 #include "WorldPacket.h"
 #include "WorldSession.h"
-#include "World.h"
 #include "ObjectMgr.h"
 #include "ArenaTeamMgr.h"
 #include "GuildMgr.h"
@@ -19,6 +18,7 @@
 #include "GossipDef.h"
 #include "SocialMgr.h"
 #include "PetitionMgr.h"
+#include "GameConfig.h"
 
 #define CHARTER_DISPLAY_ID 16161
 
@@ -107,9 +107,9 @@ void WorldSession::HandlePetitionBuyOpcode(WorldPacket & recvData)
     else
     {
         // TODO: find correct opcode
-        if (_player->getLevel() < sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL))
+        if (_player->getLevel() < sGameConfig->GetIntConfig("MaxPlayerLevel"))
         {
-            SendNotification(LANG_ARENA_ONE_TOOLOW, sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL));
+            SendNotification(LANG_ARENA_ONE_TOOLOW, sGameConfig->GetIntConfig("MaxPlayerLevel"));
             return;
         }
 
@@ -320,7 +320,7 @@ void WorldSession::SendPetitionQueryOpcode(uint64 petitionguid)
     data << uint8(0);                                                  // some string
     if (type == GUILD_CHARTER_TYPE)
     {
-        uint32 needed = sWorld->getIntConfig(CONFIG_MIN_PETITION_SIGNS);
+        uint32 needed = sGameConfig->GetIntConfig("MinPetitionSigns");
         data << uint32(needed);
         data << uint32(needed);
         data << uint32(0);                                  // bypass client - side limitation, a different value is needed here for each petition
@@ -452,7 +452,7 @@ void WorldSession::HandlePetitionSignOpcode(WorldPacket & recvData)
         return;
 
     // not let enemies sign guild charter
-    if (!sWorld->getBoolConfig(CONFIG_ALLOW_TWO_SIDE_INTERACTION_GUILD) && GetPlayer()->GetTeamId() != sObjectMgr->GetPlayerTeamIdByGUID(ownerGuid))
+    if (!sGameConfig->GetBoolConfig("AllowTwoSide.Interaction.Guild") && GetPlayer()->GetTeamId() != sObjectMgr->GetPlayerTeamIdByGUID(ownerGuid))
     {
         if (type != GUILD_CHARTER_TYPE)
             SendArenaTeamCommandResult(ERR_ARENA_TEAM_INVITE_SS, "", "", ERR_ARENA_TEAM_NOT_ALLIED);
@@ -463,7 +463,7 @@ void WorldSession::HandlePetitionSignOpcode(WorldPacket & recvData)
 
     if (type != GUILD_CHARTER_TYPE)
     {
-        if (_player->getLevel() < sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL))
+        if (_player->getLevel() < sGameConfig->GetIntConfig("MaxPlayerLevel"))
         {
             SendArenaTeamCommandResult(ERR_ARENA_TEAM_CREATE_S, "", _player->GetName().c_str(), ERR_ARENA_TEAM_TARGET_TOO_LOW_S);
             return;
@@ -623,7 +623,7 @@ void WorldSession::HandleOfferPetitionOpcode(WorldPacket & recvData)
 
     if (petition->petitionType != GUILD_CHARTER_TYPE)
     {
-        if (player->getLevel() < sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL))
+        if (player->getLevel() < sGameConfig->GetIntConfig("MaxPlayerLevel"))
         {
             // player is too low level to join an arena team
             SendArenaTeamCommandResult(ERR_ARENA_TEAM_CREATE_S, player->GetName().c_str(), "", ERR_ARENA_TEAM_TARGET_TOO_LOW_S);
@@ -767,7 +767,7 @@ void WorldSession::HandleTurnInPetitionOpcode(WorldPacket & recvData)
 
     uint32 requiredSignatures;
     if (type == GUILD_CHARTER_TYPE)
-        requiredSignatures = sWorld->getIntConfig(CONFIG_MIN_PETITION_SIGNS);
+        requiredSignatures = sGameConfig->GetIntConfig("MinPetitionSigns");
     else
         requiredSignatures = type-1;
 
@@ -897,7 +897,7 @@ void WorldSession::SendPetitionShowList(uint64 guid)
         data << uint32(CHARTER_DISPLAY_ID);                 // charter display id
         data << uint32(GUILD_CHARTER_COST);                 // charter cost
         data << uint32(0);                                  // unknown
-        data << uint32(sWorld->getIntConfig(CONFIG_MIN_PETITION_SIGNS)); // required signs
+        data << uint32(sGameConfig->GetIntConfig("MinPetitionSigns")); // required signs
     }
     else
     {

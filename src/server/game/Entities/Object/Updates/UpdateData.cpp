@@ -12,6 +12,7 @@
 #include "Opcodes.h"
 #include "World.h"
 #include "zlib.h"
+#include "GameConfig.h"
 
 UpdateData::UpdateData() : m_blockCount(0)
 {
@@ -44,7 +45,7 @@ void UpdateData::Compress(void* dst, uint32 *dst_size, void* src, int src_size)
     c_stream.opaque = (voidpf)0;
 
     // default Z_BEST_SPEED (1)
-    int z_res = deflateInit(&c_stream, sWorld->getIntConfig(CONFIG_COMPRESSION));
+    int z_res = deflateInit(&c_stream, sGameConfig->GetIntConfig("Compression"));
     if (z_res != Z_OK)
     {
         sLog->outError("Can't compress update packet (zlib: deflateInit) Error code: %i (%s)", z_res, zError(z_res));

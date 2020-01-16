@@ -18,12 +18,13 @@
 #include "ScriptMgr.h"
 #include "Opcodes.h"
 #include "GameTime.h"
+#include "GameConfig.h"
 
 /// Create the Weather object
 Weather::Weather(uint32 zone, WeatherData const* weatherChances)
     : m_zone(zone), m_weatherChances(weatherChances)
 {
-    m_timer.SetInterval(sWorld->getIntConfig(CONFIG_INTERVAL_CHANGEWEATHER));
+    m_timer.SetInterval(sGameConfig->GetIntConfig("ChangeWeatherInterval"));
     m_type = WEATHER_TYPE_FINE;
     m_grade = 0;
 

@@ -7,7 +7,6 @@
 #include "Common.h"
 #include "WorldPacket.h"
 #include "WorldSession.h"
-#include "World.h"
 #include "ObjectAccessor.h"
 #include "Log.h"
 #include "Opcodes.h"
@@ -17,6 +16,7 @@
 #include "SocialMgr.h"
 #include "Language.h"
 #include "AccountMgr.h"
+#include "GameConfig.h"
 
 void WorldSession::SendTradeStatus(TradeStatus status)
 {
@@ -569,9 +569,9 @@ void WorldSession::HandleInitiateTradeOpcode(WorldPacket& recvPacket)
         return;
     }
 
-    if (GetPlayer()->getLevel() < sWorld->getIntConfig(CONFIG_TRADE_LEVEL_REQ))
+    if (GetPlayer()->getLevel() < sGameConfig->GetIntConfig("LevelReq.Trade"))
     {
-        SendNotification(GetAcoreString(LANG_TRADE_REQ), sWorld->getIntConfig(CONFIG_TRADE_LEVEL_REQ));
+        SendNotification(GetAcoreString(LANG_TRADE_REQ), sGameConfig->GetIntConfig("LevelReq.Trade"));
         return;
     }
 
@@ -622,7 +622,7 @@ void WorldSession::HandleInitiateTradeOpcode(WorldPacket& recvPacket)
         return;
     }
 
-    if (!sWorld->getBoolConfig(CONFIG_ALLOW_TWO_SIDE_TRADE) && pOther->GetTeamId() != _player->GetTeamId())
+    if (!sGameConfig->GetBoolConfig("AllowTwoSide.trade") && pOther->GetTeamId() != _player->GetTeamId())
     {
         SendTradeStatus(TRADE_STATUS_WRONG_FACTION);
         return;
@@ -634,9 +634,9 @@ void WorldSession::HandleInitiateTradeOpcode(WorldPacket& recvPacket)
         return;
     }
 
-    if (pOther->getLevel() < sWorld->getIntConfig(CONFIG_TRADE_LEVEL_REQ))
+    if (pOther->getLevel() < sGameConfig->GetIntConfig("LevelReq.Trade"))
     {
-        SendNotification(GetAcoreString(LANG_TRADE_OTHER_REQ), sWorld->getIntConfig(CONFIG_TRADE_LEVEL_REQ));
+        SendNotification(GetAcoreString(LANG_TRADE_OTHER_REQ), sGameConfig->GetIntConfig("LevelReq.Trade"));
         return;
     }
 

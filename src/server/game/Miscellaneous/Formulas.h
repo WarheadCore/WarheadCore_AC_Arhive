@@ -12,6 +12,7 @@
 #include "ScriptMgr.h"
 #include "Player.h"
 #include "Creature.h"
+#include "GameConfig.h"
 
 namespace acore
 {
@@ -29,6 +30,7 @@ namespace acore
             return uint32(ceil(hk_honor_at_level_f(level, multiplier)));
         }
     }
+
     namespace XP
     {
         inline uint8 GetGrayLevel(uint8 pl_level)
@@ -173,7 +175,7 @@ namespace acore
                     // xpMod *= creature->GetCreatureTemplate()->ModExperience;
                 }
 
-                xpMod *= isBattleGround ? sWorld->getRate(RATE_XP_BG_KILL) : sWorld->getRate(RATE_XP_KILL);
+                xpMod *= isBattleGround ? sGameConfig->GetFloatConfig("Rate.XP.BattlegroundKill") : sGameConfig->GetFloatConfig("Rate.XP.Kill");
                 gain = uint32(gain * xpMod);
             }
 

@@ -131,14 +131,14 @@ void BattlegroundMgr::Update(uint32 diff)
         m_NextPeriodicQueueUpdateTime -= diff;
 
     // arena points auto-distribution
-    if (sWorld->getBoolConfig(CONFIG_ARENA_AUTO_DISTRIBUTE_POINTS))
+    if (sGameConfig->GetBoolConfig("Arena.AutoDistributePoints"))
     {
         if (m_AutoDistributionTimeChecker < diff)
         {
             if (GameTime::GetGameTime() > m_NextAutoDistributionTime)
             {
                 sArenaTeamMgr->DistributeArenaPoints();
-                m_NextAutoDistributionTime = m_NextAutoDistributionTime + BATTLEGROUND_ARENA_POINT_DISTRIBUTION_DAY * sWorld->getIntConfig(CONFIG_ARENA_AUTO_DISTRIBUTE_INTERVAL_DAYS);
+                m_NextAutoDistributionTime = m_NextAutoDistributionTime + BATTLEGROUND_ARENA_POINT_DISTRIBUTION_DAY * sGameConfig->GetIntConfig("Arena.AutoDistributeInterval");
                 sWorld->setWorldState(WS_ARENA_DISTRIBUTION_TIME, uint64(m_NextAutoDistributionTime));
             }
             m_AutoDistributionTimeChecker = 600000; // 10 minutes check
@@ -635,7 +635,7 @@ void BattlegroundMgr::CreateInitialBattlegrounds()
 
 void BattlegroundMgr::InitAutomaticArenaPointDistribution()
 {
-    if (!sWorld->getBoolConfig(CONFIG_ARENA_AUTO_DISTRIBUTE_POINTS))
+    if (!sGameConfig->GetBoolConfig("Arena.AutoDistributePoints"))
         return;
 
     time_t wstime = time_t(sWorld->getWorldState(WS_ARENA_DISTRIBUTION_TIME));
@@ -817,12 +817,12 @@ void BattlegroundMgr::ScheduleArenaQueueUpdate(uint32 arenaRatedTeamId, Battlegr
 
 uint32 BattlegroundMgr::GetRatingDiscardTimer() const
 {
-    return sWorld->getIntConfig(CONFIG_ARENA_RATING_DISCARD_TIMER);
+    return sGameConfig->GetIntConfig("Arena.RatingDiscardTimer");
 }
 
 uint32 BattlegroundMgr::GetPrematureFinishTime() const
 {
-    return sWorld->getIntConfig(CONFIG_BATTLEGROUND_PREMATURE_FINISH_TIMER);
+    return sGameConfig->GetIntConfig("Battleground.PrematureFinishTimer");
 }
 
 void BattlegroundMgr::LoadBattleMastersEntry()

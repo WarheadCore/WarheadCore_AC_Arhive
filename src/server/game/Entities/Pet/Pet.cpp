@@ -586,7 +586,7 @@ void Pet::GivePetXP(uint32 xp)
     if (!IsAlive())
         return;
 
-    uint8 maxlevel = std::min((uint8)sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL), GetOwner()->getLevel());
+    uint8 maxlevel = std::min((uint8)sGameConfig->GetIntConfig("MaxPlayerLevel"), GetOwner()->getLevel());
     uint8 petlevel = getLevel();
 
     // If pet is detected to be at, or above(?) the players level, don't hand out XP

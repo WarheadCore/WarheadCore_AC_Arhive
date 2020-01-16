@@ -11,7 +11,6 @@
 #include "SpellAuraDefines.h"
 #include "SharedDefines.h"
 #include "DBCStores.h"
-#include "World.h"
 #include "Chat.h"
 #include "Spell.h"
 #include "BattlegroundMgr.h"
@@ -22,6 +21,7 @@
 #include "InstanceScript.h"
 #include "Player.h"
 #include "GameGraveyard.h"
+#include "GameConfig.h"
 
 bool IsPrimaryProfessionSkill(uint32 skill)
 {
@@ -2627,22 +2627,26 @@ void SpellMgr::LoadSpellAreas()
         ++count;
     } while (result->NextRow());
 
-    if (sWorld->getIntConfig(CONFIG_ICC_BUFF_HORDE) > 0)
+    if (sGameConfig->GetIntConfig("ICC.Buff.Horde"))
     {
-        sLog->outString(">> Using ICC buff Horde: %u", sWorld->getIntConfig(CONFIG_ICC_BUFF_HORDE));
-        SpellArea spellAreaICCBuffHorde = { sWorld->getIntConfig(CONFIG_ICC_BUFF_HORDE),ICC_AREA,0,0,0,ICC_RACEMASK_HORDE,Gender(2),64,11,1 };
-        SpellArea const* saICCBuffHorde = &mSpellAreaMap.insert(SpellAreaMap::value_type(sWorld->getIntConfig(CONFIG_ICC_BUFF_HORDE), spellAreaICCBuffHorde))->second;
+        sLog->outString(">> Using ICC buff Horde: %u", sGameConfig->GetIntConfig("ICC.Buff.Horde"));
+
+        SpellArea spellAreaICCBuffHorde = { static_cast<uint32>(sGameConfig->GetIntConfig("ICC.Buff.Horde")), ICC_AREA, 0, 0, 0, ICC_RACEMASK_HORDE, Gender(2), 64, 11, 1 };
+        SpellArea const* saICCBuffHorde = &mSpellAreaMap.insert(SpellAreaMap::value_type(sGameConfig->GetIntConfig("ICC.Buff.Horde"), spellAreaICCBuffHorde))->second;
+
         mSpellAreaForAreaMap.insert(SpellAreaForAreaMap::value_type(ICC_AREA, saICCBuffHorde));
         ++count;
     }
     else
         sLog->outString(">> ICC buff Horde: disabled");
 
-    if (sWorld->getIntConfig(CONFIG_ICC_BUFF_ALLIANCE) > 0)
+    if (sGameConfig->GetIntConfig("ICC.Buff.Alliance"))
     {
-        sLog->outString(">> Using ICC buff Alliance: %u", sWorld->getIntConfig(CONFIG_ICC_BUFF_ALLIANCE));
-        SpellArea spellAreaICCBuffAlliance = { sWorld->getIntConfig(CONFIG_ICC_BUFF_ALLIANCE),ICC_AREA,0,0,0,ICC_RACEMASK_ALLIANCE,Gender(2),64,11,1 };
-        SpellArea const* saICCBuffAlliance = &mSpellAreaMap.insert(SpellAreaMap::value_type(sWorld->getIntConfig(CONFIG_ICC_BUFF_ALLIANCE), spellAreaICCBuffAlliance))->second;
+        sLog->outString(">> Using ICC buff Alliance: %u", sGameConfig->GetIntConfig("ICC.Buff.Alliance"));
+
+        SpellArea spellAreaICCBuffAlliance = { static_cast<uint32>(sGameConfig->GetIntConfig("ICC.Buff.Alliance")), ICC_AREA, 0, 0, 0, ICC_RACEMASK_ALLIANCE, Gender(2), 64, 11, 1 };
+        SpellArea const* saICCBuffAlliance = &mSpellAreaMap.insert(SpellAreaMap::value_type(sGameConfig->GetIntConfig("ICC.Buff.Alliance"), spellAreaICCBuffAlliance))->second;
+
         mSpellAreaForAreaMap.insert(SpellAreaForAreaMap::value_type(ICC_AREA, saICCBuffAlliance));
         ++count;
     }

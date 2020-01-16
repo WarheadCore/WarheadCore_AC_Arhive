@@ -36,6 +36,7 @@ Copied events should probably have a new owner
 #include "WorldSession.h"
 #include "GameEventMgr.h"
 #include "GameTime.h"
+#include "GameConfig.h"
 
 void WorldSession::HandleCalendarGetCalendar(WorldPacket& /*recvData*/)
 {
@@ -109,7 +110,7 @@ void WorldSession::HandleCalendarGetCalendar(WorldPacket& /*recvData*/)
     data.append(dataBuffer);
 
     // pussywizard
-    uint32 relationTime = sWorld->getIntConfig(CONFIG_INSTANCE_RESET_TIME_RELATIVE_TIMESTAMP) + sWorld->getIntConfig(CONFIG_INSTANCE_RESET_TIME_HOUR) * HOUR; // set point in time (default 29.12.2005) + X hours
+    uint32 relationTime = sGameConfig->GetIntConfig("Instance.ResetTimeRelativeTimestamp") + sGameConfig->GetIntConfig("Instance.ResetTimeHour") * HOUR; // set point in time (default 29.12.2005) + X hours
     data << uint32(relationTime);
 
     // Reuse variables
@@ -451,7 +452,7 @@ void WorldSession::HandleCalendarEventInvite(WorldPacket& recvData)
         return;
     }
 
-    if (_player->GetTeamId() != inviteeTeamId && !sWorld->getBoolConfig(CONFIG_ALLOW_TWO_SIDE_INTERACTION_CALENDAR))
+    if (_player->GetTeamId() != inviteeTeamId && !sGameConfig->GetBoolConfig("AllowTwoSide.Interaction.Calendar"))
     {
         sCalendarMgr->SendCalendarCommandResult(playerGuid, CALENDAR_ERROR_NOT_ALLIED);
         return;

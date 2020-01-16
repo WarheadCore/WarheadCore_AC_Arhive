@@ -349,24 +349,10 @@ class WorldSession
         void ResetClientTimeDelay() { m_clientTimeDelay = 0; }
 
         std::atomic<time_t> m_timeOutTime;
-        void UpdateTimeOutTime(uint32 diff)
-        {
-            if (time_t(diff) > m_timeOutTime)
-                m_timeOutTime = 0;
-            else
-                m_timeOutTime -= diff;
-        }
-        void ResetTimeOutTime(bool onlyActive)
-        {
-            if (GetPlayer())
-                m_timeOutTime = int32(sWorld->getIntConfig(CONFIG_SOCKET_TIMEOUTTIME_ACTIVE));
-            else if (!onlyActive)
-                m_timeOutTime = int32(sWorld->getIntConfig(CONFIG_SOCKET_TIMEOUTTIME));
-        }
-        bool IsConnectionIdle() const
-        {
-            return (m_timeOutTime <= 0 && !m_inQueue);
-        }
+
+        void UpdateTimeOutTime(uint32 diff);
+        void ResetTimeOutTime(bool onlyActive);
+        bool IsConnectionIdle() const;
 
         // Recruit-A-Friend Handling
         uint32 GetRecruiterId() const { return recruiterId; }

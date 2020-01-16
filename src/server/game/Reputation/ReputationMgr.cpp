@@ -9,10 +9,10 @@
 #include "DBCStores.h"
 #include "Player.h"
 #include "WorldPacket.h"
-#include "World.h"
 #include "ObjectMgr.h"
 #include "ScriptMgr.h"
 #include "Opcodes.h"
+#include "GameConfig.h"
 
 const int32 ReputationMgr::PointsInRank[MAX_REPUTATION_RANK] = {36000, 3000, 3000, 3000, 6000, 12000, 21000, 1000};
 
@@ -354,7 +354,7 @@ bool ReputationMgr::SetOneFactionReputation(FactionEntry const* factionEntry, in
         if (incremental)
         {
             // int32 *= float cause one point loss?
-            standing = int32(floor((float)standing * sWorld->getRate(RATE_REPUTATION_GAIN) + 0.5f));
+            standing = int32(floor((float)standing * sGameConfig->GetFloatConfig("Rate.Reputation.Gain") + 0.5f));
             standing += itr->second.Standing + BaseRep;
         }
 

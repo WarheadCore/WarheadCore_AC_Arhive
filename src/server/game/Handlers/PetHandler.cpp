@@ -16,13 +16,13 @@
 #include "CreatureAI.h"
 #include "Util.h"
 #include "Pet.h"
-#include "World.h"
 #include "Group.h"
 #include "SpellInfo.h"
 #include "Player.h"
 #include "Chat.h"
 #include "DisableMgr.h"
 #include "GameTime.h"
+#include "GameConfig.h"
 
 class LoadPetFromDBQueryHolder : public SQLQueryHolder
 {
@@ -1180,7 +1180,7 @@ void WorldSession::HandlePetRename(WorldPacket & recvData)
     SQLTransaction trans = CharacterDatabase.BeginTransaction();
     if (isdeclined)
     {
-        if (sWorld->getBoolConfig(CONFIG_DECLINED_NAMES_USED))
+        if (sGameConfig->GetBoolConfig("DeclinedNames"))
         {
             PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_PET_DECLINEDNAME);
             stmt->setUInt32(0, pet->GetCharmInfo()->GetPetNumber());

@@ -18,6 +18,7 @@ EndScriptData */
 #include "Player.h"
 #include "Pet.h"
 #include "ScriptMgr.h"
+#include "GameConfig.h"
 
 class reset_commandscript : public CommandScript
 {
@@ -119,8 +120,8 @@ public:
 
         // set starting level
         uint32 startLevel = target->getClass() != CLASS_DEATH_KNIGHT
-            ? sWorld->getIntConfig(CONFIG_START_PLAYER_LEVEL)
-            : sWorld->getIntConfig(CONFIG_START_HEROIC_PLAYER_LEVEL);
+            ? sGameConfig->GetIntConfig("StartPlayerLevel")
+            : sGameConfig->GetIntConfig("StartHeroicPlayerLevel");
 
         target->_ApplyAllLevelScaleItemMods(false);
         target->SetLevel(startLevel);

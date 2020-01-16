@@ -10,7 +10,6 @@
 #include "WorldPacket.h"
 #include "WorldSession.h"
 #include "DatabaseEnv.h"
-
 #include "AccountMgr.h"
 #include "CellImpl.h"
 #include "Chat.h"
@@ -23,6 +22,7 @@
 #include "SpellMgr.h"
 #include "ScriptMgr.h"
 #include "ChatLink.h"
+#include "GameConfig.h"
 
 #ifdef ELUNA
 #include "LuaEngine.h"
@@ -110,7 +110,7 @@ bool ChatHandler::HasLowerSecurityAccount(WorldSession* target, uint32 target_ac
         return false;
 
     // ignore only for non-players for non strong checks (when allow apply command at least to same sec level)
-    if (!AccountMgr::IsPlayerAccount(m_session->GetSecurity()) && !strong && !sWorld->getBoolConfig(CONFIG_GM_LOWER_SECURITY))
+    if (!AccountMgr::IsPlayerAccount(m_session->GetSecurity()) && !strong && !sGameConfig->GetBoolConfig("GM.LowerSecurity"))
         return false;
 
     if (target)
@@ -404,7 +404,7 @@ bool ChatHandler::ParseCommands(char const* text)
 
     std::string fullcmd = text;
 
-    if (m_session && AccountMgr::IsPlayerAccount(m_session->GetSecurity()) && !sWorld->getBoolConfig(CONFIG_ALLOW_PLAYER_COMMANDS))
+    if (m_session && AccountMgr::IsPlayerAccount(m_session->GetSecurity()) && !sGameConfig->GetBoolConfig("AllowPlayerCommands"))
        return false;
 
     /// chat case (.command or !command format)
@@ -461,7 +461,7 @@ Valid examples:
         return false;
 
     // more simple checks
-    if (sWorld->getIntConfig(CONFIG_CHAT_STRICT_LINK_CHECKING_SEVERITY) < 3)
+    if (sGameConfig->GetIntConfig("ChatStrictLinkChecking.Severity") < 3)
     {
         const char validSequence[6] = "cHhhr";
         const char* validSequenceIterator = validSequence;
@@ -482,7 +482,7 @@ Valid examples:
 
             ++message;
             // validate sequence
-            if (sWorld->getIntConfig(CONFIG_CHAT_STRICT_LINK_CHECKING_SEVERITY) == 2)
+            if (sGameConfig->GetIntConfig("ChatStrictLinkChecking.Severity") == 2)
             {
                 if (commandChar == *validSequenceIterator)
                 {

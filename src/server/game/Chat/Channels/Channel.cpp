@@ -13,6 +13,7 @@
 #include "AccountMgr.h"
 #include "Player.h"
 #include "GameTime.h"
+#include "GameConfig.h"
 
 Channel::Channel(std::string const& name, uint32 channelId, uint32 channelDBId, TeamId teamId, bool announce, bool ownership):
     _announce(announce),
@@ -69,7 +70,7 @@ Channel::Channel(std::string const& name, uint32 channelId, uint32 channelDBId, 
             return;
 
         // If storing custom channels in the db is enabled either load or save the channel
-        if (sWorld->getBoolConfig(CONFIG_PRESERVE_CUSTOM_CHANNELS))
+        if (sGameConfig->GetBoolConfig("PreserveCustomChannels"))
         {
             _channelDBId = ++ChannelMgr::_channelIdMax;
 
@@ -131,12 +132,12 @@ void Channel::RemoveChannelBanFromDB(uint32 guid) const
 
 void Channel::CleanOldChannelsInDB()
 {
-    if (sWorld->getIntConfig(CONFIG_PRESERVE_CUSTOM_CHANNEL_DURATION) > 0)
+    if (sGameConfig->GetIntConfig("PreserveCustomChannelDuration") > 0)
     {
         SQLTransaction trans = CharacterDatabase.BeginTransaction();
 
         PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_OLD_CHANNELS);
-        stmt->setUInt32(0, sWorld->getIntConfig(CONFIG_PRESERVE_CUSTOM_CHANNEL_DURATION) * DAY);
+        stmt->setUInt32(0, sGameConfig->GetIntConfig("PreserveCustomChannelDuration") * DAY);
         trans->Append(stmt);
 
         stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_OLD_CHANNELS_BANS);
@@ -178,7 +179,7 @@ void Channel::JoinChannel(Player* player, std::string const& pass)
     }
 
     if (HasFlag(CHANNEL_FLAG_LFG) &&
-        sWorld->getBoolConfig(CONFIG_RESTRICTED_LFG_CHANNEL) &&
+        sGameConfig->GetBoolConfig("Channel.RestrictedLfg") &&
         AccountMgr::IsPlayerAccount(player->GetSession()->GetSecurity()) &&
         player->GetGroup())
     {
@@ -191,7 +192,7 @@ void Channel::JoinChannel(Player* player, std::string const& pass)
     player->JoinedChannel(this);
 
     if (_announce && (!AccountMgr::IsGMAccount(player->GetSession()->GetSecurity()) ||
-                       !sWorld->getBoolConfig(CONFIG_SILENTLY_GM_JOIN_TO_CHANNEL)))
+                       !sGameConfig->GetBoolConfig("Channel.SilentlyGMJoin")))
     {
         WorldPacket data;
         MakeJoined(&data, guid);
@@ -231,7 +232,7 @@ void Channel::JoinChannel(Player* player, std::string const& pass)
 
         // If the channel has no owner yet and ownership is allowed, set the new owner.
         // If the channel owner is a GM and the config SilentGMJoinChannel is enabled, set the new owner
-        if ((!_ownerGUID || (_isOwnerGM && sWorld->getBoolConfig(CONFIG_SILENTLY_GM_JOIN_TO_CHANNEL))) && _ownership)
+        if ((!_ownerGUID || (_isOwnerGM && sGameConfig->GetBoolConfig("Channel.SilentlyGMJoin"))) && _ownership)
         {
             _isOwnerGM = playersStore[guid].IsOwnerGM();
             SetOwner(guid, false);
@@ -269,7 +270,7 @@ void Channel::LeaveChannel(Player* player, bool send)
 
     playersStore.erase(guid);
     if (_announce && (!AccountMgr::IsGMAccount(player->GetSession()->GetSecurity()) ||
-                       !sWorld->getBoolConfig(CONFIG_SILENTLY_GM_JOIN_TO_CHANNEL)))
+                       !sGameConfig->GetBoolConfig("Channel.SilentlyGMJoin")))
     {
         WorldPacket data;
         MakeLeft(&data, guid);
@@ -412,7 +413,7 @@ void Channel::KickOrBan(Player const* player, std::string const& badname, bool b
         }
     }
 
-    bool notify = !(AccountMgr::IsGMAccount(sec) && sWorld->getBoolConfig(CONFIG_SILENTLY_GM_JOIN_TO_CHANNEL));
+    bool notify = !(AccountMgr::IsGMAccount(sec) && sGameConfig->GetBoolConfig("Channel.SilentlyGMJoin"));
 
     if (ban)
     {
@@ -597,7 +598,7 @@ void Channel::SetMode(Player const* player, std::string const& p2n, bool mod, bo
         // allow make moderator from another team only if both is GMs
         // at this moment this only way to show channel post for GM from another team
         ((!AccountMgr::IsGMAccount(sec) || !AccountMgr::IsGMAccount(newp->GetSession()->GetSecurity())) && player->GetTeamId() != newp->GetTeamId() && 
-        !sWorld->getBoolConfig(CONFIG_ALLOW_TWO_SIDE_INTERACTION_CHANNEL)))
+        !sGameConfig->GetBoolConfig("AllowTwoSide.Interaction.Channel")))
     {
         WorldPacket data;
         MakePlayerNotFound(&data, p2n);
@@ -663,7 +664,7 @@ void Channel::SetOwner(Player const* player, std::string const& newname)
     uint64 victim = newp ? newp->GetGUID() : 0;
 
     if (!victim || !IsOn(victim) || (newp->GetTeamId() != player->GetTeamId() &&
-        !sWorld->getBoolConfig(CONFIG_ALLOW_TWO_SIDE_INTERACTION_CHANNEL)))
+        !sGameConfig->GetBoolConfig("AllowTwoSide.Interaction.Channel")))
     {
         WorldPacket data;
         MakePlayerNotFound(&data, newname);
@@ -768,7 +769,7 @@ void Channel::Say(uint64 guid, std::string const& what, uint32 lang)
     if (what.empty())
         return;
 
-    if (sWorld->getBoolConfig(CONFIG_ALLOW_TWO_SIDE_INTERACTION_CHANNEL))
+    if (sGameConfig->GetBoolConfig("AllowTwoSide.Interaction.Channel"))
         lang = LANG_UNIVERSAL;
 
     if (!IsOn(guid))
@@ -930,7 +931,7 @@ void Channel::SetOwner(uint64 guid, bool exclaim)
         if (player)
         {
             uint32 sec = player->GetSession()->GetSecurity();
-            notify = !(AccountMgr::IsGMAccount(sec) && sWorld->getBoolConfig(CONFIG_SILENTLY_GM_JOIN_TO_CHANNEL));
+            notify = !(AccountMgr::IsGMAccount(sec) && sGameConfig->GetBoolConfig("Channel.SilentlyGMJoin"));
         }
 
         WorldPacket data;

@@ -7,10 +7,10 @@
 #include "Channel.h"
 #include "Guild.h"
 #include "Group.h"
+#include "GameConfig.h"
 
 enum IPLoggingTypes
 {
-
     // AccountActionIpLogger();
     ACCOUNT_LOGIN = 0,
     ACCOUNT_FAIL_LOGIN = 1,
@@ -79,7 +79,7 @@ public:
      // ACCOUNT_LOGOUT = 6
     void AccountIPLogAction(uint32 accountId, IPLoggingTypes aType)
     {
-        if (!sWorld->getBoolConfig(CONFIG_IP_BASED_ACTION_LOGGING))
+        if (!sGameConfig->GetBoolConfig("Allow.IP.Based.Action.Logging"))
             return;
 
         // Action IP Logger is only intialized if config is set up
@@ -187,7 +187,7 @@ public:
     /// Logs a number of actions done by players with an IP
     void CharacterIPLogAction(Player* player, IPLoggingTypes aType)
     {
-        if (!sWorld->getBoolConfig(CONFIG_IP_BASED_ACTION_LOGGING))
+        if (!sGameConfig->GetBoolConfig("Allow.IP.Based.Action.Logging"))
             return;
 
         // Action IP Logger is only intialized if config is set up
@@ -259,7 +259,7 @@ public:
 
     void DeleteIPLogAction(uint64 guid, uint32 playerGuid, IPLoggingTypes aType)
     {
-        if (!sWorld->getBoolConfig(CONFIG_IP_BASED_ACTION_LOGGING))
+        if (!sGameConfig->GetBoolConfig("Allow.IP.Based.Action.Logging"))
             return;
 
         // Action IP Logger is only intialized if config is set up

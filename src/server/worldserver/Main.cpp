@@ -32,6 +32,7 @@
 #include "AsyncAuctionListing.h"
 #include "DatabaseLoader.h"
 #include "ScriptLoader.h"
+#include "GameConfig.h"
 #include <ace/Sig_Handler.h>
 
 #ifdef ELUNA
@@ -483,7 +484,7 @@ extern int main(int argc, char** argv)
     }
 
     ///- Launch the world listener socket
-    uint16 worldPort = uint16(sWorld->getIntConfig(CONFIG_PORT_WORLD));
+    uint16 worldPort = uint16(sGameConfig->GetIntConfig("WorldServerPort"));
     std::string bindIp = sConfigMgr->GetStringDefault("BindIP", "0.0.0.0");
     if (sWorldSocketMgr->StartNetwork(worldPort, bindIp.c_str()) == -1)
     {
