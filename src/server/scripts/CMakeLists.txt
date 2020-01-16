@@ -16,12 +16,6 @@ CU_SET_PATH("AC_SCRIPTS_DIR" "${CMAKE_CURRENT_LIST_DIR}")
 
 message(STATUS "SCRIPT PREPARATIONS")
 
-set("AC_DEF_SCRIPTS_LIST" "")
-
-macro(AC_ADD_DEF_SCRIPT_LOADER script_dec)
-  set("AC_DEF_SCRIPTS_LIST" "void Add${script_dec}Scripts();${AC_DEF_SCRIPTS_LIST}")
-endmacro()
-
 macro(PrepareScripts name out)
   file(GLOB_RECURSE found
     ${name}/*.h

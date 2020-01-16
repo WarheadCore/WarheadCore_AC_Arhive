@@ -45,3 +45,21 @@ MACRO(AC_ADD_CONFIG_FILE configFilePath)
     CU_GET_GLOBAL("MODULE_CONFIG_FILE_LIST")
     CU_ADD_GLOBAL("MODULE_CONFIG_FILE_LIST" "${configFilePath}")
 ENDMACRO()
+
+macro(AC_ADD_DEF_SCRIPT_LOADER script_dec)
+    CU_GET_GLOBAL("AC_DEF_SCRIPTS_LIST")
+    CU_ADD_GLOBAL("AC_DEF_SCRIPTS_LIST" "void Add${script_dec}Scripts();")
+endmacro()
+
+macro(AC_ADD_MODULES_SOURCE scriptName)
+    CU_SUBDIRLIST(sub_DIRS ${CMAKE_CURRENT_LIST_DIR}/src/ TRUE TRUE)
+    
+    FOREACH(subdir ${sub_DIRS})
+    file(GLOB sources "${subdir}/*.cpp" "${subdir}/*.h")
+        CU_LIST_ADD_CACHE(scripts_STAT_SRCS "${sources}")
+    ENDFOREACH()
+
+    AC_ADD_DEF_SCRIPT_LOADER("${scriptName}")
+    AC_ADD_SCRIPT_LOADER("${scriptName}" "")
+    message(STATUS "  -> Prepared module script: ${scriptName}")
+ENDMACRO()

@@ -7,7 +7,7 @@
 // Added modules includes
 @AC_SCRIPTS_INCLUDES@
 
-// Add default scripts
+// Add scripts defines
 @AC_SCRIPTS_LIST@
 
 void AddScripts()
