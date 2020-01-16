@@ -284,8 +284,6 @@ void ScriptMgr::LoadDatabase()
 
     ASSERT(_script_loader_callback,
            "Script loader callback wasn't registered!");
-
-    _script_loader_callback();
 }
 
 void ScriptMgr::CheckIfScriptsInDatabaseExist()
