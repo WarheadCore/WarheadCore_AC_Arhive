@@ -31,6 +31,7 @@ EndScriptData */
 #include "WaypointManager.h"
 #include "GameGraveyard.h"
 #include "GameConfig.h"
+#include "GameLocale.h"
 
 class reload_commandscript : public CommandScript
 {
@@ -721,7 +722,7 @@ public:
     static bool HandleReloadAcoreStringCommand(ChatHandler* handler, const char* /*args*/)
     {
         sLog->outString("Re-Loading acore_string Table!");
-        sObjectMgr->LoadAcoreStrings();
+        sGameLocale->LoadAcoreStrings();
         handler->SendGlobalGMSysMessage("DB table `acore_string` reloaded.");
         return true;
     }

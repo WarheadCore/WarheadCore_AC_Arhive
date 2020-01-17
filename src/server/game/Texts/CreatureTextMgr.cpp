@@ -14,6 +14,7 @@
 #include "GridNotifiersImpl.h"
 #include "CreatureTextMgr.h"
 #include "GameConfig.h"
+#include "GameLocale.h"
 
 class CreatureTextBuilder
 {
@@ -182,7 +183,7 @@ void CreatureTextMgr::LoadCreatureTextLocales()
         if (locale == LOCALE_enUS)
             continue;
 
-        ObjectMgr::AddLocaleString(Text, locale, data.Text);
+        sGameLocale->AddLocaleString(Text, locale, data.Text);
 
     } while (result->NextRow());
 
@@ -492,7 +493,7 @@ std::string CreatureTextMgr::GetLocalizedChatString(uint32 entry, uint8 gender, 
     {
         LocaleCreatureTextMap::const_iterator locItr = mLocaleTextMap.find(CreatureTextId(entry, uint32(textGroup), id));
         if (locItr != mLocaleTextMap.end())
-            ObjectMgr::GetLocaleString(locItr->second.Text, locale, baseText);
+            sGameLocale->GetLocaleString(locItr->second.Text, locale, baseText);
     }
 
     return baseText;

@@ -26,6 +26,7 @@
 #include "SmartScript.h"
 #include "SpellMgr.h"
 #include "Vehicle.h"
+#include "GameLocale.h"
 
 class AcoreStringTextBuilder
 {
@@ -37,7 +38,7 @@ public:
 
     size_t operator()(WorldPacket* data, LocaleConstant locale) const
     {
-        std::string text = sObjectMgr->GetAcoreString(_textId, locale);
+        std::string text = sGameLocale->GetAcoreString(_textId, locale);
         return ChatHandler::BuildChatPacket(*data, _msgType, Language(_language), _source, _target, text, 0, "", locale);
     }
 

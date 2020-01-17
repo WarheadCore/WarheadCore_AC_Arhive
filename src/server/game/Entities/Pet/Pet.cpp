@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
  * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
@@ -22,6 +22,7 @@
 #include "Battleground.h"
 #include "InstanceScript.h"
 #include "ArenaSpectator.h"
+#include "GameLocale.h"
 
 #define PET_XP_FACTOR 0.05f
 
@@ -656,7 +657,7 @@ bool Pet::CreateBaseAtCreature(Creature* creature)
     if (CreatureFamilyEntry const* cFamily = sCreatureFamilyStore.LookupEntry(cinfo->family))
         SetName(cFamily->Name[sWorld->GetDefaultDbcLocale()]);
     else
-        SetName(creature->GetNameForLocaleIdx(sObjectMgr->GetDBCLocaleIndex()));
+        SetName(creature->GetNameForLocaleIdx(sGameLocale->GetDBCLocaleIndex()));
 
     return true;
 }

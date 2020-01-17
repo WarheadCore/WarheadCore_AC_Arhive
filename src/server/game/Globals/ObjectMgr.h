@@ -484,11 +484,6 @@ typedef std::unordered_map<uint32/*(mapid, spawnMode) pair*/, CellObjectGuidsMap
 // Acore Trainer Reference start range
 #define ACORE_TRAINER_START_REF      200000
 
-struct AcoreString
-{
-    StringVector Content;
-};
-
 typedef std::map<uint64, uint64> LinkedRespawnContainer;
 typedef std::unordered_map<uint32, CreatureData> CreatureDataContainer;
 typedef std::unordered_map<uint32, GameObjectData> GameObjectDataContainer;
@@ -502,7 +497,6 @@ typedef std::unordered_map<uint32, QuestOfferRewardLocale> QuestOfferRewardLocal
 typedef std::unordered_map<uint32, QuestRequestItemsLocale> QuestRequestItemsLocaleContainer;
 typedef std::unordered_map<uint32, NpcTextLocale> NpcTextLocaleContainer;
 typedef std::unordered_map<uint32, PageTextLocale> PageTextLocaleContainer;
-typedef std::unordered_map<int32, AcoreString> AcoreStringContainer;
 typedef std::unordered_map<uint32, GossipMenuItemsLocale> GossipMenuItemsLocaleContainer;
 typedef std::unordered_map<uint32, PointOfInterestLocale> PointOfInterestLocaleContainer;
 
@@ -1214,19 +1208,6 @@ class ObjectMgr
         GameObjectData& NewGOData(uint32 guid) { return _gameObjectDataStore[guid]; }
         void DeleteGOData(uint32 guid);
 
-	    AcoreString const* GetAcoreString(uint32 entry) const
-        {
-            AcoreStringContainer::const_iterator itr = _acoreStringStore.find(entry);
-            if (itr == _acoreStringStore.end())
-                return NULL;
-
-            return &itr->second;
-        }
-        char const* GetAcoreString(uint32 entry, LocaleConstant locale) const;
-        char const* GetAcoreStringForDBCLocale(uint32 entry) const { return GetAcoreString(entry, DBCLocaleIndex); }
-        LocaleConstant GetDBCLocaleIndex() const { return DBCLocaleIndex; }
-        void SetDBCLocaleIndex(LocaleConstant locale) { DBCLocaleIndex = locale; }
-
         void AddCorpseCellData(uint32 mapid, uint32 cellid, uint32 player_guid, uint32 instance);
         void DeleteCorpseCellData(uint32 mapid, uint32 cellid, uint32 player_guid);
 
@@ -1312,13 +1293,8 @@ class ObjectMgr
         {
             return _gossipMenuItemsStore.equal_range(uiMenuId);
         }
-
-        static void AddLocaleString(std::string const& s, LocaleConstant locale, StringVector& data);
-        static inline void GetLocaleString(const StringVector& data, int loc_idx, std::string& value)
-        {
-            if (data.size() > size_t(loc_idx) && !data[loc_idx].empty())
-                value = data[loc_idx];
-        }
+        
+        
 
         CharacterConversionMap FactionChangeAchievements;
         CharacterConversionMap FactionChangeItems;
@@ -1404,8 +1380,6 @@ class ObjectMgr
         VehicleAccessoryContainer _vehicleTemplateAccessoryStore;
         VehicleAccessoryContainer _vehicleAccessoryStore;
 
-        LocaleConstant DBCLocaleIndex;
-
         PageTextContainer _pageTextStore;
         InstanceTemplateContainer _instanceTemplateStore;
 
@@ -1462,10 +1436,8 @@ class ObjectMgr
         GameObjectDataContainer _gameObjectDataStore;
         GameObjectLocaleContainer _gameObjectLocaleStore;
         GameObjectTemplateContainer _gameObjectTemplateStore;
-        GameObjectTemplateAddonContainer _gameObjectTemplateAddonStore;
-        /// Stores temp summon data grouped by summoner's entry, summoner's type and group id
-        TempSummonDataContainer _tempSummonDataStore;
-
+        GameObjectTemplateAddonContainer _gameObjectTemplateAddonStore;        
+        TempSummonDataContainer _tempSummonDataStore; /// Stores temp summon data grouped by summoner's entry, summoner's type and group id
         BroadcastTextContainer _broadcastTextStore;
         ItemTemplateContainer _itemTemplateStore;
         std::vector<ItemTemplate*> _itemTemplateStoreFast; // pussywizard
@@ -1475,11 +1447,9 @@ class ObjectMgr
         QuestOfferRewardLocaleContainer _questOfferRewardLocaleStore;
         QuestRequestItemsLocaleContainer _questRequestItemsLocaleStore;
         NpcTextLocaleContainer _npcTextLocaleStore;
-        PageTextLocaleContainer _pageTextLocaleStore;
-        AcoreStringContainer _acoreStringStore;
+        PageTextLocaleContainer _pageTextLocaleStore;        
         GossipMenuItemsLocaleContainer _gossipMenuItemsLocaleStore;
         PointOfInterestLocaleContainer _pointOfInterestLocaleStore;
-
         CacheVendorItemContainer _cacheVendorItemStore;
         CacheTrainerSpellContainer _cacheTrainerSpellStore;
 

@@ -31,6 +31,7 @@
 #include "GameGraveyard.h"
 #include "GameTime.h"
 #include "GameConfig.h"
+#include "GameLocale.h"
 
 #define GOSSIP_HELLO_DEMO1  "Build catapult."
 #define GOSSIP_HELLO_DEMO2  "Build demolisher."
@@ -213,7 +214,7 @@ class npc_wg_spirit_guide : public CreatureScript
             GraveyardVect graveyard = wintergrasp->GetGraveyardVector();
             for (uint8 i = 0; i < graveyard.size(); i++)
                 if (graveyard[i]->GetControlTeamId() == player->GetTeamId())
-                    AddGossipItemFor(player, GOSSIP_ICON_CHAT, sObjectMgr->GetAcoreStringForDBCLocale(((BfGraveyardWG*)graveyard[i])->GetTextId()), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + i);
+                    AddGossipItemFor(player, GOSSIP_ICON_CHAT, sGameLocale->GetAcoreStringForDBCLocale(((BfGraveyardWG*)graveyard[i])->GetTextId()), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + i);
 
             SendGossipMenuFor(player, player->GetGossipTextId(creature), creature->GetGUID());
             return true;

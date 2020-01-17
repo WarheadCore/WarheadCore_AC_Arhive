@@ -19,6 +19,7 @@
 #include "Pet.h"
 #include "MapManager.h"
 #include "GameTime.h"
+#include "GameLocale.h"
 
 void WorldSession::SendNameQueryOpcode(uint64 guid)
 {
@@ -100,8 +101,8 @@ void WorldSession::HandleCreatureQueryOpcode(WorldPacket & recvData)
         {
             if (CreatureLocale const* cl = sObjectMgr->GetCreatureLocale(entry))
             {
-                ObjectMgr::GetLocaleString(cl->Name, loc_idx, Name);
-                ObjectMgr::GetLocaleString(cl->Title, loc_idx, Title);
+                sGameLocale->GetLocaleString(cl->Name, loc_idx, Name);
+                sGameLocale->GetLocaleString(cl->Title, loc_idx, Title);
             }
         }
                                                             // guess size
@@ -173,8 +174,8 @@ void WorldSession::HandleGameObjectQueryOpcode(WorldPacket & recvData)
         if (localeConstant >= LOCALE_enUS)
             if (GameObjectLocale const* gameObjectLocale = sObjectMgr->GetGameObjectLocale(entry))
             {
-                ObjectMgr::GetLocaleString(gameObjectLocale->Name, localeConstant, Name);
-                ObjectMgr::GetLocaleString(gameObjectLocale->CastBarCaption, localeConstant, CastBarCaption);
+                sGameLocale->GetLocaleString(gameObjectLocale->Name, localeConstant, Name);
+                sGameLocale->GetLocaleString(gameObjectLocale->CastBarCaption, localeConstant, CastBarCaption);
             }
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
@@ -329,8 +330,8 @@ void WorldSession::HandleNpcTextQueryOpcode(WorldPacket & recvData)
             {
                 if (NpcTextLocale const* npcTextLocale = sObjectMgr->GetNpcTextLocale(textID))
                 {
-                    ObjectMgr::GetLocaleString(npcTextLocale->Text_0[i], locale, text0[i]);
-                    ObjectMgr::GetLocaleString(npcTextLocale->Text_1[i], locale, text1[i]);
+                    sGameLocale->GetLocaleString(npcTextLocale->Text_0[i], locale, text0[i]);
+                    sGameLocale->GetLocaleString(npcTextLocale->Text_1[i], locale, text1[i]);
                 }
             }
 
@@ -394,7 +395,7 @@ void WorldSession::HandlePageTextQueryOpcode(WorldPacket & recvData)
             int loc_idx = GetSessionDbLocaleIndex();
             if (loc_idx >= 0)
                 if (PageTextLocale const* player = sObjectMgr->GetPageTextLocale(pageID))
-                    ObjectMgr::GetLocaleString(player->Text, loc_idx, Text);
+                    sGameLocale->GetLocaleString(player->Text, loc_idx, Text);
             
             data << Text;
             data << uint32(pageText->NextPage);

@@ -28,6 +28,7 @@ EndContentData */
 #include "WaypointManager.h"
 #include "PassiveAI.h"
 #include "CombatAI.h"
+#include "GameLocale.h"
 
 // Ours
 enum songOfWindandWater
@@ -1454,10 +1455,10 @@ public:
                 switch (GetSpellInfo()->Id)
                 {
                     case SPELL_CORRECT_TRACKS:
-                        player->MonsterSay(sObjectMgr->GetAcoreStringForDBCLocale(SAY_CORRECT_TRACKS), LANG_UNIVERSAL, player);
+                        player->MonsterSay(sGameLocale->GetAcoreStringForDBCLocale(SAY_CORRECT_TRACKS), LANG_UNIVERSAL, player);
                         break;
                     case SPELL_INCORRECT_TRACKS:
-                        player->MonsterSay(sObjectMgr->GetAcoreStringForDBCLocale(SAY_INCORRECT_TRACKS), LANG_UNIVERSAL, player);
+                        player->MonsterSay(sGameLocale->GetAcoreStringForDBCLocale(SAY_INCORRECT_TRACKS), LANG_UNIVERSAL, player);
                         break;
                     default:
                         break;

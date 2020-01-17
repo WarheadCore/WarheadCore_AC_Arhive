@@ -38,6 +38,7 @@
 #include "World.h"
 #include "GameTime.h"
 #include "GameConfig.h"
+#include "GameLocale.h"
 
 ScriptMapMap sSpellScripts;
 ScriptMapMap sEventScripts;
@@ -222,8 +223,7 @@ ObjectMgr::ObjectMgr():
     _hiGoGuid(1),
     _hiDoGuid(1),
     _hiCorpseGuid(1),
-    _hiMoTransGuid(1),
-    DBCLocaleIndex(LOCALE_enUS)
+    _hiMoTransGuid(1)
 {
     for (uint8 i = 0; i < MAX_CLASSES; ++i)
     {
@@ -278,17 +278,6 @@ ObjectMgr* ObjectMgr::instance()
     return &instance;
 }
 
-void ObjectMgr::AddLocaleString(std::string const& s, LocaleConstant locale, StringVector& data)
-{
-    if (!s.empty())
-    {
-        if (data.size() <= size_t(locale))
-            data.resize(locale + 1);
-
-        data[locale] = s;
-    }
-}
-
 void ObjectMgr::LoadCreatureLocales()
 {
     uint32 oldMSTime = getMSTime();
@@ -314,8 +303,8 @@ void ObjectMgr::LoadCreatureLocales()
         if (locale == LOCALE_enUS)
             continue;
 
-        AddLocaleString(Name, locale, data.Name);
-        AddLocaleString(Title, locale, data.Title);
+        sGameLocale->AddLocaleString(Name, locale, data.Name);
+        sGameLocale->AddLocaleString(Title, locale, data.Title);
 
     } while (result->NextRow());
 
@@ -349,8 +338,8 @@ void ObjectMgr::LoadGossipMenuItemsLocales()
         if (locale == LOCALE_enUS)
             continue;
 
-        AddLocaleString(OptionText, locale, data.OptionText);
-        AddLocaleString(BoxText, locale, data.BoxText);
+        sGameLocale->AddLocaleString(OptionText, locale, data.OptionText);
+        sGameLocale->AddLocaleString(BoxText, locale, data.BoxText);
 
     } while (result->NextRow());
 
@@ -382,7 +371,7 @@ void ObjectMgr::LoadPointOfInterestLocales()
         if (locale == LOCALE_enUS)
             continue;
 
-        AddLocaleString(Name, locale, data.Name);
+        sGameLocale->AddLocaleString(Name, locale, data.Name);
 
     } while (result->NextRow());
 
@@ -2245,8 +2234,8 @@ void ObjectMgr::LoadItemLocales()
         if (locale == LOCALE_enUS)
             continue;
 
-        AddLocaleString(Name, locale, data.Name);
-        AddLocaleString(Description, locale, data.Description);
+        sGameLocale->AddLocaleString(Name, locale, data.Name);
+        sGameLocale->AddLocaleString(Description, locale, data.Description);
 
     } while (result->NextRow());
 
@@ -2872,7 +2861,7 @@ void ObjectMgr::LoadItemSetNameLocales()
         if (locale == LOCALE_enUS)
             continue;
 
-        AddLocaleString(Name, locale, data.Name);
+        sGameLocale->AddLocaleString(Name, locale, data.Name);
 
     } while (result->NextRow());
 
@@ -4609,14 +4598,14 @@ void ObjectMgr::LoadQuestLocales()
         if (locale == LOCALE_enUS)
             continue;
 
-        AddLocaleString(fields[2].GetString(), locale, data.Title);
-        AddLocaleString(fields[3].GetString(), locale, data.Details);
-        AddLocaleString(fields[4].GetString(), locale, data.Objectives);
-        AddLocaleString(fields[5].GetString(), locale, data.AreaDescription);
-        AddLocaleString(fields[6].GetString(), locale, data.CompletedText);
+        sGameLocale->AddLocaleString(fields[2].GetString(), locale, data.Title);
+        sGameLocale->AddLocaleString(fields[3].GetString(), locale, data.Details);
+        sGameLocale->AddLocaleString(fields[4].GetString(), locale, data.Objectives);
+        sGameLocale->AddLocaleString(fields[5].GetString(), locale, data.AreaDescription);
+        sGameLocale->AddLocaleString(fields[6].GetString(), locale, data.CompletedText);
 
         for (uint8 i = 0; i < 4; ++i)
-            AddLocaleString(fields[i + 7].GetString(), locale, data.ObjectiveText[i]);
+            sGameLocale->AddLocaleString(fields[i + 7].GetString(), locale, data.ObjectiveText[i]);
 
     } while (result->NextRow());
 
@@ -5240,7 +5229,7 @@ void ObjectMgr::LoadPageTextLocales()
         PageTextLocale& data    = _pageTextLocaleStore[ID];
         LocaleConstant locale   = GetLocaleByName(LocaleName);
 
-        AddLocaleString(Text, locale, data.Text);
+        sGameLocale->AddLocaleString(Text, locale, data.Text);
 
     } while (result->NextRow());
 
@@ -5498,8 +5487,8 @@ void ObjectMgr::LoadNpcTextLocales()
 
         for (uint8 i = 0; i < MAX_GOSSIP_TEXT_OPTIONS; ++i)
         {
-            AddLocaleString(fields[2 + i * 2].GetString(), locale, data.Text_0[i]);
-            AddLocaleString(fields[3 + i * 2].GetString(), locale, data.Text_1[i]);
+            sGameLocale->AddLocaleString(fields[2 + i * 2].GetString(), locale, data.Text_0[i]);
+            sGameLocale->AddLocaleString(fields[3 + i * 2].GetString(), locale, data.Text_1[i]);
         }
 
     } while (result->NextRow());
@@ -5718,7 +5707,7 @@ void ObjectMgr::LoadQuestOfferRewardLocale()
             continue;
 
         QuestOfferRewardLocale& data = _questOfferRewardLocaleStore[id];
-        AddLocaleString(fields[2].GetString(), locale, data.RewardText);
+        sGameLocale->AddLocaleString(fields[2].GetString(), locale, data.RewardText);
 
     } while (result->NextRow());
 
@@ -5748,7 +5737,7 @@ void ObjectMgr::LoadQuestRequestItemsLocale()
             continue;
 
         QuestRequestItemsLocale& data = _questRequestItemsLocaleStore[id];
-        AddLocaleString(fields[2].GetString(), locale, data.CompletionText);
+        sGameLocale->AddLocaleString(fields[2].GetString(), locale, data.CompletionText);
 
     } while (result->NextRow());
 
@@ -6410,8 +6399,8 @@ void ObjectMgr::LoadGameObjectLocales()
         if (locale == LOCALE_enUS)
             continue;
 
-        AddLocaleString(Name, locale, data.Name);
-        AddLocaleString(CastBarCaption, locale, data.CastBarCaption);
+        sGameLocale->AddLocaleString(Name, locale, data.Name);
+        sGameLocale->AddLocaleString(CastBarCaption, locale, data.CastBarCaption);
 
     } while (result->NextRow());
 
@@ -7761,55 +7750,6 @@ void ObjectMgr::LoadGameObjectForQuests()
     sLog->outString();
 }
 
-bool ObjectMgr::LoadAcoreStrings()
-{
-    uint32 oldMSTime = getMSTime();
-
-    _acoreStringStore.clear(); // for reload case
-    QueryResult result = WorldDatabase.PQuery("SELECT entry, content_default, content_loc1, content_loc2, content_loc3, content_loc4, content_loc5, content_loc6, content_loc7, content_loc8 FROM acore_string");
-    if (!result)
-    {
-        sLog->outString(">> Loaded 0 acore strings. DB table `acore_strings` is empty.");
-        sLog->outString();
-        return false;
-    }
-
-    do
-    {
-        Field* fields = result->Fetch();
-
-        uint32 entry = fields[0].GetUInt32();
-
-        AcoreString& data = _acoreStringStore[entry];
-
-        data.Content.resize(DEFAULT_LOCALE + 1);
-
-        for (uint8 i = 0; i < TOTAL_LOCALES; ++i)
-            AddLocaleString(fields[i + 1].GetString(), LocaleConstant(i), data.Content);
-
-    } while (result->NextRow());
-
-    sLog->outString(">> Loaded %u acore strings in %u ms", (uint32)_acoreStringStore.size(), GetMSTimeDiffToNow(oldMSTime));
-    sLog->outString();
-
-    return true;
-}
-
-char const* ObjectMgr::GetAcoreString(uint32 entry, LocaleConstant locale) const
-{
-    if (AcoreString const* ts = GetAcoreString(entry))
-    {
-        if (ts->Content.size() > size_t(locale) && !ts->Content[locale].empty())
-            return ts->Content[locale].c_str();
-
-        return ts->Content[DEFAULT_LOCALE].c_str();
-    }
-
-    sLog->outErrorDb("Trinity string entry %u not found in DB.", entry);
-
-    return "<error>";
-}
-
 void ObjectMgr::LoadFishingBaseSkillLevel()
 {
     uint32 oldMSTime = getMSTime();
@@ -8783,8 +8723,8 @@ void ObjectMgr::LoadBroadcastTextLocales()
         if (locale == LOCALE_enUS)
             continue;
 
-        AddLocaleString(MaleText, locale, bct->second.MaleText);
-        AddLocaleString(FemaleText, locale, bct->second.FemaleText);
+        sGameLocale->AddLocaleString(MaleText, locale, bct->second.MaleText);
+        sGameLocale->AddLocaleString(FemaleText, locale, bct->second.FemaleText);
     }
     while (result->NextRow());
 

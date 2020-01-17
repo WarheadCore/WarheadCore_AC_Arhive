@@ -13,6 +13,7 @@
 #include "Language.h"
 #include "World.h"
 #include "GameGraveyard.h"
+#include "GameLocale.h"
 
 OutdoorPvPNA::OutdoorPvPNA()
 {
@@ -123,9 +124,9 @@ void OPvPCapturePointNA::FactionTakeOver(TeamId teamId)
     if (m_ControllingFaction != TEAM_NEUTRAL)
         sGraveyard->RemoveGraveyardLink(NA_HALAA_GRAVEYARD, NA_HALAA_GRAVEYARD_ZONE, m_ControllingFaction, false);
     if (m_ControllingFaction == TEAM_ALLIANCE)
-        sWorld->SendZoneText(NA_HALAA_GRAVEYARD_ZONE, sObjectMgr->GetAcoreStringForDBCLocale(LANG_OPVP_NA_LOSE_A));
+        sWorld->SendZoneText(NA_HALAA_GRAVEYARD_ZONE, sGameLocale->GetAcoreStringForDBCLocale(LANG_OPVP_NA_LOSE_A));
     else if (m_ControllingFaction == TEAM_HORDE)
-        sWorld->SendZoneText(NA_HALAA_GRAVEYARD_ZONE, sObjectMgr->GetAcoreStringForDBCLocale(LANG_OPVP_NA_LOSE_H));
+        sWorld->SendZoneText(NA_HALAA_GRAVEYARD_ZONE, sGameLocale->GetAcoreStringForDBCLocale(LANG_OPVP_NA_LOSE_H));
 
     m_ControllingFaction = teamId;
     if (m_ControllingFaction != TEAM_NEUTRAL)
@@ -147,7 +148,7 @@ void OPvPCapturePointNA::FactionTakeOver(TeamId teamId)
         m_PvP->SendUpdateWorldState(NA_UI_HORDE_GUARDS_SHOW, 0);
         m_PvP->SendUpdateWorldState(NA_UI_ALLIANCE_GUARDS_SHOW, 1);
         m_PvP->SendUpdateWorldState(NA_UI_GUARDS_LEFT, m_GuardsAlive);
-        sWorld->SendZoneText(NA_HALAA_GRAVEYARD_ZONE, sObjectMgr->GetAcoreStringForDBCLocale(LANG_OPVP_NA_CAPTURE_A));
+        sWorld->SendZoneText(NA_HALAA_GRAVEYARD_ZONE, sGameLocale->GetAcoreStringForDBCLocale(LANG_OPVP_NA_CAPTURE_A));
     }
     else
     {
@@ -159,7 +160,7 @@ void OPvPCapturePointNA::FactionTakeOver(TeamId teamId)
         m_PvP->SendUpdateWorldState(NA_UI_HORDE_GUARDS_SHOW, 1);
         m_PvP->SendUpdateWorldState(NA_UI_ALLIANCE_GUARDS_SHOW, 0);
         m_PvP->SendUpdateWorldState(NA_UI_GUARDS_LEFT, m_GuardsAlive);
-        sWorld->SendZoneText(NA_HALAA_GRAVEYARD_ZONE, sObjectMgr->GetAcoreStringForDBCLocale(LANG_OPVP_NA_CAPTURE_H));
+        sWorld->SendZoneText(NA_HALAA_GRAVEYARD_ZONE, sGameLocale->GetAcoreStringForDBCLocale(LANG_OPVP_NA_CAPTURE_H));
     }
     UpdateWyvernRoostWorldState(NA_ROOST_S);
     UpdateWyvernRoostWorldState(NA_ROOST_N);

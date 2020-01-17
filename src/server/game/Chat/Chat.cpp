@@ -23,6 +23,7 @@
 #include "ScriptMgr.h"
 #include "ChatLink.h"
 #include "GameConfig.h"
+#include "GameLocale.h"
 
 #ifdef ELUNA
 #include "LuaEngine.h"
@@ -1219,7 +1220,7 @@ std::string ChatHandler::GetNameLink(Player* chr) const
 
 char const* CliHandler::GetAcoreString(uint32 entry) const
 {
-    return sObjectMgr->GetAcoreStringForDBCLocale(entry);
+    return sGameLocale->GetAcoreStringForDBCLocale(entry);
 }
 
 bool CliHandler::isAvailable(ChatCommand const& cmd) const
@@ -1295,5 +1296,5 @@ LocaleConstant CliHandler::GetSessionDbcLocale() const
 
 int CliHandler::GetSessionDbLocaleIndex() const
 {
-    return sObjectMgr->GetDBCLocaleIndex();
+    return sGameLocale->GetDBCLocaleIndex();
 }

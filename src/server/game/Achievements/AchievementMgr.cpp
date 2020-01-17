@@ -33,6 +33,7 @@
 #include "WorldPacket.h"
 #include "GameTime.h"
 #include "GameConfig.h"
+#include "GameLocale.h"
 
 namespace acore
 {
@@ -44,7 +45,7 @@ namespace acore
 
             void operator()(WorldPacket& data, LocaleConstant loc_idx)
             {
-                std::string text = sObjectMgr->GetAcoreString(i_textId, loc_idx);
+                std::string text = sGameLocale->GetAcoreString(i_textId, loc_idx);
                 ChatHandler::BuildChatPacket(data, i_msgtype, LANG_UNIVERSAL, &i_player, &i_player, text, i_achievementId);
             }
 
@@ -2917,8 +2918,8 @@ void AchievementGlobalMgr::LoadRewardLocales()
         if (locale == LOCALE_enUS)
             continue;
 
-        ObjectMgr::AddLocaleString(Subject, locale, data.Subject);
-        ObjectMgr::AddLocaleString(Text, locale, data.Text);
+        sGameLocale->AddLocaleString(Subject, locale, data.Subject);
+        sGameLocale->AddLocaleString(Text, locale, data.Text);
 
     } while (result->NextRow());
 

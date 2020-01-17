@@ -22,6 +22,7 @@
 #include "AsyncAuctionListing.h"
 #include "GameTime.h"
 #include "GameConfig.h"
+#include "GameLocale.h"
 #include <vector>
 
 enum eAuctionHouse
@@ -593,7 +594,7 @@ bool AuctionHouseObject::BuildListAuctionItems(WorldPacket& data, Player* player
             // local name
             if (loc_idx >= 0)
                 if (ItemLocale const* il = sObjectMgr->GetItemLocale(proto->ItemId))
-                    ObjectMgr::GetLocaleString(il->Name, loc_idx, name);
+                    sGameLocale->GetLocaleString(il->Name, loc_idx, name);
 
             // DO NOT use GetItemEnchantMod(proto->RandomProperty) as it may return a result
             //  that matches the search but it may not equal item->GetItemRandomPropertyId()

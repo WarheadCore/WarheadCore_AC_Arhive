@@ -80,6 +80,7 @@
 #include "GameTime.h"
 #include "UpdateTime.h"
 #include "GameConfig.h"
+#include "GameLocale.h"
 #include <VMapManager2.h>
 
 #ifdef ELUNA
@@ -911,7 +912,7 @@ void World::SetInitialWorldSettings()
     ///- Loading strings. Getting no records means core load has to be canceled because no error message can be output.
     sLog->outString();
     sLog->outString("Loading acore strings...");
-    if (!sObjectMgr->LoadAcoreStrings())
+    if (!sGameLocale->LoadAcoreStrings())
         exit(1);                                            // Error message displayed in function already
 
     ///- Update the realm entry in the database with the realm type from the config file
@@ -1008,7 +1009,7 @@ void World::SetInitialWorldSettings()
     sObjectMgr->LoadGossipMenuItemsLocales();
     sObjectMgr->LoadPointOfInterestLocales();
 
-    sObjectMgr->SetDBCLocaleIndex(GetDefaultDbcLocale());        // Get once for all the locale index of DBC language (console/broadcasts)
+    sGameLocale->SetDBCLocaleIndex(GetDefaultDbcLocale());        // Get once for all the locale index of DBC language (console/broadcasts)
     sLog->outString(">> Localization strings loaded in %u ms", GetMSTimeDiffToNow(oldMSTime));
     sLog->outString();
 
@@ -1866,7 +1867,7 @@ namespace acore
             explicit WorldWorldTextBuilder(uint32 textId, va_list* args = NULL) : i_textId(textId), i_args(args) {}
             void operator()(WorldPacketList& data_list, LocaleConstant loc_idx)
             {
-                char const* text = sObjectMgr->GetAcoreString(i_textId, loc_idx);
+                char const* text = sGameLocale->GetAcoreString(i_textId, loc_idx);
 
                 if (i_args)
                 {

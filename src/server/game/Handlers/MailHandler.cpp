@@ -19,6 +19,7 @@
 #include "AccountMgr.h"
 #include "GameTime.h"
 #include "GameConfig.h"
+#include "GameLocale.h"
 
 bool WorldSession::CanOpenMailBox(uint64 guid)
 {
@@ -490,7 +491,7 @@ void WorldSession::HandleMailTakeItem(WorldPacket & recvData)
                 {
                     std::string senderName;
                     if (!sObjectMgr->GetPlayerNameByGUID(sender_guid, senderName))
-                        senderName = sObjectMgr->GetAcoreStringForDBCLocale(LANG_UNKNOWN);
+                        senderName = sGameLocale->GetAcoreStringForDBCLocale(LANG_UNKNOWN);
                     std::string subj = m->subject;
                     CleanStringForMysqlQuery(subj);
                     CharacterDatabase.PExecute("INSERT INTO log_money VALUES(%u, %u, \"%s\", \"%s\", %u, \"%s\", %u, \"<COD> %s\", NOW())", GetAccountId(), player->GetGUIDLow(), player->GetName().c_str(), player->GetSession()->GetRemoteAddress().c_str(), sender_accId, senderName.c_str(), m->COD, subj.c_str());
