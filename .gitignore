@@ -91,3 +91,15 @@ local.properties
 #
 # ==================
 
+# Add default WarheadCore modules
+!modules/mod-anti-ad
+!modules/mod-auto-revive
+!modules/mod-bg-reward
+!modules/mod-buff-command
+!modules/mod-factions-icons-channel
+!modules/mod-gm-chat-color
+!modules/mod-level-reward
+!modules/mod-notify-muted
+!modules/mod-online-reward
+!modules/mod-player-info-at-login
+!modules/mod-transmogrification
