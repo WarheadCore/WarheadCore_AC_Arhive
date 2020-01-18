@@ -30,6 +30,14 @@ target_link_libraries(database
   PUBLIC
     common)
 
+CU_GET_GLOBAL("AC_MODULE_LIST")
+FOREACH(moduleList ${AC_MODULE_LIST})
+    get_filename_component(file_name ${moduleList} NAME_WE)
+    set(MODULE_LIST__ ${MODULE_LIST__}${file_name},)
+ENDFOREACH()
+
+add_definitions(-DAC_MODULES_LIST=$<1:"${MODULE_LIST__}">)
+
 set_target_properties(database
   PROPERTIES
     FOLDER

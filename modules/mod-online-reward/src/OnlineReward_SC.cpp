@@ -45,7 +45,7 @@ public:
 
         LOG_INFO("module", "Loading online rewards...");
 
-        QueryResult result = WorldDatabase.Query("SELECT RewardPlayedTime, ItemID, Count FROM online_reward");
+        QueryResult result = CharacterDatabase.Query("SELECT RewardPlayedTime, ItemID, Count FROM online_reward");
         if (!result)
         {
             sLog->outErrorDb(">> In DB table `online_reward` not data. Loading canceled");
@@ -341,11 +341,11 @@ private:
                 StrReward.erase(StrReward.end() - 1, StrReward.end());
 
             if (StrReward.size() > 0)
-                WorldDatabase.PExecute("UPDATE `online_reward_history` SET `Rewarded` = '%s' WHERE `PlayedGuid` = %u", StrReward.c_str(), PlayerGuid);
+                CharacterDatabase.PExecute("UPDATE `online_reward_history` SET `Rewarded` = '%s' WHERE `PlayedGuid` = %u", StrReward.c_str(), PlayerGuid);
         }
         else
             if (_LastRewardTimePerTimeStore[PlayerGuid])
-                WorldDatabase.PExecute("UPDATE `online_reward_history` SET `RewardedPerHour` = %u WHERE `PlayedGuid` = %u", _LastRewardTimePerTimeStore[PlayerGuid], PlayerGuid);
+                CharacterDatabase.PExecute("UPDATE `online_reward_history` SET `RewardedPerHour` = %u WHERE `PlayedGuid` = %u", _LastRewardTimePerTimeStore[PlayerGuid], PlayerGuid);
     }
 
     void LoadRewardFromDB(Player* player, bool IsPerOnline)
@@ -353,18 +353,18 @@ private:
         uint64 PlayerGuid = player->GetGUIDLow();
         bool IsExistDB = true;
 
-        QueryResult result = WorldDatabase.PQuery("SELECT * FROM `online_reward_history` WHERE `PlayedGuid` = %u", PlayerGuid);
+        QueryResult result = CharacterDatabase.PQuery("SELECT * FROM `online_reward_history` WHERE `PlayedGuid` = %u", PlayerGuid);
         if (!result)
             IsExistDB = false;
 
         if (!IsExistDB)
-            WorldDatabase.PExecute("INSERT INTO `online_reward_history`(`PlayedGuid`) VALUES (%u)", PlayerGuid);
+            CharacterDatabase.PExecute("INSERT INTO `online_reward_history`(`PlayedGuid`) VALUES (%u)", PlayerGuid);
 
         if (IsPerOnline && IsExistDB)
         {
             std::string ParamRewarded;
 
-            QueryResult result = WorldDatabase.PQuery("SELECT Rewarded FROM `online_reward_history` WHERE `PlayedGuid` = %u", PlayerGuid);
+            QueryResult result = CharacterDatabase.PQuery("SELECT Rewarded FROM `online_reward_history` WHERE `PlayedGuid` = %u", PlayerGuid);
             if (result)
                 ParamRewarded = result->Fetch()->GetString();
 
@@ -378,7 +378,7 @@ private:
         {
             uint32 LasRewardPerHour = 0;
 
-            QueryResult result = WorldDatabase.PQuery("SELECT RewardedPerHour FROM `online_reward_history` WHERE `PlayedGuid` = %u", PlayerGuid);
+            QueryResult result = CharacterDatabase.PQuery("SELECT RewardedPerHour FROM `online_reward_history` WHERE `PlayedGuid` = %u", PlayerGuid);
             if (result)
                 LasRewardPerHour = result->Fetch()->GetUInt32();
 

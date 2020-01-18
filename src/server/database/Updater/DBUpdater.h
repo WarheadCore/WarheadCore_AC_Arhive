@@ -77,6 +77,9 @@ public:
     static bool Update(DatabaseWorkerPool<T>& pool);
     static bool Populate(DatabaseWorkerPool<T>& pool);
 
+    // module
+    static std::string GetDBModuleName();
+
 private:
     static QueryResult Retrieve(DatabaseWorkerPool<T>& pool, std::string const& query);
     static void Apply(DatabaseWorkerPool<T>& pool, std::string const& query);

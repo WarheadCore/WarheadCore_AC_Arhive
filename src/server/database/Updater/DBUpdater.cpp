@@ -90,6 +90,12 @@ bool DBUpdater<LoginDatabaseConnection>::IsEnabled(uint32 const updateMask)
     return (updateMask & DatabaseLoader::DATABASE_LOGIN) ? true : false;
 }
 
+template<>
+std::string DBUpdater<LoginDatabaseConnection>::GetDBModuleName()
+{
+    return "db_auth";
+}
+
 // World Database
 template<>
 std::string DBUpdater<WorldDatabaseConnection>::GetConfigEntry()
@@ -116,6 +122,12 @@ bool DBUpdater<WorldDatabaseConnection>::IsEnabled(uint32 const updateMask)
     return (updateMask & DatabaseLoader::DATABASE_WORLD) ? true : false;
 }
 
+template<>
+std::string DBUpdater<WorldDatabaseConnection>::GetDBModuleName()
+{
+    return "db_world";
+}
+
 // Character Database
 template<>
 std::string DBUpdater<CharacterDatabaseConnection>::GetConfigEntry()
@@ -140,6 +152,12 @@ bool DBUpdater<CharacterDatabaseConnection>::IsEnabled(uint32 const updateMask)
 {
     // This way silences warnings under msvc
     return (updateMask & DatabaseLoader::DATABASE_CHARACTER) ? true : false;
+}
+
+template<>
+std::string DBUpdater<CharacterDatabaseConnection>::GetDBModuleName()
+{
+    return "db_characters";
 }
 
 // All
@@ -207,13 +225,14 @@ bool DBUpdater<T>::Update(DatabaseWorkerPool<T>& pool)
 
     if (!is_directory(sourceDirectory))
     {
-        LOG_ERROR("sql.updates", "DBUpdater: The given source directory %s does not exist, change the path to the directory where your sql directory exists (for example c:\\source\\trinitycore). Shutting down.", sourceDirectory.generic_string().c_str());
+        LOG_ERROR("sql.updates", "DBUpdater: The given source directory %s does not exist, change the path to the directory where your sql directory exists (for example c:\\source\\trinitycore). Shutting down.",
+            sourceDirectory.generic_string().c_str());
         return false;
     }
 
     UpdateFetcher updateFetcher(sourceDirectory, [&](std::string const& query) { DBUpdater<T>::Apply(pool, query); },
         [&](Path const& file) { DBUpdater<T>::ApplyFile(pool, file); },
-            [&](std::string const& query) -> QueryResult { return DBUpdater<T>::Retrieve(pool, query); });
+            [&](std::string const& query) -> QueryResult { return DBUpdater<T>::Retrieve(pool, query); }, DBUpdater<T>::GetDBModuleName());
 
     UpdateResult result;
     try

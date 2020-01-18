@@ -40,9 +40,9 @@ struct UpdateFetcher::DirectoryEntry
 UpdateFetcher::UpdateFetcher(Path const& sourceDirectory,
     std::function<void(std::string const&)> const& apply,
     std::function<void(Path const& path)> const& applyFile,
-    std::function<QueryResult(std::string const&)> const& retrieve) :
+    std::function<QueryResult(std::string const&)> const& retrieve, std::string const& dbModuleName_) :
         _sourceDirectory(std::make_unique<Path>(sourceDirectory)), _apply(apply), _applyFile(applyFile),
-        _retrieve(retrieve)
+        _retrieve(retrieve), _dbModuleName(dbModuleName_)
 {
 }
 
@@ -124,6 +124,26 @@ UpdateFetcher::DirectoryStorage UpdateFetcher::ReceiveIncludedDirectories() cons
 
     } while (result->NextRow());
 
+    std::vector<std::string> moduleList;
+
+    Tokenizer _modules(AC_MODULES_LIST, ',');
+    for (auto const& itr : _modules)
+        moduleList.push_back(itr);
+
+    for (auto const& itr : moduleList)
+    {
+        std::string path = _sourceDirectory->generic_string() + "/modules/" + itr + "/sql/" + _dbModuleName; // module/mod-name/sql/db_world
+
+        Path const p(path);
+        if (!is_directory(p))
+            continue;
+
+        DirectoryEntry const entry = { p, AppliedFileEntry::StateConvert("RELEASED") };
+        directories.push_back(entry);
+
+        LOG_TRACE("sql.updates", "Added applied modules file \"%s\" from remote.", p.filename().generic_string().c_str());
+    }
+
     return directories;
 }
 
@@ -149,7 +169,7 @@ UpdateFetcher::AppliedFileStorage UpdateFetcher::ReceiveAppliedFiles() const
     return map;
 }
 
-std::string UpdateFetcher::ReadSQLUpdate(boost::filesystem::path const& file) const
+std::string UpdateFetcher::ReadSQLUpdate(Path const& file) const
 {
     std::ifstream in(file.c_str());
     if (!in.is_open())

@@ -54,7 +54,7 @@ public:
     UpdateFetcher(Path const& updateDirectory,
         std::function<void(std::string const&)> const& apply,
         std::function<void(Path const& path)> const& applyFile,
-        std::function<QueryResult(std::string const&)> const& retrieve);
+        std::function<QueryResult(std::string const&)> const& retrieve, std::string const& dbModuleName);
     ~UpdateFetcher();
 
     UpdateResult Update(bool const redundancyChecks, bool const allowRehash,
@@ -138,6 +138,9 @@ private:
     std::function<void(std::string const&)> const _apply;
     std::function<void(Path const& path)> const _applyFile;
     std::function<QueryResult(std::string const&)> const _retrieve;
+
+    // modules
+    std::string const _dbModuleName;
 };
 
 #endif // UpdateFetcher_h__
