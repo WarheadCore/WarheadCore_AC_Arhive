@@ -1,0 +1,33 @@
+#
+# Copyright (C) since 2020 Andrei Guluaev (Winfidonarleyan/Kargatum) https://github.com/Winfidonarleyan
+# Licence MIT https://opensource.org/MIT
+#
+
+########################################
+# GMChatColor module configuration
+########################################
+[worldserver]
+
+###################################################################################################
+#
+#    GMChatColor.Enable
+#        Description: Enable color in chat for GM witch GM badge.
+#        Default: 1
+#
+#    GMChatColor.Level.3
+#        Description: Message color for GM level 3.
+#        Default: "|cffff0000"
+#
+#    GMChatColor.Level.2
+#        Description: Message color for GM level 2.
+#        Default: "|cff0000ff"
+#
+#    GMChatColor.Level.1
+#        Description: Message color for GM level 1.
+#        Default: "|cff0000ff"
+#
+
+GMChatColor.Enable = 1
+GMChatColor.Level.3 = "|cffff0000"
+GMChatColor.Level.2 = "|cff0000ff"
+GMChatColor.Level.1 = "|cff0000ff"

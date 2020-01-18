@@ -1,0 +1,18 @@
+#
+# Copyright (C) since 2020 Andrei Guluaev (Winfidonarleyan/Kargatum) https://github.com/Winfidonarleyan
+# Licence MIT https://opensource.org/MIT
+#
+
+########################################
+# BuffCommand module configuration
+########################################
+[worldserver]
+
+###################################################################################################
+#
+#    BuffCommand.Enable
+#        Description: Enable the ability to use the command .buff.
+#        Default: 1
+#
+
+BuffCommand.Enable = 1

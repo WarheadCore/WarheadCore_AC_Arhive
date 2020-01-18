@@ -1,0 +1,28 @@
+#
+# Copyright (C) since 2020 Andrei Guluaev (Winfidonarleyan/Kargatum) https://github.com/Winfidonarleyan
+# Licence MIT https://opensource.org/MIT
+#
+
+########################################
+# FactionsIconsChannel module configuration
+########################################
+[worldserver]
+
+###################################################################################################
+#
+#    ChannelIconFaction.Enable
+#        Description: Display fraction incons in chat channels.
+#        Default: 1
+#
+#    ChannelIconFaction.OnlyLFG
+#        Description: Display fraction incons in chat channels only LFG.
+#        Default: 1
+#
+#    ChannelIconFaction.GM
+#        Description: Display fraction incons for GM account.
+#        Default: 0
+#
+
+ChannelIconFaction.Enable = 1
+ChannelIconFaction.OnlyLFG = 1
+ChannelIconFaction.GM = 0

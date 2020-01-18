@@ -1,0 +1,18 @@
+#
+# Copyright (C) since 2020 Andrei Guluaev (Winfidonarleyan/Kargatum) https://github.com/Winfidonarleyan
+# Licence MIT https://opensource.org/MIT
+#
+
+########################################
+# PlayerInfoAtLogin module configuration
+########################################
+[worldserver]
+
+###################################################################################################
+#
+#    PlayerInfoAtLogin.Enable
+#        Description: Display info at login in game world
+#        Default: 1
+#
+
+PlayerInfoAtLogin.Enable = 1

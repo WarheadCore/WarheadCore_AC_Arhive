@@ -1,0 +1,49 @@
+#
+# Copyright (C) since 2020 Andrei Guluaev (Winfidonarleyan/Kargatum) https://github.com/Winfidonarleyan
+# Licence MIT https://opensource.org/MIT
+#
+
+########################################
+# OnlineReward module configuration
+########################################
+[worldserver]
+
+
+###################################################################################################
+#
+#    OnlineReward.Enable
+#        Description: Include the entire online rewards module
+#        Default: 1
+#
+#    OnlineReward.PerOnline.Enable
+#        Description: Enable Type 1 (awards for general online on the server).
+#        Default: 1
+#
+#    OnlineReward.PerTime.Enable
+#        Description: Type 2 (periodic awards for periods of time).
+#        Default: 1
+#
+#    OnlineReward.PerTime.Time
+#        Description: The period of time after which the award will be given (type 2). In seconds
+#        Default: 3600 (1 hour)
+#
+#    OnlineReward.PerTime.ItemID
+#        Description: The item to be given out during the periodic issue. (Type 2)
+#        Default: 47241 (The emblem of triumph)
+#
+#    OnlineReward.PerTime.ItemCount
+#        Description: Reward item count for reward type per time. (Type 2)
+#        Default: 1
+#
+#    OnlineReward.CheckTime
+#        Description: The time after which the module performs the verification to determine the awarding of awards in both types (number in seconds)
+#        Default: 60 (1 minute)
+#
+
+OnlineReward.Enable = 1
+OnlineReward.PerOnline.Enable = 1
+OnlineReward.PerTime.Enable = 1
+OnlineReward.PerTime.Time = 1800
+OnlineReward.PerTime.ItemID = 47241
+OnlineReward.PerTime.ItemCount = 1
+OnlineReward.CheckTime = 10

@@ -1,0 +1,18 @@
+#
+# Copyright (C) since 2020 Andrei Guluaev (Winfidonarleyan/Kargatum) https://github.com/Winfidonarleyan
+# Licence MIT https://opensource.org/MIT
+#
+
+########################################
+# LevelReward module configuration
+########################################
+[worldserver]
+
+###################################################################################################
+#
+#    LevelReward.Enable
+#        Description: Enable level up reward system.
+#        Default: 1
+#
+
+LevelReward.Enable = 1

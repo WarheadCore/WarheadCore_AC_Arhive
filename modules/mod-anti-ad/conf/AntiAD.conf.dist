@@ -1,0 +1,48 @@
+#
+# Copyright (C) since 2020 Andrei Guluaev (Winfidonarleyan/Kargatum) https://github.com/Winfidonarleyan
+# Licence MIT https://opensource.org/MIT
+#
+
+########################################
+# AntiAD module configuration
+########################################
+[worldserver]
+
+###################################################################################################
+#
+#    AntiAD.Enable
+#        Description: Enable system forbidden words.
+#        Default: 1
+#
+#    AntiAD.MessageGMsInWorld.Enable
+#        Description: Enable notify all GMs.
+#        Default: 1
+#
+#    AntiAD.FullMessageGMsInWorld.Enable
+#        Description: Enable notify full message all GMs.
+#        Default: 1
+#
+#    AntiAD.SelfMessage.Enable
+#        Description: Show forbidden word message self.
+#        Default: 1
+#
+#    AntiAD.Mute.Enable
+#        Description: Enable mute at writing forbidden word.
+#        Default: 1
+#
+#    AntiAD.MuteGM.Enable 
+#        Description: Enable mute for GMs.
+#        Default: 0
+#
+#    AntiAD.Mute.Time 
+#        Description: Mute time in minutes.
+#        Default: 5
+#
+
+AntiAD.Enable = 1
+AntiAD.MessageGMsInWorld.Enable = 1
+AntiAD.FullMessageGMsInWorld.Enable = 1
+AntiAD.SelfMessage.Enable = 1
+AntiAD.Mute.Enable = 1
+AntiAD.MuteGM.Enable = 1
+AntiAD.Mute.Time = 1

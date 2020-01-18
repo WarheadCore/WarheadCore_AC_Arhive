@@ -4,6 +4,9 @@
 
 #include "Transmogrification.h"
 #include "GameConfig.h"
+#include "GameLocale.h"
+#include "ScriptedGossip.h"
+#include "GameEventMgr.h"
 
 Transmogrification* Transmogrification::instance()
 {
@@ -194,7 +197,7 @@ std::string Transmogrification::GetItemLink(Item* item, WorldSession* session) c
     std::string name = temp->Name1;
 
     if (ItemLocale const* il = sObjectMgr->GetItemLocale(temp->ItemId))
-        sObjectMgr->GetLocaleString(il->Name, loc_idx, name);
+        sGameLocale->GetLocaleString(il->Name, loc_idx, name);
 
     if (int32 itemRandPropId = item->GetItemRandomPropertyId())
     {
@@ -245,7 +248,7 @@ std::string Transmogrification::GetItemLink(uint32 entry, WorldSession* session)
 
     std::string name = temp->Name1;
     if (ItemLocale const* il = sObjectMgr->GetItemLocale(entry))
-        ObjectMgr::GetLocaleString(il->Name, loc_idx, name);
+        sGameLocale->GetLocaleString(il->Name, loc_idx, name);
 
     std::ostringstream oss;
     oss << "|c" << std::hex << ItemQualityColors[temp->Quality] << std::dec <<

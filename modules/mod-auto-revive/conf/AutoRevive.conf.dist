@@ -1,0 +1,23 @@
+#
+# Copyright (C) since 2020 Andrei Guluaev (Winfidonarleyan/Kargatum) https://github.com/Winfidonarleyan
+# Licence MIT https://opensource.org/MIT
+#
+
+########################################
+# AutoRevive module configuration
+########################################
+[worldserver]
+
+###################################################################################################
+#
+#    AutoRevive.Enable 
+#        Description: Enable auto revive before die, only GM account.
+#        Default: 1
+#
+#    AutoRevive.ZoneID 
+#        Description: Enable in a certain area, if it is 0, it means everywhere.
+#        Default: 0
+#
+
+AutoRevive.Enable = 1
+AutoRevive.ZoneID = 0

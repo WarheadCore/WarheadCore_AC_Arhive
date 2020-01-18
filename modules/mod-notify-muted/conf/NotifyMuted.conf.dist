@@ -1,0 +1,18 @@
+#
+# Copyright (C) since 2020 Andrei Guluaev (Winfidonarleyan/Kargatum) https://github.com/Winfidonarleyan
+# Licence MIT https://opensource.org/MIT
+#
+
+########################################
+# NotifyMuted module configuration
+########################################
+[worldserver]
+
+###################################################################################################
+#
+#    NotCanSpeakMsg.Enable
+#        Description: Enable notify about mute, if player receiver mute.
+#        Default: 1
+#
+
+NotCanSpeakMsg.Enable = 1
