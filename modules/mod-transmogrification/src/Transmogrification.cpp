@@ -116,24 +116,24 @@ void Transmogrification::UnloadPlayerSets(uint64 pGUID)
     _presetByName[pGUID].clear();
 }
 
-std::string const Transmogrification::GetSlotName(uint8 slot) const
+std::string const Transmogrification::GetSlotName(Player* player, uint8 slot) const
 {
     switch (slot)
     {
-        case EQUIPMENT_SLOT_HEAD: return  "Head";// session->GetAcoreString(LANG_SLOT_NAME_HEAD);
-        case EQUIPMENT_SLOT_SHOULDERS: return  "Shoulders";// session->GetAcoreString(LANG_SLOT_NAME_SHOULDERS);
-        case EQUIPMENT_SLOT_BODY: return  "Shirt";// session->GetAcoreString(LANG_SLOT_NAME_BODY);
-        case EQUIPMENT_SLOT_CHEST: return  "Chest";// session->GetAcoreString(LANG_SLOT_NAME_CHEST);
-        case EQUIPMENT_SLOT_WAIST: return  "Waist";// session->GetAcoreString(LANG_SLOT_NAME_WAIST);
-        case EQUIPMENT_SLOT_LEGS: return  "Legs";// session->GetAcoreString(LANG_SLOT_NAME_LEGS);
-        case EQUIPMENT_SLOT_FEET: return  "Feet";// session->GetAcoreString(LANG_SLOT_NAME_FEET);
-        case EQUIPMENT_SLOT_WRISTS: return  "Wrists";// session->GetAcoreString(LANG_SLOT_NAME_WRISTS);
-        case EQUIPMENT_SLOT_HANDS: return  "Hands";// session->GetAcoreString(LANG_SLOT_NAME_HANDS);
-        case EQUIPMENT_SLOT_BACK: return  "Back";// session->GetAcoreString(LANG_SLOT_NAME_BACK);
-        case EQUIPMENT_SLOT_MAINHAND: return  "Main hand";// session->GetAcoreString(LANG_SLOT_NAME_MAINHAND);
-        case EQUIPMENT_SLOT_OFFHAND: return  "Off hand";// session->GetAcoreString(LANG_SLOT_NAME_OFFHAND);
-        case EQUIPMENT_SLOT_RANGED: return  "Ranged";// session->GetAcoreString(LANG_SLOT_NAME_RANGED);
-        case EQUIPMENT_SLOT_TABARD: return  "Tabard";// session->GetAcoreString(LANG_SLOT_NAME_TABARD);
+        case EQUIPMENT_SLOT_HEAD:       return sGameLocale->GetModuleString("mod-transmogrification", 1, player->GetSession()->GetSessionDbLocaleIndex()); // Head
+        case EQUIPMENT_SLOT_SHOULDERS:  return sGameLocale->GetModuleString("mod-transmogrification", 2, player->GetSession()->GetSessionDbLocaleIndex()); // Shoulders
+        case EQUIPMENT_SLOT_BODY:       return sGameLocale->GetModuleString("mod-transmogrification", 3, player->GetSession()->GetSessionDbLocaleIndex()); // Shirt
+        case EQUIPMENT_SLOT_CHEST:      return sGameLocale->GetModuleString("mod-transmogrification", 4, player->GetSession()->GetSessionDbLocaleIndex()); // Chest
+        case EQUIPMENT_SLOT_WAIST:      return sGameLocale->GetModuleString("mod-transmogrification", 5, player->GetSession()->GetSessionDbLocaleIndex()); // Waist
+        case EQUIPMENT_SLOT_LEGS:       return sGameLocale->GetModuleString("mod-transmogrification", 6, player->GetSession()->GetSessionDbLocaleIndex()); // Legs
+        case EQUIPMENT_SLOT_FEET:       return sGameLocale->GetModuleString("mod-transmogrification", 7, player->GetSession()->GetSessionDbLocaleIndex()); // Feet
+        case EQUIPMENT_SLOT_WRISTS:     return sGameLocale->GetModuleString("mod-transmogrification", 8, player->GetSession()->GetSessionDbLocaleIndex()); // Wrists
+        case EQUIPMENT_SLOT_HANDS:      return sGameLocale->GetModuleString("mod-transmogrification", 9, player->GetSession()->GetSessionDbLocaleIndex()); // Hands
+        case EQUIPMENT_SLOT_BACK:       return sGameLocale->GetModuleString("mod-transmogrification", 10, player->GetSession()->GetSessionDbLocaleIndex()); // Back
+        case EQUIPMENT_SLOT_MAINHAND:   return sGameLocale->GetModuleString("mod-transmogrification", 11, player->GetSession()->GetSessionDbLocaleIndex()); // Main hand
+        case EQUIPMENT_SLOT_OFFHAND:    return sGameLocale->GetModuleString("mod-transmogrification", 12, player->GetSession()->GetSessionDbLocaleIndex()); // Off hand
+        case EQUIPMENT_SLOT_RANGED:     return sGameLocale->GetModuleString("mod-transmogrification", 13, player->GetSession()->GetSessionDbLocaleIndex()); // Ranged
+        case EQUIPMENT_SLOT_TABARD:     return sGameLocale->GetModuleString("mod-transmogrification", 14, player->GetSession()->GetSessionDbLocaleIndex()); // Tabard
         default: return "";
     }
 }
@@ -869,7 +869,7 @@ void Transmogrification::LoadPlayerAtLogin(Player* player)
 
 std::string const Transmogrification::GetGossipIcon(uint8 slot, Player* player)
 {
-    auto const& slotName = GetSlotName(slot);
+    auto const& slotName = GetSlotName(player, slot);
     if (slotName.empty())
         return "";
 
@@ -880,16 +880,25 @@ std::string const Transmogrification::GetGossipIcon(uint8 slot, Player* player)
     return icon + slotName;
 }
 
-std::string const Transmogrification::GetGossipItemName(TransmogrificationGossipItem gossipItem)
+std::string const Transmogrification::GetGossipItemName(Player* player, TransmogrificationGossipItem gossipItem)
 {
     switch (gossipItem)
     {
-        case ITEM_HOW_WORKS:                return "|TInterface/ICONS/INV_Misc_Book_11:30:30:-18:0|tHow transmogrification works";
-        case ITEM_MANAGE_SETS:              return "|TInterface/RAIDFRAME/UI-RAIDFRAME-MAINASSIST:30:30:-18:0|tManage sets";
-        case ITEM_REMOVE_ALL_TRANSMOG:      return "|TInterface/ICONS/INV_Enchant_Disenchant:30:30:-18:0|tRemove all transmogrifications";
-        case ITEM_REMOVE_SINGLE_TRANSMOG:   return "|TInterface/ICONS/INV_Enchant_Disenchant:30:30:-18:0|tRemove transmogrification";
-        case ITEM_UPDATE_MENU:              return "|TInterface/PaperDollInfoFrame/UI-GearManager-Undo:30:30:-18:0|tUpdate menu";
-        case ITEM_BACK:                     return "|TInterface/ICONS/Ability_Spy:30:30:-18:0|tBack..";
+        case ITEM_HOW_WORKS:                return sGameLocale->GetModuleString("mod-transmogrification", 15, player->GetSession()->GetSessionDbLocaleIndex());
+        case ITEM_MANAGE_SETS:              return sGameLocale->GetModuleString("mod-transmogrification", 16, player->GetSession()->GetSessionDbLocaleIndex());
+        case ITEM_REMOVE_ALL_TRANSMOG:      return sGameLocale->GetModuleString("mod-transmogrification", 17, player->GetSession()->GetSessionDbLocaleIndex());
+        case ITEM_REMOVE_SINGLE_TRANSMOG:   return sGameLocale->GetModuleString("mod-transmogrification", 18, player->GetSession()->GetSessionDbLocaleIndex());
+        case ITEM_UPDATE_MENU:              return sGameLocale->GetModuleString("mod-transmogrification", 19, player->GetSession()->GetSessionDbLocaleIndex());
+        case ITEM_BACK:                     return sGameLocale->GetModuleString("mod-transmogrification", 20, player->GetSession()->GetSessionDbLocaleIndex());
+        case ITEM_REMOVE_ALL_TRANSMOG_Q:    return sGameLocale->GetModuleString("mod-transmogrification", 21, player->GetSession()->GetSessionDbLocaleIndex());
+        case ITEM_REMOVE_SINGLE_TRANSMOG_Q: return sGameLocale->GetModuleString("mod-transmogrification", 22, player->GetSession()->GetSessionDbLocaleIndex());
+        case ITEM_SAVE_SET:                 return sGameLocale->GetModuleString("mod-transmogrification", 23, player->GetSession()->GetSessionDbLocaleIndex());
+        case ITEM_ITEM_BIND_Q:              return sGameLocale->GetModuleString("mod-transmogrification", 24, player->GetSession()->GetSessionDbLocaleIndex());
+        case ITEM_HOW_SET_WORKS:            return sGameLocale->GetModuleString("mod-transmogrification", 25, player->GetSession()->GetSessionDbLocaleIndex());
+        case ITEM_SET_USE:                  return sGameLocale->GetModuleString("mod-transmogrification", 26, player->GetSession()->GetSessionDbLocaleIndex());
+        case ITEM_SET_DELETE:               return sGameLocale->GetModuleString("mod-transmogrification", 27, player->GetSession()->GetSessionDbLocaleIndex());
+        case ITEM_SET_DELETE_Q:             return sGameLocale->GetModuleString("mod-transmogrification", 28, player->GetSession()->GetSessionDbLocaleIndex());
+        case ITEM_SET_INSERT_NAME:          return sGameLocale->GetModuleString("mod-transmogrification", 29, player->GetSession()->GetSessionDbLocaleIndex());
         default:                            return "";
     }
 }
@@ -917,7 +926,7 @@ void Transmogrification::SavePreset(Player* player, Creature* creature, std::str
 
         for (uint8 slot = EQUIPMENT_SLOT_START; slot < EQUIPMENT_SLOT_END; ++slot)
         {
-            if (GetSlotName(slot).empty())
+            if (GetSlotName(player, slot).empty())
                 continue;
 
             if (Item* newItem = player->GetItemByPos(INVENTORY_SLOT_BAG_0, slot))
@@ -1008,8 +1017,7 @@ void Transmogrification::GossipShowTransmogItems(Player* player, Creature* creat
             ++limit;
 
             AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetItemIcon(newItem->GetEntry(), 30, 30, -18, 0) + GetItemLink(newItem, session), slot, newItem->GetGUIDLow(),
-                "Using this item for transmogrify will bind it to you and make it non-refundable and non-tradeable.\nDo you wish to continue?\n\n" +
-                GetItemIcon(newItem->GetEntry(), 40, 40, -15, -10) + GetItemLink(newItem, session) + ss.str(), price, false);
+                GetGossipItemName(player, ITEM_ITEM_BIND_Q) + GetItemIcon(newItem->GetEntry(), 40, 40, -15, -10) + GetItemLink(newItem, session) + ss.str(), price, false);
         }
 
         for (uint8 i = INVENTORY_SLOT_BAG_START; i < INVENTORY_SLOT_BAG_END; ++i)
@@ -1036,15 +1044,14 @@ void Transmogrification::GossipShowTransmogItems(Player* player, Creature* creat
                 ++limit;
 
                 AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetItemIcon(newItem->GetEntry(), 30, 30, -18, 0) + GetItemLink(newItem, session), slot, newItem->GetGUIDLow(),
-                    "Using this item for transmogrify will bind it to you and make it non-refundable and non-tradeable.\nDo you wish to continue?\n\n"
-                    + GetItemIcon(newItem->GetEntry(), 40, 40, -15, -10) + GetItemLink(newItem, session) + ss.str(), price, false);
+                    GetGossipItemName(player, ITEM_ITEM_BIND_Q) + GetItemIcon(newItem->GetEntry(), 40, 40, -15, -10) + GetItemLink(newItem, session) + ss.str(), price, false);
             }
         }
     }
 
-    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(ITEM_REMOVE_SINGLE_TRANSMOG), EQUIPMENT_SLOT_END + 3, slot, "Remove transmogrification from the slot?", 0, false);
-    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(ITEM_UPDATE_MENU), EQUIPMENT_SLOT_END, slot);
-    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(ITEM_BACK), EQUIPMENT_SLOT_END + 1, 0);
+    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, ITEM_REMOVE_SINGLE_TRANSMOG), EQUIPMENT_SLOT_END + 3, slot, GetGossipItemName(player, ITEM_REMOVE_SINGLE_TRANSMOG_Q), 0, false);
+    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, ITEM_UPDATE_MENU), EQUIPMENT_SLOT_END, slot);
+    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, ITEM_BACK), EQUIPMENT_SLOT_END + 1, 0);
 
     SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, creature->GetGUID());
 }
@@ -1097,15 +1104,15 @@ void Transmogrification::GossipRemoveSingleTransmogrifications(Player* player, u
 void Transmogrification::GossipShowPresetsMenu(Player* player, Creature* creature)
 {
     if (GetEnableSetInfo())
-        AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, "|TInterface/ICONS/INV_Misc_Book_11:30:30:-18:0|tHow sets work", EQUIPMENT_SLOT_END + 10, 0);
+        AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, ITEM_HOW_SET_WORKS), EQUIPMENT_SLOT_END + 10, 0);
 
     for (auto const& itr : _presetByName[player->GetGUID()])
         AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, "|TInterface/ICONS/INV_Misc_Statue_02:30:30:-18:0|t" + itr.second, EQUIPMENT_SLOT_END + 6, itr.first);
 
     if (_presetByName[player->GetGUID()].size() < GetMaxSets())
-        AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, "|TInterface/GuildBankFrame/UI-GuildBankFrame-NewTab:30:30:-18:0|tSave set", EQUIPMENT_SLOT_END + 8, 0);
+        AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, ITEM_SAVE_SET), EQUIPMENT_SLOT_END + 8, 0);
 
-    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(ITEM_BACK), EQUIPMENT_SLOT_END + 1, 0);
+    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, ITEM_BACK), EQUIPMENT_SLOT_END + 1, 0);
     SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, creature->GetGUID());
 }
 
@@ -1127,13 +1134,12 @@ void Transmogrification::GossipViewPreset(Player* player, Creature* creature, ui
     for (auto const& itr : _presetById[player->GetGUID()][action])
         AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetItemIcon(itr.second, 30, 30, -18, 0) + GetItemLink(itr.second, session), sender, action);
 
-    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, "|TInterface/ICONS/INV_Misc_Statue_02:30:30:-18:0|tUse set", EQUIPMENT_SLOT_END + 5, action,
-        "Using this set for transmogrify will bind transmogrified items to you and make them non-refundable and non-tradeable.\nDo you wish to continue?\n\n" + _presetByName[player->GetGUID()][action], 0, false);
+    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, ITEM_SET_USE), EQUIPMENT_SLOT_END + 5, action,
+        GetGossipItemName(player, ITEM_ITEM_BIND_Q) + _presetByName[player->GetGUID()][action], 0, false);
 
-    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, "|TInterface/PaperDollInfoFrame/UI-GearManager-LeaveItem-Opaque:30:30:-18:0|tDelete set",
-        EQUIPMENT_SLOT_END + 7, action, "Are you sure you want to delete " + _presetByName[player->GetGUID()][action] + "?", 0, false);
+    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, ITEM_SET_DELETE), EQUIPMENT_SLOT_END + 7, action, GetGossipItemName(player, ITEM_SET_DELETE_Q) + _presetByName[player->GetGUID()][action] + "?", 0, false);
 
-    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(ITEM_BACK), EQUIPMENT_SLOT_END + 4, 0);
+    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, ITEM_BACK), EQUIPMENT_SLOT_END + 4, 0);
     SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, creature->GetGUID());
 }
 
@@ -1154,7 +1160,7 @@ void Transmogrification::GossipSavePreset(Player* player, Creature* creature, ui
 
     for (uint8 slot = EQUIPMENT_SLOT_START; slot < EQUIPMENT_SLOT_END; ++slot)
     {
-        if (GetSlotName(slot).empty())
+        if (GetSlotName(player, slot).empty())
             continue;
 
         if (Item* newItem = player->GetItemByPos(INVENTORY_SLOT_BAG_0, slot))
@@ -1178,10 +1184,10 @@ void Transmogrification::GossipSavePreset(Player* player, Creature* creature, ui
     }
 
     if (canSave)
-        AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, "|TInterface/GuildBankFrame/UI-GuildBankFrame-NewTab:30:30:-18:0|tSave set 1", 0, 0, "Insert set name", cost * GetSetCostModifier() + GetSetCopperCost(), true);
+        AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, ITEM_SAVE_SET), 0, 0, GetGossipItemName(player, ITEM_SET_INSERT_NAME), cost * GetSetCostModifier() + GetSetCopperCost(), true);
 
-    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, "|TInterface/PaperDollInfoFrame/UI-GearManager-Undo:30:30:-18:0|tUpdate menu", sender, action);
-    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(ITEM_BACK), EQUIPMENT_SLOT_END + 4, 0);
+    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, ITEM_UPDATE_MENU), sender, action);
+    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, ITEM_BACK), EQUIPMENT_SLOT_END + 4, 0);
     SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, creature->GetGUID());
 }
 

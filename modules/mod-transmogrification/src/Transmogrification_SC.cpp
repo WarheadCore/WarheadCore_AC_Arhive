@@ -34,7 +34,7 @@ public:
     bool OnGossipHello(Player* player, Creature* creature) override
     {
         if (sTransmog->GetEnableTransmogInfo())
-            AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, sTransmog->GetGossipItemName(ITEM_HOW_WORKS), EQUIPMENT_SLOT_END + 9, 0);
+            AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, sTransmog->GetGossipItemName(player, ITEM_HOW_WORKS), EQUIPMENT_SLOT_END + 9, 0);
         
         for (uint8 slot = EQUIPMENT_SLOT_START; slot < EQUIPMENT_SLOT_END; ++slot)
         {
@@ -46,10 +46,10 @@ public:
         }
 
         if (sTransmog->GetEnableSets())
-            AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, sTransmog->GetGossipItemName(ITEM_MANAGE_SETS), EQUIPMENT_SLOT_END + 4, 0);
+            AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, sTransmog->GetGossipItemName(player, ITEM_MANAGE_SETS), EQUIPMENT_SLOT_END + 4, 0);
         
-        AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, sTransmog->GetGossipItemName(ITEM_REMOVE_ALL_TRANSMOG), EQUIPMENT_SLOT_END + 2, 0, "Remove transmogrifications from all equipped items?", 0, false);
-        AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, sTransmog->GetGossipItemName(ITEM_UPDATE_MENU), EQUIPMENT_SLOT_END + 1, 0);
+        AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, sTransmog->GetGossipItemName(player, ITEM_REMOVE_ALL_TRANSMOG), EQUIPMENT_SLOT_END + 2, 0, sTransmog->GetGossipItemName(player, ITEM_REMOVE_ALL_TRANSMOG_Q), 0, false);
+        AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, sTransmog->GetGossipItemName(player, ITEM_UPDATE_MENU), EQUIPMENT_SLOT_END + 1, 0);
 
         SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, creature->GetGUID());
 
@@ -92,11 +92,11 @@ public:
                 SavePreset(player, creature, action, sender);
                 break;
             case EQUIPMENT_SLOT_END + 10: // Set info
-                AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, sTransmog->GetGossipItemName(ITEM_BACK), EQUIPMENT_SLOT_END + 4, 0);
+                AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, sTransmog->GetGossipItemName(player, ITEM_BACK), EQUIPMENT_SLOT_END + 4, 0);
                 SendGossipMenuFor(player, sTransmog->GetSetNpcText(), creature->GetGUID());
                 break;
             case EQUIPMENT_SLOT_END + 9: // Transmog info
-                AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, sTransmog->GetGossipItemName(ITEM_BACK), EQUIPMENT_SLOT_END + 1, 0);
+                AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, sTransmog->GetGossipItemName(player, ITEM_BACK), EQUIPMENT_SLOT_END + 1, 0);
                 SendGossipMenuFor(player, sTransmog->GetTransmogNpcText(), creature->GetGUID());
                 break;
             default: // Transmogrify

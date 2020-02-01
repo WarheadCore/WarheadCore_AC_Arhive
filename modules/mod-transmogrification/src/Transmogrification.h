@@ -37,7 +37,16 @@ enum TransmogrificationGossipItem
     ITEM_REMOVE_ALL_TRANSMOG,
     ITEM_REMOVE_SINGLE_TRANSMOG,
     ITEM_UPDATE_MENU,
-    ITEM_BACK
+    ITEM_BACK,
+    ITEM_REMOVE_ALL_TRANSMOG_Q,
+    ITEM_REMOVE_SINGLE_TRANSMOG_Q,
+    ITEM_SAVE_SET,
+    ITEM_ITEM_BIND_Q,
+    ITEM_HOW_SET_WORKS,
+    ITEM_SET_USE,
+    ITEM_SET_DELETE,
+    ITEM_SET_DELETE_Q,
+    ITEM_SET_INSERT_NAME
 };
 
 class Transmogrification
@@ -83,7 +92,7 @@ public:
 
     std::string GetItemIcon(uint32 entry, uint32 width, uint32 height, int x, int y) const;
     std::string GetSlotIcon(uint8 slot, uint32 width, uint32 height, int x, int y) const;
-    std::string const GetSlotName(uint8 slot) const;
+    std::string const GetSlotName(Player* player, uint8 slot) const;
     std::string GetItemLink(Item* item, WorldSession* session) const;
     std::string GetItemLink(uint32 entry, WorldSession* session) const;
     uint32 GetFakeEntry(uint64 itemGUID) const;
@@ -98,7 +107,7 @@ public:
     void ClearPlayerAtLogout(Player* player);
     void LoadPlayerAtLogin(Player* player);
     std::string const GetGossipIcon(uint8 slot, Player* player);
-    std::string const GetGossipItemName(TransmogrificationGossipItem gossipItem);
+    std::string const GetGossipItemName(Player* player, TransmogrificationGossipItem gossipItem);
 
     bool CanSavePresets(Player* player);
     void SavePreset(Player* player, Creature* creature, std::string const& name);
