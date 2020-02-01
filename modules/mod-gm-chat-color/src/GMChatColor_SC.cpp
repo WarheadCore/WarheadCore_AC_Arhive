@@ -43,7 +43,7 @@ public:
 private:
     void SetColorMessage(Player* player, std::string& Message)
     {
-        if (!CONF_GET_BOOL(""))
+        if (!CONF_GET_BOOL("GMChatColor.Enable"))
             return;
 
         if (AccountMgr::IsPlayerAccount(player->GetSession()->GetSecurity()) || !player->isGMChat() || Message.empty())
