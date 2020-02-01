@@ -10,17 +10,15 @@
 #include "Player.h"
 #include "AccountMgr.h"
 #include "GameTime.h"
+#include "GameLocale.h"
 #include <vector>
 
-namespace lang
+enum LocaleStrings
 {
-    enum KargatumStrings
-    {
-        ANTIAD_SEND_GM_TEXT = 50000,
-        ANTIAD_SEND_SELF,
-        ANTIAD_SEND_GM_TEXT_FULL
-    };
-}
+    ANTIAD_SEND_GM_TEXT = 1,
+    ANTIAD_SEND_GM_TEXT_FULL,
+    ANTIAD_SEND_SELF,
+};
 
 class AntiAD
 {
@@ -117,24 +115,24 @@ private:
         if (!(CONF_GET_BOOL("AntiAD.MuteGM.Enable") && !AccountMgr::IsPlayerAccount(player->GetSession()->GetSecurity())))
             return;
 
-        ChatHandler handler(player->GetSession());
-        std::string NameLink = handler.GetNameLink(player);
-
         uint32 muteTime = CONF_GET_INT("AntiAD.Mute.Time");
 
         player->GetSession()->m_muteTime = time(nullptr) + muteTime * MINUTE;
 
         if (CONF_GET_BOOL("AntiAD.SelfMessage.Enable"))
-            handler.PSendSysMessage(lang::ANTIAD_SEND_SELF, muteTime);
+            sGameLocale->SendPlayerMessage(player, "mod-anti-ad", ANTIAD_SEND_SELF, muteTime);
     }
 
-    void SendGMTexts(std::string NameLink, std::string ADMessage, std::string FullMessage)
+    void SendGMTexts(Player* player, std::string ADMessage, std::string FullMessage)
     {
+        uint8 loc_idx = uint8(player->GetSession()->GetSessionDbLocaleIndex());
+        std::string NameLink = ChatHandler(player->GetSession()).GetNameLink(player);
+
         if (CONF_GET_BOOL("AntiAD.MessageGMsInWorld.Enable"))
-            sWorld->SendGMText(lang::ANTIAD_SEND_GM_TEXT, NameLink.c_str(), ADMessage.c_str());
+            sGameLocale->SendGlobalMessage("mod-anti-ad", ANTIAD_SEND_GM_TEXT, true, NameLink.c_str(), ADMessage.c_str());
 
         if (CONF_GET_BOOL("AntiAD.FullMessageGMsInWorld.Enable"))
-            sWorld->SendGMText(lang::ANTIAD_SEND_GM_TEXT_FULL, NameLink.c_str(), FullMessage.c_str());
+            sGameLocale->SendGlobalMessage("mod-anti-ad", ANTIAD_SEND_GM_TEXT_FULL, true, NameLink.c_str(), FullMessage.c_str());
     }
 
     void CheckMessage(Player* player, std::string& msg)
@@ -145,12 +143,9 @@ private:
         std::string CheckMsg = msg;
         std::string FullMessage = msg;
 
-        ChatHandler handler(player->GetSession());
-        std::string NameLink = handler.GetNameLink(player);
-
         if (sAD->IsBadMessage(msg))
         {
-            SendGMTexts(NameLink, msg, FullMessage);
+            SendGMTexts(player, msg, FullMessage);
             msg = "";
             Mute(player);
         }
