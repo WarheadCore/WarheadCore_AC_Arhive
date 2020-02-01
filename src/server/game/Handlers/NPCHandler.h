@@ -32,17 +32,4 @@ struct GossipText
     GossipTextOption Options[MAX_GOSSIP_TEXT_OPTIONS];
 };
 
-struct PageTextLocale
-{
-    StringVector Text;
-};
-
-struct NpcTextLocale
-{
-    NpcTextLocale() { Text_0.resize(8); Text_1.resize(8); }
-
-    std::vector<StringVector> Text_0;
-    std::vector<StringVector> Text_1;
-};
 #endif
-

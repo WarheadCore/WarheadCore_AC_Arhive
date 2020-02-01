@@ -991,27 +991,8 @@ void World::SetInitialWorldSettings()
     sLog->outString("Loading instances...");
     sInstanceSaveMgr->LoadInstances();
 
-    sLog->outString("Loading Broadcast texts...");
-    sObjectMgr->LoadBroadcastTexts();
-    sObjectMgr->LoadBroadcastTextLocales();
-
-    sLog->outString("Loading Localization strings...");
-    uint32 oldMSTime = getMSTime();
-    sObjectMgr->LoadCreatureLocales();
-    sObjectMgr->LoadGameObjectLocales();
-    sObjectMgr->LoadItemLocales();
-    sObjectMgr->LoadItemSetNameLocales();
-    sObjectMgr->LoadQuestLocales();
-    sObjectMgr->LoadQuestOfferRewardLocale();
-    sObjectMgr->LoadQuestRequestItemsLocale();
-    sObjectMgr->LoadNpcTextLocales();
-    sObjectMgr->LoadPageTextLocales();
-    sObjectMgr->LoadGossipMenuItemsLocales();
-    sObjectMgr->LoadPointOfInterestLocales();
-
-    sGameLocale->SetDBCLocaleIndex(GetDefaultDbcLocale());        // Get once for all the locale index of DBC language (console/broadcasts)
-    sLog->outString(">> Localization strings loaded in %u ms", GetMSTimeDiffToNow(oldMSTime));
-    sLog->outString();
+    sLog->outString("Loading Game locales texts...");
+    sGameLocale->LoadAllLocales();
 
     sLog->outString("Loading Page Texts...");
     sObjectMgr->LoadPageTexts();
@@ -1250,8 +1231,8 @@ void World::SetInitialWorldSettings()
     sAchievementMgr->LoadAchievementCriteriaData();
     sLog->outString("Loading Achievement Rewards...");
     sAchievementMgr->LoadRewards();
-    sLog->outString("Loading Achievement Reward Locales...");
-    sAchievementMgr->LoadRewardLocales();
+    //sLog->outString("Loading Achievement Reward Locales...");
+    //sGameLocale->LoadRewardLocales();
     sLog->outString("Loading Completed Achievements...");
     sAchievementMgr->LoadCompletedAchievements();
 

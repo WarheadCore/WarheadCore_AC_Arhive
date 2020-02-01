@@ -41,6 +41,7 @@
 #include "DynamicVisibility.h"
 #include "GameTime.h"
 #include "GameConfig.h"
+#include "GameLocale.h"
 
 #ifdef ELUNA
 #include "LuaEngine.h"
@@ -1702,14 +1703,14 @@ void Object::ForceValuesUpdateAtIndex(uint32 i)
 
 namespace acore
 {
-        class MonsterChatBuilder
+    class MonsterChatBuilder
     {
         public:
             MonsterChatBuilder(WorldObject const* obj, ChatMsg msgtype, int32 textId, uint32 language, WorldObject const* target)
                 : i_object(obj), i_msgtype(msgtype), i_textId(textId), i_language(Language(language)), i_target(target) { }
             void operator()(WorldPacket& data, LocaleConstant loc_idx)
             {
-                if (BroadcastText const* broadcastText = sObjectMgr->GetBroadcastText(i_textId))
+                if (BroadcastText const* broadcastText = sGameLocale->GetBroadcastText(i_textId))
                 {
                     uint8 gender = GENDER_MALE;
                     if (Unit const* unit = i_object->ToUnit())
@@ -1850,7 +1851,7 @@ void WorldObject::MonsterWhisper(int32 textId, Player const* target, bool IsBoss
 
     LocaleConstant loc_idx = target->GetSession()->GetSessionDbLocaleIndex();
 
-    BroadcastText const* broadcastText = sObjectMgr->GetBroadcastText(textId);
+    BroadcastText const* broadcastText = sGameLocale->GetBroadcastText(textId);
     std::string text = broadcastText->GetText(loc_idx, gender);
 
     WorldPacket data;

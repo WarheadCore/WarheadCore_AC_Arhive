@@ -9,6 +9,7 @@
 #include "ObjectMgr.h"
 #include "SpellInfo.h"
 #include "DBCStores.h"
+#include "GameLocale.h"
 
 // Supported shift-links (client generated and server side)
 // |color|Hachievement:achievement_id:player_guid:0:0:0:0:0:0:0:0|h[name]|h|r
@@ -192,7 +193,7 @@ bool ItemChatLink::ValidateName(char* buffer, const char* context)
 
     if (!res)
     {
-        ItemLocale const* il = sObjectMgr->GetItemLocale(_item->ItemId);
+        ItemLocale const* il = sGameLocale->GetItemLocale(_item->ItemId);
         for (uint8 index = LOCALE_koKR; index < TOTAL_LOCALES; ++index)
         {
             if (FormatName(index, il, suffixStrings) == buffer)

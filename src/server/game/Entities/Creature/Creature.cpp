@@ -41,6 +41,7 @@
 #include "World.h"
 #include "WorldPacket.h"
 #include "GameTime.h"
+#include "GameLocale.h"
 #include "Transport.h"
 
 #ifdef ELUNA
@@ -2580,7 +2581,7 @@ std::string const& Creature::GetNameForLocaleIdx(LocaleConstant loc_idx) const
     if (loc_idx != DEFAULT_LOCALE)
     {
         uint8 uloc_idx = uint8(loc_idx);
-        CreatureLocale const* cl = sObjectMgr->GetCreatureLocale(GetEntry());
+        CreatureLocale const* cl = sGameLocale->GetCreatureLocale(GetEntry());
         if (cl)
         {
             if (cl->Name.size() > uloc_idx && !cl->Name[uloc_idx].empty())

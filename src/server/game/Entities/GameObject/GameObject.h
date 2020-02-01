@@ -589,12 +589,6 @@ union GameObjectValue
     } Building;
 };
 
-struct GameObjectLocale
-{
-    StringVector Name;
-    StringVector CastBarCaption;
-};
-
 // `gameobject_addon` table
 struct GameObjectAddon
 {

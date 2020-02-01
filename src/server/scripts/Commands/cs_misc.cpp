@@ -30,6 +30,7 @@
 #include "GameGraveyard.h"
 #include "GameTime.h"
 #include "GameConfig.h"
+#include "GameLocale.h"
 
 class misc_commandscript : public CommandScript
 {
@@ -2022,74 +2023,8 @@ public:
             handler->PSendSysMessage(LANG_PINFO_CHR_LEVEL_HIGH, level);
 
         // Output XI. LANG_PINFO_CHR_RACE
-		switch (raceid)
-        {
-            case RACE_HUMAN:
-                raceStr = "Human";
-                break;
-            case RACE_ORC:
-                raceStr = "Orc";
-                break;
-            case RACE_DWARF:
-                raceStr = "Dwarf";
-                break;
-            case RACE_NIGHTELF:
-                raceStr = "Night Elf";
-                break;
-            case RACE_UNDEAD_PLAYER:
-                raceStr = "Undead";
-                break;
-            case RACE_TAUREN:
-                raceStr = "Tauren";
-                break;
-            case RACE_GNOME:
-                raceStr = "Gnome";
-                break;
-            case RACE_TROLL:
-                raceStr = "Troll";
-                break;
-            case RACE_BLOODELF:
-                raceStr = "Blood Elf";
-                break;
-            case RACE_DRAENEI:
-                raceStr = "Draenei";
-                break;
-        }
-
-        switch (classid)
-        {
-            case CLASS_WARRIOR:
-                classStr = "Warrior";
-                break;
-            case CLASS_PALADIN:
-                classStr = "Paladin";
-                break;
-            case CLASS_HUNTER:
-                classStr = "Hunter";
-                break;
-            case CLASS_ROGUE:
-                classStr = "Rogue";
-                break;
-            case CLASS_PRIEST:
-                classStr = "Priest";
-                break;
-            case CLASS_DEATH_KNIGHT:
-                classStr = "Death Knight";
-                break;
-            case CLASS_SHAMAN:
-                classStr = "Shaman";
-                break;
-            case CLASS_MAGE:
-                classStr = "Mage";
-                break;
-            case CLASS_WARLOCK:
-                classStr = "Warlock";
-                break;
-            case CLASS_DRUID:
-                classStr = "Druid";
-                break;
-        }
-
+        raceStr = sGameLocale->GetRaseString(raceid)->GetText(handler->GetSessionDbcLocale(), gender);
+        classStr = sGameLocale->GetClassString(classid)->GetText(handler->GetSessionDbcLocale(), gender);
 
         handler->PSendSysMessage(LANG_PINFO_CHR_RACE, (gender == 0 ? handler->GetAcoreString(LANG_CHARACTER_GENDER_MALE) : handler->GetAcoreString(LANG_CHARACTER_GENDER_FEMALE)), raceStr.c_str(), classStr.c_str());
 

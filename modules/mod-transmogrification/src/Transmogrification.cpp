@@ -196,7 +196,7 @@ std::string Transmogrification::GetItemLink(Item* item, WorldSession* session) c
     const ItemTemplate* temp = item->GetTemplate();
     std::string name = temp->Name1;
 
-    if (ItemLocale const* il = sObjectMgr->GetItemLocale(temp->ItemId))
+    if (ItemLocale const* il = sGameLocale->GetItemLocale(temp->ItemId))
         sGameLocale->GetLocaleString(il->Name, loc_idx, name);
 
     if (int32 itemRandPropId = item->GetItemRandomPropertyId())
@@ -247,7 +247,7 @@ std::string Transmogrification::GetItemLink(uint32 entry, WorldSession* session)
     int loc_idx = session->GetSessionDbLocaleIndex();
 
     std::string name = temp->Name1;
-    if (ItemLocale const* il = sObjectMgr->GetItemLocale(entry))
+    if (ItemLocale const* il = sGameLocale->GetItemLocale(entry))
         sGameLocale->GetLocaleString(il->Name, loc_idx, name);
 
     std::ostringstream oss;

@@ -419,49 +419,6 @@ struct AreaTrigger
     float orientation;
 };
 
-struct BroadcastText
-{
-    BroadcastText() : Id(0), Language(0), EmoteId0(0), EmoteId1(0), EmoteId2(0),
-                      EmoteDelay0(0), EmoteDelay1(0), EmoteDelay2(0), SoundId(0), Unk1(0), Unk2(0)
-    {
-        MaleText.resize(DEFAULT_LOCALE + 1);
-        FemaleText.resize(DEFAULT_LOCALE + 1);
-    }
-
-    uint32 Id;
-    uint32 Language;
-    StringVector MaleText;
-    StringVector FemaleText;
-    uint32 EmoteId0;
-    uint32 EmoteId1;
-    uint32 EmoteId2;
-    uint32 EmoteDelay0;
-    uint32 EmoteDelay1;
-    uint32 EmoteDelay2;
-    uint32 SoundId;
-    uint32 Unk1;
-    uint32 Unk2;
-    // uint32 VerifiedBuild;
-
-    std::string const& GetText(LocaleConstant locale = DEFAULT_LOCALE, uint8 gender = GENDER_MALE, bool forceGender = false) const
-    {
-        if (gender == GENDER_FEMALE && (forceGender || !FemaleText[DEFAULT_LOCALE].empty()))
-        {
-            if (FemaleText.size() > size_t(locale) && !FemaleText[locale].empty())
-                return FemaleText[locale];
-            return FemaleText[DEFAULT_LOCALE];
-        }
-        // else if (gender == GENDER_MALE)
-        {
-            if (MaleText.size() > size_t(locale) && !MaleText[locale].empty())
-                return MaleText[locale];
-            return MaleText[DEFAULT_LOCALE];
-        }
-    }
-};
-
-typedef std::unordered_map<uint32, BroadcastText> BroadcastTextContainer;
-
 typedef std::set<uint32> CellGuidSet;
 typedef std::unordered_map<uint32/*player guid*/, uint32/*instance*/> CellCorpseSet;
 
@@ -487,18 +444,7 @@ typedef std::unordered_map<uint32/*(mapid, spawnMode) pair*/, CellObjectGuidsMap
 typedef std::map<uint64, uint64> LinkedRespawnContainer;
 typedef std::unordered_map<uint32, CreatureData> CreatureDataContainer;
 typedef std::unordered_map<uint32, GameObjectData> GameObjectDataContainer;
-typedef std::map<TempSummonGroupKey, std::vector<TempSummonData> > TempSummonDataContainer;
-typedef std::unordered_map<uint32, CreatureLocale> CreatureLocaleContainer;
-typedef std::unordered_map<uint32, GameObjectLocale> GameObjectLocaleContainer;
-typedef std::unordered_map<uint32, ItemLocale> ItemLocaleContainer;
-typedef std::unordered_map<uint32, ItemSetNameLocale> ItemSetNameLocaleContainer;
-typedef std::unordered_map<uint32, QuestLocale> QuestLocaleContainer;
-typedef std::unordered_map<uint32, QuestOfferRewardLocale> QuestOfferRewardLocaleContainer;
-typedef std::unordered_map<uint32, QuestRequestItemsLocale> QuestRequestItemsLocaleContainer;
-typedef std::unordered_map<uint32, NpcTextLocale> NpcTextLocaleContainer;
-typedef std::unordered_map<uint32, PageTextLocale> PageTextLocaleContainer;
-typedef std::unordered_map<uint32, GossipMenuItemsLocale> GossipMenuItemsLocaleContainer;
-typedef std::unordered_map<uint32, PointOfInterestLocale> PointOfInterestLocaleContainer;
+typedef std::map<TempSummonGroupKey, std::vector<TempSummonData>> TempSummonDataContainer;
 
 typedef std::multimap<uint32, uint32> QuestRelations;
 typedef std::pair<QuestRelations::const_iterator, QuestRelations::const_iterator> QuestRelationBounds;
@@ -951,16 +897,11 @@ class ObjectMgr
         void LoadEventScripts();
         void LoadSpellScripts();
         void LoadWaypointScripts();
-
         void LoadSpellScriptNames();
         void ValidateSpellScripts();
         void InitializeSpellInfoPrecomputedData();
-
 		bool LoadAcoreStrings();
-        void LoadBroadcastTexts();
-        void LoadBroadcastTextLocales();
         void LoadCreatureClassLevelStats();
-        void LoadCreatureLocales();
         void LoadCreatureTemplates();
         void LoadCreatureTemplateAddons();
         void CheckCreatureTemplate(CreatureTemplate const* cInfo);
@@ -974,27 +915,15 @@ class ObjectMgr
         void LoadGameObjectAddons();
         void LoadCreatureModelInfo();
         void LoadEquipmentTemplates();
-        void LoadGameObjectLocales();
         void LoadGameobjects();
         void LoadItemTemplates();
-        void LoadItemLocales();
-        void LoadItemSetNames();
-        void LoadItemSetNameLocales();
-        void LoadQuestLocales();
-        void LoadNpcTextLocales();
-        void LoadQuestOfferRewardLocale();
-        void LoadQuestRequestItemsLocale();
-        void LoadPageTextLocales();
-        void LoadGossipMenuItemsLocales();
-        void LoadPointOfInterestLocales();
+        void LoadItemSetNames();        
         void LoadInstanceTemplate();
         void LoadInstanceEncounters();
         void LoadMailLevelRewards();
         void LoadVehicleTemplateAccessories();
         void LoadVehicleAccessories();
-
         void LoadGossipText();
-
         void LoadAreaTriggers();
         void LoadAreaTriggerTeleports();
         void LoadAccessRequirements();
@@ -1110,14 +1039,7 @@ class ObjectMgr
 
             return NULL;
         }
-
-        BroadcastText const* GetBroadcastText(uint32 id) const
-        {
-            BroadcastTextContainer::const_iterator itr = _broadcastTextStore.find(id);
-            if (itr != _broadcastTextStore.end())
-                return &itr->second;
-            return nullptr;
-        }
+        
         CreatureData const* GetCreatureData(uint32 guid) const
         {
             CreatureDataContainer::const_iterator itr = _creatureDataStore.find(guid);
@@ -1139,72 +1061,7 @@ class ObjectMgr
             if (itr == _gameObjectDataStore.end()) return NULL;
             return &itr->second;
         }
-        CreatureLocale const* GetCreatureLocale(uint32 entry) const
-        {
-            CreatureLocaleContainer::const_iterator itr = _creatureLocaleStore.find(entry);
-            if (itr == _creatureLocaleStore.end()) return NULL;
-            return &itr->second;
-        }
-        GameObjectLocale const* GetGameObjectLocale(uint32 entry) const
-        {
-            GameObjectLocaleContainer::const_iterator itr = _gameObjectLocaleStore.find(entry);
-            if (itr == _gameObjectLocaleStore.end()) return NULL;
-            return &itr->second;
-        }
-        ItemLocale const* GetItemLocale(uint32 entry) const
-        {
-            ItemLocaleContainer::const_iterator itr = _itemLocaleStore.find(entry);
-            if (itr == _itemLocaleStore.end()) return NULL;
-            return &itr->second;
-        }
-        ItemSetNameLocale const* GetItemSetNameLocale(uint32 entry) const
-        {
-            ItemSetNameLocaleContainer::const_iterator itr = _itemSetNameLocaleStore.find(entry);
-            if (itr == _itemSetNameLocaleStore.end())return NULL;
-            return &itr->second;
-        }
-        PageTextLocale const* GetPageTextLocale(uint32 entry) const
-        {
-            PageTextLocaleContainer::const_iterator itr = _pageTextLocaleStore.find(entry);
-            if (itr == _pageTextLocaleStore.end()) return NULL;
-            return &itr->second;
-        }
-        QuestLocale const* GetQuestLocale(uint32 entry) const
-        {
-            QuestLocaleContainer::const_iterator itr = _questLocaleStore.find(entry);
-            if (itr == _questLocaleStore.end()) return NULL;
-            return &itr->second;
-        }
-        GossipMenuItemsLocale const* GetGossipMenuItemsLocale(uint32 entry) const
-        {
-            GossipMenuItemsLocaleContainer::const_iterator itr = _gossipMenuItemsLocaleStore.find(entry);
-            if (itr == _gossipMenuItemsLocaleStore.end()) return NULL;
-            return &itr->second;
-        }
-        PointOfInterestLocale const* GetPointOfInterestLocale(uint32 poi_id) const
-        {
-            PointOfInterestLocaleContainer::const_iterator itr = _pointOfInterestLocaleStore.find(poi_id);
-            if (itr == _pointOfInterestLocaleStore.end()) return NULL;
-            return &itr->second;
-        }
-        QuestOfferRewardLocale const* GetQuestOfferRewardLocale(uint32 entry) const
-        {
-            auto itr = _questOfferRewardLocaleStore.find(entry);
-            if (itr == _questOfferRewardLocaleStore.end()) return nullptr;
-            return &itr->second;
-        }
-        QuestRequestItemsLocale const* GetQuestRequestItemsLocale(uint32 entry) const
-        {
-            auto itr = _questRequestItemsLocaleStore.find(entry);
-            if (itr == _questRequestItemsLocaleStore.end()) return nullptr;
-            return &itr->second;
-        }
-        NpcTextLocale const* GetNpcTextLocale(uint32 entry) const
-        {
-            NpcTextLocaleContainer::const_iterator itr = _npcTextLocaleStore.find(entry);
-            if (itr == _npcTextLocaleStore.end()) return NULL;
-            return &itr->second;
-        }
+        
         GameObjectData& NewGOData(uint32 guid) { return _gameObjectDataStore[guid]; }
         void DeleteGOData(uint32 guid);
 
@@ -1293,8 +1150,6 @@ class ObjectMgr
         {
             return _gossipMenuItemsStore.equal_range(uiMenuId);
         }
-        
-        
 
         CharacterConversionMap FactionChangeAchievements;
         CharacterConversionMap FactionChangeItems;
@@ -1432,24 +1287,12 @@ class ObjectMgr
         CreatureQuestItemMap _creatureQuestItemStore;
         EquipmentInfoContainer _equipmentInfoStore;
         LinkedRespawnContainer _linkedRespawnStore;
-        CreatureLocaleContainer _creatureLocaleStore;
         GameObjectDataContainer _gameObjectDataStore;
-        GameObjectLocaleContainer _gameObjectLocaleStore;
         GameObjectTemplateContainer _gameObjectTemplateStore;
         GameObjectTemplateAddonContainer _gameObjectTemplateAddonStore;        
         TempSummonDataContainer _tempSummonDataStore; /// Stores temp summon data grouped by summoner's entry, summoner's type and group id
-        BroadcastTextContainer _broadcastTextStore;
         ItemTemplateContainer _itemTemplateStore;
         std::vector<ItemTemplate*> _itemTemplateStoreFast; // pussywizard
-        ItemLocaleContainer _itemLocaleStore;
-        ItemSetNameLocaleContainer _itemSetNameLocaleStore;
-        QuestLocaleContainer _questLocaleStore;
-        QuestOfferRewardLocaleContainer _questOfferRewardLocaleStore;
-        QuestRequestItemsLocaleContainer _questRequestItemsLocaleStore;
-        NpcTextLocaleContainer _npcTextLocaleStore;
-        PageTextLocaleContainer _pageTextLocaleStore;        
-        GossipMenuItemsLocaleContainer _gossipMenuItemsLocaleStore;
-        PointOfInterestLocaleContainer _pointOfInterestLocaleStore;
         CacheVendorItemContainer _cacheVendorItemStore;
         CacheTrainerSpellContainer _cacheTrainerSpellStore;
 

@@ -20,6 +20,7 @@
 #include "WaypointManager.h"
 #include "World.h"
 #include "GameTime.h"
+#include "GameLocale.h"
 
 /// Put scripts in the execution queue
 void Map::ScriptsStart(ScriptMapMap const& scripts, uint32 id, Object* source, Object* target)
@@ -373,7 +374,7 @@ void Map::ScriptsProcess()
                     if (Player* player = _GetScriptPlayerSourceOrTarget(source, target, step.script))
                     {
                         LocaleConstant loc_idx = player->GetSession()->GetSessionDbLocaleIndex();
-                        BroadcastText const* broadcastText = sObjectMgr->GetBroadcastText(step.script->Talk.TextID);
+                        BroadcastText const* broadcastText = sGameLocale->GetBroadcastText(step.script->Talk.TextID);
                         std::string text = broadcastText->GetText(loc_idx, player->getGender());
 
                         switch (step.script->Talk.ChatType)

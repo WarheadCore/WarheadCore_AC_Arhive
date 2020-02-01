@@ -280,7 +280,7 @@ void BattlefieldWG::OnBattleStart()
     m_tenacityStack = 0;
     m_tenacityUpdateTimer = 20000;
 
-    if (sGameConfig->GetBoolConfig("QueueAnnouncer.Enable"))
+    if (sGameConfig->GetBoolConfig("Battleground.QueueAnnouncer.Enable"))
         sWorld->SendWorldText(BATTLEFIELD_WG_WORLD_START_MESSAGE);
 }
 

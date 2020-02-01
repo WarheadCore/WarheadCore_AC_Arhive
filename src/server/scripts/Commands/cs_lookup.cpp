@@ -21,6 +21,7 @@ EndScriptData */
 #include "ScriptMgr.h"
 #include "SpellInfo.h"
 #include "GameConfig.h"
+#include "GameLocale.h"
 
 class lookup_commandscript : public CommandScript
 {
@@ -167,7 +168,7 @@ public:
         {
             uint32 id = itr->second.Entry;
             uint8 localeIndex = handler->GetSessionDbLocaleIndex();
-            if (CreatureLocale const* creatureLocale = sObjectMgr->GetCreatureLocale(id))
+            if (CreatureLocale const* creatureLocale = sGameLocale->GetCreatureLocale(id))
             {
                 if (creatureLocale->Name.size() > localeIndex && !creatureLocale->Name[localeIndex].empty())
                 {
@@ -405,7 +406,7 @@ public:
             if (localeIndex >= 0)
             {
                 uint8 ulocaleIndex = uint8(localeIndex);
-                if (ItemLocale const* il = sObjectMgr->GetItemLocale(itr->second.ItemId))
+                if (ItemLocale const* il = sGameLocale->GetItemLocale(itr->second.ItemId))
                 {
                     if (il->Name.size() > ulocaleIndex && !il->Name[ulocaleIndex].empty())
                     {
@@ -554,7 +555,7 @@ public:
         for (GameObjectTemplateContainer::const_iterator itr = gotc->begin(); itr != gotc->end(); ++itr)
         {
             uint8 localeIndex = handler->GetSessionDbLocaleIndex();
-            if (GameObjectLocale const* objectLocalte = sObjectMgr->GetGameObjectLocale(itr->second.entry))
+            if (GameObjectLocale const* objectLocalte = sGameLocale->GetGameObjectLocale(itr->second.entry))
             {
                 if (objectLocalte->Name.size() > localeIndex && !objectLocalte->Name[localeIndex].empty())
                 {

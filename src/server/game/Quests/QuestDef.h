@@ -162,29 +162,7 @@ enum QuestSpecialFlags
     QUEST_SPECIAL_FLAGS_PLAYER_KILL          = 0x800    // Internal flag computed only
 };
 
-struct QuestLocale
-{
-    QuestLocale() { ObjectiveText.resize(QUEST_OBJECTIVES_COUNT); }
 
-    StringVector Title;
-    StringVector Details;
-    StringVector Objectives;
-    StringVector OfferRewardText;
-    StringVector RequestItemsText;
-    StringVector AreaDescription;
-    StringVector CompletedText;
-    std::vector< StringVector > ObjectiveText;
-};
-
-struct QuestRequestItemsLocale
-{
-    std::vector<std::string> CompletionText;
-};
-
-struct QuestOfferRewardLocale
-{
-    std::vector<std::string> RewardText;
-};
 
 // This Quest class provides a convenient way to access a few pretotaled (cached) quest details,
 // all base quest information, and any utility functions such as generating the amount of

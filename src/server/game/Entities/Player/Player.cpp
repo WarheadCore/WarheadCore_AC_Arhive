@@ -14956,8 +14956,8 @@ void Player::PrepareGossipMenu(WorldObject* source, uint32 menuId /*= 0*/, bool 
         if (canTalk)
         {
             std::string strOptionText, strBoxText;
-            BroadcastText const* optionBroadcastText = sObjectMgr->GetBroadcastText(itr->second.OptionBroadcastTextID);
-            BroadcastText const* boxBroadcastText = sObjectMgr->GetBroadcastText(itr->second.BoxBroadcastTextID);
+            BroadcastText const* optionBroadcastText = sGameLocale->GetBroadcastText(itr->second.OptionBroadcastTextID);
+            BroadcastText const* boxBroadcastText = sGameLocale->GetBroadcastText(itr->second.BoxBroadcastTextID);
             LocaleConstant locale = GetSession()->GetSessionDbLocaleIndex();
 
             if (optionBroadcastText)
@@ -14975,14 +14975,14 @@ void Player::PrepareGossipMenu(WorldObject* source, uint32 menuId /*= 0*/, bool 
                 if (!optionBroadcastText)
                 {
                     /// Find localizations from database.
-                    if (GossipMenuItemsLocale const* gossipMenuLocale = sObjectMgr->GetGossipMenuItemsLocale(MAKE_PAIR32(menuId, menuId)))
+                    if (GossipMenuItemsLocale const* gossipMenuLocale = sGameLocale->GetGossipMenuItemsLocale(MAKE_PAIR32(menuId, menuId)))
                         sGameLocale->GetLocaleString(gossipMenuLocale->OptionText, locale, strOptionText);
                 }
 
                 if (!boxBroadcastText)
                 {
                     /// Find localizations from database.
-                    if (GossipMenuItemsLocale const* gossipMenuLocale = sObjectMgr->GetGossipMenuItemsLocale(MAKE_PAIR32(menuId, menuId)))
+                    if (GossipMenuItemsLocale const* gossipMenuLocale = sGameLocale->GetGossipMenuItemsLocale(MAKE_PAIR32(menuId, menuId)))
                         sGameLocale->GetLocaleString(gossipMenuLocale->BoxText, locale, strBoxText);
                 }
             }
@@ -15361,7 +15361,7 @@ void Player::SendPreparedQuest(uint64 guid)
 
                     int loc_idx = GetSession()->GetSessionDbLocaleIndex();
                     if (loc_idx >= 0)
-                        if (NpcTextLocale const* nl = sObjectMgr->GetNpcTextLocale(textid))
+                        if (NpcTextLocale const* nl = sGameLocale->GetNpcTextLocale(textid))
                             sGameLocale->GetLocaleString(nl->Text_0[0], loc_idx, title);
                 }
                 else
@@ -15370,7 +15370,7 @@ void Player::SendPreparedQuest(uint64 guid)
 
                     int loc_idx = GetSession()->GetSessionDbLocaleIndex();
                     if (loc_idx >= 0)
-                        if (NpcTextLocale const* nl = sObjectMgr->GetNpcTextLocale(textid))
+                        if (NpcTextLocale const* nl = sGameLocale->GetNpcTextLocale(textid))
                             sGameLocale->GetLocaleString(nl->Text_1[0], loc_idx, title);
                 }
             }
@@ -17503,7 +17503,7 @@ void Player::SendQuestConfirmAccept(const Quest* quest, Player* pReceiver)
 
         int loc_idx = pReceiver->GetSession()->GetSessionDbLocaleIndex();
         if (loc_idx >= 0)
-            if (const QuestLocale* pLocale = sObjectMgr->GetQuestLocale(quest->GetQuestId()))
+            if (const QuestLocale* pLocale = sGameLocale->GetQuestLocale(quest->GetQuestId()))
                 sGameLocale->GetLocaleString(pLocale->Title, loc_idx, strTitle);
 			
         WorldPacket data(SMSG_QUEST_CONFIRM_ACCEPT, (4 + quest->GetTitle().size() + 8));
@@ -20960,7 +20960,7 @@ void Player::TextEmote(const std::string& text)
         if (!sGameConfig->GetBoolConfig("AllowTwoSide.Interaction.Emote") && this->GetTeamId() != itr->GetTeamId())
         {
             LocaleConstant loc_idx = itr->GetSession()->GetSessionDbLocaleIndex();
-            if (BroadcastText const* bct = sObjectMgr->GetBroadcastText(EMOTE_BROADCAST_TEXT_ID_STRANGE_GESTURES))
+            if (BroadcastText const* bct = sGameLocale->GetBroadcastText(EMOTE_BROADCAST_TEXT_ID_STRANGE_GESTURES))
             {
                 ChatHandler::BuildChatPacket(data, CHAT_MSG_EMOTE, LANG_UNIVERSAL, this, this, bct->GetText(loc_idx, this->getGender()));
                 itr->SendDirectMessage(&data);

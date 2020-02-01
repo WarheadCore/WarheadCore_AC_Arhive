@@ -278,106 +278,6 @@ ObjectMgr* ObjectMgr::instance()
     return &instance;
 }
 
-void ObjectMgr::LoadCreatureLocales()
-{
-    uint32 oldMSTime = getMSTime();
-
-    _creatureLocaleStore.clear();                              // need for reload case
-
-    //                                               0      1       2     3
-    QueryResult result = WorldDatabase.Query("SELECT entry, locale, Name, Title FROM creature_template_locale");
-    if (!result)
-        return;
-
-    do
-    {
-        Field* fields = result->Fetch();
-
-        uint32 ID               = fields[0].GetUInt32();
-        std::string LocaleName  = fields[1].GetString();
-        std::string Name        = fields[2].GetString();
-        std::string Title       = fields[3].GetString();
-
-        CreatureLocale& data    = _creatureLocaleStore[ID];
-        LocaleConstant locale   = GetLocaleByName(LocaleName);
-        if (locale == LOCALE_enUS)
-            continue;
-
-        sGameLocale->AddLocaleString(Name, locale, data.Name);
-        sGameLocale->AddLocaleString(Title, locale, data.Title);
-
-    } while (result->NextRow());
-
-    sLog->outString(">> Loaded %lu Сreature Locale strings in %u ms", (unsigned long)_creatureLocaleStore.size(), GetMSTimeDiffToNow(oldMSTime));
-}
-
-void ObjectMgr::LoadGossipMenuItemsLocales()
-{
-    uint32 oldMSTime = getMSTime();
-
-    _gossipMenuItemsLocaleStore.clear();                              // need for reload case
-
-    //                                               0       1            2       3           4
-    QueryResult result = WorldDatabase.Query("SELECT MenuID, OptionID, Locale, OptionText, BoxText FROM gossip_menu_option_locale");
-
-    if (!result)
-        return;
-
-    do
-    {
-        Field* fields = result->Fetch();
-
-        uint16 MenuID           = fields[0].GetUInt16();
-        uint16 OptionID         = fields[1].GetUInt16();
-        std::string LocaleName  = fields[2].GetString();
-        std::string OptionText  = fields[3].GetString();
-        std::string BoxText     = fields[4].GetString();
-
-        GossipMenuItemsLocale& data = _gossipMenuItemsLocaleStore[MAKE_PAIR32(MenuID, OptionID)];
-        LocaleConstant locale   = GetLocaleByName(LocaleName);
-        if (locale == LOCALE_enUS)
-            continue;
-
-        sGameLocale->AddLocaleString(OptionText, locale, data.OptionText);
-        sGameLocale->AddLocaleString(BoxText, locale, data.BoxText);
-
-    } while (result->NextRow());
-
-    sLog->outString(">> Loaded %u Gossip Menu Option Locale strings in %u ms", (uint32)_gossipMenuItemsLocaleStore.size(), GetMSTimeDiffToNow(oldMSTime));
-}
-
-void ObjectMgr::LoadPointOfInterestLocales()
-{
-    uint32 oldMSTime = getMSTime();
-
-    _pointOfInterestLocaleStore.clear();                              // need for reload case
-
-    //                                               0   1       2
-    QueryResult result = WorldDatabase.Query("SELECT ID, locale, Name FROM points_of_interest_locale");
-
-    if (!result)
-        return;
-
-    do
-    {
-        Field* fields = result->Fetch();
-
-        uint32 ID               = fields[0].GetUInt32();
-        std::string LocaleName  = fields[1].GetString();
-        std::string Name        = fields[2].GetString();
-
-        PointOfInterestLocale& data = _pointOfInterestLocaleStore[ID];
-        LocaleConstant locale   = GetLocaleByName(LocaleName);
-        if (locale == LOCALE_enUS)
-            continue;
-
-        sGameLocale->AddLocaleString(Name, locale, data.Name);
-
-    } while (result->NextRow());
-
-    sLog->outString(">> Loaded %u Points Of Interest Locale strings in %u ms", (uint32)_pointOfInterestLocaleStore.size(), GetMSTimeDiffToNow(oldMSTime));
-}
-
 void ObjectMgr::LoadCreatureTemplates()
 {
     uint32 oldMSTime = getMSTime();
@@ -2210,37 +2110,7 @@ uint32 ObjectMgr::GetPlayerAccountIdByPlayerName(const std::string& name) const
     return 0;
 }
 
-void ObjectMgr::LoadItemLocales()
-{
-    uint32 oldMSTime = getMSTime();
 
-    _itemLocaleStore.clear();                                 // need for reload case
-
-    QueryResult result = WorldDatabase.Query("SELECT ID, locale, Name, Description FROM item_template_locale");
-    if (!result)
-        return;
-
-    do
-    {
-        Field* fields = result->Fetch();
-
-        uint32 ID               = fields[0].GetUInt32();
-        std::string LocaleName  = fields[1].GetString();
-        std::string Name        = fields[2].GetString();
-        std::string Description = fields[3].GetString();
-
-        ItemLocale& data        = _itemLocaleStore[ID];
-        LocaleConstant locale   = GetLocaleByName(LocaleName);
-        if (locale == LOCALE_enUS)
-            continue;
-
-        sGameLocale->AddLocaleString(Name, locale, data.Name);
-        sGameLocale->AddLocaleString(Description, locale, data.Description);
-
-    } while (result->NextRow());
-
-    sLog->outString(">> Loaded %u Item Locale strings in %u ms", (uint32)_itemLocaleStore.size(), GetMSTimeDiffToNow(oldMSTime));
-}
 
 void ObjectMgr::LoadItemTemplates()
 {
@@ -2835,37 +2705,6 @@ void ObjectMgr::LoadItemTemplates()
 ItemTemplate const* ObjectMgr::GetItemTemplate(uint32 entry)
 {
     return entry < _itemTemplateStoreFast.size() ? _itemTemplateStoreFast[entry] : NULL;
-}
-
-void ObjectMgr::LoadItemSetNameLocales()
-{
-    uint32 oldMSTime = getMSTime();
-
-    _itemSetNameLocaleStore.clear();                                 // need for reload case
-
-    QueryResult result = WorldDatabase.Query("SELECT ID, locale, Name FROM item_set_names_locale");
-
-    if (!result)
-        return;
-
-    do
-    {
-        Field* fields = result->Fetch();
-
-        uint32 ID               = fields[0].GetUInt32();
-        std::string LocaleName  = fields[1].GetString();
-        std::string Name        = fields[2].GetString();
-
-        ItemSetNameLocale& data = _itemSetNameLocaleStore[ID];
-        LocaleConstant locale   = GetLocaleByName(LocaleName);
-        if (locale == LOCALE_enUS)
-            continue;
-
-        sGameLocale->AddLocaleString(Name, locale, data.Name);
-
-    } while (result->NextRow());
-
-    sLog->outString(">> Loaded %u Item Set Name Locale strings in %u ms", uint32(_itemSetNameLocaleStore.size()), GetMSTimeDiffToNow(oldMSTime));
 }
 
 void ObjectMgr::LoadItemSetNames()
@@ -4574,44 +4413,6 @@ void ObjectMgr::LoadQuests()
     sLog->outString();
 }
 
-void ObjectMgr::LoadQuestLocales()
-{
-    uint32 oldMSTime = getMSTime();
-
-    _questLocaleStore.clear();                                // need for reload case
-
-    //                                               0   1       2      3        4           5        6              7               8               9               10
-    QueryResult result = WorldDatabase.Query("SELECT ID, locale, Title, Details, Objectives, EndText, CompletedText, ObjectiveText1, ObjectiveText2, ObjectiveText3, ObjectiveText4 FROM quest_template_locale");
-
-    if (!result)
-        return;
-
-    do
-    {
-        Field* fields = result->Fetch();
-
-        uint32 ID               = fields[0].GetUInt32();
-        std::string LocaleName  = fields[1].GetString();
-
-        QuestLocale& data       = _questLocaleStore[ID];
-        LocaleConstant locale   = GetLocaleByName(LocaleName);
-        if (locale == LOCALE_enUS)
-            continue;
-
-        sGameLocale->AddLocaleString(fields[2].GetString(), locale, data.Title);
-        sGameLocale->AddLocaleString(fields[3].GetString(), locale, data.Details);
-        sGameLocale->AddLocaleString(fields[4].GetString(), locale, data.Objectives);
-        sGameLocale->AddLocaleString(fields[5].GetString(), locale, data.AreaDescription);
-        sGameLocale->AddLocaleString(fields[6].GetString(), locale, data.CompletedText);
-
-        for (uint8 i = 0; i < 4; ++i)
-            sGameLocale->AddLocaleString(fields[i + 7].GetString(), locale, data.ObjectiveText[i]);
-
-    } while (result->NextRow());
-
-    sLog->outString(">> Loaded %u Quest Locale strings in %u ms", (uint32)_questLocaleStore.size(), GetMSTimeDiffToNow(oldMSTime));
-}
-
 void ObjectMgr::LoadScripts(ScriptsType type)
 {
     uint32 oldMSTime = getMSTime();
@@ -5206,36 +5007,6 @@ PageText const* ObjectMgr::GetPageText(uint32 pageEntry)
     return NULL;
 }
 
-void ObjectMgr::LoadPageTextLocales()
-{
-    uint32 oldMSTime = getMSTime();
-
-    _pageTextLocaleStore.clear();                             // need for reload case
-
-    //                                               0   1       2
-    QueryResult result = WorldDatabase.Query("SELECT ID, locale, Text FROM page_text_locale");
-
-    if (!result)
-        return;
-
-    do
-    {
-        Field* fields = result->Fetch();
-
-        uint32 ID               = fields[0].GetUInt32();
-        std::string LocaleName  = fields[1].GetString();
-        std::string Text        = fields[2].GetString();
-
-        PageTextLocale& data    = _pageTextLocaleStore[ID];
-        LocaleConstant locale   = GetLocaleByName(LocaleName);
-
-        sGameLocale->AddLocaleString(Text, locale, data.Text);
-
-    } while (result->NextRow());
-
-    sLog->outString(">> Loaded %u Page Text Locale strings in %u ms", (uint32)_pageTextLocaleStore.size(), GetMSTimeDiffToNow(oldMSTime));
-}
-
 void ObjectMgr::LoadInstanceTemplate()
 {
     uint32 oldMSTime = getMSTime();
@@ -5443,7 +5214,7 @@ void ObjectMgr::LoadGossipText()
         {
             if (gText.Options[i].BroadcastTextID)
             {
-                if (!sObjectMgr->GetBroadcastText(gText.Options[i].BroadcastTextID))
+                if (!sGameLocale->GetBroadcastText(gText.Options[i].BroadcastTextID))
                 {
                     sLog->outErrorDb("GossipText (Id: %u) in table `npc_text` has non-existing or incompatible BroadcastTextID%u %u.", id, i, gText.Options[i].BroadcastTextID);
                     gText.Options[i].BroadcastTextID = 0;
@@ -5457,43 +5228,6 @@ void ObjectMgr::LoadGossipText()
 
     sLog->outString(">> Loaded %u npc texts in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
     sLog->outString();
-}
-
-void ObjectMgr::LoadNpcTextLocales()
-{
-    uint32 oldMSTime = getMSTime();
-
-    _npcTextLocaleStore.clear();                              // need for reload case
-
-    QueryResult result = WorldDatabase.Query("SELECT ID, Locale, "
-        //   2        3        4        5        6        7        8        9        10       11       12       13       14       15       16       17
-        "Text0_0, Text0_1, Text1_0, Text1_1, Text2_0, Text2_1, Text3_0, Text3_1, Text4_0, Text4_1, Text5_0, Text5_1, Text6_0, Text6_1, Text7_0, Text7_1 "
-        "FROM npc_text_locale");
-
-    if (!result)
-        return;
-
-    do
-    {
-        Field* fields = result->Fetch();
-
-        uint32 ID               = fields[0].GetUInt32();
-        std::string LocaleName  = fields[1].GetString();
-
-        NpcTextLocale& data     = _npcTextLocaleStore[ID];
-        LocaleConstant locale   = GetLocaleByName(LocaleName);
-        if (locale == LOCALE_enUS)
-            continue;
-
-        for (uint8 i = 0; i < MAX_GOSSIP_TEXT_OPTIONS; ++i)
-        {
-            sGameLocale->AddLocaleString(fields[2 + i * 2].GetString(), locale, data.Text_0[i]);
-            sGameLocale->AddLocaleString(fields[3 + i * 2].GetString(), locale, data.Text_1[i]);
-        }
-
-    } while (result->NextRow());
-
-    sLog->outString(">> Loaded %u Npc Text Locale strings in %u ms", (uint32)_npcTextLocaleStore.size(), GetMSTimeDiffToNow(oldMSTime));
 }
 
 void ObjectMgr::ReturnOrDeleteOldMails(bool serverUp)
@@ -5684,65 +5418,7 @@ void ObjectMgr::LoadQuestAreaTriggers()
     sLog->outString();
 }
 
-void ObjectMgr::LoadQuestOfferRewardLocale()
-{
-    uint32 oldMSTime = getMSTime();
 
-    _questOfferRewardLocaleStore.clear(); // need for reload case
-
-    //                                               0     1          2
-    QueryResult result = WorldDatabase.Query("SELECT Id, locale, RewardText FROM quest_offer_reward_locale");
-    if (!result)
-        return;
-
-    do
-    {
-        Field* fields = result->Fetch();
-
-        uint32 id = fields[0].GetUInt32();
-        std::string localeName = fields[1].GetString();
-
-        LocaleConstant locale = GetLocaleByName(localeName);
-        if (locale == LOCALE_enUS)
-            continue;
-
-        QuestOfferRewardLocale& data = _questOfferRewardLocaleStore[id];
-        sGameLocale->AddLocaleString(fields[2].GetString(), locale, data.RewardText);
-
-    } while (result->NextRow());
-
-    sLog->outString(">> Loaded %lu Quest Offer Reward locale strings in %u ms", _questOfferRewardLocaleStore.size(), GetMSTimeDiffToNow(oldMSTime));
-}
-
-void ObjectMgr::LoadQuestRequestItemsLocale()
-{
-    uint32 oldMSTime = getMSTime();
-
-    _questRequestItemsLocaleStore.clear(); // need for reload case
-
-    //                                               0     1          2
-    QueryResult result = WorldDatabase.Query("SELECT Id, locale, CompletionText FROM quest_request_items_locale");
-    if (!result)
-        return;
-
-    do
-    {
-        Field* fields = result->Fetch();
-
-        uint32 id = fields[0].GetUInt32();
-        std::string localeName = fields[1].GetString();
-
-        LocaleConstant locale = GetLocaleByName(localeName);
-        if (locale == LOCALE_enUS)
-            continue;
-
-        QuestRequestItemsLocale& data = _questRequestItemsLocaleStore[id];
-        sGameLocale->AddLocaleString(fields[2].GetString(), locale, data.CompletionText);
-
-    } while (result->NextRow());
-
-    sLog->outString(">> Loaded %lu Quest Request Items locale strings in %u ms", _questRequestItemsLocaleStore.size(), GetMSTimeDiffToNow(oldMSTime));
-}
 
 void ObjectMgr::LoadTavernAreaTriggers()
 {
@@ -6372,39 +6048,6 @@ uint32 ObjectMgr::GenerateRecycledLowGuid(HighGuid guidHigh)
     }
 
     return GenerateLowGuid(guidHigh);
-}
-
-void ObjectMgr::LoadGameObjectLocales()
-{
-    uint32 oldMSTime = getMSTime();
-
-    _gameObjectLocaleStore.clear(); // need for reload case
-
-    //                                               0      1       2     3
-    QueryResult result = WorldDatabase.Query("SELECT entry, locale, name, castBarCaption FROM gameobject_template_locale");
-    if (!result)
-        return;
-
-    do
-    {
-        Field* fields = result->Fetch();
-
-        uint32 ID                   = fields[0].GetUInt32();
-        std::string LocaleName      = fields[1].GetString();
-        std::string Name            = fields[2].GetString();
-        std::string CastBarCaption  = fields[3].GetString();
-
-        GameObjectLocale& data      = _gameObjectLocaleStore[ID];
-        LocaleConstant locale       = GetLocaleByName(LocaleName);
-        if (locale == LOCALE_enUS)
-            continue;
-
-        sGameLocale->AddLocaleString(Name, locale, data.Name);
-        sGameLocale->AddLocaleString(CastBarCaption, locale, data.CastBarCaption);
-
-    } while (result->NextRow());
-
-    sLog->outString(">> Loaded %u Gameobject Locale strings in %u ms", (uint32)_gameObjectLocaleStore.size(), GetMSTimeDiffToNow(oldMSTime));
 }
 
 inline void CheckGOLockId(GameObjectTemplate const* goInfo, uint32 dataN, uint32 N)
@@ -8389,7 +8032,7 @@ void ObjectMgr::LoadGossipMenuItems()
             gMenuItem.OptionIcon = GOSSIP_ICON_CHAT;
         }
 
-        if (gMenuItem.OptionBroadcastTextID && !GetBroadcastText(gMenuItem.OptionBroadcastTextID))
+        if (gMenuItem.OptionBroadcastTextID && !sGameLocale->GetBroadcastText(gMenuItem.OptionBroadcastTextID))
         {
             sLog->outErrorDb("Table `gossip_menu_option` for menu %u, id %u has non-existing or incompatible OptionBroadcastTextID %u, ignoring.", gMenuItem.MenuID, gMenuItem.OptionID, gMenuItem.OptionBroadcastTextID);
             gMenuItem.OptionBroadcastTextID = 0;
@@ -8404,7 +8047,7 @@ void ObjectMgr::LoadGossipMenuItems()
             gMenuItem.ActionPoiID = 0;
         }
 
-        if (gMenuItem.BoxBroadcastTextID && !GetBroadcastText(gMenuItem.BoxBroadcastTextID))
+        if (gMenuItem.BoxBroadcastTextID && !sGameLocale->GetBroadcastText(gMenuItem.BoxBroadcastTextID))
         {
             sLog->outErrorDb("Table `gossip_menu_option` for menu %u, id %u has non-existing or incompatible BoxBroadcastTextID %u, ignoring.", gMenuItem.MenuID, gMenuItem.OptionID, gMenuItem.BoxBroadcastTextID);
             gMenuItem.BoxBroadcastTextID = 0;
@@ -8600,136 +8243,6 @@ uint32 ObjectMgr::GetScriptId(const char *name)
         return 0;
 
     return uint32(itr - _scriptNamesStore.begin());
-}
-
-void ObjectMgr::LoadBroadcastTexts()
-{
-    uint32 oldMSTime = getMSTime();
-
-    _broadcastTextStore.clear(); // for reload case
-
-    //                                               0   1         2         3           4         5         6         7            8            9            10       11    12
-    QueryResult result = WorldDatabase.Query("SELECT ID, Language, MaleText, FemaleText, EmoteID0, EmoteID1, EmoteID2, EmoteDelay0, EmoteDelay1, EmoteDelay2, SoundId, Unk1, Unk2 FROM broadcast_text");
-    if (!result)
-    {
-        sLog->outString(">> Loaded 0 broadcast texts. DB table `broadcast_text` is empty.");
-        sLog->outString();
-        return;
-    }
-
-    _broadcastTextStore.rehash(result->GetRowCount());
-
-    do
-    {
-        Field* fields = result->Fetch();
-
-        BroadcastText bct;
-
-        bct.Id = fields[0].GetUInt32();
-        bct.Language = fields[1].GetUInt32();
-        bct.MaleText[DEFAULT_LOCALE] = fields[2].GetString();
-        bct.FemaleText[DEFAULT_LOCALE] = fields[3].GetString();
-        bct.EmoteId0 = fields[4].GetUInt32();
-        bct.EmoteId1 = fields[5].GetUInt32();
-        bct.EmoteId2 = fields[6].GetUInt32();
-        bct.EmoteDelay0 = fields[7].GetUInt32();
-        bct.EmoteDelay1 = fields[8].GetUInt32();
-        bct.EmoteDelay2 = fields[9].GetUInt32();
-        bct.SoundId = fields[10].GetUInt32();
-        bct.Unk1 = fields[11].GetUInt32();
-        bct.Unk2 = fields[12].GetUInt32();
-
-        if (bct.SoundId)
-        {
-            if (!sSoundEntriesStore.LookupEntry(bct.SoundId))
-            {
-                LOG_DEBUG("misc", "BroadcastText (Id: %u) in table `broadcast_text` has SoundId %u but sound does not exist.", bct.Id, bct.SoundId);
-                bct.SoundId = 0;
-            }
-        }
-
-        if (!GetLanguageDescByID(bct.Language))
-        {
-            LOG_DEBUG("misc", "BroadcastText (Id: %u) in table `broadcast_text` using Language %u but Language does not exist.", bct.Id, bct.Language);
-            bct.Language = LANG_UNIVERSAL;
-        }
-
-        if (bct.EmoteId0)
-        {
-            if (!sEmotesStore.LookupEntry(bct.EmoteId0))
-            {
-                LOG_DEBUG("misc", "BroadcastText (Id: %u) in table `broadcast_text` has EmoteId0 %u but emote does not exist.", bct.Id, bct.EmoteId0);
-                bct.EmoteId0 = 0;
-            }
-        }
-
-        if (bct.EmoteId1)
-        {
-            if (!sEmotesStore.LookupEntry(bct.EmoteId1))
-            {
-                LOG_DEBUG("misc", "BroadcastText (Id: %u) in table `broadcast_text` has EmoteId1 %u but emote does not exist.", bct.Id, bct.EmoteId1);
-                bct.EmoteId1 = 0;
-            }
-        }
-
-        if (bct.EmoteId2)
-        {
-            if (!sEmotesStore.LookupEntry(bct.EmoteId2))
-            {
-                LOG_DEBUG("misc", "BroadcastText (Id: %u) in table `broadcast_text` has EmoteId2 %u but emote does not exist.", bct.Id, bct.EmoteId2);
-                bct.EmoteId2 = 0;
-            }
-        }
-
-        _broadcastTextStore[bct.Id] = bct;
-    }
-    while (result->NextRow());
-
-    sLog->outString(">> Loaded " SZFMTD " broadcast texts in %u ms", _broadcastTextStore.size(), GetMSTimeDiffToNow(oldMSTime));
-    sLog->outString();
-}
-
-void ObjectMgr::LoadBroadcastTextLocales()
-{
-    uint32 oldMSTime = getMSTime();
-
-    //                                               0   1       2         3
-    QueryResult result = WorldDatabase.Query("SELECT ID, locale, MaleText, FemaleText FROM broadcast_text_locale");
-
-    if (!result)
-    {
-        sLog->outString(">> Loaded 0 broadcast text locales. DB table `broadcast_text_locale` is empty.");
-        sLog->outString();
-        return;
-    }
-
-    do
-    {
-        Field* fields = result->Fetch();
-
-        uint32 id               = fields[0].GetUInt32();
-        std::string LocaleName  = fields[1].GetString();
-        std::string MaleText    = fields[2].GetString();
-        std::string FemaleText  = fields[3].GetString();
-
-        BroadcastTextContainer::iterator bct = _broadcastTextStore.find(id);
-        if (bct == _broadcastTextStore.end())
-        {
-            sLog->outErrorDb("BroadcastText (Id: %u) in table `broadcast_text_locale` does not exist. Skipped!", id);
-            continue;
-        }
-
-        LocaleConstant locale = GetLocaleByName(LocaleName);
-        if (locale == LOCALE_enUS)
-            continue;
-
-        sGameLocale->AddLocaleString(MaleText, locale, bct->second.MaleText);
-        sGameLocale->AddLocaleString(FemaleText, locale, bct->second.FemaleText);
-    }
-    while (result->NextRow());
-
-    sLog->outString(">> Loaded %u Broadcast Text Locales in %u ms", uint32(_broadcastTextStore.size()), GetMSTimeDiffToNow(oldMSTime));
-    sLog->outString();
 }
 
 CreatureBaseStats const* ObjectMgr::GetCreatureBaseStats(uint8 level, uint8 unitClass)
