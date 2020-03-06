@@ -177,7 +177,7 @@ bool World::IsClosed() const
 {
     return m_isClosed;
 }
- 
+
 void World::SetClosed(bool val)
 {
     m_isClosed = val;
@@ -1326,8 +1326,8 @@ void World::SetInitialWorldSettings()
     ///- Handle outdated emails (delete/return)
     sLog->outString("Returning old mails...");
     sObjectMgr->ReturnOrDeleteOldMails(false);
-    
-    ///- Load AutoBroadCast 
+
+    ///- Load AutoBroadCast
     sLog->outString("Loading Autobroadcasts...");
     LoadAutobroadcasts();
 
@@ -1335,7 +1335,7 @@ void World::SetInitialWorldSettings()
     sObjectMgr->LoadSpellScripts();                              // must be after load Creature/Gameobject(Template/Data)
     sObjectMgr->LoadEventScripts();                              // must be after load Creature/Gameobject(Template/Data)
     sObjectMgr->LoadWaypointScripts();
-    
+
     sLog->outString("Loading spell script names...");
     sObjectMgr->LoadSpellScriptNames();
 
@@ -1498,7 +1498,7 @@ void World::SetInitialWorldSettings()
             }
         }
     }
-    
+
     uint32 startupDuration = GetMSTimeDiffToNow(startupBegin);
     
     LOG_INFO("server.loading", "");
@@ -1549,7 +1549,7 @@ void World::DetectDBCLang()
     {
         default_locale = m_lang_confid;
     }
-        
+
     if (default_locale >= TOTAL_LOCALES)
     {
         sLog->outError("Unable to determine your DBC Locale! (corrupt DBC?)");
@@ -1655,7 +1655,7 @@ void World::Update(uint32 diff)
     // so we don't have to do it in every packet that modifies auctions
     AsyncAuctionListingMgr::SetAuctionListingAllowed(false);
     {
-        ACORE_GUARD(ACE_Thread_Mutex, AsyncAuctionListingMgr::GetLock()); 
+        ACORE_GUARD(ACE_Thread_Mutex, AsyncAuctionListingMgr::GetLock());
 
         // pussywizard: handle auctions when the timer has passed
         if (m_timers[WUPDATE_AUCTIONS].Passed())
@@ -1742,11 +1742,11 @@ void World::Update(uint32 diff)
     {
         uint32 tmpDiff = GameTime::GetUptime();
         uint32 maxOnlinePlayers = GetMaxPlayerCount();
-        
+
         m_timers[WUPDATE_UPTIME].Reset();
-        
+
         PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPD_UPTIME_PLAYERS);
-        
+
         stmt->setUInt32(0, tmpDiff);
         stmt->setUInt16(1, uint16(maxOnlinePlayers));
         stmt->setUInt32(2, realmID);
@@ -1754,7 +1754,7 @@ void World::Update(uint32 diff)
         
         LoginDatabase.Execute(stmt);
     }
-    
+
     ///- Erase corpses once every 20 minutes
     if (m_timers[WUPDATE_CORPSES].Passed())
     {
@@ -2208,7 +2208,7 @@ void World::SendAutoBroadcast()
 {
     if (m_Autobroadcasts.empty())
         return;
-    
+
     uint32 weight = 0;
     AutobroadcastsWeightMap selectionWeights;
 

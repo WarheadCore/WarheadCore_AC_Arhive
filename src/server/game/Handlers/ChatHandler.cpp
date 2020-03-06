@@ -147,6 +147,15 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recvData)
 		            recvData.rfinish();
 		            return;
 	            }
+
+	            if (sWorld->getBoolConfig(CONFIG_CHATLOG_ADDON))
+	            {
+		            std::string to, msg;
+		            recvData >> to >> msg;
+		            if (msg.empty())
+			            return;
+	            }
+
 	            break;
             default:
                 LOG_ERROR("chat", "Player %s (GUID: %u) sent a chatmessage with an invalid language/message type combination", 

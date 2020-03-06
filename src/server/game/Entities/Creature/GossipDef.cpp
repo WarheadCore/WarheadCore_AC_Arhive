@@ -215,10 +215,11 @@ void PlayerMenu::SendGossipMenu(uint32 titleTextId, uint64 objectGUID) const
             std::string title = quest->GetTitle();
 
             int32 locale = _session->GetSessionDbLocaleIndex();
-            if (locale >= 0)
-                if (QuestLocale const* localeData = sGameLocale->GetQuestLocale(questID))
-                    sGameLocale->GetLocaleString(localeData->Title, locale, title);
-            data << title;  
+            
+            if (QuestLocale const* localeData = sGameLocale->GetQuestLocale(questID))
+                sGameLocale->GetLocaleString(localeData->Title, locale, title);
+            
+            data << title;
         }        
     }
 
@@ -242,9 +243,9 @@ void PlayerMenu::SendPointOfInterest(uint32 poiId) const
 
     std::string name = poi->Name;
     int32 locale = _session->GetSessionDbLocaleIndex();
-    if (locale >= 0)
-        if (PointOfInterestLocale const* localeData = sGameLocale->GetPointOfInterestLocale(poiId))
-            sGameLocale->GetLocaleString(localeData->Name, locale, name);
+
+    if (PointOfInterestLocale const* localeData = sGameLocale->GetPointOfInterestLocale(poiId))
+        sGameLocale->GetLocaleString(localeData->Name, locale, name);
 
     WorldPacket data(SMSG_GOSSIP_POI, 4 + 4 + 4 + 4 + 4 + 20);  // guess size
     data << uint32(poi->Flags);
@@ -323,9 +324,9 @@ void PlayerMenu::SendQuestGiverQuestList(QEmote const& eEmote, const std::string
             std::string title = quest->GetTitle();
 
             int32 locale = _session->GetSessionDbLocaleIndex();
-            if (locale >= 0)
-                if (QuestLocale const* localeData = sGameLocale->GetQuestLocale(questID))
-                    sGameLocale->GetLocaleString(localeData->Title, locale, title);
+
+            if (QuestLocale const* localeData = sGameLocale->GetQuestLocale(questID))
+                sGameLocale->GetLocaleString(localeData->Title, locale, title);
 				
             data << uint32(questID);
             data << uint32(qmi.QuestIcon);
@@ -363,16 +364,14 @@ void PlayerMenu::SendQuestGiverQuestDetails(Quest const* quest, uint64 npcGUID, 
 	std::string questAreaDescription = quest->GetAreaDescription();
 
 	int32 locale = _session->GetSessionDbLocaleIndex();
-	if (locale >= 0)
-	{
-        if (QuestLocale const* localeData = sGameLocale->GetQuestLocale(quest->GetQuestId()))
-        {
-            sGameLocale->GetLocaleString(localeData->Title, locale, questTitle);
-            sGameLocale->GetLocaleString(localeData->Details, locale, questDetails);
-            sGameLocale->GetLocaleString(localeData->Objectives, locale, questObjectives);
-            sGameLocale->GetLocaleString(localeData->AreaDescription, locale, questAreaDescription);
-        }
-	}
+    
+    if (QuestLocale const* localeData = sGameLocale->GetQuestLocale(quest->GetQuestId()))
+    {
+        sGameLocale->GetLocaleString(localeData->Title, locale, questTitle);
+        sGameLocale->GetLocaleString(localeData->Details, locale, questDetails);
+        sGameLocale->GetLocaleString(localeData->Objectives, locale, questObjectives);
+        sGameLocale->GetLocaleString(localeData->AreaDescription, locale, questAreaDescription);
+    }
 	
     WorldPacket data(SMSG_QUESTGIVER_QUEST_DETAILS, 500);   // guess size
     data << uint64(npcGUID);
@@ -475,7 +474,7 @@ void PlayerMenu::SendQuestQueryResponse(Quest const* quest) const
         questObjectiveText[i] = quest->ObjectiveText[i];
 
     int32 locale = _session->GetSessionDbLocaleIndex();
-    if (locale >= 0)
+    if (QuestLocale const* localeData = sObjectMgr->GetQuestLocale(quest->GetQuestId()))
     {
         if (QuestLocale const* localeData = sGameLocale->GetQuestLocale(quest->GetQuestId()))
         {
@@ -604,14 +603,12 @@ void PlayerMenu::SendQuestGiverOfferReward(Quest const* quest, uint64 npcGUID, b
     std::string RewardText = quest->GetOfferRewardText();
 
 	int32 locale = _session->GetSessionDbLocaleIndex();
-	if (locale >= 0)
-	{
-		if (QuestLocale const* localeData = sGameLocale->GetQuestLocale(quest->GetQuestId()))
-			sGameLocale->GetLocaleString(localeData->Title, locale, questTitle);
+  
+    if (QuestLocale const* localeData = sGameLocale->GetQuestLocale(quest->GetQuestId()))
+        sGameLocale->GetLocaleString(localeData->Title, locale, questTitle);
 
-        if (QuestOfferRewardLocale const* questOfferRewardLocale = sGameLocale->GetQuestOfferRewardLocale(quest->GetQuestId()))
-            sGameLocale->GetLocaleString(questOfferRewardLocale->RewardText, locale, RewardText);
-	}
+    if (QuestOfferRewardLocale const* questOfferRewardLocale = sGameLocale->GetQuestOfferRewardLocale(quest->GetQuestId()))
+        sGameLocale->GetLocaleString(questOfferRewardLocale->RewardText, locale, RewardText);
 	
     WorldPacket data(SMSG_QUESTGIVER_OFFER_REWARD, 400);    // guess size
     data << uint64(npcGUID);
@@ -700,14 +697,12 @@ void PlayerMenu::SendQuestGiverRequestItems(Quest const* quest, uint64 npcGUID, 
 	std::string requestItemsText = quest->GetRequestItemsText();
 
 	int32 locale = _session->GetSessionDbLocaleIndex();
-	if (locale >= 0)
-	{
-        if (QuestLocale const* localeData = sGameLocale->GetQuestLocale(quest->GetQuestId()))
-            sGameLocale->GetLocaleString(localeData->Title, locale, questTitle);
+        
+    if (QuestLocale const* localeData = sGameLocale->GetQuestLocale(quest->GetQuestId()))
+        sGameLocale->GetLocaleString(localeData->Title, locale, questTitle);
 
-        if (QuestRequestItemsLocale const* questRequestItemsLocale = sGameLocale->GetQuestRequestItemsLocale(quest->GetQuestId()))
-            sGameLocale->GetLocaleString(questRequestItemsLocale->CompletionText, locale, requestItemsText);
-	}
+    if (QuestRequestItemsLocale const* questRequestItemsLocale = sGameLocale->GetQuestRequestItemsLocale(quest->GetQuestId()))
+        sGameLocale->GetLocaleString(questRequestItemsLocale->CompletionText, locale, requestItemsText);
 
     if (!quest->GetReqItemsCount() && canComplete)
     {

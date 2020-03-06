@@ -128,10 +128,10 @@ extern int main(int argc, char** argv)
     if (!pidFile.empty())
     {
         if (uint32 pid = CreatePIDFile(pidFile))
-            sLog->outError("Daemon PID: %u\n", pid);
+            sLog->outError("Daemon PID: %u\n", pid); // outError for red color in console
         else
         {
-            sLog->outError("Cannot create PID file %s.\n", pidFile.c_str());
+            sLog->outError("Cannot create PID file %s (possible error: permission)\n", pidFile.c_str());
             return 1;
         }
     }
@@ -164,7 +164,7 @@ extern int main(int argc, char** argv)
 
     if (acceptor.open(bind_addr, ACE_Reactor::instance(), ACE_NONBLOCK) == -1)
     {
-        sLog->outError("Auth server can not bind to %s:%d", bind_ip.c_str(), rmport);
+        sLog->outError("Auth server can not bind to %s:%d (possible error: port already in use)", bind_ip.c_str(), rmport);
         return 1;
     }
 
@@ -179,24 +179,24 @@ extern int main(int argc, char** argv)
     Handler.register_handler(SIGTERM, &SignalTERM);
 
 #if defined(_WIN32) || defined(__linux__)
-    
+
     ///- Handle affinity for multiple processors and process priority
     uint32 affinity = sConfigMgr->GetIntDefault("UseProcessors", 0);
     bool highPriority = sConfigMgr->GetBoolDefault("ProcessPriority", false);
 
 #ifdef _WIN32 // Windows
-    
+
     HANDLE hProcess = GetCurrentProcess();
     if (affinity > 0)
     {
         ULONG_PTR appAff;
         ULONG_PTR sysAff;
-        
+
         if (GetProcessAffinityMask(hProcess, &appAff, &sysAff))
         {
             // remove non accessible processors
             ULONG_PTR currentAffinity = affinity & appAff;
-            
+
             if (!currentAffinity)
                 sLog->outError("server.authserver", "Processors marked in UseProcessors bitmask (hex) %x are not accessible for the authserver. Accessible processors bitmask (hex): %x", affinity, appAff);
             else if (SetProcessAffinityMask(hProcess, currentAffinity))
@@ -205,7 +205,7 @@ extern int main(int argc, char** argv)
                 sLog->outError("server.authserver", "Can't set used processors (hex): %x", currentAffinity);
         }
     }
-    
+
     if (highPriority)
     {
         if (SetPriorityClass(hProcess, HIGH_PRIORITY_CLASS))
@@ -213,9 +213,9 @@ extern int main(int argc, char** argv)
         else
             sLog->outError("server.authserver", "Can't set authserver process priority class.");
     }
-    
+
 #else // Linux
-    
+
     if (affinity > 0)
     {
         cpu_set_t mask;
@@ -242,7 +242,7 @@ extern int main(int argc, char** argv)
         else
             LOG_INFO("server.authserver", "authserver process priority class set to %i", getpriority(PRIO_PROCESS, 0));
     }
-    
+
 #endif
 #endif
 

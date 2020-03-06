@@ -219,7 +219,7 @@ void WorldSession::HandleAuctionSellItem(WorldPacket & recvData)
         SendAuctionCommandResult(0, AUCTION_SELL_ITEM, ERR_AUCTION_DATABASE_ERROR);
         return;
     }
- 
+
     // check if there are 2 identical guids, in this case user is most likely cheating
     for (uint32 i = 0; i < itemsCount - 1; ++i)
     {
@@ -647,6 +647,13 @@ void WorldSession::HandleAuctionListBidderItems(WorldPacket & recvData)
 //this void sends player info about his auctions
 void WorldSession::HandleAuctionListOwnerItems(WorldPacket & recvData)
 {
+    // prevent crash caused by malformed packet
+    uint64 guid;
+    uint32 listfrom;
+
+    recvData >> guid;
+    recvData >> listfrom;
+
     // pussywizard:
     const uint32 delay = 4500;
     const uint32 now = GameTime::GetGameTimeMS();
@@ -657,10 +664,11 @@ void WorldSession::HandleAuctionListOwnerItems(WorldPacket & recvData)
         diff = delay;
 
     _lastAuctionListOwnerItemsMSTime = now + delay; // set longest possible here, actual exectuing will change this to getMSTime of that moment
-    _player->m_Events.AddEvent(new AuctionListOwnerItemsDelayEvent(recvData, _player->GetGUID(), true), _player->m_Events.CalculateTime(delay-diff));
+    _player->m_Events.AddEvent(new AuctionListOwnerItemsDelayEvent(guid, _player->GetGUID(), true), _player->m_Events.CalculateTime(delay-diff));
 }
 
-void WorldSession::HandleAuctionListOwnerItemsEvent(WorldPacket & recvData)
+
+void WorldSession::HandleAuctionListOwnerItemsEvent(uint64 creatureGuid)
 {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("network", "WORLD: Received CMSG_AUCTION_LIST_OWNER_ITEMS");
@@ -668,13 +676,7 @@ void WorldSession::HandleAuctionListOwnerItemsEvent(WorldPacket & recvData)
 
     _lastAuctionListOwnerItemsMSTime = GameTime::GetGameTimeMS(); // pussywizard
 
-    uint32 listfrom;
-    uint64 guid;
-
-    recvData >> guid;
-    recvData >> listfrom;                                  // not used in fact (this list not have page control in client)
-
-    Creature* creature = GetPlayer()->GetNPCIfCanInteractWith(guid, UNIT_NPC_FLAG_AUCTIONEER);
+    Creature* creature = GetPlayer()->GetNPCIfCanInteractWith(creatureGuid, UNIT_NPC_FLAG_AUCTIONEER);
     if (!creature)
     {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)

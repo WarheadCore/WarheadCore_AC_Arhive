@@ -68,7 +68,6 @@ enum WorldTimers
     WUPDATE_5_SECS,
     WUPDATE_COUNT
 };
-
 /// Can be used in SMSG_AUTH_RESPONSE packet
 enum BillingPlanFlags
 {

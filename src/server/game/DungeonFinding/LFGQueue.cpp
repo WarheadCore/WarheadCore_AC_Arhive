@@ -176,7 +176,7 @@ uint8 LFGQueue::FindGroups()
 {
     //sLog->outString("FIND GROUPS!");
     uint8 newGroupsProcessed = 0;
-    while (!newToQueueStore.empty())
+    if (!newToQueueStore.empty())
     {
         ++newGroupsProcessed;
         uint64 newGuid = newToQueueStore.front();
