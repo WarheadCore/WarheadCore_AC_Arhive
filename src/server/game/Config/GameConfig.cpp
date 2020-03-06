@@ -317,6 +317,8 @@ void GameConfig::LoadBoolConfigs(bool reload /*= false*/)
     // DB logging
     AddBoolConfig("EnableLogDB");
 
+    AddBoolConfig("SetAllCreaturesWithWaypointMovementActive");
+
     LOG_INFO("config", "> Loaded %u bool configs", static_cast<uint32>(_boolConfigs.size()));
 }
 
