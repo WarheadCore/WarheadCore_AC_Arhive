@@ -122,7 +122,7 @@ class boss_toravon : public CreatureScript
                         events.RepeatEvent(20000);
                         break;
                     case EVENT_FROZEN_ORB_STALKER:
-                        me->CastCustomSpell(SPELL_FROZEN_ORB, SPELLVALUE_MAX_TARGETS, RAID_MODE(1, 3), me, false);
+                        me->CastCustomSpell(SPELL_FROZEN_ORB, SPELLVALUE_MAX_TARGETS, RAID_MODE(1, 3, 2, 4), me, false);
                         events.RepeatEvent(35000);
                         events.ScheduleEvent(EVENT_CHECK_SUMMONS, 10000);
                         break;

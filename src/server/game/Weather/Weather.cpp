@@ -16,6 +16,7 @@
 #include "ObjectMgr.h"
 #include "Util.h"
 #include "ScriptMgr.h"
+#include "WorldSession.h"
 #include "Opcodes.h"
 #include "GameTime.h"
 #include "GameConfig.h"

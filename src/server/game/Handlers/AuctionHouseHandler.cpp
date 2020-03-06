@@ -659,6 +659,13 @@ void WorldSession::HandleAuctionListOwnerItems(WorldPacket & recvData)
     const uint32 now = GameTime::GetGameTimeMS();
     if (_lastAuctionListOwnerItemsMSTime > now) // list is pending
         return;
+
+    if (!_player)
+        return;
+
+    if (_player->GetGUID() == 0)
+        return;
+
     uint32 diff = getMSTimeDiff(_lastAuctionListOwnerItemsMSTime, now);
     if (diff > delay)
         diff = delay;
@@ -676,7 +683,16 @@ void WorldSession::HandleAuctionListOwnerItemsEvent(uint64 creatureGuid)
 
     _lastAuctionListOwnerItemsMSTime = GameTime::GetGameTimeMS(); // pussywizard
 
-    Creature* creature = GetPlayer()->GetNPCIfCanInteractWith(creatureGuid, UNIT_NPC_FLAG_AUCTIONEER);
+    uint32 listfrom;
+    uint64 guid;
+
+    recvData >> guid;
+    recvData >> listfrom;                                  // not used in fact (this list not have page control in client)
+
+    if (guid == 0)
+        return;
+
+    Creature* creature = GetPlayer()->GetNPCIfCanInteractWith(guid, UNIT_NPC_FLAG_AUCTIONEER);
     if (!creature)
     {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)

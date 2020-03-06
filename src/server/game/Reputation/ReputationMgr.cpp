@@ -11,6 +11,7 @@
 #include "WorldPacket.h"
 #include "ObjectMgr.h"
 #include "ScriptMgr.h"
+#include "WorldSession.h"
 #include "Opcodes.h"
 #include "GameConfig.h"
 

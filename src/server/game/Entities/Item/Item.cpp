@@ -15,6 +15,7 @@
 #include "ScriptMgr.h"
 #include "ConditionMgr.h"
 #include "Player.h"
+#include "WorldSession.h"
 #include "Opcodes.h"
 #include "GameTime.h"
 

@@ -10,6 +10,7 @@
 #include "WorldSession.h"
 #include "DatabaseEnv.h"
 #include "ArenaTeam.h"
+#include "Chat.h"
 #include "Log.h"
 #include "ObjectMgr.h"
 #include "SocialMgr.h"
@@ -144,6 +145,11 @@ void WorldSession::HandleArenaTeamInviteOpcode(WorldPacket & recvData)
         SendArenaTeamCommandResult(ERR_ARENA_TEAM_CREATE_S, arenaTeam->GetName(), "", ERR_ARENA_TEAM_TOO_MANY_MEMBERS_S);
         return;
     }
+
+    //check for fake packets and bad addons that cause client to crash
+    std::string arenaTeamName = arenaTeam->GetName();
+    if (!ChatHandler(this).isValidChatMessage(arenaTeamName.c_str()))
+        return;
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("bg", "Player %s Invited %s to Join his ArenaTeam", GetPlayer()->GetName().c_str(), invitedName.c_str());

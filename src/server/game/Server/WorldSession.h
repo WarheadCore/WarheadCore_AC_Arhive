@@ -16,9 +16,13 @@
 #include "AddonMgr.h"
 #include "DatabaseEnv.h"
 #include "World.h"
+#include "Opcodes.h"
 #include "WorldPacket.h"
 #include "GossipDef.h"
 #include "Cryptography/BigNumber.h"
+#include "AccountMgr.h"
+#include "BanManager.h"
+#include "Log.h"
 
 class Creature;
 class GameObject;
@@ -179,6 +183,12 @@ class CharacterCreateInfo
 
     private:
         virtual ~CharacterCreateInfo(){};
+};
+
+struct PacketCounter
+{
+    time_t lastReceiveTime;
+    uint32 amountCounter;
 };
 
 /// Player session in the World
@@ -923,6 +933,35 @@ class WorldSession
         QueryResultHolderFuture _loadPetFromDBSecondCallback;
         QueryCallback_3<PreparedQueryResult, uint8, uint8, uint32> _openWrappedItemCallback;
 
+        friend class World;
+    protected:
+        class DosProtection
+        {
+            friend class World;
+        public:
+            DosProtection(WorldSession* s) : Session(s), _policy((Policy)sWorld->getIntConfig(CONFIG_PACKET_SPOOF_POLICY)) {}
+
+            bool EvaluateOpcode(WorldPacket& p, time_t time) const;
+        protected:
+            enum Policy
+            {
+                POLICY_LOG,
+                POLICY_KICK,
+                POLICY_BAN,
+            };
+
+            uint32 GetMaxPacketCounterAllowed(uint16 opcode) const;
+
+            WorldSession* Session;
+
+        private:
+            Policy _policy;
+            typedef std::unordered_map<uint16, PacketCounter> PacketThrottlingMap;
+            // mark this member as "mutable" so it can be modified even in const functions
+            mutable PacketThrottlingMap _PacketThrottlingMap;
+
+        } AntiDOS;
+
     public:
         // xinef: those must be public, requires calls out of worldsession :(
         QueryCallback_2<PreparedQueryResult, uint32, AsynchPetSummon*> _loadPetFromDBFirstCallback;
@@ -984,7 +1023,7 @@ class WorldSession
         bool isRecruiter;
         ACE_Based::LockedQueue<WorldPacket*, ACE_Thread_Mutex> _recvQueue;
         uint64 m_currentBankerGUID;
-        time_t timeWhoCommandAllowed;
+        time_t timerGsSpam;
         uint32 _offlineTime;
         bool _kicked;
         bool _shouldSetOfflineInDB;
