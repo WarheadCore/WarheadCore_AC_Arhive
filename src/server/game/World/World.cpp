@@ -843,6 +843,13 @@ void World::LoadConfigSettings(bool reload)
     if (tempIntOption < 1)
         sGameConfig->SetInt("PvPToken.ItemCount", 1);
 
+    tempIntOption = sGameConfig->GetIntConfig("PacketSpoof.BanMode");
+    if (tempIntOption == 1 || tempIntOption > 2)
+    {
+        LOG_ERROR("config", "> AntiDOS: Invalid ban mode %u. Set 0", tempIntOption);
+        sGameConfig->SetInt("PacketSpoof.BanMode", 0);
+    }
+
     if (reload)
     {
         m_timers[WUPDATE_AUTOBROADCAST].SetInterval(sGameConfig->GetIntConfig("AutoBroadcast.Timer"));

@@ -272,7 +272,7 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
     bool deletePacket = true;
     WorldPacket* firstDelayedPacket = NULL;
     uint32 processedPackets = 0;
-    time_t currentTime = time(NULL);
+    time_t currentTime = GameTime::GetGameTime();
 
     while (m_Socket && !m_Socket->IsClosed() && !_recvQueue.empty() && _recvQueue.peek(true) != firstDelayedPacket && _recvQueue.next(packet, updater))
     {
@@ -1388,7 +1388,7 @@ bool WorldSession::DosProtection::EvaluateOpcode(WorldPacket& p, time_t time) co
     if (++packetCounter.amountCounter <= maxPacketCounterAllowed)
         return true;
     
-    sLog->outError("AntiDOS: Account %u, IP: %s, Ping: %u, Character: %s, flooding packet (opc: %s (0x%X), count: %u)",
+    LOG_WARN("network", "AntiDOS: Account %u, IP: %s, Ping: %u, Character: %s, flooding packet (opc: %s (0x%X), count: %u)",
         Session->GetAccountId(), Session->GetRemoteAddress().c_str(), Session->GetLatency(), Session->GetPlayerName().c_str(),
         opcodeTable[p.GetOpcode()].name, p.GetOpcode(), packetCounter.amountCounter);
 
@@ -1404,36 +1404,38 @@ bool WorldSession::DosProtection::EvaluateOpcode(WorldPacket& p, time_t time) co
         }
         case POLICY_BAN:
         {
-            uint32 bm = sWorld->getIntConfig(CONFIG_PACKET_SPOOF_BANMODE);
-            int64 duration = (int64)sWorld->getIntConfig(CONFIG_PACKET_SPOOF_BANDURATION); // in seconds
+            uint32 bm = sGameConfig->GetIntConfig("PacketSpoof.BanMode");
+            int64 duration = sGameConfig->GetIntConfig("PacketSpoof.BanDuration"); // in seconds
             std::string nameOrIp = "";
             switch (bm)
             {
             case 0:
             {
                 AccountMgr::GetName(Session->GetAccountId(), nameOrIp);
-                sBan->BanAccount(nameOrIp, std::to_string(duration), "DOS (Packet Flooding/Spoofing", "Server: AutoDOS");
+                sBan->BanAccount(nameOrIp, std::to_string(duration), "DOS (Packet Flooding/Spoofing", "Server: AutiDOS");
                 break;
             }
             case 2:
             {
                 nameOrIp = Session->GetRemoteAddress();
-                sBan->BanIP(nameOrIp, std::to_string(duration), "DOS (Packet Flooding/Spoofing", "Server: AutoDOS");
+                sBan->BanIP(nameOrIp, std::to_string(duration), "DOS (Packet Flooding/Spoofing", "Server: AutiDOS");
                 break;
             }
             }
 
-            sLog->outError("AntiDOS: Player automatically banned for %u seconds.", uint64(duration));
+            LOG_WARN("network", "AntiDOS: Player automatically banned for %u seconds.", static_cast<uint32>(duration));
             Session->KickPlayer();
             return false;
         }
         default: // invalid policy
-            return true;    }
+            return true;
+    }
 }
 
 uint32 WorldSession::DosProtection::GetMaxPacketCounterAllowed(uint16 opcode) const
 {
     uint32 maxPacketCounterAllowed;
+
     switch (opcode)
     {
         // CPU usage sending 2000 packets/second on a 3.70 GHz 4 cores on Win x64
@@ -1675,4 +1677,11 @@ uint32 WorldSession::DosProtection::GetMaxPacketCounterAllowed(uint16 opcode) co
     }
 
     return maxPacketCounterAllowed;
+}
+
+WorldSession::DosProtection::DosProtection(WorldSession* s) : 
+    Session(s), 
+    _policy((Policy)sGameConfig->GetIntConfig("PacketSpoof.Policy"))
+{
+
 }

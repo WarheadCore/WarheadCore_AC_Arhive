@@ -220,11 +220,6 @@ void WorldSession::HandleWhoOpcode(WorldPacket& recvData)
 {
     LOG_DEBUG("network", "WORLD: Recvd CMSG_WHO Message");
 
-    time_t now = GameTime::GetGameTime();
-    if (now < timeWhoCommandAllowed)
-        return;
-    timeWhoCommandAllowed = now + 3;
-
     uint32 matchcount = 0;
 
     uint32 level_min, level_max, racemask, classmask, zones_count, str_count;

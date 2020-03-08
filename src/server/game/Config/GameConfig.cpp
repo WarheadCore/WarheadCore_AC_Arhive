@@ -555,6 +555,11 @@ void GameConfig::LoadIntConfigs(bool reload /*= false*/)
     AddIntConfig("ICC.Buff.Horde", 73822);
     AddIntConfig("ICC.Buff.Alliance", 73828);
 
+    // Packet spoof punishment
+    AddIntConfig("PacketSpoof.Policy", 1);
+    AddIntConfig("PacketSpoof.BanMode");
+    AddIntConfig("PacketSpoof.BanDuration", 86400);
+
     // Check options can't be changed at worldserver.conf reload
     if (reload)
     {

@@ -660,10 +660,7 @@ void WorldSession::HandleAuctionListOwnerItems(WorldPacket & recvData)
     if (_lastAuctionListOwnerItemsMSTime > now) // list is pending
         return;
 
-    if (!_player)
-        return;
-
-    if (_player->GetGUID() == 0)
+    if (!_player || _player->GetGUID() == 0)
         return;
 
     uint32 diff = getMSTimeDiff(_lastAuctionListOwnerItemsMSTime, now);
@@ -674,25 +671,15 @@ void WorldSession::HandleAuctionListOwnerItems(WorldPacket & recvData)
     _player->m_Events.AddEvent(new AuctionListOwnerItemsDelayEvent(guid, _player->GetGUID(), true), _player->m_Events.CalculateTime(delay-diff));
 }
 
-
 void WorldSession::HandleAuctionListOwnerItemsEvent(uint64 creatureGuid)
 {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("network", "WORLD: Received CMSG_AUCTION_LIST_OWNER_ITEMS");
 #endif
 
-    _lastAuctionListOwnerItemsMSTime = GameTime::GetGameTimeMS(); // pussywizard
+    _lastAuctionListOwnerItemsMSTime = GameTime::GetGameTimeMS(); // pussywizard    
 
-    uint32 listfrom;
-    uint64 guid;
-
-    recvData >> guid;
-    recvData >> listfrom;                                  // not used in fact (this list not have page control in client)
-
-    if (guid == 0)
-        return;
-
-    Creature* creature = GetPlayer()->GetNPCIfCanInteractWith(guid, UNIT_NPC_FLAG_AUCTIONEER);
+    Creature* creature = GetPlayer()->GetNPCIfCanInteractWith(creatureGuid, UNIT_NPC_FLAG_AUCTIONEER);
     if (!creature)
     {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)

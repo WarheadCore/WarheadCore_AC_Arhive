@@ -939,9 +939,9 @@ class WorldSession
         {
             friend class World;
         public:
-            DosProtection(WorldSession* s) : Session(s), _policy((Policy)sWorld->getIntConfig(CONFIG_PACKET_SPOOF_POLICY)) {}
-
+            DosProtection(WorldSession* s);
             bool EvaluateOpcode(WorldPacket& p, time_t time) const;
+        
         protected:
             enum Policy
             {
@@ -959,6 +959,9 @@ class WorldSession
             typedef std::unordered_map<uint16, PacketCounter> PacketThrottlingMap;
             // mark this member as "mutable" so it can be modified even in const functions
             mutable PacketThrottlingMap _PacketThrottlingMap;
+
+            DosProtection(DosProtection const& right) = delete;
+            DosProtection& operator=(DosProtection const& right) = delete;
 
         } AntiDOS;
 

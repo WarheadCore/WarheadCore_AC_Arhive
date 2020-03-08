@@ -148,7 +148,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recvData)
 		            return;
 	            }
 
-	            if (sWorld->getBoolConfig(CONFIG_CHATLOG_ADDON))
+	            if (sGameConfig->GetBoolConfig("ChatLogs.Addon"))
 	            {
 		            std::string to, msg;
 		            recvData >> to >> msg;

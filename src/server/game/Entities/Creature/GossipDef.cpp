@@ -474,7 +474,7 @@ void PlayerMenu::SendQuestQueryResponse(Quest const* quest) const
         questObjectiveText[i] = quest->ObjectiveText[i];
 
     int32 locale = _session->GetSessionDbLocaleIndex();
-    if (QuestLocale const* localeData = sObjectMgr->GetQuestLocale(quest->GetQuestId()))
+    if (QuestLocale const* localeData = sGameLocale->GetQuestLocale(quest->GetQuestId()))
     {
         if (QuestLocale const* localeData = sGameLocale->GetQuestLocale(quest->GetQuestId()))
         {
