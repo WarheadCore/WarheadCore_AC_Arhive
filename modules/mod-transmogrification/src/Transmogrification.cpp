@@ -435,26 +435,37 @@ bool Transmogrification::CanTransmogrifyItemWithItem(Player* player, ItemTemplat
     if (IsRangedWeapon(source->Class, source->SubClass) != IsRangedWeapon(target->Class, target->SubClass))
         return false;
 
-    if (source->SubClass != target->SubClass && !IsRangedWeapon(target->Class, target->SubClass))
+    if (source->SubClass != target->SubClass && !IsRangedWeapon(target->Class, target->SubClass) && !IsAllowed(source->ItemId))
     {
-        if (!IsAllowed(source->ItemId))
-        {
-            if (source->Class == ITEM_CLASS_ARMOR && !AllowMixedArmorTypes)
-                return false;
+        if (source->Class == ITEM_CLASS_ARMOR && !AllowMixedArmorTypes)
+            return false;
 
-            if (source->Class == ITEM_CLASS_WEAPON && !AllowMixedWeaponTypes)
-                return false;
-        }
+        /*if (source->Class == ITEM_CLASS_WEAPON) && !AllowMixedWeaponTypes)
+            return false;*/
+        if (source->Class == ITEM_CLASS_WEAPON && !player->GetSkillValue(target->GetSkill()))
+            return false;
     }
 
-    if (source->InventoryType != target->InventoryType)
+    if (!AllowMixedWeaponTypes && source->InventoryType != target->InventoryType && source->Class == ITEM_CLASS_WEAPON)
+    {
+        if (source->InventoryType == INVTYPE_2HWEAPON || target->InventoryType == INVTYPE_2HWEAPON)
+            return false;
+    }
+
+    if (AllowMixedWeaponTypes && source->InventoryType != target->InventoryType)
     {
         if (source->Class == ITEM_CLASS_WEAPON && !(IsRangedWeapon(target->Class, target->SubClass) ||
             (
                 // [AZTH] Yehonal: fixed weapon check
-                (target->InventoryType == INVTYPE_WEAPON || target->InventoryType == INVTYPE_2HWEAPON || target->InventoryType == INVTYPE_WEAPONMAINHAND || target->InventoryType == INVTYPE_WEAPONOFFHAND)
-                && (source->InventoryType == INVTYPE_WEAPON || source->InventoryType == INVTYPE_2HWEAPON || source->InventoryType == INVTYPE_WEAPONMAINHAND || source->InventoryType == INVTYPE_WEAPONOFFHAND)
-            )
+                (target->InventoryType == INVTYPE_WEAPON ||
+                    target->InventoryType == INVTYPE_2HWEAPON ||
+                    target->InventoryType == INVTYPE_WEAPONMAINHAND ||
+                    target->InventoryType == INVTYPE_WEAPONOFFHAND)
+                &&
+                (source->InventoryType == INVTYPE_WEAPON ||
+                    source->InventoryType == INVTYPE_2HWEAPON ||
+                    source->InventoryType == INVTYPE_WEAPONMAINHAND ||
+                    source->InventoryType == INVTYPE_WEAPONOFFHAND))
         ))
             return false;
 
@@ -482,18 +493,12 @@ bool Transmogrification::SuitableForTransmogrification(Player* player, ItemTempl
         return true;
 
     //[AZTH] Yehonal
-    if (proto->SubClass > 0 && player->GetSkillValue(proto->GetSkill()) == 0)
+    if (proto->SubClass && !player->GetSkillValue(proto->GetSkill()))
     {
-        if (proto->Class == ITEM_CLASS_ARMOR)
-        {
-            if (!AllowMixedArmorTypes)
-                return false;
-        }
-        else if (proto->Class == ITEM_CLASS_WEAPON)
-        {
-            if (!AllowMixedWeaponTypes)
-                return false;
-        }
+        if (proto->Class == ITEM_CLASS_ARMOR && !AllowMixedArmorTypes)
+            return false;
+        else if (proto->Class == ITEM_CLASS_WEAPON && !AllowMixedWeaponTypes)
+            return false;
         else
             return false;
     }
@@ -519,13 +524,9 @@ bool Transmogrification::SuitableForTransmogrification(Player* player, ItemTempl
     if (!IgnoreReqRace && (proto->AllowableRace & player->getRaceMask()) == 0)
         return false;
 
-    if (!IgnoreReqSkill && proto->RequiredSkill != 0)
-    {
-        if (player->GetSkillValue(proto->RequiredSkill) == 0)
+    if (!IgnoreReqSkill && proto->RequiredSkill != 0 &&
+        (!player->GetSkillValue(proto->RequiredSkill) || player->GetSkillValue(proto->RequiredSkill) < proto->RequiredSkillRank))
             return false;
-        else if (player->GetSkillValue(proto->RequiredSkill) < proto->RequiredSkillRank)
-            return false;
-    }
 
     if (!IgnoreReqSpell && proto->RequiredSpell != 0 && !player->HasSpell(proto->RequiredSpell))
         return false;
