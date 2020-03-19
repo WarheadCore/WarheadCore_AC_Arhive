@@ -446,8 +446,19 @@ bool Transmogrification::CanTransmogrifyItemWithItem(Player* player, ItemTemplat
             return false;
     }
 
-    if (!AllowMixedWeaponTypes && source->InventoryType != target->InventoryType && source->Class == ITEM_CLASS_WEAPON)
+    if (!AllowMixedArmorTypes && source->InventoryType != target->InventoryType)
     {
+        if (source->Class == ITEM_CLASS_ARMOR &&
+            !((source->InventoryType == INVTYPE_CHEST || source->InventoryType == INVTYPE_ROBE) &&
+            (target->InventoryType == INVTYPE_CHEST || target->InventoryType == INVTYPE_ROBE)))
+            return false;
+    }
+
+    if (!AllowMixedWeaponTypes && source->InventoryType != target->InventoryType)
+    {
+        if (target->Class != ITEM_CLASS_WEAPON || source->Class != ITEM_CLASS_WEAPON)
+            return false;
+
         if (source->InventoryType == INVTYPE_2HWEAPON || target->InventoryType == INVTYPE_2HWEAPON)
             return false;
     }
@@ -467,11 +478,6 @@ bool Transmogrification::CanTransmogrifyItemWithItem(Player* player, ItemTemplat
                     source->InventoryType == INVTYPE_WEAPONMAINHAND ||
                     source->InventoryType == INVTYPE_WEAPONOFFHAND))
         ))
-            return false;
-
-        if (source->Class == ITEM_CLASS_ARMOR &&
-            !((source->InventoryType == INVTYPE_CHEST || source->InventoryType == INVTYPE_ROBE) &&
-                (target->InventoryType == INVTYPE_CHEST || target->InventoryType == INVTYPE_ROBE)))
             return false;
     }
 

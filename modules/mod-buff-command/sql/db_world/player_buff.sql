@@ -1,6 +1,3 @@
-SET NAMES utf8mb4;
-SET FOREIGN_KEY_CHECKS = 0;
-
 -- ----------------------------
 -- Table structure for player_buff
 -- ----------------------------
@@ -20,5 +17,3 @@ INSERT INTO `player_buff` VALUES (48162, '');
 INSERT INTO `player_buff` VALUES (48470, '');
 INSERT INTO `player_buff` VALUES (57623, '');
 INSERT INTO `player_buff` VALUES (61316, '');
-
-SET FOREIGN_KEY_CHECKS = 1;
