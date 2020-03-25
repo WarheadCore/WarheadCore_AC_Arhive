@@ -629,7 +629,7 @@ void World::LoadConfigSettings(bool reload)
         int32 startPoints = sGameConfig->GetIntConfig(startPointsOptionName);
         if (startPoints < 0)
         {
-            LOG_ERROR("config", "%s (%i) must be in range 0..%s(%u). Set to %u.", startPointsOptionName.c_str(), maxPointsOptionName.c_str(), startPoints, maxPoints, 0);
+            LOG_ERROR("config", "%s (%i) must be in range 0..%s(%u). Set to %u.", startPointsOptionName.c_str(), startPoints, maxPointsOptionName.c_str(), maxPoints, 0);
             sGameConfig->SetInt(startPointsOptionName, 0);
         }
         else if (startPoints > maxPoints)
