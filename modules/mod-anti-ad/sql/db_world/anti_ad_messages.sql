@@ -1,6 +1,3 @@
-SET NAMES utf8mb4;
-SET FOREIGN_KEY_CHECKS = 0;
-
 -- ----------------------------
 -- Table structure for anti_ad_messages
 -- ----------------------------
@@ -30,4 +27,12 @@ INSERT INTO `anti_ad_messages` VALUES ('w-o-w');
 INSERT INTO `anti_ad_messages` VALUES ('wow');
 INSERT INTO `anti_ad_messages` VALUES ('www');
 
-SET FOREIGN_KEY_CHECKS = 1;
+-- ----------------------------
+-- Records of string_module
+-- ----------------------------
+INSERT INTO `string_module` VALUES ('mod-anti-ad', 1, 'enUS', '|cFFFF0000[AntiAD]:|r %s |cff6C8CD5said a bad word:|r %s');
+INSERT INTO `string_module` VALUES ('mod-anti-ad', 2, 'enUS', '|cFFFF0000[AntiAD]:|r %s |cff6C8CD5wanted to say:|r %s');
+INSERT INTO `string_module` VALUES ('mod-anti-ad', 3, 'enUS', '|cFFFF0000[AntiAD]:|cff6C8CD5 You chat muted on |r %u |cff6C8CD5minutes.');
+INSERT INTO `string_module` VALUES ('mod-anti-ad', 1, 'ruRU', '|cFFFF0000[Антиреклама]:|r %s |cff6C8CD5сказал запрещённое слово:|r %s');
+INSERT INTO `string_module` VALUES ('mod-anti-ad', 2, 'ruRU', '|cFFFF0000[Антиреклама]:|r %s |cff6C8CD5хотел сказать:|r %s');
+INSERT INTO `string_module` VALUES ('mod-anti-ad', 3, 'ruRU', '|cFFFF0000[Антиреклама]:|cff6C8CD5 Ваш чат заблокирован на|r %u |cff6C8CD5минут.');
