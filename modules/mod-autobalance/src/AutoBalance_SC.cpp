@@ -705,7 +705,7 @@ public:
 
     void OnAfterUpdateEncounterState(Map* map, EncounterCreditType type, uint32 /*creditEntry*/, Unit* source, Difficulty /*difficulty_fixed*/, DungeonEncounterList const* /*encounters*/, uint32 /*dungeonCompleted*/, bool updated) override {
 
-        if (!CONF_GET_BOOL("AB.Reward.enable") || !updated)
+        if (!CONF_GET_BOOL("AB.Reward.Enable") || !updated)
             return;
 
         if (map->GetPlayersCountExceptGMs() < CONF_GET_INT("AB.Reward.MinPlayerReward"))
