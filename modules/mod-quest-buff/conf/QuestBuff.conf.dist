@@ -1,0 +1,17 @@
+#
+# Copyright (C) since 2020 Andrei Guluaev (Winfidonarleyan/Kargatum) https://github.com/Winfidonarleyan
+# Licence MIT https://opensource.org/MIT
+#
+
+########################################
+# QuestBuff module configuration
+########################################
+[worldserver]
+
+#
+#   QuestBuff.Enable
+#       Description: Enable system
+#       Default: 1
+#
+
+QuestBuff.Enable = 1

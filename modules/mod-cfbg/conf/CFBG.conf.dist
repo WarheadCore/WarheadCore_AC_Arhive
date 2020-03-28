@@ -1,0 +1,29 @@
+#
+# Copyright (C) since 2020 Andrei Guluaev (Winfidonarleyan/Kargatum) https://github.com/Winfidonarleyan
+# Licence MIT https://opensource.org/MIT
+#
+
+########################################
+# CFBG module configuration
+########################################
+[worldserver]
+
+###################################################################################################
+#   CFBG
+#   
+#   CFBG.Enable
+#       Description: Enable mixed alliance and horde in one battleground 
+#       Default: 1
+#
+#   CFBG.Include.Avg.Ilvl.Enable
+#       Description: Enable check average item level for bg
+#       Default: 0
+#
+#   CFBG.Players.Count.In.Group
+#       Description: Maximum players in party for enter queue
+#       Default: 3
+#
+
+CFBG.Enable = 0
+CFBG.IncludeAvgIlvl.Enable = 0
+CFBG.PlayersCountInGroup = 3

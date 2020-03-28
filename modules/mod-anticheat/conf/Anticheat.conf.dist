@@ -1,0 +1,41 @@
+#
+# Copyright (C) since 2020 Andrei Guluaev (Winfidonarleyan/Kargatum) https://github.com/Winfidonarleyan
+# Licence MIT https://opensource.org/MIT
+#
+
+########################################
+# AC module configuration
+########################################
+[worldserver]
+
+#
+#    AC.Enable
+#        Description: Enables or disables the AC System functionality
+#        Default:     1 - (Enabled)
+#                     0 - (Disabled)
+#
+
+AC.Enable = 1
+
+#
+#    AC.Info.Enable
+#        Description: Enables or disables the AC System information in gm messages
+#        Default:     1 - (Enabled)
+#                     0 - (Disabled)
+#
+
+AC.Info.Enable = 1
+
+#
+#    AC.Detect
+#        Description: It represents which detections are enabled.
+#        Default:     1 - (Enabled)
+#                     0 - (Disabled)
+#
+
+AC.Detect.FlyHack.Enable = 1
+AC.Detect.WaterWalkHack.Enable = 1
+AC.Detect.JumpHack.Enable = 1
+AC.Detect.TelePlaneHack.Enable = 1
+AC.Detect.SpeedHack.Enable = 1
+AC.Detect.ClimbHack.Enable = 0

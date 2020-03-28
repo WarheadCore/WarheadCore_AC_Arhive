@@ -1,0 +1,17 @@
+#
+# Copyright (C) since 2020 Andrei Guluaev (Winfidonarleyan/Kargatum) https://github.com/Winfidonarleyan
+# Licence MIT https://opensource.org/MIT
+#
+
+########################################
+# BossAnnouncer module configuration
+########################################
+[worldserver]
+
+#
+#    BossAnnouncer.Enable
+#        Description: Enable system.
+#        Default: 1
+#
+
+BossAnnouncer.Enable = 1
