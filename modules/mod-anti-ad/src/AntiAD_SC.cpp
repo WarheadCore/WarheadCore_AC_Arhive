@@ -143,9 +143,9 @@ private:
         std::string CheckMsg = msg;
         std::string FullMessage = msg;
 
-        if (sAD->IsBadMessage(msg))
+        if (sAD->IsBadMessage(CheckMsg))
         {
-            SendGMTexts(player, msg, FullMessage);
+            SendGMTexts(player, CheckMsg, FullMessage);
             msg = "";
             Mute(player);
         }
