@@ -6,6 +6,9 @@
 #ifndef _ANTICHEAT_H_
 #define _ANTICHEAT_H_
 
+#include "Common.h"
+#include "Player.h"
+
 class AnticheatData
 {
 public:
