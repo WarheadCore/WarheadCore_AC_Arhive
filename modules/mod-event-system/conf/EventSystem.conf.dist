@@ -1,0 +1,15 @@
+#
+# Copyright (C) since 2020 Andrei Guluaev (Winfidonarleyan/Kargatum) https://github.com/Winfidonarleyan
+# Licence MIT https://opensource.org/MIT
+#
+
+########################################
+# EventSystem module configuration
+########################################
+[worldserver]
+
+#
+#   ES.Enable - Включить/выключить систему
+#
+
+ES.Enable = 1

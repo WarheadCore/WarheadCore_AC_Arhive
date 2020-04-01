@@ -105,6 +105,7 @@ local.properties
 !modules/mod-donate-ips
 !modules/mod-duel-reset
 !modules/mod-dungeon-buff
+!modules/mod-event-system
 !modules/mod-external-mail
 !modules/mod-factions-icons-channel
 !modules/mod-gm-chat-color
