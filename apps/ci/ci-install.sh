@@ -4,7 +4,7 @@ set -e
 
 cat >>conf/config.sh <<CONFIG_SH
 MTHREADS=$(expr $(grep -c ^processor /proc/cpuinfo) + 2)
-CWARNINGS=ON
+CWARNINGS=OFF
 CDEBUG=OFF
 CTYPE=Release
 CSCRIPTS=ON
@@ -12,7 +12,7 @@ CSERVERS=ON
 CTOOLS=ON
 CSCRIPTPCH=OFF
 CCOREPCH=OFF
-CCUSTOMOPTIONS='-DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_C_FLAGS="-Werror" -DCMAKE_CXX_FLAGS="-Werror"'
+CCUSTOMOPTIONS='-DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache'
 DB_CHARACTERS_CONF="MYSQL_USER='root'; MYSQL_PASS='root'; MYSQL_HOST='localhost';"
 DB_AUTH_CONF="MYSQL_USER='root'; MYSQL_PASS='root'; MYSQL_HOST='localhost';"
 DB_WORLD_CONF="MYSQL_USER='root'; MYSQL_PASS='root'; MYSQL_HOST='localhost';"
@@ -21,7 +21,10 @@ CONFIG_SH
 time sudo apt-get update -y
 # time sudo apt-get upgrade -y
 time sudo apt-get install -y git lsb-release sudo ccache
-time ./acore.sh install-deps
+time sudo apt-get install -y git cmake make gcc g++ clang libmysqlclient-dev \
+  libssl-dev libbz2-dev libreadline-dev libncurses-dev \
+  mysql-server libace-6.* libace-dev curl unzip \
+  boost1.67
 
 case $COMPILER in
   "clang6" )
