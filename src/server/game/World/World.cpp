@@ -113,6 +113,7 @@ World::World()
     m_NextWeeklyQuestReset = 0;
     m_NextMonthlyQuestReset = 0;
     m_NextRandomBGReset = 0;
+    m_NextCalendarOldEventsDeletionTime = 0;
     m_NextGuildReset = 0;
     m_defaultDbcLocale = LOCALE_enUS;
     mail_expire_check_timer = 0;
@@ -1456,6 +1457,9 @@ void World::SetInitialWorldSettings()
     sLog->outString("Calculate random battleground reset time..." );
     InitRandomBGResetTime();
 
+    sLog->outString("Calculate deletion of old calendar events time...");
+    InitCalendarOldEventsDeletionTime();
+
     sLog->outString("Calculate Guild cap reset time...");
     InitGuildResetTime();
     sLog->outString();
@@ -2384,6 +2388,23 @@ void World::InitRandomBGResetTime()
         sWorld->setWorldState(WS_BG_DAILY_RESET_TIME, uint64(m_NextRandomBGReset));
 }
 
+void World::InitCalendarOldEventsDeletionTime()
+{
+    time_t now = time(nullptr);
+    time_t currentDeletionTime = getWorldState(WS_DAILY_CALENDAR_DELETION_OLD_EVENTS_TIME);
+    time_t nextDeletionTime = currentDeletionTime ? currentDeletionTime : GetNextTimeWithDayAndHour(-1, getIntConfig(CONFIG_CALENDAR_DELETE_OLD_EVENTS_HOUR));
+
+    // If the reset time saved in the worldstate is before now it means the server was offline when the reset was supposed to occur.
+    // In this case we set the reset time in the past and next world update will do the reset and schedule next one in the future.
+    if (currentDeletionTime < now)
+        m_NextCalendarOldEventsDeletionTime = nextDeletionTime - DAY;
+    else
+        m_NextCalendarOldEventsDeletionTime = nextDeletionTime;
+
+    if (!currentDeletionTime)
+        sWorld->setWorldState(WS_DAILY_CALENDAR_DELETION_OLD_EVENTS_TIME, uint64(m_NextCalendarOldEventsDeletionTime));
+}
+
 void World::InitGuildResetTime()
 {
     time_t wstime = time_t(getWorldState(WS_GUILD_DAILY_RESET_TIME));
@@ -2484,6 +2505,15 @@ void World::ResetRandomBG()
 
     m_NextRandomBGReset = GetNextTimeWithDayAndHour(-1, 6);
     sWorld->setWorldState(WS_BG_DAILY_RESET_TIME, uint64(m_NextRandomBGReset));
+}
+
+void World::CalendarDeleteOldEvents()
+{
+    sLog->outString("Calendar deletion of old events.");
+
+    m_NextCalendarOldEventsDeletionTime = time_t(m_NextCalendarOldEventsDeletionTime + DAY);
+    sWorld->setWorldState(WS_DAILY_CALENDAR_DELETION_OLD_EVENTS_TIME, uint64(m_NextCalendarOldEventsDeletionTime));
+    sCalendarMgr->DeleteOldEvents();
 }
 
 void World::ResetGuildCap()
