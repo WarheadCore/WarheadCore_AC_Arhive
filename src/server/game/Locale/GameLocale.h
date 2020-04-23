@@ -243,7 +243,7 @@ public:
     LocaleConstant GetDBCLocaleIndex() const { return DBCLocaleIndex; }
     void SetDBCLocaleIndex(LocaleConstant locale) { DBCLocaleIndex = locale; }
 
-    //void LoadRewardLocales(); // Not used
+    void LoadRewardLocales();
     void LoadBroadcastTexts();
     void LoadBroadcastTextLocales();
     void LoadCreatureLocales();
@@ -258,7 +258,7 @@ public:
     void LoadGossipMenuItemsLocales();
     void LoadPointOfInterestLocales();
 
-    //AchievementRewardLocale const* GetAchievementRewardLocale(AchievementEntry const* achievement) const; // Not used
+    AchievementRewardLocale const* GetAchievementRewardLocale(uint32 entry) const;
     BroadcastText const* GetBroadcastText(uint32 id) const;
     CreatureLocale const* GetCreatureLocale(uint32 entry) const;
     GameObjectLocale const* GetGameObjectLocale(uint32 entry) const;

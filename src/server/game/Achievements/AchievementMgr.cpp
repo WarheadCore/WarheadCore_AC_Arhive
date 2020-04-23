@@ -2227,12 +2227,13 @@ void AchievementMgr::CompletedAchievement(AchievementEntry const* achievement)
             std::string text = reward->text;
             
             LocaleConstant localeConstant = GetPlayer()->GetSession()->GetSessionDbLocaleIndex();
+
             if (localeConstant != LOCALE_enUS)
             {
-                if(AchievementRewardLocale const* loc = sAchievementMgr->GetAchievementRewardLocale(achievement))
+                if(AchievementRewardLocale const* loc = sGameLocale->GetAchievementRewardLocale(achievement->ID))
                 {
-                    ObjectMgr::GetLocaleString(loc->Subject, localeConstant, subject);
-                    ObjectMgr::GetLocaleString(loc->Text, localeConstant, text);
+                    sGameLocale->GetLocaleString(loc->Subject, localeConstant, subject);
+                    sGameLocale->GetLocaleString(loc->Text, localeConstant, text);
                 }
             }
           

@@ -123,11 +123,11 @@ AcoreString const* GameLocale::GetAcoreString(uint32 entry) const
     return &itr->second;
 }
 
-/*void GameLocale::LoadRewardLocales()
+void GameLocale::LoadRewardLocales()
 {
     uint32 oldMSTime = getMSTime();
 
-    m_achievementRewardLocales.clear();                       // need for reload case
+    _achievementRewardLocales.clear();                       // need for reload case
 
     //                                               0   1       2        3
     QueryResult result = WorldDatabase.Query("SELECT ID, Locale, Subject, Text FROM achievement_reward_locale");
@@ -148,13 +148,13 @@ AcoreString const* GameLocale::GetAcoreString(uint32 entry) const
         std::string Subject = fields[2].GetString();
         std::string Text = fields[3].GetString();
 
-        if (m_achievementRewards.find(ID) == m_achievementRewards.end())
+        if (_achievementRewardLocales.find(ID) == _achievementRewardLocales.end())
         {
             sLog->outErrorDb("Table `achievement_reward_locale` (Entry: %u) has locale strings for non-existing achievement reward.", ID);
             continue;
         }
 
-        AchievementRewardLocale& data = m_achievementRewardLocales[ID];
+        AchievementRewardLocale& data = _achievementRewardLocales[ID];
         LocaleConstant locale = GetLocaleByName(LocaleName);
         if (locale == LOCALE_enUS)
             continue;
@@ -164,9 +164,9 @@ AcoreString const* GameLocale::GetAcoreString(uint32 entry) const
 
     } while (result->NextRow());
 
-    sLog->outString(">> Loaded %lu Achievement Reward Locale strings in %u ms", (unsigned long)m_achievementRewardLocales.size(), GetMSTimeDiffToNow(oldMSTime));
+    sLog->outString(">> Loaded %u Achievement Reward Locale strings in %u ms", static_cast<uint32>(_achievementRewardLocales.size()), GetMSTimeDiffToNow(oldMSTime));
     sLog->outString();
-}*/
+}
 
 void GameLocale::LoadBroadcastTexts()
 {
@@ -645,11 +645,11 @@ void GameLocale::LoadQuestRequestItemsLocale()
     sLog->outString(">> Loaded %u Quest Request Items locale strings in %u ms", static_cast<uint32>(_questRequestItemsLocaleStore.size()), GetMSTimeDiffToNow(oldMSTime));
 }
 
-//AchievementRewardLocale const* GameLocale::GetAchievementRewardLocale(AchievementEntry const* achievement) const
-//{
-//    auto const& itr = _achievementRewardLocales.find(achievement->ID);
-//    return itr != _achievementRewardLocales.end() ? &itr->second : nullptr;
-//}
+AchievementRewardLocale const* GameLocale::GetAchievementRewardLocale(uint32 entry) const
+{
+    auto const& itr = _achievementRewardLocales.find(entry);
+    return itr != _achievementRewardLocales.end() ? &itr->second : nullptr;
+}
 
 BroadcastText const* GameLocale::GetBroadcastText(uint32 id) const
 {
