@@ -18,6 +18,15 @@ bool Position::operator==(Position const& a)
         G3D::fuzzyEq(a.m_orientation, m_orientation));
 }
 
+void Position::RelocatePolarOffset(float angle, float dist, float z /*= 0.0f*/)
+{
+    SetOrientation(GetOrientation() + angle);
+
+    m_positionX = GetPositionX() + dist * std::cos(GetOrientation());
+    m_positionY = GetPositionY() + dist * std::sin(GetOrientation());
+    m_positionZ = GetPositionZ() + z;
+}
+
 bool Position::HasInLine(Position const* pos, float width) const
 {
     if (!HasInArc(M_PI, pos))

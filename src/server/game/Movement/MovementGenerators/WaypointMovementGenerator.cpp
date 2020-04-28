@@ -7,7 +7,6 @@
 #include "WaypointMovementGenerator.h"
 //Extended headers
 #include "ObjectMgr.h"
-#include "World.h"
 #include "Transport.h"
 //Flightmaster grid preloading
 #include "MapManager.h"
@@ -21,6 +20,7 @@
 #include "MoveSpline.h"
 #include "Spell.h"
 #include "GameTime.h"
+#include "GameConfig.h"
 
 void WaypointMovementGenerator<Creature>::LoadPath(Creature* creature)
 {
@@ -220,8 +220,10 @@ bool WaypointMovementGenerator<Creature>::DoUpdate(Creature* creature, uint32 di
         if (stop)
         {
             Stop(1000);
+
             if (!creature->IsStopped())
                 creature->StopMoving();
+
             return true;
         }
     }
@@ -234,7 +236,7 @@ bool WaypointMovementGenerator<Creature>::DoUpdate(Creature* creature, uint32 di
     else
     {
         if (creature->IsStopped())
-            Stop(sWorld->getIntConfig(CONFIG_WAYPOINT_MOVEMENT_STOP_TIME_FOR_PLAYER) * IN_MILLISECONDS);
+            Stop(sGameConfig->GetIntConfig("WaypointMovementStopTimeForPlayer") * IN_MILLISECONDS);
         else
         {
             // xinef: code to detect pre-empetively if we should start movement to next waypoint
@@ -250,7 +252,8 @@ bool WaypointMovementGenerator<Creature>::DoUpdate(Creature* creature, uint32 di
             }
         }
     }
-     return true;
+
+    return true;
  }
 
 void WaypointMovementGenerator<Creature>::MovementInform(Creature* creature)

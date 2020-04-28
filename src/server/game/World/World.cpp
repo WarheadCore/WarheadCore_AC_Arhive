@@ -851,6 +851,13 @@ void World::LoadConfigSettings(bool reload)
         sGameConfig->SetInt("PacketSpoof.BanMode", 0);
     }
 
+    tempIntOption = sGameConfig->GetIntConfig("Calendar.DeleteOldEventsHour");
+    if (tempIntOption > 23)
+    {
+        LOG_ERROR("config", "Calendar.DeleteOldEventsHour (%i) can't be load. Set to 6.", tempIntOption);
+        sGameConfig->SetInt("Calendar.DeleteOldEventsHour", 6);
+    }
+
     if (reload)
     {
         m_timers[WUPDATE_AUTOBROADCAST].SetInterval(sGameConfig->GetIntConfig("AutoBroadcast.Timer"));
@@ -1658,6 +1665,9 @@ void World::Update(uint32 diff)
     if (currentGameTime > m_NextRandomBGReset)
         ResetRandomBG();
 
+    if (currentGameTime > m_NextCalendarOldEventsDeletionTime)
+        CalendarDeleteOldEvents();
+
     if (currentGameTime > m_NextGuildReset)
         ResetGuildCap();
 
@@ -2390,9 +2400,9 @@ void World::InitRandomBGResetTime()
 
 void World::InitCalendarOldEventsDeletionTime()
 {
-    time_t now = time(nullptr);
+    time_t now = GameTime::GetGameTime();
     time_t currentDeletionTime = getWorldState(WS_DAILY_CALENDAR_DELETION_OLD_EVENTS_TIME);
-    time_t nextDeletionTime = currentDeletionTime ? currentDeletionTime : GetNextTimeWithDayAndHour(-1, getIntConfig(CONFIG_CALENDAR_DELETE_OLD_EVENTS_HOUR));
+    time_t nextDeletionTime = currentDeletionTime ? currentDeletionTime : GetNextTimeWithDayAndHour(-1, sGameConfig->GetIntConfig("Calendar.DeleteOldEventsHour"));
 
     // If the reset time saved in the worldstate is before now it means the server was offline when the reset was supposed to occur.
     // In this case we set the reset time in the past and next world update will do the reset and schedule next one in the future.
@@ -2509,7 +2519,7 @@ void World::ResetRandomBG()
 
 void World::CalendarDeleteOldEvents()
 {
-    sLog->outString("Calendar deletion of old events.");
+    LOG_INFO("misc", "Calendar deletion of old events.");
 
     m_NextCalendarOldEventsDeletionTime = time_t(m_NextCalendarOldEventsDeletionTime + DAY);
     sWorld->setWorldState(WS_DAILY_CALENDAR_DELETION_OLD_EVENTS_TIME, uint64(m_NextCalendarOldEventsDeletionTime));
@@ -2518,7 +2528,7 @@ void World::CalendarDeleteOldEvents()
 
 void World::ResetGuildCap()
 {
-    sLog->outString("Guild Daily Cap reset.");
+    LOG_INFO("misc", "Guild Daily Cap reset.");
 
     m_NextGuildReset = GetNextTimeWithDayAndHour(-1, 6);
     sWorld->setWorldState(WS_GUILD_DAILY_RESET_TIME, uint64(m_NextGuildReset));
