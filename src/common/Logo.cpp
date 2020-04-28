@@ -11,7 +11,7 @@
 #include <openssl/crypto.h>
 #include <boost/version.hpp>
 
-void acore::Logo::Show(std::string const& applicationName, std::string configName, void(*log)(char const* text))
+void acore::Logo::Show(char const* applicationName, char const* configName, void(*log)(char const* text))
 {
     log(acore::StringFormat("%s (%s)", GitRevision::GetFullVersion(), applicationName).c_str());
     log("<Ctrl-C> to stop");
