@@ -2177,8 +2177,8 @@ void ObjectMgr::LoadItemTemplates()
         itemTemplate.Flags                     = fields[7].GetUInt32();
         itemTemplate.Flags2                    = fields[8].GetUInt32();
         itemTemplate.BuyCount                  = uint32(fields[9].GetUInt8());
-        itemTemplate.BuyPrice                  = int32(fields[10].GetInt64() * sWorld->getRate((Rates)(RATE_BUYVALUE_ITEM_POOR + itemTemplate.Quality)));
-        itemTemplate.SellPrice                 = uint32(fields[11].GetUInt32() * sWorld->getRate((Rates)(RATE_SELLVALUE_ITEM_POOR + itemTemplate.Quality)));
+        itemTemplate.BuyPrice                  = int32(fields[10].GetInt64());
+        itemTemplate.SellPrice                 = fields[11].GetUInt32();
         itemTemplate.InventoryType             = uint32(fields[12].GetUInt8());
         itemTemplate.AllowableClass            = fields[13].GetInt32();
         itemTemplate.AllowableRace             = fields[14].GetInt32();
@@ -2195,6 +2195,45 @@ void ObjectMgr::LoadItemTemplates()
         itemTemplate.Stackable                 = fields[25].GetInt32();
         itemTemplate.ContainerSlots            = uint32(fields[26].GetUInt8());
         itemTemplate.StatsCount                = uint32(fields[27].GetUInt8());
+
+        // Rate.BuyValue and Rate.SellValue
+        switch (itemTemplate.Quality)
+        {
+        case ITEM_QUALITY_POOR:
+            itemTemplate.BuyCount = itemTemplate.BuyCount * static_cast<uint32>(sGameConfig->GetFloatConfig("Rate.BuyValue.Item.Poor"));
+            itemTemplate.SellPrice = itemTemplate.SellPrice * static_cast<uint32>(sGameConfig->GetFloatConfig("Rate.SellValue.Item.Poor"));
+            break;
+        case ITEM_QUALITY_NORMAL:
+            itemTemplate.BuyCount = itemTemplate.BuyCount * static_cast<uint32>(sGameConfig->GetFloatConfig("Rate.BuyValue.Item.Normal"));
+            itemTemplate.SellPrice = itemTemplate.SellPrice * static_cast<uint32>(sGameConfig->GetFloatConfig("Rate.SellValue.Item.Normal"));
+            break;
+        case ITEM_QUALITY_UNCOMMON:
+            itemTemplate.BuyCount = itemTemplate.BuyCount * static_cast<uint32>(sGameConfig->GetFloatConfig("Rate.BuyValue.Item.Uncommon"));
+            itemTemplate.SellPrice = itemTemplate.SellPrice * static_cast<uint32>(sGameConfig->GetFloatConfig("Rate.SellValue.Item.Uncommon"));
+            break;
+        case ITEM_QUALITY_RARE:
+            itemTemplate.BuyCount = itemTemplate.BuyCount * static_cast<uint32>(sGameConfig->GetFloatConfig("Rate.BuyValue.Item.Rare"));
+            itemTemplate.SellPrice = itemTemplate.SellPrice * static_cast<uint32>(sGameConfig->GetFloatConfig("Rate.SellValue.Item.Rare"));
+            break;
+        case ITEM_QUALITY_EPIC:
+            itemTemplate.BuyCount = itemTemplate.BuyCount * static_cast<uint32>(sGameConfig->GetFloatConfig("Rate.BuyValue.Item.Epic"));
+            itemTemplate.SellPrice = itemTemplate.SellPrice * static_cast<uint32>(sGameConfig->GetFloatConfig("Rate.SellValue.Item.Epic"));
+            break;
+        case ITEM_QUALITY_LEGENDARY:
+            itemTemplate.BuyCount = itemTemplate.BuyCount * static_cast<uint32>(sGameConfig->GetFloatConfig("Rate.BuyValue.Item.Legendary"));
+            itemTemplate.SellPrice = itemTemplate.SellPrice * static_cast<uint32>(sGameConfig->GetFloatConfig("Rate.SellValue.Item.Legendary"));
+            break;
+        case ITEM_QUALITY_ARTIFACT:
+            itemTemplate.BuyCount = itemTemplate.BuyCount * static_cast<uint32>(sGameConfig->GetFloatConfig("Rate.BuyValue.Item.Artifact"));
+            itemTemplate.SellPrice = itemTemplate.SellPrice * static_cast<uint32>(sGameConfig->GetFloatConfig("Rate.SellValue.Item.Artifact"));
+            break;
+        case ITEM_QUALITY_HEIRLOOM:
+            itemTemplate.BuyCount = itemTemplate.BuyCount * static_cast<uint32>(sGameConfig->GetFloatConfig("Rate.BuyValue.Item.Heirloom"));
+            itemTemplate.SellPrice = itemTemplate.SellPrice * static_cast<uint32>(sGameConfig->GetFloatConfig("Rate.SellValue.Item.Heirloom"));
+            break;
+        default:
+            break;
+        }
 
         for (uint8 i = 0; i < itemTemplate.StatsCount; ++i)
         {

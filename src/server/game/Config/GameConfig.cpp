@@ -700,5 +700,25 @@ void GameConfig::LoadFloatConfigs(bool reload /*= false*/)
     AddFloatConfig("Visibility.Distance.Instances", DEFAULT_VISIBILITY_INSTANCE);
     AddFloatConfig("Visibility.Distance.BGArenas", DEFAULT_VISIBILITY_BGARENAS);
 
+    // Rate.SellValue.Item
+    AddFloatConfig("Rate.SellValue.Item.Poor");
+    AddFloatConfig("Rate.SellValue.Item.Normal");
+    AddFloatConfig("Rate.SellValue.Item.Uncommon");
+    AddFloatConfig("Rate.SellValue.Item.Rare");
+    AddFloatConfig("Rate.SellValue.Item.Epic");
+    AddFloatConfig("Rate.SellValue.Item.Legendary");
+    AddFloatConfig("Rate.SellValue.Item.Artifact");
+    AddFloatConfig("Rate.SellValue.Item.Heirloom");
+
+    // Rate.BuyValue.Item
+    AddFloatConfig("Rate.BuyValue.Item.Poor");
+    AddFloatConfig("Rate.BuyValue.Item.Normal");
+    AddFloatConfig("Rate.BuyValue.Item.Uncommon");
+    AddFloatConfig("Rate.BuyValue.Item.Rare");
+    AddFloatConfig("Rate.BuyValue.Item.Epic");
+    AddFloatConfig("Rate.BuyValue.Item.Legendary");
+    AddFloatConfig("Rate.BuyValue.Item.Artifact");
+    AddFloatConfig("Rate.BuyValue.Item.Heirloom");
+
     LOG_INFO("config", "> Loaded %u float configs", static_cast<uint32>(_floatConfigs.size()));
 }
