@@ -560,6 +560,12 @@ void GameConfig::LoadIntConfigs(bool reload /*= false*/)
     AddIntConfig("PacketSpoof.BanMode");
     AddIntConfig("PacketSpoof.BanDuration", 86400);
 
+    //
+    AddIntConfig("WaypointMovementStopTimeForPlayer", 120);
+
+    // Calendar
+    AddIntConfig("Calendar.DeleteOldEventsHour", 6);
+
     // Check options can't be changed at worldserver.conf reload
     if (reload)
     {
