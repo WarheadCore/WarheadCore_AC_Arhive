@@ -327,7 +327,12 @@ extern int main(int argc, char** argv)
     // Init all logs
     sLog->Initialize();
 
-    acore::Logo::Show("server.worldserver", "worldserver", configFile);
+    acore::Logo::Show("worldserver", configFile,
+        [](char const* text)
+        {
+            LOG_INFO("server.worldserver", "%s", text);
+        }
+    );
 
     sConfigMgr->LoadModulesConfigs();
 
