@@ -3,6 +3,7 @@
  */
 
 #include "Logo.h"
+#include "Log.h"
 #include "GitRevision.h"
 #include "StringFormat.h"
 #include <ace/Version.h>
