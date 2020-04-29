@@ -56,6 +56,8 @@ void ScriptMgr::Initialize()
 {
     LOG_INFO("server.loading", "> Loading C++ scripts");
     LOG_INFO("server.loading", "");
+
+    AddSC_SmartScripts();
     
     ASSERT(_script_loader_callback,
            "Script loader callback wasn't registered!");
@@ -132,8 +134,6 @@ void ScriptMgr::LoadDatabase()
     ScriptRegistry<AchievementCriteriaScript>::AddALScripts();
 
     FillSpellSummary();
-
-    AddSC_SmartScripts();
 
     CheckIfScriptsInDatabaseExist();
 
