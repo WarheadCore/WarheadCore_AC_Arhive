@@ -56,11 +56,17 @@ private:
     StorageType m_storage;
 };
 
+AC_COMMON_API struct tm* localtime_r(time_t const* time, struct tm* result);
+AC_COMMON_API time_t LocalTimeToUTCTime(time_t time);
+AC_COMMON_API time_t GetLocalHourTimestamp(time_t time, uint8 hour, bool onlyAfterTime = true);
+AC_COMMON_API tm TimeBreakdown(time_t t);
+
 AC_COMMON_API void stripLineInvisibleChars(std::string &src);
 AC_COMMON_API int32 MoneyStringToMoney(const std::string& moneyString);
 AC_COMMON_API std::string secsToTimeString(uint64 timeInSecs, bool shortText = false);
 AC_COMMON_API uint32 TimeStringToSecs(const std::string& timestring);
 AC_COMMON_API std::string TimeToTimestampStr(time_t t);
+AC_COMMON_API std::string TimeToHumanReadable(time_t t);
 
 /* Return a random number in the range min..max. */
 AC_COMMON_API int32 irand(int32 min, int32 max);
