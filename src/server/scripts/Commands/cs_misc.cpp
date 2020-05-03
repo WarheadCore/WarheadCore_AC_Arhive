@@ -2185,7 +2185,7 @@ public:
             stmt->setInt64(0, muteTime);
             std::string nameLink = handler->playerLink(targetName);
 
-            if (sWorld->getBoolConfig(CONFIG_SHOW_MUTE_IN_WORLD))
+            if (CONF_GET_BOOL("ShowMuteInWorld"))
                 sWorld->SendWorldText(LANG_COMMAND_MUTEMESSAGE_WORLD, muteBy.c_str(), nameLink.c_str(), notSpeakTime, muteReasonStr.c_str());
 
             ChatHandler(target->GetSession()).PSendSysMessage(LANG_YOUR_CHAT_DISABLED, notSpeakTime, muteBy.c_str(), muteReasonStr.c_str());
@@ -2209,7 +2209,7 @@ public:
         LoginDatabase.Execute(stmt);
         std::string nameLink = handler->playerLink(targetName);
 
-        if (sWorld->getBoolConfig(CONFIG_SHOW_MUTE_IN_WORLD) && !target)
+        if (CONF_GET_BOOL("ShowMuteInWorld") && !target)
             sWorld->SendWorldText(LANG_COMMAND_MUTEMESSAGE_WORLD, muteBy.c_str(), nameLink.c_str(), notSpeakTime, muteReasonStr.c_str());
         else
         {

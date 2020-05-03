@@ -284,6 +284,7 @@ void GameConfig::LoadBoolConfigs(bool reload /*= false*/)
 
     // AddBoolConfig("ShowKickInWorld"); //not used
     AddBoolConfig("ShowBanInWorld");
+    AddBoolConfig("ShowMuteInWorld");
 
     AddBoolConfig("Warden.Enabled");
     AddBoolConfig("AutoBroadcast.On");
