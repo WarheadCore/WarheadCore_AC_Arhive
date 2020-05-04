@@ -6,6 +6,7 @@
 #include "Config.h"
 #include "Object.h"
 #include "Log.h"
+#include "World.h"
 
 GameConfig* GameConfig::instance()
 {
