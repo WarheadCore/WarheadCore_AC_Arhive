@@ -13,6 +13,7 @@
 #include "Map.h"
 #include "Object.h"
 #include "MapUpdater.h"
+#include <atomic>
 
 class Transport;
 class StaticTransport;

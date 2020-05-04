@@ -61,6 +61,7 @@ target_link_libraries(worldserver
   PRIVATE
     acore-core-interface
   PUBLIC
+    scripts
     game
     shared
     gsoap
@@ -71,12 +72,6 @@ if (NOT DISABLED_ALL_MODULES AND MODULES_EXIST)
 target_link_libraries(worldserver
   PUBLIC
     modules)
-endif()
-
-if (DISABLED_ALL_MODULES OR NOT MODULES_EXIST)
-target_link_libraries(worldserver
-  PUBLIC
-    scripts)
 endif()
 
 set_target_properties(worldserver

@@ -105,13 +105,13 @@ public:
         void UpdateAI(uint32 diff) override
         {
             events.Update(diff);
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_CLEARWATER_ANNOUNCE:
                 {
                     time_t curtime = GameTime::GetGameTime();
                     tm strdate;
-                    ACE_OS::localtime_r(&curtime, &strdate);
+                    localtime_r(&curtime, &strdate);
 
                     if (!preWarning && strdate.tm_hour == 13 && strdate.tm_min == 55)
                     {
@@ -250,13 +250,13 @@ public:
         void UpdateAI(uint32 diff) override
         {
             events.Update(diff);
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_RIGGLE_ANNOUNCE:
                 {
                     time_t curtime = GameTime::GetGameTime();
                     tm strdate;
-                    ACE_OS::localtime_r(&curtime, &strdate);
+                    localtime_r(&curtime, &strdate);
                     if (!startWarning && strdate.tm_hour == 14 && strdate.tm_min == 0)
                     {
                         sCreatureTextMgr->SendChat(me, RIGGLE_SAY_START, 0, CHAT_MSG_MONSTER_YELL, LANG_UNIVERSAL, TEXT_RANGE_ZONE);

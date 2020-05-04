@@ -48,9 +48,7 @@ target_include_directories(modules
 
 target_link_libraries(modules
   PRIVATE
-    modules-interface
-  PUBLIC
-    scripts)
+    modules-interface)
 
 add_dependencies(modules revision.h)
 
