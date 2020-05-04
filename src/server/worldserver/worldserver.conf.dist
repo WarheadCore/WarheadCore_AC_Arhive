@@ -3365,6 +3365,7 @@ Logger.root = 6,Server
 Logger.server = 6,Server
 Logger.commands.gm = 6,GM
 Logger.sql = 4,DBErrors
+Logger.sql.updates = 4,Server
 Logger.mmaps= 6,Server
 Logger.module= 6,Server
 

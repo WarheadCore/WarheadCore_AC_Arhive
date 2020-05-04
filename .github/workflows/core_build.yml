@@ -35,5 +35,3 @@ jobs:
         run: source ./apps/ci/ci-compile.sh
       - name: Dry run
         run: source ./apps/ci/ci-worldserver-dry-run.sh
-      - name: Check startup errors
-        run: source ./apps/ci/ci-error-check.sh
