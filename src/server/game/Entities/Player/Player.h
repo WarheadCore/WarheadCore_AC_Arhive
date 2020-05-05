@@ -1794,8 +1794,8 @@ class Player : public Unit, public GridObject<Player>
 
         static uint32 const infinityCooldownDelay = 0x9A7EC800;  // used for set "infinity cooldowns" for spells and check, MONTH*IN_MILLISECONDS
         static uint32 const infinityCooldownDelayCheck = 0x4D3F6400; //MONTH*IN_MILLISECONDS/2;
-        virtual bool HasSpellCooldown(uint32 spell_id) const;
-        virtual bool HasSpellItemCooldown(uint32 spell_id, uint32 itemid) const;
+        virtual bool HasSpellCooldown(uint32 spell_id) const override;
+        virtual bool HasSpellItemCooldown(uint32 spell_id, uint32 itemid) const override;
         uint32 GetSpellCooldownDelay(uint32 spell_id) const;
         void AddSpellAndCategoryCooldowns(SpellInfo const* spellInfo, uint32 itemId, Spell* spell = NULL, bool infinityCooldown = false);
         void AddSpellCooldown(uint32 spell_id, uint32 itemid, uint32 end_time, bool needSendToClient = false, bool forceSendToSpectator = false) override;

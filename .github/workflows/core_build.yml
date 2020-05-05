@@ -9,16 +9,12 @@ jobs:
       fail-fast: false
       matrix:
         compiler: [clang6, clang7]
-        modules: [with, without]
     runs-on: ubuntu-18.04
-    name: ${{ matrix.compiler }}-${{ matrix.modules }}-modules
+    name: ${{ matrix.compiler }}
     env:
       COMPILER: ${{ matrix.compiler }}
     steps:
       - uses: actions/checkout@v2
-      - name: Checkout modules
-        run: ./apps/ci/ci-install-modules.sh
-        if: matrix.modules == 'with'
       - name: Cache
         uses: actions/cache@v1.1.2
         with:
@@ -39,21 +35,3 @@ jobs:
         run: source ./apps/ci/ci-compile.sh
       - name: Dry run
         run: source ./apps/ci/ci-worldserver-dry-run.sh
-      - name: Check startup errors
-        run: source ./apps/ci/ci-error-check.sh
-
-  docker-build:
-    strategy:
-      fail-fast: false
-    runs-on: ubuntu-18.04
-    steps:
-      - uses: actions/checkout@v2
-      - name: Configure
-        run: |
-          docker --version
-          docker-compose --version
-          ./apps/ci/docker/ci-docker-config.sh
-          ./bin/acore-docker-generate-etc
-      - name: Build
-        run: |
-          ./bin/acore-docker-build-no-scripts

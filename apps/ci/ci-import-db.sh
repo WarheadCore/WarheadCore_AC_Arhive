@@ -2,5 +2,5 @@
 
 set -e
 
-echo "--> Import DB"
-bash ./acore.sh "db-assembler" "import-all"
+sudo systemctl start mysql
+./acore.sh "db-assembler" "import-all"

@@ -113,7 +113,12 @@ extern int main(int argc, char** argv)
     // Init all logs
     sLog->Initialize();
 
-    acore::Logo::Show("server.authserver", "authserver", configFile);
+    acore::Logo::Show("authserver", configFile,
+        [](char const* text)
+        {
+            LOG_INFO("server.authserver", "%s", text);
+        }
+    );
 
 #if defined (ACE_HAS_EVENT_POLL) || defined (ACE_HAS_DEV_POLL)
     ACE_Reactor::instance(new ACE_Reactor(new ACE_Dev_Poll_Reactor(ACE::max_handles(), 1), 1), true);
