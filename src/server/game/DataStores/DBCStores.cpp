@@ -185,7 +185,7 @@ static bool LoadDBC_assert_print(uint32 fsize, uint32 rsize, const std::string& 
 
 template<class T>
 inline void LoadDBC(uint32& availableDbcLocales, StoreProblemList& errors, DBCStorage<T>& storage, std::string const& dbcPath, std::string const& filename,
-    char const* dbTable = nullptr, char const* dbFormat = nullptr, char const* dbIndexName = nullptr)
+    char const* dbTable = nullptr, char const* dbFormat = nullptr)
 {
     // compatibility format and C++ structure sizes
     ASSERT(DBCFileLoader::GetFormatRecordSize(storage.GetFormat()) == sizeof(T) || LoadDBC_assert_print(DBCFileLoader::GetFormatRecordSize(storage.GetFormat()), sizeof(T), filename));
@@ -210,7 +210,7 @@ inline void LoadDBC(uint32& availableDbcLocales, StoreProblemList& errors, DBCSt
         }
 
         if (dbTable)
-            storage.LoadFromDB(dbTable, dbFormat, dbIndexName);
+            storage.LoadFromDB(dbTable, dbFormat);
     }
     else
     {
@@ -342,11 +342,11 @@ void LoadDBCStores(const std::string& dataPath)
 
 #undef LOAD_DBC
 
-#define LOAD_DBC_EXT(store, file, dbtable, dbformat, dbpk) LoadDBC(availableDbcLocales, bad_dbc_files, store, dbcPath, file, dbtable, dbformat, dbpk)
+#define LOAD_DBC_EXT(store, file, dbtable, dbformat) LoadDBC(availableDbcLocales, bad_dbc_files, store, dbcPath, file, dbtable, dbformat)
 
-    LOAD_DBC_EXT(sAchievementStore,     "Achievement.dbc",      "achievement_dbc",      CustomAchievementfmt,     CustomAchievementIndex);
-    LOAD_DBC_EXT(sSpellStore,           "Spell.dbc",            "spell_dbc",            CustomSpellEntryfmt,      CustomSpellEntryIndex);
-    LOAD_DBC_EXT(sSpellDifficultyStore, "SpellDifficulty.dbc",  "spelldifficulty_dbc",  CustomSpellDifficultyfmt, CustomSpellDifficultyIndex);
+    LOAD_DBC_EXT(sAchievementStore,     "Achievement.dbc",      "achievement_dbc",      CustomAchievementfmt);
+    LOAD_DBC_EXT(sSpellStore,           "Spell.dbc",            "spell_dbc",            CustomSpellEntryfmt);
+    LOAD_DBC_EXT(sSpellDifficultyStore, "SpellDifficulty.dbc",  "spelldifficulty_dbc",  CustomSpellDifficultyfmt);
 
 #undef LOAD_DBC_EXT
 
@@ -560,8 +560,10 @@ void LoadDBCStores(const std::string& dataPath)
 
             if (node->MountCreatureID[0] && node->MountCreatureID[0] != 32981)
                 sHordeTaxiNodesMask[field] |= submask;
+
             if (node->MountCreatureID[1] && node->MountCreatureID[1] != 32981)
                 sAllianceTaxiNodesMask[field] |= submask;
+
             if (node->MountCreatureID[0] == 32981 || node->MountCreatureID[1] == 32981)
                 sDeathKnightTaxiNodesMask[field] |= submask;
 

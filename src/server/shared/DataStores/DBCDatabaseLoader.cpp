@@ -23,8 +23,13 @@
 #include "StringFormat.h"
 #include <sstream>
 
-DBCDatabaseLoader::DBCDatabaseLoader(char const* tableName, char const* dbFormatString, char const* primaryKey, char const* dbcFormatString, std::vector<char*>& stringPool)
-    : _sqlTableName(tableName), _formatString(dbFormatString), _indexName(primaryKey), _dbcFormat(dbcFormatString), _sqlIndexPos(0), _recordSize(0), _stringPool(stringPool)
+DBCDatabaseLoader::DBCDatabaseLoader(char const* tableName, char const* dbFormatString, char const* dbcFormatString, std::vector<char*>& stringPool)
+    : _sqlTableName(tableName),
+    _formatString(dbFormatString),
+    _dbcFormat(dbcFormatString),
+    _sqlIndexPos(0),
+    _recordSize(0),
+    _stringPool(stringPool)
 {
     // Get sql index position
     int32 indexPos = -1;
@@ -60,7 +65,7 @@ static char const* nullStr = "";
 
 char* DBCDatabaseLoader::Load(uint32& records, char**& indexTable)
 {
-    std::string query = acore::StringFormat("SELECT * FROM `%s` ORDER BY %s DESC;", _sqlTableName, _indexName);
+    std::string query = acore::StringFormat("SELECT * FROM `%s` ORDER BY `ID` DESC", _sqlTableName);
 
     // no error if empty set
     QueryResult result = WorldDatabase.Query(query.c_str());
@@ -94,23 +99,11 @@ char* DBCDatabaseLoader::Load(uint32& records, char**& indexTable)
     do
     {
         Field* fields = result->Fetch();
-
         uint32 indexValue = fields[_sqlIndexPos].GetUInt32();
-
         char* dataValue = indexTable[indexValue];
+
         newIndexes[newRecords] = indexValue;
         dataValue = &dataTable[newRecords++ * _recordSize];
-        //if (!dataValue)
-        //{
-        //    newIndexes[newRecords] = indexValue;
-        //    dataValue = &dataTable[newRecords++ * _recordSize];
-        //}
-        //else
-        //{
-        //    // Attempt to overwrite existing data
-        //    ASSERT(false, "Index %d already exists in dbc:'%s'", indexValue, _sqlTableName);
-        //    return nullptr;
-        //}
 
         uint32 dataOffset = 0;
         uint32 sqlColumnNumber = 0;
