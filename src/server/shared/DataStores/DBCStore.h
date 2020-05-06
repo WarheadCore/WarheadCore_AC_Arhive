@@ -73,7 +73,7 @@ public:
     bool Load(char const* path) override
     {
         return DBCStorageBase::Load(path, _indexTable.AsChar);
-}
+    }
 
     bool LoadStringsFrom(char const* path) override
     {
