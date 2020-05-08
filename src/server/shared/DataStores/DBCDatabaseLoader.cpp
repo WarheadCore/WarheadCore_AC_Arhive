@@ -100,12 +100,6 @@ char* DBCDatabaseLoader::Load(uint32& records, char**& indexTable)
 
         for (; (*dbcFormat); ++dbcFormat)
         {
-            if (!*dbcFormat)
-            {
-                ASSERT(false, "DB and DBC format strings do not have the same length for '%s'", _sqlTableName);
-                return nullptr;
-            }
-
             switch (*dbcFormat)
             {
             case FT_FLOAT:
