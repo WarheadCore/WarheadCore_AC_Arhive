@@ -1957,7 +1957,7 @@ void ScriptMgr::OnBeforeRollMeleeOutcomeAgainst(const Unit* attacker, const Unit
     FOREACH_SCRIPT(UnitScript)->OnBeforeRollMeleeOutcomeAgainst(attacker, victim, attType, attackerMaxSkillValueForLevel, victimMaxSkillValueForLevel, attackerWeaponSkill, victimDefenseSkill, crit_chance, miss_chance, dodge_chance, parry_chance, block_chance);
 }
 
-void ScriptMgr::OnPlayerMove(Player* player, MovementInfo movementInfo, uint32 opcode)
+void ScriptMgr::OnPlayerMove(Player* player, const MovementInfo &movementInfo, uint32 opcode)
 {
     FOREACH_SCRIPT(MovementHandlerScript)->OnPlayerMove(player, movementInfo, opcode);
 }

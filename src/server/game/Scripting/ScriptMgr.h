@@ -476,7 +476,7 @@ protected:
 public:
 
     //Called whenever a player moves
-    virtual void OnPlayerMove(Player* /*player*/, MovementInfo /*movementInfo*/, uint32 /*opcode*/) { }
+    virtual void OnPlayerMove(Player* /*player*/, const MovementInfo /*movementInfo*/, uint32 /*opcode*/) { }
 };
 
 class AllMapScript : public ScriptObject
@@ -1541,7 +1541,7 @@ class ScriptMgr
 
     public: /* MovementHandlerScript */
 
-        void OnPlayerMove(Player* player, MovementInfo movementInfo, uint32 opcode);
+        void OnPlayerMove(Player* player, const MovementInfo &movementInfo, uint32 opcode);
 
     public: /* AllCreatureScript */
 
