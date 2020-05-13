@@ -31,7 +31,7 @@ namespace MMAP
 {
     struct MapTiles
     {
-        MapTiles() : m_mapId(uint32(-1)), m_tiles(NULL) {}
+        MapTiles() : m_mapId(uint32(-1)), m_tiles(nullptr) {}
 
         MapTiles(uint32 id, std::set<uint32>* tiles) : m_mapId(id), m_tiles(tiles) {}
         ~MapTiles() {}
@@ -49,7 +49,7 @@ namespace MMAP
 
     struct Tile
     {
-        Tile() : chf(NULL), solid(NULL), cset(NULL), pmesh(NULL), dmesh(NULL) {}
+        Tile() : chf(nullptr), solid(nullptr), cset(nullptr), pmesh(nullptr), dmesh(nullptr) {}
         ~Tile()
         {
             rcFreeCompactHeightfield(chf);
@@ -65,6 +65,27 @@ namespace MMAP
         rcPolyMeshDetail* dmesh;
     };
 
+    struct TileConfig
+    {
+        TileConfig(bool bigBaseUnit)
+        {
+            // these are WORLD UNIT based metrics
+            // this are basic unit dimentions
+            // value have to divide GRID_SIZE(533.3333f) ( aka: 0.5333, 0.2666, 0.3333, 0.1333, etc )
+            BASE_UNIT_DIM = bigBaseUnit ? 0.5333333f : 0.2666666f;
+
+            // All are in UNIT metrics!
+            VERTEX_PER_MAP = int(GRID_SIZE / BASE_UNIT_DIM + 0.5f);
+            VERTEX_PER_TILE = bigBaseUnit ? 40 : 80; // must divide VERTEX_PER_MAP
+            TILES_PER_MAP = VERTEX_PER_MAP / VERTEX_PER_TILE;
+        }
+
+        float BASE_UNIT_DIM;
+        int VERTEX_PER_MAP;
+        int VERTEX_PER_TILE;
+        int TILES_PER_MAP;
+    };
+
     class MapBuilder
     {
         public:
@@ -75,7 +96,8 @@ namespace MMAP
                 bool skipBattlegrounds   = false,
                 bool debugOutput         = false,
                 bool bigBaseUnit         = false,
-                const char* offMeshFilePath = NULL);
+                int mapid                = -1,
+                char const* offMeshFilePath = nullptr);
 
             ~MapBuilder();
 
