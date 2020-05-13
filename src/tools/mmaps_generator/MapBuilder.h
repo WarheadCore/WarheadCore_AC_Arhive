@@ -113,6 +113,7 @@ namespace MMAP
             void getGridBounds(uint32 mapID, uint32 &minX, uint32 &minY, uint32 &maxX, uint32 &maxY) const;
 
             bool shouldSkipMap(uint32 mapID);
+            bool isContinentMap(uint32 mapID);
             bool isTransportMap(uint32 mapID);
             bool shouldSkipTile(uint32 mapID, uint32 tileX, uint32 tileY);
             // percentageDone - method to calculate percentage

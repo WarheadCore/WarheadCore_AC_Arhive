@@ -43,7 +43,7 @@ namespace VMAP
     //=================================================================
 
     TileAssembler::TileAssembler(const std::string& pSrcDirName, const std::string& pDestDirName)
-        : iDestDir(pDestDirName), iSrcDir(pSrcDirName), iFilterMethod(NULL), iCurrentUniqueNameId(0)
+        : iDestDir(pDestDirName), iSrcDir(pSrcDirName), iCurrentUniqueNameId(0)
     {
         //mkdir(iDestDir);
         //init();
@@ -228,8 +228,10 @@ namespace VMAP
                 printf("spawning Map %d\n", mapID);
                 mapData[mapID] = current = new MapSpawns();
             }
-            else current = (*map_iter).second;
-            current->UniqueEntries.insert(pair<uint32, ModelSpawn>(spawn.ID, spawn));
+            else
+                current = map_iter->second;
+
+            current->UniqueEntries.emplace(spawn.ID, spawn);
             current->TileEntries.insert(pair<uint32, uint32>(StaticMapTree::packTileID(tileX, tileY), spawn.ID));
         }
         bool success = (ferror(dirf) == 0);

@@ -13,6 +13,7 @@
 
 #ifndef _WIN32
     #include <stddef.h>
+    #include <cstring>
     #include <dirent.h>
 #endif
 
@@ -106,7 +107,7 @@ namespace MMAP
             errno = 0;
             if ((dp = readdir(dirp)) != NULL)
             {
-                if (matchWildcardFilter(filter.c_str(), dp->d_name))
+                if (strcmp(dp->d_name, ".") != 0 && strcmp(dp->d_name, "..") != 0 && matchWildcardFilter(filter.c_str(), dp->d_name))
                     fileList.push_back(std::string(dp->d_name));
             }
             else
