@@ -76,7 +76,7 @@ char* DBCDatabaseLoader::Load(uint32& records, char**& indexTable)
         uint32 indexValue = fields[_sqlIndexPos].GetUInt32();
         char* dataValue = indexTable[indexValue];
 
-        // If exist - override
+        // If exist in DBC file override from DB
         newIndexes[newRecords] = indexValue;
         dataValue = &dataTable[newRecords++ * _recordSize];
 
@@ -109,7 +109,7 @@ char* DBCDatabaseLoader::Load(uint32& records, char**& indexTable)
             case FT_NA:
                 break;
             default:
-                ASSERT(false, "Unsupported data type '%c' marked present in table '%s'", *dbcFormat, _sqlTableName);
+                ASSERT(false, "Unsupported data type '%c' in table '%s'", *dbcFormat, _sqlTableName);
                 return nullptr;
             }
 
