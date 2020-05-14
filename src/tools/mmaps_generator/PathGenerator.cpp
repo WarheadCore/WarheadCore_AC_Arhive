@@ -8,7 +8,6 @@
 #include "MapBuilder.h"
 #include "PathCommon.h"
 #include "Timer.h"
-#include <boost/filesystem.hpp>
 #include <unordered_map>
 
 using namespace MMAP;
@@ -246,8 +245,9 @@ std::unordered_map<uint32, uint8> LoadLiquid()
 {
     DBCFileLoader liquidDbc;
     std::unordered_map<uint32, uint8> liquidData;
+
     // format string doesnt matter as long as it has correct length (only used for mapping to structures in worldserver)
-    if (liquidDbc.Load((boost::filesystem::path("dbc") / "LiquidType.dbc").string().c_str(), "nxxixixxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")) // TODO: no boost shit
+    if (liquidDbc.Load("dbc/LiquidType.dbc", "nxxixixxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")) // TODO: no boost shit
     {
         for (uint32 x = 0; x < liquidDbc.GetNumRows(); ++x)
         {
