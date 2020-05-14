@@ -92,7 +92,7 @@ target_compile_features(Foundation
   
 if(WIN32)
   target_compile_definitions(Foundation PUBLIC POCO_NO_UNWINDOWS POCO_NO_AUTOMATIC_LIBS)
-  # target_link_libraries(Foundation PRIVATE iphlpapi)
+  target_link_libraries(Foundation PRIVATE iphlpapi)
 endif()
 
 if (UNIX)
