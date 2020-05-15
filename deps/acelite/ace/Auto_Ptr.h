@@ -4,7 +4,7 @@
 /**
  *  @file    Auto_Ptr.h
  *
- *  @author Doug Schmidt <schmidt@uci.edu>
+ *  @author Doug Schmidt <d.schmidt@vanderbilt.edu>
  *  @author Irfan Pyarali <irfan@cs.wustl.edu>
  *  @author Jack Reeves <jack@fx.com>
  *  @author Dr. Harald M. Mueller <mueller@garwein.hai.siemens.co.at>
@@ -45,7 +45,6 @@ class ACE_Auto_Basic_Ptr
 public:
   typedef X element_type;
 
-  // = Initialization and termination methods
   explicit ACE_Auto_Basic_Ptr (X * p = 0) : p_ (p) {}
 
   ACE_Auto_Basic_Ptr (ACE_Auto_Basic_Ptr<X> & ap);
@@ -76,6 +75,9 @@ ACE_END_VERSIONED_NAMESPACE_DECL
 #include <memory>
 #if defined (ACE_USES_STD_NAMESPACE_FOR_STDCPP_LIB) && \
             (ACE_USES_STD_NAMESPACE_FOR_STDCPP_LIB != 0)
+#if !defined (ACE_HAS_CPP17)
+using std::auto_ptr;
+#endif /* !ACE_HAS_CPP17 */
 #endif /* ACE_USES_STD_NAMESPACE_FOR_STDCPP_LIB */
 #else /* ACE_HAS_STANDARD_CPP_LIBRARY */
 
@@ -90,7 +92,6 @@ class auto_ptr : public ACE_Auto_Basic_Ptr<X>
 public:
   typedef X element_type;
 
-  // = Initialization and termination methods
   explicit auto_ptr (X * p = 0) : ACE_Auto_Basic_Ptr<X> (p) {}
   auto_ptr (auto_ptr<X> & ap) : ACE_Auto_Basic_Ptr<X> (ap.release ()) {}
 
@@ -111,7 +112,6 @@ class ACE_Auto_Ptr : public ACE_Auto_Basic_Ptr <X>
 public:
   typedef X element_type;
 
-  // = Initialization and termination methods
   explicit ACE_Auto_Ptr (X * p = 0) : ACE_Auto_Basic_Ptr<X> (p) {}
 
   X *operator-> () const;
@@ -131,7 +131,6 @@ class ACE_Auto_Basic_Array_Ptr
 public:
   typedef X element_type;
 
-  // = Initialization and termination methods.
   explicit ACE_Auto_Basic_Array_Ptr (X * p = 0) : p_ (p) {}
 
   ACE_Auto_Basic_Array_Ptr (ACE_Auto_Basic_Array_Ptr<X> & ap);
@@ -167,7 +166,6 @@ class ACE_Auto_Array_Ptr : public ACE_Auto_Basic_Array_Ptr<X>
 public:
   typedef X element_type;
 
-  // = Initialization and termination methods.
   explicit ACE_Auto_Array_Ptr (X *p = 0)
     : ACE_Auto_Basic_Array_Ptr<X> (p) {}
 

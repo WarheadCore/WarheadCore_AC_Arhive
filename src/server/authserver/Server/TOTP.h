@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2013 TrinityCore <http://www.trinitycore.org/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -14,12 +14,16 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef _TOTP_H
 #define _TOTP_H
+
 #include "openssl/hmac.h"
 #include "openssl/evp.h"
+
 namespace TOTP
 {
     unsigned int GenerateToken(const char* b32key);
 }
+
 #endif
