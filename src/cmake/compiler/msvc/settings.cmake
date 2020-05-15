@@ -1,6 +1,5 @@
 #
-# Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
-# Copyright (C) 2008-2019 TrinityCore <https://www.trinitycore.org/>
+# This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
 #
 
 # set up output paths for executable binaries (.exe-files, and .dll-files on DLL-capable platforms)
