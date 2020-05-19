@@ -375,7 +375,7 @@ extern int main(int argc, char** argv)
         return 1;
 
     if (isImportDBOnly)
-        return 0;
+        exit(0);
 
     // set server offline (not connectable)
     LoginDatabase.DirectPExecute("UPDATE realmlist SET flag = (flag & ~%u) | %u WHERE id = '%d'", REALM_FLAG_OFFLINE, REALM_FLAG_INVALID, realmID);
