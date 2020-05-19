@@ -175,7 +175,7 @@ bool DBUpdater<T>::Create(DatabaseWorkerPool<T>& pool)
 
     std::string answer;
     std::getline(std::cin, answer);
-    if (!answer.empty() && !(answer.substr(0, 1) == "y"))
+    if (!sConfigMgr->isDryRun() && !answer.empty() && !(answer.substr(0, 1) == "y"))
         return false;
 
     LOG_INFO("sql.updates", "Creating database \"%s\"...", pool.GetConnectionInfo()->database.c_str());
