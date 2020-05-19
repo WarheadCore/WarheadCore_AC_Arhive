@@ -272,7 +272,7 @@ public:
 extern int main(int argc, char** argv)
 {
     ///- Command line parsing to get the configuration file name
-    char const* configFile = _ACORE_CORE_CONFIG;
+    std::string configFile = sConfigMgr->GetConfigPath() + std::string(_ACORE_CORE_CONFIG);
     int c = 1;
     bool isImportDBOnly = false;
 
@@ -342,7 +342,7 @@ extern int main(int argc, char** argv)
     // Init all logs
     sLog->Initialize();
 
-    warhead::Logo::Show("worldserver", configFile,
+    warhead::Logo::Show("worldserver", configFile.c_str(),
         [](char const* text)
         {
             LOG_INFO("server.worldserver", "%s", text);

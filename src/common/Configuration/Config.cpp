@@ -222,20 +222,20 @@ void ConfigMgr::SetConfigList(std::string const& fileName, std::string const& mo
 bool ConfigMgr::LoadAppConfigs(std::string const& applicationName /*= "worldserver"*/)
 {
     // #1 - Load init config file .conf.dist
-    if (!sConfigMgr->LoadInitial(GetConfigPath() + _initConfigFile + ".dist"))
+    if (!sConfigMgr->LoadInitial(_initConfigFile + ".dist"))
     {
         SYS_LOG_ERROR("");
-        SYS_LOG_ERROR("Load config error. Invalid or missing dist configuration file: %s", std::string(GetConfigPath() + _initConfigFile + ".dist").c_str());
+        SYS_LOG_ERROR("Load config error. Invalid or missing dist configuration file: %s", std::string(_initConfigFile + ".dist").c_str());
         SYS_LOG_ERROR("Verify that the file exists and has \'[%s]' written in the top of the file!", applicationName.c_str());
 
         return false;
     }
 
     // #2 - Load .conf file
-    if (!sConfigMgr->LoadMore(GetConfigPath() + _initConfigFile))
+    if (!sConfigMgr->LoadMore(_initConfigFile))
     {
         SYS_LOG_ERROR("");
-        SYS_LOG_ERROR("Load config error. Invalid or missing configuration file: %s", GetConfigPath() + _initConfigFile.c_str());
+        SYS_LOG_ERROR("Load config error. Invalid or missing configuration file: %s", _initConfigFile.c_str());
         SYS_LOG_ERROR("Verify that the file exists and has \'[%s]' written in the top of the file!", applicationName.c_str());
 
         return false;
@@ -263,7 +263,7 @@ bool ConfigMgr::LoadModulesConfigs()
         bool IsExistDistConfig = true;
 
         std::string moduleName = itr;
-        std::string configFile = std::string(itr) + std::string(".conf");
+        std::string configFile = moduleName + std::string(".conf");
         std::string defaultConfig = GetConfigPath() + configModulesFolder + configFile;
         std::string ConfigFileDist = defaultConfig + std::string(".dist");
 
