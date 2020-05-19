@@ -1379,7 +1379,7 @@ class spell_dk_corpse_explosion : public SpellScriptLoader
                         FinishCast(SPELL_FAILED_CANT_DO_THAT_RIGHT_NOW);
                         return;
                     }
-                    target = acore::Containers::SelectRandomContainerElement(targets);
+                    target = warhead::Containers::SelectRandomContainerElement(targets);
                     targets.clear();
                     targets.push_back(target);
                 }
@@ -2266,7 +2266,7 @@ class spell_dk_raise_dead : public SpellScriptLoader
                     return;
                 }
 
-                WorldObject* target = acore::Containers::SelectRandomContainerElement(targets);
+                WorldObject* target = warhead::Containers::SelectRandomContainerElement(targets);
                 targets.clear();
                 targets.push_back(target);
                 _corpse = true;

@@ -132,8 +132,8 @@ bool ChatHandler::HasLowerSecurityAccount(WorldSession* target, uint32 target_ac
     else
         return true;                                        // caller must report error for (target == NULL && target_account == 0)
 
-    AccountTypes target_ac_sec = AccountTypes(target_sec);
-    if (m_session->GetSecurity() < target_ac_sec || (strong && m_session->GetSecurity() <= target_ac_sec))
+    AccountTypes target_WH_sec = AccountTypes(target_sec);
+    if (m_session->GetSecurity() < target_WH_sec || (strong && m_session->GetSecurity() <= target_WH_sec))
     {
         SendSysMessage(LANG_YOURS_SECURITY_IS_LOW);
         SetSentErrorMessage(true);
@@ -898,8 +898,8 @@ GameObject* ChatHandler::GetNearbyGameObject()
 
     Player* pl = m_session->GetPlayer();
     GameObject* obj = NULL;
-    acore::NearestGameObjectCheck check(*pl);
-    acore::GameObjectLastSearcher<acore::NearestGameObjectCheck> searcher(pl, obj, check);
+    warhead::NearestGameObjectCheck check(*pl);
+    warhead::GameObjectLastSearcher<warhead::NearestGameObjectCheck> searcher(pl, obj, check);
     pl->VisitNearbyGridObject(SIZE_OF_GRIDS, searcher);
     return obj;
 }
@@ -916,13 +916,13 @@ GameObject* ChatHandler::GetObjectGlobalyWithGuidOrNearWithDbGuid(uint32 lowguid
     if (!obj && sObjectMgr->GetGOData(lowguid))                   // guid is DB guid of object
     {
         // search near player then
-        CellCoord p(acore::ComputeCellCoord(pl->GetPositionX(), pl->GetPositionY()));
+        CellCoord p(warhead::ComputeCellCoord(pl->GetPositionX(), pl->GetPositionY()));
         Cell cell(p);
 
-        acore::GameObjectWithDbGUIDCheck go_check(lowguid);
-        acore::GameObjectSearcher<acore::GameObjectWithDbGUIDCheck> checker(pl, obj, go_check);
+        warhead::GameObjectWithDbGUIDCheck go_check(lowguid);
+        warhead::GameObjectSearcher<warhead::GameObjectWithDbGUIDCheck> checker(pl, obj, go_check);
 
-        TypeContainerVisitor<acore::GameObjectSearcher<acore::GameObjectWithDbGUIDCheck>, GridTypeMapContainer > object_checker(checker);
+        TypeContainerVisitor<warhead::GameObjectSearcher<warhead::GameObjectWithDbGUIDCheck>, GridTypeMapContainer > object_checker(checker);
         cell.Visit(p, object_checker, *pl->GetMap(), *pl, pl->GetGridActivationRange());
     }
 

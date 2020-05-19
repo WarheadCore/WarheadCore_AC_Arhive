@@ -304,7 +304,7 @@ class spell_tsh_shadow_bolt : public SpellScriptLoader
                                 playerList.push_back(player);
 
                     if (!playerList.empty())
-                        target = acore::Containers::SelectRandomContainerElement(playerList);
+                        target = warhead::Containers::SelectRandomContainerElement(playerList);
                 }
             }
 

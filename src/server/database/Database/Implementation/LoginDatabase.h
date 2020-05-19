@@ -21,7 +21,7 @@
 #include "DatabaseWorkerPool.h"
 #include "MySQLConnection.h"
 
-class AC_DATABASE_API LoginDatabaseConnection : public MySQLConnection
+class WH_DATABASE_API LoginDatabaseConnection : public MySQLConnection
 {
     public:
         //- Constructors for sync and async connections

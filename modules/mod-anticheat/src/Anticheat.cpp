@@ -280,7 +280,7 @@ void Anticheat::BuildReport(Player* player)
     uint32 key = player->GetGUIDLow();
 
     // display warning at the center of the screen, hacky way?
-    std::string str = acore::StringFormat("[%s] использует читы!", player->GetName().c_str());
+    std::string str = warhead::StringFormat("[%s] использует читы!", player->GetName().c_str());
     WorldPacket data(SMSG_NOTIFICATION, (str.size() + 1));
     data << str;
     sWorld->SendGlobalGMMessage(&data);

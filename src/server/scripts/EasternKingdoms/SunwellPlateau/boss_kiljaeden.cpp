@@ -1066,7 +1066,7 @@ class spell_kiljaeden_sinister_reflection : public SpellScriptLoader
 
             void FilterTargets(std::list<WorldObject*>& targets)
             {
-                targets.remove_if(acore::UnitAuraCheck(true, SPELL_VENGEANCE_OF_THE_BLUE_FLIGHT));
+                targets.remove_if(warhead::UnitAuraCheck(true, SPELL_VENGEANCE_OF_THE_BLUE_FLIGHT));
             }
 
             void HandleScriptEffect(SpellEffIndex effIndex)
@@ -1103,7 +1103,7 @@ class spell_kiljaeden_sinister_reflection_clone : public SpellScriptLoader
 
             void FilterTargets(std::list<WorldObject*>& targets)
             {
-                targets.sort(acore::ObjectDistanceOrderPred(GetCaster()));
+                targets.sort(warhead::ObjectDistanceOrderPred(GetCaster()));
                 WorldObject* target = targets.front();
                 
                 targets.clear();
@@ -1313,7 +1313,7 @@ class spell_kiljaeden_dragon_breath : public SpellScriptLoader
 
             void FilterTargets(std::list<WorldObject*>& targets)
             {
-                targets.remove_if(acore::UnitAuraCheck(true, SPELL_VENGEANCE_OF_THE_BLUE_FLIGHT));
+                targets.remove_if(warhead::UnitAuraCheck(true, SPELL_VENGEANCE_OF_THE_BLUE_FLIGHT));
             }
 
             void Register()

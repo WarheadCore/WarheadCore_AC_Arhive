@@ -26,9 +26,9 @@
 #include <ace/Thread_Mutex.h>
 #include <AutoPtr.h>
 
-typedef acore::AutoPtr<ACE_Configuration_Heap, ACE_Null_Mutex> Config;
+typedef warhead::AutoPtr<ACE_Configuration_Heap, ACE_Null_Mutex> Config;
 
-class AC_COMMON_API ConfigMgr
+class WH_COMMON_API ConfigMgr
 {
     friend class ConfigLoader;
 

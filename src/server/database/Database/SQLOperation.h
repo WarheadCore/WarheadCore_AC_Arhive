@@ -56,7 +56,7 @@ union SQLResultSetUnion
 
 class MySQLConnection;
 
-class AC_DATABASE_API SQLOperation : public ACE_Method_Request
+class WH_DATABASE_API SQLOperation : public ACE_Method_Request
 {
     public:
         SQLOperation(): m_conn(NULL) { }

@@ -34,7 +34,7 @@ namespace VMAP
     */
     //===============================================
 
-    class AC_COMMON_API ModelPosition
+    class WH_COMMON_API ModelPosition
     {
         private:
             G3D::Matrix3 iRotation;
@@ -63,7 +63,7 @@ namespace VMAP
     typedef std::map<uint32, MapSpawns*> MapData;
     //===============================================
 
-    struct AC_COMMON_API GroupModel_Raw
+    struct WH_COMMON_API GroupModel_Raw
     {
         uint32 mogpflags;
         uint32 GroupWMOID;
@@ -89,7 +89,7 @@ namespace VMAP
         bool Read(const char * path);
     };
 
-    class AC_COMMON_API TileAssembler
+    class WH_COMMON_API TileAssembler
     {
         private:
             std::string iDestDir;

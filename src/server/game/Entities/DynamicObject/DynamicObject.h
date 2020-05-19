@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef AZEROTHCORE_DYNAMICOBJECT_H
-#define AZEROTHCORE_DYNAMICOBJECT_H
+#ifndef WH_DYNAMICOBJECT_H
+#define WH_DYNAMICOBJECT_H
 
 #include "Object.h"
 

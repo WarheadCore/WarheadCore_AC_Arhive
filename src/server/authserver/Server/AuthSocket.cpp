@@ -141,7 +141,7 @@ typedef struct AuthHandler
 #endif
 
 // Launch a thread to transfer a patch to the client
-class PatcherRunnable: public acore::Runnable
+class PatcherRunnable: public warhead::Runnable
 {
 public:
     PatcherRunnable(class AuthSocket*);
@@ -1157,7 +1157,7 @@ bool AuthSocket::_HandleXferResume()
     socket().recv((char*)&start, sizeof(start));
     fseek(pPatch, long(start), 0);
 
-    acore::Thread u(new PatcherRunnable(this));
+    warhead::Thread u(new PatcherRunnable(this));
     return true;
 }
 
@@ -1193,7 +1193,7 @@ bool AuthSocket::_HandleXferAccept()
     socket().recv_skip(1);                                         // clear input buffer
     fseek(pPatch, 0, 0);
 
-    acore::Thread u(new PatcherRunnable(this));
+    warhead::Thread u(new PatcherRunnable(this));
     return true;
 }
 

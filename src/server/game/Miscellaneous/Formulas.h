@@ -25,7 +25,7 @@
 #include "Creature.h"
 #include "GameConfig.h"
 
-namespace acore
+namespace warhead
 {
     namespace Honor
     {

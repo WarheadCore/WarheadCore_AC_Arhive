@@ -557,7 +557,7 @@ class npc_minigob_manabonk : public CreatureScript
 
                 if (PlayerInDalaranList.empty())
                     return NULL;
-                return acore::Containers::SelectRandomContainerElement(PlayerInDalaranList);
+                return warhead::Containers::SelectRandomContainerElement(PlayerInDalaranList);
             }
 
             void SendMailToPlayer(Player* player)

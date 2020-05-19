@@ -179,7 +179,7 @@ const Position PosPlatform         = {2640.5f, -3360.6f, 285.26f, 0.0f};
 #define IN_LIVE_SIDE(who) (who->GetPositionY() < POS_Y_GATE)
 
 // Predicate function to check that the r   efzr unit is NOT on the same side as the source.
-struct NotOnSameSide : public acore::unary_function<Unit *, bool>
+struct NotOnSameSide : public warhead::unary_function<Unit *, bool>
 {
     bool m_inLiveSide;
     explicit NotOnSameSide(Unit *pSource) : m_inLiveSide(IN_LIVE_SIDE(pSource)) {}
@@ -686,7 +686,7 @@ class spell_gothik_shadow_bolt_volley : public SpellScriptLoader
 
             void FilterTargets(std::list<WorldObject*>& targets)
             {
-                targets.remove_if(acore::UnitAuraCheck(false, SPELL_SHADOW_MARK));
+                targets.remove_if(warhead::UnitAuraCheck(false, SPELL_SHADOW_MARK));
             }
 
             void Register() override

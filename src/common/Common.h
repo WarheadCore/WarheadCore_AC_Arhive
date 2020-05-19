@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef AZEROTHCORE_COMMON_H
-#define AZEROTHCORE_COMMON_H
+#ifndef WH_COMMON_H
+#define WH_COMMON_H
 
 // config.h needs to be included 1st
 /// @todo this thingy looks like hack, but its not, need to
@@ -71,7 +71,7 @@
 #include <signal.h>
 #include <assert.h>
 
-#if AC_PLATFORM == AC_PLATFORM_WINDOWS
+#if WH_PLATFORM == WH_PLATFORM_WINDOWS
 #define STRCASECMP stricmp
 #else
 #define STRCASECMP strcasecmp
@@ -96,7 +96,7 @@
 #include <ace/Thread_Mutex.h>
 #include <ace/Stack_Trace.h>
 
-#if AC_PLATFORM == AC_PLATFORM_WINDOWS
+#if WH_PLATFORM == WH_PLATFORM_WINDOWS
 #  include <ace/config-all.h>
 // XP winver - needed to compile with standard leak check in MemoryLeaks.h
 // uncomment later if needed
@@ -112,7 +112,7 @@
 #  include <netdb.h>
 #endif
 
-#if AC_COMPILER == AC_COMPILER_MICROSOFT
+#if WH_COMPILER == WH_COMPILER_MICROSOFT
 
 #include <float.h>
 
@@ -182,10 +182,10 @@ const uint8 TOTAL_LOCALES = 9;
 #define MAX_LOCALES 8
 #define MAX_ACCOUNT_TUTORIAL_VALUES 8
 
-extern AC_COMMON_API char const* localeNames[TOTAL_LOCALES];
+extern WH_COMMON_API char const* localeNames[TOTAL_LOCALES];
 
-AC_COMMON_API LocaleConstant GetLocaleByName(const std::string& name);
-AC_COMMON_API void CleanStringForMysqlQuery(std::string& str);
+WH_COMMON_API LocaleConstant GetLocaleByName(const std::string& name);
+WH_COMMON_API void CleanStringForMysqlQuery(std::string& str);
 
 typedef std::vector<std::string> StringVector;
 
@@ -220,7 +220,7 @@ typedef std::vector<std::string> StringVector;
   ACE_Read_Guard< MUTEX > ACORE_GUARD_OBJECT (LOCK); \
     if (ACORE_GUARD_OBJECT.locked() == 0) ASSERT(false);
 
-namespace acore
+namespace warhead
 {
     template<class ArgumentType, class ResultType>
     struct unary_function

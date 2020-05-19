@@ -154,14 +154,14 @@ class boss_nalorakk : public CreatureScript
                 me->GetPosition(x, y, z);
 
                 {
-                    CellCoord pair(acore::ComputeCellCoord(x, y));
+                    CellCoord pair(warhead::ComputeCellCoord(x, y));
                     Cell cell(pair);
                     cell.SetNoCreate();
 
-                    acore::AllFriendlyCreaturesInGrid check(me);
-                    acore::CreatureListSearcher<acore::AllFriendlyCreaturesInGrid> searcher(me, templist, check);
+                    warhead::AllFriendlyCreaturesInGrid check(me);
+                    warhead::CreatureListSearcher<warhead::AllFriendlyCreaturesInGrid> searcher(me, templist, check);
 
-                    TypeContainerVisitor<acore::CreatureListSearcher<acore::AllFriendlyCreaturesInGrid>, GridTypeMapContainer> cSearcher(searcher);
+                    TypeContainerVisitor<warhead::CreatureListSearcher<warhead::AllFriendlyCreaturesInGrid>, GridTypeMapContainer> cSearcher(searcher);
 
                     cell.Visit(pair, cSearcher, *(me->GetMap()), *me, me->GetGridActivationRange());
                 }
@@ -181,14 +181,14 @@ class boss_nalorakk : public CreatureScript
                 me->GetPosition(x, y, z);
 
                 {
-                    CellCoord pair(acore::ComputeCellCoord(x, y));
+                    CellCoord pair(warhead::ComputeCellCoord(x, y));
                     Cell cell(pair);
                     cell.SetNoCreate();
 
-                    acore::AllFriendlyCreaturesInGrid check(me);
-                    acore::CreatureListSearcher<acore::AllFriendlyCreaturesInGrid> searcher(me, templist, check);
+                    warhead::AllFriendlyCreaturesInGrid check(me);
+                    warhead::CreatureListSearcher<warhead::AllFriendlyCreaturesInGrid> searcher(me, templist, check);
 
-                    TypeContainerVisitor<acore::CreatureListSearcher<acore::AllFriendlyCreaturesInGrid>, GridTypeMapContainer> cSearcher(searcher);
+                    TypeContainerVisitor<warhead::CreatureListSearcher<warhead::AllFriendlyCreaturesInGrid>, GridTypeMapContainer> cSearcher(searcher);
 
                     cell.Visit(pair, cSearcher, *(me->GetMap()), *me, me->GetGridActivationRange());
                 }

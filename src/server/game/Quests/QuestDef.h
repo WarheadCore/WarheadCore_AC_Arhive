@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef AZEROTHCORE_QUEST_H
-#define AZEROTHCORE_QUEST_H
+#ifndef WH_QUEST_H
+#define WH_QUEST_H
 
 #include "Define.h"
 #include "DatabaseEnv.h"

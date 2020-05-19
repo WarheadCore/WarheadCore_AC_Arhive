@@ -284,7 +284,7 @@ class spell_boss_magus_telestra_gravity_well : public SpellScriptLoader
 
             void SelectTarget(std::list<WorldObject*>& targets)
             {
-                targets.remove_if(acore::RandomCheck(50));
+                targets.remove_if(warhead::RandomCheck(50));
             }
 
             void HandlePull(SpellEffIndex effIndex)

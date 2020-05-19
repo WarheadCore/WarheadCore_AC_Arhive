@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef AZEROTHCORE_GAMEOBJECT_H
-#define AZEROTHCORE_GAMEOBJECT_H
+#ifndef WH_GAMEOBJECT_H
+#define WH_GAMEOBJECT_H
 
 #include "Common.h"
 #include "SharedDefines.h"

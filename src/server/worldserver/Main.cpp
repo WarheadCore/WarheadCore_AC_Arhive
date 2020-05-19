@@ -50,11 +50,11 @@
 #include "LuaEngine.h"
 #endif
 
-#if AC_PLATFORM == AC_PLATFORM_WINDOWS
+#if WH_PLATFORM == WH_PLATFORM_WINDOWS
 #include "ServiceWin32.h"
 char serviceName[] = "worldserver";
-char serviceLongName[] = "AzerothCore world service";
-char serviceDescription[] = "AzerothCore World of Warcraft emulator world service";
+char serviceLongName[] = "WarheadCore world service";
+char serviceDescription[] = "WarheadCore World of Warcraft emulator world service";
 /*
  * -1 - not in service mode
  *  0 - stopped
@@ -64,7 +64,7 @@ char serviceDescription[] = "AzerothCore World of Warcraft emulator world servic
 int m_ServiceStatus = -1;
 #endif
 
-#if AC_PLATFORM == AC_PLATFORM_UNIX
+#if WH_PLATFORM == WH_PLATFORM_UNIX
 #include <sched.h>
 #include <sys/resource.h>
 #define PROCESS_HIGH_PRIORITY -15 // [-20, 19], default is 0
@@ -82,7 +82,7 @@ void usage(const char* prog)
     SYS_LOG_INFO("Usage:\n");
     SYS_LOG_INFO(" %s [<options>]\n", prog);
     SYS_LOG_INFO("    -c config_file           use config_file as configuration file\n");
-#if AC_PLATFORM == AC_PLATFORM_WINDOWS
+#if WH_PLATFORM == WH_PLATFORM_WINDOWS
     SYS_LOG_INFO("    Running as service functions:\n");
     SYS_LOG_INFO("    --service                run as service\n");
     SYS_LOG_INFO("    -s install               install service\n");
@@ -91,7 +91,7 @@ void usage(const char* prog)
 }
 
 /// Handle worldservers's termination signals
-class WorldServerSignalHandler : public acore::SignalHandler
+class WorldServerSignalHandler : public warhead::SignalHandler
 {
 public:
     virtual void HandleSignal(int sigNum)
@@ -102,7 +102,7 @@ public:
             World::StopNow(RESTART_EXIT_CODE);
             break;
         case SIGTERM:
-#if AC_PLATFORM == AC_PLATFORM_WINDOWS
+#if WH_PLATFORM == WH_PLATFORM_WINDOWS
         case SIGBREAK:
             if (m_ServiceStatus != 1)
 #endif
@@ -116,7 +116,7 @@ public:
     }
 };
 
-class FreezeDetectorRunnable : public acore::Runnable
+class FreezeDetectorRunnable : public warhead::Runnable
 {
 private:
     uint32 _loops;
@@ -147,7 +147,7 @@ public:
                 ABORT();
             }
 
-            acore::Thread::Sleep(1000);
+            warhead::Thread::Sleep(1000);
         }
 
         sLog->outString("Anti-freeze thread exiting without problems.");
@@ -159,7 +159,7 @@ void _StopDB();
 void ClearOnlineAccounts();
 
 /// Heartbeat thread for the World
-class WorldRunnable : public acore::Runnable
+class WorldRunnable : public warhead::Runnable
 {
 public:
     /// Heartbeat for the World
@@ -184,9 +184,9 @@ public:
             avgDiffTracker.Update(executionTimeDiff > WORLD_SLEEP_CONST ? executionTimeDiff : WORLD_SLEEP_CONST);
 
             if (executionTimeDiff < WORLD_SLEEP_CONST)
-                acore::Thread::Sleep(WORLD_SLEEP_CONST - executionTimeDiff);
+                warhead::Thread::Sleep(WORLD_SLEEP_CONST - executionTimeDiff);
 
-#if AC_PLATFORM == AC_PLATFORM_WINDOWS
+#if WH_PLATFORM == WH_PLATFORM_WINDOWS
             if (m_ServiceStatus == 0)
                 World::StopNow(SHUTDOWN_EXIT_CODE);
 
@@ -215,7 +215,7 @@ public:
     }
 };
 
-class AuctionListRunnable : public acore::Runnable
+class AuctionListRunnable : public warhead::Runnable
 {
 public:
     void run()
@@ -261,7 +261,7 @@ public:
                 }
             }
 
-            acore::Thread::Sleep(1);
+            warhead::Thread::Sleep(1);
         }
 
         LOG_INFO("auctionHouse", "Auction House Listing thread exiting without problems.");
@@ -298,7 +298,7 @@ extern int main(int argc, char** argv)
                 configFile = argv[c];
         }
 
-        #if AC_PLATFORM == AC_PLATFORM_WINDOWS
+        #if WH_PLATFORM == WH_PLATFORM_WINDOWS
         if (strcmp(argv[c], "-s") == 0) // Services
         {
             if (++c >= argc)
@@ -342,7 +342,7 @@ extern int main(int argc, char** argv)
     // Init all logs
     sLog->Initialize();
 
-    acore::Logo::Show("worldserver", configFile,
+    warhead::Logo::Show("worldserver", configFile,
         [](char const* text)
         {
             LOG_INFO("server.worldserver", "%s", text);
@@ -388,48 +388,48 @@ extern int main(int argc, char** argv)
 
     ///- Initialize the signal handlers
     WorldServerSignalHandler signalINT, signalTERM; //, signalSEGV
-#if AC_PLATFORM == AC_PLATFORM_WINDOWS
+#if WH_PLATFORM == WH_PLATFORM_WINDOWS
     WorldServerSignalHandler signalBREAK;
-#endif /* AC_PLATFORM == AC_PLATFORM_WINDOWS */
+#endif /* WH_PLATFORM == WH_PLATFORM_WINDOWS */
 
     ///- Register worldserver's signal handlers
     ACE_Sig_Handler handle;
     handle.register_handler(SIGINT, &signalINT);
     handle.register_handler(SIGTERM, &signalTERM);
-#if AC_PLATFORM == AC_PLATFORM_WINDOWS
+#if WH_PLATFORM == WH_PLATFORM_WINDOWS
     handle.register_handler(SIGBREAK, &signalBREAK);
 #endif
     //handle.register_handler(SIGSEGV, &signalSEGV);
 
     ///- Launch Runnable's thread
-    acore::Thread worldThread(new WorldRunnable);
-    acore::Thread rarThread(new RARunnable);
-    acore::Thread auctionLising_thread(new AuctionListRunnable);
-    acore::Thread* cliThread = nullptr;   
-    acore::Thread* soapThread = nullptr;
-    acore::Thread* freezeThread = nullptr;
+    warhead::Thread worldThread(new WorldRunnable);
+    warhead::Thread rarThread(new RARunnable);
+    warhead::Thread auctionLising_thread(new AuctionListRunnable);
+    warhead::Thread* cliThread = nullptr;   
+    warhead::Thread* soapThread = nullptr;
+    warhead::Thread* freezeThread = nullptr;
 
     // Set thread priority
-    worldThread.setPriority(acore::Priority_Highest);
-    auctionLising_thread.setPriority(acore::Priority_High);
+    worldThread.setPriority(warhead::Priority_Highest);
+    auctionLising_thread.setPriority(warhead::Priority_High);
 
-#if AC_PLATFORM == AC_PLATFORM_WINDOWS
+#if WH_PLATFORM == WH_PLATFORM_WINDOWS
     if (sConfigMgr->GetBoolDefault("Console.Enable", true) && (m_ServiceStatus == -1)/* need disable console in service mode*/)
 #else
     if (sConfigMgr->GetBoolDefault("Console.Enable", true))
 #endif
     {
         ///- Launch CliRunnable thread
-        cliThread = new acore::Thread(new CliRunnable);
+        cliThread = new warhead::Thread(new CliRunnable);
     }    
 
-#if defined(AC_PLATFORM_WINDOWS) || defined(AC_PLATFORM_UNIX)
+#if defined(WH_PLATFORM_WINDOWS) || defined(WH_PLATFORM_UNIX)
 
     ///- Handle affinity for multiple processors and process priority
     uint32 affinity = sConfigMgr->GetIntDefault("UseProcessors", 0);
     bool highPriority = sConfigMgr->GetBoolDefault("ProcessPriority", false);
 
-#if AC_PLATFORM == AC_PLATFORM_WINDOWS // Windows
+#if WH_PLATFORM == WH_PLATFORM_WINDOWS // Windows
 
     HANDLE hProcess = GetCurrentProcess();
 
@@ -495,15 +495,15 @@ extern int main(int argc, char** argv)
     {
         ACSoapRunnable* runnable = new ACSoapRunnable();
         runnable->SetListenArguments(sConfigMgr->GetStringDefault("SOAP.IP", "127.0.0.1"), uint16(sConfigMgr->GetIntDefault("SOAP.Port", 7878)));
-        soapThread = new acore::Thread(runnable);
+        soapThread = new warhead::Thread(runnable);
     }
 
     // Start up freeze catcher thread    
     if (uint32 freezeDelay = sConfigMgr->GetIntDefault("MaxCoreStuckTime", 0))
     {
         FreezeDetectorRunnable* runnable = new FreezeDetectorRunnable(freezeDelay * 1000);
-        freezeThread = new acore::Thread(runnable);
-        freezeThread->setPriority(acore::Priority_Highest);
+        freezeThread = new warhead::Thread(runnable);
+        freezeThread->setPriority(warhead::Priority_Highest);
     }
 
     ///- Launch the world listener socket
@@ -551,7 +551,7 @@ extern int main(int argc, char** argv)
 
     if (cliThread)
     {
-#if AC_PLATFORM == AC_PLATFORM_WINDOWS
+#if WH_PLATFORM == WH_PLATFORM_WINDOWS
         // this only way to terminate CLI thread exist at Win32 (alt. way exist only in Windows Vista API)
         //_exit(1);
         // send keyboard input to safely unblock the CLI thread

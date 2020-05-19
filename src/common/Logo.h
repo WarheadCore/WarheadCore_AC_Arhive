@@ -7,11 +7,11 @@
 
 #include "Define.h"
 
-namespace acore
+namespace warhead
 {
     namespace Logo
     {
-        AC_COMMON_API void Show(char const* applicationName, char const* configName, void(*log)(char const* text));
+        WH_COMMON_API void Show(char const* applicationName, char const* configName, void(*log)(char const* text));
     }
 }
 

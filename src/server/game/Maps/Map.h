@@ -62,7 +62,7 @@ class BattlegroundMap;
 class Transport;
 class StaticTransport;
 class MotionTransport;
-namespace acore
+namespace warhead
 {
     struct ObjectUpdater;
     struct LargeObjectUpdater;
@@ -307,14 +307,14 @@ class Map : public GridRefManager<NGridType>
         template<class T> bool AddToMap(T *, bool checkTransport = false);
         template<class T> void RemoveFromMap(T *, bool);
 
-        void VisitNearbyCellsOf(WorldObject* obj, TypeContainerVisitor<acore::ObjectUpdater, GridTypeMapContainer> &gridVisitor,
-            TypeContainerVisitor<acore::ObjectUpdater, WorldTypeMapContainer> &worldVisitor,
-            TypeContainerVisitor<acore::ObjectUpdater, GridTypeMapContainer> &largeGridVisitor,
-            TypeContainerVisitor<acore::ObjectUpdater, WorldTypeMapContainer> &largeWorldVisitor);
-        void VisitNearbyCellsOfPlayer(Player* player, TypeContainerVisitor<acore::ObjectUpdater, GridTypeMapContainer> &gridVisitor,
-            TypeContainerVisitor<acore::ObjectUpdater, WorldTypeMapContainer> &worldVisitor,
-            TypeContainerVisitor<acore::ObjectUpdater, GridTypeMapContainer> &largeGridVisitor,
-            TypeContainerVisitor<acore::ObjectUpdater, WorldTypeMapContainer> &largeWorldVisitor);
+        void VisitNearbyCellsOf(WorldObject* obj, TypeContainerVisitor<warhead::ObjectUpdater, GridTypeMapContainer> &gridVisitor,
+            TypeContainerVisitor<warhead::ObjectUpdater, WorldTypeMapContainer> &worldVisitor,
+            TypeContainerVisitor<warhead::ObjectUpdater, GridTypeMapContainer> &largeGridVisitor,
+            TypeContainerVisitor<warhead::ObjectUpdater, WorldTypeMapContainer> &largeWorldVisitor);
+        void VisitNearbyCellsOfPlayer(Player* player, TypeContainerVisitor<warhead::ObjectUpdater, GridTypeMapContainer> &gridVisitor,
+            TypeContainerVisitor<warhead::ObjectUpdater, WorldTypeMapContainer> &worldVisitor,
+            TypeContainerVisitor<warhead::ObjectUpdater, GridTypeMapContainer> &largeGridVisitor,
+            TypeContainerVisitor<warhead::ObjectUpdater, WorldTypeMapContainer> &largeWorldVisitor);
             
         virtual void Update(const uint32, const uint32, bool thread = true);
 
@@ -332,13 +332,13 @@ class Map : public GridRefManager<NGridType>
 
         bool IsRemovalGrid(float x, float y) const
         {
-            GridCoord p = acore::ComputeGridCoord(x, y);
+            GridCoord p = warhead::ComputeGridCoord(x, y);
             return !getNGrid(p.x_coord, p.y_coord);
         }
 
         bool IsGridLoaded(float x, float y) const
         {
-            return IsGridLoaded(acore::ComputeGridCoord(x, y));
+            return IsGridLoaded(warhead::ComputeGridCoord(x, y));
         }
 
         void LoadGrid(float x, float y);
@@ -749,7 +749,7 @@ inline void Map::Visit(Cell const& cell, TypeContainerVisitor<T, CONTAINER>& vis
 template<class NOTIFIER>
 inline void Map::VisitAll(float const& x, float const& y, float radius, NOTIFIER& notifier)
 { 
-    CellCoord p(acore::ComputeCellCoord(x, y));
+    CellCoord p(warhead::ComputeCellCoord(x, y));
     Cell cell(p);
     cell.SetNoCreate();
 
@@ -763,7 +763,7 @@ inline void Map::VisitAll(float const& x, float const& y, float radius, NOTIFIER
 template<class NOTIFIER>
 inline void Map::VisitFirstFound(const float &x, const float &y, float radius, NOTIFIER &notifier)
 { 
-    CellCoord p(acore::ComputeCellCoord(x, y));
+    CellCoord p(warhead::ComputeCellCoord(x, y));
     Cell cell(p);
     cell.SetNoCreate();
 
@@ -779,7 +779,7 @@ inline void Map::VisitFirstFound(const float &x, const float &y, float radius, N
 template<class NOTIFIER>
 inline void Map::VisitWorld(const float &x, const float &y, float radius, NOTIFIER &notifier)
 { 
-    CellCoord p(acore::ComputeCellCoord(x, y));
+    CellCoord p(warhead::ComputeCellCoord(x, y));
     Cell cell(p);
     cell.SetNoCreate();
 
@@ -790,7 +790,7 @@ inline void Map::VisitWorld(const float &x, const float &y, float radius, NOTIFI
 template<class NOTIFIER>
 inline void Map::VisitGrid(const float &x, const float &y, float radius, NOTIFIER &notifier)
 { 
-    CellCoord p(acore::ComputeCellCoord(x, y));
+    CellCoord p(warhead::ComputeCellCoord(x, y));
     Cell cell(p);
     cell.SetNoCreate();
 

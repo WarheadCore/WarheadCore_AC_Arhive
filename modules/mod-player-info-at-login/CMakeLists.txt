@@ -14,7 +14,7 @@
 #
 
 # Add source files
-AC_ADD_MODULES_SOURCE("PlayerInfoAtLogin")
+WH_ADD_MODULES_SOURCE("PlayerInfoAtLogin")
 
 # Add config file
-AC_ADD_CONFIG_FILE("${CMAKE_CURRENT_LIST_DIR}/conf/PlayerInfoAtLogin.conf.dist")
+WH_ADD_CONFIG_FILE("${CMAKE_CURRENT_LIST_DIR}/conf/PlayerInfoAtLogin.conf.dist")

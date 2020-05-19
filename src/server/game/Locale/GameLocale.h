@@ -300,13 +300,13 @@ public:
     template<typename... Args>
     void SendPlayerMessage(Player* player, std::string moduleName, uint32 id, Args&& ... args)
     {
-        SendPlayerMessage(player, acore::StringFormat(GetModuleString(moduleName, id, uint8(player->GetSession()->GetSessionDbLocaleIndex())), std::forward<Args>(args)...));
+        SendPlayerMessage(player, warhead::StringFormat(GetModuleString(moduleName, id, uint8(player->GetSession()->GetSessionDbLocaleIndex())), std::forward<Args>(args)...));
     }
 
     template<typename... Args>
     void SendGlobalMessage(std::string moduleName, uint32 id, bool gmOnly, Args&& ... args)
     {
-        SendGlobalMessage(gmOnly, acore::StringFormat(GetModuleString(moduleName, id, DBCLocaleIndex), std::forward<Args>(args)...));
+        SendGlobalMessage(gmOnly, warhead::StringFormat(GetModuleString(moduleName, id, DBCLocaleIndex), std::forward<Args>(args)...));
     }
 
 private:

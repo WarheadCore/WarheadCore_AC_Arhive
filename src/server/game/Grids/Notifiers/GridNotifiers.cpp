@@ -27,7 +27,7 @@
 #include "CellImpl.h"
 #include "SpellInfo.h"
 
-using namespace acore;
+using namespace warhead;
 
 
 void VisibleNotifier::Visit(GameObjectMapType &m)

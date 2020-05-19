@@ -174,7 +174,7 @@ class spell_mark_of_kazrogal : public SpellScriptLoader
 
             void FilterTargets(std::list<WorldObject*>& targets)
             {
-                targets.remove_if(acore::PowerCheck(POWER_MANA, false));
+                targets.remove_if(warhead::PowerCheck(POWER_MANA, false));
             }
 
             void Register()

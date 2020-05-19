@@ -24,9 +24,9 @@
 #include <thread>
 #include <atomic>
 
-namespace acore
+namespace warhead
 {
-    class AC_COMMON_API Runnable
+    class WH_COMMON_API Runnable
     {
         public:
             virtual ~Runnable() {}
@@ -53,7 +53,7 @@ namespace acore
         Priority_Realtime,
     };
 
-    class AC_COMMON_API Thread
+    class WH_COMMON_API Thread
     {
         public:
             Thread();

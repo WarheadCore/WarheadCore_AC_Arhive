@@ -26,7 +26,7 @@
 
 #include <ace/Reactor.h>
 
-class RARunnable : public acore::Runnable
+class RARunnable : public warhead::Runnable
 {
 public:
     RARunnable();

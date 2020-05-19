@@ -20,7 +20,7 @@
 
 #include <ace/Bound_Ptr.h>
 
-namespace acore
+namespace warhead
 {
 
 template <class Pointer, class Lock>
@@ -48,6 +48,6 @@ public:
     }
 };
 
-} // namespace acore
+} // namespace warhead
 
 #endif

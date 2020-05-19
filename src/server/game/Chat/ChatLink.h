@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef AZEROTHCORE_CHATLINK_H
-#define AZEROTHCORE_CHATLINK_H
+#ifndef WH_CHATLINK_H
+#define WH_CHATLINK_H
 
 #include "SharedDefines.h"
 #include <sstream>

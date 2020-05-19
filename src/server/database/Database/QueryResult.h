@@ -29,7 +29,7 @@
 #endif
 #include <mysql.h>
 
-class AC_DATABASE_API ResultSet
+class WH_DATABASE_API ResultSet
 {
     public:
         ResultSet(MYSQL_RES* result, MYSQL_FIELD* fields, uint64 rowCount, uint32 fieldCount);
@@ -59,9 +59,9 @@ class AC_DATABASE_API ResultSet
         MYSQL_FIELD* _fields;
 };
 
-typedef acore::AutoPtr<ResultSet, ACE_Thread_Mutex> QueryResult;
+typedef warhead::AutoPtr<ResultSet, ACE_Thread_Mutex> QueryResult;
 
-class AC_DATABASE_API PreparedResultSet
+class WH_DATABASE_API PreparedResultSet
 {
     public:
         PreparedResultSet(MYSQL_STMT* stmt, MYSQL_RES* result, uint64 rowCount, uint32 fieldCount);
@@ -104,7 +104,7 @@ class AC_DATABASE_API PreparedResultSet
 
 };
 
-typedef acore::AutoPtr<PreparedResultSet, ACE_Thread_Mutex> PreparedQueryResult;
+typedef warhead::AutoPtr<PreparedResultSet, ACE_Thread_Mutex> PreparedQueryResult;
 
 #endif
 

@@ -47,7 +47,7 @@ namespace VMAP
     //==============================================================
     //==============================================================
 
-    class AC_COMMON_API MyCollisionDetection
+    class WH_COMMON_API MyCollisionDetection
     {
     public:
 

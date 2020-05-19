@@ -965,7 +965,7 @@ class spell_xt002_gravity_bomb_aura : public SpellScriptLoader
             void SelectTarget(std::list<WorldObject*>& targets)
             {
                 if (Unit* victim = GetCaster()->GetVictim())
-                    targets.remove_if(acore::ObjectGUIDCheck(victim->GetGUID(), true)); 
+                    targets.remove_if(warhead::ObjectGUIDCheck(victim->GetGUID(), true)); 
             }
 
             void Register()
@@ -1047,7 +1047,7 @@ class spell_xt002_searing_light_spawn_life_spark : public SpellScriptLoader
             void SelectTarget(std::list<WorldObject*>& targets)
             {
                 if (Unit* victim = GetCaster()->GetVictim())
-                    targets.remove_if(acore::ObjectGUIDCheck(victim->GetGUID(), true)); 
+                    targets.remove_if(warhead::ObjectGUIDCheck(victim->GetGUID(), true)); 
             }
 
             void Register()

@@ -27,10 +27,10 @@
 #include <vector>
 
 //! Because circular includes are bad
-AC_COMMON_API extern uint32 urand(uint32 min, uint32 max);
-AC_COMMON_API extern uint32 urandweighted(size_t count, double const* chances);
+WH_COMMON_API extern uint32 urand(uint32 min, uint32 max);
+WH_COMMON_API extern uint32 urandweighted(size_t count, double const* chances);
 
-namespace acore
+namespace warhead
 {
     template<class T>
     constexpr inline T* AddressOrSelf(T* ptr)
@@ -121,6 +121,6 @@ namespace acore
     }
     //! namespace Containers
 }
-//! namespace acore
+//! namespace warhead
 
 #endif //! #ifdef ACORE_CONTAINERS_H

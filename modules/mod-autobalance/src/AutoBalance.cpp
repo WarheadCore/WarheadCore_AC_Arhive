@@ -1,6 +1,6 @@
 /*
 * Copyright (C) 2020 WarheadCore <https://github.com/WarheadCore/WarheadCore>
-* Copyright (C) 2018 AzerothCore <http://www.azerothcore.org>
+* Copyright (C) 2018 warheadCore <http://www.warheadcore.org>
 * Copyright (C) 2012 CVMagic <http://www.trinitycore.org/f/topic/6551-vas-autobalance/>
 * Copyright (C) 2008-2010 TrinityCore <http://www.trinitycore.org/>
 * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>

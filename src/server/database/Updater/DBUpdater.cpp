@@ -42,7 +42,7 @@ bool DBUpdaterUtil::CheckExecutable()
     boost::filesystem::path exe(GetCorrectedMySQLExecutable());
     if (!exists(exe))
     {
-        exe = acore::SearchExecutableInPath("mysql");
+        exe = warhead::SearchExecutableInPath("mysql");
         if (!exe.empty() && exists(exe))
         {
             // Correct the path to the cli
@@ -248,7 +248,7 @@ bool DBUpdater<T>::Update(DatabaseWorkerPool<T>& pool)
         return false;
     }
 
-    std::string const info = acore::StringFormat("Containing " SZFMTD " new and " SZFMTD " archived updates.",
+    std::string const info = warhead::StringFormat("Containing " SZFMTD " new and " SZFMTD " archived updates.",
         result.recent, result.archived);
 
     if (!result.updated)
@@ -390,7 +390,7 @@ void DBUpdater<T>::ApplyFile(DatabaseWorkerPool<T>& pool, std::string const& hos
         args.push_back(database);
 
     // Invokes a mysql process which doesn't leak credentials to logs
-    int const ret = acore::StartProcess(DBUpdaterUtil::GetCorrectedMySQLExecutable(), args,
+    int const ret = warhead::StartProcess(DBUpdaterUtil::GetCorrectedMySQLExecutable(), args,
                                  "sql.updates", path.generic_string(), true);
 
     if (ret != EXIT_SUCCESS)
@@ -406,6 +406,6 @@ void DBUpdater<T>::ApplyFile(DatabaseWorkerPool<T>& pool, std::string const& hos
     }
 }
 
-template class AC_DATABASE_API DBUpdater<LoginDatabaseConnection>;
-template class AC_DATABASE_API DBUpdater<WorldDatabaseConnection>;
-template class AC_DATABASE_API DBUpdater<CharacterDatabaseConnection>;
+template class WH_DATABASE_API DBUpdater<LoginDatabaseConnection>;
+template class WH_DATABASE_API DBUpdater<WorldDatabaseConnection>;
+template class WH_DATABASE_API DBUpdater<CharacterDatabaseConnection>;
