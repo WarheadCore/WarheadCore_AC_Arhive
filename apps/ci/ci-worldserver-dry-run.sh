@@ -8,4 +8,4 @@ echo "LoginDatabaseInfo     = \"localhost;3306;root;root;acore_auth\"" >> ./env/
 echo "WorldDatabaseInfo     = \"localhost;3306;root;root;acore_world\"" >> ./env/dist/etc/worldserver.conf
 echo "CharacterDatabaseInfo = \"localhost;3306;root;root;acore_characters\"" >> ./env/dist/etc/worldserver.conf
 git clone --depth=1 --branch=master --single-branch https://github.com/ac-data/ac-data.git ./env/dist/data
-(cd ./env/dist/bin/ && timeout 5m ./worldserver --dry-run)
+(cd ./env/dist/bin/ && timeout 5m ./worldserver --import-db && timeout 5m ./worldserver --dry-run)
