@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef AZEROTHCORE_ARENATEAM_H
-#define AZEROTHCORE_ARENATEAM_H
+#ifndef WH_ARENATEAM_H
+#define WH_ARENATEAM_H
 
 #include "QueryResult.h"
 #include "Map.h"

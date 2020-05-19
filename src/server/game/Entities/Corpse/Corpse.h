@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef AZEROTHCORE_CORPSE_H
-#define AZEROTHCORE_CORPSE_H
+#ifndef WH_CORPSE_H
+#define WH_CORPSE_H
 
 #include "Object.h"
 #include "DatabaseEnv.h"

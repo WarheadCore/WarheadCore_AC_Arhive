@@ -270,7 +270,7 @@ class ThreatManager
 
 //=================================================
 
-namespace acore
+namespace warhead
 {
     // Binary predicate for sorting HostileReferences based on threat value
     class ThreatOrderPred

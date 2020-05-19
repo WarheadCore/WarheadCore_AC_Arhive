@@ -15,13 +15,13 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef AZEROTHCORE_WORLDPACKET_H
-#define AZEROTHCORE_WORLDPACKET_H
+#ifndef WH_WORLDPACKET_H
+#define WH_WORLDPACKET_H
 
 #include "Common.h"
 #include "ByteBuffer.h"
 
-class AC_COMMON_API WorldPacket : public ByteBuffer
+class WH_COMMON_API WorldPacket : public ByteBuffer
 {
     public:
                                                             // just container for later use

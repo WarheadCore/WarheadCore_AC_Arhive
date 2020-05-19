@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef AZEROTHCORE_GOSSIP_H
-#define AZEROTHCORE_GOSSIP_H
+#ifndef WH_GOSSIP_H
+#define WH_GOSSIP_H
 
 #include "Common.h"
 #include "QuestDef.h"

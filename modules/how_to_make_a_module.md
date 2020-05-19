@@ -1,8 +1,8 @@
-# CREATE A NEW AZEROTHCORE MODULE
+# CREATE A NEW warheadCORE MODULE
 
 1) Read this page first:
 
-http://www.azerothcore.org/wiki/Create-a-Module
+http://www.warheadcore.org/wiki/Create-a-Module
 
 
 2) Run the script `create_module.sh`:
@@ -12,7 +12,7 @@ http://www.azerothcore.org/wiki/Create-a-Module
 This script will create the base of your module, with a clean history and add a git configuration option to this repository only (local config).
 
 
-NOTE: You can also clone our skeleton-module manually, clean the history, and configure but you should use the script instead https://github.com/azerothcore/skeleton-module/
+NOTE: You can also clone our skeleton-module manually, clean the history, and configure but you should use the script instead https://github.com/warheadcore/skeleton-module/
 
 
 3) Share it with the community!

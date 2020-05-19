@@ -741,7 +741,7 @@ class Spell
 #endif
 };
 
-namespace acore
+namespace warhead
 {
     struct WorldObjectSpellTargetCheck
     {

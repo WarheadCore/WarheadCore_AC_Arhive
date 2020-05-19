@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _AUTH_HMAC_H
-#define _AUTH_HMAC_H
+#ifndef _AUTH_HMWH_H
+#define _AUTH_HMWH_H
 
 #include "Define.h"
 #include <string>
@@ -27,7 +27,7 @@ class BigNumber;
 
 #define SEED_KEY_SIZE 16
 
-class AC_COMMON_API HmacHash
+class WH_COMMON_API HmacHash
 {
     public:
         HmacHash(uint32 len, uint8 *seed);

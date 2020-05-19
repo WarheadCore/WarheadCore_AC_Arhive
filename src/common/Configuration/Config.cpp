@@ -254,7 +254,7 @@ bool ConfigMgr::LoadModulesConfigs()
         std::string configFile = std::string(itr) + std::string(".conf");
         std::string defaultConfig = configPath + "/" + configFile;
 
-#if AC_PLATFORM == AC_PLATFORM_WINDOWS
+#if WH_PLATFORM == WH_PLATFORM_WINDOWS
         defaultConfig = configFile;
 #endif
 

@@ -51,11 +51,11 @@
 #define _ACORE_REALM_CONFIG  "authserver.conf"
 #endif
 
-#if AC_PLATFORM == AC_PLATFORM_WINDOWS
+#if WH_PLATFORM == WH_PLATFORM_WINDOWS
 #include "ServiceWin32.h"
 char serviceName[] = "authserver";
-char serviceLongName[] = "AzerothCore auth service";
-char serviceDescription[] = "AzerothCore World of Warcraft emulator auth service";
+char serviceLongName[] = "WarheadCore auth service";
+char serviceDescription[] = "WarheadCore World of Warcraft emulator auth service";
 /*
  * -1 - not in service mode
  *  0 - stopped
@@ -70,7 +70,7 @@ void StopDB();
 bool stopEvent = false;                                     // Setting it to true stops the server
 
 /// Handle authserver's termination signals
-class AuthServerSignalHandler : public acore::SignalHandler
+class AuthServerSignalHandler : public warhead::SignalHandler
 {
 public:
     virtual void HandleSignal(int sigNum)
@@ -124,7 +124,7 @@ extern int main(int argc, char** argv)
     // Init all logs
     sLog->Initialize();
 
-    acore::Logo::Show("authserver", configFile,
+    warhead::Logo::Show("authserver", configFile,
         [](char const* text)
         {
             LOG_INFO("server.authserver", "%s", text);

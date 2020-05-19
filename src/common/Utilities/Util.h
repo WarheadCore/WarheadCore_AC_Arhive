@@ -39,7 +39,7 @@ template<typename T, class S> struct Finder
     bool operator()(const std::pair<int, S> &obj) { return obj.second.*idMember_ == val_; }
 };
 
-class AC_COMMON_API Tokenizer
+class WH_COMMON_API Tokenizer
 {
 public:
     typedef std::vector<char const*> StorageType;
@@ -67,37 +67,37 @@ private:
     StorageType m_storage;
 };
 
-AC_COMMON_API struct tm* localtime_r(time_t const* time, struct tm* result);
-AC_COMMON_API time_t LocalTimeToUTCTime(time_t time);
-AC_COMMON_API time_t GetLocalHourTimestamp(time_t time, uint8 hour, bool onlyAfterTime = true);
-AC_COMMON_API tm TimeBreakdown(time_t t);
+WH_COMMON_API struct tm* localtime_r(time_t const* time, struct tm* result);
+WH_COMMON_API time_t LocalTimeToUTCTime(time_t time);
+WH_COMMON_API time_t GetLocalHourTimestamp(time_t time, uint8 hour, bool onlyAfterTime = true);
+WH_COMMON_API tm TimeBreakdown(time_t t);
 
-AC_COMMON_API void stripLineInvisibleChars(std::string &src);
-AC_COMMON_API int32 MoneyStringToMoney(const std::string& moneyString);
-AC_COMMON_API std::string secsToTimeString(uint64 timeInSecs, bool shortText = false);
-AC_COMMON_API uint32 TimeStringToSecs(const std::string& timestring);
-AC_COMMON_API std::string TimeToTimestampStr(time_t t);
-AC_COMMON_API std::string TimeToHumanReadable(time_t t);
+WH_COMMON_API void stripLineInvisibleChars(std::string &src);
+WH_COMMON_API int32 MoneyStringToMoney(const std::string& moneyString);
+WH_COMMON_API std::string secsToTimeString(uint64 timeInSecs, bool shortText = false);
+WH_COMMON_API uint32 TimeStringToSecs(const std::string& timestring);
+WH_COMMON_API std::string TimeToTimestampStr(time_t t);
+WH_COMMON_API std::string TimeToHumanReadable(time_t t);
 
 /* Return a random number in the range min..max. */
-AC_COMMON_API int32 irand(int32 min, int32 max);
+WH_COMMON_API int32 irand(int32 min, int32 max);
 
 /* Return a random number in the range min..max (inclusive). */
-AC_COMMON_API uint32 urand(uint32 min, uint32 max);
+WH_COMMON_API uint32 urand(uint32 min, uint32 max);
 
 /* Return a random number in the range 0 .. UINT32_MAX. */
-AC_COMMON_API uint32 rand32();
+WH_COMMON_API uint32 rand32();
 
 /* Return a random number in the range min..max */
-AC_COMMON_API float frand(float min, float max);
+WH_COMMON_API float frand(float min, float max);
 
 /* Return a random double from 0.0 to 1.0 (exclusive). */
-AC_COMMON_API double rand_norm();
+WH_COMMON_API double rand_norm();
 
 /* Return a random double from 0.0 to 100.0 (exclusive). */
-AC_COMMON_API double rand_chance();
+WH_COMMON_API double rand_chance();
 
-AC_COMMON_API uint32 urandweighted(size_t count, double const* chances);
+WH_COMMON_API uint32 urandweighted(size_t count, double const* chances);
 
 /* Return true if a random roll fits in the specified chance (range 0-100). */
 inline bool roll_chance_f(float chance)
@@ -144,24 +144,24 @@ inline T RoundToInterval(T& num, T floor, T ceil)
 }
 
 // UTF8 handling
-AC_COMMON_API bool Utf8toWStr(const std::string& utf8str, std::wstring& wstr);
+WH_COMMON_API bool Utf8toWStr(const std::string& utf8str, std::wstring& wstr);
 
 // in wsize==max size of buffer, out wsize==real string size
-AC_COMMON_API bool Utf8toWStr(char const* utf8str, size_t csize, wchar_t* wstr, size_t& wsize);
+WH_COMMON_API bool Utf8toWStr(char const* utf8str, size_t csize, wchar_t* wstr, size_t& wsize);
 
 inline bool Utf8toWStr(const std::string& utf8str, wchar_t* wstr, size_t& wsize)
 {
     return Utf8toWStr(utf8str.c_str(), utf8str.size(), wstr, wsize);
 }
 
-AC_COMMON_API bool WStrToUtf8(std::wstring const& wstr, std::string& utf8str);
+WH_COMMON_API bool WStrToUtf8(std::wstring const& wstr, std::string& utf8str);
 
 // size==real string size
-AC_COMMON_API bool WStrToUtf8(wchar_t* wstr, size_t size, std::string& utf8str);
+WH_COMMON_API bool WStrToUtf8(wchar_t* wstr, size_t size, std::string& utf8str);
 
 // set string to "" if invalid utf8 sequence
-AC_COMMON_API size_t utf8length(std::string& utf8str);
-AC_COMMON_API void utf8truncate(std::string& utf8str, size_t len);
+WH_COMMON_API size_t utf8length(std::string& utf8str);
+WH_COMMON_API void utf8truncate(std::string& utf8str, size_t len);
 
 inline bool isBasicLatinCharacter(wchar_t wchar)
 {
@@ -330,34 +330,34 @@ inline wchar_t wcharToLower(wchar_t wchar)
     return wchar;
 }
 
-AC_COMMON_API void wstrToUpper(std::wstring& str);
-AC_COMMON_API void wstrToLower(std::wstring& str);
+WH_COMMON_API void wstrToUpper(std::wstring& str);
+WH_COMMON_API void wstrToLower(std::wstring& str);
 
-AC_COMMON_API std::wstring GetMainPartOfName(std::wstring const& wname, uint32 declension);
+WH_COMMON_API std::wstring GetMainPartOfName(std::wstring const& wname, uint32 declension);
 
-AC_COMMON_API bool utf8ToConsole(const std::string& utf8str, std::string& conStr);
-AC_COMMON_API bool consoleToUtf8(const std::string& conStr, std::string& utf8str);
-AC_COMMON_API bool Utf8FitTo(const std::string& str, std::wstring const& search);
-AC_COMMON_API void utf8printf(FILE* out, const char *str, ...);
-AC_COMMON_API void vutf8printf(FILE* out, const char *str, va_list* ap);
-AC_COMMON_API bool Utf8ToUpperOnlyLatin(std::string& utf8String);
+WH_COMMON_API bool utf8ToConsole(const std::string& utf8str, std::string& conStr);
+WH_COMMON_API bool consoleToUtf8(const std::string& conStr, std::string& utf8str);
+WH_COMMON_API bool Utf8FitTo(const std::string& str, std::wstring const& search);
+WH_COMMON_API void utf8printf(FILE* out, const char *str, ...);
+WH_COMMON_API void vutf8printf(FILE* out, const char *str, va_list* ap);
+WH_COMMON_API bool Utf8ToUpperOnlyLatin(std::string& utf8String);
 
-AC_COMMON_API bool IsIPAddress(char const* ipaddress);
+WH_COMMON_API bool IsIPAddress(char const* ipaddress);
 
 /// Checks if address belongs to the a network with specified submask
-AC_COMMON_API bool IsIPAddrInNetwork(ACE_INET_Addr const& net, ACE_INET_Addr const& addr, ACE_INET_Addr const& subnetMask);
+WH_COMMON_API bool IsIPAddrInNetwork(ACE_INET_Addr const& net, ACE_INET_Addr const& addr, ACE_INET_Addr const& subnetMask);
 
 /// Transforms ACE_INET_Addr address into string format "dotted_ip:port"
-AC_COMMON_API std::string GetAddressString(ACE_INET_Addr const& addr);
+WH_COMMON_API std::string GetAddressString(ACE_INET_Addr const& addr);
 
-AC_COMMON_API uint32 CreatePIDFile(const std::string& filename);
-AC_COMMON_API uint32 GetPID();
+WH_COMMON_API uint32 CreatePIDFile(const std::string& filename);
+WH_COMMON_API uint32 GetPID();
 
-AC_COMMON_API std::string ByteArrayToHexStr(uint8 const* bytes, uint32 length, bool reverse = false);
-AC_COMMON_API void HexStrToByteArray(std::string const& str, uint8* out, bool reverse = false);
-AC_COMMON_API bool StringToBool(std::string const& str);
+WH_COMMON_API std::string ByteArrayToHexStr(uint8 const* bytes, uint32 length, bool reverse = false);
+WH_COMMON_API void HexStrToByteArray(std::string const& str, uint8* out, bool reverse = false);
+WH_COMMON_API bool StringToBool(std::string const& str);
 
-AC_COMMON_API bool StringContainsStringI(std::string const& haystack, std::string const& needle);
+WH_COMMON_API bool StringContainsStringI(std::string const& haystack, std::string const& needle);
 template <typename T>
 inline bool ValueContainsStringI(std::pair<T, std::string> const& haystack, std::string const& needle)
 {
@@ -401,7 +401,7 @@ class HookList
         }
 };
 
-class AC_COMMON_API flag96
+class WH_COMMON_API flag96
 {
 private:
     uint32 part[3];
@@ -566,7 +566,7 @@ bool CompareValues(ComparisionType type, T val1, T val2)
 /*
 * SFMT wrapper satisfying UniformRandomNumberGenerator concept for use in <random> algorithms
 */
-class AC_COMMON_API SFMTEngine
+class WH_COMMON_API SFMTEngine
 {
 public:
     typedef uint32 result_type;

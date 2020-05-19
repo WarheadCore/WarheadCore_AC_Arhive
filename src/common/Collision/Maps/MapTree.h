@@ -28,7 +28,7 @@ namespace VMAP
     class GroupModel;
     class VMapManager2;
 
-    struct AC_COMMON_API LocationInfo
+    struct WH_COMMON_API LocationInfo
     {
         LocationInfo(): hitInstance(0), hitModel(0), ground_Z(-G3D::inf()) { }
         const ModelInstance* hitInstance;
@@ -36,7 +36,7 @@ namespace VMAP
         float ground_Z;
     };
 
-    class AC_COMMON_API StaticMapTree
+    class WH_COMMON_API StaticMapTree
     {
         typedef std::unordered_map<uint32, bool> loadedTileMap;
         typedef std::unordered_map<uint32, uint32> loadedSpawnMap;

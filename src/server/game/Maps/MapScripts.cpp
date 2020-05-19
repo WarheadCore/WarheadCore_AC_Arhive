@@ -273,13 +273,13 @@ inline GameObject* Map::_FindGameObject(WorldObject* searchObject, uint32 guid) 
 { 
     GameObject* gameobject = NULL;
 
-    CellCoord p(acore::ComputeCellCoord(searchObject->GetPositionX(), searchObject->GetPositionY()));
+    CellCoord p(warhead::ComputeCellCoord(searchObject->GetPositionX(), searchObject->GetPositionY()));
     Cell cell(p);
 
-    acore::GameObjectWithDbGUIDCheck goCheck(guid);
-    acore::GameObjectSearcher<acore::GameObjectWithDbGUIDCheck> checker(searchObject, gameobject, goCheck);
+    warhead::GameObjectWithDbGUIDCheck goCheck(guid);
+    warhead::GameObjectSearcher<warhead::GameObjectWithDbGUIDCheck> checker(searchObject, gameobject, goCheck);
 
-    TypeContainerVisitor<acore::GameObjectSearcher<acore::GameObjectWithDbGUIDCheck>, GridTypeMapContainer > objectChecker(checker);
+    TypeContainerVisitor<warhead::GameObjectSearcher<warhead::GameObjectWithDbGUIDCheck>, GridTypeMapContainer > objectChecker(checker);
     cell.Visit(p, objectChecker, *searchObject->GetMap(), *searchObject, searchObject->GetGridActivationRange());
 
     return gameobject;
@@ -837,13 +837,13 @@ void Map::ScriptsProcess()
                 WorldObject* wSource = dynamic_cast <WorldObject*> (source);
                 if (wSource) //using grid searcher
                 {
-                    CellCoord p(acore::ComputeCellCoord(wSource->GetPositionX(), wSource->GetPositionY()));
+                    CellCoord p(warhead::ComputeCellCoord(wSource->GetPositionX(), wSource->GetPositionY()));
                     Cell cell(p);
 
-                    acore::CreatureWithDbGUIDCheck target_check(step.script->CallScript.CreatureEntry);
-                    acore::CreatureSearcher<acore::CreatureWithDbGUIDCheck> checker(wSource, cTarget, target_check);
+                    warhead::CreatureWithDbGUIDCheck target_check(step.script->CallScript.CreatureEntry);
+                    warhead::CreatureSearcher<warhead::CreatureWithDbGUIDCheck> checker(wSource, cTarget, target_check);
 
-                    TypeContainerVisitor<acore::CreatureSearcher <acore::CreatureWithDbGUIDCheck>, GridTypeMapContainer > unit_checker(checker);
+                    TypeContainerVisitor<warhead::CreatureSearcher <warhead::CreatureWithDbGUIDCheck>, GridTypeMapContainer > unit_checker(checker);
                     cell.Visit(p, unit_checker, *wSource->GetMap(), *wSource, wSource->GetGridActivationRange());
                 }
                 else //check hashmap holders

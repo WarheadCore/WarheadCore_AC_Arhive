@@ -25,7 +25,7 @@
 class EventProcessor;
 // Note. All times are in milliseconds here.
 
-class AC_COMMON_API BasicEvent
+class WH_COMMON_API BasicEvent
 {
 
     friend class EventProcessor;
@@ -70,7 +70,7 @@ class AC_COMMON_API BasicEvent
 
 typedef std::multimap<uint64, BasicEvent*> EventList;
 
-class AC_COMMON_API EventProcessor
+class WH_COMMON_API EventProcessor
 {
     public:
         EventProcessor() : m_time(0) { }

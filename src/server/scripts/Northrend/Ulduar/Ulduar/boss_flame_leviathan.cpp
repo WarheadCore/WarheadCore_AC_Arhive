@@ -1996,7 +1996,7 @@ class spell_pursue : public SpellScriptLoader
                 else
                 {
                     //! In the end, only one target should be selected
-                    WorldObject* _target = acore::Containers::SelectRandomContainerElement(targets);
+                    WorldObject* _target = warhead::Containers::SelectRandomContainerElement(targets);
                     targets.clear();
                     if (_target)
                         targets.push_back(_target);
@@ -2046,8 +2046,8 @@ class spell_vehicle_throw_passenger : public SpellScriptLoader
                     {
                         // use 99 because it is 3d search
                         std::list<WorldObject*> targetList;
-                        acore::WorldObjectSpellAreaTargetCheck check(99, GetExplTargetDest(), GetCaster(), GetCaster(), GetSpellInfo(), TARGET_CHECK_DEFAULT, nullptr);
-                        acore::WorldObjectListSearcher<acore::WorldObjectSpellAreaTargetCheck> searcher(GetCaster(), targetList, check);
+                        warhead::WorldObjectSpellAreaTargetCheck check(99, GetExplTargetDest(), GetCaster(), GetCaster(), GetSpellInfo(), TARGET_CHECK_DEFAULT, nullptr);
+                        warhead::WorldObjectListSearcher<warhead::WorldObjectSpellAreaTargetCheck> searcher(GetCaster(), targetList, check);
                         GetCaster()->GetMap()->VisitAll(GetCaster()->m_positionX, GetCaster()->m_positionY, 99, searcher);
                         float minDist = 99 * 99;
                         Unit* target = nullptr;

@@ -38,7 +38,7 @@ void HMAC_CTX_free(HMAC_CTX* ctx)
 HmacHash::HmacHash(uint32 len, uint8 *seed)
 {
     m_ctx = HMAC_CTX_new();
-    HMAC_Init_ex(m_ctx, seed, len, EVP_sha1(), nullptr);
+    HMWH_Init_ex(m_ctx, seed, len, EVP_sha1(), nullptr);
     memset(m_digest, 0, sizeof(m_digest));
 }
 

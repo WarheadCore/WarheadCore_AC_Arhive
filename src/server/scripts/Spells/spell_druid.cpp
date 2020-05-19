@@ -1078,7 +1078,7 @@ class spell_dru_starfall_dummy : public SpellScriptLoader
 
             void FilterTargets(std::list<WorldObject*>& targets)
             {
-                acore::Containers::RandomResizeList(targets, 2);
+                warhead::Containers::RandomResizeList(targets, 2);
             }
 
             void HandleDummy(SpellEffIndex /*effIndex*/)
@@ -1306,7 +1306,7 @@ class spell_dru_t10_restoration_4p_bonus : public SpellScriptLoader
                         return;
                     }
 
-                    tempTargets.sort(acore::HealthPctOrderPred());
+                    tempTargets.sort(warhead::HealthPctOrderPred());
                     targets.clear();
                     targets.push_back(tempTargets.front());
                 }
@@ -1343,13 +1343,13 @@ class spell_dru_wild_growth : public SpellScriptLoader
 
             void FilterTargets(std::list<WorldObject*>& targets)
             {
-                targets.remove_if(acore::RaidCheck(GetCaster(), false));
+                targets.remove_if(warhead::RaidCheck(GetCaster(), false));
 
                 uint32 const maxTargets = GetCaster()->HasAura(SPELL_DRUID_GLYPH_OF_WILD_GROWTH) ? 6 : 5;
 
                 if (targets.size() > maxTargets)
                 {
-                    targets.sort(acore::HealthPctOrderPred());
+                    targets.sort(warhead::HealthPctOrderPred());
                     targets.resize(maxTargets);
                 }
 

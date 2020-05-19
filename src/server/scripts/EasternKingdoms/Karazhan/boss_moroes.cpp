@@ -178,7 +178,7 @@ class boss_moroes : public CreatureScript
                     if (Creature* summon = ObjectAccessor::GetCreature(*me, *i))
                         guestList.push_back(summon);
 
-                return acore::Containers::SelectRandomContainerElement(guestList);
+                return warhead::Containers::SelectRandomContainerElement(guestList);
             }
 
             void UpdateAI(uint32 diff)

@@ -48,7 +48,7 @@ CCOREPCH=ON
 
 # Skip specific modules from compilation (cmake reconfigure needed)
 # use semicolon ; to separate modules
-CDISABLED_AC_MODULES=""
+CDISABLED_WH_MODULES=""
 
 # you can add your custom definitions here ( -D )
 # example:  CCUSTOMOPTIONS=" -DWITH_PERFTOOLS=ON -DENABLE_EXTRA_LOGS=ON"

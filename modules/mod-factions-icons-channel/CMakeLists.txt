@@ -14,7 +14,7 @@
 #
 
 # Add source files
-AC_ADD_MODULES_SOURCE("FactionsIconsChannel")
+WH_ADD_MODULES_SOURCE("FactionsIconsChannel")
 
 # Add config file
-AC_ADD_CONFIG_FILE("${CMAKE_CURRENT_LIST_DIR}/conf/FactionsIconsChannel.conf.dist")
+WH_ADD_CONFIG_FILE("${CMAKE_CURRENT_LIST_DIR}/conf/FactionsIconsChannel.conf.dist")

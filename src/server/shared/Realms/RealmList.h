@@ -35,7 +35,7 @@ enum RealmFlags
 };
 
 // Storage object for a realm
-struct AC_SHARED_API Realm
+struct WH_SHARED_API Realm
 {
     ACE_INET_Addr ExternalAddress;
     ACE_INET_Addr LocalAddress;
@@ -51,7 +51,7 @@ struct AC_SHARED_API Realm
 };
 
 /// Storage object for the list of realms on the server
-class AC_SHARED_API RealmList
+class WH_SHARED_API RealmList
 {
 public:
     typedef std::map<std::string, Realm> RealmMap;

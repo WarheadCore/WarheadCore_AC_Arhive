@@ -777,7 +777,7 @@ class spell_gen_select_target_count : public SpellScriptLoader
             void FilterTargets(std::list<WorldObject*>& targets)
             {
                 targets.remove(GetCaster());
-                acore::Containers::RandomResizeList(targets, _count);
+                warhead::Containers::RandomResizeList(targets, _count);
             }
 
             void Register()
@@ -1731,8 +1731,8 @@ class spell_gen_cannibalize : public SpellScriptLoader
                 float max_range = GetSpellInfo()->GetMaxRange(false);
                 WorldObject* result = NULL;
                 // search for nearby enemy corpse in range
-                acore::AnyDeadUnitSpellTargetInRangeCheck check(caster, max_range, GetSpellInfo(), TARGET_CHECK_CORPSE);
-                acore::WorldObjectSearcher<acore::AnyDeadUnitSpellTargetInRangeCheck> searcher(caster, result, check);
+                warhead::AnyDeadUnitSpellTargetInRangeCheck check(caster, max_range, GetSpellInfo(), TARGET_CHECK_CORPSE);
+                warhead::WorldObjectSearcher<warhead::AnyDeadUnitSpellTargetInRangeCheck> searcher(caster, result, check);
                 caster->GetMap()->VisitFirstFound(caster->m_positionX, caster->m_positionY, max_range, searcher);
                 if (!result)
                     return SPELL_FAILED_NO_EDIBLE_CORPSES;
@@ -4777,13 +4777,13 @@ class spell_gen_replenishment : public SpellScriptLoader
                     }
                 }
 
-                targets.remove_if(acore::PowerCheck(POWER_MANA, false));
+                targets.remove_if(warhead::PowerCheck(POWER_MANA, false));
 
                 uint8 const maxTargets = 10;
 
                 if (targets.size() > maxTargets)
                 {
-                    targets.sort(acore::PowerPctOrderPred(POWER_MANA));
+                    targets.sort(warhead::PowerPctOrderPred(POWER_MANA));
                     targets.resize(maxTargets);
                 }
             }
@@ -5022,7 +5022,7 @@ void AddSC_generic_spell_scripts()
     new spell_gen_have_item_auras();
     new spell_gen_mine_sweeper();
     new spell_gen_reduced_above_60();
-    new spell_gen_relocaste_dest("spell_q10838_demoniac_scryer_visual", 0, 0, 20.0, 0);
+    new spell_gen_relocaste_dest("spell_q10838_demoniWH_scryer_visual", 0, 0, 20.0, 0);
     new spell_gen_relocaste_dest("spell_q20438_q24556_aquantos_laundry", 0, 0, 7.0f, 0);
     new spell_gen_allow_proc_from_spells_with_cost();
     new spell_gen_bg_preparation();

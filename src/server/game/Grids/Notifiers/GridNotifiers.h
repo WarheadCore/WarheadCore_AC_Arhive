@@ -35,7 +35,7 @@
 class Player;
 //class Map;
 
-namespace acore
+namespace warhead
 {
     struct VisibleNotifier
     {

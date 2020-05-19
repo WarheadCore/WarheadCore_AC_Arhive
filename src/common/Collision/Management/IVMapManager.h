@@ -41,7 +41,7 @@ namespace VMAP
     #define VMAP_INVALID_HEIGHT_VALUE -200000.0f            // real assigned value in unknown height case
 
     //===========================================================
-    class AC_COMMON_API IVMapManager
+    class WH_COMMON_API IVMapManager
     {
         private:
             bool iEnableLineOfSightCalc;

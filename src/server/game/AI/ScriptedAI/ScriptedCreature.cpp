@@ -389,8 +389,8 @@ void ScriptedAI::DoTeleportAll(float x, float y, float z, float o)
 Unit* ScriptedAI::DoSelectLowestHpFriendly(float range, uint32 minHPDiff)
 {
     Unit* unit = NULL;
-    acore::MostHPMissingInRange u_check(me, range, minHPDiff);
-    acore::UnitLastSearcher<acore::MostHPMissingInRange> searcher(me, unit, u_check);
+    warhead::MostHPMissingInRange u_check(me, range, minHPDiff);
+    warhead::UnitLastSearcher<warhead::MostHPMissingInRange> searcher(me, unit, u_check);
     me->VisitNearbyObject(range, searcher);
 
     return unit;
@@ -399,8 +399,8 @@ Unit* ScriptedAI::DoSelectLowestHpFriendly(float range, uint32 minHPDiff)
 std::list<Creature*> ScriptedAI::DoFindFriendlyCC(float range)
 {
     std::list<Creature*> list;
-    acore::FriendlyCCedInRange u_check(me, range);
-    acore::CreatureListSearcher<acore::FriendlyCCedInRange> searcher(me, list, u_check);
+    warhead::FriendlyCCedInRange u_check(me, range);
+    warhead::CreatureListSearcher<warhead::FriendlyCCedInRange> searcher(me, list, u_check);
     me->VisitNearbyObject(range, searcher);
     return list;
 }
@@ -408,8 +408,8 @@ std::list<Creature*> ScriptedAI::DoFindFriendlyCC(float range)
 std::list<Creature*> ScriptedAI::DoFindFriendlyMissingBuff(float range, uint32 uiSpellid)
 {
     std::list<Creature*> list;
-    acore::FriendlyMissingBuffInRange u_check(me, range, uiSpellid);
-    acore::CreatureListSearcher<acore::FriendlyMissingBuffInRange> searcher(me, list, u_check);
+    warhead::FriendlyMissingBuffInRange u_check(me, range, uiSpellid);
+    warhead::CreatureListSearcher<warhead::FriendlyMissingBuffInRange> searcher(me, list, u_check);
     me->VisitNearbyObject(range, searcher);
     return list;
 }
@@ -418,13 +418,13 @@ Player* ScriptedAI::GetPlayerAtMinimumRange(float minimumRange)
 {
     Player* player = NULL;
 
-    CellCoord pair(acore::ComputeCellCoord(me->GetPositionX(), me->GetPositionY()));
+    CellCoord pair(warhead::ComputeCellCoord(me->GetPositionX(), me->GetPositionY()));
     Cell cell(pair);
     cell.SetNoCreate();
 
-    acore::PlayerAtMinimumRangeAway check(me, minimumRange);
-    acore::PlayerSearcher<acore::PlayerAtMinimumRangeAway> searcher(me, player, check);
-    TypeContainerVisitor<acore::PlayerSearcher<acore::PlayerAtMinimumRangeAway>, GridTypeMapContainer> visitor(searcher);
+    warhead::PlayerAtMinimumRangeAway check(me, minimumRange);
+    warhead::PlayerSearcher<warhead::PlayerAtMinimumRangeAway> searcher(me, player, check);
+    TypeContainerVisitor<warhead::PlayerSearcher<warhead::PlayerAtMinimumRangeAway>, GridTypeMapContainer> visitor(searcher);
 
     cell.Visit(pair, visitor, *me->GetMap(), *me, minimumRange);
 

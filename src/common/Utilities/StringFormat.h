@@ -20,7 +20,7 @@
 
 #include "fmt/printf.h"
 
-namespace acore
+namespace warhead
 {
     /// Default AC string format function.
     template<typename Format, typename... Args>

@@ -35,7 +35,7 @@ CU_SUBDIRLIST(sub_DIRS  "${CMAKE_SOURCE_DIR}/modules" FALSE FALSE)
 FOREACH(subdir ${sub_DIRS})
   get_filename_component(MODULENAME ${subdir} NAME)
     
-  if (";${DISABLED_AC_MODULES};" MATCHES ";${MODULENAME};")
+  if (";${DISABLED_WH_MODULES};" MATCHES ";${MODULENAME};")
     continue()
   endif()
 

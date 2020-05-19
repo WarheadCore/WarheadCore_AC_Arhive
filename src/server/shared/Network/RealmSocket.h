@@ -25,13 +25,13 @@
 #include <ace/Basic_Types.h>
 #include "Common.h"
 
-class AC_SHARED_API RealmSocket : public ACE_Svc_Handler<ACE_SOCK_STREAM, ACE_NULL_SYNCH>
+class WH_SHARED_API RealmSocket : public ACE_Svc_Handler<ACE_SOCK_STREAM, ACE_NULL_SYNCH>
 {
 private:
     typedef ACE_Svc_Handler<ACE_SOCK_STREAM, ACE_NULL_SYNCH> Base;
 
 public:
-    class AC_SHARED_API Session
+    class WH_SHARED_API Session
     {
     public:
         Session(void);

@@ -122,7 +122,7 @@ char const* GameLocale::GetAcoreString(uint32 entry, LocaleConstant locale) cons
         return as->Content[DEFAULT_LOCALE].c_str();
     }
 
-    sLog->outErrorDb("Azeroth string entry %u not found in DB.", entry);
+    sLog->outErrorDb("Warhead string entry %u not found in DB.", entry);
 
     return "<error>";
 }

@@ -323,7 +323,7 @@ template<>
 void Map::SwitchGridContainers(Creature* obj, bool on)
 { 
     ASSERT(!obj->IsPermanentWorldObject());
-    CellCoord p = acore::ComputeCellCoord(obj->GetPositionX(), obj->GetPositionY());
+    CellCoord p = warhead::ComputeCellCoord(obj->GetPositionX(), obj->GetPositionY());
     if (!p.IsCoordValid())
     {
         sLog->outError("Map::SwitchGridContainers: Object " UI64FMTD " has invalid coordinates X:%f Y:%f grid cell [%u:%u]", obj->GetGUID(), obj->GetPositionX(), obj->GetPositionY(), p.x_coord, p.y_coord);
@@ -362,7 +362,7 @@ template<>
 void Map::SwitchGridContainers(GameObject* obj, bool on)
 { 
     ASSERT(!obj->IsPermanentWorldObject());
-    CellCoord p = acore::ComputeCellCoord(obj->GetPositionX(), obj->GetPositionY());
+    CellCoord p = warhead::ComputeCellCoord(obj->GetPositionX(), obj->GetPositionY());
     if (!p.IsCoordValid())
     {
         sLog->outError("Map::SwitchGridContainers: Object " UI64FMTD " has invalid coordinates X:%f Y:%f grid cell [%u:%u]", obj->GetGUID(), obj->GetPositionX(), obj->GetPositionY(), p.x_coord, p.y_coord);
@@ -493,7 +493,7 @@ void Map::LoadAllCells()
 
 bool Map::AddPlayerToMap(Player* player)
 { 
-    CellCoord cellCoord = acore::ComputeCellCoord(player->GetPositionX(), player->GetPositionY());
+    CellCoord cellCoord = warhead::ComputeCellCoord(player->GetPositionX(), player->GetPositionY());
     if (!cellCoord.IsCoordValid())
     {
         sLog->outError("Map::Add: Player (GUID: %u) has invalid coordinates X:%f Y:%f grid cell [%u:%u]", player->GetGUIDLow(), player->GetPositionX(), player->GetPositionY(), cellCoord.x_coord, cellCoord.y_coord);
@@ -548,7 +548,7 @@ bool Map::AddToMap(T* obj, bool checkTransport)
         return true;
     }
 
-    CellCoord cellCoord = acore::ComputeCellCoord(obj->GetPositionX(), obj->GetPositionY());
+    CellCoord cellCoord = warhead::ComputeCellCoord(obj->GetPositionX(), obj->GetPositionY());
     //It will create many problems (including crashes) if an object is not added to grid after creation
     //The correct way to fix it is to make AddToMap return false and delete the object if it is not added to grid
     //But now AddToMap is used in too many places, I will just see how many ASSERT failures it will cause
@@ -600,7 +600,7 @@ bool Map::AddToMap(MotionTransport* obj, bool /*checkTransport*/)
     if (obj->IsInWorld())
         return true;
 
-    CellCoord cellCoord = acore::ComputeCellCoord(obj->GetPositionX(), obj->GetPositionY());
+    CellCoord cellCoord = warhead::ComputeCellCoord(obj->GetPositionX(), obj->GetPositionY());
     if (!cellCoord.IsCoordValid())
     {
         sLog->outError("Map::Add: Object " UI64FMTD " has invalid coordinates X:%f Y:%f grid cell [%u:%u]", obj->GetGUID(), obj->GetPositionX(), obj->GetPositionY(), cellCoord.x_coord, cellCoord.y_coord);
@@ -643,10 +643,10 @@ bool Map::IsGridLoaded(const GridCoord &p) const
 }
 
 
-void Map::VisitNearbyCellsOfPlayer(Player* player, TypeContainerVisitor<acore::ObjectUpdater, GridTypeMapContainer> &gridVisitor,
-    TypeContainerVisitor<acore::ObjectUpdater, WorldTypeMapContainer> &worldVisitor,
-    TypeContainerVisitor<acore::ObjectUpdater, GridTypeMapContainer> &largeGridVisitor,
-    TypeContainerVisitor<acore::ObjectUpdater, WorldTypeMapContainer> &largeWorldVisitor)
+void Map::VisitNearbyCellsOfPlayer(Player* player, TypeContainerVisitor<warhead::ObjectUpdater, GridTypeMapContainer> &gridVisitor,
+    TypeContainerVisitor<warhead::ObjectUpdater, WorldTypeMapContainer> &worldVisitor,
+    TypeContainerVisitor<warhead::ObjectUpdater, GridTypeMapContainer> &largeGridVisitor,
+    TypeContainerVisitor<warhead::ObjectUpdater, WorldTypeMapContainer> &largeWorldVisitor)
 {
     // check for valid position
     if (!player->IsPositionValid())
@@ -678,10 +678,10 @@ void Map::VisitNearbyCellsOfPlayer(Player* player, TypeContainerVisitor<acore::O
     }
 }
 
-void Map::VisitNearbyCellsOf(WorldObject* obj, TypeContainerVisitor<acore::ObjectUpdater, GridTypeMapContainer> &gridVisitor,
-    TypeContainerVisitor<acore::ObjectUpdater, WorldTypeMapContainer> &worldVisitor,
-    TypeContainerVisitor<acore::ObjectUpdater, GridTypeMapContainer> &largeGridVisitor,
-    TypeContainerVisitor<acore::ObjectUpdater, WorldTypeMapContainer> &largeWorldVisitor)
+void Map::VisitNearbyCellsOf(WorldObject* obj, TypeContainerVisitor<warhead::ObjectUpdater, GridTypeMapContainer> &gridVisitor,
+    TypeContainerVisitor<warhead::ObjectUpdater, WorldTypeMapContainer> &worldVisitor,
+    TypeContainerVisitor<warhead::ObjectUpdater, GridTypeMapContainer> &largeGridVisitor,
+    TypeContainerVisitor<warhead::ObjectUpdater, WorldTypeMapContainer> &largeWorldVisitor)
 { 
     // Check for valid position
     if (!obj->IsPositionValid())
@@ -762,17 +762,17 @@ void Map::Update(const uint32 t_diff, const uint32 s_diff, bool  /*thread*/)
     resetMarkedCells();
     resetMarkedCellsLarge();
 
-    acore::ObjectUpdater updater(t_diff, false);
+    warhead::ObjectUpdater updater(t_diff, false);
 
     // for creature
-    TypeContainerVisitor<acore::ObjectUpdater, GridTypeMapContainer  > grid_object_update(updater);
+    TypeContainerVisitor<warhead::ObjectUpdater, GridTypeMapContainer  > grid_object_update(updater);
     // for pets
-    TypeContainerVisitor<acore::ObjectUpdater, WorldTypeMapContainer > world_object_update(updater);
+    TypeContainerVisitor<warhead::ObjectUpdater, WorldTypeMapContainer > world_object_update(updater);
 
     // for large creatures
-    acore::ObjectUpdater largeObjectUpdater(t_diff, true);
-    TypeContainerVisitor<acore::ObjectUpdater, GridTypeMapContainer  > grid_large_object_update(largeObjectUpdater);
-    TypeContainerVisitor<acore::ObjectUpdater, WorldTypeMapContainer  > world_large_object_update(largeObjectUpdater);
+    warhead::ObjectUpdater largeObjectUpdater(t_diff, true);
+    TypeContainerVisitor<warhead::ObjectUpdater, GridTypeMapContainer  > grid_large_object_update(largeObjectUpdater);
+    TypeContainerVisitor<warhead::ObjectUpdater, WorldTypeMapContainer  > world_large_object_update(largeObjectUpdater);
 
     // pussywizard: container for far creatures in combat with players
     std::vector<Creature*> updateList; updateList.reserve(10);

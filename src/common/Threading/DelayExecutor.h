@@ -23,7 +23,7 @@
 #include <ace/Activation_Queue.h>
 #include <ace/Method_Request.h>
 
-class AC_COMMON_API DelayExecutor : protected ACE_Task_Base
+class WH_COMMON_API DelayExecutor : protected ACE_Task_Base
 {
     public:
 

@@ -682,8 +682,8 @@ class spell_love_is_in_the_air_romantic_picnic : public SpellScriptLoader
                 // For nearby players, check if they have the same aura. If so, cast Romantic Picnic (45123)
                 // required by achievement and "hearts" visual
                 std::list<Player*> playerList;
-                acore::AnyPlayerInObjectRangeCheck checker(target, INTERACTION_DISTANCE*2);
-                acore::PlayerListSearcher<acore::AnyPlayerInObjectRangeCheck> searcher(target, playerList, checker);
+                warhead::AnyPlayerInObjectRangeCheck checker(target, INTERACTION_DISTANCE*2);
+                warhead::PlayerListSearcher<warhead::AnyPlayerInObjectRangeCheck> searcher(target, playerList, checker);
                 target->VisitNearbyWorldObject(INTERACTION_DISTANCE*2, searcher);
                 for (std::list<Player*>::const_iterator itr = playerList.begin(); itr != playerList.end(); ++itr)
                 {

@@ -22,11 +22,11 @@ Example (everything below is needed, just replace with your scripts' names):
 ```
 set(scripts_STAT_SRCS
   ${scripts_STAT_SRCS}
-  ${AC_SCRIPTS_DIR}/Custom/your_script.cpp
-  ${AC_SCRIPTS_DIR}/Custom/your_script.h
+  ${WH_SCRIPTS_DIR}/Custom/your_script.cpp
+  ${WH_SCRIPTS_DIR}/Custom/your_script.h
 )
 
-AC_ADD_SCRIPT_LOADER("Custom" "ScriptLoader.h")
+WH_ADD_SCRIPT_LOADER("Custom" "ScriptLoader.h")
 
 message("  -> Prepared: My custom scripts")
 ```

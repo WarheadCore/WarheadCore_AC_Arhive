@@ -803,7 +803,7 @@ void World::LoadConfigSettings(bool reload)
     if (dataPath.empty() || (dataPath.at(dataPath.length()-1) != '/' && dataPath.at(dataPath.length()-1) != '\\'))
         dataPath.push_back('/');
 
-#if AC_PLATFORM == AC_PLATFORM_UNIX || AC_PLATFORM == AC_PLATFORM_APPLE
+#if WH_PLATFORM == WH_PLATFORM_UNIX || WH_PLATFORM == WH_PLATFORM_APPLE
     if (dataPath[0] == '~')
     {
         const char* home = getenv("HOME");
@@ -1543,7 +1543,7 @@ void World::SetInitialWorldSettings()
 
     if (sConfigMgr->isDryRun()) 
     {
-        sLog->outString("AzerothCore dry run completed, terminating.");
+        sLog->outString("WarheadCore dry run completed, terminating.");
         exit(0);
     }
 }
@@ -1871,7 +1871,7 @@ void World::SendGlobalGMMessage(WorldPacket* packet, WorldSession* self, TeamId 
     }
 }
 
-namespace acore
+namespace warhead
 {
     class WorldWorldTextBuilder
     {
@@ -1914,7 +1914,7 @@ namespace acore
             uint32 i_textId;
             va_list* i_args;
     };
-}                                                           // namespace acore
+}                                                           // namespace warhead
 
 /// Send a System Message to all players (except self if mentioned)
 void World::SendWorldText(uint32 string_id, ...)
@@ -1922,8 +1922,8 @@ void World::SendWorldText(uint32 string_id, ...)
     va_list ap;
     va_start(ap, string_id);
 
-    acore::WorldWorldTextBuilder wt_builder(string_id, &ap);
-    acore::LocalizedPacketListDo<acore::WorldWorldTextBuilder> wt_do(wt_builder);
+    warhead::WorldWorldTextBuilder wt_builder(string_id, &ap);
+    warhead::LocalizedPacketListDo<warhead::WorldWorldTextBuilder> wt_do(wt_builder);
     for (SessionMap::const_iterator itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
     {
         if (!itr->second || !itr->second->GetPlayer() || !itr->second->GetPlayer()->IsInWorld())
@@ -1941,8 +1941,8 @@ void World::SendGMText(uint32 string_id, ...)
     va_list ap;
     va_start(ap, string_id);
 
-    acore::WorldWorldTextBuilder wt_builder(string_id, &ap);
-    acore::LocalizedPacketListDo<acore::WorldWorldTextBuilder> wt_do(wt_builder);
+    warhead::WorldWorldTextBuilder wt_builder(string_id, &ap);
+    warhead::LocalizedPacketListDo<warhead::WorldWorldTextBuilder> wt_do(wt_builder);
     for (SessionMap::iterator itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
     {
         if (!itr->second || !itr->second->GetPlayer() || !itr->second->GetPlayer()->IsInWorld())

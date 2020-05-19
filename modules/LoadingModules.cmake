@@ -18,7 +18,7 @@ endif()
 
 if (NOT DISABLED_ALL_MODULES)
 # Check disabled modules
-set(DISABLED_AC_MODULES ${DISABLED_AC_MODULES} ${DISABLED_MODULES})
+set(DISABLED_WH_MODULES ${DISABLED_WH_MODULES} ${DISABLED_MODULES})
 
 # Set empty modules default
 set(MODULES_EXIST 0)
@@ -33,11 +33,11 @@ FOREACH(subdir ${sub_DIRS})
     option(MODULE_${MODULENAME} "Enable module:${MODULENAME}" 1)
 
     if (NOT MODULE_${MODULENAME})
-      set(DISABLED_AC_MODULES ${DISABLED_AC_MODULES} ${MODULENAME})
+      set(DISABLED_WH_MODULES ${DISABLED_WH_MODULES} ${MODULENAME})
     endif()
   endif()
   
-  if (";${DISABLED_AC_MODULES};" MATCHES ";${MODULENAME};")    
+  if (";${DISABLED_WH_MODULES};" MATCHES ";${MODULENAME};")    
     continue()
   endif()
 
@@ -46,7 +46,7 @@ FOREACH(subdir ${sub_DIRS})
     message("Loading module: ${subdir_rel}")
     add_subdirectory("${subdir_rel}")
     set(MODULES_EXIST 1)
-    AC_ADD_MODULE(${subdir_rel})
+    WH_ADD_MODULE(${subdir_rel})
   endif()
 ENDFOREACH()
 endif()
