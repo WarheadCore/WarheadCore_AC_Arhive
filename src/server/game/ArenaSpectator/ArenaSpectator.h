@@ -16,8 +16,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef AZEROTHCORE_ARENASPECTATOR_H
-#define AZEROTHCORE_ARENASPECTATOR_H
+#ifndef WH_ARENASPECTATOR_H
+#define WH_ARENASPECTATOR_H
 
 #include "Player.h"
 #include "World.h"

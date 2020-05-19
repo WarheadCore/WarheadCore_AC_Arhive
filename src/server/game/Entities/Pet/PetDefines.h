@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef AZEROTHCORE_PET_DEFINES_H
-#define AZEROTHCORE_PET_DEFINES_H
+#ifndef WH_PET_DEFINES_H
+#define WH_PET_DEFINES_H
 
 enum PetType
 {

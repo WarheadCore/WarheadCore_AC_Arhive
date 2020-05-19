@@ -1619,8 +1619,8 @@ bool ConditionMgr::isSourceTypeValid(Condition* cond)
 bool ConditionMgr::isConditionTypeValid(Condition* cond)
 {
     if (cond->ConditionType == CONDITION_NONE
-        || (cond->ConditionType >= CONDITION_TC_END && cond->ConditionType <= CONDITION_AC_START)
-        || (cond->ConditionType >= CONDITION_AC_END)
+        || (cond->ConditionType >= CONDITION_TC_END && cond->ConditionType <= CONDITION_WH_START)
+        || (cond->ConditionType >= CONDITION_WH_END)
         )
     {
         sLog->outErrorDb("SourceEntry %u in `condition` table has an invalid ConditionType (%u), ignoring.",
@@ -1639,7 +1639,7 @@ bool ConditionMgr::isConditionTypeValid(Condition* cond)
         case CONDITION_PET_TYPE:
         case CONDITION_TAXI:
         case CONDITION_QUESTSTATE:
-            sLog->outErrorDb("SourceEntry %u in `condition` table has a ConditionType that is not yet supported on AzerothCore (%u), ignoring.",
+            sLog->outErrorDb("SourceEntry %u in `condition` table has a ConditionType that is not yet supported on WarheadCore (%u), ignoring.",
                              cond->SourceEntry, uint32(cond->ConditionType));
             return false;
         default:

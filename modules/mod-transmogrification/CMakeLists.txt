@@ -14,12 +14,12 @@
 #
 
 # Add scripts files
-AC_ADD_SCRIPT("${CMAKE_CURRENT_LIST_DIR}/src/Transmogrification_SC.cpp")
-AC_ADD_SCRIPT("${CMAKE_CURRENT_LIST_DIR}/src/Transmogrification.cpp")
-AC_ADD_SCRIPT("${CMAKE_CURRENT_LIST_DIR}/src/Transmogrification.h")
+WH_ADD_SCRIPT("${CMAKE_CURRENT_LIST_DIR}/src/Transmogrification_SC.cpp")
+WH_ADD_SCRIPT("${CMAKE_CURRENT_LIST_DIR}/src/Transmogrification.cpp")
+WH_ADD_SCRIPT("${CMAKE_CURRENT_LIST_DIR}/src/Transmogrification.h")
 
 # Add scripts to script loader
-AC_ADD_SCRIPT_LOADER("Transmogrification" "${CMAKE_CURRENT_LIST_DIR}/src/TransmogrificationLoad.h" "SC_Npc_VisualWeapon")
+WH_ADD_SCRIPT_LOADER("Transmogrification" "${CMAKE_CURRENT_LIST_DIR}/src/TransmogrificationLoad.h" "SC_Npc_VisualWeapon")
 
 # Add config file
-AC_ADD_CONFIG_FILE("${CMAKE_CURRENT_LIST_DIR}/conf/Transmogrification.conf.dist")
+WH_ADD_CONFIG_FILE("${CMAKE_CURRENT_LIST_DIR}/conf/Transmogrification.conf.dist")

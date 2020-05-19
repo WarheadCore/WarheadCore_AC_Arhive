@@ -27,7 +27,7 @@ using namespace boost::process;
 using namespace boost::process::initializers;
 using namespace boost::iostreams;
 
-namespace acore
+namespace warhead
 {
 
 template<typename T>
@@ -254,4 +254,4 @@ std::string SearchExecutableInPath(std::string const& filename)
     }
 }
 
-} // namespace acore
+} // namespace warhead

@@ -417,7 +417,7 @@ LfgCompatibility LFGQueue::CheckCompatibility(Lfg5Guids const& checkWith, const 
     proposal.cancelTime = GameTime::GetGameTime() + LFG_TIME_PROPOSAL;
     proposal.state = LFG_PROPOSAL_INITIATING;
     proposal.leader = 0;
-    proposal.dungeonId = acore::Containers::SelectRandomContainerElement(proposalDungeons);
+    proposal.dungeonId = warhead::Containers::SelectRandomContainerElement(proposalDungeons);
 
     bool leader = false;
     for (LfgRolesMap::const_iterator itRoles = proposalRoles.begin(); itRoles != proposalRoles.end(); ++itRoles)

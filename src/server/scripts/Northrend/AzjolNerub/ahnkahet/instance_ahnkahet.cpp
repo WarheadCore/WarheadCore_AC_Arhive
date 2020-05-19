@@ -288,7 +288,7 @@ class spell_shadow_sickle_periodic_damage : public SpellScriptLoader
                                 PlayerList.push_back(player);
 
                     if (!PlayerList.empty())
-                        caster->CastSpell(acore::Containers::SelectRandomContainerElement(PlayerList), caster->GetMap()->IsHeroic() ? SPELL_SHADOW_SICKLE_H : SPELL_SHADOW_SICKLE, true);
+                        caster->CastSpell(warhead::Containers::SelectRandomContainerElement(PlayerList), caster->GetMap()->IsHeroic() ? SPELL_SHADOW_SICKLE_H : SPELL_SHADOW_SICKLE, true);
 
                 }
             }

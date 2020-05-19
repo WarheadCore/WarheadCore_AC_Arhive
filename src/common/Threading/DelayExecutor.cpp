@@ -96,8 +96,8 @@ int DelayExecutor::start(int num_threads, ACE_Method_Request* pre_svc_hook, ACE_
     queue_.queue()->activate();
 
     // pussywizard:
-    //acore::ThreadPriority tp;
-    //int _priority = tp.getPriority(acore::Priority_Highest);
+    //warhead::ThreadPriority tp;
+    //int _priority = tp.getPriority(warhead::Priority_Highest);
     //if (ACE_Task_Base::activate(THR_NEW_LWP | THR_JOINABLE, num_threads, 0, _priority) == -1)
     //    return -1;
 

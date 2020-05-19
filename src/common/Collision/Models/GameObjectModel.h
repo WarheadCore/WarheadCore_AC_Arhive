@@ -33,7 +33,7 @@ namespace VMAP
 class GameObject;
 struct GameObjectDisplayInfoEntry;
 
-class AC_COMMON_API GameObjectModelOwnerBase
+class WH_COMMON_API GameObjectModelOwnerBase
 {
 public:
     virtual bool IsSpawned() const { return false; }
@@ -46,7 +46,7 @@ public:
     virtual ~GameObjectModelOwnerBase() { }
 };
 
-class AC_COMMON_API GameObjectModel /*, public Intersectable*/
+class WH_COMMON_API GameObjectModel /*, public Intersectable*/
 {
     GameObjectModel() : phasemask(0), iInvScale(0), iScale(0), iModel(nullptr) { }
 
@@ -84,6 +84,6 @@ private:
     std::unique_ptr<GameObjectModelOwnerBase> owner;
 };
 
-AC_COMMON_API void LoadGameObjectModelList(std::string const& dataPath);
+WH_COMMON_API void LoadGameObjectModelList(std::string const& dataPath);
 
 #endif // _GAMEOBJECT_MODEL_H

@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef AZEROTHCORE_TOTEM_H
-#define AZEROTHCORE_TOTEM_H
+#ifndef WH_TOTEM_H
+#define WH_TOTEM_H
 
 #include "TemporarySummon.h"
 

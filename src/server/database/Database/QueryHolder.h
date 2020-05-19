@@ -20,7 +20,7 @@
 
 #include <ace/Future.h>
 
-class AC_DATABASE_API SQLQueryHolder
+class WH_DATABASE_API SQLQueryHolder
 {
     friend class SQLQueryHolderTask;
     private:
@@ -41,7 +41,7 @@ class AC_DATABASE_API SQLQueryHolder
 
 typedef ACE_Future<SQLQueryHolder*> QueryResultHolderFuture;
 
-class AC_DATABASE_API SQLQueryHolderTask : public SQLOperation
+class WH_DATABASE_API SQLQueryHolderTask : public SQLOperation
 {
     private:
         SQLQueryHolder * m_holder;

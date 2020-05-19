@@ -126,7 +126,7 @@ UpdateFetcher::DirectoryStorage UpdateFetcher::ReceiveIncludedDirectories() cons
 
     std::vector<std::string> moduleList;
 
-    Tokenizer _modules(AC_MODULES_LIST, ',');
+    Tokenizer _modules(WH_MODULES_LIST, ',');
     for (auto const& itr : _modules)
         moduleList.push_back(itr);
 

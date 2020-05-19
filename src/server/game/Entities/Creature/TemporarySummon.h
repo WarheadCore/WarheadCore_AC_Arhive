@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef AZEROTHCORE_TEMPSUMMON_H
-#define AZEROTHCORE_TEMPSUMMON_H
+#ifndef WH_TEMPSUMMON_H
+#define WH_TEMPSUMMON_H
 
 #include "Creature.h"
 

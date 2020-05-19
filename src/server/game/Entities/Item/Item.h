@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef AZEROTHCORE_ITEM_H
-#define AZEROTHCORE_ITEM_H
+#ifndef WH_ITEM_H
+#define WH_ITEM_H
 
 #include "Common.h"
 #include "Object.h"

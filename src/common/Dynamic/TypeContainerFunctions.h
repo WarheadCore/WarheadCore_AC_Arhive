@@ -28,7 +28,7 @@
 #include "Dynamic/TypeList.h"
 #include <map>
 
-namespace acore
+namespace warhead
 {
     /* ContainerMapList Helpers */
     // count functions

@@ -31,7 +31,7 @@
 #include <time.h>
 
 // Root of ByteBuffer exception hierarchy
-class AC_COMMON_API ByteBufferException : public std::exception
+class WH_COMMON_API ByteBufferException : public std::exception
 {
 public:
     ~ByteBufferException() throw() { }
@@ -45,7 +45,7 @@ private:
     std::string msg_;
 };
 
-class AC_COMMON_API ByteBufferPositionException : public ByteBufferException
+class WH_COMMON_API ByteBufferPositionException : public ByteBufferException
 {
 public:
     ByteBufferPositionException(bool add, size_t pos, size_t size, size_t valueSize);
@@ -53,7 +53,7 @@ public:
     ~ByteBufferPositionException() throw() { }
 };
 
-class AC_COMMON_API ByteBufferSourceException : public ByteBufferException
+class WH_COMMON_API ByteBufferSourceException : public ByteBufferException
 {
 public:
     ByteBufferSourceException(size_t pos, size_t size, size_t valueSize);
@@ -61,7 +61,7 @@ public:
     ~ByteBufferSourceException() throw() { }
 };
 
-class AC_COMMON_API ByteBuffer
+class WH_COMMON_API ByteBuffer
 {
     public:
         const static size_t DEFAULT_SIZE = 0x1000;

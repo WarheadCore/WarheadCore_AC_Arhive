@@ -20,7 +20,7 @@
 
 #include "Log.h"
 
-class AC_DATABASE_API MySQL
+class WH_DATABASE_API MySQL
 {
     public:
         /*! Create a thread on the MySQL server to mirrior the calling thread,

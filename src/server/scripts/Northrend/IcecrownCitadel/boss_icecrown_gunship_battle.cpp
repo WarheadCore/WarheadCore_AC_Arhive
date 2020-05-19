@@ -2217,7 +2217,7 @@ class spell_igb_explosion : public SpellScriptLoader
             void SelectTarget(std::list<WorldObject*>& targets)
             {
                 targets.remove_if(IgbExplosionCheck(GetCaster()));
-                acore::Containers::RandomResizeList(targets, 1);
+                warhead::Containers::RandomResizeList(targets, 1);
             }
 
             void Register()
@@ -2486,7 +2486,7 @@ class spell_igb_burning_pitch_selector : public SpellScriptLoader
                 targets.remove_if(BurningPitchFilterCheck(teamId == TEAM_HORDE ? GO_ORGRIMS_HAMMER_H : GO_THE_SKYBREAKER_A));
                 if (!targets.empty())
                 {
-                    WorldObject* target = acore::Containers::SelectRandomContainerElement(targets);
+                    WorldObject* target = warhead::Containers::SelectRandomContainerElement(targets);
                     targets.clear();
                     targets.push_back(target);
                 }
@@ -2571,7 +2571,7 @@ class spell_igb_rocket_artillery : public SpellScriptLoader
 
                 if (!targets.empty())
                 {
-                    WorldObject* target = acore::Containers::SelectRandomContainerElement(targets);
+                    WorldObject* target = warhead::Containers::SelectRandomContainerElement(targets);
                     targets.clear();
                     targets.push_back(target);
                 }

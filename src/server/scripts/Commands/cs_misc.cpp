@@ -186,7 +186,7 @@ public:
             }
         }
         ASSERT(!allowedArenas.empty());
-        BattlegroundTypeId randomizedArenaBgTypeId = acore::Containers::SelectRandomContainerElement(allowedArenas);
+        BattlegroundTypeId randomizedArenaBgTypeId = warhead::Containers::SelectRandomContainerElement(allowedArenas);
 
         uint8 count = 0;
         if (i != tokens.end())
@@ -407,7 +407,7 @@ public:
             }
         }
 
-        CellCoord cellCoord = acore::ComputeCellCoord(object->GetPositionX(), object->GetPositionY());
+        CellCoord cellCoord = warhead::ComputeCellCoord(object->GetPositionX(), object->GetPositionY());
         Cell cell(cellCoord);
 
         uint32 zoneId, areaId;
@@ -426,7 +426,7 @@ public:
         float groundZ = map->GetHeight(object->GetPhaseMask(), object->GetPositionX(), object->GetPositionY(), MAX_HEIGHT);
         float floorZ = map->GetHeight(object->GetPhaseMask(), object->GetPositionX(), object->GetPositionY(), object->GetPositionZ());
 
-        GridCoord gridCoord = acore::ComputeGridCoord(object->GetPositionX(), object->GetPositionY());
+        GridCoord gridCoord = warhead::ComputeGridCoord(object->GetPositionX(), object->GetPositionY());
 
         // 63? WHY?
         int gridX = 63 - gridCoord.x_coord;
@@ -2136,14 +2136,14 @@ public:
             return true;
         }
 
-        CellCoord p(acore::ComputeCellCoord(player->GetPositionX(), player->GetPositionY()));
+        CellCoord p(warhead::ComputeCellCoord(player->GetPositionX(), player->GetPositionY()));
         Cell cell(p);
         cell.SetNoCreate();
 
-        acore::RespawnDo u_do;
-        acore::WorldObjectWorker<acore::RespawnDo> worker(player, u_do);
+        warhead::RespawnDo u_do;
+        warhead::WorldObjectWorker<warhead::RespawnDo> worker(player, u_do);
 
-        TypeContainerVisitor<acore::WorldObjectWorker<acore::RespawnDo>, GridTypeMapContainer > obj_worker(worker);
+        TypeContainerVisitor<warhead::WorldObjectWorker<warhead::RespawnDo>, GridTypeMapContainer > obj_worker(worker);
         cell.Visit(p, obj_worker, *player->GetMap(), *player, player->GetGridActivationRange());
 
         return true;

@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef AZEROTHCORE_GUILD_H
-#define AZEROTHCORE_GUILD_H
+#ifndef WH_GUILD_H
+#define WH_GUILD_H
 
 #include "World.h"
 #include "Item.h"

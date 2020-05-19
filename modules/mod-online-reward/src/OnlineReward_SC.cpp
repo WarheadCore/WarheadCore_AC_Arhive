@@ -223,9 +223,9 @@ private:
                 MailItemsVector ListItemPairs;
                 ListItemPairs.push_back(MailItemsPair(ItemID, Count));
 
-                Subject = acore::StringFormat("Reward for online %s", PlayedTimeSecStr.c_str());
-                Text = acore::StringFormat("Привет, %s!\nВы играете на нашем сервере уже более %s. Пожалуйста примите подарок", player->GetName().c_str(), PlayedTimeSecStr.c_str());
-                SelfMessage = acore::StringFormat("You were rewarded for online (%s). You can get the award at the post office.", PlayedTimeSecStr.c_str());
+                Subject = warhead::StringFormat("Reward for online %s", PlayedTimeSecStr.c_str());
+                Text = warhead::StringFormat("Привет, %s!\nВы играете на нашем сервере уже более %s. Пожалуйста примите подарок", player->GetName().c_str(), PlayedTimeSecStr.c_str());
+                SelfMessage = warhead::StringFormat("You were rewarded for online (%s). You can get the award at the post office.", PlayedTimeSecStr.c_str());
 
                 handler.PSendSysMessage("%s", SelfMessage.c_str());
                 SendMailItems(player, Subject, Text, 0, ListItemPairs);
@@ -318,9 +318,9 @@ private:
                 MailItemsVector ListItemPairs;
                 ListItemPairs.push_back(MailItemsPair(CONF_GET_INT("OnlineReward.PerTime.ItemID"), CONF_GET_INT("OnlineReward.PerTime.ItemCount")));
 
-                Subject = acore::StringFormat("Reward for online %s", PlayedTimeSecStr.c_str());
-                Text = acore::StringFormat("Привет, %s!\nВы играете на нашем сервере уже более %s. Пожалуйста примите подарок", player->GetName().c_str(), PlayedTimeSecStr.c_str());
-                SelfMessage = acore::StringFormat("You were rewarded for online (%s). You can get the award at the post office.", PlayedTimeSecStr.c_str());
+                Subject = warhead::StringFormat("Reward for online %s", PlayedTimeSecStr.c_str());
+                Text = warhead::StringFormat("Привет, %s!\nВы играете на нашем сервере уже более %s. Пожалуйста примите подарок", player->GetName().c_str(), PlayedTimeSecStr.c_str());
+                SelfMessage = warhead::StringFormat("You were rewarded for online (%s). You can get the award at the post office.", PlayedTimeSecStr.c_str());
 
                 handler.PSendSysMessage("%s", SelfMessage.c_str());
                 SendMailItems(player, Subject, Text, 0, ListItemPairs);

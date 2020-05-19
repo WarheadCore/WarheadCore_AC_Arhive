@@ -501,8 +501,8 @@ public:
         {
             float radius = 50.0f;
             std::list<Player*> players;
-            acore::AnyPlayerInObjectRangeCheck checker(me, radius);
-            acore::PlayerListSearcher<acore::AnyPlayerInObjectRangeCheck> searcher(me, players, checker);
+            warhead::AnyPlayerInObjectRangeCheck checker(me, radius);
+            warhead::PlayerListSearcher<warhead::AnyPlayerInObjectRangeCheck> searcher(me, players, checker);
             me->VisitNearbyWorldObject(radius, searcher);
 
             for (std::list<Player*>::const_iterator itr = players.begin(); itr != players.end(); ++itr)

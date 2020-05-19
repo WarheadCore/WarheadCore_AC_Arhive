@@ -213,7 +213,7 @@ class spell_gurtogg_bloodboil : public SpellScriptLoader
                 if (targets.empty())
                     return;
 
-                targets.sort(acore::ObjectDistanceOrderPred(GetCaster(), false));
+                targets.sort(warhead::ObjectDistanceOrderPred(GetCaster(), false));
                 if (targets.size() > GetSpellValue()->MaxAffectedTargets)
                 {
                     std::list<WorldObject*>::iterator itr = targets.begin();

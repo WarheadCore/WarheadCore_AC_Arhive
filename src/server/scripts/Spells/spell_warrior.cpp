@@ -179,7 +179,7 @@ class spell_warr_improved_spell_reflection_trigger : public SpellScriptLoader
             void FilterTargets(std::list<WorldObject*>& unitList)
             {
                 GetCaster()->RemoveAurasDueToSpell(SPELL_WARRIOR_SPELL_REFLECTION);
-                unitList.sort(acore::ObjectDistanceOrderPred(GetCaster()));
+                unitList.sort(warhead::ObjectDistanceOrderPred(GetCaster()));
                 while (unitList.size() > GetSpellValue()->MaxAffectedTargets)
                     unitList.pop_back();
             }

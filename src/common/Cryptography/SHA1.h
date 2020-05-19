@@ -24,7 +24,7 @@
 
 class BigNumber;
 
-class AC_COMMON_API SHA1Hash
+class WH_COMMON_API SHA1Hash
 {
     public:
         SHA1Hash();
@@ -47,6 +47,6 @@ class AC_COMMON_API SHA1Hash
 };
 
 /// Returns the SHA1 hash of the given content as hex string.
-AC_COMMON_API std::string CalculateSHA1Hash(std::string const& content);
+WH_COMMON_API std::string CalculateSHA1Hash(std::string const& content);
 #endif
 

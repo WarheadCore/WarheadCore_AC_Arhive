@@ -91,7 +91,7 @@ bool Corpse::Create(uint32 guidlow, Player* owner)
     SetObjectScale(1);
     SetUInt64Value(CORPSE_FIELD_OWNER, owner->GetGUID());
 
-    _gridCoord = acore::ComputeGridCoord(GetPositionX(), GetPositionY());
+    _gridCoord = warhead::ComputeGridCoord(GetPositionX(), GetPositionY());
 
     return true;
 }
@@ -185,7 +185,7 @@ bool Corpse::LoadCorpseFromDB(uint32 guid, Field* fields)
         return false;
     }
 
-    _gridCoord = acore::ComputeGridCoord(GetPositionX(), GetPositionY());
+    _gridCoord = warhead::ComputeGridCoord(GetPositionX(), GetPositionY());
     return true;
 }
 

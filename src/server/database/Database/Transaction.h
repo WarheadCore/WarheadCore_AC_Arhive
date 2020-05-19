@@ -50,10 +50,10 @@ class Transaction
         bool _cleanedUp;
 
 };
-typedef acore::AutoPtr<Transaction, ACE_Thread_Mutex> SQLTransaction;
+typedef warhead::AutoPtr<Transaction, ACE_Thread_Mutex> SQLTransaction;
 
 /*! Low level class*/
-class AC_DATABASE_API TransactionTask : public SQLOperation
+class WH_DATABASE_API TransactionTask : public SQLOperation
 {
     template <class T> friend class DatabaseWorkerPool;
     friend class DatabaseWorker;

@@ -437,7 +437,7 @@ class spell_sha_ancestral_awakening_proc : public SpellScriptLoader
                 if (targets.size() < 2)
                     return;
 
-                targets.sort(acore::HealthPctOrderPred());
+                targets.sort(warhead::HealthPctOrderPred());
 
                 WorldObject* target = targets.front();
                 targets.clear();
@@ -529,8 +529,8 @@ class spell_sha_bloodlust : public SpellScriptLoader
 
             void RemoveInvalidTargets(std::list<WorldObject*>& targets)
             {
-                targets.remove_if(acore::UnitAuraCheck(true, SPELL_SHAMAN_SATED));
-                targets.remove_if(acore::UnitAuraCheck(true, SPELL_SHAMAN_EXHAUSTION));
+                targets.remove_if(warhead::UnitAuraCheck(true, SPELL_SHAMAN_SATED));
+                targets.remove_if(warhead::UnitAuraCheck(true, SPELL_SHAMAN_EXHAUSTION));
             }
 
             void ApplyDebuff()
@@ -992,8 +992,8 @@ class spell_sha_heroism : public SpellScriptLoader
 
             void RemoveInvalidTargets(std::list<WorldObject*>& targets)
             {
-                targets.remove_if(acore::UnitAuraCheck(true, SPELL_SHAMAN_EXHAUSTION));
-                targets.remove_if(acore::UnitAuraCheck(true, SPELL_SHAMAN_SATED));
+                targets.remove_if(warhead::UnitAuraCheck(true, SPELL_SHAMAN_EXHAUSTION));
+                targets.remove_if(warhead::UnitAuraCheck(true, SPELL_SHAMAN_SATED));
             }
 
             void ApplyDebuff()

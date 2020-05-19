@@ -45,7 +45,7 @@ public:
         if (!name)
             name = "Unknown creature";
 
-        std::string message = acore::StringFormat("|cffff0000# |cff7bbef7%s|r и его группа убили мирового босса |cffff0000%s|r", player->GetName(), name);       
+        std::string message = warhead::StringFormat("|cffff0000# |cff7bbef7%s|r и его группа убили мирового босса |cffff0000%s|r", player->GetName(), name);       
 
         sWorld->SendServerMessage(SERVER_MSG_STRING, message.c_str());
 	};

@@ -24,7 +24,7 @@
 typedef ACE_Future<QueryResult> QueryResultFuture;
 
 /*! Raw, ad-hoc query. */
-class AC_DATABASE_API BasicStatementTask : public SQLOperation
+class WH_DATABASE_API BasicStatementTask : public SQLOperation
 {
     public:
         BasicStatementTask(const char* sql);

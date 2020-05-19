@@ -482,12 +482,12 @@ class spell_mistress_kiss_area : public SpellScriptLoader
             void FilterTargets(std::list<WorldObject*>& targets)
             {
                 // get a list of players with mana
-                targets.remove_if(acore::ObjectTypeIdCheck(TYPEID_PLAYER, false));
-                targets.remove_if(acore::PowerCheck(POWER_MANA, false));
+                targets.remove_if(warhead::ObjectTypeIdCheck(TYPEID_PLAYER, false));
+                targets.remove_if(warhead::PowerCheck(POWER_MANA, false));
                 if (targets.empty())
                     return;
 
-                WorldObject* target = acore::Containers::SelectRandomContainerElement(targets);
+                WorldObject* target = warhead::Containers::SelectRandomContainerElement(targets);
                 targets.clear();
                 targets.push_back(target);
             }

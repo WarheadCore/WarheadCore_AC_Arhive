@@ -36,7 +36,7 @@ enum ConnectionFlags
     CONNECTION_BOTH = CONNECTION_ASYNC | CONNECTION_SYNCH
 };
 
-struct AC_DATABASE_API MySQLConnectionInfo
+struct WH_DATABASE_API MySQLConnectionInfo
 {
     MySQLConnectionInfo() { }
     MySQLConnectionInfo(const std::string& infoString)
@@ -64,7 +64,7 @@ struct AC_DATABASE_API MySQLConnectionInfo
 
 typedef std::map<uint32 /*index*/, std::pair<std::string /*query*/, ConnectionFlags /*sync/async*/> > PreparedStatementMap;
 
-class AC_DATABASE_API MySQLConnection
+class WH_DATABASE_API MySQLConnection
 {
     template <class T> friend class DatabaseWorkerPool;
     friend class PingOperation;

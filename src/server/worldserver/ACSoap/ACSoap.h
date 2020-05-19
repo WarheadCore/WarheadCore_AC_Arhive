@@ -25,7 +25,7 @@
 #include <ace/Task.h>
 #include <Threading.h>
 
-class ACSoapRunnable : public acore::Runnable
+class ACSoapRunnable : public warhead::Runnable
 {
     public:
         ACSoapRunnable() : _port(0) { }

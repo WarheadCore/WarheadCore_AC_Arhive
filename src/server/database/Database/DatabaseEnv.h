@@ -38,12 +38,12 @@
 #include "WorldDatabase.h"
 
 /// Accessor to the world database
-AC_DATABASE_API extern WorldDatabaseWorkerPool WorldDatabase;
+WH_DATABASE_API extern WorldDatabaseWorkerPool WorldDatabase;
 
 /// Accessor to the character database
-AC_DATABASE_API extern CharacterDatabaseWorkerPool CharacterDatabase;
+WH_DATABASE_API extern CharacterDatabaseWorkerPool CharacterDatabase;
 
 /// Accessor to the realm/login database
-AC_DATABASE_API extern LoginDatabaseWorkerPool LoginDatabase;
+WH_DATABASE_API extern LoginDatabaseWorkerPool LoginDatabase;
 
 #endif

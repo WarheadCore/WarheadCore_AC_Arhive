@@ -15,15 +15,15 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef AZEROTHCORE_FIELD_H
-#define AZEROTHCORE_FIELD_H
+#ifndef WH_FIELD_H
+#define WH_FIELD_H
 
 #include "Common.h"
 #include "Log.h"
 
 #include <mysql.h>
 
-class AC_DATABASE_API Field
+class WH_DATABASE_API Field
 {
     friend class ResultSet;
     friend class PreparedResultSet;

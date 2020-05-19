@@ -204,9 +204,9 @@ private:
         MailItemsVector ListItemPairs;
         ListItemPairs.push_back(MailItemsPair(levelReward->ItemID, levelReward->ItemCount));
 
-        Subject = acore::StringFormat("Reward for level up to %u", Level);
-        Text = acore::StringFormat("You increased level to %u and get a reward!", Level);
-        SelfMessage = acore::StringFormat("You increased level to %u and get a reward!", Level);
+        Subject = warhead::StringFormat("Reward for level up to %u", Level);
+        Text = warhead::StringFormat("You increased level to %u and get a reward!", Level);
+        SelfMessage = warhead::StringFormat("You increased level to %u and get a reward!", Level);
 
         handler.PSendSysMessage("%s", SelfMessage.c_str());
         SendMailItems(player, Subject, Text, levelReward->Money, ListItemPairs);

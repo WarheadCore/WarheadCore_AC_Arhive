@@ -14,7 +14,7 @@
 #
 
 # Set projectname (must be done AFTER setting configurationtypes)
-project(AzerothCore)
+project(WarheadCore)
 
 # Require a min version Cmake
 cmake_minimum_required(VERSION 3.8)

@@ -21,7 +21,7 @@
 #include "Define.h"
 #include <ace/Event_Handler.h>
 
-namespace acore
+namespace warhead
 {
 
 /// Handle termination signals

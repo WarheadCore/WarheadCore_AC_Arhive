@@ -628,7 +628,7 @@ class spell_reliquary_of_souls_fixate : public SpellScriptLoader
                 if (targets.empty())
                     return;
 
-                targets.sort(acore::ObjectDistanceOrderPred(GetCaster()));
+                targets.sort(warhead::ObjectDistanceOrderPred(GetCaster()));
                 WorldObject* target = targets.front();
                 targets.clear();
                 targets.push_back(target);

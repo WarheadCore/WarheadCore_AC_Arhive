@@ -346,7 +346,7 @@ void GameConfig::LoadStringConfigs(bool reload /*= false*/)
     AddStringConfig("DataDir", "./");
 
     AddStringConfig("PlayerStart.String", "");
-    AddStringConfig("Motd", "Welcome to an AzerothCore server");
+    AddStringConfig("Motd", "Welcome to an WarheadCore server");
 
     LOG_INFO("config", "> Loaded %u string configs", static_cast<uint32>(_stringConfigs.size()));
 }
