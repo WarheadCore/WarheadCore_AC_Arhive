@@ -256,7 +256,6 @@ bool ConfigMgr::LoadModulesConfigs()
     moduleConfigFiles.clear();
 
     std::string configModulesFolder = "modules/";
-    std::string applicationName = "worldserver";
 
     for (auto const& itr : _modulesConfigFiles)
     {
@@ -295,7 +294,7 @@ bool ConfigMgr::LoadModulesConfigs()
 
     // Print modules configurations
     LOG_INFO("config", "");
-    LOG_INFO("config", "Using configuration for modules:");
+    LOG_INFO("config", "Using modules configuration:");
 
     for (auto const& itr : moduleConfigFiles)
         LOG_INFO("config", "> Module (%s) using (%s)", itr.first.c_str(), itr.second.c_str());
