@@ -10,21 +10,11 @@ jobs:
       matrix:
         compiler: [clang7]
     runs-on: ubuntu-18.04
-    name: ${{ matrix.compiler }}
+    name: Import db
     env:
       COMPILER: ${{ matrix.compiler }}
     steps:
-      - uses: actions/checkout@v2
-      - name: Cache
-        uses: actions/cache@v1.1.2
-        with:
-          path: /home/runner/.ccache
-          key: ccache:${{ matrix.compiler }}:${{ matrix.modules }}-modules:${{ github.ref }}:${{ github.sha }}
-          restore-keys: |
-            ccache:${{ matrix.compiler }}:${{ matrix.modules }}-modules:${{ github.ref }}
-            ccache:${{ matrix.compiler }}:${{ matrix.modules }}-modules
-            ccache:${{ matrix.compiler }}
-            ccache
+      - uses: actions/checkout@v2      
       - name: Configure OS
         run: source ./apps/ci/ci-install.sh
         env:
