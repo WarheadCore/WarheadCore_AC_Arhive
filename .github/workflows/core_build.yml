@@ -31,9 +31,7 @@ jobs:
       - name: Configure OS
         run: source ./apps/ci/ci-install.sh
         env:
-          CONTINUOUS_INTEGRATION: true
-      - name: Import db
-        run: source ./apps/ci/ci-import-db.sh
+          CONTINUOUS_INTEGRATION: true      
       - name: Build
         run: source ./apps/ci/ci-compile.sh
       - name: Dry run
