@@ -19,6 +19,7 @@
 #include "Errors.h"
 #include "Log.h"
 #include "Util.h"
+#include "StringFormat.h"
 
 ConfigMgr* ConfigMgr::instance()
 {
@@ -192,6 +193,17 @@ std::list<std::string> ConfigMgr::GetKeysByString(std::string const& name)
     return keys;
 }
 
+std::string const ConfigMgr::GetConfigPath()
+{
+    std::string configPath = std::string(_CONF_DIR);
+
+#if WH_PLATFORM == WH_PLATFORM_WINDOWS
+    configPath = std::string("configs/");
+#endif
+
+    return configPath;
+}
+
 void ConfigMgr::SetConfigList(std::string const& fileName, std::string const& modulesConfigList /*= ""*/)
 {
     _initConfigFile = fileName;
@@ -210,20 +222,21 @@ void ConfigMgr::SetConfigList(std::string const& fileName, std::string const& mo
 bool ConfigMgr::LoadAppConfigs(std::string const& applicationName /*= "worldserver"*/)
 {
     // #1 - Load init config file .conf.dist
-    if (!sConfigMgr->LoadInitial(_initConfigFile + ".dist"))
+    if (!sConfigMgr->LoadInitial(GetConfigPath() + _initConfigFile + ".dist"))
     {
-        printf("Load config error. Invalid or missing dist configuration file: %s", std::string(_initConfigFile + ".dist").c_str());
-        printf("Verify that the file exists and has \'[%s]' written in the top of the file!", applicationName.c_str());
+        SYS_LOG_ERROR("");
+        SYS_LOG_ERROR("Load config error. Invalid or missing dist configuration file: %s", std::string(GetConfigPath() + _initConfigFile + ".dist").c_str());
+        SYS_LOG_ERROR("Verify that the file exists and has \'[%s]' written in the top of the file!", applicationName.c_str());
 
         return false;
     }
 
     // #2 - Load .conf file
-    if (!sConfigMgr->LoadMore(_initConfigFile))
+    if (!sConfigMgr->LoadMore(GetConfigPath() + _initConfigFile))
     {
-        sLog->outString("");
-        sLog->outString("Load config error. Invalid or missing configuration file: %s", _initConfigFile.c_str());
-        sLog->outString("Verify that the file exists and has \'[%s]' written in the top of the file!", applicationName.c_str());
+        SYS_LOG_ERROR("");
+        SYS_LOG_ERROR("Load config error. Invalid or missing configuration file: %s", GetConfigPath() + _initConfigFile.c_str());
+        SYS_LOG_ERROR("Verify that the file exists and has \'[%s]' written in the top of the file!", applicationName.c_str());
 
         return false;
     }
@@ -242,7 +255,7 @@ bool ConfigMgr::LoadModulesConfigs()
 
     moduleConfigFiles.clear();
 
-    std::string configPath = _CONF_DIR;
+    std::string configModulesFolder = "modules/";
     std::string applicationName = "worldserver";
 
     for (auto const& itr : _modulesConfigFiles)
@@ -252,33 +265,20 @@ bool ConfigMgr::LoadModulesConfigs()
 
         std::string moduleName = itr;
         std::string configFile = std::string(itr) + std::string(".conf");
-        std::string defaultConfig = configPath + "/" + configFile;
-
-#if WH_PLATFORM == WH_PLATFORM_WINDOWS
-        defaultConfig = configFile;
-#endif
-
+        std::string defaultConfig = GetConfigPath() + configModulesFolder + configFile;
         std::string ConfigFileDist = defaultConfig + std::string(".dist");
 
         // Load .conf.dist config
-        if (!sConfigMgr->LoadMore(ConfigFileDist.c_str()))
+        if (!sConfigMgr->LoadMore(ConfigFileDist))
         {
             IsExistDistConfig = false;
 
-            sLog->outString("");
-            sLog->outError("Load config error. Invalid or missing dist configuration file: %s", ConfigFileDist.c_str());
-            sLog->outError("Verify that the file exists and has \'[%s]' written in the top of the file!", applicationName.c_str());
+            LOG_ERROR("config", "Invalid or missing dist configuration file: %s", ConfigFileDist.c_str());
         }
 
         // Load .conf config
-        if (!sConfigMgr->LoadMore(defaultConfig.c_str()))
-        {
+        if (!sConfigMgr->LoadMore(defaultConfig))
             IsExistDefaultConfig = false;
-
-            sLog->outString("");
-            sLog->outString("Load config error. Invalid or missing configuration file: %s", defaultConfig.c_str());
-            sLog->outString("Verify that the file exists and has \'[%s]' written in the top of the file!", applicationName.c_str());
-        }
 
         // #1 - Not exist .conf and exist .conf.dist
         if (!IsExistDefaultConfig && IsExistDistConfig)
@@ -294,13 +294,13 @@ bool ConfigMgr::LoadModulesConfigs()
         return false;
 
     // Print modules configurations
-    sLog->outString();
-    sLog->outString("Using configuration for modules:");
+    LOG_INFO("config", "");
+    LOG_INFO("config", "Using configuration for modules:");
 
     for (auto const& itr : moduleConfigFiles)
-        sLog->outString("> Module (%s) using (%s)", itr.first.c_str(), itr.second.c_str());
+        LOG_INFO("config", "> Module (%s) using (%s)", itr.first.c_str(), itr.second.c_str());
 
-    sLog->outString();
+    LOG_INFO("config", "");
 
     return true;
 }

@@ -68,6 +68,8 @@ public:
 
     void SetConfigList(std::string const& fileName, std::string const& modulesConfigList = "");
 
+    std::string const GetConfigPath();
+
 private:
     bool dryRun = false;
 
