@@ -10,9 +10,7 @@ jobs:
       matrix:
         compiler: [clang7]
     runs-on: ubuntu-18.04
-    name: Import db
-    env:
-      COMPILER: ${{ matrix.compiler }}
+    name: Import db    
     steps:
       - uses: actions/checkout@v2
       - name: Configure OS
