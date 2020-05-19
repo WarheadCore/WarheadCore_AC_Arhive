@@ -4,7 +4,6 @@ on:
     branches: 
       - '**'         # matches every branch
       - '!coverity_scan'   # excludes coverity_scan
-  pull_request:
 
 jobs:
   build:
