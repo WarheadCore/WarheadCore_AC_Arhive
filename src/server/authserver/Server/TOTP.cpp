@@ -60,7 +60,7 @@ int base32_decode(const char* encoded, char* result, int bufSize)
     return count;
 }
 
-#define HMWH_RES_SIZE 20
+#define HMAC_RES_SIZE 20
 
 namespace TOTP
 {
@@ -70,8 +70,8 @@ namespace TOTP
         int bufsize = (keySize + 7)/8*5;
         char* encoded = new char[bufsize];
         memset(encoded, 0, bufsize);
-        unsigned int hmacResSize = HMWH_RES_SIZE;
-        unsigned char hmacRes[HMWH_RES_SIZE];
+        unsigned int hmacResSize = HMAC_RES_SIZE;
+        unsigned char hmacRes[HMAC_RES_SIZE];
         unsigned long timestamp = time(NULL)/30;
         unsigned char challenge[8];
          for (int i = 8; i--;timestamp >>= 8)

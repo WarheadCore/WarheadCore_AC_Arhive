@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _AUTH_HMWH_H
-#define _AUTH_HMWH_H
+#ifndef _AUTH_HMAC_H
+#define _AUTH_HMAC_H
 
 #include "Define.h"
 #include <string>
