@@ -34,5 +34,7 @@ jobs:
           CONTINUOUS_INTEGRATION: true      
       - name: Build
         run: source ./apps/ci/ci-compile.sh
+      - name: Import DB
+        run: source ./apps/ci/ci-worldserver-import-db.sh
       - name: Dry run
         run: source ./apps/ci/ci-worldserver-dry-run.sh
