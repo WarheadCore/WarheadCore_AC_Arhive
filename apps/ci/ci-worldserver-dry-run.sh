@@ -2,4 +2,4 @@
 
 set -e
 
-timeout 5m ./worldserver --dry-run
+(cd ./env/dist/bin/ && timeout 5m ./worldserver --dry-run)
