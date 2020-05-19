@@ -29,7 +29,7 @@ jobs:
             ccache:${{ matrix.compiler }}
             ccache
       - name: Configure OS
-        run: source ./apps/ci/ci-install.sh
+        run: source ./apps/ci/ci-install.sh core-build
         env:
           CONTINUOUS_INTEGRATION: true      
       - name: Build

@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Configure OS
-        run: source ./apps/ci/ci-install.sh
+        run: source ./apps/ci/ci-install.sh import-db
         env:
           CONTINUOUS_INTEGRATION: true
       - name: Import db
