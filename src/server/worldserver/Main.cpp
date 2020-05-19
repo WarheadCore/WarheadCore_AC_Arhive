@@ -615,6 +615,9 @@ bool _StartDB()
     if (!loader.Load())
         return false;
 
+    if (sConfigMgr->isDryRun())
+        acore::Thread::Sleep(5000);
+
     ///- Get the realm Id from the configuration file
     realmID = sConfigMgr->GetIntDefault("RealmID", 0);
     if (!realmID)
