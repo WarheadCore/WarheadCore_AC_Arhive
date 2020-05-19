@@ -35,7 +35,7 @@ DB_WORLD_CONF="MYSQL_USER='root'; MYSQL_PASS='root'; MYSQL_HOST='localhost';"
 CONFIG_SH
 
 time sudo apt-get install -y ccache cmake make gcc g++ clang \
-  libssl-dev libbz2-dev libreadline-dev libncurses-dev libace-6.* libace-dev \  
+  libssl-dev libbz2-dev libreadline-dev libncurses-dev libace-6.* libace-dev \
   libboost-system1.65-dev libboost-filesystem1.65-dev libboost-thread1.65-dev libboost-program-options1.65-dev libboost-iostreams1.65-dev
 
 time sudo apt-get install -y clang-7
