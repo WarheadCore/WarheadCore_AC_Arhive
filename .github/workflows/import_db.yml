@@ -6,13 +6,9 @@ on:
 jobs:
   build:
     strategy:
-      fail-fast: false
-      matrix:
-        compiler: [clang7]
+      fail-fast: false      
     runs-on: ubuntu-18.04
-    name: Import db
-    env:
-      COMPILER: ${{ matrix.compiler }}
+    name: Import db    
     steps:
       - uses: actions/checkout@v2
       - name: Configure OS
