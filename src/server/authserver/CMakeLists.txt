@@ -72,12 +72,12 @@ if( WIN32 )
   if ( MSVC )
     add_custom_command(TARGET authserver
       POST_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/authserver.conf.dist ${CMAKE_BINARY_DIR}/bin/$(ConfigurationName)/
+      COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/authserver.conf.dist ${CMAKE_BINARY_DIR}/bin/$(ConfigurationName)/configs/
     )
   elseif ( MINGW )
     add_custom_command(TARGET authserver
       POST_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/authserver.conf.dist ${CMAKE_BINARY_DIR}/bin/
+      COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/authserver.conf.dist ${CMAKE_BINARY_DIR}/bin/configs/
     )
   endif()
 endif()
@@ -88,7 +88,7 @@ elseif( WIN32 )
   install(TARGETS authserver DESTINATION "${CMAKE_INSTALL_PREFIX}")
 endif()
 
-install(FILES  authserver.conf.dist DESTINATION ${CONF_DIR})
+install(FILES authserver.conf.dist DESTINATION ${CONF_DIR}/configs/)
 
 # Generate precompiled header
 if (USE_COREPCH)
