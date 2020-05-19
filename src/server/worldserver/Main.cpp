@@ -274,6 +274,7 @@ extern int main(int argc, char** argv)
     ///- Command line parsing to get the configuration file name
     char const* configFile = _ACORE_CORE_CONFIG;
     int c = 1;
+    bool isImportDBOnly = false;
 
     while (c < argc)
     {
@@ -281,6 +282,9 @@ extern int main(int argc, char** argv)
         {
             sConfigMgr->setDryRun(true);
         }
+
+        if (!strcmp(argv[c], "--import-db"))
+            isImportDBOnly = true;
 
         if (!strcmp(argv[c], "-c"))
         {
@@ -369,6 +373,9 @@ extern int main(int argc, char** argv)
     ///- Start the databases
     if (!_StartDB())
         return 1;
+
+    if (isImportDBOnly)
+        exit(0);
 
     // set server offline (not connectable)
     LoginDatabase.DirectPExecute("UPDATE realmlist SET flag = (flag & ~%u) | %u WHERE id = '%d'", REALM_FLAG_OFFLINE, REALM_FLAG_INVALID, realmID);
