@@ -1,4 +1,4 @@
-name: core-build
+name: import-db
 on:
   push:
   pull_request:
@@ -7,31 +7,9 @@ jobs:
   build:
     strategy:
       fail-fast: false
-      matrix:
-        compiler: [clang6, clang7]
     runs-on: ubuntu-18.04
-    name: ${{ matrix.compiler }}
-    env:
-      COMPILER: ${{ matrix.compiler }}
+    name: Import DB   
     steps:
       - uses: actions/checkout@v2
-      - name: Cache
-        uses: actions/cache@v1.1.2
-        with:
-          path: /home/runner/.ccache
-          key: ccache:${{ matrix.compiler }}:${{ matrix.modules }}-modules:${{ github.ref }}:${{ github.sha }}
-          restore-keys: |
-            ccache:${{ matrix.compiler }}:${{ matrix.modules }}-modules:${{ github.ref }}
-            ccache:${{ matrix.compiler }}:${{ matrix.modules }}-modules
-            ccache:${{ matrix.compiler }}
-            ccache
-      - name: Configure OS
-        run: source ./apps/ci/ci-install.sh
-        env:
-          CONTINUOUS_INTEGRATION: true
       - name: Import db
         run: source ./apps/ci/ci-import-db.sh
-      - name: Build
-        run: source ./apps/ci/ci-compile.sh
-      - name: Dry run
-        run: source ./apps/ci/ci-worldserver-dry-run.sh
