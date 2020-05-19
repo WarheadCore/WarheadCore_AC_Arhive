@@ -48,3 +48,5 @@ time sudo apt-get install -y clang-7
   exit 1
     ;;
 esac
+
+sudo systemctl start mysql
