@@ -334,7 +334,9 @@ extern int main(int argc, char** argv)
         ++c;
     }
 
-    sConfigMgr->SetConfigList(std::string(configFile), std::string(CONFIG_FILE_LIST));
+    SYS_LOG_INFO("configFile - (%s)", configFile.c_str());
+
+    sConfigMgr->SetConfigList(configFile, std::string(CONFIG_FILE_LIST));
 
     if (!sConfigMgr->LoadAppConfigs())
         return 1;
