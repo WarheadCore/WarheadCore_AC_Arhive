@@ -36,11 +36,6 @@ GroupSources(${CMAKE_CURRENT_SOURCE_DIR})
 add_executable(worldserver
   ${PRIVATE_SOURCES})
 
-if(NOT WIN32)
-  set_target_properties(worldserver PROPERTIES
-    COMPILE_DEFINITIONS _ACORE_CORE_CONFIG="${CONF_DIR}/worldserver.conf")
-endif()
-
 add_dependencies(worldserver revision.h)
 
 if(UNIX AND NOT NOJEM)
