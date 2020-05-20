@@ -6,6 +6,7 @@
 #include "Log.h"
 #include "GitRevision.h"
 #include "StringFormat.h"
+#include "Config.h"
 #include <ace/Version.h>
 #include <openssl/opensslv.h>
 #include <openssl/crypto.h>
