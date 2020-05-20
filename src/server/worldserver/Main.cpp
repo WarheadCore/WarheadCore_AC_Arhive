@@ -335,6 +335,7 @@ extern int main(int argc, char** argv)
     }
 
     SYS_LOG_INFO("configFile - (%s)", configFile.c_str());
+    SYS_LOG_INFO("GetConfigPath - (%s)", sConfigMgr->GetConfigPath().c_str());
 
     sConfigMgr->SetConfigList(configFile, std::string(CONFIG_FILE_LIST));
 

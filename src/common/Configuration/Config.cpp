@@ -195,10 +195,10 @@ std::list<std::string> ConfigMgr::GetKeysByString(std::string const& name)
 
 std::string const ConfigMgr::GetConfigPath()
 {
-    std::string configPath = std::string(_CONF_DIR);
+    std::string configPath = _CONF_DIR;
 
 #if WH_PLATFORM == WH_PLATFORM_WINDOWS
-    configPath = std::string("configs/");
+    configPath = "configs/";
 #endif
 
     return configPath;
