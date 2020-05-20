@@ -197,7 +197,7 @@ std::string const ConfigMgr::GetConfigPath()
 {
 #if WH_PLATFORM == WH_PLATFORM_WINDOWS
     return "configs/";
-#elif
+#else
     return _CONF_DIR;
 #endif
 }
