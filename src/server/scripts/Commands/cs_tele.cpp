@@ -47,7 +47,7 @@ public:
         };
         static std::vector<ChatCommand> commandTable =
         {
-            { "tele",           SEC_MODERATOR,      false, nullptr,                            "", teleCommandTable }
+            { "teleport",           SEC_MODERATOR,      false, nullptr,      "", teleCommandTable }
         };
         return commandTable;
     }

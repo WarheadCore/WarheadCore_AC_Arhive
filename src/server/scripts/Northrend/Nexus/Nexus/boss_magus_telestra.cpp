@@ -159,7 +159,6 @@ class boss_magus_telestra : public CreatureScript
                     if (++copiesDied >= 3)
                     {
                         copiesDied = 0;
-                        Talk(SAY_MERGE);
                         events.CancelEvent(EVENT_MAGUS_FAIL_ACHIEVEMENT);
                         events.ScheduleEvent(EVENT_MAGUS_MERGED, 5000);
                         me->CastSpell(me, SPELL_BURNING_WINDS, true);
@@ -183,6 +182,7 @@ class boss_magus_telestra : public CreatureScript
                         {
                             me->CastSpell(me, SPELL_START_SUMMON_CLONES, false);
                             events.ScheduleEvent(EVENT_MAGUS_RELOCATE, 3500);
+                            Talk(SAY_SPLIT);
                             break;
                         }
                         events.ScheduleEvent(EVENT_MAGUS_HEALTH1, 1000);
@@ -192,6 +192,7 @@ class boss_magus_telestra : public CreatureScript
                         {
                             me->CastSpell(me, SPELL_START_SUMMON_CLONES, false);
                             events.ScheduleEvent(EVENT_MAGUS_RELOCATE, 3500);
+                            Talk(SAY_SPLIT);
                             break;
                         }
                         events.ScheduleEvent(EVENT_MAGUS_HEALTH2, 1000);
@@ -218,6 +219,7 @@ class boss_magus_telestra : public CreatureScript
                     case EVENT_MAGUS_MERGED:
                         me->CastSpell(me, SPELL_TELESTRA_BACK, true);
                         me->RemoveAllAuras();
+                        Talk(SAY_MERGE);
                         break;
                 }
 
@@ -242,7 +244,6 @@ class spell_boss_magus_telestra_summon_telestra_clones : public SpellScriptLoade
 
             void HandleApply(AuraEffect const*  /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
-                GetUnitOwner()->ToCreature()->AI()->Talk(SAY_SPLIT);
                 GetUnitOwner()->CastSpell(GetUnitOwner(), SPELL_FIRE_MAGUS_SUMMON, true);
                 GetUnitOwner()->CastSpell(GetUnitOwner(), SPELL_FROST_MAGUS_SUMMON, true);
                 GetUnitOwner()->CastSpell(GetUnitOwner(), SPELL_ARCANE_MAGUS_SUMMON, true);
