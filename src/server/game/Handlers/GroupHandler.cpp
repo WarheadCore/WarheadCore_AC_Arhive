@@ -756,14 +756,10 @@ void WorldSession::HandleRaidReadyCheckOpcode(WorldPacket& recvData)
         /********************/
 
         // Check if Ready Check in BG is enabled
-        if (sWorld->getBoolConfig(CONFIG_BATTLEGROUND_DISABLE_READY_CHECK_IN_BG))
+        if (sGameConfig->GetBoolConfig("Battleground.DisableReadyCheckInBG") && _player->InBattleground())
         {
-            // Check if player is in BG
-            if (_player->InBattleground())
-                {
-                    _player->GetSession()->SendNotification(LANG_BG_READY_CHECK_ERROR);
-                    return;
-                }
+            _player->GetSession()->SendNotification(LANG_BG_READY_CHECK_ERROR);
+            return;
         }
 
         // everything's fine, do it

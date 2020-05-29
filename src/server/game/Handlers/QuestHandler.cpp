@@ -600,14 +600,10 @@ void WorldSession::HandlePushQuestToParty(WorldPacket& recvPacket)
                 }
 
                 // Check if Quest Share in BG is enabled
-                if (sWorld->getBoolConfig(CONFIG_BATTLEGROUND_DISABLE_QUEST_SHARE_IN_BG))
+                if (sGameConfig->GetBoolConfig("Battleground.DisableQuestShareInBG") && _player->InBattleground())
                 {
-                    // Check if player is in BG
-                    if (_player->InBattleground())
-                        {
-                            _player->GetSession()->SendNotification(LANG_BG_SHARE_QUEST_ERROR);
-                            continue;
-                        }
+                    _player->GetSession()->SendNotification(LANG_BG_SHARE_QUEST_ERROR);
+                    continue;
                 }
 
                 if (player->GetDivider() != 0)

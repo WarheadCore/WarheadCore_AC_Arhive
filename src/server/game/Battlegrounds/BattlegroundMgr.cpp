@@ -675,9 +675,9 @@ void BattlegroundMgr::BuildBattlegroundListPacket(WorldPacket* data, uint64 guid
     if (!player)
         return;
 
-    uint32 winner_kills = player->GetRandomWinner() ? sWorld->getIntConfig(CONFIG_BG_REWARD_WINNER_HONOR_LAST) : sWorld->getIntConfig(CONFIG_BG_REWARD_WINNER_HONOR_FIRST);
-    uint32 winner_arena = player->GetRandomWinner() ? sWorld->getIntConfig(CONFIG_BG_REWARD_WINNER_ARENA_LAST) : sWorld->getIntConfig(CONFIG_BG_REWARD_WINNER_ARENA_FIRST);
-    uint32 loser_kills = player->GetRandomWinner() ? sWorld->getIntConfig(CONFIG_BG_REWARD_LOSER_HONOR_LAST) : sWorld->getIntConfig(CONFIG_BG_REWARD_LOSER_HONOR_FIRST);
+    uint32 winner_kills = player->GetRandomWinner() ? sGameConfig->GetIntConfig("Battleground.RewardWinnerHonorLast") : sGameConfig->GetIntConfig("Battleground.RewardWinnerHonorFirst");
+    uint32 loser_kills = player->GetRandomWinner() ? sGameConfig->GetIntConfig("Battleground.RewardLoserHonorLast") : sGameConfig->GetIntConfig("Battleground.RewardLoserHonorFirst");
+    uint32 winner_arena = player->GetRandomWinner() ? sGameConfig->GetIntConfig("Battleground.RewardWinnerArenaLast") : sGameConfig->GetIntConfig("Battleground.RewardWinnerArenaFirst");
 
     winner_kills = warhead::Honor::hk_honor_at_level(player->getLevel(), float(winner_kills));
     loser_kills = warhead::Honor::hk_honor_at_level(player->getLevel(), float(loser_kills));
