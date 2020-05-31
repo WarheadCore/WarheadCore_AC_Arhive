@@ -200,7 +200,7 @@ GroupQueueInfo* BattlegroundQueue::AddGroup(Player * leader, Group * grp, PvPDif
     if (!bg)
         return ginfo;
 
-    if (!isRated && !isPremade && sGameConfig->GetBoolConfig("QueueAnnouncer.Enable"))
+    if (!isRated && !isPremade && sGameConfig->GetBoolConfig("Battleground.QueueAnnouncer.Enable"))
         SendMessageQueue(leader, bg, bracketEntry);
 
     return ginfo;

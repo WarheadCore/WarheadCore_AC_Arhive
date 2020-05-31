@@ -598,7 +598,7 @@ inline void Battleground::_ProcessJoin(uint32 diff)
             }
 
             // Announce BG starting
-            if (sGameConfig->GetBoolConfig("QueueAnnouncer.Enable"))
+            if (sGameConfig->GetBoolConfig("Battleground.QueueAnnouncer.Enable"))
                 sWorld->SendWorldText(LANG_BG_STARTED_ANNOUNCE_WORLD, GetName(), std::min(GetMinLevel(), (uint32)80), std::min(GetMaxLevel(), (uint32)80));
 
             sScriptMgr->OnBattlegroundStart(this);
