@@ -381,40 +381,6 @@ bool CFBG::FillPlayersToCFBGWithSpecific(BattlegroundQueue* bgqueue, Battlegroun
     BattlegroundQueue::GroupsQueueType::const_iterator Horde_itr = m_QueuedBoth[TEAM_HORDE].begin();
     for (; Horde_itr != m_QueuedBoth[TEAM_HORDE].end() && bgqueue->m_SelectionPools[TEAM_HORDE].AddGroup((*Horde_itr), hordeFree); ++Horde_itr);
 
-    // calculate free space after adding
-    int32 aliDiff = aliFree - int32(bgqueue->m_SelectionPools[TEAM_ALLIANCE].GetPlayerCount());
-    int32 hordeDiff = hordeFree - int32(bgqueue->m_SelectionPools[TEAM_HORDE].GetPlayerCount());
-
-    // if free space differs too much, ballance
-    while (abs(aliDiff - hordeDiff) > 1 && (bgqueue->m_SelectionPools[TEAM_HORDE].GetPlayerCount() > 0 || bgqueue->m_SelectionPools[TEAM_ALLIANCE].GetPlayerCount() > 0))
-    {
-        // if results in more alliance players than horde:
-        if (aliDiff < hordeDiff)
-        {
-            // no more alliance in pool, invite whatever we can from horde
-            if (!bgqueue->m_SelectionPools[TEAM_ALLIANCE].GetPlayerCount())
-                break;
-
-            // kick alliance, returns true if kicked more than needed, so then try to fill up
-            if (bgqueue->m_SelectionPools[TEAM_ALLIANCE].KickGroup(hordeDiff - aliDiff))
-                for (; Ali_itr != m_QueuedBoth[TEAM_ALLIANCE].end() && bgqueue->m_SelectionPools[TEAM_ALLIANCE].AddGroup((*Ali_itr), aliFree >= hordeDiff ? aliFree - hordeDiff : 0); ++Ali_itr);
-        }        
-        else // if results in more horde players than alliance:
-        {
-            // no more horde in pool, invite whatever we can from alliance
-            if (!bgqueue->m_SelectionPools[TEAM_HORDE].GetPlayerCount())
-                break;
-
-            // kick horde, returns true if kicked more than needed, so then try to fill up
-            if (bgqueue->m_SelectionPools[TEAM_HORDE].KickGroup(aliDiff - hordeDiff))
-                for (; Horde_itr != m_QueuedBoth[TEAM_HORDE].end() && bgqueue->m_SelectionPools[TEAM_HORDE].AddGroup((*Horde_itr), hordeFree >= aliDiff ? hordeFree - aliDiff : 0); ++Horde_itr);
-        }
-
-        // recalculate free space after adding
-        aliDiff = aliFree - int32(bgqueue->m_SelectionPools[TEAM_ALLIANCE].GetPlayerCount());
-        hordeDiff = hordeFree - int32(bgqueue->m_SelectionPools[TEAM_HORDE].GetPlayerCount());
-    }
-
     return true;
 }
 
@@ -439,40 +405,6 @@ bool CFBG::FillPlayersToCFBG(BattlegroundQueue* bgqueue, Battleground* bg, const
     // horde: at first fill as much as possible
     BattlegroundQueue::GroupsQueueType::const_iterator Horde_itr = bgqueue->m_QueuedGroups[bracket_id][BG_QUEUE_CFBG].begin();
     for (; Horde_itr != bgqueue->m_QueuedGroups[bracket_id][BG_QUEUE_CFBG].end() && bgqueue->m_SelectionPools[TEAM_HORDE].AddGroup((*Horde_itr), hordeFree); ++Horde_itr);
-
-    // calculate free space after adding
-    int32 aliDiff = aliFree - int32(bgqueue->m_SelectionPools[TEAM_ALLIANCE].GetPlayerCount());
-    int32 hordeDiff = hordeFree - int32(bgqueue->m_SelectionPools[TEAM_HORDE].GetPlayerCount());
-
-    // if free space differs too much, ballance
-    while (abs(aliDiff - hordeDiff) > 1 && (bgqueue->m_SelectionPools[TEAM_HORDE].GetPlayerCount() > 0 || bgqueue->m_SelectionPools[TEAM_ALLIANCE].GetPlayerCount() > 0))
-    {
-        // if results in more alliance players than horde:
-        if (aliDiff < hordeDiff)
-        {
-            // no more alliance in pool, invite whatever we can from horde
-            if (!bgqueue->m_SelectionPools[TEAM_ALLIANCE].GetPlayerCount())
-                break;
-
-            // kick alliance, returns true if kicked more than needed, so then try to fill up
-            if (bgqueue->m_SelectionPools[TEAM_ALLIANCE].KickGroup(hordeDiff - aliDiff))
-                for (; Ali_itr != bgqueue->m_QueuedGroups[bracket_id][BG_QUEUE_CFBG].end() && bgqueue->m_SelectionPools[TEAM_ALLIANCE].AddGroup((*Ali_itr), aliFree >= hordeDiff ? aliFree - hordeDiff : 0); ++Ali_itr);
-        }
-        else // if results in more horde players than alliance:
-        {
-            // no more horde in pool, invite whatever we can from alliance
-            if (!bgqueue->m_SelectionPools[TEAM_HORDE].GetPlayerCount())
-                break;
-
-            // kick horde, returns true if kicked more than needed, so then try to fill up
-            if (bgqueue->m_SelectionPools[TEAM_HORDE].KickGroup(aliDiff - hordeDiff))
-                for (; Horde_itr != bgqueue->m_QueuedGroups[bracket_id][BG_QUEUE_CFBG].end() && bgqueue->m_SelectionPools[TEAM_HORDE].AddGroup((*Horde_itr), hordeFree >= aliDiff ? hordeFree - aliDiff : 0); ++Horde_itr);
-        }
-
-        // recalculate free space after adding
-        aliDiff = aliFree - int32(bgqueue->m_SelectionPools[TEAM_ALLIANCE].GetPlayerCount());
-        hordeDiff = hordeFree - int32(bgqueue->m_SelectionPools[TEAM_HORDE].GetPlayerCount());
-    }
 
     return true;
 }
