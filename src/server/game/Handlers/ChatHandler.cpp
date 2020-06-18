@@ -165,19 +165,10 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recvData)
 		            recvData.rfinish();
 		            return;
 	            }
-
-	            if (sGameConfig->GetBoolConfig("ChatLogs.Addon"))
-	            {
-		            std::string to, msg;
-		            recvData >> to >> msg;
-		            if (msg.empty())
-			            return;
-	            }
-
 	            break;
             default:
-                LOG_ERROR("chat", "Player %s (GUID: %u) sent a chatmessage with an invalid language/message type combination", 
-                                   GetPlayer()->GetName().c_str(), GetPlayer()->GetGUIDLow());
+                LOG_ERROR("network", "Player %s (GUID: %u) sent a chatmessage with an invalid language/message type combination", 
+                                     GetPlayer()->GetName().c_str(), GetPlayer()->GetGUIDLow());
 
                 recvData.rfinish();
                 return;
@@ -272,7 +263,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recvData)
         stripLineInvisibleChars(msg);
 
     // pussywizard:
-    if (lang != LANG_ADDON && msg.find("|0") != std::string::npos)
+    if (msg.length() > 255 || (lang != LANG_ADDON && msg.find("|0") != std::string::npos))
         return;
 
     if (!ignoreChecks)

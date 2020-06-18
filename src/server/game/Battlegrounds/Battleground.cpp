@@ -395,7 +395,7 @@ TeamId Battleground::GetPrematureWinner()
         return TEAM_ALLIANCE;
     else if (GetPlayersCountByTeam(TEAM_HORDE) >= GetMinPlayersPerTeam())
         return TEAM_HORDE;
-        
+
     return TEAM_NEUTRAL;
 }
 
@@ -598,7 +598,7 @@ inline void Battleground::_ProcessJoin(uint32 diff)
             }
 
             // Announce BG starting
-            if (sGameConfig->GetBoolConfig("QueueAnnouncer.Enable"))
+            if (sGameConfig->GetBoolConfig("Battleground.QueueAnnouncer.Enable"))
                 sWorld->SendWorldText(LANG_BG_STARTED_ANNOUNCE_WORLD, GetName(), std::min(GetMinLevel(), (uint32)80), std::min(GetMaxLevel(), (uint32)80));
 
             sScriptMgr->OnBattlegroundStart(this);
@@ -987,13 +987,13 @@ void Battleground::EndBattleground(TeamId winnerTeamId)
                 // Arena lost => reset the win_rated_arena having the "no_lose" condition
                 player->ResetAchievementCriteria(ACHIEVEMENT_CRITERIA_CONDITION_NO_LOSE, 0);
             }
-            
+
             player->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_PLAY_ARENA, GetMapId());
         }
 
-        uint32 winner_kills = player->GetRandomWinner() ? BG_REWARD_WINNER_HONOR_LAST : BG_REWARD_WINNER_HONOR_FIRST;
-        uint32 loser_kills = player->GetRandomWinner() ? BG_REWARD_LOSER_HONOR_LAST : BG_REWARD_LOSER_HONOR_FIRST;
-        uint32 winner_arena = player->GetRandomWinner() ? BG_REWARD_WINNER_ARENA_LAST : BG_REWARD_WINNER_ARENA_FIRST;
+        uint32 winner_kills = player->GetRandomWinner() ? sGameConfig->GetIntConfig("Battleground.RewardWinnerHonorLast") : sGameConfig->GetIntConfig("Battleground.RewardWinnerHonorFirst");
+        uint32 loser_kills = player->GetRandomWinner() ? sGameConfig->GetIntConfig("Battleground.RewardLoserHonorLast") : sGameConfig->GetIntConfig("Battleground.RewardLoserHonorFirst");
+        uint32 winner_arena = player->GetRandomWinner() ? sGameConfig->GetIntConfig("Battleground.RewardWinnerArenaLast") : sGameConfig->GetIntConfig("Battleground.RewardWinnerArenaFirst");
 
         sScriptMgr->OnBattlegroundEndReward(this, player, winnerTeamId);
 
@@ -1324,8 +1324,11 @@ void Battleground::AddOrSetPlayerToCorrectBgGroup(Player* player, TeamId teamId)
 
 uint32 Battleground::GetFreeSlotsForTeam(TeamId teamId) const
 {
-    // if BG is starting and "Battleground.InvitationType" == BG_QUEUE_INVITATION_TYPE_NO_BALANCE, invite anyone
-    if (GetStatus() == STATUS_WAIT_JOIN && sGameConfig->GetIntConfig("Battleground.InvitationType") == BG_QUEUE_INVITATION_TYPE_NO_BALANCE)
+    if (!(GetStatus() == STATUS_IN_PROGRESS || GetStatus() == STATUS_WAIT_JOIN))
+        return 0;
+
+    // if CONFIG_BATTLEGROUND_INVITATION_TYPE == BG_QUEUE_INVITATION_TYPE_NO_BALANCE, invite everyone unless the BG is full
+    if (sGameConfig->GetIntConfig("Battleground.InvitationType") == BG_QUEUE_INVITATION_TYPE_NO_BALANCE)
         return (GetInvitedCount(teamId) < GetMaxPlayersPerTeam()) ? GetMaxPlayersPerTeam() - GetInvitedCount(teamId) : 0;
 
     // if BG is already started or "Battleground.InvitationType" != BG_QUEUE_INVITATION_TYPE_NO_BALANCE, do not allow to join too many players of one faction
@@ -1334,41 +1337,36 @@ uint32 Battleground::GetFreeSlotsForTeam(TeamId teamId) const
     uint32 otherTeamInvitedCount = teamId == TEAM_ALLIANCE ? GetInvitedCount(TEAM_HORDE) : GetInvitedCount(TEAM_ALLIANCE);
     uint32 otherTeamPlayersCount = teamId == TEAM_ALLIANCE ? GetPlayersCountByTeam(TEAM_HORDE) : GetPlayersCountByTeam(TEAM_ALLIANCE);
 
-    if (GetStatus() == STATUS_IN_PROGRESS || GetStatus() == STATUS_WAIT_JOIN)
-    {
-        // difference based on ppl invited (not necessarily entered battle)
-        // default: allow 0
-        uint32 diff = 0;
-        uint32 maxPlayersPerTeam = GetMaxPlayersPerTeam();
-        uint32 minPlayersPerTeam = GetMinPlayersPerTeam();
+    // difference based on ppl invited (not necessarily entered battle)
+    // default: allow 0
+    uint32 diff = 0;
+    uint32 maxPlayersPerTeam = GetMaxPlayersPerTeam();
+    uint32 minPlayersPerTeam = GetMinPlayersPerTeam();
 
-        // allow join one person if the sides are equal (to fill up bg to minPlayerPerTeam)
-        if (otherTeamInvitedCount == thisTeamInvitedCount)
-            diff = 1;
-        else if (otherTeamInvitedCount > thisTeamInvitedCount) // allow join more ppl if the other side has more players
-            diff = otherTeamInvitedCount - thisTeamInvitedCount;
+    // allow join one person if the sides are equal (to fill up bg to minPlayerPerTeam)
+    if (otherTeamInvitedCount == thisTeamInvitedCount)
+        diff = 1;
+    else if (otherTeamInvitedCount > thisTeamInvitedCount) // allow join more ppl if the other side has more players
+        diff = otherTeamInvitedCount - thisTeamInvitedCount;
 
-        // difference based on max players per team (don't allow inviting more)
-        uint32 diff2 = (thisTeamInvitedCount < maxPlayersPerTeam) ? maxPlayersPerTeam - thisTeamInvitedCount : 0;
+    // difference based on max players per team (don't allow inviting more)
+    uint32 diff2 = (thisTeamInvitedCount < maxPlayersPerTeam) ? maxPlayersPerTeam - thisTeamInvitedCount : 0;
 
-        // difference based on players who already entered
-        // default: allow 0
-        uint32 diff3 = 0;
+    // difference based on players who already entered
+    // default: allow 0
+    uint32 diff3 = 0;
 
-        // allow join one person if the sides are equal (to fill up bg minPlayerPerTeam)
-        if (otherTeamPlayersCount == thisTeamPlayersCount)
-            diff3 = 1;
-        else if (otherTeamPlayersCount > thisTeamPlayersCount) // allow join more ppl if the other side has more players
-            diff3 = otherTeamPlayersCount - thisTeamPlayersCount;
-        else if (thisTeamInvitedCount <= minPlayersPerTeam) // or other side has less than minPlayersPerTeam
-            diff3 = minPlayersPerTeam - thisTeamInvitedCount + 1;
+    // allow join one person if the sides are equal (to fill up bg minPlayerPerTeam)
+    if (otherTeamPlayersCount == thisTeamPlayersCount)
+        diff3 = 1;
+    else if (otherTeamPlayersCount > thisTeamPlayersCount) // allow join more ppl if the other side has more players
+        diff3 = otherTeamPlayersCount - thisTeamPlayersCount;
+    else if (thisTeamInvitedCount <= minPlayersPerTeam) // or other side has less than minPlayersPerTeam
+        diff3 = minPlayersPerTeam - thisTeamInvitedCount + 1;
 
-        // return the minimum of the 3 differences
-        // min of diff, diff2 and diff3
-        return std::min({ diff, diff2, diff3 });
-    }
-
-    return 0;
+    // return the minimum of the 3 differences
+    // min of diff, diff2 and diff3
+    return std::min({ diff, diff2, diff3 });
 }
 
 uint32 Battleground::GetMaxFreeSlots() const

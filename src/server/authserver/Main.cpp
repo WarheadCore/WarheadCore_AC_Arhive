@@ -97,7 +97,7 @@ void usage(const char* prog)
 extern int main(int argc, char** argv)
 {
     // Command line parsing to get the configuration file name
-    char const* configFile = _ACORE_REALM_CONFIG;
+    std::string configFile = sConfigMgr->GetConfigPath() + std::string(_ACORE_REALM_CONFIG);
     int count = 1;
 
     while (count < argc)
@@ -124,7 +124,7 @@ extern int main(int argc, char** argv)
     // Init all logs
     sLog->Initialize();
 
-    warhead::Logo::Show("authserver", configFile,
+    warhead::Logo::Show("authserver", configFile.c_str(),
         [](char const* text)
         {
             LOG_INFO("server.authserver", "%s", text);

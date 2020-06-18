@@ -6,6 +6,7 @@
 #include "Log.h"
 #include "GitRevision.h"
 #include "StringFormat.h"
+#include "Config.h"
 #include <ace/Version.h>
 #include <openssl/opensslv.h>
 #include <openssl/crypto.h>
@@ -16,20 +17,18 @@ void warhead::Logo::Show(char const* applicationName, char const* configName, vo
     log(warhead::StringFormat("%s (%s)", GitRevision::GetFullVersion(), applicationName).c_str());
     log("<Ctrl-C> to stop");
     log("");
-    log("   █████╗ ███████╗███████╗██████╗  ██████╗ ████████╗██╗  ██╗");
-    log("  ██╔══██╗╚══███╔╝██╔════╝██╔══██╗██╔═══██╗╚══██╔══╝██║  ██║");
-    log("  ███████║  ███╔╝ █████╗  ██████╔╝██║   ██║   ██║   ███████║");
-    log("  ██╔══██║ ███╔╝  ██╔══╝  ██╔══██╗██║   ██║   ██║   ██╔══██║");
-    log("  ██║  ██║███████╗███████╗██║  ██║╚██████╔╝   ██║   ██║  ██║");
-    log("  ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝ ╚═════╝    ╚═╝   ╚═╝  ╚═╝");
-    log("                                ██████╗ ██████╗ ██████╗ ███████╗");
-    log("                                ██╔════╝██╔═══██╗██╔══██╗██╔═══╝");
-    log("                                ██║     ██║   ██║██████╔╝█████╗");
-    log("                                ██║     ██║   ██║██╔══██╗██╔══╝");
-    log("                                ╚██████╗╚██████╔╝██║  ██║███████╗");
-    log("                                 ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝");
-    log("");
-    log("  	  WarheadCore 3.3.5a  -  www.Warheadcore.org");
+    log("  ██╗     ██╗  █████╗  ██████╗  ██╗  ██╗ ███████╗  █████╗  ██████╗");
+    log("  ██║     ██║ ██╔══██╗ ██╔══██╗ ██║  ██║ ██╔════╝ ██╔══██╗ ██╔═══██╗");
+    log("  ██║     ██║ ███████║ ██████╔╝ ███████║ █████╗   ███████║ ██║   ██║");
+    log("  ██║ ██╗ ██║ ██╔══██║ ██╔══██╗ ██╔══██║ ██╔══╝   ██╔══██║ ██║   ██║");
+    log("  ╚═██╔═██╔═╝ ██║  ██║ ██║  ██║ ██║  ██║ ███████╗ ██║  ██║ ██████╔═╝");
+    log("    ╚═╝ ╚═╝   ╚═╝  ╚═╝ ╚═╝  ╚═╝ ╚═╝  ╚═╝ ╚══════╝ ╚═╝  ╚═╝ ╚═════╝");
+    log("                                ██████╗   ██████╗  ██████╗  ███████╗");
+    log("                                ██╔═══╝  ██╔═══██╗ ██╔══██╗ ██╔════╝");
+    log("                                ██║      ██║   ██║ ██████╔╝ █████╗");
+    log("                                ██║      ██║   ██║ ██╔══██╗ ██╔══╝");
+    log("                                ╚██████╗ ╚██████╔╝ ██║  ██║ ███████╗");
+    log("                                 ╚═════╝  ╚═════╝  ╚═╝  ╚═╝ ╚══════╝");
     log("");
     log(warhead::StringFormat("> Using configuration file:       %s", configName).c_str());
     log(warhead::StringFormat("> Using SSL version:              %s (library: %s)", OPENSSL_VERSION_TEXT, SSLeay_version(SSLEAY_VERSION)).c_str());

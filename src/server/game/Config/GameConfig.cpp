@@ -273,6 +273,8 @@ void GameConfig::LoadBoolConfigs(bool reload /*= false*/)
     AddBoolConfig("Battleground.StoreStatistics.Enable");
     AddBoolConfig("Battleground.TrackDeserters.Enable");
     AddBoolConfig("Battleground.GiveXPForKills");
+    AddBoolConfig("Battleground.DisableQuestShareInBG");
+    AddBoolConfig("Battleground.DisableReadyCheckInBG");
 
     AddBoolConfig("Arena.AutoDistributePoints");
     AddBoolConfig("Arena.ArenaSeason.InProgress", true);
@@ -580,6 +582,20 @@ void GameConfig::LoadIntConfigs(bool reload /*= false*/)
 
     // Calendar
     AddIntConfig("Calendar.DeleteOldEventsHour", 6);
+
+    // Random Battleground Rewards
+    AddIntConfig("Battleground.RewardWinnerHonorFirst", 30);
+    AddIntConfig("Battleground.RewardWinnerArenaFirst", 25);
+    AddIntConfig("Battleground.RewardWinnerHonorLast", 15);
+    AddIntConfig("Battleground.RewardWinnerArenaLast");
+    AddIntConfig("Battleground.RewardLoserHonorFirst", 5);
+    AddIntConfig("Battleground.RewardLoserHonorLast", 5);
+
+    // CharterCost
+    AddIntConfig("Guild.CharterCost", 1000);
+    AddIntConfig("ArenaTeam.CharterCost.2v2", 800000);
+    AddIntConfig("ArenaTeam.CharterCost.3v3", 1200000);
+    AddIntConfig("ArenaTeam.CharterCost.5v5", 2000000);
 
     // Check options can't be changed at worldserver.conf reload
     if (reload)

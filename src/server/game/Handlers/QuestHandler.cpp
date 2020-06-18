@@ -30,6 +30,7 @@
 #include "BattlegroundAV.h"
 #include "ScriptMgr.h"
 #include "GameObjectAI.h"
+#include "Language.h"
 #include "GameConfig.h"
 
 #ifdef ELUNA
@@ -595,6 +596,13 @@ void WorldSession::HandlePushQuestToParty(WorldPacket& recvPacket)
                 if (!player->SatisfyQuestLog(false))
                 {
                     _player->SendPushToPartyResponse(player, QUEST_PARTY_MSG_LOG_FULL);
+                    continue;
+                }
+
+                // Check if Quest Share in BG is enabled
+                if (sGameConfig->GetBoolConfig("Battleground.DisableQuestShareInBG") && _player->InBattleground())
+                {
+                    _player->GetSession()->SendNotification(LANG_BG_SHARE_QUEST_ERROR);
                     continue;
                 }
 

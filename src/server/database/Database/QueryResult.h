@@ -27,7 +27,12 @@
 #ifdef _WIN32
   #include <winsock2.h>
 #endif
+
 #include <mysql.h>
+
+#if !defined(MARIADB_VERSION_ID) && MYSQL_VERSION_ID >= 80001
+typedef bool my_bool;
+#endif
 
 class WH_DATABASE_API ResultSet
 {

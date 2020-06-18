@@ -31,6 +31,7 @@
 #include "Util.h"
 #include "SpellAuras.h"
 #include "Vehicle.h"
+#include "Language.h"
 #include "GameConfig.h"
 
 class Aura;
@@ -753,6 +754,13 @@ void WorldSession::HandleRaidReadyCheckOpcode(WorldPacket& recvData)
         if (!group->IsLeader(GetPlayer()->GetGUID()) && !group->IsAssistant(GetPlayer()->GetGUID()))
             return;
         /********************/
+
+        // Check if Ready Check in BG is enabled
+        if (sGameConfig->GetBoolConfig("Battleground.DisableReadyCheckInBG") && _player->InBattleground())
+        {
+            _player->GetSession()->SendNotification(LANG_BG_READY_CHECK_ERROR);
+            return;
+        }
 
         // everything's fine, do it
         WorldPacket data(MSG_RAID_READY_CHECK, 8);
