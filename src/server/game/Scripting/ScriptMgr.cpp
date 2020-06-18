@@ -1823,6 +1823,21 @@ void ScriptMgr::OnGuildBankEvent(Guild* guild, uint8 eventType, uint8 tabId, uin
     FOREACH_SCRIPT(GuildScript)->OnBankEvent(guild, eventType, tabId, playerGuid, itemOrMoney, itemStackCount, destTabId);
 }
 
+void ScriptMgr::OnGuildLoadFromDB(Guild* guild)
+{
+    FOREACH_SCRIPT(GuildScript)->OnGuildLoadFromDB(guild);
+}
+
+void ScriptMgr::OnGuildBeforeCreate(Guild* guild)
+{
+    FOREACH_SCRIPT(GuildScript)->OnGuildBeforeCreate(guild);
+}
+
+void ScriptMgr::OnAddGuildFromDB(Guild* guild)
+{
+    FOREACH_SCRIPT(GuildScript)->OnAddGuildFromDB(guild);
+}
+
 // Group
 void ScriptMgr::OnGroupAddMember(Group* group, uint64 guid)
 {

@@ -18,6 +18,7 @@
 #include "Common.h"
 #include "GuildMgr.h"
 #include "GameConfig.h"
+#include "ScriptMgr.h"
 
 GuildMgr::GuildMgr() : NextGuildId(1)
 { }
@@ -78,10 +79,10 @@ Guild* GuildMgr::GetGuildByName(const std::string& guildName) const
     return NULL;
 }
 
-std::string GuildMgr::GetGuildNameById(uint32 guildId) const
+std::string GuildMgr::GetGuildNameById(uint32 guildId, bool isFull /*= false*/) const
 {
     if (Guild* guild = GetGuildById(guildId))
-        return guild->GetName();
+        return guild->GetName(isFull);
 
     return "";
 }

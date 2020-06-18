@@ -365,10 +365,11 @@ void WorldSession::HandleWhoOpcode(WorldPacket& recvData)
         if (!(wplayer_name.empty() || wpname.find(wplayer_name) != std::wstring::npos))
             continue;
 
-        std::string gname = sGuildMgr->GetGuildNameById(itr->second->GetGuildId());
+        std::string gname = sGuildMgr->GetGuildNameById(itr->second->GetGuildId(), true);
         std::wstring wgname;
         if (!Utf8toWStr(gname, wgname))
             continue;
+
         wstrToLower(wgname);
 
         if (!(wguild_name.empty() || wgname.find(wguild_name) != std::wstring::npos))

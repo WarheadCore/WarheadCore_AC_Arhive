@@ -1179,10 +1179,14 @@ bool Guild::Create(Player* pLeader, std::string const& name)
     m_id = sGuildMgr->GenerateGuildId();
     m_leaderGuid = pLeader->GetGUID();
     m_name = name;
+    m_full_name = name;
     m_info = "";
     m_motd = "No message set.";
     m_bankMoney = 0;
     m_createdDate = GameTime::GetGameTime();
+
+    sScriptMgr->OnGuildBeforeCreate(this);
+
     _CreateLogHolders();
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
@@ -1328,7 +1332,7 @@ void Guild::HandleQuery(WorldSession* session)
 {
     WorldPacket data(SMSG_GUILD_QUERY_RESPONSE, 8 * 32 + 200);      // Guess size
     data << uint32(m_id);
-    data << m_name;
+    data << m_full_name;
 
     // Rank name
     for (uint8 i = 0; i < GUILD_RANKS_MAX_COUNT; ++i)               // Always show 10 ranks
@@ -1565,7 +1569,7 @@ void Guild::HandleInviteMember(WorldSession* session, std::string const& name)
 
     WorldPacket data(SMSG_GUILD_INVITE, 8 + 10);              // Guess size
     data << player->GetName();
-    data << m_name;
+    data << m_full_name;
     pInvitee->GetSession()->SendPacket(&data);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
    LOG_DEBUG("guild", "SMSG_GUILD_INVITE [%s]", pInvitee->GetName().c_str());
@@ -1607,7 +1611,7 @@ void Guild::HandleLeaveMember(WorldSession* session)
         _LogEvent(GUILD_EVENT_LOG_LEAVE_GUILD, player->GetGUIDLow());
         _BroadcastEvent(GE_LEFT, player->GetGUID(), player->GetName().c_str());
 
-        SendCommandResult(session, GUILD_COMMAND_QUIT, ERR_GUILD_COMMAND_SUCCESS, m_name);
+        SendCommandResult(session, GUILD_COMMAND_QUIT, ERR_GUILD_COMMAND_SUCCESS, m_full_name);
     }
 
     sCalendarMgr->RemovePlayerGuildEventsAndSignups(player->GetGUID(), GetId());
@@ -1834,8 +1838,8 @@ void Guild::HandleDisband(WorldSession* session)
 // Send data to client
 void Guild::SendInfo(WorldSession* session) const
 {
-    WorldPacket data(SMSG_GUILD_INFO, m_name.size() + 4 + 4 + 4);
-    data << m_name;
+    WorldPacket data(SMSG_GUILD_INFO, m_full_name.size() + 4 + 4 + 4);
+    data << m_full_name;
     data.AppendPackedTime(m_createdDate);           // 3.x (prev. year + month + day)
     data << uint32(m_members.size());               // Number of members
     data << m_accountsNumber;                       // Number of accounts
@@ -1960,12 +1964,15 @@ bool Guild::LoadFromDB(Field* fields)
 {
     m_id            = fields[0].GetUInt32();
     m_name          = fields[1].GetString();
+    m_full_name     = fields[1].GetString();
     m_leaderGuid    = MAKE_NEW_GUID(fields[2].GetUInt32(), 0, HIGHGUID_PLAYER);
     m_emblemInfo.LoadFromDB(fields);
     m_info          = fields[8].GetString();
     m_motd          = fields[9].GetString();
     m_createdDate   = time_t(fields[10].GetUInt32());
     m_bankMoney     = fields[11].GetUInt64();
+
+    sScriptMgr->OnGuildLoadFromDB(this);
 
     uint8 purchasedTabs = uint8(fields[12].GetUInt64());
     if (purchasedTabs > GUILD_BANK_MAX_TABS)

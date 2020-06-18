@@ -20,6 +20,8 @@
 
 #include "Guild.h"
 
+typedef std::unordered_map<uint32, Guild*> GuildContainer;
+
 class GuildMgr
 {
 private:
@@ -32,7 +34,7 @@ public:
     Guild* GetGuildByLeader(uint64 guid) const;
     Guild* GetGuildById(uint32 guildId) const;
     Guild* GetGuildByName(std::string const& guildName) const;
-    std::string GetGuildNameById(uint32 guildId) const;
+    std::string GetGuildNameById(uint32 guildId, bool isFull = false) const;
 
     void LoadGuilds();
     void AddGuild(Guild* guild);
@@ -42,8 +44,10 @@ public:
     void SetNextGuildId(uint32 Id) { NextGuildId = Id; }
 
     void ResetTimes();
+
+    const GuildContainer& GetAllGuilds() const { return GuildStore; }
 protected:
-    typedef std::unordered_map<uint32, Guild*> GuildContainer;
+    
     uint32 NextGuildId;
     GuildContainer GuildStore;
 };
