@@ -31,6 +31,13 @@ struct Position
 
     Position(Position const& loc) { Relocate(loc); }
 
+    /* requried as of C++ 11 */
+#if __cplusplus >= 201103L
+    Position(Position&&) = default;
+    Position& operator=(const Position&) = default;
+    Position& operator=(Position&&) = default;
+#endif
+
     struct PositionXYStreamer
     {
         explicit PositionXYStreamer(Position& pos) : Pos(&pos) { }
