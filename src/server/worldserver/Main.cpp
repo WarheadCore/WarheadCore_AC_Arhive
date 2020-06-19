@@ -46,10 +46,6 @@
 #include "GameConfig.h"
 #include <ace/Sig_Handler.h>
 
-#ifdef ELUNA
-#include "LuaEngine.h"
-#endif
-
 #if WH_PLATFORM == WH_PLATFORM_WINDOWS
 #include "ServiceWin32.h"
 char serviceName[] = "worldserver";
@@ -209,9 +205,6 @@ public:
         sObjectAccessor->UnloadAll();             // unload 'i_player2corpse' storage and remove from world
         sScriptMgr->Unload();
         sOutdoorPvPMgr->Die();
-#ifdef ELUNA
-        Eluna::Uninitialize();
-#endif
     }
 };
 

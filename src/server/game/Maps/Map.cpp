@@ -39,10 +39,6 @@
 #include "GameTime.h"
 #include "GameConfig.h"
 
-#ifdef ELUNA
-#include "LuaEngine.h"
-#endif
-
 union u_map_magic
 {
     char asChar[4];
@@ -2776,35 +2772,18 @@ void InstanceMap::CreateInstanceScript(bool load, std::string data, uint32 compl
 { 
     if (instance_script != NULL)
         return;
-#ifdef ELUNA
-    bool isElunaAI = false;
-    instance_script = sEluna->GetInstanceData(this);
-    if (instance_script)
-        isElunaAI = true;
 
-    // if Eluna AI was fetched succesfully we should not call CreateInstanceData nor set the unused scriptID
-    if (!isElunaAI)
+    InstanceTemplate const* mInstance = sObjectMgr->GetInstanceTemplate(GetId());
+    if (mInstance)
     {
-#endif
-        InstanceTemplate const* mInstance = sObjectMgr->GetInstanceTemplate(GetId());
-        if (mInstance)
-        {
-            i_script_id = mInstance->ScriptId;
-            instance_script = sScriptMgr->CreateInstanceScript(this);
-        }
-#ifdef ELUNA
+        i_script_id = mInstance->ScriptId;
+        instance_script = sScriptMgr->CreateInstanceScript(this);
     }
-#endif
 
     if (!instance_script)
         return;
 
-#ifdef ELUNA
-    // use mangos behavior if we are dealing with Eluna AI
-    // initialize should then be called only if load is false
-    if (!isElunaAI || !load)
-#endif
-        instance_script->Initialize();
+    instance_script->Initialize();
 
     if (load)
     {

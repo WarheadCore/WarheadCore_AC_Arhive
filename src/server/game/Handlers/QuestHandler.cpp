@@ -33,10 +33,6 @@
 #include "Language.h"
 #include "GameConfig.h"
 
-#ifdef ELUNA
-#include "LuaEngine.h"
-#endif
-
 void WorldSession::HandleQuestgiverStatusQueryOpcode(WorldPacket & recvData)
 {
     uint64 guid;
@@ -104,11 +100,6 @@ void WorldSession::HandleQuestgiverHelloOpcode(WorldPacket & recvData)
     // Stop the npc if moving
     //if (!creature->GetTransport()) // pussywizard: reverted with new spline (old: without this check, npc would stay in place and the transport would continue moving, so the npc falls off. NPCs on transports don't have waypoints, so stopmoving is not needed)
         creature->StopMoving();
-
-#ifdef ELUNA
-        if (sEluna->OnGossipHello(_player, creature))
-            return;
-#endif
 
     if (sScriptMgr->OnGossipHello(_player, creature))
         return;
@@ -434,9 +425,7 @@ void WorldSession::HandleQuestLogRemoveQuest(WorldPacket& recvData)
             _player->AbandonQuest(questId); // remove all quest items player received before abandoning quest.
             _player->RemoveActiveQuest(questId);
             _player->RemoveTimedAchievement(ACHIEVEMENT_TIMED_TYPE_QUEST, questId);
-#ifdef ELUNA
-            sEluna->OnQuestAbandon(_player, questId);
-#endif
+
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
             sLog->outDetail("Player %u abandoned quest %u", _player->GetGUIDLow(), questId);
 #endif

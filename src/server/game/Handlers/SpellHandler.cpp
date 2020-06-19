@@ -33,9 +33,6 @@
 #include "GameObjectAI.h"
 #include "SpellAuraEffects.h"
 #include "Player.h"
-#ifdef ELUNA
-#include "LuaEngine.h"
-#endif
 
 void WorldSession::HandleClientCastFlags(WorldPacket& recvPacket, uint8 castFlags, SpellCastTargets& targets)
 {

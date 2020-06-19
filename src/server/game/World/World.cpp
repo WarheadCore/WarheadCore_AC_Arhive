@@ -94,10 +94,6 @@
 #include "GameLocale.h"
 #include <VMapManager2.h>
 
-#ifdef ELUNA
-#include "LuaEngine.h"
-#endif
-
 ACE_Atomic_Op<ACE_Thread_Mutex, bool> World::m_stopEvent = false;
 uint8 World::m_ExitCode = SHUTDOWN_EXIT_CODE;
 uint32 World::m_worldLoopCounter = 0;
@@ -422,15 +418,6 @@ void World::LoadConfigSettings(bool reload)
         LOG_ERROR("config", "World settings reload fail: can't read settings.");
         return;
     }
-
-#ifdef ELUNA
-    ///- Initialize Lua Engine
-    if (!reload)
-    {
-        sLog->outString("Initialize Eluna Lua Engine...");
-        Eluna::Initialize();
-    }
-#endif
 
     sScriptMgr->OnBeforeConfigLoad(reload);
 
@@ -1499,13 +1486,6 @@ void World::SetInitialWorldSettings()
     mgr->LoadChannels();
     mgr = ChannelMgr::forTeam(TEAM_HORDE);
     mgr->LoadChannels();
-
-#ifdef ELUNA
-    ///- Run eluna scripts.
-    // in multithread foreach: run scripts
-    sEluna->RunScripts();
-    sEluna->OnConfigLoad(false,false); // Must be done after Eluna is initialized and scripts have run.
-#endif
 
     if (sGameConfig->GetBoolConfig("PreloadAllNonInstancedMapGrids"))
     {

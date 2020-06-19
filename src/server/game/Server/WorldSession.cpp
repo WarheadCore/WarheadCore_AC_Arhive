@@ -51,10 +51,6 @@
 #include "GameConfig.h"
 #include "GameLocale.h"
 
-#ifdef ELUNA
-#include "LuaEngine.h"
-#endif
-
 namespace {
 
     std::string const DefaultPlayerName = "<none>";
@@ -248,11 +244,6 @@ void WorldSession::SendPacket(WorldPacket const* packet)
 
     sScriptMgr->OnPacketSend(this, *packet);
 
-#ifdef ELUNA
-    if (!sEluna->OnPacketSend(this, *packet))
-        return;
-#endif
-
     if (m_Socket->SendPacket(*packet) == -1)
         m_Socket->CloseSocket("m_Socket->SendPacket(*packet) == -1");
 }
@@ -326,11 +317,9 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
                                 delete movementPacket;
                                 movementPacket = NULL;
                             }
+                            
                             sScriptMgr->OnPacketReceive(this, *packet);
-                            #ifdef ELUNA
-                            if (!sEluna->OnPacketReceive(this, *packet))
-                                break;
-                            #endif
+                            
                             (this->*opHandle.handler)(*packet);
                         }
                         break;
@@ -346,10 +335,7 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
                             if (AntiDOS.EvaluateOpcode(*packet, currentTime))
                             {
                                 sScriptMgr->OnPacketReceive(this, *packet);
-#ifdef ELUNA
-                                if (!sEluna->OnPacketReceive(this, *packet))
-                                    break;
-#endif
+
                                 (this->*opHandle.handler)(*packet);
                             }
                         }
@@ -361,10 +347,7 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
                         if (AntiDOS.EvaluateOpcode(*packet, currentTime))
                         {
                             sScriptMgr->OnPacketReceive(this, *packet);
-#ifdef ELUNA
-                            if (!sEluna->OnPacketReceive(this, *packet))
-                                break;
-#endif
+
                             (this->*opHandle.handler)(*packet);
                         }
                         break;

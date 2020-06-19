@@ -28,10 +28,6 @@
 #include "GridDefines.h"
 #include "Map.h"
 
-#ifdef ELUNA
-class ElunaEventProcessor;
-#endif
-
 #include <set>
 #include <string>
 #include <sstream>
@@ -554,11 +550,7 @@ class WorldObject : public Object, public WorldLocation
     public:
         virtual ~WorldObject();
 
-#ifdef ELUNA
-        virtual void Update(uint32 /*time_diff*/);
-#else
         virtual void Update(uint32 /*time_diff*/) { };
-#endif
         void _Create(uint32 guidlow, HighGuid guidhigh, uint32 phaseMask);
 
         virtual void RemoveFromWorld()
@@ -570,10 +562,6 @@ class WorldObject : public Object, public WorldLocation
 
             Object::RemoveFromWorld();
         }
-
-#ifdef ELUNA
-        ElunaEventProcessor* elunaEvents;
-#endif
 
         void GetNearPoint2D(float &x, float &y, float distance, float absAngle) const;
         void GetNearPoint(WorldObject const* searcher, float &x, float &y, float &z, float searcher_size, float distance2d, float absAngle, float controlZ = 0) const;

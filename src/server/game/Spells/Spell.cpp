@@ -15,11 +15,6 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifdef ELUNA
-#include "LuaEngine.h"
-#include "ElunaUtility.h"
-#endif
-
 #include "Common.h"
 #include "DatabaseEnv.h"
 #include "WorldPacket.h"
@@ -3675,9 +3670,6 @@ void Spell::_cast(bool skipCheck)
     {
         // now that we've done the basic check, now run the scripts
         // should be done before the spell is actually executed
-#ifdef ELUNA
-        sEluna->OnSpellCast(playerCaster, this, skipCheck);
-#endif
 
         // As of 3.0.2 pets begin attacking their owner's target immediately
         // Let any pets know we've attacked something. Check DmgClass for harmful spells only
