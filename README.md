@@ -9,3 +9,6 @@ WarheadCore is based [AzerothCore](https://github.com/azerothcore/azerothcore-wo
 - Rework scripts loaders system (like TrinityCore)
 - Rework module loades system (add lib and other)
 - Support default modules
+
+## Links
+- Discord https://discord.gg/gSxh2xt
