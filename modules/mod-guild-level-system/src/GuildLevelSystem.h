@@ -64,6 +64,7 @@ public:
     void SetGuildLevels();
 
     void SetFullName(uint32 guildID);
+    void SetFullNameFirstLevel(Guild* guild);
 
     uint32 GetMaxLevel() { return _maxLevel; }
     uint32 GetExpItemID() { return _expItemID; }

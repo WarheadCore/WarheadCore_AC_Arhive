@@ -1087,9 +1087,6 @@ class GuildScript : public ScriptObject
 
         // Before create guild
         virtual void OnGuildBeforeCreate(Guild* /*guild*/) { }
-
-        // Guila add in store from DB
-        virtual void OnAddGuildFromDB(Guild* /*guild*/) { }
 };
 
 class GroupScript : public ScriptObject
@@ -1527,7 +1524,6 @@ class ScriptMgr
         void OnGuildBankEvent(Guild* guild, uint8 eventType, uint8 tabId, uint32 playerGuid, uint32 itemOrMoney, uint16 itemStackCount, uint8 destTabId);
         void OnGuildLoadFromDB(Guild* guild);
         void OnGuildBeforeCreate(Guild* guild);
-        void OnAddGuildFromDB(Guild* guild);
 
     public: /* GroupScript */
 

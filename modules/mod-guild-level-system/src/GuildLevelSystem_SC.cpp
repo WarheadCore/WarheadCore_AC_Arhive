@@ -28,13 +28,13 @@ class Kargatum_Guild : public GuildScript
 {
 public: Kargatum_Guild() : GuildScript("Kargatum_Guild") { }
 
-    /*void OnAddGuildFromDB(Guild* guild) override
+    void OnCreate(Guild* guild, Player* /*leader*/, const std::string& /*name*/) override
     {
         if (!CONF_GET_BOOL("GLS.Enable"))
             return;
 
-        sGuildLevelSystem->SetFullName(guild->GetId());
-    }*/
+        sGuildLevelSystem->SetFullNameFirstLevel(guild);
+    }
 
     void OnGuildBeforeCreate(Guild* guild) override
     {
@@ -42,14 +42,6 @@ public: Kargatum_Guild() : GuildScript("Kargatum_Guild") { }
             return;
 
         sGuildLevelSystem->AddEmptyGLS(guild);
-    }
-
-    void OnCreate(Guild* guild, Player* /*leader*/, const std::string& /*name*/) override
-    {
-        if (!CONF_GET_BOOL("GLS.Enable"))
-            return;
-    
-        sGuildLevelSystem->SetFullName(guild->GetId());
     }
 
     void OnDisband(Guild* guild) override
@@ -65,7 +57,7 @@ public: Kargatum_Guild() : GuildScript("Kargatum_Guild") { }
         if (!CONF_GET_BOOL("GLS.Enable"))
             return;
 
-        sGuildLevelSystem->UpdateGuildVisibleLevel(guild->GetId());
+        //sGuildLevelSystem->UpdateGuildVisibleLevel(guild->GetId());
         sGuildLevelSystem->RewardSpellGuildMember(guild, player);
     }
 
@@ -195,8 +187,8 @@ public: Kargatum_Guild_Creature() : CreatureScript("Kargatum_Guild_Creature") { 
             SendGossipMenuFor(player, 1, creature->GetGUID());
             break;
         case 3: // Настройки гильдии
-            AddGossipItemFor(player, 10, warhead::StringFormat("%s Чат создателя гильдии", AdmChatSetting.c_str()), GOSSIP_SENDER_MAIN, 1001);
-            AddGossipItemFor(player, 10, warhead::StringFormat("%s Чат заместителя гильдии", AssistantChatSetting.c_str()), GOSSIP_SENDER_MAIN, 1002);
+            AddGossipItemFor(player, 10, warhead::StringFormat("%s чат создателя гильдии", AdmChatSetting.c_str()), GOSSIP_SENDER_MAIN, 1001);
+            AddGossipItemFor(player, 10, warhead::StringFormat("%s чат заместителя гильдии", AssistantChatSetting.c_str()), GOSSIP_SENDER_MAIN, 1002);
             SendGossipMenuFor(player, 1, creature->GetGUID());
             break;
         case 4: // Информация

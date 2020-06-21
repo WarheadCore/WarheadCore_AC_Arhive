@@ -1562,11 +1562,6 @@ void ScriptMgr::OnGuildBeforeCreate(Guild* guild)
     FOREACH_SCRIPT(GuildScript)->OnGuildBeforeCreate(guild);
 }
 
-void ScriptMgr::OnAddGuildFromDB(Guild* guild)
-{
-    FOREACH_SCRIPT(GuildScript)->OnAddGuildFromDB(guild);
-}
-
 // Group
 void ScriptMgr::OnGroupAddMember(Group* group, uint64 guid)
 {
