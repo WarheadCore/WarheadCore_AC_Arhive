@@ -46,10 +46,6 @@
 #include "GameTime.h"
 #include "GameConfig.h"
 
-#ifdef ELUNA
-#include "LuaEngine.h"
-#endif
-
 #if defined(__GNUC__)
 #pragma pack(1)
 #else
@@ -708,7 +704,7 @@ int WorldSocket::ProcessIncoming(WorldPacket* new_pct)
             case CMSG_KEEP_ALIVE:           
                 if (m_Session)
                     m_Session->ResetTimeOutTime(true);
-                break;
+                return 0;
             default:
             {
                 ACE_GUARD_RETURN (LockType, Guard, m_SessionLock, -1);

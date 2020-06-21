@@ -28,10 +28,6 @@
 #include "GridDefines.h"
 #include "Map.h"
 
-#ifdef ELUNA
-class ElunaEventProcessor;
-#endif
-
 #include <set>
 #include <string>
 #include <sstream>
@@ -461,7 +457,13 @@ class WorldLocation : public Position
     public:
         explicit WorldLocation(uint32 _mapid = MAPID_INVALID, float _x = 0, float _y = 0, float _z = 0, float _o = 0)
             : m_mapId(_mapid) { Relocate(_x, _y, _z, _o); }
-        WorldLocation(const WorldLocation &loc) { WorldRelocate(loc); }
+        WorldLocation(const WorldLocation &loc) : Position () { WorldRelocate(loc); }
+        /* requried as of C++ 11 */
+        #if __cplusplus >= 201103L
+        WorldLocation(WorldLocation&&) = default;
+        WorldLocation& operator=(const WorldLocation&) = default;
+        WorldLocation& operator=(WorldLocation&&) = default;
+        #endif
 
         void WorldRelocate(const WorldLocation &loc)
         {
@@ -548,11 +550,7 @@ class WorldObject : public Object, public WorldLocation
     public:
         virtual ~WorldObject();
 
-#ifdef ELUNA
-        virtual void Update(uint32 /*time_diff*/);
-#else
         virtual void Update(uint32 /*time_diff*/) { };
-#endif
         void _Create(uint32 guidlow, HighGuid guidhigh, uint32 phaseMask);
 
         virtual void RemoveFromWorld()
@@ -564,10 +562,6 @@ class WorldObject : public Object, public WorldLocation
 
             Object::RemoveFromWorld();
         }
-
-#ifdef ELUNA
-        ElunaEventProcessor* elunaEvents;
-#endif
 
         void GetNearPoint2D(float &x, float &y, float distance, float absAngle) const;
         void GetNearPoint(WorldObject const* searcher, float &x, float &y, float &z, float searcher_size, float distance2d, float absAngle, float controlZ = 0) const;
