@@ -46,6 +46,7 @@
 #include "BattlegroundQueue.h"
 #include "GameGraveyard.h"
 #include "GameTime.h"
+#include "GameConfig.h"
 #include <unordered_map>
 #include <random>
 
@@ -801,30 +802,14 @@ uint8 BattlegroundMgr::BGArenaType(BattlegroundQueueTypeId bgQueueTypeId)
 
 void BattlegroundMgr::ToggleTesting()
 {
-    if (sWorld->getBoolConfig(CONFIG_DEBUG_BATTLEGROUND))
-    {
-        m_Testing = true;
-        sWorld->SendWorldText(LANG_DEBUG_BG_CONF);
-    }
-    else
-    {
-        m_Testing = !m_Testing;
-        sWorld->SendWorldText(m_Testing ? LANG_DEBUG_BG_ON : LANG_DEBUG_BG_OFF);
-    }
+    m_Testing = sGameConfig->GetBoolConfig("Debug.Battleground") ? true : !m_Testing;
+    sWorld->SendWorldText(m_Testing ? LANG_DEBUG_BG_ON : LANG_DEBUG_BG_OFF);
 }
 
 void BattlegroundMgr::ToggleArenaTesting()
 {
-    if (sWorld->getBoolConfig(CONFIG_DEBUG_ARENA))
-    {
-        m_ArenaTesting = true;
-        sWorld->SendWorldText(LANG_DEBUG_ARENA_CONF);
-    }
-    else
-    {
-        m_ArenaTesting = !m_ArenaTesting;
-        sWorld->SendWorldText(m_ArenaTesting ? LANG_DEBUG_ARENA_ON : LANG_DEBUG_ARENA_OFF);
-    }
+    m_ArenaTesting = sGameConfig->GetBoolConfig("Debug.Arena") ? true : !m_ArenaTesting;
+    sWorld->SendWorldText(m_ArenaTesting ? LANG_DEBUG_ARENA_ON : LANG_DEBUG_ARENA_OFF);
 }
 
 void BattlegroundMgr::SetHolidayWeekends(uint32 mask)

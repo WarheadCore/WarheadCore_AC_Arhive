@@ -336,6 +336,10 @@ void GameConfig::LoadBoolConfigs(bool reload /*= false*/)
 
     AddBoolConfig("SetAllCreaturesWithWaypointMovementActive");
 
+    // Debug
+    AddBoolConfig("Debug.Battleground");
+    AddBoolConfig("Debug.Arena");
+
     LOG_INFO("config", "> Loaded %u bool configs", static_cast<uint32>(_boolConfigs.size()));
 }
 
