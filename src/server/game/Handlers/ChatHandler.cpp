@@ -271,7 +271,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recvData)
         if (ChatHandler(this).ParseCommands(msg.c_str()))
             return;
 
-        if (!sMute->CanSpeak())
+        if (!sMute->CanSpeak(this))
         {
             SendNotification(GetAcoreString(LANG_WAIT_BEFORE_SPEAKING), sMute->GetMuteTimeString(this).c_str());
             return;

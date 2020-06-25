@@ -31,13 +31,16 @@ public:
 
     void MutePlayer(std::string const targetName, uint32 notSpeakTime, std::string const muteBy, std::string const muteReason);
     void UnMutePlayer(std::string const targetName);
+    void UpdateMuteAccount(uint32 accountID, uint32 muteDate, int32 muteTime);
     void SetMuteTime(WorldSession* sess, uint32 muteTime);
+    void AddMuteTime(WorldSession* sess, uint32 muteTime);
     uint32 GetMuteTime(WorldSession* sess);
     std::string const GetMuteTimeString(WorldSession* sess);
     void DeleteMuteTime(WorldSession* sess);
 
     void CheckMuteExpired(WorldSession* sess);
     bool CanSpeak(WorldSession* sess);
+    void LoginAccount(uint32 accountID);
 
 private:
     std::unordered_map<WorldSession*, uint32> _listSessions;

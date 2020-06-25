@@ -23,6 +23,7 @@
 #include "AccountMgr.h"
 #include "GameTime.h"
 #include "GameLocale.h"
+#include "MuteManager.h"
 #include <vector>
 
 enum LocaleStrings
@@ -129,7 +130,7 @@ private:
 
         uint32 muteTime = CONF_GET_INT("AntiAD.Mute.Time");
 
-        player->GetSession()->m_muteTime = time(nullptr) + muteTime * MINUTE;
+        sMute->MutePlayer(player->GetName(), muteTime, "Console", "Advertisment");
 
         if (CONF_GET_BOOL("AntiAD.SelfMessage.Enable"))
             sGameLocale->SendPlayerMessage(player, "mod-anti-ad", ANTIAD_SEND_SELF, muteTime);

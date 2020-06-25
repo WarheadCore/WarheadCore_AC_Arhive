@@ -2148,7 +2148,7 @@ public:
         if (handler->HasLowerSecurity(target, targetGuid, true))
             return false;
        
-        sMute->AddMuteTime(targetName, notSpeakTime, handler->GetSession() ? handler->GetSession()->GetPlayerName() : handler->GetAcoreString(LANG_CONSOLE), muteReasonStr);
+        sMute->MutePlayer(targetName, notSpeakTime, handler->GetSession() ? handler->GetSession()->GetPlayerName() : handler->GetAcoreString(LANG_CONSOLE), muteReasonStr);
 
         return true;
     }
@@ -2170,31 +2170,19 @@ public:
                 target = session->GetPlayer();
 
         // must have strong lesser security level
-        if (handler->HasLowerSecurity (target, targetGuid, true))
+        if (handler->HasLowerSecurity(target, targetGuid, true))
             return false;
 
         if (target && target->CanSpeak())
         {
             handler->SendSysMessage(LANG_CHAT_ALREADY_ENABLED);
             handler->SetSentErrorMessage(true);
-            return false;            
+            return false;
         }
 
-        target->GetSession()->m_muteTime = 0;
+        sMute->UnMutePlayer(targetName);
 
-        PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPD_MUTE_TIME);
-        stmt->setInt64(0, 0);
-        stmt->setString(1, "");
-        stmt->setString(2, "");
-        stmt->setUInt32(3, accountId);
-        LoginDatabase.Execute(stmt);
-
-        if (target)
-            ChatHandler(target->GetSession()).PSendSysMessage(LANG_YOUR_CHAT_ENABLED);
-
-        std::string nameLink = handler->playerLink(targetName);
-
-        handler->PSendSysMessage(LANG_YOU_ENABLE_CHAT, nameLink.c_str());
+        handler->PSendSysMessage(LANG_YOU_ENABLE_CHAT, handler->playerLink(targetName).c_str());
 
         return true;
     }

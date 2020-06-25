@@ -853,21 +853,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
         security = SEC_ADMINISTRATOR;
         */
 
-    k.SetHexStr (fields[1].GetCString());
-
-    int64 mutetime = fields[6].GetInt64();
-    //! Negative mutetime indicates amount of seconds to be muted effective on next login - which is now.
-    if (mutetime < 0)
-    {
-        mutetime = GameTime::GetGameTime() + llabs(mutetime);
-
-        PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPD_MUTE_TIME_LOGIN);
-
-        stmt->setInt64(0, mutetime);
-        stmt->setUInt32(1, id);
-
-        LoginDatabase.Execute(stmt);
-    }
+    k.SetHexStr(fields[1].GetCString());
 
     locale = LocaleConstant (fields[7].GetUInt8());
     if (locale >= TOTAL_LOCALES)
@@ -990,7 +976,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     LoginDatabase.Execute(stmt);
 
     // NOTE ATM the socket is single-threaded, have this in mind ...
-    ACE_NEW_RETURN(m_Session, WorldSession(id, this, AccountTypes(security), expansion, mutetime, locale, recruiter, isRecruiter, skipQueue, TotalTime), -1);
+    ACE_NEW_RETURN(m_Session, WorldSession(id, this, AccountTypes(security), expansion, locale, recruiter, isRecruiter, skipQueue, TotalTime), -1);
 
     m_Crypt.Init(&k);
 
