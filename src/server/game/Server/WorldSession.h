@@ -355,9 +355,6 @@ class WorldSession
 
         void DoLootRelease(uint64 lguid);
 
-        // Account mute time
-        time_t m_muteTime;
-
         // Locales
         LocaleConstant GetSessionDbcLocale() const { return m_sessionDbcLocale; }
         LocaleConstant GetSessionDbLocaleIndex() const { return m_sessionDbLocaleIndex; }
