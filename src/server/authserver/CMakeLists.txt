@@ -87,7 +87,7 @@ elseif( WIN32 )
   install(TARGETS authserver DESTINATION "${CMAKE_INSTALL_PREFIX}")
 endif()
 
-install(FILES authserver.conf.dist DESTINATION ${CONF_DIR}/configs)
+install(FILES authserver.conf.dist DESTINATION ${CONF_DIR})
 
 # Generate precompiled header
 if (USE_COREPCH)
