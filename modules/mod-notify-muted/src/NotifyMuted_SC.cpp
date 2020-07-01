@@ -44,7 +44,7 @@ public:
         if (receiver->CanSpeak())
             return;
 
-        uint64 MuteTime = sMute->GetMuteTime(receiver->GetSession());
+        uint64 MuteTime = sMute->GetMuteTime(receiver->GetSession()->GetAccountId());
         if (!MuteTime)
             return;
 

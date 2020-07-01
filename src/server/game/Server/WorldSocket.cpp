@@ -789,8 +789,8 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     sLog->outStaticDebug ("WorldSocket::HandleAuthSession: client %u, loginServerID %u, account %s, loginServerType %u, clientseed %u", BuiltNumberClient, loginServerID, account.c_str(), loginServerType, clientSeed);
 #endif
     // Get the account information from the realmd database
-    //         0           1        2       3        4            5         6       7          8      9      10
-    // SELECT id, sessionkey, last_ip, locked, lock_country, expansion, mutetime, locale, recruiter, os, totaltime FROM account WHERE username = ?
+    //         0           1        2       3        4            5        6       7       8      9
+    // SELECT id, sessionkey, last_ip, locked, lock_country, expansion, locale, recruiter, os, totaltime FROM account WHERE username = ?
     PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_INFO_BY_NAME);
 
     stmt->setString(0, account);
@@ -855,13 +855,13 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
 
     k.SetHexStr(fields[1].GetCString());
 
-    locale = LocaleConstant (fields[7].GetUInt8());
+    locale = LocaleConstant(fields[6].GetUInt8());
     if (locale >= TOTAL_LOCALES)
         locale = LOCALE_enUS;
 
-    uint32 recruiter = fields[8].GetUInt32();
-    std::string os = fields[9].GetString();
-    TotalTime = fields[10].GetUInt32();
+    uint32 recruiter = fields[7].GetUInt32();
+    std::string os = fields[8].GetString();
+    TotalTime = fields[9].GetUInt32();
 
     // Must be done before WorldSession is created
     if (wardenActive && os != "Win" && os != "OSX")
@@ -1008,9 +1008,6 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     m_Session->LoadTutorialsData();
     m_Session->ReadAddonsInfo(recvPacket);
 
-    // At this point, we can safely hook a successful login
-    sScriptMgr->OnAccountLogin(id);
-
     // Initialize Warden system only if it is enabled by config
     if (wardenActive)
         m_Session->InitWarden(&k, os);
@@ -1020,6 +1017,9 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     ACE_OS::sleep (ACE_Time_Value (0, sleepTime));
 
     sWorld->AddSession (m_Session);
+
+    // At this point, we can safely hook a successful login
+    sScriptMgr->OnAccountLogin(id);
 
     return 0;
 }

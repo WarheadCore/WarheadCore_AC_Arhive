@@ -1615,7 +1615,7 @@ void Player::Update(uint32 p_time)
     }
 
     // If mute expired, remove it from the DB
-    sMute->CheckMuteExpired(GetSession());
+    sMute->CheckMuteExpired(GetSession()->GetAccountId());
 
     if (!m_timedquests.empty())
     {
@@ -20400,8 +20400,8 @@ void Player::UpdateSpeakTime(uint32 specialMessageLimit)
         {
             // prevent overwrite mute time, if message send just before mutes set, for example.
             time_t new_mute = current + sGameConfig->GetIntConfig("ChatFlood.MuteTime");
-            if (sMute->GetMuteTime(GetSession()) < new_mute)
-                sMute->SetMuteTime(GetSession(), new_mute);
+            if (sMute->GetMuteTime(GetSession()->GetAccountId()) < new_mute)
+                sMute->SetMuteTime(GetSession()->GetAccountId(), new_mute);
 
             m_speakCount = 0;
         }
@@ -20414,7 +20414,7 @@ void Player::UpdateSpeakTime(uint32 specialMessageLimit)
 
 bool Player::CanSpeak() const
 {
-    return sMute->CanSpeak(GetSession());
+    return sMute->CanSpeak(GetSession()->GetAccountId());
 }
 
 /*********************************************************/

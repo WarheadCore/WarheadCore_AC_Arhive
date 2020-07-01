@@ -1757,7 +1757,7 @@ public:
         std::string OS                = handler->GetAcoreString(LANG_UNKNOWN);
 
         // Mute data print variables
-        int64 muteTime                = -1;
+        int32 muteDate                = -1;
         std::string muteReason        = handler->GetAcoreString(LANG_NO_REASON);
         std::string muteBy            = handler->GetAcoreString(LANG_UNKNOWN);
 
@@ -1808,7 +1808,7 @@ public:
             latency           = target->GetSession()->GetLatency();
             raceid            = target->getRace();
             classid           = target->getClass();
-            muteTime          = sMute->GetMuteTime(target->GetSession());
+            muteDate          = sMute->GetMuteTime(accId);
             mapId             = target->GetMapId();
             areaId            = target->GetAreaId();
             alive             = target->IsAlive() ? handler->GetAcoreString(LANG_YES) : handler->GetAcoreString(LANG_NO);
@@ -1853,8 +1853,8 @@ public:
         stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_PINFO);
         stmt->setInt32(0, int32(realmID));
         stmt->setUInt32(1, accId);
+        
         PreparedQueryResult accInfoResult = LoginDatabase.Query(stmt);
-
         if (accInfoResult)
         {
             Field* fields = accInfoResult->Fetch();
@@ -1901,12 +1901,22 @@ public:
                 lastIp    = handler->GetAcoreString(LANG_UNAUTHORIZED);
                 lastLogin = handler->GetAcoreString(LANG_UNAUTHORIZED);
             }
-            muteTime      = fields[6].GetUInt64();
-            muteReason    = fields[7].GetString();
-            muteBy        = fields[8].GetString();
-            failedLogins  = fields[9].GetUInt32();
-            locked        = fields[10].GetUInt8();
-            OS            = fields[11].GetString();
+            
+            failedLogins  = fields[6].GetUInt32();
+            locked        = fields[7].GetUInt8();
+            OS            = fields[8].GetString();
+        }
+
+        stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_MUTE_INFO);
+        stmt->setUInt32(0, accId);
+
+        PreparedQueryResult accmuteInfoResult = LoginDatabase.Query(stmt);
+        if (accmuteInfoResult)
+        {
+            Field* fields   = accmuteInfoResult->Fetch();
+            muteDate        = fields[0].GetInt32();
+            muteReason      = fields[2].GetString();
+            muteBy          = fields[3].GetString();
         }
 
         // Creates a chat link to the character. Returns nameLink
@@ -1915,6 +1925,7 @@ public:
         // Returns banType, banTime, bannedBy, banreason
         PreparedStatement* banQuery = LoginDatabase.GetPreparedStatement(LOGIN_SEL_PINFO_BANS);
         banQuery->setUInt32(0, accId);
+        
         PreparedQueryResult accBannedResult = LoginDatabase.Query(banQuery);
         if (!accBannedResult)
         {
@@ -1935,8 +1946,8 @@ public:
         // Can be used to query data from World database
         PreparedStatement* xpQuery = WorldDatabase.GetPreparedStatement(WORLD_SEL_REQ_XP);
         xpQuery->setUInt8(0, level);
+        
         PreparedQueryResult xpResult = WorldDatabase.Query(xpQuery);
-
         if (xpResult)
         {
             Field* fields = xpResult->Fetch();
@@ -1946,8 +1957,8 @@ public:
         // Can be used to query data from Characters database
         PreparedStatement* charXpQuery = CharacterDatabase.GetPreparedStatement(CHAR_SEL_PINFO_XP);
         charXpQuery->setUInt32(0, lowguid);
+        
         PreparedQueryResult charXpResult = CharacterDatabase.Query(charXpQuery);
-
         if (charXpResult)
         {
             Field* fields = charXpResult->Fetch();
@@ -1958,6 +1969,7 @@ public:
             {
                 PreparedStatement* guildQuery = CharacterDatabase.GetPreparedStatement(CHAR_SEL_GUILD_MEMBER_EXTENDED);
                 guildQuery->setUInt32(0, lowguid);
+                
                 PreparedQueryResult guildInfoResult = CharacterDatabase.Query(guildQuery);
                 if (guildInfoResult)
                 {
@@ -1984,8 +1996,8 @@ public:
             handler->PSendSysMessage(LANG_PINFO_BANNED, banType.c_str(), banReason.c_str(), banTime > 0 ? secsToTimeString(banTime - GameTime::GetGameTime(), true).c_str() : handler->GetAcoreString(LANG_PERMANENTLY), bannedBy.c_str());
 
         // Output IV. LANG_PINFO_MUTED if mute is applied
-        if (muteTime > 0)
-            handler->PSendSysMessage(LANG_PINFO_MUTED, muteReason.c_str(), secsToTimeString(muteTime - GameTime::GetGameTime(), true).c_str(), muteBy.c_str());
+        if (muteDate > 0)
+            handler->PSendSysMessage(LANG_PINFO_MUTED, muteReason.c_str(), secsToTimeString(muteDate - GameTime::GetGameTime(), true).c_str(), muteBy.c_str());
 
         // Output V. LANG_PINFO_ACC_ACCOUNT
         handler->PSendSysMessage(LANG_PINFO_ACC_ACCOUNT, userName.c_str(), accId, security);
@@ -2150,6 +2162,9 @@ public:
        
         sMute->MutePlayer(targetName, notSpeakTime, handler->GetSession() ? handler->GetSession()->GetPlayerName() : handler->GetAcoreString(LANG_CONSOLE), muteReasonStr);
 
+        if (!CONF_GET_BOOL("ShowMuteInWorld"))
+            handler->PSendSysMessage(LANG_YOU_DISABLE_CHAT, handler->playerLink(targetName).c_str(), notSpeakTime, muteReasonStr.c_str());
+
         return true;
     }
 
@@ -2220,8 +2235,8 @@ public:
     {
         PreparedStatement *stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_MUTE_INFO);
         stmt->setUInt16(0, accountId);
+        
         PreparedQueryResult result = LoginDatabase.Query(stmt);
-
         if (!result)
         {
             handler->PSendSysMessage(LANG_COMMAND_MUTEHISTORY_EMPTY, accountName);
@@ -2229,6 +2244,7 @@ public:
         }
 
         handler->PSendSysMessage(LANG_COMMAND_MUTEHISTORY, accountName);
+        
         do
         {
             Field* fields = result->Fetch();
@@ -2244,6 +2260,7 @@ public:
 
             handler->PSendSysMessage(LANG_COMMAND_MUTEHISTORY_OUTPUT, buffer, fields[1].GetUInt32(), fields[2].GetCString(), fields[3].GetCString());
         } while (result->NextRow());
+        
         return true;
     }
 

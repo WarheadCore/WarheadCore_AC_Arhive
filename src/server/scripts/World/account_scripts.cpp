@@ -16,7 +16,9 @@
  */
 
 #include "ScriptMgr.h"
+#include "DatabaseEnv.h"
 #include "MuteManager.h"
+#include "World.h"
 
 class LoginMuteTime : public AccountScript
 {
@@ -26,7 +28,16 @@ public:
     void OnAccountLogin(uint32 accountID) override
     {
         sMute->LoginAccount(accountID);
-    }   
+    }
+
+    void OnAccountLogout(uint32 accountID) override
+    {
+        sMute->DeleteMuteTime(accountID, false);
+
+        auto session = sWorld->FindSession(accountID);
+
+        LoginDatabase.PExecute("UPDATE account SET totaltime = %u WHERE id = %u", session->GetTotalTime(), session->GetAccountId());
+    }
 };
 
 void AddSC_login_mute_time()
