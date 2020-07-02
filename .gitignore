@@ -94,6 +94,7 @@ local.properties
 # ==================
 
 # Add default WarheadCore modules
+!modules/mod-1v1-arena
 !modules/mod-anti-ad
 !modules/mod-anticheat
 !modules/mod-auto-revive

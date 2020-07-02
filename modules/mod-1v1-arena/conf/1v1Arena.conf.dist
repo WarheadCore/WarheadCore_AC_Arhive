@@ -1,0 +1,54 @@
+#
+# This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+#
+# This file is free software; as a special exception the author gives
+# unlimited permission to copy and/or distribute it, with or without
+# modifications, as long as this notice is preserved.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# User has manually chosen to ignore the git-tests, so throw them a warning.
+# This is done EACH compile so they can be alerted about the consequences.
+#
+
+########################################
+# 1v1Arena module configuration
+########################################
+[worldserver]
+
+#
+#     Arena.1v1.Enable
+#         Description: Enable the 1v1 arena.
+#         Default:     0 - (Disabled)
+#                      1 - (Enabled)
+#
+
+Arena1v1.Enable = 1
+
+#
+#    Arena.1v1.MinLevel
+#        Description: Min level to create an arena team
+#        Default:     80
+#
+
+Arena1v1.MinLevel = 80
+
+#
+#    Arena.1v1.Costs
+#        Description: Costs for create an arena team
+#        Default:     400000 - (40 gold)
+#
+
+Arena1v1.Costs = 400000
+
+#
+#    Arena.1v1.BlockForbiddenTalents
+#        Description: If true, healers can't join 1v1 arena, if they invested more than 35 talentpoints in a healing-talenttree.
+#                      You can also block tanks and other talents, if you modify FORBIDDEN_TALENTS_IN_1V1_ARENA in the npc_arena1v1.h file (hardcoding). See TalentTab.dbc for available talents (you will need an DBC-Editor).
+#        Default:     1 - (true)
+#                     0 - (false)
+#
+
+Arena1v1.BlockForbiddenTalents = 1
