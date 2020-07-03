@@ -48,7 +48,7 @@ list(APPEND CMAKE_MODULE_PATH
 
 if (CMAKE_VERSION VERSION_LESS "3.16.0")
   list(APPEND CMAKE_MODULE_PATH
-    "${CMAKE_SOURCE_DIR}/dep/cotire/CMake")
+    "${CMAKE_SOURCE_DIR}/deps/cotire/CMake")
 endif()
 
 include(CheckCXXSourceRuns)
