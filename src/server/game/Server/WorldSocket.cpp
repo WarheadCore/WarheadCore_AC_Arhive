@@ -789,8 +789,8 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     sLog->outStaticDebug ("WorldSocket::HandleAuthSession: client %u, loginServerID %u, account %s, loginServerType %u, clientseed %u", BuiltNumberClient, loginServerID, account.c_str(), loginServerType, clientSeed);
 #endif
     // Get the account information from the realmd database
-    //         0           1        2       3        4            5         6       7          8      9      10
-    // SELECT id, sessionkey, last_ip, locked, lock_country, expansion, mutetime, locale, recruiter, os, totaltime FROM account WHERE username = ?
+    //         0           1        2       3        4            5        6       7       8      9
+    // SELECT id, sessionkey, last_ip, locked, lock_country, expansion, locale, recruiter, os, totaltime FROM account WHERE username = ?
     PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_INFO_BY_NAME);
 
     stmt->setString(0, account);
@@ -853,29 +853,15 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
         security = SEC_ADMINISTRATOR;
         */
 
-    k.SetHexStr (fields[1].GetCString());
+    k.SetHexStr(fields[1].GetCString());
 
-    int64 mutetime = fields[6].GetInt64();
-    //! Negative mutetime indicates amount of seconds to be muted effective on next login - which is now.
-    if (mutetime < 0)
-    {
-        mutetime = GameTime::GetGameTime() + llabs(mutetime);
-
-        PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPD_MUTE_TIME_LOGIN);
-
-        stmt->setInt64(0, mutetime);
-        stmt->setUInt32(1, id);
-
-        LoginDatabase.Execute(stmt);
-    }
-
-    locale = LocaleConstant (fields[7].GetUInt8());
+    locale = LocaleConstant(fields[6].GetUInt8());
     if (locale >= TOTAL_LOCALES)
         locale = LOCALE_enUS;
 
-    uint32 recruiter = fields[8].GetUInt32();
-    std::string os = fields[9].GetString();
-    TotalTime = fields[10].GetUInt32();
+    uint32 recruiter = fields[7].GetUInt32();
+    std::string os = fields[8].GetString();
+    TotalTime = fields[9].GetUInt32();
 
     // Must be done before WorldSession is created
     if (wardenActive && os != "Win" && os != "OSX")
@@ -990,7 +976,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     LoginDatabase.Execute(stmt);
 
     // NOTE ATM the socket is single-threaded, have this in mind ...
-    ACE_NEW_RETURN(m_Session, WorldSession(id, this, AccountTypes(security), expansion, mutetime, locale, recruiter, isRecruiter, skipQueue, TotalTime), -1);
+    ACE_NEW_RETURN(m_Session, WorldSession(id, this, AccountTypes(security), expansion, locale, recruiter, isRecruiter, skipQueue, TotalTime), -1);
 
     m_Crypt.Init(&k);
 
@@ -1022,9 +1008,6 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     m_Session->LoadTutorialsData();
     m_Session->ReadAddonsInfo(recvPacket);
 
-    // At this point, we can safely hook a successful login
-    sScriptMgr->OnAccountLogin(id);
-
     // Initialize Warden system only if it is enabled by config
     if (wardenActive)
         m_Session->InitWarden(&k, os);
@@ -1034,6 +1017,9 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     ACE_OS::sleep (ACE_Time_Value (0, sleepTime));
 
     sWorld->AddSession (m_Session);
+
+    // At this point, we can safely hook a successful login
+    sScriptMgr->OnAccountLogin(id);
 
     return 0;
 }

@@ -42,6 +42,7 @@
 #include "GameTime.h"
 #include "GameConfig.h"
 #include "GameLocale.h"
+#include "MuteManager.h"
 
 class misc_commandscript : public CommandScript
 {
@@ -1756,7 +1757,7 @@ public:
         std::string OS                = handler->GetAcoreString(LANG_UNKNOWN);
 
         // Mute data print variables
-        int64 muteTime                = -1;
+        int32 muteTime                = 0;
         std::string muteReason        = handler->GetAcoreString(LANG_NO_REASON);
         std::string muteBy            = handler->GetAcoreString(LANG_UNKNOWN);
 
@@ -1807,7 +1808,6 @@ public:
             latency           = target->GetSession()->GetLatency();
             raceid            = target->getRace();
             classid           = target->getClass();
-            muteTime          = target->GetSession()->m_muteTime;
             mapId             = target->GetMapId();
             areaId            = target->GetAreaId();
             alive             = target->IsAlive() ? handler->GetAcoreString(LANG_YES) : handler->GetAcoreString(LANG_NO);
@@ -1852,8 +1852,8 @@ public:
         stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_PINFO);
         stmt->setInt32(0, int32(realmID));
         stmt->setUInt32(1, accId);
+        
         PreparedQueryResult accInfoResult = LoginDatabase.Query(stmt);
-
         if (accInfoResult)
         {
             Field* fields = accInfoResult->Fetch();
@@ -1900,12 +1900,23 @@ public:
                 lastIp    = handler->GetAcoreString(LANG_UNAUTHORIZED);
                 lastLogin = handler->GetAcoreString(LANG_UNAUTHORIZED);
             }
-            muteTime      = fields[6].GetUInt64();
-            muteReason    = fields[7].GetString();
-            muteBy        = fields[8].GetString();
-            failedLogins  = fields[9].GetUInt32();
-            locked        = fields[10].GetUInt8();
-            OS            = fields[11].GetString();
+            
+            failedLogins  = fields[6].GetUInt32();
+            locked        = fields[7].GetUInt8();
+            OS            = fields[8].GetString();
+        }
+
+        // Check mute info if exist
+        stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_MUTE_INFO);
+        stmt->setUInt32(0, accId);
+
+        PreparedQueryResult accmuteInfoResult = LoginDatabase.Query(stmt);
+        if (accmuteInfoResult)
+        {
+            Field* fields   = accmuteInfoResult->Fetch();
+            muteTime        = std::abs(fields[1].GetInt32());
+            muteReason      = fields[2].GetString();
+            muteBy          = fields[3].GetString();
         }
 
         // Creates a chat link to the character. Returns nameLink
@@ -1914,6 +1925,7 @@ public:
         // Returns banType, banTime, bannedBy, banreason
         PreparedStatement* banQuery = LoginDatabase.GetPreparedStatement(LOGIN_SEL_PINFO_BANS);
         banQuery->setUInt32(0, accId);
+        
         PreparedQueryResult accBannedResult = LoginDatabase.Query(banQuery);
         if (!accBannedResult)
         {
@@ -1934,8 +1946,8 @@ public:
         // Can be used to query data from World database
         PreparedStatement* xpQuery = WorldDatabase.GetPreparedStatement(WORLD_SEL_REQ_XP);
         xpQuery->setUInt8(0, level);
+        
         PreparedQueryResult xpResult = WorldDatabase.Query(xpQuery);
-
         if (xpResult)
         {
             Field* fields = xpResult->Fetch();
@@ -1945,8 +1957,8 @@ public:
         // Can be used to query data from Characters database
         PreparedStatement* charXpQuery = CharacterDatabase.GetPreparedStatement(CHAR_SEL_PINFO_XP);
         charXpQuery->setUInt32(0, lowguid);
+        
         PreparedQueryResult charXpResult = CharacterDatabase.Query(charXpQuery);
-
         if (charXpResult)
         {
             Field* fields = charXpResult->Fetch();
@@ -1957,6 +1969,7 @@ public:
             {
                 PreparedStatement* guildQuery = CharacterDatabase.GetPreparedStatement(CHAR_SEL_GUILD_MEMBER_EXTENDED);
                 guildQuery->setUInt32(0, lowguid);
+                
                 PreparedQueryResult guildInfoResult = CharacterDatabase.Query(guildQuery);
                 if (guildInfoResult)
                 {
@@ -1983,8 +1996,8 @@ public:
             handler->PSendSysMessage(LANG_PINFO_BANNED, banType.c_str(), banReason.c_str(), banTime > 0 ? secsToTimeString(banTime - GameTime::GetGameTime(), true).c_str() : handler->GetAcoreString(LANG_PERMANENTLY), bannedBy.c_str());
 
         // Output IV. LANG_PINFO_MUTED if mute is applied
-        if (muteTime > 0)
-            handler->PSendSysMessage(LANG_PINFO_MUTED, muteReason.c_str(), secsToTimeString(muteTime - GameTime::GetGameTime(), true).c_str(), muteBy.c_str());
+        if (muteTime)
+            handler->PSendSysMessage(LANG_PINFO_MUTED, muteReason.c_str(), secsToTimeString(muteTime, true).c_str(), muteBy.c_str());
 
         // Output V. LANG_PINFO_ACC_ACCOUNT
         handler->PSendSysMessage(LANG_PINFO_ACC_ACCOUNT, userName.c_str(), accId, security);
@@ -2144,59 +2157,13 @@ public:
         uint32 notSpeakTime = uint32(atoi(delayStr));
 
         // must have strong lesser security level
-        if (handler->HasLowerSecurity (target, targetGuid, true))
+        if (handler->HasLowerSecurity(target, targetGuid, true))
             return false;
+       
+        sMute->MutePlayer(targetName, notSpeakTime, handler->GetSession() ? handler->GetSession()->GetPlayerName() : handler->GetAcoreString(LANG_CONSOLE), muteReasonStr);
 
-        PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPD_MUTE_TIME);
-        std::string muteBy = "";
-        if (handler->GetSession())
-            muteBy = handler->GetSession()->GetPlayerName();
-        else
-            muteBy = handler->GetAcoreString(LANG_CONSOLE);
-
-        if (target)
-        {
-            // Target is online, mute will be in effect right away.
-            int64 muteTime = GameTime::GetGameTime() + notSpeakTime * MINUTE;
-            target->GetSession()->m_muteTime = muteTime;
-            stmt->setInt64(0, muteTime);
-            std::string nameLink = handler->playerLink(targetName);
-
-            if (CONF_GET_BOOL("ShowMuteInWorld"))
-                sWorld->SendWorldText(LANG_COMMAND_MUTEMESSAGE_WORLD, muteBy.c_str(), nameLink.c_str(), notSpeakTime, muteReasonStr.c_str());
-
-            ChatHandler(target->GetSession()).PSendSysMessage(LANG_YOUR_CHAT_DISABLED, notSpeakTime, muteBy.c_str(), muteReasonStr.c_str());
-        }
-        else
-        {
-            // Target is offline, mute will be in effect starting from the next login.
-            int32 muteTime = -int32(notSpeakTime * MINUTE);
-            stmt->setInt64(0, muteTime);
-        }
-
-        stmt->setString(1, muteReasonStr);
-        stmt->setString(2, muteBy);
-        stmt->setUInt32(3, accountId);
-        LoginDatabase.Execute(stmt);
-        stmt = LoginDatabase.GetPreparedStatement(LOGIN_INS_ACCOUNT_MUTE);
-        stmt->setUInt32(0, accountId);
-        stmt->setUInt32(1, notSpeakTime);
-        stmt->setString(2, muteBy);
-        stmt->setString(3, muteReasonStr);
-        LoginDatabase.Execute(stmt);
-        std::string nameLink = handler->playerLink(targetName);
-
-        if (CONF_GET_BOOL("ShowMuteInWorld") && !target)
-            sWorld->SendWorldText(LANG_COMMAND_MUTEMESSAGE_WORLD, muteBy.c_str(), nameLink.c_str(), notSpeakTime, muteReasonStr.c_str());
-        else
-        {
-            // pussywizard: notify all online GMs
-            ACORE_READ_GUARD(HashMapHolder<Player>::LockType, *HashMapHolder<Player>::GetLock());
-            HashMapHolder<Player>::MapType const& m = sObjectAccessor->GetPlayers();
-            for (HashMapHolder<Player>::MapType::const_iterator itr = m.begin(); itr != m.end(); ++itr)
-                if (itr->second->GetSession()->GetSecurity())
-                    ChatHandler(itr->second->GetSession()).PSendSysMessage(target ? LANG_YOU_DISABLE_CHAT : LANG_COMMAND_DISABLE_CHAT_DELAYED, (handler->GetSession() ? handler->GetSession()->GetPlayerName().c_str() : handler->GetAcoreString(LANG_CONSOLE)), nameLink.c_str(), notSpeakTime, muteReasonStr.c_str());
-        }
+        if (!CONF_GET_BOOL("ShowMuteInWorld"))
+            handler->PSendSysMessage(LANG_YOU_DISABLE_CHAT, handler->playerLink(targetName).c_str(), notSpeakTime, muteReasonStr.c_str());
 
         return true;
     }
@@ -2218,34 +2185,19 @@ public:
                 target = session->GetPlayer();
 
         // must have strong lesser security level
-        if (handler->HasLowerSecurity (target, targetGuid, true))
+        if (handler->HasLowerSecurity(target, targetGuid, true))
             return false;
 
-        if (target)
+        if (target && target->CanSpeak())
         {
-            if (target->CanSpeak())
-            {
-                handler->SendSysMessage(LANG_CHAT_ALREADY_ENABLED);
-                handler->SetSentErrorMessage(true);
-                return false;
-            }
-
-            target->GetSession()->m_muteTime = 0;
+            handler->SendSysMessage(LANG_CHAT_ALREADY_ENABLED);
+            handler->SetSentErrorMessage(true);
+            return false;
         }
 
-        PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPD_MUTE_TIME);
-        stmt->setInt64(0, 0);
-        stmt->setString(1, "");
-        stmt->setString(2, "");
-        stmt->setUInt32(3, accountId);
-        LoginDatabase.Execute(stmt);
+        sMute->UnMutePlayer(targetName);
 
-        if (target)
-            ChatHandler(target->GetSession()).PSendSysMessage(LANG_YOUR_CHAT_ENABLED);
-
-        std::string nameLink = handler->playerLink(targetName);
-
-        handler->PSendSysMessage(LANG_YOU_ENABLE_CHAT, nameLink.c_str());
+        handler->PSendSysMessage(LANG_YOU_ENABLE_CHAT, handler->playerLink(targetName).c_str());
 
         return true;
     }
@@ -2283,8 +2235,8 @@ public:
     {
         PreparedStatement *stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_MUTE_INFO);
         stmt->setUInt16(0, accountId);
+        
         PreparedQueryResult result = LoginDatabase.Query(stmt);
-
         if (!result)
         {
             handler->PSendSysMessage(LANG_COMMAND_MUTEHISTORY_EMPTY, accountName);
@@ -2292,6 +2244,7 @@ public:
         }
 
         handler->PSendSysMessage(LANG_COMMAND_MUTEHISTORY, accountName);
+        
         do
         {
             Field* fields = result->Fetch();
@@ -2307,6 +2260,7 @@ public:
 
             handler->PSendSysMessage(LANG_COMMAND_MUTEHISTORY_OUTPUT, buffer, fields[1].GetUInt32(), fields[2].GetCString(), fields[3].GetCString());
         } while (result->NextRow());
+        
         return true;
     }
 
