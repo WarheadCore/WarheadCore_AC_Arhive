@@ -1757,7 +1757,7 @@ public:
         std::string OS                = handler->GetAcoreString(LANG_UNKNOWN);
 
         // Mute data print variables
-        int32 muteDate                = -1;
+        int32 muteTime                = 0;
         std::string muteReason        = handler->GetAcoreString(LANG_NO_REASON);
         std::string muteBy            = handler->GetAcoreString(LANG_UNKNOWN);
 
@@ -1808,7 +1808,6 @@ public:
             latency           = target->GetSession()->GetLatency();
             raceid            = target->getRace();
             classid           = target->getClass();
-            muteDate          = sMute->GetMuteTime(accId);
             mapId             = target->GetMapId();
             areaId            = target->GetAreaId();
             alive             = target->IsAlive() ? handler->GetAcoreString(LANG_YES) : handler->GetAcoreString(LANG_NO);
@@ -1907,6 +1906,7 @@ public:
             OS            = fields[8].GetString();
         }
 
+        // Check mute info if exist
         stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_MUTE_INFO);
         stmt->setUInt32(0, accId);
 
@@ -1914,7 +1914,7 @@ public:
         if (accmuteInfoResult)
         {
             Field* fields   = accmuteInfoResult->Fetch();
-            muteDate        = fields[0].GetInt32();
+            muteTime        = std::abs(fields[1].GetInt32());
             muteReason      = fields[2].GetString();
             muteBy          = fields[3].GetString();
         }
@@ -1996,8 +1996,8 @@ public:
             handler->PSendSysMessage(LANG_PINFO_BANNED, banType.c_str(), banReason.c_str(), banTime > 0 ? secsToTimeString(banTime - GameTime::GetGameTime(), true).c_str() : handler->GetAcoreString(LANG_PERMANENTLY), bannedBy.c_str());
 
         // Output IV. LANG_PINFO_MUTED if mute is applied
-        if (muteDate > 0)
-            handler->PSendSysMessage(LANG_PINFO_MUTED, muteReason.c_str(), secsToTimeString(muteDate - GameTime::GetGameTime(), true).c_str(), muteBy.c_str());
+        if (muteTime)
+            handler->PSendSysMessage(LANG_PINFO_MUTED, muteReason.c_str(), secsToTimeString(muteTime, true).c_str(), muteBy.c_str());
 
         // Output V. LANG_PINFO_ACC_ACCOUNT
         handler->PSendSysMessage(LANG_PINFO_ACC_ACCOUNT, userName.c_str(), accId, security);
