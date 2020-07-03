@@ -33,10 +33,9 @@ public:
     void OnAccountLogout(uint32 accountID) override
     {
         sMute->DeleteMuteTime(accountID, false);
-
-        auto session = sWorld->FindSession(accountID);
-
-        LoginDatabase.PExecute("UPDATE account SET totaltime = %u WHERE id = %u", session->GetTotalTime(), session->GetAccountId());
+        
+        if (auto session = sWorld->FindSession(accountID))
+            LoginDatabase.PExecute("UPDATE account SET totaltime = %u WHERE id = %u", session->GetTotalTime(), session->GetAccountId());        
     }
 };
 
