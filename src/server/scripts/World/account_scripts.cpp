@@ -19,6 +19,7 @@
 #include "DatabaseEnv.h"
 #include "MuteManager.h"
 #include "World.h"
+#include "WorldSession.h"
 
 class LoginMuteTime : public AccountScript
 {
