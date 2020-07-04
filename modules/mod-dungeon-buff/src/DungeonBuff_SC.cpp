@@ -153,7 +153,7 @@ public:
         if (map->IsRaid() || map->Is25ManRaid())
             return;
 
-        if (player->GetMap()->IsDungeon())
+        if (map->IsDungeon())
             sDB->ApplyBuffs(player);
     }
 };
@@ -173,4 +173,5 @@ public:
 void AddSC_DungeonBuff()
 {
     new DungeonBuff_World();
+    new DungeonBuff_Player();
 }
