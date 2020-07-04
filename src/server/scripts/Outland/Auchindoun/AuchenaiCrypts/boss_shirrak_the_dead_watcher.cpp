@@ -111,7 +111,7 @@ public:
         void UpdateAI(uint32 diff)
         {
             events.Update(diff);
-            uint32 eventId = events.ExecuteEvent();
+            uint32 eventId = events.GetEvent();
 
             if (eventId == EVENT_SPELL_INHIBIT_MAGIC)
             {

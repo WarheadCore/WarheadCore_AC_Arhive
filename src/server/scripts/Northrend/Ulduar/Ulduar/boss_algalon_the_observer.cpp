@@ -619,7 +619,7 @@ class boss_algalon_the_observer : public CreatureScript
                 if (!(events.GetPhaseMask() & PHASE_MASK_NO_CAST_CHECK) && me->HasUnitState(UNIT_STATE_CASTING))
                     return;
 
-                switch (events.ExecuteEvent())
+                switch (events.GetEvent())
                 {
                     case EVENT_INTRO_1:
                         me->RemoveAurasDueToSpell(SPELL_RIDE_THE_LIGHTNING);
@@ -892,7 +892,7 @@ class npc_brann_bronzebeard_algalon : public CreatureScript
                 UpdateVictim();
                 events.Update(diff);
 
-                switch (events.ExecuteEvent())
+                switch (events.GetEvent())
                 {
                     case EVENT_BRANN_MOVE_INTRO:
                         events.PopEvent();
@@ -1031,7 +1031,7 @@ class npc_living_constellation : public CreatureScript
                     return;
 
                 events.Update(diff);
-                switch (events.ExecuteEvent())
+                switch (events.GetEvent())
                 {
                     case EVENT_ARCANE_BARRAGE:
                         me->CastCustomSpell(SPELL_ARCANE_BARRAGE, SPELLVALUE_MAX_TARGETS, 1, (Unit*)NULL, true);
@@ -1153,7 +1153,7 @@ class go_celestial_planetarium_access : public GameObjectScript
                     return;
 
                 events.Update(diff);
-                switch (events.ExecuteEvent())
+                switch (events.GetEvent())
                 {
                     case EVENT_DESPAWN_CONSOLE:
                         go->Delete();

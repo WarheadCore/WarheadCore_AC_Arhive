@@ -110,7 +110,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case EVENT_CHECK_HEALTH:
                     if (HealthBelowPct(25))
@@ -203,7 +203,7 @@ public:
                 return;
 
             events.Update(diff);
-            if (events.ExecuteEvent() == EVENT_STOLEN_SOUL_SPELL)
+            if (events.GetEvent() == EVENT_STOLEN_SOUL_SPELL)
             {
                 switch (myClass)
                 {

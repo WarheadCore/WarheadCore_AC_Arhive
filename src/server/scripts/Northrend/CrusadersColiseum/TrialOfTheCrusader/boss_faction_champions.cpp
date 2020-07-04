@@ -118,7 +118,7 @@ struct boss_faction_championsAI : public ScriptedAI
 
     void EventMapGCD(EventMap &e, uint32 delay, uint32 gcd = 0)
     {
-        e.DelayEvents(delay, gcd);
+        e.DelayEventsToMax(delay, gcd);
     }
 
     void JustDied(Unit* /*pKiller*/)
@@ -305,7 +305,7 @@ public:
             if( !myCanCast() )
                 return;
 
-            switch( events.ExecuteEvent() )
+            switch( events.GetEvent() )
             {
                 case 0:
                     break;
@@ -434,7 +434,7 @@ public:
             if( !myCanCast() )
                 return;
 
-            switch( events.ExecuteEvent() )
+            switch( events.GetEvent() )
             {
                 case 0:
                     break;
@@ -557,7 +557,7 @@ public:
             if( !myCanCast() )
                 return;
 
-            switch( events.ExecuteEvent() )
+            switch( events.GetEvent() )
             {
                 case 0:
                     break;
@@ -690,7 +690,7 @@ public:
             if( !myCanCast() )
                 return;
 
-            switch( events.ExecuteEvent() )
+            switch( events.GetEvent() )
             {
                 case 0:
                     break;
@@ -813,7 +813,7 @@ public:
             if( !myCanCast() )
                 return;
 
-            switch( events.ExecuteEvent() )
+            switch( events.GetEvent() )
             {
                 case 0:
                     break;
@@ -973,7 +973,7 @@ public:
             if( !myCanCast() )
                 return;
 
-            switch( events.ExecuteEvent() )
+            switch( events.GetEvent() )
             {
                 case 0:
                     break;
@@ -1110,7 +1110,7 @@ public:
             if( !myCanCast() )
                 return;
 
-            switch( events.ExecuteEvent() )
+            switch( events.GetEvent() )
             {
                 case 0:
                     break;
@@ -1264,7 +1264,7 @@ public:
             if( !myCanCast() )
                 return;
 
-            switch( events.ExecuteEvent() )
+            switch( events.GetEvent() )
             {
                 case 0:
                     break;
@@ -1417,7 +1417,7 @@ public:
             if( !myCanCast() )
                 return;
 
-            switch( events.ExecuteEvent() )
+            switch( events.GetEvent() )
             {
                 case 0:
                     break;
@@ -1556,7 +1556,7 @@ public:
             if( !myCanCast() )
                 return;
 
-            switch( events.ExecuteEvent() )
+            switch( events.GetEvent() )
             {
                 case 0:
                     break;
@@ -1748,7 +1748,7 @@ public:
             if( !myCanCast() )
                 return;
 
-            switch( events.ExecuteEvent() )
+            switch( events.GetEvent() )
             {
                 case 0:
                     break;
@@ -1905,7 +1905,7 @@ public:
             if( !myCanCast() )
                 return;
 
-            switch( events.ExecuteEvent() )
+            switch( events.GetEvent() )
             {
                 case 0:
                     break;
@@ -2064,7 +2064,7 @@ public:
             if( !myCanCast() )
                 return;
 
-            switch( events.ExecuteEvent() )
+            switch( events.GetEvent() )
             {
                 case 0:
                     break;
@@ -2203,7 +2203,7 @@ public:
             if( !myCanCast() )
                 return;
 
-            switch( events.ExecuteEvent() )
+            switch( events.GetEvent() )
             {
                 case 0:
                     break;
@@ -2348,7 +2348,7 @@ public:
             if( !myCanCast() )
                 return;
 
-            switch( events.ExecuteEvent() )
+            switch( events.GetEvent() )
             {
                 case 0:
                     break;
@@ -2423,7 +2423,7 @@ public:
             if( !myCanCast() )
                 return;
 
-            switch( events.ExecuteEvent() )
+            switch( events.GetEvent() )
             {
                 case 0:
                     break;

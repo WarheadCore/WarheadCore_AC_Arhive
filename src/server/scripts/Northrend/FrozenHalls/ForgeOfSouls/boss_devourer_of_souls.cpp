@@ -177,7 +177,7 @@ public:
             if (Spell* s = me->GetCurrentSpell(CURRENT_CHANNELED_SPELL))
                 if (s->m_spellInfo->Id == SPELL_MIRRORED_SOUL)
                 {
-                    switch (events.ExecuteEvent())
+                    switch (events.GetEvent())
                     {
                         case 0:
                             break;
@@ -203,7 +203,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch(events.ExecuteEvent())
+            switch(events.GetEvent())
             {
                 case 0:
                     break;
@@ -224,14 +224,14 @@ public:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40.0f, true))
                         me->CastSpell(target, SPELL_WELL_OF_SOULS, false);
                     events.RepeatEvent(urand(25000,30000));
-                    events.DelayEvents(4000, 0);
+                    events.DelayEventsToMax(4000, 0);
                     break;
                 case EVENT_SPELL_UNLEASHED_SOULS:
                     me->CastSpell(me, SPELL_UNLEASHED_SOULS, false);
                     Talk(SAY_FACE_UNLEASH_SOUL);
                     Talk(EMOTE_UNLEASH_SOUL);
                     events.RepeatEvent(urand(30000,40000));
-                    events.DelayEvents(5000, 0);
+                    events.DelayEventsToMax(5000, 0);
                     me->setAttackTimer(BASE_ATTACK, 5500);
                     break;
                 case EVENT_SPELL_WAILING_SOULS:
@@ -240,7 +240,7 @@ public:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
                         me->CastCustomSpell(SPELL_WAILING_SOULS_TARGETING, SPELLVALUE_MAX_TARGETS, 1, target, false);
                     events.RepeatEvent(80000);
-                    events.DelayEvents(20000, 0);
+                    events.DelayEventsToMax(20000, 0);
                     break;
             }
 
