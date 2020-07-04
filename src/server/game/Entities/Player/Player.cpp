@@ -15725,8 +15725,8 @@ void Player::AddQuest(Quest const* quest, Object* questGiver)
         PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_QUEST_TRACK);
         stmt->setUInt32(0, quest_id);
         stmt->setUInt32(1, GetGUIDLow());
-        stmt->setString(2, _HASH);
-        stmt->setString(3, _DATE);
+        stmt->setString(2, GitRevision::GetHash());
+        stmt->setString(3, GitRevision::GetDate());
 
         // add to Quest Tracker
         CharacterDatabase.Execute(stmt);
