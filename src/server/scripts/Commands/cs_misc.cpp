@@ -2251,14 +2251,18 @@ public:
 
             // we have to manually set the string for mutedate
             time_t sqlTime = fields[0].GetUInt32();
-            tm timeInfo;
-            char buffer[80];
+            std::tm aTm;
+            localtime_r(&sqlTime, &aTm);
 
-            // set it to string
-            localtime_r(&sqlTime, &timeInfo);
-            strftime(buffer, sizeof(buffer), "%Y-%m-%d %I:%M%p", &timeInfo);
+            //       YYYY   year
+            //       MM     month (2 digits 01-12)
+            //       DD     day (2 digits 01-31)
+            //       HH     hour (2 digits 00-23)
+            //       MM     minutes (2 digits 00-59)
+            //       SS     seconds (2 digits 00-59)
+            std::string const muteDate = warhead::StringFormat("%04d-%02d-%02d %02d:%02d:%02d", aTm.tm_year + 1900, aTm.tm_mon + 1, aTm.tm_mday, aTm.tm_hour, aTm.tm_min, aTm.tm_sec);
 
-            handler->PSendSysMessage(LANG_COMMAND_MUTEHISTORY_OUTPUT, buffer, fields[1].GetUInt32(), fields[2].GetCString(), fields[3].GetCString());
+            handler->PSendSysMessage(LANG_COMMAND_MUTEHISTORY_OUTPUT, muteDate.c_str(), secsToTimeString(fields[1].GetUInt32(), true).c_str(), fields[3].GetCString(), fields[2].GetCString());
         } while (result->NextRow());
         
         return true;
