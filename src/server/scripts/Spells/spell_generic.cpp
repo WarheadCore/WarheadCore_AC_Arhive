@@ -5022,7 +5022,7 @@ void AddSC_generic_spell_scripts()
     new spell_gen_have_item_auras();
     new spell_gen_mine_sweeper();
     new spell_gen_reduced_above_60();
-    new spell_gen_relocaste_dest("spell_q10838_demoniWH_scryer_visual", 0, 0, 20.0, 0);
+    new spell_gen_relocaste_dest("spell_q10838_demoniac_scryer_visual", 0, 0, 20.0, 0);
     new spell_gen_relocaste_dest("spell_q20438_q24556_aquantos_laundry", 0, 0, 7.0f, 0);
     new spell_gen_allow_proc_from_spells_with_cost();
     new spell_gen_bg_preparation();
