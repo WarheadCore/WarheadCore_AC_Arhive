@@ -92,7 +92,6 @@ private:
     bool IsPlayerBuffed(Player* player)
     {
         auto const& itr = _playerBuffedStore.find(player->GetGUID());
-
         if (itr != _playerBuffedStore.end())
             return true;
 
@@ -102,6 +101,7 @@ private:
     uint32 GetPlayerCountInGroup(Player* player)
     {
         uint32 count = 1;
+        
         if (Group* group = player->GetGroup())
             count = static_cast<uint32>(group->GetMemberSlots().size());
 
@@ -144,7 +144,7 @@ public:
             return;
 
         if (!player)
-            return;        
+            return;
 
         sDB->ClearBuffs(player);
 
@@ -163,7 +163,7 @@ class DungeonBuff_World : public WorldScript
 public:
     DungeonBuff_World() : WorldScript("DungeonBuff_World") { }
 
-    void OnAfterConfigLoad(bool /*Reload*/) override
+    void OnAfterConfigLoad(bool /*reload*/) override
     {
         sDB->LoadConfig();
     }
