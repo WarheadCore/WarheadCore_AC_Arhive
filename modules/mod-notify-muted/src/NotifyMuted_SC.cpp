@@ -21,6 +21,7 @@
 #include "Chat.h"
 #include "Player.h"
 #include "GameTime.h"
+#include "MuteManager.h"
 
 namespace lang
 {
@@ -43,7 +44,7 @@ public:
         if (receiver->CanSpeak())
             return;
 
-        uint64 MuteTime = receiver->GetSession()->m_muteTime;
+        uint64 MuteTime = sMute->GetMuteTime(receiver->GetSession()->GetAccountId());
         if (!MuteTime)
             return;
 

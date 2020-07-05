@@ -146,7 +146,7 @@ public:
             }
 
             events.Update(diff);
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case EVENT_SPELL_CORROSIVE:
                     me->CastSpell(me->GetVictim(), SPELL_CORROSIVE_ACID, false);

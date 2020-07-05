@@ -141,7 +141,7 @@ public:
                 if (me->isAttackReady())
                     me->SetFacingToObject(me->GetVictim());
 
-            switch(events.ExecuteEvent())
+            switch(events.GetEvent())
             {
                 case 0:
                     break;

@@ -90,6 +90,7 @@
 #include "GameGraveyard.h"
 #include "GameTime.h"
 #include "GameLocale.h"
+#include "MuteManager.h"
 
 #define ZONE_UPDATE_INTERVAL (2*IN_MILLISECONDS)
 
@@ -1614,16 +1615,7 @@ void Player::Update(uint32 p_time)
     }
 
     // If mute expired, remove it from the DB
-    if (GetSession()->m_muteTime && GetSession()->m_muteTime < now)
-    {
-        GetSession()->m_muteTime = 0;
-        PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPD_MUTE_TIME);
-        stmt->setInt64(0, 0); // Set the mute time to 0
-        stmt->setString(1, "");
-        stmt->setString(2, "");
-        stmt->setUInt32(3, GetSession()->GetAccountId());
-        LoginDatabase.Execute(stmt);
-    }
+    sMute->CheckMuteExpired(GetSession()->GetAccountId());
 
     if (!m_timedquests.empty())
     {
@@ -15733,8 +15725,8 @@ void Player::AddQuest(Quest const* quest, Object* questGiver)
         PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_QUEST_TRACK);
         stmt->setUInt32(0, quest_id);
         stmt->setUInt32(1, GetGUIDLow());
-        stmt->setString(2, _HASH);
-        stmt->setString(3, _DATE);
+        stmt->setString(2, GitRevision::GetHash());
+        stmt->setString(3, GitRevision::GetDate());
 
         // add to Quest Tracker
         CharacterDatabase.Execute(stmt);
@@ -20396,7 +20388,7 @@ void Player::UpdateSpeakTime(uint32 specialMessageLimit)
     if (!AccountMgr::IsPlayerAccount(GetSession()->GetSecurity()))
         return;
 
-    time_t current = time (NULL);
+    time_t current = GameTime::GetGameTime();
     if (m_speakTime > current)
     {
         uint32 max_count = specialMessageLimit ? specialMessageLimit : sGameConfig->GetIntConfig("ChatFlood.MessageCount");
@@ -20408,8 +20400,8 @@ void Player::UpdateSpeakTime(uint32 specialMessageLimit)
         {
             // prevent overwrite mute time, if message send just before mutes set, for example.
             time_t new_mute = current + sGameConfig->GetIntConfig("ChatFlood.MuteTime");
-            if (GetSession()->m_muteTime < new_mute)
-                GetSession()->m_muteTime = new_mute;
+            if (sMute->GetMuteTime(GetSession()->GetAccountId()) < new_mute)
+                sMute->SetMuteTime(GetSession()->GetAccountId(), new_mute);
 
             m_speakCount = 0;
         }
@@ -20422,7 +20414,7 @@ void Player::UpdateSpeakTime(uint32 specialMessageLimit)
 
 bool Player::CanSpeak() const
 {
-    return  GetSession()->m_muteTime <= time (NULL);
+    return sMute->CanSpeak(GetSession()->GetAccountId());
 }
 
 /*********************************************************/

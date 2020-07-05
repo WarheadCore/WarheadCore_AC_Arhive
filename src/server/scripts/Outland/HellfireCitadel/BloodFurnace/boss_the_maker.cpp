@@ -107,7 +107,7 @@ class boss_the_maker : public CreatureScript
                 if (me->HasUnitState(UNIT_STATE_CASTING))
                     return;
 
-                switch (events.ExecuteEvent())
+                switch (events.GetEvent())
                 {
                     case EVENT_SPELL_ACID:
                         me->CastSpell(me->GetVictim(), SPELL_ACID_SPRAY, false);

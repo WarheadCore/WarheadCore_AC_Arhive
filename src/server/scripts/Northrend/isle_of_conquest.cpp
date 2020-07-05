@@ -270,7 +270,7 @@ class boss_isle_of_conquest : public CreatureScript
                 if (me->HasUnitState(UNIT_STATE_CASTING))
                     return;
 
-                switch (events.ExecuteEvent())
+                switch (events.GetEvent())
                 {
                     case EVENT_CHECK_RAGE:
                         CheckRageBuff();

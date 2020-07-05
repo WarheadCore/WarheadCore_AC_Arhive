@@ -443,7 +443,7 @@ public:
 
             events.Update(diff);
 
-            switch( events.ExecuteEvent() )
+            switch( events.GetEvent() )
             {
                 case 0:
                     break;
@@ -1166,7 +1166,7 @@ public:
             if (!cannon || cannon->HasUnitState(UNIT_STATE_CASTING) || me->HasUnitState(UNIT_STATE_CASTING) || me->HasAuraType(SPELL_AURA_MOD_SILENCE))
                 return;
 
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case 0:
                     break;
@@ -1479,7 +1479,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case 0:
                     break;
@@ -1836,7 +1836,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case 0:
                     break;
@@ -2387,7 +2387,7 @@ public:
 
             events.Update(diff);
 
-            switch( events.ExecuteEvent() )
+            switch( events.GetEvent() )
             {
                 case 0:
                     break;
@@ -2511,7 +2511,7 @@ public:
         void UpdateAI(uint32 diff)
         {
             events.Update(diff);
-            switch( events.ExecuteEvent() )
+            switch( events.GetEvent() )
             {
                 case 0:
                     break;

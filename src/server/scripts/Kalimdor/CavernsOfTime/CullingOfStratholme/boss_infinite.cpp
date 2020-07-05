@@ -135,7 +135,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case EVENT_SPELL_VOID_STRIKE:
                     me->CastSpell(me->GetVictim(), SPELL_VOID_STRIKE, false);

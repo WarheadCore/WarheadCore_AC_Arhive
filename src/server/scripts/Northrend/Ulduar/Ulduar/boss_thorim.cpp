@@ -681,7 +681,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case EVENT_THORIM_AGGRO:
                     me->MonsterYell("Interlopers! You mortals who dare to interfere with my sport will pay... Wait--you...", LANG_UNIVERSAL, 0);
@@ -896,7 +896,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case EVENT_SIF_FINISH_DOMINION:
                     events.PopEvent();
@@ -1223,7 +1223,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case EVENT_DR_ACOLYTE_GH:
                     if (HealthBelowPct(60))
@@ -1340,7 +1340,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case EVENT_IR_GUARD_IMPALE:
                     me->CastSpell(me->GetVictim(), SPELL_IMPALE, false);
@@ -1483,7 +1483,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case EVENT_RC_RUNIC_SMASH_TRIGGER:
                     _nextTriggerPos += 16.0f;
@@ -1586,7 +1586,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case EVENT_ARG_RD:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
@@ -1704,7 +1704,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case EVENT_DR_WARBRINGER_RS:
                     me->CastSpell(me->GetVictim(), SPELL_RUNIC_STRIKE, false);

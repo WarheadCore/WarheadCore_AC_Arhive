@@ -499,7 +499,7 @@ public:
         void UpdateAI(uint32 diff)
         {
             events.Update(diff);
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case EVENT_BETRAYAL_1:
                     Talk(SAY_DRAKURU_0);
@@ -600,7 +600,7 @@ public:
             if (!UpdateVictim())
                 return;
 
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case EVENT_BETRAYAL_SHADOW_BOLT:
                     if (!me->IsWithinMeleeRange(me->GetVictim()))

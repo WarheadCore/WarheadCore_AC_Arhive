@@ -316,7 +316,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch(events.ExecuteEvent())
+            switch(events.GetEvent())
             {
                 // Control events
                 case EVENT_HEALTH_CHECK:

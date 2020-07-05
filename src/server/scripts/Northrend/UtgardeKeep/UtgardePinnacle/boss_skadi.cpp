@@ -204,7 +204,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case EVENT_SKADI_START:
                 {
@@ -443,7 +443,7 @@ public:
         void UpdateAI(uint32 diff)
         {
             events.Update(diff);
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case EVENT_GRAUF_CHECK:
                 {

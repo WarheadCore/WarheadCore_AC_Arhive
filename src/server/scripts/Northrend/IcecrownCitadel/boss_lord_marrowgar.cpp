@@ -167,7 +167,7 @@ class boss_lord_marrowgar : public CreatureScript
                 if (me->HasUnitState(UNIT_STATE_CASTING))
                     return;
 
-                switch (events.ExecuteEvent())
+                switch (events.GetEvent())
                 {
                     case 0:
                         break;
@@ -340,7 +340,7 @@ public:
         {
             events.Update(diff);
 
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case 0:
                     break;

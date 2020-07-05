@@ -46,6 +46,7 @@
 #include "BattlegroundQueue.h"
 #include "GameGraveyard.h"
 #include "GameTime.h"
+#include "GameConfig.h"
 #include <unordered_map>
 #include <random>
 
@@ -801,13 +802,13 @@ uint8 BattlegroundMgr::BGArenaType(BattlegroundQueueTypeId bgQueueTypeId)
 
 void BattlegroundMgr::ToggleTesting()
 {
-    m_Testing = !m_Testing;
+    m_Testing = sGameConfig->GetBoolConfig("Debug.Battleground") ? true : !m_Testing;
     sWorld->SendWorldText(m_Testing ? LANG_DEBUG_BG_ON : LANG_DEBUG_BG_OFF);
 }
 
 void BattlegroundMgr::ToggleArenaTesting()
 {
-    m_ArenaTesting = !m_ArenaTesting;
+    m_ArenaTesting = sGameConfig->GetBoolConfig("Debug.Arena") ? true : !m_ArenaTesting;
     sWorld->SendWorldText(m_ArenaTesting ? LANG_DEBUG_ARENA_ON : LANG_DEBUG_ARENA_OFF);
 }
 
