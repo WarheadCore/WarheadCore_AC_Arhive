@@ -24,6 +24,17 @@
 
 class WH_COMMON_API EventMap
 {
+    /**
+    * Internal storage type.
+    * Key: Time as uint32 when the event should occur.
+    * Value: The event data as uint32.
+    *
+    * Structure of event data:
+    * - Bit  0 - 15: Event Id.
+    * - Bit 16 - 23: Group
+    * - Bit 24 - 31: Phase
+    * - Pattern: 0xPPGGEEEE
+    */
     typedef std::multimap<uint32, uint32> EventStore;
 
 public:
@@ -54,6 +65,9 @@ public:
         return _time;
     }
 
+    /**
+    * @name SetTimer\
+    */
     void SetTimer(uint32 time)
     {
         _time = time;
@@ -168,10 +182,39 @@ public:
 
     /**
     * @name RepeatEvent
+    * @brief Repeats the mostly recently executed event.
+    * @param time Time until in milliseconds as std::chrono::duration the event occurs.
+    */
+    void RepeatEvent(Milliseconds time)
+    {
+        RepeatEvent(uint32(time.count()));
+    }
+    
+    /**
+    * @name RepeatEvent
     * @brief Repeats the mostly recently executed event, Equivalent to Repeat(urand(minTime, maxTime).
     * @param time time until the event occurs.
     */
     void RepeatEvent(uint32 time);
+
+    /**
+    * @name RepeatEvent
+    * @brief Repeats the mostly recently executed event.
+    * @param minTime Minimum time as std::chrono::duration until the event occurs.
+    * @param maxTime Maximum time as std::chrono::duration until the event occurs.
+    */
+    void RepeatEvent(Milliseconds minTime, Milliseconds maxTime)
+    {
+        RepeatEvent(uint32(minTime.count()), uint32(maxTime.count()));
+    }
+
+    /**
+    * @name RepeatEvent
+    * @brief Repeats the mostly recently executed event, Equivalent to Repeat(urand(minTime, maxTime).
+    * @param minTime Minimum time until the event occurs.
+    * @param maxTime Maximum time until the event occurs.
+    */
+    void RepeatEvent(uint32 minTime, uint32 maxTime);
 
     /**
     * @name PopEvent
@@ -221,6 +264,9 @@ public:
         DelayEvents(uint32(delay.count()), group);
     }
 
+    /**
+    * @name DelayEventsToMax
+    */
     void DelayEventsToMax(uint32 delay, uint32 group);
 
     /**

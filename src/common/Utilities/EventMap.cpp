@@ -71,6 +71,11 @@ void EventMap::RescheduleEvent(uint32 eventId, uint32 time, uint32 groupId /*= 0
     ScheduleEvent(eventId, time, groupId, phase);
 }
 
+void EventMap::RepeatEvent(uint32 minTime, uint32 maxTime)
+{
+    RepeatEvent(urand(minTime, maxTime));
+}
+
 void EventMap::RepeatEvent(uint32 time)
 {
     if (Empty())
