@@ -21,6 +21,7 @@
 #include "Chat.h"
 #include "Player.h"
 #include "ScriptedGossip.h"
+#include "TaskScheduler.h"
 
 class ExternalMail
 {
@@ -29,16 +30,6 @@ public:
     {
         static ExternalMail instance;
         return &instance;
-    }
-
-    void LoadConfig()
-    {
-        _IntervalTime = CONF_GET_INT("External.Mail.Interval") * 1000 * 60;
-    }
-
-    uint32 GetCheckTimeInterval()
-    {
-        return _IntervalTime;
     }
 
     void SendMails()
@@ -162,11 +153,6 @@ public:
             LOG_INFO("modules", "");
         }
     }
-
-private:
-
-    // From config
-    uint32 _IntervalTime;
 };
 
 #define sEM ExternalMail::instance()
@@ -179,28 +165,32 @@ public:
     void OnAfterConfigLoad(bool /*reload*/) override
     {
         sGameConfig->AddBoolConfig("External.Mail.Enable");
-        sGameConfig->AddIntConfig("External.Mail.Interval", 5);
-
-        sEM->LoadConfig();
     }
 
-    void OnUpdate(uint32 Diff) override
+    void OnStartup() override
     {
         if (!CONF_GET_BOOL("External.Mail.Enable"))
             return;
 
-        uint32 TimeInterval = sEM->GetCheckTimeInterval();
-
-        if (CheckTimeInterval < Diff)
+        scheduler.Schedule(1min, [this](TaskContext context)
         {
+            LOG_TRACE("modules.em", "> External Mail: Send mails");
+
             sEM->SendMails();
-            CheckTimeInterval = TimeInterval;
-        }
-        else
-            CheckTimeInterval -= Diff;
+
+            context.Repeat();
+        });
+    }
+
+    void OnUpdate(uint32 diff) override
+    {
+        if (!CONF_GET_BOOL("External.Mail.Enable"))
+            return;
+
+        scheduler.Update(diff);
     }
 private:
-    uint32 CheckTimeInterval = sEM->GetCheckTimeInterval();
+    TaskScheduler scheduler;
 };
 
 // Group all custom scripts
