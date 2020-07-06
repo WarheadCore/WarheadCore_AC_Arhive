@@ -22,7 +22,7 @@
 #
 #    PlayerInfoAtLogin.Enable
 #        Description: Display info at login in game world
-#        Default: 1
+#        Default: 0
 #
 
-PlayerInfoAtLogin.Enable = 1
+PlayerInfoAtLogin.Enable = 0

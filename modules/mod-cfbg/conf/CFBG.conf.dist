@@ -23,7 +23,7 @@
 #   
 #   CFBG.Enable
 #       Description: Enable mixed alliance and horde in one battleground 
-#       Default: 1
+#       Default: 0
 #
 #   CFBG.Include.Avg.Ilvl.Enable
 #       Description: Enable check average item level for bg

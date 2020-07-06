@@ -29,5 +29,5 @@
 #        Default: 1 minutes
 #
 
-External.Mail.Enable = 1
+External.Mail.Enable = 0
 External.Mail.Interval = 1

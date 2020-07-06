@@ -22,7 +22,7 @@
 #
 #    ChannelIconFaction.Enable
 #        Description: Display fraction incons in chat channels.
-#        Default: 1
+#        Default: 0
 #
 #    ChannelIconFaction.OnlyLFG
 #        Description: Display fraction incons in chat channels only LFG.
@@ -33,6 +33,6 @@
 #        Default: 0
 #
 
-ChannelIconFaction.Enable = 1
+ChannelIconFaction.Enable = 0
 ChannelIconFaction.OnlyLFG = 1
 ChannelIconFaction.GM = 0
