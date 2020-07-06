@@ -55,13 +55,13 @@ public:
         uint32 msTime = getMSTime();
         rewards.clear();
 
-        LOG_INFO("module", "Loading online rewards...");
+        LOG_INFO("modules", "Loading online rewards...");
 
         QueryResult result = CharacterDatabase.Query("SELECT RewardPlayedTime, ItemID, Count FROM online_reward");
         if (!result)
         {
             sLog->outErrorDb(">> In DB table `online_reward` not data. Loading canceled");
-            sLog->outString();
+            LOG_INFO("modules", "");
             return;
         }
 
@@ -99,8 +99,8 @@ public:
 
         } while (result->NextRow());
 
-        sLog->outString(">> Loaded %u reward in %u ms", (uint32)rewards.size(), GetMSTimeDiffToNow(msTime));
-        sLog->outString();
+        LOG_INFO("modules", ">> Loaded %u reward in %u ms", (uint32)rewards.size(), GetMSTimeDiffToNow(msTime));
+        LOG_INFO("modules", "");
     }
 
     void RewardPlayer(Player* player)

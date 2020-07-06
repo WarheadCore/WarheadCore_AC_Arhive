@@ -117,7 +117,7 @@ public:
 
                 if (ItemCount < 1 || (itemTemplate->MaxCount > 0 && ItemCount > static_cast<uint32>(itemTemplate->MaxCount)))
                 {
-                    LOG_ERROR("module", "> External Mail: Некорректное количество (%u) для предмета (%u)", ItemCount, ItemID);
+                    LOG_ERROR("modules", "> External Mail: Некорректное количество (%u) для предмета (%u)", ItemCount, ItemID);
                     continue;
                 }
 
@@ -131,7 +131,7 @@ public:
 
                 if (items.size() > MAX_MAIL_ITEMS)
                 {
-                    LOG_ERROR("module", "> External Mail: Превышен лимит количества предметов для ID - %u", ID);
+                    LOG_ERROR("modules", "> External Mail: Превышен лимит количества предметов для ID - %u", ID);
                     continue;
                 }
 
@@ -158,8 +158,8 @@ public:
 
         if (MessagesCount)
         {
-            sLog->outString("> External Mail: Отправлено (%u) писем", MessagesCount);
-            sLog->outString();
+            LOG_INFO("modules", "> External Mail: Отправлено (%u) писем", MessagesCount);
+            LOG_INFO("modules", "");
         }
     }
 
