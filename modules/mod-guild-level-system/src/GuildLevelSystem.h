@@ -34,20 +34,20 @@ class GuildLevel
 {
 public:
     GuildLevel::GuildLevel(uint32 level, uint32 exp, Guild* _source)
-        : Level(level), Exp(exp), source(_source) { }
+        : _level(level), _exp(exp), _source(_source) { }
 
     // Get
-    uint32 GetLevel() { return Level; }
-    uint32 GetExp() { return Exp; }
-    Guild* GetSource() { return source; }    
+    uint32 GetLevel() { return _level; }
+    uint32 GetExp() { return _exp; }
+    Guild* GetSource() { return _source; }    
 
     // Add
     void AddExp(uint32 exp);
 
 private:
-    uint32 Level;
-    uint32 Exp;
-    Guild* source;
+    uint32 _level;
+    uint32 _exp;
+    Guild* _source;
 };
 
 class GuildLevelSystem

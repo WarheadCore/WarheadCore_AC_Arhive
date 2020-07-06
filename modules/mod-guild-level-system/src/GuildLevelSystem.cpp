@@ -34,27 +34,27 @@ void GuildLevel::AddExp(uint32 exp)
     uint32 nextLvlXP = sGuildLevelSystem->GetExpForNextLevel(level);
     uint32 newXP = curXP + exp;
 
-    while (newXP >= nextLvlXP && Level < CONF_GET_INT("GLS.MaxLevel"))
+    while (newXP >= nextLvlXP && _level < CONF_GET_INT("GLS.MaxLevel"))
     {
         newXP -= nextLvlXP;
 
         if (level < sGuildLevelSystem->GetMaxLevel())
         {
-            sGuildLevelSystem->SendGuildFormat(source, "|cffff0000#|r |cff6C8CD5Гильдия достигла|r %u-го |cff6C8CD5уровня.|r", level + 1);
+            sGuildLevelSystem->SendGuildFormat(_source, "|cffff0000#|r |cff6C8CD5Гильдия|r %s |cff6C8CD5достигла|r %u-го |cff6C8CD5уровня.|r", _source->GetName().c_str(), level + 1);
 
-            Level = level + 1;
-            sGuildLevelSystem->UpdateGuildVisibleLevel(source->GetId());
-            sGuildLevelSystem->UpdateRewardForNewLevel(source->GetId());
+            _level = level + 1;
+            sGuildLevelSystem->UpdateGuildVisibleLevel(_source->GetId());
+            sGuildLevelSystem->UpdateRewardForNewLevel(_source->GetId());
 
-            CharacterDatabase.PExecute("UPDATE `gls_guild_level` SET `Level` = %u WHERE `GuildID` = %u", level + 1, source->GetId());
+            CharacterDatabase.PExecute("UPDATE `gls_guild_level` SET `Level` = %u WHERE `GuildID` = %u", level + 1, _source->GetId());
         }
 
         level = GetLevel();
         nextLvlXP = sGuildLevelSystem->GetExpForNextLevel(level);
     }
 
-    Exp = newXP;
-    CharacterDatabase.PExecute("UPDATE `gls_guild_level` SET `Exp` = %u WHERE `GuildID` = %u", newXP, source->GetId());
+    _exp = newXP;
+    CharacterDatabase.PExecute("UPDATE `gls_guild_level` SET `Exp` = %u WHERE `GuildID` = %u", newXP, _source->GetId());
 }
 
 GuildLevelSystem* GuildLevelSystem::instance()
@@ -67,7 +67,9 @@ void GuildLevelSystem::Init()
 {
     LOG_INFO("module", "Loading Guild Level System");
 
-    ItemTemplate const* itemTemplate = sObjectMgr->GetItemTemplate(CONF_GET_INT("GLS.Exp.ItemID"));
+    _expItemID = CONF_GET_INT("GLS.Exp.ItemID");
+
+    ItemTemplate const* itemTemplate = sObjectMgr->GetItemTemplate(_expItemID);
     if (!itemTemplate)
     {
         LOG_ERROR("module.gls", "> ItemID (%s) for GLS is not valid. Set default (37711)", CONF_GET_INT("GLS.Exp.ItemID"));
@@ -254,7 +256,7 @@ GuildLevel* GuildLevelSystem::GetGLS(uint32 guildid, bool needCheck /*= true*/)
         return itr->second;
 
     if (needCheck)
-        ASSERT(false, "> Guild id (%u) is not found in GLS", guildid);
+        ABORT_MSG("> Guild id (%u) is not found in GLS", guildid);
 
     return nullptr;
 }
@@ -262,7 +264,7 @@ GuildLevel* GuildLevelSystem::GetGLS(uint32 guildid, bool needCheck /*= true*/)
 void GuildLevelSystem::AddGLS(Guild* guild, uint32 level, uint32 exp)
 {
     if (GetGLS(guild->GetId(), false))
-        ASSERT(false, "> Guild id (%u) is exist in GLS", guild->GetId());
+        ABORT_MSG("> Guild id (%u) is exist in GLS", guild->GetId());
 
     _guildstore.insert(std::make_pair(guild->GetId(), new GuildLevel(level, exp, guild)));
 }
@@ -270,7 +272,7 @@ void GuildLevelSystem::AddGLS(Guild* guild, uint32 level, uint32 exp)
 void GuildLevelSystem::AddEmptyGLS(Guild* guild)
 {
     if (GetGLS(guild->GetId(), false))
-        ASSERT(false, "> Guild id (%u) is exist in GLS", guild->GetId());
+        ABORT_MSG("> Guild id (%u) is exist in GLS", guild->GetId());
 
     SQLTransaction trans = CharacterDatabase.BeginTransaction();
 
@@ -429,12 +431,6 @@ void GuildLevelSystem::InvestExpChoice(Player* player, char const* code)
     int32 InvestCount = atoi(code);
     uint32 ItemCount = player->GetItemCount(guildExpItemID);
 
-    if (!ItemCount)
-    {
-        handler.PSendSysMessage("|cFFFF0000#|cff6C8CD5 У вас нет|r %s", ItemLink.c_str());
-        return;
-    }
-
     if (!player->HasItemCount(guildExpItemID, InvestCount))
     {
         uint32 NeedItemCount = InvestCount - ItemCount;
@@ -443,7 +439,7 @@ void GuildLevelSystem::InvestExpChoice(Player* player, char const* code)
     }
 
     player->DestroyItemCount(guildExpItemID, InvestCount, true);
-    AddGuildExp(guild, ItemCount);
+    AddGuildExp(guild, InvestCount);
     CharacterDatabase.PExecute("INSERT INTO `gls_invested`(`GuildID`, `PlayerName`, `InvestExp`, `UnixDate`) VALUES (%u, '%s', %u, %u)", guild->GetId(), player->GetName().c_str(), InvestCount, GameTime::GetGameTime());
 }
 
@@ -648,8 +644,6 @@ void GuildLevelSystem::SetFullName(uint32 guildID)
     std::string const& fullName = warhead::StringFormat("%s (%u level)", guild->GetName().c_str(), GetGLS(guild->GetId())->GetLevel());
 
     guild->SetName(fullName, true);
-
-    LOG_WARN("module", "GLS: Add full name %s", fullName.c_str());
 }
 
 void GuildLevelSystem::SetFullNameFirstLevel(Guild* guild)
