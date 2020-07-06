@@ -18,11 +18,11 @@
 #include "Log.h"
 #include "ScriptMgr.h"
 #include "GameConfig.h"
-#include "Chat.h"
-#include "Player.h"
-#include "ScriptedGossip.h"
+#include "ExternalMail.h"
 #include "TaskScheduler.h"
+#include "Player.h"
 #include <vector>
+#include <unordered_map>
 
 enum IPSShopType
 {
@@ -64,6 +64,8 @@ public:
         QueryResult result = CharacterDatabase.PQuery("SELECT id, nickname, item_id, item_quantity FROM `shop_purchase` WHERE flag = 0");
         if (!result)
             return;
+
+        LOG_TRACE("modules.ips", "> DonateIPS: SendDonate");
 
         do
         {
@@ -176,9 +178,7 @@ private:
 
     void SendRewardItem(std::string charName, uint32 itemID, uint32 itemCount)
     {
-        // Add mail item
-        CharacterDatabase.PExecute("INSERT INTO `mail_external` (PlayerName, Subject, ItemID, ItemCount, Message, CreatureEntry) VALUES ('%s', '%s', %u, %u, '%s', 37688)",
-            charName.c_str(), thanksSubject.c_str(), itemID, itemCount, thanksText.c_str());
+        sEM->AddMail(charName, thanksSubject, thanksText, itemID, itemCount, 37688);
     }
 
     void SendRewardRename(std::string charName)
@@ -232,8 +232,6 @@ public:
 
         scheduler.Schedule(15s, [this](TaskContext context)
         {
-            LOG_TRACE("modules.ips", "> DonateIPS: SendDonate");
-
             sDonateIPS->SendDonate();
 
             context.Repeat();
