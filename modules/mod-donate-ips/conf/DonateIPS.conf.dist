@@ -19,7 +19,12 @@
 [worldserver]
 
 #
-#   IPS.Donate.Enable
+#   IPSShop.Enable
+#       Описание: Систему доната wowka.su
+#       Значение: 0 - выключить (по умолчанию)
+#                 1 - включить
 #
 
-IPS.Donate.Enable = 1
+IPSShop.Enable = 0
+
+#Logger.modules.ips = 6,Modules
