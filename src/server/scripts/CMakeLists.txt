@@ -32,13 +32,10 @@ macro(PrepareScripts name out)
   message(STATUS "  -> Prepared: ${name}")
 endmacro(PrepareScripts)
 
-CU_GET_GLOBAL("WH_SCRIPTS_SOURCES")
-
 set(scripts_STAT_SRCS
   ${scripts_STAT_SRCS}
   ScriptLoader.h
-  ${BUILDDIR}/GenLoader.cpp
-  ${WH_SCRIPTS_SOURCES})
+  ${BUILDDIR}/GenLoader.cpp)
 
 CU_SET_PATH("CMAKE_WH_MODULE_DIR" "${CMAKE_CURRENT_LIST_DIR}")
 

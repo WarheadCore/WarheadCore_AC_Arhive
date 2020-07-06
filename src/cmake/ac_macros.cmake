@@ -76,14 +76,8 @@ endmacro()
 #
 #   WH_ADD_MODULES_SOURCE
 #
-
 macro(WH_ADD_MODULES_SOURCE scriptName)
     CU_SUBDIRLIST(sub_DIRS ${CMAKE_CURRENT_LIST_DIR}/src/ TRUE TRUE)
-    
-    FOREACH(subdir ${sub_DIRS})
-    file(GLOB sources "${subdir}/*.cpp" "${subdir}/*.h")
-        CU_LIST_ADD_CACHE(scripts_STAT_SRCS "${sources}")
-    ENDFOREACH()
 
     WH_ADD_DEF_SCRIPT_LOADER("${scriptName}")
     WH_ADD_SCRIPT_LOADER("${scriptName}" "")
@@ -91,7 +85,7 @@ macro(WH_ADD_MODULES_SOURCE scriptName)
 ENDMACRO()
 
 #
-#   
+#   WH_ADD_MODULE
 #
 
 macro(WH_ADD_MODULE modulename)
