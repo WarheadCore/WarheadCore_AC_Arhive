@@ -3185,6 +3185,10 @@ void Player::GiveXP(uint32 xp, Unit* victim, float group_rate)
 
     sScriptMgr->OnGivePlayerXP(this, xp, victim);
 
+    // If experience set 0 after used hooks, don't give
+    if (!xp)
+        return;
+
     // Favored experience increase START
     uint32 zone = GetZoneId();
     float favored_exp_mult = 0;
