@@ -1907,7 +1907,7 @@ public:
         }
 
         // Check mute info if exist
-        stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_MUTE_INFO);
+        stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_MUTE);
         stmt->setUInt32(0, accId);
 
         PreparedQueryResult accmuteInfoResult = LoginDatabase.Query(stmt);
