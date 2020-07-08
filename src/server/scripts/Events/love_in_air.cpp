@@ -368,7 +368,7 @@ class npc_love_in_air_hummel : public CreatureScript
                 if (me->HasUnitState(UNIT_STATE_CASTING))
                     return;
 
-                switch (events.ExecuteEvent())
+                switch (events.GetEvent())
                 {
                     case EVENT_CALL_BAXTER:
                     {
@@ -462,7 +462,7 @@ class npc_love_in_air_hummel_helper : public CreatureScript
                 if (me->HasUnitState(UNIT_STATE_CASTING))
                     return;
 
-                switch (events.ExecuteEvent())
+                switch (events.GetEvent())
                 {
                     case EVENT_SPELL_PERFUME_SPRAY:
                         me->CastSpell(me->GetVictim(), SPELL_COLOGNE_SPRAY, false);

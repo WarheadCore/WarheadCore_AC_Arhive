@@ -43,14 +43,14 @@ public:
         uint32 msTime = getMSTime();
         rewards.clear();
 
-        LOG_INFO("module", "Load level reward data...");
+        LOG_INFO("modules", "Load level reward data...");
 
         //                                                  0      1      2       3
         QueryResult result = WorldDatabase.Query("SELECT Level, Money, ItemID, ItemCount FROM level_reward ORDER BY Level");
         if (!result)
         {
             sLog->outErrorDb("In DB table `level_reward` not data. Loading canceled"); 
-            sLog->outString();
+            LOG_INFO("modules", "");
             return;
         }
 
@@ -93,8 +93,8 @@ public:
 
         } while (result->NextRow());
 
-        sLog->outString(">> Loaded %u reward for level in %u ms", static_cast<uint32>(rewards.size()), GetMSTimeDiffToNow(msTime));
-        sLog->outString();
+        LOG_INFO("modules", ">> Loaded %u reward for level in %u ms", static_cast<uint32>(rewards.size()), GetMSTimeDiffToNow(msTime));
+        LOG_INFO("modules", "");
     }
 
     void RewardPlayer(Player* player, uint8 oldLevel)

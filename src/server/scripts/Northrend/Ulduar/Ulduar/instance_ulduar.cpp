@@ -1009,7 +1009,7 @@ public:
                 return;
 
             _events.Update(diff);
-            switch (_events.ExecuteEvent())
+            switch (_events.GetEvent())
             {
                 case EVENT_UPDATE_ALGALON_TIMER:
                     if (m_algalonTimer == TIMER_ALGALON_DEFEATED)

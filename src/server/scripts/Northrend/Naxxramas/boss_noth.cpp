@@ -198,7 +198,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 // GROUND
                 case EVENT_SPELL_CURSE:

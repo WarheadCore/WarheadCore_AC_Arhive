@@ -397,7 +397,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case EVENT_POSITION_CHECK:
                     if (me->GetPositionX() > 450 || me->GetPositionX() < 120)

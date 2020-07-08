@@ -22,7 +22,7 @@
 #
 #    NotCanSpeakMsg.Enable
 #        Description: Enable notify about mute, if player receiver mute.
-#        Default: 1
+#        Default: 0
 #
 
-NotCanSpeakMsg.Enable = 1
+NotCanSpeakMsg.Enable = 0

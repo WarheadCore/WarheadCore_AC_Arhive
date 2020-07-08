@@ -148,7 +148,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case EVENT_SPELL_UNBALANCING_STRIKE:
                     me->CastSpell(me->GetVictim(), SPELL_UNBALANCING_STRIKE, false);
@@ -227,7 +227,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING) || me->IsCharmed())
                 return;
 
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case EVENT_MINION_BLOOD_STRIKE:
                     me->CastSpell(me->GetVictim(), SPELL_BLOOD_STRIKE, false);

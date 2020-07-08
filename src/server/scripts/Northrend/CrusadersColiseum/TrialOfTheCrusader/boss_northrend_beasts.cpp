@@ -156,7 +156,7 @@ public:
             if( me->HasUnitState(UNIT_STATE_CASTING) )
                 return;
 
-            switch( events.ExecuteEvent() )
+            switch( events.GetEvent() )
             {
                 case 0:
                     break;
@@ -288,7 +288,7 @@ public:
             if( me->HasUnitState(UNIT_STATE_CASTING) )
                 return;
 
-            switch( events.ExecuteEvent() )
+            switch( events.GetEvent() )
             {
                 case 0:
                     break;
@@ -563,7 +563,7 @@ struct boss_jormungarAI : public ScriptedAI
         if( me->HasUnitState(UNIT_STATE_CASTING) )
             return;
 
-        switch( events.ExecuteEvent() )
+        switch( events.GetEvent() )
         {
             case 0:
                 break;
@@ -874,7 +874,7 @@ public:
             if( me->HasUnitState(UNIT_STATE_CASTING) )
                 return;
 
-            switch( events.ExecuteEvent() )
+            switch( events.GetEvent() )
             {
                 case 0:
                     break;

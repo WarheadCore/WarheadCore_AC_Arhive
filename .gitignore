@@ -111,6 +111,7 @@ local.properties
 !modules/mod-level-reward
 !modules/mod-notify-muted
 !modules/mod-online-reward
+!modules/mod-player-can-get-exp
 !modules/mod-player-info-at-login
 !modules/mod-quest-buff
 !modules/mod-transmogrification

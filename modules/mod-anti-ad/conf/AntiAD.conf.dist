@@ -22,7 +22,7 @@
 #
 #    AntiAD.Enable
 #        Description: Enable system forbidden words.
-#        Default: 1
+#        Default: 0
 #
 #    AntiAD.MessageGMsInWorld.Enable
 #        Description: Enable notify all GMs.
@@ -49,7 +49,7 @@
 #        Default: 5
 #
 
-AntiAD.Enable = 1
+AntiAD.Enable = 0
 AntiAD.MessageGMsInWorld.Enable = 1
 AntiAD.FullMessageGMsInWorld.Enable = 1
 AntiAD.SelfMessage.Enable = 1

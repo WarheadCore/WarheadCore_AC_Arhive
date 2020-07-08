@@ -24,10 +24,5 @@
 #        Default: 0 (disabled)
 #                 1 (enabled)
 #
-#    External.Mail.Interval
-#        Mail delivery delay time for item sending from mail_external table, in minutes.
-#        Default: 1 minutes
-#
 
-External.Mail.Enable = 1
-External.Mail.Interval = 1
+External.Mail.Enable = 0

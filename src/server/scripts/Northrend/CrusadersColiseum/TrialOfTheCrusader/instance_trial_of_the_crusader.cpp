@@ -580,7 +580,7 @@ public:
         void Update(uint32 diff)
         {
             events.Update(diff);
-            switch( events.ExecuteEvent() )
+            switch( events.GetEvent() )
             {
                 case 0:
                     break;

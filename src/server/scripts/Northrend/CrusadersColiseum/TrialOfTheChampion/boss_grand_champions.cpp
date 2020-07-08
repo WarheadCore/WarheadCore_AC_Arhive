@@ -270,7 +270,7 @@ public:
             if( me->HasUnitState(UNIT_STATE_CASTING) )
                 return;
 
-            switch( events.ExecuteEvent() )
+            switch( events.GetEvent() )
             {
                 case 0:
                     break;
@@ -668,7 +668,7 @@ public:
             if( me->HasUnitState(UNIT_STATE_CASTING) || ((me->GetEntry()==NPC_JACOB || me->GetEntry()==NPC_MOKRA) && me->HasAura(SPELL_BLADESTORM)) )
                 return;
 
-            switch( events.ExecuteEvent() )
+            switch( events.GetEvent() )
             {
                 case 0:
                     break;

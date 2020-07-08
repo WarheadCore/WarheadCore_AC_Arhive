@@ -20,10 +20,10 @@
 #
 #     AB.Enable
 #        Enable/Disable the autobalance system
-#        Default:   1
+#        Default:   0
 #
 
-AB.Enable = 1
+AB.Enable = 0
 
 #
 #     AB.InflectionPoint series

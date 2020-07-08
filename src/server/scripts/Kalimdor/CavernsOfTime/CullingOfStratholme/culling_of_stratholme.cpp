@@ -672,7 +672,7 @@ public:
             if (eventInRun)
             {
                 actionEvents.Update(diff);
-                switch (uint32 currentEvent = actionEvents.ExecuteEvent())
+                switch (uint32 currentEvent = actionEvents.GetEvent())
                 {
                     case EVENT_ACTION_PHASE1:
                         SetRun(false);
@@ -1176,7 +1176,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (combatEvents.ExecuteEvent())
+            switch (combatEvents.GetEvent())
             {
                 case EVENT_COMBAT_EXORCISM:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))

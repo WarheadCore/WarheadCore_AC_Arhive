@@ -22,7 +22,7 @@
 #
 #    LevelReward.Enable
 #        Description: Enable level up reward system.
-#        Default: 1
+#        Default: 0
 #
 
-LevelReward.Enable = 1
+LevelReward.Enable = 0

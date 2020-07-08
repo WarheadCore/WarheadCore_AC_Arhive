@@ -21,7 +21,7 @@
 #
 #   QuestBuff.Enable
 #       Description: Enable system
-#       Default: 1
+#       Default: 0
 #
 
-QuestBuff.Enable = 1
+QuestBuff.Enable = 0

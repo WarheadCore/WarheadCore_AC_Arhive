@@ -228,7 +228,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case EVENT_DIREBREW_RESPAWN1:
                     SummonSister(NPC_ILSA_DIREBREW);
@@ -341,7 +341,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case EVENT_SISTERS_BARREL:
                     me->CastSpell(me->GetVictim(), SPELL_BARRELED, false);
@@ -719,7 +719,7 @@ public:
         void UpdateAI(uint32 diff)
         {
             events.Update(diff);
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case EVENT_CHECK_HOUR:
                 {

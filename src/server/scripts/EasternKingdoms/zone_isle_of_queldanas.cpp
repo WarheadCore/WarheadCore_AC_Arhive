@@ -231,7 +231,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (uint32 evId = events.ExecuteEvent())
+            switch (uint32 evId = events.GetEvent())
             {
                 case 0:
                     break;

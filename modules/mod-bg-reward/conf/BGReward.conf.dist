@@ -22,7 +22,7 @@
 #
 #    BGReward.Enable
 #        Description: Enable battleground reward system.
-#        Default: 1
+#        Default: 0
 #
 #    BGReward.ItemID.WSG
 #        Description: Reward item on battleground Warsong Gulch.
@@ -57,7 +57,7 @@
 #        Default: 1
 #
 
-BGReward.Enable = 1
+BGReward.Enable = 0
 
 BGReward.ItemID.WSG = 20558
 BGReward.ItemID.Arathi = 20559

@@ -32,6 +32,8 @@ namespace warhead
 
     DECLSPEC_NORETURN WH_COMMON_API void Abort(char const* file, int line, char const* function) ATTR_NORETURN;
 
+    DECLSPEC_NORETURN WH_COMMON_API void Abort(char const* file, int line, char const* function, char const* message, ...) ATTR_NORETURN;
+
     WH_COMMON_API void Warning(char const* file, int line, char const* function, char const* message);
 
     DECLSPEC_NORETURN WH_COMMON_API void AbortHandler(int sigval) ATTR_NORETURN;
@@ -58,6 +60,7 @@ WH_COMMON_API std::string GetDebugInfo();
 #define WPError(cond, msg) ASSERT_BEGIN do { if (!(cond)) warhead::Error(__FILE__, __LINE__, __FUNCTION__, (msg)); } while(0) ASSERT_END
 #define WPWarning(cond, msg) ASSERT_BEGIN do { if (!(cond)) warhead::Warning(__FILE__, __LINE__, __FUNCTION__, (msg)); } while(0) ASSERT_END
 #define WPAbort() ASSERT_BEGIN do { warhead::Abort(__FILE__, __LINE__, __FUNCTION__); } while(0) ASSERT_END
+#define WPAbort_MSG(msg, ...) ASSERT_BEGIN do { warhead::Abort(__FILE__, __LINE__, __FUNCTION__, (msg), ##__VA_ARGS__); } while(0) ASSERT_END
 
 #ifdef PERFORMANCE_PROFILING
 #define ASSERT(cond, ...) ((void)0)
@@ -68,6 +71,7 @@ WH_COMMON_API std::string GetDebugInfo();
 #endif
 
 #define ABORT WPAbort
+#define ABORT_MSG WPAbort_MSG
 
 template <typename T>
 inline T* ASSERT_NOTNULL_IMPL(T* pointer, char const* expr)

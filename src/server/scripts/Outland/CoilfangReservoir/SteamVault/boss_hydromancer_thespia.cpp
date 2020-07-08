@@ -92,7 +92,7 @@ public:
                 return;
 
             events.Update(diff);
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case EVENT_SPELL_LIGHTNING:
                     for (uint8 i = 0; i < DUNGEON_MODE(1, 2); ++i)

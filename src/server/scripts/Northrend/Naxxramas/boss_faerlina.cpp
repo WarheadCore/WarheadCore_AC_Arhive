@@ -153,7 +153,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case EVENT_SPELL_POISON_BOLT:
                     if (!me->HasAura(SPELL_WIDOWS_EMBRACE))

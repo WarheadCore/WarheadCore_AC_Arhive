@@ -168,7 +168,7 @@ public:
                 return;
 
             events.Update(diff);
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case EVENT_SPELL_SHADOWBOLT:
                     me->CastSpell(me, SPELL_SHADOWBOLT_VOLLEY, false);

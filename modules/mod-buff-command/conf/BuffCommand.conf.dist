@@ -22,7 +22,7 @@
 #
 #    BuffCommand.Enable
 #        Description: Enable the ability to use the command .buff.
-#        Default: 1
+#        Default: 0
 #
 
-BuffCommand.Enable = 1
+BuffCommand.Enable = 0
