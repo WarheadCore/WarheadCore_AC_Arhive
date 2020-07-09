@@ -276,7 +276,7 @@ void MotionMaster::MoveTargetedHome()
     }
     else
     {
-        sLog->outError("Player (GUID: %u) attempt targeted home", _owner->GetGUIDLow());
+        LOG_ERROR("server", "Player (GUID: %u) attempt targeted home", _owner->GetGUIDLow());
     }
 }
 
@@ -599,7 +599,7 @@ void MotionMaster::MoveSeekAssistance(float x, float y, float z)
 
     if (_owner->GetTypeId() == TYPEID_PLAYER)
     {
-        sLog->outError("Player (GUID: %u) attempt to seek assistance", _owner->GetGUIDLow());
+        LOG_ERROR("server", "Player (GUID: %u) attempt to seek assistance", _owner->GetGUIDLow());
     }
     else
     {
@@ -622,7 +622,7 @@ void MotionMaster::MoveSeekAssistanceDistract(uint32 time)
 
     if (_owner->GetTypeId() == TYPEID_PLAYER)
     {
-        sLog->outError("Player (GUID: %u) attempt to call distract after assistance", _owner->GetGUIDLow());
+        LOG_ERROR("server", "Player (GUID: %u) attempt to call distract after assistance", _owner->GetGUIDLow());
     }
     else
     {
@@ -683,13 +683,13 @@ void MotionMaster::MoveTaxiFlight(uint32 path, uint32 pathnode)
         }
         else
         {
-            sLog->outError("%s attempt taxi to (not existed Path %u node %u)",
+            LOG_ERROR("server", "%s attempt taxi to (not existed Path %u node %u)",
             _owner->GetName().c_str(), path, pathnode);
         }
     }
     else
     {
-        sLog->outError("Creature (Entry: %u GUID: %u) attempt taxi to (Path %u node %u)",
+        LOG_ERROR("server", "Creature (Entry: %u GUID: %u) attempt taxi to (Path %u node %u)",
             _owner->GetEntry(), _owner->GetGUIDLow(), path, pathnode);
     }
 }
@@ -854,7 +854,7 @@ void MotionMaster::DirectDelete(_Ty curr)
 
 void MotionMaster::DelayedDelete(_Ty curr)
 {
-    sLog->outCrash("Unit (Entry %u) is trying to delete its updating MG (Type %u)!", _owner->GetEntry(), curr->GetMovementGeneratorType());
+    LOG_FATAL("server", "Unit (Entry %u) is trying to delete its updating MG (Type %u)!", _owner->GetEntry(), curr->GetMovementGeneratorType());
     if (isStatic(curr))
         return;
     if (!_expList)

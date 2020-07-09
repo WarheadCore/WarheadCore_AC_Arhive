@@ -74,7 +74,7 @@ public:
             auto spell = sSpellStore.LookupEntry(QB.SpellID);
             if (!spell)
             {
-                sLog->outError("-> Spell with number (%u) not found. Skip.", QB.SpellID);
+                LOG_ERROR("modules", "-> Spell with number (%u) not found. Skip.", QB.SpellID);
                 continue;
             }
 

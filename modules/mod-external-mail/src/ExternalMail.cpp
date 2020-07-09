@@ -27,7 +27,7 @@ bool ExMail::AddItems(uint32 itemID, uint32 itemCount)
     ItemTemplate const* itemTemplate = sObjectMgr->GetItemTemplate(itemID);
     if (!itemTemplate)
     {
-        sLog->outErrorDb("> External Mail: Предмета под номером %u не существует. ID (%u)", itemID, ID);
+        LOG_ERROR("modules","> External Mail: Предмета под номером %u не существует. ID (%u)", itemID, ID);
         return false;
     }
 
@@ -84,7 +84,7 @@ void ExternalMail::GetMailsFromDB()
 
         if (!normalizePlayerName(PlayerName))
         {
-            sLog->outErrorDb("> External Mail: Неверное имя персонажа (%s)", PlayerName.c_str());
+            LOG_ERROR("modules", "> External Mail: Неверное имя персонажа (%s)", PlayerName.c_str());
             continue;
         }
 
@@ -98,14 +98,14 @@ void ExternalMail::GetMailsFromDB()
         ItemTemplate const* itemTemplate = sObjectMgr->GetItemTemplate(ItemID);
         if (!itemTemplate)
         {
-            sLog->outErrorDb("> External Mail: Предмета под номером %u не существует. Пропуск", ItemID);
+            LOG_ERROR("modules", "> External Mail: Предмета под номером %u не существует. Пропуск", ItemID);
             _error = true;
         }
 
         auto const* creature = sObjectMgr->GetCreatureTemplate(CreatureEntry);
         if (!creature)
         {
-            sLog->outErrorDb("> External Mail: НПС под номером %u не существует. Пропуск", CreatureEntry);
+            LOG_ERROR("modules", "> External Mail: НПС под номером %u не существует. Пропуск", CreatureEntry);
             _error = true;
         }
 

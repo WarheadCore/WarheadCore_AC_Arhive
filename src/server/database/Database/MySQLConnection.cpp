@@ -83,7 +83,7 @@ uint32 MySQLConnection::Open()
     MYSQL* mysqlInit = mysql_init(nullptr);
     if (!mysqlInit)
     {
-        sLog->outError("Could not initialize Mysql connection to database `%s`", m_connectionInfo.database.c_str());
+        LOG_ERROR("server", "Could not initialize Mysql connection to database `%s`", m_connectionInfo.database.c_str());
         return false;
     }
 
@@ -136,15 +136,15 @@ uint32 MySQLConnection::Open()
     {
         if (!m_reconnecting)
         {
-            sLog->outSQLDriver("> MySQL client library: %s", mysql_get_client_info());
-            sLog->outSQLDriver("> MySQL server ver: %s ", mysql_get_server_info(m_Mysql));
+            LOG_INFO("sql.driver", "> MySQL client library: %s", mysql_get_client_info());
+            LOG_INFO("sql.driver", "> MySQL server ver: %s ", mysql_get_server_info(m_Mysql));
             // MySQL version above 5.1 IS required in both client and server and there is no known issue with different versions above 5.1
             // if (mysql_get_server_version(m_Mysql) != mysql_get_client_version())
             //     sLog->outInfo(LOG_FILTER_SQL, "[WARNING] MySQL client/server version mismatch; may conflict with behaviour of prepared statements.");
         }
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-        sLog->outDetail("Connected to MySQL database at %s", m_connectionInfo.host.c_str());
+        LOG_INFO("server", "Connected to MySQL database at %s", m_connectionInfo.host.c_str());
 #endif
         mysql_autocommit(m_Mysql, 1);
 
@@ -389,7 +389,7 @@ bool MySQLConnection::ExecuteTransaction(SQLTransaction& transaction)
                 ASSERT(stmt);
                 if (!Execute(stmt))
                 {
-                    sLog->outSQLDriver("[Warning] Transaction aborted. %u queries not executed.", (uint32)queries.size());
+                    LOG_INFO("sql.driver", "[Warning] Transaction aborted. %u queries not executed.", (uint32)queries.size());
                     RollbackTransaction();
                     return false;
                 }
@@ -401,7 +401,7 @@ bool MySQLConnection::ExecuteTransaction(SQLTransaction& transaction)
                 ASSERT(sql);
                 if (!Execute(sql))
                 {
-                    sLog->outSQLDriver("[Warning] Transaction aborted. %u queries not executed.", (uint32)queries.size());
+                    LOG_INFO("sql.driver", "[Warning] Transaction aborted. %u queries not executed.", (uint32)queries.size());
                     RollbackTransaction();
                     return false;
                 }
@@ -424,7 +424,7 @@ MySQLPreparedStatement* MySQLConnection::GetPreparedStatement(uint32 index)
     ASSERT(index < m_stmts.size());
     MySQLPreparedStatement* ret = m_stmts[index];
     if (!ret)
-        sLog->outSQLDriver("ERROR: Could not fetch prepared statement %u on database `%s`, connection type: %s.",
+        LOG_INFO("sql.driver", "ERROR: Could not fetch prepared statement %u on database `%s`, connection type: %s.",
             index, m_connectionInfo.database.c_str(), (m_connectionFlags & CONNECTION_ASYNC) ? "asynchronous" : "synchronous");
 
     return ret;
@@ -450,16 +450,16 @@ void MySQLConnection::PrepareStatement(uint32 index, const char* sql, Connection
     MYSQL_STMT* stmt = mysql_stmt_init(m_Mysql);
     if (!stmt)
     {
-        sLog->outSQLDriver("[ERROR]: In mysql_stmt_init() id: %u, sql: \"%s\"", index, sql);
-        sLog->outSQLDriver("[ERROR]: %s", mysql_error(m_Mysql));
+        LOG_INFO("sql.driver", "[ERROR]: In mysql_stmt_init() id: %u, sql: \"%s\"", index, sql);
+        LOG_INFO("sql.driver", "[ERROR]: %s", mysql_error(m_Mysql));
         m_prepareError = true;
     }
     else
     {
         if (mysql_stmt_prepare(stmt, sql, static_cast<unsigned long>(strlen(sql))))
         {
-            sLog->outSQLDriver("[ERROR]: In mysql_stmt_prepare() id: %u, sql: \"%s\"", index, sql);
-            sLog->outSQLDriver("[ERROR]: %s", mysql_stmt_error(stmt));
+            LOG_INFO("sql.driver", "[ERROR]: In mysql_stmt_prepare() id: %u, sql: \"%s\"", index, sql);
+            LOG_INFO("sql.driver", "[ERROR]: %s", mysql_stmt_error(stmt));
             mysql_stmt_close(stmt);
             m_prepareError = true;
         }
@@ -503,9 +503,9 @@ bool MySQLConnection::_HandleMySQLErrno(uint32 errNo)
             mysql_close(GetHandle());
             if (this->Open())                           // Don't remove 'this' pointer unless you want to skip loading all prepared statements....
             {
-                sLog->outSQLDriver("Connection to the MySQL server is active.");
+                LOG_INFO("sql.driver", "Connection to the MySQL server is active.");
                 if (oldThreadId != mysql_thread_id(GetHandle()))
-                    sLog->outSQLDriver("Successfully reconnected to %s @%s:%s (%s).",
+                    LOG_INFO("sql.driver", "Successfully reconnected to %s @%s:%s (%s).",
                         m_connectionInfo.database.c_str(), m_connectionInfo.host.c_str(), m_connectionInfo.port_or_socket.c_str(),
                             (m_connectionFlags & CONNECTION_ASYNC) ? "asynchronous" : "synchronous");
 
@@ -528,17 +528,17 @@ bool MySQLConnection::_HandleMySQLErrno(uint32 errNo)
         // Outdated table or database structure - terminate core
         case ER_BAD_FIELD_ERROR:
         case ER_NO_SUCH_TABLE:
-            sLog->outError("Your database structure is not up to date. Please make sure you've executed all queries in the sql/updates folders.");
+            LOG_ERROR("server", "Your database structure is not up to date. Please make sure you've executed all queries in the sql/updates folders.");
             ACE_OS::sleep(10);
             std::abort();
             return false;
         case ER_PARSE_ERROR:
-            sLog->outError("Error while parsing SQL. Core fix required.");
+            LOG_ERROR("server", "Error while parsing SQL. Core fix required.");
             ACE_OS::sleep(10);
             std::abort();
             return false;
         default:
-            sLog->outError("Unhandled MySQL errno %u. Unexpected behaviour possible.", errNo);
+            LOG_ERROR("server", "Unhandled MySQL errno %u. Unexpected behaviour possible.", errNo);
             return false;
     }
 }

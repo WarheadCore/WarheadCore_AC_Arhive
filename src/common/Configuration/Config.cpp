@@ -107,7 +107,7 @@ std::string ConfigMgr::GetStringDefault(std::string const& name, const std::stri
     else
     {
         if (logUnused)
-            sLog->outError("-> Not found option '%s'. The default value is used (%s)", name.c_str(), def.c_str());
+            LOG_ERROR("server", "-> Not found option '%s'. The default value is used (%s)", name.c_str(), def.c_str());
 
         return def;
     }
@@ -120,7 +120,7 @@ bool ConfigMgr::GetBoolDefault(std::string const& name, bool def, bool logUnused
     if (!GetValueHelper(name.c_str(), val))
     {
         if (logUnused)
-            def ? sLog->outError("-> Not found option '%s'. The default value is used (Yes)", name.c_str()) : sLog->outError("-> Not found option '%s'. The default value is used (No)", name.c_str());
+            LOG_ERROR("server", "-> Not found option '%s'. The default value is used (%s)", name.c_str(), def ? "Yes" : "No");
 
         return def;
     }
@@ -137,7 +137,7 @@ int ConfigMgr::GetIntDefault(std::string const& name, int def, bool logUnused /*
     else
     {
         if (logUnused)
-            sLog->outError("-> Not found option '%s'. The default value is used (%i)", name.c_str(), def);
+            LOG_ERROR("server", "-> Not found option '%s'. The default value is used (%i)", name.c_str(), def);
 
         return def;
     }
@@ -152,7 +152,7 @@ float ConfigMgr::GetFloatDefault(std::string const& name, float def, bool logUnu
     else
     {
         if (logUnused)
-            sLog->outError("-> Not found option '%s'. The default value is used (%f)", name.c_str(), def);
+            LOG_ERROR("server", "-> Not found option '%s'. The default value is used (%f)", name.c_str(), def);
 
         return def;
     }

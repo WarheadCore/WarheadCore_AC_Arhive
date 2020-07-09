@@ -205,7 +205,7 @@ AuthSocket::~AuthSocket(void) { }
 // Accept the connection
 void AuthSocket::OnAccept(void)
 {
-    sLog->outBasic("'%s:%d' Accepting connection", socket().getRemoteAddress().c_str(), socket().getRemotePort());
+    LOG_INFO("server", "'%s:%d' Accepting connection", socket().getRemoteAddress().c_str(), socket().getRemotePort());
 }
 
 void AuthSocket::OnClose(void)
@@ -235,7 +235,7 @@ void AuthSocket::OnRead()
             ++challengesInARow;
             if (challengesInARow == MAX_AUTH_LOGON_CHALLENGES_IN_A_ROW)
             {
-                sLog->outString("Got %u AUTH_LOGON_CHALLENGE in a row from '%s', possible ongoing DoS", challengesInARow, socket().getRemoteAddress().c_str());
+                LOG_INFO("server", "Got %u AUTH_LOGON_CHALLENGE in a row from '%s', possible ongoing DoS", challengesInARow, socket().getRemoteAddress().c_str());
                 socket().shutdown();
                 return;
             }
@@ -244,7 +244,7 @@ void AuthSocket::OnRead()
           challengesInARowRealmList++;
           if (challengesInARowRealmList == MAX_AUTH_GET_REALM_LIST)
           {
-              sLog->outString("Got %u REALM_LIST in a row from '%s', possible ongoing DoS", challengesInARowRealmList, socket().getRemoteAddress().c_str());
+              LOG_INFO("server", "Got %u REALM_LIST in a row from '%s', possible ongoing DoS", challengesInARowRealmList, socket().getRemoteAddress().c_str());
               socket().shutdown();
               return;
           }
@@ -901,7 +901,7 @@ bool AuthSocket::_HandleReconnectChallenge()
     // Stop if the account is not found
     if (!result)
     {
-        sLog->outError("'%s:%d' [ERROR] user %s tried to login and we cannot find his session key in the database.", socket().getRemoteAddress().c_str(), socket().getRemotePort(), _login.c_str());
+        LOG_ERROR("server", "'%s:%d' [ERROR] user %s tried to login and we cannot find his session key in the database.", socket().getRemoteAddress().c_str(), socket().getRemotePort(), _login.c_str());
         socket().shutdown();
         return false;
     }
@@ -978,7 +978,7 @@ bool AuthSocket::_HandleReconnectProof()
     }
     else
     {
-        sLog->outError("'%s:%d' [ERROR] user %s tried to login, but session is invalid.", socket().getRemoteAddress().c_str(), socket().getRemotePort(), _login.c_str());
+        LOG_ERROR("server", "'%s:%d' [ERROR] user %s tried to login, but session is invalid.", socket().getRemoteAddress().c_str(), socket().getRemotePort(), _login.c_str());
         socket().shutdown();
         return false;
     }
@@ -1024,7 +1024,7 @@ bool AuthSocket::_HandleRealmList()
     PreparedQueryResult result = LoginDatabase.Query(stmt);
     if (!result)
     {
-        sLog->outError("'%s:%d' [ERROR] user %s tried to login but we cannot find him in the database.", socket().getRemoteAddress().c_str(), socket().getRemotePort(), _login.c_str());
+        LOG_ERROR("server", "'%s:%d' [ERROR] user %s tried to login but we cannot find him in the database.", socket().getRemoteAddress().c_str(), socket().getRemotePort(), _login.c_str());
         socket().shutdown();
         return false;
     }
@@ -1147,7 +1147,7 @@ bool AuthSocket::_HandleXferResume()
     // Check packet length and patch existence
     if (socket().recv_len() < 9 || !pPatch) // FIXME: pPatch is never used
     {
-        sLog->outError("Error while resuming patch transfer (wrong packet)");
+        LOG_ERROR("server", "Error while resuming patch transfer (wrong packet)");
         return false;
     }
 
@@ -1185,7 +1185,7 @@ bool AuthSocket::_HandleXferAccept()
     // Check packet length and patch existence
     if (!pPatch)
     {
-        sLog->outError("Error while accepting patch transfer (wrong packet)");
+        LOG_ERROR("server", "Error while accepting patch transfer (wrong packet)");
         return false;
     }
 
@@ -1272,7 +1272,7 @@ void Patcher::LoadPatchMD5(char *szFileName)
 
     if (!pPatch)
     {
-        sLog->outError("Error loading patch %s\n", path.c_str());
+        LOG_ERROR("server", "Error loading patch %s\n", path.c_str());
         return;
     }
 

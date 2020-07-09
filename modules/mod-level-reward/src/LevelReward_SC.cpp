@@ -49,8 +49,8 @@ public:
         QueryResult result = WorldDatabase.Query("SELECT Level, Money, ItemID, ItemCount FROM level_reward ORDER BY Level");
         if (!result)
         {
-            sLog->outErrorDb("In DB table `level_reward` not data. Loading canceled"); 
-            LOG_INFO("modules", "");
+            LOG_ERROR("modules", "In DB table `level_reward` not data. Loading canceled"); 
+            LOG_ERROR("modules", "");
             return;
         }
 
@@ -69,7 +69,7 @@ public:
             // Проверка
             if (Level > CONF_GET_INT("MaxPlayerLevel"))
             {
-                sLog->outErrorDb("-> Level (%u) more, than max player level in world (%u). Skip", Level, CONF_GET_INT("MaxPlayerLevel"));
+                LOG_ERROR("modules", "-> Level (%u) more, than max player level in world (%u). Skip", Level, CONF_GET_INT("MaxPlayerLevel"));
                 continue;
             }
 
@@ -78,14 +78,14 @@ public:
                 ItemTemplate const* itemTemplate = sObjectMgr->GetItemTemplate(_levelReward.ItemID);
                 if (!itemTemplate)
                 {
-                    sLog->outErrorDb("-> For level (%u) item witch nuber %u not found. Item delete from reward", Level, _levelReward.ItemID);
+                    LOG_ERROR("modules", "-> For level (%u) item witch nuber %u not found. Item delete from reward", Level, _levelReward.ItemID);
                     _levelReward.ItemID = 0;
                 }
             }
 
             if (_levelReward.ItemID && !_levelReward.ItemCount)
             {
-                sLog->outErrorDb("-> For level (%u) item witch nuber %u adding 0 count - this useless. Set 1", Level, _levelReward.ItemID);
+                LOG_ERROR("modules", "-> For level (%u) item witch nuber %u adding 0 count - this useless. Set 1", Level, _levelReward.ItemID);
                 _levelReward.ItemCount = 1;
             }
 
@@ -143,7 +143,7 @@ private:
         {
             if (ListItemPairs.size() > MAX_MAIL_ITEMS)
             {
-                sLog->outError("> SendMailItems: ListItemPairs.size() = %u", (uint32)ListItemPairs.size());
+                LOG_ERROR("modules", "> SendMailItems: ListItemPairs.size() = %u", (uint32)ListItemPairs.size());
                 return;
             }
 
@@ -172,7 +172,7 @@ private:
 
                 if (_listItemPairs.size() > MAX_MAIL_ITEMS)
                 {
-                    sLog->outError("> SendMailItems: _listItemPairs.size() = %u", (uint32)_listItemPairs.size());
+                    LOG_ERROR("modules", "> SendMailItems: _listItemPairs.size() = %u", (uint32)_listItemPairs.size());
                     break;
                 }
             }

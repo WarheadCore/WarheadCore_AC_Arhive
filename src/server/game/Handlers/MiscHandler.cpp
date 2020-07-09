@@ -1008,7 +1008,7 @@ void WorldSession::HandleUpdateAccountData(WorldPacket &recv_data)
     if (decompressedSize > 0xFFFF)
     {
         recv_data.rfinish();                   // unnneded warning spam in this case
-        sLog->outError("UAD: Account data packet too big, size %u", decompressedSize);
+        LOG_ERROR("server", "UAD: Account data packet too big, size %u", decompressedSize);
         return;
     }
 
@@ -1019,7 +1019,7 @@ void WorldSession::HandleUpdateAccountData(WorldPacket &recv_data)
     if (uncompress(dest.contents(), &realSize, recv_data.contents() + recv_data.rpos(), recv_data.size() - recv_data.rpos()) != Z_OK)
     {
         recv_data.rfinish();                   // unnneded warning spam in this case
-        sLog->outError("UAD: Failed to decompress account data");
+        LOG_ERROR("server", "UAD: Failed to decompress account data");
         return;
     }
 
@@ -1093,12 +1093,12 @@ void WorldSession::HandleSetActionButtonOpcode(WorldPacket& recv_data)
     uint8  type   = ACTION_BUTTON_TYPE(packetData);
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDetail("BUTTON: %u ACTION: %u TYPE: %u", button, action, type);
+    LOG_INFO("server", "BUTTON: %u ACTION: %u TYPE: %u", button, action, type);
 #endif
     if (!packetData)
     {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-        sLog->outDetail("MISC: Remove action from button %u", button);
+        LOG_INFO("server", "MISC: Remove action from button %u", button);
 #endif
         GetPlayer()->removeActionButton(button);
     }
@@ -1109,26 +1109,26 @@ void WorldSession::HandleSetActionButtonOpcode(WorldPacket& recv_data)
             case ACTION_BUTTON_MACRO:
             case ACTION_BUTTON_CMACRO:
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                sLog->outDetail("MISC: Added Macro %u into button %u", action, button);
+                LOG_INFO("server", "MISC: Added Macro %u into button %u", action, button);
 #endif
                 break;
             case ACTION_BUTTON_EQSET:
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                sLog->outDetail("MISC: Added EquipmentSet %u into button %u", action, button);
+                LOG_INFO("server", "MISC: Added EquipmentSet %u into button %u", action, button);
 #endif
                 break;
             case ACTION_BUTTON_SPELL:
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                sLog->outDetail("MISC: Added Spell %u into button %u", action, button);
+                LOG_INFO("server", "MISC: Added Spell %u into button %u", action, button);
 #endif
                 break;
             case ACTION_BUTTON_ITEM:
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                sLog->outDetail("MISC: Added Item %u into button %u", action, button);
+                LOG_INFO("server", "MISC: Added Item %u into button %u", action, button);
 #endif
                 break;
             default:
-                sLog->outError("MISC: Unknown action button type %u for action %u into button %u for player %s (GUID: %u)", type, action, button, _player->GetName().c_str(), _player->GetGUIDLow());
+                LOG_ERROR("server", "MISC: Unknown action button type %u for action %u into button %u for player %s (GUID: %u)", type, action, button, _player->GetName().c_str(), _player->GetGUIDLow());
                 return;
         }
         GetPlayer()->addActionButton(button, action, type);
@@ -1222,7 +1222,7 @@ void WorldSession::HandleSetActionBarToggles(WorldPacket& recv_data)
     if (!GetPlayer())                                        // ignore until not logged (check needed because STATUS_AUTHED)
     {
         if (ActionBar != 0)
-            sLog->outError("WorldSession::HandleSetActionBarToggles in not logged state with value: %u, ignored", uint32(ActionBar));
+            LOG_ERROR("server", "WorldSession::HandleSetActionBarToggles in not logged state with value: %u, ignored", uint32(ActionBar));
         return;
     }
 
@@ -1489,7 +1489,7 @@ void WorldSession::HandleFarSightOpcode(WorldPacket& recvData)
             _player->SetSeer(target);
         else {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-            sLog->outError("Player %s requests non-existing seer " UI64FMTD, _player->GetName().c_str(), _player->GetUInt64Value(PLAYER_FARSIGHT));
+            LOG_ERROR("server", "Player %s requests non-existing seer " UI64FMTD, _player->GetName().c_str(), _player->GetUInt64Value(PLAYER_FARSIGHT));
 #endif
         }
     }
@@ -1964,7 +1964,7 @@ void WorldSession::HandleInstanceLockResponse(WorldPacket& recvPacket)
     if (!_player->HasPendingBind() || _player->GetPendingBind() != _player->GetInstanceId() || (_player->GetGroup() && _player->GetGroup()->isLFGGroup() && _player->GetGroup()->IsLfgRandomInstance()))
     {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-        sLog->outDetail("InstanceLockResponse: Player %s (guid %u) tried to bind himself/teleport to graveyard without a pending bind!", _player->GetName().c_str(), _player->GetGUIDLow());
+        LOG_INFO("server", "InstanceLockResponse: Player %s (guid %u) tried to bind himself/teleport to graveyard without a pending bind!", _player->GetName().c_str(), _player->GetGUIDLow());
 #endif
         return;
     }

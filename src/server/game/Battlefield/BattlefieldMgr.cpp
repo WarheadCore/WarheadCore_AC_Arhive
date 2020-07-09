@@ -45,15 +45,15 @@ void BattlefieldMgr::InitBattlefield()
     // respawn, init variables
     if (!pBf->SetupBattlefield())
     {
-        sLog->outString(">> Battlefield: Wintergrasp init failed.");
-        sLog->outString();
+        LOG_INFO("server", ">> Battlefield: Wintergrasp init failed.");
+        LOG_INFO("server", "");
         delete pBf;
     }
     else
     {
         m_BattlefieldSet.push_back(pBf);
-        sLog->outString(">> Battlefield: Wintergrasp successfully initiated.");
-        sLog->outString();
+        LOG_INFO("server", ">> Battlefield: Wintergrasp successfully initiated.");
+        LOG_INFO("server", "");
     }
 
     /* For Cataclysm: Tol Barad

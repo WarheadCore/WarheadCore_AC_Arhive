@@ -82,7 +82,7 @@ void Transmogrification::LoadPlayerSets(uint64 pGUID)
 
             if (slot >= EQUIPMENT_SLOT_END)
             {
-                sLog->outError("Item entry (FakeEntry: %u, playerGUID: %u, slot: %u, presetId: %u) has invalid slot, ignoring.", entry, GUID_LOPART(pGUID), slot, uint32(PresetID));
+                LOG_ERROR("modules", "Item entry (FakeEntry: %u, playerGUID: %u, slot: %u, presetId: %u) has invalid slot, ignoring.", entry, GUID_LOPART(pGUID), slot, uint32(PresetID));
                 continue;
             }
 

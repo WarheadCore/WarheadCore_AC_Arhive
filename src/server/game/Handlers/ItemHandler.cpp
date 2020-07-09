@@ -444,7 +444,7 @@ void WorldSession::HandleItemQuerySingleOpcode(WorldPacket & recvData)
     recvData >> item;
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDetail("STORAGE: Item Query = %u", item);
+    LOG_INFO("server", "STORAGE: Item Query = %u", item);
 #endif
 
     ItemTemplate const* pProto = sObjectMgr->GetItemTemplate(item);
@@ -607,7 +607,7 @@ void WorldSession::HandleReadItem(WorldPacket & recvData)
     uint8 bag, slot;
     recvData >> bag >> slot;
 
-    //sLog->outDetail("STORAGE: Read bag = %u, slot = %u", bag, slot);
+    //LOG_INFO("server", "STORAGE: Read bag = %u, slot = %u", bag, slot);
     Item* pItem = _player->GetItemByPos(bag, slot);
 
     if (pItem && pItem->GetTemplate()->PageText)
@@ -619,14 +619,14 @@ void WorldSession::HandleReadItem(WorldPacket & recvData)
         {
             data.Initialize (SMSG_READ_ITEM_OK, 8);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-            sLog->outDetail("STORAGE: Item page sent");
+            LOG_INFO("server", "STORAGE: Item page sent");
 #endif
         }
         else
         {
             data.Initialize(SMSG_READ_ITEM_FAILED, 8);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-            sLog->outDetail("STORAGE: Unable to read item");
+            LOG_INFO("server", "STORAGE: Unable to read item");
 #endif
             _player->SendEquipError(msg, pItem, NULL);
         }
@@ -722,7 +722,7 @@ void WorldSession::HandleSellItemOpcode(WorldPacket & recvData)
                     Item* pNewItem = pItem->CloneItem(count, _player);
                     if (!pNewItem)
                     {
-                        sLog->outError("WORLD: HandleSellItemOpcode - could not create clone of item %u; count = %u", pItem->GetEntry(), count);
+                        LOG_ERROR("server", "WORLD: HandleSellItemOpcode - could not create clone of item %u; count = %u", pItem->GetEntry(), count);
                         _player->SendSellError(SELL_ERR_CANT_SELL_ITEM, creature, itemguid, 0);
                         return;
                     }
@@ -1077,7 +1077,7 @@ void WorldSession::HandleBuyBankSlotOpcode(WorldPacket& recvPacket)
     ++slot;
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDetail("PLAYER: Buy bank bag slot, slot number = %u", slot);
+    LOG_INFO("server", "PLAYER: Buy bank bag slot, slot number = %u", slot);
 #endif
 
     BankBagSlotPricesEntry const* slotEntry = sBankBagSlotPricesStore.LookupEntry(slot);

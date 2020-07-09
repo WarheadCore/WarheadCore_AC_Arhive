@@ -76,7 +76,7 @@ uint32 DatabaseWorkerPool<T>::Open()
 template <class T>
 void DatabaseWorkerPool<T>::Close()
 {
-    sLog->outSQLDriver("Closing down DatabasePool '%s'.", GetDatabaseName());
+    LOG_INFO("sql.driver", "Closing down DatabasePool '%s'.", GetDatabaseName());
 
     //! Shuts down delaythreads for this connection pool by underlying deactivate().
     //! The next dequeue attempt in the worker thread tasks will result in an error,
@@ -92,7 +92,7 @@ void DatabaseWorkerPool<T>::Close()
         t->Close();         //! Closes the actualy MySQL connection.
     }
 
-    sLog->outSQLDriver("Asynchronous connections on DatabasePool '%s' terminated. Proceeding with synchronous connections.",
+    LOG_INFO("sql.driver", "Asynchronous connections on DatabasePool '%s' terminated. Proceeding with synchronous connections.",
         GetDatabaseName());
 
     //! Shut down the synchronous connections
@@ -106,7 +106,7 @@ void DatabaseWorkerPool<T>::Close()
     delete _queue;
     delete _mqueue;
 
-    sLog->outSQLDriver("All connections on DatabasePool '%s' closed.", GetDatabaseName());
+    LOG_INFO("sql.driver", "All connections on DatabasePool '%s' closed.", GetDatabaseName());
 }
 
 template <class T>
@@ -301,10 +301,10 @@ void DatabaseWorkerPool<T>::CommitTransaction(SQLTransaction transaction)
     switch (transaction->GetSize())
     {
         case 0:
-            sLog->outSQLDriver("Transaction contains 0 queries. Not executing.");
+            LOG_INFO("sql.driver", "Transaction contains 0 queries. Not executing.");
             return;
         case 1:
-            sLog->outSQLDriver("Warning: Transaction only holds 1 query, consider removing Transaction context in code.");
+            LOG_INFO("sql.driver", "Warning: Transaction only holds 1 query, consider removing Transaction context in code.");
             break;
         default:
             break;
