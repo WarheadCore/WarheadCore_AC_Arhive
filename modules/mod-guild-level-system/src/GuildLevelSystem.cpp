@@ -127,7 +127,7 @@ void GuildLevelSystem::LoadGuildLevels()
 
     } while (result->NextRow());
 
-    sLog->outString(">> Загружено %u GLS уровней гильдий за %u мс", static_cast<uint32>(_guildstore.size()), GetMSTimeDiffToNow(oldMSTime));
+    LOG_INFO("module.gls", ">> Загружено %u GLS уровней гильдий за %u мс", static_cast<uint32>(_guildstore.size()), GetMSTimeDiffToNow(oldMSTime));
 }
 
 void GuildLevelSystem::LoadExpGuildForLevel()
@@ -155,13 +155,13 @@ void GuildLevelSystem::LoadExpGuildForLevel()
 
         if ((current_level + 1) > MaxLevelGuild)
         {
-            sLog->outError("> Уровень гильдии (%u) больше, чем максимальный (%u)", current_level + 1, MaxLevelGuild);
+            LOG_ERROR("module.gls", "> Уровень гильдии (%u) больше, чем максимальный (%u)", current_level + 1, MaxLevelGuild);
             continue;
         }
 
         if (!current_xp)
         {
-            sLog->outError("> Опыт для следующего уровня на уровне (%u) не может быть равен нулю", current_level);
+            LOG_ERROR("module.gls", "> Опыт для следующего уровня на уровне (%u) не может быть равен нулю", current_level);
             continue;
         }
 
@@ -169,7 +169,7 @@ void GuildLevelSystem::LoadExpGuildForLevel()
 
     } while (result->NextRow());
 
-    sLog->outString(">> Загружено %u уровней для системы гильдий за %u мс", static_cast<uint32>(_guildExpForLevelStore.size()), GetMSTimeDiffToNow(oldMSTime));
+    LOG_INFO("module.gls", ">> Загружено %u уровней для системы гильдий за %u мс", static_cast<uint32>(_guildExpForLevelStore.size()), GetMSTimeDiffToNow(oldMSTime));
 }
 
 void GuildLevelSystem::LoadGuildSetting()
@@ -194,7 +194,7 @@ void GuildLevelSystem::LoadGuildSetting()
 
     } while (result->NextRow());
 
-    sLog->outString(">> Загружено %u настроек гильдий за %u мс", static_cast<uint32>(_guildSettingStore.size()), GetMSTimeDiffToNow(oldMSTime));
+    LOG_INFO("module.gls", ">> Загружено %u настроек гильдий за %u мс", static_cast<uint32>(_guildSettingStore.size()), GetMSTimeDiffToNow(oldMSTime));
 }
 
 void GuildLevelSystem::LoadGuildSpellReward()
@@ -246,7 +246,7 @@ void GuildLevelSystem::LoadGuildSpellReward()
 
     } while (result->NextRow());
 
-    sLog->outString(">> Загружено %u наградных спеллов для %u уровней гильдий за %u мс", spellCount, static_cast<uint32>(_guildSpellRewardStore.size()), GetMSTimeDiffToNow(oldMSTime));
+    LOG_INFO("module.gls", ">> Загружено %u наградных спеллов для %u уровней гильдий за %u мс", spellCount, static_cast<uint32>(_guildSpellRewardStore.size()), GetMSTimeDiffToNow(oldMSTime));
 }
 
 GuildLevel* GuildLevelSystem::GetGLS(uint32 guildid, bool needCheck /*= true*/)
