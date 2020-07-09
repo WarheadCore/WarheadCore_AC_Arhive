@@ -23,7 +23,7 @@
 #
 #    OnlineReward.Enable
 #        Description: Include the entire online rewards module
-#        Default: 1
+#        Default: 0
 #
 #    OnlineReward.PerOnline.Enable
 #        Description: Enable Type 1 (awards for general online on the server).
@@ -50,7 +50,7 @@
 #        Default: 60 (1 minute)
 #
 
-OnlineReward.Enable = 1
+OnlineReward.Enable = 0
 OnlineReward.PerOnline.Enable = 1
 OnlineReward.PerTime.Enable = 1
 OnlineReward.PerTime.Time = 1800

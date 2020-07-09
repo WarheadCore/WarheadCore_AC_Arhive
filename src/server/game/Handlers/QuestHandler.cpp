@@ -43,7 +43,7 @@ void WorldSession::HandleQuestgiverStatusQueryOpcode(WorldPacket & recvData)
     if (!questGiver)
     {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-        sLog->outDetail("Error in CMSG_QUESTGIVER_STATUS_QUERY, called for not found questgiver (Typeid: %u GUID: %u)", GuidHigh2TypeId(GUID_HIPART(guid)), GUID_LOPART(guid));
+        LOG_INFO("server", "Error in CMSG_QUESTGIVER_STATUS_QUERY, called for not found questgiver (Typeid: %u GUID: %u)", GuidHigh2TypeId(GUID_HIPART(guid)), GUID_LOPART(guid));
 #endif
         return;
     }
@@ -68,7 +68,7 @@ void WorldSession::HandleQuestgiverStatusQueryOpcode(WorldPacket & recvData)
             break;
         }
         default:
-            sLog->outError("QuestGiver called for unexpected type %u", questGiver->GetTypeId());
+            LOG_ERROR("server", "QuestGiver called for unexpected type %u", questGiver->GetTypeId());
             break;
     }
 
@@ -261,7 +261,7 @@ void WorldSession::HandleQuestgiverChooseRewardOpcode(WorldPacket & recvData)
 
     if (reward >= QUEST_REWARD_CHOICES_COUNT)
     {
-        sLog->outError("Error in CMSG_QUESTGIVER_CHOOSE_REWARD: player %s (guid %d) tried to get invalid reward (%u) (probably packet hacking)", _player->GetName().c_str(), _player->GetGUIDLow(), reward);
+        LOG_ERROR("server", "Error in CMSG_QUESTGIVER_CHOOSE_REWARD: player %s (guid %d) tried to get invalid reward (%u) (probably packet hacking)", _player->GetName().c_str(), _player->GetGUIDLow(), reward);
         return;
     }
 
@@ -282,7 +282,7 @@ void WorldSession::HandleQuestgiverChooseRewardOpcode(WorldPacket & recvData)
         if ((!_player->CanSeeStartQuest(quest) &&  _player->GetQuestStatus(questId) == QUEST_STATUS_NONE) ||
             (_player->GetQuestStatus(questId) != QUEST_STATUS_COMPLETE && !quest->IsAutoComplete()))
         {
-            sLog->outError("HACK ALERT: Player %s (guid: %u) is trying to complete quest (id: %u) but he has no right to do it!",
+            LOG_ERROR("server", "HACK ALERT: Player %s (guid: %u) is trying to complete quest (id: %u) but he has no right to do it!",
                            _player->GetName().c_str(), _player->GetGUIDLow(), questId);
             return;
         }
@@ -427,7 +427,7 @@ void WorldSession::HandleQuestLogRemoveQuest(WorldPacket& recvData)
             _player->RemoveTimedAchievement(ACHIEVEMENT_TIMED_TYPE_QUEST, questId);
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-            sLog->outDetail("Player %u abandoned quest %u", _player->GetGUIDLow(), questId);
+            LOG_INFO("server", "Player %u abandoned quest %u", _player->GetGUIDLow(), questId);
 #endif
             // check if Quest Tracker is enabled
             if (sGameConfig->GetBoolConfig("Quests.EnableQuestTracker"))
@@ -508,7 +508,7 @@ void WorldSession::HandleQuestgiverCompleteQuest(WorldPacket& recvData)
     {
         if (!_player->CanSeeStartQuest(quest) && _player->GetQuestStatus(questId) == QUEST_STATUS_NONE)
         {
-            sLog->outError("Possible hacking attempt: Player %s [guid: %u] tried to complete quest [entry: %u] without being in possession of the quest!",
+            LOG_ERROR("server", "Possible hacking attempt: Player %s [guid: %u] tried to complete quest [entry: %u] without being in possession of the quest!",
                           _player->GetName().c_str(), _player->GetGUIDLow(), questId);
             return;
         }

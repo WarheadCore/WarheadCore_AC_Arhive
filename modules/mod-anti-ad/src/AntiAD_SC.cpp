@@ -48,13 +48,13 @@ public:
 
         messages.clear();
 
-        LOG_INFO("module", "Loading forbidden words...");
+        LOG_INFO("modules", "Loading forbidden words...");
 
         QueryResult result = WorldDatabase.PQuery("SELECT message FROM `anti_ad_messages`");
         if (!result)
         {
-            sLog->outString(">> Loading 0 word. DB table `anti_ad_messages` is empty.");
-            sLog->outString();
+            LOG_INFO("modules", ">> Loading 0 word. DB table `anti_ad_messages` is empty.");
+            LOG_INFO("modules", "");
             return;
         }
 
@@ -65,8 +65,8 @@ public:
 
         } while (result->NextRow());
 
-        sLog->outString(">> Loaded forbidden words %u in %u ms", static_cast<uint32>(messages.size()), GetMSTimeDiffToNow(oldMSTime));
-        sLog->outString();
+        LOG_INFO("modules", ">> Loaded forbidden words %u in %u ms", static_cast<uint32>(messages.size()), GetMSTimeDiffToNow(oldMSTime));
+        LOG_INFO("modules", "");
     }
 
     bool IsBadMessage(std::string& msg)

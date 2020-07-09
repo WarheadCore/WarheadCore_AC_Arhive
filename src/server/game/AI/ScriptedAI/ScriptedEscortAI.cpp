@@ -424,13 +424,13 @@ void npc_escortAI::Start(bool isActiveAttacker /* = true*/, bool run /* = false 
 {
     if (me->GetVictim())
     {
-        sLog->outError("TSCR ERROR: EscortAI (script: %s, creature entry: %u) attempts to Start while in combat", me->GetScriptName().c_str(), me->GetEntry());
+        LOG_ERROR("server", "TSCR ERROR: EscortAI (script: %s, creature entry: %u) attempts to Start while in combat", me->GetScriptName().c_str(), me->GetEntry());
         return;
     }
 
     if (HasEscortState(STATE_ESCORT_ESCORTING))
     {
-        sLog->outError("TSCR: EscortAI (script: %s, creature entry: %u) attempts to Start while already escorting", me->GetScriptName().c_str(), me->GetEntry());
+        LOG_ERROR("server", "TSCR: EscortAI (script: %s, creature entry: %u) attempts to Start while already escorting", me->GetScriptName().c_str(), me->GetEntry());
         return;
     }
 
@@ -443,7 +443,7 @@ void npc_escortAI::Start(bool isActiveAttacker /* = true*/, bool run /* = false 
 
     if (WaypointList.empty())
     {
-        sLog->outErrorDb("TSCR: EscortAI (script: %s, creature entry: %u) starts with 0 waypoints (possible missing entry in script_waypoint. Quest: %u).",
+        LOG_ERROR("sql.sql", "TSCR: EscortAI (script: %s, creature entry: %u) starts with 0 waypoints (possible missing entry in script_waypoint. Quest: %u).",
             me->GetScriptName().c_str(), me->GetEntry(), quest ? quest->GetQuestId() : 0);
         return;
     }

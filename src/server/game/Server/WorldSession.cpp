@@ -124,6 +124,7 @@ WorldSession::WorldSession(uint32 id, WorldSocket* sock, AccountTypes sec, uint8
     recruiterId(recruiter),
     isRecruiter(isARecruiter),
     m_currentBankerGUID(0),
+    m_currentVendorEntry(0),
     timerGsSpam(0),
     _calendarEventCreationCooldown(0)
 {
@@ -231,9 +232,9 @@ void WorldSession::SendPacket(WorldPacket const* packet)
         uint64 minTime = uint64(cur_time - lastTime);
         uint64 fullTime = uint64(lastTime - firstTime);
 
-        sLog->outDetail("Send all time packets count: " UI64FMTD " bytes: " UI64FMTD " avr.count/sec: %f avr.bytes/sec: %f time: %u", sendPacketCount, sendPacketBytes, float(sendPacketCount) / fullTime, float(sendPacketBytes) / fullTime, uint32(fullTime));
+        LOG_INFO("server", "Send all time packets count: " UI64FMTD " bytes: " UI64FMTD " avr.count/sec: %f avr.bytes/sec: %f time: %u", sendPacketCount, sendPacketBytes, float(sendPacketCount) / fullTime, float(sendPacketBytes) / fullTime, uint32(fullTime));
 
-        sLog->outDetail("Send last min packets count: " UI64FMTD " bytes: " UI64FMTD " avr.count/sec: %f avr.bytes/sec: %f", sendLastPacketCount, sendLastPacketBytes, float(sendLastPacketCount) / minTime, float(sendLastPacketBytes) / minTime);
+        LOG_INFO("server", "Send last min packets count: " UI64FMTD " bytes: " UI64FMTD " avr.count/sec: %f avr.bytes/sec: %f", sendLastPacketCount, sendLastPacketBytes, float(sendLastPacketCount) / minTime, float(sendLastPacketBytes) / minTime);
 
         lastTime = cur_time;
         sendLastPacketCount = 1;
@@ -280,7 +281,7 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
     {
         if (packet->GetOpcode() >= NUM_MSG_TYPES)
         {
-            sLog->outError("WorldSession Packet filter: received non-existent opcode %s (0x%.4X)", LookupOpcodeName(packet->GetOpcode()), packet->GetOpcode());
+            LOG_ERROR("server", "WorldSession Packet filter: received non-existent opcode %s (0x%.4X)", LookupOpcodeName(packet->GetOpcode()), packet->GetOpcode());
         }
         else
         {
@@ -358,7 +359,7 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
             }
             catch (ByteBufferException const&)
             {
-                sLog->outError("WorldSession::Update ByteBufferException occured while parsing a packet (opcode: %u) from client %s, accountid=%i. Skipped packet.", packet->GetOpcode(), GetRemoteAddress().c_str(), GetAccountId());
+                LOG_ERROR("server", "WorldSession::Update ByteBufferException occured while parsing a packet (opcode: %u) from client %s, accountid=%i. Skipped packet.", packet->GetOpcode(), GetRemoteAddress().c_str(), GetAccountId());
                 if (sLog->ShouldLog("network", LOG_LEVEL_DEBUG))
                 {
                     LOG_DEBUG("network", "Dumping error causing packet:");
@@ -584,7 +585,7 @@ void WorldSession::LogoutPlayer(bool save)
         //! Call script hook before deletion
         sScriptMgr->OnPlayerLogout(_player);
 
-        sLog->outChar("Account: %d (IP: %s) Logout Character:[%s] (GUID: %u) Level: %d", GetAccountId(), GetRemoteAddress().c_str(), _player->GetName().c_str(), _player->GetGUIDLow(), _player->getLevel());
+        LOG_INFO("entities.player.character", "Account: %d (IP: %s) Logout Character:[%s] (GUID: %u) Level: %d", GetAccountId(), GetRemoteAddress().c_str(), _player->GetName().c_str(), _player->GetGUIDLow(), _player->getLevel());
 
         //! Remove the player from the world
         // the player may not be in the world when logging out
@@ -670,22 +671,22 @@ char const* WorldSession::GetAcoreString(uint32 entry) const
 
 void WorldSession::Handle_NULL(WorldPacket& recvPacket)
 {
-    sLog->outError("SESSION: received unhandled opcode %s (0x%.4X)", LookupOpcodeName(recvPacket.GetOpcode()), recvPacket.GetOpcode());
+    LOG_ERROR("server", "SESSION: received unhandled opcode %s (0x%.4X)", LookupOpcodeName(recvPacket.GetOpcode()), recvPacket.GetOpcode());
 }
 
 void WorldSession::Handle_EarlyProccess(WorldPacket& recvPacket)
 {
-    sLog->outError("SESSION: received opcode %s (0x%.4X) that must be processed in WorldSocket::OnRead", LookupOpcodeName(recvPacket.GetOpcode()), recvPacket.GetOpcode());
+    LOG_ERROR("server", "SESSION: received opcode %s (0x%.4X) that must be processed in WorldSocket::OnRead", LookupOpcodeName(recvPacket.GetOpcode()), recvPacket.GetOpcode());
 }
 
 void WorldSession::Handle_ServerSide(WorldPacket& recvPacket)
 {
-    sLog->outError("SESSION: received server-side opcode %s (0x%.4X)", LookupOpcodeName(recvPacket.GetOpcode()), recvPacket.GetOpcode());
+    LOG_ERROR("server", "SESSION: received server-side opcode %s (0x%.4X)", LookupOpcodeName(recvPacket.GetOpcode()), recvPacket.GetOpcode());
 }
 
 void WorldSession::Handle_Deprecated(WorldPacket& recvPacket)
 {
-    sLog->outError("SESSION: received deprecated opcode %s (0x%.4X)", LookupOpcodeName(recvPacket.GetOpcode()), recvPacket.GetOpcode());
+    LOG_ERROR("server", "SESSION: received deprecated opcode %s (0x%.4X)", LookupOpcodeName(recvPacket.GetOpcode()), recvPacket.GetOpcode());
 }
 
 void WorldSession::SendAuthWaitQue(uint32 position)
@@ -728,13 +729,13 @@ void WorldSession::LoadAccountData(PreparedQueryResult result, uint32 mask)
         uint32 type = fields[0].GetUInt8();
         if (type >= NUM_ACCOUNT_DATA_TYPES)
         {
-            sLog->outError("Table `%s` have invalid account data type (%u), ignore.", mask == GLOBAL_CACHE_MASK ? "account_data" : "character_account_data", type);
+            LOG_ERROR("server", "Table `%s` have invalid account data type (%u), ignore.", mask == GLOBAL_CACHE_MASK ? "account_data" : "character_account_data", type);
             continue;
         }
 
         if ((mask & (1 << type)) == 0)
         {
-            sLog->outError("Table `%s` have non appropriate for table  account data type (%u), ignore.", mask == GLOBAL_CACHE_MASK ? "account_data" : "character_account_data", type);
+            LOG_ERROR("server", "Table `%s` have non appropriate for table  account data type (%u), ignore.", mask == GLOBAL_CACHE_MASK ? "account_data" : "character_account_data", type);
             continue;
         }
 
@@ -995,7 +996,7 @@ void WorldSession::ReadAddonsInfo(WorldPacket &data)
 
     if (size > 0xFFFFF)
     {
-        sLog->outError("WorldSession::ReadAddonsInfo addon info too big, size %u", size);
+        LOG_ERROR("server", "WorldSession::ReadAddonsInfo addon info too big, size %u", size);
         return;
     }
 
@@ -1026,7 +1027,7 @@ void WorldSession::ReadAddonsInfo(WorldPacket &data)
             addonInfo >> enabled >> crc >> unk1;
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-            sLog->outDetail("ADDON: Name: %s, Enabled: 0x%x, CRC: 0x%x, Unknown2: 0x%x", addonName.c_str(), enabled, crc, unk1);
+            LOG_INFO("server", "ADDON: Name: %s, Enabled: 0x%x, CRC: 0x%x, Unknown2: 0x%x", addonName.c_str(), enabled, crc, unk1);
 #endif
 
             AddonInfo addon(addonName, enabled, crc, 2, true);
@@ -1042,9 +1043,9 @@ void WorldSession::ReadAddonsInfo(WorldPacket &data)
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
                 if (!match)
-                    sLog->outDetail("ADDON: %s was known, but didn't match known CRC (0x%x)!", addon.Name.c_str(), savedAddon->CRC);
+                    LOG_INFO("server", "ADDON: %s was known, but didn't match known CRC (0x%x)!", addon.Name.c_str(), savedAddon->CRC);
                 else
-                    sLog->outDetail("ADDON: %s was known, CRC is correct (0x%x)", addon.Name.c_str(), savedAddon->CRC);
+                    LOG_INFO("server", "ADDON: %s was known, CRC is correct (0x%x)", addon.Name.c_str(), savedAddon->CRC);
 #endif
             }
             else
@@ -1052,7 +1053,7 @@ void WorldSession::ReadAddonsInfo(WorldPacket &data)
                 AddonMgr::SaveAddon(addon);
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                sLog->outDetail("ADDON: %s (0x%x) was not known, saving...", addon.Name.c_str(), addon.CRC);
+                LOG_INFO("server", "ADDON: %s (0x%x) was not known, saving...", addon.Name.c_str(), addon.CRC);
 #endif
             }
 
@@ -1072,7 +1073,7 @@ void WorldSession::ReadAddonsInfo(WorldPacket &data)
 #endif
     }
     else
-        sLog->outError("Addon packet uncompress error!");
+        LOG_ERROR("server", "Addon packet uncompress error!");
 }
 
 void WorldSession::SendAddonsInfo()
@@ -1112,7 +1113,7 @@ void WorldSession::SendAddonsInfo()
             if (usepk)                                      // if CRC is wrong, add public key (client need it)
             {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                sLog->outDetail("ADDON: CRC (0x%x) for addon %s is wrong (does not match expected 0x%x), sending pubkey", itr->CRC, itr->Name.c_str(), STANDARD_ADDON_CRC);
+                LOG_INFO("server", "ADDON: CRC (0x%x) for addon %s is wrong (does not match expected 0x%x), sending pubkey", itr->CRC, itr->Name.c_str(), STANDARD_ADDON_CRC);
 #endif
                 data.append(addonPublicKey, sizeof(addonPublicKey));
             }
@@ -1391,7 +1392,7 @@ bool WorldSession::DosProtection::EvaluateOpcode(WorldPacket& p, time_t time) co
             return true;
         case POLICY_KICK:
         {
-            sLog->outError("AntiDOS: Player kicked!");
+            LOG_ERROR("server", "AntiDOS: Player kicked!");
             Session->KickPlayer();
             return false;
         }

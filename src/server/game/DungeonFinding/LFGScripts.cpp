@@ -78,7 +78,7 @@ void LFGPlayerScript::OnLogin(Player* player)
         uint64 gguid2 = group->GetGUID();
         if (gguid != gguid2)
         {
-            //sLog->outError("%s on group %u but LFG has group %u saved... Fixing.",
+            //LOG_ERROR("server", "%s on group %u but LFG has group %u saved... Fixing.",
             //    player->GetSession()->GetPlayerInfo().c_str(), GUID_LOPART(gguid2), GUID_LOPART(gguid));
             sLFGMgr->SetupGroupMember(guid, group->GetGUID());
         }

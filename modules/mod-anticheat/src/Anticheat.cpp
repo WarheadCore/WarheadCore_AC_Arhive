@@ -72,7 +72,7 @@ void Anticheat::JumpHackDetection(Player* player, MovementInfo /* movementInfo *
 
     if (m_Players[key].GetLastOpcode() == MSG_MOVE_JUMP && opcode == MSG_MOVE_JUMP)
     {
-        LOG_INFO("module", "> Anticheat: Jump-Hack detected player %s (%u)", player->GetName().c_str(), player->GetGUIDLow());
+        LOG_INFO("modules", "> Anticheat: Jump-Hack detected player %s (%u)", player->GetName().c_str(), player->GetGUIDLow());
         BuildReport(player);
     }
 }
@@ -96,7 +96,7 @@ void Anticheat::WalkOnWaterHackDetection(Player* player, MovementInfo  movementI
         player->HasAuraType(SPELL_AURA_WATER_WALK))
         return;
 
-    LOG_INFO("module", "> Anticheat: Walk on Water - Hack detected player %s (%u)", player->GetName().c_str(), player->GetGUIDLow());
+    LOG_INFO("modules", "> Anticheat: Walk on Water - Hack detected player %s (%u)", player->GetName().c_str(), player->GetGUIDLow());
 
     BuildReport(player);
 }
@@ -120,7 +120,7 @@ void Anticheat::FlyHackDetection(Player* player, MovementInfo  movementInfo)
     if (!movementInfo.HasMovementFlag(MOVEMENTFLAG_CAN_FLY) && !movementInfo.HasMovementFlag(MOVEMENTFLAG_FLYING) && stricterChecks)
         return;
 
-    LOG_INFO("module", "> Anticheat: Fly-Hack detected player %s (%u)", player->GetName().c_str(), player->GetGUIDLow());
+    LOG_INFO("modules", "> Anticheat: Fly-Hack detected player %s (%u)", player->GetName().c_str(), player->GetGUIDLow());
 
     BuildReport(player);
 }
@@ -147,7 +147,7 @@ void Anticheat::TeleportPlaneHackDetection(Player* player, MovementInfo movement
     // we are not really walking there
     if (z_diff > 1.0f)
     {
-        sLog->outString("AnticheatMgr:: Teleport To Plane - Hack detected player %s (%u)", player->GetName().c_str(), player->GetGUIDLow());
+        LOG_INFO("modules", "AnticheatMgr:: Teleport To Plane - Hack detected player %s (%u)", player->GetName().c_str(), player->GetGUIDLow());
         BuildReport(player);
     }
 }
@@ -203,7 +203,7 @@ void Anticheat::ClimbHackDetection(Player* player, MovementInfo movementInfo, ui
 
     if (angle > CLIMB_ANGLE)
     {
-        LOG_INFO("module", "> Anticheat: Climb-Hack detected player %s (%u)", player->GetName().c_str(), player->GetGUIDLow());
+        LOG_INFO("modules", "> Anticheat: Climb-Hack detected player %s (%u)", player->GetName().c_str(), player->GetGUIDLow());
         BuildReport(player);
     }
 }
@@ -251,7 +251,7 @@ void Anticheat::SpeedHackDetection(Player* player, MovementInfo movementInfo)
     if (clientSpeedRate > speedRate)
     {
         BuildReport(player);
-        LOG_INFO("module", "> Anticheat: Speed-Hack detected player %s (%u)", player->GetName().c_str(), player->GetGUIDLow());
+        LOG_INFO("modules", "> Anticheat: Speed-Hack detected player %s (%u)", player->GetName().c_str(), player->GetGUIDLow());
     }
 }
 

@@ -29,5 +29,5 @@
 #        Default: 0
 #
 
-AutoRevive.Enable = 1
+AutoRevive.Enable = 0
 AutoRevive.ZoneID = 0

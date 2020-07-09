@@ -194,7 +194,7 @@ void WorldSession::HandleOpenItemOpcode(WorldPacket& recvPacket)
     recvPacket >> bagIndex >> slot;
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDetail("bagIndex: %u, slot: %u", bagIndex, slot);
+    LOG_INFO("server", "bagIndex: %u, slot: %u", bagIndex, slot);
 #endif
 
     Item* item = pUser->GetItemByPos(bagIndex, slot);
@@ -215,7 +215,7 @@ void WorldSession::HandleOpenItemOpcode(WorldPacket& recvPacket)
     if (!(proto->Flags & ITEM_FLAG_HAS_LOOT) && !item->HasFlag(ITEM_FIELD_FLAGS, ITEM_FIELD_FLAG_WRAPPED))
     {
         pUser->SendEquipError(EQUIP_ERR_CANT_DO_RIGHT_NOW, item, NULL);
-        sLog->outError("Possible hacking attempt: Player %s [guid: %u] tried to open item [guid: %u, entry: %u] which is not openable!",
+        LOG_ERROR("server", "Possible hacking attempt: Player %s [guid: %u] tried to open item [guid: %u, entry: %u] which is not openable!",
                 pUser->GetName().c_str(), pUser->GetGUIDLow(), item->GetGUIDLow(), proto->ItemId);
         return;
     }
@@ -229,7 +229,7 @@ void WorldSession::HandleOpenItemOpcode(WorldPacket& recvPacket)
         if (!lockInfo)
         {
             pUser->SendEquipError(EQUIP_ERR_ITEM_LOCKED, item, NULL);
-            sLog->outError("WORLD::OpenItem: item [guid = %u] has an unknown lockId: %u!", item->GetGUIDLow(), lockId);
+            LOG_ERROR("server", "WORLD::OpenItem: item [guid = %u] has an unknown lockId: %u!", item->GetGUIDLow(), lockId);
             return;
         }
 
@@ -271,7 +271,7 @@ void WorldSession::HandleOpenWrappedItemCallback(PreparedQueryResult result, uin
 
     if (!result)
     {
-        sLog->outError("Wrapped item %u don't have record in character_gifts table and will deleted", item->GetGUIDLow());
+        LOG_ERROR("server", "Wrapped item %u don't have record in character_gifts table and will deleted", item->GetGUIDLow());
         GetPlayer()->DestroyItem(item->GetBagSlot(), item->GetSlot(), true);
         return;
     }
@@ -368,7 +368,7 @@ void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
 
     if (!spellInfo)
     {
-        sLog->outError("WORLD: unknown spell id %u", spellId);
+        LOG_ERROR("server", "WORLD: unknown spell id %u", spellId);
         recvPacket.rfinish(); // prevent spam at ignore packet
         return;
     }
@@ -505,7 +505,7 @@ void WorldSession::HandlePetCancelAuraOpcode(WorldPacket& recvPacket)
     SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(spellId);
     if (!spellInfo)
     {
-        sLog->outError("WORLD: unknown PET spell id %u", spellId);
+        LOG_ERROR("server", "WORLD: unknown PET spell id %u", spellId);
         return;
     }
 
@@ -513,13 +513,13 @@ void WorldSession::HandlePetCancelAuraOpcode(WorldPacket& recvPacket)
 
     if (!pet)
     {
-        sLog->outError("HandlePetCancelAura: Attempt to cancel an aura for non-existant pet %u by player '%s'", uint32(GUID_LOPART(guid)), GetPlayer()->GetName().c_str());
+        LOG_ERROR("server", "HandlePetCancelAura: Attempt to cancel an aura for non-existant pet %u by player '%s'", uint32(GUID_LOPART(guid)), GetPlayer()->GetName().c_str());
         return;
     }
 
     if (pet != GetPlayer()->GetGuardianPet() && pet != GetPlayer()->GetCharm())
     {
-        sLog->outError("HandlePetCancelAura: Pet %u is not a pet of player '%s'", uint32(GUID_LOPART(guid)), GetPlayer()->GetName().c_str());
+        LOG_ERROR("server", "HandlePetCancelAura: Pet %u is not a pet of player '%s'", uint32(GUID_LOPART(guid)), GetPlayer()->GetName().c_str());
         return;
     }
 

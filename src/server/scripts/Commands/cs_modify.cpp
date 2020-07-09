@@ -208,7 +208,7 @@ public:
         target->SetPower(POWER_ENERGY, energy);
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-        sLog->outDetail(handler->GetAcoreString(LANG_CURRENT_ENERGY), target->GetMaxPower(POWER_ENERGY));
+        LOG_INFO("server", handler->GetAcoreString(LANG_CURRENT_ENERGY), target->GetMaxPower(POWER_ENERGY));
 #endif
 
         return true;

@@ -206,7 +206,7 @@ Creature::~Creature()
     i_AI = NULL;
 
     //if (m_uint32Values)
-    //    sLog->outError("Deconstruct Creature Entry = %u", GetEntry());
+    //    LOG_ERROR("server", "Deconstruct Creature Entry = %u", GetEntry());
 }
 
 void Creature::AddToWorld()
@@ -312,7 +312,7 @@ bool Creature::InitEntry(uint32 Entry, const CreatureData* data)
     CreatureTemplate const* normalInfo = sObjectMgr->GetCreatureTemplate(Entry);
     if (!normalInfo)
     {
-        sLog->outErrorDb("Creature::InitEntry creature entry %u does not exist.", Entry);
+        LOG_ERROR("sql.sql", "Creature::InitEntry creature entry %u does not exist.", Entry);
         return false;
     }
 
@@ -351,7 +351,7 @@ bool Creature::InitEntry(uint32 Entry, const CreatureData* data)
     // Cancel load if no model defined
     if (!(cinfo->GetFirstValidModelId()))
     {
-        sLog->outErrorDb("Creature (Entry: %u) has no model defined in table `creature_template`, can't load. ", Entry);
+        LOG_ERROR("sql.sql", "Creature (Entry: %u) has no model defined in table `creature_template`, can't load. ", Entry);
         return false;
     }
 
@@ -359,7 +359,7 @@ bool Creature::InitEntry(uint32 Entry, const CreatureData* data)
     CreatureModelInfo const* minfo = sObjectMgr->GetCreatureModelRandomGender(&displayID);
     if (!minfo)                                             // Cancel load if no model defined
     {
-        sLog->outErrorDb("Creature (Entry: %u) has no model defined in table `creature_template`, can't load. ", Entry);
+        LOG_ERROR("sql.sql", "Creature (Entry: %u) has no model defined in table `creature_template`, can't load. ", Entry);
         return false;
     }
 
@@ -504,11 +504,11 @@ void Creature::Update(uint32 diff)
     {
         case JUST_RESPAWNED:
             // Must not be called, see Creature::setDeathState JUST_RESPAWNED -> ALIVE promoting.
-            sLog->outError("Creature (GUID: %u Entry: %u) in wrong state: JUST_RESPAWNED (4)", GetGUIDLow(), GetEntry());
+            LOG_ERROR("server", "Creature (GUID: %u Entry: %u) in wrong state: JUST_RESPAWNED (4)", GetGUIDLow(), GetEntry());
             break;
         case JUST_DIED:
             // Must not be called, see Creature::setDeathState JUST_DIED -> CORPSE promoting.
-            sLog->outError("Creature (GUID: %u Entry: %u) in wrong state: JUST_DEAD (1)", GetGUIDLow(), GetEntry());
+            LOG_ERROR("server", "Creature (GUID: %u Entry: %u) in wrong state: JUST_DEAD (1)", GetGUIDLow(), GetEntry());
             break;
         case DEAD:
         {
@@ -837,7 +837,7 @@ bool Creature::Create(uint32 guidlow, Map* map, uint32 phaseMask, uint32 Entry, 
     CreatureTemplate const* cinfo = sObjectMgr->GetCreatureTemplate(Entry);
     if (!cinfo)
     {
-        sLog->outErrorDb("Creature::Create(): creature template (guidlow: %u, entry: %u) does not exist.", guidlow, Entry);
+        LOG_ERROR("sql.sql", "Creature::Create(): creature template (guidlow: %u, entry: %u) does not exist.", guidlow, Entry);
         return false;
     }
 
@@ -851,7 +851,7 @@ bool Creature::Create(uint32 guidlow, Map* map, uint32 phaseMask, uint32 Entry, 
 
     if (!IsPositionValid())
     {
-        sLog->outError("Creature::Create(): given coordinates for creature (guidlow %d, entry %d) are not valid (X: %f, Y: %f, Z: %f, O: %f)", guidlow, Entry, x, y, z, ang);
+        LOG_ERROR("server", "Creature::Create(): given coordinates for creature (guidlow %d, entry %d) are not valid (X: %f, Y: %f, Z: %f, O: %f)", guidlow, Entry, x, y, z, ang);
         return false;
     }
 
@@ -1016,7 +1016,7 @@ void Creature::SaveToDB()
     CreatureData const* data = sObjectMgr->GetCreatureData(m_DBTableGuid);
     if (!data)
     {
-        sLog->outError("Creature::SaveToDB failed, cannot get creature data!");
+        LOG_ERROR("server", "Creature::SaveToDB failed, cannot get creature data!");
         return;
     }
 
@@ -1267,7 +1267,7 @@ bool Creature::CreateFromProto(uint32 guidlow, uint32 Entry, uint32 vehId, const
     CreatureTemplate const* normalInfo = sObjectMgr->GetCreatureTemplate(Entry);
     if (!normalInfo)
     {
-        sLog->outErrorDb("Creature::CreateFromProto(): creature template (guidlow: %u, entry: %u) does not exist.", guidlow, Entry);
+        LOG_ERROR("sql.sql", "Creature::CreateFromProto(): creature template (guidlow: %u, entry: %u) does not exist.", guidlow, Entry);
         return false;
     }
 
@@ -1318,7 +1318,7 @@ bool Creature::LoadCreatureFromDB(uint32 guid, Map* map, bool addToMap, bool gri
 
     if (!data)
     {
-        sLog->outErrorDb("Creature (GUID: %u) not found in table `creature`, can't load. ", guid);
+        LOG_ERROR("sql.sql", "Creature (GUID: %u) not found in table `creature`, can't load. ", guid);
         return false;
     }
 
@@ -1450,7 +1450,7 @@ void Creature::DeleteFromDB()
 { 
     if (!m_DBTableGuid)
     {
-        sLog->outError("Trying to delete not saved creature! LowGUID: %u, Entry: %u", GetGUIDLow(), GetEntry());
+        LOG_ERROR("server", "Trying to delete not saved creature! LowGUID: %u, Entry: %u", GetGUIDLow(), GetEntry());
         return;
     }
 
@@ -1765,7 +1765,7 @@ SpellInfo const* Creature::reachWithSpellAttack(Unit* victim)
         SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(m_spells[i]);
         if (!spellInfo)
         {
-            sLog->outError("WORLD: unknown spell id %i", m_spells[i]);
+            LOG_ERROR("server", "WORLD: unknown spell id %i", m_spells[i]);
             continue;
         }
 
@@ -1813,7 +1813,7 @@ SpellInfo const* Creature::reachWithSpellCure(Unit* victim)
         SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(m_spells[i]);
         if (!spellInfo)
         {
-            sLog->outError("WORLD: unknown spell id %i", m_spells[i]);
+            LOG_ERROR("server", "WORLD: unknown spell id %i", m_spells[i]);
             continue;
         }
 
@@ -2236,7 +2236,7 @@ bool Creature::LoadCreaturesAddon(bool reload)
             SpellInfo const* AdditionalSpellInfo = sSpellMgr->GetSpellInfo(*itr);
             if (!AdditionalSpellInfo)
             {
-                sLog->outErrorDb("Creature (GUID: %u Entry: %u) has wrong spell %u defined in `auras` field.", GetGUIDLow(), GetEntry(), *itr);
+                LOG_ERROR("sql.sql", "Creature (GUID: %u Entry: %u) has wrong spell %u defined in `auras` field.", GetGUIDLow(), GetEntry(), *itr);
                 continue;
             }
 
@@ -2244,7 +2244,7 @@ bool Creature::LoadCreaturesAddon(bool reload)
             if (HasAura(*itr))
             {
                 if (!reload)
-                    sLog->outErrorDb("Creature (GUID: %u Entry: %u) has duplicate aura (spell %u) in `auras` field.", GetGUIDLow(), GetEntry(), *itr);
+                    LOG_ERROR("sql.sql", "Creature (GUID: %u Entry: %u) has duplicate aura (spell %u) in `auras` field.", GetGUIDLow(), GetEntry(), *itr);
 
                 continue;
             }
@@ -2271,7 +2271,7 @@ void Creature::SetInCombatWithZone()
 { 
     if (!CanHaveThreatList())
     {
-        sLog->outError("Creature entry %u call SetInCombatWithZone but creature cannot have threat list.", GetEntry());
+        LOG_ERROR("server", "Creature entry %u call SetInCombatWithZone but creature cannot have threat list.", GetEntry());
         return;
     }
 
@@ -2279,7 +2279,7 @@ void Creature::SetInCombatWithZone()
 
     if (!map->IsDungeon())
     {
-        sLog->outError("Creature entry %u call SetInCombatWithZone for map (id: %u) that isn't an instance.", GetEntry(), map->GetId());
+        LOG_ERROR("server", "Creature entry %u call SetInCombatWithZone for map (id: %u) that isn't an instance.", GetEntry(), map->GetId());
         return;
     }
 

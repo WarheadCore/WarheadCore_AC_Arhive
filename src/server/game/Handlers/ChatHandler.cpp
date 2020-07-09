@@ -51,7 +51,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recvData)
 
     if (type >= MAX_CHAT_MSG_TYPE)
     {
-        sLog->outError("CHAT: Wrong message type received: %u", type);
+        LOG_ERROR("server", "CHAT: Wrong message type received: %u", type);
         recvData.rfinish();
         return;
     }
@@ -281,7 +281,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recvData)
         {
             if (sGameConfig->GetIntConfig("ChatStrictLinkChecking.Severity") && !ChatHandler(this).isValidChatMessage(msg.c_str()))
             {
-                //sLog->outError("Player %s (GUID: %u) sent a chatmessage with an invalid link: %s", GetPlayer()->GetName().c_str(),
+                //LOG_ERROR("server", "Player %s (GUID: %u) sent a chatmessage with an invalid link: %s", GetPlayer()->GetName().c_str(),
                 //    GetPlayer()->GetGUIDLow(), msg.c_str());
 
                 if (sGameConfig->GetIntConfig("ChatStrictLinkChecking.Kick"))
@@ -584,7 +584,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recvData)
             break;
         }
         default:
-            sLog->outError("CHAT: unknown message type %u, lang: %u", type, lang);
+            LOG_ERROR("server", "CHAT: unknown message type %u, lang: %u", type, lang);
             break;
     }
 }

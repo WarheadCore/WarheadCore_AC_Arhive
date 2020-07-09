@@ -21,7 +21,7 @@
 #
 #    BossAnnouncer.Enable
 #        Description: Enable system.
-#        Default: 1
+#        Default: 0
 #
 
-BossAnnouncer.Enable = 1
+BossAnnouncer.Enable = 0

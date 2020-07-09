@@ -96,8 +96,8 @@ void FormationMgr::LoadCreatureFormations()
 
     if (!result)
     {
-        sLog->outErrorDb(">> Loaded 0 creatures in formations. DB table `creature_formations` is empty!");
-        sLog->outString();
+        LOG_ERROR("sql.sql", ">> Loaded 0 creatures in formations. DB table `creature_formations` is empty!");
+        LOG_INFO("server", "");
         return;
     }
 
@@ -132,14 +132,14 @@ void FormationMgr::LoadCreatureFormations()
         {
             if (!sObjectMgr->GetCreatureData(group_member->leaderGUID))
             {
-                sLog->outErrorDb("creature_formations table leader guid %u incorrect (not exist)", group_member->leaderGUID);
+                LOG_ERROR("sql.sql", "creature_formations table leader guid %u incorrect (not exist)", group_member->leaderGUID);
                 delete group_member;
                 continue;
             }
 
             if (!sObjectMgr->GetCreatureData(memberGUID))
             {
-                sLog->outErrorDb("creature_formations table member guid %u incorrect (not exist)", memberGUID);
+                LOG_ERROR("sql.sql", "creature_formations table member guid %u incorrect (not exist)", memberGUID);
                 delete group_member;
                 continue;
             }
@@ -150,8 +150,8 @@ void FormationMgr::LoadCreatureFormations()
     }
     while (result->NextRow());
 
-    sLog->outString(">> Loaded %u creatures in formations in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-    sLog->outString();
+    LOG_INFO("server", ">> Loaded %u creatures in formations in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+    LOG_INFO("server", "");
 }
 
 void CreatureGroup::AddMember(Creature* member)

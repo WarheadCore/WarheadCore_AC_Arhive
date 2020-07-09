@@ -3423,6 +3423,7 @@ LogChannel.Console = 1,local,%t,lightRed lightRed red brown magenta cyan lightMa
 LogChannel.Server = 2,local,%Y-%m-%d %H:%M:%S %t,Server.log,false,daily,false
 LogChannel.GM = 2,local,%Y-%m-%d %H:%M:%S %t,gm_%s.log,false,daily,false
 LogChannel.DBErrors = 2,local,%Y-%m-%d %H:%M:%S %t,DBErrors.log,false,daily,false
+LogChannel.Modules = 2,local,%Y-%m-%d %H:%M:%S %t,Modules.log,false,daily,false
 
 #
 #  Logger config values: Given a logger "name"
@@ -3451,7 +3452,7 @@ Logger.commands.gm = 6,GM
 Logger.sql = 4,DBErrors
 Logger.sql.updates = 6,Server
 Logger.mmaps= 6,Server
-Logger.module= 6,Server
+Logger.modules = 6,Modules
 
 #Logger.achievement=6,Server
 #Logger.addon=6,Server

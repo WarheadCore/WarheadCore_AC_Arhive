@@ -22,7 +22,7 @@
 #
 #    GMChatColor.Enable
 #        Description: Enable color in chat for GM witch GM badge.
-#        Default: 1
+#        Default: 0
 #
 #    GMChatColor.Level.3
 #        Description: Message color for GM level 3.
@@ -37,7 +37,7 @@
 #        Default: "|cff0000ff"
 #
 
-GMChatColor.Enable = 1
+GMChatColor.Enable = 0
 GMChatColor.Level.3 = "|cffff0000"
 GMChatColor.Level.2 = "|cff0000ff"
 GMChatColor.Level.1 = "|cff0000ff"

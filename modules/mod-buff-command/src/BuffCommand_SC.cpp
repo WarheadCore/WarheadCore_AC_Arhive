@@ -38,13 +38,13 @@ public:
 
         buffs.clear();
 
-        LOG_INFO("module", "Loading buff for command .buff...");
+        LOG_INFO("modules", "Loading buff for command .buff...");
 
         QueryResult result = WorldDatabase.PQuery("SELECT SpellID FROM `player_buff`");
         if (!result)
         {
-            sLog->outString(">> Loaded 0 buffs. DB table `player_buff` is empty.");
-            sLog->outString();
+            LOG_INFO("modules", ">> Loaded 0 buffs. DB table `player_buff` is empty.");
+            LOG_INFO("modules", "");
             return;
         }
 
@@ -55,7 +55,7 @@ public:
             auto spell = sSpellStore.LookupEntry(spellID);
             if (!spell)
             {
-                sLog->outError("-> Spell with number (%u) not found. Skip.", spellID);
+                LOG_ERROR("modules", "-> Spell with number (%u) not found. Skip.", spellID);
                 continue;
             }
 
@@ -63,8 +63,8 @@ public:
 
         } while (result->NextRow());
 
-        sLog->outString(">> Loaded %u buffs in %u ms", static_cast<uint32>(buffs.size()), GetMSTimeDiffToNow(oldMSTime));
-        sLog->outString();
+        LOG_INFO("modules", ">> Loaded %u buffs in %u ms", static_cast<uint32>(buffs.size()), GetMSTimeDiffToNow(oldMSTime));
+        LOG_INFO("modules", "");
     }
 
     void ApplyBuffs(Player* player)
@@ -108,7 +108,7 @@ public:
 
         if (stringArg == "reload" && AccountMgr::IsAdminAccount(player->GetSession()->GetSecurity()))
         {
-            sLog->outString("Re-Loading player buff data...");
+            LOG_INFO("modules", "Re-Loading player buff data...");
             sBC->LoadDataFromDB();
             handler->SendGlobalGMSysMessage("|cff6C8CD5#|cFFFF0000 DB Table|r `player_buff` |cFFFF0000reloaded.|r");
             return true;

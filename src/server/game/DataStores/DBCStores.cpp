@@ -189,7 +189,7 @@ uint32 DBCFileCount = 0;
 
 static bool LoadDBC_assert_print(uint32 fsize, uint32 rsize, const std::string& filename)
 {
-    sLog->outError("Size of '%s' set by format string (%u) not equal size of C++ structure (%u).", filename.c_str(), fsize, rsize);
+    LOG_ERROR("server", "Size of '%s' set by format string (%u) not equal size of C++ structure (%u).", filename.c_str(), fsize, rsize);
 
     // ASSERT must fail after function call
     return false;
@@ -572,7 +572,7 @@ void LoadDBCStores(const std::string& dataPath)
     // error checks
     if (bad_dbc_files.size() >= DBCFileCount)
     {
-        sLog->outError("Incorrect DataDir value in worldserver.conf or ALL required *.dbc files (%d) not found by path: %sdbc", DBCFileCount, dataPath.c_str());
+        LOG_ERROR("server", "Incorrect DataDir value in worldserver.conf or ALL required *.dbc files (%d) not found by path: %sdbc", DBCFileCount, dataPath.c_str());
         exit(1);
     }
     else if (!bad_dbc_files.empty())
@@ -581,7 +581,7 @@ void LoadDBCStores(const std::string& dataPath)
         for (StoreProblemList::iterator i = bad_dbc_files.begin(); i != bad_dbc_files.end(); ++i)
             str += *i + "\n";
 
-        sLog->outError("Some required *.dbc files (%u from %u) not found or not compatible:\n %s", static_cast<uint32>(bad_dbc_files.size()), DBCFileCount, str.c_str());
+        LOG_ERROR("server", "Some required *.dbc files (%u from %u) not found or not compatible:\n %s", static_cast<uint32>(bad_dbc_files.size()), DBCFileCount, str.c_str());
         exit(1);
     }
 
@@ -593,12 +593,12 @@ void LoadDBCStores(const std::string& dataPath)
         !sMapStore.LookupEntry(724)                ||       // last map added in 3.3.5a
         !sSpellStore.LookupEntry(80864)            )        // last client known item added in 3.3.5a
     {
-        sLog->outError("You have _outdated_ DBC data. Please extract correct versions from current using client.");
+        LOG_ERROR("server", "You have _outdated_ DBC data. Please extract correct versions from current using client.");
         exit(1);
     }
 
-    sLog->outString(">> Initialized %d data stores in %u ms", DBCFileCount, GetMSTimeDiffToNow(oldMSTime));
-    sLog->outString();
+    LOG_INFO("server", ">> Initialized %d data stores in %u ms", DBCFileCount, GetMSTimeDiffToNow(oldMSTime));
+    LOG_INFO("server", "");
 }
 
 SimpleFactionsList const* GetFactionTeamList(uint32 faction)

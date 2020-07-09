@@ -83,7 +83,7 @@ void WorldSession::HandleSetSheathedOpcode(WorldPacket& recvData)
 
     if (sheathed >= MAX_SHEATH_STATE)
     {
-        sLog->outError("Unknown sheath state %u ??", sheathed);
+        LOG_ERROR("server", "Unknown sheath state %u ??", sheathed);
         return;
     }
 

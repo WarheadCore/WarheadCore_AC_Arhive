@@ -43,14 +43,14 @@ public:
         uint32 msTime = getMSTime();
         rewards.clear();
 
-        LOG_INFO("module", "Load level reward data...");
+        LOG_INFO("modules", "Load level reward data...");
 
         //                                                  0      1      2       3
         QueryResult result = WorldDatabase.Query("SELECT Level, Money, ItemID, ItemCount FROM level_reward ORDER BY Level");
         if (!result)
         {
-            sLog->outErrorDb("In DB table `level_reward` not data. Loading canceled"); 
-            sLog->outString();
+            LOG_ERROR("modules", "In DB table `level_reward` not data. Loading canceled"); 
+            LOG_ERROR("modules", "");
             return;
         }
 
@@ -69,7 +69,7 @@ public:
             // Проверка
             if (Level > CONF_GET_INT("MaxPlayerLevel"))
             {
-                sLog->outErrorDb("-> Level (%u) more, than max player level in world (%u). Skip", Level, CONF_GET_INT("MaxPlayerLevel"));
+                LOG_ERROR("modules", "-> Level (%u) more, than max player level in world (%u). Skip", Level, CONF_GET_INT("MaxPlayerLevel"));
                 continue;
             }
 
@@ -78,14 +78,14 @@ public:
                 ItemTemplate const* itemTemplate = sObjectMgr->GetItemTemplate(_levelReward.ItemID);
                 if (!itemTemplate)
                 {
-                    sLog->outErrorDb("-> For level (%u) item witch nuber %u not found. Item delete from reward", Level, _levelReward.ItemID);
+                    LOG_ERROR("modules", "-> For level (%u) item witch nuber %u not found. Item delete from reward", Level, _levelReward.ItemID);
                     _levelReward.ItemID = 0;
                 }
             }
 
             if (_levelReward.ItemID && !_levelReward.ItemCount)
             {
-                sLog->outErrorDb("-> For level (%u) item witch nuber %u adding 0 count - this useless. Set 1", Level, _levelReward.ItemID);
+                LOG_ERROR("modules", "-> For level (%u) item witch nuber %u adding 0 count - this useless. Set 1", Level, _levelReward.ItemID);
                 _levelReward.ItemCount = 1;
             }
 
@@ -93,8 +93,8 @@ public:
 
         } while (result->NextRow());
 
-        sLog->outString(">> Loaded %u reward for level in %u ms", static_cast<uint32>(rewards.size()), GetMSTimeDiffToNow(msTime));
-        sLog->outString();
+        LOG_INFO("modules", ">> Loaded %u reward for level in %u ms", static_cast<uint32>(rewards.size()), GetMSTimeDiffToNow(msTime));
+        LOG_INFO("modules", "");
     }
 
     void RewardPlayer(Player* player, uint8 oldLevel)
@@ -143,7 +143,7 @@ private:
         {
             if (ListItemPairs.size() > MAX_MAIL_ITEMS)
             {
-                sLog->outError("> SendMailItems: ListItemPairs.size() = %u", (uint32)ListItemPairs.size());
+                LOG_ERROR("modules", "> SendMailItems: ListItemPairs.size() = %u", (uint32)ListItemPairs.size());
                 return;
             }
 
@@ -172,7 +172,7 @@ private:
 
                 if (_listItemPairs.size() > MAX_MAIL_ITEMS)
                 {
-                    sLog->outError("> SendMailItems: _listItemPairs.size() = %u", (uint32)_listItemPairs.size());
+                    LOG_ERROR("modules", "> SendMailItems: _listItemPairs.size() = %u", (uint32)_listItemPairs.size());
                     break;
                 }
             }

@@ -41,7 +41,7 @@ Weather::Weather(uint32 zone, WeatherData const* weatherChances)
     m_grade = 0;
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDetail("WORLD: Starting weather system for zone %u (change every %u minutes).", m_zone, (uint32)(m_timer.GetInterval() / (MINUTE*IN_MILLISECONDS)));
+    LOG_INFO("server", "WORLD: Starting weather system for zone %u (change every %u minutes).", m_zone, (uint32)(m_timer.GetInterval() / (MINUTE*IN_MILLISECONDS)));
 #endif
 }
 
@@ -103,7 +103,7 @@ bool Weather::ReGenerate()
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     static char const* seasonName[WEATHER_SEASONS] = { "spring", "summer", "fall", "winter" };
-    sLog->outDetail("Generating a change in %s weather for zone %u.", seasonName[season], m_zone);
+    LOG_INFO("server", "Generating a change in %s weather for zone %u.", seasonName[season], m_zone);
 #endif
 
     if ((u < 60) && (m_grade < 0.33333334f))                // Get fair
@@ -270,7 +270,7 @@ bool Weather::UpdateWeather()
             break;
     }
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDetail("Change the weather of zone %u to %s.", m_zone, wthstr);
+    LOG_INFO("server", "Change the weather of zone %u to %s.", m_zone, wthstr);
 #endif
     sScriptMgr->OnWeatherChange(this, state, m_grade);
     return true;

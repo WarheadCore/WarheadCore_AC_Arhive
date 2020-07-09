@@ -25,7 +25,7 @@
 #                     0 - (Disabled)
 #
 
-AC.Enable = 1
+AC.Enable = 0
 
 #
 #    AC.Info.Enable

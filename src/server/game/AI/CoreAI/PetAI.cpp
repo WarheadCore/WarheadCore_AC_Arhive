@@ -691,7 +691,7 @@ bool PetAI::CanAttack(Unit* target, const SpellInfo* spellInfo)
     // pussywizard: ZOMG! TEMP!
     if (!me->GetCharmInfo())
     {
-        sLog->outMisc("PetAI::CanAttack (A1) - %u, %u", me->GetEntry(), GUID_LOPART(me->GetOwnerGUID()));
+        LOG_INFO("misc", "PetAI::CanAttack (A1) - %u, %u", me->GetEntry(), GUID_LOPART(me->GetOwnerGUID()));
         return false;
     }
 

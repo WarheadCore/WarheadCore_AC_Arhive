@@ -82,7 +82,7 @@ Group::~Group()
 #endif
         if (m_bgGroup->GetBgRaid(TEAM_ALLIANCE) == this) m_bgGroup->SetBgRaid(TEAM_ALLIANCE, NULL);
         else if (m_bgGroup->GetBgRaid(TEAM_HORDE) == this) m_bgGroup->SetBgRaid(TEAM_HORDE, NULL);
-        else sLog->outError("Group::~Group: battleground group is not linked to the correct battleground.");
+        else LOG_ERROR("server", "Group::~Group: battleground group is not linked to the correct battleground.");
     }
     Rolls::iterator itr;
     while (!RollId.empty())

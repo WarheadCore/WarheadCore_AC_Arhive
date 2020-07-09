@@ -115,7 +115,7 @@ bool ArenaTeam::AddMember(uint64 playerGuid)
     // Check if player is already in a similar arena team
     if ((player && player->GetArenaTeamId(GetSlot())) || Player::GetArenaTeamIdFromStorage(GUID_LOPART(playerGuid), GetSlot()) != 0)
     {
-        sLog->outError("Arena: Player %s (guid: %u) already has an arena team of type %u", playerName.c_str(), GUID_LOPART(playerGuid), GetType());
+        LOG_ERROR("server", "Arena: Player %s (guid: %u) already has an arena team of type %u", playerName.c_str(), GUID_LOPART(playerGuid), GetType());
         return false;
     }
 
@@ -250,7 +250,7 @@ bool ArenaTeam::LoadMembersFromDB(QueryResult result)
         // Delete member if character information is missing
         if (fields[6].GetString().empty())
         {
-            sLog->outErrorDb("ArenaTeam %u has member with empty name - probably player %u doesn't exist, deleting him from memberlist!", arenaTeamId, GUID_LOPART(newMember.Guid));
+            LOG_ERROR("sql.sql", "ArenaTeam %u has member with empty name - probably player %u doesn't exist, deleting him from memberlist!", arenaTeamId, GUID_LOPART(newMember.Guid));
             this->DelMember(newMember.Guid, true);
             continue;
         }
@@ -559,7 +559,7 @@ void ArenaTeam::BroadcastEvent(ArenaTeamEvents event, uint64 guid, uint8 strCoun
             data << str1 << str2 << str3;
             break;
         default:
-            sLog->outError("Unhandled strCount %u in ArenaTeam::BroadcastEvent", strCount);
+            LOG_ERROR("server", "Unhandled strCount %u in ArenaTeam::BroadcastEvent", strCount);
             return;
     }
 
@@ -600,7 +600,7 @@ uint8 ArenaTeam::GetSlotByType(uint32 type)
         default:
             break;
     }
-    sLog->outError("FATAL: Unknown arena team type %u for some arena team", type);
+    LOG_ERROR("server", "FATAL: Unknown arena team type %u for some arena team", type);
     return 0xFF;
 }
 

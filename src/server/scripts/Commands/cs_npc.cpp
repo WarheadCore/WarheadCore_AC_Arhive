@@ -308,8 +308,9 @@ public:
             return false;
         }
 
-        uint32 vendor_entry = vendor->GetEntry();
-
+        char* addMulti = strtok(nullptr, " ");
+        uint32 vendor_entry = addMulti ? handler->GetSession()->GetCurrentVendor() : vendor->GetEntry();
+        
         if (!sObjectMgr->IsVendorItemValid(vendor_entry, itemId, maxcount, incrtime, extendedcost, handler->GetSession()->GetPlayer()))
         {
             handler->SetSentErrorMessage(true);
@@ -529,9 +530,11 @@ public:
             handler->SetSentErrorMessage(true);
             return false;
         }
+
         uint32 itemId = atol(pitem);
 
-        if (!sObjectMgr->RemoveVendorItem(vendor->GetEntry(), itemId))
+        char* addMulti = strtok(nullptr, " ");
+        if (!sObjectMgr->RemoveVendorItem(addMulti ? handler->GetSession()->GetCurrentVendor() : vendor->GetEntry(), itemId))
         {
             handler->PSendSysMessage(LANG_ITEM_NOT_IN_LIST, itemId);
             handler->SetSentErrorMessage(true);
@@ -980,7 +983,7 @@ public:
 
         if (dontdel_str)
         {
-            //sLog->outError("DEBUG: All 3 params are set");
+            //LOG_ERROR("server", "DEBUG: All 3 params are set");
 
             // All 3 params are set
             // GUID
@@ -988,7 +991,7 @@ public:
             // doNotDEL
             if (stricmp(dontdel_str, "NODEL") == 0)
             {
-                //sLog->outError("DEBUG: doNotDelete = true;");
+                //LOG_ERROR("server", "DEBUG: doNotDelete = true;");
                 doNotDelete = true;
             }
         }
@@ -997,10 +1000,10 @@ public:
             // Only 2 params - but maybe NODEL is set
             if (type_str)
             {
-                sLog->outError("DEBUG: Only 2 params ");
+                LOG_ERROR("server", "DEBUG: Only 2 params ");
                 if (stricmp(type_str, "NODEL") == 0)
                 {
-                    //sLog->outError("DEBUG: type_str, NODEL ");
+                    //LOG_ERROR("server", "DEBUG: type_str, NODEL ");
                     doNotDelete = true;
                     type_str = nullptr;
                 }

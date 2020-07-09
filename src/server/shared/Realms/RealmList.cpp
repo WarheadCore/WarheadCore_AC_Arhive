@@ -104,7 +104,7 @@ void RealmList::UpdateRealms(bool init)
             UpdateRealm(realmId, name, externalAddr, localAddr, submask, icon, flag, timezone, (allowedSecurityLevel <= SEC_ADMINISTRATOR ? AccountTypes(allowedSecurityLevel) : SEC_ADMINISTRATOR), pop, build);
 
             if (init)
-                sLog->outString("> Added realm \"%s\" at %s:%u.", name.c_str(), m_realms[name].ExternalAddress.get_host_addr(), port);
+                LOG_INFO("server", "> Added realm \"%s\" at %s:%u.", name.c_str(), m_realms[name].ExternalAddress.get_host_addr(), port);
         }
         while (result->NextRow());
     }

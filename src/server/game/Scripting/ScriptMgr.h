@@ -332,7 +332,7 @@ template<class TMap> class MapScript : public UpdatableScript<TMap>
             _mapEntry = sMapStore.LookupEntry(_mapId);
 
             if (!_mapEntry)
-                sLog->outError("Invalid MapScript for %u; no such map ID.", _mapId);
+                LOG_ERROR("server", "Invalid MapScript for %u; no such map ID.", _mapId);
         }
 
         // Gets the MapEntry structure associated with this script. Can return NULL.
@@ -374,7 +374,7 @@ class WorldMapScript : public ScriptObject, public MapScript<Map>
             checkMap();
 
             if (GetEntry() && !GetEntry()->IsWorldMap())
-                sLog->outError("WorldMapScript for map %u is invalid.", GetEntry()->MapID);
+                LOG_ERROR("server", "WorldMapScript for map %u is invalid.", GetEntry()->MapID);
         }
 };
 
@@ -392,7 +392,7 @@ class InstanceMapScript : public ScriptObject, public MapScript<InstanceMap>
             checkMap();
 
             if (GetEntry() && !GetEntry()->IsDungeon())
-                sLog->outError("InstanceMapScript for map %u is invalid.", GetEntry()->MapID);
+                LOG_ERROR("server", "InstanceMapScript for map %u is invalid.", GetEntry()->MapID);
         }
 
         // Gets an InstanceScript object for this instance.
@@ -413,7 +413,7 @@ class BattlegroundMapScript : public ScriptObject, public MapScript<Battleground
             checkMap();
 
             if (GetEntry() && !GetEntry()->IsBattleground())
-                sLog->outError("BattlegroundMapScript for map %u is invalid.", GetEntry()->MapID);
+                LOG_ERROR("server", "BattlegroundMapScript for map %u is invalid.", GetEntry()->MapID);
         }
 };
 
@@ -1694,7 +1694,7 @@ public:
                     else
                     {
                         // If the script is already assigned -> delete it!
-                        sLog->outError("Script '%s' already assigned with the same script name, so the script can't work.",
+                        LOG_ERROR("server", "Script '%s' already assigned with the same script name, so the script can't work.",
                             script->GetName().c_str());
 
                         ABORT(); // Error that should be fixed ASAP.
@@ -1704,7 +1704,7 @@ public:
                 {
                     // The script uses a script name from database, but isn't assigned to anything.
                     if (script->GetName().find("Smart") == std::string::npos)
-                        sLog->outErrorDb("Script named '%s' does not have a script name assigned in database.",
+                        LOG_ERROR("sql.sql", "Script named '%s' does not have a script name assigned in database.",
                             script->GetName().c_str());
                 }
             }
@@ -1738,7 +1738,7 @@ private:
         {
             if (itr.second == script)
             {
-                sLog->outError("Script '%s' has same memory pointer as '%s'.",
+                LOG_ERROR("server", "Script '%s' has same memory pointer as '%s'.",
                     script->GetName().c_str(), itr.second->GetName().c_str());
 
                 return false;
