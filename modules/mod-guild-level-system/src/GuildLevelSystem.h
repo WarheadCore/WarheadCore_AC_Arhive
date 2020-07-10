@@ -33,7 +33,7 @@ enum GuildSettingFlag
 class GuildLevel
 {
 public:
-    GuildLevel::GuildLevel(uint32 level, uint32 exp, Guild* __source)
+    GuildLevel(uint32 level, uint32 exp, Guild* __source)
         : _level(level), _exp(exp), _source(__source) { }
 
     // Get
