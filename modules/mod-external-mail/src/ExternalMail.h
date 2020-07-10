@@ -29,7 +29,8 @@ struct ExMail
     std::string Body;
     uint32 Money;
     uint32 CreatureEntry;
-    std::list<std::pair<uint32, uint32>> Items;    
+    std::list<std::pair<uint32, uint32>> Items;
+    std::list<std::list<std::pair<uint32, uint32>>> _overCountItems;
 
     bool AddItems(uint32 itemID, uint32 itemCount);
 };

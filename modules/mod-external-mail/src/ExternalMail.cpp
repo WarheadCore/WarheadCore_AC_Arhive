@@ -39,18 +39,20 @@ bool ExMail::AddItems(uint32 itemID, uint32 itemCount)
 
     while (itemCount > itemTemplate->GetMaxStackSize())
     {
-        Items.emplace_back(itemID, itemTemplate->GetMaxStackSize());
-        itemCount -= itemTemplate->GetMaxStackSize();
+        if (Items.size() <= MAX_MAIL_ITEMS)
+        {
+            Items.emplace_back(itemID, itemTemplate->GetMaxStackSize());
+            itemCount -= itemTemplate->GetMaxStackSize();
+        }
+        else
+        {
+            _overCountItems.emplace_back(Items);
+            Items.clear();
+        }
     }
 
     Items.emplace_back(itemID, itemCount);
-
-    if (Items.size() > MAX_MAIL_ITEMS)
-    {
-        LOG_ERROR("modules", "> External Mail: Превышен лимит количества предметов. ID (%u)", ID);
-        Items.clear();
-        return false;
-    }
+    _overCountItems.emplace_back(Items);
 
     return true;
 }
@@ -145,23 +147,26 @@ void ExternalMail::SendMails()
     {
         auto exmail = itr.second;
 
-        Player* receiver = ObjectAccessor::FindPlayer(exmail.PlayerGuid);
-        MailDraft* mail = new MailDraft(exmail.Subject, exmail.Body);
-
-        if (exmail.Money)
-            mail->AddMoney(exmail.Money);
-
-        for (auto const& items : exmail.Items)
+        for (auto const& items : exmail._overCountItems)
         {
-            if (Item* mailItem = Item::CreateItem(items.first, items.second))
-            {
-                mailItem->SaveToDB(trans);
-                mail->AddItem(mailItem);
-            }
-        }
+            Player* receiver = ObjectAccessor::FindPlayer(exmail.PlayerGuid);
+            MailDraft* mail = new MailDraft(exmail.Subject, exmail.Body);
 
-        mail->SendMailTo(trans, receiver ? receiver : MailReceiver(exmail.PlayerGuid), MailSender(MAIL_CREATURE, exmail.CreatureEntry, MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_RETURNED);
-        delete mail;
+            if (exmail.Money)
+                mail->AddMoney(exmail.Money);
+        
+            for (auto const& itr : items)
+            {
+                if (Item* mailItem = Item::CreateItem(itr.first, itr.second))
+                {
+                    mailItem->SaveToDB(trans);
+                    mail->AddItem(mailItem);
+                }
+            }
+
+            mail->SendMailTo(trans, receiver ? receiver : MailReceiver(exmail.PlayerGuid), MailSender(MAIL_CREATURE, exmail.CreatureEntry, MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_RETURNED);
+            delete mail;
+        }
 
         trans->PAppend("DELETE FROM mail_external WHERE id = %u", exmail.ID);
     }
