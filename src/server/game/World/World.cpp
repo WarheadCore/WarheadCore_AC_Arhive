@@ -1156,7 +1156,7 @@ void World::SetInitialWorldSettings()
     LOG_INFO("server", "Loading SpellArea Data...");                // must be after quest load
     sSpellMgr->LoadSpellAreas();
 
-    LOG_INFO("server", "Loading Area Trigger definitions");
+    LOG_INFO("server", "Loading Area Trigger definitions...");
     sObjectMgr->LoadAreaTriggers();
 
     LOG_INFO("server", "Loading Area Trigger Teleport definitions...");

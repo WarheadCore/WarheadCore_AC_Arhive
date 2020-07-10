@@ -15,9 +15,11 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Log.h"
 #include "ScriptMgr.h"
+#include "Log.h"
 #include "GameConfig.h"
+#include "DBLoader.h"
+#include "GameLocale.h"
 #include "Chat.h"
 #include "Player.h"
 #include "AccountMgr.h"
@@ -88,10 +90,31 @@ public:
     {
         static std::vector<ChatCommand> commandTable = // .commands
         {
-            { "buff",				SEC_PLAYER,			false, &HandleBuffCommand,	""}
+            { "buff",				SEC_PLAYER,			false,  &HandleBuffCommand,	""},
+            { "warhead",			SEC_CONSOLE,		true,   &HandleWarheadCommand,	""}
+
         };
 
         return commandTable;
+    }
+
+    static bool HandleWarheadCommand(ChatHandler* handler, const char* args)
+    {
+        if (!*args)
+        {
+            handler->SendSysMessage("Нужны аргументы");
+            handler->SetSentErrorMessage(true);
+            return false;
+        }
+
+        std::string arg = strtok((char*)args, " ");
+
+        if (arg == "add")
+            sDBLoader->AddTable("acore_string", []() { sGameLocale->LoadAcoreStrings(); });
+        else if (arg == "reload")
+            sDBLoader->LoadTable("acore_string");
+
+        return true;
     }
 
     static bool HandleBuffCommand(ChatHandler* handler, const char* args)
