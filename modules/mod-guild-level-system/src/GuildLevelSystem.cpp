@@ -72,7 +72,7 @@ void GuildLevelSystem::Init()
     ItemTemplate const* itemTemplate = sObjectMgr->GetItemTemplate(_expItemID);
     if (!itemTemplate)
     {
-        LOG_ERROR("module.gls", "> ItemID (%s) for GLS is not valid. Set default (37711)", CONF_GET_INT("GLS.Exp.ItemID"));
+        LOG_ERROR("module.gls", "> ItemID (%u) for GLS is not valid. Set default (37711)", CONF_GET_INT("GLS.Exp.ItemID"));
         _expItemID = 37711;
     }
 
