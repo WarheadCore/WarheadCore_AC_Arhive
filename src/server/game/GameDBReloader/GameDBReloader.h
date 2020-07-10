@@ -15,10 +15,10 @@ struct DBLoaderSctuct
     std::function<void()> Function;
 };
 
-class DBLoader
+class GameDBReloader
 {
 public:
-    static DBLoader* instance();
+    static GameDBReloader* instance();
 
     void LoadDefaultTables();
     void LoadTable(std::string const& dbName);
@@ -28,6 +28,6 @@ private:
     std::unordered_map<std::string /*table name*/, DBLoaderSctuct /*msg and func*/> _store;
 };
 
-#define sDBLoader DBLoader::instance()
+#define sDBLoader GameDBReloader::instance()
 
 #endif // _DBLOADER_

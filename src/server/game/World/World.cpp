@@ -1252,6 +1252,7 @@ void World::SetInitialWorldSettings()
     ///- Load dynamic data tables from the database
     LOG_INFO("server", "Loading Item Auctions...");
     sAuctionMgr->LoadAuctionItems();
+
     LOG_INFO("server", "Loading Auctions...");
     sAuctionMgr->LoadAuctions();
 

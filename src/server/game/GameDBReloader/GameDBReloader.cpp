@@ -20,14 +20,25 @@
 #include "SkillDiscovery.h"
 #include "SkillExtraItems.h"
 #include "WeatherMgr.h"
+#include "ArenaTeamMgr.h"
+#include "GroupMgr.h"
+#include "BattleGroundMgr.h"
+#include "WaypointManager.h"
+#include "SmartScriptMgr.h"
+#include "CreatureGroups.h"
+#include "TicketMgr.h"
+#include "CreatureTextMgr.h"
+#include "PetitionMgr.h"
+#include "LootItemStorage.h"
+#include "ChannelMgr.h"
 
-DBLoader* DBLoader::instance()
+GameDBReloader* GameDBReloader::instance()
 {
-    static DBLoader instance;
+    static GameDBReloader instance;
     return &instance;
 }
 
-void DBLoader::LoadDefaultTables()
+void GameDBReloader::LoadDefaultTables()
 {
     AddTable("acore_string", "Acore strings", []() { sGameLocale->LoadAcoreStrings(); });
     AddTable("game_graveyard", "Game graveyard", []() { sGraveyard->LoadGraveyardFromDB(); });
@@ -142,9 +153,41 @@ void DBLoader::LoadDefaultTables()
     AddTable("character_achievement", "Completed Achievements", []() { sAchievementMgr->LoadCompletedAchievements(); });
     AddTable("auctionhouse", "Auctions", []() { sAuctionMgr->LoadAuctionItems(); sAuctionMgr->LoadAuctions(); });
     AddTable("guild", "Guild", []() { sGuildMgr->LoadGuilds(); });
+    AddTable("arena_team", "ArenaTeams", []() { sArenaTeamMgr->LoadArenaTeams(); });
+    AddTable("groups", "Groups", []() { sGroupMgr->LoadGroups(); });
+    AddTable("reserved_name", "ReservedNames", []() { sObjectMgr->LoadReservedPlayersNames(); });
+    AddTable("battlemaster_entry", "BattleMasters", []() { sBattlegroundMgr->LoadBattleMastersEntry(); });
+    AddTable("game_tele", "GameTeleports", []() { sObjectMgr->LoadGameTele(); });
+    AddTable("gossip_menu", "Gossip menu", []() { sObjectMgr->LoadGossipMenu(); });
+    AddTable("gossip_menu_option", "Gossip menu options", []() { sObjectMgr->LoadGossipMenuItems(); });
+    AddTable("npc_vendor", "Vendors", []() { sObjectMgr->LoadVendors(); });
+    AddTable("npc_trainer", "Trainers", []() { sObjectMgr->LoadTrainerSpell(); });
+    AddTable("waypoint_data", "Waypoints", []() { sWaypointMgr->Load(); });
+    AddTable("waypoints", "SmartAI Waypoints", []() { sSmartWaypointMgr->LoadFromDB(); });
+    AddTable("creature_formations", "Creature Formations", []() { sFormationMgr->LoadCreatureFormations(); });
+    AddTable("worldstates", "World States", []() { sWorld->LoadWorldStates(); });
+    AddTable("conditions", "Conditions", []() { sConditionMgr->LoadConditions(true); });
+    AddTable("player_factionchange_achievement", "Faction change achievement pairs", []() { sObjectMgr->LoadFactionChangeAchievements(); });
+    AddTable("player_factionchange_spells", "Faction change spell pairs", []() { sObjectMgr->LoadFactionChangeSpells(); });
+    AddTable("player_factionchange_items", "Faction change item pairs", []() { sObjectMgr->LoadFactionChangeItems(); });
+    AddTable("player_factionchange_reputations", "Faction change reputation pairs", []() { sObjectMgr->LoadFactionChangeReputations(); });
+    AddTable("player_factionchange_titles", "Faction change title pairs", []() { sObjectMgr->LoadFactionChangeTitles(); });
+    AddTable("player_factionchange_quests", "Faction change quest pairs", []() { sObjectMgr->LoadFactionChangeQuests(); });
+    AddTable("gm_ticket", "GM tickets", []() { sTicketMgr->LoadTickets(); });
+    AddTable("gm_survey", "GM surveys", []() { sTicketMgr->LoadSurveys(); });
+    AddTable("addons", "Client addons", []() { AddonMgr::LoadFromDB(); });
+    AddTable("autobroadcast", "Autobroadcasts", []() { sWorld->LoadAutobroadcasts(); });
+    AddTable("spell_script_names", "Spell script names", []() { sObjectMgr->LoadSpellScriptNames(); });
+    AddTable("creature_texts", "Creature Texts", []() { sCreatureTextMgr->LoadCreatureTexts(); });
+    AddTable("smart_scripts", "SmartAI scripts", []() { sSmartScriptMgr->LoadSmartAIFromDB(); });
+    AddTable("battleground_template", "Battleground", []() { sBattlegroundMgr->CreateInitialBattlegrounds(); });
+    AddTable("petition", "Petitions", []() { sPetitionMgr->LoadPetitions(); });
+    AddTable("petition_sign", "Petition Signs", []() { sPetitionMgr->LoadSignatures(); });
+    AddTable("item_loot_storage", "Stored Loot Items", []() { sLootItemStorage->LoadStorageFromDB(); });
+    AddTable("channels_rights", "Channel Rights", []() { ChannelMgr::LoadChannelRights(); });
 }
 
-bool DBLoader::AddTable(std::string dbName, std::string const& message, std::function<void()> function)
+bool GameDBReloader::AddTable(std::string dbName, std::string const& message, std::function<void()> function)
 {
     // Check exist
     auto const& itr = _store.find(dbName);
@@ -163,7 +206,7 @@ bool DBLoader::AddTable(std::string dbName, std::string const& message, std::fun
     return true;
 }
 
-void DBLoader::LoadTable(std::string const& dbName)
+void GameDBReloader::LoadTable(std::string const& dbName)
 {
     // Check exist
     auto const& itr = _store.find(dbName);
