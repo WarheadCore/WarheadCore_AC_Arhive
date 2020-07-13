@@ -27,7 +27,6 @@ ACE_MUTEX_LOCK_CLEANUP_ADAPTER_NAME (void *args)
   ACE_VERSIONED_NAMESPACE_NAME::ACE_OS::mutex_lock_cleanup (args);
 }
 
-
 #if !defined(ACE_WIN32) && defined (__IBMCPP__) && (__IBMCPP__ >= 400)
 # define ACE_BEGINTHREADEX(STACK, STACKSIZE, ENTRY_POINT, ARGS, FLAGS, THR_ID) \
        (*THR_ID = ::_beginthreadex ((void(_Optlink*)(void*))ENTRY_POINT, STACK, STACKSIZE, ARGS), *THR_ID)
@@ -4075,7 +4074,7 @@ ACE_OS::thr_create (ACE_THR_FUNC func,
   else
 #   endif /* ACE_HAS_MFC */
     {
-      int start_suspended = ACE_BIT_ENABLED (flags, THR_SUSPENDED);
+      int const start_suspended = ACE_BIT_ENABLED (flags, THR_SUSPENDED);
 
       if (priority != ACE_DEFAULT_THREAD_PRIORITY)
         // If we need to set the priority, then we need to start the
@@ -4105,15 +4104,6 @@ ACE_OS::thr_create (ACE_THR_FUNC func,
             }
         }
     }
-#   if 0
-  *thr_handle = ::CreateThread
-    (0,
-     stacksize,
-     LPTHREAD_START_ROUTINE (thread_args->entry_point ()),
-     thread_args,
-     flags,
-     thr_id);
-#   endif /* 0 */
 
   // Close down the handle if no one wants to use it.
   if (thr_handle == &tmp_handle && tmp_handle != 0)
