@@ -504,6 +504,8 @@ void GameConfig::LoadIntConfigs(bool reload /*= false*/)
 
     AddIntConfig("Battleground.PrematureFinishTimer", 5 * MINUTE * IN_MILLISECONDS);
     AddIntConfig("Battleground.InvitationType");
+    AddIntConfig("Battleground.ReportAFK.Timer", 4);
+    AddIntConfig("Battleground.ReportAFK", 3);
     AddIntConfig("Battleground.PremadeGroupWaitForMatch", 30 * MINUTE * IN_MILLISECONDS);
 
     AddIntConfig("Arena.MaxRatingDifference", 150);
