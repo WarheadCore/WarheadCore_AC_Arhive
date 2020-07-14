@@ -22726,7 +22726,7 @@ void Player::ReportedAfkBy(Player* reporter)
         return;
 
     // Xinef: 2 minutes startup + 2 minute of match
-    if (bg->GetStartTime() < sWorld->getIntConfig(CONFIG_BATTLEGROUND_REPORT_AFK_TIMER) * MINUTE * IN_MILLISECONDS)
+    if (bg->GetStartTime() < CONF_GET_INT("Battleground.ReportAFK.Timer") * MINUTE * IN_MILLISECONDS)
         return;
 
     // check if player has 'Idle' or 'Inactive' debuff
@@ -22734,7 +22734,7 @@ void Player::ReportedAfkBy(Player* reporter)
     {
         m_bgData.bgAfkReporter.insert(reporter->GetGUIDLow());
         // by default 3 players have to complain to apply debuff
-        if (m_bgData.bgAfkReporter.size() >= sWorld->getIntConfig(CONFIG_BATTLEGROUND_REPORT_AFK))
+        if (m_bgData.bgAfkReporter.size() >= CONF_GET_INT("Battleground.ReportAFK"))
         {
             // cast 'Idle' spell
             CastSpell(this, 43680, true);
