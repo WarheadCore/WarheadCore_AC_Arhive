@@ -57,6 +57,46 @@
 //    CharacterDatabase.PExecute("UPDATE `gls_guild_level` SET `Exp` = %u WHERE `GuildID` = %u", newXP, _source->GetId());
 //}
 
+GuildCriteria::GuildCriteria(uint32 guildID)
+    : _guildID(guildID)
+{
+    AddBaseCriterias();
+    RescalingCriterias();
+}
+
+void GuildCriteria::AddBaseCriterias()
+{
+    for (auto const& itr : sGuildLevelSystem->GetBaseCriterias())
+        _guildCriteria.insert(std::make_pair(itr.first, itr.second));
+}
+
+void GuildCriteria::RescalingCriterias()
+{
+    auto guild = sGuildMgr->GetGuildById(_guildID);
+    uint32 members = guild ? guild->GetMemberCount() : 0;
+
+    if (!members)
+        ABORT_MSG("> GLS: No members count in guild (%u)", _guildID);
+
+    for (auto& itr : _guildCriteria)
+    {
+        auto& criteria = itr.second;
+
+        float coef = criteria.Coef;
+        uint32 criteriaID = itr.first;
+        uint32 minPlayers = criteria.MinPlayersCount;
+        uint32 diff = members > minPlayers ? members - minPlayers : 0;
+
+        if (diff)
+        {
+            float totalCoef = 1.0f + diff * coef;
+
+            for (uint32 i = 0; i < GLS_ITEMS_COUNT; ++i)
+                criteria.ItemCount[i] = sGuildLevelSystem->GetMaxCriteriaItemCountBase(criteriaID, i) * totalCoef;
+        }
+    }
+}
+
 void GuildCriteria::AddProgress(uint32 criteriaID, GuildCriteriaProgressStruct& _data)
 {
     _guildCriteriaProgress.insert(std::make_pair(criteriaID, _data));
@@ -67,37 +107,31 @@ void GuildCriteria::AddEmptyProgress(uint32 criteriaID)
     GuildCriteriaProgressStruct _data;
     _data.CriteriaID = criteriaID;
     _data.GuildID = _guildID;
-    _data.ItemCount1 = 0;
-    _data.ItemCount2 = 0;
-    _data.ItemCount3 = 0;
+
+    for (uint32 i = 0; i < GLS_ITEMS_COUNT; ++i)
+        _data.ItemCount[i] = 0;
 
     AddProgress(criteriaID, _data);
 }
 
+uint32 GuildCriteria::GetMaxCriteriaItemCount(uint32 criteriaID, uint8 itemType)
+{
+    auto const& itr = _guildCriteria.find(criteriaID);
+    if (itr != _guildCriteria.end())
+        return itr->second.ItemCount[itemType];
+
+    ABORT_MSG("> GLS: Not found criteria (%u) for guild id (%u)", criteriaID, _guildID);
+
+    return 0;
+}
+
 uint32 GuildCriteria::GetItemCountProgress(uint32 criteriaID, uint8 itemType)
 {
-    uint32 itemCount = 0;
-
     auto const& itr = _guildCriteriaProgress.find(criteriaID);
     if (itr != _guildCriteriaProgress.end())
-    {
-        switch (itemType)
-        {
-        case 1:
-            itemCount = itr->second.ItemCount1;
-            break;
-        case 2:
-            itemCount = itr->second.ItemCount2;
-            break;
-        case 3:
-            itemCount = itr->second.ItemCount3;
-            break;
-        default:
-            break;
-        }
-    }
+        return itr->second.ItemCount[itemType];
 
-    return itemCount;
+    return 0;
 }
 
 void GuildCriteria::AddItemProgess(uint32 criteriaID, uint8 itemType, uint32 itemCount)
@@ -110,28 +144,33 @@ void GuildCriteria::AddItemProgess(uint32 criteriaID, uint8 itemType, uint32 ite
     if (progress == _guildCriteriaProgress.end())
         ABORT_MSG("> GLS: Not found criteria progress (%u) after insert empty", criteriaID);
 
-    switch (itemType)
-    {
-    case 1:
-        progress->second.ItemCount1 += itemCount;
-        break;
-    case 2:
-        progress->second.ItemCount2 += itemCount;
-        break;
-    case 3:
-        progress->second.ItemCount3 += itemCount;
-        break;
-    default:
-        break;
-    }
+    // Add progress count
+    progress->second.ItemCount[itemType] += itemCount;
+
+    std::string itemsCount;
+
+    for (uint32 i = 0; i < GLS_ITEMS_COUNT; ++i)
+        itemsCount += std::to_string(progress->second.ItemCount[i]) + ",";
+
+    // Delete last (,)
+    if (!itemsCount.empty())
+        itemsCount.erase(itemsCount.end() - 1, itemsCount.end());
 
     SQLTransaction trans = CharacterDatabase.BeginTransaction();
 
     trans->PAppend("DELETE FROM `gls_criteria_progress` WHERE `GuildID` = %u AND `CriteriaID` = %u", progress->second.GuildID, progress->second.CriteriaID);
-    trans->PAppend("INSERT INTO `gls_criteria_progress`(`GuildID`, `CriteriaID`, `ItemCount1`, `ItemCount2`, `ItemCount3`) VALUES (%u, %u, %u, %u, %u)",
-        progress->second.GuildID, progress->second.CriteriaID, progress->second.ItemCount1, progress->second.ItemCount2, progress->second.ItemCount3);
+    trans->PAppend("INSERT INTO `gls_criteria_progress`(`GuildID`, `CriteriaID`, `ItemCount`) VALUES (%u, %u, '%s')", progress->second.GuildID, progress->second.CriteriaID, itemsCount.c_str());
 
     CharacterDatabase.CommitTransaction(trans);
+}
+
+uint32 GuildCriteria::GetCriteriaItemID(uint32 criteriaID, uint8 itemType)
+{
+    auto& progress = _guildCriteria.find(criteriaID);
+    if (progress == _guildCriteria.end())
+        ABORT_MSG("> GLS: Not found criteria (%u) for guild id (%u)", criteriaID, _guildID);
+
+    return progress->second.ItemID[itemType];
 }
 
 GuildLevelSystem* GuildLevelSystem::instance()
@@ -162,7 +201,7 @@ void GuildLevelSystem::Init()
     //SetGuildLevels();
 
     LOG_INFO("modules.gls", ">> Loading gls criteria");
-    LoadCriteria();
+    LoadBaseCriteria();
 
     LOG_INFO("modules.gls", ">> Loading gls criteria progress");
     LoadCriteriaProgress();
@@ -212,7 +251,7 @@ void GuildLevelSystem::Init()
 //
 //    LOG_INFO("module.gls", ">> Загружено %u GLS уровней гильдий за %u мс", static_cast<uint32>(_guildstore.size()), GetMSTimeDiffToNow(oldMSTime));
 //}
-
+//
 //void GuildLevelSystem::LoadExpGuildForLevel()
 //{
 //    uint32 oldMSTime = getMSTime();
@@ -331,7 +370,7 @@ void GuildLevelSystem::Init()
 //
 //    LOG_INFO("module.gls", ">> Загружено %u наградных спеллов для %u уровней гильдий за %u мс", spellCount, static_cast<uint32>(_guildSpellRewardStore.size()), GetMSTimeDiffToNow(oldMSTime));
 //}
-
+//
 //GuildCriteria* GuildLevelSystem::GetCriteria(uint32 guildid, bool needCheck /*= true*/)
 //{
 //    auto const& itr = _guildstore.find(guildid);
@@ -343,7 +382,7 @@ void GuildLevelSystem::Init()
 //
 //    return nullptr;
 //}
-
+//
 //void GuildLevelSystem::AddGLS(Guild* guild, uint32 level, uint32 exp)
 //{
 //    if (GetCriteria(guild->GetId(), false))
@@ -384,7 +423,7 @@ void GuildLevelSystem::Init()
 //
 //    _guildstore.erase(guildID);
 //}
-
+//
 //uint32 GuildLevelSystem::GetExpForNextLevel(uint32 level)
 //{
 //    if (!CONF_GET_BOOL("GLS.Enable"))
@@ -448,7 +487,7 @@ void GuildLevelSystem::Init()
 //        RewardSpellGuildMember(guild, player);
 //    }
 //}
-
+//
 //void GuildLevelSystem::AddGuildExp(Guild* guild, uint32 exp)
 //{
 //    auto gls = GetCriteria(guild->GetId());
@@ -457,7 +496,7 @@ void GuildLevelSystem::Init()
 //
 //    gls->AddExp(exp);
 //}
-
+//
 //void GuildLevelSystem::GuildInfo(Player* player)
 //{
 //    auto gls = GetCriteria(player->GetGuildId());
@@ -480,7 +519,7 @@ void GuildLevelSystem::Init()
 //    AddGossipItemFor(player, 10, "Обновить меню", GOSSIP_SENDER_MAIN, 1);
 //    AddGossipItemFor(player, 10, "<- Назад", GOSSIP_SENDER_MAIN, 101);
 //}
-
+//
 //void GuildLevelSystem::InvestExpFull(Player* player)
 //{
 //    ChatHandler handler(player->GetSession());
@@ -571,7 +610,7 @@ void GuildLevelSystem::Init()
 //            ChangeGuildSetting(GUILD_SETTING_FLAG_ASSISTANT_CHAT, guild, true);
 //    }
 //}
-
+//
 //void GuildLevelSystem::RewardSpellGuildMember(Guild* guild, Player* player)
 //{
 //    ASSERT(player && guild);
@@ -686,6 +725,7 @@ std::string const GuildLevelSystem::GetItemLink(uint32 itemid, int8 index_loc)
         color = "cffe6cc80";
         break;
     default:
+        ABORT();
         break;
     }
 
@@ -713,29 +753,26 @@ std::string const GuildLevelSystem::GetItemLink(uint32 itemid, int8 index_loc)
 //}
 
 // Criteria
-void GuildLevelSystem::LoadCriteria()
+void GuildLevelSystem::LoadBaseCriteria()
 {
     uint32 oldMSTime = getMSTime();
 
-    _guildCriteria.clear();
+    _guildCriteriaBase.clear();
 
     QueryResult result = CharacterDatabase.Query("SELECT "
         "`CriteriaID`,"                 // 0
-        "`ItemID1`,"                    // 1
-        "`ItemCount1`,"                 // 2
-        "`ItemID2`,"                    // 3
-        "`ItemCount2`,"                 // 4
-        "`ItemID3`,"                    // 5
-        "`ItemCount3`,"                 // 6
-        "`Coef`,"                       // 7
-        "`RewardItemID`,"               // 8
-        "`RewardItemCount`,"            // 9
-        "`RewardChooseItemID1`,"        // 10
-        "`RewardChooseItemCount1`,"     // 11
-        "`RewardChooseItemID2`,"        // 12
-        "`RewardChooseItemCount2`,"     // 13
-        "`RewardChooseItemID3`,"        // 14
-        "`RewardChooseItemCount3`"      // 15
+        "`ListItemID`,"                 // 1
+        "`ListItemCount`,"              // 2
+        "`MinPlayersCount`,"            // 3
+        "`Coef`,"                       // 4
+        "`RewardItemID`,"               // 5
+        "`RewardItemCount`,"            // 6
+        "`RewardChooseItemID1`,"        // 7
+        "`RewardChooseItemCount1`,"     // 8
+        "`RewardChooseItemID2`,"        // 9
+        "`RewardChooseItemCount2`,"     // 10
+        "`RewardChooseItemID3`,"        // 11
+        "`RewardChooseItemCount3`"      // 12
         "FROM `gls_criteria`");
 
     if (!result)
@@ -749,7 +786,7 @@ void GuildLevelSystem::LoadCriteria()
     {
         Field* fields = result->Fetch();
 
-        auto CheckItemID = [](std::vector<uint32> itemID) -> bool
+        auto CheckItemIDs = [](std::vector<uint32> itemID) -> bool
         {
             for (auto const& _itemID : itemID)
             {
@@ -768,48 +805,67 @@ void GuildLevelSystem::LoadCriteria()
         };
 
         uint32 criteriaID               = fields[0].GetUInt32();
-        uint32 itemID1                  = fields[1].GetUInt32();
-        uint32 itemCount1               = fields[2].GetUInt32();
-        uint32 itemID2                  = fields[3].GetUInt32();
-        uint32 itemCount2               = fields[4].GetUInt32();
-        uint32 itemID3                  = fields[5].GetUInt32();
-        uint32 itemCount3               = fields[6].GetUInt32();
-        float coef                      = fields[7].GetFloat();
-        uint32 rewardItemID             = fields[8].GetUInt32();
-        uint32 rewardItemCount          = fields[9].GetUInt32();
-        uint32 rewardChooseItemID1      = fields[10].GetUInt32();
-        uint32 rewardChooseItemCount1   = fields[11].GetUInt32();
-        uint32 rewardChooseItemID2      = fields[12].GetUInt32();
-        uint32 rewardChooseItemCount2   = fields[13].GetUInt32();
-        uint32 rewardChooseItemID3      = fields[14].GetUInt32();
-        uint32 rewardChooseItemCount3   = fields[15].GetUInt32();
-
-        if (!CheckItemID({ itemID1, itemID2, itemID3, rewardItemID, rewardChooseItemID1, rewardChooseItemID2, rewardChooseItemID3 }))
-            continue;
+        std::string listItemID          = fields[1].GetString();
+        std::string listItemCount       = fields[2].GetString();
+        uint32 minPlayersCount          = fields[3].GetUInt32();
+        float coef                      = fields[4].GetFloat();
+        uint32 rewardItemID             = fields[5].GetUInt32();
+        uint32 rewardItemCount          = fields[6].GetUInt32();
+        
+        std::vector<uint32> itemIds = { rewardItemID };
 
         GuildCriteriaStruct _data;
         _data.CriteriaID                = criteriaID;
-        _data.ItemID1                   = itemID1;
-        _data.ItemCount1                = itemCount1;
-        _data.ItemID2                   = itemID2;
-        _data.ItemCount2                = itemCount2;
-        _data.ItemID3                   = itemID3;
-        _data.ItemCount3                = itemCount3;
+        _data.MinPlayersCount           = minPlayersCount;
         _data.Coef                      = coef;
         _data.RewardItemID              = rewardItemID;
         _data.RewardItemCount           = rewardItemCount;
-        _data.RewardChooseItemID1       = rewardChooseItemID1;
-        _data.RewardChooseItemCount1    = rewardChooseItemCount1;
-        _data.RewardChooseItemID2       = rewardChooseItemID1;
-        _data.RewardChooseItemCount2    = rewardChooseItemCount1;
-        _data.RewardChooseItemID3       = rewardChooseItemID1;
-        _data.RewardChooseItemCount3    = rewardChooseItemCount1;
 
-        _guildCriteria.insert(std::make_pair(criteriaID, _data));
+        Tokenizer listItemIDTokens(listItemID, ',');
+        Tokenizer listItemCountTokens(listItemCount, ',');
+
+        if (static_cast<uint32>(listItemIDTokens.size()) > GLS_ITEMS_COUNT)
+        {
+            LOG_FATAL("modules.gls", "> GLS: List items for CriteriaID (%u) > %u", criteriaID, GLS_ITEMS_COUNT);
+            continue;
+        }
+
+        if (static_cast<uint32>(listItemCountTokens.size()) > GLS_ITEMS_COUNT)
+        {
+            LOG_FATAL("modules.gls", "> GLS: List items count for CriteriaID (%u) > %u", criteriaID, GLS_ITEMS_COUNT);
+            continue;
+        }
+
+        if (listItemIDTokens.size() != listItemCountTokens.size())
+        {
+            LOG_FATAL("modules.gls", "> GLS: Differenst size data between `ListItemID` and `ListItemCount`");
+            continue;
+        }
+
+        for (uint32 i = 0; i < static_cast<uint32>(listItemIDTokens.size()); ++i)
+        {
+            _data.ItemID[i] = atoi(listItemIDTokens[i]);
+            itemIds.push_back(_data.ItemID[i]);
+        }
+
+        for (uint32 i = 0; i < static_cast<uint32>(listItemCountTokens.size()); ++i)
+            _data.ItemCount[i] = atoi(listItemCountTokens[i]);
+
+        for (uint32 i = 0; i < GLS_ITEMS_REWARD_CHOOSE_COUNT; ++i)
+        {
+            _data.RewardChooseItemID[i] = fields[7 + i * 2].GetUInt32(); // 7, 9, 11
+            _data.RewardChooseItemCount[i] = fields[8 + i * 2].GetUInt32(); // 8, 10, 12
+            itemIds.push_back(_data.RewardChooseItemID[i]);
+        }
+
+        if (!CheckItemIDs(itemIds))
+            continue;
+
+        _guildCriteriaBase.insert(std::make_pair(criteriaID, _data));
 
     } while (result->NextRow());
 
-    LOG_INFO("modules.gls", ">> Загружено %u GLS критерий за %u мс", static_cast<uint32>(_guildCriteria.size()), GetMSTimeDiffToNow(oldMSTime));
+    LOG_INFO("modules.gls", ">> Загружено %u GLS критерий за %u мс", static_cast<uint32>(_guildCriteriaBase.size()), GetMSTimeDiffToNow(oldMSTime));
     LOG_INFO("modules.gls", "");
 }
 
@@ -822,9 +878,7 @@ void GuildLevelSystem::LoadCriteriaProgress()
     QueryResult result = CharacterDatabase.Query("SELECT "
         "`GuildID`,"     // 0
         "`CriteriaID`,"  // 1
-        "`ItemCount1`,"  // 2
-        "`ItemCount2`,"  // 3
-        "`ItemCount3`"   // 4
+        "`ItemCount` "   // 2
         "FROM `gls_criteria_progress`");
 
     if (!result)
@@ -834,15 +888,15 @@ void GuildLevelSystem::LoadCriteriaProgress()
         return;
     }
 
+    uint32 count = 0;
+
     do
     {
         Field* fields = result->Fetch();
 
-        uint32 guildID      = fields[0].GetUInt32();
-        uint32 criteriaID   = fields[1].GetUInt32();
-        uint32 itemCount1   = fields[2].GetUInt32();
-        uint32 itemCount2   = fields[3].GetUInt32();
-        uint32 itemCount3   = fields[4].GetUInt32();
+        uint32 guildID              = fields[0].GetUInt32();
+        uint32 criteriaID           = fields[1].GetUInt32();
+        std::string listItemCount   = fields[2].GetString();
 
         // Check guild
         if (!sGuildMgr->GetGuildById(guildID))
@@ -854,51 +908,38 @@ void GuildLevelSystem::LoadCriteriaProgress()
         GuildCriteriaProgressStruct _data;
         _data.GuildID       = guildID;
         _data.CriteriaID    = criteriaID;
-        _data.ItemCount1    = itemCount1;
-        _data.ItemCount2    = itemCount2;
-        _data.ItemCount3    = itemCount3;
 
-        auto criteria = new GuildCriteria(guildID);
+        Tokenizer listItemCountTokens(listItemCount, ',');
+
+        if (static_cast<uint32>(listItemCountTokens.size()) > GLS_ITEMS_COUNT)
+        {
+            LOG_FATAL("modules.gls", "> GLS: List items count for CriteriaID (%u) > %u", criteriaID, GLS_ITEMS_COUNT);
+            continue;
+        }
+
+        for (uint32 i = 0; i < static_cast<uint32>(listItemCountTokens.size()); ++i)
+            _data.ItemCount[i] = atoi(listItemCountTokens[i]);
+
+        auto criteria = GetCriteriaProgress(guildID);
+        if (!criteria)
+            criteria = new GuildCriteria(guildID);
+
         criteria->AddProgress(criteriaID, _data);
 
         _guildCriteriaProgress.insert(std::make_pair(guildID, criteria));
+
+        count++;
     } while (result->NextRow());
 
-    LOG_INFO("modules.gls", ">> Загружено %u GLS критерий прогресса за %u мс", static_cast<uint32>(_guildCriteriaProgress.size()), GetMSTimeDiffToNow(oldMSTime));
+    LOG_INFO("modules.gls", ">> Загружено %u GLS критерий прогресса за %u мс", count, GetMSTimeDiffToNow(oldMSTime));
     LOG_INFO("modules.gls", "");
-}
-
-uint32 GuildLevelSystem::GetCriteriaItemID(uint32 criteriaID, uint8 itemType)
-{
-    uint32 itemID = 0;
-
-    auto const& itr = _guildCriteria.find(criteriaID);
-    if (itr != _guildCriteria.end())
-    {
-        switch (itemType)
-        {
-        case 1:
-            itemID = itr->second.ItemID1;
-            break;
-        case 2:
-            itemID = itr->second.ItemID2;
-            break;
-        case 3:
-            itemID = itr->second.ItemID3;
-            break;
-        default:            
-            break;
-        }
-    }
-
-    return itemID;
 }
 
 void GuildLevelSystem::InvestItem(Player* player, Creature* creature, uint32 action, uint8 sender, uint32 itemCount)
 {
     uint32 criteriaID = action - GLS_GOSSIP_CHOOSE_INVEST, itemType = sender;
 
-    if (!itemType || itemType > 3)
+    if (itemType > GLS_ITEMS_COUNT)
     {
         LOG_ERROR("modules.gls", "> GLS: invalid item type (%u)", itemType);
         return;
@@ -913,7 +954,11 @@ void GuildLevelSystem::InvestItem(Player* player, Creature* creature, uint32 act
         return;
     }
 
-    uint32 itemID = GetCriteriaItemID(criteriaID, itemType);
+    auto criteriaProgress = GetCriteriaProgress(guildID, true);
+    if (!criteriaProgress)
+        ABORT();
+
+    uint32 itemID = criteriaProgress->GetCriteriaItemID(criteriaID, itemType);
     if (!itemID)
     {
         LOG_ERROR("modules.gls", "> GLS: invalid item id at invest (%u-%u)", criteriaID, itemType);
@@ -922,16 +967,7 @@ void GuildLevelSystem::InvestItem(Player* player, Creature* creature, uint32 act
 
     int8 Locale_index = handler.GetSessionDbLocaleIndex();
     std::string const& ItemLink = GetItemLink(itemID, Locale_index);
-    uint32 hasItemCount = player->GetItemCount(itemID);
-
-    auto criteria = GetCriteriaProgress(guildID);
-    if (!criteria)
-        AddEmptyGuildCriteria(guildID);
-
-    criteria = GetCriteriaProgress(guildID);
-
-    if (!criteria)
-        ABORT_MSG("> GLS: cannot create new criteria progress (%u) for guild (%u)", criteriaID, guildID);
+    uint32 hasItemCount = player->GetItemCount(itemID);    
 
     if (!player->HasItemCount(itemID, itemCount))
     {
@@ -940,8 +976,8 @@ void GuildLevelSystem::InvestItem(Player* player, Creature* creature, uint32 act
         return;
     }
 
-    uint32 maxItems = GetMaxCriteriaItemCount(criteriaID, itemType);
-    uint32 currentItems = criteria->GetItemCountProgress(criteriaID, itemType);
+    uint32 maxItems = criteriaProgress->GetMaxCriteriaItemCount(criteriaID, itemType);
+    uint32 currentItems = criteriaProgress->GetItemCountProgress(criteriaID, itemType);
     uint32 needItems = maxItems - currentItems;
 
     if (itemCount > needItems)
@@ -952,7 +988,7 @@ void GuildLevelSystem::InvestItem(Player* player, Creature* creature, uint32 act
     }
 
     player->DestroyItemCount(itemID, itemCount, true);
-    criteria->AddItemProgess(criteriaID, itemType, itemCount);
+    criteriaProgress->AddItemProgess(criteriaID, itemType, itemCount);
     ShowInvestedMenu(player, creature, action, sender);
 }
 
@@ -960,7 +996,7 @@ void GuildLevelSystem::InvestItemFull(Player* player, Creature* creature, uint32
 {
     uint32 criteriaID = action - GLS_GOSSIP_FULL_INVEST, itemType = sender;
 
-    if (!itemType || itemType > 3)
+    if (itemType > GLS_ITEMS_COUNT)
     {
         LOG_ERROR("modules.gls", "> GLS: invalid item type (%u)", itemType);
         ShowInvestedMenu(player, creature, action, sender);
@@ -976,14 +1012,16 @@ void GuildLevelSystem::InvestItemFull(Player* player, Creature* creature, uint32
         return;
     }
 
-    uint32 itemID = GetCriteriaItemID(criteriaID, itemType);
+    auto criteriaProgress = GetCriteriaProgress(guildID, true);
+    if (!criteriaProgress)
+        ABORT();
+
+    uint32 itemID = criteriaProgress->GetCriteriaItemID(criteriaID, itemType);
     if (!itemID)
     {
         LOG_ERROR("modules.gls", "> GLS: invalid item id at invest (%u-%u)", criteriaID, itemType);
         handler.PSendSysMessage("> Неверный номер предмета (%u-%u)", criteriaID, itemType);
-        return;
     }
-
     auto ItemLink = GetItemLink(itemID, handler.GetSessionDbLocaleIndex());
     uint32 hasItemCount = player->GetItemCount(itemID);
     uint32 itemCount = hasItemCount;
@@ -995,40 +1033,52 @@ void GuildLevelSystem::InvestItemFull(Player* player, Creature* creature, uint32
         return;
     }
 
-    auto criteria = GetCriteriaProgress(guildID);
-    if (!criteria)
-        AddEmptyGuildCriteria(guildID);
-
-    criteria = GetCriteriaProgress(guildID);
-
-    if (!criteria)
-        ABORT_MSG("> GLS: cannot create new criteria progress (%u) for guild (%u)", criteriaID, guildID);    
-
-    uint32 maxItems = GetMaxCriteriaItemCount(criteriaID, itemType);
-    uint32 currentItems = criteria->GetItemCountProgress(criteriaID, itemType);
+    uint32 maxItems = criteriaProgress->GetMaxCriteriaItemCount(criteriaID, itemType);
+    uint32 currentItems = criteriaProgress->GetItemCountProgress(criteriaID, itemType);
     uint32 needItems = maxItems - currentItems;
 
     if (itemCount > needItems)
         itemCount = needItems;
 
     player->DestroyItemCount(itemID, itemCount, true);
-    criteria->AddItemProgess(criteriaID, itemType, itemCount);
-    ShowInvestedMenu(player, creature, action, sender);
+    criteriaProgress->AddItemProgess(criteriaID, itemType, itemCount);
+    ShowInvestedMenu(player, creature, criteriaID + GLS_GOSSIP_CHOOSE_INVEST, sender);
 }
 
-GuildCriteria* GuildLevelSystem::GetCriteriaProgress(uint32 guildid)
+GuildCriteria* GuildLevelSystem::GetCriteriaProgress(uint32 guildid, bool forceCreate /*= false*/)
 {
-    auto const& itr = _guildCriteriaProgress.find(guildid);
+    auto& itr = _guildCriteriaProgress.find(guildid);
     if (itr != _guildCriteriaProgress.end())
         return itr->second;
+
+    if (forceCreate)
+    {
+        AddEmptyGuildCriteria(guildid);
+        itr = _guildCriteriaProgress.find(guildid);
+        if (itr != _guildCriteriaProgress.end())
+            return itr->second;
+
+        ABORT_MSG("> GLS: Invalid creeate empty guild criteria for guild (%u)", guildid);
+    }
 
     return nullptr;
 }
 
+uint32 GuildLevelSystem::GetMaxCriteriaItemCountBase(uint32 criteriaID, uint8 itemType)
+{
+    auto const& itr = _guildCriteriaBase.find(criteriaID);
+    if (itr != _guildCriteriaBase.end())
+        return itr->second.ItemCount[itemType];
+
+    LOG_FATAL("modules.gls", "> GLS: Not found base criteria (%u)", criteriaID);
+
+    return 0;
+}
+
 GuildCriteriaStruct* GuildLevelSystem::GetCriteria(uint32 criteriaID)
 {
-    auto const& itr = _guildCriteria.find(criteriaID);
-    if (itr != _guildCriteria.end())
+    auto const& itr = _guildCriteriaBase.find(criteriaID);
+    if (itr != _guildCriteriaBase.end())
         return &itr->second;
 
     return nullptr;
@@ -1036,38 +1086,29 @@ GuildCriteriaStruct* GuildLevelSystem::GetCriteria(uint32 criteriaID)
 
 void GuildLevelSystem::ShowCritera(Player* player, Creature* creature)
 {
-    auto criteria = GetCriteriaProgress(player->GetGuildId());
+    auto criteriaProgress = GetCriteriaProgress(player->GetGuildId(), true);
+    if (!criteriaProgress)
+        ABORT();
 
     AddGossipItemFor(player, 10, "Прогресс критерий:", GOSSIP_SENDER_MAIN, 2);
 
-    for (auto const& itr : _guildCriteria)
+    for (auto const& itr : _guildCriteriaBase)
     {
         uint32 criteriaID = itr.first;
-        uint32 gossipAction = criteriaID + 10000;
+        uint32 gossipAction = criteriaID + GLS_GOSSIP_CHOOSE_INVEST;
         uint32 _count = 1;
-
-        auto itemName1 = GetItemLocale(itr.second.ItemID1);
-        auto itemName2 = GetItemLocale(itr.second.ItemID2);
-        auto itemName3 = GetItemLocale(itr.second.ItemID3);
-
-        auto currentItems1 = criteria ? criteria->GetItemCountProgress(criteriaID, 1) : 0;
-        auto currentItems2 = criteria ? criteria->GetItemCountProgress(criteriaID, 2) : 0;
-        auto currentItems3 = criteria ? criteria->GetItemCountProgress(criteriaID, 3) : 0;
-
-        auto maxItems1 = itr.second.ItemCount1;
-        auto maxItems2 = itr.second.ItemCount2;
-        auto maxItems3 = itr.second.ItemCount3;
 
         AddGossipItemFor(player, 10, warhead::StringFormat("--- Критерий #%u:", criteriaID), GOSSIP_SENDER_MAIN, 2);
 
-        if (!itemName1.empty())
-            AddGossipItemFor(player, 10, warhead::StringFormat("- 1. (%s) - %u/%u", itemName1.c_str(), currentItems1, maxItems1), 1, gossipAction);
+        for (uint32 i = 0; i < GLS_ITEMS_COUNT; ++i)
+        {
+            auto itemName = GetItemLocale(itr.second.ItemID[i]);
+            auto currentItems = criteriaProgress->GetItemCountProgress(criteriaID, i);
+            auto maxItems = criteriaProgress->GetMaxCriteriaItemCount(criteriaID, i);
 
-        if (!itemName2.empty())
-            AddGossipItemFor(player, 10, warhead::StringFormat("- 2. (%s) - %u/%u", itemName2.c_str(), currentItems2, maxItems2), 2, gossipAction);
-
-        if (!itemName3.empty())
-            AddGossipItemFor(player, 10, warhead::StringFormat("- 3. (%s) - %u/%u", itemName3.c_str(), currentItems3, maxItems3), 3, gossipAction);
+            if (!itemName.empty())
+                AddGossipItemFor(player, 10, warhead::StringFormat("- %u. (%s) - %u/%u", i + 1, itemName.c_str(), currentItems, maxItems), i, gossipAction);
+        }
     }
     
     AddGossipItemFor(player, 10, ">> В главное меню", GOSSIP_SENDER_MAIN, 99);
@@ -1076,42 +1117,22 @@ void GuildLevelSystem::ShowCritera(Player* player, Creature* creature)
 
 void GuildLevelSystem::ShowInvestedMenu(Player* player, Creature* creature, uint32 action, uint32 sender)
 {
+    ClearGossipMenuFor(player);
+
     uint32 criteriaID = action - GLS_GOSSIP_CHOOSE_INVEST;
 
-    auto criteria = GetCriteria(criteriaID);
-    if (!criteria)
-        return;
+    auto criteriaProgress = GetCriteriaProgress(player->GetGuildId(), true);
+    if (!criteriaProgress)
+        ABORT();
+  
+    uint32 itemID = criteriaProgress->GetCriteriaItemID(criteriaID, sender);
+    if (!itemID)
+        ABORT();
 
-    auto criteriaProgress = GetCriteriaProgress(player->GetGuildId());
-    
-    uint32 currentItems = 0, maxItems = 0, playerItemCount = 0, itemID = 0;
-
-    switch (sender)
-    {
-    case 1:
-        itemID = criteria->ItemID1;
-        currentItems = criteriaProgress ? criteriaProgress->GetItemCountProgress(criteriaID, 1) : 0;
-        maxItems = criteria->ItemCount1;
-        playerItemCount = player->GetItemCount(criteria->ItemID1);
-        break;
-    case 2:
-        itemID = criteria->ItemID2;
-        currentItems = criteriaProgress ? criteriaProgress->GetItemCountProgress(criteriaID, 2) : 0;
-        maxItems = criteria->ItemCount2;
-        playerItemCount = player->GetItemCount(criteria->ItemID2);
-        break;
-    case 3:
-        itemID = criteria->ItemID3;
-        currentItems = criteriaProgress ? criteriaProgress->GetItemCountProgress(criteriaID, 3) : 0;
-        maxItems = criteria->ItemCount3;
-        playerItemCount = player->GetItemCount(criteria->ItemID3);
-        break;
-    default:
-        break;
-    }
-
-    auto itemName = GetItemLocale(itemID, player->GetSession()->GetSessionDbLocaleIndex());
     auto itemLink = GetItemLink(itemID, player->GetSession()->GetSessionDbLocaleIndex());
+    uint32 currentItems = criteriaProgress->GetItemCountProgress(criteriaID, sender);
+    uint32 maxItems = criteriaProgress->GetMaxCriteriaItemCount(criteriaID, sender);
+    uint32 playerItemCount = player->GetItemCount(itemID);    
     uint32 itemsNeed = maxItems - currentItems;
     uint32 itemCount = playerItemCount;
 
@@ -1137,33 +1158,12 @@ void GuildLevelSystem::ShowInvestedMenu(Player* player, Creature* creature, uint
     SendGossipMenuFor(player, 1, creature->GetGUID());
 }
 
-uint32 GuildLevelSystem::GetMaxCriteriaItemCount(uint32 criteriaID, uint8 itemType)
-{
-    uint32 itemCount = 0;
-
-    auto const& itr = _guildCriteria.find(criteriaID);
-    if (itr != _guildCriteria.end())
-    {
-        switch (itemType)
-        {
-        case 1:
-            itemCount = itr->second.ItemCount1;
-            break;
-        case 2:
-            itemCount = itr->second.ItemCount2;
-            break;
-        case 3:
-            itemCount = itr->second.ItemCount3;
-            break;
-        default:
-            break;
-        }
-    }
-
-    return itemCount;
-}
-
 void GuildLevelSystem::AddEmptyGuildCriteria(uint32 guildID)
 {
     _guildCriteriaProgress.insert(std::make_pair(guildID, new GuildCriteria(guildID)));
+}
+
+void GuildLevelSystem::RescaleCriterias(uint32 guildID)
+{
+    GetCriteriaProgress(guildID, true)->RescalingCriterias();
 }

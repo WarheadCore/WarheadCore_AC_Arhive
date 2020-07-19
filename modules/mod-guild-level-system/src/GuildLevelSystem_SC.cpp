@@ -27,36 +27,12 @@ class Kargatum_Guild : public GuildScript
 {
 public: Kargatum_Guild() : GuildScript("Kargatum_Guild") { }
 
-    void OnCreate(Guild* guild, Player* /*leader*/, const std::string& /*name*/) override
-    {
-        if (!CONF_GET_BOOL("GLS.Enable"))
-            return;
-
-        //sGuildLevelSystem->SetFullNameFirstLevel(guild);
-    }
-
-    void OnGuildBeforeCreate(Guild* guild) override
-    {
-        if (!CONF_GET_BOOL("GLS.Enable"))
-            return;
-
-        //sGuildLevelSystem->AddEmptyGLS(guild);
-    }
-
-    void OnDisband(Guild* guild) override
-    {
-        if (!CONF_GET_BOOL("GLS.Enable"))
-            return;
-
-        //sGuildLevelSystem->DeleteGLS(guild);
-    }
-
     void OnAddMember(Guild* guild, Player* player, uint8& /*plRank*/) override
     {
         if (!CONF_GET_BOOL("GLS.Enable"))
             return;
 
-        //sGuildLevelSystem->RewardSpellGuildMember(guild, player);
+        sGuildLevelSystem->RescaleCriterias(guild->GetId());
     }
 
     void OnRemoveMember(Guild* guild, Player* player, bool /*isDisbanding*/, bool /*isKicked*/) override
@@ -64,7 +40,7 @@ public: Kargatum_Guild() : GuildScript("Kargatum_Guild") { }
         if (!CONF_GET_BOOL("GLS.Enable"))
             return;
 
-        //sGuildLevelSystem->UnRewardSpellGuildMember(guild, player);
+        sGuildLevelSystem->RescaleCriterias(guild->GetId());
     }
 };
 
@@ -139,7 +115,7 @@ public: Kargatum_Guild_Creature() : CreatureScript("Kargatum_Guild_Creature") { 
 
         // |TInterface/ICONS/Spell_Magic_ManaGain:32:32:-18:0|t
 
-        //AddGossipItemFor(player, 10, "Информация о гильдии", GOSSIP_SENDER_MAIN, 1);
+        AddGossipItemFor(player, 10, "Информация о гильдии", GOSSIP_SENDER_MAIN, 1);
         AddGossipItemFor(player, 10, "Критерии", GOSSIP_SENDER_MAIN, 2);
         AddGossipItemFor(player, 10, "Выход", GOSSIP_SENDER_MAIN, 100);
 
@@ -165,6 +141,11 @@ public: Kargatum_Guild_Creature() : CreatureScript("Kargatum_Guild_Creature") { 
 
         switch (action)
         {
+        case 1:
+            AddGossipItemFor(player, 10, warhead::StringFormat("> Количество участников %u", player->GetGuild()->GetMemberCount()), GOSSIP_SENDER_MAIN, 1);
+            AddGossipItemFor(player, 10, ">> В главное меню", GOSSIP_SENDER_MAIN, 99);
+            SendGossipMenuFor(player, 1, creature->GetGUID());
+            break;
         case 2: // Вклад в ги
             sGuildLevelSystem->ShowCritera(player, creature);
             break;
@@ -185,7 +166,6 @@ public: Kargatum_Guild_Creature() : CreatureScript("Kargatum_Guild_Creature") { 
     {
         ClearGossipMenuFor(player);
         sGuildLevelSystem->InvestItem(player, creature, action, sender, static_cast<uint32>(atoi(code)));
-        SendGossipMenuFor(player, 1, creature->GetGUID());
 
         return true;
     }
@@ -218,7 +198,7 @@ public:
 void AddSC_GuildLevelSystem()
 {
     new GuildLevelSystem_World();
-    //new Kargatum_Guild();
+    new Kargatum_Guild();
     //new Kargatum_Guild_Player();
     new Kargatum_Guild_Creature();
 }

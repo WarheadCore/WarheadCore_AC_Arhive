@@ -26,56 +26,52 @@
 
 uint32 constexpr GLS_GOSSIP_FULL_INVEST = 100000;
 uint32 constexpr GLS_GOSSIP_CHOOSE_INVEST = 10000;
+uint32 constexpr GLS_ITEMS_COUNT = 3;
+uint32 constexpr GLS_ITEMS_REWARD_CHOOSE_COUNT = 3;
 
 struct GuildCriteriaStruct
 {
     uint32 CriteriaID;
-    uint32 ItemID1;
-    uint32 ItemCount1;
-    uint32 ItemID2;
-    uint32 ItemCount2;
-    uint32 ItemID3;
-    uint32 ItemCount3;
+    uint32 ItemID[GLS_ITEMS_COUNT];
+    uint32 ItemCount[GLS_ITEMS_COUNT];
+    uint32 MinPlayersCount;
     float Coef;
     uint32 RewardItemID;
     uint32 RewardItemCount;
-    uint32 RewardChooseItemID1;
-    uint32 RewardChooseItemCount1;
-    uint32 RewardChooseItemID2;
-    uint32 RewardChooseItemCount2;
-    uint32 RewardChooseItemID3;
-    uint32 RewardChooseItemCount3;
+    uint32 RewardChooseItemID[GLS_ITEMS_REWARD_CHOOSE_COUNT];
+    uint32 RewardChooseItemCount[GLS_ITEMS_REWARD_CHOOSE_COUNT];
 };
 
 struct GuildCriteriaProgressStruct
 {
     uint32 GuildID;
     uint32 CriteriaID;
-    uint32 ItemCount1;
-    uint32 ItemCount2;
-    uint32 ItemCount3;
+    uint32 ItemCount[GLS_ITEMS_COUNT];
 };
 
-enum GuildSettingFlag
-{
-    GUILD_SETTING_FLAG_NONE            = 0,
-    GUILD_SETTING_FLAG_ADM_CHAT        = 1,
-    GUILD_SETTING_FLAG_ASSISTANT_CHAT  = 2
-};
+typedef std::unordered_map<uint32 /*criteria id*/, GuildCriteriaStruct> GuildCriteriaBase;
 
 class GuildCriteria
 {
 public:
-    GuildCriteria(uint32 guildID) : _guildID(guildID) { }
+    GuildCriteria(uint32 guildID);
     ~GuildCriteria() = default;
 
+    // Progress
     void AddProgress(uint32 criteriaID, GuildCriteriaProgressStruct& _data);
     void AddEmptyProgress(uint32 criteriaID);
     void AddItemProgess(uint32 criteriaID, uint8 itemType, uint32 itemCount);
     uint32 GetItemCountProgress(uint32 criteriaID, uint8 itemType);
 
+    // Base
+    void AddBaseCriterias();
+    void RescalingCriterias();
+    uint32 GetMaxCriteriaItemCount(uint32 criteriaID, uint8 itemType);
+    uint32 GetCriteriaItemID(uint32 criteriaID, uint8 itemType);
+
 private:
     std::unordered_map<uint32 /*criteria id*/, GuildCriteriaProgressStruct> _guildCriteriaProgress; // for history
+    std::unordered_map<uint32 /*criteria id*/, GuildCriteriaStruct> _guildCriteria;
     uint32 _guildID = 0;
 };
 
@@ -86,54 +82,20 @@ public:
 
     void Init();
 
-    //void LoadExpGuildForLevel();
-    //void LoadGuildSetting();
-    //void LoadGuildSpellReward();
-    //void LoadGuildLevels();
-    //void SetGuildLevels();
-
     // Criteria
-    void LoadCriteria();
+    void LoadBaseCriteria();
     void LoadCriteriaProgress();
     void AddEmptyGuildCriteria(uint32 guildID);
     void InvestItem(Player* player, Creature* creature, uint32 action, uint8 sender, uint32 itemCount); // from gossip
     void InvestItemFull(Player* player, Creature* creature, uint32 action, uint8 sender); // from gossip
-    uint32 GetCriteriaItemID(uint32 criteriaID, uint8 itemType);
-    uint32 GetMaxCriteriaItemCount(uint32 criteriaID, uint8 itemType);
-    GuildCriteria* GetCriteriaProgress(uint32 guildid);
+    GuildCriteria* GetCriteriaProgress(uint32 guildid, bool forceCreate = false);
+    uint32 GetMaxCriteriaItemCountBase(uint32 criteriaID, uint8 itemType);
     GuildCriteriaStruct* GetCriteria(uint32 criteriaID);
+    const GuildCriteriaBase& GetBaseCriterias() { return _guildCriteriaBase; }
+    void RescaleCriterias(uint32 guildID);
 
     void ShowCritera(Player* player, Creature* creature);
     void ShowInvestedMenu(Player* player, Creature* creature, uint32 action, uint32 sender);
-
-    //void SetFullName(uint32 guildID);
-    //void SetFullNameFirstLevel(Guild* guild);
-
-    // Config
-    //uint32 GetMaxLevel() { return _maxLevel; }
-    //uint32 GetExpItemID() { return _expItemID; }
-
-    //uint32 GetExpForNextLevel(uint32 level);
-    //void UpdateGuildVisibleLevel(uint32 guildID);
-    //void UpdateRewardForNewLevel(uint32 guildID);
-    //void AddGuildExp(Guild* guild, uint32 exp);
-    //void GuildInfo(Player* player);
-    //void InvestExpFull(Player* player);
-
-    //uint32 GetCountExpItem(Player* player);
-    //bool IsAsseptSetting(GuildSettingFlag Flag, Guild* guild);
-
-    //std::string IsAdmChat(Guild* guild);
-    //std::string IsAssistantChat(Guild* guild);
-
-    //void ChangeGuildSetting(GuildSettingFlag Flag, Guild* guild, bool Apply);
-    //void ChangeSettingChat(Guild* guild, bool IsAdmChat);
-    /*void RewardSpellGuildMember(Guild* guild, Player* player);
-    void UnRewardSpellGuildMember(Guild* guild, Player* player);*/
-    
-    /*void AddGLS(Guild* guild, uint32 level, uint32 exp);
-    void AddEmptyGLS(Guild* guild);
-    void DeleteGLS(Guild* guild);*/
 
     template<typename Format, typename... Args>
     inline void SendGuildFormat(Guild* guild, Format&& fmt, Args&& ... args)
@@ -151,7 +113,7 @@ private:
     //std::unordered_map<uint32 /*guild id*/, GuildCriteria*> _guildstore;
 
     // Criteria
-    std::unordered_map<uint32 /*criteria id*/, GuildCriteriaStruct> _guildCriteria;
+    GuildCriteriaBase _guildCriteriaBase;
     std::unordered_map<uint32 /*guild id*/, GuildCriteria*> _guildCriteriaProgress;
 
     void SendGuildMessage(Guild* guild, std::string&& message);
