@@ -767,12 +767,8 @@ void GuildLevelSystem::LoadBaseCriteria()
         "`Coef`,"                       // 4
         "`RewardItemID`,"               // 5
         "`RewardItemCount`,"            // 6
-        "`RewardChooseItemID1`,"        // 7
-        "`RewardChooseItemCount1`,"     // 8
-        "`RewardChooseItemID2`,"        // 9
-        "`RewardChooseItemCount2`,"     // 10
-        "`RewardChooseItemID3`,"        // 11
-        "`RewardChooseItemCount3`"      // 12
+        "`ListRewardChooseItemID`,"     // 7
+        "`ListRewardChooseItemCount` "  // 8
         "FROM `gls_criteria`");
 
     if (!result)
@@ -804,15 +800,17 @@ void GuildLevelSystem::LoadBaseCriteria()
             return true;
         };
 
-        uint32 criteriaID               = fields[0].GetUInt32();
-        std::string listItemID          = fields[1].GetString();
-        std::string listItemCount       = fields[2].GetString();
-        uint32 minPlayersCount          = fields[3].GetUInt32();
-        float coef                      = fields[4].GetFloat();
-        uint32 rewardItemID             = fields[5].GetUInt32();
-        uint32 rewardItemCount          = fields[6].GetUInt32();
+        uint32 criteriaID                       = fields[0].GetUInt32();
+        std::string listItemID                  = fields[1].GetString();
+        std::string listItemCount               = fields[2].GetString();
+        uint32 minPlayersCount                  = fields[3].GetUInt32();
+        float coef                              = fields[4].GetFloat();
+        uint32 rewardItemID                     = fields[5].GetUInt32();
+        uint32 rewardItemCount                  = fields[6].GetUInt32();
+        std::string listRewardChooseItemID      = fields[7].GetString();
+        std::string listRewardChooseItemCount   = fields[8].GetString();
         
-        std::vector<uint32> itemIds = { rewardItemID };
+        std::vector<uint32> toCheckItems = { rewardItemID };
 
         GuildCriteriaStruct _data;
         _data.CriteriaID                = criteriaID;
@@ -845,20 +843,44 @@ void GuildLevelSystem::LoadBaseCriteria()
         for (uint32 i = 0; i < static_cast<uint32>(listItemIDTokens.size()); ++i)
         {
             _data.ItemID[i] = atoi(listItemIDTokens[i]);
-            itemIds.push_back(_data.ItemID[i]);
+            toCheckItems.push_back(_data.ItemID[i]);
         }
 
         for (uint32 i = 0; i < static_cast<uint32>(listItemCountTokens.size()); ++i)
             _data.ItemCount[i] = atoi(listItemCountTokens[i]);
 
-        for (uint32 i = 0; i < GLS_ITEMS_REWARD_CHOOSE_COUNT; ++i)
+        // Reward items
+        Tokenizer listRewardChooseItemIDTokens(listRewardChooseItemID, ',');
+        Tokenizer listRewardChooseItemCountTokens(listRewardChooseItemCount, ',');
+
+        if (static_cast<uint32>(listRewardChooseItemIDTokens.size()) > GLS_ITEMS_REWARD_CHOOSE_COUNT)
         {
-            _data.RewardChooseItemID[i] = fields[7 + i * 2].GetUInt32(); // 7, 9, 11
-            _data.RewardChooseItemCount[i] = fields[8 + i * 2].GetUInt32(); // 8, 10, 12
-            itemIds.push_back(_data.RewardChooseItemID[i]);
+            LOG_FATAL("modules.gls", "> GLS: List shoose reward items for CriteriaID (%u) > %u", criteriaID, GLS_ITEMS_REWARD_CHOOSE_COUNT);
+            continue;
         }
 
-        if (!CheckItemIDs(itemIds))
+        if (static_cast<uint32>(listRewardChooseItemCountTokens.size()) > GLS_ITEMS_REWARD_CHOOSE_COUNT)
+        {
+            LOG_FATAL("modules.gls", "> GLS: List shoose reward items count for CriteriaID (%u) > %u", criteriaID, GLS_ITEMS_REWARD_CHOOSE_COUNT);
+            continue;
+        }
+
+        if (listRewardChooseItemIDTokens.size() != listRewardChooseItemCountTokens.size())
+        {
+            LOG_FATAL("modules.gls", "> GLS: Differenst size data between `ListRewardChooseItemID` and `ListRewardChooseItemCount`");
+            continue;
+        }
+
+        for (uint32 i = 0; i < static_cast<uint32>(listRewardChooseItemIDTokens.size()); ++i)
+        {
+            _data.RewardChooseItemID[i] = atoi(listRewardChooseItemIDTokens[i]);
+            toCheckItems.push_back(_data.RewardChooseItemID[i]);
+        }
+
+        for (uint32 i = 0; i < static_cast<uint32>(listRewardChooseItemCountTokens.size()); ++i)
+            _data.RewardChooseItemCount[i] = atoi(listRewardChooseItemCountTokens[i]);
+
+        if (!CheckItemIDs(toCheckItems))
             continue;
 
         _guildCriteriaBase.insert(std::make_pair(criteriaID, _data));
