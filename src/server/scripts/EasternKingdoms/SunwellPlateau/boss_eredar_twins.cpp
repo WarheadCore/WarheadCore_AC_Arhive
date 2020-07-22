@@ -23,11 +23,11 @@
 enum Quotes
 {
     YELL_INTRO_SAC              = 0,
-    YELL_SWH_DEAD               = 4,
+    YELL_SAC_DEAD               = 4,
     EMOTE_SHADOW_NOVA           = 5,
     YELL_ENRAGE                 = 6,
     YELL_SISTER_ALYTHESS_DEAD   = 7,
-    YELL_SWH_KILL               = 8,
+    YELL_SAC_KILL               = 8,
     YELL_SHADOW_NOVA            = 9,
 
     YELL_INTRO_ALY              = 0,
@@ -140,7 +140,7 @@ public:
         void KilledUnit(Unit* victim)
         {
             if (victim->GetTypeId() == TYPEID_PLAYER && urand(0,1))
-                Talk(YELL_SWH_KILL);
+                Talk(YELL_SAC_KILL);
         }
 
         void JustDied(Unit* /*killer*/)
@@ -150,7 +150,7 @@ public:
 
             if (sisterDied)
             {
-                Talk(YELL_SWH_DEAD);
+                Talk(YELL_SAC_DEAD);
                 instance->SetBossState(DATA_EREDAR_TWINS, DONE);
             }
             else if (Creature* alythess = ObjectAccessor::GetCreature(*me, instance->GetData64(NPC_GRAND_WARLOCK_ALYTHESS)))
@@ -288,7 +288,7 @@ public:
         void KilledUnit(Unit* victim)
         {
             if (victim->GetTypeId() == TYPEID_PLAYER && urand(0,1))
-                Talk(YELL_SWH_KILL);
+                Talk(YELL_SAC_KILL);
         }
 
         void JustDied(Unit* /*killer*/)
@@ -298,7 +298,7 @@ public:
 
             if (sisterDied)
             {
-                Talk(YELL_SWH_DEAD);
+                Talk(YELL_SAC_DEAD);
                 instance->SetBossState(DATA_EREDAR_TWINS, DONE);
             }
             else if (Creature* scorlash = ObjectAccessor::GetCreature(*me, instance->GetData64(NPC_LADY_SACROLASH)))

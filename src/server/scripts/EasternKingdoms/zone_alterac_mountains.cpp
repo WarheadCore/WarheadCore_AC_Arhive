@@ -16,7 +16,7 @@
  */
 
 /* ScriptData
-SDName: AlterWH_Mountains
+SDName: Alterac_Mountains
 SD%Complete: 0
 SDComment: Placeholder
 SDCategory: Alterac Mountains
@@ -28,7 +28,7 @@ EndContentData */
 //#include "ScriptMgr.h"
 //#include "ScriptedCreature.h"
 
-/*void AddSC_alterWH_mountains()
+/*void AddSC_alterac_mountains()
 {
     Script* newscript;
 }*/
