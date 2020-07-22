@@ -16,7 +16,7 @@
  */
 
 // This is where scripts' loading functions should be declared:
-void AddSC_alterWH_valley();                 //Alterac Valley
+void AddSC_alterac_valley();                 //Alterac Valley
 void AddSC_boss_balinda();
 void AddSC_boss_drekthar();
 void AddSC_boss_galvangar();
@@ -129,7 +129,7 @@ void AddSC_boss_hazzarah();
 void AddSC_boss_renataki();
 void AddSC_boss_wushoolay();
 void AddSC_instance_zulgurub();
-//void AddSC_alterWH_mountains();
+//void AddSC_alterac_mountains();
 void AddSC_arathi_highlands();
 void AddSC_blasted_lands();
 void AddSC_duskwood();
@@ -155,7 +155,7 @@ void AddSC_wetlands();
 // void Add${NameOfDirectory}Scripts()
 void AddEasternKingdomsScripts()
 {
-    AddSC_alterWH_valley();                 //Alterac Valley
+    AddSC_alterac_valley();                 //Alterac Valley
     AddSC_boss_balinda();
     AddSC_boss_drekthar();
     AddSC_boss_galvangar();
@@ -268,7 +268,7 @@ void AddEasternKingdomsScripts()
     AddSC_boss_renataki();
     AddSC_boss_wushoolay();
     AddSC_instance_zulgurub();
-    //AddSC_alterWH_mountains();
+    //AddSC_alterac_mountains();
     AddSC_arathi_highlands();
     AddSC_blasted_lands();
     AddSC_duskwood();

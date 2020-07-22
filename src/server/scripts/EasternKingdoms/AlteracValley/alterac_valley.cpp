@@ -176,7 +176,7 @@ class npc_av_marshal_or_warmaster : public CreatureScript
         }
 };
 
-void AddSC_alterWH_valley()
+void AddSC_alterac_valley()
 {
     new npc_av_marshal_or_warmaster();
 }
