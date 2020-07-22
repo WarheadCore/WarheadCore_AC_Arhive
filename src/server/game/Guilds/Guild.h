@@ -765,6 +765,8 @@ public:
 
     void ResetTimes();
 
+    auto const& GetAllMembers() { return m_members; }
+
 protected:
     uint32 m_id;
     std::string m_name;

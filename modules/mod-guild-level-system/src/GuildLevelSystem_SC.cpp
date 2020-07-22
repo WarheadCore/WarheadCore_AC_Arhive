@@ -127,15 +127,40 @@ public: Kargatum_Guild_Creature() : CreatureScript("Kargatum_Guild_Creature") { 
     {
         ClearGossipMenuFor(player);
 
-        // Invest full items
-        if (action > GLS_GOSSIP_FULL_INVEST)
+        if (sender >= GLS_GOSSIP_GET_ALL_REWARDS_SENDER + GLS_ITEMS_REWARD_CHOOSE_COUNT)
+            ABORT();
+
+        // Show details info criteria and rewards
+        if (sender == GLS_GOSSIP_SHOW_CRITERIA_SENDER)
         {
-            sGuildLevelSystem->InvestItemFull(player, creature, action, sender);
+            sGuildLevelSystem->ShowCriteriaInfo(player, creature, sender, action);
             return true;
         }
-        else if (action > GLS_GOSSIP_CHOOSE_INVEST) // Invest choose items
+        else if (sender >= GLS_GOSSIP_SHOW_REWARDS_SENDER && sender < GLS_GOSSIP_GET_REWARDS_SENDER + GLS_ITEMS_REWARD_CHOOSE_COUNT)
         {
-            sGuildLevelSystem->ShowInvestedMenu(player, creature, action, sender);
+            sGuildLevelSystem->ShowRewardInfo(player, creature, sender, action);
+            return true;
+        }
+        else if (sender >= GLS_GOSSIP_CHOOSE_REWARD_SENDER && sender < GLS_GOSSIP_GET_ALL_REWARDS_SENDER + GLS_ITEMS_REWARD_CHOOSE_COUNT/*sender < GLS_GOSSIP_CHOOSE_REWARD_SENDER + GLS_ITEMS_REWARD_CHOOSE_COUNT*/)
+        {
+            sGuildLevelSystem->GetRewardsCriteria(player, creature, sender, action);
+            return true;
+        }
+        /*else if (sender >= GLS_GOSSIP_GET_ALL_REWARDS_SENDER && sender < GLS_GOSSIP_GET_ALL_REWARDS_SENDER + GLS_ITEMS_REWARD_CHOOSE_COUNT)
+        {
+            sGuildLevelSystem->GetRewardsCriteria(player, creature, sender, action);
+            return true;
+        }*/
+
+        // Invest full items
+        if (action > GLS_GOSSIP_CRITERIA_ID_FULL)
+        {
+            sGuildLevelSystem->InvestItemFull(player, creature, sender, action);
+            return true;
+        }
+        else if (action > GLS_GOSSIP_CRITERIA_ID) // Invest choose items
+        {
+            sGuildLevelSystem->ShowInvestedMenu(player, creature, sender, action);
             return true;
         }
 
@@ -147,7 +172,10 @@ public: Kargatum_Guild_Creature() : CreatureScript("Kargatum_Guild_Creature") { 
             SendGossipMenuFor(player, 1, creature->GetGUID());
             break;
         case 2: // Вклад в ги
-            sGuildLevelSystem->ShowCritera(player, creature);
+            sGuildLevelSystem->ShowAllCriteriaInfo(player, creature);
+            break;
+        case 3: // Получить награды
+            sGuildLevelSystem->ShowAllCriteriaInfo(player, creature);
             break;
         case 100: // Выход
             CloseGossipMenuFor(player);
@@ -165,7 +193,7 @@ public: Kargatum_Guild_Creature() : CreatureScript("Kargatum_Guild_Creature") { 
     bool OnGossipSelectCode(Player* player, Creature* creature, uint32 sender, uint32 action, char const* code) override
     {
         ClearGossipMenuFor(player);
-        sGuildLevelSystem->InvestItem(player, creature, action, sender, static_cast<uint32>(atoi(code)));
+        sGuildLevelSystem->InvestItem(player, creature, sender, action, static_cast<uint32>(atoi(code)));
 
         return true;
     }

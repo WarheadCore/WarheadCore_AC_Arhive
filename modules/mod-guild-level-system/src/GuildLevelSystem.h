@@ -24,10 +24,15 @@
 #include "Creature.h"
 #include <unordered_map>
 
-uint32 constexpr GLS_GOSSIP_FULL_INVEST = 100000;
-uint32 constexpr GLS_GOSSIP_CHOOSE_INVEST = 10000;
 uint32 constexpr GLS_ITEMS_COUNT = 3;
 uint32 constexpr GLS_ITEMS_REWARD_CHOOSE_COUNT = 3;
+uint32 constexpr GLS_GOSSIP_CRITERIA_ID_FULL = 100000;
+uint32 constexpr GLS_GOSSIP_CRITERIA_ID = 10000;
+uint32 constexpr GLS_GOSSIP_SHOW_CRITERIA_SENDER = GLS_ITEMS_COUNT + 1;
+uint32 constexpr GLS_GOSSIP_SHOW_REWARDS_SENDER = GLS_GOSSIP_SHOW_CRITERIA_SENDER + 1;
+uint32 constexpr GLS_GOSSIP_GET_REWARDS_SENDER = GLS_GOSSIP_SHOW_REWARDS_SENDER + 1;
+uint32 constexpr GLS_GOSSIP_CHOOSE_REWARD_SENDER = GLS_GOSSIP_GET_REWARDS_SENDER + GLS_ITEMS_REWARD_CHOOSE_COUNT;
+uint32 constexpr GLS_GOSSIP_GET_ALL_REWARDS_SENDER = GLS_GOSSIP_CHOOSE_REWARD_SENDER + GLS_ITEMS_REWARD_CHOOSE_COUNT;
 
 struct GuildCriteriaStruct
 {
@@ -62,6 +67,8 @@ public:
     void AddEmptyProgress(uint32 criteriaID);
     void AddItemProgess(uint32 criteriaID, uint8 itemType, uint32 itemCount);
     uint32 GetItemCountProgress(uint32 criteriaID, uint8 itemType);
+    uint32 GetCountProgressDone(uint32 criteriaID);
+    uint32 GetMaxCountProgressDone(uint32 criteriaID);
 
     // Base
     void AddBaseCriterias();
@@ -86,21 +93,26 @@ public:
     void LoadBaseCriteria();
     void LoadCriteriaProgress();
     void AddEmptyGuildCriteria(uint32 guildID);
-    void InvestItem(Player* player, Creature* creature, uint32 action, uint8 sender, uint32 itemCount); // from gossip
-    void InvestItemFull(Player* player, Creature* creature, uint32 action, uint8 sender); // from gossip
+    void InvestItem(Player* player, Creature* creature, uint32 sender, uint32 action, uint32 itemCount); // from gossip
+    void InvestItemFull(Player* player, Creature* creature, uint32 sender, uint32 action); // from gossip
     GuildCriteria* GetCriteriaProgress(uint32 guildid, bool forceCreate = false);
     uint32 GetMaxCriteriaItemCountBase(uint32 criteriaID, uint8 itemType);
     GuildCriteriaStruct* GetCriteria(uint32 criteriaID);
     const GuildCriteriaBase& GetBaseCriterias() { return _guildCriteriaBase; }
     void RescaleCriterias(uint32 guildID);
+    bool IsExistRewardItemsChoose(uint32 criteriaID);
+    bool IsExistRewardItems(uint32 criteriaID);
 
-    void ShowCritera(Player* player, Creature* creature);
-    void ShowInvestedMenu(Player* player, Creature* creature, uint32 action, uint32 sender);
+    void ShowAllCriteriaInfo(Player* player, Creature* creature);
+    void ShowCriteriaInfo(Player* player, Creature* creature, uint32 sender, uint32 action);
+    void ShowInvestedMenu(Player* player, Creature* creature, uint32 sender, uint32 action);
+    void ShowRewardInfo(Player* player, Creature* creature, uint32 sender, uint32 action);
+    void GetRewardsCriteria(Player* player, Creature* creature, uint32 sender, uint32 action);
 
     template<typename Format, typename... Args>
-    inline void SendGuildFormat(Guild* guild, Format&& fmt, Args&& ... args)
+    inline void SendGuildFormat(uint32 guildID, Format&& fmt, Args&& ... args)
     {
-        SendGuildMessage(guild, warhead::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
+        SendGuildMessage(guildID, warhead::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
     }
 
     std::string const GetItemLocale(uint32 ItemID, int8 index_loc = 8);
@@ -110,13 +122,12 @@ private:
     std::unordered_map<uint32, uint32> _guildExpForLevelStore;
     std::unordered_map<uint32, uint32> _guildSettingStore;
     std::unordered_map<uint32, std::vector<uint32>> _guildSpellRewardStore;
-    //std::unordered_map<uint32 /*guild id*/, GuildCriteria*> _guildstore;
 
     // Criteria
     GuildCriteriaBase _guildCriteriaBase;
     std::unordered_map<uint32 /*guild id*/, GuildCriteria*> _guildCriteriaProgress;
 
-    void SendGuildMessage(Guild* guild, std::string&& message);
+    void SendGuildMessage(uint32 guildID, std::string&& message);
 
     uint32 _maxLevel = 0;
     uint32 _expItemID = 0;
