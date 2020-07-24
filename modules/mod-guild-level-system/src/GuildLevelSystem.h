@@ -62,12 +62,15 @@ public:
     ~GuildCriteria() = default;
 
     // Progress
+    GuildCriteriaProgressStruct* GetProgress(uint32 criteriaID, bool forceCreate = false);
+    GuildCriteriaStruct* GetCriteria(uint32 criteriaID);
     void AddProgress(uint32 criteriaID, GuildCriteriaProgressStruct& _data);
     void AddEmptyProgress(uint32 criteriaID);
     void AddItemProgess(uint32 criteriaID, uint8 itemType, uint32 itemCount);
     uint32 GetItemCountProgress(uint32 criteriaID, uint8 itemType);
     uint32 GetCountProgressDone(uint32 criteriaID);
     uint32 GetMaxCountProgressDone(uint32 criteriaID);
+    void SetSelectedSpell(uint32 criteriaID, uint32 spellID);
 
     // Base
     void AddBaseCriterias();
@@ -78,7 +81,8 @@ public:
 
     void SaveToDB(uint32 criteriaID);
     void SetProgressDone(uint32 criteriaID, bool isDone = true);
-    void UnLearnSpells(Player* player);
+    bool IsProgressDone(uint32 criteriaID);
+    void UnLearnSpells(uint32 lowGuid);
     void LearnSpells(Player* player);
 
 private:
@@ -102,7 +106,7 @@ public:
     void InvestItemFull(Player* player, Creature* creature, uint32 sender, uint32 action); // from gossip
     GuildCriteria* GetCriteriaProgress(uint32 guildid, bool forceCreate = false);
     uint32 GetMaxCriteriaItemCountBase(uint32 criteriaID, uint8 itemType);
-    GuildCriteriaStruct* GetCriteria(uint32 criteriaID);
+    GuildCriteriaStruct* GetCriteriaBase(uint32 criteriaID);
     const GuildCriteriaBase& GetBaseCriterias() { return _guildCriteriaBase; }
     void RescaleCriterias(uint32 guildID);
 
@@ -114,7 +118,7 @@ public:
     void GetRewardsCriteria(Player* player, Creature* creature, uint32 sender, uint32 action);
 
     // Spells
-    void UnLearnSpellsForPlayer(Player* player, uint32 guildID);
+    void UnLearnSpellsForPlayer(uint32 lowGuid, uint32 guildID);
     void LearnSpellsForPlayer(Player* player, uint32 guildID);
 
     template<typename Format, typename... Args>
@@ -126,6 +130,7 @@ public:
     std::string const GetItemLocale(uint32 ItemID, int8 index_loc = 8);
     std::string const GetItemLink(uint32 itemID, int8 index_loc = 8);
     std::string const GetSpellLink(uint32 spellID, int8 index_loc = 8);
+    std::string const GetSpelllocale(uint32 spellID, int8 index_loc = 8);
 
 private:
     // Criteria

@@ -38,7 +38,7 @@ public: Kargatum_Guild() : GuildScript("Kargatum_Guild") { }
         sGuildLevelSystem->LearnSpellsForPlayer(player, guildID);
     }
 
-    void OnRemoveMember(Guild* guild, Player* player, bool /*isDisbanding*/, bool /*isKicked*/) override
+    void OnRemoveMember(Guild* guild, Player* player, uint32 lowGuid, bool /*isDisbanding*/, bool /*isKicked*/) override
     {
         if (!CONF_GET_BOOL("GLS.Enable"))
             return;
@@ -46,7 +46,7 @@ public: Kargatum_Guild() : GuildScript("Kargatum_Guild") { }
         uint32 guildID = guild->GetId();
 
         sGuildLevelSystem->RescaleCriterias(guildID);
-        sGuildLevelSystem->UnLearnSpellsForPlayer(player, guildID);
+        sGuildLevelSystem->UnLearnSpellsForPlayer(lowGuid, guildID);
     }
 };
 

@@ -2350,7 +2350,7 @@ void Guild::DeleteMember(uint64 guid, bool isDisbanding, bool isKicked, bool can
         }
     }
     // Call script on remove before member is actually removed from guild (and database)
-    sScriptMgr->OnGuildRemoveMember(this, player, isDisbanding, isKicked);
+    sScriptMgr->OnGuildRemoveMember(this, player, lowguid, isDisbanding, isKicked);
 
     auto memberItr = m_members.find(lowguid);
     if (memberItr != m_members.end())
