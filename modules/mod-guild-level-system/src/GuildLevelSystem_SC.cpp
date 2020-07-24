@@ -32,7 +32,10 @@ public: Kargatum_Guild() : GuildScript("Kargatum_Guild") { }
         if (!CONF_GET_BOOL("GLS.Enable"))
             return;
 
-        sGuildLevelSystem->RescaleCriterias(guild->GetId());
+        uint32 guildID = guild->GetId();
+
+        sGuildLevelSystem->RescaleCriterias(guildID);
+        sGuildLevelSystem->LearnSpellsForPlayer(player, guildID);
     }
 
     void OnRemoveMember(Guild* guild, Player* player, bool /*isDisbanding*/, bool /*isKicked*/) override
@@ -40,7 +43,10 @@ public: Kargatum_Guild() : GuildScript("Kargatum_Guild") { }
         if (!CONF_GET_BOOL("GLS.Enable"))
             return;
 
-        sGuildLevelSystem->RescaleCriterias(guild->GetId());
+        uint32 guildID = guild->GetId();
+
+        sGuildLevelSystem->RescaleCriterias(guildID);
+        sGuildLevelSystem->UnLearnSpellsForPlayer(player, guildID);
     }
 };
 
@@ -127,7 +133,7 @@ public: Kargatum_Guild_Creature() : CreatureScript("Kargatum_Guild_Creature") { 
     {
         ClearGossipMenuFor(player);
 
-        if (sender >= GLS_GOSSIP_GET_ALL_REWARDS_SENDER + GLS_ITEMS_REWARD_CHOOSE_COUNT)
+        if (sender >= GLS_GOSSIP_GET_ALL_REWARDS_SENDER + GLS_SPELLS_REWARD_COUNT)
             ABORT();
 
         // Show details info criteria and rewards
@@ -136,21 +142,16 @@ public: Kargatum_Guild_Creature() : CreatureScript("Kargatum_Guild_Creature") { 
             sGuildLevelSystem->ShowCriteriaInfo(player, creature, sender, action);
             return true;
         }
-        else if (sender >= GLS_GOSSIP_SHOW_REWARDS_SENDER && sender < GLS_GOSSIP_GET_REWARDS_SENDER + GLS_ITEMS_REWARD_CHOOSE_COUNT)
+        else if (sender >= GLS_GOSSIP_SHOW_REWARDS_SENDER && sender < GLS_GOSSIP_GET_REWARDS_SENDER + GLS_SPELLS_REWARD_COUNT)
         {
             sGuildLevelSystem->ShowRewardInfo(player, creature, sender, action);
             return true;
         }
-        else if (sender >= GLS_GOSSIP_CHOOSE_REWARD_SENDER && sender < GLS_GOSSIP_GET_ALL_REWARDS_SENDER + GLS_ITEMS_REWARD_CHOOSE_COUNT/*sender < GLS_GOSSIP_CHOOSE_REWARD_SENDER + GLS_ITEMS_REWARD_CHOOSE_COUNT*/)
+        else if (sender >= GLS_GOSSIP_CHOOSE_REWARD_SENDER && sender < GLS_GOSSIP_GET_ALL_REWARDS_SENDER + GLS_SPELLS_REWARD_COUNT/*sender < GLS_GOSSIP_CHOOSE_REWARD_SENDER + GLS_ITEMS_REWARD_CHOOSE_COUNT*/)
         {
             sGuildLevelSystem->GetRewardsCriteria(player, creature, sender, action);
             return true;
         }
-        /*else if (sender >= GLS_GOSSIP_GET_ALL_REWARDS_SENDER && sender < GLS_GOSSIP_GET_ALL_REWARDS_SENDER + GLS_ITEMS_REWARD_CHOOSE_COUNT)
-        {
-            sGuildLevelSystem->GetRewardsCriteria(player, creature, sender, action);
-            return true;
-        }*/
 
         // Invest full items
         if (action > GLS_GOSSIP_CRITERIA_ID_FULL)
@@ -207,10 +208,7 @@ public:
     void OnAfterConfigLoad(bool /*reload*/) override
     {
         sGameConfig->AddBoolConfig("GLS.Enable");
-        sGameConfig->AddIntConfig("GLS.MaxLevel", 30);
-        sGameConfig->AddIntConfig("GLS.Exp.ItemID", 37711);
-        sGameConfig->AddStringConfig("GLS.ColorChat.Rank0", "|cffff0000");
-        sGameConfig->AddStringConfig("GLS.ColorChat.Rank1", "|cffff0000");
+        sGameConfig->AddBoolConfig("GLS.Criteria.ShowItems.Enable");
     }
 
     void OnStartup() override

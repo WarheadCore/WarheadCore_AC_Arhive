@@ -25,14 +25,14 @@
 #include <unordered_map>
 
 uint32 constexpr GLS_ITEMS_COUNT = 3;
-uint32 constexpr GLS_ITEMS_REWARD_CHOOSE_COUNT = 3;
+uint32 constexpr GLS_SPELLS_REWARD_COUNT = 3;
 uint32 constexpr GLS_GOSSIP_CRITERIA_ID_FULL = 100000;
 uint32 constexpr GLS_GOSSIP_CRITERIA_ID = 10000;
 uint32 constexpr GLS_GOSSIP_SHOW_CRITERIA_SENDER = GLS_ITEMS_COUNT + 1;
 uint32 constexpr GLS_GOSSIP_SHOW_REWARDS_SENDER = GLS_GOSSIP_SHOW_CRITERIA_SENDER + 1;
 uint32 constexpr GLS_GOSSIP_GET_REWARDS_SENDER = GLS_GOSSIP_SHOW_REWARDS_SENDER + 1;
-uint32 constexpr GLS_GOSSIP_CHOOSE_REWARD_SENDER = GLS_GOSSIP_GET_REWARDS_SENDER + GLS_ITEMS_REWARD_CHOOSE_COUNT;
-uint32 constexpr GLS_GOSSIP_GET_ALL_REWARDS_SENDER = GLS_GOSSIP_CHOOSE_REWARD_SENDER + GLS_ITEMS_REWARD_CHOOSE_COUNT;
+uint32 constexpr GLS_GOSSIP_CHOOSE_REWARD_SENDER = GLS_GOSSIP_GET_REWARDS_SENDER + GLS_SPELLS_REWARD_COUNT;
+uint32 constexpr GLS_GOSSIP_GET_ALL_REWARDS_SENDER = GLS_GOSSIP_CHOOSE_REWARD_SENDER + GLS_SPELLS_REWARD_COUNT;
 
 struct GuildCriteriaStruct
 {
@@ -40,11 +40,8 @@ struct GuildCriteriaStruct
     uint32 ItemID[GLS_ITEMS_COUNT];
     uint32 ItemCount[GLS_ITEMS_COUNT];
     uint32 MinPlayersCount;
-    float Coef;
-    uint32 RewardItemID;
-    uint32 RewardItemCount;
-    uint32 RewardChooseItemID[GLS_ITEMS_REWARD_CHOOSE_COUNT];
-    uint32 RewardChooseItemCount[GLS_ITEMS_REWARD_CHOOSE_COUNT];
+    float Coef;    
+    uint32 RewardSpells[GLS_SPELLS_REWARD_COUNT];
 };
 
 struct GuildCriteriaProgressStruct
@@ -52,6 +49,8 @@ struct GuildCriteriaProgressStruct
     uint32 GuildID;
     uint32 CriteriaID;
     uint32 ItemCount[GLS_ITEMS_COUNT];
+    uint32 SelectedSpell;
+    bool IsDone;
 };
 
 typedef std::unordered_map<uint32 /*criteria id*/, GuildCriteriaStruct> GuildCriteriaBase;
@@ -75,6 +74,12 @@ public:
     void RescalingCriterias();
     uint32 GetMaxCriteriaItemCount(uint32 criteriaID, uint8 itemType);
     uint32 GetCriteriaItemID(uint32 criteriaID, uint8 itemType);
+    uint32 GetRewardSpellID(uint32 criteriaID, uint8 spellType);
+
+    void SaveToDB(uint32 criteriaID);
+    void SetProgressDone(uint32 criteriaID, bool isDone = true);
+    void UnLearnSpells(Player* player);
+    void LearnSpells(Player* player);
 
 private:
     std::unordered_map<uint32 /*criteria id*/, GuildCriteriaProgressStruct> _guildCriteriaProgress; // for history
@@ -100,14 +105,17 @@ public:
     GuildCriteriaStruct* GetCriteria(uint32 criteriaID);
     const GuildCriteriaBase& GetBaseCriterias() { return _guildCriteriaBase; }
     void RescaleCriterias(uint32 guildID);
-    bool IsExistRewardItemsChoose(uint32 criteriaID);
-    bool IsExistRewardItems(uint32 criteriaID);
 
+    // Gossip criteria
     void ShowAllCriteriaInfo(Player* player, Creature* creature);
     void ShowCriteriaInfo(Player* player, Creature* creature, uint32 sender, uint32 action);
     void ShowInvestedMenu(Player* player, Creature* creature, uint32 sender, uint32 action);
     void ShowRewardInfo(Player* player, Creature* creature, uint32 sender, uint32 action);
     void GetRewardsCriteria(Player* player, Creature* creature, uint32 sender, uint32 action);
+
+    // Spells
+    void UnLearnSpellsForPlayer(Player* player, uint32 guildID);
+    void LearnSpellsForPlayer(Player* player, uint32 guildID);
 
     template<typename Format, typename... Args>
     inline void SendGuildFormat(uint32 guildID, Format&& fmt, Args&& ... args)
@@ -116,21 +124,15 @@ public:
     }
 
     std::string const GetItemLocale(uint32 ItemID, int8 index_loc = 8);
-    std::string const GetItemLink(uint32 itemid, int8 index_loc = 8);
+    std::string const GetItemLink(uint32 itemID, int8 index_loc = 8);
+    std::string const GetSpellLink(uint32 spellID, int8 index_loc = 8);
 
 private:
-    std::unordered_map<uint32, uint32> _guildExpForLevelStore;
-    std::unordered_map<uint32, uint32> _guildSettingStore;
-    std::unordered_map<uint32, std::vector<uint32>> _guildSpellRewardStore;
-
     // Criteria
     GuildCriteriaBase _guildCriteriaBase;
     std::unordered_map<uint32 /*guild id*/, GuildCriteria*> _guildCriteriaProgress;
 
     void SendGuildMessage(uint32 guildID, std::string&& message);
-
-    uint32 _maxLevel = 0;
-    uint32 _expItemID = 0;
 };
 
 #define sGuildLevelSystem GuildLevelSystem::instance()
