@@ -847,16 +847,6 @@ void Map::Update(const uint32 t_diff, const uint32 s_diff, bool  /*thread*/)
     sScriptMgr->OnMapUpdate(this, t_diff);
 
     BuildAndSendUpdateForObjects(); // pussywizard
-
-    LOG_DEBUG("pool", "%u", mapId); // pussywizard: for crashlogs
-
-    /*WH_METRIC_VALUE("map_creatures", uint64(GetObjectsStore().Size<Creature>()),
-        WH_METRIC_TAG("map_id", std::to_string(GetId())),
-        WH_METRIC_TAG("map_instanceid", std::to_string(GetInstanceId())));
-
-    WH_METRIC_VALUE("map_gameobjects", uint64(GetObjectsStore().Size<GameObject>()),
-        WH_METRIC_TAG("map_id", std::to_string(GetId())),
-        WH_METRIC_TAG("map_instanceid", std::to_string(GetInstanceId())));*/
 }
 
 void Map::HandleDelayedVisibility()
