@@ -44,6 +44,7 @@
 #include "DatabaseLoader.h"
 #include "ScriptLoader.h"
 #include "GameConfig.h"
+#include "Metric.h"
 #include <ace/Sig_Handler.h>
 
 #if WH_PLATFORM == WH_PLATFORM_WINDOWS
@@ -70,7 +71,7 @@ int m_ServiceStatus = -1;
 #define _ACORE_CORE_CONFIG  "worldserver.conf"
 #endif
 
-#define WORLD_SLEEP_CONST 10
+#define WORLD_SLEEP_CONST 50
 
 /// Print out the usage string for this program on the console.
 void usage(const char* prog)
@@ -372,6 +373,13 @@ extern int main(int argc, char** argv)
 
     // set server offline (not connectable)
     LoginDatabase.DirectPExecute("UPDATE realmlist SET flag = (flag & ~%u) | %u WHERE id = '%d'", REALM_FLAG_OFFLINE, REALM_FLAG_INVALID, realmID);
+
+    sMetric->Initialize("WarheadCore", []()
+    {
+        WH_METRIC_VALUE("online_players", sWorld->GetPlayerCount());
+    });
+
+    WH_METRIC_EVENT("events", "Worldserver started", "");
 
     ///- Initialize the World
     sScriptMgr->SetScriptLoader(AddScripts);

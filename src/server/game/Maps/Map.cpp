@@ -38,6 +38,7 @@
 #include "Chat.h"
 #include "GameTime.h"
 #include "GameConfig.h"
+#include "Metric.h"
 
 union u_map_magic
 {
@@ -846,8 +847,6 @@ void Map::Update(const uint32 t_diff, const uint32 s_diff, bool  /*thread*/)
     sScriptMgr->OnMapUpdate(this, t_diff);
 
     BuildAndSendUpdateForObjects(); // pussywizard
-
-    LOG_DEBUG("pool", "%u", mapId); // pussywizard: for crashlogs
 }
 
 void Map::HandleDelayedVisibility()

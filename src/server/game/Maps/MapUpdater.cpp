@@ -21,6 +21,7 @@
 #include "DatabaseEnv.h"
 #include "LFGMgr.h"
 #include "AvgDiffTracker.h"
+#include "Metric.h"
 #include <ace/Guard_T.h>
 #include <ace/Method_Request.h>
 
@@ -70,6 +71,7 @@ class MapUpdateRequest : public ACE_Method_Request
 
         virtual int call()
         {
+            WH_METRIC_TIMER("map_update_time_diff", WH_METRIC_TAG("map_id", std::to_string(m_map.GetId())));
             m_map.Update (m_diff, s_diff);
             m_updater.update_finished();
             return 0;
