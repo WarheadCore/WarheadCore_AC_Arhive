@@ -38,20 +38,19 @@ GuildCriteria::GuildCriteria(uint32 guildID)
 
 GuildCriteriaProgressStruct* GuildCriteria::GetProgress(uint32 criteriaID, bool forceCreate /*= false*/)
 {
-    auto& progress = _guildCriteriaProgress.find(criteriaID);
+    auto const& progress = _guildCriteriaProgress.find(criteriaID);
     if (progress != _guildCriteriaProgress.end())
         return &progress->second;
-
+   
     if (forceCreate)
     {
         AddEmptyProgress(criteriaID);
-
-        progress = _guildCriteriaProgress.find(criteriaID);
-        if (progress == _guildCriteriaProgress.end())
-            ABORT_MSG("> GLS: Not found criteria progress (%u) after insert empty", criteriaID);
+        return GetProgress(criteriaID);
     }
 
-    return &progress->second;
+    ABORT_MSG("> GLS: Not found criteria progress (%u) after insert empty", criteriaID);
+
+    return nullptr;   
 }
 
 GuildCriteriaStruct* GuildCriteria::GetCriteria(uint32 criteriaID)
