@@ -19,7 +19,7 @@
 #define __GAMETIME_H
 
 #include "Define.h"
-#include <chrono>
+#include "Duration.h"
 
 namespace GameTime
 {

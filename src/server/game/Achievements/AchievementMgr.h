@@ -19,12 +19,11 @@
 
 #include <map>
 #include <string>
-#include <chrono>
-
 #include "Common.h"
 #include "DatabaseEnv.h"
 #include "DBCEnums.h"
 #include "DBCStores.h"
+#include "Duration.h"
 
 typedef std::list<AchievementCriteriaEntry const*> AchievementCriteriaEntryList;
 typedef std::list<AchievementEntry const*>         AchievementEntryList;
