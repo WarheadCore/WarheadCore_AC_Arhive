@@ -23,6 +23,7 @@
 #include "Cell.h"
 #include "DetourCommon.h"
 #include "DetourNavMeshQuery.h"
+#include "Metric.h"
 
 ////////////////// PathGenerator //////////////////
 PathGenerator::PathGenerator(const Unit* owner) :
@@ -61,6 +62,8 @@ bool PathGenerator::CalculatePath(float destX, float destY, float destZ, bool fo
 
     if (!warhead::IsValidMapCoord(destX, destY, destZ) || !warhead::IsValidMapCoord(x, y, z))
         return false;
+
+    WH_METRIC_EVENT("mmap_events", "CalculatePath", "");
 
     G3D::Vector3 dest(destX, destY, destZ);
     SetEndPosition(dest);

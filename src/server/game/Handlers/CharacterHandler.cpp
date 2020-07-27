@@ -52,6 +52,7 @@
 #include "Transport.h"
 #include "GameTime.h"
 #include "GameConfig.h"
+#include "Metric.h"
 
 class LoginQueryHolder : public SQLQueryHolder
 {
@@ -1212,6 +1213,8 @@ void WorldSession::HandlePlayerLoginFromDB(LoginQueryHolder* holder)
         pCurrChar->RemoveAtLoginFlag(AT_LOGIN_FIRST);
         sScriptMgr->OnFirstLogin(pCurrChar);
     }
+
+    WH_METRIC_EVENT("player_events", "Login", pCurrChar->GetName());
 
     delete holder;
 }
