@@ -1334,7 +1334,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
     {
         if (mScriptType == SMART_SCRIPT_TYPE_GAMEOBJECT)
         {
-            sLog->outErrorDb("SMART_ACTION_SET_IN_COMBAT_WITH_ZONE (38) is not allowed with SMART_SCRIPT_TYPE_GAMEOBJECT (1), skipped.");
+            LOG_ERROR("sql.sql", "SMART_ACTION_SET_IN_COMBAT_WITH_ZONE (38) is not allowed with SMART_SCRIPT_TYPE_GAMEOBJECT (1), skipped.");
             break;
         }
 
