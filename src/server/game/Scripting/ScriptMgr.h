@@ -1006,6 +1006,8 @@ class PlayerScript : public ScriptObject
 
         // Called before loading a player's pet from the DB
         virtual void OnBeforeLoadPetFromDB(Player* /*player*/, uint32& /*petentry*/, uint32& /*petnumber*/, bool& /*current*/, bool& /*forceLoadFromDB*/) { }
+
+        virtual void OnRewardHonor(Player* /*player*/, Unit* /*victim*/, uint32 /*groupsize*/, float& /*honor*/, bool /*awardXP*/) { }
 };
 
 class AccountScript : public ScriptObject
@@ -1501,6 +1503,7 @@ class ScriptMgr
         void OnBeforeGuardianInitStatsForLevel(Player* player, Guardian* guardian, CreatureTemplate const* cinfo, PetType& petType);
         void OnAfterGuardianInitStatsForLevel(Player* player, Guardian* guardian);
         void OnBeforeLoadPetFromDB(Player* player, uint32& petentry, uint32& petnumber, bool& current, bool& forceLoadFromDB);
+        void OnRewardHonor(Player* player, Unit* victim, uint32 groupsize, float& honor, bool awardXP);
 
     public: /* AccountScript */
 

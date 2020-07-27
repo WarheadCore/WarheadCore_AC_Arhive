@@ -1464,6 +1464,11 @@ void ScriptMgr::OnBeforeLoadPetFromDB(Player* player, uint32& petentry, uint32& 
     FOREACH_SCRIPT(PlayerScript)->OnBeforeLoadPetFromDB(player, petentry, petnumber, current, forceLoadFromDB);
 }
 
+void ScriptMgr::OnRewardHonor(Player* player, Unit* victim, uint32 groupsize, float& honor, bool awardXP)
+{
+    FOREACH_SCRIPT(PlayerScript)->OnRewardHonor(player, victim, groupsize, honor, awardXP);
+}
+
 // Account
 void ScriptMgr::OnAccountLogin(uint32 accountId)
 {

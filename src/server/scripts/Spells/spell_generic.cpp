@@ -5014,6 +5014,21 @@ class spell_gen_eject_passenger : public SpellScriptLoader
         }
 };
 
+class spell_aura_warhead_mod_honor_pct : public PlayerScript
+{
+public:
+    spell_aura_warhead_mod_honor_pct() : PlayerScript("spell_aura_warhead_mod_honor_pct") { }
+
+    void OnRewardHonor(Player* player, Unit* /*victim*/, uint32 /*groupsize*/, float& honor, bool /*awardXP*/) override
+    {
+        if (!player)
+            return;
+
+        for (auto const& aura : player->GetAuraEffectsByType(SPELL_AURA_WARHEAD_MOD_HONOR_PCT))
+            AddPct(honor, aura->GetAmount());
+    }
+};
+
 void AddSC_generic_spell_scripts()
 {
     // ours:
@@ -5141,4 +5156,7 @@ void AddSC_generic_spell_scripts()
     new spell_gen_whisper_gulch_yogg_saron_whisper();
     new spell_gen_eject_all_passengers();
     new spell_gen_eject_passenger();
+
+    // Warhead spells
+    new spell_aura_warhead_mod_honor_pct();
 }

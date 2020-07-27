@@ -7361,6 +7361,9 @@ bool Player::RewardHonor(Unit* uVictim, uint32 groupsize, int32 honor, bool awar
     }
 
     honor_f *= sGameConfig->GetFloatConfig("Rate.Honor");
+
+    sScriptMgr->OnRewardHonor(this, uVictim, groupsize, honor_f, awardXP);
+
     // Back to int now
     honor = int32(honor_f);
     // honor - for show honor points in log
