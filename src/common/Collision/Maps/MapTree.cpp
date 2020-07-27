@@ -21,7 +21,7 @@
 #include "VMapDefinitions.h"
 #include "Log.h"
 #include "Errors.h"
-
+#include "Metric.h"
 #include <string>
 #include <sstream>
 #include <iomanip>
@@ -413,6 +413,10 @@ namespace VMAP
         }
         else
             iLoadedTiles[packTileID(tileX, tileY)] = false;
+        
+        WH_METRIC_EVENT("map_events", "LoadMapTile",
+            "Map: " + std::to_string(iMapID) + " TileX: " + std::to_string(tileX) + " TileY: " + std::to_string(tileY));
+
         return result;
     }
 
@@ -470,7 +474,11 @@ namespace VMAP
                 fclose(tf);
             }
         }
+        
         iLoadedTiles.erase(tile);
+
+        WH_METRIC_EVENT("map_events", "UnloadMapTile",
+            "Map: " + std::to_string(iMapID) + " TileX: " + std::to_string(tileX) + " TileY: " + std::to_string(tileY));
     }
 
     void StaticMapTree::getModelInstances(ModelInstance*& models, uint32& count)

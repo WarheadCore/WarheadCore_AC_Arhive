@@ -67,7 +67,6 @@ public:
 
         static std::vector<ChatCommand> serverSetCommandTable =
         {
-            { "difftime",       SEC_CONSOLE,        true,  &HandleServerSetDiffTimeCommand,         "" },
             { "motd",           SEC_ADMINISTRATOR,  true,  &HandleServerSetMotdCommand,             "" },
             { "closed",         SEC_ADMINISTRATOR,  true,  &HandleServerSetClosedCommand,           "" }
         };
@@ -321,26 +320,6 @@ public:
         handler->SendSysMessage(LANG_USE_BOL);
         handler->SetSentErrorMessage(true);
         return false;
-    }
-       
-    // set diff time record interval
-    static bool HandleServerSetDiffTimeCommand(ChatHandler* /*handler*/, char const* args)
-    {
-        if (!*args)
-            return false;
-
-        char* newTimeStr = strtok((char*)args, " ");
-        if (!newTimeStr)
-            return false;
-
-        int32 newTime = atoi(newTimeStr);
-        if (newTime < 0)
-            return false;
-
-        sWorldUpdateTime.SetRecordUpdateTimeInterval(newTime);
-        printf("Record diff every %u ms\n", newTime);
-
-        return true;
     }
 };
 

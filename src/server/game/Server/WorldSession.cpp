@@ -50,6 +50,7 @@
 #include "GameTime.h"
 #include "GameConfig.h"
 #include "GameLocale.h"
+#include "Metric.h"
 
 namespace {
 
@@ -584,6 +585,8 @@ void WorldSession::LogoutPlayer(bool save)
 
         //! Call script hook before deletion
         sScriptMgr->OnPlayerLogout(_player);
+
+        WH_METRIC_EVENT("player_events", "Logout", _player->GetName());
 
         LOG_INFO("entities.player.character", "Account: %d (IP: %s) Logout Character:[%s] (GUID: %u) Level: %d", GetAccountId(), GetRemoteAddress().c_str(), _player->GetName().c_str(), _player->GetGUIDLow(), _player->getLevel());
 
