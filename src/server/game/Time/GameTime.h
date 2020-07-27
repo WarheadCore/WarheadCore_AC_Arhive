@@ -33,10 +33,10 @@ namespace GameTime
     uint32 GetGameTimeMS();
 
     /// Current chrono system_clock time point
-    std::chrono::system_clock::time_point GetGameTimeSystemPoint();
+    SystemTimePoint GetSystemTime();
 
     /// Current chrono steady_clock time point
-    std::chrono::steady_clock::time_point GetGameTimeSteadyPoint();
+    TimePoint GetGameTimeSteadyPoint();
 
     /// Uptime (in secs)
     uint32 GetUptime();
