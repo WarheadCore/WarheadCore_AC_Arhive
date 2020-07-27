@@ -2401,10 +2401,10 @@ bool AchievementGlobalMgr::IsRealmCompleted(AchievementEntry const* achievement)
     if (itr == m_allCompletedAchievements.end())
         return false;
 
-    if (itr->second == std::chrono::system_clock::time_point::min())
+    if (itr->second == SystemTimePoint::min())
         return false;
 
-    if (itr->second == std::chrono::system_clock::time_point::max())
+    if (itr->second == SystemTimePoint::max())
         return true;
 
     // Allow completing the realm first kill for entire minute after first person did it
@@ -2751,7 +2751,7 @@ void AchievementGlobalMgr::LoadCompletedAchievements()
     for (uint32 i = 0; i < sAchievementStore.GetNumRows(); ++i)
         if (AchievementEntry const* achievement = sAchievementStore.LookupEntry(i))
             if (achievement->flags & (ACHIEVEMENT_FLAG_REALM_FIRST_REACH | ACHIEVEMENT_FLAG_REALM_FIRST_KILL))
-                m_allCompletedAchievements[achievement->ID] = std::chrono::system_clock::time_point::min();
+                m_allCompletedAchievements[achievement->ID] = SystemTimePoint::min();
 
     if (!result)
     {
@@ -2780,7 +2780,7 @@ void AchievementGlobalMgr::LoadCompletedAchievements()
             continue;
         }
         else if (achievement->flags & (ACHIEVEMENT_FLAG_REALM_FIRST_REACH | ACHIEVEMENT_FLAG_REALM_FIRST_KILL))
-            m_allCompletedAchievements[achievementId] =  std::chrono::system_clock::time_point::max();
+            m_allCompletedAchievements[achievementId] =  SystemTimePoint::max();
     } while (result->NextRow());
 
     LOG_INFO("server", ">> Loaded %lu completed achievements in %u ms", (unsigned long)m_allCompletedAchievements.size(), GetMSTimeDiffToNow(oldMSTime));

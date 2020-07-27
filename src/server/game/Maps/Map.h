@@ -38,7 +38,6 @@
 #include "GameObjectModel.h"
 #include "Log.h"
 #include "DataMap.h"
-
 #include <bitset>
 #include <list>
 
