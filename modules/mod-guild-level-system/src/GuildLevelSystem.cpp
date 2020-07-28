@@ -614,7 +614,7 @@ void GuildLevelSystem::InvestItem(Player* player, Creature* creature, uint32 sen
     if (!player->HasItemCount(itemID, itemCount))
     {
         handler.PSendSysMessage("|cFFFF0000#|cff6C8CD5 Вам не хватает|r %s - %u", ItemLink.c_str(), itemCount - hasItemCount);
-        ShowInvestedMenu(player, creature, action, sender);
+        ShowInvestedMenu(player, creature, sender, action);
         return;
     }
 
@@ -625,7 +625,7 @@ void GuildLevelSystem::InvestItem(Player* player, Creature* creature, uint32 sen
     if (itemCount > needItems)
     {
         handler.PSendSysMessage("|cFFFF0000#|cff6C8CD5 Вы хотите вложить|r %s |cff6C8CD5больше, чем можно|r %u|cff6C8CD5. Введите корректное число|r", ItemLink.c_str(), needItems);
-        ShowInvestedMenu(player, creature, action, sender);
+        ShowInvestedMenu(player, creature, sender, action);
         return;
     }
 
@@ -636,7 +636,7 @@ void GuildLevelSystem::InvestItem(Player* player, Creature* creature, uint32 sen
     if (criteriaProgress->GetCountProgressDone(criteriaID) == criteriaProgress->GetMaxCountProgressDone(criteriaID))
         SendGuildFormat(player->GetGuildId(), "|cffff0000#|r |cff6C8CD5Гильдия выполнила критерий|r %u", criteriaID);
 
-    ShowInvestedMenu(player, creature, action, sender);
+    ShowInvestedMenu(player, creature, sender, action);
 }
 
 void GuildLevelSystem::InvestItemFull(Player* player, Creature* creature, uint32 sender, uint32 action)
@@ -646,7 +646,7 @@ void GuildLevelSystem::InvestItemFull(Player* player, Creature* creature, uint32
     if (itemType > GLS_ITEMS_COUNT)
     {
         LOG_ERROR("modules.gls", "> GLS: invalid item type (%u)", itemType);
-        ShowInvestedMenu(player, creature, action, sender);
+        ShowInvestedMenu(player, creature, sender, action);
         return;
     }
 
@@ -677,7 +677,7 @@ void GuildLevelSystem::InvestItemFull(Player* player, Creature* creature, uint32
     if (!itemCount)
     {
         handler.PSendSysMessage("|cFFFF0000#|cff6C8CD5 У вас нет|r %s", ItemLink.c_str());
-        ShowInvestedMenu(player, creature, action, sender);
+        ShowInvestedMenu(player, creature, sender, action);
         return;
     }
 
@@ -691,7 +691,7 @@ void GuildLevelSystem::InvestItemFull(Player* player, Creature* creature, uint32
     player->DestroyItemCount(itemID, itemCount, true);
     criteriaProgress->AddItemProgess(criteriaID, itemType, itemCount);
     SendGuildFormat(guildID, "|cffff0000#|r %s |cff6C8CD5вложил|r %u %s. |cff6C8CD5Осталось -|r %u", handler.playerLink(player->GetName()).c_str(), itemCount, ItemLink.c_str(), needItems - itemCount);
-    ShowInvestedMenu(player, creature, criteriaID + GLS_GOSSIP_CRITERIA_ID, sender);
+    ShowInvestedMenu(player, creature, sender, criteriaID + GLS_GOSSIP_CRITERIA_ID);
 }
 
 GuildCriteria* GuildLevelSystem::GetCriteriaProgress(uint32 guildid, bool forceCreate /*= false*/)
