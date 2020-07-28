@@ -38,7 +38,7 @@ else()
   set(BOOST_REQUIRED_VERSION 1.67)
 endif()
 
-find_package(Boost ${BOOST_REQUIRED_VERSION} REQUIRED system filesystem thread program_options iostreams regex)
+find_package(Boost ${BOOST_REQUIRED_VERSION} REQUIRED system filesystem program_options iostreams regex)
 
 add_library(boost INTERFACE)
 
