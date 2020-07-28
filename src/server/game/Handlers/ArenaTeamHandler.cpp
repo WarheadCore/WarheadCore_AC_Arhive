@@ -110,7 +110,7 @@ void WorldSession::HandleArenaTeamInviteOpcode(WorldPacket & recvData)
         return;
     }
 
-    if (player->getLevel() < sGameConfig->GetIntConfig("MaxPlayerLevel"))
+    if (!player->IsMaxLevel())
     {
         SendArenaTeamCommandResult(ERR_ARENA_TEAM_CREATE_S, "", invitedName, ERR_ARENA_TEAM_TARGET_TOO_LOW_S);
         return;
