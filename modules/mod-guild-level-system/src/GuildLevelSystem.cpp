@@ -45,12 +45,15 @@ GuildCriteriaProgressStruct* GuildCriteria::GetProgress(uint32 criteriaID, bool 
     if (forceCreate)
     {
         AddEmptyProgress(criteriaID);
-        return GetProgress(criteriaID);
+
+        auto const& _progress = _guildCriteriaProgress.find(criteriaID);
+        if (_progress != _guildCriteriaProgress.end())
+            return &_progress->second;
+
+        ABORT_MSG("> GLS: Not found criteria progress (%u) after insert empty", criteriaID);
     }
 
-    ABORT_MSG("> GLS: Not found criteria progress (%u) after insert empty", criteriaID);
-
-    return nullptr;   
+    return nullptr;
 }
 
 GuildCriteriaStruct* GuildCriteria::GetCriteria(uint32 criteriaID)
@@ -121,7 +124,7 @@ uint32 GuildCriteria::GetMaxCriteriaItemCount(uint32 criteriaID, uint8 itemType)
 
 uint32 GuildCriteria::GetItemCountProgress(uint32 criteriaID, uint8 itemType)
 {
-    return GetProgress(criteriaID)->ItemCount[itemType];
+    return GetProgress(criteriaID, true)->ItemCount[itemType];
 }
 
 uint32 GuildCriteria::GetCountProgressDone(uint32 criteriaID)
@@ -201,12 +204,16 @@ void GuildCriteria::SaveToDB(uint32 criteriaID)
 
 void GuildCriteria::SetProgressDone(uint32 criteriaID, bool isDone /*= true*/)
 {
-    GetProgress(criteriaID)->IsDone = isDone;
+    GetProgress(criteriaID, true)->IsDone = isDone;
 }
 
 bool GuildCriteria::IsProgressDone(uint32 criteriaID)
 {
-    return GetProgress(criteriaID)->IsDone;
+    auto criteriaProgress = GetProgress(criteriaID);
+    if (!criteriaProgress)
+        return false;
+
+    return criteriaProgress->IsDone;
 }
 
 void GuildCriteria::UnLearnSpells(uint32 lowGuid)
@@ -696,11 +703,12 @@ GuildCriteria* GuildLevelSystem::GetCriteriaProgress(uint32 guildid, bool forceC
     if (forceCreate)
     {
         AddEmptyGuildCriteria(guildid);
+
         auto const& _itr = _guildCriteriaProgress.find(guildid);
         if (_itr != _guildCriteriaProgress.end())
             return _itr->second;
 
-        ABORT_MSG("> GLS: Invalid creeate empty guild criteria for guild (%u)", guildid);
+        ABORT_MSG("> GLS: Invalid create empty guild criteria for guild (%u)", guildid);
     }
 
     return nullptr;
