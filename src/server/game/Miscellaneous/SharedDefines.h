@@ -20,6 +20,7 @@
 
 #include "Define.h"
 #include "DetourNavMesh.h"
+#include "DBCEnums.h"
 #include <cassert>
 
 enum SpellEffIndex
