@@ -81,7 +81,7 @@ public:
             switch (param)
             {
                 case EVENT_SUMMON_SPIRITS:
-                    _events.ScheduleEvent(EVENT_SUMMON_SPIRITS, urand(12, 14)*IN_MILLISECONDS);
+                    _events.ScheduleEvent(EVENT_SUMMON_SPIRITS, 12s, 14s);
                     break;
             }
         }
@@ -107,11 +107,11 @@ public:
 
         void EnterCombat(Unit* /*who*/) override
         { 
-            _events.ScheduleEvent(EVENT_SPELL_FIREBLAST, 2 * IN_MILLISECONDS);
+            _events.ScheduleEvent(EVENT_SPELL_FIREBLAST, 2s);
 
             // Spawn 7 Embers initially
             for (int i = 0; i < 4; ++i)
-                _events.ScheduleEvent(EVENT_SUMMON_SPIRITS, 4 * IN_MILLISECONDS);
+                _events.ScheduleEvent(EVENT_SUMMON_SPIRITS, 4s);
 
             // Activate the runes (Start burning)
             TurnRunes(true);
@@ -185,7 +185,7 @@ public:
             // Make the Spirits chase Ambassador Flamelash
             if (Creature* Spirit = me->SummonCreature(NPC_FIRE_SPIRIT, SummonPositions[getValidRandomPosition()], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 60000))
                 Spirit->AI()->DoAction(EVENT_CHASE_AMBASSADOR);
-            _events.ScheduleEvent(EVENT_SUMMON_SPIRITS, urand(12, 14) * IN_MILLISECONDS);
+            _events.ScheduleEvent(EVENT_SUMMON_SPIRITS, 12s, 14s);
         }
 
         void UpdateAI(uint32 diff) override
@@ -200,7 +200,7 @@ public:
             {
                 case EVENT_SPELL_FIREBLAST:
                     DoCastVictim(SPELL_FIREBLAST);
-                    _events.ScheduleEvent(EVENT_SPELL_FIREBLAST, 7 * IN_MILLISECONDS);
+                    _events.ScheduleEvent(EVENT_SPELL_FIREBLAST, 7s);
                     break;
                 case EVENT_SUMMON_SPIRITS:
                     SummonSpirits();
@@ -231,7 +231,7 @@ public:
         void Reset() override
         {
             // TODO: Swap this with an execute event
-            _events.ScheduleEvent(EVENT_CHASE_AMBASSADOR, 1);
+            _events.ScheduleEvent(EVENT_CHASE_AMBASSADOR, 1s);
         }
 
         void DoAction(int32 param) override
@@ -240,7 +240,7 @@ public:
             {
                 case EVENT_CHASE_AMBASSADOR:
                     // TODO: Swap this with an execute event
-                    _events.ScheduleEvent(EVENT_CHASE_AMBASSADOR, 0.1f * IN_MILLISECONDS);
+                    _events.ScheduleEvent(EVENT_CHASE_AMBASSADOR, 100ms);
                     break;
             }
         }
@@ -267,11 +267,11 @@ public:
 
                             if (me->IsAlive())
                                 me->GetMotionMaster()->MoveChase(boss);
-                            _events.ScheduleEvent(EVENT_CHASE_AMBASSADOR, 0.5f * IN_MILLISECONDS);
+                            _events.ScheduleEvent(EVENT_CHASE_AMBASSADOR, 500ms);
                         }
                     }
                     else
-                        _events.ScheduleEvent(EVENT_CHASE_AMBASSADOR, 0.5f * IN_MILLISECONDS);
+                        _events.ScheduleEvent(EVENT_CHASE_AMBASSADOR, 500ms);
                     break;
             }
 

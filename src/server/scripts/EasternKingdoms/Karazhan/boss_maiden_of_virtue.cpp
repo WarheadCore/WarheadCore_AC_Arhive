@@ -58,7 +58,7 @@ class boss_maiden_of_virtue : public CreatureScript
                 if (events.GetNextEventTime(EVENT_KILL_TALK) == 0)
                 {
                     Talk(SAY_SLAY);
-                    events.ScheduleEvent(EVENT_KILL_TALK, 5000);
+                    events.ScheduleEvent(EVENT_KILL_TALK, 5s);
                 }
             }
 
@@ -74,10 +74,10 @@ class boss_maiden_of_virtue : public CreatureScript
                 Talk(SAY_AGGRO);
 
                 me->CastSpell(me, SPELL_HOLY_GROUND, true);
-                events.ScheduleEvent(EVENT_SPELL_REPENTANCE, 25000);
-                events.ScheduleEvent(EVENT_SPELL_HOLY_FIRE, 8000);
-                events.ScheduleEvent(EVENT_SPELL_HOLY_WRATH, 15000);
-                events.ScheduleEvent(EVENT_SPELL_ENRAGE, 600000);
+                events.ScheduleEvent(EVENT_SPELL_REPENTANCE, 25s);
+                events.ScheduleEvent(EVENT_SPELL_HOLY_FIRE, 8s);
+                events.ScheduleEvent(EVENT_SPELL_HOLY_WRATH, 15s);
+                events.ScheduleEvent(EVENT_SPELL_ENRAGE, 10min);
                 DoZoneInCombat();
             }
 
@@ -94,17 +94,17 @@ class boss_maiden_of_virtue : public CreatureScript
                 {
                     case EVENT_SPELL_REPENTANCE:
                         me->CastSpell(me, SPELL_REPENTANCE, true);
-                        events.ScheduleEvent(EVENT_SPELL_REPENTANCE, urand(25000, 35000));
+                        events.ScheduleEvent(EVENT_SPELL_REPENTANCE, 25s, 35s);
                         break;
                     case EVENT_SPELL_HOLY_FIRE:
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40.0f, true))
                             me->CastSpell(target, SPELL_HOLY_FIRE, true);
-                        events.ScheduleEvent(EVENT_SPELL_HOLY_FIRE, urand(8000, 18000));
+                        events.ScheduleEvent(EVENT_SPELL_HOLY_FIRE, 8s, 18s);
                         break;
                     case EVENT_SPELL_HOLY_WRATH:
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40.0f, true))
                             me->CastSpell(target, SPELL_HOLY_WRATH, true);
-                        events.ScheduleEvent(EVENT_SPELL_HOLY_WRATH, urand(20000, 25000));
+                        events.ScheduleEvent(EVENT_SPELL_HOLY_WRATH, 20s, 25s);
                         break;
                     case EVENT_SPELL_ENRAGE:
                         me->CastSpell(me, SPELL_BERSERK, true);

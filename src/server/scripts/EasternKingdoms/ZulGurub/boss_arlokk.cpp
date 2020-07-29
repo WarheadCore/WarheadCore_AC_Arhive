@@ -116,11 +116,11 @@ class boss_arlokk : public CreatureScript
             void EnterCombat(Unit* /*who*/)
             {
                 _EnterCombat();
-                events.ScheduleEvent(EVENT_SHADOW_WORD_PAIN, urand(7000, 9000), 0, PHASE_ONE);
-                events.ScheduleEvent(EVENT_GOUGE, urand(12000, 15000), 0, PHASE_ONE);
-                events.ScheduleEvent(EVENT_SUMMON_PROWLERS, 6000, 0, PHASE_ALL);
-                events.ScheduleEvent(EVENT_MARK_OF_ARLOKK, urand(9000, 11000), 0, PHASE_ALL);
-                events.ScheduleEvent(EVENT_TRANSFORM, urand(15000, 20000), 0, PHASE_ONE);
+                events.ScheduleEvent(EVENT_SHADOW_WORD_PAIN, 7s, 9s, 0, PHASE_ONE);
+                events.ScheduleEvent(EVENT_GOUGE, 12s, 15s, 0, PHASE_ONE);
+                events.ScheduleEvent(EVENT_SUMMON_PROWLERS, 6s, 0, PHASE_ALL);
+                events.ScheduleEvent(EVENT_MARK_OF_ARLOKK, 9s, 11s, 0, PHASE_ALL);
+                events.ScheduleEvent(EVENT_TRANSFORM, 15s, 20s, 0, PHASE_ONE);
                 Talk(SAY_AGGRO);
 
                 // Sets up list of Panther spawners to cast on
@@ -181,7 +181,7 @@ class boss_arlokk : public CreatureScript
                     {
                         case EVENT_SHADOW_WORD_PAIN:
                             DoCastVictim(SPELL_SHADOW_WORD_PAIN, true);
-                            events.ScheduleEvent(EVENT_SHADOW_WORD_PAIN, urand(5000, 7000), 0, PHASE_ONE);
+                            events.ScheduleEvent(EVENT_SHADOW_WORD_PAIN, 5s, 7s, 0, PHASE_ONE);
                             break;
                         case EVENT_GOUGE:
                             DoCastVictim(SPELL_GOUGE, true);
@@ -203,7 +203,7 @@ class boss_arlokk : public CreatureScript
                                     ++_summonCountB;
                                 }
                             }
-                            events.ScheduleEvent(EVENT_SUMMON_PROWLERS, 6000, 0, PHASE_ALL);
+                            events.ScheduleEvent(EVENT_SUMMON_PROWLERS, 6s, 0, PHASE_ALL);
                             break;
                         case EVENT_MARK_OF_ARLOKK:
                         {
@@ -215,7 +215,7 @@ class boss_arlokk : public CreatureScript
                                 DoCast(target, SPELL_MARK_OF_ARLOKK, true);
                                 Talk(SAY_FEAST_PROWLER, target);
                             }
-                            events.ScheduleEvent(EVENT_MARK_OF_ARLOKK, urand(120000, 130000));
+                            events.ScheduleEvent(EVENT_MARK_OF_ARLOKK, 2min, 130s);
                             break;
                         }
                         case EVENT_TRANSFORM:
@@ -235,19 +235,19 @@ class boss_arlokk : public CreatureScript
                             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE|UNIT_FLAG_NOT_SELECTABLE);
                             DoCast(me, SPELL_VANISH_VISUAL);
                             DoCast(me, SPELL_VANISH);
-                            events.ScheduleEvent(EVENT_VANISH, 1000, 0, PHASE_ONE);
+                            events.ScheduleEvent(EVENT_VANISH, 1s, 0, PHASE_ONE);
                             break;
                         }
                         case EVENT_VANISH:
                             DoCast(me, SPELL_SUPER_INVIS);
                             me->SetWalk(false);
                             me->GetMotionMaster()->MovePoint(0, frand(-11551.0f, -11508.0f), frand(-1638.0f, -1617.0f), me->GetPositionZ());
-                            events.ScheduleEvent(EVENT_VANISH_2, 9000, 0, PHASE_ONE);
+                            events.ScheduleEvent(EVENT_VANISH_2, 9s, 0, PHASE_ONE);
                             break;
                         case EVENT_VANISH_2:
                             DoCast(me, SPELL_VANISH);
                             DoCast(me, SPELL_SUPER_INVIS);
-                            events.ScheduleEvent(EVENT_VISIBLE, urand(7000, 10000), 0, PHASE_ONE);
+                            events.ScheduleEvent(EVENT_VISIBLE, 7s, 10s, 0, PHASE_ONE);
                             break;
                         case EVENT_VISIBLE:
                             me->SetReactState(REACT_AGGRESSIVE);
@@ -256,14 +256,14 @@ class boss_arlokk : public CreatureScript
                                 AttackStart(target);
                             me->RemoveAura(SPELL_SUPER_INVIS);
                             me->RemoveAura(SPELL_VANISH);
-                            events.ScheduleEvent(EVENT_RAVAGE, urand(10000, 14000), 0, PHASE_TWO);
-                            events.ScheduleEvent(EVENT_TRANSFORM_BACK, urand(15000, 18000), 0, PHASE_TWO);
+                            events.ScheduleEvent(EVENT_RAVAGE, 10s, 14s, 0, PHASE_TWO);
+                            events.ScheduleEvent(EVENT_TRANSFORM_BACK, 15s, 18s, 0, PHASE_TWO);
                             events.SetPhase(PHASE_TWO);
                             me->HandleStatModifier(UNIT_MOD_DAMAGE_MAINHAND, TOTAL_PCT, 35.0f, true); // hack
                             break;
                         case EVENT_RAVAGE:
                             DoCastVictim(SPELL_RAVAGE, true);
-                            events.ScheduleEvent(EVENT_RAVAGE, urand(10000, 14000), 0, PHASE_TWO);
+                            events.ScheduleEvent(EVENT_RAVAGE, 10s, 14s, 0, PHASE_TWO);
                             break;
                         case EVENT_TRANSFORM_BACK:
                         {
@@ -278,9 +278,9 @@ class boss_arlokk : public CreatureScript
                             me->UpdateDamagePhysical(BASE_ATTACK);
                             */
                             me->HandleStatModifier(UNIT_MOD_DAMAGE_MAINHAND, TOTAL_PCT, 35.0f, false); // hack
-                            events.ScheduleEvent(EVENT_SHADOW_WORD_PAIN, urand(4000, 7000), 0, PHASE_ONE);
-                            events.ScheduleEvent(EVENT_GOUGE, urand(12000, 15000), 0, PHASE_ONE);
-                            events.ScheduleEvent(EVENT_TRANSFORM, urand(16000, 20000), 0, PHASE_ONE);
+                            events.ScheduleEvent(EVENT_SHADOW_WORD_PAIN, 4s, 7s, 0, PHASE_ONE);
+                            events.ScheduleEvent(EVENT_GOUGE, 12s, 15s, 0, PHASE_ONE);
+                            events.ScheduleEvent(EVENT_TRANSFORM, 15s, 20s, 0, PHASE_ONE);
                             events.SetPhase(PHASE_ONE);
                             break;
                         }
@@ -346,7 +346,7 @@ class npc_zulian_prowler : public CreatureScript
 
                 if (Unit* arlokk = ObjectAccessor::GetUnit(*me, _instance->GetData64(NPC_ARLOKK)))
                     me->GetMotionMaster()->MovePoint(0, arlokk->GetPositionX(), arlokk->GetPositionY(), arlokk->GetPositionZ());
-                _events.ScheduleEvent(EVENT_ATTACK, 6000);
+                _events.ScheduleEvent(EVENT_ATTACK, 6s);
             }
 
             void EnterCombat(Unit* /*who*/)

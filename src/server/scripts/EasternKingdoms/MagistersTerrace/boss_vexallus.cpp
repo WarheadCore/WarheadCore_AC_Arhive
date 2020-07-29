@@ -109,9 +109,9 @@ public:
             Talk(SAY_AGGRO);
             instance->SetData(DATA_VEXALLUS_EVENT, IN_PROGRESS);
 
-            events.ScheduleEvent(EVENT_SPELL_CHAIN_LIGHTNING, 8000);
-            events.ScheduleEvent(EVENT_SPELL_ARCANE_SHOCK, 5000);
-            events.ScheduleEvent(EVENT_HEALTH_CHECK, 1000);
+            events.ScheduleEvent(EVENT_SPELL_CHAIN_LIGHTNING, 8s);
+            events.ScheduleEvent(EVENT_SPELL_ARCANE_SHOCK, 5s);
+            events.ScheduleEvent(EVENT_HEALTH_CHECK, 1s);
         }
 
         void JustSummoned(Creature* summon)
@@ -165,17 +165,17 @@ public:
                         else
                             me->CastSpell(me, SPELL_SUMMON_PURE_ENERGY_N, false);
                     }
-                    events.ScheduleEvent(EVENT_HEALTH_CHECK, 0);
+                    events.ScheduleEvent(EVENT_HEALTH_CHECK, 0s);
                     break;
                 case EVENT_SPELL_CHAIN_LIGHTNING:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         me->CastSpell(target, DUNGEON_MODE(SPELL_CHAIN_LIGHTNING_N, SPELL_CHAIN_LIGHTNING_H), false);
-                    events.ScheduleEvent(EVENT_SPELL_CHAIN_LIGHTNING, 8000);
+                    events.ScheduleEvent(EVENT_SPELL_CHAIN_LIGHTNING, 8s);
                     break;
                 case EVENT_SPELL_ARCANE_SHOCK:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 20.0f))
                         me->CastSpell(target, DUNGEON_MODE(SPELL_ARCANE_SHOCK_N, SPELL_ARCANE_SHOCK_H), false);
-                    events.ScheduleEvent(EVENT_SPELL_ARCANE_SHOCK, 8000);
+                    events.ScheduleEvent(EVENT_SPELL_ARCANE_SHOCK, 8s);
                     break;
             }
 

@@ -134,13 +134,13 @@ public:
             instance->SetData(DATA_KAELTHAS_EVENT, IN_PROGRESS);
             me->SetInCombatWithZone();
 
-            events.ScheduleEvent(EVENT_SPELL_FIREBALL, 0);
-            events.ScheduleEvent(EVENT_SPELL_PHOENIX, 15000);
-            events.ScheduleEvent(EVENT_SPELL_FLAMESTRIKE, 22000);
-            events.ScheduleEvent(EVENT_CHECK_HEALTH, 1000);
+            events.ScheduleEvent(EVENT_SPELL_FIREBALL, 0s);
+            events.ScheduleEvent(EVENT_SPELL_PHOENIX, 15s);
+            events.ScheduleEvent(EVENT_SPELL_FLAMESTRIKE, 22s);
+            events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
 
             if (IsHeroic())
-                events.ScheduleEvent(EVENT_SPELL_SHOCK_BARRIER, 50000);
+                events.ScheduleEvent(EVENT_SPELL_SHOCK_BARRIER, 50s);
         }
 
         void MoveInLineOfSight(Unit* who)
@@ -149,7 +149,7 @@ public:
             {
                 Talk(SAY_AGGRO);
                 introSpeak = true;
-                events2.ScheduleEvent(EVENT_INIT_COMBAT, 35000);
+                events2.ScheduleEvent(EVENT_INIT_COMBAT, 35s);
             }
 
             ScriptedAI::MoveInLineOfSight(who);
@@ -168,7 +168,7 @@ public:
                     me->SetReactState(REACT_PASSIVE);
                     LapseAction(ACTION_REMOVE_FLY);
                     events.Reset();
-                    events2.ScheduleEvent(EVENT_FINISH_TALK, 6000);
+                    events2.ScheduleEvent(EVENT_FINISH_TALK, 6s);
                     Talk(SAY_DEATH);
                 }
             }
@@ -221,7 +221,7 @@ public:
             {
                 case EVENT_SPELL_FIREBALL:
                     me->CastSpell(me->GetVictim(), DUNGEON_MODE(SPELL_FIREBALL_N, SPELL_FIREBALL_H), false);
-                    events.ScheduleEvent(EVENT_SPELL_FIREBALL, urand(3000, 4500));
+                    events.ScheduleEvent(EVENT_SPELL_FIREBALL, 3s, 4500ms);
                     break;
                 case EVENT_SPELL_FLAMESTRIKE:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
@@ -229,17 +229,17 @@ public:
                         me->CastSpell(target, SPELL_FLAMESTRIKE_SUMMON, true);
                         Talk(SAY_FLAMESTRIKE);
                     }
-                    events.ScheduleEvent(EVENT_SPELL_FLAMESTRIKE, 25000);
+                    events.ScheduleEvent(EVENT_SPELL_FLAMESTRIKE, 25s);
                     break;
                 case EVENT_SPELL_SHOCK_BARRIER:
                     me->CastSpell(me, SPELL_SHOCK_BARRIER, true);
                     me->CastCustomSpell(SPELL_PYROBLAST, SPELLVALUE_MAX_TARGETS, 1, (Unit*)NULL, false);
-                    events.ScheduleEvent(EVENT_SPELL_SHOCK_BARRIER, 50000);
+                    events.ScheduleEvent(EVENT_SPELL_SHOCK_BARRIER, 50s);
                     break;
                 case EVENT_SPELL_PHOENIX:
                     Talk(SAY_PHOENIX);
                     me->CastSpell(me, SPELL_PHOENIX, false);
-                    events.ScheduleEvent(EVENT_SPELL_PHOENIX, 60000);
+                    events.ScheduleEvent(EVENT_SPELL_PHOENIX, 1min);
                     break;
                 case EVENT_CHECK_HEALTH:
                     if (HealthBelowPct(50))
@@ -253,24 +253,24 @@ public:
                         me->GetMotionMaster()->MoveIdle();
 
                         events.SetPhase(1);
-                        events.ScheduleEvent(EVENT_GRAVITY_LAPSE_1_1, 0);
+                        events.ScheduleEvent(EVENT_GRAVITY_LAPSE_1_1, 0s);
                         break;
                     }
-                    events.ScheduleEvent(EVENT_CHECK_HEALTH, 500);
+                    events.ScheduleEvent(EVENT_CHECK_HEALTH, 500ms);
                     break;
                 case EVENT_GRAVITY_LAPSE_1_1:
                 case EVENT_GRAVITY_LAPSE_1_2:
                     Talk(eventId == EVENT_GRAVITY_LAPSE_1_1 ? SAY_GRAVITY_LAPSE : SAY_RECAST_GRAVITY);
                     me->CastSpell(me, SPELL_GRAVITY_LAPSE_INITIAL, false);
-                    events.ScheduleEvent(EVENT_GRAVITY_LAPSE_2, 2000);
+                    events.ScheduleEvent(EVENT_GRAVITY_LAPSE_2, 2s);
                     break;
                 case EVENT_GRAVITY_LAPSE_2:
                     LapseAction(ACTION_TELEPORT_PLAYERS);
-                    events.ScheduleEvent(EVENT_GRAVITY_LAPSE_3, 1000);
+                    events.ScheduleEvent(EVENT_GRAVITY_LAPSE_3, 1s);
                     break;
                 case EVENT_GRAVITY_LAPSE_3:
                     LapseAction(ACTION_KNOCKUP);
-                    events.ScheduleEvent(EVENT_GRAVITY_LAPSE_4, 1000);
+                    events.ScheduleEvent(EVENT_GRAVITY_LAPSE_4, 1s);
                     break;
                 case EVENT_GRAVITY_LAPSE_4:
                     LapseAction(ACTION_ALLOW_FLY);
@@ -278,14 +278,14 @@ public:
                         me->CastSpell(me, SPELL_SUMMON_ARCANE_SPHERE, true);
 
                     me->CastSpell(me, SPELL_GRAVITY_LAPSE_CHANNEL, false);
-                    events.ScheduleEvent(EVENT_GRAVITY_LAPSE_5, 30000);
+                    events.ScheduleEvent(EVENT_GRAVITY_LAPSE_5, 30s);
                     break;
                 case EVENT_GRAVITY_LAPSE_5:
                     LapseAction(ACTION_REMOVE_FLY);
                     me->InterruptNonMeleeSpells(false);
                     Talk(SAY_TIRED);
                     me->CastSpell(me, SPELL_POWER_FEEDBACK, false);
-                    events.ScheduleEvent(EVENT_GRAVITY_LAPSE_1_2, 10000);
+                    events.ScheduleEvent(EVENT_GRAVITY_LAPSE_1_2, 10s);
                     break;
             }
 

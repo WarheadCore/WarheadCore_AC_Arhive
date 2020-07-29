@@ -209,7 +209,7 @@ public:
                                 nefarian->DespawnOrUnsummon();
                             break;
                         case FAIL:
-                            _events.ScheduleEvent(EVENT_RESPAWN_NEFARIUS, 15*IN_MILLISECONDS*MINUTE);
+                            _events.ScheduleEvent(EVENT_RESPAWN_NEFARIUS, 15min);
                             SetBossState(BOSS_NEFARIAN, NOT_STARTED);
                             break;
                         default:
@@ -245,7 +245,7 @@ public:
                 switch (data)
                 {
                     case IN_PROGRESS:
-                        _events.ScheduleEvent(EVENT_RAZOR_SPAWN, 45*IN_MILLISECONDS);
+                        _events.ScheduleEvent(EVENT_RAZOR_SPAWN, 45s);
                         EggEvent = data;
                         EggCount = 0;
                         break;
@@ -263,7 +263,7 @@ public:
                                 razor->RemoveAurasDueToSpell(42013); // MindControl
                                 DoRemoveAurasDueToSpellOnPlayers(42013);
                             }
-                            _events.ScheduleEvent(EVENT_RAZOR_PHASE_TWO, IN_MILLISECONDS);
+                            _events.ScheduleEvent(EVENT_RAZOR_PHASE_TWO, 1s);
                             _events.CancelEvent(EVENT_RAZOR_SPAWN);
                         }
                         if (EggEvent == NOT_STARTED)
@@ -295,7 +295,7 @@ public:
                         for (uint8 i = urand(2, 5); i > 0 ; --i)
                             if (Creature* summon =  instance->SummonCreature(Entry[urand(0, 4)], SummonPosition[urand(0, 7)]))
                                 summon->SetInCombatWithZone();
-                        _events.ScheduleEvent(EVENT_RAZOR_SPAWN, urand(12, 17)*IN_MILLISECONDS);
+                        _events.ScheduleEvent(EVENT_RAZOR_SPAWN, 12s, 17s);
                         break;
                     case EVENT_RAZOR_PHASE_TWO:
                         _events.CancelEvent(EVENT_RAZOR_SPAWN);

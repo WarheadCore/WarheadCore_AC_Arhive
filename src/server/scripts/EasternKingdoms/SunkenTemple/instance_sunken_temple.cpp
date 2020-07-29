@@ -98,7 +98,7 @@ class instance_sunken_temple : public InstanceMapScript
                 switch (type)
                 {
                     case DATA_STATUES:
-                        _events.ScheduleEvent(DATA_STATUES, 0);
+                        _events.ScheduleEvent(DATA_STATUES, 0s);
                         break;
                     case DATA_DEFENDER_KILLED:
                         ++_defendersKilled;

@@ -69,7 +69,7 @@ class boss_curator : public CreatureScript
                 if (events.GetNextEventTime(EVENT_KILL_TALK) == 0)
                 {
                     Talk(SAY_KILL);
-                    events.ScheduleEvent(EVENT_KILL_TALK, 5000);
+                    events.ScheduleEvent(EVENT_KILL_TALK, 5s);
                 }
             }
 
@@ -84,10 +84,10 @@ class boss_curator : public CreatureScript
                 BossAI::EnterCombat(who);
                 Talk(SAY_AGGRO);
 
-                events.ScheduleEvent(EVENT_SPELL_HATEFUL_BOLT, 10000);
-                events.ScheduleEvent(EVENT_SPELL_ASTRAL_FLARE, 6000);
-                events.ScheduleEvent(EVENT_SPELL_BERSERK, 600000);
-                events.ScheduleEvent(EVENT_CHECK_HEALTH, 1000);
+                events.ScheduleEvent(EVENT_SPELL_HATEFUL_BOLT, 10s);
+                events.ScheduleEvent(EVENT_SPELL_ASTRAL_FLARE, 6s);
+                events.ScheduleEvent(EVENT_SPELL_BERSERK, 10min);
+                events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
                 DoZoneInCombat();
             }
 
@@ -122,7 +122,7 @@ class boss_curator : public CreatureScript
                             Talk(SAY_ENRAGE);
                             break;
                         }
-                        events.ScheduleEvent(EVENT_CHECK_HEALTH, 1000);
+                        events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
                         break;
                     case EVENT_SPELL_BERSERK:
                         Talk(SAY_ENRAGE);
@@ -132,7 +132,9 @@ class boss_curator : public CreatureScript
                     case EVENT_SPELL_HATEFUL_BOLT:
                         if (Unit* target = SelectTarget(SELECT_TARGET_TOPAGGRO, urand(1, 2), 40.0f))
                             me->CastSpell(target, SPELL_HATEFUL_BOLT, false);
-                        events.ScheduleEvent(EVENT_SPELL_HATEFUL_BOLT, urand(5000, 7500) * (events.GetNextEventTime(EVENT_SPELL_BERSERK) == 0 ? 1 : 2));
+                        
+                        uint32 coef = events.GetNextEventTime(EVENT_SPELL_BERSERK) == 0 ? 1 : 2;
+                        events.ScheduleEvent(EVENT_SPELL_HATEFUL_BOLT, Seconds(5 * coef), Seconds(7 * coef));
                         break;
                     case EVENT_SPELL_ASTRAL_FLARE:
                     {
@@ -145,14 +147,14 @@ class boss_curator : public CreatureScript
                             me->CastSpell(me, SPELL_EVOCATION, false);
 
                             events.DelayEvents(20000);
-                            events.ScheduleEvent(EVENT_SPELL_ASTRAL_FLARE, 20000);
+                            events.ScheduleEvent(EVENT_SPELL_ASTRAL_FLARE, 20s);
                         }
                         else
                         {
                             if (roll_chance_i(50))
                                 Talk(SAY_SUMMON);
 
-                            events.ScheduleEvent(EVENT_SPELL_ASTRAL_FLARE, 10000);
+                            events.ScheduleEvent(EVENT_SPELL_ASTRAL_FLARE, 10s);
                         }
 
                         break;

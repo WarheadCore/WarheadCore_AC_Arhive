@@ -177,7 +177,7 @@ public:
             else if (param == ACTION_KALEC_DIED)
             {
                 events.Reset();
-                events2.ScheduleEvent(EVENT_TALK_BAD_1, 0);
+                events2.ScheduleEvent(EVENT_TALK_BAD_1, 0s);
                 ClearPlayerAuras();
                 return;
             }
@@ -185,7 +185,7 @@ public:
             if (me->HasAura(SPELL_BANISH) && sathBanished)
             {
                 events.Reset();
-                events2.ScheduleEvent(EVENT_TALK_GOOD_1, 1000);
+                events2.ScheduleEvent(EVENT_TALK_GOOD_1, 1s);
                 ClearPlayerAuras();
                 if (Creature* Sath = ObjectAccessor::GetCreature(*me, instance->GetData64(NPC_SATHROVARR)))
                 {
@@ -205,15 +205,15 @@ public:
         void EnterCombat(Unit* who)
         {
             BossAI::EnterCombat(who);
-            events.ScheduleEvent(EVENT_ARCANE_BUFFET, 6000);
-            events.ScheduleEvent(EVENT_FROST_BREATH, 15000);
-            events.ScheduleEvent(EVENT_WILD_MAGIC, 10000);
-            events.ScheduleEvent(EVENT_TAIL_LASH, 25000);
-            events.ScheduleEvent(EVENT_SPECTRAL_BLAST, 20000);
-            events.ScheduleEvent(EVENT_CHECK_POS, 5000);
-            events.ScheduleEvent(EVENT_CHECK_HEALTH, 1000);
-            events.ScheduleEvent(EVENT_CHECK_HEALTH2, 1000);
-            events.ScheduleEvent(EVENT_SPAWN_SPECTRALS, 16000);
+            events.ScheduleEvent(EVENT_ARCANE_BUFFET, 6s);
+            events.ScheduleEvent(EVENT_FROST_BREATH, 15s);
+            events.ScheduleEvent(EVENT_WILD_MAGIC, 10s);
+            events.ScheduleEvent(EVENT_TAIL_LASH, 25s);
+            events.ScheduleEvent(EVENT_SPECTRAL_BLAST, 20s);
+            events.ScheduleEvent(EVENT_CHECK_POS, 5s);
+            events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
+            events.ScheduleEvent(EVENT_CHECK_HEALTH2, 1s);
+            events.ScheduleEvent(EVENT_SPAWN_SPECTRALS, 16s);
 
             me->SetStandState(UNIT_STAND_STATE_STAND);
             Talk(SAY_EVIL_AGGRO);
@@ -243,7 +243,7 @@ public:
                     me->CombatStop();
                     me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                     me->setFaction(35);
-                    events2.ScheduleEvent(EVENT_TALK_GOOD_2, 1000);
+                    events2.ScheduleEvent(EVENT_TALK_GOOD_2, 1s);
                     break;
                 case EVENT_TALK_GOOD_2:
                     if (Creature* Sath = ObjectAccessor::GetCreature(*me, instance->GetData64(NPC_SATHROVARR)))
@@ -251,16 +251,16 @@ public:
                         summons.Despawn(Sath);
                         Unit::Kill(me, Sath);
                     }
-                    events2.ScheduleEvent(EVENT_TALK_GOOD_3, 8000);
+                    events2.ScheduleEvent(EVENT_TALK_GOOD_3, 8s);
                     break;
                 case EVENT_TALK_GOOD_3:
                     Talk(SAY_GOOD_PLRWIN);
-                    events2.ScheduleEvent(EVENT_TALK_GOOD_4, 10000);
+                    events2.ScheduleEvent(EVENT_TALK_GOOD_4, 10s);
                     break;
                 case EVENT_TALK_GOOD_4:
                     me->SetDisableGravity(true);
                     me->HandleEmoteCommand(EMOTE_ONESHOT_LIFTOFF);
-                    events2.ScheduleEvent(EVENT_TALK_GOOD_5, 10000);
+                    events2.ScheduleEvent(EVENT_TALK_GOOD_5, 10s);
                     break;
                 case EVENT_TALK_GOOD_5:
                     me->SetVisible(false);
@@ -272,12 +272,12 @@ public:
                     me->RemoveAllAuras();
                     me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                     Talk(SAY_EVIL_ENRAGE);
-                    events2.ScheduleEvent(EVENT_TALK_BAD_2, 3000);
+                    events2.ScheduleEvent(EVENT_TALK_BAD_2, 3s);
                     break;
                 case EVENT_TALK_BAD_2:
                     me->SetDisableGravity(true);
                     me->HandleEmoteCommand(EMOTE_ONESHOT_LIFTOFF);
-                    events2.ScheduleEvent(EVENT_TALK_BAD_3, 15000);
+                    events2.ScheduleEvent(EVENT_TALK_BAD_3, 15s);
                     break;
                 case EVENT_TALK_BAD_3:
                     me->SetVisible(false);
@@ -303,23 +303,23 @@ public:
                     break;
                 case EVENT_ARCANE_BUFFET:
                     me->CastSpell(me, SPELL_ARCANE_BUFFET, false);
-                    events.ScheduleEvent(EVENT_ARCANE_BUFFET, 8000);
+                    events.ScheduleEvent(EVENT_ARCANE_BUFFET, 8s);
                     break;
                 case EVENT_FROST_BREATH:
                     me->CastSpell(me->GetVictim(), SPELL_FROST_BREATH, false);
-                    events.ScheduleEvent(EVENT_FROST_BREATH, 15000);
+                    events.ScheduleEvent(EVENT_FROST_BREATH, 15s);
                     break;
                 case EVENT_TAIL_LASH:
                     me->CastSpell(me->GetVictim(), SPELL_TAIL_LASH, false);
-                    events.ScheduleEvent(EVENT_TAIL_LASH, 15000);
+                    events.ScheduleEvent(EVENT_TAIL_LASH, 15s);
                     break;
                 case EVENT_WILD_MAGIC:
                     me->CastCustomSpell(RAND(44978, 45001, 45002, 45004, 45006, 45010), SPELLVALUE_MAX_TARGETS, 1, me, false);
-                    events.ScheduleEvent(EVENT_WILD_MAGIC, 20000);
+                    events.ScheduleEvent(EVENT_WILD_MAGIC, 20s);
                     break;
                 case EVENT_SPECTRAL_BLAST:
                     me->CastSpell(me, SPELL_SPECTRAL_BLAST, false);
-                    events.ScheduleEvent(EVENT_SPECTRAL_BLAST, urand(15000, 25000));
+                    events.ScheduleEvent(EVENT_SPECTRAL_BLAST, 15s, 25s);
                     break;
                 case EVENT_CHECK_POS:
                     if (me->GetDistance(me->GetHomePosition()) > 50.0f)
@@ -327,7 +327,7 @@ public:
                         EnterEvadeMode();
                         return;
                     }
-                    events.ScheduleEvent(EVENT_CHECK_POS, 5000);
+                    events.ScheduleEvent(EVENT_CHECK_POS, 5s);
                     break;
                 case EVENT_CHECK_HEALTH:
                     if (me->HealthBelowPct(10))
@@ -337,7 +337,7 @@ public:
                         DoAction(ACTION_ENRAGE);
                         break;
                     }
-                    events.ScheduleEvent(EVENT_CHECK_HEALTH, 1000);
+                    events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
                     break;
                 case EVENT_CHECK_HEALTH2:
                     if (me->HealthBelowPct(1))
@@ -345,7 +345,7 @@ public:
                         DoAction(ACTION_BANISH);
                         break;
                     }
-                    events.ScheduleEvent(EVENT_CHECK_HEALTH2, 1000);
+                    events.ScheduleEvent(EVENT_CHECK_HEALTH2, 1s);
                     break;
             }
 
@@ -396,9 +396,9 @@ public:
                 me->SetDisplayId(MODEL_KALECGOS_DRAGON);
                 me->SetDisableGravity(true);
                 me->GetMotionMaster()->MovePoint(0, 1483.30f, 657.99f, 28.0f, false, true);
-                events2.ScheduleEvent(EVENT_KALEC_SCENE_1, 9000);
-                events2.ScheduleEvent(EVENT_KALEC_SCENE_2, 16000);
-                events2.ScheduleEvent(EVENT_KALEC_SCENE_3, 22000);
+                events2.ScheduleEvent(EVENT_KALEC_SCENE_1, 9s);
+                events2.ScheduleEvent(EVENT_KALEC_SCENE_2, 16s);
+                events2.ScheduleEvent(EVENT_KALEC_SCENE_3, 22s);
             }
             else
                 me->CastSpell(me, SPELL_SPECTRAL_INVISIBILITY, true);
@@ -412,10 +412,10 @@ public:
 
         void EnterCombat(Unit*)
         {
-            events.ScheduleEvent(EVENT_CHECK_HEALTH, 1000);
-            events.ScheduleEvent(EVENT_CHECK_HEALTH2, 1000);
-            events.ScheduleEvent(EVENT_SPELL_REVITALIZE, 5000);
-            events.ScheduleEvent(EVENT_SPELL_HEROIC_STRIKE, 3000);
+            events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
+            events.ScheduleEvent(EVENT_CHECK_HEALTH2, 1s);
+            events.ScheduleEvent(EVENT_SPELL_REVITALIZE, 5s);
+            events.ScheduleEvent(EVENT_SPELL_HEROIC_STRIKE, 3s);
             Talk(SAY_GOOD_AGGRO);
         }
 
@@ -461,7 +461,7 @@ public:
                         Talk(SAY_GOOD_NEAR_DEATH);
                         break;
                     }
-                    events.ScheduleEvent(EVENT_CHECK_HEALTH, 1000);
+                    events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
                     break;
                 case EVENT_CHECK_HEALTH2:
                     if (me->HealthBelowPct(10))
@@ -469,15 +469,15 @@ public:
                         Talk(SAY_GOOD_NEAR_DEATH2);
                         break;
                     }
-                    events.ScheduleEvent(EVENT_CHECK_HEALTH2, 1000);
+                    events.ScheduleEvent(EVENT_CHECK_HEALTH2, 1s);
                     break;
                 case EVENT_SPELL_REVITALIZE:
                     me->CastSpell(me, SPELL_REVITALIZE, false);
-                    events.ScheduleEvent(EVENT_SPELL_REVITALIZE, 10000);
+                    events.ScheduleEvent(EVENT_SPELL_REVITALIZE, 10s);
                     break;
                 case EVENT_SPELL_HEROIC_STRIKE:
                     me->CastSpell(me->GetVictim(), SPELL_HEROIC_STRIKE, false);
-                    events.ScheduleEvent(EVENT_SPELL_HEROIC_STRIKE, 5000);
+                    events.ScheduleEvent(EVENT_SPELL_HEROIC_STRIKE, 5s);
                     break;
             }
 
@@ -517,11 +517,11 @@ public:
             me->CastSpell(me, SPELL_DEMONIC_VISUAL, true);
             me->CastSpell(me, SPELL_SPECTRAL_INVISIBILITY, true);
 
-            events.ScheduleEvent(EVENT_SHADOW_BOLT, 7000);
-            events.ScheduleEvent(EVENT_AGONY_CURSE, 20000);
-            events.ScheduleEvent(EVENT_CORRUPTION_STRIKE, 13000);
-            events.ScheduleEvent(EVENT_CHECK_HEALTH, 1000);
-            events.ScheduleEvent(EVENT_CHECK_HEALTH2, 1000);
+            events.ScheduleEvent(EVENT_SHADOW_BOLT, 7s);
+            events.ScheduleEvent(EVENT_AGONY_CURSE, 20s);
+            events.ScheduleEvent(EVENT_CORRUPTION_STRIKE, 13s);
+            events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
+            events.ScheduleEvent(EVENT_CHECK_HEALTH2, 1s);
         }
 
         void EnterCombat(Unit* /*who*/)
@@ -575,17 +575,17 @@ public:
                     if (roll_chance_i(20))
                         Talk(SAY_SATH_SPELL1);
                     me->CastSpell(me->GetVictim(), SPELL_SHADOW_BOLT, false);
-                    events.ScheduleEvent(EVENT_SHADOW_BOLT, 9000);
+                    events.ScheduleEvent(EVENT_SHADOW_BOLT, 9s);
                     break;
                 case EVENT_AGONY_CURSE:
                     me->CastCustomSpell(SPELL_CURSE_OF_BOUNDLESS_AGONY, SPELLVALUE_MAX_TARGETS, 1, me, false);
-                    events.ScheduleEvent(EVENT_AGONY_CURSE, 30000);
+                    events.ScheduleEvent(EVENT_AGONY_CURSE, 30s);
                     break;
                 case EVENT_CORRUPTION_STRIKE:
                     if (roll_chance_i(20))
                         Talk(SAY_SATH_SPELL2);
                     me->CastSpell(me->GetVictim(), SPELL_CORRUPTION_STRIKE, false);
-                    events.ScheduleEvent(EVENT_CORRUPTION_STRIKE, 9000);
+                    events.ScheduleEvent(EVENT_CORRUPTION_STRIKE, 9s);
                     break;
                 case EVENT_CHECK_HEALTH:
                     if (me->HealthBelowPct(10))
@@ -596,7 +596,7 @@ public:
                         DoAction(ACTION_ENRAGE);
                         break;
                     }
-                    events.ScheduleEvent(EVENT_CHECK_HEALTH, 1000);
+                    events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
                     break;
                 case EVENT_CHECK_HEALTH2:
                     if (me->HealthBelowPct(1))
@@ -606,7 +606,7 @@ public:
                         DoAction(ACTION_BANISH);
                         break;
                     }
-                    events.ScheduleEvent(EVENT_CHECK_HEALTH2, 1000);
+                    events.ScheduleEvent(EVENT_CHECK_HEALTH2, 1s);
                     break;
             }
 

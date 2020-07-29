@@ -86,10 +86,10 @@ class boss_majordomo : public CreatureScript
             {
                 BossAI::EnterCombat(who);
                 Talk(SAY_AGGRO);
-                events.ScheduleEvent(EVENT_MAGIC_REFLECTION, 30000);
-                events.ScheduleEvent(EVENT_DAMAGE_REFLECTION, 15000);
-                events.ScheduleEvent(EVENT_BLAST_WAVE, 10000);
-                events.ScheduleEvent(EVENT_TELEPORT, 20000);
+                events.ScheduleEvent(EVENT_MAGIC_REFLECTION, 30s);
+                events.ScheduleEvent(EVENT_DAMAGE_REFLECTION, 15s);
+                events.ScheduleEvent(EVENT_BLAST_WAVE, 10s);
+                events.ScheduleEvent(EVENT_TELEPORT, 20s);
                 // Call every flamewaker around him
                 me->CallForHelp(30);
             }
@@ -110,7 +110,7 @@ class boss_majordomo : public CreatureScript
                         EnterEvadeMode();
                         Talk(SAY_DEFEAT);
                         _JustDied();
-                        events.ScheduleEvent(EVENT_OUTRO_1, 32000);
+                        events.ScheduleEvent(EVENT_OUTRO_1, 32s);
                         return;
                     }
 
@@ -126,20 +126,20 @@ class boss_majordomo : public CreatureScript
                         {
                             case EVENT_MAGIC_REFLECTION:
                                 DoCast(me, SPELL_MAGIC_REFLECTION);
-                                events.ScheduleEvent(EVENT_MAGIC_REFLECTION, 30000);
+                                events.ScheduleEvent(EVENT_MAGIC_REFLECTION, 30s);
                                 break;
                             case EVENT_DAMAGE_REFLECTION:
                                 DoCast(me, SPELL_DAMAGE_REFLECTION);
-                                events.ScheduleEvent(EVENT_DAMAGE_REFLECTION, 30000);
+                                events.ScheduleEvent(EVENT_DAMAGE_REFLECTION, 30s);
                                 break;
                             case EVENT_BLAST_WAVE:
                                 DoCastVictim(SPELL_BLAST_WAVE);
-                                events.ScheduleEvent(EVENT_BLAST_WAVE, 10000);
+                                events.ScheduleEvent(EVENT_BLAST_WAVE, 10s);
                                 break;
                             case EVENT_TELEPORT:
                                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
                                     DoCast(target, SPELL_TELEPORT);
-                                events.ScheduleEvent(EVENT_TELEPORT, 20000);
+                                events.ScheduleEvent(EVENT_TELEPORT, 20s);
                                 break;
                             default:
                                 break;
@@ -179,8 +179,8 @@ class boss_majordomo : public CreatureScript
                 {
                     me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
                     Talk(SAY_SUMMON_MAJ);
-                    events.ScheduleEvent(EVENT_OUTRO_2, 8000);
-                    events.ScheduleEvent(EVENT_OUTRO_3, 24000);
+                    events.ScheduleEvent(EVENT_OUTRO_2, 8s);
+                    events.ScheduleEvent(EVENT_OUTRO_3, 24s);
                 }
                 else if (action == ACTION_START_RAGNAROS_ALT)
                 {
