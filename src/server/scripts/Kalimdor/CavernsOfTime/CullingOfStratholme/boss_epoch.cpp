@@ -77,12 +77,12 @@ public:
         {
             Talk(SAY_AGGRO);
 
-            events.ScheduleEvent(EVENT_SPELL_CURSE_OF_EXERTION, 9000);
-            events.ScheduleEvent(EVENT_SPELL_WOUNDING_STRIKE, 3000);
-            events.ScheduleEvent(EVENT_SPELL_TIME_WARP, 25000);
+            events.ScheduleEvent(EVENT_SPELL_CURSE_OF_EXERTION, 9s);
+            events.ScheduleEvent(EVENT_SPELL_WOUNDING_STRIKE, 3s);
+            events.ScheduleEvent(EVENT_SPELL_TIME_WARP, 25s);
 
             if (IsHeroic())
-                events.ScheduleEvent(EVENT_SPELL_TIME_STOP, 20000);
+                events.ScheduleEvent(EVENT_SPELL_TIME_STOP, 20s);
         }
 
         void SpellHitTarget(Unit* target, const SpellInfo* spellInfo)

@@ -174,19 +174,19 @@ public:
                 case TYPE_CHRONO_LORD_DEJA:
                 case TYPE_TEMPORUS:
                     encounters[type] = DONE;
-                    Events.RescheduleEvent(EVENT_NEXT_PORTAL, 60000);
+                    Events.RescheduleEvent(EVENT_NEXT_PORTAL, 1min);
                     Events.SetPhase(1);
                     SaveToDB();
                     break;
                 case DATA_RIFT_KILLED:
                     if (!Events.IsInPhase(1))
-                        Events.RescheduleEvent(EVENT_NEXT_PORTAL, 4000);
+                        Events.RescheduleEvent(EVENT_NEXT_PORTAL, 4s);
                     break;
                 case DATA_MEDIVH:
                     DoUpdateWorldState(WORLD_STATE_BM, 1);
                     DoUpdateWorldState(WORLD_STATE_BM_SHIELD, _shieldPercent);
                     DoUpdateWorldState(WORLD_STATE_BM_RIFT, _currentRift);
-                    Events.RescheduleEvent(EVENT_NEXT_PORTAL, 3000);
+                    Events.RescheduleEvent(EVENT_NEXT_PORTAL, 3s);
                     break;
                 case DATA_DAMAGE_SHIELD:
                     --_shieldPercent;
@@ -291,7 +291,7 @@ public:
                 case EVENT_NEXT_PORTAL:
                     ++_currentRift;
                     DoUpdateWorldState(WORLD_STATE_BM_RIFT, _currentRift);
-                    Events.ScheduleEvent(EVENT_SUMMON_KEEPER, 6000);
+                    Events.ScheduleEvent(EVENT_SUMMON_KEEPER, 6s);
                     Events.SetPhase(0);
 
                     if (instance->GetCreature(_medivhGUID))

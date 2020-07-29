@@ -78,8 +78,8 @@ public:
         void EnterCombat(Unit* /*who*/)
         {
             me->InterruptNonMeleeSpells(false);
-            events.ScheduleEvent(EVENT_SPELL_VOID_STRIKE, 8000);
-            events.ScheduleEvent(EVENT_SPELL_CORRUPTING_BLIGHT, 12000);
+            events.ScheduleEvent(EVENT_SPELL_VOID_STRIKE, 8s);
+            events.ScheduleEvent(EVENT_SPELL_CORRUPTING_BLIGHT, 12s);
             Talk(SAY_AGGRO);
         }
 

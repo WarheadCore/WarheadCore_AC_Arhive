@@ -87,10 +87,10 @@ public:
         void EnterCombat(Unit* /*who*/)
         {
             Talk(SAY_AGGRO);
-            events.ScheduleEvent(EVENT_SPELL_CARRION_SWARM, 6000);
-            events.ScheduleEvent(EVENT_SPELL_MIND_BLAST, 11000);
-            events.ScheduleEvent(EVENT_SPELL_SLEEP, 20000);
-            events.ScheduleEvent(EVENT_SPELL_VAMPIRIC_TOUCH, 15000);
+            events.ScheduleEvent(EVENT_SPELL_CARRION_SWARM, 6s);
+            events.ScheduleEvent(EVENT_SPELL_MIND_BLAST, 11s);
+            events.ScheduleEvent(EVENT_SPELL_SLEEP, 20s);
+            events.ScheduleEvent(EVENT_SPELL_VAMPIRIC_TOUCH, 15s);
         }
 
         void JustDied(Unit* /*killer*/)

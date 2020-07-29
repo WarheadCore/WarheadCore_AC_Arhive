@@ -423,12 +423,12 @@ public:
             {
                 // Event
                 eventInRun = true;
-                actionEvents.ScheduleEvent(EVENT_ACTION_PHASE1, 0);
+                actionEvents.ScheduleEvent(EVENT_ACTION_PHASE1, 0s);
             }
             else if (param == ACTION_START_CITY)
             {
                 Talk(SAY_PHASE201);
-                actionEvents.ScheduleEvent(EVENT_ACTION_PHASE2, 12000);
+                actionEvents.ScheduleEvent(EVENT_ACTION_PHASE2, 12s);
                 SetRun(false);
                 eventInRun = true;
 
@@ -440,7 +440,7 @@ public:
                 waveGroupId = 10;
                 eventInRun = true;
                 SetRun(true);
-                actionEvents.ScheduleEvent(EVENT_ACTION_PHASE2+9, 10000);
+                actionEvents.ScheduleEvent(EVENT_ACTION_PHASE2+9, 10s);
             }
             else if (param == ACTION_START_TOWN_HALL)
             {
@@ -486,7 +486,7 @@ public:
             {
                 EnterEvadeMode();
                 eventInRun = true;
-                actionEvents.ScheduleEvent(EVENT_ACTION_PHASE5+1, 22000);
+                actionEvents.ScheduleEvent(EVENT_ACTION_PHASE5+1, 22s);
                 me->SetFacingTo(1.84f);
 
                 if (!me->GetMap()->GetPlayers().isEmpty())
@@ -579,7 +579,7 @@ public:
                     break;
                 // Inside Town Hall first scene pos
                 case 22:
-                    actionEvents.ScheduleEvent(EVENT_ACTION_PHASE3, 0);
+                    actionEvents.ScheduleEvent(EVENT_ACTION_PHASE3, 0s);
                     eventInRun = true;
                     SetEscortPaused(true);
                     break;
@@ -652,7 +652,7 @@ public:
                 // Infront of malganis
                 case 55:
                     Talk(SAY_PHASE502);
-                    actionEvents.ScheduleEvent(EVENT_ACTION_PHASE5, 7000);
+                    actionEvents.ScheduleEvent(EVENT_ACTION_PHASE5, 7s);
                     SetEscortPaused(true);
                     eventInRun = true;
                     break;
@@ -1216,7 +1216,7 @@ Creature* npc_arthas::npc_arthasAI::GetEventNpc(uint32 entry)
 void npc_arthas::npc_arthasAI::ScheduleNextEvent(uint32 currentEvent, uint32 time)
 {
     actionEvents.PopEvent();
-    actionEvents.ScheduleEvent(currentEvent+1, time);
+    actionEvents.ScheduleEvent(currentEvent+1, Milliseconds(time));
 }
 
 void npc_arthas::npc_arthasAI::SummonNextWave()
@@ -1240,8 +1240,8 @@ void npc_arthas::npc_arthasAI::EnterCombat(Unit* /*who*/)
     DoCast(me, SPELL_ARTHAS_AURA);
 
     // Fight
-    combatEvents.ScheduleEvent(EVENT_COMBAT_EXORCISM, 2000);
-    combatEvents.ScheduleEvent(EVENT_COMBAT_HEALTH_CHECK, 2000);
+    combatEvents.ScheduleEvent(EVENT_COMBAT_EXORCISM, 2s);
+    combatEvents.ScheduleEvent(EVENT_COMBAT_HEALTH_CHECK, 2s);
 }
 
 void npc_arthas::npc_arthasAI::ReorderInstance(uint32 data)
@@ -1265,7 +1265,7 @@ void npc_arthas::npc_arthasAI::ReorderInstance(uint32 data)
             if (data == COS_PROGRESS_FINISHED_CITY_INTRO)
             {
                 eventInRun = true;
-                actionEvents.RescheduleEvent(EVENT_ACTION_PHASE2+8, 10000);
+                actionEvents.RescheduleEvent(EVENT_ACTION_PHASE2+8, 10s);
             }
             else if (data == COS_PROGRESS_KILLED_MEATHOOK)
             {

@@ -66,9 +66,9 @@ public:
         void EnterCombat(Unit* /*who*/)
         {
             Talk(SAY_AGGRO);
-            events.RescheduleEvent(EVENT_SPELL_CONSTRICTING_CHAINS, 15000);
-            events.RescheduleEvent(EVENT_SPELL_DISEASE_EXPULSION, 4000);
-            events.RescheduleEvent(EVENT_SPELL_FRENZY, 20000);
+            events.RescheduleEvent(EVENT_SPELL_CONSTRICTING_CHAINS, 15s);
+            events.RescheduleEvent(EVENT_SPELL_DISEASE_EXPULSION, 4s);
+            events.RescheduleEvent(EVENT_SPELL_FRENZY, 20s);
         }
 
         void JustDied(Unit* /*killer*/)

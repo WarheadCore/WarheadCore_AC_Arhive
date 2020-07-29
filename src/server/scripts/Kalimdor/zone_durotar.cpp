@@ -99,7 +99,7 @@ class npc_tiger_matriarch_credit : public CreatureScript
            npc_tiger_matriarch_creditAI(Creature* creature) : ScriptedAI(creature)
            {
                SetCombatMovement(false);
-               events.ScheduleEvent(EVENT_CHECK_SUMMON_AURA, 2000);
+               events.ScheduleEvent(EVENT_CHECK_SUMMON_AURA, 2s);
            }
 
             void UpdateAI(uint32 diff)
@@ -129,7 +129,7 @@ class npc_tiger_matriarch_credit : public CreatureScript
                         }
                     }
 
-                    events.ScheduleEvent(EVENT_CHECK_SUMMON_AURA, 5000);
+                    events.ScheduleEvent(EVENT_CHECK_SUMMON_AURA, 5s);
                 }
             }
 
@@ -158,8 +158,8 @@ class npc_tiger_matriarch : public CreatureScript
             void EnterCombat(Unit* /*target*/)
             {
                 _events.Reset();
-                _events.ScheduleEvent(EVENT_POUNCE, 100);
-                _events.ScheduleEvent(EVENT_NOSUMMON, 50000);
+                _events.ScheduleEvent(EVENT_POUNCE, 100ms);
+                _events.ScheduleEvent(EVENT_NOSUMMON, 50s);
             }
 
             void IsSummonedBy(Unit* summoner)
@@ -230,7 +230,7 @@ class npc_tiger_matriarch : public CreatureScript
                     {
                         case EVENT_POUNCE:
                             DoCastVictim(SPELL_POUNCE);
-                            _events.ScheduleEvent(EVENT_POUNCE, 30000);
+                            _events.ScheduleEvent(EVENT_POUNCE, 30s);
                             break;
                         case EVENT_NOSUMMON: // Reapply SPELL_NO_SUMMON_AURA
                             if (Unit* tiger = ObjectAccessor::GetUnit(*me, _tigerGuid))
@@ -239,7 +239,7 @@ class npc_tiger_matriarch : public CreatureScript
                                     if (Unit* vehSummoner = tiger->ToTempSummon()->GetSummoner())
                                         me->AddAura(SPELL_NO_SUMMON_AURA, vehSummoner);
                             }
-                            _events.ScheduleEvent(EVENT_NOSUMMON, 50000);
+                            _events.ScheduleEvent(EVENT_NOSUMMON, 50s);
                             break;
                         default:
                             break;
