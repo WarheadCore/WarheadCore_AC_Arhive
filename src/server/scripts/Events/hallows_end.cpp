@@ -628,11 +628,11 @@ class npc_hallows_end_soh : public CreatureScript
                 for (std::list<Creature*>::const_iterator itr = temp.begin(); itr != temp.end(); ++itr)
                     unitList.push_back((*itr)->GetGUID());
 
-                events.ScheduleEvent(1, 3000);
-                events.ScheduleEvent(2, 5000);
-                events.ScheduleEvent(2, 7000);
-                events.ScheduleEvent(2, 10000);
-                events.ScheduleEvent(3, 15000);
+                events.ScheduleEvent(1, 3s);
+                events.ScheduleEvent(2, 5s);
+                events.ScheduleEvent(2, 7s);
+                events.ScheduleEvent(2, 10s);
+                events.ScheduleEvent(3, 15s);
             }
 
             void UpdateAI(uint32 diff)
@@ -958,7 +958,7 @@ class boss_headless_horseman : public CreatureScript
                 if (spellInfo->Id == SPELL_SUMMONING_RHYME_TARGET)
                 {
                     playerGUID = target->GetGUID();
-                    events.ScheduleEvent(EVENT_HH_PLAYER_TALK, 2000);
+                    events.ScheduleEvent(EVENT_HH_PLAYER_TALK, 2s);
                 }
             }
 
@@ -979,9 +979,9 @@ class boss_headless_horseman : public CreatureScript
                     me->MonsterYell("Here's my body, fit and pure! Now, your blackened souls I'll cure!", LANG_UNIVERSAL, 0);
 
                     if (phase == 1)
-                        events.ScheduleEvent(EVENT_HORSEMAN_CONFLAGRATION, 6000);
+                        events.ScheduleEvent(EVENT_HORSEMAN_CONFLAGRATION, 6s);
                     else if (phase == 2)
-                        events.ScheduleEvent(EVENT_SUMMON_PUMPKIN, 6000);
+                        events.ScheduleEvent(EVENT_SUMMON_PUMPKIN, 6s);
                 }
             }
 
@@ -998,8 +998,8 @@ class boss_headless_horseman : public CreatureScript
 
                         me->SetInCombatWithZone();
                         inFight = true;
-                        events.ScheduleEvent(EVENT_HORSEMAN_FOLLOW, 500);
-                        events.ScheduleEvent(EVENT_HORSEMAN_CLEAVE, 7000);
+                        events.ScheduleEvent(EVENT_HORSEMAN_FOLLOW, 500ms);
+                        events.ScheduleEvent(EVENT_HORSEMAN_CLEAVE, 7s);
                     }
                 }
             }
@@ -1034,8 +1034,8 @@ class boss_headless_horseman : public CreatureScript
                         if (phase < 2)
                             phase++;
 
-                        events.ScheduleEvent(EVENT_HORSEMAN_WHIRLWIND, 6000);
-                        events.ScheduleEvent(EVENT_HORSEMAN_CHECK_HEALTH, 1000);
+                        events.ScheduleEvent(EVENT_HORSEMAN_WHIRLWIND, 6s);
+                        events.ScheduleEvent(EVENT_HORSEMAN_CHECK_HEALTH, 1s);
                     }
                 }
             }

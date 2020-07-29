@@ -350,10 +350,10 @@ class npc_love_in_air_hummel : public CreatureScript
                         if (Unit* target = SelectTargetFromPlayerList(40.0f))
                         {
                             AttackStart(target);
-                            events.ScheduleEvent(EVENT_CALL_BAXTER, 10000);
-                            events.ScheduleEvent(EVENT_CALL_FRYE, 20000);
-                            events.ScheduleEvent(EVENT_SPELL_PERFUME_SPRAY, 7000);
-                            events.ScheduleEvent(EVENT_SPELL_CHAIN_REACTION, 12000);
+                            events.ScheduleEvent(EVENT_CALL_BAXTER, 10s);
+                            events.ScheduleEvent(EVENT_CALL_FRYE, 20s);
+                            events.ScheduleEvent(EVENT_SPELL_PERFUME_SPRAY, 7s);
+                            events.ScheduleEvent(EVENT_SPELL_CHAIN_REACTION, 12s);
                         }
                         else
                             EnterEvadeMode();
@@ -442,11 +442,11 @@ class npc_love_in_air_hummel_helper : public CreatureScript
 
                     if (me->GetEntry() == NPC_APOTHECARY_BAXTER)
                     {
-                        events.ScheduleEvent(EVENT_SPELL_PERFUME_SPRAY, 7000);
-                        events.ScheduleEvent(EVENT_SPELL_CHAIN_REACTION, 12000);
+                        events.ScheduleEvent(EVENT_SPELL_PERFUME_SPRAY, 7s);
+                        events.ScheduleEvent(EVENT_SPELL_CHAIN_REACTION, 12s);
                     }
                     else
-                        events.ScheduleEvent(EVENT_SPELL_THROW, 5000);
+                        events.ScheduleEvent(EVENT_SPELL_THROW, 5s);
                 }
             }
 
