@@ -3334,7 +3334,7 @@ void Player::GiveLevel(uint8 level)
 
 bool Player::IsMaxLevel() const
 {
-    return GetLevel() >= GetUInt32Value(PLAYER_FIELD_MAX_LEVEL);
+    return getLevel() >= GetUInt32Value(PLAYER_FIELD_MAX_LEVEL);
 }
 
 void Player::InitTalentForLevel()
