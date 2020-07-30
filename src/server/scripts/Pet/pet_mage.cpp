@@ -216,7 +216,7 @@ class npc_pet_mage_mirror_image : public CreatureScript
 
                 if (uint32 spellId = events.GetEvent())
                 {
-                    events.RescheduleEvent(spellId, spellId == 59637 ? 6500 : 2500);
+                    events.RescheduleEvent(spellId, spellId == 59637 ? 6500ms : 2500ms);
                     me->CastSpell(me->GetVictim(), spellId, false);
                 }
             }
