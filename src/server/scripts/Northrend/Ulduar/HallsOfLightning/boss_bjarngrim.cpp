@@ -323,7 +323,7 @@ public:
                     break;
                 case EVENT_BJARNGRIM_PUMMEL:
                     me->CastSpell(me->GetVictim(), SPELL_PUMMEL, false);
-                    events.RepeatEvent(1s, 2s,);
+                    events.RepeatEvent(1s, 2s);
                     break;
                 case EVENT_BJARNGRIM_KNOCK:
                     me->CastSpell(me, SPELL_KNOCK_AWAY, false);

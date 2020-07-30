@@ -156,39 +156,18 @@ public:
 
     /**
     * @name RepeatEvent
-    * @brief Repeats the mostly recently executed event.
-    * @param time Time until in milliseconds as std::chrono::duration the event occurs.
+    * @brief Repeats the most recently executed event.
+    * @param time Time until the event occurs as std::chrono type.
     */
-    void RepeatEvent(Milliseconds time)
-    {
-        RepeatEvent(uint32(time.count()));
-    }
-    
-    /**
-    * @name RepeatEvent
-    * @brief Repeats the mostly recently executed event, Equivalent to Repeat(urand(minTime, maxTime).
-    * @param time time until the event occurs.
-    */
-    void RepeatEvent(uint32 time);
+    void RepeatEvent(Milliseconds time);
 
     /**
     * @name RepeatEvent
-    * @brief Repeats the mostly recently executed event.
-    * @param minTime Minimum time as std::chrono::duration until the event occurs.
-    * @param maxTime Maximum time as std::chrono::duration until the event occurs.
+    * @brief Repeats the most recently executed event.
+    * @param minTime The minimum time until the event occurs as std::chrono type.
+    * @param maxTime The maximum time until the event occurs as std::chrono type.
     */
-    void RepeatEvent(Milliseconds minTime, Milliseconds maxTime)
-    {
-        RepeatEvent(uint32(minTime.count()), uint32(maxTime.count()));
-    }
-
-    /**
-    * @name RepeatEvent
-    * @brief Repeats the mostly recently executed event, Equivalent to Repeat(urand(minTime, maxTime).
-    * @param minTime Minimum time until the event occurs.
-    * @param maxTime Maximum time until the event occurs.
-    */
-    void RepeatEvent(uint32 minTime, uint32 maxTime);
+    void RepeatEvent(Milliseconds minTime, Milliseconds maxTime);
 
     /**
     * @name PopEvent

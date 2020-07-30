@@ -362,7 +362,7 @@ public:
                         break;
                     }
                     me->NearTeleportTo(nx, ny, 42.5f, me->GetOrientation());
-                    events.RepeatEvent(450);
+                    events.RepeatEvent(450ms);
                     }
                     break;
                 case 2:

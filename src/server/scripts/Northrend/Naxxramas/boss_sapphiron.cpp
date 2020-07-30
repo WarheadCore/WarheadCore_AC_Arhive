@@ -277,7 +277,7 @@ public:
                     if (cr)
                         cr->GetMotionMaster()->MoveRandom(40);
 
-                    events.RepeatEvent(RAID_MODE(8s, 6500ms));
+                    events.RepeatEvent(RAID_MODE(8000ms, 6500ms));
                     return;
                 }
                 case EVENT_FLIGHT_START:

@@ -671,7 +671,7 @@ class boss_algalon_the_observer : public CreatureScript
                         break;
                     case EVENT_PHASE_PUNCH:
                         me->CastSpell(me->GetVictim(), SPELL_PHASE_PUNCH, false);
-                        events.RepeatEvent(15500);
+                        events.RepeatEvent(15500ms);
                         break;
                     case EVENT_SUMMON_COLLAPSING_STAR:
                         Talk(SAY_ALGALON_COLLAPSING_STAR);

@@ -1745,11 +1745,11 @@ class npc_frostwing_vrykul : public CreatureScript
                         break;
                     case 33: // Twisted Winds
                         me->CastSpell((Unit*)NULL, 71306, false);
-                        events.RepeatEvent(35, 50s);
+                        events.RepeatEvent(35s, 50s);
                         break;
                     case 41: // Empowered Shadow Bolt
                         me->CastSpell(me->GetVictim(), 69528, false);
-                        events.RepeatEvent(2500);
+                        events.RepeatEvent(2500ms);
                         break;
                     case 42: // Summon Undead
                         me->CastSpell(me->GetVictim(), 69516, false);

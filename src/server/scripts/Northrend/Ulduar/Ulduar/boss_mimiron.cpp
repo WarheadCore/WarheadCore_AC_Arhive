@@ -2431,7 +2431,7 @@ public:
                             }
                         }
 
-                        events.RepeatEvent(5750);
+                        events.RepeatEvent(5750ms);
                     }
                     break;
             }

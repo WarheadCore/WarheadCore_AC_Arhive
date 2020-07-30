@@ -97,7 +97,7 @@ public:
                             }
 
                             ++counter;
-                            events.RepeatEvent(150);
+                            events.RepeatEvent(150ms);
                         }
                         else
                         {

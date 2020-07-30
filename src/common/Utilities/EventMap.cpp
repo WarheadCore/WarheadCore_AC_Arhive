@@ -71,12 +71,12 @@ void EventMap::RescheduleEvent(uint32 eventId, Milliseconds minTime, Millisecond
     RescheduleEvent(eventId, randtime(minTime, maxTime), group, phase);
 }
 
-void EventMap::RepeatEvent(uint32 minTime, uint32 maxTime)
+void EventMap::RepeatEvent(Milliseconds minTime, Milliseconds maxTime)
 {
-    RepeatEvent(urand(minTime, maxTime));
+    RepeatEvent(randtime(minTime, maxTime));
 }
 
-void EventMap::RepeatEvent(uint32 time)
+void EventMap::RepeatEvent(Milliseconds time)
 {
     if (Empty())
         return;

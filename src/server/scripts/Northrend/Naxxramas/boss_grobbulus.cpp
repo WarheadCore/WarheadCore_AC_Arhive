@@ -169,11 +169,14 @@ public:
                     events.RepeatEvent(20s);
                     break;
                 case EVENT_SPELL_MUTATING_INJECTION:
+                {
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 100.0f, true, -SPELL_MUTATING_INJECTION))
                         me->CastSpell(target, SPELL_MUTATING_INJECTION, false);
 
-                    events.RepeatEvent(8s + Milliseconds(120 * me->GetHealthPct()));
-                    break;
+                    uint32 coef = 120 * me->GetHealthPct();
+                    events.RepeatEvent(8s + Milliseconds(coef));
+                }
+                break;
             }
 
             DoMeleeAttackIfReady();
