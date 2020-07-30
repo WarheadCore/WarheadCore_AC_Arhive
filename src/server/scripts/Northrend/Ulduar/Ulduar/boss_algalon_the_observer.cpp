@@ -862,7 +862,7 @@ class npc_brann_bronzebeard_algalon : public CreatureScript
                 if (movementType != POINT_MOTION_TYPE)
                     return;
 
-                Seconds delay = 10ms;
+                auto delay = 10ms;
                 _currentPoint = pointId + 1;
                 switch (pointId)
                 {

@@ -149,7 +149,7 @@ class boss_gruul : public CreatureScript
             }
 
             private:
-                Seconds _caveInTimer;
+                Milliseconds _caveInTimer;
         };
 
         CreatureAI* GetAI(Creature* creature) const

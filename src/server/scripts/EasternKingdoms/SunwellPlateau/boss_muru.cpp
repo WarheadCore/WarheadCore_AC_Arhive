@@ -171,7 +171,7 @@ public:
         {
             events.Reset();
             events2.Reset();
-            events2.ScheduleEvent(EVENT_ENTROPIUS_AURAS, 0);
+            events2.ScheduleEvent(EVENT_ENTROPIUS_AURAS, 0s);
             events2.ScheduleEvent(EVENT_ENTROPIUS_COMBAT, 3s);
             me->SetReactState(REACT_PASSIVE);
         }

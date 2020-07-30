@@ -130,12 +130,14 @@ class boss_curator : public CreatureScript
                         me->CastSpell(me, SPELL_ASTRAL_DECONSTRUCTION, true);
                         break;
                     case EVENT_SPELL_HATEFUL_BOLT:
+                    {
                         if (Unit* target = SelectTarget(SELECT_TARGET_TOPAGGRO, urand(1, 2), 40.0f))
                             me->CastSpell(target, SPELL_HATEFUL_BOLT, false);
-                        
+
                         uint32 coef = events.GetNextEventTime(EVENT_SPELL_BERSERK) == 0 ? 1 : 2;
-                        events.ScheduleEvent(EVENT_SPELL_HATEFUL_BOLT, Seconds(5 * coef), Seconds(7 * coef));
-                        break;
+                        events.ScheduleEvent(EVENT_SPELL_HATEFUL_BOLT, Seconds(5) * coef, Seconds(7) * coef);
+                    }
+                    break;
                     case EVENT_SPELL_ASTRAL_FLARE:
                     {
                         me->CastSpell(me, RAND(SPELL_SUMMON_ASTRAL_FLARE1, SPELL_SUMMON_ASTRAL_FLARE2, SPELL_SUMMON_ASTRAL_FLARE3, SPELL_SUMMON_ASTRAL_FLARE4), false);

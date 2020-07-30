@@ -431,7 +431,7 @@ public:
                     }
 
                     events.DelayEvents(1000);
-                    events.ScheduleEvent(EVENT_SWEEP, 17);
+                    events.ScheduleEvent(EVENT_SWEEP, 17s);
                     return;
                 case EVENT_GRIP:
                     events.ScheduleEvent(EVENT_GRIP, 25s);

@@ -265,9 +265,12 @@ class boss_lady_vashj : public CreatureScript
                         events.ScheduleEvent(EVENT_CHECK_HEALTH2, 1s);
                         break;
                     case EVENT_SUMMON_SPOREBAT:
+                    {
                         me->CastSpell(me, SPELL_SUMMON_TOXIC_SPOREBAT, true);
-                        events.ScheduleEvent(EVENT_SUMMON_SPOREBAT, 20s - 1s * Milliseconds(std::min(count++, 16ms)));
-                        break;
+                        Milliseconds _minTime = std::min(Milliseconds(count++), 16ms);
+                        events.ScheduleEvent(EVENT_SUMMON_SPOREBAT, 20s - 1000ms * _minTime.count());
+                    }
+                    break;
                 }
 
                 if (me->GetReactState() != REACT_AGGRESSIVE || !me->isAttackReady())

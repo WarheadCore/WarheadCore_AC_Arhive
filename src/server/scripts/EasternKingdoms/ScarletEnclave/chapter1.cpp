@@ -723,7 +723,7 @@ public:
 
         void EnterCombat(Unit* /*who*/) override
         {
-            events.ScheduleEvent(EVENT_ICY_TOUCH, 1s GCD_CAST);
+            events.ScheduleEvent(EVENT_ICY_TOUCH, 1s, GCD_CAST);
             events.ScheduleEvent(EVENT_PLAGUE_STRIKE, 3s, GCD_CAST);
             events.ScheduleEvent(EVENT_BLOOD_STRIKE, 2s, GCD_CAST);
             events.ScheduleEvent(EVENT_DEATH_COIL, 5s, GCD_CAST);

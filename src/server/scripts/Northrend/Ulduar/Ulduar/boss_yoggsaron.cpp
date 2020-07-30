@@ -458,7 +458,7 @@ public:
 
             events.ScheduleEvent(EVENT_SARA_P1_DOORS_CLOSE, 15s, 0, EVENT_PHASE_ONE);
             events.ScheduleEvent(EVENT_SARA_P1_BERSERK, 15min, 0, 0);
-            events.ScheduleEvent(EVENT_SARA_P1_SUMMON, 0, 0, EVENT_PHASE_ONE);
+            events.ScheduleEvent(EVENT_SARA_P1_SUMMON, 0s, 0, EVENT_PHASE_ONE);
             events.SetPhase(EVENT_PHASE_ONE);
 
             me->MonsterYell("The time to strike at the head of the beast will soon be upon us! Focus your anger and hatred on his minions!", LANG_UNIVERSAL, 0);

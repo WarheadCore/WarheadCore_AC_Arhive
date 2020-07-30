@@ -337,7 +337,8 @@ public:
                         blockList.push_back((*itr)->GetGUID());
                         currentTarget = (*itr)->GetGUID();
                         --iceboltCount;
-                        events.ScheduleEvent(EVENT_FLIGHT_ICEBOLT, Seconds(me->GetExactDist(*itr) / 13.0f));
+                        uint32 _time = me->GetExactDist(*itr) / 13.0f;
+                        events.ScheduleEvent(EVENT_FLIGHT_ICEBOLT, Seconds(_time));
                     }
                     else
                         events.ScheduleEvent(EVENT_FLIGHT_BREATH, 1s);

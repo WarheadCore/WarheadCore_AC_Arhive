@@ -104,7 +104,7 @@ class boss_gal_darah : public CreatureScript
                 }
                 else
                 {
-                    events.RescheduleEvent(EVENT_PUNCTURE, 10s;
+                    events.RescheduleEvent(EVENT_PUNCTURE, 10s);
                     events.RescheduleEvent(EVENT_ENRAGE, 15s);
                     events.RescheduleEvent(EVENT_IMPALING_CHARGE, 21s);
                     events.RescheduleEvent(EVENT_STOMP, 5s);
