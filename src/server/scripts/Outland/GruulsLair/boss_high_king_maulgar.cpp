@@ -94,7 +94,7 @@ public:
         {
             if (events.GetNextEventTime(EVENT_RECENTLY_SPOKEN) == 0)
             {
-                events.ScheduleEvent(EVENT_RECENTLY_SPOKEN, 5000);
+                events.ScheduleEvent(EVENT_RECENTLY_SPOKEN, 5s);
                 Talk(SAY_SLAY);
             }
         }
@@ -128,10 +128,10 @@ public:
             _EnterCombat();
             Talk(SAY_AGGRO);
 
-            events.ScheduleEvent(EVENT_ARCING_SMASH, 6000);
-            events.ScheduleEvent(EVENT_MIGHTY_BLOW, 20000);
-            events.ScheduleEvent(EVENT_WHIRLWIND, 30000);
-            events.ScheduleEvent(EVENT_CHECK_HEALTH, 500);
+            events.ScheduleEvent(EVENT_ARCING_SMASH, 6s);
+            events.ScheduleEvent(EVENT_MIGHTY_BLOW, 20s);
+            events.ScheduleEvent(EVENT_WHIRLWIND, 30s);
+            events.ScheduleEvent(EVENT_CHECK_HEALTH, 500ms);
         }
 
         void UpdateAI(uint32 diff)
@@ -147,36 +147,37 @@ public:
             {
                 case EVENT_ARCING_SMASH:
                     me->CastSpell(me->GetVictim(), SPELL_ARCING_SMASH, false);
-                    events.ScheduleEvent(EVENT_ARCING_SMASH, 10000);
+                    events.ScheduleEvent(EVENT_ARCING_SMASH, 10s);
                     break;
                 case EVENT_MIGHTY_BLOW:
                     me->CastSpell(me->GetVictim(), SPELL_MIGHTY_BLOW, false);
-                    events.ScheduleEvent(EVENT_MIGHTY_BLOW, 16000);
+                    events.ScheduleEvent(EVENT_MIGHTY_BLOW, 16s);
                     break;
                 case EVENT_WHIRLWIND:
                     events.DelayEvents(15000);
                     me->CastSpell(me, SPELL_WHIRLWIND, false);
-                    events.ScheduleEvent(EVENT_WHIRLWIND, 54000);
+                    events.ScheduleEvent(EVENT_WHIRLWIND, 54s);
                     break;
                 case EVENT_CHECK_HEALTH:
                     if (me->HealthBelowPct(50))
                     {
                         Talk(SAY_ENRAGE);
                         me->CastSpell(me, SPELL_FLURRY, true);
-                        events.ScheduleEvent(EVENT_CHARGING, 0);
-                        events.ScheduleEvent(EVENT_ROAR, 3000);
+                        events.ScheduleEvent(EVENT_CHARGING, 0s);
+                        events.ScheduleEvent(EVENT_ROAR, 3s);
                         break;
                     }
-                    events.ScheduleEvent(EVENT_CHECK_HEALTH, 500);
+                    events.ScheduleEvent(EVENT_CHECK_HEALTH, 500ms);
                     break;
                 case EVENT_ROAR:
                     me->CastSpell(me, SPELL_ROAR, false);
-                    events.ScheduleEvent(EVENT_ROAR, 40000);
+                    events.ScheduleEvent(EVENT_ROAR, 40s);
                     break;
                 case EVENT_CHARGING:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
                         me->CastSpell(target, SPELL_BERSERKER_C, false);
-                    events.ScheduleEvent(EVENT_CHARGING, 35000);
+
+                    events.ScheduleEvent(EVENT_CHARGING, 35s);
                     break;
             }
 
@@ -227,9 +228,9 @@ public:
             me->SetInCombatWithZone();
             instance->SetBossState(DATA_MAULGAR, IN_PROGRESS);
 
-            events.ScheduleEvent(EVENT_ADD_ABILITY1, 10000);
-            events.ScheduleEvent(EVENT_ADD_ABILITY2, 15000);
-            events.ScheduleEvent(EVENT_ADD_ABILITY3, 20000);
+            events.ScheduleEvent(EVENT_ADD_ABILITY1, 10s);
+            events.ScheduleEvent(EVENT_ADD_ABILITY2, 15s);
+            events.ScheduleEvent(EVENT_ADD_ABILITY3, 20s);
         }
 
         void JustDied(Unit* /*killer*/)
@@ -255,16 +256,16 @@ public:
             {
                 case EVENT_ADD_ABILITY1:
                     me->CastSpell(me->GetVictim(), SPELL_DARK_DECAY, false);
-                    events.ScheduleEvent(EVENT_ADD_ABILITY1, 20000);
+                    events.ScheduleEvent(EVENT_ADD_ABILITY1, 20s);
                     break;
                 case EVENT_ADD_ABILITY2:
                     me->CastSpell(me, SPELL_SUMMON_WFH, false);
-                    events.ScheduleEvent(EVENT_ADD_ABILITY2, 30000);
+                    events.ScheduleEvent(EVENT_ADD_ABILITY2, 30s);
                     break;
                 case EVENT_ADD_ABILITY3:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         me->CastSpell(target, SPELL_DEATH_COIL, false);
-                    events.ScheduleEvent(EVENT_ADD_ABILITY3, 20000);
+                    events.ScheduleEvent(EVENT_ADD_ABILITY3, 20s);
                     break;
             }
 
@@ -304,10 +305,10 @@ public:
             me->SetInCombatWithZone();
             instance->SetBossState(DATA_MAULGAR, IN_PROGRESS);
 
-            events.ScheduleEvent(EVENT_ADD_ABILITY1, 5000);
-            events.ScheduleEvent(EVENT_ADD_ABILITY2, 10000);
-            events.ScheduleEvent(EVENT_ADD_ABILITY3, 20000);
-            events.ScheduleEvent(EVENT_ADD_ABILITY4, 30000);
+            events.ScheduleEvent(EVENT_ADD_ABILITY1, 5s);
+            events.ScheduleEvent(EVENT_ADD_ABILITY2, 10s);
+            events.ScheduleEvent(EVENT_ADD_ABILITY3, 20s);
+            events.ScheduleEvent(EVENT_ADD_ABILITY4, 30s);
         }
 
         void JustDied(Unit* /*killer*/)
@@ -329,20 +330,20 @@ public:
                 case EVENT_ADD_ABILITY1:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
                         me->CastSpell(target, SPELL_GREATER_POLYMORPH, false);
-                    events.ScheduleEvent(EVENT_ADD_ABILITY1, 20000);
+                    events.ScheduleEvent(EVENT_ADD_ABILITY1, 20s);
                     break;
                 case EVENT_ADD_ABILITY2:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
                         me->CastSpell(target, SPELL_LIGHTNING_BOLT, false);
-                    events.ScheduleEvent(EVENT_ADD_ABILITY2, 15000);
+                    events.ScheduleEvent(EVENT_ADD_ABILITY2, 15s);
                     break;
                 case EVENT_ADD_ABILITY3:
                     me->CastSpell(me->GetVictim(), SPELL_ARCANE_SHOCK, false);
-                    events.ScheduleEvent(EVENT_ADD_ABILITY3, 20000);
+                    events.ScheduleEvent(EVENT_ADD_ABILITY3, 20s);
                     break;
                 case EVENT_ADD_ABILITY4:
                     me->CastSpell(me, SPELL_ARCANE_EXPLOSION, false);
-                    events.ScheduleEvent(EVENT_ADD_ABILITY4, 30000);
+                    events.ScheduleEvent(EVENT_ADD_ABILITY4, 30s);
                     break;
             }
 
@@ -382,9 +383,9 @@ public:
             me->SetInCombatWithZone();
             instance->SetBossState(DATA_MAULGAR, IN_PROGRESS);
 
-            events.ScheduleEvent(EVENT_ADD_ABILITY1, 5000);
-            events.ScheduleEvent(EVENT_ADD_ABILITY2, 10000);
-            events.ScheduleEvent(EVENT_ADD_ABILITY3, 20000);
+            events.ScheduleEvent(EVENT_ADD_ABILITY1, 5s);
+            events.ScheduleEvent(EVENT_ADD_ABILITY2, 10s);
+            events.ScheduleEvent(EVENT_ADD_ABILITY3, 20s);
         }
 
         void JustDied(Unit* /*killer*/)
@@ -405,16 +406,16 @@ public:
             {
                 case EVENT_ADD_ABILITY1:
                     me->CastSpell(me, SPELL_GREATER_PW_SHIELD, false);
-                    events.ScheduleEvent(EVENT_ADD_ABILITY1, 30000);
+                    events.ScheduleEvent(EVENT_ADD_ABILITY1, 30s);
                     break;
                 case EVENT_ADD_ABILITY2:
                     if (Unit* target = DoSelectLowestHpFriendly(60.0f, 50000))
                         me->CastSpell(target, SPELL_HEAL, false);
-                    events.ScheduleEvent(EVENT_ADD_ABILITY2, 25000);
+                    events.ScheduleEvent(EVENT_ADD_ABILITY2, 25s);
                     break;
                 case EVENT_ADD_ABILITY3:
                     me->CastSpell(me, SPELL_PRAYER_OH, false);
-                    events.ScheduleEvent(EVENT_ADD_ABILITY3, 30000);
+                    events.ScheduleEvent(EVENT_ADD_ABILITY3, 30s);
                     break;
             }
 
@@ -463,9 +464,9 @@ public:
             me->SetInCombatWithZone();
             instance->SetBossState(DATA_MAULGAR, IN_PROGRESS);
 
-            events.ScheduleEvent(EVENT_ADD_ABILITY1, 1000);
-            events.ScheduleEvent(EVENT_ADD_ABILITY2, 5000);
-            events.ScheduleEvent(EVENT_ADD_ABILITY3, 20000);
+            events.ScheduleEvent(EVENT_ADD_ABILITY1, 1s);
+            events.ScheduleEvent(EVENT_ADD_ABILITY2, 5s);
+            events.ScheduleEvent(EVENT_ADD_ABILITY3, 20s);
         }
 
         void JustDied(Unit* /*killer*/)
@@ -486,15 +487,15 @@ public:
             {
                 case EVENT_ADD_ABILITY1:
                     me->CastSpell(me->GetVictim(), SPELL_GREATER_FIREBALL, false);
-                    events.ScheduleEvent(EVENT_ADD_ABILITY1, 3500);
+                    events.ScheduleEvent(EVENT_ADD_ABILITY1, 3500ms);
                     break;
                 case EVENT_ADD_ABILITY2:
                     me->CastSpell(me, SPELL_SPELLSHIELD, false);
-                    events.ScheduleEvent(EVENT_ADD_ABILITY2, 40000);
+                    events.ScheduleEvent(EVENT_ADD_ABILITY2, 40s);
                     break;
                 case EVENT_ADD_ABILITY3:
                     me->CastSpell(me, SPELL_BLAST_WAVE, false);
-                    events.ScheduleEvent(EVENT_ADD_ABILITY3, 20000);
+                    events.ScheduleEvent(EVENT_ADD_ABILITY3, 20s);
                     break;
             }
 

@@ -78,9 +78,9 @@ public:
         void EnterCombat(Unit* /*who*/)
         {
             Talk(SAY_AGGRO);
-            events.ScheduleEvent(EVENT_SPELL_LIGHTNING, 15000);
-            events.ScheduleEvent(EVENT_SPELL_LUNG, 7000);
-            events.ScheduleEvent(EVENT_SPELL_ENVELOPING, 9000);
+            events.ScheduleEvent(EVENT_SPELL_LIGHTNING, 15s);
+            events.ScheduleEvent(EVENT_SPELL_LUNG, 7s);
+            events.ScheduleEvent(EVENT_SPELL_ENVELOPING, 9s);
 
             if (instance)
                 instance->SetData(TYPE_HYDROMANCER_THESPIA, IN_PROGRESS);

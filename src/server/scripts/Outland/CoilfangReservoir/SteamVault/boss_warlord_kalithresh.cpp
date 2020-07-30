@@ -71,9 +71,9 @@ public:
         void EnterCombat(Unit* /*who*/)
         {
             Talk(SAY_AGGRO);
-            events.ScheduleEvent(EVENT_SPELL_REFLECTION, 10000);
-            events.ScheduleEvent(EVENT_SPELL_IMPALE, urand(7000, 14000));
-            events.ScheduleEvent(EVENT_SPELL_RAGE, 20000);
+            events.ScheduleEvent(EVENT_SPELL_REFLECTION, 10s);
+            events.ScheduleEvent(EVENT_SPELL_IMPALE, 7s, 14s);
+            events.ScheduleEvent(EVENT_SPELL_RAGE, 20s);
 
             if (instance)
                 instance->SetData(TYPE_WARLORD_KALITHRESH, IN_PROGRESS);

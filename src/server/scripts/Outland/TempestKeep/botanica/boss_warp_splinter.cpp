@@ -63,9 +63,9 @@ class boss_warp_splinter : public CreatureScript
                 _EnterCombat();
                 Talk(SAY_AGGRO);
 
-                events.ScheduleEvent(EVENT_ARCANE_VOLLEY, 8000);
-                events.ScheduleEvent(EVENT_WAR_STOMP, 15000);
-                events.ScheduleEvent(EVENT_SUMMON_TREANT, 20000);
+                events.ScheduleEvent(EVENT_ARCANE_VOLLEY, 8s);
+                events.ScheduleEvent(EVENT_WAR_STOMP, 15s);
+                events.ScheduleEvent(EVENT_SUMMON_TREANT, 20s);
             }
 
             void KilledUnit(Unit* victim)
@@ -93,18 +93,18 @@ class boss_warp_splinter : public CreatureScript
                 {
                     case EVENT_ARCANE_VOLLEY:
                         me->CastSpell(me, SPELL_ARCANE_VOLLEY, false);
-                        events.ScheduleEvent(EVENT_ARCANE_VOLLEY, 20000);
+                        events.ScheduleEvent(EVENT_ARCANE_VOLLEY, 20s);
                         break;
                     case EVENT_WAR_STOMP:
                         me->CastSpell(me, SPELL_WAR_STOMP, false);
-                        events.ScheduleEvent(EVENT_WAR_STOMP, 30000);
+                        events.ScheduleEvent(EVENT_WAR_STOMP, 30s);
                         break;
                     case EVENT_SUMMON_TREANT:
                         Talk(SAY_SUMMON);
                         me->CastSpell(me, SPELL_SUMMON_SAPLINGS_PERIODIC, true);
                         for (uint8 i = 0; i < 6; ++i)
                             me->CastSpell(me, SPELL_SUMMON_SAPLINGS_SUMMON+i, true);
-                        events.ScheduleEvent(EVENT_SUMMON_TREANT, 40000);
+                        events.ScheduleEvent(EVENT_SUMMON_TREANT, 40s);
                         break;
                 }
 

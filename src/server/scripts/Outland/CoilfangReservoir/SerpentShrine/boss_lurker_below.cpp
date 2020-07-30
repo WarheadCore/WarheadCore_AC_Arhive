@@ -118,10 +118,10 @@ class boss_the_lurker_below : public CreatureScript
 
             void EnterCombat(Unit* /*who*/) override
             {
-                events.ScheduleEvent(EVENT_SPELL_WHIRL, 18000);
-                events.ScheduleEvent(EVENT_SPELL_SPOUT, 45000);
-                events.ScheduleEvent(EVENT_SPELL_GEYSER, 10000);
-                events.ScheduleEvent(EVENT_PHASE_2, 125000);
+                events.ScheduleEvent(EVENT_SPELL_WHIRL, 18s);
+                events.ScheduleEvent(EVENT_SPELL_SPOUT, 45s);
+                events.ScheduleEvent(EVENT_SPELL_GEYSER, 10s);
+                events.ScheduleEvent(EVENT_PHASE_2, 125s);
             }
 
             void UpdateAI(uint32 diff) override
@@ -138,12 +138,12 @@ class boss_the_lurker_below : public CreatureScript
                 {
                     case EVENT_SPELL_WHIRL:
                         me->CastSpell(me, SPELL_WHIRL, false);
-                        events.ScheduleEvent(EVENT_SPELL_WHIRL, 18000);
+                        events.ScheduleEvent(EVENT_SPELL_WHIRL, 18s);
                         break;
                     case EVENT_SPELL_GEYSER:
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             me->CastSpell(target, SPELL_GEYSER, false);
-                        events.ScheduleEvent(EVENT_SPELL_GEYSER, 10000);
+                        events.ScheduleEvent(EVENT_SPELL_GEYSER, 10s);
                         break;
                     case EVENT_SPELL_SPOUT:
                         Talk(EMOTE_TAKE_BREATH);
@@ -151,10 +151,10 @@ class boss_the_lurker_below : public CreatureScript
                         me->SetReactState(REACT_PASSIVE);
                         me->SetFacingToObject(me->GetVictim());
                         me->SetTarget(0);
-                        events.ScheduleEvent(EVENT_SPELL_SPOUT, 60000);
-                        events.RescheduleEvent(EVENT_SPELL_WHIRL, 18000);
-                        events.RescheduleEvent(EVENT_SPELL_GEYSER, 25000);
-                        events.ScheduleEvent(EVENT_SPELL_SPOUT_PERIODIC, 3000);
+                        events.ScheduleEvent(EVENT_SPELL_SPOUT, 1min);
+                        events.RescheduleEvent(EVENT_SPELL_WHIRL, 18s);
+                        events.RescheduleEvent(EVENT_SPELL_GEYSER, 25s);
+                        events.ScheduleEvent(EVENT_SPELL_SPOUT_PERIODIC, 3s);
                         break;
                     case EVENT_SPELL_SPOUT_PERIODIC:
                         me->InterruptNonMeleeSpells(false);
@@ -162,7 +162,7 @@ class boss_the_lurker_below : public CreatureScript
                         break;
                     case EVENT_PHASE_2:
                         events.Reset();
-                        events.ScheduleEvent(EVENT_PHASE_1, 60000);
+                        events.ScheduleEvent(EVENT_PHASE_1, 1min);
                         me->SetStandState(UNIT_STAND_STATE_SUBMERGED);
                         me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                         for (uint8 i = 0; i < MAX_SUMMONS; ++i)
@@ -174,8 +174,8 @@ class boss_the_lurker_below : public CreatureScript
                         me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
 
                         events.Reset();
-                        events.ScheduleEvent(EVENT_SPELL_SPOUT, 10000);
-                        events.ScheduleEvent(EVENT_PHASE_2, 120000);
+                        events.ScheduleEvent(EVENT_SPELL_SPOUT, 10s);
+                        events.ScheduleEvent(EVENT_PHASE_2, 2min);
                         break;
                 }
 

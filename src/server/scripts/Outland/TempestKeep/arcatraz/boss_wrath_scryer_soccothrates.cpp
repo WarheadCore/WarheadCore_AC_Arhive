@@ -111,10 +111,10 @@ class boss_wrath_scryer_soccothrates : public CreatureScript
             {
                 _EnterCombat();
                 events2.Reset();
-                events.ScheduleEvent(EVENT_FELFIRE_SHOCK, urand(12000, 14000));
-                events.ScheduleEvent(EVENT_KNOCK_AWAY, urand(11000, 12000));
-                events.ScheduleEvent(EVENT_ME_FIRST, 6000);
-                events.ScheduleEvent(EVENT_CHECK_HEALTH, 1000);
+                events.ScheduleEvent(EVENT_FELFIRE_SHOCK, 12s, 14s);
+                events.ScheduleEvent(EVENT_KNOCK_AWAY, 11s, 12s);
+                events.ScheduleEvent(EVENT_ME_FIRST, 6s);
+                events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
                 Talk(SAY_AGGRO);
             }
 
@@ -129,7 +129,7 @@ class boss_wrath_scryer_soccothrates : public CreatureScript
                 if (!preFight && who->GetTypeId() == TYPEID_PLAYER && me->IsWithinDistInMap(who, 70.0f))
                 {
                     Talk(SAY_SOCCOTHRATES_CONVO_1);
-                    events2.ScheduleEvent(EVENT_PREFIGHT_1, 2000);
+                    events2.ScheduleEvent(EVENT_PREFIGHT_1, 2s);
                     preFight = true;
                 }
             }
@@ -137,7 +137,7 @@ class boss_wrath_scryer_soccothrates : public CreatureScript
             void SetData(uint32 /*type*/, uint32 data)
             {
                 if (data == 1)
-                    events2.RescheduleEvent(EVENT_DALLIAH_DEATH, 6000);
+                    events2.RescheduleEvent(EVENT_DALLIAH_DEATH, 6s);
             }
 
             void UpdateAI(uint32 diff)
@@ -148,38 +148,38 @@ class boss_wrath_scryer_soccothrates : public CreatureScript
                     case EVENT_PREFIGHT_1:
                         if (Creature* dalliah = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_DALLIAH)))
                             dalliah->AI()->Talk(SAY_DALLIAH_CONVO_1);
-                        events2.ScheduleEvent(EVENT_PREFIGHT_2, 3000);
+                        events2.ScheduleEvent(EVENT_PREFIGHT_2, 3s);
                         break;
                     case EVENT_PREFIGHT_2:
                         Talk(SAY_SOCCOTHRATES_CONVO_2);
-                        events2.ScheduleEvent(EVENT_PREFIGHT_3, 3000);
+                        events2.ScheduleEvent(EVENT_PREFIGHT_3, 3s);
                         break;
                     case EVENT_PREFIGHT_3:
                         if (Creature* dalliah = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_DALLIAH)))
                             dalliah->AI()->Talk(SAY_DALLIAH_CONVO_2);
-                        events2.ScheduleEvent(EVENT_PREFIGHT_4, 6000);
+                        events2.ScheduleEvent(EVENT_PREFIGHT_4, 6s);
                         break;
                     case EVENT_PREFIGHT_4:
                         Talk(SAY_SOCCOTHRATES_CONVO_3);
-                        events2.ScheduleEvent(EVENT_PREFIGHT_5, 2000);
+                        events2.ScheduleEvent(EVENT_PREFIGHT_5, 2s);
                         break;
                     case EVENT_PREFIGHT_5:
                         if (Creature* dalliah = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_DALLIAH)))
                             dalliah->AI()->Talk(SAY_DALLIAH_CONVO_3);
-                        events2.ScheduleEvent(EVENT_PREFIGHT_6, 3000);
+                        events2.ScheduleEvent(EVENT_PREFIGHT_6, 3s);
                         break;
                     case EVENT_PREFIGHT_6:
                         Talk(SAY_SOCCOTHRATES_CONVO_4);
-                        events2.ScheduleEvent(EVENT_PREFIGHT_7, 2000);
+                        events2.ScheduleEvent(EVENT_PREFIGHT_7, 2s);
                         break;
                     case EVENT_PREFIGHT_7:
                         if (Creature* dalliah = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_DALLIAH)))
                             dalliah->GetMotionMaster()->MovePoint(0, 118.6048f, 96.84852f, 22.44115f);
-                        events2.ScheduleEvent(EVENT_PREFIGHT_8, 4000);
+                        events2.ScheduleEvent(EVENT_PREFIGHT_8, 4s);
                         break;
                     case EVENT_PREFIGHT_8:
                         me->GetMotionMaster()->MovePoint(0, 122.1035f, 192.7203f, 22.44115f);
-                        events2.ScheduleEvent(EVENT_PREFIGHT_9, 4000);
+                        events2.ScheduleEvent(EVENT_PREFIGHT_9, 4s);
                         break;
                     case EVENT_PREFIGHT_9:
                         if (Creature* dalliah = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_DALLIAH)))
@@ -208,23 +208,23 @@ class boss_wrath_scryer_soccothrates : public CreatureScript
                 {
                     case EVENT_FELFIRE_SHOCK:
                         me->CastSpell(me->GetVictim(), SPELL_FELFIRE_SHOCK, false);
-                        events.ScheduleEvent(EVENT_FELFIRE_SHOCK, urand(12000, 14000));
+                        events.ScheduleEvent(EVENT_FELFIRE_SHOCK, 12s, 14s);
                         break;
                     case EVENT_KNOCK_AWAY:
                         me->CastSpell(me, SPELL_KNOCK_AWAY, false);
                         Talk(SAY_KNOCK_AWAY);
-                        events.ScheduleEvent(EVENT_KNOCK_AWAY, urand(11000, 12000));
-                        events.ScheduleEvent(EVENT_SPELL_CHARGE, 4600);
+                        events.ScheduleEvent(EVENT_KNOCK_AWAY, 11s, 12s);
+                        events.ScheduleEvent(EVENT_SPELL_CHARGE, 4600ms);
                         break;
                     case EVENT_SPELL_CHARGE:
                         me->CastSpell(me, SPELL_CHARGE, true);
                         me->CastSpell(me, SPELL_FELFIRE, true);
-                        events.ScheduleEvent(EVENT_FELFIRE, 300);
-                        events.ScheduleEvent(EVENT_FELFIRE, 600);
-                        events.ScheduleEvent(EVENT_FELFIRE, 900);
-                        events.ScheduleEvent(EVENT_FELFIRE, 1200);
-                        events.ScheduleEvent(EVENT_FELFIRE, 1500);
-                        events.ScheduleEvent(EVENT_FELFIRE, 1800);
+                        events.ScheduleEvent(EVENT_FELFIRE, 300ms);
+                        events.ScheduleEvent(EVENT_FELFIRE, 600ms);
+                        events.ScheduleEvent(EVENT_FELFIRE, 900ms);
+                        events.ScheduleEvent(EVENT_FELFIRE, 1200ms);
+                        events.ScheduleEvent(EVENT_FELFIRE, 1500ms);
+                        events.ScheduleEvent(EVENT_FELFIRE, 1800ms);
                         break;
                     case EVENT_FELFIRE:
                         me->CastSpell(me, SPELL_FELFIRE, true);
@@ -241,7 +241,7 @@ class boss_wrath_scryer_soccothrates : public CreatureScript
                                 dalliah->AI()->Talk(SAY_SOCCOTHRATES_25_PERCENT);
                             break;
                         }
-                        events.ScheduleEvent(EVENT_CHECK_HEALTH, 1000);
+                        events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
                         break;
                 }
 

@@ -110,10 +110,10 @@ class boss_teron_gorefiend : public CreatureScript
             void EnterCombat(Unit* who)
             {
                 BossAI::EnterCombat(who);
-                events.ScheduleEvent(EVENT_SPELL_INCINERATE, 24000);
-                events.ScheduleEvent(EVENT_SPELL_DOOM_BLOSSOM, 10000);
-                events.ScheduleEvent(EVENT_SPELL_CRUSHING_SHADOWS, 17000);
-                events.ScheduleEvent(EVENT_SPELL_SHADOW_OF_DEATH, 20000);
+                events.ScheduleEvent(EVENT_SPELL_INCINERATE, 24s);
+                events.ScheduleEvent(EVENT_SPELL_DOOM_BLOSSOM, 10s);
+                events.ScheduleEvent(EVENT_SPELL_CRUSHING_SHADOWS, 17s);
+                events.ScheduleEvent(EVENT_SPELL_SHADOW_OF_DEATH, 20s);
             }
 
             void KilledUnit(Unit*  /*victim*/)
@@ -121,7 +121,7 @@ class boss_teron_gorefiend : public CreatureScript
                 if (events.GetNextEventTime(EVENT_TALK_KILL) == 0)
                 {
                     Talk(SAY_SLAY);
-                    events.ScheduleEvent(EVENT_TALK_KILL, 6000);
+                    events.ScheduleEvent(EVENT_TALK_KILL, 6s);
                 }
             }
 
@@ -155,25 +155,25 @@ class boss_teron_gorefiend : public CreatureScript
                                 Talk(SAY_INCINERATE);
                             me->CastSpell(target, SPELL_INCINERATE, false);
                         }
-                        events.ScheduleEvent(EVENT_SPELL_INCINERATE, 25000);
+                        events.ScheduleEvent(EVENT_SPELL_INCINERATE, 25s);
                         break;
                     case EVENT_SPELL_DOOM_BLOSSOM:
                         if (roll_chance_i(50))
                             Talk(SAY_BLOSSOM);
 
                         me->CastSpell(me, SPELL_SUMMON_DOOM_BLOSSOM, false);
-                        events.ScheduleEvent(EVENT_SPELL_DOOM_BLOSSOM, 40000);
+                        events.ScheduleEvent(EVENT_SPELL_DOOM_BLOSSOM, 40s);
                         break;
                     case EVENT_SPELL_CRUSHING_SHADOWS:
                         if (roll_chance_i(20))
                             Talk(SAY_CRUSHING);
                         me->CastCustomSpell(SPELL_CRUSHING_SHADOWS, SPELLVALUE_MAX_TARGETS, 5, me, false);
-                        events.ScheduleEvent(EVENT_SPELL_CRUSHING_SHADOWS, 15000);
+                        events.ScheduleEvent(EVENT_SPELL_CRUSHING_SHADOWS, 15s);
                         break;
                     case EVENT_SPELL_SHADOW_OF_DEATH:
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, ShadowOfDeathSelector()))
                             me->CastSpell(target, SPELL_SHADOW_OF_DEATH, false);
-                        events.ScheduleEvent(EVENT_SPELL_SHADOW_OF_DEATH, 30000);
+                        events.ScheduleEvent(EVENT_SPELL_SHADOW_OF_DEATH, 30s);
                         break;
                 }
 

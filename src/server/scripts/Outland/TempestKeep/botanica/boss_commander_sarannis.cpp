@@ -62,9 +62,9 @@ class boss_commander_sarannis : public CreatureScript
             {
                 _EnterCombat();
                 Talk(SAY_AGGRO);
-                events.ScheduleEvent(EVENT_ARCANE_RESONANCE, 20000);
-                events.ScheduleEvent(EVENT_ARCANE_DEVASTATION, 10000);
-                events.ScheduleEvent(EVENT_HEALTH_CHECK, 500);
+                events.ScheduleEvent(EVENT_ARCANE_RESONANCE, 20s);
+                events.ScheduleEvent(EVENT_ARCANE_DEVASTATION, 10s);
+                events.ScheduleEvent(EVENT_HEALTH_CHECK, 500ms);
             }
 
             void KilledUnit(Unit* victim)
@@ -94,13 +94,13 @@ class boss_commander_sarannis : public CreatureScript
                         if (roll_chance_i(50))
                             Talk(SAY_ARCANE_RESONANCE);
                         me->CastSpell(me->GetVictim(), SPELL_ARCANE_RESONANCE, false);
-                        events.ScheduleEvent(EVENT_ARCANE_RESONANCE, 27000);
+                        events.ScheduleEvent(EVENT_ARCANE_RESONANCE, 27s);
                         break;
                     case EVENT_ARCANE_DEVASTATION:
                         if (roll_chance_i(50))
                             Talk(SAY_ARCANE_DEVASTATION);
                         me->CastSpell(me->GetVictim(), SPELL_ARCANE_DEVASTATION, false);
-                        events.ScheduleEvent(EVENT_ARCANE_DEVASTATION, 17000);
+                        events.ScheduleEvent(EVENT_ARCANE_DEVASTATION, 17s);
                         break;
                     case EVENT_HEALTH_CHECK:
                         if (me->HealthBelowPct(50))
@@ -110,7 +110,7 @@ class boss_commander_sarannis : public CreatureScript
                             me->CastSpell(me, SPELL_SUMMON_REINFORCEMENTS, true);
                             break;
                         }
-                        events.ScheduleEvent(EVENT_HEALTH_CHECK, 500);
+                        events.ScheduleEvent(EVENT_HEALTH_CHECK, 500ms);
                         break;
                 }
 

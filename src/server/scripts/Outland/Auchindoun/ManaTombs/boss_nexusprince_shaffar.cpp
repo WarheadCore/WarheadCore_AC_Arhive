@@ -95,9 +95,9 @@ class boss_nexusprince_shaffar : public CreatureScript
                 me->SetInCombatWithZone();
                 summons.DoZoneInCombat();
 
-                events.ScheduleEvent(EVENT_SPELL_BEACON, 10000);
-                events.ScheduleEvent(EVENT_SPELL_FR_FI, 4000);
-                events.ScheduleEvent(EVENT_SPELL_FROST_NOVA, 15000);
+                events.ScheduleEvent(EVENT_SPELL_BEACON, 10s);
+                events.ScheduleEvent(EVENT_SPELL_FR_FI, 4s);
+                events.ScheduleEvent(EVENT_SPELL_FROST_NOVA, 15s);
             }
 
             void JustSummoned(Creature* summon)
@@ -144,7 +144,7 @@ class boss_nexusprince_shaffar : public CreatureScript
                         me->CastSpell(me, SPELL_FROSTNOVA, false);
                         events.RepeatEvent(urand(16000, 23000));
                         events.DelayEvents(1500);
-                        events.ScheduleEvent(EVENT_SPELL_BLINK, 1500);
+                        events.ScheduleEvent(EVENT_SPELL_BLINK, 1500ms);
                         break;
                     case EVENT_SPELL_FR_FI:
                         me->CastSpell(me->GetVictim(), RAND(SPELL_FROSTBOLT, SPELL_FIREBALL), false);
@@ -153,7 +153,7 @@ class boss_nexusprince_shaffar : public CreatureScript
                     case EVENT_SPELL_BLINK:
                         me->CastSpell(me, SPELL_BLINK, false);
                         events.PopEvent();
-                        events.RescheduleEvent(EVENT_SPELL_FR_FI, 0);
+                        events.RescheduleEvent(EVENT_SPELL_FR_FI, 0s);
                         break;
                     case EVENT_SPELL_BEACON:
                         if (!urand(0, 3))

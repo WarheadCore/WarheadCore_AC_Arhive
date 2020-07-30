@@ -158,7 +158,7 @@ class boss_reliquary_of_souls : public CreatureScript
                     return;
 
                 me->SetInCombatWithZone();
-                events.ScheduleEvent(EVENT_ESSENCE_OF_SUFFERING, 5000); // ZOMG! 15000);
+                events.ScheduleEvent(EVENT_ESSENCE_OF_SUFFERING, 5s); // ZOMG! 15000);
                 me->SetStandState(UNIT_STAND_STATE_STAND);
             }
 
@@ -167,19 +167,16 @@ class boss_reliquary_of_souls : public CreatureScript
                 if (param == ACTION_ESSENCE_OF_SUFFERING)
                 {
                     me->SetStandState(UNIT_STAND_STATE_STAND);
-                    events.ScheduleEvent(EVENT_SUCK_ESSENCE, 1000);
-                    events.ScheduleEvent(EVENT_SPAWN_ENSLAVED_SOULS, 8000);
-                    events.ScheduleEvent(EVENT_ESSENCE_OF_DESIRE, 38000);
+                    events.ScheduleEvent(EVENT_SUCK_ESSENCE, 1s);
+                    events.ScheduleEvent(EVENT_SPAWN_ENSLAVED_SOULS, 8s);
+                    events.ScheduleEvent(EVENT_ESSENCE_OF_DESIRE, 38s);
                 }
                 else if (param == ACTION_ESSENCE_OF_DESIRE)
                 {
                     me->SetStandState(UNIT_STAND_STATE_STAND);
-                    events.ScheduleEvent(EVENT_SUCK_ESSENCE, 1000);
-                    events.ScheduleEvent(EVENT_SPAWN_ENSLAVED_SOULS, 8000);
-                    events.ScheduleEvent(EVENT_ESSENCE_OF_ANGER, 38000);
-                }
-                else if (param == ACTION_ESSENCE_OF_ANGER)
-                {
+                    events.ScheduleEvent(EVENT_SUCK_ESSENCE, 1s);
+                    events.ScheduleEvent(EVENT_SPAWN_ENSLAVED_SOULS, 8s);
+                    events.ScheduleEvent(EVENT_ESSENCE_OF_ANGER, 38s);
                 }
             }
 
@@ -196,7 +193,7 @@ class boss_reliquary_of_souls : public CreatureScript
 
                 summon->SetReactState(REACT_PASSIVE);
                 summon->CastSpell(summon, SPELL_EMERGE_VISUAL, true);
-                events.ScheduleEvent(EVENT_ENGAGE_ESSENCE, 4000);
+                events.ScheduleEvent(EVENT_ENGAGE_ESSENCE, 4s);
             }
 
             void SummonedCreatureDies(Creature* summon, Unit*)
@@ -242,10 +239,10 @@ class boss_reliquary_of_souls : public CreatureScript
                         me->CastSpell(me, SPELL_SUMMON_ESSENCE_OF_ANGER, false);
                         break;
                     case EVENT_SPAWN_ENSLAVED_SOULS:
-                        events.ScheduleEvent(EVENT_SPAWN_SOUL, 0);
-                        events.ScheduleEvent(EVENT_SPAWN_SOUL, 0);
+                        events.ScheduleEvent(EVENT_SPAWN_SOUL, 0s);
+                        events.ScheduleEvent(EVENT_SPAWN_SOUL, 0s);
                         for (uint8 i = 0; i < 16; ++i)
-                            events.ScheduleEvent(EVENT_SPAWN_SOUL, i*1200);
+                            events.ScheduleEvent(EVENT_SPAWN_SOUL, i*1200ms);
                         break;
                     case EVENT_SPAWN_SOUL:
                         me->CastCustomSpell(SPELL_SUMMON_ENSLAVED_SOUL, SPELLVALUE_MAX_TARGETS, 1, me, false);
@@ -326,7 +323,7 @@ class boss_essence_of_suffering : public CreatureScript
                 if (events.GetNextEventTime(EVENT_KILL_TALK) == 0)
                 {
                     Talk(SUFF_SAY_SLAY);
-                    events.ScheduleEvent(EVENT_KILL_TALK, 6000);
+                    events.ScheduleEvent(EVENT_KILL_TALK, 6s);
                 }
             }
 
@@ -337,8 +334,8 @@ class boss_essence_of_suffering : public CreatureScript
                 me->CastSpell(me, SPELL_ESSENCE_OF_SUFFERING_PASSIVE, true);
                 me->CastSpell(me, SPELL_ESSENCE_OF_SUFFERING_PASSIVE2, true);
 
-                events.ScheduleEvent(EVENT_SUFF_FRENZY, 45000);
-                events.ScheduleEvent(EVENT_SUFF_SOUL_DRAIN, 25000);
+                events.ScheduleEvent(EVENT_SUFF_FRENZY, 45s);
+                events.ScheduleEvent(EVENT_SUFF_SOUL_DRAIN, 25s);
             }
 
             void UpdateAI(uint32 diff)
@@ -354,14 +351,14 @@ class boss_essence_of_suffering : public CreatureScript
                 {
                     case EVENT_SUFF_SOUL_DRAIN:
                         me->CastCustomSpell(SPELL_SOUL_DRAIN, SPELLVALUE_MAX_TARGETS, 3, me, false);
-                        events.ScheduleEvent(EVENT_SUFF_SOUL_DRAIN, 30000);
+                        events.ScheduleEvent(EVENT_SUFF_SOUL_DRAIN, 30s);
                         break;
                     case EVENT_SUFF_FRENZY:
                         Talk(SUFF_SAY_ENRAGE);
                         Talk(SUFF_EMOTE_ENRAGE);
                         me->CastSpell(me, SPELL_FRENZY, false);
-                        events.ScheduleEvent(EVENT_SUFF_FRENZY, 45000);
-                        events.ScheduleEvent(EVENT_SUFF_FRENZY_EMOTE, 3000);
+                        events.ScheduleEvent(EVENT_SUFF_FRENZY, 45s);
+                        events.ScheduleEvent(EVENT_SUFF_FRENZY_EMOTE, 3s);
                         break;
                     case EVENT_SUFF_FRENZY_EMOTE:
                         Talk(SUFF_EMOTE_ENRAGE);
@@ -436,7 +433,7 @@ class boss_essence_of_desire : public CreatureScript
                 if (events.GetNextEventTime(EVENT_KILL_TALK) == 0)
                 {
                     Talk(DESI_SAY_SLAY);
-                    events.ScheduleEvent(EVENT_KILL_TALK, 6000);
+                    events.ScheduleEvent(EVENT_KILL_TALK, 6s);
                 }
             }
 
@@ -445,9 +442,9 @@ class boss_essence_of_desire : public CreatureScript
                 Talk(DESI_SAY_FREED);
                 me->CastSpell(me, SPELL_AURA_OF_DESIRE, true);
                     
-                events.ScheduleEvent(EVENT_DESI_DEADEN, 28000);
-                events.ScheduleEvent(EVENT_DESI_SPIRIT_SHOCK, 20000);
-                events.ScheduleEvent(EVENT_DESI_RUNE_SHIELD, 13000);
+                events.ScheduleEvent(EVENT_DESI_DEADEN, 28s);
+                events.ScheduleEvent(EVENT_DESI_SPIRIT_SHOCK, 20s);
+                events.ScheduleEvent(EVENT_DESI_RUNE_SHIELD, 13s);
             }
 
             void UpdateAI(uint32 diff)
@@ -465,15 +462,15 @@ class boss_essence_of_desire : public CreatureScript
                         if (roll_chance_i(50))
                             Talk(DESI_SAY_SPEC);
                         me->CastSpell(me->GetVictim(), SPELL_DEADEN, false);
-                        events.ScheduleEvent(EVENT_DESI_DEADEN, 31000);
+                        events.ScheduleEvent(EVENT_DESI_DEADEN, 31s);
                         break;
                     case EVENT_DESI_SPIRIT_SHOCK:
                         me->CastSpell(me->GetVictim(), SPELL_SPIRIT_SHOCK, false);
-                        events.ScheduleEvent(EVENT_DESI_SPIRIT_SHOCK, 12000);
+                        events.ScheduleEvent(EVENT_DESI_SPIRIT_SHOCK, 12s);
                         break;
                     case EVENT_DESI_RUNE_SHIELD:
                         me->CastSpell(me, SPELL_RUNE_SHIELD, false);
-                        events.ScheduleEvent(EVENT_DESI_RUNE_SHIELD, 15000);
+                        events.ScheduleEvent(EVENT_DESI_RUNE_SHIELD, 15s);
                         break;
                 }
 
@@ -520,7 +517,7 @@ class boss_essence_of_anger : public CreatureScript
                 if (events.GetNextEventTime(EVENT_KILL_TALK) == 0)
                 {
                     Talk(ANGER_SAY_SLAY);
-                    events.ScheduleEvent(EVENT_KILL_TALK, 6000);
+                    events.ScheduleEvent(EVENT_KILL_TALK, 6s);
                 }
             }
 
@@ -537,9 +534,9 @@ class boss_essence_of_anger : public CreatureScript
                 Talk(ANGER_SAY_FREED);
                 me->CastSpell(me, SPELL_AURA_OF_ANGER, true);
                     
-                events.ScheduleEvent(EVENT_ANGER_SPITE, 15000);
-                events.ScheduleEvent(EVENT_ANGER_SOUL_SCREAM, 10000);
-                events.ScheduleEvent(EVENT_ANGER_SEETHE, 1000);
+                events.ScheduleEvent(EVENT_ANGER_SPITE, 15s);
+                events.ScheduleEvent(EVENT_ANGER_SOUL_SCREAM, 10s);
+                events.ScheduleEvent(EVENT_ANGER_SEETHE, 1s);
             }
 
             void UpdateAI(uint32 diff)
@@ -557,11 +554,11 @@ class boss_essence_of_anger : public CreatureScript
                         if (roll_chance_i(30))
                             Talk(ANGER_SAY_SPEC);
                         me->CastCustomSpell(SPELL_SPITE, SPELLVALUE_MAX_TARGETS, 3, me, false);
-                        events.ScheduleEvent(EVENT_ANGER_SPITE, 25000);
+                        events.ScheduleEvent(EVENT_ANGER_SPITE, 25s);
                         break;
                     case EVENT_ANGER_SOUL_SCREAM:
                         me->CastSpell(me->GetVictim(), SPELL_SOUL_SCREAM, false);
-                        events.ScheduleEvent(EVENT_ANGER_SOUL_SCREAM, 10000);
+                        events.ScheduleEvent(EVENT_ANGER_SOUL_SCREAM, 10s);
                         break;
                     case EVENT_ANGER_SEETHE:
                         if (Unit* victim = me->GetVictim())
@@ -572,7 +569,7 @@ class boss_essence_of_anger : public CreatureScript
                             // victim can be lost
                             targetGUID = victimGUID;
                         }     
-                        events.ScheduleEvent(EVENT_ANGER_SEETHE, 1000);
+                        events.ScheduleEvent(EVENT_ANGER_SEETHE, 1s);
                         break;
 
                 }

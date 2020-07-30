@@ -81,10 +81,10 @@ public:
         {
             Talk(SAY_AGGRO);
 
-            events.ScheduleEvent(EVENT_SPELL_FEAR, 15000);
-            events.ScheduleEvent(EVENT_SPELL_RIBBON, 5000);
-            events.ScheduleEvent(EVENT_SPELL_SOUL, 25000);
-            events.ScheduleEvent(EVENT_CHECK_HEALTH, 5000);
+            events.ScheduleEvent(EVENT_SPELL_FEAR, 15s);
+            events.ScheduleEvent(EVENT_SPELL_RIBBON, 5s);
+            events.ScheduleEvent(EVENT_SPELL_SOUL, 25s);
+            events.ScheduleEvent(EVENT_CHECK_HEALTH, 5s);
         }
 
         void KilledUnit(Unit*)
@@ -189,7 +189,7 @@ public:
         void Reset()
         {
             myClass = CLASS_WARRIOR;
-            events.ScheduleEvent(EVENT_STOLEN_SOUL_SPELL, 1000);
+            events.ScheduleEvent(EVENT_STOLEN_SOUL_SPELL, 1s);
         }
 
         void DoAction(int32 pClass)

@@ -80,10 +80,10 @@ public:
 
         void EnterCombat(Unit*)
         {
-            events.ScheduleEvent(EVENT_SPELL_INHIBIT_MAGIC, 0);
-            events.ScheduleEvent(EVENT_SPELL_ATTRACT_MAGIC, 28000);
-            events.ScheduleEvent(EVENT_SPELL_CARNIVOROUS, 10000);
-            events.ScheduleEvent(EVENT_SPELL_FOCUS_FIRE, 17000);
+            events.ScheduleEvent(EVENT_SPELL_INHIBIT_MAGIC, 0s);
+            events.ScheduleEvent(EVENT_SPELL_ATTRACT_MAGIC, 28s);
+            events.ScheduleEvent(EVENT_SPELL_CARNIVOROUS, 10s);
+            events.ScheduleEvent(EVENT_SPELL_FOCUS_FIRE, 17s);
         }
 
         void JustSummoned(Creature* summon)
@@ -147,7 +147,7 @@ public:
                 case EVENT_SPELL_ATTRACT_MAGIC:
                     me->CastSpell(me, SPELL_ATTRACT_MAGIC, false);
                     events.RepeatEvent(30000);
-                    events.RescheduleEvent(EVENT_SPELL_CARNIVOROUS, 1500);
+                    events.RescheduleEvent(EVENT_SPELL_CARNIVOROUS, 1500ms);
                     break;
                 case EVENT_SPELL_CARNIVOROUS:
                     me->CastSpell(me, DUNGEON_MODE(SPELL_CARNIVOROUS_BITE_N, SPELL_CARNIVOROUS_BITE_H), false);
@@ -161,10 +161,10 @@ public:
                         Talk(EMOTE_FOCUSED, target);
                     }
                     events.RepeatEvent(urand(15000, 20000));
-                    events.ScheduleEvent(EVENT_SPELL_FOCUS_FIRE_2, 3000);
-                    events.ScheduleEvent(EVENT_SPELL_FOCUS_FIRE_2, 3500);
-                    events.ScheduleEvent(EVENT_SPELL_FOCUS_FIRE_2, 4000);
-                    events.ScheduleEvent(EVENT_SPELL_FOCUS_FIRE_3, 5000);
+                    events.ScheduleEvent(EVENT_SPELL_FOCUS_FIRE_2, 3s);
+                    events.ScheduleEvent(EVENT_SPELL_FOCUS_FIRE_2, 3500ms);
+                    events.ScheduleEvent(EVENT_SPELL_FOCUS_FIRE_2, 4s);
+                    events.ScheduleEvent(EVENT_SPELL_FOCUS_FIRE_3, 5s);
                     me->SetControlled(true, UNIT_STATE_ROOT);
                     break;
                 case EVENT_SPELL_FOCUS_FIRE_2:

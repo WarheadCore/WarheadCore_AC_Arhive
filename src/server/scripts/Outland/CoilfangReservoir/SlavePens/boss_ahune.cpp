@@ -106,9 +106,9 @@ public:
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
             InvokerGUID = 0;
             events.Reset();
-            events.RescheduleEvent(EVENT_EMERGE, 12000);
-            events.RescheduleEvent(EVENT_INVOKER_SAY_1, 1000);
-            events.RescheduleEvent(EVENT_SUMMON_TOTEMS, 4000);
+            events.RescheduleEvent(EVENT_EMERGE, 12s);
+            events.RescheduleEvent(EVENT_INVOKER_SAY_1, 1s);
+            events.RescheduleEvent(EVENT_SUMMON_TOTEMS, 4s);
         }
 
         EventMap events;
@@ -118,10 +118,10 @@ public:
         void StartPhase1()
         {
             me->CastSpell(me, SPELL_AHUNES_SHIELD, true);
-            events.RescheduleEvent(EVENT_TOTEMS_ATTACK, 80000);
-            events.RescheduleEvent(EVENT_SPELL_COLD_SLAP, 1200);
-            events.RescheduleEvent(EVENT_SPELL_SUMMON_HAILSTONE, 2000);
-            events.RescheduleEvent(EVENT_SPELL_SUMMON_COLDWAVE, 5000);
+            events.RescheduleEvent(EVENT_TOTEMS_ATTACK, 80s);
+            events.RescheduleEvent(EVENT_SPELL_COLD_SLAP, 1200ms);
+            events.RescheduleEvent(EVENT_SPELL_SUMMON_HAILSTONE, 2s);
+            events.RescheduleEvent(EVENT_SPELL_SUMMON_COLDWAVE, 5s);
         }
 
         void EnterCombat(Unit* /*who*/)
@@ -149,7 +149,7 @@ public:
                     me->SetVisible(true);
                     me->CastSpell(me, SPELL_EMERGE_0, false);
                     events.PopEvent();
-                    events.RescheduleEvent(EVENT_ATTACK, 2000);
+                    events.RescheduleEvent(EVENT_ATTACK, 2s);
                     break;
                 case EVENT_SUMMON_TOTEMS:
                     for (uint8 i=0; i<3; ++i)
@@ -163,13 +163,13 @@ public:
                         plr->CastSpell(plr, SPELL_MAKE_BONFIRE, true);
                     }
                     events.PopEvent();
-                    events.RescheduleEvent(EVENT_INVOKER_SAY_2, 2000);
+                    events.RescheduleEvent(EVENT_INVOKER_SAY_2, 2s);
                     break;
                 case EVENT_INVOKER_SAY_2:
                     if (Player* plr = ObjectAccessor::GetPlayer(*me, InvokerGUID))
                         plr->MonsterSay("Ahune, your strength grows no more!", LANG_UNIVERSAL, 0);
                     events.PopEvent();
-                    events.RescheduleEvent(EVENT_INVOKER_SAY_3, 2000);
+                    events.RescheduleEvent(EVENT_INVOKER_SAY_3, 2s);
                     break;
                 case EVENT_INVOKER_SAY_3:
                     if (Player* plr = ObjectAccessor::GetPlayer(*me, InvokerGUID))
@@ -194,7 +194,7 @@ public:
                         if (Creature* bunny = me->FindNearestCreature(NPC_TOTEM_BUNNY_1+i, 150.0f, true))
                             bunny->CastSpell(me, SPELL_TOTEM_BEAM, false);
                     events.PopEvent();
-                    events.RescheduleEvent(EVENT_SUBMERGE, 10000);
+                    events.RescheduleEvent(EVENT_SUBMERGE, 10s);
                     break;
                 case EVENT_SUBMERGE:
                     me->MonsterTextEmote(TEXT_RETREAT, 0, true);
@@ -206,8 +206,8 @@ public:
                         c->SetHealth(me->GetHealth());
                     }
                     events.Reset();
-                    events.RescheduleEvent(EVENT_COMBAT_EMERGE, 25000);
-                    events.RescheduleEvent(EVENT_EMERGE_WARNING, 20000);
+                    events.RescheduleEvent(EVENT_COMBAT_EMERGE, 25s);
+                    events.RescheduleEvent(EVENT_EMERGE_WARNING, 20s);
                     break;
                 case EVENT_EMERGE_WARNING:
                     me->MonsterTextEmote(TEXT_RESURFACE, 0, true);

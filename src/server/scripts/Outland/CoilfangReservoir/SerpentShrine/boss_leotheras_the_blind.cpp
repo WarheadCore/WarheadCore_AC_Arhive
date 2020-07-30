@@ -149,10 +149,10 @@ class boss_leotheras_the_blind : public CreatureScript
                         me->SetStandState(UNIT_STAND_STATE_STAND);
                         Talk(SAY_AGGRO);
 
-                        events.ScheduleEvent(EVENT_SPELL_BERSERK, 600000);
-                        events.ScheduleEvent(EVENT_HEALTH_CHECK, 1000);
-                        events.ScheduleEvent(EVENT_SWITCH_TO_DEMON, 55000);
-                        events.ScheduleEvent(EVENT_SPELL_WHIRLWIND, 10000);
+                        events.ScheduleEvent(EVENT_SPELL_BERSERK, 10min);
+                        events.ScheduleEvent(EVENT_HEALTH_CHECK, 1s);
+                        events.ScheduleEvent(EVENT_SWITCH_TO_DEMON, 55s);
+                        events.ScheduleEvent(EVENT_SPELL_WHIRLWIND, 10s);
                     }
             }
 
@@ -161,7 +161,7 @@ class boss_leotheras_the_blind : public CreatureScript
                 if (events.GetNextEventTime(EVENT_KILL_TALK) == 0)
                 {
                     Talk(me->GetDisplayId() != me->GetNativeDisplayId() ? SAY_DEMON_SLAY : SAY_NIGHTELF_SLAY);
-                    events.ScheduleEvent(EVENT_KILL_TALK, 6000);
+                    events.ScheduleEvent(EVENT_KILL_TALK, 6s);
                 }
             }
 
@@ -206,13 +206,13 @@ class boss_leotheras_the_blind : public CreatureScript
                                 DoResetThreat();
                                 me->LoadEquipment();
                                 me->RemoveAurasDueToSpell(SPELL_METAMORPHOSIS);
-                                events.ScheduleEvent(EVENT_SPELL_WHIRLWIND, 10000);
+                                events.ScheduleEvent(EVENT_SPELL_WHIRLWIND, 10s);
                             }
                             events.CancelEvent(EVENT_SWITCH_TO_DEMON);
                             events.CancelEvent(EVENT_SPELL_INSIDIOUS_WHISPER);
                             events.DelayEvents(10000);
-                            events.ScheduleEvent(EVENT_SUMMON_DEMON, 4000);
-                            events.ScheduleEvent(EVENT_RESTORE_FIGHT, 6000);
+                            events.ScheduleEvent(EVENT_SUMMON_DEMON, 4s);
+                            events.ScheduleEvent(EVENT_RESTORE_FIGHT, 6s);
                             me->SetStandState(UNIT_STAND_STATE_KNEEL);
                             me->SetReactState(REACT_PASSIVE);
                             me->GetMotionMaster()->Clear();
@@ -220,7 +220,7 @@ class boss_leotheras_the_blind : public CreatureScript
                             Talk(SAY_FINAL_FORM);
                             break;
                         }
-                        events.ScheduleEvent(EVENT_HEALTH_CHECK, 1000);
+                        events.ScheduleEvent(EVENT_HEALTH_CHECK, 1s);
                         break;
                     case EVENT_SWITCH_TO_DEMON:
                         DoResetThreat();
@@ -230,20 +230,20 @@ class boss_leotheras_the_blind : public CreatureScript
                         me->CastSpell(me, SPELL_METAMORPHOSIS, true);
 
                         events.CancelEvent(EVENT_SPELL_WHIRLWIND);
-                        events.ScheduleEvent(EVENT_SPELL_INSIDIOUS_WHISPER, 25000);
-                        events.ScheduleEvent(EVENT_SWITCH_TO_ELF, 60000);
+                        events.ScheduleEvent(EVENT_SPELL_INSIDIOUS_WHISPER, 25s);
+                        events.ScheduleEvent(EVENT_SWITCH_TO_ELF, 1min);
                         break;
                     case EVENT_SWITCH_TO_ELF:
                         DoResetThreat();
                         me->LoadEquipment();
                         me->GetMotionMaster()->MoveChase(me->GetVictim(), 0.0f);
                         me->RemoveAurasDueToSpell(SPELL_METAMORPHOSIS);
-                        events.ScheduleEvent(EVENT_SWITCH_TO_DEMON, 55000);
-                        events.ScheduleEvent(EVENT_SPELL_WHIRLWIND, 10000);
+                        events.ScheduleEvent(EVENT_SWITCH_TO_DEMON, 55s);
+                        events.ScheduleEvent(EVENT_SPELL_WHIRLWIND, 10s);
                         break;
                     case EVENT_SPELL_WHIRLWIND:
                         me->CastSpell(me, SPELL_WHIRLWIND, false);
-                        events.ScheduleEvent(EVENT_SPELL_WHIRLWIND, 27000);
+                        events.ScheduleEvent(EVENT_SPELL_WHIRLWIND, 27s);
                         break;
                     case EVENT_SPELL_INSIDIOUS_WHISPER:
                         Talk(SAY_INNER_DEMONS);
@@ -301,7 +301,7 @@ class npc_inner_demon : public CreatureScript
 
                 ownerGUID = summoner->GetGUID();
                 events.Reset();
-                events.ScheduleEvent(EVENT_SPELL_SHADOW_BOLT, 4000);
+                events.ScheduleEvent(EVENT_SPELL_SHADOW_BOLT, 4s);
             }
 
             void JustDied(Unit* /*killer*/)
@@ -334,7 +334,7 @@ class npc_inner_demon : public CreatureScript
                 {
                     case EVENT_SPELL_SHADOW_BOLT:
                         me->CastSpell(me->GetVictim(), SPELL_SHADOW_BOLT, false);
-                        events.ScheduleEvent(EVENT_SPELL_SHADOW_BOLT, 6000);
+                        events.ScheduleEvent(EVENT_SPELL_SHADOW_BOLT, 6s);
                         break;
                 }
 

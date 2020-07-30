@@ -116,7 +116,7 @@ class boss_grand_warlock_nethekurse : public CreatureScript
                             Talk(SAY_PEON_DIES);
 
                         if (++PeonKilledCount == 4)
-                            events2.ScheduleEvent(EVENT_START_ATTACK, 5000);
+                            events2.ScheduleEvent(EVENT_START_ATTACK, 5s);
                         break;
                 }
             }
@@ -148,7 +148,7 @@ class boss_grand_warlock_nethekurse : public CreatureScript
 
                     if (EventStage == EVENT_STAGE_NONE && PeonKilledCount < 4)
                     {
-                        events2.ScheduleEvent(EVENT_INTRO, 90000);
+                        events2.ScheduleEvent(EVENT_INTRO, 90s);
                         Talk(SAY_INTRO);
                         EventStage = EVENT_STAGE_INTRO;
                         instance->SetBossState(DATA_NETHEKURSE, IN_PROGRESS);
@@ -156,7 +156,7 @@ class boss_grand_warlock_nethekurse : public CreatureScript
                     }
                     else if (PeonKilledCount >= 4)
                     {
-                        events2.ScheduleEvent(EVENT_START_ATTACK, 1000);
+                        events2.ScheduleEvent(EVENT_START_ATTACK, 1s);
                         instance->SetBossState(DATA_NETHEKURSE, IN_PROGRESS);
                         me->SetInCombatWithZone();
                     }
@@ -198,9 +198,9 @@ class boss_grand_warlock_nethekurse : public CreatureScript
                         if (Unit* target = me->SelectNearestPlayer(50.0f))
                             AttackStart(target);
 
-                        events.ScheduleEvent(EVENT_SPELL_DEATH_COIL, 20000);
-                        events.ScheduleEvent(EVENT_SPELL_SHADOW_FISSURE, 8000);
-                        events.ScheduleEvent(EVENT_CHECK_HEALTH, 1000);
+                        events.ScheduleEvent(EVENT_SPELL_DEATH_COIL, 20s);
+                        events.ScheduleEvent(EVENT_SPELL_SHADOW_FISSURE, 8s);
+                        events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
                         return;
                     }
                 }
@@ -217,16 +217,16 @@ class boss_grand_warlock_nethekurse : public CreatureScript
                     case EVENT_SPELL_SHADOW_FISSURE:
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             me->CastSpell(target, SPELL_SHADOW_FISSURE, false);
-                        events.RescheduleEvent(EVENT_SPELL_SHADOW_FISSURE, urand(7500, 10000));
+                        events.RescheduleEvent(EVENT_SPELL_SHADOW_FISSURE, 7500ms, 10s);
                         break;
                     case EVENT_SPELL_DEATH_COIL:
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             me->CastSpell(target, DUNGEON_MODE(SPELL_DEATH_COIL_N, SPELL_DEATH_COIL_H), false);
-                        events.RescheduleEvent(EVENT_SPELL_DEATH_COIL, urand(15000, 20000));
+                        events.RescheduleEvent(EVENT_SPELL_DEATH_COIL, 15s, 20s);
                         break;
                     case EVENT_SPELL_CLEAVE:
                         me->CastSpell(me->GetVictim(), DUNGEON_MODE(SPELL_SHADOW_CLEAVE_N, SPELL_SHADOW_SLAM_H), false);
-                        events.RescheduleEvent(EVENT_SPELL_CLEAVE, urand(6000, 8000));
+                        events.RescheduleEvent(EVENT_SPELL_CLEAVE, 6s, 8s);
                         break;
                     case EVENT_CHECK_HEALTH:
                         if (me->HealthBelowPct(21))
@@ -235,9 +235,7 @@ class boss_grand_warlock_nethekurse : public CreatureScript
                             me->CastSpell(me, SPELL_DARK_SPIN, false);
                         }
                         else
-                        {
-                            events.RescheduleEvent(EVENT_CHECK_HEALTH, 1000);
-                        }
+                            events.RescheduleEvent(EVENT_CHECK_HEALTH, 1s);                        
                         break;
                 }
 

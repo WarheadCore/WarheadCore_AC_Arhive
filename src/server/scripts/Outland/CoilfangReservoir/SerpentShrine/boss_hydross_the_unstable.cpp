@@ -128,13 +128,13 @@ class boss_hydross_the_unstable : public CreatureScript
                     me->ApplySpellImmune(0, IMMUNITY_SCHOOL, SPELL_SCHOOL_MASK_FROST, false);
                     me->ApplySpellImmune(0, IMMUNITY_SCHOOL, SPELL_SCHOOL_MASK_NATURE, true);
                     me->CastSpell(me, SPELL_CORRUPTION, true);
-                    events.ScheduleEvent(EVENT_SPELL_MARK_OF_CORRUPTION1, 0, GROUP_ABILITIES);
-                    events.ScheduleEvent(EVENT_SPELL_MARK_OF_CORRUPTION2, 15000, GROUP_ABILITIES);
-                    events.ScheduleEvent(EVENT_SPELL_MARK_OF_CORRUPTION3, 30000, GROUP_ABILITIES);
-                    events.ScheduleEvent(EVENT_SPELL_MARK_OF_CORRUPTION4, 45000, GROUP_ABILITIES);
-                    events.ScheduleEvent(EVENT_SPELL_MARK_OF_CORRUPTION5, 60000, GROUP_ABILITIES);
-                    events.ScheduleEvent(EVENT_SPELL_MARK_OF_CORRUPTION6, 75000, GROUP_ABILITIES);
-                    events.ScheduleEvent(EVENT_SPELL_VILE_SLUDGE, 7000, GROUP_ABILITIES);
+                    events.ScheduleEvent(EVENT_SPELL_MARK_OF_CORRUPTION1, 0s, GROUP_ABILITIES);
+                    events.ScheduleEvent(EVENT_SPELL_MARK_OF_CORRUPTION2, 15s, GROUP_ABILITIES);
+                    events.ScheduleEvent(EVENT_SPELL_MARK_OF_CORRUPTION3, 30s, GROUP_ABILITIES);
+                    events.ScheduleEvent(EVENT_SPELL_MARK_OF_CORRUPTION4, 45s, GROUP_ABILITIES);
+                    events.ScheduleEvent(EVENT_SPELL_MARK_OF_CORRUPTION5, 1min, GROUP_ABILITIES);
+                    events.ScheduleEvent(EVENT_SPELL_MARK_OF_CORRUPTION6, 75s, GROUP_ABILITIES);
+                    events.ScheduleEvent(EVENT_SPELL_VILE_SLUDGE, 7s, GROUP_ABILITIES);
                 }
                 else
                 {
@@ -142,13 +142,13 @@ class boss_hydross_the_unstable : public CreatureScript
                     me->ApplySpellImmune(0, IMMUNITY_SCHOOL, SPELL_SCHOOL_MASK_FROST, true);
                     me->ApplySpellImmune(0, IMMUNITY_SCHOOL, SPELL_SCHOOL_MASK_NATURE, false);
                     me->RemoveAurasDueToSpell(SPELL_CORRUPTION);
-                    events.ScheduleEvent(EVENT_SPELL_MARK_OF_HYDROSS1, 0, GROUP_ABILITIES);
-                    events.ScheduleEvent(EVENT_SPELL_MARK_OF_HYDROSS2, 15000, GROUP_ABILITIES);
-                    events.ScheduleEvent(EVENT_SPELL_MARK_OF_HYDROSS3, 30000, GROUP_ABILITIES);
-                    events.ScheduleEvent(EVENT_SPELL_MARK_OF_HYDROSS4, 45000, GROUP_ABILITIES);
-                    events.ScheduleEvent(EVENT_SPELL_MARK_OF_HYDROSS5, 60000, GROUP_ABILITIES);
-                    events.ScheduleEvent(EVENT_SPELL_MARK_OF_HYDROSS6, 75000, GROUP_ABILITIES);
-                    events.ScheduleEvent(EVENT_SPELL_WATER_TOMB, 7000, GROUP_ABILITIES);
+                    events.ScheduleEvent(EVENT_SPELL_MARK_OF_HYDROSS1, 0s, GROUP_ABILITIES);
+                    events.ScheduleEvent(EVENT_SPELL_MARK_OF_HYDROSS2, 15s, GROUP_ABILITIES);
+                    events.ScheduleEvent(EVENT_SPELL_MARK_OF_HYDROSS3, 30s, GROUP_ABILITIES);
+                    events.ScheduleEvent(EVENT_SPELL_MARK_OF_HYDROSS4, 45s, GROUP_ABILITIES);
+                    events.ScheduleEvent(EVENT_SPELL_MARK_OF_HYDROSS5, 1min, GROUP_ABILITIES);
+                    events.ScheduleEvent(EVENT_SPELL_MARK_OF_HYDROSS6, 75s, GROUP_ABILITIES);
+                    events.ScheduleEvent(EVENT_SPELL_WATER_TOMB, 7s, GROUP_ABILITIES);
                 }
 
                 if (initial)
@@ -173,8 +173,8 @@ class boss_hydross_the_unstable : public CreatureScript
                 BossAI::EnterCombat(who);
                 Talk(SAY_AGGRO);
 
-                events.ScheduleEvent(EVENT_SPELL_ENRAGE, 600000);
-                events.ScheduleEvent(EVENT_CHECK_AURA, 1000);
+                events.ScheduleEvent(EVENT_SPELL_ENRAGE, 10min);
+                events.ScheduleEvent(EVENT_CHECK_AURA, 1s);
                 SetForm(false, true);
             }
 
@@ -183,7 +183,7 @@ class boss_hydross_the_unstable : public CreatureScript
                 if (events.GetNextEventTime(EVENT_KILL_TALK) == 0)
                 {
                     Talk(me->HasAura(SPELL_CORRUPTION) ? SAY_CORRUPT_SLAY : SAY_CLEAN_SLAY);
-                    events.ScheduleEvent(EVENT_KILL_TALK, 6000);
+                    events.ScheduleEvent(EVENT_KILL_TALK, 6s);
                 }
             }
 
@@ -224,7 +224,7 @@ class boss_hydross_the_unstable : public CreatureScript
                     case EVENT_CHECK_AURA:
                         if (me->HasAura(SPELL_BLUE_BEAM) == me->HasAura(SPELL_CORRUPTION))
                             SetForm(!me->HasAura(SPELL_BLUE_BEAM), false);
-                        events.ScheduleEvent(EVENT_CHECK_AURA, 1000);
+                        events.ScheduleEvent(EVENT_CHECK_AURA, 1s);
                         break;
                     case EVENT_SPELL_ENRAGE:
                         me->CastSpell(me, SPELL_ENRAGE, true);
@@ -246,7 +246,7 @@ class boss_hydross_the_unstable : public CreatureScript
                         break;
                     case EVENT_SPELL_MARK_OF_HYDROSS6:
                         me->CastSpell(me, SPELL_MARK_OF_HYDROSS6, false);
-                        events.ScheduleEvent(EVENT_SPELL_MARK_OF_HYDROSS6, 15000, GROUP_ABILITIES);
+                        events.ScheduleEvent(EVENT_SPELL_MARK_OF_HYDROSS6, 15s, GROUP_ABILITIES);
                         break;
                     case EVENT_SPELL_MARK_OF_CORRUPTION1:
                         me->CastSpell(me, SPELL_MARK_OF_CORRUPTION1, false);
@@ -265,17 +265,17 @@ class boss_hydross_the_unstable : public CreatureScript
                         break;
                     case EVENT_SPELL_MARK_OF_CORRUPTION6:
                         me->CastSpell(me, SPELL_MARK_OF_CORRUPTION6, false);
-                        events.ScheduleEvent(EVENT_SPELL_MARK_OF_CORRUPTION6, 15000, GROUP_ABILITIES);
+                        events.ScheduleEvent(EVENT_SPELL_MARK_OF_CORRUPTION6, 15s, GROUP_ABILITIES);
                         break;
                     case EVENT_SPELL_WATER_TOMB:
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 60.0f, true))
                             me->CastSpell(target, SPELL_WATER_TOMB, false);
-                        events.ScheduleEvent(EVENT_SPELL_WATER_TOMB, 7000, GROUP_ABILITIES);
+                        events.ScheduleEvent(EVENT_SPELL_WATER_TOMB, 7s, GROUP_ABILITIES);
                         break;
                     case EVENT_SPELL_VILE_SLUDGE:
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 60.0f, true))
                             me->CastSpell(target, SPELL_VILE_SLUDGE, false);
-                        events.ScheduleEvent(EVENT_SPELL_VILE_SLUDGE, 15000, GROUP_ABILITIES);
+                        events.ScheduleEvent(EVENT_SPELL_VILE_SLUDGE, 15s, GROUP_ABILITIES);
                         break;
 
                 }

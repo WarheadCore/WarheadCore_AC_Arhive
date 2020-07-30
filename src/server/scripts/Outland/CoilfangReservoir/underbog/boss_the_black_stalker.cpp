@@ -76,12 +76,13 @@ public:
 
         void EnterCombat(Unit*)
         {
-            events.ScheduleEvent(EVENT_LEVITATE, 12000);
-            events.ScheduleEvent(EVENT_SPELL_CHAIN, 6000);
-            events.ScheduleEvent(EVENT_SPELL_STATIC, 10000);
-            events.ScheduleEvent(EVENT_CHECK, 5000);
+            events.ScheduleEvent(EVENT_LEVITATE, 12s);
+            events.ScheduleEvent(EVENT_SPELL_CHAIN, 6s);
+            events.ScheduleEvent(EVENT_SPELL_STATIC, 10s);
+            events.ScheduleEvent(EVENT_CHECK, 5s);
+            
             if (IsHeroic())
-                events.ScheduleEvent(EVENT_SPELL_SPORES, urand(10000, 15000));
+                events.ScheduleEvent(EVENT_SPELL_SPORES, 10s, 15s);
         }
 
 
@@ -146,7 +147,7 @@ public:
                         me->CastSpell(target, SPELL_LEVITATE, false);
                         lTarget = target->GetGUID();
                         events.DelayEvents(5000);
-                        events.ScheduleEvent(EVENT_LEVITATE_TARGET_1, 2000);
+                        events.ScheduleEvent(EVENT_LEVITATE_TARGET_1, 2s);
                     }
                     break;
                 case EVENT_LEVITATE_TARGET_1:
@@ -157,7 +158,7 @@ public:
                         else
                         {
                             target->CastSpell(target, SPELL_MAGNETIC_PULL, true);
-                            events.ScheduleEvent(EVENT_LEVITATE_TARGET_2, 1500);
+                            events.ScheduleEvent(EVENT_LEVITATE_TARGET_2, 1500ms);
                         }
                     }
                     events.PopEvent();

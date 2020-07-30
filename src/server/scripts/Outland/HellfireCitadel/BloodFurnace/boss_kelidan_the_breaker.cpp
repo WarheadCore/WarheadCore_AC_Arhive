@@ -102,9 +102,9 @@ class boss_kelidan_the_breaker : public CreatureScript
 
             void EnterCombat(Unit*  /*who*/)
             {
-                events.ScheduleEvent(EVENT_SPELL_VOLLEY, 1000);
-                events.ScheduleEvent(EVENT_SPELL_CORRUPTION, 5000);
-                events.ScheduleEvent(EVENT_SPELL_BURNING_NOVA, 15000);
+                events.ScheduleEvent(EVENT_SPELL_VOLLEY, 1s);
+                events.ScheduleEvent(EVENT_SPELL_CORRUPTION, 5s);
+                events.ScheduleEvent(EVENT_SPELL_BURNING_NOVA, 15s);
 
                 me->InterruptNonMeleeSpells(false);
                 Talk(SAY_WAKE);
@@ -267,7 +267,7 @@ class boss_kelidan_the_breaker : public CreatureScript
 
                         events.DelayEvents(6000, 0);
                         events.RepeatEvent(urand(25000, 32000));
-                        events.ScheduleEvent(EVENT_SPELL_FIRE_NOVA, 5000);
+                        events.ScheduleEvent(EVENT_SPELL_FIRE_NOVA, 5s);
                         break;
                     case EVENT_SPELL_FIRE_NOVA:
                         me->CastSpell(me, SPELL_FIRE_NOVA, true);
@@ -315,8 +315,8 @@ class npc_shadowmoon_channeler : public CreatureScript
                     kelidan->AI()->DoAction(ACTION_CHANNELER_ENGAGED);
 
                 me->InterruptNonMeleeSpells(false);
-                events.ScheduleEvent(EVENT_SPELL_SHADOW_BOLT, urand(1500, 3500));
-                events.ScheduleEvent(EVENT_SPELL_MARK, urand(5000, 6500));
+                events.ScheduleEvent(EVENT_SPELL_SHADOW_BOLT, 1500ms, 3500ms);
+                events.ScheduleEvent(EVENT_SPELL_MARK, 5s, 6500ms);
             }
 
             void JustDied(Unit*  /*killer*/)

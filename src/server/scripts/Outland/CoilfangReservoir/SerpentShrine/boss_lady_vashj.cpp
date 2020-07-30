@@ -128,7 +128,7 @@ class boss_lady_vashj : public CreatureScript
                 if (events.GetNextEventTime(EVENT_KILL_TALK) == 0)
                 {
                     Talk(SAY_SLAY);
-                    events.ScheduleEvent(EVENT_KILL_TALK, 6000);
+                    events.ScheduleEvent(EVENT_KILL_TALK, 6s);
                 }
             }
 
@@ -144,10 +144,10 @@ class boss_lady_vashj : public CreatureScript
                 Talk(SAY_AGGRO);
 
                 me->CastSpell(me, SPELL_REMOVE_TAINTED_CORES, true);
-                events.ScheduleEvent(EVENT_SPELL_SHOCK_BLAST, 10000);
-                events.ScheduleEvent(EVENT_SPELL_STATIC_CHARGE, 15000);
-                events.ScheduleEvent(EVENT_SPELL_ENTANGLE, 20000);
-                events.ScheduleEvent(EVENT_CHECK_HEALTH, 1000);
+                events.ScheduleEvent(EVENT_SPELL_SHOCK_BLAST, 10s);
+                events.ScheduleEvent(EVENT_SPELL_STATIC_CHARGE, 15s);
+                events.ScheduleEvent(EVENT_SPELL_ENTANGLE, 20s);
+                events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
             }
 
             void JustSummoned(Creature* summon)
@@ -185,12 +185,12 @@ class boss_lady_vashj : public CreatureScript
                 me->SetFacingTo(me->GetHomePosition().GetOrientation());
                 instance->SetData(DATA_ACTIVATE_SHIELD, 0);
                 events.Reset();
-                events.ScheduleEvent(EVENT_SPELL_FORKED_LIGHTNING, 3000);
-                events.ScheduleEvent(EVENT_SUMMON_A, 0);
-                events.ScheduleEvent(EVENT_SUMMON_B, 45000);
-                events.ScheduleEvent(EVENT_SUMMON_C, 60000);
-                events.ScheduleEvent(EVENT_SUMMON_D, 50000);
-                events.ScheduleEvent(EVENT_CHECK_HEALTH2, 1000);
+                events.ScheduleEvent(EVENT_SPELL_FORKED_LIGHTNING, 3s);
+                events.ScheduleEvent(EVENT_SUMMON_A, 0s);
+                events.ScheduleEvent(EVENT_SUMMON_B, 45s);
+                events.ScheduleEvent(EVENT_SUMMON_C, 1min);
+                events.ScheduleEvent(EVENT_SUMMON_D, 50s);
+                events.ScheduleEvent(EVENT_CHECK_HEALTH2, 1s);
             }
 
             void UpdateAI(uint32 diff)
@@ -207,16 +207,16 @@ class boss_lady_vashj : public CreatureScript
                 {
                     case EVENT_SPELL_SHOCK_BLAST:
                         me->CastSpell(me->GetVictim(), SPELL_SHOCK_BLAST, false);
-                        events.ScheduleEvent(EVENT_SPELL_SHOCK_BLAST, urand(10000, 20000));
+                        events.ScheduleEvent(EVENT_SPELL_SHOCK_BLAST, 10s, 20s);
                         break;
                     case EVENT_SPELL_STATIC_CHARGE:
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40.0f))
                             me->CastSpell(target, SPELL_STATIC_CHARGE, false);
-                        events.ScheduleEvent(EVENT_SPELL_STATIC_CHARGE, 20000);
+                        events.ScheduleEvent(EVENT_SPELL_STATIC_CHARGE, 20s);
                         break;
                     case EVENT_SPELL_ENTANGLE:
                         me->CastSpell(me, SPELL_ENTANGLE, false);
-                        events.ScheduleEvent(EVENT_SPELL_ENTANGLE, 30000);
+                        events.ScheduleEvent(EVENT_SPELL_ENTANGLE, 30s);
                         break;
                     case EVENT_CHECK_HEALTH:
                         if (me->HealthBelowPct(71))
@@ -226,28 +226,28 @@ class boss_lady_vashj : public CreatureScript
                             me->GetMotionMaster()->MovePoint(POINT_HOME, me->GetHomePosition().GetPositionX(), me->GetHomePosition().GetPositionY(), me->GetHomePosition().GetPositionZ(), true, true);
                             break;
                         }
-                        events.ScheduleEvent(EVENT_CHECK_HEALTH, 1000);
+                        events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
                         break;
                     case EVENT_SPELL_FORKED_LIGHTNING:
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 60.0f))
                             me->CastSpell(target, SPELL_FORKED_LIGHTNING, false);
-                        events.ScheduleEvent(EVENT_SPELL_FORKED_LIGHTNING, urand(2500, 5000));
+                        events.ScheduleEvent(EVENT_SPELL_FORKED_LIGHTNING, 2500ms, 5s);
                         break;
                     case EVENT_SUMMON_A:
                         me->CastSpell(me, SPELL_SUMMON_ENCHANTED_ELEMENTAL, true);
-                        events.ScheduleEvent(EVENT_SUMMON_A, 2500);
+                        events.ScheduleEvent(EVENT_SUMMON_A, 2500ms);
                         break;
                     case EVENT_SUMMON_B:
                         me->CastSpell(me, SPELL_SUMMON_COILFANG_ELITE, true);
-                        events.ScheduleEvent(EVENT_SUMMON_B, 45000);
+                        events.ScheduleEvent(EVENT_SUMMON_B, 45s);
                         break;
                     case EVENT_SUMMON_C:
                         me->CastSpell(me, SPELL_SUMMON_COILFANG_STRIDER, true);
-                        events.ScheduleEvent(EVENT_SUMMON_C, 60000);
+                        events.ScheduleEvent(EVENT_SUMMON_C, 1min);
                         break;
                     case EVENT_SUMMON_D:
                         me->CastSpell(me, SPELL_SUMMON_TAINTED_ELEMENTAL, true);
-                        events.ScheduleEvent(EVENT_SUMMON_D, 50000);
+                        events.ScheduleEvent(EVENT_SUMMON_D, 50s);
                         break;
                     case EVENT_CHECK_HEALTH2:
                         if (!me->HasAura(SPELL_MAGIC_BARRIER))
@@ -256,17 +256,17 @@ class boss_lady_vashj : public CreatureScript
                             me->SetReactState(REACT_AGGRESSIVE);
                             me->GetMotionMaster()->MoveChase(me->GetVictim());
                             events.Reset();
-                            events.ScheduleEvent(EVENT_SPELL_SHOCK_BLAST, 10000);
-                            events.ScheduleEvent(EVENT_SPELL_STATIC_CHARGE, 15000);
-                            events.ScheduleEvent(EVENT_SPELL_ENTANGLE, 20000);
-                            events.ScheduleEvent(EVENT_SUMMON_SPOREBAT, 5000);
+                            events.ScheduleEvent(EVENT_SPELL_SHOCK_BLAST, 10s);
+                            events.ScheduleEvent(EVENT_SPELL_STATIC_CHARGE, 15s);
+                            events.ScheduleEvent(EVENT_SPELL_ENTANGLE, 20s);
+                            events.ScheduleEvent(EVENT_SUMMON_SPOREBAT, 5s);
                             break;
                         }
-                        events.ScheduleEvent(EVENT_CHECK_HEALTH2, 1000);
+                        events.ScheduleEvent(EVENT_CHECK_HEALTH2, 1s);
                         break;
                     case EVENT_SUMMON_SPOREBAT:
                         me->CastSpell(me, SPELL_SUMMON_TOXIC_SPOREBAT, true);
-                        events.ScheduleEvent(EVENT_SUMMON_SPOREBAT, 20000 - 1000*std::min(count++, 16));
+                        events.ScheduleEvent(EVENT_SUMMON_SPOREBAT, 20s - 1s * Milliseconds(std::min(count++, 16ms)));
                         break;
                 }
 

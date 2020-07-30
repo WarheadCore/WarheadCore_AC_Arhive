@@ -235,7 +235,7 @@ class boss_kaelthas : public CreatureScript
             {
                 BossAI::Reset();
                 events2.Reset();
-                events2.ScheduleEvent(EVENT_GATHER_ADVISORS, 1000);
+                events2.ScheduleEvent(EVENT_GATHER_ADVISORS, 1s);
                 phase = PHASE_NONE;
 
                 me->ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_HOVER, true);
@@ -259,8 +259,8 @@ class boss_kaelthas : public CreatureScript
                     phase = PHASE_SINGLE_ADVISOR;
                     me->SetInCombatWithZone();
                     Talk(SAY_INTRO);
-                    events2.ScheduleEvent(EVENT_PREFIGHT_PHASE11, 23000);
-                    events2.ScheduleEvent(EVENT_PREFIGHT_PHASE12, 30000);
+                    events2.ScheduleEvent(EVENT_PREFIGHT_PHASE11, 23s);
+                    events2.ScheduleEvent(EVENT_PREFIGHT_PHASE12, 30s);
                 }
             }
 
@@ -294,29 +294,29 @@ class boss_kaelthas : public CreatureScript
                             if (summon->GetDBTableGUIDLow() && summon->IsAlive())
                                 return;
 
-                    events2.ScheduleEvent(EVENT_PREFIGHT_PHASE71, 2000);
+                    events2.ScheduleEvent(EVENT_PREFIGHT_PHASE71, 2s);
                     return;
                 }
 
                 if (summon->GetEntry() == NPC_THALADRED)
                 {
-                    events2.ScheduleEvent(EVENT_PREFIGHT_PHASE21, 2000);
-                    events2.ScheduleEvent(EVENT_PREFIGHT_PHASE22, 14500);
+                    events2.ScheduleEvent(EVENT_PREFIGHT_PHASE21, 2s);
+                    events2.ScheduleEvent(EVENT_PREFIGHT_PHASE22, 14500ms);
                 }
                 else if (summon->GetEntry() == NPC_LORD_SANGUINAR)
                 {
-                    events2.ScheduleEvent(EVENT_PREFIGHT_PHASE31, 2000);
-                    events2.ScheduleEvent(EVENT_PREFIGHT_PHASE32, 9000);
+                    events2.ScheduleEvent(EVENT_PREFIGHT_PHASE31, 2s);
+                    events2.ScheduleEvent(EVENT_PREFIGHT_PHASE32, 9s);
                 }
                 else if (summon->GetEntry() == NPC_CAPERNIAN)
                 {
-                    events2.ScheduleEvent(EVENT_PREFIGHT_PHASE41, 2000);
-                    events2.ScheduleEvent(EVENT_PREFIGHT_PHASE42, 10400);
+                    events2.ScheduleEvent(EVENT_PREFIGHT_PHASE41, 2s);
+                    events2.ScheduleEvent(EVENT_PREFIGHT_PHASE42, 10400ms);
                 }
                 else if (summon->GetEntry() == NPC_TELONICUS)
                 {
-                    events2.ScheduleEvent(EVENT_PREFIGHT_PHASE51, 3000);
-                    events2.ScheduleEvent(EVENT_PREFIGHT_PHASE52, 9000);
+                    events2.ScheduleEvent(EVENT_PREFIGHT_PHASE51, 3s);
+                    events2.ScheduleEvent(EVENT_PREFIGHT_PHASE52, 9s);
                 }
             }
 
@@ -335,22 +335,22 @@ class boss_kaelthas : public CreatureScript
 
                 if (point == POINT_MIDDLE)
                 {
-                    events2.ScheduleEvent(EVENT_SCENE_1, 0);
-                    events2.ScheduleEvent(EVENT_SCENE_2, 2500);
-                    events2.ScheduleEvent(EVENT_SCENE_3, 4000);
-                    events2.ScheduleEvent(EVENT_SCENE_4, 7000);
-                    events2.ScheduleEvent(EVENT_SCENE_5, 10000);
-                    events2.ScheduleEvent(EVENT_SCENE_6, 14000);
-                    events2.ScheduleEvent(EVENT_SCENE_7, 17500);
-                    events2.ScheduleEvent(EVENT_SCENE_8, 19000);
-                    events2.ScheduleEvent(EVENT_SCENE_9, 22000); // two first lightnings + aura
-                    events2.ScheduleEvent(EVENT_SCENE_10, 22800); // two
-                    events2.ScheduleEvent(EVENT_SCENE_11, 23600); // two
-                    events2.ScheduleEvent(EVENT_SCENE_12, 24500); // two
-                    events2.ScheduleEvent(EVENT_SCENE_13, 24800); // two
-                    events2.ScheduleEvent(EVENT_SCENE_14, 25300); // two
-                    events2.ScheduleEvent(EVENT_SCENE_15, 32000); // full power
-                    events2.ScheduleEvent(EVENT_SCENE_16, 36000); // remove lightnings + aura, move down
+                    events2.ScheduleEvent(EVENT_SCENE_1, 0s);
+                    events2.ScheduleEvent(EVENT_SCENE_2, 2500ms);
+                    events2.ScheduleEvent(EVENT_SCENE_3, 4s);
+                    events2.ScheduleEvent(EVENT_SCENE_4, 7s);
+                    events2.ScheduleEvent(EVENT_SCENE_5, 10s);
+                    events2.ScheduleEvent(EVENT_SCENE_6, 14s);
+                    events2.ScheduleEvent(EVENT_SCENE_7, 17500ms);
+                    events2.ScheduleEvent(EVENT_SCENE_8, 19s);
+                    events2.ScheduleEvent(EVENT_SCENE_9, 22s); // two first lightnings + aura
+                    events2.ScheduleEvent(EVENT_SCENE_10, 22800ms); // two
+                    events2.ScheduleEvent(EVENT_SCENE_11, 23600ms); // two
+                    events2.ScheduleEvent(EVENT_SCENE_12, 24500ms); // two
+                    events2.ScheduleEvent(EVENT_SCENE_13, 24800ms); // two
+                    events2.ScheduleEvent(EVENT_SCENE_14, 25300ms); // two
+                    events2.ScheduleEvent(EVENT_SCENE_15, 32s); // full power
+                    events2.ScheduleEvent(EVENT_SCENE_16, 36s); // remove lightnings + aura, move down
                 }
                 else if (point == POINT_START_LAST_PHASE)
                 {
@@ -360,10 +360,11 @@ class boss_kaelthas : public CreatureScript
                     me->SetReactState(REACT_AGGRESSIVE);
                     me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE|UNIT_FLAG_NON_ATTACKABLE);
                     events.SetTimer(60000);
-                    events.ScheduleEvent(EVENT_SPELL_FIREBALL, 0);
-                    events.ScheduleEvent(EVENT_SPELL_FLAMESTRIKE, 10000);
-                    events.ScheduleEvent(EVENT_SPELL_SUMMON_PHOENIX, 20000);
-                    events.ScheduleEvent(EVENT_SPELL_GRAVITY_LAPSE, 5000);
+                    events.ScheduleEvent(EVENT_SPELL_FIREBALL, 0s);
+                    events.ScheduleEvent(EVENT_SPELL_FLAMESTRIKE, 10s);
+                    events.ScheduleEvent(EVENT_SPELL_SUMMON_PHOENIX, 20s);
+                    events.ScheduleEvent(EVENT_SPELL_GRAVITY_LAPSE, 5s);
+
                     if (me->GetVictim())
                     {
                         me->SetTarget(me->GetVictim()->GetGUID());
@@ -456,9 +457,9 @@ class boss_kaelthas : public CreatureScript
                                         summon->AI()->AttackStart(target);
                                 }
                         }
-                        events2.ScheduleEvent(EVENT_PREFIGHT_PHASE61, 2*MINUTE*IN_MILLISECONDS);
-                        events2.ScheduleEvent(EVENT_PREFIGHT_PHASE62, 2*MINUTE*IN_MILLISECONDS+6000);
-                        events2.ScheduleEvent(EVENT_PREFIGHT_PHASE63, 2*MINUTE*IN_MILLISECONDS+12000);
+                        events2.ScheduleEvent(EVENT_PREFIGHT_PHASE61, 2min);
+                        events2.ScheduleEvent(EVENT_PREFIGHT_PHASE62, 126s);
+                        events2.ScheduleEvent(EVENT_PREFIGHT_PHASE63, 132s);
                         break;
                     case EVENT_PREFIGHT_PHASE61:
                         phase = PHASE_ALL_ADVISORS;
@@ -478,7 +479,7 @@ class boss_kaelthas : public CreatureScript
                                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                                         summon->AI()->AttackStart(target);
                                 }
-                        events2.ScheduleEvent(EVENT_PREFIGHT_PHASE71, 3*MINUTE*IN_MILLISECONDS);
+                        events2.ScheduleEvent(EVENT_PREFIGHT_PHASE71, 3min);
                         break;
                     case EVENT_PREFIGHT_PHASE71:
                         events2.CancelEvent(EVENT_PREFIGHT_PHASE71);
@@ -491,13 +492,13 @@ class boss_kaelthas : public CreatureScript
 
                         events2.Reset();
                         events.Reset();
-                        events.ScheduleEvent(EVENT_SPELL_FIREBALL, 1000);
-                        events.ScheduleEvent(EVENT_SPELL_FLAMESTRIKE, 15000);
-                        events.ScheduleEvent(EVENT_SPELL_SUMMON_PHOENIX, 30000);
-                        events.ScheduleEvent(EVENT_SPELL_SEQ_1, 20000);
-                        events.ScheduleEvent(EVENT_SPELL_SEQ_2, 40000);
-                        events.ScheduleEvent(EVENT_SPELL_SEQ_3, 60000);
-                        events.ScheduleEvent(EVENT_CHECK_HEALTH, 1000);
+                        events.ScheduleEvent(EVENT_SPELL_FIREBALL, 1s);
+                        events.ScheduleEvent(EVENT_SPELL_FLAMESTRIKE, 15s);
+                        events.ScheduleEvent(EVENT_SPELL_SUMMON_PHOENIX, 30s);
+                        events.ScheduleEvent(EVENT_SPELL_SEQ_1, 20s);
+                        events.ScheduleEvent(EVENT_SPELL_SEQ_2, 40s);
+                        events.ScheduleEvent(EVENT_SPELL_SEQ_3, 1min);
+                        events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
                         break;
                     case EVENT_SCENE_1:
                         me->SetTarget(0);
@@ -620,30 +621,30 @@ class boss_kaelthas : public CreatureScript
                 switch (events.ExecuteEvent())
                 {
                     case EVENT_SPELL_SEQ_1:
-                        events.ScheduleEvent(EVENT_SPELL_MIND_CONTROL, 0);
-                        events.ScheduleEvent(EVENT_SPELL_ARCANE_DISRUPTION, 3000);
-                        events.ScheduleEvent(EVENT_SPELL_SEQ_1, 50000);
+                        events.ScheduleEvent(EVENT_SPELL_MIND_CONTROL, 0s);
+                        events.ScheduleEvent(EVENT_SPELL_ARCANE_DISRUPTION, 3s);
+                        events.ScheduleEvent(EVENT_SPELL_SEQ_1, 50s);
                         break;
                     case EVENT_SPELL_SEQ_2:
-                        events.ScheduleEvent(EVENT_SPELL_MIND_CONTROL, 3000);
-                        events.ScheduleEvent(EVENT_SPELL_ARCANE_DISRUPTION, 6000);
-                        events.ScheduleEvent(EVENT_SPELL_SEQ_2, 50000);
+                        events.ScheduleEvent(EVENT_SPELL_MIND_CONTROL, 3s);
+                        events.ScheduleEvent(EVENT_SPELL_ARCANE_DISRUPTION, 6s);
+                        events.ScheduleEvent(EVENT_SPELL_SEQ_2, 50s);
                         break;
                     case EVENT_SPELL_SEQ_3:
                         Talk(SAY_PYROBLAST);
                         me->CastSpell(me, SPELL_SHOCK_BARRIER, false);
-                        events.ScheduleEvent(EVENT_SPELL_SEQ_3, 50000);
+                        events.ScheduleEvent(EVENT_SPELL_SEQ_3, 50s);
                         events.DelayEvents(10000);
-                        events.ScheduleEvent(EVENT_SPELL_PYROBLAST, 0);
-                        events.ScheduleEvent(EVENT_SPELL_PYROBLAST, 4000);
-                        events.ScheduleEvent(EVENT_SPELL_PYROBLAST, 8000);
+                        events.ScheduleEvent(EVENT_SPELL_PYROBLAST, 0s);
+                        events.ScheduleEvent(EVENT_SPELL_PYROBLAST, 4s);
+                        events.ScheduleEvent(EVENT_SPELL_PYROBLAST, 8s);
                         break;
                     case EVENT_SPELL_SHOCK_BARRIER:
                         me->CastSpell(me, SPELL_SHOCK_BARRIER, false);
                         break;
                     case EVENT_SPELL_FIREBALL:
                         me->CastSpell(me->GetVictim(), SPELL_FIREBALL, false);
-                        events.ScheduleEvent(EVENT_SPELL_FIREBALL, roll_chance_i(70) ? 2000: 4000);
+                        events.ScheduleEvent(EVENT_SPELL_FIREBALL, roll_chance_i(70) ? 2s: 4s);
                         break;
                     case EVENT_SPELL_PYROBLAST:
                         me->CastSpell(me->GetVictim(), SPELL_PYROBLAST, false);
@@ -651,7 +652,7 @@ class boss_kaelthas : public CreatureScript
                     case EVENT_SPELL_FLAMESTRIKE:
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
                             me->CastSpell(target, SPELL_FLAME_STRIKE, false);
-                        events.ScheduleEvent(EVENT_SPELL_FLAMESTRIKE, 20000);
+                        events.ScheduleEvent(EVENT_SPELL_FLAMESTRIKE, 20s);
                         break;
                     case EVENT_SPELL_ARCANE_DISRUPTION:
                         me->CastSpell(me, SPELL_ARCANE_DISRUPTION, false);
@@ -664,7 +665,7 @@ class boss_kaelthas : public CreatureScript
                     case EVENT_SPELL_SUMMON_PHOENIX:
                         Talk(SAY_SUMMON_PHOENIX);
                         me->CastSpell(me, SPELL_PHOENIX, false);
-                        events.ScheduleEvent(EVENT_SPELL_SUMMON_PHOENIX, 40000);
+                        events.ScheduleEvent(EVENT_SPELL_SUMMON_PHOENIX, 40s);
                         break;
                     case EVENT_CHECK_HEALTH:
                         if (me->HealthBelowPct(51))
@@ -677,17 +678,17 @@ class boss_kaelthas : public CreatureScript
                             me->SendMeleeAttackStop();
                             break;
                         }
-                        events.ScheduleEvent(EVENT_CHECK_HEALTH, 1000);
+                        events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
                         break;
                     case EVENT_SPELL_GRAVITY_LAPSE:
                         events.DelayEvents(30000);
                         me->setAttackTimer(BASE_ATTACK, 30000);
-                        events.ScheduleEvent(EVENT_SPELL_GRAVITY_LAPSE, 90000);
-                        events.ScheduleEvent(EVENT_GRAVITY_LAPSE_END, 32000);
-                        events.ScheduleEvent(EVENT_SPELL_SHOCK_BARRIER, 20000);
-                        events.ScheduleEvent(EVENT_SPELL_SHOCK_BARRIER, 10000);
-                        events.ScheduleEvent(EVENT_SPELL_NETHER_BEAM, 4000);
-                        events.ScheduleEvent(EVENT_SPELL_NETHER_VAPOR, 0);
+                        events.ScheduleEvent(EVENT_SPELL_GRAVITY_LAPSE, 90s);
+                        events.ScheduleEvent(EVENT_GRAVITY_LAPSE_END, 32s);
+                        events.ScheduleEvent(EVENT_SPELL_SHOCK_BARRIER, 20s);
+                        events.ScheduleEvent(EVENT_SPELL_SHOCK_BARRIER, 10s);
+                        events.ScheduleEvent(EVENT_SPELL_NETHER_BEAM, 4s);
+                        events.ScheduleEvent(EVENT_SPELL_NETHER_VAPOR, 0s);
                         me->CastSpell(me, SPELL_SHOCK_BARRIER, false);
                         me->CastSpell(me, SPELL_GRAVITY_LAPSE, false);
                         me->SetTarget(0);
@@ -700,7 +701,7 @@ class boss_kaelthas : public CreatureScript
                         break;
                     case EVENT_SPELL_NETHER_BEAM:
                         me->CastSpell(me, SPELL_NETHER_BEAM, false);
-                        events.ScheduleEvent(EVENT_SPELL_NETHER_BEAM, 4000);
+                        events.ScheduleEvent(EVENT_SPELL_NETHER_BEAM, 4s);
                         break;
                     case EVENT_GRAVITY_LAPSE_END:
                         summons.DespawnEntry(NPC_NETHER_VAPOR);

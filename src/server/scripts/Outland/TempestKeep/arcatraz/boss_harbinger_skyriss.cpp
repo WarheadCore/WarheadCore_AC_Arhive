@@ -83,13 +83,14 @@ class boss_harbinger_skyriss : public CreatureScript
                 Talk(SAY_AGGRO);
                 me->SetInCombatWithZone();
 
-                events.ScheduleEvent(EVENT_SUMMON_IMAGE1, 1000);
-                events.ScheduleEvent(EVENT_SUMMON_IMAGE2, 1000);
-                events.ScheduleEvent(EVENT_SPELL_MIND_REND, 10000);
-                events.ScheduleEvent(EVENT_SPELL_FEAR, 15000);
-                events.ScheduleEvent(EVENT_SPELL_DOMINATION, 30000);
+                events.ScheduleEvent(EVENT_SUMMON_IMAGE1, 1s);
+                events.ScheduleEvent(EVENT_SUMMON_IMAGE2, 1s);
+                events.ScheduleEvent(EVENT_SPELL_MIND_REND, 10s);
+                events.ScheduleEvent(EVENT_SPELL_FEAR, 15s);
+                events.ScheduleEvent(EVENT_SPELL_DOMINATION, 30s);
+
                 if (IsHeroic())
-                    events.ScheduleEvent(EVENT_SPELL_MANA_BURN, 25000);
+                    events.ScheduleEvent(EVENT_SPELL_MANA_BURN, 25s);
             }
 
             void JustDied(Unit* /*killer*/)
@@ -131,7 +132,8 @@ class boss_harbinger_skyriss : public CreatureScript
                             me->CastSpell(me, SPELL_66_ILLUSION, false);
                             break;
                         }
-                        events.ScheduleEvent(EVENT_SUMMON_IMAGE1, 1000);
+
+                        events.ScheduleEvent(EVENT_SUMMON_IMAGE1, 1s);
                         break;
                     case EVENT_SUMMON_IMAGE2:
                         if (HealthBelowPct(34))
@@ -140,12 +142,12 @@ class boss_harbinger_skyriss : public CreatureScript
                             me->CastSpell(me, SPELL_33_ILLUSION, false);
                             break;
                         }
-                        events.ScheduleEvent(EVENT_SUMMON_IMAGE2, 1000);
+                        events.ScheduleEvent(EVENT_SUMMON_IMAGE2, 1s);
                         break;
                     case EVENT_SPELL_MIND_REND:
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f))
                             me->CastSpell(target, SPELL_MIND_REND, false);
-                        events.ScheduleEvent(EVENT_SPELL_MIND_REND, 10000);
+                        events.ScheduleEvent(EVENT_SPELL_MIND_REND, 10s);
                         break;
                     case EVENT_SPELL_FEAR:
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 20.0f))
@@ -153,7 +155,7 @@ class boss_harbinger_skyriss : public CreatureScript
                             Talk(SAY_FEAR);
                             me->CastSpell(target, SPELL_FEAR, false);
                         }
-                        events.ScheduleEvent(EVENT_SPELL_FEAR, 25000);
+                        events.ScheduleEvent(EVENT_SPELL_FEAR, 25s);
                         break;
                     case EVENT_SPELL_DOMINATION:
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 30.0f))
@@ -161,12 +163,12 @@ class boss_harbinger_skyriss : public CreatureScript
                             Talk(SAY_MIND);
                             me->CastSpell(target, SPELL_DOMINATION, false);
                         }
-                        events.ScheduleEvent(EVENT_SPELL_DOMINATION, 30000);
+                        events.ScheduleEvent(EVENT_SPELL_DOMINATION, 30s);
                         break;
                     case EVENT_SPELL_MANA_BURN:
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, PowerUsersSelector(me, POWER_MANA, 40.0f, false)))
                             me->CastSpell(target, SPELL_MANA_BURN, false);
-                        events.ScheduleEvent(EVENT_SPELL_MANA_BURN, 30000);
+                        events.ScheduleEvent(EVENT_SPELL_MANA_BURN, 30s);
                         break;
                 }
 

@@ -87,12 +87,13 @@ public:
         {
             Talk(SAY_AGGRO);
 
-            events.ScheduleEvent(EVENT_SPELL_BLINK, 35000);
-            events.ScheduleEvent(EVENT_SPELL_ARCANE_VOLLEY, 5000);
-            events.ScheduleEvent(EVENT_SPELL_POLYMORPH, 8000);
-            events.ScheduleEvent(EVENT_HEALTH_CHECK, 2000);
+            events.ScheduleEvent(EVENT_SPELL_BLINK, 35s);
+            events.ScheduleEvent(EVENT_SPELL_ARCANE_VOLLEY, 5s);
+            events.ScheduleEvent(EVENT_SPELL_POLYMORPH, 8s);
+            events.ScheduleEvent(EVENT_HEALTH_CHECK, 2s);
+            
             if (IsHeroic())
-                events.ScheduleEvent(EVENT_SPELL_SLOW, urand(15000, 25000));
+                events.ScheduleEvent(EVENT_SPELL_SLOW, 15s, 25s);
         }
 
         void JustDied(Unit* /*killer*/)
@@ -153,7 +154,7 @@ public:
                     }
                     events.RepeatEvent(urand(35000, 40000));
                     events.DelayEvents(500);
-                    events.ScheduleEvent(EVENT_SPELL_BLINK_2, 0);
+                    events.ScheduleEvent(EVENT_SPELL_BLINK_2, 0s);
                     return;
                 case EVENT_SPELL_BLINK_2:
                     me->CastSpell(me, SPELL_ARCANE_EXPLOSION_N, false);
@@ -234,11 +235,11 @@ public:
         void EnterCombat(Unit* /*who*/)
         {
             events.Reset();
-            events.ScheduleEvent(EVENT_SPELL_SCREECH, 14000);
-            events.ScheduleEvent(EVENT_SPELL_BOMB, 5000);
-            events.ScheduleEvent(EVENT_SPELL_CYCLONE, 8000);
-            events.ScheduleEvent(EVENT_ANZU_HEALTH1, 2000);
-            events.ScheduleEvent(EVENT_ANZU_HEALTH2, 2001);
+            events.ScheduleEvent(EVENT_SPELL_SCREECH, 14s);
+            events.ScheduleEvent(EVENT_SPELL_BOMB, 5s);
+            events.ScheduleEvent(EVENT_SPELL_CYCLONE, 8s);
+            events.ScheduleEvent(EVENT_ANZU_HEALTH1, 2s);
+            events.ScheduleEvent(EVENT_ANZU_HEALTH2, 2001ms);
 
             if (InstanceScript* instance = me->GetInstanceScript())
                 instance->SetData(TYPE_ANZU_ENCOUNTER, IN_PROGRESS);

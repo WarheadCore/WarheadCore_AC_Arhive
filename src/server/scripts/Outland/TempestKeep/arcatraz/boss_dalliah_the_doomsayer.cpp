@@ -91,13 +91,13 @@ class boss_dalliah_the_doomsayer : public CreatureScript
                 _EnterCombat();
                 Talk(SAY_AGGRO);
 
-                events.ScheduleEvent(EVENT_GIFT_OF_THE_DOOMSAYER, urand(1000, 4000));
-                events.ScheduleEvent(EVENT_WHIRLWIND, urand(7000, 9000));
-                events.ScheduleEvent(EVENT_ME_FIRST, 6000);
-                events.ScheduleEvent(EVENT_CHECK_HEALTH, 1000);
+                events.ScheduleEvent(EVENT_GIFT_OF_THE_DOOMSAYER, 1s, 4s);
+                events.ScheduleEvent(EVENT_WHIRLWIND, 7s, 9s);
+                events.ScheduleEvent(EVENT_ME_FIRST, 6s);
+                events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
 
                 if (IsHeroic())
-                    events.ScheduleEvent(EVENT_SHADOW_WAVE, urand(11000, 16000));
+                    events.ScheduleEvent(EVENT_SHADOW_WAVE, 11s, 16s);
             }
 
             void KilledUnit(Unit* victim)
@@ -109,7 +109,7 @@ class boss_dalliah_the_doomsayer : public CreatureScript
             void SetData(uint32 /*type*/, uint32 data)
             {
                 if (data == 1)
-                    events2.ScheduleEvent(EVENT_SOCCOTHRATES_DEATH, 6000);
+                    events2.ScheduleEvent(EVENT_SOCCOTHRATES_DEATH, 6s);
             }
 
             void UpdateAI(uint32 diff)
@@ -133,13 +133,13 @@ class boss_dalliah_the_doomsayer : public CreatureScript
                 {
                     case EVENT_GIFT_OF_THE_DOOMSAYER:
                         me->CastSpell(me->GetVictim(), SPELL_GIFT_OF_THE_DOOMSAYER, false);
-                        events.ScheduleEvent(EVENT_GIFT_OF_THE_DOOMSAYER, urand(16000, 21000));
+                        events.ScheduleEvent(EVENT_GIFT_OF_THE_DOOMSAYER, 16s, 21s);
                         break;
                     case EVENT_WHIRLWIND:
                         me->CastSpell(me, SPELL_WHIRLWIND, false);
                         Talk(SAY_WHIRLWIND);
-                        events.ScheduleEvent(EVENT_WHIRLWIND, urand(19000, 21000));
-                        events.ScheduleEvent(EVENT_HEAL, 6000);
+                        events.ScheduleEvent(EVENT_WHIRLWIND, 19s, 21s);
+                        events.ScheduleEvent(EVENT_HEAL, 6s);
                         break;
                     case EVENT_HEAL:
                         me->CastSpell(me, SPELL_HEAL, false);
@@ -147,7 +147,7 @@ class boss_dalliah_the_doomsayer : public CreatureScript
                         break;
                     case EVENT_SHADOW_WAVE:
                         me->CastSpell(me->GetVictim(), SPELL_SHADOW_WAVE, false);
-                        events.ScheduleEvent(EVENT_SHADOW_WAVE, urand(11000, 16000));
+                        events.ScheduleEvent(EVENT_SHADOW_WAVE, 11s, 16s);
                         break;
                     case EVENT_ME_FIRST:
                         if (Creature* soccothrates = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_SOCCOTHRATES)))
@@ -161,7 +161,7 @@ class boss_dalliah_the_doomsayer : public CreatureScript
                                 soccothrates->AI()->Talk(SAY_DALLIAH_25_PERCENT);
                             break;
                         }
-                        events.ScheduleEvent(EVENT_CHECK_HEALTH, 1000);
+                        events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
                         break;
                 }
 

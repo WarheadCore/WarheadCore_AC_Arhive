@@ -85,10 +85,10 @@ public:
         void EnterCombat(Unit* /*who*/)
         {
             Talk(SAY_AGGRO);
-            events.ScheduleEvent(EVENT_SPELL_INCITE, 20000);
-            events.ScheduleEvent(EVENT_INCITE_WAIT, 15000);
-            events.ScheduleEvent(EVENT_SPELL_CHARGE, 0);
-            events.ScheduleEvent(EVENT_SPELL_KNOCKBACK, 15000);
+            events.ScheduleEvent(EVENT_SPELL_INCITE, 20s);
+            events.ScheduleEvent(EVENT_INCITE_WAIT, 15s);
+            events.ScheduleEvent(EVENT_SPELL_CHARGE, 0s);
+            events.ScheduleEvent(EVENT_SPELL_KNOCKBACK, 15s);
 
             if (instance)
                 instance->SetData(DATA_BLACKHEARTTHEINCITEREVENT, IN_PROGRESS);
@@ -129,7 +129,7 @@ public:
                     InciteChaos = true;
                     events.DelayEvents(15000);
                     events.RepeatEvent(40000);
-                    events.ScheduleEvent(EVENT_INCITE_WAIT, 15000);
+                    events.ScheduleEvent(EVENT_INCITE_WAIT, 15s);
                     break;
                 }
                 case EVENT_SPELL_CHARGE:

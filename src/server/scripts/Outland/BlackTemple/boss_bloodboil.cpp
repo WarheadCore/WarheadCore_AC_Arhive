@@ -98,21 +98,21 @@ class boss_gurtogg_bloodboil : public CreatureScript
                 Talk(SAY_AGGRO);
 
                 me->CastSpell(me, SPELL_ACIDIC_WOUND, true);
-                events.ScheduleEvent(EVENT_SPELL_BLOOD_BOIL, 10000);
-                events.ScheduleEvent(EVENT_SPELL_BEWILDERING_STRIKE, 28000, GROUP_DELAY);
-                events.ScheduleEvent(EVENT_SPELL_FEL_ACID_BREATH, 38000);
-                events.ScheduleEvent(EVENT_SPELL_EJECT, 14000);
-                events.ScheduleEvent(EVENT_SPELL_ARCING_SMASH, 5000);
-                events.ScheduleEvent(EVENT_SPELL_FEL_GEYSER, 60000);
-                events.ScheduleEvent(EVENT_SPELL_BERSERK, 600000);
+                events.ScheduleEvent(EVENT_SPELL_BLOOD_BOIL, 10s);
+                events.ScheduleEvent(EVENT_SPELL_BEWILDERING_STRIKE, 28s, GROUP_DELAY);
+                events.ScheduleEvent(EVENT_SPELL_FEL_ACID_BREATH, 38s);
+                events.ScheduleEvent(EVENT_SPELL_EJECT, 14s);
+                events.ScheduleEvent(EVENT_SPELL_ARCING_SMASH, 5s);
+                events.ScheduleEvent(EVENT_SPELL_FEL_GEYSER, 1min);
+                events.ScheduleEvent(EVENT_SPELL_BERSERK, 10min);
             }
 
-            void KilledUnit(Unit*  /*victim*/)
+            void KilledUnit(Unit* /*victim*/)
             {
                 if (events.GetNextEventTime(EVENT_KILL_TALK) == 0)
                 {
                     Talk(SAY_SLAY);
-                    events.ScheduleEvent(EVENT_KILL_TALK, 6000);
+                    events.ScheduleEvent(EVENT_KILL_TALK, 6s);
                 }
             }
 
@@ -145,23 +145,23 @@ class boss_gurtogg_bloodboil : public CreatureScript
                         break;
                     case EVENT_SPELL_BLOOD_BOIL:
                         me->CastCustomSpell(SPELL_BLOODBOIL, SPELLVALUE_MAX_TARGETS, 5, me, false);
-                        events.ScheduleEvent(EVENT_SPELL_BLOOD_BOIL, 10000);
+                        events.ScheduleEvent(EVENT_SPELL_BLOOD_BOIL, 10s);
                         break;
                     case EVENT_SPELL_BEWILDERING_STRIKE:
                         me->CastSpell(me->GetVictim(), SPELL_BEWILDERING_STRIKE, false);
-                        events.ScheduleEvent(EVENT_SPELL_BEWILDERING_STRIKE, 30000, GROUP_DELAY);
+                        events.ScheduleEvent(EVENT_SPELL_BEWILDERING_STRIKE, 30s, GROUP_DELAY);
                         break;
                     case EVENT_SPELL_FEL_ACID_BREATH:
                         me->CastSpell(me->GetVictim(), me->HasAura(SPELL_FEL_RAGE_SELF) ? SPELL_FEL_ACID_BREATH2 : SPELL_FEL_ACID_BREATH1, false);
-                        events.ScheduleEvent(EVENT_SPELL_FEL_ACID_BREATH, 30000);
+                        events.ScheduleEvent(EVENT_SPELL_FEL_ACID_BREATH, 30s);
                         break;
                     case EVENT_SPELL_EJECT:
                         me->CastSpell(me->GetVictim(), me->HasAura(SPELL_FEL_RAGE_SELF) ? SPELL_EJECT2 : SPELL_EJECT1, false);
-                        events.ScheduleEvent(EVENT_SPELL_EJECT, 20000);
+                        events.ScheduleEvent(EVENT_SPELL_EJECT, 20s);
                         break;
                     case EVENT_SPELL_ARCING_SMASH:
                         me->CastSpell(me->GetVictim(), me->HasAura(SPELL_FEL_RAGE_SELF) ? SPELL_ARCING_SMASH2 : SPELL_ARCING_SMASH1, false);
-                        events.ScheduleEvent(EVENT_SPELL_ARCING_SMASH, 15000);
+                        events.ScheduleEvent(EVENT_SPELL_ARCING_SMASH, 15s);
                         break;
                     case EVENT_SPELL_FEL_GEYSER:
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 40.0f, true))
@@ -177,10 +177,10 @@ class boss_gurtogg_bloodboil : public CreatureScript
                             me->CastSpell(target, SPELL_FEL_GEYSER_SUMMON, true);
                             me->CastSpell(me, SPELL_FEL_GEYSER_STUN, true);
                             me->CastSpell(me, SPELL_INSIGNIFICANCE, true);
-                            events.ScheduleEvent(EVENT_SPELL_CHARGE, 2000);
+                            events.ScheduleEvent(EVENT_SPELL_CHARGE, 2s);
                             events.DelayEvents(30000, GROUP_DELAY);
                         }
-                        events.ScheduleEvent(EVENT_SPELL_FEL_GEYSER, 90000);
+                        events.ScheduleEvent(EVENT_SPELL_FEL_GEYSER, 90s);
                         break;
                     case EVENT_SPELL_CHARGE:
                         me->CastSpell(me->GetVictim(), SPELL_CHARGE, true);

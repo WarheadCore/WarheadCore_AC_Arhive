@@ -59,9 +59,9 @@ class boss_gatewatcher_gyrokill : public CreatureScript
             void EnterCombat(Unit* /*who*/)
             {
                 _EnterCombat();
-                events.ScheduleEvent(EVENT_STREAM_OF_MACHINE_FLUID, 10000);
-                events.ScheduleEvent(EVENT_SAW_BLADE, 20000);
-                events.ScheduleEvent(EVENT_SHADOW_POWER, 30000);
+                events.ScheduleEvent(EVENT_STREAM_OF_MACHINE_FLUID, 10s);
+                events.ScheduleEvent(EVENT_SAW_BLADE, 20s);
+                events.ScheduleEvent(EVENT_SHADOW_POWER, 30s);
                 Talk(SAY_AGGRO);
             }
 
@@ -84,17 +84,17 @@ class boss_gatewatcher_gyrokill : public CreatureScript
                 {
                     case EVENT_STREAM_OF_MACHINE_FLUID:
                         me->CastSpell(me->GetVictim(), SPELL_STREAM_OF_MACHINE_FLUID, false);
-                        events.ScheduleEvent(EVENT_STREAM_OF_MACHINE_FLUID, urand(12000, 14000));
+                        events.ScheduleEvent(EVENT_STREAM_OF_MACHINE_FLUID, 12s, 14s);
                         break;
                     case EVENT_SAW_BLADE:
                         if (Unit* target= SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f))
                             me->CastSpell(target, SPELL_SAW_BLADE, false);
                         Talk(SAY_SAW_BLADE);
-                        events.ScheduleEvent(EVENT_SAW_BLADE, 25000);
+                        events.ScheduleEvent(EVENT_SAW_BLADE, 25s);
                         break;
                     case EVENT_SHADOW_POWER:
                         me->CastSpell(me, SPELL_SHADOW_POWER, false);
-                        events.ScheduleEvent(EVENT_SAW_BLADE, 25000);
+                        events.ScheduleEvent(EVENT_SAW_BLADE, 25s);
                         break;
                 }
 

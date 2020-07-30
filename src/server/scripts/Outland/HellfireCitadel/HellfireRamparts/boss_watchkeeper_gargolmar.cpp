@@ -68,10 +68,11 @@ class boss_watchkeeper_gargolmar : public CreatureScript
             {
                 Talk(SAY_AGGRO);
                 BossAI::EnterCombat(who);
-                events.ScheduleEvent(EVENT_MORTAL_WOUND, 5000);
-                events.ScheduleEvent(EVENT_SURGE, 3000);
-                events.ScheduleEvent(EVENT_CHECK_HEALTH, 1000);
-                events.ScheduleEvent(EVENT_RETALIATION, 1000);
+
+                events.ScheduleEvent(EVENT_MORTAL_WOUND, 5s);
+                events.ScheduleEvent(EVENT_SURGE, 3s);
+                events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
+                events.ScheduleEvent(EVENT_RETALIATION, 1s);
             }
 
             void MoveInLineOfSight(Unit* who)
@@ -93,7 +94,7 @@ class boss_watchkeeper_gargolmar : public CreatureScript
                 if (events.GetNextEventTime(EVENT_KILL_TALK) == 0)
                 {
                     Talk(SAY_KILL);
-                    events.ScheduleEvent(EVENT_KILL_TALK, 6000);
+                    events.ScheduleEvent(EVENT_KILL_TALK, 6s);
                 }
             }
 
@@ -116,22 +117,22 @@ class boss_watchkeeper_gargolmar : public CreatureScript
                 {
                     case EVENT_MORTAL_WOUND:
                         me->CastSpell(me->GetVictim(), SPELL_MORTAL_WOUND, false);
-                        events.ScheduleEvent(EVENT_MORTAL_WOUND, 8000);
+                        events.ScheduleEvent(EVENT_MORTAL_WOUND, 8s);
                         break;
                     case EVENT_SURGE:
                         Talk(SAY_SURGE);
                         if (Unit* target = SelectTarget(SELECT_TARGET_FARTHEST, 0))
                             me->CastSpell(target, SPELL_SURGE, false);
-                        events.ScheduleEvent(EVENT_SURGE, 11000);
+                        events.ScheduleEvent(EVENT_SURGE, 11s);
                         break;
                     case EVENT_RETALIATION:
                         if (me->HealthBelowPct(20))
                         {
                             me->CastSpell(me, SPELL_RETALIATION, false);
-                            events.ScheduleEvent(EVENT_RETALIATION, 30000);
+                            events.ScheduleEvent(EVENT_RETALIATION, 30s);
                         }
                         else
-                            events.ScheduleEvent(EVENT_RETALIATION, 500);
+                            events.ScheduleEvent(EVENT_RETALIATION, 500ms);
                         break;
                     case EVENT_CHECK_HEALTH:
                         if (me->HealthBelowPct(50))
@@ -143,7 +144,7 @@ class boss_watchkeeper_gargolmar : public CreatureScript
                                 (*itr)->AI()->SetData(NPC_HELLFIRE_WATCHER, 0);                         
                             break;
                         }
-                        events.ScheduleEvent(EVENT_CHECK_HEALTH, 500);
+                        events.ScheduleEvent(EVENT_CHECK_HEALTH, 500ms);
                         break;
                 }
 

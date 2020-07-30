@@ -73,11 +73,11 @@ class boss_omor_the_unscarred : public CreatureScript
                 Talk(SAY_AGGRO);
                 BossAI::EnterCombat(who);
 
-                events.ScheduleEvent(EVENT_SUMMON1, 10000);
-                events.ScheduleEvent(EVENT_SUMMON2, 25000);
-                events.ScheduleEvent(EVENT_TREACHEROUS_AURA, 6000);
-                events.ScheduleEvent(EVENT_DEMONIC_SHIELD, 1000);
-                events.ScheduleEvent(EVENT_ORBITAL_STRIKE, 20000);
+                events.ScheduleEvent(EVENT_SUMMON1, 10s);
+                events.ScheduleEvent(EVENT_SUMMON2, 25s);
+                events.ScheduleEvent(EVENT_TREACHEROUS_AURA, 6s);
+                events.ScheduleEvent(EVENT_DEMONIC_SHIELD, 1s);
+                events.ScheduleEvent(EVENT_ORBITAL_STRIKE, 20s);
             }
 
             void KilledUnit(Unit*)
@@ -85,7 +85,7 @@ class boss_omor_the_unscarred : public CreatureScript
                 if (events.GetNextEventTime(EVENT_KILL_TALK) == 0)
                 {
                     Talk(SAY_KILL);
-                    events.ScheduleEvent(EVENT_KILL_TALK, 6000);
+                    events.ScheduleEvent(EVENT_KILL_TALK, 6s);
                 }
             }
 
@@ -119,23 +119,23 @@ class boss_omor_the_unscarred : public CreatureScript
                         break;
                     case EVENT_SUMMON2:
                         me->CastSpell(me, SPELL_SUMMON_FIENDISH_HOUND, false);
-                        events.ScheduleEvent(EVENT_SUMMON2, 15000);
+                        events.ScheduleEvent(EVENT_SUMMON2, 15s);
                         break;
                     case EVENT_TREACHEROUS_AURA:
                         if (roll_chance_i(33))
                             Talk(SAY_CURSE);
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             me->CastSpell(target, SPELL_TREACHEROUS_AURA, false);
-                        events.ScheduleEvent(EVENT_TREACHEROUS_AURA, urand(12000, 18000));
+                        events.ScheduleEvent(EVENT_TREACHEROUS_AURA, 12s, 18s);
                         break;
                     case EVENT_DEMONIC_SHIELD:
                         if (me->HealthBelowPct(21))
                         {
                             me->CastSpell(me, SPELL_DEMONIC_SHIELD, false);
-                            events.ScheduleEvent(EVENT_DEMONIC_SHIELD, 15000);
+                            events.ScheduleEvent(EVENT_DEMONIC_SHIELD, 15s);
                         }
                         else
-                            events.ScheduleEvent(EVENT_DEMONIC_SHIELD, 1000);
+                            events.ScheduleEvent(EVENT_DEMONIC_SHIELD, 1s);
                         break;
                     case EVENT_ORBITAL_STRIKE:
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 15.0f, true))
@@ -143,10 +143,10 @@ class boss_omor_the_unscarred : public CreatureScript
                             _targetGUID = target->GetGUID();
                             me->CastSpell(target, SPELL_ORBITAL_STRIKE, false);
                             events.DelayEvents(5000);
-                            events.ScheduleEvent(EVENT_SHADOW_WHIP, 4000);
+                            events.ScheduleEvent(EVENT_SHADOW_WHIP, 4s);
                             me->GetMotionMaster()->Clear();
                         }
-                        events.ScheduleEvent(EVENT_ORBITAL_STRIKE, 20000);
+                        events.ScheduleEvent(EVENT_ORBITAL_STRIKE, 20s);
                         break;
                     case EVENT_SHADOW_WHIP:
                         me->GetMotionMaster()->MoveChase(me->GetVictim());

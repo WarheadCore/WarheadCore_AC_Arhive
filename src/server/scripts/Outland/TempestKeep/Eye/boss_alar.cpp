@@ -121,7 +121,7 @@ class boss_alar : public CreatureScript
             void EnterCombat(Unit* who)
             {
                 BossAI::EnterCombat(who);
-                events.ScheduleEvent(EVENT_SWITCH_PLATFORM, 0);
+                events.ScheduleEvent(EVENT_SWITCH_PLATFORM, 0s);
             }
 
             void JustDied(Unit* killer)
@@ -163,9 +163,9 @@ class boss_alar : public CreatureScript
 
                         me->setAttackTimer(BASE_ATTACK, 16000);
                         events.Reset();
-                        events.ScheduleEvent(EVENT_RELOCATE_MIDDLE, 8000);
-                        events.ScheduleEvent(EVENT_MOVE_TO_PHASE_2, 12000);
-                        events.ScheduleEvent(EVENT_REBIRTH, 16001);
+                        events.ScheduleEvent(EVENT_RELOCATE_MIDDLE, 8s);
+                        events.ScheduleEvent(EVENT_MOVE_TO_PHASE_2, 12s);
+                        events.ScheduleEvent(EVENT_REBIRTH, 16001ms);
                     }
                 }
             }
@@ -182,11 +182,11 @@ class boss_alar : public CreatureScript
                 if (id == POINT_PLATFORM)
                     me->setAttackTimer(BASE_ATTACK, 1000);
                 else if (id == POINT_QUILL)
-                    events.ScheduleEvent(EVENT_START_QUILLS, 1000);
+                    events.ScheduleEvent(EVENT_START_QUILLS, 1s);
                 else if (id == POINT_DIVE)
                 {
-                    events.ScheduleEvent(EVENT_START_DIVE, 1000);
-                    events.ScheduleEvent(EVENT_CAST_DIVE_BOMB, 5000);
+                    events.ScheduleEvent(EVENT_START_DIVE, 1s);
+                    events.ScheduleEvent(EVENT_CAST_DIVE_BOMB, 5s);
                 }
             }
 
@@ -224,7 +224,7 @@ class boss_alar : public CreatureScript
                             noQuillTimes = 0;
                             platform = RAND(0, 3);
                             me->GetMotionMaster()->MovePoint(POINT_QUILL, alarPoints[POINT_QUILL], false, true);
-                            events.ScheduleEvent(EVENT_SWITCH_PLATFORM, 16000);
+                            events.ScheduleEvent(EVENT_SWITCH_PLATFORM, 16s);
                         }
                         else
                         {
@@ -235,7 +235,7 @@ class boss_alar : public CreatureScript
                             }
                             me->GetMotionMaster()->MovePoint(POINT_PLATFORM, alarPoints[platform], false, true);
                             platform = (platform+1)%4;
-                            events.ScheduleEvent(EVENT_SWITCH_PLATFORM, 30000);
+                            events.ScheduleEvent(EVENT_SWITCH_PLATFORM, 30s);
                         }
                         me->setAttackTimer(BASE_ATTACK, 20000);
                         break;
@@ -254,28 +254,28 @@ class boss_alar : public CreatureScript
                         platform = POINT_MIDDLE;
                         me->GetMotionMaster()->MoveChase(me->GetVictim());
 
-                        events.ScheduleEvent(EVENT_SPELL_MELT_ARMOR, 67000);
-                        events.ScheduleEvent(EVENT_SPELL_CHARGE, 10000);
-                        events.ScheduleEvent(EVENT_SPELL_FLAME_PATCH, 20000);
-                        events.ScheduleEvent(EVENT_SPELL_DIVE_BOMB, 30000);
+                        events.ScheduleEvent(EVENT_SPELL_MELT_ARMOR, 67s);
+                        events.ScheduleEvent(EVENT_SPELL_CHARGE, 10s);
+                        events.ScheduleEvent(EVENT_SPELL_FLAME_PATCH, 20s);
+                        events.ScheduleEvent(EVENT_SPELL_DIVE_BOMB, 30s);
                         break;
                     case EVENT_SPELL_MELT_ARMOR:
                         me->CastSpell(me->GetVictim(), SPELL_MELT_ARMOR, false);
-                        events.ScheduleEvent(EVENT_SPELL_MELT_ARMOR, 60000);
+                        events.ScheduleEvent(EVENT_SPELL_MELT_ARMOR, 1min);
                         break;
                     case EVENT_SPELL_CHARGE:
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true))
                             me->CastSpell(target, SPELL_CHARGE, false);
-                        events.ScheduleEvent(EVENT_SPELL_CHARGE, 30000);
+                        events.ScheduleEvent(EVENT_SPELL_CHARGE, 30s);
                         break;
                     case EVENT_SPELL_FLAME_PATCH:
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true))
                             me->SummonCreature(NPC_FLAME_PATCH, *target, TEMPSUMMON_TIMED_DESPAWN, 2*MINUTE*IN_MILLISECONDS);
-                        events.ScheduleEvent(EVENT_SPELL_FLAME_PATCH, 30000);
+                        events.ScheduleEvent(EVENT_SPELL_FLAME_PATCH, 30s);
                         break;
                     case EVENT_SPELL_DIVE_BOMB:
                         me->GetMotionMaster()->MovePoint(POINT_DIVE, alarPoints[POINT_DIVE], false, true);
-                        events.ScheduleEvent(EVENT_SPELL_DIVE_BOMB, 30000);
+                        events.ScheduleEvent(EVENT_SPELL_DIVE_BOMB, 30s);
                         events.DelayEvents(15000);
                         me->setAttackTimer(BASE_ATTACK, 20000);
                         break;
@@ -283,9 +283,9 @@ class boss_alar : public CreatureScript
                         me->CastSpell(me, SPELL_DIVE_BOMB_VISUAL, false);
                         break;
                     case EVENT_CAST_DIVE_BOMB:
-                        events.ScheduleEvent(EVENT_SUMMON_DIVE_PHOENIX, 2000);
-                        events.ScheduleEvent(EVENT_REBIRTH_DIVE, 6000);
-                        events.ScheduleEvent(EVENT_FINISH_DIVE, 10000);
+                        events.ScheduleEvent(EVENT_SUMMON_DIVE_PHOENIX, 2s);
+                        events.ScheduleEvent(EVENT_REBIRTH_DIVE, 6s);
+                        events.ScheduleEvent(EVENT_FINISH_DIVE, 10s);
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 90.0f, true))
                         {
                             me->CastSpell(target, SPELL_DIVE_BOMB, false);

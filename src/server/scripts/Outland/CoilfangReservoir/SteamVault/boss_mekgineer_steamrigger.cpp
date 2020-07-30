@@ -86,12 +86,12 @@ public:
         void EnterCombat(Unit* /*who*/)
         {
             Talk(SAY_AGGRO);
-            events.ScheduleEvent(EVENT_SPELL_SHRINK, 20000);
-            events.ScheduleEvent(EVENT_SPELL_SAW, 15000);
-            events.ScheduleEvent(EVENT_SPELL_NET, 10000);
-            events.ScheduleEvent(EVENT_CHECK_HP75, 5000);
-            events.ScheduleEvent(EVENT_CHECK_HP50, 5000);
-            events.ScheduleEvent(EVENT_CHECK_HP25, 5000);
+            events.ScheduleEvent(EVENT_SPELL_SHRINK, 20s);
+            events.ScheduleEvent(EVENT_SPELL_SAW, 15s);
+            events.ScheduleEvent(EVENT_SPELL_NET, 10s);
+            events.ScheduleEvent(EVENT_CHECK_HP75, 5s);
+            events.ScheduleEvent(EVENT_CHECK_HP50, 5s);
+            events.ScheduleEvent(EVENT_CHECK_HP25, 5s);
 
             if (instance)
                 instance->SetData(TYPE_MEKGINEER_STEAMRIGGER, IN_PROGRESS);

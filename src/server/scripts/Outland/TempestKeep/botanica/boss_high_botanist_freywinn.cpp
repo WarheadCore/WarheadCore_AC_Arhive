@@ -72,8 +72,8 @@ class boss_high_botanist_freywinn : public CreatureScript
                 _EnterCombat();
                 Talk(SAY_AGGRO);
 
-                events.ScheduleEvent(EVENT_SUMMON_SEEDLING, 6000);
-                events.ScheduleEvent(EVENT_TREE_FORM, 30000);
+                events.ScheduleEvent(EVENT_SUMMON_SEEDLING, 6s);
+                events.ScheduleEvent(EVENT_TREE_FORM, 30s);
             }
 
             void KilledUnit(Unit* victim)
@@ -108,14 +108,14 @@ class boss_high_botanist_freywinn : public CreatureScript
                         if (roll_chance_i(20))
                             Talk(SAY_OOC_RANDOM);
                         me->CastSpell(me, RAND(SPELL_PLANT_WHITE, SPELL_PLANT_GREEN, SPELL_PLANT_BLUE, SPELL_PLANT_RED), false);
-                        events.ScheduleEvent(EVENT_SUMMON_SEEDLING, 6000);
+                        events.ScheduleEvent(EVENT_SUMMON_SEEDLING, 6s);
                         break;
                     case EVENT_TREE_FORM:
                         events.Reset();
                         events.SetPhase(1);
-                        events.ScheduleEvent(EVENT_CHECK_FRAYERS, 1000);
-                        events.ScheduleEvent(EVENT_TREE_FORM, 75000);
-                        events.ScheduleEvent(EVENT_RESTORE_COMBAT, 46000);
+                        events.ScheduleEvent(EVENT_CHECK_FRAYERS, 1s);
+                        events.ScheduleEvent(EVENT_TREE_FORM, 75s);
+                        events.ScheduleEvent(EVENT_RESTORE_COMBAT, 46s);
 
                         Talk(SAY_TREE);
                         me->RemoveAllAuras();
@@ -128,7 +128,7 @@ class boss_high_botanist_freywinn : public CreatureScript
                         break;
                     case EVENT_RESTORE_COMBAT:
                         events.SetPhase(0);
-                        events.ScheduleEvent(EVENT_SUMMON_SEEDLING, 6000);
+                        events.ScheduleEvent(EVENT_SUMMON_SEEDLING, 6s);
                         me->GetMotionMaster()->MoveChase(me->GetVictim());
                         break;
                     case EVENT_CHECK_FRAYERS:
@@ -136,11 +136,11 @@ class boss_high_botanist_freywinn : public CreatureScript
                         {
                             me->InterruptNonMeleeSpells(true);
                             me->RemoveAllAuras();
-                            events.RescheduleEvent(EVENT_RESTORE_COMBAT, 0);
-                            events.RescheduleEvent(EVENT_TREE_FORM, 30000);
+                            events.RescheduleEvent(EVENT_RESTORE_COMBAT, 0s);
+                            events.RescheduleEvent(EVENT_TREE_FORM, 30s);
                             break;
                         }
-                        events.ScheduleEvent(EVENT_CHECK_FRAYERS, 500);
+                        events.ScheduleEvent(EVENT_CHECK_FRAYERS, 500ms);
                         break;
                 }
 
