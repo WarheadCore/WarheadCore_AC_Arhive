@@ -86,7 +86,7 @@ public:
         npc_elder_clearwaterAI(Creature *c) : ScriptedAI(c)
         {
             events.Reset();
-            events.ScheduleEvent(EVENT_CLEARWATER_ANNOUNCE, 1000, 1, 0);
+            events.ScheduleEvent(EVENT_CLEARWATER_ANNOUNCE, 1s, 1);
             finished = false;
             preWarning = false;
             startWarning = false;
@@ -233,7 +233,7 @@ public:
         npc_riggle_bassbaitAI(Creature *c) : ScriptedAI(c)
         {
             events.Reset();
-            events.ScheduleEvent(EVENT_RIGGLE_ANNOUNCE, 1000, 1, 0);
+            events.ScheduleEvent(EVENT_RIGGLE_ANNOUNCE, 1s, 1);
             finished = false;
             startWarning = false;
             finishWarning = false;

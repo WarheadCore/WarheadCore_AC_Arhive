@@ -100,9 +100,9 @@ struct emerald_dragonAI : public WorldBossAI
         me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
         me->SetReactState(REACT_AGGRESSIVE);
         DoCast(me, SPELL_MARK_OF_NATURE_AURA, true);
-        events.ScheduleEvent(EVENT_TAIL_SWEEP, 4000);
-        events.ScheduleEvent(EVENT_NOXIOUS_BREATH, urand(7500, 15000));
-        events.ScheduleEvent(EVENT_SEEPING_FOG, urand(12500, 20000));
+        events.ScheduleEvent(EVENT_TAIL_SWEEP, 4s);
+        events.ScheduleEvent(EVENT_NOXIOUS_BREATH, 7500ms, 15s);
+        events.ScheduleEvent(EVENT_SEEPING_FOG, 12500ms, 20s);
     }
 
     // Target killed during encounter, mark them as suspectible for Aura Of Nature
@@ -122,17 +122,17 @@ struct emerald_dragonAI : public WorldBossAI
                 // Despawntime is 2 minutes, so reschedule it for new cast after 2 minutes + a minor "random time" (30 seconds at max)
                 DoCast(me, SPELL_SEEPING_FOG_LEFT, true);
                 DoCast(me, SPELL_SEEPING_FOG_RIGHT, true);
-                events.ScheduleEvent(EVENT_SEEPING_FOG, urand(120000, 150000));
+                events.ScheduleEvent(EVENT_SEEPING_FOG, 2min, 150s);
                 break;
             case EVENT_NOXIOUS_BREATH:
                 // Noxious Breath is cast on random intervals, no less than 7.5 seconds between
                 DoCast(me, SPELL_NOXIOUS_BREATH);
-                events.ScheduleEvent(EVENT_NOXIOUS_BREATH, urand(7500, 15000));
+                events.ScheduleEvent(EVENT_NOXIOUS_BREATH, 7500ms, 15s);
                 break;
             case EVENT_TAIL_SWEEP:
                 // Tail Sweep is cast every two seconds, no matter what goes on in front of the dragon
                 DoCast(me, SPELL_TAIL_SWEEP);
-                events.ScheduleEvent(EVENT_TAIL_SWEEP, 2000);
+                events.ScheduleEvent(EVENT_TAIL_SWEEP, 2s);
                 break;
         }
     }
@@ -253,7 +253,7 @@ class boss_ysondre : public CreatureScript
             {
                 _stage = 1;
                 emerald_dragonAI::Reset();
-                events.ScheduleEvent(EVENT_LIGHTNING_WAVE, 12000);
+                events.ScheduleEvent(EVENT_LIGHTNING_WAVE, 12s);
             }
 
             void EnterCombat(Unit* who)
@@ -281,7 +281,7 @@ class boss_ysondre : public CreatureScript
                 {
                     case EVENT_LIGHTNING_WAVE:
                         DoCastVictim(SPELL_LIGHTNING_WAVE);
-                        events.ScheduleEvent(EVENT_LIGHTNING_WAVE, urand(10000, 20000));
+                        events.ScheduleEvent(EVENT_LIGHTNING_WAVE, 10s, 20s);
                         break;
                     default:
                         emerald_dragonAI::ExecuteEvent(eventId);
@@ -341,7 +341,7 @@ class boss_lethon : public CreatureScript
             {
                 _stage = 1;
                 emerald_dragonAI::Reset();
-                events.ScheduleEvent(EVENT_SHADOW_BOLT_WHIRL, 10000);
+                events.ScheduleEvent(EVENT_SHADOW_BOLT_WHIRL, 10s);
             }
 
             void EnterCombat(Unit* who)
@@ -376,7 +376,7 @@ class boss_lethon : public CreatureScript
                 {
                     case EVENT_SHADOW_BOLT_WHIRL:
                         me->CastSpell((Unit*)NULL, SPELL_SHADOW_BOLT_WHIRL, false);
-                        events.ScheduleEvent(EVENT_SHADOW_BOLT_WHIRL, urand(15000, 30000));
+                        events.ScheduleEvent(EVENT_SHADOW_BOLT_WHIRL, 15s, 30s);
                         break;
                     default:
                         emerald_dragonAI::ExecuteEvent(eventId);
@@ -467,7 +467,7 @@ class boss_emeriss : public CreatureScript
             {
                 _stage = 1;
                 emerald_dragonAI::Reset();
-                events.ScheduleEvent(EVENT_VOLATILE_INFECTION, 12000);
+                events.ScheduleEvent(EVENT_VOLATILE_INFECTION, 12s);
             }
 
             void KilledUnit(Unit* who)
@@ -499,7 +499,7 @@ class boss_emeriss : public CreatureScript
                 {
                     case EVENT_VOLATILE_INFECTION:
                         DoCastVictim(SPELL_VOLATILE_INFECTION);
-                        events.ScheduleEvent(EVENT_VOLATILE_INFECTION, 120000);
+                        events.ScheduleEvent(EVENT_VOLATILE_INFECTION, 2min);
                         break;
                     default:
                         emerald_dragonAI::ExecuteEvent(eventId);
@@ -565,8 +565,8 @@ class boss_taerar : public CreatureScript
                 _banishedTimer = 0;
 
                 emerald_dragonAI::Reset();
-                events.ScheduleEvent(EVENT_ARCANE_BLAST, 12000);
-                events.ScheduleEvent(EVENT_BELLOWING_ROAR, 30000);
+                events.ScheduleEvent(EVENT_ARCANE_BLAST, 12s);
+                events.ScheduleEvent(EVENT_BELLOWING_ROAR, 30s);
             }
 
             void EnterCombat(Unit* who)
@@ -613,11 +613,11 @@ class boss_taerar : public CreatureScript
                 {
                     case EVENT_ARCANE_BLAST:
                         DoCast(SPELL_ARCANE_BLAST);
-                        events.ScheduleEvent(EVENT_ARCANE_BLAST, urand(7000, 12000));
+                        events.ScheduleEvent(EVENT_ARCANE_BLAST, 7s, 12s);
                         break;
                     case EVENT_BELLOWING_ROAR:
                         DoCast(SPELL_BELLOWING_ROAR);
-                        events.ScheduleEvent(EVENT_BELLOWING_ROAR, urand(20000, 30000));
+                        events.ScheduleEvent(EVENT_BELLOWING_ROAR, 20s, 30s);
                         break;
                     default:
                         emerald_dragonAI::ExecuteEvent(eventId);
