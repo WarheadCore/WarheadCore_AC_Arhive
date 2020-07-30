@@ -178,13 +178,13 @@ enum BG_AB_Misc
     BG_AB_REP_TICK_WEEKEND              = 120,
 
     BG_AB_WARNING_NEAR_VICTORY_SCORE    = 1400,
-    BG_AB_MAX_TEAM_SCORE                = 1600,
-
-    BG_AB_FLAG_CAPTURING_TIME           = 60000,
-    BG_AB_BANNER_UPDATE_TIME            = 2000
+    BG_AB_MAX_TEAM_SCORE                = 1600
 };
 
-const uint32 BG_AB_TickIntervals[BG_AB_DYNAMIC_NODES_COUNT+1] = {0, 12000, 9000, 6000, 3000, 1000};
+constexpr Minutes BG_AB_FLAG_CAPTURING_TIME = 1min;
+constexpr Seconds BG_AB_BANNER_UPDATE_TIME = 2s;
+
+const Seconds BG_AB_TickIntervals[BG_AB_DYNAMIC_NODES_COUNT+1] = {0s, 12s, 9s, 6s, 3s, 1s};
 const uint32 BG_AB_TickPoints[BG_AB_DYNAMIC_NODES_COUNT+1] = {0, 10, 10, 10, 10, 30};
 const uint32 BG_AB_GraveyardIds[BG_AB_ALL_NODES_COUNT] = {895, 894, 893, 897, 896, 898, 899};
 

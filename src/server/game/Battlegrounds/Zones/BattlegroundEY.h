@@ -31,11 +31,12 @@ enum BG_EY_Events
 
 enum BG_EY_Timers
 {
-    BG_EY_FLAG_RESPAWN_TIME         = 20*IN_MILLISECONDS,
-    BG_EY_FLAG_ON_GROUND_TIME       = 10*IN_MILLISECONDS,
-    BG_EY_FPOINTS_CHECK_TIME        = 2*IN_MILLISECONDS,
-    BG_EY_FPOINTS_TICK_TIME         = 1*IN_MILLISECONDS
+    BG_EY_FPOINTS_CHECK_TIME        = 2000,
+    BG_EY_FPOINTS_TICK_TIME         = 1000
 };
+
+constexpr Seconds BG_EY_FLAG_RESPAWN_TIME = 20s;
+constexpr Seconds BG_EY_FLAG_ON_GROUND_TIME = 10s;
 
 enum BG_EY_WorldStates
 {

@@ -75,7 +75,7 @@ void CombatAI::EnterCombat(Unit* who)
         if (AISpellInfo[*i].condition == AICOND_AGGRO)
             me->CastSpell(who, *i, false);
         else if (AISpellInfo[*i].condition == AICOND_COMBAT)
-            events.ScheduleEvent(*i, AISpellInfo[*i].cooldown + rand()%AISpellInfo[*i].cooldown);
+            events.ScheduleEvent(*i, Milliseconds(AISpellInfo[*i].cooldown), Milliseconds(AISpellInfo[*i].cooldown * 2));
     }
 }
 
@@ -92,7 +92,7 @@ void CombatAI::UpdateAI(uint32 diff)
     if (uint32 spellId = events.ExecuteEvent())
     {
         DoCast(spellId);
-        events.ScheduleEvent(spellId, AISpellInfo[spellId].cooldown + rand()%AISpellInfo[spellId].cooldown);
+        events.ScheduleEvent(spellId, Milliseconds(AISpellInfo[spellId].cooldown), Milliseconds(AISpellInfo[spellId].cooldown * 2));
     }
     else
         DoMeleeAttackIfReady();
@@ -133,7 +133,7 @@ void CasterAI::EnterCombat(Unit* who)
                 DoCast(spells[spell]);
                 cooldown += me->GetCurrentSpellCastTime(*itr);
             }
-            events.ScheduleEvent(*itr, cooldown);
+            events.ScheduleEvent(*itr, Milliseconds(cooldown));
         }
     }
 }
@@ -158,7 +158,7 @@ void CasterAI::UpdateAI(uint32 diff)
     {
         DoCast(spellId);
         uint32 casttime = me->GetCurrentSpellCastTime(spellId);
-        events.ScheduleEvent(spellId, (casttime ? casttime : 500) + GetAISpellInfo(spellId)->realCooldown);
+        events.ScheduleEvent(spellId, Milliseconds((casttime ? casttime : 500) + GetAISpellInfo(spellId)->realCooldown));
     }
 }
 
