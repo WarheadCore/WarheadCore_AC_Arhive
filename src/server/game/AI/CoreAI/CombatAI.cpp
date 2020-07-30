@@ -75,7 +75,7 @@ void CombatAI::EnterCombat(Unit* who)
         if (AISpellInfo[*i].condition == AICOND_AGGRO)
             me->CastSpell(who, *i, false);
         else if (AISpellInfo[*i].condition == AICOND_COMBAT)
-            events.ScheduleEvent(*i, Milliseconds(AISpellInfo[*i].cooldown), Milliseconds(AISpellInfo[*i].cooldown * 2));
+            events.ScheduleEvent(*i, Milliseconds(AISpellInfo[spell].cooldown + rand() % AISpellInfo[spell].cooldown));
     }
 }
 
@@ -92,7 +92,7 @@ void CombatAI::UpdateAI(uint32 diff)
     if (uint32 spellId = events.ExecuteEvent())
     {
         DoCast(spellId);
-        events.ScheduleEvent(spellId, Milliseconds(AISpellInfo[spellId].cooldown), Milliseconds(AISpellInfo[spellId].cooldown * 2));
+        events.ScheduleEvent(spellId, Milliseconds(AISpellInfo[spellId].cooldown + rand() % AISpellInfo[spellId].cooldown));
     }
     else
         DoMeleeAttackIfReady();
