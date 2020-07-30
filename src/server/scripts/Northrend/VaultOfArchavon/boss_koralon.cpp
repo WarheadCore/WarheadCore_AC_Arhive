@@ -89,9 +89,9 @@ class boss_koralon : public CreatureScript
             {
                 me->CastSpell(me, SPELL_BURNING_FURY, true);
 
-                events.ScheduleEvent(EVENT_BURNING_BREATH, 10000);
-                events.ScheduleEvent(EVENT_METEOR_FISTS, 30000);
-                events.ScheduleEvent(EVENT_FLAME_CINDER, 20000);
+                events.ScheduleEvent(EVENT_BURNING_BREATH, 10s);
+                events.ScheduleEvent(EVENT_METEOR_FISTS, 30s);
+                events.ScheduleEvent(EVENT_FLAME_CINDER, 20s);
 
                 if (pInstance)
                     pInstance->SetData(EVENT_KORALON, IN_PROGRESS);

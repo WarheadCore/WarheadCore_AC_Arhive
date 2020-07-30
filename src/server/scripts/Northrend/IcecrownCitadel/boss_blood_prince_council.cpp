@@ -270,8 +270,8 @@ class boss_prince_keleseth_icc : public CreatureScript
                 me->resetAttackTimer(BASE_ATTACK);
                 DoAction(ACTION_REMOVE_INVOCATION);
                 events.Reset();
-                events.ScheduleEvent(EVENT_BERSERK, 600000);
-                events.ScheduleEvent(EVENT_SHADOW_RESONANCE, urand(10000, 15000));
+                events.ScheduleEvent(EVENT_BERSERK, 10min);
+                events.ScheduleEvent(EVENT_SHADOW_RESONANCE, 10s, 15s);
                 if (IsHeroic())
                     me->AddAura(SPELL_SHADOW_PRISON, me);
             }
@@ -409,7 +409,7 @@ class boss_prince_keleseth_icc : public CreatureScript
                     case EVENT_SHADOW_RESONANCE:
                         Talk(SAY_KELESETH_SPECIAL);
                         me->CastSpell(me, SPELL_SHADOW_RESONANCE, false);
-                        events.ScheduleEvent(EVENT_SHADOW_RESONANCE, urand(10000, 15000));
+                        events.ScheduleEvent(EVENT_SHADOW_RESONANCE, 10s, 15s);
                         break;
                 }
 
@@ -526,9 +526,9 @@ class boss_prince_taldaram_icc : public CreatureScript
 
                 DoAction(ACTION_REMOVE_INVOCATION);
                 events.Reset();
-                events.ScheduleEvent(EVENT_BERSERK, 600000);
-                events.ScheduleEvent(EVENT_GLITTERING_SPARKS, urand(12000, 15000));
-                events.ScheduleEvent(EVENT_CONJURE_FLAME, 20000);
+                events.ScheduleEvent(EVENT_BERSERK, 10min);
+                events.ScheduleEvent(EVENT_GLITTERING_SPARKS, 12s, 15s);
+                events.ScheduleEvent(EVENT_CONJURE_FLAME, 20s);
                 if (IsHeroic())
                     me->AddAura(SPELL_SHADOW_PRISON, me);
             }
@@ -678,18 +678,18 @@ class boss_prince_taldaram_icc : public CreatureScript
                         break;
                     case EVENT_GLITTERING_SPARKS:
                         me->CastSpell(me->GetVictim(), SPELL_GLITTERING_SPARKS, false);
-                        events.ScheduleEvent(EVENT_GLITTERING_SPARKS, urand(15000, 25000));
+                        events.ScheduleEvent(EVENT_GLITTERING_SPARKS, 15s, 25s);
                         break;
                     case EVENT_CONJURE_FLAME:
                         if (_isEmpowered)
                         {
                             me->CastSpell(me, SPELL_CONJURE_EMPOWERED_FLAME, false);
-                            events.ScheduleEvent(EVENT_CONJURE_FLAME, 15000);
+                            events.ScheduleEvent(EVENT_CONJURE_FLAME, 15s);
                         }
                         else
                         {
                             me->CastSpell(me, SPELL_CONJURE_FLAME, false);
-                            events.ScheduleEvent(EVENT_CONJURE_FLAME, urand(20000, 25000));
+                            events.ScheduleEvent(EVENT_CONJURE_FLAME, 20s, 25s);
                         }
                         Talk(SAY_TALDARAM_SPECIAL);
                         break;
@@ -814,10 +814,11 @@ class boss_prince_valanar_icc : public CreatureScript
                 invocationOrder[1] = RAND(DATA_PRINCE_KELESETH_GUID, DATA_PRINCE_TALDARAM_GUID);
                 invocationOrder[2] = DATA_PRINCE_KELESETH_GUID + DATA_PRINCE_TALDARAM_GUID - invocationOrder[1];
 
-                events.ScheduleEvent(EVENT_BERSERK, 600000);
-                events.ScheduleEvent(EVENT_KINETIC_BOMB, urand(18000, 24000));
-                events.ScheduleEvent(EVENT_SHOCK_VORTEX, urand(15000, 20000));
-                events.ScheduleEvent(EVENT_INVOCATION_OF_BLOOD, 45000);
+                events.ScheduleEvent(EVENT_BERSERK, 10min);
+                events.ScheduleEvent(EVENT_KINETIC_BOMB, 18s, 24s);
+                events.ScheduleEvent(EVENT_SHOCK_VORTEX, 15s, 20s);
+                events.ScheduleEvent(EVENT_INVOCATION_OF_BLOOD, 45s);
+
                 if (IsHeroic())
                 {
                     me->AddAura(SPELL_SHADOW_PRISON, me);
@@ -1002,7 +1003,7 @@ class boss_prince_valanar_icc : public CreatureScript
                             current->CastSpell((Unit*)NULL, visualSpellId, true);
                             next->AI()->Talk(1);
                         }
-                        events.ScheduleEvent(EVENT_INVOCATION_OF_BLOOD, 46000);
+                        events.ScheduleEvent(EVENT_INVOCATION_OF_BLOOD, 46s);
                         break;
                     case EVENT_BERSERK:
                         me->CastSpell(me, SPELL_BERSERK, true);
@@ -1014,20 +1015,20 @@ class boss_prince_valanar_icc : public CreatureScript
                             me->CastSpell(target, SPELL_KINETIC_BOMB_TARGET, false);
                             Talk(SAY_VALANAR_SPECIAL);
                         }
-                        events.ScheduleEvent(EVENT_KINETIC_BOMB, me->GetMap()->Is25ManRaid() ? 20500 : 30500);
+                        events.ScheduleEvent(EVENT_KINETIC_BOMB, me->GetMap()->Is25ManRaid() ? 20500ms : 30500ms);
                         break;
                     case EVENT_SHOCK_VORTEX:
                         if (_isEmpowered)
                         {
                             me->CastSpell(me, SPELL_EMPOWERED_SHOCK_VORTEX, false);
                             Talk(EMOTE_VALANAR_SHOCK_VORTEX);
-                            events.ScheduleEvent(EVENT_SHOCK_VORTEX, 30000);
+                            events.ScheduleEvent(EVENT_SHOCK_VORTEX, 30s);
                         }
                         else
                         {
                             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
                                 me->CastSpell(target, SPELL_SHOCK_VORTEX, false);
-                            events.ScheduleEvent(EVENT_SHOCK_VORTEX, urand(18000, 23000));
+                            events.ScheduleEvent(EVENT_SHOCK_VORTEX, 18s, 23s);
                         }
                         break;
                 }
@@ -1096,7 +1097,7 @@ class npc_blood_queen_lana_thel : public CreatureScript
                 _introDone = true;
                 Talk(SAY_INTRO_1);
                 _events.SetPhase(1);
-                _events.ScheduleEvent(EVENT_INTRO_1, 14000);
+                _events.ScheduleEvent(EVENT_INTRO_1, 14s);
                 // summon a visual trigger
                 if (Creature* summon = DoSummon(NPC_FLOATING_TRIGGER, triggerPos, 15000, TEMPSUMMON_TIMED_DESPAWN))
                 {
@@ -1339,7 +1340,7 @@ class npc_kinetic_bomb : public CreatureScript
             void Reset()
             {
                 _events.Reset();
-                _events.RescheduleEvent(EVENT_BOMB_DESPAWN, 60000);
+                _events.RescheduleEvent(EVENT_BOMB_DESPAWN, 1min);
                 me->SetWalk(true);
                 exploded = false;
 
@@ -1356,7 +1357,7 @@ class npc_kinetic_bomb : public CreatureScript
                 if (action == SPELL_KINETIC_BOMB_EXPLOSION)
                 {
                     exploded = true;
-                    _events.RescheduleEvent(EVENT_BOMB_DESPAWN, 1000);
+                    _events.RescheduleEvent(EVENT_BOMB_DESPAWN, 1s);
                 }
                 else if (action == ACTION_KINETIC_BOMB_JUMP)
                 {
@@ -1366,7 +1367,7 @@ class npc_kinetic_bomb : public CreatureScript
                         me->StopMoving();
                         me->GetMotionMaster()->MoveCharge(_x, _y, me->GetPositionZ() + 60.0f, me->GetSpeed(MOVE_RUN));
                     }
-                    _events.RescheduleEvent(EVENT_CONTINUE_FALLING, 3000);
+                    _events.RescheduleEvent(EVENT_CONTINUE_FALLING, 3s);
                 }
             }
 

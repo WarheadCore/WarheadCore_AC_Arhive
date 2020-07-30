@@ -161,10 +161,10 @@ public:
 
         void EnterCombat(Unit* /*who*/)
         {
-            events.ScheduleEvent(EVENT_HERALD_MIND_FLAY, 8000);
-            events.ScheduleEvent(EVENT_HERALD_SHADOW, 5000);
-            events.ScheduleEvent(EVENT_HERALD_SHIVER, 15000);
-            events.ScheduleEvent(EVENT_HERALD_HEALTH, 1000);
+            events.ScheduleEvent(EVENT_HERALD_MIND_FLAY, 8s);
+            events.ScheduleEvent(EVENT_HERALD_SHADOW, 5s);
+            events.ScheduleEvent(EVENT_HERALD_SHIVER, 15s);
+            events.ScheduleEvent(EVENT_HERALD_HEALTH, 1s);
 
             Talk(SAY_AGGRO);
 

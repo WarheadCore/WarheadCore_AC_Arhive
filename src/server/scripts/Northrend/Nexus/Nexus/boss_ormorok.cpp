@@ -89,12 +89,13 @@ class boss_ormorok : public CreatureScript
                 Talk(SAY_AGGRO);
                 BossAI::EnterCombat(who);
 
-                events.ScheduleEvent(EVENT_ORMOROK_CRYSTAL_SPIKES, 12000);
-                events.ScheduleEvent(EVENT_ORMOROK_TRAMPLE, 10000);
-                events.ScheduleEvent(EVENT_ORMOROK_SPELL_REFLECTION, 30000);
-                events.ScheduleEvent(EVENT_ORMOROK_HEALTH, 1000);
+                events.ScheduleEvent(EVENT_ORMOROK_CRYSTAL_SPIKES, 12s);
+                events.ScheduleEvent(EVENT_ORMOROK_TRAMPLE, 10s);
+                events.ScheduleEvent(EVENT_ORMOROK_SPELL_REFLECTION, 30s);
+                events.ScheduleEvent(EVENT_ORMOROK_HEALTH, 1s);
+                
                 if (IsHeroic())
-                    events.ScheduleEvent(EVENT_ORMOROK_SUMMON, 17000);
+                    events.ScheduleEvent(EVENT_ORMOROK_SUMMON, 17s);
             }
 
             void JustDied(Unit* killer)
@@ -108,7 +109,7 @@ class boss_ormorok : public CreatureScript
                 if (events.GetNextEventTime(EVENT_KILL_TALK) == 0)
                 {
                     Talk(SAY_KILL);
-                    events.ScheduleEvent(EVENT_KILL_TALK, 6000);
+                    events.ScheduleEvent(EVENT_KILL_TALK, 6s);
                 }
             }
 
@@ -135,28 +136,28 @@ class boss_ormorok : public CreatureScript
                             Talk(EMOTE_FRENZY);
                             break;
                         }
-                        events.ScheduleEvent(EVENT_ORMOROK_HEALTH, 1000);
+                        events.ScheduleEvent(EVENT_ORMOROK_HEALTH, 1s);
                         break;
                     case EVENT_ORMOROK_TRAMPLE:
                         me->CastSpell(me, SPELL_TRAMPLE, false);
-                        events.ScheduleEvent(EVENT_ORMOROK_TRAMPLE, 10000);
+                        events.ScheduleEvent(EVENT_ORMOROK_TRAMPLE, 10s);
                         break;
                     case EVENT_ORMOROK_SPELL_REFLECTION:
                         Talk(SAY_REFLECT);
                         me->CastSpell(me, SPELL_SPELL_REFLECTION, false);
-                        events.ScheduleEvent(EVENT_ORMOROK_SPELL_REFLECTION, 30000);
+                        events.ScheduleEvent(EVENT_ORMOROK_SPELL_REFLECTION, 30s);
                         break;
                     case EVENT_ORMOROK_SUMMON:
                         if (Unit* target = SelectTarget(SELECT_TARGET_FARTHEST, 0, 50.0f, true))
                             me->CastSpell(target, SPELL_SUMMON_CRYSTALLINE_TANGLER, true);
-                        events.ScheduleEvent(EVENT_ORMOROK_SUMMON, 17000);
+                        events.ScheduleEvent(EVENT_ORMOROK_SUMMON, 17s);
                         break;
                     case EVENT_ORMOROK_CRYSTAL_SPIKES:
                         Talk(SAY_CRYSTAL_SPIKES);
                         me->CastSpell(me, SPELL_CRYSTAL_SPIKES, false);
                         _spikesCount = 0;
-                        events.ScheduleEvent(EVENT_ORMOROK_SUMMON_SPIKES, 300);
-                        events.ScheduleEvent(EVENT_ORMOROK_CRYSTAL_SPIKES, 20000);
+                        events.ScheduleEvent(EVENT_ORMOROK_SUMMON_SPIKES, 300ms);
+                        events.ScheduleEvent(EVENT_ORMOROK_CRYSTAL_SPIKES, 20s);
                         break;
                     case EVENT_ORMOROK_SUMMON_SPIKES:
                         if (++_spikesCount > 9)
@@ -171,7 +172,7 @@ class boss_ormorok : public CreatureScript
                             if (h != INVALID_HEIGHT)
                                 me->SummonCreature(NPC_CRYSTAL_SPIKE, x, y, h, 0, TEMPSUMMON_TIMED_DESPAWN, 7000);
                         }
-                        events.ScheduleEvent(EVENT_ORMOROK_SUMMON_SPIKES, 200);
+                        events.ScheduleEvent(EVENT_ORMOROK_SUMMON_SPIKES, 200ms);
                         break;
                 }
 

@@ -119,13 +119,15 @@ struct boss_twin_valkyrAI : public ScriptedAI
                 pInstance->DoStopTimedAchievement(ACHIEVEMENT_TIMED_TYPE_EVENT, 21853);
 
             // special events here
-            events.RescheduleEvent(EVENT_BERSERK, IsHeroic() ? 360000 : 600000);
-            events.RescheduleEvent(EVENT_SUMMON_BALLS_1, urand(10000,15000));
-            events.RescheduleEvent(EVENT_SPECIAL, 45000);
+            events.RescheduleEvent(EVENT_BERSERK, IsHeroic() ? 6min : 10min);
+            events.RescheduleEvent(EVENT_SUMMON_BALLS_1, 10s, 15s);
+            events.RescheduleEvent(EVENT_SPECIAL, 45s);
         }
-        events.RescheduleEvent(EVENT_SPELL_SPIKE, urand(5000,8000));
-        if( IsHeroic() )
-            events.RescheduleEvent(EVENT_SPELL_TOUCH, urand(10000,25000), 1);
+        
+        events.RescheduleEvent(EVENT_SPELL_SPIKE, 5s, 8s);
+        
+        if(IsHeroic())
+            events.RescheduleEvent(EVENT_SPELL_TOUCH, 10s, 25s, 1);
 
         me->SetDisableGravity(true);
         me->SetHover(true);
@@ -193,7 +195,7 @@ struct boss_twin_valkyrAI : public ScriptedAI
             case -3:
                 me->SetCanDualWield(true);
                 me->CastSpell(me, SPELL_TWIN_POWER, true);
-                events.RescheduleEvent(EVENT_REMOVE_DUAL_WIELD, 15000);
+                events.RescheduleEvent(EVENT_REMOVE_DUAL_WIELD, 15s);
                 break;
         }
     }
@@ -322,13 +324,13 @@ struct boss_twin_valkyrAI : public ScriptedAI
                     switch( eventId )
                     {
                         case EVENT_SUMMON_BALLS_1:
-                            events.RescheduleEvent(EVENT_SUMMON_BALLS_2, 8000);
+                            events.RescheduleEvent(EVENT_SUMMON_BALLS_2, 8s);
                             break;
                         case EVENT_SUMMON_BALLS_2:
-                            events.RescheduleEvent(EVENT_SUMMON_BALLS_3, 8000);
+                            events.RescheduleEvent(EVENT_SUMMON_BALLS_3, 8s);
                             break;
                         case EVENT_SUMMON_BALLS_3:
-                            events.RescheduleEvent(EVENT_SUMMON_BALLS_1, 15000);
+                            events.RescheduleEvent(EVENT_SUMMON_BALLS_1, 15s);
                             break;
                     }
                 }

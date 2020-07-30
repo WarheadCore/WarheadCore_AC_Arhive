@@ -113,12 +113,12 @@ public:
         {
             BossAI::EnterCombat(who);
             me->SetInCombatWithZone();
-            events.ScheduleEvent(EVENT_WEB_WRAP, 20000);
-            events.ScheduleEvent(EVENT_SPELL_WEB_SPRAY, 40000);
-            events.ScheduleEvent(EVENT_SPELL_POISON_SHOCK, 10000);
-            events.ScheduleEvent(EVENT_SPELL_NECROTIC_POISON, 5000);
-            events.ScheduleEvent(EVENT_HEALTH_CHECK, 1000);
-            events.ScheduleEvent(EVENT_SUMMON_SPIDERLINGS, 30000);
+            events.ScheduleEvent(EVENT_WEB_WRAP, 20s);
+            events.ScheduleEvent(EVENT_SPELL_WEB_SPRAY, 40s);
+            events.ScheduleEvent(EVENT_SPELL_POISON_SHOCK, 10s);
+            events.ScheduleEvent(EVENT_SPELL_NECROTIC_POISON, 5s);
+            events.ScheduleEvent(EVENT_HEALTH_CHECK, 1s);
+            events.ScheduleEvent(EVENT_SUMMON_SPIDERLINGS, 30s);
 
             if (pInstance)
             {

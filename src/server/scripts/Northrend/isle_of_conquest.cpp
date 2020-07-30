@@ -62,7 +62,7 @@ class npc_isle_of_conquest_turret : public CreatureScript
                         me->setFaction(faction);
                     me->CreateVehicleKit(510, NPC_KEEP_CANNON);
                     me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_SPELLCLICK);
-                    events.ScheduleEvent(EVENT_RESTORE_FLAG, 4000);
+                    events.ScheduleEvent(EVENT_RESTORE_FLAG, 4s);
                 }
             }
 
@@ -163,7 +163,7 @@ class npc_ioc_gunship_captain : public CreatureScript
                 if (action == ACTION_GUNSHIP_READY)
                 {
                     DoCast(me, SPELL_SIMPLE_TELEPORT);
-                    _events.ScheduleEvent(EVENT_TALK, 3000);
+                    _events.ScheduleEvent(EVENT_TALK, 3s);
                 }
             }
 
@@ -175,7 +175,7 @@ class npc_ioc_gunship_captain : public CreatureScript
                     switch (eventId)
                     {
                         case EVENT_TALK:
-                            _events.ScheduleEvent(EVENT_DESPAWN, 1000);
+                            _events.ScheduleEvent(EVENT_DESPAWN, 1s);
                             Talk(SAY_ONBOARD);
                             DoCast(me, SPELL_TELEPORT_VISUAL_ONLY);
                             break;
@@ -255,10 +255,10 @@ class boss_isle_of_conquest : public CreatureScript
 
             void EnterCombat(Unit*  /*who*/)
             {
-                events.ScheduleEvent(EVENT_CHECK_RAGE, 2000);
-                events.ScheduleEvent(EVENT_BRUTAL_STRIKE, 6000);
-                events.ScheduleEvent(EVENT_CRUSHING_LEAP, 22000);
-                events.ScheduleEvent(EVENT_DAGGER_THROW, 10000);
+                events.ScheduleEvent(EVENT_CHECK_RAGE, 2s);
+                events.ScheduleEvent(EVENT_BRUTAL_STRIKE, 6s);
+                events.ScheduleEvent(EVENT_CRUSHING_LEAP, 22s);
+                events.ScheduleEvent(EVENT_DAGGER_THROW, 10s);
             }
 
             void UpdateAI(uint32 diff)

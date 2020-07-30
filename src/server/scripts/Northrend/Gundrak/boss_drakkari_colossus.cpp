@@ -114,7 +114,7 @@ class boss_drakkari_colossus : public CreatureScript
                 {
                     me->SetInCombatWithZone();
                     summons.DoAction(ACTION_MERGE);
-                    events.ScheduleEvent(EVENT_COLOSSUS_START_FIGHT, 3500);
+                    events.ScheduleEvent(EVENT_COLOSSUS_START_FIGHT, 3500ms);
                 }
             }
 
@@ -143,9 +143,9 @@ class boss_drakkari_colossus : public CreatureScript
             void EnterCombat(Unit* who)
             {
                 BossAI::EnterCombat(who);
-                events.ScheduleEvent(EVENT_COLOSSUS_MIGHTY_BLOW, 10000);
-                events.ScheduleEvent(EVENT_COLOSSUS_HEALTH_1, 1000);
-                events.ScheduleEvent(EVENT_COLOSSUS_HEALTH_2, 1000);
+                events.ScheduleEvent(EVENT_COLOSSUS_MIGHTY_BLOW, 10s);
+                events.ScheduleEvent(EVENT_COLOSSUS_HEALTH_1, 1s);
+                events.ScheduleEvent(EVENT_COLOSSUS_HEALTH_2, 1s);
             }
 
             void JustSummoned(Creature* summon) 
@@ -208,7 +208,7 @@ class boss_drakkari_colossus : public CreatureScript
                         break;
                     case EVENT_COLOSSUS_MIGHTY_BLOW:
                         me->CastSpell(me->GetVictim(), SPELL_MIGHTY_BLOW, false);
-                        events.ScheduleEvent(EVENT_COLOSSUS_MIGHTY_BLOW, 10000);
+                        events.ScheduleEvent(EVENT_COLOSSUS_MIGHTY_BLOW, 10s);
                         break;
                     case EVENT_COLOSSUS_HEALTH_1:
                         if (me->HealthBelowPct(51))
@@ -219,7 +219,7 @@ class boss_drakkari_colossus : public CreatureScript
                             me->GetMotionMaster()->Clear();
                             break;
                         }
-                        events.ScheduleEvent(EVENT_COLOSSUS_HEALTH_1, 1000);
+                        events.ScheduleEvent(EVENT_COLOSSUS_HEALTH_1, 1s);
                         break;
                     case EVENT_COLOSSUS_HEALTH_2:
                         if (me->HealthBelowPct(21))
@@ -230,7 +230,7 @@ class boss_drakkari_colossus : public CreatureScript
                             me->GetMotionMaster()->Clear();
                             break;
                         }
-                        events.ScheduleEvent(EVENT_COLOSSUS_HEALTH_2, 1000);
+                        events.ScheduleEvent(EVENT_COLOSSUS_HEALTH_2, 1s);
                         break;
                 }
 
@@ -253,9 +253,9 @@ class boss_drakkari_elemental : public CreatureScript
         {
             boss_drakkari_elementalAI(Creature* pCreature) : ScriptedAI(pCreature)
             {
-                events.ScheduleEvent(EVENT_ELEMENTAL_HEALTH, 1000);
-                events.ScheduleEvent(EVENT_ELEMENTAL_SURGE, 7000);
-                events.ScheduleEvent(EVENT_ELEMENTAL_VOLLEY, 0);
+                events.ScheduleEvent(EVENT_ELEMENTAL_HEALTH, 1s);
+                events.ScheduleEvent(EVENT_ELEMENTAL_SURGE, 7s);
+                events.ScheduleEvent(EVENT_ELEMENTAL_VOLLEY, 0s);
             }
 
             EventMap events;
@@ -301,13 +301,13 @@ class boss_drakkari_elemental : public CreatureScript
                             events.Reset();
                             break;
                         }
-                        events.ScheduleEvent(EVENT_ELEMENTAL_HEALTH, 1000);
+                        events.ScheduleEvent(EVENT_ELEMENTAL_HEALTH, 1s);
                         break;
                     case EVENT_ELEMENTAL_SURGE:
                         Talk(SAY_SURGE);
                         me->CastSpell(me, SPELL_SURGE_VISUAL, true);
                         me->CastSpell(me->GetVictim(), SPELL_SURGE, false);
-                        events.ScheduleEvent(EVENT_ELEMENTAL_SURGE, 15000);
+                        events.ScheduleEvent(EVENT_ELEMENTAL_SURGE, 15s);
                         break;
                     case EVENT_ELEMENTAL_VOLLEY:
                         me->CastSpell(me, SPELL_MOJO_VOLLEY, true);
@@ -341,8 +341,8 @@ class npc_living_mojo : public CreatureScript
             void Reset()
             {
                 events.Reset();
-                events.ScheduleEvent(EVENT_MOJO_MOJO_PUDDLE, 13000);
-                events.ScheduleEvent(EVENT_MOJO_MOJO_WAVE, 15000);
+                events.ScheduleEvent(EVENT_MOJO_MOJO_PUDDLE, 13s);
+                events.ScheduleEvent(EVENT_MOJO_MOJO_WAVE, 15s);
             }
 
             void MoveInLineOfSight(Unit* who)
@@ -390,13 +390,13 @@ class npc_living_mojo : public CreatureScript
                     case EVENT_MOJO_MOJO_PUDDLE:
                     {
                         me->CastSpell(me, SPELL_MOJO_PUDDLE, false);
-                        events.ScheduleEvent(EVENT_MOJO_MOJO_PUDDLE, 13000);
+                        events.ScheduleEvent(EVENT_MOJO_MOJO_PUDDLE, 13s);
                         break;
                     }
                     case EVENT_MOJO_MOJO_WAVE:
                     {
                         me->CastSpell(me->GetVictim(), SPELL_MOJO_WAVE, false);
-                        events.ScheduleEvent(EVENT_MOJO_MOJO_WAVE, 15000);
+                        events.ScheduleEvent(EVENT_MOJO_MOJO_WAVE, 15s);
                         break;
                     }
                 }

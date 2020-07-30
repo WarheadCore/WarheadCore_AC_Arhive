@@ -164,13 +164,13 @@ public:
             EnterCombatSelfFunction();
             me->CastSpell(me, RAID_MODE(SPELL_FROST_AURA_10, SPELL_FROST_AURA_25), true);
 
-            events.ScheduleEvent(EVENT_BERSERK, 15*60000);
-            events.ScheduleEvent(EVENT_SPELL_CLEAVE, 5000);
-            events.ScheduleEvent(EVENT_SPELL_TAIL_SWEEP, 10000);
-            events.ScheduleEvent(EVENT_SPELL_LIFE_DRAIN, 17000);
-            events.ScheduleEvent(EVENT_SPELL_BLIZZARD, 17000);
-            events.ScheduleEvent(EVENT_FLIGHT_START, 45000);
-            events.ScheduleEvent(EVENT_HUNDRED_CLUB, 5000);
+            events.ScheduleEvent(EVENT_BERSERK, 15min);
+            events.ScheduleEvent(EVENT_SPELL_CLEAVE, 5s);
+            events.ScheduleEvent(EVENT_SPELL_TAIL_SWEEP, 10s);
+            events.ScheduleEvent(EVENT_SPELL_LIFE_DRAIN, 17s);
+            events.ScheduleEvent(EVENT_SPELL_BLIZZARD, 17s);
+            events.ScheduleEvent(EVENT_FLIGHT_START, 45s);
+            events.ScheduleEvent(EVENT_HUNDRED_CLUB, 5s);
         }
 
         void JustDied(Unit*  killer) override
@@ -188,7 +188,7 @@ public:
         void MovementInform(uint32 type, uint32 id) override
         {
             if (type == POINT_MOTION_TYPE && id == POINT_CENTER)
-                events.ScheduleEvent(EVENT_FLIGHT_LIFTOFF, 500);
+                events.ScheduleEvent(EVENT_FLIGHT_LIFTOFF, 500ms);
         }
 
         void SpellHitTarget(Unit* target, const SpellInfo* spellInfo) override
@@ -301,7 +301,7 @@ public:
                     me->SetHover(true);
                     currentTarget = 0;
                     events.PopEvent();
-                    events.ScheduleEvent(EVENT_FLIGHT_ICEBOLT, 3000);
+                    events.ScheduleEvent(EVENT_FLIGHT_ICEBOLT, 3s);
                     iceboltCount = RAID_MODE(2, 3);
                     return;
                 case EVENT_FLIGHT_ICEBOLT:
@@ -337,23 +337,23 @@ public:
                         blockList.push_back((*itr)->GetGUID());
                         currentTarget = (*itr)->GetGUID();
                         --iceboltCount;
-                        events.ScheduleEvent(EVENT_FLIGHT_ICEBOLT, (me->GetExactDist(*itr) / 13.0f)*IN_MILLISECONDS);
+                        events.ScheduleEvent(EVENT_FLIGHT_ICEBOLT, Seconds(me->GetExactDist(*itr) / 13.0f));
                     }
                     else
-                        events.ScheduleEvent(EVENT_FLIGHT_BREATH, 1000);
+                        events.ScheduleEvent(EVENT_FLIGHT_BREATH, 1s);
                     return;
                 }
                 case EVENT_FLIGHT_BREATH:
                     currentTarget = 0;
                     Talk(EMOTE_BREATH);
                     me->CastSpell(me, SPELL_FROST_MISSILE, false);
-                    events.ScheduleEvent(EVENT_FLIGHT_SPELL_EXPLOSION, 8500);
+                    events.ScheduleEvent(EVENT_FLIGHT_SPELL_EXPLOSION, 8500ms);
                     events.PopEvent();
                     return;
                 case EVENT_FLIGHT_SPELL_EXPLOSION:
                     me->CastSpell(me, SPELL_FROST_EXPLOSION, true);
                     events.PopEvent();
-                    events.ScheduleEvent(EVENT_FLIGHT_START_LAND, 3000);
+                    events.ScheduleEvent(EVENT_FLIGHT_START_LAND, 3s);
                     return;
                 case EVENT_FLIGHT_START_LAND:
                     if (!blockList.empty())
@@ -363,7 +363,7 @@ public:
 
                     blockList.clear();
                     me->RemoveAllGameObjects();
-                    events.ScheduleEvent(EVENT_LAND, 1000);
+                    events.ScheduleEvent(EVENT_LAND, 1s);
                     events.PopEvent();
                     return;
                 case EVENT_LAND:
@@ -372,7 +372,7 @@ public:
 
                     me->SetHover(false);
                     events.PopEvent();
-                    events.ScheduleEvent(EVENT_GROUND, 1500);
+                    events.ScheduleEvent(EVENT_GROUND, 1500ms);
                     return;
                 case EVENT_GROUND:
                     me->SetReactState(REACT_AGGRESSIVE);

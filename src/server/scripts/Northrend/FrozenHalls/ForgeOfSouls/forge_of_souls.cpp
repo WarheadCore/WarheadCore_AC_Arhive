@@ -67,7 +67,7 @@ public:
                 {
                     me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
                     events.Reset();
-                    events.ScheduleEvent(1, 1000);
+                    events.ScheduleEvent(1, 1s);
                 }
         }
 
@@ -83,12 +83,12 @@ public:
                     if (me->GetEntry() == NPC_JAINA_PART1)
                     {
                         Talk(SAY_JAINA_INTRO_1);
-                        events.ScheduleEvent(2, 8000);
+                        events.ScheduleEvent(2, 8s);
                     }
                     else
                     {
                         Talk(SAY_SYLVANAS_INTRO_1);
-                        events.ScheduleEvent(2, 11500);
+                        events.ScheduleEvent(2, 11500ms);
                     }
                     break;
                 case 2:
@@ -96,12 +96,12 @@ public:
                     if (me->GetEntry() == NPC_JAINA_PART1)
                     {
                         Talk(SAY_JAINA_INTRO_2);
-                        events.ScheduleEvent(3, 9000);
+                        events.ScheduleEvent(3, 9s);
                     }
                     else
                     {
                         Talk(SAY_SYLVANAS_INTRO_2);
-                        events.ScheduleEvent(3, 10500);
+                        events.ScheduleEvent(3, 10500ms);
                     }
                     break;
                 case 3:
@@ -109,12 +109,12 @@ public:
                     if (me->GetEntry() == NPC_JAINA_PART1)
                     {
                         Talk(SAY_JAINA_INTRO_3);
-                        events.ScheduleEvent(4, 8000);
+                        events.ScheduleEvent(4, 8s);
                     }
                     else
                     {
                         Talk(SAY_SYLVANAS_INTRO_3);
-                        events.ScheduleEvent(4, 10500);
+                        events.ScheduleEvent(4, 10500ms);
                     }
                     break;
                 case 4:
@@ -122,12 +122,12 @@ public:
                     if (me->GetEntry() == NPC_JAINA_PART1)
                     {
                         Talk(SAY_JAINA_INTRO_4);
-                        events.ScheduleEvent(5, 10000);
+                        events.ScheduleEvent(5, 10s);
                     }
                     else
                     {
                         Talk(SAY_SYLVANAS_INTRO_4);
-                        events.ScheduleEvent(5, 11000);
+                        events.ScheduleEvent(5, 11s);
                     }
                     break;
                 case 5:
@@ -135,12 +135,12 @@ public:
                     if (me->GetEntry() == NPC_JAINA_PART1)
                     {
                         Talk(SAY_JAINA_INTRO_5);
-                        events.ScheduleEvent(6, 8000);
+                        events.ScheduleEvent(6, 8s);
                     }
                     else
                     {
                         Talk(SAY_SYLVANAS_INTRO_5);
-                        events.ScheduleEvent(6, 9500);
+                        events.ScheduleEvent(6, 9500ms);
                     }
                     break;
                 case 6:
@@ -148,7 +148,7 @@ public:
                     if (me->GetEntry() == NPC_JAINA_PART1)
                     {
                         Talk(SAY_JAINA_INTRO_6);
-                        events.ScheduleEvent(7, 12000);
+                        events.ScheduleEvent(7, 12s);
                     }
                     else
                     {
@@ -160,7 +160,7 @@ public:
                     if (me->GetEntry() == NPC_JAINA_PART1)
                     {
                         Talk(SAY_JAINA_INTRO_7);
-                        events.ScheduleEvent(8, 8000);
+                        events.ScheduleEvent(8, 8s);
                     }
                     break;
                 case 8:

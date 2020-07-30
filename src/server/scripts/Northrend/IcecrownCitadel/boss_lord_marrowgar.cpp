@@ -118,11 +118,11 @@ class boss_lord_marrowgar : public CreatureScript
             {
                 me->SetReactState(REACT_AGGRESSIVE);
                 _Reset();
-                events.ScheduleEvent(EVENT_ENABLE_BONE_SLICE, 10000);
-                events.ScheduleEvent(EVENT_SPELL_BONE_SPIKE_GRAVEYARD, urand(10000, 15000));
-                events.ScheduleEvent(EVENT_SPELL_COLDFLAME, 5000);
-                events.ScheduleEvent(EVENT_WARN_BONE_STORM, urand(45000, 50000));
-                events.ScheduleEvent(EVENT_ENRAGE, 600000);
+                events.ScheduleEvent(EVENT_ENABLE_BONE_SLICE, 10s);
+                events.ScheduleEvent(EVENT_SPELL_BONE_SPIKE_GRAVEYARD, 10s, 15s);
+                events.ScheduleEvent(EVENT_SPELL_COLDFLAME, 5s);
+                events.ScheduleEvent(EVENT_WARN_BONE_STORM, 45s, 50s);
+                events.ScheduleEvent(EVENT_ENRAGE, 10min);
 
                 _boneSlice = false;
                 memset(_lastBoneSliceTargets, 0, 3 * sizeof(uint64));
@@ -202,16 +202,16 @@ class boss_lord_marrowgar : public CreatureScript
                         me->GetMotionMaster()->MoveIdle();
                         me->GetMotionMaster()->MovementExpired();
                         events.RepeatEvent(urand(90000, 95000));
-                        events.ScheduleEvent(EVENT_BEGIN_BONE_STORM, 3050);
+                        events.ScheduleEvent(EVENT_BEGIN_BONE_STORM, 3050ms);
                         break;
                     case EVENT_BEGIN_BONE_STORM:
                         {
-                            uint32 _boneStormDuration = RAID_MODE<uint32>(20000, 30000, 20000, 30000);
+                            Seconds _boneStormDuration = RAID_MODE<uint32>(20s, 30s, 20s, 30s);
                             if (Aura* pStorm = me->GetAura(SPELL_BONE_STORM))
                                 pStorm->SetDuration(int32(_boneStormDuration));
                             events.PopEvent();
-                            events.ScheduleEvent(EVENT_BONE_STORM_MOVE, 0);
-                            events.ScheduleEvent(EVENT_END_BONE_STORM, _boneStormDuration+1);
+                            events.ScheduleEvent(EVENT_BONE_STORM_MOVE, 0s);
+                            events.ScheduleEvent(EVENT_END_BONE_STORM, _boneStormDuration + 1ms);
                         }
                         break;
                     case EVENT_BONE_STORM_MOVE:
@@ -244,9 +244,11 @@ class boss_lord_marrowgar : public CreatureScript
                         DoStartMovement(me->GetVictim());
                         events.PopEvent();
                         events.CancelEvent(EVENT_BONE_STORM_MOVE);
-                        events.ScheduleEvent(EVENT_ENABLE_BONE_SLICE, 10000);
+                        events.ScheduleEvent(EVENT_ENABLE_BONE_SLICE, 10s);
+                        
                         if (!IsHeroic())
-                            events.RescheduleEvent(EVENT_SPELL_BONE_SPIKE_GRAVEYARD, urand(15000, 20000));
+                            events.RescheduleEvent(EVENT_SPELL_BONE_SPIKE_GRAVEYARD, 15s, 20s);
+                        
                         break;
                     case EVENT_ENRAGE:
                         me->CastSpell(me, SPELL_BERSERK, true);
@@ -272,7 +274,7 @@ class boss_lord_marrowgar : public CreatureScript
                 if (type != POINT_MOTION_TYPE || id != 1337)
                     return;
 
-                events.ScheduleEvent(EVENT_SPELL_COLDFLAME_BONE_STORM, 0);
+                events.ScheduleEvent(EVENT_SPELL_COLDFLAME_BONE_STORM, 0s);
             }
 
             void JustDied(Unit* /*killer*/)
@@ -331,8 +333,8 @@ public:
 
         void IsSummonedBy(Unit* /*summoner*/)
         {
-            events.ScheduleEvent(1, 450);
-            events.ScheduleEvent(2, 12000);
+            events.ScheduleEvent(1, 450ms);
+            events.ScheduleEvent(2, 12s);
             me->m_positionZ = 42.5f;
         }
 
@@ -434,7 +436,7 @@ public:
             summoner->SetPetGUID(petGUID);
             summoner->GetMotionMaster()->Clear();
             summoner->StopMoving();
-            events.ScheduleEvent(1, 8000);
+            events.ScheduleEvent(1, 8s);
             hasTrappedUnit = true;
         }
 

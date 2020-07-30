@@ -294,11 +294,11 @@ class boss_deathbringer_saurfang : public CreatureScript
                 Talk(SAY_AGGRO);
 
                 events.Reset();
-                events.ScheduleEvent(EVENT_SUMMON_BLOOD_BEAST, 30000);
-                events.ScheduleEvent(EVENT_BERSERK, (IsHeroic() ? 360000 : 480000));
-                events.ScheduleEvent(EVENT_BOILING_BLOOD, 15500, 0);
-                events.ScheduleEvent(EVENT_BLOOD_NOVA, 17000, 0);
-                events.ScheduleEvent(EVENT_RUNE_OF_BLOOD, 20000, 0);
+                events.ScheduleEvent(EVENT_SUMMON_BLOOD_BEAST, 30s);
+                events.ScheduleEvent(EVENT_BERSERK, (IsHeroic() ? 6min : 8min));
+                events.ScheduleEvent(EVENT_BOILING_BLOOD, 15500ms);
+                events.ScheduleEvent(EVENT_BLOOD_NOVA, 17s);
+                events.ScheduleEvent(EVENT_RUNE_OF_BLOOD, 20s);
 
                 _fallenChampionCastCount = 0;
                 instance->DoRemoveAurasDueToSpellOnPlayers(SPELL_MARK_OF_THE_FALLEN_CHAMPION);
@@ -426,9 +426,9 @@ class boss_deathbringer_saurfang : public CreatureScript
                                 for (uint32 i25 = 0; i25 < 3; ++i25)
                                     DoCast(me, SPELL_SUMMON_BLOOD_BEAST_25_MAN+i25);
                             Talk(SAY_BLOOD_BEASTS);
-                            events.ScheduleEvent(EVENT_SUMMON_BLOOD_BEAST, 40000);
+                            events.ScheduleEvent(EVENT_SUMMON_BLOOD_BEAST, 40s);
                             if (IsHeroic())
-                                events.ScheduleEvent(EVENT_BLOOD_BEAST_SCENT_OF_BLOOD, 10000);
+                                events.ScheduleEvent(EVENT_BLOOD_BEAST_SCENT_OF_BLOOD, 10s);
                             break;
                         case EVENT_BLOOD_BEAST_SCENT_OF_BLOOD:
                             Talk(EMOTE_SCENT_OF_BLOOD);
@@ -437,16 +437,16 @@ class boss_deathbringer_saurfang : public CreatureScript
                         case EVENT_BLOOD_NOVA:
                         {
                             me->CastSpell((Unit*)NULL, SPELL_BLOOD_NOVA_TRIGGER, false);
-                            events.ScheduleEvent(EVENT_BLOOD_NOVA, urand(20000, 25000));
+                            events.ScheduleEvent(EVENT_BLOOD_NOVA, 20s, 25s);
                             break;
                         }
                         case EVENT_RUNE_OF_BLOOD:
                             DoCastVictim(SPELL_RUNE_OF_BLOOD);
-                            events.ScheduleEvent(EVENT_RUNE_OF_BLOOD, urand(20000, 25000));
+                            events.ScheduleEvent(EVENT_RUNE_OF_BLOOD, 20s, 25s);
                             break;
                         case EVENT_BOILING_BLOOD:
                             me->CastSpell((Unit*)NULL, SPELL_BOILING_BLOOD, false);
-                            events.ScheduleEvent(EVENT_BOILING_BLOOD, urand(15000, 20000));
+                            events.ScheduleEvent(EVENT_BOILING_BLOOD, 15s, 20s);
                             break;
                         case EVENT_BERSERK:
                             DoCast(me, SPELL_BERSERK);
@@ -561,8 +561,8 @@ class npc_high_overlord_saurfang_icc : public CreatureScript
                             me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
                             Talk(SAY_INTRO_HORDE_1);
                             _events.SetPhase(PHASE_INTRO_H);
-                            _events.ScheduleEvent(EVENT_INTRO_HORDE_2, 5000, 0, PHASE_INTRO_H);
-                            _events.ScheduleEvent(EVENT_INTRO_HORDE_3, 18500, 0, PHASE_INTRO_H);
+                            _events.ScheduleEvent(EVENT_INTRO_HORDE_2, 5s, 0, PHASE_INTRO_H);
+                            _events.ScheduleEvent(EVENT_INTRO_HORDE_3, 18500ms, 0, PHASE_INTRO_H);
                             _instance->HandleGameObject(_instance->GetData64(GO_SAURFANG_S_DOOR), true);
 
                             if (GameObject* teleporter = ObjectAccessor::GetGameObject(*me, _instance->GetData64(GO_SCOURGE_TRANSPORTER_SAURFANG)))
@@ -634,13 +634,13 @@ class npc_high_overlord_saurfang_icc : public CreatureScript
                         case POINT_FIRST_STEP:
                             me->SetWalk(false);
                             Talk(SAY_INTRO_HORDE_3);
-                            _events.ScheduleEvent(EVENT_INTRO_HORDE_4, 6500, 0, PHASE_INTRO_H);
-                            _events.ScheduleEvent(EVENT_INTRO_HORDE_5, 15500, 0, PHASE_INTRO_H);
-                            _events.ScheduleEvent(EVENT_INTRO_HORDE_6, 29500, 0, PHASE_INTRO_H);
-                            _events.ScheduleEvent(EVENT_INTRO_HORDE_7, 43800, 0, PHASE_INTRO_H);
-                            _events.ScheduleEvent(EVENT_INTRO_HORDE_8, 47000, 0, PHASE_INTRO_H);
-                            _events.ScheduleEvent(EVENT_INTRO_HORDE_9, 46700+1000+500, 0, PHASE_INTRO_H);
-                            _events.ScheduleEvent(EVENT_INTRO_FINISH,  46700+1000+9000, 0, PHASE_INTRO_H);
+                            _events.ScheduleEvent(EVENT_INTRO_HORDE_4, 6500ms, 0, PHASE_INTRO_H);
+                            _events.ScheduleEvent(EVENT_INTRO_HORDE_5, 15500ms, 0, PHASE_INTRO_H);
+                            _events.ScheduleEvent(EVENT_INTRO_HORDE_6, 29500ms, 0, PHASE_INTRO_H);
+                            _events.ScheduleEvent(EVENT_INTRO_HORDE_7, 43800ms, 0, PHASE_INTRO_H);
+                            _events.ScheduleEvent(EVENT_INTRO_HORDE_8, 47s, 0, PHASE_INTRO_H);
+                            _events.ScheduleEvent(EVENT_INTRO_HORDE_9, 48200ms, 0, PHASE_INTRO_H);
+                            _events.ScheduleEvent(EVENT_INTRO_FINISH,  56700ms, 0, PHASE_INTRO_H);
                             break;
                         /*case POINT_CORPSE:
                             if (Creature* deathbringer = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_DEATHBRINGER_SAURFANG)))
@@ -823,9 +823,9 @@ class npc_muradin_bronzebeard_icc : public CreatureScript
                             me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
                             Talk(SAY_INTRO_ALLIANCE_1);
                             _events.SetPhase(PHASE_INTRO_A);
-                            _events.ScheduleEvent(EVENT_INTRO_ALLIANCE_2, 2500, 0, PHASE_INTRO_A);
-                            _events.ScheduleEvent(EVENT_INTRO_ALLIANCE_3, 20000, 0, PHASE_INTRO_A);
-                            _events.ScheduleEvent(EVENT_INTRO_ALLIANCE_4, 2500+17500+9500, 0, PHASE_INTRO_A);
+                            _events.ScheduleEvent(EVENT_INTRO_ALLIANCE_2, 2500ms, 0, PHASE_INTRO_A);
+                            _events.ScheduleEvent(EVENT_INTRO_ALLIANCE_3, 20s, 0, PHASE_INTRO_A);
+                            _events.ScheduleEvent(EVENT_INTRO_ALLIANCE_4, 29500ms, 0, PHASE_INTRO_A);
                             _instance->HandleGameObject(_instance->GetData64(GO_SAURFANG_S_DOOR), true);
 
                             if (GameObject* teleporter = ObjectAccessor::GetGameObject(*me, _instance->GetData64(GO_SCOURGE_TRANSPORTER_SAURFANG)))
@@ -893,10 +893,10 @@ class npc_muradin_bronzebeard_icc : public CreatureScript
                         case POINT_FIRST_STEP:
                             me->SetWalk(false);
                             Talk(SAY_INTRO_ALLIANCE_4);
-                            _events.ScheduleEvent(EVENT_INTRO_ALLIANCE_5, 5000, 0, PHASE_INTRO_A);
-                            _events.ScheduleEvent(EVENT_INTRO_ALLIANCE_6, 6500+500, 0, PHASE_INTRO_A);
-                            _events.ScheduleEvent(EVENT_INTRO_ALLIANCE_7, 6500+500+2000, 0, PHASE_INTRO_A);
-                            _events.ScheduleEvent(EVENT_INTRO_FINISH, 6500+500+2000+5000, 0, PHASE_INTRO_A);
+                            _events.ScheduleEvent(EVENT_INTRO_ALLIANCE_5, 5s, 0, PHASE_INTRO_A);
+                            _events.ScheduleEvent(EVENT_INTRO_ALLIANCE_6, 7s, 0, PHASE_INTRO_A);
+                            _events.ScheduleEvent(EVENT_INTRO_ALLIANCE_7, 9s, 0, PHASE_INTRO_A);
+                            _events.ScheduleEvent(EVENT_INTRO_FINISH, 14s, 0, PHASE_INTRO_A);
                             break;
                         default:
                             break;

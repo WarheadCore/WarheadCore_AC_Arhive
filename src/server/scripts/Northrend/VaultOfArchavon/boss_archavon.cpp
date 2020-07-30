@@ -90,10 +90,11 @@ class boss_archavon : public CreatureScript
 
             void EnterCombat(Unit* /*who*/)
             {
-                events.ScheduleEvent(EVENT_ROCK_SHARDS, 15000);
-                events.ScheduleEvent(EVENT_CHOKING_CLOUD, 30000);
-                events.ScheduleEvent(EVENT_STOMP, 45000);
-                events.ScheduleEvent(EVENT_BERSERK, 300000);
+                events.ScheduleEvent(EVENT_ROCK_SHARDS, 15s);
+                events.ScheduleEvent(EVENT_CHOKING_CLOUD, 30s);
+                events.ScheduleEvent(EVENT_STOMP, 45s);
+                events.ScheduleEvent(EVENT_BERSERK, 5min);
+                
                 if (pInstance)
                     pInstance->SetData(EVENT_ARCHAVON, IN_PROGRESS);
             }
@@ -135,7 +136,7 @@ class boss_archavon : public CreatureScript
                         me->MonsterTextEmote(buffer, 0);
                         me->CastSpell(me->GetVictim(), RAID_MODE(SPELL_STOMP_10, SPELL_STOMP_25), false);
                         events.RepeatEvent(45000);
-                        events.ScheduleEvent(EVENT_IMPALE, 3000);
+                        events.ScheduleEvent(EVENT_IMPALE, 3s);
                         break;
                     }
                     case EVENT_IMPALE:

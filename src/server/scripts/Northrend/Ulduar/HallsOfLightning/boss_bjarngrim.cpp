@@ -171,22 +171,22 @@ public:
             me->SetInCombatWithZone();
             Talk(SAY_AGGRO);
 
-            events.ScheduleEvent(EVENT_BJARNGRIM_CHANGE_STANCE, 20000, 0);
+            events.ScheduleEvent(EVENT_BJARNGRIM_CHANGE_STANCE, 20s);
 
             // DEFENSIVE STANCE
-            events.ScheduleEvent(EVENT_BJARNGRIM_REFLECTION, 8000, STANCE_DEFENSIVE);
-            events.ScheduleEvent(EVENT_BJARNGRIM_PUMMEL, 5000, STANCE_DEFENSIVE);
-            events.ScheduleEvent(EVENT_BJARNGRIM_KNOCK, 16000, STANCE_DEFENSIVE);
-            events.ScheduleEvent(EVENT_BJARNGRIM_IRONFORM, 12000, STANCE_DEFENSIVE);
+            events.ScheduleEvent(EVENT_BJARNGRIM_REFLECTION, 8s, STANCE_DEFENSIVE);
+            events.ScheduleEvent(EVENT_BJARNGRIM_PUMMEL, 5s, STANCE_DEFENSIVE);
+            events.ScheduleEvent(EVENT_BJARNGRIM_KNOCK, 16s, STANCE_DEFENSIVE);
+            events.ScheduleEvent(EVENT_BJARNGRIM_IRONFORM, 12s, STANCE_DEFENSIVE);
 
             // BERSERKER STANCE
-            events.ScheduleEvent(EVENT_BJARNGRIM_MORTAL_STRIKE, 20000+4000, STANCE_BERSERKER);
-            events.ScheduleEvent(EVENT_BJARNGRIM_WHIRLWIND, 20000+6000, STANCE_BERSERKER);
+            events.ScheduleEvent(EVENT_BJARNGRIM_MORTAL_STRIKE, 24s, STANCE_BERSERKER);
+            events.ScheduleEvent(EVENT_BJARNGRIM_WHIRLWIND, 26s, STANCE_BERSERKER);
 
             // BATTLE STANCE
-            events.ScheduleEvent(EVENT_BJARNGRIM_INTERCEPT, 20000+3000, STANCE_BATTLE);
-            events.ScheduleEvent(EVENT_BJARNGRIM_CLEAVE, 20000+5000, STANCE_BATTLE);
-            events.ScheduleEvent(EVENT_BJARNGRIM_SLAM, 20000+10000, STANCE_BATTLE);
+            events.ScheduleEvent(EVENT_BJARNGRIM_INTERCEPT, 23s, STANCE_BATTLE);
+            events.ScheduleEvent(EVENT_BJARNGRIM_CLEAVE, 25s, STANCE_BATTLE);
+            events.ScheduleEvent(EVENT_BJARNGRIM_SLAM, 30s, STANCE_BATTLE);
 
             if (m_pInstance)
             {
@@ -395,10 +395,10 @@ public:
                 BjarngrimGUID = 0;
         }
 
-        void EnterCombat(Unit*)
+        void EnterCombat(Unit* /*who*/)
         {
-            events.ScheduleEvent(EVENT_ARC_WELD, 2000);
-            events.ScheduleEvent(EVENT_RENEW_STEEL, 10000 + rand()%1000);
+            events.ScheduleEvent(EVENT_ARC_WELD, 2s);
+            events.ScheduleEvent(EVENT_RENEW_STEEL, 10s, 11s);
         }
 
         void UpdateAI(uint32 diff)

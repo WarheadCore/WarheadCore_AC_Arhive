@@ -392,20 +392,22 @@ public:
             {
                 me->MonsterYell(TEXT_LMK2_ACTIVATE, LANG_UNIVERSAL, 0);
                 me->PlayDirectSound(SOUND_TANK_ACTIVE);
-                events.ScheduleEvent(EVENT_SIT_LMK2, 6000);
-                events.ScheduleEvent(EVENT_BERSERK, 900000);
+                events.ScheduleEvent(EVENT_SIT_LMK2, 6s);
+                events.ScheduleEvent(EVENT_BERSERK, 15min);
             }
             else
             {
-                events.ScheduleEvent(EVENT_MIMIRON_SAY_HARDMODE, 7000);
-                events.ScheduleEvent(EVENT_BERSERK, Is25ManRaid() ? 10*MINUTE*IN_MILLISECONDS : 8*MINUTE*IN_MILLISECONDS);
+                events.ScheduleEvent(EVENT_MIMIRON_SAY_HARDMODE, 7s);
+                events.ScheduleEvent(EVENT_BERSERK, Is25ManRaid() ? 10min : 8min);
 
-                events.ScheduleEvent(EVENT_COMPUTER_SAY_INITIATED, 0);
-                events.ScheduleEvent(EVENT_COMPUTER_SAY_MINUTES, 3000);
+                events.ScheduleEvent(EVENT_COMPUTER_SAY_INITIATED, 0s);
+                events.ScheduleEvent(EVENT_COMPUTER_SAY_MINUTES, 3s);
                 minutesTalkNum = Is25ManRaid() ? TALK_COMPUTER_TEN : TALK_COMPUTER_EIGHT;
-                for (uint32 i=0; i<uint32(TALK_COMPUTER_ZERO-minutesTalkNum-1); ++i)
-                    events.ScheduleEvent(EVENT_COMPUTER_SAY_MINUTES, (i+1)*MINUTE*IN_MILLISECONDS);
-                events.ScheduleEvent(EVENT_COMPUTER_SAY_MINUTES, (TALK_COMPUTER_ZERO-minutesTalkNum)*MINUTE*IN_MILLISECONDS + 6000);
+                
+                for (uint32 i = 0; i < uint32(TALK_COMPUTER_ZERO - minutesTalkNum - 1); ++i)
+                    events.ScheduleEvent(EVENT_COMPUTER_SAY_MINUTES, 1min * (i+1));
+                
+                events.ScheduleEvent(EVENT_COMPUTER_SAY_MINUTES, Milliseconds(TALK_COMPUTER_ZERO-minutesTalkNum) * 1min + 6s);
             }
 
             // ensure LMK2 is at proper position
@@ -461,8 +463,8 @@ public:
                     me->MonsterYell(TEXT_HARDMODE, LANG_UNIVERSAL, 0);
                     me->PlayDirectSound(SOUND_TANK_HARD_INTRO);
                     events.PopEvent();
-                    events.ScheduleEvent(EVENT_SPAWN_FLAMES_INITIAL, 0);
-                    events.ScheduleEvent(EVENT_SIT_LMK2, 4000);
+                    events.ScheduleEvent(EVENT_SPAWN_FLAMES_INITIAL, 0s);
+                    events.ScheduleEvent(EVENT_SIT_LMK2, 4s);
                     break;
                 case EVENT_SPAWN_FLAMES_INITIAL:
                     {
@@ -499,7 +501,7 @@ public:
                     if( hardmode )
                         me->SummonCreature(33576, 2744.78f, 2569.47f, 364.32f, 0.0f, TEMPSUMMON_TIMED_DESPAWN, 120000);
                     events.PopEvent();
-                    events.ScheduleEvent(EVENT_BERSERK_2, 0);
+                    events.ScheduleEvent(EVENT_BERSERK_2, 0s);
                     break;
                 case EVENT_BERSERK_2:
                     {
@@ -520,7 +522,7 @@ public:
                     {
                         me->EnterVehicle(LMK2, 6);
                         events.PopEvent();
-                        events.ScheduleEvent(EVENT_SIT_LMK2_INTERVAL, 2000);
+                        events.ScheduleEvent(EVENT_SIT_LMK2_INTERVAL, 2s);
                         break;
                     }
                     EnterEvadeMode();
@@ -549,7 +551,7 @@ public:
                         me->PlayDirectSound(SOUND_TANK_DEATH);
                         LMK2->SetFacingTo(3.58f);
                         events.PopEvent();
-                        events.ScheduleEvent(EVENT_ELEVATOR_INTERVAL_0, 6000);
+                        events.ScheduleEvent(EVENT_ELEVATOR_INTERVAL_0, 6s);
                         break;
                     }
                     EnterEvadeMode();
@@ -562,7 +564,7 @@ public:
                         elevator->EnableCollision(false);
                     }
                     events.PopEvent();
-                    events.ScheduleEvent(EVENT_ELEVATOR_INTERVAL_1, 6000);
+                    events.ScheduleEvent(EVENT_ELEVATOR_INTERVAL_1, 6s);
                     break;
                 case EVENT_ELEVATOR_INTERVAL_1:
                     if(me->SummonCreature(NPC_VX001, 2744.65f, 2569.46f, 364.40f, 3.14f, TEMPSUMMON_MANUAL_DESPAWN))
@@ -574,7 +576,7 @@ public:
                             elevator->EnableCollision(false);
                         }
                         events.PopEvent();
-                        events.ScheduleEvent(EVENT_ELEVATOR_INTERVAL_2, 18000);
+                        events.ScheduleEvent(EVENT_ELEVATOR_INTERVAL_2, 18s);
                         break;
                     }
                     EnterEvadeMode();
@@ -584,7 +586,7 @@ public:
                     {
                         me->EnterVehicle(VX001, 0);
                         events.PopEvent();
-                        events.ScheduleEvent(EVENT_SITTING_ON_VX001, 4000);
+                        events.ScheduleEvent(EVENT_SITTING_ON_VX001, 4s);
                         break;
                     }
                     EnterEvadeMode();
@@ -593,14 +595,14 @@ public:
                     me->MonsterYell(TEXT_VX001_ACTIVATE, LANG_UNIVERSAL, 0);
                     me->PlayDirectSound(SOUND_TORSO_ACTIVE);
                     events.PopEvent();
-                    events.ScheduleEvent(EVENT_ENTER_VX001, 5000);
+                    events.ScheduleEvent(EVENT_ENTER_VX001, 5s);
                     break;
                 case EVENT_ENTER_VX001:
                     if( Creature* VX001 = GetVX001() )
                     {
                         me->EnterVehicle(VX001, 1);
                         events.PopEvent();
-                        events.ScheduleEvent(EVENT_EMOTE_VX001, 2000);
+                        events.ScheduleEvent(EVENT_EMOTE_VX001, 2s);
                         break;
                     }
                     EnterEvadeMode();
@@ -610,7 +612,7 @@ public:
                     {
                         VX001->HandleEmoteCommand(EMOTE_ONESHOT_EMERGE);
                         events.PopEvent();
-                        events.ScheduleEvent(EVENT_VX001_START_FIGHT, 1750);
+                        events.ScheduleEvent(EVENT_VX001_START_FIGHT, 1750ms);
                         break;
                     }
                     EnterEvadeMode();
@@ -633,7 +635,7 @@ public:
                         VX001->HandleEmoteCommand(EMOTE_STATE_DROWNED);
                         VX001->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_STATE_DROWNED);
                         events.PopEvent();
-                        events.ScheduleEvent(EVENT_GET_OUT_VX001, 2500);
+                        events.ScheduleEvent(EVENT_GET_OUT_VX001, 2500ms);
                         break;
                     }
                     EnterEvadeMode();
@@ -647,7 +649,7 @@ public:
                             ACU->MonsterMoveWithSpeed(2737.75f, 2574.22f, 381.34f, speed);
                             ACU->SetPosition(2737.75f, 2574.22f, 381.34f, M_PI);
                             events.PopEvent();
-                            events.ScheduleEvent(EVENT_SAY_VX001_DEAD, 2000);
+                            events.ScheduleEvent(EVENT_SAY_VX001_DEAD, 2s);
                             break;
                         }
                     EnterEvadeMode();
@@ -657,14 +659,14 @@ public:
                     me->MonsterYell(TEXT_VX001_DEATH, LANG_UNIVERSAL, 0);
                     me->PlayDirectSound(SOUND_TORSO_DEATH);
                     events.PopEvent();
-                    events.ScheduleEvent(EVENT_ENTER_ACU, 7000);
+                    events.ScheduleEvent(EVENT_ENTER_ACU, 7s);
                     break;
                 case EVENT_ENTER_ACU:
                     if( Creature* ACU = GetACU() )
                     {
                         me->EnterVehicle(ACU, 0);
                         events.PopEvent();
-                        events.ScheduleEvent(EVENT_SAY_ACU_ACTIVATE, 6000);
+                        events.ScheduleEvent(EVENT_SAY_ACU_ACTIVATE, 6s);
                         break;
                     }
                     EnterEvadeMode();
@@ -673,7 +675,7 @@ public:
                     me->MonsterYell(TEXT_ACU_ACTIVATE, LANG_UNIVERSAL, 0);
                     me->PlayDirectSound(SOUND_HEAD_ACTIVE);
                     events.PopEvent();
-                    events.ScheduleEvent(EVENT_ACU_START_ATTACK, 4000);
+                    events.ScheduleEvent(EVENT_ACU_START_ATTACK, 4s);
                     break;
                 case EVENT_ACU_START_ATTACK:
                     if( Creature* ACU = GetACU() )
@@ -691,14 +693,14 @@ public:
                     me->MonsterYell(TEXT_ACU_DEATH, LANG_UNIVERSAL, 0);
                     me->PlayDirectSound(SOUND_HEAD_DEATH);
                     events.PopEvent();
-                    events.ScheduleEvent(EVENT_LEVIATHAN_COME_CLOSER, 5000);
+                    events.ScheduleEvent(EVENT_LEVIATHAN_COME_CLOSER, 5s);
                     break;
                 case EVENT_LEVIATHAN_COME_CLOSER:
                     if (Creature* LMK2 = GetLMK2())
                     {
                         LMK2->GetMotionMaster()->MoveCharge(2755.77f, 2574.95f, 364.31f, 21.0f);
                         events.PopEvent();
-                        events.ScheduleEvent(EVENT_VX001_EMOTE_JUMP, 4000);
+                        events.ScheduleEvent(EVENT_VX001_EMOTE_JUMP, 4s);
                         break;
                     }
                     EnterEvadeMode();
@@ -717,7 +719,7 @@ public:
                         VX001->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_ONESHOT_CUSTOM_SPELL_02);
                         VX001->HandleEmoteCommand(EMOTE_ONESHOT_CUSTOM_SPELL_02);
                         events.PopEvent();
-                        events.ScheduleEvent(EVENT_LEVIATHAN_RIDE_MIDDLE, 4800);
+                        events.ScheduleEvent(EVENT_LEVIATHAN_RIDE_MIDDLE, 4800ms);
                     }
                     break;
                 case EVENT_LEVIATHAN_RIDE_MIDDLE:
@@ -737,7 +739,7 @@ public:
                         LMK2->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_STATE_CUSTOM_SPELL_01);
                         LMK2->HandleEmoteCommand(EMOTE_STATE_CUSTOM_SPELL_01);
                         events.PopEvent();
-                        events.ScheduleEvent(EVENT_JOIN_TOGETHER, 3000);
+                        events.ScheduleEvent(EVENT_JOIN_TOGETHER, 3s);
                     }
                     break;
                 case EVENT_JOIN_TOGETHER:
@@ -755,7 +757,7 @@ public:
                         me->MonsterYell(TEXT_VOLTRON_ACTIVATE, LANG_UNIVERSAL, 0);
                         me->PlayDirectSound(SOUND_VOLTRON_ACTIVE);
                         events.PopEvent();
-                        events.ScheduleEvent(EVENT_START_PHASE4, 10000);
+                        events.ScheduleEvent(EVENT_START_PHASE4, 10s);
                     }
                     break;
                 case EVENT_START_PHASE4:
@@ -845,7 +847,7 @@ public:
                                 computer->AI()->Talk(TALK_COMPUTER_TERMINATED);
 
                         events.Reset();
-                        events.ScheduleEvent(EVENT_SAY_VOLTRON_DEAD, 6000);
+                        events.ScheduleEvent(EVENT_SAY_VOLTRON_DEAD, 6s);
                     }
                     break;
                 case EVENT_SAY_VOLTRON_DEAD:
@@ -856,7 +858,7 @@ public:
                         if( GameObject *go = me->SummonGameObject(chestId, 2744.65f, 2569.46f, 364.397f, 0, 0, 0, 0, 0, 0) )
                             go->SetUInt32Value(GAMEOBJECT_FLAGS, 0);
                     events.PopEvent();
-                    events.ScheduleEvent(EVENT_DISAPPEAR, 15000);
+                    events.ScheduleEvent(EVENT_DISAPPEAR, 15s);
                     break;
                 case EVENT_DISAPPEAR:
                     if( pInstance )
@@ -966,13 +968,13 @@ public:
             switch (value) // end of phase 1-3, 4-6 for voltron
             {
                 case 1:
-                    events.ScheduleEvent(EVENT_LMK2_RETREAT_INTERVAL, 5000);
+                    events.ScheduleEvent(EVENT_LMK2_RETREAT_INTERVAL, 5s);
                     break;
                 case 2:
-                    events.ScheduleEvent(EVENT_VX001_EMOTESTATE_DEATH, 2500);
+                    events.ScheduleEvent(EVENT_VX001_EMOTESTATE_DEATH, 2500ms);
                     break;
                 case 3:
-                    events.ScheduleEvent(EVENT_SAY_ACU_DEAD, 5000);
+                    events.ScheduleEvent(EVENT_SAY_ACU_DEAD, 5s);
                     break;
                 case 4:
                 case 5:
@@ -991,7 +993,7 @@ public:
                         Spell* s2 = VX001->GetCurrentSpell(CURRENT_GENERIC_SPELL);
                         Spell* s3 = ACU->GetCurrentSpell(CURRENT_GENERIC_SPELL);
                         if (s1 && s2 && s3 && s1->GetSpellInfo()->Id == SPELL_SELF_REPAIR && s2->GetSpellInfo()->Id == SPELL_SELF_REPAIR && s3->GetSpellInfo()->Id == SPELL_SELF_REPAIR)
-                            events.ScheduleEvent(EVENT_FINISH, 0);
+                            events.ScheduleEvent(EVENT_FINISH, 0s);
                     }
                     break;
                 case 7:
@@ -1080,13 +1082,13 @@ public:
                             AttackStart(target);
                         DoZoneInCombat();
                         events.Reset();
-                        events.ScheduleEvent(EVENT_SPELL_NAPALM_SHELL, 3000);
-                        events.ScheduleEvent(EVENT_SPELL_PLASMA_BLAST, 10000);
-                        events.ScheduleEvent(EVENT_SPELL_SHOCK_BLAST, 20000);
-                        events.ScheduleEvent(EVENT_PROXIMITY_MINES_1, 6000);
+                        events.ScheduleEvent(EVENT_SPELL_NAPALM_SHELL, 3s);
+                        events.ScheduleEvent(EVENT_SPELL_PLASMA_BLAST, 10s);
+                        events.ScheduleEvent(EVENT_SPELL_SHOCK_BLAST, 20s);
+                        events.ScheduleEvent(EVENT_PROXIMITY_MINES_1, 6s);
                         if (Creature* c = GetMimiron())
                             if (c->AI()->GetData(1))
-                                events.ScheduleEvent(EVENT_FLAME_SUPPRESSION_50000, 60000);
+                                events.ScheduleEvent(EVENT_FLAME_SUPPRESSION_50000, 1min);
                         break;
                     case 4:
                         me->SetReactState(REACT_AGGRESSIVE);
@@ -1097,8 +1099,8 @@ public:
                             AttackStart(target);
                         DoZoneInCombat();
                         events.Reset();
-                        events.ScheduleEvent(EVENT_SPELL_SHOCK_BLAST, 20000);
-                        events.ScheduleEvent(EVENT_PROXIMITY_MINES_1, 6000);
+                        events.ScheduleEvent(EVENT_SPELL_SHOCK_BLAST, 20s);
+                        events.ScheduleEvent(EVENT_PROXIMITY_MINES_1, 6s);
                         break;
 
                 }
@@ -1202,7 +1204,7 @@ public:
                 case EVENT_SPELL_SHOCK_BLAST:
                     me->CastSpell(me->GetVictim(), SPELL_SHOCK_BLAST, false);
                     events.RepeatEvent(30000);
-                    events.ScheduleEvent(EVENT_PROXIMITY_MINES_1, 8000);
+                    events.ScheduleEvent(EVENT_PROXIMITY_MINES_1, 8s);
                     break;
                 case EVENT_PROXIMITY_MINES_1:
                     {
@@ -1368,16 +1370,16 @@ public:
                         me->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_ONESHOT_SPELL_CAST_OMNI);
                         me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                         events.Reset();
-                        events.ScheduleEvent(EVENT_SPELL_HEAT_WAVE, 10000);
-                        events.ScheduleEvent(EVENT_SPELL_ROCKET_STRIKE, 16000);
-                        events.ScheduleEvent(EVENT_SPELL_RAPID_BURST, 0);
-                        events.ScheduleEvent(EVENT_SPELL_SPINNING_UP, 30000);
-                        events.ScheduleEvent(EVENT_REINSTALL_ROCKETS, 3000);
+                        events.ScheduleEvent(EVENT_SPELL_HEAT_WAVE, 10s);
+                        events.ScheduleEvent(EVENT_SPELL_ROCKET_STRIKE, 16s);
+                        events.ScheduleEvent(EVENT_SPELL_RAPID_BURST, 0s);
+                        events.ScheduleEvent(EVENT_SPELL_SPINNING_UP, 30s);
+                        events.ScheduleEvent(EVENT_REINSTALL_ROCKETS, 3s);
                         if (Creature* c = GetMimiron())
                             if (c->AI()->GetData(1))
                             {
-                                events.ScheduleEvent(EVENT_FLAME_SUPPRESSION_10, 7000);
-                                events.ScheduleEvent(EVENT_FROST_BOMB, 1000);
+                                events.ScheduleEvent(EVENT_FLAME_SUPPRESSION_10, 7s);
+                                events.ScheduleEvent(EVENT_FROST_BOMB, 1s);
                             }
                         break;
                     case 4:
@@ -1385,13 +1387,13 @@ public:
                         fighting = true;
                         me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                         events.Reset();
-                        events.ScheduleEvent(EVENT_REINSTALL_ROCKETS, 3000);
-                        events.ScheduleEvent(EVENT_SPELL_ROCKET_STRIKE, 16000);
-                        events.ScheduleEvent(EVENT_HAND_PULSE, 1);
+                        events.ScheduleEvent(EVENT_REINSTALL_ROCKETS, 3s);
+                        events.ScheduleEvent(EVENT_SPELL_ROCKET_STRIKE, 16s);
+                        events.ScheduleEvent(EVENT_HAND_PULSE, 10ms);
                         //events.ScheduleEvent(EVENT_SPELL_SPINNING_UP, 30000);
                         if (Creature* c = GetMimiron())
                             if (c->AI()->GetData(1))
-                                events.ScheduleEvent(EVENT_FROST_BOMB, 1000);
+                                events.ScheduleEvent(EVENT_FROST_BOMB, 1s);
                         break;
                 }
             }
@@ -1510,7 +1512,7 @@ public:
                                 }
                         }
                         events.RepeatEvent(20000);
-                        events.ScheduleEvent(EVENT_REINSTALL_ROCKETS, 10000);
+                        events.ScheduleEvent(EVENT_REINSTALL_ROCKETS, 10s);
                     }
                     break;
                 case EVENT_REINSTALL_ROCKETS:
@@ -1567,7 +1569,7 @@ public:
                         me->SetOrientation(angle);
                         me->SetFacingTo(angle);
                         me->CastSpell(p, SPELL_SPINNING_UP, true);
-                        events.RescheduleEvent((Phase == 2 ? EVENT_SPELL_RAPID_BURST : EVENT_HAND_PULSE), 14500);
+                        events.RescheduleEvent((Phase == 2 ? EVENT_SPELL_RAPID_BURST : EVENT_HAND_PULSE), 14500ms);
                     }
                     break;
                 case EVENT_FLAME_SUPPRESSION_10:
@@ -1708,13 +1710,13 @@ public:
                             AttackStart(target);
                         DoZoneInCombat();
                         events.Reset();
-                        events.ScheduleEvent(EVENT_SPELL_PLASMA_BALL, 0);
-                        events.ScheduleEvent(EVENT_SUMMON_BOMB_BOT, 15000);
-                        events.ScheduleEvent(EVENT_SUMMON_ASSAULT_BOT, 1000);
-                        events.ScheduleEvent(EVENT_SUMMON_JUNK_BOT, 10000);
+                        events.ScheduleEvent(EVENT_SPELL_PLASMA_BALL, 0s);
+                        events.ScheduleEvent(EVENT_SUMMON_BOMB_BOT, 15s);
+                        events.ScheduleEvent(EVENT_SUMMON_ASSAULT_BOT, 1s);
+                        events.ScheduleEvent(EVENT_SUMMON_JUNK_BOT, 10s);
                         if (Creature* c = GetMimiron())
                             if (c->AI()->GetData(1))
-                                events.ScheduleEvent(EVENT_SUMMON_EMERGENCY_FIRE_BOTS, 0);
+                                events.ScheduleEvent(EVENT_SUMMON_EMERGENCY_FIRE_BOTS, 0s);
                         break;
                     case 4:
                         me->SetReactState(REACT_AGGRESSIVE);
@@ -1725,14 +1727,14 @@ public:
                             AttackStart(target);
                         DoZoneInCombat();
                         events.Reset();
-                        events.ScheduleEvent(EVENT_SPELL_PLASMA_BALL, 0);
+                        events.ScheduleEvent(EVENT_SPELL_PLASMA_BALL, 0s);
 
                 }
             }
             else if (id == 2 && !immobilized && Phase == 3) // magnetic core
             {
                 immobilized = true;
-                events.ScheduleEvent(EVENT_MAGNETIC_CORE_PULL_DOWN, 2000);
+                events.ScheduleEvent(EVENT_MAGNETIC_CORE_PULL_DOWN, 2s);
             }
         }
 
@@ -1892,14 +1894,14 @@ public:
                     me->MonsterMoveWithSpeed(me->GetPositionX(), me->GetPositionY(), 365.34f, me->GetExactDist(me->GetPositionX(), me->GetPositionY(), 365.34f));
                     me->UpdatePosition(me->GetPositionX(), me->GetPositionY(), 365.34f, me->GetOrientation(), false);
                     events.PopEvent();
-                    events.ScheduleEvent(EVENT_MAGNETIC_CORE_FREE, 20000);
+                    events.ScheduleEvent(EVENT_MAGNETIC_CORE_FREE, 20s);
                     break;
                 case EVENT_MAGNETIC_CORE_FREE:
                     me->RemoveAura(SPELL_SPINNING);
                     me->MonsterMoveWithSpeed(me->GetPositionX(), me->GetPositionY(), 381.34f, me->GetDistance(me->GetPositionX(), me->GetPositionY(), 381.34f));
                     me->UpdatePosition(me->GetPositionX(), me->GetPositionY(), 381.34f, me->GetOrientation(), false);
                     events.PopEvent();
-                    events.ScheduleEvent(EVENT_MAGNETIC_CORE_REMOVE_IMMOBILIZE, 1000);
+                    events.ScheduleEvent(EVENT_MAGNETIC_CORE_REMOVE_IMMOBILIZE, 1s);
                     break;
                 case EVENT_MAGNETIC_CORE_REMOVE_IMMOBILIZE:
                     immobilized = false;
@@ -2332,7 +2334,7 @@ public:
         {
             CreateTime = GameTime::GetGameTime();
             events.Reset();
-            events.ScheduleEvent(EVENT_FLAMES_SPREAD, 5750);
+            events.ScheduleEvent(EVENT_FLAMES_SPREAD, 5750ms);
             if( Creature* flame = me->SummonCreature(NPC_FLAMES_SPREAD, me->GetPositionX(), me->GetPositionY(), 364.32f, 0.0f) )
             {
                 FlameList.push_back(flame->GetGUID());
@@ -2494,7 +2496,7 @@ public:
         npc_ulduar_emergency_fire_botAI(Creature *pCreature) : ScriptedAI(pCreature)
         {
             events.Reset();
-            events.ScheduleEvent(EVENT_EMERGENCY_BOT_CHECK, 1000);
+            events.ScheduleEvent(EVENT_EMERGENCY_BOT_CHECK, 1s);
         }
 
         EventMap events;
@@ -2505,7 +2507,7 @@ public:
         void MovementInform(uint32 type, uint32 id)
         {
             if (type == POINT_MOTION_TYPE && id == 1)
-                events.ScheduleEvent(EVENT_EMERGENCY_BOT_ATTACK, 0);
+                events.ScheduleEvent(EVENT_EMERGENCY_BOT_ATTACK, 0s);
         }
 
         void UpdateAI(uint32 diff)
@@ -2522,7 +2524,7 @@ public:
                         me->m_orientation = me->GetAngle(flame->GetPositionX(), flame->GetPositionY());
                         float dist = me->GetExactDist2d(flame);
                         if (dist <= 5.0f)
-                            events.ScheduleEvent(EVENT_EMERGENCY_BOT_ATTACK, 0);
+                            events.ScheduleEvent(EVENT_EMERGENCY_BOT_ATTACK, 0s);
                         else
                             me->GetMotionMaster()->MovePoint(1, me->GetPositionX()+(dist-5.0f)*cos(me->GetOrientation()), me->GetPositionY()+(dist-5.0f)*sin(me->GetOrientation()), 364.32f);
                     }
@@ -2530,7 +2532,7 @@ public:
                 case EVENT_EMERGENCY_BOT_ATTACK:
                     me->CastSpell((Unit*)NULL, SPELL_WATER_SPRAY, false);
                     events.PopEvent();
-                    events.RescheduleEvent(EVENT_EMERGENCY_BOT_CHECK, 5000);
+                    events.RescheduleEvent(EVENT_EMERGENCY_BOT_CHECK, 5s);
                     break;
             }
         }

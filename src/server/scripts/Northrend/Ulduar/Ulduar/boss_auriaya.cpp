@@ -177,12 +177,12 @@ public:
             if (m_pInstance)
                 m_pInstance->SetData(TYPE_AURIAYA, IN_PROGRESS);
 
-            events.ScheduleEvent(EVENT_TERRIFYING_SCREECH, 35000);
-            events.ScheduleEvent(EVENT_SONIC_SCREECH, 45000);
-            events.ScheduleEvent(EVENT_GUARDIAN_SWARM, 70000);
-            events.ScheduleEvent(EVENT_SUMMON_FERAL_DEFENDER, 60000);
-            events.ScheduleEvent(EVENT_SENTINEL_BLAST, 36000);
-            events.ScheduleEvent(EVENT_ENRAGE, 600000);
+            events.ScheduleEvent(EVENT_TERRIFYING_SCREECH, 35s);
+            events.ScheduleEvent(EVENT_SONIC_SCREECH, 45s);
+            events.ScheduleEvent(EVENT_GUARDIAN_SWARM, 70s);
+            events.ScheduleEvent(EVENT_SUMMON_FERAL_DEFENDER, 1min);
+            events.ScheduleEvent(EVENT_SENTINEL_BLAST, 36s);
+            events.ScheduleEvent(EVENT_ENRAGE, 10min);
 
             summons.DoZoneInCombat(NPC_SANCTUM_SENTRY);
 
@@ -223,7 +223,7 @@ public:
         void DoAction(int32 param)
         {
             if (param == ACTION_FERAL_DEATH_WITH_STACK)
-                events.ScheduleEvent(EVENT_RESPAWN_FERAL_DEFENDER, 25000);
+                events.ScheduleEvent(EVENT_RESPAWN_FERAL_DEFENDER, 25s);
             else if (param == ACTION_FERAL_DEATH)
                 _nineLives = true;
         }
@@ -244,7 +244,7 @@ public:
                     me->CastSpell(me, SPELL_ACTIVATE_FERAL_DEFENDER, true);
                     events.PopEvent();
                     me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_INTERRUPT_CAST, true);
-                    events.ScheduleEvent(EVENT_REMOVE_IMMUNE, 3000);
+                    events.ScheduleEvent(EVENT_REMOVE_IMMUNE, 3s);
                     break;
                 case EVENT_REMOVE_IMMUNE:
                     events.PopEvent();

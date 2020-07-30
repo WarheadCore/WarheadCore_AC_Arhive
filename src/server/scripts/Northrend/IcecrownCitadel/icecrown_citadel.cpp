@@ -415,36 +415,36 @@ class npc_highlord_tirion_fordring_lh : public CreatureScript
                             return;
 
                         Talk(SAY_TIRION_INTRO_1);
-                        _events.ScheduleEvent(EVENT_TIRION_INTRO_2, 4000);
-                        _events.ScheduleEvent(EVENT_TIRION_INTRO_3, 14000);
-                        _events.ScheduleEvent(EVENT_TIRION_INTRO_4, 18000);
-                        _events.ScheduleEvent(EVENT_TIRION_INTRO_5, 31000);
-                        _events.ScheduleEvent(EVENT_LK_INTRO_1, 35000);
-                        _events.ScheduleEvent(EVENT_TIRION_INTRO_6, 51000);
-                        _events.ScheduleEvent(EVENT_LK_INTRO_2, 58000);
-                        _events.ScheduleEvent(EVENT_LK_INTRO_3, 74000);
-                        _events.ScheduleEvent(EVENT_LK_INTRO_4, 86000); // sound last 21 seconds (five more)
-                        _events.ScheduleEvent(EVENT_BOLVAR_INTRO_1, 105000);
-                        _events.ScheduleEvent(EVENT_LK_INTRO_5, 113000);
+                        _events.ScheduleEvent(EVENT_TIRION_INTRO_2, 4s);
+                        _events.ScheduleEvent(EVENT_TIRION_INTRO_3, 14s);
+                        _events.ScheduleEvent(EVENT_TIRION_INTRO_4, 18s);
+                        _events.ScheduleEvent(EVENT_TIRION_INTRO_5, 31s);
+                        _events.ScheduleEvent(EVENT_LK_INTRO_1, 35s);
+                        _events.ScheduleEvent(EVENT_TIRION_INTRO_6, 51s);
+                        _events.ScheduleEvent(EVENT_LK_INTRO_2, 58s);
+                        _events.ScheduleEvent(EVENT_LK_INTRO_3, 74s);
+                        _events.ScheduleEvent(EVENT_LK_INTRO_4, 86s); // sound last 21 seconds (five more)
+                        _events.ScheduleEvent(EVENT_BOLVAR_INTRO_1, 105s);
+                        _events.ScheduleEvent(EVENT_LK_INTRO_5, 113s);
 
                         if (_instance->GetData(DATA_TEAMID_IN_INSTANCE) == TEAM_HORDE)
                         {
-                            _events.ScheduleEvent(EVENT_SAURFANG_INTRO_1, 125000);
-                            _events.ScheduleEvent(EVENT_TIRION_INTRO_H_7, 134000);
-                            _events.ScheduleEvent(EVENT_SAURFANG_INTRO_2, 144000);
-                            _events.ScheduleEvent(EVENT_SAURFANG_INTRO_3, 155000);
-                            _events.ScheduleEvent(EVENT_SAURFANG_INTRO_4, 167000);
-                            _events.ScheduleEvent(EVENT_SAURFANG_RUN, 175000);
+                            _events.ScheduleEvent(EVENT_SAURFANG_INTRO_1, 125s);
+                            _events.ScheduleEvent(EVENT_TIRION_INTRO_H_7, 134s);
+                            _events.ScheduleEvent(EVENT_SAURFANG_INTRO_2, 144s);
+                            _events.ScheduleEvent(EVENT_SAURFANG_INTRO_3, 155s);
+                            _events.ScheduleEvent(EVENT_SAURFANG_INTRO_4, 167s);
+                            _events.ScheduleEvent(EVENT_SAURFANG_RUN, 175s);
                         }
                         else
                         {
-                            _events.ScheduleEvent(EVENT_MURADIN_INTRO_1, 125000);
-                            _events.ScheduleEvent(EVENT_MURADIN_INTRO_2, 129000);
-                            _events.ScheduleEvent(EVENT_MURADIN_INTRO_3, 132000);
-                            _events.ScheduleEvent(EVENT_TIRION_INTRO_A_7, 141000);
-                            _events.ScheduleEvent(EVENT_MURADIN_INTRO_4, 149000);
-                            _events.ScheduleEvent(EVENT_MURADIN_INTRO_5, 156000);
-                            _events.ScheduleEvent(EVENT_MURADIN_RUN, 162000);
+                            _events.ScheduleEvent(EVENT_MURADIN_INTRO_1, 125s);
+                            _events.ScheduleEvent(EVENT_MURADIN_INTRO_2, 129s);
+                            _events.ScheduleEvent(EVENT_MURADIN_INTRO_3, 132s);
+                            _events.ScheduleEvent(EVENT_TIRION_INTRO_A_7, 141s);
+                            _events.ScheduleEvent(EVENT_MURADIN_INTRO_4, 149s);
+                            _events.ScheduleEvent(EVENT_MURADIN_INTRO_5, 156s);
+                            _events.ScheduleEvent(EVENT_MURADIN_RUN, 162s);
                         }
                     }
                 }
@@ -591,9 +591,9 @@ class npc_rotting_frost_giant : public CreatureScript
             void Reset()
             {
                 _events.Reset();
-                _events.ScheduleEvent(EVENT_DEATH_PLAGUE, 15000);
-                _events.ScheduleEvent(EVENT_STOMP, urand(5000, 8000));
-                _events.ScheduleEvent(EVENT_ARCTIC_BREATH, urand(10000, 15000));
+                _events.ScheduleEvent(EVENT_DEATH_PLAGUE, 15s);
+                _events.ScheduleEvent(EVENT_STOMP, 5s, 8s);
+                _events.ScheduleEvent(EVENT_ARCTIC_BREATH, 10s, 15s);
             }
 
             void JustDied(Unit* /*killer*/)
@@ -621,15 +621,15 @@ class npc_rotting_frost_giant : public CreatureScript
                                 Talk(EMOTE_DEATH_PLAGUE_WARNING, target);
                                 DoCast(target, SPELL_DEATH_PLAGUE);
                             }
-                            _events.ScheduleEvent(EVENT_DEATH_PLAGUE, 15000);
+                            _events.ScheduleEvent(EVENT_DEATH_PLAGUE, 15s);
                             break;
                         case EVENT_STOMP:
                             DoCastVictim(SPELL_STOMP);
-                            _events.ScheduleEvent(EVENT_STOMP, urand(15000, 18000));
+                            _events.ScheduleEvent(EVENT_STOMP, 15s, 18s);
                             break;
                         case EVENT_ARCTIC_BREATH:
                             DoCastVictim(SPELL_ARCTIC_BREATH);
-                            _events.ScheduleEvent(EVENT_ARCTIC_BREATH, urand(26000, 33000));
+                            _events.ScheduleEvent(EVENT_ARCTIC_BREATH, 26s, 33s);
                             break;
                         default:
                             break;
@@ -667,7 +667,7 @@ class npc_frost_freeze_trap : public CreatureScript
                 {
                     case 1000:
                     case 11000:
-                        _events.ScheduleEvent(EVENT_ACTIVATE_TRAP, uint32(action));
+                        _events.ScheduleEvent(EVENT_ACTIVATE_TRAP, Milliseconds(action));
                         break;
                     default:
                         break;
@@ -686,7 +686,7 @@ class npc_frost_freeze_trap : public CreatureScript
                         if (instance->GetData(DATA_COLDFLAME_JETS) == IN_PROGRESS)
                         {
                             DoCast(me, SPELL_COLDFLAME_JETS);
-                            _events.ScheduleEvent(EVENT_ACTIVATE_TRAP, 22000);
+                            _events.ScheduleEvent(EVENT_ACTIVATE_TRAP, 22s);
                         }
             }
 
@@ -722,8 +722,8 @@ class npc_crok_scourgebane : public CreatureScript
                 _handledWP4 = false;
 
                 _events.Reset();
-                _events.ScheduleEvent(EVENT_SCOURGE_STRIKE, urand(7500, 12500));
-                _events.ScheduleEvent(EVENT_DEATH_STRIKE, urand(25000, 30000));
+                _events.ScheduleEvent(EVENT_SCOURGE_STRIKE, 7500ms, 12500ms);
+                _events.ScheduleEvent(EVENT_DEATH_STRIKE, 25s, 30s);
             }
 
             void DoAction(int32 action)
@@ -744,9 +744,9 @@ class npc_crok_scourgebane : public CreatureScript
                             crusader->AI()->DoAction(ACTION_START_GAUNTLET);
 
                     Talk(SAY_CROK_INTRO_1);
-                    _events.ScheduleEvent(EVENT_ARNATH_INTRO_2, 7000);
-                    _events.ScheduleEvent(EVENT_CROK_INTRO_3, 14000);
-                    _events.ScheduleEvent(EVENT_START_PATHING, 37000);
+                    _events.ScheduleEvent(EVENT_ARNATH_INTRO_2, 7s);
+                    _events.ScheduleEvent(EVENT_CROK_INTRO_3, 14s);
+                    _events.ScheduleEvent(EVENT_START_PATHING, 37s);
                 }
                 else if (action == ACTION_RESET_EVENT)
                 {
@@ -869,7 +869,7 @@ class npc_crok_scourgebane : public CreatureScript
 
                     damage = 0;
                     me->CastSpell(me, SPELL_ICEBOUND_ARMOR, true);
-                    _events.ScheduleEvent(EVENT_HEALTH_CHECK, 1000);
+                    _events.ScheduleEvent(EVENT_HEALTH_CHECK, 1s);
                 }
             }
 
@@ -926,12 +926,12 @@ class npc_crok_scourgebane : public CreatureScript
                         break;
                     case EVENT_SCOURGE_STRIKE:
                         DoCastVictim(SPELL_SCOURGE_STRIKE);
-                        _events.ScheduleEvent(EVENT_SCOURGE_STRIKE, urand(10000, 14000));
+                        _events.ScheduleEvent(EVENT_SCOURGE_STRIKE, 10s, 14s);
                         break;
                     case EVENT_DEATH_STRIKE:
                         if (HealthBelowPct(20))
                             DoCastVictim(SPELL_DEATH_STRIKE);
-                        _events.ScheduleEvent(EVENT_DEATH_STRIKE, urand(5000, 10000));
+                        _events.ScheduleEvent(EVENT_DEATH_STRIKE, 5s, 10s);
                         break;
                     case EVENT_HEALTH_CHECK:
                         if (HealthAbovePct(25))
@@ -942,7 +942,7 @@ class npc_crok_scourgebane : public CreatureScript
                         else
                         {
                             Unit::DealHeal(me, me, me->CountPctFromMaxHealth(3));
-                            _events.ScheduleEvent(EVENT_HEALTH_CHECK, 1000);
+                            _events.ScheduleEvent(EVENT_HEALTH_CHECK, 1s);
                         }
                         break;
                     default:
@@ -1043,8 +1043,8 @@ class boss_sister_svalna : public CreatureScript
                     crok->AI()->Talk(SAY_CROK_COMBAT_SVALNA);
                     crok->AI()->AttackStart(me);
                 }
-                events.ScheduleEvent(EVENT_SVALNA_COMBAT, 9000);
-                events.ScheduleEvent(EVENT_IMPALING_SPEAR, urand(15000, 20000));
+                events.ScheduleEvent(EVENT_SVALNA_COMBAT, 9s);
+                events.ScheduleEvent(EVENT_IMPALING_SPEAR, 15s, 20s);
             }
 
             void KilledUnit(Unit* victim)
@@ -1082,10 +1082,10 @@ class boss_sister_svalna : public CreatureScript
                         break;
                     case ACTION_START_GAUNTLET:
                         me->setActive(true);
-                        events.ScheduleEvent(EVENT_SVALNA_START, 25000);
+                        events.ScheduleEvent(EVENT_SVALNA_START, 25s);
                         break;
                     case ACTION_RESURRECT_CAPTAINS:
-                        events.RescheduleEvent(EVENT_SVALNA_RESURRECT, 7000);
+                        events.RescheduleEvent(EVENT_SVALNA_RESURRECT, 7s);
                         break;
                     case ACTION_CAPTAIN_DIES:
                         Talk(SAY_SVALNA_CAPTAIN_DEATH);
@@ -1172,7 +1172,7 @@ class boss_sister_svalna : public CreatureScript
                             me->AddAura(70203, me);
                             DoCast(target, SPELL_IMPALING_SPEAR);
                         }
-                        events.ScheduleEvent(EVENT_IMPALING_SPEAR, urand(20000, 25000));
+                        events.ScheduleEvent(EVENT_IMPALING_SPEAR, 20s, 25s);
                         break;
                     default:
                         break;
@@ -1314,12 +1314,14 @@ class npc_captain_arnath : public CreatureScript
             void Reset()
             {
                 npc_argent_captainAI::Reset();
+                
                 Events.Reset();
-                Events.ScheduleEvent(EVENT_ARNATH_FLASH_HEAL, urand(4000, 7000));
-                Events.ScheduleEvent(EVENT_ARNATH_PW_SHIELD, urand(8000, 14000));
-                Events.ScheduleEvent(EVENT_ARNATH_SMITE, urand(3000, 6000));
+                Events.ScheduleEvent(EVENT_ARNATH_FLASH_HEAL, 4s, 7s);
+                Events.ScheduleEvent(EVENT_ARNATH_PW_SHIELD, 8s, 14s);
+                Events.ScheduleEvent(EVENT_ARNATH_SMITE, 3s, 6s);
+                
                 if (Is25ManRaid() && IsUndead)
-                    Events.ScheduleEvent(EVENT_ARNATH_DOMINATE_MIND, urand(22000, 27000));
+                    Events.ScheduleEvent(EVENT_ARNATH_DOMINATE_MIND, 22s, 27s);
             }
 
             void UpdateAI(uint32 diff)
@@ -1337,24 +1339,24 @@ class npc_captain_arnath : public CreatureScript
                     case EVENT_ARNATH_FLASH_HEAL:
                         if (Creature* target = FindFriendlyCreature())
                             DoCast(target, SPELL_FLASH_HEAL);
-                        Events.ScheduleEvent(EVENT_ARNATH_FLASH_HEAL, urand(6000, 9000));
+                        Events.ScheduleEvent(EVENT_ARNATH_FLASH_HEAL, 6s, 9s);
                         break;
                     case EVENT_ARNATH_PW_SHIELD:
                     {
                         std::list<Creature*> targets = DoFindFriendlyMissingBuff(40.0f, SPELL_POWER_WORD_SHIELD);
                         if (!targets.empty())
                             DoCast(warhead::Containers::SelectRandomContainerElement(targets), SPELL_POWER_WORD_SHIELD);
-                        Events.ScheduleEvent(EVENT_ARNATH_PW_SHIELD, urand(15000, 20000));
+                        Events.ScheduleEvent(EVENT_ARNATH_PW_SHIELD, 15s, 20s);
                         break;
                     }
                     case EVENT_ARNATH_SMITE:
                         DoCastVictim(SPELL_SMITE);
-                        Events.ScheduleEvent(EVENT_ARNATH_SMITE, urand(4000, 7000));
+                        Events.ScheduleEvent(EVENT_ARNATH_SMITE, 4s, 7s);
                         break;
                     case EVENT_ARNATH_DOMINATE_MIND:
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true, -SPELL_DOMINATE_MIND))
                             DoCast(target, SPELL_DOMINATE_MIND);
-                        Events.ScheduleEvent(EVENT_ARNATH_DOMINATE_MIND, urand(28000, 37000));
+                        Events.ScheduleEvent(EVENT_ARNATH_DOMINATE_MIND, 28s, 37s);
                         break;
                     default:
                         break;
@@ -1395,11 +1397,12 @@ class npc_captain_brandon : public CreatureScript
             {
                 npc_argent_captainAI::Reset();
                 Events.Reset();
-                Events.ScheduleEvent(EVENT_BRANDON_CRUSADER_STRIKE, urand(6000, 10000));
-                Events.ScheduleEvent(EVENT_BRANDON_DIVINE_SHIELD, 500);
-                Events.ScheduleEvent(EVENT_BRANDON_JUDGEMENT_OF_COMMAND, urand(8000, 13000));
+                Events.ScheduleEvent(EVENT_BRANDON_CRUSADER_STRIKE, 6s, 10s);
+                Events.ScheduleEvent(EVENT_BRANDON_DIVINE_SHIELD, 500ms);
+                Events.ScheduleEvent(EVENT_BRANDON_JUDGEMENT_OF_COMMAND, 8s, 13s);
+                
                 if (IsUndead)
-                    Events.ScheduleEvent(EVENT_BRANDON_HAMMER_OF_BETRAYAL, urand(25000, 30000));
+                    Events.ScheduleEvent(EVENT_BRANDON_HAMMER_OF_BETRAYAL, 25s, 30s);
             }
 
             void UpdateAI(uint32 diff)
@@ -1418,21 +1421,21 @@ class npc_captain_brandon : public CreatureScript
                     {
                         case EVENT_BRANDON_CRUSADER_STRIKE:
                             DoCastVictim(SPELL_CRUSADER_STRIKE);
-                            Events.ScheduleEvent(EVENT_BRANDON_CRUSADER_STRIKE, urand(6000, 12000));
+                            Events.ScheduleEvent(EVENT_BRANDON_CRUSADER_STRIKE, 6s, 12s);
                             break;
                         case EVENT_BRANDON_DIVINE_SHIELD:
                             if (HealthBelowPct(20))
                                 DoCast(me, SPELL_DIVINE_SHIELD);
-                            Events.ScheduleEvent(EVENT_BRANDON_DIVINE_SHIELD, 500);
+                            Events.ScheduleEvent(EVENT_BRANDON_DIVINE_SHIELD, 500ms);
                             break;
                         case EVENT_BRANDON_JUDGEMENT_OF_COMMAND:
                             DoCastVictim(SPELL_JUDGEMENT_OF_COMMAND);
-                            Events.ScheduleEvent(EVENT_BRANDON_JUDGEMENT_OF_COMMAND, urand(8000, 13000));
+                            Events.ScheduleEvent(EVENT_BRANDON_JUDGEMENT_OF_COMMAND, 8s, 13s);
                             break;
                         case EVENT_BRANDON_HAMMER_OF_BETRAYAL:
                             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true))
                                 DoCast(target, SPELL_HAMMER_OF_BETRAYAL);
-                            Events.ScheduleEvent(EVENT_BRANDON_HAMMER_OF_BETRAYAL, urand(45000, 60000));
+                            Events.ScheduleEvent(EVENT_BRANDON_HAMMER_OF_BETRAYAL, 45s, 1min);
                             break;
                         default:
                             break;
@@ -1464,11 +1467,12 @@ class npc_captain_grondel : public CreatureScript
             {
                 npc_argent_captainAI::Reset();
                 Events.Reset();
-                Events.ScheduleEvent(EVENT_GRONDEL_CHARGE_CHECK, 500);
-                Events.ScheduleEvent(EVENT_GRONDEL_MORTAL_STRIKE, urand(8000, 14000));
-                Events.ScheduleEvent(EVENT_GRONDEL_SUNDER_ARMOR, urand(3000, 12000));
+                Events.ScheduleEvent(EVENT_GRONDEL_CHARGE_CHECK, 500ms);
+                Events.ScheduleEvent(EVENT_GRONDEL_MORTAL_STRIKE, 8s, 14s);
+                Events.ScheduleEvent(EVENT_GRONDEL_SUNDER_ARMOR, 3s, 12s);
+                
                 if (IsUndead)
-                    Events.ScheduleEvent(EVENT_GRONDEL_CONFLAGRATION, urand(12000, 17000));
+                    Events.ScheduleEvent(EVENT_GRONDEL_CONFLAGRATION, 12s, 17s);
             }
 
             void UpdateAI(uint32 diff)
@@ -1487,20 +1491,20 @@ class npc_captain_grondel : public CreatureScript
                     {
                         case EVENT_GRONDEL_CHARGE_CHECK:
                             DoCastVictim(SPELL_CHARGE);
-                            Events.ScheduleEvent(EVENT_GRONDEL_CHARGE_CHECK, 500);
+                            Events.ScheduleEvent(EVENT_GRONDEL_CHARGE_CHECK, 500ms);
                             break;
                         case EVENT_GRONDEL_MORTAL_STRIKE:
                             DoCastVictim(SPELL_MORTAL_STRIKE);
-                            Events.ScheduleEvent(EVENT_GRONDEL_MORTAL_STRIKE, urand(10000, 15000));
+                            Events.ScheduleEvent(EVENT_GRONDEL_MORTAL_STRIKE, 10s, 15s);
                             break;
                         case EVENT_GRONDEL_SUNDER_ARMOR:
                             DoCastVictim(SPELL_SUNDER_ARMOR);
-                            Events.ScheduleEvent(EVENT_GRONDEL_SUNDER_ARMOR, urand(5000, 17000));
+                            Events.ScheduleEvent(EVENT_GRONDEL_SUNDER_ARMOR, 5s, 17s);
                             break;
                         case EVENT_GRONDEL_CONFLAGRATION:
                             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
                                 DoCast(target, SPELL_CONFLAGRATION);
-                            Events.ScheduleEvent(EVENT_GRONDEL_CONFLAGRATION, urand(10000, 15000));
+                            Events.ScheduleEvent(EVENT_GRONDEL_CONFLAGRATION, 10s, 15s);
                             break;
                         default:
                             break;
@@ -1532,9 +1536,9 @@ class npc_captain_rupert : public CreatureScript
             {
                 npc_argent_captainAI::Reset();
                 Events.Reset();
-                Events.ScheduleEvent(EVENT_RUPERT_FEL_IRON_BOMB, urand(15000, 20000));
-                Events.ScheduleEvent(EVENT_RUPERT_MACHINE_GUN, urand(25000, 30000));
-                Events.ScheduleEvent(EVENT_RUPERT_ROCKET_LAUNCH, urand(10000, 15000));
+                Events.ScheduleEvent(EVENT_RUPERT_FEL_IRON_BOMB, 15s, 20s);
+                Events.ScheduleEvent(EVENT_RUPERT_MACHINE_GUN, 25s, 30s);
+                Events.ScheduleEvent(EVENT_RUPERT_ROCKET_LAUNCH, 10s, 15s);
             }
 
             void UpdateAI(uint32 diff)
@@ -1554,17 +1558,17 @@ class npc_captain_rupert : public CreatureScript
                         case EVENT_RUPERT_FEL_IRON_BOMB:
                             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                                 DoCast(target, SPELL_FEL_IRON_BOMB);
-                            Events.ScheduleEvent(EVENT_RUPERT_FEL_IRON_BOMB, urand(15000, 20000));
+                            Events.ScheduleEvent(EVENT_RUPERT_FEL_IRON_BOMB, 15s, 20s);
                             break;
                         case EVENT_RUPERT_MACHINE_GUN:
                             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
                                 DoCast(target, SPELL_MACHINE_GUN);
-                            Events.ScheduleEvent(EVENT_RUPERT_MACHINE_GUN, urand(25000, 30000));
+                            Events.ScheduleEvent(EVENT_RUPERT_MACHINE_GUN, 25s, 30s);
                             break;
                         case EVENT_RUPERT_ROCKET_LAUNCH:
                             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
                                 DoCast(target, SPELL_ROCKET_LAUNCH);
-                            Events.ScheduleEvent(EVENT_RUPERT_ROCKET_LAUNCH, urand(10000, 15000));
+                            Events.ScheduleEvent(EVENT_RUPERT_ROCKET_LAUNCH, 10s, 15s);
                             break;
                         default:
                             break;
@@ -1639,30 +1643,30 @@ class npc_frostwing_vrykul : public CreatureScript
                 switch (me->GetEntry())
                 {
                     case NPC_YMIRJAR_HUNTRESS:
-                        events.ScheduleEvent(1, urand(10000, 15000)); // Ice Trap
-                        events.ScheduleEvent(2, urand(8000, 12000)); // Rapid Shot
-                        events.ScheduleEvent(3, urand(6000, 10000)); // Volley
+                        events.ScheduleEvent(1, 10s, 15s); // Ice Trap
+                        events.ScheduleEvent(2, 8s, 12s); // Rapid Shot
+                        events.ScheduleEvent(3, 6s, 10s); // Volley
                         if (me->GetMap()->Is25ManRaid())
-                            events.ScheduleEvent(4, 5000); // Summon Warhawk
+                            events.ScheduleEvent(4, 5s); // Summon Warhawk
                         break;
                     case NPC_YMIRJAR_WARLORD:
-                        events.ScheduleEvent(11, 6000); // Whirlwind
+                        events.ScheduleEvent(11, 6s); // Whirlwind
                         break;
                     case NPC_YMIRJAR_BATTLE_MAIDEN:
-                        events.ScheduleEvent(21, 3000); // Barbaric Strike
-                        events.ScheduleEvent(22, urand(8000, 12000)); // Adrenaline Rush
+                        events.ScheduleEvent(21, 3s); // Barbaric Strike
+                        events.ScheduleEvent(22, 8s, 12s); // Adrenaline Rush
                         break;
                     case NPC_YMIRJAR_FROSTBINDER:
-                        events.ScheduleEvent(31, 0); // Arctic Chill
-                        events.ScheduleEvent(32, urand(15000, 25000)); // Frozen Orb
-                        events.ScheduleEvent(33, urand(15000, 30000)); // Twisted Winds
-                        events2.ScheduleEvent(100, 0); // Spirit Stream
+                        events.ScheduleEvent(31, 0s); // Arctic Chill
+                        events.ScheduleEvent(32, 15s, 25s); // Frozen Orb
+                        events.ScheduleEvent(33, 15s, 30s); // Twisted Winds
+                        events2.ScheduleEvent(100, 0s); // Spirit Stream
                         me->SetHover(false);
                         break;
                     case NPC_YMIRJAR_DEATHBRINGER:
-                        events.ScheduleEvent(41, 2500); // Empowered Shadow Bolt
-                        events.ScheduleEvent(42, 5000); // Summon Undead
-                        events2.ScheduleEvent(100, 0); // Spirit Stream
+                        events.ScheduleEvent(41, 2500ms); // Empowered Shadow Bolt
+                        events.ScheduleEvent(42, 5s); // Summon Undead
+                        events2.ScheduleEvent(100, 0s); // Spirit Stream
                         break;
                 }
             }
@@ -1677,7 +1681,7 @@ class npc_frostwing_vrykul : public CreatureScript
                         case 100:
                             if (Creature* stalker = me->FindNearestCreature(NPC_INVISIBLE_STALKER_3_0, 50.0f))
                                 me->CastSpell(stalker, SPELL_SPIRIT_STREAM, false);
-                            events2.ScheduleEvent(100, 33000);
+                            events2.ScheduleEvent(100, 33s);
                             break;
                     }
                 }
@@ -1700,7 +1704,7 @@ class npc_frostwing_vrykul : public CreatureScript
                         break;
                     case 2: // Rapid Shot
                         me->CastSpell(me->GetVictim(), 71251, false);
-                        events.RepeatEvent(urand(25000, 30000));
+                        events.RepeatEvent(25s, 30s);
                         break;
                     case 3: // Volley
                         {
@@ -1866,7 +1870,7 @@ class npc_arthas_teleport_visual : public CreatureScript
                 if (_instance->GetBossState(DATA_PROFESSOR_PUTRICIDE) == DONE &&
                     _instance->GetBossState(DATA_BLOOD_QUEEN_LANA_THEL) == DONE &&
                     _instance->GetBossState(DATA_SINDRAGOSA) == DONE)
-                    _events.ScheduleEvent(EVENT_SOUL_MISSILE, urand(1000, 6000));
+                    _events.ScheduleEvent(EVENT_SOUL_MISSILE, 1s, 6s);
             }
 
             void UpdateAI(uint32 diff)
@@ -1879,7 +1883,7 @@ class npc_arthas_teleport_visual : public CreatureScript
                 if (_events.ExecuteEvent() == EVENT_SOUL_MISSILE)
                 {
                     DoCastAOE(SPELL_SOUL_MISSILE);
-                    _events.ScheduleEvent(EVENT_SOUL_MISSILE, urand(5000, 7000));
+                    _events.ScheduleEvent(EVENT_SOUL_MISSILE, 5s, 7s);
                 }
             }
 
@@ -2570,10 +2574,10 @@ public:
         void EnterCombat(Unit*  /*who*/)
         {
             events.Reset();
-            events.ScheduleEvent(1, urand(5000,15000));
-            events.ScheduleEvent(2, urand(5000,15000));
-            events.ScheduleEvent(3, urand(5000,15000));
-            events.ScheduleEvent(4, urand(1000,3000));
+            events.ScheduleEvent(1, 5s, 15s);
+            events.ScheduleEvent(2, 5s, 15s);
+            events.ScheduleEvent(3, 5s, 15s);
+            events.ScheduleEvent(4, 1s, 3s);
         }
 
         void UpdateAI(uint32 diff)
@@ -2637,8 +2641,8 @@ public:
         void EnterCombat(Unit*  /*who*/)
         {
             events.Reset();
-            events.ScheduleEvent(1, urand(5000,10000));
-            events.ScheduleEvent(2, urand(5000,15000));
+            events.ScheduleEvent(1, 5s, 10s);
+            events.ScheduleEvent(2, 5s, 15s);
         }
 
         void UpdateAI(uint32 diff)
@@ -2657,7 +2661,7 @@ public:
                     break;
                 case 1:
                     me->CastSpell(me->GetVictim(), 69989, false);
-                    events.RepeatEvent(urand(5000,10000));
+                    events.RepeatEvent(5s, 10s);
                     break;
                 case 2:
                     me->CastSpell(me->GetVictim(), 69975, false);
@@ -2691,9 +2695,9 @@ public:
         void EnterCombat(Unit*  /*who*/)
         {
             events.Reset();
-            events.ScheduleEvent(1, urand(5000,15000));
-            events.ScheduleEvent(2, urand(5000,15000));
-            events.ScheduleEvent(3, urand(1000,3000));
+            events.ScheduleEvent(1, 5s, 15s);
+            events.ScheduleEvent(2, 5s, 15s);
+            events.ScheduleEvent(3, 1s, 3s);
         }
 
         void UpdateAI(uint32 diff)
@@ -2752,10 +2756,10 @@ public:
         void EnterCombat(Unit*  /*who*/)
         {
             events.Reset();
-            events.ScheduleEvent(1, urand(5000,15000));
-            events.ScheduleEvent(2, urand(5000,15000));
-            events.ScheduleEvent(3, urand(5000,15000));
-            events.ScheduleEvent(4, urand(1000,3000));
+            events.ScheduleEvent(1, 5s, 15s);
+            events.ScheduleEvent(2, 5s, 15s);
+            events.ScheduleEvent(3, 5s, 15s);
+            events.ScheduleEvent(4, 1s, 3s);
         }
 
         void UpdateAI(uint32 diff)
@@ -2821,7 +2825,7 @@ public:
             events.Reset();
             summons.DespawnAll();
             me->setActive(true);
-            events.ScheduleEvent(1, 10000);
+            events.ScheduleEvent(1, 10s);
             me->SetInCombatWithZone();
         }
 
@@ -2921,37 +2925,37 @@ class SeveredEssenceSpellInfo
 public:
     uint8 Class;
     uint32 id;
-    uint32 cooldown_ms;
+    Seconds cooldown;
     uint8 targetType;
     float range;
 };
 
 SeveredEssenceSpellInfo sesi_spells[] =
 {
-    {CLASS_SHAMAN, 71938, 5000, 1, 0.0f},
-    {CLASS_PALADIN, 57767, 8000, 2, 30.0f},
-    {CLASS_WARLOCK, 71937, 10000, 1, 0.0f},
-    {CLASS_DEATH_KNIGHT, 49576, 15000, 1, 30.0f},
-    {CLASS_ROGUE, 71933, 8000, 1, 0.0f},
-    {CLASS_MAGE, 71928, 4000, 1, 40.0f},
-    {CLASS_PALADIN, 71930, 5000, 2, 40.0f},
-    {CLASS_ROGUE, 71955, 40000, 1, 30.0f},
-    {CLASS_PRIEST, 71931, 5000, 2, 40.0f},
-    {CLASS_SHAMAN, 71934, 7000, 1, 0.0f},
-    {CLASS_DRUID, 71925, 5000, 1, 0.0f},
-    {CLASS_DEATH_KNIGHT, 71951, 8000, 1, 0.0f},
-    {CLASS_DEATH_KNIGHT, 71924, 8000, 1, 0.0f},
-    {CLASS_WARLOCK, 71965, 20000, 0, 0.0f},
-    {CLASS_PRIEST, 71932, 8000, 2, 40.0f},
-    {CLASS_DRUID, 71926, 10000, 1, 0.0f},
-    {CLASS_WARLOCK, 71936, 9000, 1, 0.0f},
-    {CLASS_ROGUE, 57640, 3000, 1, 0.0f},
-    {CLASS_WARRIOR, 71961, 5000, 1, 0.0f},
-    {CLASS_MAGE, 71929, 10000, 1, 0.0f},
-    {CLASS_WARRIOR, 53395, 5000, 1, 0.0f},
-    {CLASS_WARRIOR, 71552, 5000, 1, 0.0f},
-    {CLASS_HUNTER, 36984, 7000, 1, 0.0f},
-    {CLASS_HUNTER, 29576, 5000, 1, 0.0f},
+    {CLASS_SHAMAN, 71938, 5s, 1, 0.0f},
+    {CLASS_PALADIN, 57767, 8s, 2, 30.0f},
+    {CLASS_WARLOCK, 71937, 10s, 1, 0.0f},
+    {CLASS_DEATH_KNIGHT, 49576, 15s, 1, 30.0f},
+    {CLASS_ROGUE, 71933, 8s, 1, 0.0f},
+    {CLASS_MAGE, 71928, 4s, 1, 40.0f},
+    {CLASS_PALADIN, 71930, 5s, 2, 40.0f},
+    {CLASS_ROGUE, 71955, 40s, 1, 30.0f},
+    {CLASS_PRIEST, 71931, 5s, 2, 40.0f},
+    {CLASS_SHAMAN, 71934, 7s, 1, 0.0f},
+    {CLASS_DRUID, 71925, 5s, 1, 0.0f},
+    {CLASS_DEATH_KNIGHT, 71951, 8s, 1, 0.0f},
+    {CLASS_DEATH_KNIGHT, 71924, 8s, 1, 0.0f},
+    {CLASS_WARLOCK, 71965, 20s, 0, 0.0f},
+    {CLASS_PRIEST, 71932, 8s, 2, 40.0f},
+    {CLASS_DRUID, 71926, 10s, 1, 0.0f},
+    {CLASS_WARLOCK, 71936, 9s, 1, 0.0f},
+    {CLASS_ROGUE, 57640, 3s, 1, 0.0f},
+    {CLASS_WARRIOR, 71961, 5s, 1, 0.0f},
+    {CLASS_MAGE, 71929, 10s, 1, 0.0f},
+    {CLASS_WARRIOR, 53395, 5s, 1, 0.0f},
+    {CLASS_WARRIOR, 71552, 5s, 1, 0.0f},
+    {CLASS_HUNTER, 36984, 7s, 1, 0.0f},
+    {CLASS_HUNTER, 29576, 5s, 1, 0.0f},
     {0, 0, 0, 0, 0.0f},
 };
 
@@ -2982,12 +2986,12 @@ public:
 
             Class = a;
 
-            for (uint8 i=0; ; ++i)
+            for (uint8 i = 0; ; ++i)
             {
                 if (sesi_spells[i].id)
                 {
                     if (Class == sesi_spells[i].Class)
-                        events.ScheduleEvent(i+1, sesi_spells[i].cooldown_ms/4);
+                        events.ScheduleEvent(i + 1, sesi_spells[i].cooldown / 4);
                 }
                 else
                     break;
@@ -3021,7 +3025,7 @@ public:
                 if (target)
                     me->CastSpell(target, sesi_spells[e-1].id, TRIGGERED_IGNORE_SHAPESHIFT);
 
-                events.RepeatEvent(sesi_spells[e-1].cooldown_ms);
+                events.RepeatEvent(sesi_spells[e-1].cooldown);
             }
 
             if (Class == CLASS_HUNTER)
@@ -3062,9 +3066,9 @@ public:
         void Reset()
         {
             events.Reset();
-            events.ScheduleEvent(1, urand(15000, 25000)); // blizzard
-            events.ScheduleEvent(2, 5000); // cleave
-            events.ScheduleEvent(3, urand(10000, 15000)); // frost breath
+            events.ScheduleEvent(1, 15s, 25s); // blizzard
+            events.ScheduleEvent(2, 5s); // cleave
+            events.ScheduleEvent(3, 10s, 15s); // frost breath
         }
 
         void DoAction(int32 a)
@@ -3122,7 +3126,7 @@ public:
                     break;
                 case 3:
                     me->CastSpell(me->GetVictim(), 70116, false);
-                    events.RepeatEvent(urand(10000, 15000));
+                    events.RepeatEvent(10s, 15s);
                     break;
             }
 
@@ -3175,7 +3179,7 @@ public:
         {
             me->SetWalk(false);
             events.Reset();
-            events.ScheduleEvent(1, urand(3000, 6000)); // leaping face maul
+            events.ScheduleEvent(1, 3s, 6s); // leaping face maul
         }
 
         void JustReachedHome()
@@ -3264,7 +3268,7 @@ public:
                     if (me->GetVictim() && !me->GetVictim()->HasAura(71163) && me->GetVictim()->GetDistance(me) > 5.0f && me->GetVictim()->GetDistance(me) < 30.0f)
                     {
                         me->CastSpell(me->GetVictim(), 71164, false);
-                        events.RepeatEvent(urand(15000, 20000));
+                        events.RepeatEvent(15s, 20s);
                     }
                     else
                         events.RepeatEvent(3000);
@@ -3331,9 +3335,9 @@ public:
         void Reset()
         {
             events.Reset();
-            events.ScheduleEvent(1, urand(3000, 10000)); // Crypt Scarabs
-            events.ScheduleEvent(2, urand(15000, 25000)); // Dark Mending
-            events.ScheduleEvent(3, urand(8000, 15000)); // Web Wrap
+            events.ScheduleEvent(1, 3s, 10s); // Crypt Scarabs
+            events.ScheduleEvent(2, 15s, 25s); // Dark Mending
+            events.ScheduleEvent(3, 8s, 15s); // Web Wrap
         }
 
         void MoveInLineOfSight(Unit* who)
@@ -3459,7 +3463,7 @@ class npc_icc_gauntlet_controller : public CreatureScript
             void ScheduleBroodlings()
             {
                 for (uint8 i = 0; i < 30; ++i)
-                    events.ScheduleEvent(EVENT_SUMMON_BROODLING, 10000+i*350);
+                    events.ScheduleEvent(EVENT_SUMMON_BROODLING, 10s + Milliseconds(i * 350));
             }
 
 
@@ -3514,8 +3518,8 @@ class npc_icc_gauntlet_controller : public CreatureScript
                     me->setActive(true);
                     events.Reset();
                     events.SetPhase(0);
-                    events.ScheduleEvent(EVENT_CHECK_FIGHT, 1000);
-                    events.ScheduleEvent(EVENT_GAUNTLET_PHASE1, 0);
+                    events.ScheduleEvent(EVENT_CHECK_FIGHT, 1s);
+                    events.ScheduleEvent(EVENT_GAUNTLET_PHASE1, 0s);
                     instance->SetBossState(DATA_SINDRAGOSA_GAUNTLET, IN_PROGRESS);
                 }
             }
@@ -3560,12 +3564,12 @@ class npc_icc_gauntlet_controller : public CreatureScript
                     if (events.GetPhaseMask() == 0)
                     {
                         events.SetPhase(1);
-                        events.ScheduleEvent(EVENT_GAUNTLET_PHASE2, 0);
+                        events.ScheduleEvent(EVENT_GAUNTLET_PHASE2, 0s);
                     }
                     else if (events.GetPhaseMask() == 1)
                     {
                         events.SetPhase(2);
-                        events.ScheduleEvent(EVENT_GAUNTLET_PHASE3, 0);
+                        events.ScheduleEvent(EVENT_GAUNTLET_PHASE3, 0s);
                     }
                     else
                         Unit::Kill(me, me);
@@ -3585,7 +3589,7 @@ class npc_icc_gauntlet_controller : public CreatureScript
                             if (me->GetDistance(itr->GetSource()) > 100.0f || !itr->GetSource()->IsAlive() || itr->GetSource()->IsGameMaster())
                                 continue;
 
-                            events.ScheduleEvent(EVENT_CHECK_FIGHT, 1000);
+                            events.ScheduleEvent(EVENT_CHECK_FIGHT, 1s);
                             return;
                         }
 
@@ -3640,13 +3644,14 @@ class npc_icc_putricades_trap : public CreatureScript
                 {
                     me->setActive(true);
                     events.Reset();
-                    events.ScheduleEvent(EVENT_CHECK_FIGHT, 1000);
+                    events.ScheduleEvent(EVENT_CHECK_FIGHT, 1s);
                     instance->SetData(DATA_PUTRICIDE_TRAP_STATE, IN_PROGRESS);
                     me->CastSpell(me, SPELL_GIANT_INSECT_SWARM, true);
 
                     for (uint8 i = 0; i < 60; ++i)
-                        events.ScheduleEvent(EVENT_GAUNTLET_PHASE1, i*1000);
-                    events.ScheduleEvent(EVENT_GAUNTLET_PHASE2, 60000);
+                        events.ScheduleEvent(EVENT_GAUNTLET_PHASE1, i * 1s);
+                    
+                    events.ScheduleEvent(EVENT_GAUNTLET_PHASE2, 1min);
                 }
             }
 
@@ -3687,7 +3692,7 @@ class npc_icc_putricades_trap : public CreatureScript
                             if (me->GetDistance(itr->GetSource()) > 100.0f || !itr->GetSource()->IsAlive() || itr->GetSource()->IsGameMaster())
                                 continue;
 
-                            events.ScheduleEvent(EVENT_CHECK_FIGHT, 1000);
+                            events.ScheduleEvent(EVENT_CHECK_FIGHT, 1s);
                             return;
                         }
 

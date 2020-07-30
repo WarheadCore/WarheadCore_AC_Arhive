@@ -266,21 +266,21 @@ public:
                         break;
 
                     case MI_POINT_INTRO_CENTER_AIR:
-                        events.RescheduleEvent(EVENT_INTRO_LAND, 0, 1);
+                        events.RescheduleEvent(EVENT_INTRO_LAND, 0s, 1);
                         break;
                     case MI_POINT_VORTEX_CENTER:
                         if (Creature* c = me->SummonCreature(NPC_WORLD_TRIGGER_LAOI, CenterPos, TEMPSUMMON_TIMED_DESPAWN, 15000))
                             c->CastSpell(c, SPELL_VORTEX_VISUAL, true);
-                        events.RescheduleEvent(EVENT_START_VORTEX_REAL, 1000, 1);
+                        events.RescheduleEvent(EVENT_START_VORTEX_REAL, 1s, 1);
                         break;
                     case MI_POINT_CENTER_GROUND_PH_2:
-                        events.RescheduleEvent(EVENT_START_PHASE_2_FLY_UP, 0, 1);
+                        events.RescheduleEvent(EVENT_START_PHASE_2_FLY_UP, 0s, 1);
                         break;
                     case MI_POINT_CIRCLE_OUTSIDE_PH_2:
-                        events.RescheduleEvent(EVENT_RESUME_FLYING_CIRCLES_PH_2, 0, 1);
+                        events.RescheduleEvent(EVENT_RESUME_FLYING_CIRCLES_PH_2, 0s, 1);
                         break;
                     case MI_POINT_SURGE_OF_POWER_CENTER:
-                        events.RescheduleEvent(EVENT_SURGE_OF_POWER_WARNING, 0, 1);
+                        events.RescheduleEvent(EVENT_SURGE_OF_POWER_WARNING, 0s, 1);
                         break;
                 }
             }
@@ -292,22 +292,22 @@ public:
                         me->SetCanFly(false);
                         me->SetDisableGravity(false);
                         //me->SetHover(false);
-                        events.RescheduleEvent(EVENT_START_FIGHT, 0, 1);
+                        events.RescheduleEvent(EVENT_START_FIGHT, 0s, 1);
                         break;
                     case MI_POINT_VORTEX_TAKEOFF:
-                        events.RescheduleEvent(EVENT_VORTEX_FLY_TO_CENTER, 0, 1);
+                        events.RescheduleEvent(EVENT_VORTEX_FLY_TO_CENTER, 0s, 1);
                         break;
                     case MI_POINT_VORTEX_LAND:
                         me->SetCanFly(false);
                         me->SetDisableGravity(false);
                         //me->SetHover(false);
-                        events.RescheduleEvent(EVENT_VORTEX_LAND_1, 0, 1);
+                        events.RescheduleEvent(EVENT_VORTEX_LAND_1, 0s, 1);
                         break;
                     case MI_POINT_CENTER_AIR_PH_2:
                         me->GetMap()->SetZoneOverrideLight(AREA_EYE_OF_ETERNITY, LIGHT_ARCANE_RUNES, 5 * IN_MILLISECONDS);
                         break;
                     case MI_POINT_PH_3_FIGHT_POSITION:
-                        events.RescheduleEvent(EVENT_START_PHASE_3, 6000, 1);
+                        events.RescheduleEvent(EVENT_START_PHASE_3, 6s, 1);
                         break;
                 }
             }
@@ -333,7 +333,7 @@ public:
 
             Talk(SAY_PHASE_1);
 
-            events.RescheduleEvent(EVENT_INTRO_MOVE_CENTER, 0, 1);
+            events.RescheduleEvent(EVENT_INTRO_MOVE_CENTER, 0s, 1);
             if (pInstance)
                 pInstance->SetData(DATA_ENCOUNTER_STATUS, IN_PROGRESS);
         }
@@ -368,7 +368,7 @@ public:
             if (!bLockHealthCheck && me->HealthBelowPctDamaged(50, damage))
             {
                 bLockHealthCheck = true;
-                events.RescheduleEvent(EVENT_START_PHASE_2, 0, 1);
+                events.RescheduleEvent(EVENT_START_PHASE_2, 0s, 1);
             }
         }
 
@@ -431,11 +431,11 @@ public:
                         events.PopEvent();
 
                         events.SetPhase(PHASE_ONE);
-                        events.RescheduleEvent(EVENT_BERSERK, 600000, 0);
-                        events.RescheduleEvent(EVENT_SPELL_ARCANE_BREATH, urand(9000,12000), 1);
-                        events.RescheduleEvent(EVENT_SPELL_ARCANE_STORM, urand(2000,5000), 1);
-                        events.RescheduleEvent(EVENT_SUMMON_POWER_SPARK, urand(10000,15000), 1);
-                        events.RescheduleEvent(EVENT_START_VORTEX_0, 30000, 1);
+                        events.RescheduleEvent(EVENT_BERSERK, 10min);
+                        events.RescheduleEvent(EVENT_SPELL_ARCANE_BREATH, 9s, 12s, 1);
+                        events.RescheduleEvent(EVENT_SPELL_ARCANE_STORM, 2s, 5s, 1);
+                        events.RescheduleEvent(EVENT_SUMMON_POWER_SPARK, 10s, 15s, 1);
+                        events.RescheduleEvent(EVENT_START_VORTEX_0, 30s, 1);
                     }
                     break;
 
@@ -552,7 +552,7 @@ public:
                         }
                     }
                     events.PopEvent();
-                    events.RescheduleEvent(EVENT_VORTEX_LAND_0, 11000, 1);
+                    events.RescheduleEvent(EVENT_VORTEX_LAND_0, 11s, 1);
                     break;
                 case EVENT_VORTEX_LAND_0:
                     me->GetMotionMaster()->MoveLand(MI_POINT_VORTEX_LAND, CenterPos, 7.0f);
@@ -570,7 +570,7 @@ public:
                         me->GetMotionMaster()->MoveChase(target);
                     }
                     events.PopEvent();
-                    events.RescheduleEvent(EVENT_START_VORTEX_0, 60000, 1);
+                    events.RescheduleEvent(EVENT_START_VORTEX_0, 1min, 1);
                     break;
                 }
                 case EVENT_START_PHASE_2:
@@ -595,17 +595,17 @@ public:
                     me->SendMovementFlagUpdate();
                     me->GetMotionMaster()->MoveTakeoff(MI_POINT_CENTER_AIR_PH_2, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ()+32.0f, 7.0f);
                     events.PopEvent();
-                    events.RescheduleEvent(EVENT_START_PHASE_2_MOVE_TO_SIDE, 22500, 1);
+                    events.RescheduleEvent(EVENT_START_PHASE_2_MOVE_TO_SIDE, 22500ms, 1);
                     break;
                 }
                 case EVENT_START_PHASE_2_MOVE_TO_SIDE:
                     Talk(SAY_PHASE_2);
                     me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PACIFIED);
                     me->GetMotionMaster()->MovePoint(MI_POINT_CIRCLE_OUTSIDE_PH_2, Phase2NorthPos);
-                    events.RescheduleEvent(EVENT_SPELL_ARCANE_STORM, urand(12000,15000), 1);
-                    events.RescheduleEvent(EVENT_SPELL_ARCANE_OVERLOAD, 8000, 1);
-                    events.RescheduleEvent(EVENT_MOVE_TO_SURGE_OF_POWER, 55000, 1);
-                    events.RescheduleEvent(EVENT_CHECK_TRASH_DEAD, 3000, 1);
+                    events.RescheduleEvent(EVENT_SPELL_ARCANE_STORM, 12s, 15s, 1);
+                    events.RescheduleEvent(EVENT_SPELL_ARCANE_OVERLOAD, 8s, 1);
+                    events.RescheduleEvent(EVENT_MOVE_TO_SURGE_OF_POWER, 55s, 1);
+                    events.RescheduleEvent(EVENT_CHECK_TRASH_DEAD, 3s, 1);
 
                     for (int i=0; i<MAX_NEXUS_LORDS; i++)
                     {
@@ -643,7 +643,7 @@ public:
                         me->SetFacingTo(me->GetAngle(posx, posy));
                         me->CastSpell(posx, posy, CenterPos.GetPositionZ()+1.5f, SPELL_ARCANE_OVERLOAD, true);
                         events.RepeatEvent(15000);
-                        events.RescheduleEvent(EVENT_RESUME_FLYING_CIRCLES_PH_2, 3000, 1);
+                        events.RescheduleEvent(EVENT_RESUME_FLYING_CIRCLES_PH_2, 3s, 1);
                     }
                     break;
                 case EVENT_RESUME_FLYING_CIRCLES_PH_2:
@@ -669,19 +669,19 @@ public:
                 case EVENT_SURGE_OF_POWER_WARNING:
                     Talk(EMOTE_SURGE_OF_POWER_WARNING_P2);
                     events.PopEvent();
-                    events.RescheduleEvent(EVENT_SPELL_SURGE_OF_POWER, 1500, 1);
+                    events.RescheduleEvent(EVENT_SPELL_SURGE_OF_POWER, 1500ms, 1);
                     break;
                 case EVENT_SPELL_SURGE_OF_POWER:
                     if (Creature* c = me->SummonCreature(NPC_SURGE_OF_POWER, CenterPos, TEMPSUMMON_TIMED_DESPAWN, 10000))
                         me->CastSpell(c, SPELL_SURGE_OF_POWER, false);
                     events.PopEvent();
                     Talk(SAY_SURGE_OF_POWER);
-                    events.RescheduleEvent(EVENT_CLEAR_TARGET, 10000, 1);
-                    events.RescheduleEvent(EVENT_RESUME_FLYING_CIRCLES_PH_2, 10000, 1);
-                    events.RescheduleEvent(EVENT_SPELL_ARCANE_STORM, urand(17000,25000), 1);
-                    events.RescheduleEvent(EVENT_SPELL_ARCANE_OVERLOAD, 16000, 1);
-                    events.RescheduleEvent(EVENT_MOVE_TO_SURGE_OF_POWER, 55000+10000, 1);
-                    events.RescheduleEvent(EVENT_CHECK_TRASH_DEAD, 3000, 1);
+                    events.RescheduleEvent(EVENT_CLEAR_TARGET, 10s, 1);
+                    events.RescheduleEvent(EVENT_RESUME_FLYING_CIRCLES_PH_2, 10s, 1);
+                    events.RescheduleEvent(EVENT_SPELL_ARCANE_STORM, 17s, 25s, 1);
+                    events.RescheduleEvent(EVENT_SPELL_ARCANE_OVERLOAD, 16s, 1);
+                    events.RescheduleEvent(EVENT_MOVE_TO_SURGE_OF_POWER, 65s, 1);
+                    events.RescheduleEvent(EVENT_CHECK_TRASH_DEAD, 3s, 1);
                     break;
                 case EVENT_CLEAR_TARGET:
                     me->SendMeleeAttackStop();
@@ -704,8 +704,8 @@ public:
                             me->GetMotionMaster()->MoveIdle();
                             me->StopMoving();
                             me->GetMotionMaster()->MovePoint(MI_POINT_START_PH_3, CenterPos.GetPositionX(), CenterPos.GetPositionY(), CenterPos.GetPositionZ()+70.0f);
-                            events.RescheduleEvent(EVENT_LIGHT_DIMENSION_CHANGE, 1000, 1);
-                            events.RescheduleEvent(EVENT_DESTROY_PLATFORM_0, 10000, 1);
+                            events.RescheduleEvent(EVENT_LIGHT_DIMENSION_CHANGE, 1s, 1);
+                            events.RescheduleEvent(EVENT_DESTROY_PLATFORM_0, 10s, 1);
                         }
                     }
                     break;
@@ -722,7 +722,7 @@ public:
                     }
                     me->GetMap()->SetZoneOverrideLight(AREA_EYE_OF_ETERNITY, LIGHT_OBSCURE_SPACE, 1 * IN_MILLISECONDS);
                     events.PopEvent();
-                    events.RescheduleEvent(EVENT_MOVE_TO_PHASE_3_POSITION, 2000, 1);
+                    events.RescheduleEvent(EVENT_MOVE_TO_PHASE_3_POSITION, 2s, 1);
                     break;
                 case EVENT_MOVE_TO_PHASE_3_POSITION:
                     {
@@ -750,7 +750,7 @@ public:
                                 }
 
                         events.PopEvent();
-                        events.RescheduleEvent(EVENT_SAY_PHASE_3_INTRO, 3000, 1);
+                        events.RescheduleEvent(EVENT_SAY_PHASE_3_INTRO, 3s, 1);
                     }
                     break;
                 case EVENT_SAY_PHASE_3_INTRO:
@@ -765,10 +765,10 @@ public:
                     me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PACIFIED | UNIT_FLAG_DISABLE_MOVE);
                     if (Unit* target = me->GetVictim())
                         AttackStart(target);
-                    events.RescheduleEvent(EVENT_SPELL_ARCANE_PULSE, 0, 1);
-                    events.RescheduleEvent(EVENT_SPELL_STATIC_FIELD, urand(1000,4000), 1);
-                    events.RescheduleEvent(EVENT_SPELL_PH3_SURGE_OF_POWER, urand(4000,7000), 1);
-                    events.RescheduleEvent(EVENT_SPELL_ARCANE_STORM, urand(12000,15000), 1);
+                    events.RescheduleEvent(EVENT_SPELL_ARCANE_PULSE, 0s, 1);
+                    events.RescheduleEvent(EVENT_SPELL_STATIC_FIELD, 1s, 4s, 1);
+                    events.RescheduleEvent(EVENT_SPELL_PH3_SURGE_OF_POWER, 4s, 7s, 1);
+                    events.RescheduleEvent(EVENT_SPELL_ARCANE_STORM, 12s, 15s, 1);
                     break;
                 case EVENT_SPELL_ARCANE_PULSE:
                     me->CastSpell(me, SPELL_ARCANE_PULSE, true);
@@ -1092,7 +1092,7 @@ public:
             pInstance = me->GetInstanceScript();
             timer = 0;
             events.Reset();
-            events.RescheduleEvent(EVENT_TELEPORT_VISUAL, 0);
+            events.RescheduleEvent(EVENT_TELEPORT_VISUAL, 0s);
         }
 
         InstanceScript* pInstance;
@@ -1103,8 +1103,8 @@ public:
         {
             DoZoneInCombat();
             events.Reset();
-            events.RescheduleEvent(EVENT_NEXUS_LORD_ARCANE_SHOCK, urand(3000,10000));
-            events.RescheduleEvent(EVENT_NEXUS_LORD_HASTE, urand(8000,14000));
+            events.RescheduleEvent(EVENT_NEXUS_LORD_ARCANE_SHOCK, 3s, 10s);
+            events.RescheduleEvent(EVENT_NEXUS_LORD_HASTE, 8s, 14s);
         }
 
         void AttackStart(Unit* victim) override
@@ -1186,8 +1186,8 @@ public:
             me->SetReactState(REACT_PASSIVE);
             pInstance = me->GetInstanceScript();
             events.Reset();
-            events.RescheduleEvent(EVENT_TELEPORT_VISUAL, 0);
-            events.RescheduleEvent(EVENT_SCION_OF_ETERNITY_ARCANE_BARRAGE, urand(20000,25000));
+            events.RescheduleEvent(EVENT_TELEPORT_VISUAL, 0s);
+            events.RescheduleEvent(EVENT_SCION_OF_ETERNITY_ARCANE_BARRAGE, 20s, 25s);
         }
 
         InstanceScript* pInstance;
@@ -1317,11 +1317,11 @@ public:
             switch (id)
             {
                 case MI_POINT_SCION:
-                    events.RescheduleEvent(EVENT_DISK_MOVE_NEXT_POINT, 0);
+                    events.RescheduleEvent(EVENT_DISK_MOVE_NEXT_POINT, 0s);
                     break;
                 case MI_POINT_NEXUS_LORD:
                     if (me->GetPositionZ() > CenterPos.GetPositionZ()+2.0f)
-                        events.RescheduleEvent(EVENT_DISK_MOVE_NEXT_POINT, 0);
+                        events.RescheduleEvent(EVENT_DISK_MOVE_NEXT_POINT, 0s);
                     else
                         if (Vehicle* v = me->GetVehicleKit())
                             if (Unit* pass = v->GetPassenger(0))
@@ -1405,7 +1405,7 @@ public:
         npc_alexstraszaAI(Creature* pCreature) : ScriptedAI(pCreature)
         {
             events.Reset();
-            events.ScheduleEvent(1, 9000);
+            events.ScheduleEvent(1, 9s);
             me->SetCanFly(true);
             me->SetDisableGravity(true);
             me->SetHover(true);
@@ -1427,17 +1427,17 @@ public:
 
                     Talk(SAY_ALEXSTRASZA_ONE);
                     events.PopEvent();
-                    events.RescheduleEvent(2, 6000);
+                    events.RescheduleEvent(2, 6s);
                     break;
                 case 2:
                     Talk(SAY_ALEXSTRASZA_TWO);
                     events.PopEvent();
-                    events.RescheduleEvent(3, 5000);
+                    events.RescheduleEvent(3, 5s);
                     break;
                 case 3:
                     Talk(SAY_ALEXSTRASZA_THREE);
                     events.PopEvent();
-                    events.RescheduleEvent(4, 22000);
+                    events.RescheduleEvent(4, 22s);
                     break;
                 case 4:
                     Talk(SAY_ALEXSTRASZA_FOUR);

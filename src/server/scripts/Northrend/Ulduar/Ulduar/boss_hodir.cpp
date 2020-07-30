@@ -254,10 +254,10 @@ public:
             me->CastSpell(me, SPELL_BITING_COLD_BOSS_AURA, true);
             SmallIcicles(true);
             events.Reset();
-            events.RescheduleEvent(EVENT_FLASH_FREEZE, 60000);
-            events.RescheduleEvent(EVENT_FREEZE, 15000);
-            events.RescheduleEvent(EVENT_BERSERK, 480000);
-            events.RescheduleEvent(EVENT_HARD_MODE_MISSED, 180000);
+            events.RescheduleEvent(EVENT_FLASH_FREEZE, 1min);
+            events.RescheduleEvent(EVENT_FREEZE, 15s);
+            events.RescheduleEvent(EVENT_BERSERK, 8min);
+            events.RescheduleEvent(EVENT_HARD_MODE_MISSED, 3min);
 
             me->MonsterYell(TEXT_HODIR_AGGRO, LANG_UNIVERSAL, 0);
             me->PlayDirectSound(SOUND_HODIR_AGGRO, 0);
@@ -378,7 +378,7 @@ public:
             }
 
             if( !berserk && (me->GetPositionX() < 1940.0f || me->GetPositionX() > 2070.0f || me->GetPositionY() < -300.0f || me->GetPositionY() > -155.0f) )
-                events.RescheduleEvent(EVENT_BERSERK, 1);
+                events.RescheduleEvent(EVENT_BERSERK, 10ms);
 
             events.Update(diff);
 
@@ -428,9 +428,9 @@ public:
                         me->PlayDirectSound(SOUND_HODIR_FLASH_FREEZE, 0);
                         SmallIcicles(false);
                         events.RepeatEvent(55000 + urand(0,10000));
-                        events.ScheduleEvent(EVENT_SMALL_ICICLES_ENABLE, Is25ManRaid() ? 12000 : 24000);
-                        events.ScheduleEvent(EVENT_FROZEN_BLOWS, 15000);
-                        events.RescheduleEvent(EVENT_FREEZE, 20000);
+                        events.ScheduleEvent(EVENT_SMALL_ICICLES_ENABLE, Is25ManRaid() ? 12s : 24s);
+                        events.ScheduleEvent(EVENT_FROZEN_BLOWS, 15s);
+                        events.RescheduleEvent(EVENT_FREEZE, 20s);
                     }
                     break;
                 case EVENT_SMALL_ICICLES_ENABLE:
@@ -746,9 +746,9 @@ public:
 
         void ScheduleAbilities()
         {
-            events.ScheduleEvent(EVENT_PRIEST_DISPELL_MAGIC, 7000);
-            events.ScheduleEvent(EVENT_PRIEST_GREAT_HEAL, urand(6000,7000));
-            events.ScheduleEvent(EVENT_PRIEST_SMITE, 2100);
+            events.ScheduleEvent(EVENT_PRIEST_DISPELL_MAGIC, 7s);
+            events.ScheduleEvent(EVENT_PRIEST_GREAT_HEAL, 6s, 7s);
+            events.ScheduleEvent(EVENT_PRIEST_SMITE, 2100ms);
         }
 
         void SpellHit(Unit* /*caster*/, const SpellInfo* spell)
@@ -756,7 +756,7 @@ public:
             if(spell->Id == SPELL_FLASH_FREEZE_TRAPPED_NPC)
             {
                 events.Reset();
-                events.ScheduleEvent(EVENT_TRY_FREE_HELPER, 2000);
+                events.ScheduleEvent(EVENT_TRY_FREE_HELPER, 2s);
             }
         }
 
@@ -844,8 +844,8 @@ public:
 
         void ScheduleAbilities()
         {
-            events.ScheduleEvent(EVENT_DRUID_WRATH, 1600);
-            events.ScheduleEvent(EVENT_DRUID_STARLIGHT, 10000);
+            events.ScheduleEvent(EVENT_DRUID_WRATH, 1600ms);
+            events.ScheduleEvent(EVENT_DRUID_STARLIGHT, 10s);
         }
 
         void SpellHit(Unit* /*caster*/, const SpellInfo* spell)
@@ -853,7 +853,7 @@ public:
             if(spell->Id == SPELL_FLASH_FREEZE_TRAPPED_NPC)
             {
                 events.Reset();
-                events.ScheduleEvent(EVENT_TRY_FREE_HELPER, 2000);
+                events.ScheduleEvent(EVENT_TRY_FREE_HELPER, 2s);
             }
         }
 
@@ -942,8 +942,8 @@ public:
 
         void ScheduleAbilities()
         {
-            events.ScheduleEvent(EVENT_SHAMAN_LAVA_BURST, 2600);
-            events.ScheduleEvent(EVENT_SHAMAN_STORM_CLOUD, 10000);
+            events.ScheduleEvent(EVENT_SHAMAN_LAVA_BURST, 2600ms);
+            events.ScheduleEvent(EVENT_SHAMAN_STORM_CLOUD, 10s);
         }
 
         void SpellHit(Unit* /*caster*/, const SpellInfo* spell)
@@ -951,7 +951,7 @@ public:
             if(spell->Id == SPELL_FLASH_FREEZE_TRAPPED_NPC)
             {
                 events.Reset();
-                events.ScheduleEvent(EVENT_TRY_FREE_HELPER, 2000);
+                events.ScheduleEvent(EVENT_TRY_FREE_HELPER, 2s);
             }
         }
 
@@ -1043,9 +1043,9 @@ public:
 
         void ScheduleAbilities()
         {
-            events.ScheduleEvent(EVENT_MAGE_FIREBALL, 3100);
-            events.ScheduleEvent(EVENT_MAGE_TOASTY_FIRE, 6000);
-            events.ScheduleEvent(EVENT_MAGE_MELT_ICE, 1000);
+            events.ScheduleEvent(EVENT_MAGE_FIREBALL, 3100ms);
+            events.ScheduleEvent(EVENT_MAGE_TOASTY_FIRE, 6s);
+            events.ScheduleEvent(EVENT_MAGE_MELT_ICE, 1s);
         }
 
         void SpellHit(Unit* /*caster*/, const SpellInfo* spell)
@@ -1053,7 +1053,7 @@ public:
             if(spell->Id == SPELL_FLASH_FREEZE_TRAPPED_NPC)
             {
                 events.Reset();
-                events.ScheduleEvent(EVENT_TRY_FREE_HELPER, 2000);
+                events.ScheduleEvent(EVENT_TRY_FREE_HELPER, 2s);
             }
         }
 

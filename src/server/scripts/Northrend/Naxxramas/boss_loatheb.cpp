@@ -110,10 +110,10 @@ public:
             }
 
             me->SetInCombatWithZone();
-            events.ScheduleEvent(EVENT_SPELL_NECROTIC_AURA, 10000);
-            events.ScheduleEvent(EVENT_SPELL_DEATHBLOOM, 6000);
-            events.ScheduleEvent(EVENT_SUMMON_SPORE, 12000);
-            events.ScheduleEvent(EVENT_SPELL_BERSERK, 720000);
+            events.ScheduleEvent(EVENT_SPELL_NECROTIC_AURA, 10s);
+            events.ScheduleEvent(EVENT_SPELL_DEATHBLOOM, 6s);
+            events.ScheduleEvent(EVENT_SUMMON_SPORE, 12s);
+            events.ScheduleEvent(EVENT_SPELL_BERSERK, 12min);
         }
 
         void JustDied(Unit* killer) override

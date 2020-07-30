@@ -118,10 +118,10 @@ class boss_anomalus : public CreatureScript
                 BossAI::EnterCombat(who);
 
                 events.SetTimer(45000);
-                events.ScheduleEvent(EVENT_ANOMALUS_SPARK, 5000);
-                events.ScheduleEvent(EVENT_ANOMALUS_HEALTH, 1000);
+                events.ScheduleEvent(EVENT_ANOMALUS_SPARK, 5s);
+                events.ScheduleEvent(EVENT_ANOMALUS_HEALTH, 1s);
                 if (IsHeroic())
-                    events.ScheduleEvent(EVENT_ANOMALUS_ARCANE_ATTRACTION, 8000);
+                    events.ScheduleEvent(EVENT_ANOMALUS_ARCANE_ATTRACTION, 8s);
             }
 
             void JustDied(Unit* killer)
@@ -154,16 +154,16 @@ class boss_anomalus : public CreatureScript
                             events.DelayEvents(46000);
                             break;
                         }
-                        events.ScheduleEvent(EVENT_ANOMALUS_HEALTH, 1000);
+                        events.ScheduleEvent(EVENT_ANOMALUS_HEALTH, 1s);
                         break;
                     case EVENT_ANOMALUS_SPARK:
                         me->CastSpell(me->GetVictim(), SPELL_SPARK, false);
-                        events.ScheduleEvent(EVENT_ANOMALUS_SPARK, 5000);
+                        events.ScheduleEvent(EVENT_ANOMALUS_SPARK, 5s);
                         break;
                     case EVENT_ANOMALUS_ARCANE_ATTRACTION:
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true))
                             me->CastSpell(target, SPELL_ARCANE_ATTRACTION, false);
-                        events.ScheduleEvent(EVENT_ANOMALUS_ARCANE_ATTRACTION, 15000);
+                        events.ScheduleEvent(EVENT_ANOMALUS_ARCANE_ATTRACTION, 15s);
                         break;
                 }
 

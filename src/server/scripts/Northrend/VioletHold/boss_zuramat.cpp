@@ -86,9 +86,9 @@ public:
             Talk(SAY_AGGRO);
             DoZoneInCombat();
             events.Reset();
-            events.RescheduleEvent(EVENT_SPELL_SHROUD_OF_DARKNESS, urand(5000,7000));
-            events.RescheduleEvent(EVENT_SPELL_VOID_SHIFT, urand(23000,25000));
-            events.RescheduleEvent(EVENT_SPELL_SUMMON_VOID_SENTRY, 10000);
+            events.RescheduleEvent(EVENT_SPELL_SHROUD_OF_DARKNESS, 5s, 7s);
+            events.RescheduleEvent(EVENT_SPELL_VOID_SHIFT, 23s, 25s);
+            events.RescheduleEvent(EVENT_SPELL_SUMMON_VOID_SENTRY, 10s);
             if (pInstance)
                 pInstance->SetData(DATA_ACHIEV, 1);
         }

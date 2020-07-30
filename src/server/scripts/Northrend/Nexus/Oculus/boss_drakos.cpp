@@ -92,9 +92,9 @@ public:
 
             me->SetInCombatWithZone();
 
-            events.RescheduleEvent(EVENT_MAGIC_PULL, urand(10000,15000));
-            events.RescheduleEvent(EVENT_THUNDERING_STOMP, urand(3000, 6000));
-            events.RescheduleEvent(EVENT_SUMMON, 2000);
+            events.RescheduleEvent(EVENT_MAGIC_PULL, 10s, 15s);
+            events.RescheduleEvent(EVENT_THUNDERING_STOMP, 3s, 6s);
+            events.RescheduleEvent(EVENT_SUMMON, 2s);
         }
 
         void JustDied(Unit*  /*killer*/)
@@ -147,7 +147,7 @@ public:
 
                         me->CastSpell(me, SPELL_MAGIC_PULL, false);
                         events.RepeatEvent(urand(15000,25000));
-                        events.ScheduleEvent(EVENT_SUMMON_x4, 1500);
+                        events.ScheduleEvent(EVENT_SUMMON_x4, 1500ms);
                     }
                     break;
                 case EVENT_THUNDERING_STOMP:

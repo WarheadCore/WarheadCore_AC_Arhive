@@ -160,12 +160,12 @@ public:
         {
             me->MonsterYell("Ah, the heroes. Your little friends said you would come. This certainly saves me the trouble of hunting you down myself.", LANG_UNIVERSAL, 0);
             me->CastSpell(me, SPELL_ARTRUIS_ICY_VEINS, true);
-            events.RescheduleEvent(EVENT_CAST_FROST_BOLT, 4000);
-            events.RescheduleEvent(EVENT_CAST_FROST_NOVA, 15000);
-            events.RescheduleEvent(EVENT_CAST_ICE_LANCE, 8500);
-            events.RescheduleEvent(EVENT_CAST_ICY_VEINS, 30000);
-            events.RescheduleEvent(EVENT_ARTRUIS_HP_CHECK, 1000);
-            events.RescheduleEvent(EVENT_ARTRUIS_TALK1, 6000);
+            events.RescheduleEvent(EVENT_CAST_FROST_BOLT, 4s);
+            events.RescheduleEvent(EVENT_CAST_FROST_NOVA, 15s);
+            events.RescheduleEvent(EVENT_CAST_ICE_LANCE, 8500ms);
+            events.RescheduleEvent(EVENT_CAST_ICY_VEINS, 30s);
+            events.RescheduleEvent(EVENT_ARTRUIS_HP_CHECK, 1s);
+            events.RescheduleEvent(EVENT_ARTRUIS_TALK1, 6s);
         }
 
         void JustDied(Unit* /*killer*/)
@@ -208,7 +208,7 @@ public:
                             minion->AddThreat(me, 100000.0f);
                             minion->AI()->AttackStart(me);
                             minion->DespawnOrUnsummon(900000);
-                            events.RescheduleEvent(EVENT_ARTRUIS_TALK3, 5000);
+                            events.RescheduleEvent(EVENT_ARTRUIS_TALK3, 5s);
                         }
                     }
                 }
@@ -240,7 +240,7 @@ public:
                 case EVENT_ARTRUIS_TALK1:
                     me->MonsterYell("I have weathered a hundred years of war and suffering. Do you truly think it wise to pit your mortal bodies against a being that cannot die? I'd venture you have more to lose.", LANG_UNIVERSAL, 0);
                     events.PopEvent();
-                    events.RescheduleEvent(EVENT_ARTRUIS_TALK2, 10000);
+                    events.RescheduleEvent(EVENT_ARTRUIS_TALK2, 10s);
                     break;
                 case EVENT_ARTRUIS_TALK2:
                     me->MonsterYell("Even shattered into countless pieces, the crystals all around weaken me... perhaps i should not have underestimated the titans so...", LANG_UNIVERSAL, 0);

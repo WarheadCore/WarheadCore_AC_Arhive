@@ -98,8 +98,8 @@ class boss_toravon : public CreatureScript
             {
                 me->CastSpell(me, SPELL_FROZEN_MALLET, true);
 
-                events.ScheduleEvent(EVENT_FROZEN_ORB_STALKER, 12000);
-                events.ScheduleEvent(EVENT_FREEZING_GROUND, 7000);
+                events.ScheduleEvent(EVENT_FROZEN_ORB_STALKER, 12s);
+                events.ScheduleEvent(EVENT_FREEZING_GROUND, 7s);
                 if (pInstance)
                     pInstance->SetData(EVENT_TORAVON, IN_PROGRESS);
             }
@@ -137,7 +137,7 @@ class boss_toravon : public CreatureScript
                     case EVENT_FROZEN_ORB_STALKER:
                         me->CastCustomSpell(SPELL_FROZEN_ORB, SPELLVALUE_MAX_TARGETS, RAID_MODE(1, 3, 2, 4), me, false);
                         events.RepeatEvent(35000);
-                        events.ScheduleEvent(EVENT_CHECK_SUMMONS, 10000);
+                        events.ScheduleEvent(EVENT_CHECK_SUMMONS, 10s);
                         break;
                     case EVENT_CHECK_SUMMONS:
                         for (SummonList::iterator i = summons.begin(); i != summons.end();)

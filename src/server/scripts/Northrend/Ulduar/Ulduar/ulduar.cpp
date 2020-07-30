@@ -266,9 +266,9 @@ public:
         void EnterCombat(Unit* /*who*/)
         {
             events.Reset();
-            events.ScheduleEvent(1, 2000); // checking Separation Anxiety, Charged Sphere
-            events.ScheduleEvent(2, urand(5000,8000)); // Forked Lightning
-            events.ScheduleEvent(3, (me->GetEntry() == 33722 ? 20000 : 50000)); // Summon Charged Sphere
+            events.ScheduleEvent(1, 2s); // checking Separation Anxiety, Charged Sphere
+            events.ScheduleEvent(2, 5s, 8s); // Forked Lightning
+            events.ScheduleEvent(3, (me->GetEntry() == 33722 ? 20s : 50s)); // Summon Charged Sphere
             if (Creature* c = me->FindNearestCreature((me->GetEntry() == 33722 ? 33699 : 33722), 30.0f, true))
                 otherGUID = c->GetGUID();
             else
@@ -351,9 +351,9 @@ public:
         void Reset()
         {
             events.Reset();
-            events.ScheduleEvent(1, urand(5000, 8000)); // Flame Spray
-            events.ScheduleEvent(2, urand(3000, 6000)); // Machine Gun
-            events.ScheduleEvent(3, 1000); // Charged Leap
+            events.ScheduleEvent(1, 5s, 8s); // Flame Spray
+            events.ScheduleEvent(2, 3s, 6s); // Machine Gun
+            events.ScheduleEvent(3, 1s); // Charged Leap
         }
 
         void PassengerBoarded(Unit* p, int8  /*seat*/, bool  /*apply*/)

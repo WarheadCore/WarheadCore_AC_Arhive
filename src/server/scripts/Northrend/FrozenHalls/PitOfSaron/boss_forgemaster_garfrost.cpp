@@ -115,7 +115,7 @@ public:
 
             Talk(SAY_AGGRO);
             DoZoneInCombat();
-            events.RescheduleEvent(EVENT_SPELL_THROW_SARONITE, urand(5000,7500));
+            events.RescheduleEvent(EVENT_SPELL_THROW_SARONITE, 5s, 7500ms);
 
             if (pInstance)
                 pInstance->SetData(DATA_GARFROST, IN_PROGRESS);
@@ -131,7 +131,7 @@ public:
                 me->SendMeleeAttackStop(me->GetVictim());
                 events.DelayEvents(8000);
                 me->CastSpell(me, SPELL_THUNDERING_STOMP, false);
-                events.RescheduleEvent(EVENT_JUMP, 1250);
+                events.RescheduleEvent(EVENT_JUMP, 1250ms);
                 return;
             }
 
@@ -144,7 +144,7 @@ public:
                 me->SendMeleeAttackStop(me->GetVictim());
                 events.DelayEvents(8000);
                 me->CastSpell(me, SPELL_THUNDERING_STOMP, false);
-                events.RescheduleEvent(EVENT_JUMP, 1250);
+                events.RescheduleEvent(EVENT_JUMP, 1250ms);
                 return;
             }
         }
@@ -181,7 +181,7 @@ public:
             }
             if (spell->Id == uint32(SPELL_FORGE_BLADE))
             {
-                events.RescheduleEvent(EVENT_SPELL_CHILLING_WAVE, 10000);
+                events.RescheduleEvent(EVENT_SPELL_CHILLING_WAVE, 10s);
                 SetEquipmentSlots(false, EQUIP_ID_SWORD);
                 me->SetReactState(REACT_AGGRESSIVE);
                 me->SetControlled(false, UNIT_STATE_ROOT);
@@ -194,7 +194,7 @@ public:
             }
             else if (spell->Id == uint32(SPELL_FORGE_MACE))
             {
-                events.RescheduleEvent(EVENT_SPELL_DEEP_FREEZE, 10000);
+                events.RescheduleEvent(EVENT_SPELL_DEEP_FREEZE, 10s);
                 SetEquipmentSlots(false, EQUIP_ID_MACE);
                 me->SetReactState(REACT_AGGRESSIVE);
                 me->SetControlled(false, UNIT_STATE_ROOT);

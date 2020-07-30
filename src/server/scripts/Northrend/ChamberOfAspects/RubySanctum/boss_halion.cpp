@@ -225,7 +225,7 @@ class boss_halion : public CreatureScript
                 me->SetVisible(false);
                 me->SetReactState(REACT_PASSIVE);
                 _events2.Reset();
-                _events2.RescheduleEvent(EVENT_HALION_VISIBILITY, 30000);
+                _events2.RescheduleEvent(EVENT_HALION_VISIBILITY, 30s);
             }
 
             void JustSummoned(Creature* summon)
@@ -298,14 +298,14 @@ class boss_halion : public CreatureScript
                 Talk(SAY_AGGRO);
                 instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me, 1);
 
-                events.ScheduleEvent(EVENT_CLEAVE, urand(8000, 10000));
-                events.ScheduleEvent(EVENT_TAIL_LASH, 10000);
-                events.ScheduleEvent(EVENT_BREATH, urand(10000, 15000));
-                events.ScheduleEvent(EVENT_ACTIVATE_FIREWALL, 5000);
-                events.ScheduleEvent(EVENT_METEOR_STRIKE, urand(20000, 25000));
-                events.ScheduleEvent(EVENT_FIERY_COMBUSTION, urand(15000, 18000));
-                events.ScheduleEvent(EVENT_CHECK_HEALTH, 1000);
-                _events2.ScheduleEvent(EVENT_TRIGGER_BERSERK, 8*MINUTE*IN_MILLISECONDS);
+                events.ScheduleEvent(EVENT_CLEAVE, 8s, 10s);
+                events.ScheduleEvent(EVENT_TAIL_LASH, 10s);
+                events.ScheduleEvent(EVENT_BREATH, 10s, 15s);
+                events.ScheduleEvent(EVENT_ACTIVATE_FIREWALL, 5s);
+                events.ScheduleEvent(EVENT_METEOR_STRIKE, 20s, 25s);
+                events.ScheduleEvent(EVENT_FIERY_COMBUSTION, 15s, 18s);
+                events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
+                _events2.ScheduleEvent(EVENT_TRIGGER_BERSERK, 8min);
             }
 
             void KilledUnit(Unit* victim)
@@ -313,7 +313,7 @@ class boss_halion : public CreatureScript
                 if (victim->GetTypeId() == TYPEID_PLAYER && events.GetNextEventTime(EVENT_KILL_TALK) == 0)
                 {
                     Talk(SAY_KILL);
-                    events.ScheduleEvent(EVENT_KILL_TALK, 6000);
+                    events.ScheduleEvent(EVENT_KILL_TALK, 6s);
                 }
             }
 
@@ -376,15 +376,15 @@ class boss_halion : public CreatureScript
                 {
                     case EVENT_CLEAVE:
                         me->CastSpell(me->GetVictim(), SPELL_CLEAVE, false);
-                        events.ScheduleEvent(EVENT_CLEAVE, urand(8000, 10000));
+                        events.ScheduleEvent(EVENT_CLEAVE, 8s, 10s);
                         break;
                     case EVENT_TAIL_LASH:
                         me->CastSpell(me, SPELL_TAIL_LASH, false);
-                        events.ScheduleEvent(EVENT_TAIL_LASH, 10000);
+                        events.ScheduleEvent(EVENT_TAIL_LASH, 10s);
                         break;
                     case EVENT_BREATH:
                         me->CastSpell(me->GetVictim(), SPELL_FLAME_BREATH, false);
-                        events.ScheduleEvent(EVENT_BREATH, urand(10000, 12000));
+                        events.ScheduleEvent(EVENT_BREATH, 10s, 12s);
                         break;
                     case EVENT_ACTIVATE_FIREWALL:
                         instance->HandleGameObject(instance->GetData64(GO_FLAME_RING), false, NULL);
@@ -394,12 +394,12 @@ class boss_halion : public CreatureScript
                         _livingEmberCount = summons.GetEntryCount(NPC_LIVING_EMBER);
                         me->CastCustomSpell(SPELL_METEOR_STRIKE_TARGETING, SPELLVALUE_MAX_TARGETS, 1, me, false);
                         Talk(SAY_METEOR_STRIKE);
-                        events.ScheduleEvent(EVENT_METEOR_STRIKE, 40000);
+                        events.ScheduleEvent(EVENT_METEOR_STRIKE, 40s);
                         break;
                     case EVENT_FIERY_COMBUSTION:
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 100.0f, true, -SPELL_TWILIGHT_REALM))
                             me->CastSpell(target, SPELL_FIERY_COMBUSTION, false);
-                        events.ScheduleEvent(EVENT_FIERY_COMBUSTION, 25000);
+                        events.ScheduleEvent(EVENT_FIERY_COMBUSTION, 25s);
                         break;
                     case EVENT_CHECK_HEALTH:
                         if (me->HealthBelowPct(75))
@@ -409,7 +409,7 @@ class boss_halion : public CreatureScript
                             events.DelayEvents(10000);
                             return;
                         }
-                        events.ScheduleEvent(EVENT_CHECK_HEALTH, 1000);
+                        events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
                         break;
                 }
 
@@ -457,16 +457,16 @@ class boss_twilight_halion : public CreatureScript
                 me->SetReactState(REACT_DEFENSIVE);
             }
 
-            void EnterCombat(Unit*  /*who*/)
+            void EnterCombat(Unit* /*who*/)
             {
                 _events.Reset();
-                _events.ScheduleEvent(EVENT_CLEAVE, urand(8000, 10000));
-                _events.ScheduleEvent(EVENT_TAIL_LASH, 10000);
-                _events.ScheduleEvent(EVENT_BREATH, urand(10000, 15000));
-                _events.ScheduleEvent(EVENT_SOUL_CONSUMPTION, 20000);
-                _events.ScheduleEvent(EVENT_SHADOW_PULSARS, 16000);
-                _events.ScheduleEvent(EVENT_SEND_ENCOUNTER_UNIT, 2000);
-                _events.ScheduleEvent(EVENT_CHECK_HEALTH, 1000);
+                _events.ScheduleEvent(EVENT_CLEAVE, 8s, 10s);
+                _events.ScheduleEvent(EVENT_TAIL_LASH, 10s);
+                _events.ScheduleEvent(EVENT_BREATH, 10s, 15s);
+                _events.ScheduleEvent(EVENT_SOUL_CONSUMPTION, 20s);
+                _events.ScheduleEvent(EVENT_SHADOW_PULSARS, 16s);
+                _events.ScheduleEvent(EVENT_SEND_ENCOUNTER_UNIT, 2s);
+                _events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
 
                 me->SetInCombatWithZone();
             }
@@ -480,7 +480,7 @@ class boss_twilight_halion : public CreatureScript
                 if (victim->GetTypeId() == TYPEID_PLAYER && _events.GetNextEventTime(EVENT_KILL_TALK) == 0)
                 {
                     Talk(SAY_KILL);
-                    _events.ScheduleEvent(EVENT_KILL_TALK, 6000);
+                    _events.ScheduleEvent(EVENT_KILL_TALK, 6s);
                 }
             }
 
@@ -529,20 +529,20 @@ class boss_twilight_halion : public CreatureScript
                         break;
                     case EVENT_CLEAVE:
                         me->CastSpell(me->GetVictim(), SPELL_CLEAVE, false);
-                        _events.ScheduleEvent(EVENT_CLEAVE, urand(8000, 10000));
+                        _events.ScheduleEvent(EVENT_CLEAVE, 8s, 10s);
                         break;
                     case EVENT_TAIL_LASH:
                         me->CastSpell(me, SPELL_TAIL_LASH, false);
-                        _events.ScheduleEvent(EVENT_TAIL_LASH, 10000);
+                        _events.ScheduleEvent(EVENT_TAIL_LASH, 10s);
                         break;
                     case EVENT_BREATH:
                         me->CastSpell(me->GetVictim(), SPELL_DARK_BREATH, false);
-                        _events.ScheduleEvent(EVENT_BREATH, urand(10000, 12000));
+                        _events.ScheduleEvent(EVENT_BREATH, 10s, 12s);
                         break;
                     case EVENT_SOUL_CONSUMPTION:
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 100.0f, true, SPELL_TWILIGHT_REALM))
                             me->CastSpell(target, SPELL_SOUL_CONSUMPTION, false);
-                        _events.ScheduleEvent(EVENT_SOUL_CONSUMPTION, 20000);
+                        _events.ScheduleEvent(EVENT_SOUL_CONSUMPTION, 20s);
                         break;
                     case EVENT_CHECK_HEALTH:
                         if (me->HealthBelowPct(50))
@@ -552,13 +552,13 @@ class boss_twilight_halion : public CreatureScript
                             Talk(SAY_PHASE_THREE);
                             return;
                         }
-                        _events.ScheduleEvent(EVENT_CHECK_HEALTH, 1000);
+                        _events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
                         break;
                     case EVENT_SHADOW_PULSARS:
                         Talk(SAY_SPHERE_PULSE);
                         Talk(EMOTE_WARN_LASER);
-                        _events.ScheduleEvent(EVENT_SHADOW_PULSARS, 29000);
-                        _events.ScheduleEvent(EVENT_SHADOW_PULSARS_SHOOT, 5000);
+                        _events.ScheduleEvent(EVENT_SHADOW_PULSARS, 29s);
+                        _events.ScheduleEvent(EVENT_SHADOW_PULSARS_SHOOT, 5s);
                         break;
                     case EVENT_SHADOW_PULSARS_SHOOT:
                         if (Creature* orbCarrier = ObjectAccessor::GetCreature(*me, _instance->GetData64(NPC_ORB_CARRIER)))
@@ -610,13 +610,13 @@ class npc_halion_controller : public CreatureScript
             void DoAction(int32 action)
             {
                 if (action == ACTION_INTRO_HALION)
-                    _events.ScheduleEvent(EVENT_START_INTRO, 2000);
+                    _events.ScheduleEvent(EVENT_START_INTRO, 2s);
                 else if (action == ACTION_CHECK_CORPOREALITY)
                 {
                     _materialDamage = 1;
                     _twilightDamage = 1;
                     _corporeality = 5;
-                    _events.ScheduleEvent(EVENT_CHECK_CORPOREALITY, 7000);
+                    _events.ScheduleEvent(EVENT_CHECK_CORPOREALITY, 7s);
                 }
                 else if (action == ACTION_RESET_ENCOUNTER)
                 {
@@ -635,23 +635,23 @@ class npc_halion_controller : public CreatureScript
                     // Intro
                     case EVENT_START_INTRO:
                         me->CastSpell(me, SPELL_COSMETIC_FIRE_PILLAR, false);
-                        _events.ScheduleEvent(EVENT_INTRO_PROGRESS_1, 5000);
+                        _events.ScheduleEvent(EVENT_INTRO_PROGRESS_1, 5s);
                         break;
                     case EVENT_INTRO_PROGRESS_1:
                         _instance->SetBossState(DATA_HALION_INTRO1, NOT_STARTED);
                         _instance->SetBossState(DATA_HALION_INTRO1, DONE);
-                        _events.ScheduleEvent(EVENT_INTRO_PROGRESS_2, 5000);
+                        _events.ScheduleEvent(EVENT_INTRO_PROGRESS_2, 5s);
                         break;
                     case EVENT_INTRO_PROGRESS_2:
                         _instance->SetBossState(DATA_HALION_INTRO2, NOT_STARTED);
                         _instance->SetBossState(DATA_HALION_INTRO2, DONE);
-                        _events.ScheduleEvent(EVENT_INTRO_PROGRESS_3, 4000);
+                        _events.ScheduleEvent(EVENT_INTRO_PROGRESS_3, 4s);
                         break;
                     case EVENT_INTRO_PROGRESS_3:
                         _instance->SetBossState(DATA_HALION_INTRO_DONE, NOT_STARTED);
                         _instance->SetBossState(DATA_HALION_INTRO_DONE, DONE);
                         me->CastSpell(me, SPELL_FIERY_EXPLOSION, false);
-                        _events.ScheduleEvent(EVENT_INTRO_PROGRESS_4, 500);
+                        _events.ScheduleEvent(EVENT_INTRO_PROGRESS_4, 500ms);
                         break;
                     case EVENT_INTRO_PROGRESS_4:
                         if (Creature* halion = ObjectAccessor::GetCreature(*me, _instance->GetData64(NPC_HALION)))
@@ -666,7 +666,7 @@ class npc_halion_controller : public CreatureScript
                         break;
                     case EVENT_CHECK_CORPOREALITY:
                         UpdateCorporeality();
-                        _events.ScheduleEvent(EVENT_CHECK_CORPOREALITY, 10000);
+                        _events.ScheduleEvent(EVENT_CHECK_CORPOREALITY, 10s);
                         break;
                 }
             }
@@ -684,7 +684,7 @@ class npc_halion_controller : public CreatureScript
                 float damageRatio = float(_materialDamage) / float(_twilightDamage);
 
                 if (_twilightDamage == 1 || _materialDamage == 1)
-                    _events.ScheduleEvent(EVENT_TWILIGHT_MENDING, 4000);
+                    _events.ScheduleEvent(EVENT_TWILIGHT_MENDING, 4s);
 
                 _twilightDamage = 1;
                 _materialDamage = 1;

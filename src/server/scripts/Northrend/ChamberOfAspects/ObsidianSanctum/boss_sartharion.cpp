@@ -238,8 +238,8 @@ public:
         {
             summons.RemoveNotExisting();
             Talk(WHISPER_LAVA_CHURN);
-            events.ScheduleEvent(EVENT_SARTHARION_START_LAVA, 2000);
-            events.ScheduleEvent(EVENT_SARTHARION_FINISH_LAVA, 9000);
+            events.ScheduleEvent(EVENT_SARTHARION_START_LAVA, 2s);
+            events.ScheduleEvent(EVENT_SARTHARION_FINISH_LAVA, 9s);
 
             // Send wave from left
             if (urand(0,1))
@@ -292,15 +292,15 @@ public:
                         {
                             case DATA_TENEBRON:
                                 cr->CastSpell(cr, SPELL_POWER_OF_TENEBRON, true);
-                                events.ScheduleEvent(EVENT_SARTHARION_CALL_TENEBRON, 10000);
+                                events.ScheduleEvent(EVENT_SARTHARION_CALL_TENEBRON, 10s);
                                 break;
                             case DATA_SHADRON:
                                 cr->CastSpell(cr, SPELL_POWER_OF_SHADRON, true);
-                                events.ScheduleEvent(EVENT_SARTHARION_CALL_SHADRON, 65000);
+                                events.ScheduleEvent(EVENT_SARTHARION_CALL_SHADRON, 65s);
                                 break;
                             case DATA_VESPERON:
                                 cr->CastSpell(cr, SPELL_POWER_OF_VESPERON, true);
-                                events.ScheduleEvent(EVENT_SARTHARION_CALL_VESPERON, 115000);
+                                events.ScheduleEvent(EVENT_SARTHARION_CALL_VESPERON, 115s);
                                 break;
                         }
                     }
@@ -362,14 +362,14 @@ public:
             if (pInstance)
                 pInstance->SetData(BOSS_SARTHARION_EVENT, IN_PROGRESS);
 
-            events.ScheduleEvent(EVENT_SARTHARION_CAST_CLEAVE, 7000);
-            events.ScheduleEvent(EVENT_SARTHARION_CAST_FLAME_BREATH, 15000);
-            events.ScheduleEvent(EVENT_SARTHARION_CAST_TAIL_LASH, 11000);
-            events.ScheduleEvent(EVENT_SARTHARION_SUMMON_LAVA, 20000);
-            events.ScheduleEvent(EVENT_SARTHARION_LAVA_STRIKE, 5000);
-            events.ScheduleEvent(EVENT_SARTHARION_HEALTH_CHECK, 10000);
-            events.ScheduleEvent(EVENT_SARTHARION_BERSERK, 900000);
-            events.ScheduleEvent(EVENT_SARTHARION_BOUNDARY, 1000);
+            events.ScheduleEvent(EVENT_SARTHARION_CAST_CLEAVE, 7s);
+            events.ScheduleEvent(EVENT_SARTHARION_CAST_FLAME_BREATH, 15s);
+            events.ScheduleEvent(EVENT_SARTHARION_CAST_TAIL_LASH, 11s);
+            events.ScheduleEvent(EVENT_SARTHARION_SUMMON_LAVA, 20s);
+            events.ScheduleEvent(EVENT_SARTHARION_LAVA_STRIKE, 5s);
+            events.ScheduleEvent(EVENT_SARTHARION_HEALTH_CHECK, 10s);
+            events.ScheduleEvent(EVENT_SARTHARION_BERSERK, 15min);
+            events.ScheduleEvent(EVENT_SARTHARION_BOUNDARY, 1s);
 
             StoreDragons();
             me->CallForHelp(500.0f);
@@ -673,9 +673,9 @@ public:
                 me->SetCanFly(false);
             }
 
-            events.ScheduleEvent(EVENT_MINIBOSS_SHADOW_FISSURE, 20000);
-            events.ScheduleEvent(EVENT_MINIBOSS_SHADOW_BREATH, 10000);
-            events.ScheduleEvent(EVENT_MINIBOSS_OPEN_PORTAL, 15000);
+            events.ScheduleEvent(EVENT_MINIBOSS_SHADOW_FISSURE, 20s);
+            events.ScheduleEvent(EVENT_MINIBOSS_SHADOW_BREATH, 10s);
+            events.ScheduleEvent(EVENT_MINIBOSS_OPEN_PORTAL, 15s);
 
             if (pInstance && !isSartharion)
                 pInstance->SetData(BOSS_TENEBRON_EVENT, IN_PROGRESS);
@@ -772,7 +772,7 @@ public:
                         pInstance->SetData(DATA_ADD_PORTAL, 0);
 
                         
-                    events.ScheduleEvent(EVENT_MINIBOSS_SPAWN_HELPERS, 2000);
+                    events.ScheduleEvent(EVENT_MINIBOSS_SPAWN_HELPERS, 2s);
                     events.RepeatEvent(60000);
                     break;
                 case EVENT_MINIBOSS_SPAWN_HELPERS:
@@ -788,7 +788,7 @@ public:
                         }
                     }
 
-                    events.ScheduleEvent(EVENT_MINIBOSS_HATCH_EGGS, 25000);
+                    events.ScheduleEvent(EVENT_MINIBOSS_HATCH_EGGS, 25s);
                     events.PopEvent();
                     break;
                 }
@@ -928,9 +928,9 @@ public:
                 me->SetCanFly(false);
             }
 
-            events.ScheduleEvent(EVENT_MINIBOSS_SHADOW_FISSURE, 20000);
-            events.ScheduleEvent(EVENT_MINIBOSS_SHADOW_BREATH, 10000);
-            events.ScheduleEvent(EVENT_MINIBOSS_OPEN_PORTAL, 15000);
+            events.ScheduleEvent(EVENT_MINIBOSS_SHADOW_FISSURE, 20s);
+            events.ScheduleEvent(EVENT_MINIBOSS_SHADOW_BREATH, 10s);
+            events.ScheduleEvent(EVENT_MINIBOSS_OPEN_PORTAL, 15s);
             
             if (pInstance && !isSartharion)
                 pInstance->SetData(BOSS_SHADRON_EVENT, IN_PROGRESS);
@@ -983,7 +983,7 @@ public:
                 me->RemoveAura(SPELL_GIFT_OF_TWILIGHT_SHADOW);
             }
 
-            events.ScheduleEvent(EVENT_MINIBOSS_OPEN_PORTAL, 30000);
+            events.ScheduleEvent(EVENT_MINIBOSS_OPEN_PORTAL, 30s);
         }
 
         void MovementInform(uint32 type, uint32 pointId)
@@ -1042,7 +1042,7 @@ public:
                     else if (pInstance)
                         pInstance->SetData(DATA_ADD_PORTAL, 0);
                         
-                    events.ScheduleEvent(EVENT_MINIBOSS_SPAWN_HELPERS, 2000);
+                    events.ScheduleEvent(EVENT_MINIBOSS_SPAWN_HELPERS, 2s);
                     events.PopEvent();
                     break;
                 case EVENT_MINIBOSS_SPAWN_HELPERS:
@@ -1162,9 +1162,9 @@ public:
                 me->SetCanFly(false);
             }
 
-            events.ScheduleEvent(EVENT_MINIBOSS_SHADOW_FISSURE, 20000);
-            events.ScheduleEvent(EVENT_MINIBOSS_SHADOW_BREATH, 10000);
-            events.ScheduleEvent(EVENT_MINIBOSS_OPEN_PORTAL, 30000);
+            events.ScheduleEvent(EVENT_MINIBOSS_SHADOW_FISSURE, 20s);
+            events.ScheduleEvent(EVENT_MINIBOSS_SHADOW_BREATH, 10s);
+            events.ScheduleEvent(EVENT_MINIBOSS_OPEN_PORTAL, 30s);
 
             if (pInstance && !isSartharion)
                 pInstance->SetData(BOSS_VESPERON_EVENT, IN_PROGRESS);
@@ -1212,7 +1212,7 @@ public:
                 pInstance->SetData(DATA_CLEAR_PORTAL, 1);
             }
 
-            events.ScheduleEvent(EVENT_MINIBOSS_OPEN_PORTAL, 30000);
+            events.ScheduleEvent(EVENT_MINIBOSS_OPEN_PORTAL, 30s);
         }
 
         void MovementInform(uint32 type, uint32 pointId)
@@ -1272,7 +1272,7 @@ public:
                     else if (pInstance)
                         pInstance->SetData(DATA_ADD_PORTAL, 0);
                         
-                    events.ScheduleEvent(EVENT_MINIBOSS_SPAWN_HELPERS, 2000);
+                    events.ScheduleEvent(EVENT_MINIBOSS_SPAWN_HELPERS, 2s);
                     events.PopEvent();
                     break;
                 case EVENT_MINIBOSS_SPAWN_HELPERS:

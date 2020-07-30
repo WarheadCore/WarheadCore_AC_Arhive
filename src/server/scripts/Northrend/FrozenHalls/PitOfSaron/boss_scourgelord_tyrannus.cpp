@@ -122,10 +122,10 @@ public:
                 me->CastSpell(me, 43979, true);
                 Talk(SAY_AGGRO);
                 events.Reset();
-                events.RescheduleEvent(EVENT_SPELL_FORCEFUL_SMASH, urand(14000,16000));
-                events.RescheduleEvent(EVENT_SPELL_OVERLORDS_BRAND, urand(4000,6000));
-                events.RescheduleEvent(EVENT_RIMEFANG_SPELL_ICY_BLAST, 5000);
-                events.RescheduleEvent(EVENT_SPELL_MARK_OF_RIMEFANG, 25000);
+                events.RescheduleEvent(EVENT_SPELL_FORCEFUL_SMASH, 14s, 16s);
+                events.RescheduleEvent(EVENT_SPELL_OVERLORDS_BRAND, 4s, 6s);
+                events.RescheduleEvent(EVENT_RIMEFANG_SPELL_ICY_BLAST, 5s);
+                events.RescheduleEvent(EVENT_SPELL_MARK_OF_RIMEFANG, 25s);
             }
         }
 
@@ -160,7 +160,7 @@ public:
                     {
                         me->CastSpell(me->GetVictim(), SPELL_FORCEFUL_SMASH, false);
                         events.PopEvent();
-                        events.RescheduleEvent(EVENT_SPELL_UNHOLY_POWER, 1000);
+                        events.RescheduleEvent(EVENT_SPELL_UNHOLY_POWER, 1s);
                         break;
                     }
                     events.RepeatEvent(3000);
@@ -170,7 +170,7 @@ public:
                     Talk(EMOTE_SMASH);
                     me->CastSpell(me, SPELL_UNHOLY_POWER, false);
                     events.PopEvent();
-                    events.ScheduleEvent(EVENT_SPELL_FORCEFUL_SMASH, urand(40000, 48000));
+                    events.ScheduleEvent(EVENT_SPELL_FORCEFUL_SMASH, 40s, 48s);
                     break;
                 case EVENT_SPELL_OVERLORDS_BRAND:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 95.0f, true))
@@ -192,7 +192,7 @@ public:
                             c->CastSpell(target, RIMEFANG_SPELL_HOARFROST, false);
                         }
                     events.RepeatEvent(25000);
-                    events.RescheduleEvent(EVENT_RIMEFANG_SPELL_ICY_BLAST, 10000);
+                    events.RescheduleEvent(EVENT_RIMEFANG_SPELL_ICY_BLAST, 10s);
                     break;
             }
 

@@ -192,10 +192,10 @@ public:
         void ScheduleEvents(bool anvil)
         {
             events.SetPhase(1);
-            events.RescheduleEvent(EVENT_HEAT, 8000, 0, 1);
-            events.RescheduleEvent(EVENT_SHATTER, 10000, 0, 1);
-            events.RescheduleEvent(EVENT_CHECK_HEALTH, anvil ? 1000 : 6000, 0, 1);
-            events.RescheduleEvent(EVENT_POSITION, 4000, 0, 1);
+            events.RescheduleEvent(EVENT_HEAT, 8s, 0, 1);
+            events.RescheduleEvent(EVENT_SHATTER, 10s, 0, 1);
+            events.RescheduleEvent(EVENT_CHECK_HEALTH, anvil ? 1s : 6s, 0, 1);
+            events.RescheduleEvent(EVENT_POSITION, 4s, 0, 1);
         }
 
         void JustSummoned(Creature* summon)
@@ -243,7 +243,7 @@ public:
                 me->SetControlled(true, UNIT_STATE_ROOT);
             }
             else
-                events.ScheduleEvent(EVENT_MOVE_TO_ANVIL, 0, 0, 2);
+                events.ScheduleEvent(EVENT_MOVE_TO_ANVIL, 0s, 0, 2);
         }
 
         void SpellHitTarget(Unit* /*who*/, const SpellInfo *spellInfo)
@@ -269,7 +269,7 @@ public:
             if (me->GetMotionMaster()->GetCurrentMovementGeneratorType() == CHASE_MOTION_TYPE)
                 me->GetMotionMaster()->MovementExpired();
 
-            events.ScheduleEvent(EVENT_MOVE_TO_ANVIL, 0, 0, 2);
+            events.ScheduleEvent(EVENT_MOVE_TO_ANVIL, 0s, 0, 2);
         }
 
         void UpdateAI(uint32 diff)
@@ -343,8 +343,8 @@ public:
         void Reset()
         {
             events.Reset();
-            events.ScheduleEvent(EVENT_BLAST, 7000);
-            events.ScheduleEvent(EVENT_IMMOLATION, 3000);
+            events.ScheduleEvent(EVENT_BLAST, 7s);
+            events.ScheduleEvent(EVENT_IMMOLATION, 3s);
         }
 
         void DamageTaken(Unit*, uint32 &uiDamage, DamageEffectType, SpellSchoolMask)
@@ -483,7 +483,7 @@ public:
                     _isActive = false;
                     _attackGUID = who->GetGUID();
                     events.Reset();
-                    events.RescheduleEvent(EVENT_UNFREEZE, 5000);
+                    events.RescheduleEvent(EVENT_UNFREEZE, 5s);
                 }
             }
         }
@@ -493,16 +493,16 @@ public:
             events.Reset();
             if (me->GetEntry() == 28961) // NPC_TITANIUM_SIEGEBREAKER
             {
-                events.ScheduleEvent(EVENT_PIERCING_HOWL, 10000+rand()%15000);
-                events.ScheduleEvent(EVENT_PENETRATING_STRIKE, 5000+rand()%5000);
-                events.ScheduleEvent(EVENT_FRIGHTENING_SHOUT, 20000+rand()%8000);
-                events.ScheduleEvent(EVENT_BLADE_TURNING, 12000);
+                events.ScheduleEvent(EVENT_PIERCING_HOWL, 10s, 25s);
+                events.ScheduleEvent(EVENT_PENETRATING_STRIKE, 5s, 10s);
+                events.ScheduleEvent(EVENT_FRIGHTENING_SHOUT, 20s, 28s);
+                events.ScheduleEvent(EVENT_BLADE_TURNING, 12s);
             }
             else
             {
-                events.ScheduleEvent(EVENT_THROW, 10000+rand()%15000);
-                events.ScheduleEvent(EVENT_DEADLY_THROW, 15000+rand()%15000);
-                events.ScheduleEvent(EVENT_DEFLECTION, 15000);
+                events.ScheduleEvent(EVENT_THROW, 10s, 25s);
+                events.ScheduleEvent(EVENT_DEADLY_THROW, 15s, 30s);
+                events.ScheduleEvent(EVENT_DEFLECTION, 15s);
             }
         }
 

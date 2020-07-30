@@ -437,7 +437,7 @@ public:
                 {
                     me->SetVisible(true);
                     playerGUID = who->GetGUID();
-                    events.ScheduleEvent(EVENT_BETRAYAL_1, 5000);
+                    events.ScheduleEvent(EVENT_BETRAYAL_1, 5s);
                 }
             }
             else
@@ -461,9 +461,9 @@ public:
         void EnterCombat(Unit*)
         {
             Talk(SAY_DRAKURU_3);
-            events.ScheduleEvent(EVENT_BETRAYAL_SHADOW_BOLT, 2000);
-            events.ScheduleEvent(EVENT_BETRAYAL_CRYSTAL, 5000);
-            events.ScheduleEvent(EVENT_BETRAYAL_COMBAT_TALK, 20000);
+            events.ScheduleEvent(EVENT_BETRAYAL_SHADOW_BOLT, 2s);
+            events.ScheduleEvent(EVENT_BETRAYAL_CRYSTAL, 5s);
+            events.ScheduleEvent(EVENT_BETRAYAL_COMBAT_TALK, 20s);
         }
 
         void DamageTaken(Unit*, uint32& damage, DamageEffectType, SpellSchoolMask)
@@ -476,7 +476,7 @@ public:
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                 me->setFaction(35);
                 events.Reset();
-                events.ScheduleEvent(EVENT_BETRAYAL_4, 1000);
+                events.ScheduleEvent(EVENT_BETRAYAL_4, 1s);
             }
         }
 
@@ -504,7 +504,7 @@ public:
                 case EVENT_BETRAYAL_1:
                     Talk(SAY_DRAKURU_0);
                     events.PopEvent();
-                    events.ScheduleEvent(EVENT_BETRAYAL_2, 5000);
+                    events.ScheduleEvent(EVENT_BETRAYAL_2, 5s);
                     break;
                 case EVENT_BETRAYAL_2:
                     me->SummonCreature(NPC_BLIGHTBLOOD_TROLL, 6184.1f, -1969.9f, 586.76f, 4.5f);
@@ -512,7 +512,7 @@ public:
                     me->SummonCreature(NPC_BLIGHTBLOOD_TROLL, 6166.2f, -2065.4f, 586.76f, 1.4f);
                     me->SummonCreature(NPC_BLIGHTBLOOD_TROLL, 6127.5f, -2008.7f, 586.76f, 0.0f);
                     events.PopEvent();
-                    events.ScheduleEvent(EVENT_BETRAYAL_3, 5000);
+                    events.ScheduleEvent(EVENT_BETRAYAL_3, 5s);
                     break;
                 case EVENT_BETRAYAL_3:
                     Talk(SAY_DRAKURU_1);
@@ -525,29 +525,29 @@ public:
                     break;
                 case EVENT_BETRAYAL_4:
                     Talk(SAY_DRAKURU_5);
-                    events.ScheduleEvent(EVENT_BETRAYAL_5, 6000);
+                    events.ScheduleEvent(EVENT_BETRAYAL_5, 6s);
                     events.PopEvent();
                     break;
                 case EVENT_BETRAYAL_5:
                     Talk(SAY_DRAKURU_6);
                     me->CastSpell(me, SPELL_THROW_PORTAL_CRYSTAL, true);
-                    events.ScheduleEvent(EVENT_BETRAYAL_6, 8000);
+                    events.ScheduleEvent(EVENT_BETRAYAL_6, 8s);
                     events.PopEvent();
                     break;
                 case EVENT_BETRAYAL_6:
                     me->SummonCreature(NPC_LICH_KING, 6142.9f, -2011.6f, 590.86f, 0.0f, TEMPSUMMON_TIMED_DESPAWN, 41000);
-                    events.ScheduleEvent(EVENT_BETRAYAL_7, 8000);
+                    events.ScheduleEvent(EVENT_BETRAYAL_7, 8s);
                     events.PopEvent();
                     break;
                 case EVENT_BETRAYAL_7:
                     Talk(SAY_DRAKURU_7);
-                    events.ScheduleEvent(EVENT_BETRAYAL_8, 5000);
+                    events.ScheduleEvent(EVENT_BETRAYAL_8, 5s);
                     events.PopEvent();
                     break;
                 case EVENT_BETRAYAL_8:
                     if (Creature* lich = ObjectAccessor::GetCreature(*me, lichGUID))
                         lich->AI()->Talk(SAY_LICH_7);
-                    events.ScheduleEvent(EVENT_BETRAYAL_9, 6000);
+                    events.ScheduleEvent(EVENT_BETRAYAL_9, 6s);
                     events.PopEvent();
                     break;
                 case EVENT_BETRAYAL_9:
@@ -556,26 +556,26 @@ public:
                         lich->AI()->Talk(SAY_LICH_8);
                         lich->CastSpell(me, SPELL_TOUCH_OF_DEATH, false);
                     }
-                    events.ScheduleEvent(EVENT_BETRAYAL_10, 4000);
+                    events.ScheduleEvent(EVENT_BETRAYAL_10, 4s);
                     events.PopEvent();
                     break;
                 case EVENT_BETRAYAL_10:
                     me->SetVisible(false);
                     if (Creature* lich = ObjectAccessor::GetCreature(*me, lichGUID))
                         lich->AI()->Talk(SAY_LICH_9);
-                    events.ScheduleEvent(EVENT_BETRAYAL_11, 4000);
+                    events.ScheduleEvent(EVENT_BETRAYAL_11, 4s);
                     events.PopEvent();
                     break;
                 case EVENT_BETRAYAL_11:
                     if (Creature* lich = ObjectAccessor::GetCreature(*me, lichGUID))
                         lich->AI()->Talk(SAY_LICH_10);
-                    events.ScheduleEvent(EVENT_BETRAYAL_12, 6000);
+                    events.ScheduleEvent(EVENT_BETRAYAL_12, 6s);
                     events.PopEvent();
                     break;
                 case EVENT_BETRAYAL_12:
                     if (Creature* lich = ObjectAccessor::GetCreature(*me, lichGUID))
                         lich->AI()->Talk(SAY_LICH_11);
-                    events.ScheduleEvent(EVENT_BETRAYAL_13, 3000);
+                    events.ScheduleEvent(EVENT_BETRAYAL_13, 3s);
                     events.PopEvent();
                     break;
                 case EVENT_BETRAYAL_13:
@@ -584,7 +584,7 @@ public:
                         lich->AI()->Talk(SAY_LICH_12);
                         lich->GetMotionMaster()->MovePoint(0, 6143.8f, -2011.5f, 590.9f);
                     }
-                    events.ScheduleEvent(EVENT_BETRAYAL_14, 7000);
+                    events.ScheduleEvent(EVENT_BETRAYAL_14, 7s);
                     events.PopEvent();
                     break;
                 case EVENT_BETRAYAL_14:
@@ -848,7 +848,7 @@ public:
                         me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
                         me->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_ONESHOT_NONE);
                         Talk(SAY_RECRUIT);
-                        _events.ScheduleEvent(EVENT_RECRUIT_2, 3000);
+                        _events.ScheduleEvent(EVENT_RECRUIT_2, 3s);
                         break;
                     case EVENT_RECRUIT_2:
                         me->SetWalk(true);
@@ -866,7 +866,7 @@ public:
 
         void sGossipSelect(Player* player, uint32 /*sender*/, uint32 /*action*/)
         {
-            _events.ScheduleEvent(EVENT_RECRUIT_1, 100);
+            _events.ScheduleEvent(EVENT_RECRUIT_1, 100ms);
             CloseGossipMenuFor(player);
             me->CastSpell(player, SPELL_QUEST_CREDIT, true);
             me->SetFacingToObject(player);

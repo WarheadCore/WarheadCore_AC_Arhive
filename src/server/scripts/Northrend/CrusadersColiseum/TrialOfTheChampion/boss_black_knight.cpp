@@ -181,11 +181,11 @@ public:
                     announcer->DespawnOrUnsummon();
 
                 events.Reset();
-                events.ScheduleEvent(EVENT_ANNOUNCER_SAY_ZOMBIE, 2500);
-                events.ScheduleEvent(EVENT_SPELL_PLAGUE_STRIKE, urand(7000,9000));
-                events.ScheduleEvent(EVENT_SPELL_ICY_TOUCH, urand(3500,7000));
-                events.ScheduleEvent(EVENT_SPELL_DEATH_RESPITE, urand(13000,15000));
-                events.ScheduleEvent(EVENT_SPELL_OBLITERATE, urand(11000,19000));
+                events.ScheduleEvent(EVENT_ANNOUNCER_SAY_ZOMBIE, 2500ms);
+                events.ScheduleEvent(EVENT_SPELL_PLAGUE_STRIKE, 7s, 9s);
+                events.ScheduleEvent(EVENT_SPELL_ICY_TOUCH, 3500ms, 7s);
+                events.ScheduleEvent(EVENT_SPELL_DEATH_RESPITE, 13s, 15s);
+                events.ScheduleEvent(EVENT_SPELL_OBLITERATE, 11s, 19s);
             }
         }
 
@@ -213,18 +213,18 @@ public:
                             me->CastSpell(me, SPELL_ARMY_DEAD, false);
 
                             events.Reset();
-                            events.ScheduleEvent(EVENT_SPELL_PLAGUE_STRIKE, urand(7000,9000));
-                            events.ScheduleEvent(EVENT_SPELL_ICY_TOUCH, urand(3500,7000));
-                            events.ScheduleEvent(EVENT_SPELL_OBLITERATE, urand(11000,19000));
-                            events.ScheduleEvent(EVENT_SPELL_DESECRATION, urand(2000,3000));
+                            events.ScheduleEvent(EVENT_SPELL_PLAGUE_STRIKE, 7s, 9s);
+                            events.ScheduleEvent(EVENT_SPELL_ICY_TOUCH, 3500ms, 7s);
+                            events.ScheduleEvent(EVENT_SPELL_OBLITERATE, 11s, 19s);
+                            events.ScheduleEvent(EVENT_SPELL_DESECRATION, 2s, 3s);
                             break;
                         case 3:
                             me->SetDisplayId(MODEL_GHOST);
                             Talk(TEXT_BK_GHOST_RES);
 
                             events.Reset();
-                            events.ScheduleEvent(EVENT_SPELL_DEATH_BITE, 2000);
-                            events.ScheduleEvent(EVENT_SPELL_MARKED_DEATH, 1000);
+                            events.ScheduleEvent(EVENT_SPELL_DEATH_BITE, 2s);
+                            events.ScheduleEvent(EVENT_SPELL_MARKED_DEATH, 1s);
                             break;
                         default:
                             EnterEvadeMode();
@@ -408,9 +408,11 @@ public:
         void EnterCombat(Unit*  /*who*/)
         {
             events.Reset();
+            
             if (me->GetEntry() == NPC_RISEN_JAEREN || me->GetEntry() == NPC_RISEN_ARELAS)
-                events.RescheduleEvent(1, 1000); // leap
-            events.RescheduleEvent(2, urand(3000,4000)); // claw
+                events.RescheduleEvent(1, 1s); // leap
+            
+            events.RescheduleEvent(2, 3s, 4s); // claw
         }
 
         void SpellHit(Unit*  /*caster*/, const SpellInfo* spell)

@@ -100,10 +100,10 @@ public:
             BossAI::EnterCombat(who);
             PullChamberAdds();
             me->SetInCombatWithZone();
-            events.ScheduleEvent(EVENT_SPELL_POISON_CLOUD, 15000);
-            events.ScheduleEvent(EVENT_SPELL_MUTATING_INJECTION, 20000);
-            events.ScheduleEvent(EVENT_SPELL_SLIME_SPRAY, 10000);
-            events.ScheduleEvent(EVENT_SPELL_BERSERK, RAID_MODE(12*MINUTE*IN_MILLISECONDS, 9*MINUTE*IN_MILLISECONDS));
+            events.ScheduleEvent(EVENT_SPELL_POISON_CLOUD, 15s);
+            events.ScheduleEvent(EVENT_SPELL_MUTATING_INJECTION, 20s);
+            events.ScheduleEvent(EVENT_SPELL_SLIME_SPRAY, 10s);
+            events.ScheduleEvent(EVENT_SPELL_BERSERK, RAID_MODE(12min, 9min));
         }
 
         void SpellHitTarget(Unit *target, const SpellInfo* spellInfo) override

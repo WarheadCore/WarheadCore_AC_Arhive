@@ -138,9 +138,9 @@ public:
                     addValue = 1;
 
                 if (wave%6 != 0)
-                    events.RescheduleEvent(RAND(EVENT_SUMMON_KEEPER_OR_GUARDIAN,EVENT_SUMMON_ELITES), 10000);
+                    events.RescheduleEvent(RAND(EVENT_SUMMON_KEEPER_OR_GUARDIAN, EVENT_SUMMON_ELITES), 10s);
                 else
-                    events.RescheduleEvent(EVENT_SUMMON_SABOTEOUR, 3000);
+                    events.RescheduleEvent(EVENT_SUMMON_SABOTEOUR, 3s);
             }
         }
 
@@ -169,7 +169,7 @@ public:
                     if (Creature *c = DoSummon(RAND(NPC_PORTAL_GUARDIAN, NPC_PORTAL_KEEPER), me, 2.0f, 0, TEMPSUMMON_DEAD_DESPAWN))
                         me->CastSpell(c, SPELL_PORTAL_CHANNEL, false);
                     events.PopEvent();
-                    events.RescheduleEvent(EVENT_SUMMON_KEEPER_TRASH, 20000);
+                    events.RescheduleEvent(EVENT_SUMMON_KEEPER_TRASH, 20s);
                     break;
                 case EVENT_SUMMON_KEEPER_TRASH:
                     for (uint8 i=0; i<3+addValue; ++i)
