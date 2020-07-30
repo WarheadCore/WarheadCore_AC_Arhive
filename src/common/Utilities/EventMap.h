@@ -114,20 +114,17 @@ public:
 
     /**
     * @name ScheduleEvent
-    * @brief Creates new event entry in map.
+    * @brief Schedules a new event. An existing event is not canceled.
     * @param eventId The id of the new event.
     * @param time The time until the event occurs as std::chrono type.
     * @param group The group which the event is associated to. Has to be between 1 and 8. 0 means it has no group.
     * @param phase The phase in which the event can occur. Has to be between 1 and 8. 0 means it can occur in all phases.
     */
-    void ScheduleEvent(uint32 eventId, Milliseconds time, uint32 group = 0, uint8 phase = 0)
-    {
-        ScheduleEvent(eventId, uint32(time.count()), group, phase);
-    }
+    void ScheduleEvent(uint32 eventId, Milliseconds time, uint32 group = 0, uint8 phase = 0);
 
     /**
     * @name ScheduleEvent
-    * @brief Creates new event entry in map.
+    * @brief Schedules a new event. An existing event is not canceled.
     * @param eventId The id of the new event.
     * @param minTime The minimum time until the event occurs as std::chrono type.
     * @param maxTime The maximum time until the event occurs as std::chrono type.
@@ -137,16 +134,6 @@ public:
     void ScheduleEvent(uint32 eventId, Milliseconds minTime, Milliseconds maxTime, uint32 group = 0, uint32 phase = 0);
 
     /**
-    * @name ScheduleEvent
-    * @brief Creates new event entry in map.
-    * @param eventId The id of the new event.
-    * @param time The time in milliseconds until the event occurs.
-    * @param group The group which the event is associated to. Has to be between 1 and 8. 0 means it has no group.
-    * @param phase The phase in which the event can occur. Has to be between 1 and 8. 0 means it can occur in all phases.
-    */
-    void ScheduleEvent(uint32 eventId, uint32 time, uint32 group = 0, uint32 phase = 0);
-
-    /**
     * @name RescheduleEvent
     * @brief Cancels the given event and reschedules it.
     * @param eventId The id of the event.
@@ -154,10 +141,7 @@ public:
     * @param group The group which the event is associated to. Has to be between 1 and 8. 0 means it has no group.
     * @param phase The phase in which the event can occur. Has to be between 1 and 8. 0 means it can occur in all phases.
     */
-    void RescheduleEvent(uint32 eventId, Milliseconds time, uint32 group = 0, uint8 phase = 0)
-    {
-        RescheduleEvent(eventId, uint32(time.count()), group, phase);
-    }
+    void RescheduleEvent(uint32 eventId, Milliseconds time, uint32 group = 0, uint8 phase = 0);
 
     /**
     * @name RescheduleEvent
@@ -169,16 +153,6 @@ public:
     * @param phase The phase in which the event can occur. Has to be between 1 and 8. 0 means it can occur in all phases.
     */
     void RescheduleEvent(uint32 eventId, Milliseconds minTime, Milliseconds maxTime, uint32 group = 0, uint32 phase = 0);
-
-    /**
-    * @name RescheduleEvent
-    * @brief Cancels the given event and reschedules it.
-    * @param eventId The id of the event.
-    * @param time The time in milliseconds until the event occurs.
-    * @param group The group which the event is associated to. Has to be between 1 and 8. 0 means it has no group.
-    * @param phase The phase in which the event can occur. Has to be between 1 and 8. 0 means it can occur in all phases.
-    */
-    void RescheduleEvent(uint32 eventId, uint32 time, uint32 groupId = 0, uint32 phase = 0);
 
     /**
     * @name RepeatEvent
