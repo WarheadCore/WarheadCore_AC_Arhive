@@ -605,16 +605,16 @@ public:
                 case EVENT_BETRAYAL_SHADOW_BOLT:
                     if (!me->IsWithinMeleeRange(me->GetVictim()))
                         me->CastSpell(me->GetVictim(), SPELL_SHADOW_BOLT, false);
-                    events.RepeatEvent(2000);
+                    events.RepeatEvent(2s);
                     break;
                 case EVENT_BETRAYAL_CRYSTAL:
                     if (Player* player = ObjectAccessor::GetPlayer(*me, playerGUID))
                         me->CastSpell(player, SPELL_THROW_BRIGHT_CRYSTAL, true);
-                    events.RepeatEvent(urand(6000, 15000));
+                    events.RepeatEvent(6s, 15s);
                     break;
                 case EVENT_BETRAYAL_COMBAT_TALK:
                     Talk(SAY_DRAKURU_4);
-                    events.RepeatEvent(20000);
+                    events.RepeatEvent(20s);
                     break;
             }
 

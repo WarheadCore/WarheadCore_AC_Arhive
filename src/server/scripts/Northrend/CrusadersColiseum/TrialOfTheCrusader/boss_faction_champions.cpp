@@ -341,22 +341,22 @@ public:
                     break;
                 case EVENT_SPELL_TRANQUILITY:
                     me->CastSpell(me, SPELL_TRANQUILITY, false);
-                    events.RepeatEvent(urand(120000,180000));
+                    events.RepeatEvent(2min, 3min);
                     EventMapGCD(events, 1500);
                     break;
                 case EVENT_SPELL_BARKSKIN:
                     if( HealthBelowPct(50) )
                     {
                         me->CastSpell(me, SPELL_BARKSKIN, false);
-                        events.RepeatEvent(60000);
+                        events.RepeatEvent(1min);
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(6000);
+                        events.RepeatEvent(6s);
                     break;
                 case EVENT_SPELL_NATURE_GRASP:
                     me->CastSpell(me, SPELL_NATURE_GRASP, false);
-                    events.RepeatEvent(60000);
+                    events.RepeatEvent(1min);
                     EventMapGCD(events, 1500);
                     break;
             }
@@ -461,13 +461,13 @@ public:
                         me->CastSpell((Unit*)NULL, SPELL_HEROISM, true);
                     else
                         me->CastSpell((Unit*)NULL, SPELL_BLOODLUST, true);
-                    events.RepeatEvent(600000);
+                    events.RepeatEvent(10min);
                     EventMapGCD(events, 1500);
                     break;
                 case EVENT_SPELL_HEX:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 20.0f, true) )
                         me->CastSpell(target, SPELL_HEX, false);
-                    events.RepeatEvent(45000);
+                    events.RepeatEvent(45s);
                     EventMapGCD(events, 1500);
                     break;
                 case EVENT_SPELL_EARTH_SHIELD:
@@ -564,18 +564,18 @@ public:
                 case EVENT_SPELL_HAND_OF_FREEDOM:
                     if( Creature* target = SelectTarget_MostHPLostFriendlyMissingBuff(SPELL_HAND_OF_FREEDOM, 30.0f) )
                         me->CastSpell(target, SPELL_HAND_OF_FREEDOM, false);
-                    events.RepeatEvent(25000);
+                    events.RepeatEvent(25s);
                     EventMapGCD(events, 1500);
                     break;
                 case EVENT_SPELL_BUBBLE:
                     if( HealthBelowPct(25) )
                     {
                         me->CastSpell(me, SPELL_BUBBLE, false);
-                        events.RepeatEvent(300000);
+                        events.RepeatEvent(5min);
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(10000);
+                        events.RepeatEvent(10s);
                     break;
                 case EVENT_SPELL_CLEANSE:
                     if( Creature* target = SelectTarget_MostHPLostFriendlyMissingBuff(SPELL_CLEANSE, 40.0f) )
@@ -605,21 +605,21 @@ public:
                     if( Creature* target = SelectTarget_MostHPLostFriendlyMissingBuff(SPELL_HAND_OF_PROTECTION, 40.0f) )
                     {
                         me->CastSpell(target, SPELL_HAND_OF_PROTECTION, false);
-                        events.RepeatEvent(300000);
+                        events.RepeatEvent(5min);
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(10000);
+                        events.RepeatEvent(10s);
                     break;
                 case EVENT_SPELL_HAMMER_OF_JUSTICE:
                     if( Unit* target = SelectTarget(SELECT_TARGET_NEAREST, 0, 15.0f, true) )
                     {
                         me->CastSpell(target, SPELL_HAMMER_OF_JUSTICE, false);
-                        events.RepeatEvent(40000);
+                        events.RepeatEvent(40s);
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(10000);
+                        events.RepeatEvent(10s);
                     break;
             }
 
@@ -726,17 +726,17 @@ public:
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(6000);
+                        events.RepeatEvent(6s);
                     break;
                 case EVENT_SPELL_PSYCHIC_SCREAM:
                     if( HealthBelowPct(50) && EnemiesInRange(8.0f) >= 3 )
                     {
                         me->CastSpell((Unit*)NULL, SPELL_PSYCHIC_SCREAM, false);
-                        events.RepeatEvent(30000);
+                        events.RepeatEvent(30s);
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(6000);
+                        events.RepeatEvent(6s);
                     break;
             }
 
@@ -821,12 +821,12 @@ public:
                     if( Unit* target = SelectEnemyCaster(false, 30.0f) )
                     {
                         me->CastSpell(target, SPELL_SILENCE, false);
-                        events.RepeatEvent(45000);
+                        events.RepeatEvent(45s);
                         EventMapGCD(events, 1500);
                         break;
                     }
                     else
-                        events.RepeatEvent(6000);
+                        events.RepeatEvent(6s);
                     break;
                 case EVENT_SPELL_VAMPIRIC_TOUCH:
                     if( me->GetVictim() )
@@ -856,21 +856,21 @@ public:
                     if( me->GetVictim() && me->GetExactDist2d(me->GetVictim()) <= 30.0f )
                     {
                         me->CastSpell(me->GetVictim(), SPELL_HORROR, false);
-                        events.RepeatEvent(120000);
+                        events.RepeatEvent(2min);
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(10000);
+                        events.RepeatEvent(10s);
                     break;
                 case EVENT_SPELL_DISPERSION:
                     if( HealthBelowPct(25) )
                     {
                         me->CastSpell(me, SPELL_DISPERSION, false);
-                        events.RepeatEvent(180000);
+                        events.RepeatEvent(3min);
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(6000);
+                        events.RepeatEvent(6s);
                     break;
                 case EVENT_SPELL_DISPEL:
                     if( Unit* target = (urand(0,1) ? SelectTarget(SELECT_TARGET_TOPAGGRO, 0, 30.0f, true) : SelectTarget_MostHPLostFriendlyMissingBuff(SPELL_DISPEL, 40.0f)) )
@@ -882,11 +882,11 @@ public:
                     if( EnemiesInRange(8.0f) >= 3 )
                     {
                         me->CastSpell((Unit*)NULL, SPELL_PSYCHIC_SCREAM, false);
-                        events.RepeatEvent(30000);
+                        events.RepeatEvent(30s);
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(6000);
+                        events.RepeatEvent(6s);
                     break;
             }
 
@@ -985,11 +985,11 @@ public:
                     if( EnemiesInRange(9.0f) >= 3 )
                     {
                         me->CastSpell((Unit*)NULL, SPELL_HELLFIRE, false);
-                        events.RepeatEvent(30000);
+                        events.RepeatEvent(30s);
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(6000);
+                        events.RepeatEvent(6s);
                     break;
                 case EVENT_SPELL_CORRUPTION:
                     if( me->GetVictim() )
@@ -1130,32 +1130,32 @@ public:
                     if( EnemiesInRange(9.0f) >= 3 )
                     {
                         me->CastSpell((Unit*)NULL, SPELL_ARCANE_EXPLOSION, false);
-                        events.RepeatEvent(6000);
+                        events.RepeatEvent(6s);
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(6000);
+                        events.RepeatEvent(6s);
                     break;
                 case EVENT_SPELL_BLINK:
                     if( HealthBelowPct(50) && EnemiesInRange(10.0f) >= 3 )
                     {
                         me->CastSpell((Unit*)NULL, SPELL_FROST_NOVA, false);
-                        events.RepeatEvent(15000);
+                        events.RepeatEvent(15s);
                         EventMapGCD(events, 1500);
                         // blink disabled, fucking movement shit not working
                     }
                     else
-                        events.RepeatEvent(6000);
+                        events.RepeatEvent(6s);
                     break;
                 case EVENT_SPELL_COUNTERSPELL:
                     if( Unit* target = SelectEnemyCaster(true, 30.0f) )
                     {
                         me->CastSpell(target, SPELL_COUNTERSPELL, false);
-                        events.RepeatEvent(24000);
+                        events.RepeatEvent(24s);
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(6000);
+                        events.RepeatEvent(6s);
                     break;
                 case EVENT_SPELL_FROSTBOLT:
                     if( me->GetVictim() )
@@ -1167,16 +1167,16 @@ public:
                     if( HealthBelowPct(25) )
                     {
                         me->CastSpell(me, SPELL_ICE_BLOCK, false);
-                        events.RepeatEvent(300000);
+                        events.RepeatEvent(5min);
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(6000);
+                        events.RepeatEvent(6s);
                     break;
                 case EVENT_SPELL_POLYMORPH:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 30.0f, true) )
                         me->CastSpell(target, SPELL_POLYMORPH, false);
-                    events.RepeatEvent(15000);
+                    events.RepeatEvent(15s);
                     EventMapGCD(events, 1500);
                     break;
             }
@@ -1282,21 +1282,21 @@ public:
                     if( HealthBelowPct(25) )
                     {
                         me->CastSpell(me, SPELL_DETERRENCE, false);
-                        events.RepeatEvent(90000);
+                        events.RepeatEvent(90s);
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(6000);
+                        events.RepeatEvent(6s);
                     break;
                 case EVENT_SPELL_DISENGAGE:
                     if( EnemiesInRange(10.0f) >= 3 )
                     {
                         me->CastSpell(me, SPELL_DISENGAGE, false);
-                        events.RepeatEvent(20000);
+                        events.RepeatEvent(20s);
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(6000);
+                        events.RepeatEvent(6s);
                     break;
                 case EVENT_SPELL_EXPLOSIVE_SHOT:
                     if( me->GetVictim() )
@@ -1306,7 +1306,7 @@ public:
                     break;
                 case EVENT_SPELL_FROST_TRAP:
                     me->CastSpell(me, SPELL_FROST_TRAP, false);
-                    events.RepeatEvent(30000);
+                    events.RepeatEvent(30s);
                     EventMapGCD(events, 1500);
                     break;
                 case EVENT_SPELL_STEADY_SHOT:
@@ -1318,18 +1318,18 @@ public:
                 case EVENT_SPELL_WING_CLIP:
                     if( me->GetVictim() && me->GetDistance2d(me->GetVictim()) <= 5.0f )
                         me->CastSpell(me->GetVictim(), SPELL_WING_CLIP, false);
-                    events.RepeatEvent(8000);
+                    events.RepeatEvent(8s);
                     EventMapGCD(events, 1500);
                     break;
                 case EVENT_SPELL_WYVERN_STING:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 35.0f, true) )
                     {
                         me->CastSpell(target, SPELL_WYVERN_STING, false);
-                        events.RepeatEvent(60000);
+                        events.RepeatEvent(1min);
                         EventMapGCD(events, 1500);
                         break;
                     }
-                    events.RepeatEvent(10000);
+                    events.RepeatEvent(10s);
                     break;
             }
 
@@ -1425,11 +1425,11 @@ public:
                     if( HealthBelowPct(50) )
                     {
                         me->CastSpell(me, SPELL_BARKSKIN, false);
-                        events.RepeatEvent(60000);
+                        events.RepeatEvent(1min);
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(6000);
+                        events.RepeatEvent(6s);
                     break;
                 case EVENT_SPELL_WRATH:
                     if( me->GetVictim() )
@@ -1475,7 +1475,7 @@ public:
                     break;
                 case EVENT_SPELL_FORCE_OF_NATURE:
                     me->CastSpell((Unit*)NULL, SPELL_FORCE_OF_NATURE, false);
-                    events.RepeatEvent(180000);
+                    events.RepeatEvent(3min);
                     EventMapGCD(events, 1500);
                     break;
             }
@@ -1563,63 +1563,63 @@ public:
                 case EVENT_SPELL_BLADESTORM:
                     if( me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISARMED) )
                     {
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                         break;
                     }
                     if( EnemiesInRange(8.0f) >= 3 )
                     {
                         me->CastSpell(me, SPELL_BLADESTORM, false);
-                        events.RepeatEvent(90000);
+                        events.RepeatEvent(90s);
                         events.DelayEvents(9000);
                     }
                     else
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                     break;
                 case EVENT_SPELL_INTIMIDATING_SHOUT:
                     if( EnemiesInRange(8.0f) >= 3 )
                     {
                         me->CastSpell((Unit*)NULL, SPELL_INTIMIDATING_SHOUT, false);
-                        events.RepeatEvent(120000);
+                        events.RepeatEvent(2min);
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                     break;
                 case EVENT_SPELL_MORTAL_STRIKE:
                     if( me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISARMED) )
                     {
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                         break;
                     }
                     if( me->GetVictim() )
                         me->CastSpell(me->GetVictim(), SPELL_MORTAL_STRIKE, false);
-                    events.RepeatEvent(urand(6000,8000));
+                    events.RepeatEvent(6s, 8s);
                     EventMapGCD(events, 1500);
                     break;
                 case EVENT_SPELL_CHARGE:
                     if( me->GetVictim() && me->GetDistance2d(me->GetVictim()) > 8.0f && me->GetDistance2d(me->GetVictim()) < 25.0f )
                     {
                         me->CastSpell(me->GetVictim(), SPELL_CHARGE, false);
-                        events.RepeatEvent(10000);
+                        events.RepeatEvent(10s);
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                     break;
                 case EVENT_SPELL_DISARM:
                     if( me->GetVictim() && me->GetDistance2d(me->GetVictim()) < 5.0f  )
                     {
                         me->CastSpell(me->GetVictim(), SPELL_DISARM, false);
-                        events.RepeatEvent(60000);
+                        events.RepeatEvent(1min);
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                     break;
                 case EVENT_SPELL_OVERPOWER:
                     if( me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISARMED) )
                     {
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                         break;
                     }
                     if( me->GetVictim() && me->GetDistance2d(me->GetVictim()) < 5.0f  )
@@ -1629,12 +1629,12 @@ public:
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                     break;
                 case EVENT_SPELL_SUNDER_ARMOR:
                     if( me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISARMED) )
                     {
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                         break;
                     }
                     if( me->GetVictim() && me->GetDistance2d(me->GetVictim()) < 5.0f  )
@@ -1644,37 +1644,37 @@ public:
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                     break;
                 case EVENT_SPELL_SHATTERING_THROW:
                     if( me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISARMED) )
                     {
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                         break;
                     }
                     if( me->GetVictim() && me->GetDistance2d(me->GetVictim()) < 25.0f  )
                     {
                         me->CastSpell(me->GetVictim(), SPELL_SHATTERING_THROW, false);
-                        events.RepeatEvent(300000);
+                        events.RepeatEvent(5min);
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(6000);
+                        events.RepeatEvent(6s);
                     break;
                 case EVENT_SPELL_RETALIATION:
                     if( me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISARMED) )
                     {
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                         break;
                     }
                     if( EnemiesInRange(8.0f) >= 3 )
                     {
                         me->CastSpell(me, SPELL_RETALIATION, false);
-                        events.RepeatEvent(300000);
+                        events.RepeatEvent(5min);
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                     break;
             }
 
@@ -1760,17 +1760,17 @@ public:
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                     break;
                 case EVENT_SPELL_DEATH_COIL:
                     if( me->GetVictim() && me->GetDistance2d(me->GetVictim()) <= 30.0f )
                     {
                         me->CastSpell(me->GetVictim(), SPELL_DEATH_COIL, false);
-                        events.RepeatEvent(urand(5000,8000));
+                        events.RepeatEvent(5s, 8s);
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                     break;
                 case EVENT_SPELL_DEATH_GRIP:
                     if( me->GetVictim() && me->GetDistance2d(me->GetVictim()) <= 30.0f && me->GetDistance2d(me->GetVictim()) >= 12.0f )
@@ -1781,36 +1781,36 @@ public:
                         me->GetClosePoint(x,y,z,3.0f);
                         pos.Relocate(x, y, z);
                         me->GetVictim()->CastSpell(pos.GetPositionX(), pos.GetPositionY(), pos.GetPositionZ(), 49575, true);
-                        events.RepeatEvent(35000);
+                        events.RepeatEvent(35s);
                         EventMapGCD(events, 2000);
                     }
                     else
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                     break;
                 case EVENT_SPELL_FROST_STRIKE:
                     if( me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISARMED) )
                     {
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                         break;
                     }
                     if( me->GetVictim() && me->GetDistance2d(me->GetVictim()) < 5.0f  )
                     {
                         me->CastSpell(me->GetVictim(), SPELL_FROST_STRIKE, false);
-                        events.RepeatEvent(urand(6000,10000));
+                        events.RepeatEvent(6s, 10s);
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                     break;
                 case EVENT_SPELL_ICEBOUND_FORTITUDE:
                     if( HealthBelowPct(50) )
                     {
                         me->CastSpell(me, SPELL_ICEBOUND_FORTITUDE, false);
-                        events.RepeatEvent(60000);
+                        events.RepeatEvent(1min);
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(6000);
+                        events.RepeatEvent(6s);
                     break;
                 case EVENT_SPELL_ICY_TOUCH:
                     if( me->GetVictim() && me->GetDistance2d(me->GetVictim()) < 20.0f  )
@@ -1820,17 +1820,17 @@ public:
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                     break;
                 case EVENT_SPELL_STRANGULATE:
                     if(SelectEnemyCaster(false, 30.0f))
                     {
                         me->CastSpell(me->GetVictim(), SPELL_STRANGULATE, false);
-                        events.RepeatEvent(120000);
+                        events.RepeatEvent(2min);
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                     break;
             }
 
@@ -1912,45 +1912,45 @@ public:
                 case EVENT_SPELL_FAN_OF_KNIVES:
                     if( me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISARMED) )
                     {
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                         break;
                     }
                     if( EnemiesInRange(10.0f) >= 3 )
                     {
                         me->CastSpell(me->GetVictim(), SPELL_FAN_OF_KNIVES, false);
-                        events.RepeatEvent(urand(6000,10000));
+                        events.RepeatEvent(6s, 10s);
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                     break;
                 case EVENT_SPELL_BLIND:
                     if( Unit* target = SelectTarget(SELECT_TARGET_BOTTOMAGGRO, 0, 20.0f, true) )
                     {
                         me->CastSpell(target, SPELL_BLIND, false);
-                        events.RepeatEvent(120000);
+                        events.RepeatEvent(2min);
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                     break;
                 case EVENT_SPELL_CLOAK:
                     if( HealthBelowPct(50) )
                     {
                         me->CastSpell(me, SPELL_CLOAK, false);
-                        events.RepeatEvent(90000);
+                        events.RepeatEvent(90s);
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(6000);
+                        events.RepeatEvent(6s);
                     break;
                 case EVENT_SPELL_BLADE_FLURRY:
                     if( me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISARMED) )
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                     else
                     {
                         me->CastSpell(me, SPELL_BLADE_FLURRY, false);
-                        events.RepeatEvent(120000);
+                        events.RepeatEvent(2min);
                         EventMapGCD(events, 1500);
                     }
                     break;
@@ -1958,31 +1958,31 @@ public:
                     if( me->GetVictim() && me->GetDistance2d(me->GetVictim()) < 40.0f && me->GetDistance2d(me->GetVictim()) > 10.0f )
                     {
                         me->CastSpell(me->GetVictim(), SPELL_SHADOWSTEP, false);
-                        events.RepeatEvent(30000);
+                        events.RepeatEvent(30s);
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                     break;
                 case EVENT_SPELL_HEMORRHAGE:
                     if( me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISARMED) )
                     {
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                         break;
                     }
                     if( me->GetVictim() && me->GetDistance2d(me->GetVictim()) <= 5.0f )
                     {
                         me->CastSpell(me->GetVictim(), SPELL_HEMORRHAGE, false);
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                     break;
                 case EVENT_SPELL_EVISCERATE:
                     if( me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISARMED) )
                     {
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                         break;
                     }
                     if( me->GetVictim() && me->GetDistance2d(me->GetVictim()) <= 5.0f )
@@ -1992,7 +1992,7 @@ public:
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                     break;
             }
 
@@ -2071,59 +2071,59 @@ public:
                 case EVENT_SPELL_EARTH_SHOCK_ENH:
                     if( me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SILENCED) )
                     {
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                         break;
                     }
                     if( Unit* target = SelectTarget(SELECT_TARGET_TOPAGGRO, 0, 25.0f, true) )
                     {
                         me->CastSpell(target, SPELL_EARTH_SHOCK_ENH, false);
-                        events.RepeatEvent(urand(6000,8000));
+                        events.RepeatEvent(6s, 8s);
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                     break;
                 case EVENT_SPELL_LAVA_LASH:
                     if( me->HasFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_DISARM_OFFHAND) )
                     {
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                         break;
                     }
                     if( Unit* target = SelectTarget(SELECT_TARGET_TOPAGGRO, 0, 5.0f, true) )
                     {
                         me->CastSpell(target, SPELL_LAVA_LASH, false);
-                        events.RepeatEvent(urand(6000,8000));
+                        events.RepeatEvent(6s, 8s);
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                     break;
                 case EVENT_SPELL_STORMSTRIKE:
                     if( me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISARMED) && me->HasFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_DISARM_OFFHAND) )
                     {
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                         break;
                     }
                     if( Unit* target = SelectTarget(SELECT_TARGET_TOPAGGRO, 0, 5.0f, true) )
                     {
                         me->CastSpell(target, SPELL_STORMSTRIKE, false);
-                        events.RepeatEvent(urand(8000,9000));
+                        events.RepeatEvent(8s, 9s);
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                     break;
                 case EVENT_SPELL_HEROISM_OR_BLOODLUST:
                     if( me->GetEntry() == NPC_ALLIANCE_SHAMAN_RESTORATION )
                         me->CastSpell((Unit*)NULL, SPELL_HEROISM, true);
                     else
                         me->CastSpell((Unit*)NULL, SPELL_BLOODLUST, true);
-                    events.RepeatEvent(600000);
+                    events.RepeatEvent(10min);
                     EventMapGCD(events, 1500);
                     break;
                 case EVENT_SUMMON_TOTEM:
                     me->CastSpell((Unit*)NULL, RAND(SPELL_GROUNDING_TOTEM,SPELL_WINDFURY_TOTEM,SPELL_TREMOR_TOTEM), false);
-                    events.RepeatEvent(30000);
+                    events.RepeatEvent(30s);
                     EventMapGCD(events, 1500);
                     break;
 
@@ -2209,38 +2209,38 @@ public:
                     break;
                 case EVENT_SPELL_AVENGING_WRATH:
                     me->CastSpell(me, SPELL_AVENGING_WRATH, false);
-                    events.RepeatEvent(180000);
+                    events.RepeatEvent(3min);
                     EventMapGCD(events, 1500);
                     break;
                 case EVENT_SPELL_CRUSADER_STRIKE:
                     if( me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISARMED) )
                     {
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                         break;
                     }
                     if( Unit* target = SelectTarget(SELECT_TARGET_TOPAGGRO, 0, 5.0f, true) )
                     {
                         me->CastSpell(target, SPELL_CRUSADER_STRIKE, false);
-                        events.RepeatEvent(urand(6000,8000));
+                        events.RepeatEvent(6s, 8s);
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                     break;
                 case EVENT_SPELL_DIVINE_SHIELD:
                     if( HealthBelowPct(25) )
                     {
                         me->CastSpell(me, SPELL_DIVINE_SHIELD, false);
-                        events.RepeatEvent(300000);
+                        events.RepeatEvent(5min);
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                     break;
                 case EVENT_SPELL_DIVINE_STORM:
                     if( me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISARMED) )
                     {
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                         break;
                     }
                     if( EnemiesInRange(5.0f) >= 3 )
@@ -2250,27 +2250,27 @@ public:
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                     break;
                 case EVENT_SPELL_HAMMER_OF_JUSTICE_RET:
                     if( Unit* target = SelectTarget(SELECT_TARGET_TOPAGGRO, 0, 15.0f, true) )
                     {
                         me->CastSpell(target, SPELL_HAMMER_OF_JUSTICE_RET, false);
-                        events.RepeatEvent(40000);
+                        events.RepeatEvent(40s);
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                     break;
                 case EVENT_SPELL_HAND_OF_PROTECTION_RET:
                     if( Creature* target = SelectTarget_MostHPLostFriendlyMissingBuff(SPELL_HAND_OF_PROTECTION_RET, 30.0f) )
                     {
                         me->CastSpell(target, SPELL_HAND_OF_PROTECTION_RET, false);
-                        events.RepeatEvent(300000);
+                        events.RepeatEvent(5min);
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                     break;
                 case EVENT_SPELL_JUDGEMENT_OF_COMMAND:
                     if( Unit* target = SelectTarget(SELECT_TARGET_TOPAGGRO, 0, 20.0f, true) )
@@ -2280,17 +2280,17 @@ public:
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                     break;
                 case EVENT_SPELL_REPENTANCE:
                     if( Unit* target = SelectTarget(SELECT_TARGET_BOTTOMAGGRO, 0, 20.0f, true) )
                     {
                         me->CastSpell(target, SPELL_REPENTANCE, false);
-                        events.RepeatEvent(60000);
+                        events.RepeatEvent(1min);
                         EventMapGCD(events, 1500);
                     }
                     else
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                     break;
             }
 
@@ -2355,13 +2355,13 @@ public:
                 case EVENT_SPELL_DEVOUR_MAGIC:
                     if( me->GetVictim() )
                         me->CastSpell(me->GetVictim(), SPELL_DEVOUR_MAGIC, false);
-                    events.RepeatEvent(urand(8000,15000));
+                    events.RepeatEvent(8s, 15s);
                     EventMapGCD(events, 1500);
                     break;
                 case EVENT_SPELL_SPELL_LOCK:
                     if( me->GetVictim() )
                         me->CastSpell(me->GetVictim(), SPELL_SPELL_LOCK, false);
-                    events.RepeatEvent(24000);
+                    events.RepeatEvent(24s);
                     EventMapGCD(events, 1500);
                     break;
             }
@@ -2430,7 +2430,7 @@ public:
                 case EVENT_SPELL_CLAW:
                     if( me->GetVictim() )
                         me->CastSpell(me->GetVictim(), SPELL_CLAW, false);
-                    events.RepeatEvent(urand(8000,15000));
+                    events.RepeatEvent(8s, 15s);
                     break;
             }
 

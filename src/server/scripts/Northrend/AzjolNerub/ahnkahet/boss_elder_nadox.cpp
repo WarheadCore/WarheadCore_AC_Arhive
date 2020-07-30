@@ -178,7 +178,7 @@ public:
             {
                 case EVENT_CHECK_HEALTH:
                 {
-                    events.RepeatEvent(1000);
+                    events.RepeatEvent(1s);
                     if (HealthBelowPct(50))
                     {
                         events.CancelEvent(EVENT_CHECK_HEALTH);
@@ -198,19 +198,19 @@ public:
                     if (Creature *pSwarmer = me->FindNearestCreature(NPC_AHNKAHAR_SWARMER, 40, true))
                         me->CastSpell(pSwarmer, SPELL_BROOD_RAGE_H, true);
                     
-                    events.RepeatEvent(10000);
+                    events.RepeatEvent(10s);
                     break;
                 }
                 case EVENT_PLAGUE:
                 {
                     me->CastSpell(me->GetVictim(), DUNGEON_MODE(SPELL_BROOD_PLAGUE, SPELL_BROOD_PLAGUE_H), false);
-                    events.RepeatEvent(12000+rand()%5000);
+                    events.RepeatEvent(12s, 17s);
                     break;
                 }
                 case EVENT_SWARMER:
                 {
                     SummonHelpers(true);
-                    events.RepeatEvent(10000);
+                    events.RepeatEvent(10s);
                     break;
                 }
                 case EVENT_CHECK_HOME:
@@ -225,7 +225,7 @@ public:
                         break;
                     }
 
-                    events.RepeatEvent(2000);
+                    events.RepeatEvent(2s);
                     break;
                 }
             }

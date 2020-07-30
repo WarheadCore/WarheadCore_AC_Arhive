@@ -431,7 +431,7 @@ public:
                     }
 
                     events.RescheduleEvent(EVENT_KADDRAK_SWITCH_EYE, 1500ms);
-                    events.RepeatEvent(2000+urand(0,2000));
+                    events.RepeatEvent(2s, 4s);
                     break;
                 }
                 case EVENT_KADDRAK_SWITCH_EYE:
@@ -463,7 +463,7 @@ public:
                             }
                         }
                     }
-                    events.RepeatEvent(20000);
+                    events.RepeatEvent(20s);
                     break;
                 }
                 case EVENT_ABEDNEUM_HEAD: // Third
@@ -481,12 +481,12 @@ public:
                             cr->CastSpell(cr, DUNGEON_MODE(SPELL_SEARING_GAZE, SPELL_SEARING_GAZE_H), true);
                         }
                     }
-                    events.RepeatEvent(30000);
+                    events.RepeatEvent(30s);
                     break;
                 }
                 case EVENT_SUMMON_MONSTERS:
                 {
-                    uint32 Time = 45000 - (2500*WaveNum);
+                    Milliseconds _time = 45s - (2500ms * WaveNum);
                     SummonCreatures(NPC_DARK_RUNE_PROTECTOR, 3);
                     if (WaveNum > 2)
                         SummonCreatures(NPC_DARK_RUNE_STORMCALLER, 2);
@@ -494,7 +494,7 @@ public:
                         SummonCreatures(NPC_IRON_GOLEM_CUSTODIAN, 1);
 
                     WaveNum++;
-                    events.RepeatEvent(Time);
+                    events.RepeatEvent(_time);
                     break;
                 }
                 case EVENT_TRIBUNAL_END:
@@ -738,13 +738,13 @@ public:
                     if (Unit *tgt = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         me->CastSpell(tgt, SPELL_DRP_CHARGE, false);
 
-                    events.RepeatEvent(10000);
+                    events.RepeatEvent(10s);
                     break;
                 }
                 case EVENT_DRP_CLEAVE:
                 {
                     me->CastSpell(me->GetVictim(), SPELL_DRP_CLEAVE, false);
-                    events.RepeatEvent(7000);
+                    events.RepeatEvent(7s);
                     break;
                 }
             }
@@ -794,13 +794,13 @@ public:
                 case EVENT_DRS_LIGHTNING_BOLD:
                 {
                     me->CastSpell(me->GetVictim(), IsHeroic() ? SPELL_DRS_LIGHTING_BOLT_H : SPELL_DRS_LIGHTING_BOLT, false);
-                    events.RepeatEvent(5000);
+                    events.RepeatEvent(5s);
                     break;
                 }
                 case EVENT_DRS_SHADOW_WORD_PAIN:
                 {
                     me->CastSpell(me->GetVictim(), IsHeroic() ? SPELL_DRS_SHADOW_WORD_PAIN_H : SPELL_DRS_SHADOW_WORD_PAIN, false);
-                    events.RepeatEvent(12000);
+                    events.RepeatEvent(12s);
                     break;
                 }
             }
@@ -848,13 +848,13 @@ public:
                 case EVENT_IGC_CRUSH:
                 {
                     me->CastSpell(me->GetVictim(), SPELL_IGC_CRUSH_ARMOR, false);
-                    events.RepeatEvent(6000);
+                    events.RepeatEvent(6s);
                     break;
                 }
                 case EVENT_IGC_GROUND_SMASH:
                 {
                     me->CastSpell(me->GetVictim(), IsHeroic() ? SPELL_IGC_GROUND_SMASH_H : SPELL_IGC_GROUND_SMASH, false);
-                    events.RepeatEvent(5000);
+                    events.RepeatEvent(5s);
                     break;
                 }
             }

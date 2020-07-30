@@ -215,7 +215,7 @@ public:
                         Talk(SAY_INCINERATE);
                         me->CastSpell(target, SPELL_INCINERATE_FLESH, false);
                     }
-                    events.RepeatEvent(urand(20000,25000));
+                    events.RepeatEvent(20s, 25s);
                     break;
                 case EVENT_SPELL_NETHER_POWER:
                     me->CastSpell(me, SPELL_NETHER_POWER, false);
@@ -228,7 +228,7 @@ public:
                         Talk(EMOTE_LEGION_FLAME, target);
                         me->CastSpell(target, SPELL_LEGION_FLAME, false);
                     }
-                    events.RepeatEvent(30000);
+                    events.RepeatEvent(30s);
                     break;
                 case EVENT_SPELL_TOUCH_OF_JARAXXUS:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true) )
@@ -333,10 +333,10 @@ public:
                         me->AddThreat(target, 50000.0f);
                         me->CastSpell(target, SPELL_FEL_STEAK_MORPH, true);
                         me->CastSpell(target, SPELL_FEL_STEAK, true);
-                        events.RepeatEvent(30000);
+                        events.RepeatEvent(30s);
                     }
                     else
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                     break;
             }
 
@@ -411,16 +411,16 @@ public:
                 case EVENT_SPELL_SHIVAN_SLASH:
                     if( me->GetVictim() )
                         me->CastSpell(me->GetVictim(), SPELL_SHIVAN_SLASH, false);
-                    events.RepeatEvent(urand(15000,25000));
+                    events.RepeatEvent(15s, 25s);
                     break;
                 case EVENT_SPELL_SPINNING_PAIN_SPIKE:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 140.0f, true) )
                         me->CastSpell(target, SPELL_SPINNING_PAIN_SPIKE, false);
-                    events.RepeatEvent(urand(25000,30000));
+                    events.RepeatEvent(25s, 30s);
                     break;
                 case EVENT_SPELL_MISTRESS_KISS:
                     me->CastSpell((Unit*)NULL, SPELL_MISTRESS_KISS, false);
-                    events.RepeatEvent(urand(25000,35000));
+                    events.RepeatEvent(25s, 35s);
                     break;
             }
 

@@ -249,11 +249,11 @@ class boss_kelidan_the_breaker : public CreatureScript
                 {
                     case EVENT_SPELL_VOLLEY:
                         me->CastSpell(me, SPELL_SHADOW_BOLT_VOLLEY, false);
-                        events.RepeatEvent(urand(8000, 13000));
+                        events.RepeatEvent(8s, 13s);
                         break;
                     case EVENT_SPELL_CORRUPTION:
                         me->CastSpell(me, SPELL_CORRUPTION, false);
-                        events.RepeatEvent(urand(30000, 50000));
+                        events.RepeatEvent(30s, 50s);
                         break;
                     case EVENT_SPELL_BURNING_NOVA:
                         Talk(SAY_NOVA);
@@ -266,7 +266,7 @@ class boss_kelidan_the_breaker : public CreatureScript
                             DoTeleportAll(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation());
 
                         events.DelayEvents(6000, 0);
-                        events.RepeatEvent(urand(25000, 32000));
+                        events.RepeatEvent(25s, 32s);
                         events.ScheduleEvent(EVENT_SPELL_FIRE_NOVA, 5s);
                         break;
                     case EVENT_SPELL_FIRE_NOVA:
@@ -338,12 +338,12 @@ class npc_shadowmoon_channeler : public CreatureScript
                 {
                     case EVENT_SPELL_SHADOW_BOLT:
                         me->CastSpell(me->GetVictim(), IsHeroic() ? SPELL_SHADOW_BOLT_H : SPELL_SHADOW_BOLT, false);
-                        events.RepeatEvent(urand(6000, 7500));
+                        events.RepeatEvent(6s, 7500ms);
                         break;
                     case EVENT_SPELL_MARK:
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             me->CastSpell(target, SPELL_MARK_OF_SHADOW, false);
-                        events.RepeatEvent(urand(16000, 17500));
+                        events.RepeatEvent(16s, 17500ms);
                         break;
                 }
 

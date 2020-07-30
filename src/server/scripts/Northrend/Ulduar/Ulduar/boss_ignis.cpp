@@ -364,7 +364,7 @@ public:
                         events.PopEvent();
                         break;
                     }
-                    events.RepeatEvent(RAID_MODE(40000,30000));
+                    events.RepeatEvent(RAID_MODE(40s, 30s));
                     break;
                 case EVENT_SPELL_SCORCH:
                     if( rand()%2 )
@@ -381,7 +381,7 @@ public:
                     me->DisableRotate(true);
                     me->SendMovementFlagUpdate();
                     me->CastSpell(me->GetVictim(), S_SCORCH, false);
-                    events.RepeatEvent(20000);
+                    events.RepeatEvent(20s);
                     events.RescheduleEvent(EVENT_ENABLE_ROTATE, 3001ms);
                     break;
                 case EVENT_ENABLE_ROTATE:
@@ -392,7 +392,7 @@ public:
                 case EVENT_SPELL_FLAME_JETS:
                     me->MonsterTextEmote(TEXT_FLAME_JETS, 0, true);
                     me->CastSpell(me->GetVictim(), S_FLAME_JETS, false);
-                    events.RepeatEvent(25000);
+                    events.RepeatEvent(25s);
                     break;
                 case EVENT_GRAB:
                     {
@@ -433,7 +433,7 @@ public:
                             }
                         }
 
-                        events.RepeatEvent(24000); // +6000 below
+                        events.RepeatEvent(24s); // +6000 below
                         events.DelayEvents(6000);
                     }
                     break;

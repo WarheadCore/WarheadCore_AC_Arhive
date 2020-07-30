@@ -96,16 +96,16 @@ public:
                     break;
                 case EVENT_SPELL_CORROSIVE_SALIVA:
                     me->CastSpell(me->GetVictim(), SPELL_CORROSIVE_SALIVA, false);
-                    events.RepeatEvent(urand(8000,10000));
+                    events.RepeatEvent(8s, 10s);
                     break;
                 case EVENT_SPELL_OPTIC_LINK:
                     if (Unit* target = SelectTarget(SELECT_TARGET_FARTHEST, 0, 40.0f, true))
                     {
                         me->CastSpell(target, SPELL_OPTIC_LINK, false);
-                        events.RepeatEvent(urand(18000,21000));
+                        events.RepeatEvent(18s, 21s);
                     }
                     else
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                     break;
             }
 

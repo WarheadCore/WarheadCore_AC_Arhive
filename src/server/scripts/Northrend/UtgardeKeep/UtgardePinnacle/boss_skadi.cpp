@@ -223,7 +223,7 @@ public:
                 case EVENT_SKADI_CRUSH:
                 {
                     me->CastSpell(me->GetVictim(), IsHeroic() ? SPELL_CRUSH_H : SPELL_CRUSH_N, false);
-                    events.RepeatEvent(8000);
+                    events.RepeatEvent(8s);
                     break;
                 }
                 case EVENT_SKADI_SPEAR:
@@ -231,13 +231,13 @@ public:
                     if (Unit *tgt = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         me->CastSpell(tgt, IsHeroic() ? SPELL_POISONED_SPEAR_H : SPELL_POISONED_SPEAR_N, false);
 
-                    events.RepeatEvent(10000);
+                    events.RepeatEvent(10s);
                     break;
                 }
                 case EVENT_SKADI_WHIRLWIND:
                 {
                     me->CastSpell(me, IsHeroic() ? SPELL_WHIRLWIND_H : SPELL_WHIRLWIND_N, false);
-                    events.RepeatEvent(15000 + rand()%5000);
+                    events.RepeatEvent(15s, 20s);
                     events.DelayEvents(10000);
                     break;
                 }
@@ -448,7 +448,7 @@ public:
                 case EVENT_GRAUF_CHECK:
                 {
                     CheckPlayers();
-                    events.RepeatEvent(2000);
+                    events.RepeatEvent(2s);
                     break;
                 }
                 case EVENT_GRAUF_START:
@@ -478,13 +478,13 @@ public:
                         m_pInstance->SetData(SKADI_IN_RANGE, 0);
 
                     currentPos = targetPoint;
-                    events.RepeatEvent(25000);
+                    events.RepeatEvent(25s);
                     break;
                 }
                 case EVENT_GRAUF_SUMMON_HELPERS:
                 {
                     SpawnHelpers(1);
-                    events.RepeatEvent(15000);
+                    events.RepeatEvent(15s);
                     break;
                 }
                 case EVENT_GRAUF_REMOVE_SKADI:

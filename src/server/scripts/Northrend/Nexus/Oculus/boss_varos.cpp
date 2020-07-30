@@ -175,7 +175,7 @@ public:
                     {
                         if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true) )
                             me->CastSpell(target, SPELL_AMPLIFY_MAGIC, false);
-                        events.RepeatEvent(urand(17500, 22500));
+                        events.RepeatEvent(17500ms, 22500ms);
                     }
                     break;
                 case EVENT_CALL_AZURE_RING_CAPTAIN_1:

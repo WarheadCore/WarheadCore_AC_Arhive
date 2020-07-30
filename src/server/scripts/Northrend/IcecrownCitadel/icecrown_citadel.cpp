@@ -1700,7 +1700,7 @@ class npc_frostwing_vrykul : public CreatureScript
                         break;
                     case 1: // Ice Trap
                         me->CastSpell((Unit*)NULL, 71249, false);
-                        events.RepeatEvent(urand(35000, 40000));
+                        events.RepeatEvent(35s, 40s);
                         break;
                     case 2: // Rapid Shot
                         me->CastSpell(me->GetVictim(), 71251, false);
@@ -1712,10 +1712,10 @@ class npc_frostwing_vrykul : public CreatureScript
                             if (target && me->GetDistance(target) > 10.0f)
                             {
                                 me->CastSpell(target, 71252, false);
-                                events.RepeatEvent(urand(25000, 35000));
+                                events.RepeatEvent(25s, 35s);
                             }
                             else
-                                events.RepeatEvent(2500);
+                                events.RepeatEvent(2500ms);
                         }
                         break;
                     case 4: // Summon Warhawk
@@ -1724,15 +1724,15 @@ class npc_frostwing_vrykul : public CreatureScript
                         break;
                     case 11: // Whirlwind
                         me->CastSpell(me->GetVictim(), 41056, false);
-                        events.RepeatEvent(6000);
+                        events.RepeatEvent(6s);
                         break;
                     case 21: // Barbaric Strike
                         me->CastSpell(me->GetVictim(), 71257, false);
-                        events.RepeatEvent(3000);
+                        events.RepeatEvent(3s);
                         break;
                     case 22: // Adrenaline Rush
                         me->CastSpell(me, 71258, false);
-                        events.RepeatEvent(urand(15000, 25000));
+                        events.RepeatEvent(15s, 25s);
                         break;
                     case 31: // Arctic Chill
                         me->CastSpell(me, 71270, true);
@@ -1741,11 +1741,11 @@ class npc_frostwing_vrykul : public CreatureScript
                     case 32: // Frozen Orb
                         if (Unit* target = SelectTarget(SELECT_TARGET_FARTHEST, 0, 30.0f, true))
                             me->CastSpell(target, 71274, false);
-                        events.RepeatEvent(urand(40000, 50000));
+                        events.RepeatEvent(40s, 50s);
                         break;
                     case 33: // Twisted Winds
                         me->CastSpell((Unit*)NULL, 71306, false);
-                        events.RepeatEvent(urand(35000, 50000));
+                        events.RepeatEvent(35, 50s);
                         break;
                     case 41: // Empowered Shadow Bolt
                         me->CastSpell(me->GetVictim(), 69528, false);
@@ -1753,7 +1753,7 @@ class npc_frostwing_vrykul : public CreatureScript
                         break;
                     case 42: // Summon Undead
                         me->CastSpell(me->GetVictim(), 69516, false);
-                        events.RepeatEvent(45000);
+                        events.RepeatEvent(45s);
                         break;
                     default:
                         events.PopEvent();
@@ -2597,21 +2597,21 @@ public:
                 case 1:
                     if (Unit* target = DoSelectLowestHpFriendly(35.0f, 5000))
                         me->CastSpell(target, 69899, false);
-                    events.RepeatEvent(urand(10000,20000));
+                    events.RepeatEvent(10s, 20s);
                     break;
                 case 2:
                     if (Unit* target = DoSelectLowestHpFriendly(35.0f, 5000))
                         me->CastSpell(target, 69882, false);
-                    events.RepeatEvent(urand(10000,20000));
+                    events.RepeatEvent(10s, 20s);
                     break;
                 case 3:
                     if (Unit* target = DoSelectLowestHpFriendly(35.0f, 5000))
                         me->CastSpell(target, 69898, false);
-                    events.RepeatEvent(urand(10000,20000));
+                    events.RepeatEvent(10s, 20s);
                     break;
                 case 4:
                     me->CastSpell(me->GetVictim(), 69968, false);
-                    events.RepeatEvent(urand(2000,3000));
+                    events.RepeatEvent(2s, 3s);
                     break;
             }
 
@@ -2665,7 +2665,7 @@ public:
                     break;
                 case 2:
                     me->CastSpell(me->GetVictim(), 69975, false);
-                    events.RepeatEvent(urand(10000,15000));
+                    events.RepeatEvent(10s, 15s);
                     break;
             }
 
@@ -2717,16 +2717,16 @@ public:
                 case 1:
                     if (Unit* target = DoSelectLowestHpFriendly(35.0f, 5000))
                         me->CastSpell(target, 69963, false);
-                    events.RepeatEvent(urand(10000,20000));
+                    events.RepeatEvent(10s, 20s);
                     break;
                 case 2:
                     if (Unit* target = DoSelectLowestHpFriendly(35.0f, 5000))
                         me->CastSpell(target, 69910, false);
-                    events.RepeatEvent(urand(10000,20000));
+                    events.RepeatEvent(10s, 20s);
                     break;
                 case 3:
                     me->CastSpell(me->GetVictim(), 69967, false);
-                    events.RepeatEvent(urand(2000,3000));
+                    events.RepeatEvent(2s, 3s);
                     break;
             }
 
@@ -2779,21 +2779,21 @@ public:
                 case 1:
                     if (Unit* target = DoSelectLowestHpFriendly(35.0f, 5000))
                         me->CastSpell(target, 69923, false);
-                    events.RepeatEvent(urand(10000,20000));
+                    events.RepeatEvent(10s, 20s);
                     break;
                 case 2:
                     if (Unit* target = DoSelectLowestHpFriendly(35.0f, 5000))
                         me->CastSpell(target, 69926, false);
-                    events.RepeatEvent(urand(20000,30000));
+                    events.RepeatEvent(20s, 30s);
                     break;
                 case 3:
                     if (Unit* target = DoSelectLowestHpFriendly(35.0f, 5000))
                         me->CastSpell(target, 69958, false);
-                    events.RepeatEvent(urand(10000,20000));
+                    events.RepeatEvent(10s, 20s);
                     break;
                 case 4:
                     me->CastSpell(me->GetVictim(), 69970, false);
-                    events.RepeatEvent(urand(3000,4000));
+                    events.RepeatEvent(3s, 4s);
                     break;
             }
 
@@ -2905,7 +2905,7 @@ public:
                                 casted = true;
                                 me->CastSpell(target, 71906, true); // Severed Essence
                             }
-                        events.RepeatEvent(casted ? 25000 : 5000);
+                        events.RepeatEvent(casted ? 25s : 5s);
                     }
                     break;
             }
@@ -2956,7 +2956,7 @@ SeveredEssenceSpellInfo sesi_spells[] =
     {CLASS_WARRIOR, 71552, 5s, 1, 0.0f},
     {CLASS_HUNTER, 36984, 7s, 1, 0.0f},
     {CLASS_HUNTER, 29576, 5s, 1, 0.0f},
-    {0, 0, 0, 0, 0.0f},
+    {0, 0, 0s, 0, 0.0f},
 };
 
 class npc_icc_severed_essence : public CreatureScript
@@ -3118,11 +3118,11 @@ public:
                 case 1:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40.0f, true))
                         me->CastSpell(target, 70362, false);
-                    events.RepeatEvent(urand(25000, 35000));
+                    events.RepeatEvent(25s, 35s);
                     break;
                 case 2:
                     me->CastSpell(me->GetVictim(), 70361, false);
-                    events.RepeatEvent(5000);
+                    events.RepeatEvent(5s);
                     break;
                 case 3:
                     me->CastSpell(me->GetVictim(), 70116, false);
@@ -3271,7 +3271,7 @@ public:
                         events.RepeatEvent(15s, 20s);
                     }
                     else
-                        events.RepeatEvent(3000);
+                        events.RepeatEvent(3s);
                     break;
             }
 
@@ -3409,16 +3409,16 @@ public:
                     break;
                 case 1:
                     me->CastSpell(me->GetVictim(), 70965, false);
-                    events.RepeatEvent(urand(20000, 30000));
+                    events.RepeatEvent(20s, 30s);
                     break;
                 case 2:
                     me->CastSpell(me->GetVictim(), 71020, false);
-                    events.RepeatEvent(urand(20000, 30000));
+                    events.RepeatEvent(20s, 30s);
                     break;
                 case 3:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40.0f, true))
                         me->CastSpell(target, 70980, false);
-                    events.RepeatEvent(urand(20000, 30000));
+                    events.RepeatEvent(20s, 30s);
                     break;
             }
 

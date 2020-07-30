@@ -290,19 +290,19 @@ public:
             {
                 case SPELL_TIME_SHIFT:
                     me->CastSpell(me, SPELL_TIME_SHIFT, false);
-                    events.RepeatEvent(18000);
+                    events.RepeatEvent(18s);
                     break;
                 case SPELL_TIME_LAPSE:
                     me->CastSpell(me->GetVictim(), SPELL_TIME_LAPSE, false);
-                    events.RepeatEvent(12000);
+                    events.RepeatEvent(12s);
                     break;
                 case SPELL_FROST_BREATH:
                     me->CastSpell(me->GetVictim(), SPELL_FROST_BREATH, false);
-                    events.RepeatEvent(12000);
+                    events.RepeatEvent(12s);
                     break;
                 case SPELL_FROST_CLEAVE:
                     me->CastSpell(me->GetVictim(), SPELL_FROST_CLEAVE, false);
-                    events.RepeatEvent(8000);
+                    events.RepeatEvent(8s);
                     break;
             }
 

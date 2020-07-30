@@ -344,18 +344,18 @@ public:
             {
                 case EVENT_FUSION_PUNCH:
                     me->CastSpell(me->GetVictim(), SPELL_FUSION_PUNCH, false);
-                    events.RepeatEvent(urand(15000,20000));
+                    events.RepeatEvent(15s, 20s);
                     break;
                 case EVENT_STATIC_DISRUPTION:
                     if (Unit *pTarget = SelectTarget(SELECT_TARGET_FARTHEST, 0, 0, true))
                         me->CastSpell(pTarget, SPELL_STATIC_DISRUPTION, false);
 
-                    events.RepeatEvent(urand(20000,40000));
+                    events.RepeatEvent(20s, 40s);
                     break;
                 case EVENT_OVERWHELMING_POWER:
                     Talk(SAY_STEELBREAKER_POWER);
                     me->CastSpell(me->GetVictim(), SPELL_OVERWHELMING_POWER, true);
-                    events.RepeatEvent(RAID_MODE(61000, 36000));
+                    events.RepeatEvent(RAID_MODE(61s, 36s));
                     break;
                 case EVENT_ENRAGE:
                     Talk(SAY_STEELBREAKER_BERSERK);
@@ -519,7 +519,7 @@ public:
                         target = me;
 
                     me->CastSpell(target, SPELL_RUNE_OF_POWER, true);
-                    events.RepeatEvent(60000);
+                    events.RepeatEvent(1min);
                     break;
                 }
                 case EVENT_SHIELD_OF_RUNES:
@@ -531,13 +531,13 @@ public:
                         me->CastSpell(target, SPELL_RUNE_OF_DEATH, true);
 
                     Talk(SAY_MOLGEIM_RUNE_DEATH);
-                    events.RepeatEvent(urand(30000,40000));
+                    events.RepeatEvent(30s, 40s);
                     break;
                 case EVENT_RUNE_OF_SUMMONING:
                     Talk(SAY_MOLGEIM_SUMMON);
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         me->CastSpell(target,SPELL_RUNE_OF_SUMMONING);
-                    events.RepeatEvent(urand(30000,45000));
+                    events.RepeatEvent(30s, 45s);
                     break;
                 case EVENT_ENRAGE:
                     me->CastSpell(me, SPELL_BERSERK, true);
@@ -781,7 +781,7 @@ public:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         me->CastSpell(target, SPELL_CHAIN_LIGHTNING, false);
 
-                    events.RepeatEvent(urand(9000,17000));
+                    events.RepeatEvent(9s, 17s);
                     break;
                 case EVENT_IMMUNE:
                     me->ApplySpellImmune(1, IMMUNITY_EFFECT, SPELL_EFFECT_INTERRUPT_CAST, false);
@@ -797,12 +797,12 @@ public:
                 case EVENT_LIGHTNING_WHIRL:
                     Talk(SAY_BRUNDIR_SPECIAL);
                     me->CastSpell(me, SPELL_LIGHTNING_WHIRL, true);
-                    events.RepeatEvent(urand(10000,25000));
+                    events.RepeatEvent(10s, 25s);
                     break;
                 case EVENT_LIGHTNING_TENDRILS:
                 {
                     // Reschedule old
-                    events.RepeatEvent(35000);
+                    events.RepeatEvent(35s);
                     events.DelayEvents(18000);
                     Talk(SAY_BRUNDIR_FLIGHT);
                     

@@ -128,18 +128,18 @@ public:
                     DoResetThreat();
                     InciteChaos = true;
                     events.DelayEvents(15000);
-                    events.RepeatEvent(40000);
+                    events.RepeatEvent(40s);
                     events.ScheduleEvent(EVENT_INCITE_WAIT, 15s);
                     break;
                 }
                 case EVENT_SPELL_CHARGE:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         me->CastSpell(target, SPELL_CHARGE, false);
-                    events.RepeatEvent(urand(15000, 25000));
+                    events.RepeatEvent(15s, 25s);
                     break;
                 case EVENT_SPELL_KNOCKBACK:
                     me->CastSpell(me, SPELL_WAR_STOMP, false);
-                    events.RepeatEvent(urand(18000, 24000));
+                    events.RepeatEvent(18s, 24s);
                     break;
             }
 

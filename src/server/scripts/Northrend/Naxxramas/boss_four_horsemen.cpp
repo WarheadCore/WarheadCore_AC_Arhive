@@ -309,7 +309,7 @@ public:
             {
                 case EVENT_SPELL_MARK_CAST:
                     me->CastSpell(me, TABLE_SPELL_MARK[horsemanId], false);
-                    events.RepeatEvent((me->GetEntry() == NPC_LADY_BLAUMEUX || me->GetEntry() == NPC_SIR_ZELIEK) ? 15000 : 12000);
+                    events.RepeatEvent((me->GetEntry() == NPC_LADY_BLAUMEUX || me->GetEntry() == NPC_SIR_ZELIEK) ? 15s : 12s);
                     return;
                 case EVENT_BERSERK:
                     Talk(SAY_SPECIAL);
@@ -320,16 +320,16 @@ public:
                     Talk(SAY_TAUNT);
 
                     me->CastSpell(me->GetVictim(), RAID_MODE(TABLE_SPELL_PRIMARY_10[horsemanId], TABLE_SPELL_PRIMARY_25[horsemanId]), false);
-                    events.RepeatEvent(15000);
+                    events.RepeatEvent(15s);
                     return;
                 case EVENT_SPELL_PUNISH:
                     if (!SelectTarget(SELECT_TARGET_NEAREST, 0, 45.0f, true))
                         me->CastSpell(me, TABLE_SPELL_PUNISH[horsemanId], false);
-                    events.RepeatEvent(3000);
+                    events.RepeatEvent(3s);
                     return;
                 case EVENT_SPELL_SECONDARY:
                     me->CastSpell(me->GetVictim(), RAID_MODE(TABLE_SPELL_SECONDARY_10[horsemanId], TABLE_SPELL_SECONDARY_25[horsemanId]), false);
-                    events.RepeatEvent(15000);
+                    events.RepeatEvent(15s);
                     return;
             }
 

@@ -340,10 +340,10 @@ public:
                         events.ScheduleEvent(EVENT_START_SECOND_PHASE, 5s);
                         return;
                     }
-                    events.RepeatEvent(1000);
+                    events.RepeatEvent(1s);
                     break;
                 case EVENT_CHECK_ROOM:
-                    events.RepeatEvent(5000);
+                    events.RepeatEvent(5s);
                     if (me->GetPositionX() < 722 || me->GetPositionX() > 987 || me->GetPositionY() < -139 || me->GetPositionY() > 124)
                         EnterEvadeMode();
 
@@ -365,7 +365,7 @@ public:
                     me->MonsterYell("NO! NO! NO! NO! NO!", LANG_UNIVERSAL, 0);
                     me->PlayDirectSound(XT_SOUND_TANTARUM);
                     me->CastSpell(me, SPELL_TYMPANIC_TANTARUM, true);
-                    events.RepeatEvent(60000);
+                    events.RepeatEvent(1min);
                     return;
                 case EVENT_ENRAGE:
                     me->MonsterYell("I'm tired of these toys. I don't want to play anymore!", LANG_UNIVERSAL, 0);

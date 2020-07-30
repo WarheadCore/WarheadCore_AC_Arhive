@@ -180,13 +180,14 @@ class boss_lord_marrowgar : public CreatureScript
                             bool a = me->HasAura(SPELL_BONE_STORM);
                             if (IsHeroic() || !a)
                                 me->CastSpell(me, SPELL_BONE_SPIKE_GRAVEYARD, a);
-                            events.RepeatEvent(urand(15000, 20000));
+                            
+                            events.RepeatEvent(15s, 20s);
                         }
                         break;
                     case EVENT_SPELL_COLDFLAME:
                         if (!me->HasAura(SPELL_BONE_STORM))
                             me->CastSpell((Unit*)NULL, SPELL_COLDFLAME_NORMAL, false);
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                         break;
                     case EVENT_SPELL_COLDFLAME_BONE_STORM:
                         me->CastSpell(me, SPELL_COLDFLAME_BONE_STORM, false);
@@ -201,7 +202,7 @@ class boss_lord_marrowgar : public CreatureScript
                         me->SetReactState(REACT_PASSIVE); // to prevent chasing another target on UpdateVictim()
                         me->GetMotionMaster()->MoveIdle();
                         me->GetMotionMaster()->MovementExpired();
-                        events.RepeatEvent(urand(90000, 95000));
+                        events.RepeatEvent(90s, 95s);
                         events.ScheduleEvent(EVENT_BEGIN_BONE_STORM, 3050ms);
                         break;
                     case EVENT_BEGIN_BONE_STORM:
@@ -220,10 +221,10 @@ class boss_lord_marrowgar : public CreatureScript
                         {
                             if (me->GetMotionMaster()->GetCurrentMovementGeneratorType() == POINT_MOTION_TYPE)
                             {
-                                events.RepeatEvent(1);
+                                events.RepeatEvent(10ms);
                                 break;
                             }
-                            events.RepeatEvent(5000);
+                            events.RepeatEvent(5s);
                             Unit* unit = SelectTarget(SELECT_TARGET_RANDOM, 0, BoneStormMoveTargetSelector(me));
                             if (!unit)
                             {

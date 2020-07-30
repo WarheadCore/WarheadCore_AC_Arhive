@@ -718,12 +718,12 @@ public:
                 }
                 case EVENT_THORIM_STORMHAMMER:
                     me->CastCustomSpell(SPELL_STORMHAMMER, SPELLVALUE_MAX_TARGETS, 1, me->GetVictim(), false);
-                    events.RepeatEvent(16000);
+                    events.RepeatEvent(16s);
                     PlaySpecial();
                     break;
                 case EVENT_THORIM_CHARGE_ORB:
                     me->CastCustomSpell(SPELL_CHARGE_ORB, SPELLVALUE_MAX_TARGETS, 1, me, false);
-                    events.RepeatEvent(16000);
+                    events.RepeatEvent(16s);
                     PlaySpecial();
                     break;
                 case EVENT_THORIM_LIGHTNING_ORB:
@@ -731,7 +731,7 @@ public:
                     if (GetArenaPlayer())
                     {
                         // Player found, repeat and return
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                         return;
                     }
 
@@ -754,12 +754,12 @@ public:
                     break;
                 case EVENT_THORIM_FILL_ARENA:
                     SpawnArenaNPCs();
-                    events.RepeatEvent(10000);
+                    events.RepeatEvent(10s);
                     PlaySpecial();
                     break;
                 case EVENT_THORIM_UNBALANCING_STRIKE:
                     me->CastSpell(me->GetVictim(), SPELL_UNBALANCING_STRIKE, false);
-                    events.RepeatEvent(20000);
+                    events.RepeatEvent(20s);
                     break;
                 case EVENT_THORIM_LIGHTNING_CHARGE:
                     me->CastSpell(me, SPELL_LIGHTNING_PILLAR_P2, true);
@@ -768,7 +768,7 @@ public:
                 case EVENT_THORIM_CHAIN_LIGHTNING:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         me->CastSpell(target, SPELL_CHAIN_LIGHTNING, false);
-                    events.RepeatEvent(15000);
+                    events.RepeatEvent(15s);
                     break;
                 case EVENT_THORIM_BERSERK:
                     me->CastSpell(me, SPELL_BERSERK, true);
@@ -919,15 +919,15 @@ public:
                     break;
                 case EVENT_SIF_FROSTBOLT_VALLEY:
                     me->CastSpell(me, SPELL_FROSTBOLT_VALLEY, false);
-                    events.RepeatEvent(13000);
+                    events.RepeatEvent(13s);
                     return;
                 case EVENT_SIF_BLIZZARD:
                     me->SummonCreature(NPC_SIF_BLIZZARD, 2108.7f, -280.04f, 419.42f, 0, TEMPSUMMON_TIMED_DESPAWN, 30000);
-                    events.RepeatEvent(30000);
+                    events.RepeatEvent(30s);
                     return;
                 case EVENT_SIF_FROST_NOVA_START:
                     me->NearTeleportTo(2108+urand(0, 42), -238-irand(0,46), 420.02f, me->GetAngle(&Middle));
-                    events.RepeatEvent(20000);
+                    events.RepeatEvent(20s);
                     events.DelayEvents(5001);
                     events.ScheduleEvent(EVENT_SIF_FROST_NOVA_CAST, 2500ms);
                     _allowCast = false;
@@ -1230,49 +1230,49 @@ public:
                         me->CastSpell(me, SPELL_GREATER_HEAL, false);
                     else if (Unit* target = DoSelectLowestHpFriendly(60.0f, 20))
                         me->CastSpell(target, SPELL_GREATER_HEAL, false);
-                    events.RepeatEvent(10000);
+                    events.RepeatEvent(10s);
                     break;
                 case EVENT_DR_ACOLYTE_HS:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM,0))
                         me->CastSpell(target, SPELL_HOLY_SMITE, false);
-                    events.RepeatEvent(1600);
+                    events.RepeatEvent(1600ms);
                     break;
                 case EVENT_DR_ACOLYTE_R:
                     if (HealthBelowPct(75) && !me->HasAura(SPELL_RENEW))
                         me->CastSpell(me, SPELL_GREATER_HEAL, false);
                     else if (Unit* target = DoSelectLowestHpFriendly(60.0f, 10))
                         me->CastSpell(target, SPELL_RENEW, false);
-                    events.RepeatEvent(7000);
+                    events.RepeatEvent(7s);
                     break;
                 case EVENT_CM_SOLDIER_BS:
                     me->CastSpell(me->GetVictim(), SPELL_BARBED_SHOT, false);
-                    events.RepeatEvent(9000);
+                    events.RepeatEvent(9s);
                     break;
                 case EVENT_CM_SOLDIER_WC:
                     me->CastSpell(me->GetVictim(), SPELL_WING_CLIP, false);
-                    events.RepeatEvent(5000);
+                    events.RepeatEvent(5s);
                     break;
                 case EVENT_CM_SOLDIER_S:
                     if (me->GetDistance(me->GetVictim()) > 8)
                         me->CastSpell(me->GetVictim(), SPELL_SHOOT, false);
 
-                    events.RepeatEvent(1500);
+                    events.RepeatEvent(1500ms);
                     break;
                 case EVENT_CM_CAPTAIN_D:
                     me->CastSpell(me->GetVictim(), SPELL_DEVASTATE, false);
-                    events.RepeatEvent(9000);
+                    events.RepeatEvent(9s);
                     break;
                 case EVENT_CM_CAPTAIN_HC:
                     me->CastSpell(me->GetVictim(), SPELL_HEROIC_STRIKE, false);
-                    events.RepeatEvent(5000);
+                    events.RepeatEvent(5s);
                     break;
                 case EVENT_JB_ACID_BREATH:
                     me->CastSpell(me->GetVictim(), SPELL_ACID_BREATH, false);
-                    events.RepeatEvent(12000);
+                    events.RepeatEvent(12s);
                     break;
                 case EVENT_JB_SWEEP:
                     me->CastSpell(me->GetVictim(), SPELL_SWEEP, false);
-                    events.RepeatEvent(5000);
+                    events.RepeatEvent(5s);
                     break;
             }
 
@@ -1344,42 +1344,42 @@ public:
             {
                 case EVENT_IR_GUARD_IMPALE:
                     me->CastSpell(me->GetVictim(), SPELL_IMPALE, false);
-                    events.RepeatEvent(12000);
+                    events.RepeatEvent(12s);
                     break;
                 case EVENT_IR_GUARD_WHIRL:
                     me->CastSpell(me->GetVictim(), SPELL_WHIRLING_TRIP, false);
-                    events.RepeatEvent(5000);
+                    events.RepeatEvent(5s);
                     break;
                 case EVENT_DR_ACOLYTE_GH:
                     if (HealthBelowPct(60))
                         me->CastSpell(me, SPELL_GREATER_HEAL, false);
                     else if (Unit* target = DoSelectLowestHpFriendly(60.0f, 20))
                         me->CastSpell(target, SPELL_GREATER_HEAL, false);
-                    events.RepeatEvent(10000);
+                    events.RepeatEvent(10s);
                     break;
                 case EVENT_DR_ACOLYTE_HS:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM,0))
                         me->CastSpell(target, SPELL_HOLY_SMITE, false);
-                    events.RepeatEvent(1600);
+                    events.RepeatEvent(1600ms);
                     break;
                 case EVENT_DR_ACOLYTE_R:
                     if (HealthBelowPct(75) && !me->HasAura(SPELL_RENEW))
                         me->CastSpell(me, SPELL_GREATER_HEAL, false);
                     else if (Unit* target = DoSelectLowestHpFriendly(60.0f, 10))
                         me->CastSpell(target, SPELL_RENEW, false);
-                    events.RepeatEvent(7000);
+                    events.RepeatEvent(7s);
                     break;
                 case EVENT_IH_GUARD_CLEAVE:
                     me->CastSpell(me->GetVictim(), SPELL_CLEAVE, false);
-                    events.RepeatEvent(6000);
+                    events.RepeatEvent(6s);
                     break;
                 case EVENT_IH_GUARD_HAMSTRING:
                     me->CastSpell(me->GetVictim(), SPELL_HAMSTRING, false);
-                    events.RepeatEvent(9000);
+                    events.RepeatEvent(9s);
                     break;
                 case EVENT_IH_GUARD_SHIELD_SMASH:
                     me->CastSpell(me->GetVictim(), SPELL_SHIELD_SMASH, false);
-                    events.RepeatEvent(15000);
+                    events.RepeatEvent(15s);
                     break;
             }
 
@@ -1502,21 +1502,21 @@ public:
 
                     _nextTriggerPos = -385.0f;
                     RunRunicSmash(false);
-                    events.RepeatEvent(11000);
+                    events.RepeatEvent(11s);
                     break;
                 case EVENT_RC_RUNIC_BARRIER:
                     me->CastSpell(me, SPELL_RUNIC_BARRIER, false);
                     me->MonsterTextEmote("Runic Colossus surrounds itself with a crackling Runic Barrier!", 0, true);
-                    events.RepeatEvent(20000);
+                    events.RepeatEvent(20s);
                     break;
                 case EVENT_RC_SMASH:
                     me->CastSpell(me->GetVictim(), SPELL_SMASH, false);
-                    events.RepeatEvent(10000);
+                    events.RepeatEvent(10s);
                     break;
                 case EVENT_RC_CHARGE:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         me->CastSpell(target, SPELL_CHARGE, false);
-                    events.RepeatEvent(15000);
+                    events.RepeatEvent(15s);
                     break;
             }
 
@@ -1591,17 +1591,17 @@ public:
                 case EVENT_ARG_RD:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         me->CastSpell(target, SPELL_RUNE_DETONATION, false);
-                    events.RepeatEvent(12000);
+                    events.RepeatEvent(12s);
                     break;
                 case EVENT_ARG_STOMP:
                     me->CastSpell(me->GetVictim(), SPELL_STOMP, false);
-                    events.RepeatEvent(8000);
+                    events.RepeatEvent(8s);
                     break;
                 case EVENT_ARG_SPAWN:
                     if (Creature *cr = me->SummonCreature(NPC_IRON_HONOR_GUARD, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 20000))
                         if (Unit* target = SelectTargetFromPlayerList(150.0f))
                             cr->AI()->AttackStart(target);
-                    events.RepeatEvent(10000);
+                    events.RepeatEvent(10s);
                     break;
             }
 
@@ -1708,45 +1708,45 @@ public:
             {
                 case EVENT_DR_WARBRINGER_RS:
                     me->CastSpell(me->GetVictim(), SPELL_RUNIC_STRIKE, false);
-                    events.RepeatEvent(8000);
+                    events.RepeatEvent(8s);
                     break;
                 case EVENT_DR_EVOKER_RL:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         me->CastSpell(target, SPELL_RUNIC_LIGHTNING, false);
-                    events.RepeatEvent(2500);
+                    events.RepeatEvent(2500ms);
                     break;
                 case EVENT_DR_EVOKER_RM:
                     if (Unit* target = DoSelectLowestHpFriendly(40.0f, 15))
                         me->CastSpell(target, SPELL_RUNIC_MENDING, false);
                     else
                         me->CastSpell(me, SPELL_RUNIC_MENDING, false);
-                    events.RepeatEvent(4000);
+                    events.RepeatEvent(4s);
                     break;
                 case EVENT_DR_EVOKER_RS:
                     me->CastSpell(me, SPELL_RUNIC_SHIELD, false);
-                    events.RepeatEvent(10000);
+                    events.RepeatEvent(10s);
                     break;
                 case EVENT_DR_CHAMPION_CH:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         me->CastSpell(target, SPELL_CHARGE, false);
-                    events.RepeatEvent(12000);
+                    events.RepeatEvent(12s);
                     break;
                 case EVENT_DR_CHAMPION_WH:
                     if (!me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISARMED))
                         me->CastSpell(me, SPELL_WHIRLWIND, false);
-                    events.RepeatEvent(6000);
+                    events.RepeatEvent(6s);
                     break;
                 case EVENT_DR_CHAMPION_MS:
                     me->CastSpell(me->GetVictim(), SPELL_MORTAL_STRIKE, false);
-                    events.RepeatEvent(8000);
+                    events.RepeatEvent(8s);
                     break;
                 case EVENT_DR_COMMONER_LB:
                     me->CastSpell(me->GetVictim(), SPELL_LOW_BLOW, false);
-                    events.RepeatEvent(5000);
+                    events.RepeatEvent(5s);
                     break;
                 case EVENT_DR_COMMONER_PM:
                     me->CastSpell(me->GetVictim(), SPELL_PUMMEL, false);
-                    events.RepeatEvent(6000);
+                    events.RepeatEvent(6s);
                     break;
             }
 

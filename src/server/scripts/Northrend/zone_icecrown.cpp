@@ -317,7 +317,7 @@ public:
                     if (fail)
                         EnterEvadeMode();
 
-                    events.RepeatEvent(5000);
+                    events.RepeatEvent(5s);
                     break;
                 }
             }

@@ -182,7 +182,7 @@ public:
                 case EVENT_SPELL_RADIANCE:
                     me->CastSpell((Unit*)NULL, SPELL_RADIANCE, false);
                     me->MonsterTextEmote(TEXT_RADIATE, 0, true);
-                    events.RepeatEvent(16000);
+                    events.RepeatEvent(16s);
                     break;
                 case EVENT_SPELL_HAMMER_RIGHTEOUS:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 55.0f, true) )
@@ -194,7 +194,7 @@ public:
                         me->CastSpell(target, SPELL_HAMMER_JUSTICE, true);
                         me->CastSpell(target, SPELL_HAMMER_RIGHTEOUS, false);
                     }
-                    events.RepeatEvent(25000);
+                    events.RepeatEvent(25s);
                     break;
             }
 
@@ -360,12 +360,12 @@ public:
                 case EVENT_SPELL_SMITE:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true) )
                         me->CastSpell(target, SPELL_SMITE, false);
-                    events.RepeatEvent(urand(3000,4000));
+                    events.RepeatEvent(3s, 4s);
                     break;
                 case EVENT_SPELL_HOLY_FIRE:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 30.0f, true) )
                         me->CastSpell(target, SPELL_HOLY_FIRE, false);
-                    events.RepeatEvent(urand(9000,12000));
+                    events.RepeatEvent(9s, 12s);
                     break;
                 case EVENT_SPELL_RENEW:
                     if( !MemoryGUID )
@@ -378,7 +378,7 @@ public:
                     else if( Creature* memory = ObjectAccessor::GetCreature(*me, MemoryGUID) )
                         if( memory->IsAlive() )
                             me->CastSpell(memory, SPELL_RENEW, false);
-                    events.RepeatEvent(urand(15000,17000));
+                    events.RepeatEvent(15s, 17s);
                     break;
             }
 
@@ -455,16 +455,16 @@ public:
                 case EVENT_SPELL_OLD_WOUNDS:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 10.0f, true) )
                         me->CastSpell(target, SPELL_OLD_WOUNDS, true);
-                    events.RepeatEvent(12000);
+                    events.RepeatEvent(12s);
                     break;
                 case EVENT_SPELL_SHADOWS_PAST:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40.0f, true) )
                         me->CastSpell(target, SPELL_SHADOWS_PAST, false);
-                    events.RepeatEvent(urand(15000,20000));
+                    events.RepeatEvent(15s, 20s);
                     break;
                 case EVENT_SPELL_WAKING_NIGHTMARE:
                     me->CastSpell(me, SPELL_WAKING_NIGHTMARE, false);
-                    events.RepeatEvent(35000);
+                    events.RepeatEvent(35s);
                     break;
             }
 
@@ -675,52 +675,53 @@ public:
 
                 case EVENT_MONK_SPELL_FLURRY_OF_BLOWS:
                     me->CastSpell(me, SPELL_FLURRY_OF_BLOWS, false);
-                    events.RepeatEvent(urand(12000,18000));
+                    events.RepeatEvent(12s, 18s);
                     break;
                 case EVENT_MONK_SPELL_PUMMEL:
                     if( me->GetVictim() )
                         me->CastSpell(me->GetVictim(), SPELL_PUMMEL, false);
-                    events.RepeatEvent(urand(8000,11000));
+                    events.RepeatEvent(8s, 11s);
                     break;
 
                 case EVENT_PRIESTESS_SPELL_HOLY_SMITE:
                     if( me->GetVictim() )
                         me->CastSpell(me->GetVictim(), SPELL_HOLY_SMITE, false);
-                    events.RepeatEvent(urand(6000,8000));
+                    events.RepeatEvent(6s, 8s);
                     break;
                 case EVENT_PRIESTESS_SPELL_SHADOW_WORD_PAIN:
                     if( me->GetVictim() )
                         me->CastSpell(me->GetVictim(), SPELL_SHADOW_WORD_PAIN, false);
-                    events.RepeatEvent(urand(12000,15000));
+                    events.RepeatEvent(12s, 15s);
                     break;
                 case EVENT_PRIESTESS_SPELL_FOUNTAIN_OF_LIGHT:
                     me->CastSpell((Unit*)NULL, SPELL_FOUNTAIN_OF_LIGHT, false);
-                    events.RepeatEvent(urand(35000,45000));
+                    events.RepeatEvent(35s, 45s);
                     break;
                 case EVENT_PRIESTESS_SPELL_MIND_CONTROL_H:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 30.0f, true) )
                         me->CastSpell(target, SPELL_MIND_CONTROL_H, false);
-                    events.RepeatEvent(urand(22000,30000));
+                    events.RepeatEvent(22s, 30s);
                     break;
 
                 case EVENT_LIGHTWIELDER_SPELL_BLAZING_LIGHT:
                     {
                         Unit* target = DoSelectLowestHpFriendly(40.0f);
-                        if( !target )
+                        if(!target)
                             target = me;
+                        
                         me->CastSpell(target, SPELL_BLAZING_LIGHT, false);
-                        events.RepeatEvent(urand(8000,12000));
+                        events.RepeatEvent(8s, 12s);
                     }
                     break;
                 case EVENT_LIGHTWIELDER_SPELL_CLEAVE:
                     if( me->GetVictim() )
                         me->CastSpell(me->GetVictim(), SPELL_CLEAVE, false);
-                    events.RepeatEvent(urand(6000,8000));
+                    events.RepeatEvent(6s, 8s);
                     break;
                 case EVENT_LIGHTWIELDER_SPELL_UNBALANCING_STRIKE_H:
                     if( me->GetVictim() )
                         me->CastSpell(me->GetVictim(), SPELL_UNBALANCING_STRIKE_H, false);
-                    events.RepeatEvent(urand(12000,15000));
+                    events.RepeatEvent(12s, 15s);
                     break;
             }
 

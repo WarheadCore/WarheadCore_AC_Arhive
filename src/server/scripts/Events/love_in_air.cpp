@@ -386,11 +386,11 @@ class npc_love_in_air_hummel : public CreatureScript
                     }
                     case EVENT_SPELL_PERFUME_SPRAY:
                         me->CastSpell(me->GetVictim(), SPELL_ALLURING_PERFUME_SPRAY, false);
-                        events.RepeatEvent(6000);
+                        events.RepeatEvent(6s);
                         break;
                     case EVENT_SPELL_CHAIN_REACTION:
                         me->CastSpell(me->GetVictim(), SPELL_CHAIN_REACTION, false);
-                        events.RepeatEvent(12000);
+                        events.RepeatEvent(12s);
                         break;
                 }
 
@@ -466,11 +466,11 @@ class npc_love_in_air_hummel_helper : public CreatureScript
                 {
                     case EVENT_SPELL_PERFUME_SPRAY:
                         me->CastSpell(me->GetVictim(), SPELL_COLOGNE_SPRAY, false);
-                        events.RepeatEvent(6000);
+                        events.RepeatEvent(6s);
                         break;
                     case EVENT_SPELL_CHAIN_REACTION:
                         me->CastSpell(me->GetVictim(), SPELL_CHAIN_REACTION, false);
-                        events.RepeatEvent(12000);
+                        events.RepeatEvent(12s);
                         break;
                     case EVENT_SPELL_THROW:
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
@@ -480,7 +480,7 @@ class npc_love_in_air_hummel_helper : public CreatureScript
                             me->CastSpell(me, RAND(SPELL_THROW_COLOGNE, SPELL_THROW_PERFUME), true, NULL, NULL, me->GetGUID());
                             me->Relocate(pos);
                         }
-                        events.RepeatEvent(10000);
+                        events.RepeatEvent(10s);
                         break;
                 }
 

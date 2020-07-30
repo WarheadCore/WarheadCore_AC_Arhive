@@ -377,7 +377,7 @@ class boss_lady_deathwhisper : public CreatureScript
                     case EVENT_SPELL_DEATH_AND_DECAY:
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
                             me->CastSpell(target, SPELL_DEATH_AND_DECAY, false);
-                        events.RepeatEvent(urand(22000, 30000));
+                        events.RepeatEvent(22s, 30s);
                         break;
                     case EVENT_SPELL_DOMINATE_MIND_25:
                         {
@@ -414,37 +414,37 @@ class boss_lady_deathwhisper : public CreatureScript
                                 me->CastSpell(target, SPELL_DOMINATE_MIND_25, true);
                             }
 
-                            events.RepeatEvent(urand(40000, 45000));
+                            events.RepeatEvent(40s, 45s);
                         }
                         break;
                     case EVENT_SPELL_SHADOW_BOLT:
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
                             me->CastSpell(target, SPELL_SHADOW_BOLT, false);
-                        events.RepeatEvent(2100);
+                        events.RepeatEvent(2100ms);
                         break;
                     case EVENT_SUMMON_WAVE_P1:
                         SummonWaveP1();
-                        events.RepeatEvent(IsHeroic() ? 45000 : 60000);
+                        events.RepeatEvent(IsHeroic() ? 45s : 1min);
                         break;
                     case EVENT_EMPOWER_CULTIST:
                         EmpowerCultist();
-                        events.RepeatEvent(urand(18000,25000));
+                        events.RepeatEvent(18s, 25s);
                         break;
                     case EVENT_SPELL_FROSTBOLT:
                         me->CastSpell(me->GetVictim(), SPELL_FROSTBOLT, false);
-                        events.RepeatEvent(12000);
+                        events.RepeatEvent(12s);
                         break;
                     case EVENT_SPELL_FROSTBOLT_VOLLEY:
                         me->CastSpell((Unit*)nullptr, SPELL_FROSTBOLT_VOLLEY, false);
-                        events.RepeatEvent(urand(13000,15000));
+                        events.RepeatEvent(13s, 15s);
                         break;
                     case EVENT_SPELL_TOUCH_OF_INSIGNIFICANCE:
                         me->CastSpell(me->GetVictim(), SPELL_TOUCH_OF_INSIGNIFICANCE, false);
-                        events.RepeatEvent(urand(6000, 9000));
+                        events.RepeatEvent(6s, 9s);
                         break;
                     case EVENT_SUMMON_WAVE_P2:
                         SummonWaveP2();
-                        events.RepeatEvent(45000);
+                        events.RepeatEvent(45s);
                         break;
                     case EVENT_SPELL_SUMMON_SHADE:
                         {
@@ -460,7 +460,7 @@ class boss_lady_deathwhisper : public CreatureScript
                                 for (std::list<Unit*>::iterator itr = targets.begin(); itr != targets.end(); ++itr)
                                     me->CastSpell(*itr, SPELL_SUMMON_SHADE, true);
                         }
-                        events.RepeatEvent(12000);
+                        events.RepeatEvent(12s);
                         break;
                 }
 
@@ -743,15 +743,15 @@ class npc_cult_fanatic : public CreatureScript
                 {
                     case EVENT_SPELL_FANATIC_NECROTIC_STRIKE:
                         me->CastSpell(me->GetVictim(), SPELL_NECROTIC_STRIKE, false);
-                        events.RepeatEvent(urand(11000, 13000));
+                        events.RepeatEvent(11s, 13s);
                         break;
                     case EVENT_SPELL_FANATIC_SHADOW_CLEAVE:
                         me->CastSpell(me->GetVictim(), SPELL_SHADOW_CLEAVE, false);
-                        events.RepeatEvent(urand(9500, 11000));
+                        events.RepeatEvent(9500ms, 11s);
                         break;
                     case EVENT_SPELL_FANATIC_VAMPIRIC_MIGHT:
                         me->CastSpell(me, SPELL_VAMPIRIC_MIGHT, false);
-                        events.RepeatEvent(urand(20000, 27000));
+                        events.RepeatEvent(20s, 27s);
                         break;
                     case EVENT_CULTIST_DARK_MARTYRDOM_REVIVE:
                         me->RemoveAurasDueToSpell(SPELL_PERMANENT_FEIGN_DEATH);
@@ -859,23 +859,23 @@ class npc_cult_adherent : public CreatureScript
                 {
                     case EVENT_SPELL_ADHERENT_FROST_FEVER:
                         me->CastSpell(me->GetVictim(), SPELL_FROST_FEVER, false);
-                        events.RepeatEvent(urand(9000, 13000));
+                        events.RepeatEvent(9s, 13s);
                         break;
                     case EVENT_SPELL_ADHERENT_DEATHCHILL:
                         if (me->GetEntry() == NPC_EMPOWERED_ADHERENT)
                             me->CastSpell(me->GetVictim(), SPELL_DEATHCHILL_BLAST, false);
                         else
                             me->CastSpell(me->GetVictim(), SPELL_DEATHCHILL_BOLT, false);
-                        events.RepeatEvent(urand(9000, 13000));
+                        events.RepeatEvent(9s, 13s);
                         break;
                     case EVENT_SPELL_ADHERENT_CURSE_OF_TORPOR:
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
                             me->CastSpell(target, SPELL_CURSE_OF_TORPOR, false);
-                        events.RepeatEvent(urand(9000, 13000));
+                        events.RepeatEvent(9s, 13s);
                         break;
                     case EVENT_SPELL_ADHERENT_SHROUD_OF_THE_OCCULT:
                         me->CastSpell(me, SPELL_SHORUD_OF_THE_OCCULT, false);
-                        events.RepeatEvent(urand(27000, 32000));
+                        events.RepeatEvent(27s, 32s);
                         break;
                     case EVENT_CULTIST_DARK_MARTYRDOM_REVIVE:
                         me->RemoveAurasDueToSpell(SPELL_PERMANENT_FEIGN_DEATH);
@@ -1092,7 +1092,7 @@ class npc_darnavan : public CreatureScript
                 {
                     case EVENT_DARNAVAN_BLADESTORM:
                         me->CastSpell((Unit*)nullptr, SPELL_BLADESTORM, false);
-                        events.RepeatEvent(urand(90000, 100000));
+                        events.RepeatEvent(90s, 100s);
                         break;
                     case EVENT_DARNAVAN_CHARGE:
                         _canCharge = true;
@@ -1100,11 +1100,11 @@ class npc_darnavan : public CreatureScript
                         break;
                     case EVENT_DARNAVAN_INTIMIDATING_SHOUT:
                         me->CastSpell((Unit*)nullptr, SPELL_INTIMIDATING_SHOUT, false);
-                        events.RepeatEvent(urand(90000, 120000));
+                        events.RepeatEvent(90s, 2min);
                         break;
                     case EVENT_DARNAVAN_MORTAL_STRIKE:
                         me->CastSpell(me->GetVictim(), SPELL_MORTAL_STRIKE, false);
-                        events.RepeatEvent(urand(15000, 30000));
+                        events.RepeatEvent(15s, 30s);
                         break;
                     case EVENT_DARNAVAN_SHATTERING_THROW:
                         _canShatter = true;
@@ -1112,7 +1112,7 @@ class npc_darnavan : public CreatureScript
                         break;
                     case EVENT_DARNAVAN_SUNDER_ARMOR:
                         me->CastSpell(me->GetVictim(), SPELL_SUNDER_ARMOR, false);
-                        events.RepeatEvent(urand(3000, 7000));
+                        events.RepeatEvent(3s, 7s);
                         break;
                     default:
                         break;

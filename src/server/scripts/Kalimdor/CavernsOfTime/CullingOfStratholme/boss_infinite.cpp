@@ -139,12 +139,12 @@ public:
             {
                 case EVENT_SPELL_VOID_STRIKE:
                     me->CastSpell(me->GetVictim(), SPELL_VOID_STRIKE, false);
-                    events.RepeatEvent(8000);
+                    events.RepeatEvent(8s);
                     break;
                 case EVENT_SPELL_CORRUPTING_BLIGHT:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true))
                         me->CastSpell(target, SPELL_CORRUPTING_BLIGHT, false);
-                    events.RepeatEvent(12000);
+                    events.RepeatEvent(12s);
                     break;
             }
 

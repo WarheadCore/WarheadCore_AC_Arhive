@@ -110,7 +110,7 @@ public:
                 case EVENT_SPELL_SHROUD_OF_DARKNESS:
                     me->CastSpell(me, SPELL_SHROUD_OF_DARKNESS, false);
                     Talk(SAY_SHIELD);
-                    events.RepeatEvent(20000);
+                    events.RepeatEvent(20s);
                     break;
                 case EVENT_SPELL_VOID_SHIFT:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 60.0f, true))
@@ -118,11 +118,11 @@ public:
                         me->CastSpell(target, SPELL_VOID_SHIFT, false);
                         me->MonsterWhisper("Gaze... into the void.", target->ToPlayer(), false);
                     }
-                    events.RepeatEvent(urand(18000,22000));
+                    events.RepeatEvent(18s, 22s);
                     break;
                 case EVENT_SPELL_SUMMON_VOID_SENTRY:
                     me->CastSpell((Unit*)NULL, SPELL_SUMMON_VOID_SENTRY, false);
-                    events.RepeatEvent(12000);
+                    events.RepeatEvent(12s);
                     break;
             }
 

@@ -1020,7 +1020,7 @@ public:
                         // Arthas is fighting infinites in town hall
                         if (me->IsInCombat())
                         {
-                            actionEvents.RepeatEvent(1000);
+                            actionEvents.RepeatEvent(1s);
                             return;
                         }
 
@@ -1042,7 +1042,7 @@ public:
                         // Arthas is fighting first chronos
                         if (me->IsInCombat())
                         {
-                            actionEvents.RepeatEvent(1000);
+                            actionEvents.RepeatEvent(1s);
                             return;
                         }
 
@@ -1056,7 +1056,7 @@ public:
                         // Arthas is fighting second chronos
                         if (me->IsInCombat())
                         {
-                            actionEvents.RepeatEvent(1000);
+                            actionEvents.RepeatEvent(1s);
                             return;
                         }
 
@@ -1070,7 +1070,7 @@ public:
                         // Arthas is fighting third chronos
                         if (me->IsInCombat())
                         {
-                            actionEvents.RepeatEvent(1000);
+                            actionEvents.RepeatEvent(1s);
                             return;
                         }
 
@@ -1115,7 +1115,7 @@ public:
                         // Arthas is fighting epoch chronos
                         if (me->IsInCombat())
                         {
-                            actionEvents.RepeatEvent(1000);
+                            actionEvents.RepeatEvent(1s);
                             return;
                         }
 
@@ -1182,13 +1182,13 @@ public:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         me->CastSpell(target, DUNGEON_MODE(SPELL_ARTHAS_EXORCISM_N, SPELL_ARTHAS_EXORCISM_H), false);
 
-                    combatEvents.RepeatEvent(7300);
+                    combatEvents.RepeatEvent(7300ms);
                     break;
                 case EVENT_COMBAT_HEALTH_CHECK:
                     if (HealthBelowPct(40))
                         me->CastSpell(me, SPELL_ARTHAS_HOLY_LIGHT, false);
 
-                    combatEvents.RepeatEvent(1000);
+                    combatEvents.RepeatEvent(1s);
                     break;
             }
 

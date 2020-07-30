@@ -585,11 +585,11 @@ public:
                     return;
                 }
                 _spawnedAmount++;
-                events.RepeatEvent(60000);
+                events.RepeatEvent(1min);
                 break;
             case EVENT_FREYA_LIFEBINDER:
             {
-                events.RepeatEvent(45000);
+                events.RepeatEvent(45s);
                 float x, y, z;
                 for (uint8 i = 0; i < 10; ++i)
                 {
@@ -609,7 +609,7 @@ public:
             case EVENT_FREYA_SUNBEAM:
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
                     me->CastSpell(target, SPELL_SUNBEAM, false);
-                events.RepeatEvent(15000+urand(0,5000));
+                events.RepeatEvent(15s, 20s);
                 break;
             case EVENT_FREYA_RESPAWN_TRIO:
                 events.PopEvent();
@@ -634,7 +634,7 @@ public:
                     if (!(--_minCount))
                         break;
                 }
-                events.RepeatEvent(18000);
+                events.RepeatEvent(18s);
                 break;
             }
             case EVENT_FREYA_BERSERK:
@@ -645,11 +645,11 @@ public:
                 break;
             case EVENT_FREYA_GROUND_TREMOR:
                 me->CastSpell(me, SPELL_GROUND_TREMOR_FREYA, false);
-                events.RepeatEvent(25000+urand(0,10000));
+                events.RepeatEvent(25s, 35s);
                 break;
             case EVENT_FREYA_IRON_ROOT:
                 me->CastCustomSpell(SPELL_IRON_ROOTS_FREYA, SPELLVALUE_MAX_TARGETS, 1, me, false);
-                events.RepeatEvent(45000+urand(0,10000));
+                events.RepeatEvent(45s, 55s);
                 break;
             case EVENT_FREYA_UNSTABLE_SUN_BEAM:
                 if (Creature* cr = me->SummonCreature(NPC_FREYA_UNSTABLE_SUN_BEAM, me->GetPositionX()+urand(7,25), me->GetPositionY()+urand(7,25), me->GetMap()->GetHeight(me->GetPositionX(), me->GetPositionY(), MAX_HEIGHT), 0, TEMPSUMMON_TIMED_DESPAWN, 10000))
@@ -657,7 +657,7 @@ public:
                     cr->CastSpell(cr, SPELL_UNSTABLE_SUN_VISUAL, true);
                     cr->CastSpell(cr, SPELL_UNSTABLE_SUN_FREYA_DAMAGE, true);
                 }
-                events.RepeatEvent(38000+urand(0,10000));
+                events.RepeatEvent(38s, 48s);
                 break;
             }
 
@@ -759,17 +759,17 @@ public:
             {
                 case EVENT_STONEBARK_FISTS_OF_STONE:
                     me->CastSpell(me, SPELL_FISTS_OF_STONE, false);
-                    events.RepeatEvent(60000);
+                    events.RepeatEvent(1min);
                     break;
                 case EVENT_STONEBARK_GROUND_TREMOR:
                     if (!me->HasAura(SPELL_FISTS_OF_STONE))
                         me->CastSpell(me, SPELL_GROUND_TREMOR, false);
-                    events.RepeatEvent(20000);
+                    events.RepeatEvent(20s);
                     break;
                 case EVENT_STONEBARK_PETRIFIED_BARK:
                     _chargesCount = RAID_MODE(60, 120);
                     me->CastSpell(me, SPELL_PETRIFIED_BARK, false);
-                    events.RepeatEvent(30000);
+                    events.RepeatEvent(30s);
                     break;
             }
 
@@ -857,7 +857,7 @@ public:
                 case EVENT_BRIGHTLEAF_FLUX:
                     if (Aura* aur = me->AddAura(SPELL_BRIGHTLEAF_FLUX, me))
                         aur->SetStackAmount(urand(1,10));
-                    events.RepeatEvent(10000);
+                    events.RepeatEvent(10s);
                     break;
                 case EVENT_BRIGHTLEAF_SOLAR_FLARE:
                     if (Aura* aur = me->GetAura(SPELL_BRIGHTLEAF_FLUX))
@@ -865,7 +865,7 @@ public:
                         me->CastCustomSpell(SPELL_SOLAR_FLARE, SPELLVALUE_MAX_TARGETS, aur->GetStackAmount(), me, false);
                         me->RemoveAura(aur);
                     }
-                    events.RepeatEvent(15000);
+                    events.RepeatEvent(15s);
                     break;
                 case EVENT_BRIGHTLEAF_UNSTABLE_SUN_BEAM:
                     events.ScheduleEvent(EVENT_BRIGHTLEAF_DESPAWN_SUN_BEAM, 15s);
@@ -881,7 +881,7 @@ public:
                         beam->CastSpell(beam, SPELL_PHOTOSYNTHESIS, true);
                         summons.Summon(beam);
                     }
-                    events.RepeatEvent(20000);
+                    events.RepeatEvent(20s);
                     break;
                 case EVENT_BRIGHTLEAF_DESPAWN_SUN_BEAM:
                     for (SummonList::iterator i = summons.begin(); i != summons.end();)
@@ -978,16 +978,16 @@ public:
             {
                 case EVENT_IRONBRANCH_IMPALE:
                     me->CastSpell(me->GetVictim(), SPELL_IMPALE, false);
-                    events.RepeatEvent(17000);
+                    events.RepeatEvent(17s);
                     break;
                 case EVENT_IRONBRANCH_IRON_ROOT:
                     me->CastCustomSpell(SPELL_IRON_ROOTS, SPELLVALUE_MAX_TARGETS, 1, me, false);
-                    events.RepeatEvent(20000);
+                    events.RepeatEvent(20s);
                     break;
                 case EVENT_IRONBRANCH_THORN_SWARM:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         me->CastSpell(target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), SPELL_THORN_SWARM, false);
-                    events.RepeatEvent(14000);
+                    events.RepeatEvent(14s);
                     break;
             }
 
@@ -1210,12 +1210,12 @@ public:
             {
                 case EVENT_ANCIENT_CONSERVATOR_NATURE_FURY:
                     me->CastSpell(me->GetVictim(), SPELL_NATURE_FURY, false);
-                    events.RepeatEvent(14000);
+                    events.RepeatEvent(14s);
                     break;
                 case EVENT_WATER_SPIRIT_CHARGE:
                     me->CastSpell(me, SPELL_TIDAL_WAVE_AURA, true);
                     me->CastSpell(me->GetVictim(), SPELL_TIDAL_WAVE, false);
-                    events.RepeatEvent(12000);
+                    events.RepeatEvent(12s);
                     events.ScheduleEvent(EVENT_WATER_SPIRIT_DAMAGE, 3s);
                     break;
                 case EVENT_WATER_SPIRIT_DAMAGE:
@@ -1225,11 +1225,11 @@ public:
                 case EVENT_STORM_LASHER_LIGHTNING_LASH:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         me->CastSpell(target, SPELL_LIGHTNING_LASH, false);
-                    events.RepeatEvent(10000);
+                    events.RepeatEvent(10s);
                     break;
                 case EVENT_STORM_LASHER_STORMBOLT:
                     me->CastSpell(me->GetVictim(), SPELL_STORMBOLT, false);
-                    events.RepeatEvent(6000);
+                    events.RepeatEvent(6s);
                     break;
                 case EVENT_DETONATING_LASHER_FLAME_LASH:
                     me->CastSpell(me->GetVictim(), SPELL_FLAME_LASH, false);
@@ -1238,7 +1238,7 @@ public:
                         AttackStart(target);
                     else
                         me->DespawnOrUnsummon(1);
-                    events.RepeatEvent(10000);
+                    events.RepeatEvent(10s);
                     break;
             }
 

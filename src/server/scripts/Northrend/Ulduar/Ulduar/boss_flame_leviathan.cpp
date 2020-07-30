@@ -405,7 +405,7 @@ public:
                         EnterEvadeMode();
                         return;
                     }
-                    events.RepeatEvent(5000);
+                    events.RepeatEvent(5s);
                     break;
                 case EVENT_PURSUE:
                     Talk(FLAME_LEVIATHAN_SAY_PURSUE);
@@ -414,22 +414,22 @@ public:
                     return;
                 case EVENT_SPEED:
                     me->CastSpell(me, SPELL_GATHERING_SPEED, false);
-                    events.RepeatEvent(15000);
+                    events.RepeatEvent(15s);
                     return;
                 case EVENT_MISSILE:
                     me->CastSpell(me, SPELL_MISSILE_BARRAGE, true);
-                    events.RepeatEvent(4000);
+                    events.RepeatEvent(4s);
                     return;
                 case EVENT_VENT:
                     me->CastSpell(me, SPELL_FLAME_VENTS, false);
-                    events.RepeatEvent(20000);
+                    events.RepeatEvent(20s);
                     return;
                 case EVENT_SUMMON:
                     if(summons.size() < 20)
                         if (Creature* lift = DoSummonFlyer(NPC_MECHANOLIFT, me, 30.0f, 50.0f, 0))
                             lift->GetMotionMaster()->MoveRandom(100);
 
-                    events.RepeatEvent(4000);
+                    events.RepeatEvent(4s);
                     return;
                 case EVENT_SOUND_BEGINNING:
                     if (_towersCount)
@@ -448,7 +448,7 @@ public:
                     return;
                 case EVENT_THORIMS_HAMMER:
                     SummonTowerHelpers(TOWER_OF_STORMS);
-                    events.RepeatEvent(60000+rand()%60000);
+                    events.RepeatEvent(1min, 2min);
                     me->MonsterTextEmote("Flame Leviathan activates Thorim's Hammer.", 0, true);
                     Talk(FLAME_LEVIATHAN_SAY_TOWER_STORM);
                     return;

@@ -473,12 +473,12 @@ public:
                     break;
                 case 1: // Shadow Bolt
                     me->CastSpell(me->GetVictim(), 69577, false);
-                    events.RepeatEvent(4000);
+                    events.RepeatEvent(4s);
                     break;
                 case 2: // Conversion Beam
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 30.0f, true))
                         me->CastSpell(target, 69578, false);
-                    events.RepeatEvent(urand(20000,25000));
+                    events.RepeatEvent(20s, 25s);
                     break;
             }
 

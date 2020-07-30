@@ -216,10 +216,10 @@ public:
                         HealthCheck -= 25;
                     }
 
-                    events.RepeatEvent(1000);
+                    events.RepeatEvent(1s);
                     break;
                 case EVENT_LIGHTNING_NOVA:
-                    events.RepeatEvent(15000);
+                    events.RepeatEvent(15s);
                     me->CastSpell(me, SPELL_LIGHTNING_NOVA_VISUAL, true);
                     me->CastSpell(me, SPELL_LIGHTNING_NOVA_THUNDERS, true);
 
@@ -236,7 +236,7 @@ public:
                     if (Unit* target = SelectTargetFromPlayerList(100, SPELL_ARC_LIGHTNING))
                         me->CastSpell(target, SPELL_ARC_LIGHTNING, false);
 
-                    events.RepeatEvent(12000);
+                    events.RepeatEvent(12s);
                     break;
                 case EVENT_AURA_REMOVE:
                     me->RemoveAura(SPELL_LIGHTNING_NOVA_THUNDERS);

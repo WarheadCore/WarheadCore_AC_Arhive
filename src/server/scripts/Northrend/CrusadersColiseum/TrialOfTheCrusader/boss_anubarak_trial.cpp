@@ -292,26 +292,26 @@ public:
                             i = (i+1)%6;
                         }
                         while( i != StartAt );
-                        events.RepeatEvent(4000);
+                        events.RepeatEvent(4s);
                     }
                     break;
                 case EVENT_SPELL_FREEZING_SLASH:
                     {
                         if( me->GetVictim() )
                             me->CastSpell(me->GetVictim(), SPELL_FREEZING_SLASH, false);
-                        events.RepeatEvent(urand(15000,20000));
+                        events.RepeatEvent(15s, 20s);
                     }
                     break;
                 case EVENT_SPELL_PENETRATING_COLD:
                     {
                         me->CastCustomSpell(SPELL_PENETRATING_COLD, SPELLVALUE_MAX_TARGETS, RAID_MODE(2,5,2,5));
-                        events.RepeatEvent(18000);
+                        events.RepeatEvent(18s);
                     }
                     break;
                 case EVENT_SUMMON_NERUBIAN:
                     {
                         me->CastCustomSpell(SPELL_SUMMON_BURROWER, SPELLVALUE_MAX_TARGETS, RAID_MODE(1,2,2,4));
-                        events.RepeatEvent(45000);
+                        events.RepeatEvent(45s);
                     }
                     break;
                 case EVENT_SUBMERGE:
@@ -338,7 +338,7 @@ public:
                         uint8 i = urand(0,3);
                         if( Creature* c = ObjectAccessor::GetCreature(*me, BurrowGUID[i]) )
                             me->CastSpell(c, SPELL_SUMMON_SCARAB, true);
-                        events.RepeatEvent(4000);
+                        events.RepeatEvent(4s);
                     }
                     break;
                 case EVENT_EMERGE:
@@ -696,7 +696,7 @@ public:
                 case EVENT_SPELL_SHADOW_STRIKE:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 250.0f, true) )
                         me->CastSpell(target, SPELL_SHADOW_STRIKE, false);
-                    events.RepeatEvent(urand(30000,45000));
+                    events.RepeatEvent(30s, 45s);
                     break;
                 case EVENT_SUBMERGE:
                     if( HealthBelowPct(80) && !me->HasAura(RAID_MODE(66193,67855,67856,67857)) ) // not having permafrost - allow submerge
@@ -712,7 +712,7 @@ public:
                         events.RescheduleEvent(EVENT_EMERGE, 10s);
                     }
                     else
-                        events.RepeatEvent(3000);
+                        events.RepeatEvent(3s);
                     break;
                 case EVENT_EMERGE:
                     me->SetHealth(me->GetMaxHealth());

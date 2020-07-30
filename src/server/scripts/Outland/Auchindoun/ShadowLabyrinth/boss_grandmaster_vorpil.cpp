@@ -173,16 +173,16 @@ public:
             {
                 case EVENT_SPELL_SHADOWBOLT:
                     me->CastSpell(me, SPELL_SHADOWBOLT_VOLLEY, false);
-                    events.RepeatEvent(urand(15000, 30000));
+                    events.RepeatEvent(15s, 30s);
                     break;
                 case EVENT_SPELL_BANISH:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 30, false))
                         me->CastSpell(target, SPELL_BANISH, false);
-                    events.RepeatEvent(16000);
+                    events.RepeatEvent(16s);
                     break;
                 case EVENT_SUMMON_TRAVELER:
                     spawnVoidTraveler();
-                    events.RepeatEvent(HealthBelowPct(20) ? 5000: 10000);
+                    events.RepeatEvent(HealthBelowPct(20) ? 5s: 10s);
                     break;
                 case EVENT_SPELL_DRAWSHADOWS:
                 {
@@ -197,7 +197,7 @@ public:
                     me->CastSpell(me, SPELL_DRAW_SHADOWS, true);
                     me->CastSpell(me, SPELL_RAIN_OF_FIRE_N);
 
-                    events.RepeatEvent(24000);
+                    events.RepeatEvent(24s);
                     events.DelayEvents(6000);
                     break;
                 }

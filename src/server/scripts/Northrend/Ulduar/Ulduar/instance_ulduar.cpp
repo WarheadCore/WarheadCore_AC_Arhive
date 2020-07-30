@@ -1022,7 +1022,7 @@ public:
                     DoUpdateWorldState(WORLD_STATE_ALGALON_DESPAWN_TIMER, --m_algalonTimer);
                     if (m_algalonTimer)
                     {
-                        _events.RepeatEvent(60000);
+                        _events.RepeatEvent(1min);
                         return;
                     }
 

@@ -441,11 +441,11 @@ public:
 
                 case EVENT_SPELL_ARCANE_BREATH:
                     me->CastSpell(me->GetVictim(), SPELL_ARCANE_BREATH, false);
-                    events.RepeatEvent(urand(12000,15000));
+                    events.RepeatEvent(12s, 15s);
                     break;
                 case EVENT_SPELL_ARCANE_STORM:
                     me->CastCustomSpell(SPELL_ARCANE_STORM, SPELLVALUE_MAX_TARGETS, DUNGEON_MODE(5, 12), me, true);
-                    events.RepeatEvent(urand(10000,15000));
+                    events.RepeatEvent(12s, 15s);
                     break;
                 case EVENT_SUMMON_POWER_SPARK:
                     {
@@ -458,7 +458,7 @@ public:
                             c->AI()->Talk(EMOTE_POWER_SPARK);
                         }
                         
-                        events.RepeatEvent(urand(20000,30000));
+                        events.RepeatEvent(20s, 30s);
                     }
                     break;
                 case EVENT_START_VORTEX_0:
@@ -642,7 +642,7 @@ public:
                         float posy = CenterPos.GetPositionY()+sin(angle)*dist;
                         me->SetFacingTo(me->GetAngle(posx, posy));
                         me->CastSpell(posx, posy, CenterPos.GetPositionZ()+1.5f, SPELL_ARCANE_OVERLOAD, true);
-                        events.RepeatEvent(15000);
+                        events.RepeatEvent(15s);
                         events.RescheduleEvent(EVENT_RESUME_FLYING_CIRCLES_PH_2, 3s, 1);
                     }
                     break;
@@ -691,7 +691,7 @@ public:
                 case EVENT_CHECK_TRASH_DEAD:
                     {
                         if (me->FindNearestCreature(NPC_SCION_OF_ETERNITY, 250.0f, true) || me->FindNearestCreature(NPC_NEXUS_LORD, 250.0f, true))
-                            events.RepeatEvent(3000);
+                            events.RepeatEvent(3s);
                         else
                         {
                             me->SendMeleeAttackStop();
@@ -772,7 +772,7 @@ public:
                     break;
                 case EVENT_SPELL_ARCANE_PULSE:
                     me->CastSpell(me, SPELL_ARCANE_PULSE, true);
-                    events.RepeatEvent(3000);
+                    events.RepeatEvent(3s);
                     break;
                 case EVENT_SPELL_STATIC_FIELD:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 200.0f, false))
@@ -780,11 +780,11 @@ public:
                         me->SetFacingToObject(target);
                         me->CastSpell(target, SPELL_STATIC_FIELD_MAIN, true);
                     }
-                    events.RepeatEvent(12000);
+                    events.RepeatEvent(12s);
                     break;
                 case EVENT_SPELL_PH3_SURGE_OF_POWER:
                     me->CastSpell((Unit*)nullptr, SPELL_PH3_SURGE_OF_POWER, false);
-                    events.RepeatEvent(7000);
+                    events.RepeatEvent(7s);
                     break;
             }
 
@@ -1149,11 +1149,11 @@ public:
                 case EVENT_NEXUS_LORD_ARCANE_SHOCK:
                     if (Unit* victim = me->GetVictim())
                         me->CastSpell(victim, SPELL_ARCANE_SHOCK);
-                    events.RepeatEvent(urand(10000,15000));
+                    events.RepeatEvent(10s, 15s);
                     break;
                 case EVENT_NEXUS_LORD_HASTE:
                     me->CastSpell(me, SPELL_HASTE);
-                    events.RepeatEvent(urand(20000,30000));
+                    events.RepeatEvent(20s, 30s);
                     break;
             }
 
@@ -1224,7 +1224,7 @@ public:
                             if (Player* plr = ObjectAccessor::GetPlayer(*me, guids.at(urand(0, guids.size()-1))))
                                 me->CastSpell(plr, SPELL_SCION_ARCANE_BARRAGE);
 
-                        events.RepeatEvent(urand(5000,8000));
+                        events.RepeatEvent(5s, 8s);
                     }
                     break;
             }

@@ -266,19 +266,19 @@ public:
                         insanityTimes++;
                     }
 
-                    events.RepeatEvent(1000);
+                    events.RepeatEvent(1s);
                     break;
                 }
                 case EVENT_HERALD_MIND_FLAY:
                 {
                     me->CastSpell(me->GetVictim(), IsHeroic() ? SPELL_MIND_FLAY_H : SPELL_MIND_FLAY, false);
-                    events.RepeatEvent(20000);
+                    events.RepeatEvent(20s);
                     break;
                 }
                 case EVENT_HERALD_SHADOW:
                 {
                     me->CastSpell(me->GetVictim(), IsHeroic() ? SPELL_SHADOW_BOLT_VOLLEY_H : SPELL_SHADOW_BOLT_VOLLEY, false);
-                    events.RepeatEvent(5000);
+                    events.RepeatEvent(5s);
                     break;
                 }
                 case EVENT_HERALD_SHIVER:
@@ -286,7 +286,7 @@ public:
                     if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         me->CastSpell(pTarget, IsHeroic() ? SPELL_SHIVER_H : SPELL_SHIVER, false);
 
-                    events.RepeatEvent(15000);
+                    events.RepeatEvent(15s);
                     break;
                 }
             }

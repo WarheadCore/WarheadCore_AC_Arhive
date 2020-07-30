@@ -235,7 +235,7 @@ public:
                         events.PopEvent();
                         break;
                     }
-                    events.RepeatEvent(1000);
+                    events.RepeatEvent(1s);
                     break;
                 case EVENT_ARTRUIS_TALK1:
                     me->MonsterYell("I have weathered a hundred years of war and suffering. Do you truly think it wise to pit your mortal bodies against a being that cannot die? I'd venture you have more to lose.", LANG_UNIVERSAL, 0);
@@ -252,19 +252,19 @@ public:
                     break;
                 case EVENT_CAST_FROST_BOLT:
                     me->CastSpell(me->GetVictim(), SPELL_ARTRUIS_FROSTBOLT, false);
-                    events.RepeatEvent(4000);
+                    events.RepeatEvent(4s);
                     break;
                 case EVENT_CAST_ICE_LANCE:
                     me->CastSpell(me->GetVictim(), SPELL_ARTRUIS_ICE_LANCE, false);
-                    events.RepeatEvent(8500);
+                    events.RepeatEvent(8500ms);
                     break;
                 case EVENT_CAST_FROST_NOVA:
                     me->CastSpell(me, SPELL_ARTRUIS_FROST_NOVA, false);
-                    events.RepeatEvent(15000);
+                    events.RepeatEvent(15s);
                     break;
                 case EVENT_CAST_ICY_VEINS:
                     me->CastSpell(me, SPELL_ARTRUIS_ICY_VEINS, false);
-                    events.RepeatEvent(30000);
+                    events.RepeatEvent(30s);
                     break;
             }
         }

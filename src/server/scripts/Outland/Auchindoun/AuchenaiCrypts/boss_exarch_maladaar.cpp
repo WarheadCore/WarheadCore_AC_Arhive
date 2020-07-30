@@ -120,7 +120,7 @@ public:
                         events.PopEvent();
                         return;
                     }
-                    events.RepeatEvent(2000);
+                    events.RepeatEvent(2s);
                     break;
                 case EVENT_SPELL_SOUL:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
@@ -135,16 +135,16 @@ public:
                             summon->AI()->AttackStart(target);
                         }
                     }
-                    events.RepeatEvent(urand(25000, 30000));
+                    events.RepeatEvent(25s, 30s);
                     break;
                 case EVENT_SPELL_RIBBON:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         me->CastSpell(target, SPELL_RIBBON_OF_SOULS, false);
-                    events.RepeatEvent(urand(10000, 20000));
+                    events.RepeatEvent(10s, 20s);
                     break;
                 case EVENT_SPELL_FEAR:
                     me->CastSpell(me, SPELL_SOUL_SCREAM, false);
-                    events.RepeatEvent(urand(15000, 25000));
+                    events.RepeatEvent(15s, 25s);
                     break;
             }
 
@@ -209,43 +209,43 @@ public:
                 {
                     case CLASS_WARRIOR:
                         me->CastSpell(me->GetVictim(), SPELL_MORTAL_STRIKE, false);
-                        events.RepeatEvent(6000);
+                        events.RepeatEvent(6s);
                         break;
                     case CLASS_PALADIN:
                         me->CastSpell(me->GetVictim(), SPELL_HAMMER_OF_JUSTICE, false);
-                        events.RepeatEvent(6000);
+                        events.RepeatEvent(6s);
                         break;
                     case CLASS_HUNTER:
                         me->CastSpell(me->GetVictim(), SPELL_FREEZING_TRAP, false);
-                        events.RepeatEvent(20000);
+                        events.RepeatEvent(20s);
                         break;
                     case CLASS_ROGUE:
                         me->CastSpell(me->GetVictim(), SPELL_HEMORRHAGE, false);
-                        events.RepeatEvent(10000);
+                        events.RepeatEvent(10s);
                         break;
                     case CLASS_PRIEST:
                         me->CastSpell(me->GetVictim(), SPELL_MIND_FLAY, false);
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                         break;
                     case CLASS_SHAMAN:
                         me->CastSpell(me->GetVictim(), SPELL_FROSTSHOCK, false);
-                        events.RepeatEvent(8000);
+                        events.RepeatEvent(8s);
                         break;
                     case CLASS_MAGE:
                         me->CastSpell(me->GetVictim(), SPELL_FIREBALL, false);
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                         break;
                     case CLASS_WARLOCK:
                         me->CastSpell(me->GetVictim(), SPELL_CURSE_OF_AGONY, false);
-                        events.RepeatEvent(20000);
+                        events.RepeatEvent(20s);
                         break;
                     case CLASS_DRUID:
                         me->CastSpell(me->GetVictim(), SPELL_MOONFIRE, false);
-                        events.RepeatEvent(10000);
+                        events.RepeatEvent(10s);
                         break;
                     case CLASS_DEATH_KNIGHT:
                         me->CastSpell(me->GetVictim(), SPELL_PLAGUE_STRIKE, false);
-                        events.RepeatEvent(6000);
+                        events.RepeatEvent(6s);
                         break;
                 }
             }

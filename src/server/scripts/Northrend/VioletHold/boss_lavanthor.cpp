@@ -95,19 +95,19 @@ public:
                     break;
                 case EVENT_SPELL_FIREBOLT:
                     me->CastSpell(me->GetVictim(), SPELL_FIREBOLT, false);
-                    events.RepeatEvent(urand(5000,13000));
+                    events.RepeatEvent(5s, 13s);
                     break;
                 case EVENT_SPELL_FLAME_BREATH:
                     me->CastSpell(me->GetVictim(), SPELL_FLAME_BREATH, false);
-                    events.RepeatEvent(urand(10000,15000));
+                    events.RepeatEvent(10s, 15s);
                     break;
                 case EVENT_SPELL_LAVA_BURN:
                     me->CastSpell(me->GetVictim(), SPELL_LAVA_BURN, false);
-                    events.RepeatEvent(urand(14000,20000));
+                    events.RepeatEvent(14s, 20s);
                     break;
                 case EVENT_SPELL_CAUTERIZING_FLAMES:
                     me->CastSpell((Unit*)NULL, SPELL_FLAME_BREATH, false);
-                    events.RepeatEvent(urand(10000,16000));
+                    events.RepeatEvent(10s, 16s);
                     break;
             }
 

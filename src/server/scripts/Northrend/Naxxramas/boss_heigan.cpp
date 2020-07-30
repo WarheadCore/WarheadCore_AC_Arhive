@@ -179,11 +179,11 @@ public:
             {
                 case EVENT_SPELL_SPELL_DISRUPTION:
                     me->CastSpell(me, SPELL_SPELL_DISRUPTION, false);
-                    events.RepeatEvent(10000);
+                    events.RepeatEvent(10s);
                     break;
                 case EVENT_SPELL_DECEPIT_FEVER:
                     me->CastSpell(me, RAID_MODE(SPELL_DECREPIT_FEVER_10, SPELL_DECREPIT_FEVER_25), false);
-                    events.RepeatEvent(20000);
+                    events.RepeatEvent(20s);
                     break;
                 case EVENT_SWITCH_PHASE:
                     if (currentPhase == PHASE_SLOW_DANCE)
@@ -212,7 +212,7 @@ public:
                     if (currentPhase == PHASE_SLOW_DANCE)
                         Talk(SAY_TAUNT);
 
-                    events.RepeatEvent(currentPhase == PHASE_SLOW_DANCE ? 10000 : 4000);
+                    events.RepeatEvent(currentPhase == PHASE_SLOW_DANCE ? 10s : 4s);
                     break;
                 case EVENT_SAFETY_DANCE:
                 {
@@ -228,7 +228,7 @@ public:
                         }
 
                     }
-                    events.RepeatEvent(5000);
+                    events.RepeatEvent(5s);
                     return;
                 }
             }

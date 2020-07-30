@@ -139,15 +139,15 @@ class boss_koralon : public CreatureScript
                     case EVENT_BURNING_BREATH:
                         rotateTimer = 1500;
                         me->CastSpell(me, SPELL_BURNING_BREATH, false);
-                        events.RepeatEvent(45000);
+                        events.RepeatEvent(45s);
                         break;
                     case EVENT_METEOR_FISTS:
                         me->CastSpell(me, SPELL_METEOR_FISTS, true);
-                        events.RepeatEvent(45000);
+                        events.RepeatEvent(45s);
                         break;
                     case EVENT_FLAME_CINDER:
                         me->CastSpell(me, SPELL_FLAMING_CINDER, true);
-                        events.RepeatEvent(30000);
+                        events.RepeatEvent(30s);
                         break;
                     default:
                         break;

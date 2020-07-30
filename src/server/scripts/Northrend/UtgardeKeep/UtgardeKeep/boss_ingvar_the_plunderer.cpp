@@ -335,24 +335,24 @@ public:
                         me->CastSpell((Unit*)NULL, SPELL_STAGGERING_ROAR, false);
                     else
                         me->CastSpell((Unit*)NULL, SPELL_DREADFUL_ROAR, false);
-                    events.RepeatEvent(urand(15000,20000));
+                    events.RepeatEvent(15s, 20s);
                     break;
                 case EVENT_SPELL_CLEAVE_OR_WOE_STRIKE:
                     if( me->GetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_ID) == 0 )
                     {
-                        events.RepeatEvent(3000);
+                        events.RepeatEvent(3s);
                         break;
                     }
                     if (me->GetDisplayId() == DISPLAYID_DEFAULT)
                         me->CastSpell(me->GetVictim(), SPELL_CLEAVE, false);
                     else
                         me->CastSpell(me->GetVictim(), SPELL_WOE_STRIKE, false);
-                    events.RepeatEvent(urand(0,4000)+3000);
+                    events.RepeatEvent(3s, 7s);
                     break;
                 case EVENT_SPELL_SMASH:
                     if( me->GetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_ID) == 0 )
                     {
-                        events.RepeatEvent(3000);
+                        events.RepeatEvent(3s);
                         break;
                     }
                     me->SetControlled(true, UNIT_STATE_ROOT);
@@ -362,20 +362,20 @@ public:
                         me->CastSpell((Unit*)NULL, SPELL_SMASH, false);
                     else
                         me->CastSpell((Unit*)NULL, SPELL_DARK_SMASH, false);
-                    events.RepeatEvent(urand(9000,11000));
+                    events.RepeatEvent(9s, 11s);
                     events.RescheduleEvent(EVENT_UNROOT, 3750ms);
                     break;
                 case EVENT_SPELL_ENRAGE_OR_SHADOW_AXE:
                     if (me->GetDisplayId() == DISPLAYID_DEFAULT)
                     {
                         me->CastSpell(me, SPELL_ENRAGE, false);
-                        events.RepeatEvent(10000);
+                        events.RepeatEvent(10s);
                     }
                     else
                     {
                         me->CastSpell((Unit*)NULL, SPELL_SHADOW_AXE, true);
                         SetEquipmentSlots(false, EQUIP_UNEQUIP, EQUIP_NO_CHANGE, EQUIP_NO_CHANGE);
-                        events.RepeatEvent(35000);
+                        events.RepeatEvent(35s);
                         events.RescheduleEvent(EVENT_AXE_RETURN, 10s);
                     }
                     break;

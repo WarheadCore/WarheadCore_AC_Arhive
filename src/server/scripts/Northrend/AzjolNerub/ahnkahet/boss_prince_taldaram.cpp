@@ -163,7 +163,7 @@ public:
                 case EVENT_PRINCE_BLOODTHIRST:
                 {
                     me->CastSpell(me->GetVictim(), SPELL_BLOODTHIRST, false);
-                    events.RepeatEvent(10000);
+                    events.RepeatEvent(10s);
                     break;
                 }
                 case EVENT_PRINCE_FLAME_SPHERES:
@@ -182,7 +182,7 @@ public:
                         if ((cr = me->SummonCreature(CREATURE_FLAME_SPHERE_2, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ()+5.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 10*IN_MILLISECONDS)))
                             summons.Summon(cr);
                     }
-                    events.RepeatEvent(15000);
+                    events.RepeatEvent(15s);
                     break;
                 }
                 case EVENT_PRINCE_VANISH:

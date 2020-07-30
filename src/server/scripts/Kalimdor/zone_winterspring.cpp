@@ -164,7 +164,7 @@ public:
                 if (!player || !player->IsWithinDist2d(me, 60.0f))
                     EnterEvadeMode();
                 else
-                    events.RepeatEvent(5000);
+                    events.RepeatEvent(5s);
                 return;
             }
 
@@ -178,31 +178,31 @@ public:
             {
                 case EVENT_SPELL_CHAIN_LIGHTNING:
                     me->CastSpell(me->GetVictim(), eventId, false);
-                    events.RepeatEvent(7000);
+                    events.RepeatEvent(7s);
                     break;
                 case EVENT_SPELL_TEMPTRESS_KISS:
                     me->CastSpell(me->GetVictim(), eventId, false);
-                    events.RepeatEvent(45000);
+                    events.RepeatEvent(45s);
                     break;
                 case EVENT_SPELL_DEMONIC_ENRAGE:
                     me->CastSpell(me, eventId, false);
-                    events.RepeatEvent(20000);
+                    events.RepeatEvent(20s);
                     break;
                 case EVENT_SPELL_ENTROPIC_STING:
                     me->CastSpell(me->GetVictim(), eventId, false);
-                    events.RepeatEvent(20000);
+                    events.RepeatEvent(20s);
                     break;
                 case EVENT_SPELL_DEMONIC_DOOM:
                     me->CastSpell(me->GetVictim(), eventId, false);
-                    events.RepeatEvent(50000);
+                    events.RepeatEvent(50s);
                     break;
                 case EVENT_SPELL_STINGING_TRAUMA:
                     me->CastSpell(me->GetVictim(), eventId, false);
-                    events.RepeatEvent(20000);
+                    events.RepeatEvent(20s);
                     break;
                 case EVENT_SPELL_DREADFUL_FRIGHT:
                     me->CastSpell(me->GetVictim(), eventId, false);
-                    events.RepeatEvent(15000);
+                    events.RepeatEvent(15s);
                     break;
             }
 

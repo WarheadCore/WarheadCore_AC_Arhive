@@ -142,13 +142,13 @@ class boss_nexusprince_shaffar : public CreatureScript
                 {
                     case EVENT_SPELL_FROST_NOVA:
                         me->CastSpell(me, SPELL_FROSTNOVA, false);
-                        events.RepeatEvent(urand(16000, 23000));
-                        events.DelayEvents(1500);
+                        events.RepeatEvent(16s, 23s);
+                        events.DelayEvents(1500ms);
                         events.ScheduleEvent(EVENT_SPELL_BLINK, 1500ms);
                         break;
                     case EVENT_SPELL_FR_FI:
                         me->CastSpell(me->GetVictim(), RAND(SPELL_FROSTBOLT, SPELL_FIREBALL), false);
-                        events.RepeatEvent(urand(3000, 4000));
+                        events.RepeatEvent(3s, 4s);
                         break;
                     case EVENT_SPELL_BLINK:
                         me->CastSpell(me, SPELL_BLINK, false);
@@ -160,7 +160,7 @@ class boss_nexusprince_shaffar : public CreatureScript
                             Talk(SAY_SUMMON);
 
                         me->CastSpell(me, SPELL_ETHEREAL_BEACON, true);
-                        events.RepeatEvent(10000);
+                        events.RepeatEvent(10s);
                         break;
                 }
 

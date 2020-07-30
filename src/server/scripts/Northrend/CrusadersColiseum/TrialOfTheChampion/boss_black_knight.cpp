@@ -257,36 +257,36 @@ public:
                 case EVENT_SPELL_PLAGUE_STRIKE:
                     if( me->GetVictim() )
                         me->CastSpell(me->GetVictim(), SPELL_PLAGUE_STRIKE, false);
-                    events.RepeatEvent(urand(10000,12000));
+                    events.RepeatEvent(10s, 12s);
                     break;
                 case EVENT_SPELL_ICY_TOUCH:
                     if( me->GetVictim() )
                         me->CastSpell(me->GetVictim(), SPELL_ICY_TOUCH, false);
-                    events.RepeatEvent(urand(5000,6000));
+                    events.RepeatEvent(5s, 6s);
                     break;
                 case EVENT_SPELL_DEATH_RESPITE:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true) )
                         me->CastSpell(target, SPELL_DEATH_RESPITE, false);
-                    events.RepeatEvent(urand(13000,15000));
+                    events.RepeatEvent(13s, 15s);
                     break;
                 case EVENT_SPELL_OBLITERATE:
                     if( me->GetVictim() )
                         me->CastSpell(me->GetVictim(), SPELL_OBLITERATE, false);
-                    events.RepeatEvent(urand(15000,17000));
+                    events.RepeatEvent(15s, 17s);
                     break;
                 case EVENT_SPELL_DESECRATION:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true) )
                         me->CastSpell(target, SPELL_DESECRATION, false);
-                    events.RepeatEvent(urand(14000,17000));
+                    events.RepeatEvent(14s, 17s);
                     break;
                 case EVENT_SPELL_DEATH_BITE:
                     me->CastSpell((Unit*)NULL, SPELL_DEATH_BITE, false);
-                    events.RepeatEvent(urand(2000,4000));
+                    events.RepeatEvent(2s, 4s);
                     break;
                 case EVENT_SPELL_MARKED_DEATH:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.000000f, true) )
                         me->CastSpell(target, SPELL_MARKED_DEATH, false);
-                    events.RepeatEvent(9000);
+                    events.RepeatEvent(9s);
                     break;
             }
 
@@ -467,12 +467,12 @@ public:
                             events.PopEvent();
                             break;
                         }
-                    events.RepeatEvent(1000);
+                    events.RepeatEvent(1s);
                     break;
                 case 2: // claw
                     if (Unit* target = me->GetVictim())
                         me->CastSpell(target, SPELL_CLAW_N, false);
-                    events.RepeatEvent(urand(6000,8000));
+                    events.RepeatEvent(6s, 8s);
                     break;
             }
 

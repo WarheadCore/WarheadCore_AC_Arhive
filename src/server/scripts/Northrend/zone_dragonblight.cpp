@@ -415,7 +415,7 @@ public:
                 {
                     if (me->FindNearestCreature(NPC_INFINITE_TIMERENDER, 50.0f))
                     {
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                         return;
                     }
 
@@ -1312,22 +1312,22 @@ public:
                     break;
                 case 2:
                     me->CastSpell((Unit*)NULL, 70866, false);
-                    events.RepeatEvent(urand(30000, 35000));
+                    events.RepeatEvent(30s, 35s);
                     break;
                 case 3:
                     if (me->GetVictim())
                         me->CastSpell(me->GetVictim(), 70886, false);
-                    events.RepeatEvent(urand(15000, 30000));
+                    events.RepeatEvent(15s, 30s);
                     break;
                 case 4:
                     if (me->GetVictim())
                         me->CastSpell(me->GetVictim(), 71003, false);
-                    events.RepeatEvent(urand(15000, 30000));
+                    events.RepeatEvent(15s, 30s);
                     break;
                 case 5:
                     if (me->GetVictim())
                         me->CastSpell(me->GetVictim(), 70864, false);
-                    events.RepeatEvent(urand(8000, 12000));
+                    events.RepeatEvent(8s, 12s);
                     break;
                 case 6:
                     Talk(0);

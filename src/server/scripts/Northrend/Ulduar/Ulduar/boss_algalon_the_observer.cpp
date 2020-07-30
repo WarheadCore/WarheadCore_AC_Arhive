@@ -667,7 +667,7 @@ class boss_algalon_the_observer : public CreatureScript
                         break;
                     case EVENT_QUANTUM_STRIKE:
                         me->CastSpell(me->GetVictim(), SPELL_QUANTUM_STRIKE, false);
-                        events.RepeatEvent(urand(3000, 4500));
+                        events.RepeatEvent(3s, 4500ms);
                         break;
                     case EVENT_PHASE_PUNCH:
                         me->CastSpell(me->GetVictim(), SPELL_PHASE_PUNCH, false);
@@ -678,23 +678,23 @@ class boss_algalon_the_observer : public CreatureScript
                         Talk(EMOTE_ALGALON_COLLAPSING_STAR);
                         for (uint8 i = 0; i < COLLAPSING_STAR_COUNT; ++i)
                             me->SummonCreature(NPC_COLLAPSING_STAR, CollapsingStarPos[i], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 2000);
-                        events.RepeatEvent(60000);
+                        events.RepeatEvent(1min);
                         break;
                     case EVENT_COSMIC_SMASH:
                         Talk(EMOTE_ALGALON_COSMIC_SMASH);
                         me->CastCustomSpell(SPELL_COSMIC_SMASH, SPELLVALUE_MAX_TARGETS, RAID_MODE(1,3), (Unit*)NULL);
-                        events.RepeatEvent(25500);
+                        events.RepeatEvent(25500ms);
                         break;
                     case EVENT_ACTIVATE_LIVING_CONSTELLATION:
                     {
                         if (events.GetPhaseMask() & PHASE_MASK_NO_UPDATE)
                         {
-                            events.RepeatEvent(4000);
+                            events.RepeatEvent(4s);
                             break;
                         }
                         CallConstellations();
                         //me->CastSpell(me, SPELL_TRIGGER_3_ADDS, true);
-                        events.RepeatEvent(50000);
+                        events.RepeatEvent(50s);
                         break;
                     }
                     case EVENT_BIG_BANG:
@@ -706,7 +706,7 @@ class boss_algalon_the_observer : public CreatureScript
                         summons.DoAction(ACTION_BIG_BANG, pred);
 
                         me->CastSpell((Unit*)NULL, SPELL_BIG_BANG, false);
-                        events.RepeatEvent(90500);
+                        events.RepeatEvent(90500ms);
                         break;
                     }
                     case EVENT_ASCEND_TO_THE_HEAVENS:
@@ -807,7 +807,7 @@ class boss_algalon_the_observer : public CreatureScript
                         if (DoCheckHeraldOfTheTitans())
                             events.PopEvent();
                         else
-                            events.RepeatEvent(5000);
+                            events.RepeatEvent(5s);
                         break;
                 }
 
@@ -1035,7 +1035,7 @@ class npc_living_constellation : public CreatureScript
                 {
                     case EVENT_ARCANE_BARRAGE:
                         me->CastCustomSpell(SPELL_ARCANE_BARRAGE, SPELLVALUE_MAX_TARGETS, 1, (Unit*)NULL, true);
-                        events.RepeatEvent(2500);
+                        events.RepeatEvent(2500ms);
                         break;
                     case EVENT_RESUME_UPDATING:
                         events.SetPhase(0);

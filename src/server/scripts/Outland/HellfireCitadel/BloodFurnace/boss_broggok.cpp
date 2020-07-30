@@ -101,7 +101,7 @@ class boss_broggok : public CreatureScript
                         break;
                     case EVENT_SPELL_POISON:
                         me->CastSpell(me, SPELL_POISON_CLOUD, false);
-                        events.RepeatEvent(20000);
+                        events.RepeatEvent(20s);
                         break;
 
                 }

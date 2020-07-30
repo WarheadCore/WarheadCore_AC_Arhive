@@ -128,7 +128,7 @@ public:
                     DoResetThreat();
                     me->SetControlled(true, UNIT_STATE_ROOT);
                     me->setAttackTimer(BASE_ATTACK, 3000);
-                    events.RepeatEvent(30000);
+                    events.RepeatEvent(30s);
                     events.ScheduleEvent(EVENT_UNROOT, 3s);
                     break;
                 case EVENT_UNROOT:
@@ -138,20 +138,20 @@ public:
                 case EVENT_SPELL_BLIZZARD:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 45.0f, true))
                         me->CastSpell(target, SPELL_BLIZZARD, false);
-                    events.RepeatEvent(15000);
+                    events.RepeatEvent(15s);
                     break;
                 case EVENT_SPELL_MANA_DESTRUCTION:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true))
                         me->CastSpell(target, SPELL_MANA_DESTRUCTION, false);
-                    events.RepeatEvent(20000);
+                    events.RepeatEvent(20s);
                     break;
                 case EVENT_SPELL_TAIL_SWEEP:
                     me->CastSpell(me->GetVictim(), SPELL_TAIL_SWEEP, false);
-                    events.RepeatEvent(urand(15000,20000));
+                    events.RepeatEvent(15s, 20s);
                     break;
                 case EVENT_SPELL_UNCONTROLLABLE_ENERGY:
                     me->CastSpell(me->GetVictim(), SPELL_UNCONTROLLABLE_ENERGY, false);
-                    events.RepeatEvent(urand(20000,25000));
+                    events.RepeatEvent(20s, 25s);
                     break;
             }
 

@@ -194,21 +194,21 @@ public:
                 case EVENT_SPELL_ARCANE_BARRAGE:
                     if( Unit* v = me->GetVictim() )
                         me->CastSpell(v, SPELL_ARCANE_BARRAGE, false);
-                    events.RepeatEvent(2500);
+                    events.RepeatEvent(2500ms);
                     break;
                 case EVENT_SPELL_ARCANE_VOLLEY:
                     me->CastSpell(me, SPELL_ARCANE_VOLLEY, false);
-                    events.RepeatEvent(8000);
+                    events.RepeatEvent(8s);
                     break;
                 case EVENT_SPELL_ENRAGED_ASSAULT:
                     Talk(SAY_ENRAGE);
                     me->CastSpell(me, SPELL_ENRAGED_ASSAULT, false);
-                    events.RepeatEvent(35000);
+                    events.RepeatEvent(35s);
                     break;
                 case EVENT_SUMMON_WHELPS:
                     for( uint8 i=0; i<5; ++i )
                         events.ScheduleEvent(EVENT_SUMMON_SINGLE_WHELP, 0s, 8s);
-                    events.RepeatEvent(40000);
+                    events.RepeatEvent(40s);
                     break;
                 case EVENT_SUMMON_SINGLE_WHELP:
                     {

@@ -163,7 +163,7 @@ public:
                         events.RescheduleEvent(EVENT_SPELL_UNHOLY_POWER, 1s);
                         break;
                     }
-                    events.RepeatEvent(3000);
+                    events.RepeatEvent(3s);
                     break;
                 case EVENT_SPELL_UNHOLY_POWER:
                     Talk(SAY_SMASH);
@@ -175,13 +175,13 @@ public:
                 case EVENT_SPELL_OVERLORDS_BRAND:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 95.0f, true))
                         me->CastSpell(target, SPELL_OVERLORDS_BRAND, false);
-                    events.RepeatEvent(urand(11000,12000));
+                    events.RepeatEvent(11s, 12s);
                     break;
                 case EVENT_RIMEFANG_SPELL_ICY_BLAST:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 190.0f, true))
                         if (Creature* c = pInstance->instance->GetCreature(pInstance->GetData64(DATA_RIMEFANG_GUID)))
                             c->CastSpell(target, RIMEFANG_SPELL_ICY_BLAST, false);
-                    events.RepeatEvent(5000);
+                    events.RepeatEvent(5s);
                     break;
                 case EVENT_SPELL_MARK_OF_RIMEFANG:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 190.0f, true))
@@ -191,7 +191,7 @@ public:
                             c->AI()->Talk(EMOTE_RIMEFANG_ICEBOLT, target);
                             c->CastSpell(target, RIMEFANG_SPELL_HOARFROST, false);
                         }
-                    events.RepeatEvent(25000);
+                    events.RepeatEvent(25s);
                     events.RescheduleEvent(EVENT_RIMEFANG_SPELL_ICY_BLAST, 10s);
                     break;
             }

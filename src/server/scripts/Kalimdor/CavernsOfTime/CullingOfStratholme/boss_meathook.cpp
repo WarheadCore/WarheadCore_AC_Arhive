@@ -98,16 +98,16 @@ public:
             {
                 case EVENT_SPELL_DISEASE_EXPULSION:
                     me->CastSpell(me, DUNGEON_MODE(SPELL_DISEASE_EXPULSION_N, SPELL_DISEASE_EXPULSION_H), false);
-                    events.RepeatEvent(6000);
+                    events.RepeatEvent(6s);
                     break;
                 case EVENT_SPELL_FRENZY:
                     me->CastSpell(me, SPELL_FRENZY, false);
-                    events.RepeatEvent(20000);
+                    events.RepeatEvent(20s);
                     break;
                 case EVENT_SPELL_CONSTRICTING_CHAINS:
                     if (Unit *pTarget = SelectTarget(SELECT_TARGET_BOTTOMAGGRO, 0, 50.0f, true))
                         me->CastSpell(pTarget, DUNGEON_MODE(SPELL_CONSTRICTING_CHAINS_N, SPELL_CONSTRICTING_CHAINS_H), false);
-                    events.RepeatEvent(14000);
+                    events.RepeatEvent(14s);
                     break;
             }
 
