@@ -52,6 +52,14 @@ float frand(float min, float max)
     return float(sfmtRand->Random() * (max - min) + min);
 }
 
+Milliseconds randtime(Milliseconds min, Milliseconds max)
+{
+    long long diff = max.count() - min.count();
+    ASSERT(diff >= 0);
+    ASSERT(diff <= (uint32)-1);
+    return min + Milliseconds(urand(0, diff));
+}
+
 uint32 rand32()
 {
     return int32(sfmtRand->BRandom());
