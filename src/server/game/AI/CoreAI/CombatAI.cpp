@@ -70,12 +70,12 @@ void CombatAI::JustDied(Unit* killer)
 
 void CombatAI::EnterCombat(Unit* who)
 {
-    for (SpellVct::iterator i = spells.begin(); i != spells.end(); ++i)
+    for (auto const& spell : spells)
     {
-        if (AISpellInfo[*i].condition == AICOND_AGGRO)
-            me->CastSpell(who, *i, false);
-        else if (AISpellInfo[*i].condition == AICOND_COMBAT)
-            events.ScheduleEvent(*i, Milliseconds(AISpellInfo[spell].cooldown + rand() % AISpellInfo[spell].cooldown));
+        if (AISpellInfo[spell].condition == AICOND_AGGRO)
+            me->CastSpell(who, spell, false);
+        else if (AISpellInfo[spell].condition == AICOND_COMBAT)
+            events.ScheduleEvent(spell, Milliseconds(AISpellInfo[spell].cooldown + rand() % AISpellInfo[spell].cooldown));
     }
 }
 

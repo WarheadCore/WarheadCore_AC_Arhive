@@ -157,7 +157,7 @@ public:
                     break;
                 case EVENT_SPELL_FEAR:
                     me->CastSpell(me, SPELL_FEAR, false);
-                    events.RepeatEvent(20s, 30s);
+                    events.RepeatEvent(20s, 35s);
                     break;
                 case EVENT_SPELL_ENRAGE:
                     me->CastSpell(me->GetVictim(), SPELL_ENRAGE, false);
