@@ -432,7 +432,7 @@ public:
                         }
 
                         events.Repeat(24s); // +6000 below
-                        events.DelayEvents(6000);
+                        events.DelayEvents(6s);
                     }
                     break;
             }

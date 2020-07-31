@@ -974,7 +974,7 @@ class npc_living_constellation : public CreatureScript
                         break;
                     case ACTION_BIG_BANG:
                         events.SetPhase(PHASE_BIG_BANG);
-                        events.DelayEvents(9500);
+                        events.DelayEvents(9500ms);
                         events.ScheduleEvent(EVENT_RESUME_UPDATING, 9500ms);
                         break;
                 }

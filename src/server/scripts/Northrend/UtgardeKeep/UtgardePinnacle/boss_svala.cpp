@@ -342,7 +342,7 @@ public:
                         me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                     }
 
-                    events.DelayEvents(25001); // +1 just to be sure
+                    events.DelayEvents(25001ms); // +1 just to be sure
                     events.ScheduleEvent(EVENT_SORROWGRAVE_RITUAL_SPELLS, 0s);
                     events.ScheduleEvent(EVENT_SORROWGRAVE_FINISH_RITUAL, 25s);
                     return;

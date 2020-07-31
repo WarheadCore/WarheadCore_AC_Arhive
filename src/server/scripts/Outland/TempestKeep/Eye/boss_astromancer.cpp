@@ -166,7 +166,7 @@ class boss_high_astromancer_solarian : public CreatureScript
                         me->setAttackTimer(BASE_ATTACK, 21000);
                         me->SetModelVisible(false);
                         events.ScheduleEvent(EVENT_SPAWN_PORTALS, 50s);
-                        events.DelayEvents(21000);
+                        events.DelayEvents(21s);
                         events.ScheduleEvent(EVENT_SUMMON_ADDS, 6s);
                         events.ScheduleEvent(EVENT_REAPPEAR, 20s);
                         for (uint8 i = 0; i < 3; ++i)

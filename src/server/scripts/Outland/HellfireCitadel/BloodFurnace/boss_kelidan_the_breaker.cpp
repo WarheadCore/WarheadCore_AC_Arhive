@@ -265,7 +265,7 @@ class boss_kelidan_the_breaker : public CreatureScript
                         if (IsHeroic())
                             DoTeleportAll(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation());
 
-                        events.DelayEvents(6000, 0);
+                        events.DelayEvents(6s);
                         events.Repeat(25s, 32s);
                         events.ScheduleEvent(EVENT_SPELL_FIRE_NOVA, 5s);
                         break;

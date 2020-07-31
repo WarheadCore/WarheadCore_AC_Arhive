@@ -559,7 +559,7 @@ class boss_sindragosa : public CreatureScript
                         me->SetControlled(true, UNIT_STATE_ROOT);
                         me->SendMovementFlagUpdate();
                         me->CastSpell(me->GetVictim(), SPELL_TAIL_SMASH, false);
-                        events.DelayEventsToMax(1, 0);
+                        events.DelayEvents(10ms);
                         events.ScheduleEvent(EVENT_UNROOT, 0s);
                         events.ScheduleEvent(EVENT_TAIL_SMASH, 22s, 27s, EVENT_GROUP_LAND_PHASE);
                         break;
@@ -568,7 +568,7 @@ class boss_sindragosa : public CreatureScript
                         me->SetControlled(true, UNIT_STATE_ROOT);
                         me->SendMovementFlagUpdate();
                         me->CastSpell(me->GetVictim(), _isThirdPhase ? SPELL_FROST_BREATH_P2 : SPELL_FROST_BREATH_P1, false);
-                        events.DelayEventsToMax(1, 0);
+                        events.DelayEvents(10ms);
                         events.ScheduleEvent(EVENT_UNROOT, 0s);
                         events.ScheduleEvent(EVENT_FROST_BREATH, 20s, 25s, EVENT_GROUP_LAND_PHASE);
                         break;
@@ -583,7 +583,7 @@ class boss_sindragosa : public CreatureScript
                         break;
                     case EVENT_ICY_GRIP:
                         me->CastSpell((Unit*)NULL, SPELL_ICY_GRIP, false);
-                        events.DelayEventsToMax(1001, 0);
+                        events.DelayEvents(1001ms);
                         events.ScheduleEvent(EVENT_BLISTERING_COLD, 1s, EVENT_GROUP_LAND_PHASE);
                         if (uint32 evTime = events.GetNextEventTime(EVENT_ICE_TOMB))
                             if (events.GetTimer() > evTime || evTime - events.GetTimer() < 7000)

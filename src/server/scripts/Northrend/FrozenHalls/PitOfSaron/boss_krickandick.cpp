@@ -243,7 +243,7 @@ public:
                                 k->CastSpell(k, SPELL_EXPLOSIVE_BARRAGE_KRICK, false);
                                 me->CastSpell(me, SPELL_EXPLOSIVE_BARRAGE_ICK, false);
                             }
-                            events.DelayEvents(20000);
+                            events.DelayEvents(20s);
                             break;
                     }
                     events.Repeat(25s, 30s);

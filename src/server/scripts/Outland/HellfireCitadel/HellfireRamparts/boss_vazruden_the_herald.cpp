@@ -225,7 +225,7 @@ class boss_nazan : public CreatureScript
                         break;
                     case EVENT_CHANGE_POS:
                         me->GetMotionMaster()->MovePoint(POINT_FLIGHT, NazanPos[urand(0,2)], false);
-                        events.DelayEvents(7000);
+                        events.DelayEvents(7s);
                         events.ScheduleEvent(EVENT_CHANGE_POS, 30s);
                         break;
                     case EVENT_RESTORE_COMBAT:

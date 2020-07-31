@@ -151,7 +151,7 @@ class boss_anomalus : public CreatureScript
                             me->CastSpell(me, SPELL_CREATE_RIFT, false);
                             me->CastSpell(me, SPELL_RIFT_SHIELD, true);
                             me->m_Events.AddEvent(new ChargeRifts(me), me->m_Events.CalculateTime(1000));
-                            events.DelayEvents(46000);
+                            events.DelayEvents(46s);
                             break;
                         }
                         events.ScheduleEvent(EVENT_ANOMALUS_HEALTH, 1s);

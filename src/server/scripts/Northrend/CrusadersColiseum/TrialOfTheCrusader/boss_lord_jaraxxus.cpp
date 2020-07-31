@@ -219,7 +219,7 @@ public:
                     break;
                 case EVENT_SPELL_NETHER_POWER:
                     me->CastSpell(me, SPELL_NETHER_POWER, false);
-                    events.DelayEvents(5000);
+                    events.DelayEvents(5s);
                     events.Repeat(25s, 45s);
                     break;
                 case EVENT_SPELL_LEGION_FLAME:

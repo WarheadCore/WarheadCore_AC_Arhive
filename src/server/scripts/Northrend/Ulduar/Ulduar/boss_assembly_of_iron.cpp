@@ -800,7 +800,7 @@ public:
                 {
                     // Reschedule old
                     events.Repeat(35s);
-                    events.DelayEvents(18000);
+                    events.DelayEvents(18s);
                     Talk(SAY_BRUNDIR_FLIGHT);
                     
                     _flyPhase = true;

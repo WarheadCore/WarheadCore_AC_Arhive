@@ -264,7 +264,7 @@ public:
                     me->PlayDirectSound(SOUND_VEZAX_SURGE, 0);
                     me->CastSpell(me, SPELL_SURGE_OF_DARKNESS, false);
                     events.Repeat(63s);
-                    events.DelayEvents(10000, 1);
+                    events.DelayEvents(10s, 1);
                     break;
                 case EVENT_SPELL_MARK_OF_THE_FACELESS:
                     {
@@ -311,8 +311,8 @@ public:
                                     sv->GetMotionMaster()->MoveCharge(1852.78f, 81.38f, 342.461f, 28.0f);
                                 }
 
-                            events.DelayEvents(12000, 0);
-                            events.DelayEvents(12000, 1);
+                            events.DelayEvents(12s);
+                            events.DelayEvents(12s, 1);
                             events.ScheduleEvent(EVENT_SARONITE_VAPORS_SWIRL, 6s);
                         }
                     }

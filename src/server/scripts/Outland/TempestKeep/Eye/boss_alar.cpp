@@ -276,7 +276,7 @@ class boss_alar : public CreatureScript
                     case EVENT_SPELL_DIVE_BOMB:
                         me->GetMotionMaster()->MovePoint(POINT_DIVE, alarPoints[POINT_DIVE], false, true);
                         events.ScheduleEvent(EVENT_SPELL_DIVE_BOMB, 30s);
-                        events.DelayEvents(15000);
+                        events.DelayEvents(15s);
                         me->setAttackTimer(BASE_ATTACK, 20000);
                         break;
                     case EVENT_START_DIVE:

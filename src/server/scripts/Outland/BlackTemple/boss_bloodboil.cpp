@@ -178,7 +178,7 @@ class boss_gurtogg_bloodboil : public CreatureScript
                             me->CastSpell(me, SPELL_FEL_GEYSER_STUN, true);
                             me->CastSpell(me, SPELL_INSIGNIFICANCE, true);
                             events.ScheduleEvent(EVENT_SPELL_CHARGE, 2s);
-                            events.DelayEvents(30000, GROUP_DELAY);
+                            events.DelayEvents(30s, GROUP_DELAY);
                         }
                         events.ScheduleEvent(EVENT_SPELL_FEL_GEYSER, 90s);
                         break;

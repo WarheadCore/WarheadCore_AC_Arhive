@@ -279,7 +279,7 @@ class boss_rotface : public CreatureScript
                                 me->CastSpell(c, SPELL_SLIME_SPRAY, false);
                             }
                         }
-                        events.DelayEvents(1);
+                        events.DelayEvents(10ms);
                         events.ScheduleEvent(EVENT_SLIME_SPRAY, 20s);
                         events.ScheduleEvent(EVENT_UNROOT, 0s);
                         break;

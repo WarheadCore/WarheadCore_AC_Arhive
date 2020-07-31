@@ -178,44 +178,18 @@ public:
 
     /**
     * @name DelayEvents
-    * @brief Delays all events in the map. If delay is greater than or equal internal timer, delay will be 0.
-    * @param delay Amount of delay in ms as std::chrono::duration.
+    * @brief Delays all events.
+    * @param delay Amount of delay as std::chrono type.
     */
-    void DelayEvents(Milliseconds delay)
-    {
-        DelayEvents(uint32(delay.count()));
-    }
-
-    /**
-    * @name DelayEvents
-    * @brief Delays all events in the map. If delay is greater than or equal internal timer, delay will be 0.
-    * @param delay Amount of delay.
-    */
-    void DelayEvents(uint32 delay);
+    void DelayEvents(Milliseconds delay);
 
     /**
     * @name DelayEvents
     * @brief Delay all events of the same group.
-    * @param delay Amount of delay in ms as std::chrono::duration.
+    * @param delay Amount of delay as std::chrono type.
     * @param group Group of the events.
     */
-    void DelayEvents(Milliseconds delay, uint32 group)
-    {
-        DelayEvents(uint32(delay.count()), group);
-    }
-
-    /**
-    * @name DelayEventsToMax
-    */
-    void DelayEventsToMax(uint32 delay, uint32 group);
-
-    /**
-    * @name DelayEvents
-    * @brief Delay all events of the same group.
-    * @param delay Amount of delay.
-    * @param group Group of the events.
-    */
-    void DelayEvents(uint32 delay, uint32 group);
+    void DelayEvents(Milliseconds delay, uint32 group);
 
     /**
     * @name CancelEvent

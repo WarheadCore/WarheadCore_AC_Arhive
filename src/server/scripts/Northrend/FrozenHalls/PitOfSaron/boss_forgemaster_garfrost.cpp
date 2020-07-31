@@ -129,7 +129,7 @@ public:
                 me->SetReactState(REACT_PASSIVE);
                 me->SetTarget(0);
                 me->SendMeleeAttackStop(me->GetVictim());
-                events.DelayEvents(8000);
+                events.DelayEvents(8s);
                 me->CastSpell(me, SPELL_THUNDERING_STOMP, false);
                 events.RescheduleEvent(EVENT_JUMP, 1250ms);
                 return;
@@ -142,7 +142,7 @@ public:
                 me->SetReactState(REACT_PASSIVE);
                 me->SetTarget(0);
                 me->SendMeleeAttackStop(me->GetVictim());
-                events.DelayEvents(8000);
+                events.DelayEvents(8s);
                 me->CastSpell(me, SPELL_THUNDERING_STOMP, false);
                 events.RescheduleEvent(EVENT_JUMP, 1250ms);
                 return;

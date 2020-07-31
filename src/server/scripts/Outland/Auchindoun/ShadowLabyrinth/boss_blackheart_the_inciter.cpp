@@ -126,7 +126,7 @@ public:
 
                     DoResetThreat();
                     InciteChaos = true;
-                    events.DelayEvents(15000);
+                    events.DelayEvents(15s);
                     events.Repeat(40s);
                     events.ScheduleEvent(EVENT_INCITE_WAIT, 15s);
                     break;

@@ -285,7 +285,7 @@ public:
                         return;
                     }
                     events.Repeat(45s);
-                    events.DelayEvents(35000);
+                    events.DelayEvents(35s);
                     me->SetReactState(REACT_PASSIVE);
                     me->AttackStop();
                     float x, y, z, o;

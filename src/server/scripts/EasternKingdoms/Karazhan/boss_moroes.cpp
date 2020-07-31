@@ -227,7 +227,7 @@ class boss_moroes : public CreatureScript
                         events.ScheduleEvent(EVENT_SPELL_GOUGE, 25s, 40s);
                         return;
                     case EVENT_SPELL_VANISH:
-                        events.DelayEvents(9000);
+                        events.DelayEvents(9s);
                         events.SetPhase(1);
                         me->CastSpell(me, SPELL_VANISH, false);
                         events.ScheduleEvent(EVENT_SPELL_VANISH, 30s);

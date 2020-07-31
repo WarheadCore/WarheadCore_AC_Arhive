@@ -154,7 +154,7 @@ public:
                     events.ScheduleEvent(EVENT_MIGHTY_BLOW, 16s);
                     break;
                 case EVENT_WHIRLWIND:
-                    events.DelayEvents(15000);
+                    events.DelayEvents(15s);
                     me->CastSpell(me, SPELL_WHIRLWIND, false);
                     events.ScheduleEvent(EVENT_WHIRLWIND, 54s);
                     break;

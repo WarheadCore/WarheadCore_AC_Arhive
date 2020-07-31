@@ -103,27 +103,21 @@ uint32 EventMap::ExecuteEvent()
     return 0;
 }
 
-void EventMap::DelayEventsToMax(uint32 delay, uint32 group)
+void EventMap::DelayEvents(Milliseconds delay)
 {
-    for (EventStore::iterator itr = _eventMap.begin(); itr != _eventMap.end();)
+    if (Empty())
+        return;
+
+    EventStore delayed = std::move(_eventMap);
+    for (EventStore::iterator itr = delayed.begin(); itr != delayed.end();)
     {
-        if (itr->first < _time + delay && (group == 0 || ((1 << (group + 15)) & itr->second)))
-        {
-            ScheduleEvent(itr->second, Milliseconds(delay));
-            _eventMap.erase(itr);
-            itr = _eventMap.begin();
-        }
-        else
-            ++itr;
+        EventStore::node_type node = delayed.extract(itr++);
+        node.key() = node.key() + delay.count();
+        _eventMap.insert(_eventMap.end(), std::move(node));
     }
 }
 
-void EventMap::DelayEvents(uint32 delay)
-{
-    _time = delay < _time ? _time - delay : 0;
-}
-
-void EventMap::DelayEvents(uint32 delay, uint32 group)
+void EventMap::DelayEvents(Milliseconds delay, uint32 group)
 {
     if (!group || group > 8 || Empty())
         return;
@@ -132,9 +126,9 @@ void EventMap::DelayEvents(uint32 delay, uint32 group)
 
     for (EventStore::iterator itr = _eventMap.begin(); itr != _eventMap.end();)
     {
-        if (!group || (itr->second & (1 << (group + 15))))
+        if (itr->second & (1 << (group + 15)))
         {
-            delayed.insert(EventStore::value_type(itr->first + delay, itr->second));
+            delayed.insert(std::make_pair(itr->first + delay.count(), itr->second));
             _eventMap.erase(itr++);
         }
         else
@@ -181,7 +175,7 @@ uint32 EventMap::GetNextEventTime(uint32 eventId) const
     if (Empty())
         return 0;
 
-    for (std::pair<uint32 const, uint32> const& itr : _eventMap)
+    for (auto const& itr : _eventMap)
         if (eventId == (itr.second & 0x0000FFFF))
             return itr.first;
 

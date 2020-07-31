@@ -228,7 +228,7 @@ class boss_magtheridon : public CreatureScript
                         {
                             Talk(SAY_PHASE3);
                             events.SetPhase(1);
-                            events.DelayEvents(18000);
+                            events.DelayEvents(18s);
                             events.ScheduleEvent(EVENT_COLLAPSE_CEIL, 8s);
                             events.ScheduleEvent(EVENT_COLLAPSE_DAMAGE, 15s);
                             break;

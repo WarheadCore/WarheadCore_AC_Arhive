@@ -918,7 +918,6 @@ class boss_the_lich_king : public CreatureScript
                         Talk(SAY_LK_REMORSELESS_WINTER);
                         me->GetMap()->SetZoneMusic(AREA_THE_FROZEN_THRONE, MUSIC_SPECIAL);
                         me->CastSpell(me, SPELL_REMORSELESS_WINTER_1, false);
-                        //events.DelayEvents(62500, EVENT_GROUP_BERSERK); // delay berserk timer, its not ticking during phase transitions, bullshit, 15mins on movies
                         events.ScheduleEvent(EVENT_QUAKE, 62500ms);
                         events.ScheduleEvent(EVENT_PAIN_AND_SUFFERING, 3500ms, EVENT_GROUP_ABILITIES);
                         events.ScheduleEvent(EVENT_SUMMON_ICE_SPHERE, 8s, EVENT_GROUP_ABILITIES);
@@ -930,7 +929,6 @@ class boss_the_lich_king : public CreatureScript
                         me->GetMap()->SetZoneMusic(AREA_THE_FROZEN_THRONE, MUSIC_SPECIAL);
                         me->CastSpell(me, SPELL_REMORSELESS_WINTER_2, false);
                         summons.DespawnEntry(NPC_VALKYR_SHADOWGUARD);
-                        //events.DelayEvents(62500, EVENT_GROUP_BERSERK); // delay berserk timer, its not ticking during phase transitions, bullshit, 15 mins on movies
                         events.ScheduleEvent(EVENT_QUAKE_2, 62500ms);
                         events.ScheduleEvent(EVENT_PAIN_AND_SUFFERING, 3500ms, EVENT_GROUP_ABILITIES);
                         events.ScheduleEvent(EVENT_SUMMON_ICE_SPHERE, 8s, EVENT_GROUP_ABILITIES);
@@ -1150,7 +1148,7 @@ class boss_the_lich_king : public CreatureScript
                         me->SetReactState(REACT_PASSIVE);
                         me->AttackStop();
                         events.ScheduleEvent(EVENT_START_ATTACK, 55s);
-                        events.DelayEvents(52500, EVENT_GROUP_VILE_SPIRITS);
+                        events.DelayEvents(52500ms, EVENT_GROUP_VILE_SPIRITS);
                         events.CancelEvent(EVENT_DEFILE);
                         events.CancelEvent(EVENT_SOUL_REAPER);
                         events.ScheduleEvent(EVENT_FROSTMOURNE_HEROIC, 6s, EVENT_GROUP_ABILITIES);

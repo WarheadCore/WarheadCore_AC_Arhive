@@ -237,7 +237,7 @@ public:
                 {
                     me->CastSpell(me, IsHeroic() ? SPELL_WHIRLWIND_H : SPELL_WHIRLWIND_N, false);
                     events.Repeat(15s, 20s);
-                    events.DelayEvents(10000);
+                    events.DelayEvents(10s);
                     break;
                 }
             }

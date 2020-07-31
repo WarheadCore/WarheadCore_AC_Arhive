@@ -210,7 +210,7 @@ class boss_leotheras_the_blind : public CreatureScript
                             }
                             events.CancelEvent(EVENT_SWITCH_TO_DEMON);
                             events.CancelEvent(EVENT_SPELL_INSIDIOUS_WHISPER);
-                            events.DelayEvents(10000);
+                            events.DelayEvents(10s);
                             events.ScheduleEvent(EVENT_SUMMON_DEMON, 4s);
                             events.ScheduleEvent(EVENT_RESTORE_FIGHT, 6s);
                             me->SetStandState(UNIT_STAND_STATE_KNEEL);

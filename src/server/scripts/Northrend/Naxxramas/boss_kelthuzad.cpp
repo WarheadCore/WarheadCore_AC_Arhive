@@ -400,7 +400,7 @@ public:
                     if (me->HealthBelowPct(45))
                     {
                         Talk(SAY_REQUEST_AID);
-                        events.DelayEvents(5500);
+                        events.DelayEvents(5500ms);
                         events.ScheduleEvent(EVENT_THIRD_PHASE_LICH_KING_SAY, 5s);
                         break;
                     }

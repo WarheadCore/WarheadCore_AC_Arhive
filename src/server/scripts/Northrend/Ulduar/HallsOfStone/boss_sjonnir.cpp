@@ -269,7 +269,7 @@ public:
                 {
                     me->CastSpell(me, DUNGEON_MODE(SPELL_LIGHTNING_RING, SPELL_LIGHTNING_RING_H), false);
                     events.Repeat(25s, 31s);
-                    events.DelayEvents(10000); // Channel duration
+                    events.DelayEvents(10s); // Channel duration
                     break;
                 }
                 case EVENT_SUMMON_SPEACH:

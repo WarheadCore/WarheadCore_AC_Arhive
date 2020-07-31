@@ -224,14 +224,14 @@ public:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40.0f, true))
                         me->CastSpell(target, SPELL_WELL_OF_SOULS, false);
                     events.Repeat(25s, 30s);
-                    events.DelayEventsToMax(4000, 0);
+                    events.DelayEvents(4s);
                     break;
                 case EVENT_SPELL_UNLEASHED_SOULS:
                     me->CastSpell(me, SPELL_UNLEASHED_SOULS, false);
                     Talk(SAY_FACE_UNLEASH_SOUL);
                     Talk(EMOTE_UNLEASH_SOUL);
                     events.Repeat(30s, 40s);
-                    events.DelayEventsToMax(5000, 0);
+                    events.DelayEvents(5s);
                     me->setAttackTimer(BASE_ATTACK, 5500);
                     break;
                 case EVENT_SPELL_WAILING_SOULS:
@@ -240,7 +240,7 @@ public:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
                         me->CastCustomSpell(SPELL_WAILING_SOULS_TARGETING, SPELLVALUE_MAX_TARGETS, 1, target, false);
                     events.Repeat(80s);
-                    events.DelayEventsToMax(20000, 0);
+                    events.DelayEvents(20s);
                     break;
             }
 

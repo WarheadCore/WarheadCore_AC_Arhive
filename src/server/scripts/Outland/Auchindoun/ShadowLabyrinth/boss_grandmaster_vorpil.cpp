@@ -198,7 +198,7 @@ public:
                     me->CastSpell(me, SPELL_RAIN_OF_FIRE_N);
 
                     events.Repeat(24s);
-                    events.DelayEvents(6000);
+                    events.DelayEvents(6s);
                     break;
                 }
             }

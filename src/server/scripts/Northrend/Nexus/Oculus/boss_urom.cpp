@@ -336,7 +336,7 @@ public:
                     z = me->GetPositionZ();
                     me->CastSpell(me, SPELL_TELEPORT, false);
                     events.Repeat(25s, 30s);
-                    events.DelayEvents(10000);
+                    events.DelayEvents(10s);
                     break;
                 case EVENT_TELE_BACK:
                     me->GetMotionMaster()->MoveIdle();

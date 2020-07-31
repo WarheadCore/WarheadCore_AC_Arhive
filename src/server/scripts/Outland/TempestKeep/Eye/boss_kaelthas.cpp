@@ -634,7 +634,7 @@ class boss_kaelthas : public CreatureScript
                         Talk(SAY_PYROBLAST);
                         me->CastSpell(me, SPELL_SHOCK_BARRIER, false);
                         events.ScheduleEvent(EVENT_SPELL_SEQ_3, 50s);
-                        events.DelayEvents(10000);
+                        events.DelayEvents(10s);
                         events.ScheduleEvent(EVENT_SPELL_PYROBLAST, 0s);
                         events.ScheduleEvent(EVENT_SPELL_PYROBLAST, 4s);
                         events.ScheduleEvent(EVENT_SPELL_PYROBLAST, 8s);
@@ -681,7 +681,7 @@ class boss_kaelthas : public CreatureScript
                         events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
                         break;
                     case EVENT_SPELL_GRAVITY_LAPSE:
-                        events.DelayEvents(30000);
+                        events.DelayEvents(30s);
                         me->setAttackTimer(BASE_ATTACK, 30000);
                         events.ScheduleEvent(EVENT_SPELL_GRAVITY_LAPSE, 90s);
                         events.ScheduleEvent(EVENT_GRAVITY_LAPSE_END, 32s);

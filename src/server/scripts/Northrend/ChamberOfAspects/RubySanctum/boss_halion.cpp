@@ -406,7 +406,7 @@ class boss_halion : public CreatureScript
                         {
                             Talk(SAY_PHASE_TWO);
                             me->CastSpell(me, SPELL_TWILIGHT_PHASING, false);
-                            events.DelayEvents(10000);
+                            events.DelayEvents(10s);
                             return;
                         }
                         events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);

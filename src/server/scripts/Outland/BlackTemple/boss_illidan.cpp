@@ -665,17 +665,15 @@ class boss_illidan_stormrage : public CreatureScript
                         if (summons.HasEntry(NPC_MAIEV_SHADOWSONG))
                         {
                             ScheduleNormalEvents(5);
-                            events.DelayEvents(11000);
                             events.ScheduleEvent(EVENT_MOVE_MAIEV, 10s);
-                            events.ScheduleEvent(EVENT_FINISH_TRANSFORM, 10500ms);
                         }
                         else
                         {
                             ScheduleNormalEvents(3);
                             events.ScheduleEvent(EVENT_PHASE_5_START, 1s);
-                            events.DelayEvents(11000);
-                            events.ScheduleEvent(EVENT_FINISH_TRANSFORM, 10500ms);
                         }
+                        events.DelayEvents(11s);
+                        events.ScheduleEvent(EVENT_FINISH_TRANSFORM, 10500ms);
                         break;
                     case EVENT_MOVE_MAIEV:
                         if (Creature* maiev = summons.GetCreatureWithEntry(NPC_MAIEV_SHADOWSONG))

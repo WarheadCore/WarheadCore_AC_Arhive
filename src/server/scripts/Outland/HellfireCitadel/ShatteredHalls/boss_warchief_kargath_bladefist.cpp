@@ -147,7 +147,7 @@ class boss_warchief_kargath_bladefist : public CreatureScript
                         events.ScheduleEvent(EVENT_SUMMON_ADDS, 30s);
                         break;
                     case EVENT_BLADE_DANCE:
-                        events.DelayEvents(10001);
+                        events.DelayEvents(10001ms);
                         events.ScheduleEvent(EVENT_BLADE_DANCE, 40s);
                         events.ScheduleEvent(EVENT_MOVE_TO_NEXT_POINT, 0s);
                         events.ScheduleEvent(EVENT_FINISH_BLADE_DANCE, 10s);

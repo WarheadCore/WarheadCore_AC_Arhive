@@ -196,7 +196,7 @@ class boss_anub_arak : public CreatureScript
                             me->CastSpell(me, SPELL_SUBMERGE, false);
                             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE|UNIT_FLAG_NOT_SELECTABLE);
 
-                            events.DelayEvents(46000, 0);
+                            events.DelayEvents(46s);
                             events.ScheduleEvent(EVENT_EMERGE, 45s);
                             events.ScheduleEvent(EVENT_SUMMON_ASSASSINS, 2s);
                             events.ScheduleEvent(EVENT_SUMMON_GUARDIAN, 4s);

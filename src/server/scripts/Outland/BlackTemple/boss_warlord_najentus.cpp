@@ -110,7 +110,7 @@ public:
             {
                 case EVENT_SPELL_SHIELD:
                     me->CastSpell(me, SPELL_TIDAL_SHIELD, false);
-                    events.DelayEvents(10000);
+                    events.DelayEvents(10s);
                     events.ScheduleEvent(EVENT_SPELL_SHIELD, 1min);
                     break;
                 case EVENT_SPELL_BERSERK:

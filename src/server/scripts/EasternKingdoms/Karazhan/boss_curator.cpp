@@ -148,7 +148,7 @@ class boss_curator : public CreatureScript
                             Talk(SAY_EVOCATE);
                             me->CastSpell(me, SPELL_EVOCATION, false);
 
-                            events.DelayEvents(20000);
+                            events.DelayEvents(20s);
                             events.ScheduleEvent(EVENT_SPELL_ASTRAL_FLARE, 20s);
                         }
                         else

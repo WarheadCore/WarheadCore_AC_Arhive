@@ -659,7 +659,8 @@ public:
 
             uint32 timer = events.GetNextEventTime(EVENT_SARA_P2_OPEN_PORTALS);
             uint32 portalTime = (timer > events.GetTimer() ? timer - events.GetTimer() : 0);
-            events.DelayEvents(param+100);
+            Milliseconds delay = Milliseconds(param) + 100ms;
+            events.DelayEvents(delay);
             events.RescheduleEvent(EVENT_SARA_P2_OPEN_PORTALS, Milliseconds(portalTime), 0, EVENT_PHASE_TWO);
             events.ScheduleEvent(EVENT_SARA_P2_REMOVE_STUN, Milliseconds(param), 0, EVENT_PHASE_TWO);
             me->CastSpell(me, SPELL_SHATTERED_ILLUSION, true);

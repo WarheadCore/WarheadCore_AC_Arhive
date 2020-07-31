@@ -152,7 +152,7 @@ public:
                         DoCast(target, SPELL_BLINK_TELEPORT);
                     }
                     events.Repeat(35s, 40s);
-                    events.DelayEvents(500);
+                    events.DelayEvents(500ms);
                     events.ScheduleEvent(EVENT_SPELL_BLINK_2, 0s);
                     return;
                 case EVENT_SPELL_BLINK_2:
@@ -288,25 +288,25 @@ public:
                 case EVENT_SPELL_SCREECH:
                     me->CastSpell(me, SPELL_PARALYZING_SCREECH, false);
                     events.Repeat(23s);
-                    events.DelayEvents(3000);
+                    events.DelayEvents(3s);
                     break;
                 case EVENT_SPELL_BOMB:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true))
                         me->CastSpell(target, SPELL_SPELL_BOMB, false);
                     events.Repeat(16s, 24500ms);
-                    events.DelayEvents(3000);
+                    events.DelayEvents(3s);
                     break;
                 case EVENT_SPELL_CYCLONE:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 45.0f, true))
                         me->CastSpell(target, SPELL_CYCLONE, false);
                     events.Repeat(22s, 27s);
-                    events.DelayEvents(3000);
+                    events.DelayEvents(3s);
                     break;
                 case EVENT_ANZU_HEALTH1:
                     if (me->HealthBelowPct(66))
                     {
                         SummonBroods();
-                        events.DelayEvents(10000);
+                        events.DelayEvents(10s);
                         return;
                     }
                     events.Repeat(1s);
@@ -315,7 +315,7 @@ public:
                     if (me->HealthBelowPct(33))
                     {
                         SummonBroods();
-                        events.DelayEvents(10000);
+                        events.DelayEvents(10s);
                         return;
                     }
                     events.Repeat(1s);
