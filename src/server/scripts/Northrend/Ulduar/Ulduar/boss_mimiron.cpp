@@ -445,24 +445,21 @@ public:
 
             events.Update(diff);
 
-            switch( events.GetEvent() )
+            switch( events.ExecuteEvent() )
             {
                 case 0:
                     break;
                 case EVENT_COMPUTER_SAY_INITIATED:
                     if( Creature* computer = me->SummonCreature(NPC_COMPUTER, 2790.0f, 2569.44f, 364.31f, 0.0f, TEMPSUMMON_TIMED_DESPAWN, 1000) )
                         computer->AI()->Talk(TALK_COMPUTER_INITIATED);
-                    events.PopEvent();
                     break;
                 case EVENT_COMPUTER_SAY_MINUTES:
                     if( Creature* computer = me->SummonCreature(NPC_COMPUTER, 2790.0f, 2569.44f, 364.31f, 0.0f, TEMPSUMMON_TIMED_DESPAWN, 1000) )
                         computer->AI()->Talk(minutesTalkNum++);
-                    events.PopEvent();
                     break;
                 case EVENT_MIMIRON_SAY_HARDMODE:
                     me->MonsterYell(TEXT_HARDMODE, LANG_UNIVERSAL, 0);
                     me->PlayDirectSound(SOUND_TANK_HARD_INTRO);
-                    events.PopEvent();
                     events.ScheduleEvent(EVENT_SPAWN_FLAMES_INITIAL, 0s);
                     events.ScheduleEvent(EVENT_SIT_LMK2, 4s);
                     break;
@@ -491,7 +488,7 @@ public:
                                 pg.erase(pg.begin()+index);
                             }
 
-                        events.RepeatEvent(30s);
+                        events.Repeat(30s);
                     }
                     break;
                 case EVENT_BERSERK:
@@ -500,7 +497,6 @@ public:
                     me->PlayDirectSound(SOUND_BERSERK);
                     if( hardmode )
                         me->SummonCreature(33576, 2744.78f, 2569.47f, 364.32f, 0.0f, TEMPSUMMON_TIMED_DESPAWN, 120000);
-                    events.PopEvent();
                     events.ScheduleEvent(EVENT_BERSERK_2, 0s);
                     break;
                 case EVENT_BERSERK_2:
@@ -514,14 +510,13 @@ public:
                             LMK2->CastSpell(LMK2, SPELL_BERSERK, true);
                         if ((ACU = GetACU()))
                             ACU->CastSpell(ACU, SPELL_BERSERK, true);
-                        events.RepeatEvent(30s);
+                        events.Repeat(30s);
                     }
                     break;
                 case EVENT_SIT_LMK2:
                     if(Creature* LMK2 = GetLMK2())
                     {
                         me->EnterVehicle(LMK2, 6);
-                        events.PopEvent();
                         events.ScheduleEvent(EVENT_SIT_LMK2_INTERVAL, 2s);
                         break;
                     }
@@ -538,7 +533,6 @@ public:
                                     cannon->CastSpell(cannon, SPELL_EMERGENCY_MODE, true);
                         }
                         LMK2->AI()->SetData(1, 1);
-                        events.PopEvent();
                         break;
                     }
                     EnterEvadeMode();
@@ -550,7 +544,6 @@ public:
                         me->MonsterYell(TEXT_LMK2_DEATH, LANG_UNIVERSAL, 0);
                         me->PlayDirectSound(SOUND_TANK_DEATH);
                         LMK2->SetFacingTo(3.58f);
-                        events.PopEvent();
                         events.ScheduleEvent(EVENT_ELEVATOR_INTERVAL_0, 6s);
                         break;
                     }
@@ -563,7 +556,6 @@ public:
                         elevator->UseDoorOrButton(0, false);
                         elevator->EnableCollision(false);
                     }
-                    events.PopEvent();
                     events.ScheduleEvent(EVENT_ELEVATOR_INTERVAL_1, 6s);
                     break;
                 case EVENT_ELEVATOR_INTERVAL_1:
@@ -575,7 +567,6 @@ public:
                             elevator->UseDoorOrButton(0, true);
                             elevator->EnableCollision(false);
                         }
-                        events.PopEvent();
                         events.ScheduleEvent(EVENT_ELEVATOR_INTERVAL_2, 18s);
                         break;
                     }
@@ -585,7 +576,6 @@ public:
                     if (Creature* VX001 = GetVX001())
                     {
                         me->EnterVehicle(VX001, 0);
-                        events.PopEvent();
                         events.ScheduleEvent(EVENT_SITTING_ON_VX001, 4s);
                         break;
                     }
@@ -594,14 +584,12 @@ public:
                 case EVENT_SITTING_ON_VX001:
                     me->MonsterYell(TEXT_VX001_ACTIVATE, LANG_UNIVERSAL, 0);
                     me->PlayDirectSound(SOUND_TORSO_ACTIVE);
-                    events.PopEvent();
                     events.ScheduleEvent(EVENT_ENTER_VX001, 5s);
                     break;
                 case EVENT_ENTER_VX001:
                     if( Creature* VX001 = GetVX001() )
                     {
                         me->EnterVehicle(VX001, 1);
-                        events.PopEvent();
                         events.ScheduleEvent(EVENT_EMOTE_VX001, 2s);
                         break;
                     }
@@ -611,7 +599,6 @@ public:
                     if( Creature* VX001 = GetVX001() )
                     {
                         VX001->HandleEmoteCommand(EMOTE_ONESHOT_EMERGE);
-                        events.PopEvent();
                         events.ScheduleEvent(EVENT_VX001_START_FIGHT, 1750ms);
                         break;
                     }
@@ -624,7 +611,6 @@ public:
                             VX001->CastSpell(VX001, SPELL_EMERGENCY_MODE, true);
                         VX001->AI()->SetData(1, 2);
                         me->SetInCombatWithZone();
-                        events.PopEvent();
                         break;
                     }
                     EnterEvadeMode();
@@ -634,7 +620,6 @@ public:
                     {
                         VX001->HandleEmoteCommand(EMOTE_STATE_DROWNED);
                         VX001->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_STATE_DROWNED);
-                        events.PopEvent();
                         events.ScheduleEvent(EVENT_GET_OUT_VX001, 2500ms);
                         break;
                     }
@@ -648,7 +633,6 @@ public:
                             float speed = ACU->GetDistance(2737.75f, 2574.22f, 381.34f) / 2.0f;
                             ACU->MonsterMoveWithSpeed(2737.75f, 2574.22f, 381.34f, speed);
                             ACU->SetPosition(2737.75f, 2574.22f, 381.34f, M_PI);
-                            events.PopEvent();
                             events.ScheduleEvent(EVENT_SAY_VX001_DEAD, 2s);
                             break;
                         }
@@ -658,14 +642,12 @@ public:
                     changeAllowedFlameSpreadTime = true;
                     me->MonsterYell(TEXT_VX001_DEATH, LANG_UNIVERSAL, 0);
                     me->PlayDirectSound(SOUND_TORSO_DEATH);
-                    events.PopEvent();
                     events.ScheduleEvent(EVENT_ENTER_ACU, 7s);
                     break;
                 case EVENT_ENTER_ACU:
                     if( Creature* ACU = GetACU() )
                     {
                         me->EnterVehicle(ACU, 0);
-                        events.PopEvent();
                         events.ScheduleEvent(EVENT_SAY_ACU_ACTIVATE, 6s);
                         break;
                     }
@@ -674,7 +656,6 @@ public:
                 case EVENT_SAY_ACU_ACTIVATE:
                     me->MonsterYell(TEXT_ACU_ACTIVATE, LANG_UNIVERSAL, 0);
                     me->PlayDirectSound(SOUND_HEAD_ACTIVE);
-                    events.PopEvent();
                     events.ScheduleEvent(EVENT_ACU_START_ATTACK, 4s);
                     break;
                 case EVENT_ACU_START_ATTACK:
@@ -684,7 +665,6 @@ public:
                             ACU->CastSpell(ACU, SPELL_EMERGENCY_MODE, true);
                         ACU->AI()->SetData(1, 3);
                         me->SetInCombatWithZone();
-                        events.PopEvent();
                         break;
                     }
                     EnterEvadeMode();
@@ -692,14 +672,12 @@ public:
                 case EVENT_SAY_ACU_DEAD:
                     me->MonsterYell(TEXT_ACU_DEATH, LANG_UNIVERSAL, 0);
                     me->PlayDirectSound(SOUND_HEAD_DEATH);
-                    events.PopEvent();
                     events.ScheduleEvent(EVENT_LEVIATHAN_COME_CLOSER, 5s);
                     break;
                 case EVENT_LEVIATHAN_COME_CLOSER:
                     if (Creature* LMK2 = GetLMK2())
                     {
                         LMK2->GetMotionMaster()->MoveCharge(2755.77f, 2574.95f, 364.31f, 21.0f);
-                        events.PopEvent();
                         events.ScheduleEvent(EVENT_VX001_EMOTE_JUMP, 4s);
                         break;
                     }
@@ -718,7 +696,6 @@ public:
                         VX001->SendMeleeAttackStop();
                         VX001->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_ONESHOT_CUSTOM_SPELL_02);
                         VX001->HandleEmoteCommand(EMOTE_ONESHOT_CUSTOM_SPELL_02);
-                        events.PopEvent();
                         events.ScheduleEvent(EVENT_LEVIATHAN_RIDE_MIDDLE, 4800ms);
                     }
                     break;
@@ -738,7 +715,6 @@ public:
                         VX001->EnterVehicle(LMK2, 3);
                         LMK2->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_STATE_CUSTOM_SPELL_01);
                         LMK2->HandleEmoteCommand(EMOTE_STATE_CUSTOM_SPELL_01);
-                        events.PopEvent();
                         events.ScheduleEvent(EVENT_JOIN_TOGETHER, 3s);
                     }
                     break;
@@ -756,7 +732,6 @@ public:
                         me->EnterVehicle(VX001, 1);
                         me->MonsterYell(TEXT_VOLTRON_ACTIVATE, LANG_UNIVERSAL, 0);
                         me->PlayDirectSound(SOUND_VOLTRON_ACTIVE);
-                        events.PopEvent();
                         events.ScheduleEvent(EVENT_START_PHASE4, 10s);
                     }
                     break;
@@ -784,7 +759,6 @@ public:
                             ACU->CastSpell(ACU, SPELL_EMERGENCY_MODE, true);
                         }
                         me->SetInCombatWithZone();
-                        events.PopEvent();
                     }
                     break;
                 case EVENT_FINISH:
@@ -857,7 +831,6 @@ public:
                     if( uint32 chestId = (hardmode ? RAID_MODE(GO_MIMIRON_CHEST_HARD, GO_MIMIRON_CHEST_HERO_HARD) : RAID_MODE(GO_MIMIRON_CHEST, GO_MIMIRON_CHEST_HERO)) )
                         if( GameObject *go = me->SummonGameObject(chestId, 2744.65f, 2569.46f, 364.397f, 0, 0, 0, 0, 0, 0) )
                             go->SetUInt32Value(GAMEOBJECT_FLAGS, 0);
-                    events.PopEvent();
                     events.ScheduleEvent(EVENT_DISAPPEAR, 15s);
                     break;
                 case EVENT_DISAPPEAR:
@@ -865,7 +838,6 @@ public:
                         pInstance->SetData(TYPE_MIMIRON, DONE);
                     summons.DespawnAll();
                     me->DespawnOrUnsummon();
-                    events.PopEvent();
                     break;
             }
         }
@@ -1168,7 +1140,7 @@ public:
             if (!cannon || cannon->HasUnitState(UNIT_STATE_CASTING) || me->HasUnitState(UNIT_STATE_CASTING) || me->HasAuraType(SPELL_AURA_MOD_SILENCE))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case 0:
                     break;
@@ -1190,7 +1162,7 @@ public:
                         if( pTarget )
                             cannon->CastSpell(pTarget, SPELL_NAPALM_SHELL, false);
 
-                        events.RepeatEvent(14s);
+                        events.Repeat(14s);
                     }
                     break;
                 case EVENT_SPELL_PLASMA_BLAST:
@@ -1199,11 +1171,11 @@ public:
                         me->MonsterTextEmote("Leviathan Mk II begins to cast Plasma Blast!", 0, true);
                         cannon->CastSpell(victim, SPELL_PLASMA_BLAST, false);
                     }
-                    events.RepeatEvent(22s);
+                    events.Repeat(22s);
                     break;
                 case EVENT_SPELL_SHOCK_BLAST:
                     me->CastSpell(me->GetVictim(), SPELL_SHOCK_BLAST, false);
-                    events.RepeatEvent(30s);
+                    events.Repeat(30s);
                     events.ScheduleEvent(EVENT_PROXIMITY_MINES_1, 8s);
                     break;
                 case EVENT_PROXIMITY_MINES_1:
@@ -1222,12 +1194,10 @@ public:
                                 pmNPC->KnockbackFrom(x, y, 6.0f, 25.0f);
                         }
 
-                        events.PopEvent();
                     }
                     break;
                 case EVENT_FLAME_SUPPRESSION_50000:
                     me->CastSpell(me, SPELL_FLAME_SUPPRESSANT_50000yd, false);
-                    events.PopEvent();
                     break;
             }
         }
@@ -1481,13 +1451,13 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case 0:
                     break;
                 case EVENT_SPELL_HEAT_WAVE:
                     me->CastSpell(me, SPELL_HEAT_WAVE, true);
-                    events.RepeatEvent(10s);
+                    events.Repeat(10s);
                     break;
                 case EVENT_SPELL_ROCKET_STRIKE:
                     if( Vehicle* vk = me->GetVehicleKit() )
@@ -1511,7 +1481,7 @@ public:
                                         r->ToCreature()->AI()->SetData(0, 0);
                                 }
                         }
-                        events.RepeatEvent(20s);
+                        events.Repeat(20s);
                         events.ScheduleEvent(EVENT_REINSTALL_ROCKETS, 10s);
                     }
                     break;
@@ -1524,7 +1494,6 @@ public:
                                     if (!me->HandleSpellClick(accessory, i))
                                         accessory->UnSummon();
                     }
-                    events.PopEvent();
                     break;
                 case EVENT_SPELL_RAPID_BURST:
                     if (Player* p = SelectTargetFromPlayerList(80.0f))
@@ -1532,7 +1501,7 @@ public:
                         me->CastSpell(p, SPELL_RAPID_BURST, true);
                         me->SetFacingToObject(p);
                     }
-                    events.RepeatEvent(3200ms);
+                    events.Repeat(3200ms);
                     break;
                 case EVENT_HAND_PULSE:
                     if (Player* p = SelectTargetFromPlayerList(80.0f))
@@ -1557,10 +1526,10 @@ public:
 
                         leftarm = !leftarm;
                     }
-                    events.RepeatEvent(1750ms);
+                    events.Repeat(1750ms);
                     break;
                 case EVENT_SPELL_SPINNING_UP:
-                    events.RepeatEvent(45s);
+                    events.Repeat(45s);
                     if (Player* p = SelectTargetFromPlayerList(80.0f))
                     {
                         float angle = me->GetAngle(p);
@@ -1574,11 +1543,11 @@ public:
                     break;
                 case EVENT_FLAME_SUPPRESSION_10:
                     me->CastSpell(me, SPELL_FLAME_SUPPRESSANT_10yd, false);
-                    events.RepeatEvent(10s);
+                    events.Repeat(10s);
                     break;
                 case EVENT_FROST_BOMB:
                     me->CastCustomSpell(SPELL_VX001_FROST_BOMB, SPELLVALUE_MAX_TARGETS, 1, (Unit*)NULL, false);
-                    events.RepeatEvent(45s);
+                    events.Repeat(45s);
                     break;
             }
         }
@@ -1838,7 +1807,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case 0:
                     break;
@@ -1859,24 +1828,24 @@ public:
                             }
                         }
                     }
-                    events.RepeatEvent(3s);
+                    events.Repeat(3s);
                     break;
                 case EVENT_SUMMON_BOMB_BOT:
                     if( !immobilized )
                         me->CastSpell(me, SPELL_SUMMON_BOMB_BOT, false);
-                    events.RepeatEvent(15s);
+                    events.Repeat(15s);
                     break;
                 case EVENT_SUMMON_ASSAULT_BOT:
                     if( GameObject* pad = me->FindNearestGameObject(RAND(194742, 194746, 194745), 200.0f) )
                         if (Creature* trigger = me->SummonCreature(NPC_BOT_SUMMON_TRIGGER, *pad, TEMPSUMMON_TIMED_DESPAWN, 15000))
                             trigger->AI()->DoAction(2);
-                    events.RepeatEvent(30s);
+                    events.Repeat(30s);
                     break;
                 case EVENT_SUMMON_JUNK_BOT:
                     if( GameObject* pad = me->FindNearestGameObject(RAND(194741, 194744, 194747), 200.0f) )
                         if (Creature* trigger = me->SummonCreature(NPC_BOT_SUMMON_TRIGGER, *pad, TEMPSUMMON_TIMED_DESPAWN, 15000))
                             trigger->AI()->DoAction(1);
-                    events.RepeatEvent(10s);
+                    events.Repeat(10s);
                     break;
                 case EVENT_SUMMON_EMERGENCY_FIRE_BOTS:
                     {
@@ -1885,7 +1854,7 @@ public:
                             if( GameObject* pad = me->FindNearestGameObject(ids[i], 200.0f) )
                                 if (Creature* trigger = me->SummonCreature(NPC_BOT_SUMMON_TRIGGER, *pad, TEMPSUMMON_MANUAL_DESPAWN))
                                     trigger->AI()->DoAction(3);
-                        events.RepeatEvent(45s);
+                        events.Repeat(45s);
                     }
                     break;
                 case EVENT_MAGNETIC_CORE_PULL_DOWN:
@@ -1893,19 +1862,16 @@ public:
                     me->CastSpell(me, SPELL_SPINNING, true);
                     me->MonsterMoveWithSpeed(me->GetPositionX(), me->GetPositionY(), 365.34f, me->GetExactDist(me->GetPositionX(), me->GetPositionY(), 365.34f));
                     me->UpdatePosition(me->GetPositionX(), me->GetPositionY(), 365.34f, me->GetOrientation(), false);
-                    events.PopEvent();
                     events.ScheduleEvent(EVENT_MAGNETIC_CORE_FREE, 20s);
                     break;
                 case EVENT_MAGNETIC_CORE_FREE:
                     me->RemoveAura(SPELL_SPINNING);
                     me->MonsterMoveWithSpeed(me->GetPositionX(), me->GetPositionY(), 381.34f, me->GetDistance(me->GetPositionX(), me->GetPositionY(), 381.34f));
                     me->UpdatePosition(me->GetPositionX(), me->GetPositionY(), 381.34f, me->GetOrientation(), false);
-                    events.PopEvent();
                     events.ScheduleEvent(EVENT_MAGNETIC_CORE_REMOVE_IMMOBILIZE, 1s);
                     break;
                 case EVENT_MAGNETIC_CORE_REMOVE_IMMOBILIZE:
                     immobilized = false;
-                    events.PopEvent();
                     break;
             }
         }
@@ -2389,7 +2355,7 @@ public:
 
             events.Update(diff);
 
-            switch( events.GetEvent() )
+            switch( events.ExecuteEvent() )
             {
                 case 0:
                     break;
@@ -2400,14 +2366,6 @@ public:
                             me->DespawnOrUnsummon();
                             return;
                         }
-
-                        if (InstanceScript* pInstance = me->GetInstanceScript())
-                            if (Creature* mimiron = GetMimiron())
-                                if (CreateTime < mimiron->AI()->GetData(10))
-                                {
-                                    events.PopEvent();
-                                    break;
-                                }
 
                         Creature* last = ObjectAccessor::GetCreature(*me, FlameList.back());
                         if( last )
@@ -2431,7 +2389,7 @@ public:
                             }
                         }
 
-                        events.RepeatEvent(5750ms);
+                        events.Repeat(5750ms);
                     }
                     break;
             }
@@ -2513,12 +2471,12 @@ public:
         void UpdateAI(uint32 diff)
         {
             events.Update(diff);
-            switch( events.GetEvent() )
+            switch( events.ExecuteEvent() )
             {
                 case 0:
                     break;
                 case EVENT_EMERGENCY_BOT_CHECK:
-                    events.RepeatEvent(15s); // just in case, will be rescheduled
+                    events.Repeat(15s); // just in case, will be rescheduled
                     if( Creature* flame = me->FindNearestCreature(NPC_FLAMES_SPREAD, 150.0f, true) )
                     {
                         me->m_orientation = me->GetAngle(flame->GetPositionX(), flame->GetPositionY());
@@ -2531,7 +2489,6 @@ public:
                     break;
                 case EVENT_EMERGENCY_BOT_ATTACK:
                     me->CastSpell((Unit*)NULL, SPELL_WATER_SPRAY, false);
-                    events.PopEvent();
                     events.RescheduleEvent(EVENT_EMERGENCY_BOT_CHECK, 5s);
                     break;
             }

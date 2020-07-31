@@ -105,45 +105,44 @@ public:
                 return;
 
             events.Update(diff);
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_SPELL_SONIC_BOOM:
                     Talk(EMOTE_SONIC_BOOM);
                     me->CastSpell(me, DUNGEON_MODE(SPELL_SONIC_BOOM_CAST_N, SPELL_SONIC_BOOM_CAST_H), false);
-                    events.RepeatEvent(28500ms);
+                    events.Repeat(28500ms);
                     events.DelayEvents(1500);
                     events.ScheduleEvent(EVENT_SPELL_SONIC_BOOM_EFFECT, 0s);
                     return;
                 case EVENT_SPELL_SONIC_BOOM_EFFECT:
                     me->CastSpell(me, DUNGEON_MODE(SPELL_SONIC_BOOM_EFFECT_N, SPELL_SONIC_BOOM_EFFECT_H), true);
-                    events.PopEvent();
                     break;
                 case EVENT_SPELL_MURMURS_TOUCH:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 80.0f, true))
                         me->CastSpell(target, DUNGEON_MODE(SPELL_MURMURS_TOUCH_N, SPELL_MURMURS_TOUCH_H), false);
-                    events.RepeatEvent(25s, 35s);
+                    events.Repeat(25s, 35s);
                     break;
                 case EVENT_SPELL_RESONANCE:
                     if (!me->IsWithinMeleeRange(me->GetVictim()))
                         me->CastSpell(me, SPELL_RESONANCE, false);
-                    events.RepeatEvent(5s);
+                    events.Repeat(5s);
                     break;
                 case EVENT_SPELL_MAGNETIC:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 80.0f, true))
                     {
                         me->CastSpell(target, SPELL_MAGNETIC_PULL, false);
-                        events.RepeatEvent(15s, 30s);
+                        events.Repeat(15s, 30s);
                         return;
                     }
-                    events.RepeatEvent(500ms);
+                    events.Repeat(500ms);
                     break;
                 case EVENT_SPELL_THUNDERING:
                     me->CastSpell(me, SPELL_THUNDERING_STORM, true);
-                    events.RepeatEvent(15s);
+                    events.Repeat(15s);
                     break;
                 case EVENT_SPELL_SONIC_SHOCK:
                     me->CastSpell(me->GetVictim(), SPELL_SONIC_SHOCK, false);
-                    events.RepeatEvent(10s, 20s);
+                    events.Repeat(10s, 20s);
                     break;
             }
 

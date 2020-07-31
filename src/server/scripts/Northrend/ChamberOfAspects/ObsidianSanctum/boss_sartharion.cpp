@@ -437,28 +437,26 @@ public:
             events.Update(diff);
 
             // Special events which needs to be fired immidiately
-            switch(events.GetEvent())
+            switch(events.ExecuteEvent())
             {
                 case EVENT_SARTHARION_BOUNDARY:
                     if (me->GetPositionX() < 3218.86f || me->GetPositionX() > 3275.69f || me->GetPositionY() < 484.68f || me->GetPositionY() > 572.4f) // https://github.com/TrinityCore/TrinityCore/blob/3.3.5/src/server/scripts/Northrend/ChamberOfAspects/ObsidianSanctum/instance_obsidian_sanctum.cpp#L31
                         EnterEvadeMode();
 
-                    events.RepeatEvent(1s);
+                    events.Repeat(1s);
                 break;
                 case EVENT_SARTHARION_SUMMON_LAVA:
                     if (!urand(0,3))
                         Talk(SAY_SARTHARION_SPECIAL);
 
                     SummonLavaWaves();
-                    events.RepeatEvent(25s);
+                    events.Repeat(25s);
                     return;
                 case EVENT_SARTHARION_START_LAVA:
                     SendLavaWaves(true);
-                    events.PopEvent();
                     return;
                 case EVENT_SARTHARION_FINISH_LAVA:
                     SendLavaWaves(false);
-                    events.PopEvent();
                     return;
             }
 
@@ -476,19 +474,19 @@ public:
 void boss_sartharion::boss_sartharionAI::HandleSartharionAbilities()
 {
     // Handling of Sartharion Events
-    switch (events.GetEvent())
+    switch (events.ExecuteEvent())
     {
         case EVENT_SARTHARION_CAST_CLEAVE:
             me->CastSpell(me->GetVictim(), SPELL_SARTHARION_CLEAVE, false);
-            events.RepeatEvent(10s);
+            events.Repeat(10s);
             break;
         case EVENT_SARTHARION_CAST_FLAME_BREATH:
             me->CastSpell(me->GetVictim(), SPELL_SARTHARION_FLAME_BREATH, false);
-            events.RepeatEvent(20s);
+            events.Repeat(20s);
             break;
         case EVENT_SARTHARION_CAST_TAIL_LASH:
             me->CastSpell(me, SPELL_SARTHARION_TAIL_LASH, false);
-            events.RepeatEvent(18s);
+            events.Repeat(18s);
             break;
         case EVENT_SARTHARION_LAVA_STRIKE:
             {
@@ -513,7 +511,7 @@ void boss_sartharion::boss_sartharionAI::HandleSartharionAbilities()
                     }
             }
 
-            events.RepeatEvent(20s);
+            events.Repeat(20s);
             break;
             }
         case EVENT_SARTHARION_HEALTH_CHECK:
@@ -521,7 +519,7 @@ void boss_sartharion::boss_sartharionAI::HandleSartharionAbilities()
             {
                 me->CastSpell(me, SPELL_SARTHARION_BERSERK, true);
                 usedBerserk = true;
-                events.RepeatEvent(2s);
+                events.Repeat(2s);
                 break;
             }
 
@@ -536,14 +534,12 @@ void boss_sartharion::boss_sartharionAI::HandleSartharionAbilities()
                             cr->CastSpell(cr, SPELL_CYCLONE_AURA_PERIODIC, true);
                 }
                 Talk(SAY_SARTHARION_BERSERK);
-                events.PopEvent();
                 break;
             }
-            events.RepeatEvent(2s);
+            events.Repeat(2s);
             break;
         case EVENT_SARTHARION_BERSERK:
             summons.DespawnEntry(NPC_SAFE_AREA_TRIGGER);
-            events.PopEvent();
             break;
     }
 }
@@ -551,26 +547,23 @@ void boss_sartharion::boss_sartharionAI::HandleSartharionAbilities()
 void boss_sartharion::boss_sartharionAI::HandleDrakeAbilities()
 {
     // Handling of Drakes Events
-    switch (events.GetEvent())
+    switch (events.ExecuteEvent())
     {
         // Dragon Calls
         case EVENT_SARTHARION_CALL_TENEBRON:
             Talk(SAY_SARTHARION_CALL_TENEBRON);
             if (Creature* tenebron = ObjectAccessor::GetCreature(*me, dragons[DRAGON_TENEBRON]))
                 tenebron->AI()->DoAction(ACTION_CALL_DRAGON);
-            events.PopEvent();
             break;
         case EVENT_SARTHARION_CALL_SHADRON:
             Talk(SAY_SARTHARION_CALL_SHADRON);
             if (Creature* shadron = ObjectAccessor::GetCreature(*me, dragons[DRAGON_SHADRON]))
                 shadron->AI()->DoAction(ACTION_CALL_DRAGON);
-            events.PopEvent();
             break;
         case EVENT_SARTHARION_CALL_VESPERON:
             Talk(SAY_SARTHARION_CALL_VESPERON);
             if (Creature* vesperon = ObjectAccessor::GetCreature(*me, dragons[DRAGON_VESPERON]))
                 vesperon->AI()->DoAction(ACTION_CALL_DRAGON);
-            events.PopEvent();
             break;
     }
 }
@@ -746,18 +739,18 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_MINIBOSS_SHADOW_BREATH:
                     if (!urand(0,10))
                         Talk(SAY_TENEBRON_BREATH);
                     me->CastSpell(me->GetVictim(), SPELL_SHADOW_BREATH, false);
-                    events.RepeatEvent(17500ms);
+                    events.Repeat(17500ms);
                     break;
                 case EVENT_MINIBOSS_SHADOW_FISSURE:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
                         me->CastSpell(target, SPELL_SHADOW_FISSURE, false);
-                    events.RepeatEvent(22500ms);
+                    events.Repeat(22500ms);
                     break;
                 case EVENT_MINIBOSS_OPEN_PORTAL:
                     Talk(WHISPER_OPEN_PORTAL);
@@ -773,7 +766,7 @@ public:
 
                         
                     events.ScheduleEvent(EVENT_MINIBOSS_SPAWN_HELPERS, 2s);
-                    events.RepeatEvent(1min);
+                    events.Repeat(1min);
                     break;
                 case EVENT_MINIBOSS_SPAWN_HELPERS:
                 {
@@ -789,7 +782,6 @@ public:
                     }
 
                     events.ScheduleEvent(EVENT_MINIBOSS_HATCH_EGGS, 25s);
-                    events.PopEvent();
                     break;
                 }
                 case EVENT_MINIBOSS_HATCH_EGGS:
@@ -823,7 +815,6 @@ public:
 
                     EntryCheckPredicate pred(NPC_TWILIGHT_EGG);
                     summons.DoAction(ACTION_SWITCH_PHASE, pred);
-                    events.PopEvent();
                     break;
                 }
             }
@@ -1018,18 +1009,18 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_MINIBOSS_SHADOW_BREATH:
                     if (!urand(0,10))
                         Talk(SAY_SHADRON_BREATH);
                     me->CastSpell(me->GetVictim(), SPELL_SHADOW_BREATH, false);
-                    events.RepeatEvent(17500ms);
+                    events.Repeat(17500ms);
                     break;
                 case EVENT_MINIBOSS_SHADOW_FISSURE:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
                         me->CastSpell(target, SPELL_SHADOW_FISSURE, false);
-                    events.RepeatEvent(22500ms);
+                    events.Repeat(22500ms);
                     break;
                 case EVENT_MINIBOSS_OPEN_PORTAL:
                     Talk(WHISPER_OPEN_PORTAL);
@@ -1043,7 +1034,6 @@ public:
                         pInstance->SetData(DATA_ADD_PORTAL, 0);
                         
                     events.ScheduleEvent(EVENT_MINIBOSS_SPAWN_HELPERS, 2s);
-                    events.PopEvent();
                     break;
                 case EVENT_MINIBOSS_SPAWN_HELPERS:
                     Talk(WHISPER_SUMMON_DICIPLE);
@@ -1054,7 +1044,6 @@ public:
                         cr->SetPhaseMask(16, true);
                     }
 
-                    events.PopEvent();
                     break;
             }
 
@@ -1248,18 +1237,18 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_MINIBOSS_SHADOW_BREATH:
                     if (!urand(0,10))
                         Talk(SAY_SHADRON_BREATH);
                     me->CastSpell(me->GetVictim(), SPELL_SHADOW_BREATH, false);
-                    events.RepeatEvent(17500ms);
+                    events.Repeat(17500ms);
                     break;
                 case EVENT_MINIBOSS_SHADOW_FISSURE:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
                         me->CastSpell(target, SPELL_SHADOW_FISSURE, false);
-                    events.RepeatEvent(22500ms);
+                    events.Repeat(22500ms);
                     break;
                 case EVENT_MINIBOSS_OPEN_PORTAL:
                     Talk(WHISPER_OPEN_PORTAL);
@@ -1273,7 +1262,6 @@ public:
                         pInstance->SetData(DATA_ADD_PORTAL, 0);
                         
                     events.ScheduleEvent(EVENT_MINIBOSS_SPAWN_HELPERS, 2s);
-                    events.PopEvent();
                     break;
                 case EVENT_MINIBOSS_SPAWN_HELPERS:
                     Talk(WHISPER_SUMMON_DICIPLE);
@@ -1284,7 +1272,6 @@ public:
                         cr->SetPhaseMask(16, true);
                     }
 
-                    events.PopEvent();
                     break;
             }
 

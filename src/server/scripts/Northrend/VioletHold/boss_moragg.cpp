@@ -90,22 +90,22 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch(events.GetEvent())
+            switch(events.ExecuteEvent())
             {
                 case 0:
                     break;
                 case EVENT_SPELL_CORROSIVE_SALIVA:
                     me->CastSpell(me->GetVictim(), SPELL_CORROSIVE_SALIVA, false);
-                    events.RepeatEvent(8s, 10s);
+                    events.Repeat(8s, 10s);
                     break;
                 case EVENT_SPELL_OPTIC_LINK:
                     if (Unit* target = SelectTarget(SELECT_TARGET_FARTHEST, 0, 40.0f, true))
                     {
                         me->CastSpell(target, SPELL_OPTIC_LINK, false);
-                        events.RepeatEvent(18s, 21s);
+                        events.Repeat(18s, 21s);
                     }
                     else
-                        events.RepeatEvent(5s);
+                        events.Repeat(5s);
                     break;
             }
 

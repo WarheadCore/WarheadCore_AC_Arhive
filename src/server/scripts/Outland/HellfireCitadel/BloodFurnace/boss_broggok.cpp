@@ -88,20 +88,20 @@ class boss_broggok : public CreatureScript
                 if (me->HasUnitState(UNIT_STATE_CASTING))
                     return;
 
-                switch (events.GetEvent())
+                switch (events.ExecuteEvent())
                 {
                     case EVENT_SPELL_SLIME:
                         me->CastSpell(me->GetVictim(), SPELL_SLIME_SPRAY, false);
-                        events.RepeatEvent(7s, 12s);
+                        events.Repeat(7s, 12s);
                         break;
                     case EVENT_SPELL_BOLT:
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             me->CastSpell(target, SPELL_POISON_BOLT, false);
-                        events.RepeatEvent(6s, 11s);
+                        events.Repeat(6s, 11s);
                         break;
                     case EVENT_SPELL_POISON:
                         me->CastSpell(me, SPELL_POISON_CLOUD, false);
-                        events.RepeatEvent(20s);
+                        events.Repeat(20s);
                         break;
 
                 }

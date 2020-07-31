@@ -317,13 +317,12 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch(events.GetEvent())
+            switch(events.ExecuteEvent())
             {
                 // Control events
                 case EVENT_HEALTH_CHECK:
                     if (_hardMode)
                     {
-                        events.PopEvent();
                         return;
                     }
 
@@ -340,10 +339,10 @@ public:
                         events.ScheduleEvent(EVENT_START_SECOND_PHASE, 5s);
                         return;
                     }
-                    events.RepeatEvent(1s);
+                    events.Repeat(1s);
                     break;
                 case EVENT_CHECK_ROOM:
-                    events.RepeatEvent(5s);
+                    events.Repeat(5s);
                     if (me->GetPositionX() < 722 || me->GetPositionX() > 987 || me->GetPositionY() < -139 || me->GetPositionY() > 124)
                         EnterEvadeMode();
 
@@ -352,12 +351,10 @@ public:
                 // Abilities events
                 case EVENT_GRAVITY_BOMB:
                     me->CastCustomSpell(SPELL_GRAVITY_BOMB, SPELLVALUE_MAX_TARGETS, 1, me, true);
-                    events.PopEvent();
                     events.ScheduleEvent(EVENT_SEARING_LIGHT, 10s, 1);
                     break;
                 case EVENT_SEARING_LIGHT:
                     me->CastCustomSpell(SPELL_SEARING_LIGHT, SPELLVALUE_MAX_TARGETS, 1, me, true);
-                    events.PopEvent();
                     events.ScheduleEvent(EVENT_GRAVITY_BOMB, 10s, 1);
                     break;
                 case EVENT_TYMPANIC_TANTARUM:
@@ -365,13 +362,12 @@ public:
                     me->MonsterYell("NO! NO! NO! NO! NO!", LANG_UNIVERSAL, 0);
                     me->PlayDirectSound(XT_SOUND_TANTARUM);
                     me->CastSpell(me, SPELL_TYMPANIC_TANTARUM, true);
-                    events.RepeatEvent(1min);
+                    events.Repeat(1min);
                     return;
                 case EVENT_ENRAGE:
                     me->MonsterYell("I'm tired of these toys. I don't want to play anymore!", LANG_UNIVERSAL, 0);
                     me->PlayDirectSound(XT_SOUND_SUMMON);
                     me->CastSpell(me, SPELL_XT002_ENRAGE, true);
-                    events.PopEvent();
                     break;
 
                 // Animation events
@@ -382,13 +378,11 @@ public:
                         heart->GetAI()->DoAction(ACTION_AWAKEN_HEART);
                     
                     events.ScheduleEvent(EVENT_RESTORE, 30s);
-                    events.PopEvent();
                     return;
                 // Restore from heartbreak
                 case EVENT_RESTORE:
                     if (_hardMode)
                     {
-                        events.PopEvent();
                         return;
                     }
 
@@ -401,14 +395,12 @@ public:
                         heart->GetAI()->DoAction(ACTION_HIDE_HEART);
 
                     events.ScheduleEvent(EVENT_REMOVE_EMOTE, 4s);
-                    events.PopEvent();
                     return;
                 case EVENT_REMOVE_EMOTE:
                     me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
                     me->SetControlled(false, UNIT_STATE_STUNNED);
 
                     RescheduleEvents();
-                    events.PopEvent();
                     return;
             }
             

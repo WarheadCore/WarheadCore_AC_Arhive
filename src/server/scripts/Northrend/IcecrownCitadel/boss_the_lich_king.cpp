@@ -1055,7 +1055,6 @@ class boss_the_lich_king : public CreatureScript
                     case EVENT_PAIN_AND_SUFFERING:
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
                         {
-                            //events.DelayEventsToMax(500, EVENT_GROUP_ABILITIES);
                             me->SetOrientation(me->GetAngle(target));
                             me->CastSpell(target, SPELL_PAIN_AND_SUFFERING, false);
                         }

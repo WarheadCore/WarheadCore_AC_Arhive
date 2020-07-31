@@ -184,38 +184,36 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_BALL_LIGHTNING:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
                         me->CastSpell(target, me->GetMap()->IsHeroic() ? SPELL_BALL_LIGHTNING_H : SPELL_BALL_LIGHTNING_N, false);
                     
-                    events.RepeatEvent(10s, 11s);
+                    events.Repeat(10s, 11s);
                     break;
                 case EVENT_STATIC_OVERLOAD:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
                         me->CastSpell(target, me->GetMap()->IsHeroic() ? SPELL_STATIC_OVERLOAD_H : SPELL_STATIC_OVERLOAD_N, false);
 
-                    events.RepeatEvent(5s, 6s);
+                    events.Repeat(5s, 6s);
                     break;
                 case EVENT_CHECK_HEALTH:
                     if (HealthBelowPct(HealthCheck))
                         me->CastSpell(me, SPELL_DISPERSE, false);
 
-                    events.RepeatEvent(1s);
+                    events.Repeat(1s);
                     return;
                 case EVENT_CALL_SPARKS:
                 {
                     EntryCheckPredicate pred(NPC_SPARK_OF_IONAR);
                     summons.DoAction(ACTION_CALLBACK, pred);
-                    events.PopEvent();
                     events.ScheduleEvent(EVENT_RESTORE, 2s, 0, 2);
                     return;
                 }
                 case EVENT_RESTORE:
                     EntryCheckPredicate pred(NPC_SPARK_OF_IONAR);
                     summons.DoAction(ACTION_SPARK_DESPAWN, pred);
-                    events.PopEvent();
 
                     me->SetVisible(true);
                     me->SetControlled(false, UNIT_STATE_STUNNED);

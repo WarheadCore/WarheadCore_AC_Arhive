@@ -133,27 +133,26 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_SUMMON_SPORE:
                     me->CastSpell(me, SPELL_SUMMON_SPORE, true);
-                    events.RepeatEvent(35s);
+                    events.Repeat(35s);
                     break;
                 case EVENT_SPELL_NECROTIC_AURA:
                     me->CastSpell(me, SPELL_NECROTIC_AURA, true);
-                    events.RepeatEvent(20s);
+                    events.Repeat(20s);
                     break;
                 case EVENT_SPELL_DEATHBLOOM:
                     me->CastSpell(me, RAID_MODE(SPELL_DEATHBLOOM_10, SPELL_DEATHBLOOM_25), false);
-                    events.RepeatEvent(30s);
+                    events.Repeat(30s);
                     break;
                 case EVENT_SPELL_INEVITABLE_DOOM:
                     me->CastSpell(me, RAID_MODE(SPELL_INEVITABLE_DOOM_10, SPELL_INEVITABLE_DOOM_25), false);
-                    events.RepeatEvent(events.GetTimer() < Milliseconds(5min).count() ? 30s : 15s);
+                    events.Repeat(events.GetTimer() < Milliseconds(5min).count() ? 30s : 15s);
                     break;
                 case EVENT_SPELL_BERSERK:
                     me->CastSpell(me, SPELL_BERSERK, true);
-                    events.PopEvent();
                     break;
             }
 

@@ -153,17 +153,17 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_SPELL_POISON_BOLT:
                     if (!me->HasAura(SPELL_WIDOWS_EMBRACE))
                         me->CastCustomSpell(RAID_MODE(SPELL_POISON_BOLT_VOLLEY_10, SPELL_POISON_BOLT_VOLLEY_25), SPELLVALUE_MAX_TARGETS, 3, me, false);
-                    events.RepeatEvent(14s);
+                    events.Repeat(14s);
                     break;
                 case EVENT_SPELL_RAIN_OF_FIRE:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         me->CastSpell(target, RAID_MODE(SPELL_RAIN_OF_FIRE_10, SPELL_RAIN_OF_FIRE_25), false);
-                    events.RepeatEvent(12s);
+                    events.Repeat(12s);
                     break;
                 case EVENT_SPELL_FRENZY:
                     if (!me->HasAura(RAID_MODE(SPELL_FRENZY_10, SPELL_FRENZY_25)))
@@ -171,10 +171,10 @@ public:
                         Talk(SAY_FRENZY);
                         Talk(EMOTE_FRENZY);
                         me->CastSpell(me, RAID_MODE(SPELL_FRENZY_10, SPELL_FRENZY_25), true);
-                        events.RepeatEvent(1min);
+                        events.Repeat(1min);
                     }
                     else
-                        events.RepeatEvent(30s);
+                        events.Repeat(30s);
                     break;
             }
 

@@ -358,18 +358,16 @@ public:
         void UpdateAI(uint32 diff)
         {
             events.Update(diff);
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_START_EVENT:
                     if (Creature* cr = getFuture())
                         cr->MonsterWhisper(IsFuture() ? "Hey there, $N, don't be alarmed. It's me... you... from the future. I'm here to help." : "Whoa! You're me, but from the future! Hey, my equipment got an upgrade! Cool!", getSummoner());
-                    events.PopEvent();
                     events.ScheduleEvent(EVENT_FIGHT_1, 7s);
                     break;
                 case EVENT_FIGHT_1:
                     if (Creature* cr = getFuture())
                         cr->MonsterWhisper(IsFuture() ? "Heads up... here they come. I'll help as much as I can. Let's just keep them off the hourglass!" : "Here come the Infinites! I've got to keep the hourglass safe. Can you help?", getSummoner());
-                    events.PopEvent();
                     events.ScheduleEvent(EVENT_FIGHT_2, 6s);
                     break;
                 case EVENT_FIGHT_2:
@@ -401,13 +399,11 @@ public:
                             cr->AI()->AttackStart(me);
                         }
 
-                        events.PopEvent();
                         events.ScheduleEvent(EVENT_CHECK_FINISH, 20s);
                         return;
                     }
 
                     phase++;
-                    events.PopEvent();
                     events.ScheduleEvent(EVENT_FIGHT_2, 35s);
                     break;
                 }
@@ -415,7 +411,7 @@ public:
                 {
                     if (me->FindNearestCreature(NPC_INFINITE_TIMERENDER, 50.0f))
                     {
-                        events.RepeatEvent(5s);
+                        events.Repeat(5s);
                         return;
                     }
 
@@ -423,14 +419,12 @@ public:
                         player->GroupEventHappens(IsFuture() ? QUEST_MYSTERY_OF_THE_INFINITE : QUEST_MYSTERY_OF_THE_INFINITE_REDUX, me);
 
                     me->MonsterWhisper(IsFuture() ? "Look, $N, the hourglass has revealed Nozdormu!" : "What the heck? Nozdormu is up there!", getSummoner());
-                    events.PopEvent();
                     events.ScheduleEvent(EVENT_FINISH_EVENT, 6s);
                     break;
                 }
                 case EVENT_FINISH_EVENT:
                 {
                     me->MonsterWhisper(IsFuture() ? "Farewell, $N. Keep us alive and get some better equipment!" : "I feel like I'm being pulled away through time. Thanks for the help....", getSummoner());
-                    events.PopEvent();
                     me->DespawnOrUnsummon(500);
                     if (getFuture())
                         getFuture()->DespawnOrUnsummon(500);
@@ -1299,7 +1293,7 @@ public:
             events.Update(diff);
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case 0:
                     break;
@@ -1308,31 +1302,29 @@ public:
                     me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                     if (Unit* t = me->SelectNearestTarget(50.0f))
                         AttackStart(t);
-                    events.PopEvent();
                     break;
                 case 2:
                     me->CastSpell((Unit*)NULL, 70866, false);
-                    events.RepeatEvent(30s, 35s);
+                    events.Repeat(30s, 35s);
                     break;
                 case 3:
                     if (me->GetVictim())
                         me->CastSpell(me->GetVictim(), 70886, false);
-                    events.RepeatEvent(15s, 30s);
+                    events.Repeat(15s, 30s);
                     break;
                 case 4:
                     if (me->GetVictim())
                         me->CastSpell(me->GetVictim(), 71003, false);
-                    events.RepeatEvent(15s, 30s);
+                    events.Repeat(15s, 30s);
                     break;
                 case 5:
                     if (me->GetVictim())
                         me->CastSpell(me->GetVictim(), 70864, false);
-                    events.RepeatEvent(8s, 12s);
+                    events.Repeat(8s, 12s);
                     break;
                 case 6:
                     Talk(0);
                     me->CastSpell(me, SPELL_SAC_EMERGE, true);
-                    events.PopEvent();
                     break;
             }
             DoMeleeAttackIfReady();

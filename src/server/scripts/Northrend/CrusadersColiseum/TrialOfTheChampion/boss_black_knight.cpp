@@ -244,7 +244,7 @@ public:
             if( me->HasUnitState(UNIT_STATE_CASTING) )
                 return;
 
-            switch( events.GetEvent() )
+            switch( events.ExecuteEvent() )
             {
                 case 0:
                     break;
@@ -252,41 +252,40 @@ public:
                     if( pInstance && !summons.empty() )
                         if( Creature* ghoul = pInstance->instance->GetCreature(*summons.begin()) )
                             ghoul->MonsterYell("[Zombie] .... . Brains ....", LANG_UNIVERSAL, 0);
-                    events.PopEvent();
                     break;
                 case EVENT_SPELL_PLAGUE_STRIKE:
                     if( me->GetVictim() )
                         me->CastSpell(me->GetVictim(), SPELL_PLAGUE_STRIKE, false);
-                    events.RepeatEvent(10s, 12s);
+                    events.Repeat(10s, 12s);
                     break;
                 case EVENT_SPELL_ICY_TOUCH:
                     if( me->GetVictim() )
                         me->CastSpell(me->GetVictim(), SPELL_ICY_TOUCH, false);
-                    events.RepeatEvent(5s, 6s);
+                    events.Repeat(5s, 6s);
                     break;
                 case EVENT_SPELL_DEATH_RESPITE:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true) )
                         me->CastSpell(target, SPELL_DEATH_RESPITE, false);
-                    events.RepeatEvent(13s, 15s);
+                    events.Repeat(13s, 15s);
                     break;
                 case EVENT_SPELL_OBLITERATE:
                     if( me->GetVictim() )
                         me->CastSpell(me->GetVictim(), SPELL_OBLITERATE, false);
-                    events.RepeatEvent(15s, 17s);
+                    events.Repeat(15s, 17s);
                     break;
                 case EVENT_SPELL_DESECRATION:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true) )
                         me->CastSpell(target, SPELL_DESECRATION, false);
-                    events.RepeatEvent(14s, 17s);
+                    events.Repeat(14s, 17s);
                     break;
                 case EVENT_SPELL_DEATH_BITE:
                     me->CastSpell((Unit*)NULL, SPELL_DEATH_BITE, false);
-                    events.RepeatEvent(2s, 4s);
+                    events.Repeat(2s, 4s);
                     break;
                 case EVENT_SPELL_MARKED_DEATH:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.000000f, true) )
                         me->CastSpell(target, SPELL_MARKED_DEATH, false);
-                    events.RepeatEvent(9s);
+                    events.Repeat(9s);
                     break;
             }
 
@@ -455,7 +454,7 @@ public:
             if( me->HasUnitState(UNIT_STATE_CASTING) )
                 return;
 
-            switch( events.GetEvent() )
+            switch( events.ExecuteEvent() )
             {
                 case 0:
                     break;
@@ -464,15 +463,14 @@ public:
                         if (me->GetDistance(target) > 5.0f && me->GetDistance(target) < 30.0f)
                         {
                             me->CastSpell(target, SPELL_LEAP, false);
-                            events.PopEvent();
                             break;
                         }
-                    events.RepeatEvent(1s);
+                    events.Repeat(1s);
                     break;
                 case 2: // claw
                     if (Unit* target = me->GetVictim())
                         me->CastSpell(target, SPELL_CLAW_N, false);
-                    events.RepeatEvent(6s, 8s);
+                    events.Repeat(6s, 8s);
                     break;
             }
 

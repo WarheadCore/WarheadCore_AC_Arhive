@@ -237,49 +237,45 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_SUMMON_FERAL_DEFENDER:
                     me->MonsterTextEmote("Auriaya begins to activate Feral Defender.", 0, true);
                     me->CastSpell(me, SPELL_ACTIVATE_FERAL_DEFENDER, true);
-                    events.PopEvent();
                     me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_INTERRUPT_CAST, true);
                     events.ScheduleEvent(EVENT_REMOVE_IMMUNE, 3s);
                     break;
                 case EVENT_REMOVE_IMMUNE:
-                    events.PopEvent();
                     me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_INTERRUPT_CAST, false);
                     break;
                 case EVENT_TERRIFYING_SCREECH:
                     me->MonsterTextEmote("Auriaya begins to cast Terrifying Screech.", 0, true);
                     me->CastSpell(me, SPELL_TERRIFYING_SCREECH, false);
-                    events.RepeatEvent(35s);
+                    events.Repeat(35s);
                     break;
                 case EVENT_SONIC_SCREECH:
                     me->CastSpell(me, SPELL_SONIC_SCREECH, false);
-                    events.RepeatEvent(50s);
+                    events.Repeat(50s);
                     break;
                 case EVENT_GUARDIAN_SWARM:
                     me->CastSpell(me->GetVictim(), SPELL_GUARDIAN_SWARM, false);
-                    events.RepeatEvent(40s);
+                    events.Repeat(40s);
                     break;
                 case EVENT_SENTINEL_BLAST:
                     me->CastSpell(me, SPELL_SENTINEL_BLAST, false);
-                    events.RepeatEvent(35s);
+                    events.Repeat(35s);
                     events.DelayEvents(5000, 0);
                     break;
                 case EVENT_RESPAWN_FERAL_DEFENDER:
                 {
                     EntryCheckPredicate pred(NPC_FERAL_DEFENDER);
                     summons.DoAction(ACTION_FERAL_RESPAWN, pred);
-                    events.PopEvent();
                     break;
                 }
                 case EVENT_ENRAGE:
                     me->MonsterTextEmote("You waste my time!", 0);
                     me->PlayDirectSound(SOUND_BERSERK);
                     me->CastSpell(me, SPELL_ENRAGE, true);
-                    events.PopEvent();
                     break;
             }
 

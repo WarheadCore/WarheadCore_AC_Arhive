@@ -104,17 +104,16 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch(events.GetEvent())
+            switch(events.ExecuteEvent())
             {
                 case 0:
                     break;
                 case EVENT_SPELL_ARCANE_BARRAGE_VOLLEY:
                     me->CastSpell((Unit*)NULL, SPELL_ARCANE_BARRAGE_VOLLEY, false);
-                    events.RepeatEvent(20s);
+                    events.Repeat(20s);
                     break;
                 case EVENT_SPELL_ARCANE_BUFFET:
                     me->CastSpell(me->GetVictim(), SPELL_ARCANE_BUFFET, false);
-                    events.PopEvent();
                     break;
                 case EVENT_SUMMON_SPHERES:
                     {
@@ -128,7 +127,7 @@ public:
                             do { entry2 = RAND(SPELL_SUMMON_ETHEREAL_SPHERE_1, SPELL_SUMMON_ETHEREAL_SPHERE_2, SPELL_SUMMON_ETHEREAL_SPHERE_3); } while (entry1 == entry2);
                             me->CastSpell((Unit*)NULL, entry2, true);
                         }
-                        events.RepeatEvent(45s);
+                        events.Repeat(45s);
                         events.RescheduleEvent(EVENT_SPELL_ARCANE_BUFFET, 5s);
                         events.RescheduleEvent(EVENT_CHECK_DISTANCE, 6s);
                     }
@@ -148,11 +147,11 @@ public:
                         if (found)
                         {
                             Talk(SAY_CHARGED);
-                            events.RepeatEvent(9s);
+                            events.Repeat(9s);
                             events.RescheduleEvent(EVENT_SUMMON_SPHERES, 10s);
                         }
                         else
-                            events.RepeatEvent(2s);
+                            events.Repeat(2s);
                     }
                     break;
             }

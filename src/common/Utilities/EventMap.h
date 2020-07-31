@@ -159,7 +159,7 @@ public:
     * @brief Repeats the most recently executed event.
     * @param time Time until the event occurs as std::chrono type.
     */
-    void RepeatEvent(Milliseconds time);
+    void Repeat(Milliseconds time);
 
     /**
     * @name RepeatEvent
@@ -167,13 +167,7 @@ public:
     * @param minTime The minimum time until the event occurs as std::chrono type.
     * @param maxTime The maximum time until the event occurs as std::chrono type.
     */
-    void RepeatEvent(Milliseconds minTime, Milliseconds maxTime);
-
-    /**
-    * @name PopEvent
-    * @brief Remove the first event in the map.
-    */
-    void PopEvent();
+    void Repeat(Milliseconds minTime, Milliseconds maxTime);
 
     /**
     * @name ExecuteEvent
@@ -181,13 +175,6 @@ public:
     * @return Id of the event to execute.
     */
     uint32 ExecuteEvent();
-
-    /**
-    * @name GetEvent
-    * @brief Returns the next event to execute.
-    * @return Id of the event to execute.
-    */
-    uint32 GetEvent();
 
     /**
     * @name DelayEvents

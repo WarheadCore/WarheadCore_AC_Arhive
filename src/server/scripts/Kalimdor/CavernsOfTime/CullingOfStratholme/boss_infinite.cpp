@@ -135,16 +135,16 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_SPELL_VOID_STRIKE:
                     me->CastSpell(me->GetVictim(), SPELL_VOID_STRIKE, false);
-                    events.RepeatEvent(8s);
+                    events.Repeat(8s);
                     break;
                 case EVENT_SPELL_CORRUPTING_BLIGHT:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true))
                         me->CastSpell(target, SPELL_CORRUPTING_BLIGHT, false);
-                    events.RepeatEvent(12s);
+                    events.Repeat(12s);
                     break;
             }
 

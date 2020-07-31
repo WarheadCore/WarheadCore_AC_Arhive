@@ -245,15 +245,15 @@ class boss_kelidan_the_breaker : public CreatureScript
                 if (me->HasUnitState(UNIT_STATE_CASTING))
                     return;
 
-                switch (events.GetEvent())
+                switch (events.ExecuteEvent())
                 {
                     case EVENT_SPELL_VOLLEY:
                         me->CastSpell(me, SPELL_SHADOW_BOLT_VOLLEY, false);
-                        events.RepeatEvent(8s, 13s);
+                        events.Repeat(8s, 13s);
                         break;
                     case EVENT_SPELL_CORRUPTION:
                         me->CastSpell(me, SPELL_CORRUPTION, false);
-                        events.RepeatEvent(30s, 50s);
+                        events.Repeat(30s, 50s);
                         break;
                     case EVENT_SPELL_BURNING_NOVA:
                         Talk(SAY_NOVA);
@@ -266,12 +266,11 @@ class boss_kelidan_the_breaker : public CreatureScript
                             DoTeleportAll(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation());
 
                         events.DelayEvents(6000, 0);
-                        events.RepeatEvent(25s, 32s);
+                        events.Repeat(25s, 32s);
                         events.ScheduleEvent(EVENT_SPELL_FIRE_NOVA, 5s);
                         break;
                     case EVENT_SPELL_FIRE_NOVA:
                         me->CastSpell(me, SPELL_FIRE_NOVA, true);
-                        events.PopEvent();
                         break;
                 }
 
@@ -334,16 +333,16 @@ class npc_shadowmoon_channeler : public CreatureScript
                 if (me->HasUnitState(UNIT_STATE_CASTING))
                     return;
 
-                switch (events.GetEvent())
+                switch (events.ExecuteEvent())
                 {
                     case EVENT_SPELL_SHADOW_BOLT:
                         me->CastSpell(me->GetVictim(), IsHeroic() ? SPELL_SHADOW_BOLT_H : SPELL_SHADOW_BOLT, false);
-                        events.RepeatEvent(6s, 7500ms);
+                        events.Repeat(6s, 7500ms);
                         break;
                     case EVENT_SPELL_MARK:
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             me->CastSpell(target, SPELL_MARK_OF_SHADOW, false);
-                        events.RepeatEvent(16s, 17500ms);
+                        events.Repeat(16s, 17500ms);
                         break;
                 }
 

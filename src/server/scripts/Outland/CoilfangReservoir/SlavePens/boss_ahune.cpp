@@ -141,20 +141,18 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch(events.GetEvent())
+            switch(events.ExecuteEvent())
             {
                 case 0:
                     break;
                 case EVENT_EMERGE:
                     me->SetVisible(true);
                     me->CastSpell(me, SPELL_EMERGE_0, false);
-                    events.PopEvent();
                     events.RescheduleEvent(EVENT_ATTACK, 2s);
                     break;
                 case EVENT_SUMMON_TOTEMS:
                     for (uint8 i=0; i<3; ++i)
                         DoSummon(NPC_TOTEM, TotemPos[i], 10*60*1000, TEMPSUMMON_TIMED_DESPAWN);
-                    events.PopEvent();
                     break;
                 case EVENT_INVOKER_SAY_1:
                     if (Player* plr = ObjectAccessor::GetPlayer(*me, InvokerGUID))
@@ -162,19 +160,16 @@ public:
                         plr->MonsterSay("The Ice Stone has melted!", LANG_UNIVERSAL, 0);
                         plr->CastSpell(plr, SPELL_MAKE_BONFIRE, true);
                     }
-                    events.PopEvent();
                     events.RescheduleEvent(EVENT_INVOKER_SAY_2, 2s);
                     break;
                 case EVENT_INVOKER_SAY_2:
                     if (Player* plr = ObjectAccessor::GetPlayer(*me, InvokerGUID))
                         plr->MonsterSay("Ahune, your strength grows no more!", LANG_UNIVERSAL, 0);
-                    events.PopEvent();
                     events.RescheduleEvent(EVENT_INVOKER_SAY_3, 2s);
                     break;
                 case EVENT_INVOKER_SAY_3:
                     if (Player* plr = ObjectAccessor::GetPlayer(*me, InvokerGUID))
                         plr->MonsterSay("Your frozen reign will not come to pass!", LANG_UNIVERSAL, 0);
-                    events.PopEvent();
                     break;
                 case EVENT_ATTACK:
                     events.Reset();
@@ -193,7 +188,6 @@ public:
                     for (uint8 i=0; i<3; ++i)
                         if (Creature* bunny = me->FindNearestCreature(NPC_TOTEM_BUNNY_1+i, 150.0f, true))
                             bunny->CastSpell(me, SPELL_TOTEM_BEAM, false);
-                    events.PopEvent();
                     events.RescheduleEvent(EVENT_SUBMERGE, 10s);
                     break;
                 case EVENT_SUBMERGE:
@@ -211,7 +205,6 @@ public:
                     break;
                 case EVENT_EMERGE_WARNING:
                     me->MonsterTextEmote(TEXT_RESURFACE, 0, true);
-                    events.PopEvent();
                     break;
                 case EVENT_COMBAT_EMERGE:
                     me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
@@ -219,7 +212,6 @@ public:
                     me->CastSpell(me, SPELL_EMERGE_0, false);
                     // me->CastSpell(me, SPELL_AHUNE_RESURFACES, true); // done in SummonedCreatureDespawn
                     me->RemoveAura(SPELL_SUBMERGE_0);
-                    events.PopEvent();
                     StartPhase1();
                     break;
 
@@ -233,14 +225,14 @@ public:
                             target->GetNearPoint(target, x, y, z, target->GetObjectSize(), 30.0f, target->GetAngle(me->GetPositionX(), me->GetPositionY()) + M_PI);
                             target->GetMotionMaster()->MoveJump(x, y, z+20.0f, 10.0f, 20.0f);
                         }
-                    events.RepeatEvent(1500ms);
+                    events.Repeat(1500ms);
                     break;
                 case EVENT_SPELL_SUMMON_HAILSTONE:
                     {
                         float dist = (float)urand(3,10);
                         float angle = rand_norm()*2*M_PI;
                         me->CastSpell(MinionSummonPos.GetPositionX()+cos(angle)*dist, MinionSummonPos.GetPositionY()+sin(angle)*dist, MinionSummonPos.GetPositionZ(), SPELL_SUMMON_HAILSTONE, false);
-                        events.RepeatEvent(30s);
+                        events.Repeat(30s);
                     }
                     break;
                 case EVENT_SPELL_SUMMON_COLDWAVE:
@@ -255,11 +247,10 @@ public:
                         float angle = rand_norm()*2*M_PI;
                         me->CastSpell(MinionSummonPos.GetPositionX()+cos(angle)*dist, MinionSummonPos.GetPositionY()+sin(angle)*dist, MinionSummonPos.GetPositionZ(), SPELL_SUMMON_FROSTWIND, false);
                     }
-                    events.RepeatEvent(6s);
+                    events.Repeat(6s);
                     break;
 
                 default:
-                    events.PopEvent();
                     break;
             }
 

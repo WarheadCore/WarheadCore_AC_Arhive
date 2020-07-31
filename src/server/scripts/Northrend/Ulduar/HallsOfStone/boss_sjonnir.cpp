@@ -206,7 +206,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_CHECK_HEALTH:
                 {
@@ -237,17 +237,16 @@ public:
 
                         events.CancelEvent(EVENT_SUMMON);
                         events.ScheduleEvent(EVENT_SUMMON, 0s);
-                        events.PopEvent();
                         break;
                     }
 
-                    events.RepeatEvent(1s);
+                    events.Repeat(1s);
                     break;
                 }
                 case EVENT_SHIELD:
                 {
                     me->CastSpell(me, DUNGEON_MODE(SPELL_LIGHTNING_SHIELD, SPELL_LIGHTNING_SHIELD_H), false);
-                    events.RepeatEvent(14s, 19s);
+                    events.Repeat(14s, 19s);
                     break;
                 }
                 case EVENT_CHAIN_LIGHTNING:
@@ -255,7 +254,7 @@ public:
                     if (Unit *target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true, 0))
                         me->CastSpell(target, DUNGEON_MODE(SPELL_CHAIN_LIGHTNING, SPELL_CHAIN_LIGHTNING_H), false);
 
-                    events.RepeatEvent(6s, 12s);
+                    events.Repeat(6s, 12s);
                     break;
                 }
                 case EVENT_STATIC_CHARGE:
@@ -263,13 +262,13 @@ public:
                     if (Unit *target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true, 0))
                         me->CastSpell(target, DUNGEON_MODE(SPELL_STATIC_CHARGE, SPELL_STATIC_CHARGE_H), false);
 
-                    events.RepeatEvent(20s);
+                    events.Repeat(20s);
                     break;
                 }
                 case EVENT_LIGHTNING_RING:
                 {
                     me->CastSpell(me, DUNGEON_MODE(SPELL_LIGHTNING_RING, SPELL_LIGHTNING_RING_H), false);
-                    events.RepeatEvent(25s, 31s);
+                    events.Repeat(25s, 31s);
                     events.DelayEvents(10000); // Channel duration
                     break;
                 }
@@ -281,7 +280,6 @@ public:
                         brann->PlayDirectSound(14275);
                     }
 
-                    events.PopEvent();
                     break;
                 }
                 case EVENT_SUMMON:
@@ -291,7 +289,7 @@ public:
                         case PHASE_SUMMON_UNFRIENDLY_DWARFES:
                         {
                             SummonDwarfes(false);
-                            events.RepeatEvent(20s);
+                            events.Repeat(20s);
                             break;
                         }
                         case PHASE_SUMMON_OOZE:
@@ -305,13 +303,12 @@ public:
                                     summons.Summon(ooze);
                                 }
                             }
-                            events.RepeatEvent(10s);
+                            events.Repeat(10s);
                             break;
                         }
                         case PHASE_SUMMON_FRIENDLY_DWARFES:
                         {
                             SummonDwarfes(true);
-                            events.PopEvent();
                             break;
                         }
                     }
@@ -451,13 +448,13 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 // Every 5 seconds
                 case EVENT_TOXIC_VOLLEY:
                 {
                     me->CastSpell(me, DUNGEON_MODE(SPELL_TOXIC_VOLLEY, SPELL_TOXIC_VOLLEY_H), false);
-                    events.RepeatEvent(5s);
+                    events.Repeat(5s);
                     break;
                 }
             }
@@ -495,7 +492,7 @@ public:
         void UpdateAI(uint32 diff)
         {
             events.Update(diff);
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_MALFORMED_OOZE_CHECK:
                 {
@@ -511,7 +508,7 @@ public:
                                 break;
                             }
 
-                    events.RepeatEvent(1s);
+                    events.Repeat(1s);
                     break;
                 }
             }

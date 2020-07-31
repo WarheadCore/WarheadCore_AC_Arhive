@@ -337,18 +337,17 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case 0:
                     break;
                 case EVENT_ENRAGE:
                     me->CastSpell(me, SPELL_BERSERK, true);
-                    events.RepeatEvent(10min);
+                    events.Repeat(10min);
                     break;
                 case EVENT_COMMANDER_SAY_AGGRO:
                     if (Creature* commander = ObjectAccessor::GetCreature(*me, CommanderGUID))
                         commander->AI()->Talk(SAY_COMMANDER_AGGRO);
-                    events.PopEvent();
                     break;
                 case EVENT_EE_SAY_MOVE_OUT:
                     for (uint8 i=0; i<3; ++i)
@@ -358,17 +357,16 @@ public:
                                 c->MonsterYell(TEXT_EE_MOVE_OUT, LANG_UNIVERSAL, 0);
                             c->AI()->SetData(1, 0); // start repairing
                         }
-                    events.PopEvent();
                     break;
                 case EVENT_SPELL_FIREBALL:
                     if( Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 200.0f, true) )
                         me->CastSpell(pTarget, SPELL_FIREBALL, false);
-                    events.RepeatEvent(4s);
+                    events.Repeat(4s);
                     break;
                 case EVENT_SPELL_DEVOURING_FLAME:
                     if( Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 200.0f, true) )
                         me->CastSpell(pTarget, SPELL_DEVOURINGFLAME, false);
-                    events.RepeatEvent(13s);
+                    events.Repeat(13s);
                     break;
                 case EVENT_SUMMON_MOLE_MACHINES:
                     {
@@ -389,7 +387,7 @@ public:
                                 drill->SetGoAnimProgress(0);
                             }
                         }
-                        events.RepeatEvent(45s);
+                        events.Repeat(45s);
                         events.RescheduleEvent(EVENT_SUMMON_ADDS, 4s);
                     }
                     break;
@@ -437,17 +435,14 @@ public:
 
                         }
                     }
-                    events.PopEvent();
                     break;
                 case EVENT_WARN_DEEP_BREATH:
                     me->MonsterTextEmote(TEXT_DEEP_BREATH, 0, true);
                     me->RemoveAura(62794);
-                    events.PopEvent();
                     events.ScheduleEvent(EVENT_PHASE2_FLAME_BREATH, 2500ms);
                     break;
                 case EVENT_PHASE2_FLAME_BREATH:
                     me->CastSpell(me, S_FLAMEBREATH, true);
-                    events.PopEvent();
                     events.ScheduleEvent(EVENT_FLY_UP, 2s);
                     break;
                 case EVENT_FLY_UP:
@@ -485,7 +480,6 @@ public:
                             me->GetMotionMaster()->MoveChase(target);
                         }
                         bGroundPhase = true;
-                        events.PopEvent();
                         events.CancelEvent(EVENT_SPELL_FIREBALL);
                         events.CancelEvent(EVENT_SPELL_DEVOURING_FLAME);
                         events.CancelEvent(EVENT_SUMMON_MOLE_MACHINES);
@@ -513,7 +507,6 @@ public:
                         events.ScheduleEvent(EVENT_RESUME_FIXING, 22s);
                     }
 
-                    events.PopEvent();
                     break;
                 case EVENT_RESUME_FIXING:
                     for (uint8 i=0; i<3; ++i)
@@ -523,15 +516,14 @@ public:
                                 c->MonsterYell(TEXT_EE_FIRES_OUT, LANG_UNIVERSAL, 0);
                             c->AI()->SetData(1, 0); // start repairing
                         }
-                    events.PopEvent();
                     break;
                 case EVENT_SPELL_FLAME_BREATH:
                     me->CastSpell(me->GetVictim(), S_FLAMEBREATH, false);
-                    events.RepeatEvent(20s);
+                    events.Repeat(20s);
                     break;
                 case EVENT_SPELL_DEVOURING_FLAME_GROUND:
                     me->CastSpell(me->GetVictim(), SPELL_DEVOURINGFLAME, false);
-                    events.RepeatEvent(13s);
+                    events.Repeat(13s);
                     break;
                 case EVENT_SPELL_FUSE_ARMOR:
                     if (Unit* victim = me->GetVictim())
@@ -541,14 +533,14 @@ public:
                             if (Aura* aur = victim->GetAura(SPELL_FUSEARMOR))
                                 if (aur->GetStackAmount() == 5)
                                     victim->CastSpell(victim, 64774, true);
-                            events.RepeatEvent(10s);
+                            events.Repeat(10s);
                             break;
                         }
-                    events.RepeatEvent(2s);
+                    events.Repeat(2s);
                     break;
                 case EVENT_SPELL_FLAME_BUFFET:
                     me->CastSpell(me->GetVictim(), S_FLAMEBUFFET, false);
-                    events.RepeatEvent(7s);
+                    events.Repeat(7s);
                     break;
             }
 

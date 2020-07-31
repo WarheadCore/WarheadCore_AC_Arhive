@@ -207,7 +207,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_CHECK_HEALTH:
                     if (HealthBelowPct(HealthCheck))
@@ -216,10 +216,10 @@ public:
                         HealthCheck -= 25;
                     }
 
-                    events.RepeatEvent(1s);
+                    events.Repeat(1s);
                     break;
                 case EVENT_LIGHTNING_NOVA:
-                    events.RepeatEvent(15s);
+                    events.Repeat(15s);
                     me->CastSpell(me, SPELL_LIGHTNING_NOVA_VISUAL, true);
                     me->CastSpell(me, SPELL_LIGHTNING_NOVA_THUNDERS, true);
 
@@ -230,17 +230,15 @@ public:
                     break;
                 case EVENT_SHOCKWAVE:
                     me->CastSpell(me, me->GetMap()->IsHeroic() ? SPELL_PULSING_SHOCKWAVE_H : SPELL_PULSING_SHOCKWAVE_N, false);
-                    events.PopEvent();
                     break;
                 case EVENT_ARC_LIGHTNING:
                     if (Unit* target = SelectTargetFromPlayerList(100, SPELL_ARC_LIGHTNING))
                         me->CastSpell(target, SPELL_ARC_LIGHTNING, false);
 
-                    events.RepeatEvent(12s);
+                    events.Repeat(12s);
                     break;
                 case EVENT_AURA_REMOVE:
                     me->RemoveAura(SPELL_LIGHTNING_NOVA_THUNDERS);
-                    events.PopEvent();
                     break;
             }
 

@@ -270,7 +270,7 @@ public:
             if( me->HasUnitState(UNIT_STATE_CASTING) )
                 return;
 
-            switch( events.GetEvent() )
+            switch( events.ExecuteEvent() )
             {
                 case 0:
                     break;
@@ -302,7 +302,7 @@ public:
                                 me->CastSpell(target, SPELL_MINIONS_CHARGE, false);
                             }
                         }
-                        events.RepeatEvent(4500ms, 6s);
+                        events.Repeat(4500ms, 6s);
                     }
                     break;
                 case EVENT_SHIELD_BREAKER:
@@ -324,13 +324,13 @@ public:
                             if( Unit* target = ObjectAccessor::GetCreature(*me, LIST.at(rnd)) )
                                 me->CastSpell(target, SPELL_NPC_SHIELD_BREAKER, false);
                         }
-                        events.RepeatEvent(6s, 8s);
+                        events.Repeat(6s, 8s);
                     }
                     break;
                 case EVENT_THRUST:
                     if( me->GetVictim() && me->GetExactDist(me->GetVictim()) <= 5.5f )
                         me->CastSpell(me->GetVictim(), SPELL_PLAYER_VEHICLE_THRUST, false);
-                    events.RepeatEvent(3s, 5s);
+                    events.Repeat(3s, 5s);
                     break;
             }
         }
@@ -668,7 +668,7 @@ public:
             if( me->HasUnitState(UNIT_STATE_CASTING) || ((me->GetEntry()==NPC_JACOB || me->GetEntry()==NPC_MOKRA) && me->HasAura(SPELL_BLADESTORM)) )
                 return;
 
-            switch( events.GetEvent() )
+            switch( events.ExecuteEvent() )
             {
                 case 0:
                     break;
@@ -676,7 +676,7 @@ public:
                     {
                         if( me->HasAura(SPELL_TRAMPLE_STUN) )
                         {
-                            events.RepeatEvent(200ms);
+                            events.Repeat(200ms);
                             break;
                         }
                         
@@ -702,7 +702,7 @@ public:
 
                             if( trample )
                             {
-                                events.RepeatEvent(15100ms);
+                                events.Repeat(15100ms);
                                 break;
                             }
                         }
@@ -712,7 +712,7 @@ public:
                             {
                                 if( me->GetMotionMaster()->GetCurrentMovementGeneratorType() != POINT_MOTION_TYPE )
                                     me->GetMotionMaster()->MovePoint(7, *mount);
-                                events.RepeatEvent(200ms);
+                                events.Repeat(200ms);
                                 break;
                             }
 
@@ -722,11 +722,9 @@ public:
                             NewMountGUID = mount->GetGUID();
                             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                             me->GetMotionMaster()->MovePoint(7, *mount);
-                            events.RepeatEvent(200ms);
+                            events.Repeat(200ms);
                             break;
                         }
-
-                        events.PopEvent();
                     }
                     break;
                 case EVENT_MOUNT_CHARGE:
@@ -757,7 +755,7 @@ public:
                                 me->CastSpell(target, SPELL_MINIONS_CHARGE, false);
                             }
                         }
-                        events.RepeatEvent(4500ms, 6s);
+                        events.Repeat(4500ms, 6s);
                     }
                     break;
                 case EVENT_SHIELD_BREAKER:
@@ -779,34 +777,34 @@ public:
                             if( Unit* target = ObjectAccessor::GetCreature(*me, LIST.at(rnd)) )
                                 me->CastSpell(target, SPELL_NPC_SHIELD_BREAKER, false);
                         }
-                        events.RepeatEvent(6s, 8s);
+                        events.Repeat(6s, 8s);
                     }
                     break;
                 case EVENT_THRUST:
                     if( Unit* victim = me->GetVictim() )
                         if( me->GetExactDist(victim) <= 6.0f )
                             me->CastSpell(victim, SPELL_PLAYER_VEHICLE_THRUST, false);
-                    events.RepeatEvent(3s, 5s);
+                    events.Repeat(3s, 5s);
                     break;
 
                 /******************* MAGE *******************/
                 case EVEMT_MAGE_SPELL_FIREBALL:
                     if( me->GetVictim() )
                         me->CastSpell(me->GetVictim(), SPELL_FIREBALL, false);
-                    events.RepeatEvent(5s);
+                    events.Repeat(5s);
                     break;
                 case EVEMT_MAGE_SPELL_BLAST_WAVE:
                     me->CastSpell((Unit*)NULL, SPELL_BLAST_WAVE, false);
-                    events.RepeatEvent(13s);
+                    events.Repeat(13s);
                     break;
                 case EVEMT_MAGE_SPELL_HASTE:
                     me->CastSpell(me, SPELL_HASTE, false);
-                    events.RepeatEvent(22s);
+                    events.Repeat(22s);
                     break;
                 case EVEMT_MAGE_SPELL_POLYMORPH:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 30.0f, true) )
                         me->CastSpell(target, SPELL_POLYMORPH, false);
-                    events.RepeatEvent(8s);
+                    events.Repeat(8s);
                     break;
                 /***************** MAGE END *****************/
 
@@ -814,11 +812,11 @@ public:
                 case EVENT_SHAMAN_SPELL_CHAIN_LIGHTNING:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 30.0f, true) )
                         me->CastSpell(target, SPELL_CHAIN_LIGHTNING, false);
-                    events.RepeatEvent(16s);
+                    events.Repeat(16s);
                     break;
                 case EVENT_SHAMAN_SPELL_EARTH_SHIELD:
                     me->CastSpell(me, SPELL_EARTH_SHIELD, false);
-                    events.RepeatEvent(30s, 35s);
+                    events.Repeat(30s, 35s);
                     break;
                 case EVENT_SHAMAN_SPELL_HEALING_WAVE:
                     {
@@ -832,23 +830,22 @@ public:
                         else
                             target = me;
                         me->CastSpell(target, SPELL_HEALING_WAVE, false);
-                        events.RepeatEvent(22s);
+                        events.Repeat(22s);
                     }
                     break;
                 case EVENT_SHAMAN_SPELL_HEX_OF_MENDING:
                     if( me->GetVictim() )
                         me->CastSpell(me->GetVictim(), SPELL_HEX_OF_MENDING, false);
-                    events.RepeatEvent(20s, 25s);
+                    events.Repeat(20s, 25s);
                     break;
                 /**************** SHAMAN END ****************/
 
                 /****************** HUNTER ******************/
                 case EVENT_HUNTER_SPELL_DISENGAGE:
-                    events.PopEvent();
                     break;
                 case EVENT_HUNTER_SPELL_LIGHTNING_ARROWS:
                     me->CastSpell((Unit*)NULL, SPELL_LIGHTNING_ARROWS, false);
-                    events.RepeatEvent(20s, 25s);
+                    events.Repeat(20s, 25s);
                     break;
                 case EVENT_HUNTER_SPELL_MULTI_SHOT:
                     {
@@ -859,7 +856,7 @@ public:
                                 me->CastSpell(target, SPELL_SHOOT, false);
                                 UnitTargetGUID = target->GetGUID();
                             }
-                            events.RepeatEvent(2s);
+                            events.Repeat(2s);
                             break;
                         }
                         else
@@ -882,7 +879,7 @@ public:
                             }
                             UnitTargetGUID = 0;
                         }
-                        events.RepeatEvent(15s, 20s);
+                        events.Repeat(15s, 20s);
                     }
                     break;
                 /**************** HUNTER END ****************/
@@ -891,16 +888,16 @@ public:
                 case EVENT_ROGUE_SPELL_EVISCERATE:
                     if( me->GetVictim() )
                         me->CastSpell(me->GetVictim(), SPELL_EVISCERATE, false);
-                    events.RepeatEvent(8s);
+                    events.Repeat(8s);
                     break;
                 case EVENT_ROGUE_SPELL_FAN_OF_KNIVES:
                     me->CastSpell((Unit*)NULL, SPELL_FAN_OF_KNIVES, false);
-                    events.RepeatEvent(14s);
+                    events.Repeat(14s);
                     break;
                 case EVENT_ROGUE_SPELL_POISON_BOTTLE:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 30.0f, true) )
                         me->CastSpell(target, SPELL_POISON_BOTTLE, false);
-                    events.RepeatEvent(19s);
+                    events.Repeat(19s);
                     break;
                 /**************** ROGUE END *****************/
 
@@ -908,12 +905,12 @@ public:
                 case EVENT_WARRIOR_SPELL_MORTAL_STRIKE:
                     if( me->GetVictim() )
                         me->CastSpell(me->GetVictim(), SPELL_MORTAL_STRIKE, false);
-                    events.RepeatEvent(8s, 12s);
+                    events.Repeat(8s, 12s);
                     break;
                 case EVENT_WARRIOR_SPELL_BLADESTORM:
                     if( me->GetVictim() )
                         me->CastSpell(me->GetVictim(), SPELL_BLADESTORM, false);
-                    events.RepeatEvent(15s, 20s);
+                    events.Repeat(15s, 20s);
                     break;
                 case EVENT_WARRIOR_SPELL_INTERCEPT:
                     {
@@ -929,11 +926,10 @@ public:
                                 break;
                             }
                         }
-                        events.RepeatEvent(7s);
+                        events.Repeat(7s);
                     }
                     break;
                 case EVENT_WARRIOR_SPELL_ROLLING_THROW:
-                    events.PopEvent();
                     break;
                 /*************** WARRIOR END ****************/
             }

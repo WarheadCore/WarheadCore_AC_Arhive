@@ -136,7 +136,7 @@ public:
 
             DoMeleeAttackIfReady();
 
-            switch( events.GetEvent() )
+            switch( events.ExecuteEvent() )
             {
                 case 0:
                     break;
@@ -144,7 +144,7 @@ public:
                     {
                         Talk(SAY_PULL);
                         me->CastSpell(me, SPELL_MAGIC_PULL, false);
-                        events.RepeatEvent(15s, 25s);
+                        events.Repeat(15s, 25s);
                         events.ScheduleEvent(EVENT_SUMMON_x4, 1500ms);
                     }
                     break;
@@ -153,7 +153,7 @@ public:
                         Talk(SAY_STOMP);
 
                         me->CastSpell(me, SPELL_THUNDERING_STOMP, false);
-                        events.RepeatEvent(10s, 20s);
+                        events.Repeat(10s, 20s);
                     }
                     break;
                 case EVENT_SUMMON:
@@ -163,7 +163,7 @@ public:
                             float angle = rand_norm()*2*M_PI;
                             me->SummonCreature(NPC_UNSTABLE_SPHERE, me->GetPositionX() + 5.0f*cos(angle), me->GetPositionY() + 5.0f*sin(angle), me->GetPositionZ(), 0.0f, TEMPSUMMON_TIMED_DESPAWN, 18000);
                         }
-                        events.RepeatEvent(2s);
+                        events.Repeat(2s);
                     }
                     break;
                 case EVENT_SUMMON_x4:
@@ -172,7 +172,6 @@ public:
                         float angle = rand_norm()*2*M_PI;
                         me->SummonCreature(NPC_UNSTABLE_SPHERE, me->GetPositionX() + 5.0f*cos(angle), me->GetPositionY() + 5.0f*sin(angle), me->GetPositionZ(), 0.0f, TEMPSUMMON_TIMED_DESPAWN, 18000);
                     }
-                    events.PopEvent();
                     break;
             }
         }

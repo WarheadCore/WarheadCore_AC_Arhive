@@ -224,7 +224,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_ARTRUIS_HP_CHECK:
                     if (me->GetHealthPct() <= 30)
@@ -232,39 +232,35 @@ public:
                         me->SetControlled(true, UNIT_STATE_STUNNED);
                         me->MonsterTextEmote("Artruis is shielded. You must choose your side quickly to break his spell.", 0, true);
                         SummonsAction(ACTION_BIND_MINIONS);
-                        events.PopEvent();
                         break;
                     }
-                    events.RepeatEvent(1s);
+                    events.Repeat(1s);
                     break;
                 case EVENT_ARTRUIS_TALK1:
                     me->MonsterYell("I have weathered a hundred years of war and suffering. Do you truly think it wise to pit your mortal bodies against a being that cannot die? I'd venture you have more to lose.", LANG_UNIVERSAL, 0);
-                    events.PopEvent();
                     events.RescheduleEvent(EVENT_ARTRUIS_TALK2, 10s);
                     break;
                 case EVENT_ARTRUIS_TALK2:
                     me->MonsterYell("Even shattered into countless pieces, the crystals all around weaken me... perhaps i should not have underestimated the titans so...", LANG_UNIVERSAL, 0);
-                    events.PopEvent();
                     break;
                 case EVENT_ARTRUIS_TALK3:
                     me->MonsterYell("Arthas once mustered strength... of the very same sort... perhaps he is the path that you will follow.", LANG_UNIVERSAL, 0);
-                    events.PopEvent();
                     break;
                 case EVENT_CAST_FROST_BOLT:
                     me->CastSpell(me->GetVictim(), SPELL_ARTRUIS_FROSTBOLT, false);
-                    events.RepeatEvent(4s);
+                    events.Repeat(4s);
                     break;
                 case EVENT_CAST_ICE_LANCE:
                     me->CastSpell(me->GetVictim(), SPELL_ARTRUIS_ICE_LANCE, false);
-                    events.RepeatEvent(8500ms);
+                    events.Repeat(8500ms);
                     break;
                 case EVENT_CAST_FROST_NOVA:
                     me->CastSpell(me, SPELL_ARTRUIS_FROST_NOVA, false);
-                    events.RepeatEvent(15s);
+                    events.Repeat(15s);
                     break;
                 case EVENT_CAST_ICY_VEINS:
                     me->CastSpell(me, SPELL_ARTRUIS_ICY_VEINS, false);
-                    events.RepeatEvent(30s);
+                    events.Repeat(30s);
                     break;
             }
         }

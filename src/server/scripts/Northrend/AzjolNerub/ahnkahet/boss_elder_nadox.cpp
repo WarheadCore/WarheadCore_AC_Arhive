@@ -174,11 +174,11 @@ public:
             if( me->HasUnitState(UNIT_STATE_CASTING) )
                 return;
 
-            switch ( events.GetEvent() )
+            switch ( events.ExecuteEvent() )
             {
                 case EVENT_CHECK_HEALTH:
                 {
-                    events.RepeatEvent(1s);
+                    events.Repeat(1s);
                     if (HealthBelowPct(50))
                     {
                         events.CancelEvent(EVENT_CHECK_HEALTH);
@@ -190,7 +190,6 @@ public:
                 {
                     Talk(EMOTE_HATCHES, me);
                     SummonHelpers(false);
-                    events.PopEvent();
                     break;
                 }
                 case EVENT_BROOD_RAGE:
@@ -198,19 +197,19 @@ public:
                     if (Creature *pSwarmer = me->FindNearestCreature(NPC_AHNKAHAR_SWARMER, 40, true))
                         me->CastSpell(pSwarmer, SPELL_BROOD_RAGE_H, true);
                     
-                    events.RepeatEvent(10s);
+                    events.Repeat(10s);
                     break;
                 }
                 case EVENT_PLAGUE:
                 {
                     me->CastSpell(me->GetVictim(), DUNGEON_MODE(SPELL_BROOD_PLAGUE, SPELL_BROOD_PLAGUE_H), false);
-                    events.RepeatEvent(12s, 17s);
+                    events.Repeat(12s, 17s);
                     break;
                 }
                 case EVENT_SWARMER:
                 {
                     SummonHelpers(true);
-                    events.RepeatEvent(10s);
+                    events.Repeat(10s);
                     break;
                 }
                 case EVENT_CHECK_HOME:
@@ -221,11 +220,10 @@ public:
                     if (me->GetPositionZ() < 24)
                     {
                         me->CastSpell(me, SPELL_ENRAGE, true);
-                        events.PopEvent();
                         break;
                     }
 
-                    events.RepeatEvent(2s);
+                    events.Repeat(2s);
                     break;
                 }
             }

@@ -214,7 +214,7 @@ public:
         void UpdateAI(uint32 diff)
         {
             events.Update(diff);
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_CHECK_PLAYER:
                 {
@@ -224,18 +224,17 @@ public:
                         EnterEvadeMode();
                         return;
                     }
-                    events.RepeatEvent(2s);
+                    events.Repeat(2s);
                     break;
                 }
                 case EVENT_SUMMON_ARCHERS:
                     SummonArchers();
-                    events.PopEvent();
                     break;
                 case EVENT_SUMMON_PEASANTS:
                     _spoken = false;
                     SummonPeasants();
                     _spoken = false;
-                    events.RepeatEvent(1min);
+                    events.Repeat(1min);
                     break;
             }
         }

@@ -113,7 +113,7 @@ public:
                 return;
 
             events.Update(diff);
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_CHECK:
                     float x, y, z, o;
@@ -123,25 +123,25 @@ public:
                         EnterEvadeMode();
                         return;
                     }
-                    events.RepeatEvent(5s);
+                    events.Repeat(5s);
                     break;
                 case EVENT_SPELL_SPORES:
                     me->CastSpell(me, SPELL_SUMMON_SPORE_STRIDER, false);
-                    events.RepeatEvent(10s, 15s);
+                    events.Repeat(10s, 15s);
                     break;
                 case EVENT_SPELL_CHAIN:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         me->CastSpell(target, SPELL_CHAIN_LIGHTNING, false);
                     events.DelayEvents(3000);
-                    events.RepeatEvent(9s);
+                    events.Repeat(9s);
                     break;
                 case EVENT_SPELL_STATIC:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 30, true))
                         me->CastSpell(target, SPELL_STATIC_CHARGE, false);
-                    events.RepeatEvent(10s);
+                    events.Repeat(10s);
                     break;
                 case EVENT_LEVITATE:
-                    events.RepeatEvent(15s);
+                    events.Repeat(15s);
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
                     {
                         me->CastSpell(target, SPELL_LEVITATE, false);
@@ -161,7 +161,6 @@ public:
                             events.ScheduleEvent(EVENT_LEVITATE_TARGET_2, 1500ms);
                         }
                     }
-                    events.PopEvent();
                     break;
                 case EVENT_LEVITATE_TARGET_2:
                     if (Unit* target = ObjectAccessor::GetUnit(*me, lTarget))
@@ -174,7 +173,6 @@ public:
                             lTarget = 0;
                         }
                     }
-                    events.PopEvent();
                     break;
             }
 

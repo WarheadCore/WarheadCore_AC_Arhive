@@ -119,7 +119,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_SPELL_HATEFUL_STRIKE:
                 {
@@ -163,28 +163,26 @@ public:
                     if (finalTarget)
                         me->CastSpell(finalTarget, RAID_MODE(SPELL_HATEFUL_STRIKE_10, SPELL_HATEFUL_STRIKE_25), false);
 
-                    events.RepeatEvent(1s);
+                    events.Repeat(1s);
                     break;
                 }
                 case EVENT_SPELL_BERSERK:
                     Talk(EMOTE_BERSERK);
                     me->CastSpell(me, SPELL_BERSERK, true);
                     events.ScheduleEvent(EVENT_SPELL_SLIME_BOLT, 2s);
-                    events.PopEvent();
                     break;
                 case EVENT_SPELL_SLIME_BOLT:
                     me->CastSpell(me, SPELL_SLIME_BOLT, false);
-                    events.RepeatEvent(3s);
+                    events.Repeat(3s);
                     break;
                 case EVENT_HEALTH_CHECK:
                     if (me->GetHealthPct() <= 5)
                     {
                         Talk(EMOTE_ENRAGE);
                         me->CastSpell(me, SPELL_FRENZY, true);
-                        events.PopEvent();
                         break;
                     }
-                    events.RepeatEvent(1s);
+                    events.Repeat(1s);
                     break;
 
             }

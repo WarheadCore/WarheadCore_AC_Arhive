@@ -368,29 +368,27 @@ class npc_love_in_air_hummel : public CreatureScript
                 if (me->HasUnitState(UNIT_STATE_CASTING))
                     return;
 
-                switch (events.GetEvent())
+                switch (events.ExecuteEvent())
                 {
                     case EVENT_CALL_BAXTER:
                     {
                         EntryCheckPredicate pred(NPC_APOTHECARY_BAXTER);
                         summons.DoAction(ACTION_RELEASE_HELPER, pred);
-                        events.PopEvent();
                         break;
                     }
                     case EVENT_CALL_FRYE:
                     {
                         EntryCheckPredicate pred(NPC_APOTHECARY_FRYE);
                         summons.DoAction(ACTION_RELEASE_HELPER, pred);
-                        events.PopEvent();
                         break;
                     }
                     case EVENT_SPELL_PERFUME_SPRAY:
                         me->CastSpell(me->GetVictim(), SPELL_ALLURING_PERFUME_SPRAY, false);
-                        events.RepeatEvent(6s);
+                        events.Repeat(6s);
                         break;
                     case EVENT_SPELL_CHAIN_REACTION:
                         me->CastSpell(me->GetVictim(), SPELL_CHAIN_REACTION, false);
-                        events.RepeatEvent(12s);
+                        events.Repeat(12s);
                         break;
                 }
 
@@ -462,15 +460,15 @@ class npc_love_in_air_hummel_helper : public CreatureScript
                 if (me->HasUnitState(UNIT_STATE_CASTING))
                     return;
 
-                switch (events.GetEvent())
+                switch (events.ExecuteEvent())
                 {
                     case EVENT_SPELL_PERFUME_SPRAY:
                         me->CastSpell(me->GetVictim(), SPELL_COLOGNE_SPRAY, false);
-                        events.RepeatEvent(6s);
+                        events.Repeat(6s);
                         break;
                     case EVENT_SPELL_CHAIN_REACTION:
                         me->CastSpell(me->GetVictim(), SPELL_CHAIN_REACTION, false);
-                        events.RepeatEvent(12s);
+                        events.Repeat(12s);
                         break;
                     case EVENT_SPELL_THROW:
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
@@ -480,7 +478,7 @@ class npc_love_in_air_hummel_helper : public CreatureScript
                             me->CastSpell(me, RAND(SPELL_THROW_COLOGNE, SPELL_THROW_PERFUME), true, NULL, NULL, me->GetGUID());
                             me->Relocate(pos);
                         }
-                        events.RepeatEvent(10s);
+                        events.Repeat(10s);
                         break;
                 }
 

@@ -181,7 +181,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING | UNIT_STATE_STUNNED))
                 return;
 
-            switch(events.GetEvent())
+            switch(events.ExecuteEvent())
             {
                 case 0:
                     break;
@@ -191,14 +191,14 @@ public:
                             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40.0f, true))
                             {
                                 k->CastSpell(target, SPELL_TOXIC_WASTE);
-                                events.RepeatEvent(7s, 10s);
+                                events.Repeat(7s, 10s);
                                 break;
                             }
-                    events.RepeatEvent(2500ms);
+                    events.Repeat(2500ms);
                     break;
                 case EVENT_SPELL_MIGHTY_KICK:
                     me->CastSpell(me->GetVictim(), SPELL_MIGHTY_KICK, false);
-                    events.RepeatEvent(20s, 25s);
+                    events.Repeat(20s, 25s);
                     break;
                 case EVENT_SPELL_SHADOW_BOLT:
                     if (Creature* k = GetKrick())
@@ -206,16 +206,15 @@ public:
                             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 35.0f, true))
                             {
                                 k->CastSpell(target, SPELL_SHADOW_BOLT);
-                                events.RepeatEvent(14s);
+                                events.Repeat(14s);
                                 break;
                             }
-                    events.RepeatEvent(2500ms);
+                    events.Repeat(2500ms);
                     break;
                 case EVENT_SET_REACT_AGGRESSIVE:
                     me->SetReactState(REACT_AGGRESSIVE);
                     if (!UpdateVictim())
                         return;
-                    events.PopEvent();
                     break;
                 case EVENT_SPECIAL:
                     switch(urand(0,2))
@@ -247,7 +246,7 @@ public:
                             events.DelayEvents(20000);
                             break;
                     }
-                    events.RepeatEvent(25s, 30s);
+                    events.Repeat(25s, 30s);
                     break;
             }
 
@@ -311,7 +310,7 @@ public:
         void UpdateAI(uint32 diff)
         {
             events.Update(diff);
-            switch(events.GetEvent())
+            switch(events.ExecuteEvent())
             {
                 case 0:
                     break;
@@ -328,7 +327,6 @@ public:
                             c->AI()->Reset();
                         }
                     }
-                    events.PopEvent();
                     events.RescheduleEvent(1, 3s);
                     break;
                 case 1:
@@ -348,7 +346,6 @@ public:
                             if (Creature* c = pInstance->instance->GetCreature(pInstance->GetData64(DATA_GUARD_1_GUID+i)))
                                 c->DespawnOrUnsummon();
                     }
-                    events.PopEvent();
                     events.RescheduleEvent(2, 7s);
                     break;
                 case 2:
@@ -363,12 +360,10 @@ public:
                         if (Creature* c = pInstance->instance->GetCreature(pInstance->GetData64(DATA_LEADER_FIRST_GUID)))
                             c->AI()->Talk(c->GetEntry() == NPC_JAINA_PART1 ? SAY_JAINA_KRICK_1 : SAY_SYLVANAS_KRICK_1);
                     }
-                    events.PopEvent();
                     events.RescheduleEvent(3, 6500ms);
                     break;
                 case 3:
                     Talk(SAY_OUTRO_KRICK_2);
-                    events.PopEvent();
                     events.RescheduleEvent(4, 17s);
                     break;
                 case 4:
@@ -379,12 +374,10 @@ public:
                         if (Creature* c = pInstance->instance->GetCreature(pInstance->GetData64(DATA_LEADER_FIRST_GUID)))
                             c->AI()->Talk(c->GetEntry() == NPC_JAINA_PART1 ? SAY_JAINA_KRICK_2 : SAY_SYLVANAS_KRICK_2);
                     }
-                    events.PopEvent();
                     events.RescheduleEvent(5, 6500ms);
                     break;
                 case 5:
                     Talk(SAY_OUTRO_KRICK_3);
-                    events.PopEvent();
                     events.RescheduleEvent(6, 6500ms);
                     break;
                 case 6:
@@ -394,7 +387,6 @@ public:
                             c->SetFacingToObject(me);
                             c->AI()->Talk(SAY_TYRANNUS_KRICK_1);
                         }
-                    events.PopEvent();
                     events.RescheduleEvent(7, 4s);
                     break;
                 case 7:
@@ -405,12 +397,10 @@ public:
                     me->SendMovementFlagUpdate();
                     me->GetMotionMaster()->MoveTakeoff(0, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ()+9.0f, 0.5f * 7.0f);
 
-                    events.PopEvent();
                     events.RescheduleEvent(8, 2s);
                     break;
                 case 8:
                     Talk(SAY_OUTRO_KRICK_4);
-                    events.PopEvent();
                     events.RescheduleEvent(9, 1500ms);
                     break;
                 case 9:
@@ -428,14 +418,12 @@ public:
 
                     me->RemoveAllAuras();
                     me->GetMotionMaster()->MoveFall(0, true);
-                    events.PopEvent();
                     events.RescheduleEvent(10, 5s);
                     break;
                 case 10:
                     if (pInstance)
                         if (Creature* c = pInstance->instance->GetCreature(pInstance->GetData64(DATA_TYRANNUS_EVENT_GUID)))
                             c->AI()->Talk(SAY_TYRANNUS_KRICK_2);
-                    events.PopEvent();
                     events.RescheduleEvent(11, 9s);
                     break;
                 case 11:
@@ -451,7 +439,6 @@ public:
                     }
                     me->setActive(false);
                     Unit::Kill(me, me);
-                    events.PopEvent();
                     break;
             }
         }

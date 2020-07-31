@@ -153,20 +153,19 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_SPELL_POISON_CLOUD:
                     me->CastSpell(me, SPELL_POISON_CLOUD, true);
-                    events.RepeatEvent(15s);
+                    events.Repeat(15s);
                     break;
                 case EVENT_SPELL_BERSERK:
                     me->CastSpell(me, SPELL_BERSERK, true);
-                    events.PopEvent();
                     break;
                 case EVENT_SPELL_SLIME_SPRAY:
                     Talk(EMOTE_SLIME);
                     me->CastSpell(me->GetVictim(), RAID_MODE(SPELL_SLIME_SPRAY_10, SPELL_SLIME_SPRAY_25), false);
-                    events.RepeatEvent(20s);
+                    events.Repeat(20s);
                     break;
                 case EVENT_SPELL_MUTATING_INJECTION:
                 {
@@ -174,7 +173,7 @@ public:
                         me->CastSpell(target, SPELL_MUTATING_INJECTION, false);
 
                     uint32 coef = 120 * me->GetHealthPct();
-                    events.RepeatEvent(8s + Milliseconds(coef));
+                    events.Repeat(8s + Milliseconds(coef));
                 }
                 break;
             }

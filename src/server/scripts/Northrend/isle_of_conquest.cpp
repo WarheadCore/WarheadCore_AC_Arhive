@@ -270,25 +270,25 @@ class boss_isle_of_conquest : public CreatureScript
                 if (me->HasUnitState(UNIT_STATE_CASTING))
                     return;
 
-                switch (events.GetEvent())
+                switch (events.ExecuteEvent())
                 {
                     case EVENT_CHECK_RAGE:
                         CheckRageBuff();
-                        events.RepeatEvent(2s);
+                        events.Repeat(2s);
                         break;
                     case EVENT_BRUTAL_STRIKE:
                         me->CastSpell(me->GetVictim(), SPELL_IOCBOSS_BRUTAL_STRIKE, false);
-                        events.RepeatEvent(6s);
+                        events.Repeat(6s);
                         break;
                     case EVENT_CRUSHING_LEAP:
                         me->CastSpell(me, SPELL_IOCBOSS_CRUSHING_LEAP, false);
-                        events.RepeatEvent(22s);
+                        events.Repeat(22s);
                         break;
                     case EVENT_DAGGER_THROW:
                         if (Unit* tgt = SelectTarget(SELECT_TARGET_RANDOM))
                             me->CastSpell(tgt, SPELL_IOCBOSS_DAGGER_THROW, false);
                         
-                        events.RepeatEvent(10s);
+                        events.Repeat(10s);
                         break;
                 }
 

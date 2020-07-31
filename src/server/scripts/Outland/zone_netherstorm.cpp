@@ -339,25 +339,25 @@ class adyen_the_lightbringer : public CreatureScript
                     {
                         case EVENT_CRUSADER_STRIKE:
                             me->CastSpell(me->GetVictim(), CRUSADER_STRIKE, false);
-                            _events.RepeatEvent(3500ms);
+                            _events.Repeat(3500ms);
                             break;
                         case EVENT_HAMMER_OF_JUSTICE:
                             me->CastSpell(me->GetVictim(), HAMMER_OF_JUSTICE, false);
-                            _events.RepeatEvent(10s, 14s);
+                            _events.Repeat(10s, 14s);
                             break;
                         case EVENT_HOLY_LIGHT:
                             // if low enough will heal and trigger again in 18s.
                             if (me->GetHealthPct() <= 45)
                             {
                                 me->CastSpell(me, HOLY_LIGHT, false);
-                                _events.RepeatEvent(18s, 22s);
+                                _events.Repeat(18s, 22s);
                             }
                             else if (Unit* who = me->FindNearestCreature(ANCHORITE_KARJA, 30.0f, true))
                             {
                                 if (who->GetHealthPct() <= 45)
                                 {
                                     me->CastSpell(who, HOLY_LIGHT, false);
-                                    _events.RepeatEvent(18s, 22s);
+                                    _events.Repeat(18s, 22s);
                                 }
                             }
                             else if (Unit* who = me->FindNearestCreature(EXARCH_ORELIS, 30.0f, true))
@@ -365,11 +365,11 @@ class adyen_the_lightbringer : public CreatureScript
                                 if (who->GetHealthPct() <= 45)
                                 {
                                     me->CastSpell(who, HOLY_LIGHT, false);
-                                    _events.RepeatEvent(18s, 22s);
+                                    _events.Repeat(18s, 22s);
                                 }
                             }
                             else
-                                _events.RepeatEvent(1s);
+                                _events.Repeat(1s);
                             break;
                     }
                 }

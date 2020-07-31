@@ -753,7 +753,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch(events.GetEvent())
+            switch(events.ExecuteEvent())
             {
                 case EVENT_SARA_P1_DOORS_CLOSE:
                     // Whispers of YS
@@ -764,10 +764,9 @@ public:
                             go->SetGoState(GO_STATE_READY);
 
                     events.ScheduleEvent(EVENT_SARA_P1_SPELLS, 0s, 1, EVENT_PHASE_ONE);
-                    events.PopEvent();
                     break;
                 case EVENT_SARA_P1_SUMMON:
-                    events.RepeatEvent(20s - std::min(_summonedGuardiansCount, (uint8)5) * 2s);
+                    events.Repeat(20s - std::min(_summonedGuardiansCount, (uint8)5) * 2s);
                     ++_summonedGuardiansCount;
                     InformCloud();
                     break;
@@ -776,12 +775,11 @@ public:
                     uint32 spell = RAND(SPELL_SARAS_ANGER_TARGET_SELECTOR, SPELL_SARAS_BLESSING_TARGET_SELECTOR, SPELL_SARAS_FAVOR_TARGET_SELECTOR);
                     me->CastSpell(me, spell, false);
                     SpellSounds();
-                    events.RepeatEvent(me->GetMap()->Is25ManRaid() ? randtime(0s, 3s) : randtime(4s, 6s));
+                    events.Repeat(me->GetMap()->Is25ManRaid() ? randtime(0s, 3s) : randtime(4s, 6s));
                     break;
                 }
                 case EVENT_SARA_P2_START:
                 {
-                    events.PopEvent();
                     EntryCheckPredicate pred(NPC_YOGG_SARON);
                     summons.DoAction(ACTION_YOGG_SARON_APPEAR, pred);
                     events.RescheduleEvent(EVENT_SARA_P2_SPAWN_START_TENTACLES, 500ms, 0, EVENT_PHASE_TWO);
@@ -792,50 +790,48 @@ public:
                 }
                 case EVENT_SARA_P2_MALADY:
                     me->CastCustomSpell(SPELL_MALADY_OF_THE_MIND, SPELLVALUE_MAX_TARGETS, 1, me, false);
-                    events.RepeatEvent(20s);
+                    events.Repeat(20s);
                     break;
                 case EVENT_SARA_P2_PSYCHOSIS:
                     SpellSounds();
                     me->CastCustomSpell(SPELL_PSYCHOSIS, SPELLVALUE_MAX_TARGETS, 1, me, false);
-                    events.RepeatEvent(3500ms);
+                    events.Repeat(3500ms);
                     break;
                 case EVENT_SARA_P2_DEATH_RAY:
                     SummonDeathOrbs();
-                    events.RepeatEvent(20s);
+                    events.Repeat(20s);
                     break;
                 case EVENT_SARA_P2_SUMMON_T1: // CRUSHER
                     SpawnTentacle(NPC_CRUSHER_TENTACLE);
-                    events.RepeatEvent(randtime(50s, 1min) * uint32(_summonSpeed));
+                    events.Repeat(randtime(50s, 1min) * uint32(_summonSpeed));
                     break;
                 case EVENT_SARA_P2_SUMMON_T2: // CONSTRICTOR
                     SpawnTentacle(NPC_CONSTRICTOR_TENTACLE);
-                    events.RepeatEvent(randtime(15s, 20s) * uint32(_summonSpeed));
+                    events.Repeat(randtime(15s, 20s) * uint32(_summonSpeed));
                     break;
                 case EVENT_SARA_P2_SUMMON_T3: // CORRUPTOR
                     SpawnTentacle(NPC_CORRUPTOR_TENTACLE);
-                    events.RepeatEvent(randtime(30s, 40s) * uint32(_summonSpeed));
+                    events.Repeat(randtime(30s, 40s) * uint32(_summonSpeed));
                     break;
                 case EVENT_SARA_P2_BRAIN_LINK:
                     me->CastCustomSpell(SPELL_BRAIN_LINK, SPELLVALUE_MAX_TARGETS, 1, me, false);
-                    events.RepeatEvent(30s);
+                    events.Repeat(30s);
                     break;
                 case EVENT_SARA_P2_OPEN_PORTALS:
                 {
                     AddPortals();
                     EntryCheckPredicate pred(NPC_YOGG_SARON);
                     summons.DoAction(ACTION_YOGG_SARON_OPEN_PORTAL_YELL, pred);
-                    events.RepeatEvent(80s);
+                    events.Repeat(80s);
                     break;
                 }
                 case EVENT_SARA_P2_REMOVE_STUN:
                 {
                     me->RemoveAura(SPELL_SHATTERED_ILLUSION);
-                    events.PopEvent();
                     summons.DoAction(ACTION_REMOVE_STUN);
                     break;
                 }
                 case EVENT_SARA_P2_SPAWN_START_TENTACLES:
-                    events.PopEvent();
 
                     me->SetOrientation(M_PI);
                     me->SetDisplayId(SARA_TRANSFORM_MODEL);
@@ -859,7 +855,7 @@ public:
                     break;
                 case EVENT_SARA_P1_BERSERK:
                     me->CastSpell(me, SPELL_EXTINGUISH_ALL_LIFE, true);
-                    events.RepeatEvent(5s);
+                    events.Repeat(5s);
                     break;
             }
         }
@@ -1161,28 +1157,28 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_YS_LUNATIC_GAZE:
                     me->MonsterYell("Hoohehehahahaha... AHAHAHAHAHAHA!", LANG_UNIVERSAL, 0);
                     me->PlayDirectSound(YS_P3_LUNATIC_GAZE);
                     me->CastSpell(me, SPELL_LUNATIC_GAZE_YS, true);
-                    events.RepeatEvent(12s);
+                    events.Repeat(12s);
                     break;
                 case EVENT_YS_DEAFENING_ROAR:
                     me->MonsterTextEmote("Yogg-Saron opens his mouth wide!", 0, true);
                     me->MonsterYell("Eternal suffering awaits!", LANG_UNIVERSAL, 0);
                     me->PlayDirectSound(YS_P3_DEAFENING_ROAR);
                     me->CastSpell(me, SPELL_DEAFENING_ROAR, false);
-                    events.RepeatEvent(50s);
+                    events.Repeat(50s);
                     break;
                 case EVENT_YS_SHADOW_BEACON:
-                    events.RepeatEvent(5s);
+                    events.Repeat(5s);
                     me->CastCustomSpell(SPELL_SHADOW_BEACON, SPELLVALUE_MAX_TARGETS, RAID_MODE(1, 3), me, false);
                     break;
                 case EVENT_YS_SUMMON_GUARDIAN:
                     SummonImmortalGuardian();
-                    events.RepeatEvent(10s);
+                    events.Repeat(10s);
                     break;
             }
         }
@@ -2236,11 +2232,10 @@ public:
         void UpdateAI(uint32 diff)
         {
             events.Update(diff);
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case 40:
                 {
-                    events.PopEvent();
                     uint64 _guid = _targets.at(_current);
                     ++_current;
 

@@ -157,36 +157,35 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_SPELL_WEB_SPRAY:
                     Talk(EMOTE_WEB_SPRAY);
                     me->CastSpell(me, RAID_MODE(SPELL_WEB_SPRAY_10, SPELL_WEB_SPRAY_25), true);
-                    events.RepeatEvent(40s);
+                    events.Repeat(40s);
                     break;
                 case EVENT_SPELL_POISON_SHOCK:
                     me->CastSpell(me->GetVictim(), RAID_MODE(SPELL_POISON_SHOCK_10, SPELL_POISON_SHOCK_25), false);
-                    events.RepeatEvent(40s);
+                    events.Repeat(40s);
                     break;
                 case EVENT_SPELL_NECROTIC_POISON:
                     me->CastSpell(me->GetVictim(), RAID_MODE(SPELL_NECROTIC_POISON_10, SPELL_NECROTIC_POISON_25), false);
-                    events.RepeatEvent(30s);
+                    events.Repeat(30s);
                     break;
                 case EVENT_SUMMON_SPIDERLINGS:
                     Talk(EMOTE_SPIDERS);
                     for (uint8 i = 0; i < 8; ++i)
                         me->SummonCreature(NPC_MAEXXNA_SPIDERLING, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation());
-                    events.RepeatEvent(40s);
+                    events.Repeat(40s);
                     break;
                 case EVENT_HEALTH_CHECK:
                     if (me->GetHealthPct() < 30)
                     {
                         me->CastSpell(me, RAID_MODE(SPELL_FRENZY_10, SPELL_FRENZY_25), true);
-                        events.PopEvent();
                         break;
                     }
 
-                    events.RepeatEvent(1s);
+                    events.Repeat(1s);
                     break;
                 case EVENT_WEB_WRAP:
                     Talk(EMOTE_WEB_WRAP);
@@ -202,7 +201,7 @@ public:
                                 target->GetMotionMaster()->MoveJump(PosWrap[pos].GetPositionX(), PosWrap[pos].GetPositionY(), PosWrap[pos].GetPositionZ(), 20, 20);
                             }
                         }
-                    events.RepeatEvent(40s);
+                    events.Repeat(40s);
                     break;
             }
 

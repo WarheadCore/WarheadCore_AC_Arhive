@@ -499,11 +499,10 @@ public:
         void UpdateAI(uint32 diff)
         {
             events.Update(diff);
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_BETRAYAL_1:
                     Talk(SAY_DRAKURU_0);
-                    events.PopEvent();
                     events.ScheduleEvent(EVENT_BETRAYAL_2, 5s);
                     break;
                 case EVENT_BETRAYAL_2:
@@ -511,7 +510,6 @@ public:
                     me->SummonCreature(NPC_BLIGHTBLOOD_TROLL, 6222.9f, -2026.5f, 586.76f, 2.9f);
                     me->SummonCreature(NPC_BLIGHTBLOOD_TROLL, 6166.2f, -2065.4f, 586.76f, 1.4f);
                     me->SummonCreature(NPC_BLIGHTBLOOD_TROLL, 6127.5f, -2008.7f, 586.76f, 0.0f);
-                    events.PopEvent();
                     events.ScheduleEvent(EVENT_BETRAYAL_3, 5s);
                     break;
                 case EVENT_BETRAYAL_3:
@@ -521,34 +519,28 @@ public:
                         player->CastSpell(player, SPELL_SCOURGE_DISGUISE_EXPIRING, true);
                     if (Aura* aur = me->AddAura(SPELL_BLIGHT_FOG, me))
                         aur->SetDuration(22000);
-                    events.PopEvent();
                     break;
                 case EVENT_BETRAYAL_4:
                     Talk(SAY_DRAKURU_5);
                     events.ScheduleEvent(EVENT_BETRAYAL_5, 6s);
-                    events.PopEvent();
                     break;
                 case EVENT_BETRAYAL_5:
                     Talk(SAY_DRAKURU_6);
                     me->CastSpell(me, SPELL_THROW_PORTAL_CRYSTAL, true);
                     events.ScheduleEvent(EVENT_BETRAYAL_6, 8s);
-                    events.PopEvent();
                     break;
                 case EVENT_BETRAYAL_6:
                     me->SummonCreature(NPC_LICH_KING, 6142.9f, -2011.6f, 590.86f, 0.0f, TEMPSUMMON_TIMED_DESPAWN, 41000);
                     events.ScheduleEvent(EVENT_BETRAYAL_7, 8s);
-                    events.PopEvent();
                     break;
                 case EVENT_BETRAYAL_7:
                     Talk(SAY_DRAKURU_7);
                     events.ScheduleEvent(EVENT_BETRAYAL_8, 5s);
-                    events.PopEvent();
                     break;
                 case EVENT_BETRAYAL_8:
                     if (Creature* lich = ObjectAccessor::GetCreature(*me, lichGUID))
                         lich->AI()->Talk(SAY_LICH_7);
                     events.ScheduleEvent(EVENT_BETRAYAL_9, 6s);
-                    events.PopEvent();
                     break;
                 case EVENT_BETRAYAL_9:
                     if (Creature* lich = ObjectAccessor::GetCreature(*me, lichGUID))
@@ -557,26 +549,22 @@ public:
                         lich->CastSpell(me, SPELL_TOUCH_OF_DEATH, false);
                     }
                     events.ScheduleEvent(EVENT_BETRAYAL_10, 4s);
-                    events.PopEvent();
                     break;
                 case EVENT_BETRAYAL_10:
                     me->SetVisible(false);
                     if (Creature* lich = ObjectAccessor::GetCreature(*me, lichGUID))
                         lich->AI()->Talk(SAY_LICH_9);
                     events.ScheduleEvent(EVENT_BETRAYAL_11, 4s);
-                    events.PopEvent();
                     break;
                 case EVENT_BETRAYAL_11:
                     if (Creature* lich = ObjectAccessor::GetCreature(*me, lichGUID))
                         lich->AI()->Talk(SAY_LICH_10);
                     events.ScheduleEvent(EVENT_BETRAYAL_12, 6s);
-                    events.PopEvent();
                     break;
                 case EVENT_BETRAYAL_12:
                     if (Creature* lich = ObjectAccessor::GetCreature(*me, lichGUID))
                         lich->AI()->Talk(SAY_LICH_11);
                     events.ScheduleEvent(EVENT_BETRAYAL_13, 3s);
-                    events.PopEvent();
                     break;
                 case EVENT_BETRAYAL_13:
                     if (Creature* lich = ObjectAccessor::GetCreature(*me, lichGUID))
@@ -585,7 +573,6 @@ public:
                         lich->GetMotionMaster()->MovePoint(0, 6143.8f, -2011.5f, 590.9f);
                     }
                     events.ScheduleEvent(EVENT_BETRAYAL_14, 7s);
-                    events.PopEvent();
                     break;
                 case EVENT_BETRAYAL_14:
                     playerGUID = 0;
@@ -600,21 +587,21 @@ public:
             if (!UpdateVictim())
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_BETRAYAL_SHADOW_BOLT:
                     if (!me->IsWithinMeleeRange(me->GetVictim()))
                         me->CastSpell(me->GetVictim(), SPELL_SHADOW_BOLT, false);
-                    events.RepeatEvent(2s);
+                    events.Repeat(2s);
                     break;
                 case EVENT_BETRAYAL_CRYSTAL:
                     if (Player* player = ObjectAccessor::GetPlayer(*me, playerGUID))
                         me->CastSpell(player, SPELL_THROW_BRIGHT_CRYSTAL, true);
-                    events.RepeatEvent(6s, 15s);
+                    events.Repeat(6s, 15s);
                     break;
                 case EVENT_BETRAYAL_COMBAT_TALK:
                     Talk(SAY_DRAKURU_4);
-                    events.RepeatEvent(20s);
+                    events.Repeat(20s);
                     break;
             }
 

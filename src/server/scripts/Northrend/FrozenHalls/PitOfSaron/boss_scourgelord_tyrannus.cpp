@@ -151,7 +151,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch(events.GetEvent())
+            switch(events.ExecuteEvent())
             {
                 case 0:
                     break;
@@ -159,29 +159,27 @@ public:
                     if (me->IsWithinMeleeRange(me->GetVictim()))
                     {
                         me->CastSpell(me->GetVictim(), SPELL_FORCEFUL_SMASH, false);
-                        events.PopEvent();
                         events.RescheduleEvent(EVENT_SPELL_UNHOLY_POWER, 1s);
                         break;
                     }
-                    events.RepeatEvent(3s);
+                    events.Repeat(3s);
                     break;
                 case EVENT_SPELL_UNHOLY_POWER:
                     Talk(SAY_SMASH);
                     Talk(EMOTE_SMASH);
                     me->CastSpell(me, SPELL_UNHOLY_POWER, false);
-                    events.PopEvent();
                     events.ScheduleEvent(EVENT_SPELL_FORCEFUL_SMASH, 40s, 48s);
                     break;
                 case EVENT_SPELL_OVERLORDS_BRAND:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 95.0f, true))
                         me->CastSpell(target, SPELL_OVERLORDS_BRAND, false);
-                    events.RepeatEvent(11s, 12s);
+                    events.Repeat(11s, 12s);
                     break;
                 case EVENT_RIMEFANG_SPELL_ICY_BLAST:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 190.0f, true))
                         if (Creature* c = pInstance->instance->GetCreature(pInstance->GetData64(DATA_RIMEFANG_GUID)))
                             c->CastSpell(target, RIMEFANG_SPELL_ICY_BLAST, false);
-                    events.RepeatEvent(5s);
+                    events.Repeat(5s);
                     break;
                 case EVENT_SPELL_MARK_OF_RIMEFANG:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 190.0f, true))
@@ -191,7 +189,7 @@ public:
                             c->AI()->Talk(EMOTE_RIMEFANG_ICEBOLT, target);
                             c->CastSpell(target, RIMEFANG_SPELL_HOARFROST, false);
                         }
-                    events.RepeatEvent(25s);
+                    events.Repeat(25s);
                     events.RescheduleEvent(EVENT_RIMEFANG_SPELL_ICY_BLAST, 10s);
                     break;
             }

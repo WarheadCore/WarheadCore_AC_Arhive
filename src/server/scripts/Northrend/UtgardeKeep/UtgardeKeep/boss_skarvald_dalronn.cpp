@@ -174,13 +174,12 @@ public:
             if( me->HasUnitState(UNIT_STATE_CASTING) )
                 return;
 
-            switch( events.GetEvent() )
+            switch( events.ExecuteEvent() )
             {
                 case 0:
                     break;
                 case EVENT_MATE_DIED:
                     Talk(YELL_SKARVALD_DAL_DIEDFIRST);
-                    events.PopEvent();
                     break;
                 case EVENT_SPELL_CHARGE:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, (IsHeroic() ? 100.0f : 30.0f), true) )
@@ -189,16 +188,16 @@ public:
                         me->AddThreat(target, 10000.0f);
                         me->CastSpell(target, SPELL_CHARGE, false);
                     }
-                    events.RepeatEvent(5s, 10s);
+                    events.Repeat(5s, 10s);
                     break;
                 case EVENT_SPELL_STONE_STRIKE:
                     if( me->GetVictim() && me->IsWithinMeleeRange(me->GetVictim()) )
                     {
                         me->CastSpell(me->GetVictim(), SPELL_STONE_STRIKE, false);
-                        events.RepeatEvent(5s, 10s);
+                        events.Repeat(5s, 10s);
                     }
                     else
-                        events.RepeatEvent(3s);
+                        events.Repeat(3s);
                     break;
             }
 
@@ -327,35 +326,33 @@ public:
             if( me->HasUnitState(UNIT_STATE_CASTING) )
                 return;
 
-            switch( events.GetEvent() )
+            switch( events.ExecuteEvent() )
             {
                 case 0:
                     break;
                 case EVENT_YELL_DALRONN_AGGRO:
                     Talk(YELL_DALRONN_AGGRO);
-                    events.PopEvent();
                     break;
                 case EVENT_MATE_DIED:
                     Talk(YELL_DALRONN_SKA_DIEDFIRST);
-                    events.PopEvent();
                     break;
                 case EVENT_SPELL_SHADOW_BOLT:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 42.0f, true) )
                         me->CastSpell(target, SPELL_SHADOW_BOLT, false);
-                    events.RepeatEvent(2500ms);                   
+                    events.Repeat(2500ms);                   
                     break;
                 case EVENT_SPELL_DEBILITATE:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 45.0f, true) )
                     {
                         me->CastSpell(target, SPELL_DEBILITATE, false);
-                        events.RepeatEvent(5s, 10s);
+                        events.Repeat(5s, 10s);
                     }
                     else
-                        events.RepeatEvent(3s);
+                        events.Repeat(3s);
                     break;
                 case EVENT_SPELL_SUMMON_SKELETONS:
                     me->CastSpell((Unit*)NULL, SPELL_SUMMON_SKELETONS, false);
-                    events.RepeatEvent(20s, 30s);
+                    events.Repeat(20s, 30s);
                     break;
             }
 

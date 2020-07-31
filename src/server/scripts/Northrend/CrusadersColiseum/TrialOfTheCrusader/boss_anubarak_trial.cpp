@@ -266,14 +266,13 @@ public:
                 return;
             }
 
-            switch( events.GetEvent() )
+            switch( events.ExecuteEvent() )
             {
                 case 0:
                     break;
                 case EVENT_ENRAGE:
                     {
                         me->CastSpell(me, SPELL_BERSERK, true);
-                        events.PopEvent();
                     }
                     break;
                 case EVENT_RESPAWN_SPHERE:
@@ -292,26 +291,26 @@ public:
                             i = (i+1)%6;
                         }
                         while( i != StartAt );
-                        events.RepeatEvent(4s);
+                        events.Repeat(4s);
                     }
                     break;
                 case EVENT_SPELL_FREEZING_SLASH:
                     {
                         if( me->GetVictim() )
                             me->CastSpell(me->GetVictim(), SPELL_FREEZING_SLASH, false);
-                        events.RepeatEvent(15s, 20s);
+                        events.Repeat(15s, 20s);
                     }
                     break;
                 case EVENT_SPELL_PENETRATING_COLD:
                     {
                         me->CastCustomSpell(SPELL_PENETRATING_COLD, SPELLVALUE_MAX_TARGETS, RAID_MODE(2,5,2,5));
-                        events.RepeatEvent(18s);
+                        events.Repeat(18s);
                     }
                     break;
                 case EVENT_SUMMON_NERUBIAN:
                     {
                         me->CastCustomSpell(SPELL_SUMMON_BURROWER, SPELLVALUE_MAX_TARGETS, RAID_MODE(1,2,2,4));
-                        events.RepeatEvent(45s);
+                        events.Repeat(45s);
                     }
                     break;
                 case EVENT_SUBMERGE:
@@ -330,7 +329,6 @@ public:
                         events.RescheduleEvent(EVENT_EMERGE, EMERGE_INTERVAL);
                         events.RescheduleEvent(EVENT_SPELL_SUMMON_SPIKE, 2500ms);
                         events.RescheduleEvent(EVENT_SUMMON_SCARAB, 3s);
-                        events.PopEvent();
                     }
                     break;
                 case EVENT_SUMMON_SCARAB:
@@ -338,7 +336,7 @@ public:
                         uint8 i = urand(0,3);
                         if( Creature* c = ObjectAccessor::GetCreature(*me, BurrowGUID[i]) )
                             me->CastSpell(c, SPELL_SUMMON_SCARAB, true);
-                        events.RepeatEvent(4s);
+                        events.Repeat(4s);
                     }
                     break;
                 case EVENT_EMERGE:
@@ -347,7 +345,6 @@ public:
                         summons.DespawnEntry(NPC_SPIKE);
                         events.CancelEvent(EVENT_SUMMON_SCARAB);
                         events.RescheduleEvent(EVENT_EMERGE_2, 2s);
-                        events.PopEvent();
                     }
                     break;
                 case EVENT_EMERGE_2:
@@ -361,12 +358,10 @@ public:
                         events.RescheduleEvent(EVENT_SPELL_FREEZING_SLASH, 7s, 15s);
                         events.RescheduleEvent(EVENT_SPELL_PENETRATING_COLD, 15s, 20s);
                         events.RescheduleEvent(EVENT_SUBMERGE, SUBMERGE_INTERVAL);
-                        events.PopEvent();
                     }
                     break;
                 case EVENT_SPELL_SUMMON_SPIKE:
                     me->CastSpell(me, SPELL_SUMMON_SPIKE, true);
-                    events.PopEvent();
                     break;
             }
 
@@ -689,14 +684,14 @@ public:
             if( me->HasUnitState(UNIT_STATE_CASTING) )
                 return;
 
-            switch( events.GetEvent() )
+            switch( events.ExecuteEvent() )
             {
                 case 0:
                     break;
                 case EVENT_SPELL_SHADOW_STRIKE:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 250.0f, true) )
                         me->CastSpell(target, SPELL_SHADOW_STRIKE, false);
-                    events.RepeatEvent(30s, 45s);
+                    events.Repeat(30s, 45s);
                     break;
                 case EVENT_SUBMERGE:
                     if( HealthBelowPct(80) && !me->HasAura(RAID_MODE(66193,67855,67856,67857)) ) // not having permafrost - allow submerge
@@ -707,12 +702,11 @@ public:
                         me->CastSpell(me, SPELL_EXPOSE_WEAKNESS, true);
                         me->CastSpell(me, SPELL_SPIDER_FRENZY, true);
                         me->CastSpell(me, SPELL_SUBMERGE, false);
-                        events.PopEvent();
                         events.DelayEvents(15000);
                         events.RescheduleEvent(EVENT_EMERGE, 10s);
                     }
                     else
-                        events.RepeatEvent(3s);
+                        events.Repeat(3s);
                     break;
                 case EVENT_EMERGE:
                     me->SetHealth(me->GetMaxHealth());
@@ -720,7 +714,6 @@ public:
                     me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                     me->CastSpell(me, SPELL_EMERGE, false);
                     me->RemoveAura(SPELL_SUBMERGE);
-                    events.PopEvent();
                     events.RescheduleEvent(EVENT_SUBMERGE, 30s);
                     break;
             }
@@ -823,18 +816,16 @@ public:
 
             events.Update(diff);
 
-            switch( events.GetEvent() )
+            switch( events.ExecuteEvent() )
             {
                 case 0:
                     break;
                 case 1:
                     me->CastSpell(me, SPELL_SPIKE_SPEED2, true);
-                    events.PopEvent();
                     events.RescheduleEvent(2, 7s);
                     break;
                 case 2:
                     me->CastSpell(me, SPELL_SPIKE_SPEED3, true);
-                    events.PopEvent();
                     break;
                 case 3:
                     Reset();

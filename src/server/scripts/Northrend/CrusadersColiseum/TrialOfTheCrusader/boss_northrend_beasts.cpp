@@ -156,19 +156,18 @@ public:
             if( me->HasUnitState(UNIT_STATE_CASTING) )
                 return;
 
-            switch( events.GetEvent() )
+            switch( events.ExecuteEvent() )
             {
                 case 0:
                     break;
                 case EVENT_SPELL_SNOBOLLED:
                     if( t->GetTypeId() == TYPEID_PLAYER )
                         me->CastSpell((Unit*)NULL, SPELL_SNOBOLLED, true);
-                    events.PopEvent();
                     break;
                 case EVENT_SPELL_BATTER:
                     if( t->GetTypeId() == TYPEID_PLAYER )
                         me->CastSpell(t, SPELL_BATTER);
-                    events.RepeatEvent(6s, 8s);
+                    events.Repeat(6s, 8s);
                     break;
                 case EVENT_SPELL_FIRE_BOMB:
                     {
@@ -194,13 +193,13 @@ public:
                                     }
                         }
 
-                        events.RepeatEvent(20s, 30s);
+                        events.Repeat(20s, 30s);
                     }
                     break;
                 case EVENT_SPELL_HEAD_CRACK:
                     if( t->GetTypeId() == TYPEID_PLAYER )
                         me->CastSpell(t, SPELL_HEAD_CRACK);
-                    events.RepeatEvent(30s, 35s);
+                    events.Repeat(30s, 35s);
                     break;
             }
 
@@ -288,7 +287,7 @@ public:
             if( me->HasUnitState(UNIT_STATE_CASTING) )
                 return;
 
-            switch( events.GetEvent() )
+            switch( events.ExecuteEvent() )
             {
                 case 0:
                     break;
@@ -297,14 +296,14 @@ public:
                     {
                         if( Unit* victim = me->GetVictim() )
                             me->CastSpell(victim, SPELL_IMPALE, false);
-                        events.RepeatEvent(9s, 10s);
+                        events.Repeat(9s, 10s);
                     }
                     else
-                        events.RepeatEvent(2500ms);
+                        events.Repeat(2500ms);
                     break;
                 case EVENT_SPELL_STAGGERING_STOMP:
                     me->CastSpell((Unit*)NULL, SPELL_STAGGERING_STOMP, false);
-                    events.RepeatEvent(20s, 25s);
+                    events.Repeat(20s, 25s);
                     break;
                 case EVENT_PICK_SNOBOLD_TARGET:
                     if( Vehicle* vk = me->GetVehicleKit() )
@@ -331,7 +330,7 @@ public:
 
                                 break;
                             }
-                    events.RepeatEvent(16s, 24s);
+                    events.Repeat(16s, 24s);
                     break;
                 case EVENT_RELEASE_SNOBOLD:
                     {
@@ -372,7 +371,6 @@ public:
                                 }
                         }
                         PlayerGUID = 0;
-                        events.PopEvent();
                     }
                     break;
             }
@@ -563,7 +561,7 @@ struct boss_jormungarAI : public ScriptedAI
         if( me->HasUnitState(UNIT_STATE_CASTING) )
             return;
 
-        switch( events.GetEvent() )
+        switch( events.ExecuteEvent() )
         {
             case 0:
                 break;
@@ -596,7 +594,6 @@ struct boss_jormungarAI : public ScriptedAI
                     me->UpdatePosition(Locs[LOC_CENTER].GetPositionX()+cos(angle)*dist, Locs[LOC_CENTER].GetPositionY()+sin(angle)*dist, me->GetPositionZ(), me->GetOrientation(), true);
                     me->StopMovingOnCurrentPos();
                     DoResetThreat();
-                    events.PopEvent();
                     events.RescheduleEvent(EVENT_EMERGE, 6s);
                 }
                 break;
@@ -627,25 +624,25 @@ struct boss_jormungarAI : public ScriptedAI
             case EVENT_SPELL_SPRAY:
                 if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true) )
                     me->CastSpell(target, _SPELL_SPRAY, false);
-                events.RepeatEvent(20s);
+                events.Repeat(20s);
                 break;
             case EVENT_SPELL_SWEEP:
                 me->CastSpell((Unit*)NULL, SPELL_SWEEP_0, false);
-                events.RepeatEvent(15s, 30s);
+                events.Repeat(15s, 30s);
                 break;
             case EVENT_SPELL_BITE:
                 if( Unit* victim = me->GetVictim() )
                     me->CastSpell(victim, _SPELL_BITE, false);
-                events.RepeatEvent(20s);
+                events.Repeat(20s);
                 break;
             case EVENT_SPELL_SPEW:
                 me->CastSpell(me->GetVictim(), _SPELL_SPEW, false);
-                events.RepeatEvent(15s, 30s);
+                events.Repeat(15s, 30s);
                 break;
             case EVENT_SPELL_SLIME_POOL:
                 if( Creature* c = me->SummonCreature(NPC_SLIME_POOL, *me, TEMPSUMMON_TIMED_DESPAWN, 30000) )
                     c->CastSpell(c, SPELL_SLIME_POOL_EFFECT, true);
-                events.RepeatEvent(30s);
+                events.Repeat(30s);
                 break;
         }
 
@@ -874,23 +871,23 @@ public:
             if( me->HasUnitState(UNIT_STATE_CASTING) )
                 return;
 
-            switch( events.GetEvent() )
+            switch( events.ExecuteEvent() )
             {
                 case 0:
                     break;
                 case EVENT_SPELL_FEROCIOUS_BUTT:
                     if( Unit* victim = me->GetVictim() )
                         me->CastSpell(victim, SPELL_FEROCIOUS_BUTT, false);
-                    events.RepeatEvent(15s, 30s);
+                    events.Repeat(15s, 30s);
                     break;
                 case EVENT_SPELL_WHIRL:
                     me->CastSpell((Unit*)NULL, SPELL_WHIRL, false);
-                    events.RepeatEvent(15s, 20s);
+                    events.Repeat(15s, 20s);
                     break;
                 case EVENT_SPELL_ARCTIC_BREATH:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 90.0f, true) )
                         me->CastSpell(target, SPELL_ARCTIC_BREATH, false);
-                    events.RepeatEvent(20s, 30s);
+                    events.Repeat(20s, 30s);
                     break;
                 case EVENT_JUMP_MIDDLE:
                     me->StopMoving();
@@ -906,7 +903,6 @@ public:
                 case EVENT_SPELL_MASSIVE_CRASH:
                     me->GetMotionMaster()->Clear();
                     me->CastSpell((Unit*)NULL, SPELL_MASSIVE_CRASH, false);
-                    events.PopEvent();
                     events.RescheduleEvent(EVENT_GAZE, 2s);
                     break;
                 case EVENT_GAZE:
@@ -928,7 +924,6 @@ public:
                         me->GetMotionMaster()->MovementExpired();
                         me->SetReactState(REACT_AGGRESSIVE);
                     }
-                    events.PopEvent();
                     break;
                 case EVENT_JUMP_BACK:
                     {
@@ -948,7 +943,6 @@ public:
                         me->StopMoving();
                         me->GetMotionMaster()->MoveJump(Locs[LOC_CENTER].GetPositionX()+cos(jumpangle)*35.0f, Locs[LOC_CENTER].GetPositionY()+sin(jumpangle)*35.0f, Locs[LOC_CENTER].GetPositionZ()+1.0f, 40.0f, 12.0f);
                         
-                        events.PopEvent();
                         events.RescheduleEvent(EVENT_TRAMPLE, 1500ms);
 
                         if( pInstance )
@@ -978,7 +972,6 @@ public:
                     me->GetMotionMaster()->MoveCharge(destX, destY, destZ+1.0f, 65.0f);
                     me->SetUInt64Value(UNIT_FIELD_TARGET, 0);
                     events.RescheduleEvent(EVENT_CHECK_TRAMPLE_PLAYERS, 100ms);
-                    events.PopEvent();
                     break;
                 case EVENT_CHECK_TRAMPLE_PLAYERS:
                     if( DoTrampleIfValid() )
@@ -993,11 +986,9 @@ public:
                         me->GetMotionMaster()->MovementExpired();
                         me->SetReactState(REACT_AGGRESSIVE);
                     }
-                    // no PopEvent() intended!
                     break;
                 case EVENT_REFRESH_POSITION:
                     //me->SetFacingTo(me->GetOrientation());
-                    events.PopEvent();
                     break;
             }
 

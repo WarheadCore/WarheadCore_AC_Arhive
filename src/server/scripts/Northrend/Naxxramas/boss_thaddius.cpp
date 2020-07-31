@@ -269,14 +269,12 @@ public:
                 }
             }
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_THADDIUS_START:
                   StartEvent();
-                  events.PopEvent();
                   break;
                 case EVENT_THADDIUS_START_2:
-                    events.PopEvent();
                     Talk(SAY_AGGRO);
                     me->SetReactState(REACT_AGGRESSIVE);
                     me->SetControlled(false, UNIT_STATE_STUNNED);
@@ -290,19 +288,17 @@ public:
                     return;
                 case EVENT_THADDIUS_SPELL_BERSERK:
                     me->CastSpell(me, SPELL_BERSERK, true);
-                    events.PopEvent();
                     break;
                 case EVENT_THADDIUS_SPELL_CHAIN_LIGHTNING:
                     me->CastSpell(me->GetVictim(), RAID_MODE(SPELL_CHAIN_LIGHTNING_10, SPELL_CHAIN_LIGHTNING_25), false);
-                    events.RepeatEvent(15s);
+                    events.Repeat(15s);
                     break;
                 case EVENT_THADDIUS_POLARITY_SHIFT:
                     me->CastSpell(me, SPELL_POLARITY_SHIFT, false);
-                    events.RepeatEvent(30s);
+                    events.Repeat(30s);
                     break;
                 case EVENT_ACTIVATE_BALL_LIGHTNING:
                     ballLightningEnabled = true;
-                    events.PopEvent();
                     break;
             }
 
@@ -468,18 +464,18 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_MINION_SPELL_POWER_SURGE:
                     me->CastSpell(me, RAID_MODE(SPELL_POWER_SURGE_10, SPELL_POWER_SURGE_25), false);
-                    events.RepeatEvent(19s);
+                    events.Repeat(19s);
                     break;
                 case EVENT_MINION_SPELL_STATIC_FIELD:
                     me->CastSpell(me, RAID_MODE(SPELL_STATIC_FIELD_10, SPELL_STATIC_FIELD_25), false);
-                    events.RepeatEvent(3s);
+                    events.Repeat(3s);
                     break;
                 case EVENT_MINION_SPELL_MAGNETIC_PULL:
-                    events.RepeatEvent(25s);
+                    events.Repeat(25s);
                     if (pInstance)
                         if (Creature* feugen = ObjectAccessor::GetCreature(*me, pInstance->GetData64(DATA_FEUGEN_BOSS)))
                         {
@@ -520,7 +516,7 @@ public:
                                 cr->CastStop(SPELL_TESLA_SHOCK);
                                 cr->CastSpell(target, SPELL_TESLA_SHOCK, true);
                             }
-                            events.RepeatEvent(1500ms);
+                            events.Repeat(1500ms);
                             break;
                         }
                         else
@@ -530,7 +526,7 @@ public:
                         }
                     }
 
-                    events.RepeatEvent(5s);
+                    events.Repeat(5s);
                     break;
             }
 

@@ -92,24 +92,24 @@ public:
                 return;
 
             events.Update(diff);
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_SPELL_LIGHTNING:
                     for (uint8 i = 0; i < DUNGEON_MODE(1, 2); ++i)
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             me->CastSpell(target, SPELL_LIGHTNING_CLOUD, false);
-                    events.RepeatEvent(15s, 25s);
+                    events.Repeat(15s, 25s);
                     break;
                 case EVENT_SPELL_LUNG:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(target, SPELL_LUNG_BURST);
-                    events.RepeatEvent(7s, 12s);
+                    events.Repeat(7s, 12s);
                     break;
                 case EVENT_SPELL_ENVELOPING:
                     for (uint8 i = 0; i < DUNGEON_MODE(1, 2); ++i)
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             me->CastSpell(target, SPELL_ENVELOPING_WINDS, false);
-                    events.RepeatEvent(10s, 15s);
+                    events.Repeat(10s, 15s);
                     break;
             }
 

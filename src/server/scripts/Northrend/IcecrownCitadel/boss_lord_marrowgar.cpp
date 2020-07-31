@@ -167,13 +167,12 @@ class boss_lord_marrowgar : public CreatureScript
                 if (me->HasUnitState(UNIT_STATE_CASTING))
                     return;
 
-                switch (events.GetEvent())
+                switch (events.ExecuteEvent())
                 {
                     case 0:
                         break;
                     case EVENT_ENABLE_BONE_SLICE:
                         _boneSlice = true;
-                        events.PopEvent();
                         break;
                     case EVENT_SPELL_BONE_SPIKE_GRAVEYARD:
                         {
@@ -181,17 +180,16 @@ class boss_lord_marrowgar : public CreatureScript
                             if (IsHeroic() || !a)
                                 me->CastSpell(me, SPELL_BONE_SPIKE_GRAVEYARD, a);
                             
-                            events.RepeatEvent(15s, 20s);
+                            events.Repeat(15s, 20s);
                         }
                         break;
                     case EVENT_SPELL_COLDFLAME:
                         if (!me->HasAura(SPELL_BONE_STORM))
                             me->CastSpell((Unit*)NULL, SPELL_COLDFLAME_NORMAL, false);
-                        events.RepeatEvent(5s);
+                        events.Repeat(5s);
                         break;
                     case EVENT_SPELL_COLDFLAME_BONE_STORM:
                         me->CastSpell(me, SPELL_COLDFLAME_BONE_STORM, false);
-                        events.PopEvent();
                         break;
                     case EVENT_WARN_BONE_STORM:
                         _boneSlice = false;
@@ -202,7 +200,7 @@ class boss_lord_marrowgar : public CreatureScript
                         me->SetReactState(REACT_PASSIVE); // to prevent chasing another target on UpdateVictim()
                         me->GetMotionMaster()->MoveIdle();
                         me->GetMotionMaster()->MovementExpired();
-                        events.RepeatEvent(90s, 95s);
+                        events.Repeat(90s, 95s);
                         events.ScheduleEvent(EVENT_BEGIN_BONE_STORM, 3050ms);
                         break;
                     case EVENT_BEGIN_BONE_STORM:
@@ -212,7 +210,6 @@ class boss_lord_marrowgar : public CreatureScript
                             if (Aura* pStorm = me->GetAura(SPELL_BONE_STORM))
                                 pStorm->SetDuration(int32(_boneStormDuration.count()));
 
-                            events.PopEvent();
                             events.ScheduleEvent(EVENT_BONE_STORM_MOVE, 0s);
                             events.ScheduleEvent(EVENT_END_BONE_STORM, _boneStormDuration + 1ms);
                         }
@@ -221,10 +218,10 @@ class boss_lord_marrowgar : public CreatureScript
                         {
                             if (me->GetMotionMaster()->GetCurrentMovementGeneratorType() == POINT_MOTION_TYPE)
                             {
-                                events.RepeatEvent(10ms);
+                                events.Repeat(10ms);
                                 break;
                             }
-                            events.RepeatEvent(5s);
+                            events.Repeat(5s);
                             Unit* unit = SelectTarget(SELECT_TARGET_RANDOM, 0, BoneStormMoveTargetSelector(me));
                             if (!unit)
                             {
@@ -245,7 +242,6 @@ class boss_lord_marrowgar : public CreatureScript
                         me->GetMotionMaster()->MovementExpired();
                         me->SetReactState(REACT_AGGRESSIVE);
                         DoStartMovement(me->GetVictim());
-                        events.PopEvent();
                         events.CancelEvent(EVENT_BONE_STORM_MOVE);
                         events.ScheduleEvent(EVENT_ENABLE_BONE_SLICE, 10s);
                         
@@ -256,7 +252,6 @@ class boss_lord_marrowgar : public CreatureScript
                     case EVENT_ENRAGE:
                         me->CastSpell(me, SPELL_BERSERK, true);
                         Talk(SAY_BERSERK);
-                        events.PopEvent();
                         break;
                 }
 
@@ -345,7 +340,7 @@ public:
         {
             events.Update(diff);
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case 0:
                     break;
@@ -358,11 +353,10 @@ public:
                     float ny = me->GetPositionY()+5.0f*sin(me->GetOrientation());
                     if (!me->IsWithinLOS(nx, ny, 42.5f))
                     {
-                        events.PopEvent();
                         break;
                     }
                     me->NearTeleportTo(nx, ny, 42.5f, me->GetOrientation());
-                    events.RepeatEvent(450ms);
+                    events.Repeat(450ms);
                     }
                     break;
                 case 2:

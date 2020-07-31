@@ -316,26 +316,26 @@ public:
 
             DoMeleeAttackIfReady();
 
-            switch( events.GetEvent() )
+            switch( events.ExecuteEvent() )
             {
                 case 0:
                     break;
                 case EVENT_FROSTBOMB:
                     if( Unit* v = me->GetVictim() )
                         me->CastSpell(v, SPELL_FROSTBOMB, false);
-                    events.RepeatEvent(7s, 11s);
+                    events.Repeat(7s, 11s);
                     break;
                 case EVENT_TIME_BOMB:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true) )
                         DoCast(target, DUNGEON_MODE(SPELL_TIME_BOMB_N, SPELL_TIME_BOMB_H));
-                    events.RepeatEvent(20s, 25s);
+                    events.Repeat(20s, 25s);
                     break;
                 case EVENT_TELEPORT_TO_CENTER:
                     x = me->GetPositionX();
                     y = me->GetPositionY();
                     z = me->GetPositionZ();
                     me->CastSpell(me, SPELL_TELEPORT, false);
-                    events.RepeatEvent(25s, 30s);
+                    events.Repeat(25s, 30s);
                     events.DelayEvents(10000);
                     break;
                 case EVENT_TELE_BACK:
@@ -347,7 +347,6 @@ public:
                     me->SetControlled(false, UNIT_STATE_ROOT);
                     me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                     me->GetMotionMaster()->MoveChase(me->GetVictim());
-                    events.PopEvent();
                     break;
             }
         }

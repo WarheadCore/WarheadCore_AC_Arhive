@@ -138,21 +138,20 @@ class boss_nexusprince_shaffar : public CreatureScript
                 if (me->HasUnitState(UNIT_STATE_CASTING))
                     return;
 
-                switch (events.GetEvent())
+                switch (events.ExecuteEvent())
                 {
                     case EVENT_SPELL_FROST_NOVA:
                         me->CastSpell(me, SPELL_FROSTNOVA, false);
-                        events.RepeatEvent(16s, 23s);
+                        events.Repeat(16s, 23s);
                         events.DelayEvents(1500ms);
                         events.ScheduleEvent(EVENT_SPELL_BLINK, 1500ms);
                         break;
                     case EVENT_SPELL_FR_FI:
                         me->CastSpell(me->GetVictim(), RAND(SPELL_FROSTBOLT, SPELL_FIREBALL), false);
-                        events.RepeatEvent(3s, 4s);
+                        events.Repeat(3s, 4s);
                         break;
                     case EVENT_SPELL_BLINK:
                         me->CastSpell(me, SPELL_BLINK, false);
-                        events.PopEvent();
                         events.RescheduleEvent(EVENT_SPELL_FR_FI, 0s);
                         break;
                     case EVENT_SPELL_BEACON:
@@ -160,7 +159,7 @@ class boss_nexusprince_shaffar : public CreatureScript
                             Talk(SAY_SUMMON);
 
                         me->CastSpell(me, SPELL_ETHEREAL_BEACON, true);
-                        events.RepeatEvent(10s);
+                        events.Repeat(10s);
                         break;
                 }
 

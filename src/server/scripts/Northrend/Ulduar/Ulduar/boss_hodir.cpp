@@ -385,7 +385,7 @@ public:
             if( me->HasUnitState(UNIT_STATE_CASTING) )
                 return;
             
-            switch( events.GetEvent() )
+            switch( events.ExecuteEvent() )
             {
                 case 0:
                     break;
@@ -395,14 +395,12 @@ public:
                         me->CastSpell(me, SPELL_BERSERK, true);
                         me->MonsterYell(TEXT_HODIR_BERSERK, LANG_UNIVERSAL, 0);
                         me->PlayDirectSound(SOUND_HODIR_BERSERK, 0);
-                        events.PopEvent();
                     }
                     break;
                 case EVENT_HARD_MODE_MISSED:
                     {
                         hardmode = false;
                         me->MonsterTextEmote(TEXTEMOTE_HODIR_HARD_MODE_MISSED, 0);
-                        events.PopEvent();
                     }
                     break;
                 case EVENT_FLASH_FREEZE:
@@ -427,7 +425,7 @@ public:
                         me->MonsterYell(TEXT_HODIR_FLASH_FREEZE, LANG_UNIVERSAL, 0);
                         me->PlayDirectSound(SOUND_HODIR_FLASH_FREEZE, 0);
                         SmallIcicles(false);
-                        events.RepeatEvent(55s, 65s);
+                        events.Repeat(55s, 65s);
                         events.ScheduleEvent(EVENT_SMALL_ICICLES_ENABLE, Is25ManRaid() ? 12s : 24s);
                         events.ScheduleEvent(EVENT_FROZEN_BLOWS, 15s);
                         events.RescheduleEvent(EVENT_FREEZE, 20s);
@@ -436,7 +434,6 @@ public:
                 case EVENT_SMALL_ICICLES_ENABLE:
                     {
                         SmallIcicles(true);
-                        events.PopEvent();
                     }
                     break;
                 case EVENT_FROZEN_BLOWS:
@@ -445,7 +442,6 @@ public:
                         me->MonsterTextEmote(TEXTEMOTE_HODIR_FROZEN_BLOWS, 0);
                         me->PlayDirectSound(SOUND_HODIR_FROZEN_BLOWS, 0);
                         me->CastSpell(me, SPELL_FROZEN_BLOWS, true);
-                        events.PopEvent();
                     }
                     break;
                 case EVENT_FREEZE:
@@ -453,7 +449,7 @@ public:
                         me->CastSpell(plr, SPELL_FREEZE, false);
                     else if (Unit* plr = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true))
                         me->CastSpell(plr, SPELL_FREEZE, false);
-                    events.RepeatEvent(15s);
+                    events.Repeat(15s);
                     break;
             }
 
@@ -767,7 +763,7 @@ public:
             if( me->HasUnitState(UNIT_STATE_CASTING) )
                 return;
 
-            switch( events.GetEvent() )
+            switch( events.ExecuteEvent() )
             {
                 case 0:
                     break;
@@ -779,25 +775,24 @@ public:
                                     if( Creature* hodir = ObjectAccessor::GetCreature(*me, g) )
                                     {
                                         AttackStart(hodir);
-                                        events.PopEvent();
                                         ScheduleAbilities();
                                         break;
                                     }
-                        events.RepeatEvent(2s);
+                        events.Repeat(2s);
                     }
                     break;
                 case EVENT_PRIEST_DISPELL_MAGIC:
                     me->CastCustomSpell(SPELL_PRIEST_DISPELL_MAGIC, SPELLVALUE_MAX_TARGETS, 1, (Unit*)NULL, false);
-                    events.RepeatEvent(7s);
+                    events.Repeat(7s);
                     break;
                 case EVENT_PRIEST_GREAT_HEAL:
                     me->CastSpell(me, SPELL_PRIEST_GREAT_HEAL, false);
-                    events.RepeatEvent(6s, 7s);
+                    events.Repeat(6s, 7s);
                     break;
                 case EVENT_PRIEST_SMITE:
                     if (Unit* victim = me->GetVictim())
                         me->CastSpell(victim, SPELL_PRIEST_SMITE, false);
-                    events.RepeatEvent(2100ms);
+                    events.Repeat(2100ms);
                     break;
             }
         }
@@ -864,7 +859,7 @@ public:
             if( me->HasUnitState(UNIT_STATE_CASTING) )
                 return;
 
-            switch( events.GetEvent() )
+            switch( events.ExecuteEvent() )
             {
                 case 0:
                     break;
@@ -876,26 +871,25 @@ public:
                                     if( Creature* hodir = ObjectAccessor::GetCreature(*me, g) )
                                     {
                                         AttackStart(hodir);
-                                        events.PopEvent();
                                         ScheduleAbilities();
                                         break;
                                     }
-                        events.RepeatEvent(2s);
+                        events.Repeat(2s);
                     }
                     break;
                 case EVENT_DRUID_WRATH:
                     if (Unit* victim = me->GetVictim())
                         me->CastSpell(victim, SPELL_DRUID_WRATH, false);
-                    events.RepeatEvent(1600ms);
+                    events.Repeat(1600ms);
                     break;
                 case EVENT_DRUID_STARLIGHT:
                     if (me->GetPositionZ() < 433.0f) // ensure npc is on the ground
                     {
                         me->CastSpell(me, SPELL_DRUID_STARLIGHT_AREA_AURA, false);
-                        events.RepeatEvent(15s);
+                        events.Repeat(15s);
                         break;
                     }
-                    events.RepeatEvent(3s);
+                    events.Repeat(3s);
                     break;
             }
         }
@@ -969,7 +963,7 @@ public:
             if( me->HasUnitState(UNIT_STATE_CASTING) )
                 return;
 
-            switch( events.GetEvent() )
+            switch( events.ExecuteEvent() )
             {
                 case 0:
                     break;
@@ -981,22 +975,21 @@ public:
                                     if( Creature* hodir = ObjectAccessor::GetCreature(*me, g) )
                                     {
                                         AttackStart(hodir);
-                                        events.PopEvent();
                                         ScheduleAbilities();
                                         break;
                                     }
-                        events.RepeatEvent(2s);
+                        events.Repeat(2s);
                     }
                     break;
                 case EVENT_SHAMAN_LAVA_BURST:
                     if (Unit* victim = me->GetVictim())
                         me->CastSpell(victim, SPELL_SHAMAN_LAVA_BURST, false);
-                    events.RepeatEvent(2600ms);
+                    events.Repeat(2600ms);
                     break;
                 case EVENT_SHAMAN_STORM_CLOUD:
                     if (Player* target = ScriptedAI::SelectTargetFromPlayerList(35.0f, SPELL_SHAMAN_STORM_CLOUD))
                         me->CastSpell(target, SPELL_SHAMAN_STORM_CLOUD, false);
-                    events.RepeatEvent(30s);
+                    events.Repeat(30s);
                     break;
             }
         }
@@ -1064,7 +1057,7 @@ public:
             if( me->HasUnitState(UNIT_STATE_CASTING) )
                 return;
 
-            switch( events.GetEvent() )
+            switch( events.ExecuteEvent() )
             {
                 case 0:
                     break;
@@ -1076,21 +1069,20 @@ public:
                                     if( Creature* hodir = ObjectAccessor::GetCreature(*me, g) )
                                     {
                                         AttackStart(hodir);
-                                        events.PopEvent();
                                         ScheduleAbilities();
                                         break;
                                     }
-                        events.RepeatEvent(2s);
+                        events.Repeat(2s);
                     }
                     break;
                 case EVENT_MAGE_FIREBALL:
                     if (Unit* victim = me->GetVictim())
                         me->CastSpell(victim, SPELL_MAGE_FIREBALL, false);
-                    events.RepeatEvent(3100ms);
+                    events.Repeat(3100ms);
                     break;
                 case EVENT_MAGE_TOASTY_FIRE:
                     me->CastSpell(me, SPELL_MAGE_CONJURE_TOASTY_FIRE, false);
-                    events.RepeatEvent(10s);
+                    events.Repeat(10s);
                     break;
                 case EVENT_MAGE_MELT_ICE:
                     {
@@ -1108,10 +1100,10 @@ public:
                         if( found )
                         {
                             events.DelayEvents(2s);
-                            events.RepeatEvent(1999ms);
+                            events.Repeat(1999ms);
                             break;
                         }
-                        events.RepeatEvent(5s);
+                        events.Repeat(5s);
                     }
                     break;
             }

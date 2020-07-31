@@ -111,7 +111,7 @@ public:
         void UpdateAI(uint32 diff)
         {
             events.Update(diff);
-            uint32 eventId = events.GetEvent();
+            uint32 eventId = events.ExecuteEvent();
 
             if (eventId == EVENT_SPELL_INHIBIT_MAGIC)
             {
@@ -134,7 +134,7 @@ public:
                         else
                             player->RemoveAurasDueToSpell(SPELL_INHIBIT_MAGIC);
                     }
-                events.RepeatEvent(3s);
+                events.Repeat(3s);
                 return;
             }
 
@@ -146,12 +146,12 @@ public:
             {
                 case EVENT_SPELL_ATTRACT_MAGIC:
                     me->CastSpell(me, SPELL_ATTRACT_MAGIC, false);
-                    events.RepeatEvent(30s);
+                    events.Repeat(30s);
                     events.RescheduleEvent(EVENT_SPELL_CARNIVOROUS, 1500ms);
                     break;
                 case EVENT_SPELL_CARNIVOROUS:
                     me->CastSpell(me, DUNGEON_MODE(SPELL_CARNIVOROUS_BITE_N, SPELL_CARNIVOROUS_BITE_H), false);
-                    events.RepeatEvent(10s);
+                    events.Repeat(10s);
                     break;
                 case EVENT_SPELL_FOCUS_FIRE:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 60.0f, true))
@@ -160,7 +160,7 @@ public:
                             focusGUID = cr->GetGUID();
                         Talk(EMOTE_FOCUSED, target);
                     }
-                    events.RepeatEvent(15s, 20s);
+                    events.Repeat(15s, 20s);
                     events.ScheduleEvent(EVENT_SPELL_FOCUS_FIRE_2, 3s);
                     events.ScheduleEvent(EVENT_SPELL_FOCUS_FIRE_2, 3500ms);
                     events.ScheduleEvent(EVENT_SPELL_FOCUS_FIRE_2, 4s);
@@ -170,11 +170,9 @@ public:
                 case EVENT_SPELL_FOCUS_FIRE_2:
                     if (Unit* flare = ObjectAccessor::GetCreature(*me, focusGUID))
                         me->CastSpell(flare, SPELL_FOCUS_CAST, true);
-                    events.PopEvent();
                     break;
                 case EVENT_SPELL_FOCUS_FIRE_3:
                     me->SetControlled(false, UNIT_STATE_ROOT);
-                    events.PopEvent();
                     break;
             }
 

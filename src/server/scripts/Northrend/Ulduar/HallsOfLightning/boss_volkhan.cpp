@@ -283,34 +283,33 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_HEAT:
                     me->CastSpell(me, me->GetMap()->IsHeroic() ? SPELL_HEAT_H : SPELL_HEAT_N, true);
-                    events.RepeatEvent(8s);
+                    events.Repeat(8s);
                     break;
                 case EVENT_CHECK_HEALTH:
                     if (HealthBelowPct(HealthCheck))
                         GoToAnvil();
 
-                    events.RepeatEvent(1s);
+                    events.Repeat(1s);
                     return;
                 case EVENT_SHATTER:
                 {
-                    events.RepeatEvent(10s);
+                    events.Repeat(10s);
                     summons.DoAction(ACTION_SHATTER);
                     break;
                 }
                 case EVENT_MOVE_TO_ANVIL:
                     GetNextPos();
                     me->GetMotionMaster()->MovePoint(PointID, x, y, z);
-                    events.PopEvent();
                     return;
                 case EVENT_POSITION:
                     if (me->GetDistance(1331.9f, -106, 56) > 95)
                         EnterEvadeMode();
                     else
-                        events.RepeatEvent(4s);
+                        events.Repeat(4s);
                 
                     return;
             }
@@ -394,15 +393,15 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_BLAST:
                     me->CastSpell(me, SPELL_BLAST_WAVE, false);
-                    events.RepeatEvent(14s);
+                    events.Repeat(14s);
                     break;
                 case EVENT_IMMOLATION:
                     me->CastSpell(me->GetVictim(), me->GetMap()->IsHeroic() ? SPELL_IMMOLATION_STRIKE_H : SPELL_IMMOLATION_STRIKE_N, false);
-                    events.RepeatEvent(5s);
+                    events.Repeat(5s);
                     break;
             }
 
@@ -519,11 +518,10 @@ public:
                 return;
 
             events.Update(diff);
-            uint32 eventId = events.GetEvent();
+            uint32 eventId = events.ExecuteEvent();
 
             if (eventId == EVENT_UNFREEZE)
             {
-                events.PopEvent();
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                 me->CastSpell(me, SPELL_AWAKEN, true);
                 me->RemoveAllAuras();
@@ -544,31 +542,31 @@ public:
             {
                 case EVENT_PIERCING_HOWL:
                     me->CastSpell(me->GetVictim(), SPELL_PIERCING_HOWL, false);
-                    events.RepeatEvent(10s, 11500ms);
+                    events.Repeat(10s, 11500ms);
                     break;
                 case EVENT_PENETRATING_STRIKE:
                     me->CastSpell(me->GetVictim(), SPELL_PENETRATING_STRIKE, false);
-                    events.RepeatEvent(5s, 10s);
+                    events.Repeat(5s, 10s);
                     break;
                 case EVENT_FRIGHTENING_SHOUT:
                     me->CastSpell(me->GetVictim(), SPELL_FRIGHTENING_SHOUT, false);
-                    events.RepeatEvent(20s, 28s);
+                    events.Repeat(20s, 28s);
                     break;
                 case EVENT_BLADE_TURNING:
                     me->CastSpell(me->GetVictim(), me->GetMap()->IsHeroic() ? SPELL_BLADE_TURNING_H : SPELL_BLADE_TURNING_N, false);
-                    events.RepeatEvent(12s);
+                    events.Repeat(12s);
                     break;
                 case EVENT_THROW:
                     me->CastSpell(SelectTarget(SELECT_TARGET_RANDOM,0,50.0f, true,0), me->GetMap()->IsHeroic() ? SPELL_THROW_H : SPELL_THROW_N, true);
-                    events.RepeatEvent(10s, 25s);
+                    events.Repeat(10s, 25s);
                     break;
                 case EVENT_DEADLY_THROW:
                     me->CastSpell(SelectTarget(SELECT_TARGET_RANDOM,0,50.0f, true,0), me->GetMap()->IsHeroic() ? SPELL_DEADLY_THROW_H : SPELL_DEADLY_THROW_N, true);
-                    events.RepeatEvent(15s, 30s);
+                    events.Repeat(15s, 30s);
                     break;
                 case EVENT_DEFLECTION:
                     me->CastSpell(me, me->GetMap()->IsHeroic() ? SPELL_DEFLECTION_H : SPELL_DEFLECTION_N, false);
-                    events.RepeatEvent(15s);
+                    events.Repeat(15s);
                     break;
             }
 

@@ -119,29 +119,28 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_SPELL_ARCANE_VOLLEY:
                     me->CastSpell(me, SPELL_ARCANE_VOLLEY_N, false);
-                    events.RepeatEvent(7s, 12s);
+                    events.Repeat(7s, 12s);
                     break;
                 case EVENT_SPELL_POLYMORPH:
                     if (Unit* target = (IsHeroic() ? SelectTarget(SELECT_TARGET_RANDOM, 0) : SelectTarget(SELECT_TARGET_TOPAGGRO, 1)))
                         me->CastSpell(target, SPELL_POLYMORPH_N, false);
-                    events.RepeatEvent(15s, 17500ms);
+                    events.Repeat(15s, 17500ms);
                     break;
                 case EVENT_SPELL_SLOW:
                     me->CastSpell(me, SPELL_SLOW, false);
-                    events.RepeatEvent(15s, 30s);
+                    events.Repeat(15s, 30s);
                     break;
                 case EVENT_HEALTH_CHECK:
                     if (me->HealthBelowPct(20))
                     {
                         me->CastSpell(me, SPELL_MANA_SHIELD, false);
-                        events.PopEvent();
                         return;
                     }
-                    events.RepeatEvent(1s);
+                    events.Repeat(1s);
                     break;
                 case EVENT_SPELL_BLINK:
                     Talk(EMOTE_ARCANE_EXP);
@@ -152,14 +151,13 @@ public:
 
                         DoCast(target, SPELL_BLINK_TELEPORT);
                     }
-                    events.RepeatEvent(35s, 40s);
+                    events.Repeat(35s, 40s);
                     events.DelayEvents(500);
                     events.ScheduleEvent(EVENT_SPELL_BLINK_2, 0s);
                     return;
                 case EVENT_SPELL_BLINK_2:
                     me->CastSpell(me, SPELL_ARCANE_EXPLOSION_N, false);
                     me->CastSpell(me, SPELL_ARCANE_BUBBLE, true);
-                    events.PopEvent();
                     break;
             }
 
@@ -285,44 +283,42 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING|UNIT_STATE_STUNNED))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_SPELL_SCREECH:
                     me->CastSpell(me, SPELL_PARALYZING_SCREECH, false);
-                    events.RepeatEvent(23s);
+                    events.Repeat(23s);
                     events.DelayEvents(3000);
                     break;
                 case EVENT_SPELL_BOMB:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true))
                         me->CastSpell(target, SPELL_SPELL_BOMB, false);
-                    events.RepeatEvent(16s, 24500ms);
+                    events.Repeat(16s, 24500ms);
                     events.DelayEvents(3000);
                     break;
                 case EVENT_SPELL_CYCLONE:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 45.0f, true))
                         me->CastSpell(target, SPELL_CYCLONE, false);
-                    events.RepeatEvent(22s, 27s);
+                    events.Repeat(22s, 27s);
                     events.DelayEvents(3000);
                     break;
                 case EVENT_ANZU_HEALTH1:
                     if (me->HealthBelowPct(66))
                     {
                         SummonBroods();
-                        events.PopEvent();
                         events.DelayEvents(10000);
                         return;
                     }
-                    events.RepeatEvent(1s);
+                    events.Repeat(1s);
                     break;
                 case EVENT_ANZU_HEALTH2:
                     if (me->HealthBelowPct(33))
                     {
                         SummonBroods();
-                        events.PopEvent();
                         events.DelayEvents(10000);
                         return;
                     }
-                    events.RepeatEvent(1s);
+                    events.Repeat(1s);
                     break;
             }
 

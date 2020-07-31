@@ -119,23 +119,23 @@ public:
                 return;
 
             events.Update(diff);
-            switch (uint32 eventId = events.GetEvent())
+            switch (uint32 eventId = events.ExecuteEvent())
             {
                 case EVENT_SPELL_SHRINK:
                     me->CastSpell(me->GetVictim(), SPELL_SUPER_SHRINK_RAY, false);
-                    events.RepeatEvent(20s);
+                    events.Repeat(20s);
                     break;
                 case EVENT_SPELL_SAW:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
                         me->CastSpell(target, SPELL_SAW_BLADE, false);
                     else
                         me->CastSpell(me->GetVictim(), SPELL_SAW_BLADE, false);
-                    events.RepeatEvent(15s);
+                    events.Repeat(15s);
                     break;
                 case EVENT_SPELL_NET:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         me->CastSpell(target, SPELL_ELECTRIFIED_NET, false);
-                    events.RepeatEvent(10s);
+                    events.Repeat(10s);
                     break;
                 case EVENT_CHECK_HP25:
                 case EVENT_CHECK_HP50:
@@ -143,10 +143,9 @@ public:
                     if (me->HealthBelowPct(eventId*25))
                     {
                         SummonMechanics();
-                        events.PopEvent();
                         return;
                     }
-                    events.RepeatEvent(2s);
+                    events.Repeat(2s);
                     break;
             }
 

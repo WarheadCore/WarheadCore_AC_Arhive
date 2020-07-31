@@ -157,14 +157,14 @@ public:
         void UpdateAI(uint32 diff)
         {
             events.Update(diff);
-            uint32 eventId = events.GetEvent();
+            uint32 eventId = events.ExecuteEvent();
             if (eventId == EVENT_CHECK_PLAYER)
             {
                 Player* player = ObjectAccessor::GetPlayer(*me, playerGUID);
                 if (!player || !player->IsWithinDist2d(me, 60.0f))
                     EnterEvadeMode();
                 else
-                    events.RepeatEvent(5s);
+                    events.Repeat(5s);
                 return;
             }
 
@@ -178,31 +178,31 @@ public:
             {
                 case EVENT_SPELL_CHAIN_LIGHTNING:
                     me->CastSpell(me->GetVictim(), eventId, false);
-                    events.RepeatEvent(7s);
+                    events.Repeat(7s);
                     break;
                 case EVENT_SPELL_TEMPTRESS_KISS:
                     me->CastSpell(me->GetVictim(), eventId, false);
-                    events.RepeatEvent(45s);
+                    events.Repeat(45s);
                     break;
                 case EVENT_SPELL_DEMONIC_ENRAGE:
                     me->CastSpell(me, eventId, false);
-                    events.RepeatEvent(20s);
+                    events.Repeat(20s);
                     break;
                 case EVENT_SPELL_ENTROPIC_STING:
                     me->CastSpell(me->GetVictim(), eventId, false);
-                    events.RepeatEvent(20s);
+                    events.Repeat(20s);
                     break;
                 case EVENT_SPELL_DEMONIC_DOOM:
                     me->CastSpell(me->GetVictim(), eventId, false);
-                    events.RepeatEvent(50s);
+                    events.Repeat(50s);
                     break;
                 case EVENT_SPELL_STINGING_TRAUMA:
                     me->CastSpell(me->GetVictim(), eventId, false);
-                    events.RepeatEvent(20s);
+                    events.Repeat(20s);
                     break;
                 case EVENT_SPELL_DREADFUL_FRIGHT:
                     me->CastSpell(me->GetVictim(), eventId, false);
-                    events.RepeatEvent(15s);
+                    events.Repeat(15s);
                     break;
             }
 

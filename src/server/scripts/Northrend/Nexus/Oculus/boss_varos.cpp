@@ -167,7 +167,7 @@ public:
 
             DoMeleeAttackIfReady();
 
-            switch( events.GetEvent() )
+            switch( events.ExecuteEvent() )
             {
                 case 0:
                     break;
@@ -175,7 +175,7 @@ public:
                     {
                         if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true) )
                             me->CastSpell(target, SPELL_AMPLIFY_MAGIC, false);
-                        events.RepeatEvent(17500ms, 22500ms);
+                        events.Repeat(17500ms, 22500ms);
                     }
                     break;
                 case EVENT_CALL_AZURE_RING_CAPTAIN_1:
@@ -185,7 +185,7 @@ public:
                     {
                         Talk(SAY_AZURE);
                         Talk(SAY_AZURE_EMOTE);
-                        switch( events.GetEvent() )
+                        switch( events.ExecuteEvent() )
                         {
                             case EVENT_CALL_AZURE_RING_CAPTAIN_1:
                                 me->CastSpell(me, SPELL_CALL_AZURE_RING_CAPTAIN_1, true);
@@ -214,7 +214,6 @@ public:
                                 trigger->CastSpell(me, SPELL_ARCANE_BEAM_PERIODIC_DAMAGE, true);
                             }
                         }
-                        events.PopEvent();
                     }
                     break;
                 case EVENT_ENERGIZE_CORES_THIN:
@@ -223,7 +222,6 @@ public:
                         me->DisableRotate(false);
                         me->SetOrientation(ZapAngle);
                         me->CastSpell(me, SPELL_ENERGIZE_CORES_THIN, true);
-                        events.PopEvent();
                         events.ScheduleEvent(EVENT_ENERGIZE_CORES_DAMAGE, 4500ms);
                     }
                     break;
@@ -238,7 +236,6 @@ public:
                         ZapAngle += M_PI/2;
                         if( ZapAngle >= 2*M_PI )
                             ZapAngle -= 2*M_PI;
-                        events.PopEvent();
                         events.ScheduleEvent(EVENT_ENERGIZE_CORES_THIN, 2s);
                     }
                     break;

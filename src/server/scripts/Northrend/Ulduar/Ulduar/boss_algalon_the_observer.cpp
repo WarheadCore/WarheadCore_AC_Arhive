@@ -619,21 +619,18 @@ class boss_algalon_the_observer : public CreatureScript
                 if (!(events.GetPhaseMask() & PHASE_MASK_NO_CAST_CHECK) && me->HasUnitState(UNIT_STATE_CASTING))
                     return;
 
-                switch (events.GetEvent())
+                switch (events.ExecuteEvent())
                 {
                     case EVENT_INTRO_1:
                         me->RemoveAurasDueToSpell(SPELL_RIDE_THE_LIGHTNING);
                         Talk(SAY_ALGALON_INTRO_1);
-                        events.PopEvent();
                         break;
                     case EVENT_INTRO_2:
                         me->CastSpell((Unit*)NULL, SPELL_SUMMON_AZEROTH, true);
                         Talk(SAY_ALGALON_INTRO_2);
-                        events.PopEvent();
                         break;
                     case EVENT_INTRO_3:
                         Talk(SAY_ALGALON_INTRO_3);
-                        events.PopEvent();
                         break;
                     case EVENT_INTRO_FINISH:
                         events.Reset();
@@ -644,12 +641,10 @@ class boss_algalon_the_observer : public CreatureScript
                     case EVENT_START_COMBAT:
                         m_pInstance->SetData(TYPE_ALGALON, IN_PROGRESS);
                         Talk(SAY_ALGALON_AGGRO);
-                        events.PopEvent();
                         break;
                     case EVENT_REMOVE_UNNATTACKABLE:
                         me->SetSheath(SHEATH_STATE_MELEE);
                         me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_IMMUNE_TO_NPC);
-                        events.PopEvent();
                         break;
                     case EVENT_INTRO_TIMER_DONE:
                         events.SetPhase(PHASE_NORMAL);
@@ -660,41 +655,40 @@ class boss_algalon_the_observer : public CreatureScript
                         if (Player* target = SelectTargetFromPlayerList(150.0f))
                             AttackStart(target);
                         me->SetInCombatWithZone();
-                        events.PopEvent();
                         
                         for (uint32 i = 0; i < LIVING_CONSTELLATION_COUNT; ++i)
                             me->SummonCreature(NPC_LIVING_CONSTELLATION, ConstellationPos[i], TEMPSUMMON_DEAD_DESPAWN);
                         break;
                     case EVENT_QUANTUM_STRIKE:
                         me->CastSpell(me->GetVictim(), SPELL_QUANTUM_STRIKE, false);
-                        events.RepeatEvent(3s, 4500ms);
+                        events.Repeat(3s, 4500ms);
                         break;
                     case EVENT_PHASE_PUNCH:
                         me->CastSpell(me->GetVictim(), SPELL_PHASE_PUNCH, false);
-                        events.RepeatEvent(15500ms);
+                        events.Repeat(15500ms);
                         break;
                     case EVENT_SUMMON_COLLAPSING_STAR:
                         Talk(SAY_ALGALON_COLLAPSING_STAR);
                         Talk(EMOTE_ALGALON_COLLAPSING_STAR);
                         for (uint8 i = 0; i < COLLAPSING_STAR_COUNT; ++i)
                             me->SummonCreature(NPC_COLLAPSING_STAR, CollapsingStarPos[i], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 2000);
-                        events.RepeatEvent(1min);
+                        events.Repeat(1min);
                         break;
                     case EVENT_COSMIC_SMASH:
                         Talk(EMOTE_ALGALON_COSMIC_SMASH);
                         me->CastCustomSpell(SPELL_COSMIC_SMASH, SPELLVALUE_MAX_TARGETS, RAID_MODE(1,3), (Unit*)NULL);
-                        events.RepeatEvent(25500ms);
+                        events.Repeat(25500ms);
                         break;
                     case EVENT_ACTIVATE_LIVING_CONSTELLATION:
                     {
                         if (events.GetPhaseMask() & PHASE_MASK_NO_UPDATE)
                         {
-                            events.RepeatEvent(4s);
+                            events.Repeat(4s);
                             break;
                         }
                         CallConstellations();
                         //me->CastSpell(me, SPELL_TRIGGER_3_ADDS, true);
-                        events.RepeatEvent(50s);
+                        events.Repeat(50s);
                         break;
                     }
                     case EVENT_BIG_BANG:
@@ -706,14 +700,13 @@ class boss_algalon_the_observer : public CreatureScript
                         summons.DoAction(ACTION_BIG_BANG, pred);
 
                         me->CastSpell((Unit*)NULL, SPELL_BIG_BANG, false);
-                        events.RepeatEvent(90500ms);
+                        events.Repeat(90500ms);
                         break;
                     }
                     case EVENT_ASCEND_TO_THE_HEAVENS:
                         Talk(SAY_ALGALON_ASCEND);
                         me->CastSpell((Unit*)NULL, SPELL_ASCEND_TO_THE_HEAVENS, false);
                         events.ScheduleEvent(EVENT_EVADE, 2500ms);
-                        events.PopEvent();
                         break;
                     case EVENT_EVADE:
                         events.Reset();
@@ -725,89 +718,70 @@ class boss_algalon_the_observer : public CreatureScript
                             m_pInstance->SetData(TYPE_ALGALON, DONE);
                             m_pInstance->SetData(DATA_ALGALON_DEFEATED, 1);
                         }
-                        events.PopEvent();
                         break;
                     case EVENT_OUTRO_1:
                         me->RemoveAllAuras();
                         me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_RENAME);
-                        events.PopEvent();
                         break;
                     case EVENT_OUTRO_2:
                         _EnterEvadeMode();
                         me->GetMotionMaster()->MovePoint(POINT_ALGALON_OUTRO, AlgalonOutroPos);
-                        events.PopEvent();
                         break;
                     case EVENT_OUTRO_3:
                         me->CastSpell((Unit*)NULL, SPELL_KILL_CREDIT);
                         // Summon Chest
                         if (GameObject* go = me->SummonGameObject(RAID_MODE(GO_ALGALON_CHEST, GO_ALGALON_CHEST_HERO), 1632.1f, -306.561f, 417.321f, 4.69494f, 0, 0, 0, 1, 0))
                             go->SetUInt32Value(GAMEOBJECT_FLAGS, 0);
-                        events.PopEvent();
                         break;
                     case EVENT_OUTRO_4:
                         me->CastSpell((Unit*)NULL, SPELL_SUPERMASSIVE_FAIL);
                         me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                        events.PopEvent();
                         break;
                     case EVENT_OUTRO_5:
                         if (Creature* brann = me->SummonCreature(NPC_BRANN_BRONZBEARD_ALG, BrannOutroPos[0], TEMPSUMMON_TIMED_DESPAWN, 131500))
                             brann->AI()->DoAction(ACTION_OUTRO);
-                        events.PopEvent();
                         break;
                     case EVENT_OUTRO_6:
                         Talk(SAY_ALGALON_OUTRO_1);
                         me->SetStandState(UNIT_STAND_STATE_KNEEL);
-                        events.PopEvent();
                         break;
                     case EVENT_OUTRO_7:
                         Talk(SAY_ALGALON_OUTRO_2);
-                        events.PopEvent();
                         break;
                     case EVENT_OUTRO_8:
                         Talk(SAY_ALGALON_OUTRO_3);
-                        events.PopEvent();
                         break;
                     case EVENT_OUTRO_9:
                         Talk(SAY_ALGALON_OUTRO_4);
-                        events.PopEvent();
                         break;
                     case EVENT_OUTRO_10:
                         Talk(SAY_ALGALON_OUTRO_5);
-                        events.PopEvent();
                         break;
                     case EVENT_OUTRO_11:
                         me->SetStandState(UNIT_STAND_STATE_STAND);
                         me->CastSpell(me, SPELL_TELEPORT, false);
                         me->DespawnOrUnsummon(3000);
-                        events.PopEvent();
                         break;
                     case EVENT_DESPAWN_ALGALON_1:
                         Talk(SAY_ALGALON_DESPAWN_1);
-                        events.PopEvent();
                         break;
                     case EVENT_DESPAWN_ALGALON_2:
                         Talk(SAY_ALGALON_DESPAWN_2);
-                        events.PopEvent();
                         break;
                     case EVENT_DESPAWN_ALGALON_3:
                         Talk(SAY_ALGALON_DESPAWN_3);
-                        events.PopEvent();
                         break;
                     case EVENT_DESPAWN_ALGALON_4:
                         me->CastSpell((Unit*)NULL, SPELL_ASCEND_TO_THE_HEAVENS, false);
-                        events.PopEvent();
                         break;
                     case EVENT_DESPAWN_ALGALON_5:
                         me->SetStandState(UNIT_STAND_STATE_STAND);
                         me->CastSpell(me, SPELL_TELEPORT, false);
                         me->DespawnOrUnsummon(3000);
-                        events.PopEvent();
                         break;
                     case EVENT_CHECK_HERALD_ITEMS:
-                        if (DoCheckHeraldOfTheTitans())
-                            events.PopEvent();
-                        else
-                            events.RepeatEvent(5s);
+                        if (!DoCheckHeraldOfTheTitans())
+                            events.Repeat(5s);
                         break;
                 }
 
@@ -892,10 +866,9 @@ class npc_brann_bronzebeard_algalon : public CreatureScript
                 UpdateVictim();
                 events.Update(diff);
 
-                switch (events.GetEvent())
+                switch (events.ExecuteEvent())
                 {
                     case EVENT_BRANN_MOVE_INTRO:
-                        events.PopEvent();
                         if (_currentPoint < MAX_BRANN_WAYPOINTS_INTRO)
                             me->GetMotionMaster()->MovePoint(_currentPoint, BrannIntroWaypoint[_currentPoint]);
                         break;
@@ -903,15 +876,12 @@ class npc_brann_bronzebeard_algalon : public CreatureScript
                         if (me->GetInstanceScript() && !me->GetInstanceScript()->GetData64(TYPE_ALGALON))
                             if (Creature* algalon = me->GetMap()->SummonCreature(NPC_ALGALON, AlgalonSummonPos))
                                 algalon->AI()->DoAction(ACTION_START_INTRO);
-                        events.PopEvent();
                         break;
                     case EVENT_BRANN_OUTRO_1:
                         Talk(SAY_BRANN_ALGALON_OUTRO);
-                        events.PopEvent();
                         break;
                     case EVENT_BRANN_OUTRO_2:
                         me->GetMotionMaster()->MovePoint(POINT_BRANN_OUTRO_END, BrannOutroPos[2]);
-                        events.PopEvent();
                         break;
                 }
             }
@@ -1031,15 +1001,14 @@ class npc_living_constellation : public CreatureScript
                     return;
 
                 events.Update(diff);
-                switch (events.GetEvent())
+                switch (events.ExecuteEvent())
                 {
                     case EVENT_ARCANE_BARRAGE:
                         me->CastCustomSpell(SPELL_ARCANE_BARRAGE, SPELLVALUE_MAX_TARGETS, 1, (Unit*)NULL, true);
-                        events.RepeatEvent(2500ms);
+                        events.Repeat(2500ms);
                         break;
                     case EVENT_RESUME_UPDATING:
                         events.SetPhase(0);
-                        events.PopEvent();
                         break;
                 }
             }
@@ -1153,11 +1122,10 @@ class go_celestial_planetarium_access : public GameObjectScript
                     return;
 
                 events.Update(diff);
-                switch (events.GetEvent())
+                switch (events.ExecuteEvent())
                 {
                     case EVENT_DESPAWN_CONSOLE:
                         go->Delete();
-                        events.PopEvent();
                         break;
                 }
             }

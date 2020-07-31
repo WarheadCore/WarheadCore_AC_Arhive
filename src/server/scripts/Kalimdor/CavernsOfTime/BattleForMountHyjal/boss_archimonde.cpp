@@ -616,7 +616,7 @@ public:
                             break;
                         }
                     }
-                    events.RepeatEvent(5s);
+                    events.Repeat(5s);
                     break;
                 }
                 case EVENT_BELOW_10_PERCENT_HP:

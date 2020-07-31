@@ -149,19 +149,18 @@ public:
             }
 
             events.Update(diff);
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_SPELL_CORROSIVE:
                     me->CastSpell(me->GetVictim(), SPELL_CORROSIVE_ACID, false);
-                    events.RepeatEvent(15s, 25s);
+                    events.Repeat(15s, 25s);
                     break;
                 case EVENT_SPELL_FEAR:
                     me->CastSpell(me, SPELL_FEAR, false);
-                    events.RepeatEvent(20s, 35s);
+                    events.Repeat(20s, 35s);
                     break;
                 case EVENT_SPELL_ENRAGE:
                     me->CastSpell(me->GetVictim(), SPELL_ENRAGE, false);
-                    events.PopEvent();
                     break;
             }
             

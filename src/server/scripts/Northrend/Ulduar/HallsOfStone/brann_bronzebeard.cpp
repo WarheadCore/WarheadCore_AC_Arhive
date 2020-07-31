@@ -402,24 +402,21 @@ public:
         void UpdateEscortAI(uint32 diff) override
         {
             events.Update(diff);
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_KADDRAK_VISUAL:
                 {
                     SwitchHeadVisaul(0x1, true);
-                    events.PopEvent();
                     break;
                 }
                 case EVENT_MARNAK_VISUAL:
                 {
                     SwitchHeadVisaul(0x2, true);
-                    events.PopEvent();
                     break;
                 }
                 case EVENT_ABEDNEUM_VISUAL:
                 {
                     SwitchHeadVisaul(0x4, true);
-                    events.PopEvent();
                     break;
                 }
                 case EVENT_KADDRAK_HEAD: // First
@@ -431,7 +428,7 @@ public:
                     }
 
                     events.RescheduleEvent(EVENT_KADDRAK_SWITCH_EYE, 1500ms);
-                    events.RepeatEvent(2s, 4s);
+                    events.Repeat(2s, 4s);
                     break;
                 }
                 case EVENT_KADDRAK_SWITCH_EYE:
@@ -446,7 +443,6 @@ public:
                         kaddrak->StopMovingOnCurrentPos();
                     }
 
-                    events.PopEvent();
                     break;
                 }
                 case EVENT_MARNAK_HEAD: // Second
@@ -463,7 +459,7 @@ public:
                             }
                         }
                     }
-                    events.RepeatEvent(20s);
+                    events.Repeat(20s);
                     break;
                 }
                 case EVENT_ABEDNEUM_HEAD: // Third
@@ -481,7 +477,7 @@ public:
                             cr->CastSpell(cr, DUNGEON_MODE(SPELL_SEARING_GAZE, SPELL_SEARING_GAZE_H), true);
                         }
                     }
-                    events.RepeatEvent(30s);
+                    events.Repeat(30s);
                     break;
                 }
                 case EVENT_SUMMON_MONSTERS:
@@ -494,7 +490,7 @@ public:
                         SummonCreatures(NPC_IRON_GOLEM_CUSTODIAN, 1);
 
                     WaveNum++;
-                    events.RepeatEvent(_time);
+                    events.Repeat(_time);
                     break;
                 }
                 case EVENT_TRIBUNAL_END:
@@ -731,20 +727,20 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_DRP_CHARGE:
                 {
                     if (Unit *tgt = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         me->CastSpell(tgt, SPELL_DRP_CHARGE, false);
 
-                    events.RepeatEvent(10s);
+                    events.Repeat(10s);
                     break;
                 }
                 case EVENT_DRP_CLEAVE:
                 {
                     me->CastSpell(me->GetVictim(), SPELL_DRP_CLEAVE, false);
-                    events.RepeatEvent(7s);
+                    events.Repeat(7s);
                     break;
                 }
             }
@@ -789,18 +785,18 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_DRS_LIGHTNING_BOLD:
                 {
                     me->CastSpell(me->GetVictim(), IsHeroic() ? SPELL_DRS_LIGHTING_BOLT_H : SPELL_DRS_LIGHTING_BOLT, false);
-                    events.RepeatEvent(5s);
+                    events.Repeat(5s);
                     break;
                 }
                 case EVENT_DRS_SHADOW_WORD_PAIN:
                 {
                     me->CastSpell(me->GetVictim(), IsHeroic() ? SPELL_DRS_SHADOW_WORD_PAIN_H : SPELL_DRS_SHADOW_WORD_PAIN, false);
-                    events.RepeatEvent(12s);
+                    events.Repeat(12s);
                     break;
                 }
             }
@@ -843,18 +839,18 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_IGC_CRUSH:
                 {
                     me->CastSpell(me->GetVictim(), SPELL_IGC_CRUSH_ARMOR, false);
-                    events.RepeatEvent(6s);
+                    events.Repeat(6s);
                     break;
                 }
                 case EVENT_IGC_GROUND_SMASH:
                 {
                     me->CastSpell(me->GetVictim(), IsHeroic() ? SPELL_IGC_GROUND_SMASH_H : SPELL_IGC_GROUND_SMASH, false);
-                    events.RepeatEvent(5s);
+                    events.Repeat(5s);
                     break;
                 }
             }

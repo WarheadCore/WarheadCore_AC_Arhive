@@ -118,17 +118,17 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch(events.GetEvent())
+            switch(events.ExecuteEvent())
             {
                 case 0:
                     break;
                 case EVENT_SPELL_BLOODLUST:
                     me->CastSpell((Unit*)NULL, SPELL_BLOODLUST, false);
-                    events.RepeatEvent(35s, 45s);
+                    events.Repeat(35s, 45s);
                     break;
                 case EVENT_SPELL_BREAK_BONDS:
                     me->CastSpell((Unit*)NULL, SPELL_BREAK_BONDS, false);
-                    events.RepeatEvent(16s, 22s);
+                    events.Repeat(16s, 22s);
                     break;
                 case EVENT_SPELL_CHAIN_HEAL:
                     if (uint64 TargetGUID = GetChainHealTargetGUID())
@@ -141,24 +141,24 @@ public:
                             Creature *pGuard2 = pInstance->instance->GetCreature(pInstance->GetData64(DATA_EREKEM_GUARD_2_GUID));
                             if ((pGuard1 && !pGuard1->IsAlive()) || (pGuard2 && !pGuard2->IsAlive()))
                             {
-                                events.RepeatEvent(3s, 6s);
+                                events.Repeat(3s, 6s);
                                 break;
                             }
                         }
-                    events.RepeatEvent(8s, 11s);
+                    events.Repeat(8s, 11s);
                     break;
                 case EVENT_SPELL_EARTH_SHIELD:
                     me->CastSpell(me, SPELL_EARTH_SHIELD, false);
-                    events.RepeatEvent(20s);
+                    events.Repeat(20s);
                     break;
                 case EVENT_SPELL_EARTH_SHOCK:
                     me->CastSpell(me->GetVictim(), SPELL_EARTH_SHOCK, false);
-                    events.RepeatEvent(8s, 13s);
+                    events.Repeat(8s, 13s);
                     break;
                 case EVENT_SPELL_LIGHTNING_BOLT:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 35.0f, true))
                         me->CastSpell(target, SPELL_LIGHTNING_BOLT, false);
-                    events.RepeatEvent(15s, 25s);
+                    events.Repeat(15s, 25s);
                     break;
                 case EVENT_SPELL_STORMSTRIKE:
                     {
@@ -166,7 +166,7 @@ public:
                         Creature *pGuard2 = pInstance->instance->GetCreature(pInstance->GetData64(DATA_EREKEM_GUARD_2_GUID));
                         if (pGuard1 && !pGuard1->IsAlive() && pGuard2 && !pGuard2->IsAlive()) // both dead
                             me->CastSpell(me->GetVictim(), SPELL_STORMSTRIKE, false);
-                        events.RepeatEvent(3s);
+                        events.Repeat(3s);
                     }
                     break;
             }
@@ -283,21 +283,21 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch(events.GetEvent())
+            switch(events.ExecuteEvent())
             {
                 case 0:
                     break;
                 case EVENT_SPELL_GUSHING_WOUND:
                     me->CastSpell(me->GetVictim(), SPELL_GUSHING_WOUND, false);
-                    events.RepeatEvent(7s, 12s);
+                    events.Repeat(7s, 12s);
                     break;
                 case EVENT_SPELL_HOWLING_SCREECH:
                     me->CastSpell(me->GetVictim(), SPELL_HOWLING_SCREECH, false);
-                    events.RepeatEvent(8s, 13s);
+                    events.Repeat(8s, 13s);
                     break;
                 case EVENT_SPELL_STRIKE:
                     me->CastSpell(me->GetVictim(), SPELL_STRIKE, false);
-                    events.RepeatEvent(4s, 8s);
+                    events.Repeat(4s, 8s);
                     break;
             }
 

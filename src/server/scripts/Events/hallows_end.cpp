@@ -641,18 +641,16 @@ class npc_hallows_end_soh : public CreatureScript
                 if (me->HasUnitState(UNIT_STATE_CASTING))
                     return;
 
-                switch (events.GetEvent())
+                switch (events.ExecuteEvent())
                 {
                     case 1:
                         me->MonsterYell("Prepare yourselves, the bells have tolled! Shelter your weak, your young and your old! Each of you shall pay the final sum! Cry for mercy; the reckoning has come!", LANG_UNIVERSAL, 0);
                         me->PlayDirectSound(11966);
-                        events.PopEvent();
                         break;
                     case 2:
                     {
                         if (Unit* trigger = getTrigger())
                             me->CastSpell(trigger, SPELL_START_FIRE, true);
-                        events.PopEvent();
                         break;
                     }
                     case 3:
@@ -672,7 +670,6 @@ class npc_hallows_end_soh : public CreatureScript
                                         }
 
                                 FinishEvent(failed);
-                                events.PopEvent();
                             }
                             return;
                         }
@@ -689,7 +686,7 @@ class npc_hallows_end_soh : public CreatureScript
 
                         if (Unit* trigger = getTrigger())
                             me->CastSpell(trigger, SPELL_START_FIRE, true);
-                        events.RepeatEvent(12s);
+                        events.Repeat(12s);
                         break;
                     }
                 }
@@ -1065,7 +1062,7 @@ class boss_headless_horseman : public CreatureScript
                 if (inFight && !UpdateVictim())
                     return;
 
-                switch (events.GetEvent())
+                switch (events.ExecuteEvent())
                 {
                     case EVENT_HH_PLAYER_TALK:
                     {
@@ -1094,11 +1091,10 @@ class boss_headless_horseman : public CreatureScript
                         case 4:
                             me->CastSpell(me, SPELL_SHAKE_CAMERA_MEDIUM, true);
                             player->MonsterSay("Now, know demise!", LANG_UNIVERSAL, 0);
-                            events.PopEvent();
                             talkCount = 0;
                             return; // pop and return, skip repeat
                         }
-                        events.RepeatEvent(2s);
+                        events.Repeat(2s);
                         break;
                     }
                     case EVENT_HORSEMAN_FOLLOW:
@@ -1109,13 +1105,12 @@ class boss_headless_horseman : public CreatureScript
                             AttackStart(player);
                             me->GetMotionMaster()->MoveChase(player);
                         }
-                        events.PopEvent();
                         break;
                     }
                     case EVENT_HORSEMAN_CLEAVE:
                     {
                         me->CastSpell(me->GetVictim(), SPELL_HORSEMAN_CLEAVE, false);
-                        events.RepeatEvent(8s);
+                        events.Repeat(8s);
                         break;
                     }
                     case EVENT_HORSEMAN_WHIRLWIND:
@@ -1123,11 +1118,11 @@ class boss_headless_horseman : public CreatureScript
                         if (me->HasAuraEffect(SPELL_HORSEMAN_WHIRLWIND, EFFECT_0))
                         {
                             me->RemoveAura(SPELL_HORSEMAN_WHIRLWIND);
-                            events.RepeatEvent(15s);
+                            events.Repeat(15s);
                             break;
                         }
                         me->CastSpell(me, SPELL_HORSEMAN_WHIRLWIND, true);
-                        events.RepeatEvent(6s);
+                        events.Repeat(6s);
                         break;
                     }
                     case EVENT_HORSEMAN_CHECK_HEALTH:
@@ -1135,11 +1130,10 @@ class boss_headless_horseman : public CreatureScript
                         if (me->GetHealth() == me->GetMaxHealth())
                         {
                             me->CastSpell(me, SPELL_BODY_RESTORED_INFO, true);
-                            events.PopEvent();
                             return;
                         }
 
-                        events.RepeatEvent(1s);
+                        events.Repeat(1s);
                         break;
                     }
                     case EVENT_HORSEMAN_CONFLAGRATION:
@@ -1147,14 +1141,14 @@ class boss_headless_horseman : public CreatureScript
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             me->CastSpell(target, SPELL_HORSEMAN_CONFLAGRATION, false);
 
-                        events.RepeatEvent(12500ms);
+                        events.Repeat(12500ms);
                         break;
                     }
                     case EVENT_SUMMON_PUMPKIN:
                     {
                         if (talkCount < 4)
                         {
-                            events.RepeatEvent(10ms);
+                            events.Repeat(10ms);
                             talkCount++;
                             me->CastSpell(me, SPELL_SUMMON_PUMPKIN, false);
                         }
@@ -1162,7 +1156,7 @@ class boss_headless_horseman : public CreatureScript
                         {
                             me->MonsterSay("Soldiers arise, stand and fight! Bring victory at last to this fallen knight!", LANG_UNIVERSAL, 0);
                             me->PlayDirectSound(SOUND_SPROUT);
-                            events.RepeatEvent(15s);
+                            events.Repeat(15s);
                             talkCount = 0;
                         }
 

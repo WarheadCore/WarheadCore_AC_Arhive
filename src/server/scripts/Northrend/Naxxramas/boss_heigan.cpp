@@ -175,15 +175,15 @@ public:
             //if (me->HasUnitState(UNIT_STATE_CASTING))
             //  return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_SPELL_SPELL_DISRUPTION:
                     me->CastSpell(me, SPELL_SPELL_DISRUPTION, false);
-                    events.RepeatEvent(10s);
+                    events.Repeat(10s);
                     break;
                 case EVENT_SPELL_DECEPIT_FEVER:
                     me->CastSpell(me, RAID_MODE(SPELL_DECREPIT_FEVER_10, SPELL_DECREPIT_FEVER_25), false);
-                    events.RepeatEvent(20s);
+                    events.Repeat(20s);
                     break;
                 case EVENT_SWITCH_PHASE:
                     if (currentPhase == PHASE_SLOW_DANCE)
@@ -212,7 +212,7 @@ public:
                     if (currentPhase == PHASE_SLOW_DANCE)
                         Talk(SAY_TAUNT);
 
-                    events.RepeatEvent(currentPhase == PHASE_SLOW_DANCE ? 10s : 4s);
+                    events.Repeat(currentPhase == PHASE_SLOW_DANCE ? 10s : 4s);
                     break;
                 case EVENT_SAFETY_DANCE:
                 {
@@ -221,14 +221,13 @@ public:
                     {
                         if (IsInRoom(itr.GetSource()) && !itr.GetSource()->IsAlive())
                         {
-                            events.PopEvent();
                             pInstance->SetData(DATA_DANCE_FAIL, 0);
                             pInstance->SetData(DATA_IMMORTAL_FAIL, 0);
                             return;
                         }
 
                     }
-                    events.RepeatEvent(5s);
+                    events.Repeat(5s);
                     return;
                 }
             }

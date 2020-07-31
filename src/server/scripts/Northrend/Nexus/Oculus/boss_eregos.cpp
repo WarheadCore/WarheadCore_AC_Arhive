@@ -187,28 +187,28 @@ public:
 
             DoMeleeAttackIfReady();
 
-            switch( events.GetEvent() )
+            switch( events.ExecuteEvent() )
             {
                 case 0:
                     break;
                 case EVENT_SPELL_ARCANE_BARRAGE:
                     if( Unit* v = me->GetVictim() )
                         me->CastSpell(v, SPELL_ARCANE_BARRAGE, false);
-                    events.RepeatEvent(2500ms);
+                    events.Repeat(2500ms);
                     break;
                 case EVENT_SPELL_ARCANE_VOLLEY:
                     me->CastSpell(me, SPELL_ARCANE_VOLLEY, false);
-                    events.RepeatEvent(8s);
+                    events.Repeat(8s);
                     break;
                 case EVENT_SPELL_ENRAGED_ASSAULT:
                     Talk(SAY_ENRAGE);
                     me->CastSpell(me, SPELL_ENRAGED_ASSAULT, false);
-                    events.RepeatEvent(35s);
+                    events.Repeat(35s);
                     break;
                 case EVENT_SUMMON_WHELPS:
                     for( uint8 i=0; i<5; ++i )
                         events.ScheduleEvent(EVENT_SUMMON_SINGLE_WHELP, 0s, 8s);
-                    events.RepeatEvent(40s);
+                    events.Repeat(40s);
                     break;
                 case EVENT_SUMMON_SINGLE_WHELP:
                     {
@@ -216,7 +216,6 @@ public:
                         float y = rand_norm()*50.0f-25.0f;
                         float z = rand_norm()*50.0f-25.0f;
                         me->SummonCreature(NPC_LEY_GUARDIAN_WHELP, me->GetPositionX()+x, me->GetPositionY()+y, me->GetPositionZ()+z, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000);
-                        events.PopEvent();
                     }
                     break;
                 case EVENT_SPELL_PLANAR_SHIFT:
@@ -241,7 +240,6 @@ public:
                                     pa->GetMotionMaster()->MoveChase(t, 0.01f);
                                 }
                             }
-                    events.PopEvent();
                     break;
             }
         }

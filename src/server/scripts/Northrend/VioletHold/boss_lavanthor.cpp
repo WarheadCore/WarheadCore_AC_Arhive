@@ -89,25 +89,25 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch(events.GetEvent())
+            switch(events.ExecuteEvent())
             {
                 case 0:
                     break;
                 case EVENT_SPELL_FIREBOLT:
                     me->CastSpell(me->GetVictim(), SPELL_FIREBOLT, false);
-                    events.RepeatEvent(5s, 13s);
+                    events.Repeat(5s, 13s);
                     break;
                 case EVENT_SPELL_FLAME_BREATH:
                     me->CastSpell(me->GetVictim(), SPELL_FLAME_BREATH, false);
-                    events.RepeatEvent(10s, 15s);
+                    events.Repeat(10s, 15s);
                     break;
                 case EVENT_SPELL_LAVA_BURN:
                     me->CastSpell(me->GetVictim(), SPELL_LAVA_BURN, false);
-                    events.RepeatEvent(14s, 20s);
+                    events.Repeat(14s, 20s);
                     break;
                 case EVENT_SPELL_CAUTERIZING_FLAMES:
                     me->CastSpell((Unit*)NULL, SPELL_FLAME_BREATH, false);
-                    events.RepeatEvent(10s, 16s);
+                    events.Repeat(10s, 16s);
                     break;
             }
 

@@ -218,7 +218,7 @@ public:
             if( me->HasUnitState(UNIT_STATE_CASTING) )
                 return;
 
-            switch( events.GetEvent() )
+            switch( events.ExecuteEvent() )
             {
                 case 0:
                     break;
@@ -227,11 +227,10 @@ public:
                     me->CastSpell(me, SPELL_VEZAX_BERSERK, true);
                     me->MonsterYell(TEXT_VEZAX_BERSERK, LANG_UNIVERSAL, 0);
                     me->PlayDirectSound(SOUND_VEZAX_BERSERK, 0);
-                    events.PopEvent();
                     break;
                 case EVENT_SPELL_VEZAX_SHADOW_CRASH:
                     {
-                        events.RepeatEvent(10s);
+                        events.Repeat(10s);
 
                         std::vector<Player*> players;
                         Map::PlayerList const& pl = me->GetMap()->GetPlayers();
@@ -254,18 +253,17 @@ public:
                 case EVENT_RESTORE_TARGET:
                     if (me->GetVictim())
                         me->SetUInt64Value(UNIT_FIELD_TARGET, me->GetVictim()->GetGUID());
-                    events.PopEvent();
                     break;
                 case EVENT_SPELL_SEARING_FLAMES:
                     if(!me->HasAura(SPELL_SARONITE_BARRIER))
                         me->CastSpell(me->GetVictim(), SPELL_SEARING_FLAMES, false);
-                    events.RepeatEvent(me->GetMap()->Is25ManRaid() ? 8s : 15s);
+                    events.Repeat(me->GetMap()->Is25ManRaid() ? 8s : 15s);
                     break;
                 case EVENT_SPELL_SURGE_OF_DARKNESS:
                     me->MonsterYell(TEXT_VEZAX_SURGE, LANG_UNIVERSAL, 0);
                     me->PlayDirectSound(SOUND_VEZAX_SURGE, 0);
                     me->CastSpell(me, SPELL_SURGE_OF_DARKNESS, false);
-                    events.RepeatEvent(63s);
+                    events.Repeat(63s);
                     events.DelayEvents(10000, 1);
                     break;
                 case EVENT_SPELL_MARK_OF_THE_FACELESS:
@@ -292,7 +290,7 @@ public:
                         if (t)
                             me->CastSpell(t, SPELL_MARK_OF_THE_FACELESS_AURA, false);
 
-                        events.RepeatEvent(40s);
+                        events.Repeat(40s);
                     }
                     break;
                 case EVENT_SPELL_SUMMON_SARONITE_VAPORS:
@@ -302,7 +300,7 @@ public:
                         me->MonsterTextEmote("A cloud of saronite vapors coalesces nearby!", 0, true);
 
                         if( vaporsCount < 6 || !hardmodeAvailable )
-                            events.RepeatEvent(30s);
+                            events.Repeat(30s);
                         else
                         {
                             for( std::list<uint64>::iterator itr = summons.begin(); itr != summons.end(); ++itr )
@@ -313,7 +311,6 @@ public:
                                     sv->GetMotionMaster()->MoveCharge(1852.78f, 81.38f, 342.461f, 28.0f);
                                 }
 
-                            events.PopEvent();
                             events.DelayEvents(12000, 0);
                             events.DelayEvents(12000, 1);
                             events.ScheduleEvent(EVENT_SARONITE_VAPORS_SWIRL, 6s);
@@ -327,11 +324,9 @@ public:
                         if( Creature* sv = ObjectAccessor::GetCreature(*me, *(summons.begin())) )
                             sv->CastSpell(sv, SPELL_SARONITE_ANIMUS_FORMATION_VISUAL, true);
 
-                        events.PopEvent();
                         events.ScheduleEvent(EVENT_SPELL_SUMMON_SARONITE_ANIMUS, 2s);
                         break;
                     }
-                    events.PopEvent();
                     break;
                 case EVENT_SPELL_SUMMON_SARONITE_ANIMUS:
                     if (summons.size())
@@ -344,15 +339,12 @@ public:
                         if( Creature* sv = ObjectAccessor::GetCreature(*me, *(summons.begin())) )
                             sv->CastSpell(sv, SPELL_SUMMON_SARONITE_ANIMUS, true);
 
-                        events.PopEvent();
                         events.ScheduleEvent(EVENT_DESPAWN_SARONITE_VAPORS, 2500ms);
                         break;
                     }
-                    events.PopEvent();
                     break;
                 case EVENT_DESPAWN_SARONITE_VAPORS:
                     summons.DespawnEntry(NPC_SARONITE_VAPORS);
-                    events.PopEvent();
                     break;
             }
 

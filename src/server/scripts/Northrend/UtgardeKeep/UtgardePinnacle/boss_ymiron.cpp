@@ -212,7 +212,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_YMIRON_HEALTH_CHECK:
                 {
@@ -238,26 +238,26 @@ public:
                         BoatNum++;
                     }
 
-                    events.RepeatEvent(1s);
+                    events.Repeat(1s);
                     break;
                 }
                 case EVENT_YMIRON_BANE:
                 {
                     me->CastSpell(me, IsHeroic() ? SPELL_BANE_H : SPELL_BANE_N, false);
-                    events.RepeatEvent(20s, 25s);
+                    events.Repeat(20s, 25s);
                     break;
                 }
                 case EVENT_YMIRON_FETID_ROT:
                 {
                     me->CastSpell(me->GetVictim(), IsHeroic() ? SPELL_FETID_ROT_H : SPELL_FETID_ROT_N, false);
-                    events.RepeatEvent(10s, 13s);
+                    events.Repeat(10s, 13s);
                     break;
                 }
                 case EVENT_YMIRON_DARK_SLASH:
                 {
                     int32 dmg = me->GetVictim()->GetHealth() / 2;
                     me->CastCustomSpell(me->GetVictim(), SPELL_DARK_SLASH, &dmg, 0, 0, false);
-                    events.RepeatEvent(30s, 35s);
+                    events.Repeat(30s, 35s);
                     break;
                 }
                 case EVENT_YMIRON_ACTIVATE_BOAT:
@@ -281,7 +281,6 @@ public:
                         }
                     }
 
-                    events.PopEvent();
                     break;
                 }
                 case EVENT_YMIRON_BJORN_ABILITY:
@@ -294,19 +293,18 @@ public:
                         sf->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                         sf->GetMotionMaster()->MoveFollow(me->GetVictim(), 0, rand_norm()*M_PI*2);
                     }
-                    events.PopEvent();
                     break;
                 }
                 case EVENT_YMIRON_HALDOR_ABILITY:
                 {
                     me->CastSpell(me->GetVictim(), IsHeroic() ? SPELL_SPIRIT_STRIKE_H : SPELL_SPIRIT_STRIKE_N, false);
-                    events.RepeatEvent(5s);
+                    events.Repeat(5s);
                     break;
                 }
                 case EVENT_YMIRON_RANULF_ABILITY:
                 {
                     me->CastSpell(me, IsHeroic() ? SPELL_SPIRIT_BURST_H : SPELL_SPIRIT_BURST_N, false);
-                    events.RepeatEvent(10s);
+                    events.Repeat(10s);
                     break;
                 }
                 case EVENT_YMIRON_TORGYN_ABILITY:
@@ -319,7 +317,7 @@ public:
                             as->SetInCombatWithZone();
                         }
                     }
-                    events.RepeatEvent(15s);
+                    events.Repeat(15s);
                     break;
                 }
 

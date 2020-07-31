@@ -340,27 +340,26 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch(events.GetEvent())
+            switch(events.ExecuteEvent())
             {
                 case EVENT_FUSION_PUNCH:
                     me->CastSpell(me->GetVictim(), SPELL_FUSION_PUNCH, false);
-                    events.RepeatEvent(15s, 20s);
+                    events.Repeat(15s, 20s);
                     break;
                 case EVENT_STATIC_DISRUPTION:
                     if (Unit *pTarget = SelectTarget(SELECT_TARGET_FARTHEST, 0, 0, true))
                         me->CastSpell(pTarget, SPELL_STATIC_DISRUPTION, false);
 
-                    events.RepeatEvent(20s, 40s);
+                    events.Repeat(20s, 40s);
                     break;
                 case EVENT_OVERWHELMING_POWER:
                     Talk(SAY_STEELBREAKER_POWER);
                     me->CastSpell(me->GetVictim(), SPELL_OVERWHELMING_POWER, true);
-                    events.RepeatEvent(RAID_MODE(61s, 36s));
+                    events.Repeat(RAID_MODE(61s, 36s));
                     break;
                 case EVENT_ENRAGE:
                     Talk(SAY_STEELBREAKER_BERSERK);
                     me->CastSpell(me, SPELL_BERSERK, true);
-                    events.PopEvent();
                     break;
             }
 
@@ -510,7 +509,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch(events.GetEvent())
+            switch(events.ExecuteEvent())
             {
                 case EVENT_RUNE_OF_POWER:
                 {
@@ -519,7 +518,7 @@ public:
                         target = me;
 
                     me->CastSpell(target, SPELL_RUNE_OF_POWER, true);
-                    events.RepeatEvent(1min);
+                    events.Repeat(1min);
                     break;
                 }
                 case EVENT_SHIELD_OF_RUNES:
@@ -531,18 +530,17 @@ public:
                         me->CastSpell(target, SPELL_RUNE_OF_DEATH, true);
 
                     Talk(SAY_MOLGEIM_RUNE_DEATH);
-                    events.RepeatEvent(30s, 40s);
+                    events.Repeat(30s, 40s);
                     break;
                 case EVENT_RUNE_OF_SUMMONING:
                     Talk(SAY_MOLGEIM_SUMMON);
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         me->CastSpell(target,SPELL_RUNE_OF_SUMMONING);
-                    events.RepeatEvent(30s, 45s);
+                    events.Repeat(30s, 45s);
                     break;
                 case EVENT_ENRAGE:
                     me->CastSpell(me, SPELL_BERSERK, true);
                     Talk(SAY_MOLGEIM_BERSERK);
-                    events.PopEvent();
                     break;
             }
 
@@ -775,17 +773,16 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_CHAIN_LIGHTNING:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         me->CastSpell(target, SPELL_CHAIN_LIGHTNING, false);
 
-                    events.RepeatEvent(9s, 17s);
+                    events.Repeat(9s, 17s);
                     break;
                 case EVENT_IMMUNE:
                     me->ApplySpellImmune(1, IMMUNITY_EFFECT, SPELL_EFFECT_INTERRUPT_CAST, false);
-                    events.PopEvent();
                     break;
                 case EVENT_OVERLOAD:
                     me->ApplySpellImmune(1, IMMUNITY_EFFECT, SPELL_EFFECT_INTERRUPT_CAST, true);
@@ -797,12 +794,12 @@ public:
                 case EVENT_LIGHTNING_WHIRL:
                     Talk(SAY_BRUNDIR_SPECIAL);
                     me->CastSpell(me, SPELL_LIGHTNING_WHIRL, true);
-                    events.RepeatEvent(10s, 25s);
+                    events.Repeat(10s, 25s);
                     break;
                 case EVENT_LIGHTNING_TENDRILS:
                 {
                     // Reschedule old
-                    events.RepeatEvent(35s);
+                    events.Repeat(35s);
                     events.DelayEvents(18000);
                     Talk(SAY_BRUNDIR_FLIGHT);
                     
@@ -831,7 +828,6 @@ public:
                     me->MonsterMoveWithSpeed(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), speed);
                     _flyPhase = false;
                     events.ScheduleEvent(EVENT_LAND_LAND, 1s);
-                    events.PopEvent();
                     break;
                 }
                 case EVENT_LAND_LAND:
@@ -846,13 +842,11 @@ public:
                     me->RemoveAura(SPELL_LIGHTNING_TENDRILS);
                     me->RemoveAura(61883);
                     DoResetThreat();
-                    events.PopEvent();
                     me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_INTERRUPT_CAST, false);
                     break;
                 case EVENT_ENRAGE:
                     Talk(SAY_BRUNDIR_BERSERK);
                     me->CastSpell(me, SPELL_BERSERK, true);
-                    events.PopEvent();
                     break;
             }
 

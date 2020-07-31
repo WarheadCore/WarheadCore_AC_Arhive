@@ -194,19 +194,19 @@ public:
             if( me->HasUnitState(UNIT_STATE_CASTING) )
                 return;
 
-            switch( events.GetEvent() )
+            switch( events.ExecuteEvent() )
             {
                 case 0:
                     break;
                 case EVENT_SPELL_FEL_FIREBALL:
                     if( me->GetVictim() )
                         me->CastSpell(me->GetVictim(), SPELL_FEL_FIREBALL, false);
-                    events.RepeatEvent(10s, 15s);
+                    events.Repeat(10s, 15s);
                     break;
                 case EVENT_SPELL_FEL_LIGHTNING:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true) )
                         me->CastSpell(target, SPELL_FEL_LIGHTNING, false);
-                    events.RepeatEvent(10s, 15s);
+                    events.Repeat(10s, 15s);
                     break;
                 case EVENT_SPELL_INCINERATE_FLESH:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true) )
@@ -215,12 +215,12 @@ public:
                         Talk(SAY_INCINERATE);
                         me->CastSpell(target, SPELL_INCINERATE_FLESH, false);
                     }
-                    events.RepeatEvent(20s, 25s);
+                    events.Repeat(20s, 25s);
                     break;
                 case EVENT_SPELL_NETHER_POWER:
                     me->CastSpell(me, SPELL_NETHER_POWER, false);
                     events.DelayEvents(5000);
-                    events.RepeatEvent(25s, 45s);
+                    events.Repeat(25s, 45s);
                     break;
                 case EVENT_SPELL_LEGION_FLAME:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true) )
@@ -228,25 +228,23 @@ public:
                         Talk(EMOTE_LEGION_FLAME, target);
                         me->CastSpell(target, SPELL_LEGION_FLAME, false);
                     }
-                    events.RepeatEvent(30s);
+                    events.Repeat(30s);
                     break;
                 case EVENT_SPELL_TOUCH_OF_JARAXXUS:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true) )
                         me->CastSpell(target, SPELL_TOUCH_OF_JARAXXUS, false);
-                    events.RepeatEvent(10s, 15s);
+                    events.Repeat(10s, 15s);
                     break;
                 case EVENT_SUMMON_NETHER_PORTAL:
                     Talk(EMOTE_NETHER_PORTAL);
                     Talk(SAY_MISTRESS_OF_PAIN);
                     me->CastSpell((Unit*)NULL, SPELL_SUMMON_NETHER_PORTAL, false);
-                    events.PopEvent();
                     events.RescheduleEvent(EVENT_SUMMON_VOLCANO, 1min);
                     break;
                 case EVENT_SUMMON_VOLCANO:
                     Talk(EMOTE_INFERNAL_ERUPTION);
                     Talk(SAY_INFERNAL_ERUPTION);
                     me->CastSpell((Unit*)NULL, SPELL_SUMMON_VOLCANO, false);
-                    events.PopEvent();
                     events.RescheduleEvent(EVENT_SUMMON_NETHER_PORTAL, 1min);
                     break;
             }
@@ -322,7 +320,7 @@ public:
             if( me->HasUnitState(UNIT_STATE_CASTING) )
                 return;
 
-            switch( events.GetEvent() )
+            switch( events.ExecuteEvent() )
             {
                 case 0:
                     break;
@@ -333,10 +331,10 @@ public:
                         me->AddThreat(target, 50000.0f);
                         me->CastSpell(target, SPELL_FEL_STEAK_MORPH, true);
                         me->CastSpell(target, SPELL_FEL_STEAK, true);
-                        events.RepeatEvent(30s);
+                        events.Repeat(30s);
                     }
                     else
-                        events.RepeatEvent(5s);
+                        events.Repeat(5s);
                     break;
             }
 
@@ -404,23 +402,23 @@ public:
             if( me->HasUnitState(UNIT_STATE_CASTING) )
                 return;
 
-            switch( events.GetEvent() )
+            switch( events.ExecuteEvent() )
             {
                 case 0:
                     break;
                 case EVENT_SPELL_SHIVAN_SLASH:
                     if( me->GetVictim() )
                         me->CastSpell(me->GetVictim(), SPELL_SHIVAN_SLASH, false);
-                    events.RepeatEvent(15s, 25s);
+                    events.Repeat(15s, 25s);
                     break;
                 case EVENT_SPELL_SPINNING_PAIN_SPIKE:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 140.0f, true) )
                         me->CastSpell(target, SPELL_SPINNING_PAIN_SPIKE, false);
-                    events.RepeatEvent(25s, 30s);
+                    events.Repeat(25s, 30s);
                     break;
                 case EVENT_SPELL_MISTRESS_KISS:
                     me->CastSpell((Unit*)NULL, SPELL_MISTRESS_KISS, false);
-                    events.RepeatEvent(25s, 35s);
+                    events.Repeat(25s, 35s);
                     break;
             }
 

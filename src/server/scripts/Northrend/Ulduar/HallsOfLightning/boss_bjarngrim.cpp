@@ -305,13 +305,13 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_BJARNGRIM_CHANGE_STANCE:
                     // roll new stance
                     RemoveStanceAura(m_uiStance);
                     RollStance(m_uiStance);
-                    events.RepeatEvent(20s);
+                    events.Repeat(20s);
                     break;
 
                 ///////////////////////////////////////////////////////
@@ -319,19 +319,19 @@ public:
                 ///////////////////////////////////////////////////////
                 case EVENT_BJARNGRIM_REFLECTION:
                     me->CastSpell(me, SPELL_BJARNGRIM_REFLETION, true);
-                    events.RepeatEvent(8s, 9s);
+                    events.Repeat(8s, 9s);
                     break;
                 case EVENT_BJARNGRIM_PUMMEL:
                     me->CastSpell(me->GetVictim(), SPELL_PUMMEL, false);
-                    events.RepeatEvent(10s, 11s);
+                    events.Repeat(10s, 11s);
                     break;
                 case EVENT_BJARNGRIM_KNOCK:
                     me->CastSpell(me, SPELL_KNOCK_AWAY, false);
-                    events.RepeatEvent(20s, 21s);
+                    events.Repeat(20s, 21s);
                     break;
                 case EVENT_BJARNGRIM_IRONFORM:
                     me->CastSpell(me, SPELL_IRONFORM, true);
-                    events.RepeatEvent(18s, 23s);
+                    events.Repeat(18s, 23s);
                     break;
 
                 ///////////////////////////////////////////////////////
@@ -339,11 +339,11 @@ public:
                 ///////////////////////////////////////////////////////
                 case EVENT_BJARNGRIM_MORTAL_STRIKE:
                     me->CastSpell(me->GetVictim(), SPELL_MORTAL_STRIKE, false);
-                    events.RepeatEvent(10s);
+                    events.Repeat(10s);
                     break;
                 case EVENT_BJARNGRIM_WHIRLWIND:
                     me->CastSpell(me, SPELL_WHIRLWIND, true);
-                    events.RepeatEvent(25s);
+                    events.Repeat(25s);
                     break;
                     
                 ///////////////////////////////////////////////////////
@@ -353,15 +353,15 @@ public:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
                         me->CastSpell(target, SPELL_INTERCEPT, true);
 
-                    events.RepeatEvent(30s);
+                    events.Repeat(30s);
                     break;
                 case EVENT_BJARNGRIM_CLEAVE:
                     me->CastSpell(me->GetVictim(), SPELL_CLEAVE, false);
-                    events.RepeatEvent(25s);
+                    events.Repeat(25s);
                     break;
                 case EVENT_BJARNGRIM_SLAM:
                     me->CastSpell(me->GetVictim(), SPELL_SLAM, false);
-                    events.RepeatEvent(10s, 12s);
+                    events.Repeat(10s, 12s);
                     break;
             }
 
@@ -412,18 +412,18 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_ARC_WELD:
                     me->CastSpell(me->GetVictim(), SPELL_ARC_WELD, true);
-                    events.RepeatEvent(20s);
+                    events.Repeat(20s);
                     break;
                 case EVENT_RENEW_STEEL:
                     if (Creature* bjarngrim = ObjectAccessor::GetCreature(*me, BjarngrimGUID))
                         if (bjarngrim->IsAlive())
                             me->CastSpell(bjarngrim, me->GetMap()->IsHeroic() ? SPELL_RENEW_STEEL_H : SPELL_RENEW_STEEL_N, true);
 
-                    events.RepeatEvent(10s, 14s);
+                    events.Repeat(10s, 14s);
                     break;
             }
 

@@ -397,7 +397,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_POSITION_CHECK:
                     if (me->GetPositionX() > 450 || me->GetPositionX() < 120)
@@ -405,7 +405,7 @@ public:
                         EnterEvadeMode();
                         return;
                     }
-                    events.RepeatEvent(5s);
+                    events.Repeat(5s);
                     break;
                 case EVENT_PURSUE:
                     Talk(FLAME_LEVIATHAN_SAY_PURSUE);
@@ -414,32 +414,30 @@ public:
                     return;
                 case EVENT_SPEED:
                     me->CastSpell(me, SPELL_GATHERING_SPEED, false);
-                    events.RepeatEvent(15s);
+                    events.Repeat(15s);
                     return;
                 case EVENT_MISSILE:
                     me->CastSpell(me, SPELL_MISSILE_BARRAGE, true);
-                    events.RepeatEvent(4s);
+                    events.Repeat(4s);
                     return;
                 case EVENT_VENT:
                     me->CastSpell(me, SPELL_FLAME_VENTS, false);
-                    events.RepeatEvent(20s);
+                    events.Repeat(20s);
                     return;
                 case EVENT_SUMMON:
                     if(summons.size() < 20)
                         if (Creature* lift = DoSummonFlyer(NPC_MECHANOLIFT, me, 30.0f, 50.0f, 0))
                             lift->GetMotionMaster()->MoveRandom(100);
 
-                    events.RepeatEvent(4s);
+                    events.Repeat(4s);
                     return;
                 case EVENT_SOUND_BEGINNING:
                     if (_towersCount)
                         Talk(FLAME_LEVIATHAN_SAY_HARDMODE);
                     else
                         Talk(FLAME_LEVIATHAN_SAY_TOWER_NONE);
-                    events.PopEvent();
                     return;
                 case EVENT_REINSTALL:
-                    events.PopEvent();
                     for (uint8 i = RAID_MODE(0, 2); i < 4; ++i)
                         if (Unit* seat = vehicle->GetPassenger(i))
                             if (seat->GetTypeId() == TYPEID_UNIT)
@@ -448,25 +446,22 @@ public:
                     return;
                 case EVENT_THORIMS_HAMMER:
                     SummonTowerHelpers(TOWER_OF_STORMS);
-                    events.RepeatEvent(1min, 2min);
+                    events.Repeat(1min, 2min);
                     me->MonsterTextEmote("Flame Leviathan activates Thorim's Hammer.", 0, true);
                     Talk(FLAME_LEVIATHAN_SAY_TOWER_STORM);
                     return;
                 case EVENT_FREYA:
                     SummonTowerHelpers(TOWER_OF_LIFE);
-                    events.PopEvent();
                     me->MonsterTextEmote("Flame Leviathan activates Freya's Ward.", 0, true);
                     Talk(FLAME_LEVIATHAN_SAY_TOWER_NATURE);
                     return;
                 case EVENT_MIMIRONS_INFERNO:
                     SummonTowerHelpers(TOWER_OF_FLAMES);
-                    events.PopEvent();
                     me->MonsterTextEmote("Flame Leviathan activates Mimiron's Inferno.", 0, true);
                     Talk(FLAME_LEVIATHAN_SAY_TOWER_FLAME);
                     return;
                 case EVENT_HODIRS_FURY:
                     SummonTowerHelpers(TOWER_OF_FROST);
-                    events.PopEvent();
                     me->MonsterTextEmote("Flame Leviathan activates Hodir's Fury.", 0, true);
                     Talk(FLAME_LEVIATHAN_SAY_TOWER_FROST);
                     return;

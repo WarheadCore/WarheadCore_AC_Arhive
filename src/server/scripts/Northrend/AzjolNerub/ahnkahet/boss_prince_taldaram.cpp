@@ -158,12 +158,12 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_PRINCE_BLOODTHIRST:
                 {
                     me->CastSpell(me->GetVictim(), SPELL_BLOODTHIRST, false);
-                    events.RepeatEvent(10s);
+                    events.Repeat(10s);
                     break;
                 }
                 case EVENT_PRINCE_FLAME_SPHERES:
@@ -182,12 +182,11 @@ public:
                         if ((cr = me->SummonCreature(CREATURE_FLAME_SPHERE_2, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ()+5.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 10*IN_MILLISECONDS)))
                             summons.Summon(cr);
                     }
-                    events.RepeatEvent(15s);
+                    events.Repeat(15s);
                     break;
                 }
                 case EVENT_PRINCE_VANISH:
                 {
-                    events.PopEvent();
                     //Count alive players
                     uint8 count = 0;
                     Unit *pTarget;
@@ -221,13 +220,11 @@ public:
                         me->RemoveAura(SPELL_VANISH);
                     }
 
-                    events.PopEvent();
                     events.ScheduleEvent(EVENT_PRINCE_RESCHEDULE, 20s);
                     break;
                 }
                 case EVENT_PRINCE_RESCHEDULE:
                 {
-                    events.PopEvent();
                     ScheduleEvents();
                     break;
                 }

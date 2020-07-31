@@ -1694,17 +1694,17 @@ class npc_frostwing_vrykul : public CreatureScript
                 if (me->HasUnitState(UNIT_STATE_CASTING) || me->isFeared() || me->isFrozen() || me->HasUnitState(UNIT_STATE_STUNNED) || me->HasUnitState(UNIT_STATE_CONFUSED) || ((me->GetEntry() == NPC_YMIRJAR_DEATHBRINGER || me->GetEntry() == NPC_YMIRJAR_FROSTBINDER) && me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SILENCED)))
                     return;
 
-                switch (events.GetEvent())
+                switch (events.ExecuteEvent())
                 {
                     case 0:
                         break;
                     case 1: // Ice Trap
                         me->CastSpell((Unit*)NULL, 71249, false);
-                        events.RepeatEvent(35s, 40s);
+                        events.Repeat(35s, 40s);
                         break;
                     case 2: // Rapid Shot
                         me->CastSpell(me->GetVictim(), 71251, false);
-                        events.RepeatEvent(25s, 30s);
+                        events.Repeat(25s, 30s);
                         break;
                     case 3: // Volley
                         {
@@ -1712,51 +1712,48 @@ class npc_frostwing_vrykul : public CreatureScript
                             if (target && me->GetDistance(target) > 10.0f)
                             {
                                 me->CastSpell(target, 71252, false);
-                                events.RepeatEvent(25s, 35s);
+                                events.Repeat(25s, 35s);
                             }
                             else
-                                events.RepeatEvent(2500ms);
+                                events.Repeat(2500ms);
                         }
                         break;
                     case 4: // Summon Warhawk
                         me->CastSpell(me, 71705, false);
-                        events.PopEvent();
                         break;
                     case 11: // Whirlwind
                         me->CastSpell(me->GetVictim(), 41056, false);
-                        events.RepeatEvent(6s);
+                        events.Repeat(6s);
                         break;
                     case 21: // Barbaric Strike
                         me->CastSpell(me->GetVictim(), 71257, false);
-                        events.RepeatEvent(3s);
+                        events.Repeat(3s);
                         break;
                     case 22: // Adrenaline Rush
                         me->CastSpell(me, 71258, false);
-                        events.RepeatEvent(15s, 25s);
+                        events.Repeat(15s, 25s);
                         break;
                     case 31: // Arctic Chill
                         me->CastSpell(me, 71270, true);
-                        events.PopEvent();
                         break;
                     case 32: // Frozen Orb
                         if (Unit* target = SelectTarget(SELECT_TARGET_FARTHEST, 0, 30.0f, true))
                             me->CastSpell(target, 71274, false);
-                        events.RepeatEvent(40s, 50s);
+                        events.Repeat(40s, 50s);
                         break;
                     case 33: // Twisted Winds
                         me->CastSpell((Unit*)NULL, 71306, false);
-                        events.RepeatEvent(35s, 50s);
+                        events.Repeat(35s, 50s);
                         break;
                     case 41: // Empowered Shadow Bolt
                         me->CastSpell(me->GetVictim(), 69528, false);
-                        events.RepeatEvent(2500ms);
+                        events.Repeat(2500ms);
                         break;
                     case 42: // Summon Undead
                         me->CastSpell(me->GetVictim(), 69516, false);
-                        events.RepeatEvent(45s);
+                        events.Repeat(45s);
                         break;
                     default:
-                        events.PopEvent();
                         break;
                 }
 
@@ -2590,28 +2587,28 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case 0:
                     break;
                 case 1:
                     if (Unit* target = DoSelectLowestHpFriendly(35.0f, 5000))
                         me->CastSpell(target, 69899, false);
-                    events.RepeatEvent(10s, 20s);
+                    events.Repeat(10s, 20s);
                     break;
                 case 2:
                     if (Unit* target = DoSelectLowestHpFriendly(35.0f, 5000))
                         me->CastSpell(target, 69882, false);
-                    events.RepeatEvent(10s, 20s);
+                    events.Repeat(10s, 20s);
                     break;
                 case 3:
                     if (Unit* target = DoSelectLowestHpFriendly(35.0f, 5000))
                         me->CastSpell(target, 69898, false);
-                    events.RepeatEvent(10s, 20s);
+                    events.Repeat(10s, 20s);
                     break;
                 case 4:
                     me->CastSpell(me->GetVictim(), 69968, false);
-                    events.RepeatEvent(2s, 3s);
+                    events.Repeat(2s, 3s);
                     break;
             }
 
@@ -2655,17 +2652,17 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case 0:
                     break;
                 case 1:
                     me->CastSpell(me->GetVictim(), 69989, false);
-                    events.RepeatEvent(5s, 10s);
+                    events.Repeat(5s, 10s);
                     break;
                 case 2:
                     me->CastSpell(me->GetVictim(), 69975, false);
-                    events.RepeatEvent(10s, 15s);
+                    events.Repeat(10s, 15s);
                     break;
             }
 
@@ -2710,23 +2707,23 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case 0:
                     break;
                 case 1:
                     if (Unit* target = DoSelectLowestHpFriendly(35.0f, 5000))
                         me->CastSpell(target, 69963, false);
-                    events.RepeatEvent(10s, 20s);
+                    events.Repeat(10s, 20s);
                     break;
                 case 2:
                     if (Unit* target = DoSelectLowestHpFriendly(35.0f, 5000))
                         me->CastSpell(target, 69910, false);
-                    events.RepeatEvent(10s, 20s);
+                    events.Repeat(10s, 20s);
                     break;
                 case 3:
                     me->CastSpell(me->GetVictim(), 69967, false);
-                    events.RepeatEvent(2s, 3s);
+                    events.Repeat(2s, 3s);
                     break;
             }
 
@@ -2772,28 +2769,28 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case 0:
                     break;
                 case 1:
                     if (Unit* target = DoSelectLowestHpFriendly(35.0f, 5000))
                         me->CastSpell(target, 69923, false);
-                    events.RepeatEvent(10s, 20s);
+                    events.Repeat(10s, 20s);
                     break;
                 case 2:
                     if (Unit* target = DoSelectLowestHpFriendly(35.0f, 5000))
                         me->CastSpell(target, 69926, false);
-                    events.RepeatEvent(20s, 30s);
+                    events.Repeat(20s, 30s);
                     break;
                 case 3:
                     if (Unit* target = DoSelectLowestHpFriendly(35.0f, 5000))
                         me->CastSpell(target, 69958, false);
-                    events.RepeatEvent(10s, 20s);
+                    events.Repeat(10s, 20s);
                     break;
                 case 4:
                     me->CastSpell(me->GetVictim(), 69970, false);
-                    events.RepeatEvent(3s, 4s);
+                    events.Repeat(3s, 4s);
                     break;
             }
 
@@ -2891,7 +2888,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case 0:
                     break;
@@ -2905,7 +2902,7 @@ public:
                                 casted = true;
                                 me->CastSpell(target, 71906, true); // Severed Essence
                             }
-                        events.RepeatEvent(casted ? 25s : 5s);
+                        events.Repeat(casted ? 25s : 5s);
                     }
                     break;
             }
@@ -3014,7 +3011,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            if (uint32 e = events.GetEvent())
+            if (uint32 e = events.ExecuteEvent())
             {
                 Unit* target = NULL;
                 if (sesi_spells[e-1].targetType == 1)
@@ -3025,7 +3022,7 @@ public:
                 if (target)
                     me->CastSpell(target, sesi_spells[e-1].id, TRIGGERED_IGNORE_SHAPESHIFT);
 
-                events.RepeatEvent(sesi_spells[e-1].cooldown);
+                events.Repeat(sesi_spells[e-1].cooldown);
             }
 
             if (Class == CLASS_HUNTER)
@@ -3113,20 +3110,20 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case 1:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40.0f, true))
                         me->CastSpell(target, 70362, false);
-                    events.RepeatEvent(25s, 35s);
+                    events.Repeat(25s, 35s);
                     break;
                 case 2:
                     me->CastSpell(me->GetVictim(), 70361, false);
-                    events.RepeatEvent(5s);
+                    events.Repeat(5s);
                     break;
                 case 3:
                     me->CastSpell(me->GetVictim(), 70116, false);
-                    events.RepeatEvent(10s, 15s);
+                    events.Repeat(10s, 15s);
                     break;
             }
 
@@ -3262,16 +3259,16 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case 1:
                     if (me->GetVictim() && !me->GetVictim()->HasAura(71163) && me->GetVictim()->GetDistance(me) > 5.0f && me->GetVictim()->GetDistance(me) < 30.0f)
                     {
                         me->CastSpell(me->GetVictim(), 71164, false);
-                        events.RepeatEvent(15s, 20s);
+                        events.Repeat(15s, 20s);
                     }
                     else
-                        events.RepeatEvent(3s);
+                        events.Repeat(3s);
                     break;
             }
 
@@ -3403,22 +3400,22 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case 0:
                     break;
                 case 1:
                     me->CastSpell(me->GetVictim(), 70965, false);
-                    events.RepeatEvent(20s, 30s);
+                    events.Repeat(20s, 30s);
                     break;
                 case 2:
                     me->CastSpell(me->GetVictim(), 71020, false);
-                    events.RepeatEvent(20s, 30s);
+                    events.Repeat(20s, 30s);
                     break;
                 case 3:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40.0f, true))
                         me->CastSpell(target, 70980, false);
-                    events.RepeatEvent(20s, 30s);
+                    events.Repeat(20s, 30s);
                     break;
             }
 
