@@ -1079,7 +1079,7 @@ class boss_the_lich_king : public CreatureScript
                                 // we need to cancel it (break) and schedule a defile to be casted 5 or 4 seconds after valkyr
                                 if (time < 3s)
                                 {
-                                    events.ScheduleEvent(EVENT_DEFILE, time + Is25ManRaid() ? 5s : 4s, EVENT_GROUP_ABILITIES);
+                                    events.ScheduleEvent(EVENT_DEFILE, time + (Is25ManRaid() ? 5s : 4s), EVENT_GROUP_ABILITIES);
                                     break;
                                 }
 
@@ -1120,9 +1120,8 @@ class boss_the_lich_king : public CreatureScript
                             // doesn't exist ( now > next defile ) or defile is coming too soon
                             Seconds minTime = (Is25ManRaid() ? 5s : 4s);
                             
-                            if (uint32 evTime = events.GetTimeUntilEvent(EVENT_DEFILE))
-                                if (evTime < minTime)
-                                    events.RescheduleEvent(EVENT_DEFILE, minTime, EVENT_GROUP_ABILITIES);
+                            if (events.GetTimeUntilEvent(EVENT_DEFILE) < minTime)
+                                events.RescheduleEvent(EVENT_DEFILE, minTime, EVENT_GROUP_ABILITIES);
                         }
                         break;
                     case EVENT_VILE_SPIRITS:
