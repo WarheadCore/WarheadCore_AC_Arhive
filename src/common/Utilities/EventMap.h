@@ -233,7 +233,7 @@ public:
     * @param eventId of the event.
     * @return Time of next event.
     */
-    uint32 GetTimeUntilEvent(uint32 eventId) const;
+    Milliseconds GetTimeUntilEvent(uint32 eventId) const;
 
 private:
     /**

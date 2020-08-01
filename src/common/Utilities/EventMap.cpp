@@ -192,11 +192,11 @@ bool EventMap::IsInPhase(uint8 phase)
     return phase <= 8 && (!phase || _phase & (1 << (phase - 1)));
 }
 
-uint32 EventMap::GetTimeUntilEvent(uint32 eventId) const
+Milliseconds EventMap::GetTimeUntilEvent(uint32 eventId) const
 {
-    for (std::pair<uint32 const, uint32> const& itr : _eventMap)
+    for (auto const& itr : _eventMap)
         if (eventId == (itr.second & 0x0000FFFF))
-            return itr.first - _time;
+            return Milliseconds(itr.first - _time);
 
-    return std::numeric_limits<uint32>::max();
+    return Milliseconds::max();
 }

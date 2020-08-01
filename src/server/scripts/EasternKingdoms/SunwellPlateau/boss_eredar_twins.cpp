@@ -105,9 +105,8 @@ public:
                 Talk(YELL_SISTER_ALYTHESS_DEAD);
                 me->CastSpell(me, SPELL_EMPOWER, true);
 
-                uint32 timer = events.GetNextEventTime(EVENT_SPELL_SHADOW_NOVA);
                 events.CancelEvent(EVENT_SPELL_SHADOW_NOVA);
-                events.ScheduleEvent(EVENT_SPELL_CONFLAGRATION, Milliseconds(timer - events.GetTimer()));
+                events.ScheduleEvent(EVENT_SPELL_CONFLAGRATION, events.GetTimeUntilEvent(EVENT_SPELL_SHADOW_NOVA));
             }
         }
 
@@ -253,9 +252,8 @@ public:
                 Talk(YELL_SISTER_SACROLASH_DEAD);
                 me->CastSpell(me, SPELL_EMPOWER, true);
 
-                uint32 timer = events.GetNextEventTime(EVENT_SPELL_CONFLAGRATION);
                 events.CancelEvent(EVENT_SPELL_CONFLAGRATION);
-                events.ScheduleEvent(EVENT_SPELL_SHADOW_NOVA, Milliseconds(timer - events.GetTimer()));
+                events.ScheduleEvent(EVENT_SPELL_SHADOW_NOVA, events.GetTimeUntilEvent(EVENT_SPELL_CONFLAGRATION));
             }
         }
 

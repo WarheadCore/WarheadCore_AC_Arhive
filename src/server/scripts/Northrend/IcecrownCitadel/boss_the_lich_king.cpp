@@ -1069,19 +1069,19 @@ class boss_the_lich_king : public CreatureScript
                         break;
                     case EVENT_DEFILE:
                         {
-                            uint32 evTime = events.GetNextEventTime(EVENT_SUMMON_VALKYR);
+                            Milliseconds time = events.GetTimeUntilEvent(EVENT_SUMMON_VALKYR);
+                            
                             // if defile (cast time 2sec) is less than 3 before valkyr appears
                             // we've to decide 
-                            if (evTime && (events.GetTimer() > evTime || evTime - events.GetTimer() < 5000)) 
+                            if (time < 5s)
                             {
                                 // if valkyr is less than 1.5 secs after defile (cast time 2 sec) then we've a sync issue, so
                                 // we need to cancel it (break) and schedule a defile to be casted 5 or 4 seconds after valkyr
-                                if (events.GetTimer() > evTime || evTime - events.GetTimer() < 3500) 
+                                if (time < 3s)
                                 {
-                                    Milliseconds t = events.GetTimer() > evTime ? 0ms : Milliseconds(evTime - events.GetTimer());
-                                    events.ScheduleEvent(EVENT_DEFILE, t + (Is25ManRaid() ? 5s : 4s), EVENT_GROUP_ABILITIES);
+                                    events.ScheduleEvent(EVENT_DEFILE, time + Is25ManRaid() ? 5s : 4s, EVENT_GROUP_ABILITIES);
                                     break;
-                                } 
+                                }
 
                                 // if valkyr is coming between 1.5 and 3 seconds after defile then we've to
                                 // delay valkyr just a bit
@@ -1096,10 +1096,8 @@ class boss_the_lich_king : public CreatureScript
                                 // if no target has been found at the moment (schedule after 1 second)
                                 events.ScheduleEvent(EVENT_DEFILE, 32500ms, EVENT_GROUP_ABILITIES);
                             }
-                            else {
-                                // be sure it happen trying each seconds if no target
+                            else // be sure it happen trying each seconds if no target
                                 events.ScheduleEvent(EVENT_DEFILE, 1s, EVENT_GROUP_ABILITIES);
-                            }
                         }
                         break;
                     case EVENT_SOUL_REAPER:
@@ -1121,8 +1119,9 @@ class boss_the_lich_king : public CreatureScript
                             // schedule a defile (or reschedule it) if next defile event 
                             // doesn't exist ( now > next defile ) or defile is coming too soon
                             Seconds minTime = (Is25ManRaid() ? 5s : 4s);
-                            if (uint32 evTime = events.GetNextEventTime(EVENT_DEFILE))
-                                if (events.GetTimer() > evTime || evTime - events.GetTimer() < Milliseconds(minTime).count())
+                            
+                            if (uint32 evTime = events.GetTimeUntilEvent(EVENT_DEFILE))
+                                if (evTime < minTime)
                                     events.RescheduleEvent(EVENT_DEFILE, minTime, EVENT_GROUP_ABILITIES);
                         }
                         break;

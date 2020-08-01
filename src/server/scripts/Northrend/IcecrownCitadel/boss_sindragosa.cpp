@@ -585,9 +585,8 @@ class boss_sindragosa : public CreatureScript
                         me->CastSpell((Unit*)NULL, SPELL_ICY_GRIP, false);
                         events.DelayEvents(1001ms);
                         events.ScheduleEvent(EVENT_BLISTERING_COLD, 1s, EVENT_GROUP_LAND_PHASE);
-                        if (uint32 evTime = events.GetNextEventTime(EVENT_ICE_TOMB))
-                            if (events.GetTimer() > evTime || evTime - events.GetTimer() < 7000)
-                                events.RescheduleEvent(EVENT_ICE_TOMB, 7s);
+                        if (events.GetTimeUntilEvent(EVENT_ICE_TOMB) < 7s)
+                            events.RescheduleEvent(EVENT_ICE_TOMB, 7s);
                         break;
                     case EVENT_BLISTERING_COLD:
                         Talk(EMOTE_WARN_BLISTERING_COLD);
@@ -691,9 +690,8 @@ class boss_sindragosa : public CreatureScript
                             Talk(EMOTE_WARN_FROZEN_ORB, target);
                             me->CastSpell(target, SPELL_ICE_TOMB_DUMMY, true);
                             me->CastSpell(target, SPELL_FROST_BEACON, true);
-                            if (uint32 evTime = events.GetNextEventTime(EVENT_ICY_GRIP))
-                                if (events.GetTimer() > evTime || evTime - events.GetTimer() < 8000)
-                                    events.RescheduleEvent(EVENT_ICY_GRIP, 8s, EVENT_GROUP_LAND_PHASE);
+                            if (events.GetTimeUntilEvent(EVENT_ICY_GRIP) < 8s)
+                                events.RescheduleEvent(EVENT_ICY_GRIP, 8s, EVENT_GROUP_LAND_PHASE);
                         }
                         events.ScheduleEvent(EVENT_ICE_TOMB, 18s, 22s);
                         break;
