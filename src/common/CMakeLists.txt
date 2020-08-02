@@ -60,6 +60,7 @@ target_link_libraries(common
     acore-core-interface
   PUBLIC
     ace
+    asio
     boost
     Poco::Foundation
     mysql

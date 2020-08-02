@@ -19,6 +19,7 @@ add_subdirectory(fmt)
 add_subdirectory(poco)
 add_subdirectory(boost)
 add_subdirectory(process)
+add_subdirectory(asio)
 
 if(SERVERS OR TOOLS)
   add_subdirectory(zlib)
