@@ -32,11 +32,15 @@ class WH_COMMON_API BigNumber
         BigNumber();
         BigNumber(BigNumber const& bn);
         BigNumber(uint32);
+        template <size_t Size>
+        BigNumber(std::array<uint8, Size> const& v, bool littleEndian = true) : BigNumber() { SetBinary(v.data(), Size, littleEndian); }
         ~BigNumber();
 
         void SetDword(uint32);
         void SetQword(uint64);
-        void SetBinary(uint8 const* bytes, int32 len);
+        void SetBinary(uint8 const* bytes, int32 len, bool littleEndian = true);
+        template <typename Container>
+        auto SetBinary(Container const& c, bool littleEndian = true) -> std::enable_if_t<!std::is_pointer_v<std::decay_t<Container>>> { SetBinary(std::data(c), std::size(c), littleEndian); }
         void SetHexStr(char const* str);
 
         void SetRand(int32 numbits);
