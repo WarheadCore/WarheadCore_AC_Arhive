@@ -15,13 +15,11 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <ace/Guard_T.h>
-
 #include "Cryptography/BigNumber.h"
 #include <openssl/bn.h>
-#include <openssl/crypto.h>
+#include <cstring>
 #include <algorithm>
-#include <ace/Auto_Ptr.h>
+#include <memory>
 
 BigNumber::BigNumber()
     : _bn(BN_new())
@@ -154,7 +152,7 @@ BigNumber BigNumber::ModExp(BigNumber const& bn1, BigNumber const& bn2)
     return ret;
 }
 
-int32 BigNumber::GetNumBytes(void)
+int32 BigNumber::GetNumBytes() const
 {
     return BN_num_bytes(_bn);
 }
@@ -169,24 +167,37 @@ bool BigNumber::isZero() const
     return BN_is_zero(_bn);
 }
 
-ACE_Auto_Array_Ptr<uint8> BigNumber::AsByteArray(int32 minSize, bool littleEndian)
+bool BigNumber::AsByteArray(uint8* buf, std::size_t bufsize, bool littleEndian) const
 {
-    int length = (minSize >= GetNumBytes()) ? minSize : GetNumBytes();
+    int nBytes = GetNumBytes();
+    ASSERT(!(nBytes < 0));
+    std::size_t numBytes = static_cast<std::size_t>(nBytes);
 
-    uint8* array = new uint8[length];
+    // too large to store
+    if (bufsize < numBytes)
+        return false;
 
     // If we need more bytes than length of BigNumber set the rest to 0
-    if (length > GetNumBytes())
-        memset((void*)array, 0, length);
+    if (numBytes < bufsize)
+        memset((void*)buf, 0, bufsize);
 
-    BN_bn2bin(_bn, (unsigned char *)array);
+    BN_bn2bin(_bn, buf + (bufsize - numBytes));
 
     // openssl's BN stores data internally in big endian format, reverse if little endian desired
     if (littleEndian)
-        std::reverse(array, array + length);
+        std::reverse(buf, buf + bufsize);
 
-    ACE_Auto_Array_Ptr<uint8> ret(array);
-    return ret;
+    return true;
+}
+
+std::unique_ptr<uint8[]> BigNumber::AsByteArray(int32 minSize, bool littleEndian) const
+{
+    std::size_t length = std::max(GetNumBytes(), minSize);
+    uint8* array = new uint8[length];
+    bool success = AsByteArray(array, length, littleEndian);
+    ASSERT(success);
+
+    return std::unique_ptr<uint8[]>(array);
 }
 
 char * BigNumber::AsHexStr() const

@@ -19,7 +19,6 @@
 #define _AUTH_BIGNUMBER_H
 
 #include "Define.h"
-#include <ace/Auto_Ptr.h>
 
 struct bignum_st;
 
@@ -80,13 +79,20 @@ class WH_COMMON_API BigNumber
         BigNumber ModExp(BigNumber const& bn1, BigNumber const& bn2);
         BigNumber Exp(BigNumber const&);
 
-        int32 GetNumBytes(void);
+        int32 GetNumBytes() const;
 
         struct bignum_st *BN() { return _bn; }
 
         uint32 AsDword();
 
-        ACE_Auto_Array_Ptr<uint8> AsByteArray(int32 minSize = 0, bool littleEndian = true);
+        bool AsByteArray(uint8* buf, std::size_t bufsize, bool littleEndian = true) const;
+        std::unique_ptr<uint8[]> AsByteArray(int32 minSize = 0, bool littleEndian = true) const;
+        template <std::size_t N> std::array<uint8, N> AsByteArray(bool littleEndian = true) const
+        {
+            std::array<uint8, N> buf;
+            AsByteArray(buf.data(), N, littleEndian);
+            return buf;
+        }
 
         char * AsHexStr() const;
         char * AsDecStr() const;

@@ -17,6 +17,8 @@
 
 #include "SHA1.h"
 
+#include <cstring>
+
 #ifndef _WARDEN_KEY_GENERATION_H
 #define _WARDEN_KEY_GENERATION_H
 
@@ -25,16 +27,16 @@ class SHA1Randx
 public:
     SHA1Randx(uint8* buff, uint32 size)
     {
-        uint32 taken = size/2;
+        uint32 halfSize = size / 2;
 
         sh.Initialize();
-        sh.UpdateData(buff, taken);
+        sh.UpdateData(buff, halfSize);
         sh.Finalize();
 
         memcpy(o1, sh.GetDigest(), 20);
 
         sh.Initialize();
-        sh.UpdateData(buff + taken, size - taken);
+        sh.UpdateData(buff + halfSize, size - halfSize);
         sh.Finalize();
 
         memcpy(o2, sh.GetDigest(), 20);
