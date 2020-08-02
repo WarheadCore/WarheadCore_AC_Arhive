@@ -19,6 +19,7 @@
 #define _AUTH_BIGNUMBER_H
 
 #include "Define.h"
+#include "Errors.h"
 #include <array>
 #include <memory>
 #include <string>
