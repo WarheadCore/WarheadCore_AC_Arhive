@@ -1,8 +1,19 @@
 /*
-* Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
-* Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
-* Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
-*/
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "Chat.h"
 #include "Cell.h"
@@ -191,7 +202,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
 
         if (!sCreatureTextMgr->TextExist(talker->GetEntry(), uint8(e.action.talk.textGroupID)))
         {
-            sLog->outErrorDb("SmartScript::ProcessAction: SMART_ACTION_TALK: EntryOrGuid %d SourceType %u EventType %u TargetType %u using non-existent Text id %u for talker %u, ignored.", e.entryOrGuid, e.GetScriptType(), e.GetEventType(), e.GetTargetType(), e.action.talk.textGroupID,talker->GetEntry());
+            LOG_ERROR("sql.sql", "SmartScript::ProcessAction: SMART_ACTION_TALK: EntryOrGuid %d SourceType %u EventType %u TargetType %u using non-existent Text id %u for talker %u, ignored.", e.entryOrGuid, e.GetScriptType(), e.GetEventType(), e.GetTargetType(), e.action.talk.textGroupID,talker->GetEntry());
             break;
         }
 
@@ -742,7 +753,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
             caster = unit->SummonTrigger(unit->GetPositionX(), unit->GetPositionY(), unit->GetPositionZ(), unit->GetOrientation(), 5000);
 
         if (e.action.cast.targetsLimit > 0 && targets->size() > e.action.cast.targetsLimit)
-            acore::Containers::RandomResizeList(*targets, e.action.cast.targetsLimit);
+            warhead::Containers::RandomResizeList(*targets, e.action.cast.targetsLimit);
 
         for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
         {
@@ -801,7 +812,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
             break;
 
         if (e.action.cast.targetsLimit > 0 && targets->size() > e.action.cast.targetsLimit)
-            acore::Containers::RandomResizeList(*targets, e.action.cast.targetsLimit);
+            warhead::Containers::RandomResizeList(*targets, e.action.cast.targetsLimit);
 
         for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
         {
@@ -1256,7 +1267,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
         InstanceScript* instance = obj->GetInstanceScript();
         if (!instance)
         {
-            sLog->outErrorDb("SmartScript: Event %u attempt to set instance data without instance script. EntryOrGuid %d", e.GetEventType(), e.entryOrGuid);
+            LOG_ERROR("sql.sql", "SmartScript: Event %u attempt to set instance data without instance script. EntryOrGuid %d", e.GetEventType(), e.entryOrGuid);
             break;
         }
 
@@ -1279,7 +1290,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
         InstanceScript* instance = obj->GetInstanceScript();
         if (!instance)
         {
-            sLog->outErrorDb("SmartScript: Event %u attempt to set instance data without instance script. EntryOrGuid %d", e.GetEventType(), e.entryOrGuid);
+            LOG_ERROR("sql.sql", "SmartScript: Event %u attempt to set instance data without instance script. EntryOrGuid %d", e.GetEventType(), e.entryOrGuid);
             break;
         }
 
@@ -1321,6 +1332,12 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
     }
     case SMART_ACTION_SET_IN_COMBAT_WITH_ZONE:
     {
+        if (mScriptType == SMART_SCRIPT_TYPE_GAMEOBJECT)
+        {
+            LOG_ERROR("sql.sql", "SMART_ACTION_SET_IN_COMBAT_WITH_ZONE (38) is not allowed with SMART_SCRIPT_TYPE_GAMEOBJECT (1), skipped.");
+            break;
+        }
+
         ObjectList* targets = GetTargets(e, unit);
         if (!targets)
             break;
@@ -1535,7 +1552,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
             break;
 
         // xinef: attack random target
-        if (Unit* target = acore::Containers::SelectRandomContainerElement(*targets)->ToUnit())
+        if (Unit* target = warhead::Containers::SelectRandomContainerElement(*targets)->ToUnit())
             me->AI()->AttackStart(target);
 
         delete targets;
@@ -1773,14 +1790,14 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                     if (SmartAI* ai = CAST_AI(SmartAI, (*itr)->ToCreature()->AI()))
                         ai->GetScript()->StoreCounter(e.action.setCounter.counterId, e.action.setCounter.value, e.action.setCounter.reset);
                     else
-                        sLog->outError("SmartScript: Action target for SMART_ACTION_SET_COUNTER is not using SmartAI, skipping");
+                        LOG_ERROR("server", "SmartScript: Action target for SMART_ACTION_SET_COUNTER is not using SmartAI, skipping");
                 }
                 else if (IsGameObject(*itr))
                 {
                     if (SmartGameObjectAI* ai = CAST_AI(SmartGameObjectAI, (*itr)->ToGameObject()->AI()))
                         ai->GetScript()->StoreCounter(e.action.setCounter.counterId, e.action.setCounter.value, e.action.setCounter.reset);
                     else
-                        sLog->outError("SmartScript: Action target for SMART_ACTION_SET_COUNTER is not using SmartGameObjectAI, skipping");
+                        LOG_ERROR("server", "SmartScript: Action target for SMART_ACTION_SET_COUNTER is not using SmartGameObjectAI, skipping");
                 }
             }
 
@@ -1952,7 +1969,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
             if (ObjectList* targets = GetTargets(e, unit))
             {
                 // xinef: we want to move to random element
-                target = acore::Containers::SelectRandomContainerElement(*targets);
+                target = warhead::Containers::SelectRandomContainerElement(*targets);
                 delete targets;
             }
         }
@@ -2047,7 +2064,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                     EquipmentInfo const* einfo = sObjectMgr->GetEquipmentInfo(npc->GetEntry(), equipId);
                     if (!einfo)
                     {
-                        sLog->outError("SmartScript: SMART_ACTION_EQUIP uses non-existent equipment info id %u for creature %u", equipId, npc->GetEntry());
+                        LOG_ERROR("server", "SmartScript: SMART_ACTION_EQUIP uses non-existent equipment info id %u for creature %u", equipId, npc->GetEntry());
                         break;
                     }
                     npc->SetCurrentEquipmentId(equipId);
@@ -2176,7 +2193,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
     {
         if (e.GetTargetType() == SMART_TARGET_NONE)
         {
-            sLog->outErrorDb("SmartScript: Entry %d SourceType %u Event %u Action %u is using TARGET_NONE(0) for Script9 target. Please correct target_type in database.", e.entryOrGuid, e.GetScriptType(), e.GetEventType(), e.GetActionType());
+            LOG_ERROR("sql.sql", "SmartScript: Entry %d SourceType %u Event %u Action %u is using TARGET_NONE(0) for Script9 target. Please correct target_type in database.", e.entryOrGuid, e.GetScriptType(), e.GetEventType(), e.GetActionType());
             break;
         }
 
@@ -2309,7 +2326,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
         uint32 id = temp[urand(0, count - 1)];
         if (e.GetTargetType() == SMART_TARGET_NONE)
         {
-            sLog->outErrorDb("SmartScript: Entry %d SourceType %u Event %u Action %u is using TARGET_NONE(0) for Script9 target. Please correct target_type in database.", e.entryOrGuid, e.GetScriptType(), e.GetEventType(), e.GetActionType());
+            LOG_ERROR("sql.sql", "SmartScript: Entry %d SourceType %u Event %u Action %u is using TARGET_NONE(0) for Script9 target. Please correct target_type in database.", e.entryOrGuid, e.GetScriptType(), e.GetEventType(), e.GetActionType());
             break;
         }
 
@@ -2339,7 +2356,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
         uint32 id = urand(e.action.randTimedActionList.entry1, e.action.randTimedActionList.entry2);
         if (e.GetTargetType() == SMART_TARGET_NONE)
         {
-            sLog->outErrorDb("SmartScript: Entry %d SourceType %u Event %u Action %u is using TARGET_NONE(0) for Script9 target. Please correct target_type in database.", e.entryOrGuid, e.GetScriptType(), e.GetEventType(), e.GetActionType());
+            LOG_ERROR("sql.sql", "SmartScript: Entry %d SourceType %u Event %u Action %u is using TARGET_NONE(0) for Script9 target. Please correct target_type in database.", e.entryOrGuid, e.GetScriptType(), e.GetEventType(), e.GetActionType());
             break;
         }
 
@@ -2522,7 +2539,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
         // xinef: my implementation
         if (e.action.jump.selfJump)
         {
-            if (WorldObject* target = acore::Containers::SelectRandomContainerElement(*targets))
+            if (WorldObject* target = warhead::Containers::SelectRandomContainerElement(*targets))
                 if (me)
                     me->GetMotionMaster()->MoveJump(target->GetPositionX() + e.target.x, target->GetPositionY() + e.target.y, target->GetPositionZ() + e.target.z, (float)e.action.jump.speedxy, (float)e.action.jump.speedz);
         }
@@ -2572,14 +2589,14 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (SmartAI* ai = CAST_AI(SmartAI, (*itr)->ToCreature()->AI()))
                     ai->GetScript()->StoreTargetList(new ObjectList(*storedTargets), e.action.sendTargetToTarget.id);   // store a copy of target list
                 else
-                    sLog->outErrorDb("SmartScript: Action target for SMART_ACTION_SEND_TARGET_TO_TARGET is not using SmartAI, skipping");
+                    LOG_ERROR("sql.sql", "SmartScript: Action target for SMART_ACTION_SEND_TARGET_TO_TARGET is not using SmartAI, skipping");
             }
             else if (IsGameObject(*itr))
             {
                 if (SmartGameObjectAI* ai = CAST_AI(SmartGameObjectAI, (*itr)->ToGameObject()->AI()))
                     ai->GetScript()->StoreTargetList(new ObjectList(*storedTargets), e.action.sendTargetToTarget.id);   // store a copy of target list
                 else
-                    sLog->outErrorDb("SmartScript: Action target for SMART_ACTION_SEND_TARGET_TO_TARGET is not using SmartGameObjectAI, skipping");
+                    LOG_ERROR("sql.sql", "SmartScript: Action target for SMART_ACTION_SEND_TARGET_TO_TARGET is not using SmartGameObjectAI, skipping");
             }
         }
 
@@ -2791,7 +2808,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
         uint32 eventId = e.action.gameEventStop.id;
         if (!sGameEventMgr->IsActiveEvent(eventId))
         {
-            sLog->outError("SmartScript::ProcessAction: At case SMART_ACTION_GAME_EVENT_STOP, inactive event (id: %u)", eventId);
+            LOG_ERROR("server", "SmartScript::ProcessAction: At case SMART_ACTION_GAME_EVENT_STOP, inactive event (id: %u)", eventId);
             break;
         }
         sGameEventMgr->StopEvent(eventId, true);
@@ -2802,7 +2819,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
         uint32 eventId = e.action.gameEventStart.id;
         if (sGameEventMgr->IsActiveEvent(eventId))
         {
-            sLog->outError("SmartScript::ProcessAction: At case SMART_ACTION_GAME_EVENT_START, already activated event (id: %u)", eventId);
+            LOG_ERROR("server", "SmartScript::ProcessAction: At case SMART_ACTION_GAME_EVENT_START, already activated event (id: %u)", eventId);
             break;
         }
         sGameEventMgr->StartEvent(eventId, true);
@@ -3287,7 +3304,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
         break;
     }
     default:
-        sLog->outErrorDb("SmartScript::ProcessAction: Entry %d SourceType %u, Event %u, Unhandled Action type %u", e.entryOrGuid, e.GetScriptType(), e.event_id, e.GetActionType());
+        LOG_ERROR("sql.sql", "SmartScript::ProcessAction: Entry %d SourceType %u, Event %u, Unhandled Action type %u", e.entryOrGuid, e.GetScriptType(), e.event_id, e.GetActionType());
         break;
     }
 
@@ -3297,7 +3314,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
         if (linked.GetActionType() && linked.GetEventType() == SMART_EVENT_LINK)
             ProcessEvent(linked, unit, var0, var1, bvar, spell, gob);
         else
-            sLog->outErrorDb("SmartScript::ProcessAction: Entry %d SourceType %u, Event %u, Link Event %u not found or invalid, skipped.", e.entryOrGuid, e.GetScriptType(), e.event_id, e.link);
+            LOG_ERROR("sql.sql", "SmartScript::ProcessAction: Entry %d SourceType %u, Event %u, Link Event %u not found or invalid, skipped.", e.entryOrGuid, e.GetScriptType(), e.event_id, e.link);
     }
 }
 
@@ -3322,7 +3339,7 @@ void SmartScript::InstallTemplate(SmartScriptHolder const& e)
         return;
     if (mTemplate)
     {
-        sLog->outErrorDb("SmartScript::InstallTemplate: Entry %d SourceType %u AI Template can not be set more then once, skipped.", e.entryOrGuid, e.GetScriptType());
+        LOG_ERROR("sql.sql", "SmartScript::InstallTemplate: Entry %d SourceType %u AI Template can not be set more then once, skipped.", e.entryOrGuid, e.GetScriptType());
         return;
     }
     mTemplate = (SMARTAI_TEMPLATE)e.action.installTtemplate.id;
@@ -3630,7 +3647,7 @@ ObjectList* SmartScript::GetTargets(SmartScriptHolder const& e, Unit* invoker /*
         Creature* target = NULL;
         if (!scriptTrigger && !baseObject)
         {
-            sLog->outError("SMART_TARGET_CREATURE_GUID can not be used without invoker");
+            LOG_ERROR("server", "SMART_TARGET_CREATURE_GUID can not be used without invoker");
             break;
         }
 
@@ -3653,7 +3670,7 @@ ObjectList* SmartScript::GetTargets(SmartScriptHolder const& e, Unit* invoker /*
         GameObject* target = NULL;
         if (!scriptTrigger && !GetBaseObject())
         {
-            sLog->outError("SMART_TARGET_GAMEOBJECT_GUID can not be used without invoker");
+            LOG_ERROR("server", "SMART_TARGET_GAMEOBJECT_GUID can not be used without invoker");
             break;
         }
 
@@ -3688,7 +3705,7 @@ ObjectList* SmartScript::GetTargets(SmartScriptHolder const& e, Unit* invoker /*
                         l->push_back(*itr);
 
             if (e.target.playerRange.maxCount > 0)
-                acore::Containers::RandomResizeList(*l, e.target.playerRange.maxCount);
+                warhead::Containers::RandomResizeList(*l, e.target.playerRange.maxCount);
         }
 
         delete units;
@@ -3808,7 +3825,7 @@ ObjectList* SmartScript::GetTargets(SmartScriptHolder const& e, Unit* invoker /*
                         l->push_back(*itr);
 
         if (e.target.o > 0)
-            acore::Containers::RandomResizeList(*l, e.target.o);
+            warhead::Containers::RandomResizeList(*l, e.target.o);
 
         delete units;
         break;
@@ -3850,7 +3867,7 @@ ObjectList* SmartScript::GetTargets(SmartScriptHolder const& e, Unit* invoker /*
                 }
 
         if (e.target.roleSelection.resize > 0)
-            acore::Containers::RandomResizeList(*l, e.target.roleSelection.resize);
+            warhead::Containers::RandomResizeList(*l, e.target.roleSelection.resize);
 
         delete units;
         break;
@@ -3876,8 +3893,8 @@ ObjectList* SmartScript::GetWorldObjectsInDist(float dist)
     WorldObject* obj = GetBaseObject();
     if (obj)
     {
-        acore::AllWorldObjectsInRange u_check(obj, dist);
-        acore::WorldObjectListSearcher<acore::AllWorldObjectsInRange> searcher(obj, *targets, u_check);
+        warhead::AllWorldObjectsInRange u_check(obj, dist);
+        warhead::WorldObjectListSearcher<warhead::AllWorldObjectsInRange> searcher(obj, *targets, u_check);
         obj->VisitNearbyObject(dist, searcher);
     }
     return targets;
@@ -4007,7 +4024,7 @@ void SmartScript::ProcessEvent(SmartScriptHolder& e, Unit* unit, uint32 var0, ui
             RecalcTimer(e, 1000, 3000);
             return;
         }
-        ProcessTimedAction(e, e.event.friendlyCC.repeatMin, e.event.friendlyCC.repeatMax, acore::Containers::SelectRandomContainerElement(pList));
+        ProcessTimedAction(e, e.event.friendlyCC.repeatMin, e.event.friendlyCC.repeatMax, warhead::Containers::SelectRandomContainerElement(pList));
         break;
     }
     case SMART_EVENT_FRIENDLY_MISSING_BUFF:
@@ -4018,7 +4035,7 @@ void SmartScript::ProcessEvent(SmartScriptHolder& e, Unit* unit, uint32 var0, ui
         if (pList.empty())
             return;
 
-        ProcessTimedAction(e, e.event.missingBuff.repeatMin, e.event.missingBuff.repeatMax, acore::Containers::SelectRandomContainerElement(pList));
+        ProcessTimedAction(e, e.event.missingBuff.repeatMin, e.event.missingBuff.repeatMax, warhead::Containers::SelectRandomContainerElement(pList));
         break;
     }
     case SMART_EVENT_HAS_AURA:
@@ -4467,7 +4484,7 @@ void SmartScript::ProcessEvent(SmartScriptHolder& e, Unit* unit, uint32 var0, ui
         break;
     }
     default:
-        sLog->outErrorDb("SmartScript::ProcessEvent: Unhandled Event type %u", e.GetEventType());
+        LOG_ERROR("sql.sql", "SmartScript::ProcessEvent: Unhandled Event type %u", e.GetEventType());
         break;
     }
 }
@@ -4742,7 +4759,7 @@ void SmartScript::OnInitialize(WorldObject* obj, AreaTrigger const* at)
 #endif
             break;
         default:
-            sLog->outError("SmartScript::OnInitialize: Unhandled TypeID !WARNING!");
+            LOG_ERROR("server", "SmartScript::OnInitialize: Unhandled TypeID !WARNING!");
             return;
         }
     }
@@ -4756,7 +4773,7 @@ void SmartScript::OnInitialize(WorldObject* obj, AreaTrigger const* at)
     }
     else
     {
-        sLog->outError("SmartScript::OnInitialize: !WARNING! Initialized objects are NULL.");
+        LOG_ERROR("server", "SmartScript::OnInitialize: !WARNING! Initialized objects are NULL.");
         return;
     }
 
@@ -4859,8 +4876,8 @@ Unit* SmartScript::DoSelectLowestHpFriendly(float range, uint32 MinHPDiff)
 
     Unit* unit = NULL;
 
-    acore::MostHPMissingInRange u_check(me, range, MinHPDiff);
-    acore::UnitLastSearcher<acore::MostHPMissingInRange> searcher(me, unit, u_check);
+    warhead::MostHPMissingInRange u_check(me, range, MinHPDiff);
+    warhead::UnitLastSearcher<warhead::MostHPMissingInRange> searcher(me, unit, u_check);
     me->VisitNearbyObject(range, searcher);
     return unit;
 }
@@ -4870,8 +4887,8 @@ void SmartScript::DoFindFriendlyCC(std::list<Creature*>& _list, float range)
     if (!me)
         return;
 
-    acore::FriendlyCCedInRange u_check(me, range);
-    acore::CreatureListSearcher<acore::FriendlyCCedInRange> searcher(me, _list, u_check);
+    warhead::FriendlyCCedInRange u_check(me, range);
+    warhead::CreatureListSearcher<warhead::FriendlyCCedInRange> searcher(me, _list, u_check);
     me->VisitNearbyObject(range, searcher);
 }
 
@@ -4880,8 +4897,8 @@ void SmartScript::DoFindFriendlyMissingBuff(std::list<Creature*>& list, float ra
     if (!me)
         return;
 
-    acore::FriendlyMissingBuffInRange u_check(me, range, spellid);
-    acore::CreatureListSearcher<acore::FriendlyMissingBuffInRange> searcher(me, list, u_check);
+    warhead::FriendlyMissingBuffInRange u_check(me, range, spellid);
+    warhead::CreatureListSearcher<warhead::FriendlyMissingBuffInRange> searcher(me, list, u_check);
     me->VisitNearbyObject(range, searcher);
 }
 
@@ -4891,8 +4908,8 @@ Unit* SmartScript::DoFindClosestFriendlyInRange(float range, bool playerOnly)
         return NULL;
 
     Unit* unit = NULL;
-    acore::AnyFriendlyNotSelfUnitInObjectRangeCheck u_check(me, me, range, playerOnly);
-    acore::UnitLastSearcher<acore::AnyFriendlyNotSelfUnitInObjectRangeCheck> searcher(me, unit, u_check);
+    warhead::AnyFriendlyNotSelfUnitInObjectRangeCheck u_check(me, me, range, playerOnly);
+    warhead::UnitLastSearcher<warhead::AnyFriendlyNotSelfUnitInObjectRangeCheck> searcher(me, unit, u_check);
     me->VisitNearbyObject(range, searcher);
     return unit;
 }
@@ -4903,7 +4920,7 @@ void SmartScript::SetScript9(SmartScriptHolder& e, uint32 entry)
     // any SmartScriptHolder contained like the "e" parameter passed to this function
     if (isProcessingTimedActionList)
     {
-        sLog->outError("Entry %d SourceType %u Event %u Action %u is trying to overwrite timed action list from a timed action, this is not allowed!.", e.entryOrGuid, e.GetScriptType(), e.GetEventType(), e.GetActionType());
+        LOG_ERROR("server", "Entry %d SourceType %u Event %u Action %u is trying to overwrite timed action list from a timed action, this is not allowed!.", e.entryOrGuid, e.GetScriptType(), e.GetEventType(), e.GetActionType());
         return;
     }
 

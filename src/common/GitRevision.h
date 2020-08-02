@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
+* Copyright (C) 2016+     WarheadCore <www.Warheadcore.org>
 * Copyright (C) 2008-2018 TrinityCore <http://www.trinitycore.org/>
 */
 
@@ -10,20 +10,20 @@
 
 namespace GitRevision
 {
-    AC_COMMON_API char const* GetHash();
-    AC_COMMON_API char const* GetDate();
-    AC_COMMON_API char const* GetBranch();
-    AC_COMMON_API char const* GetCMakeCommand();
-    AC_COMMON_API char const* GetCMakeVersion();
-    AC_COMMON_API char const* GetHostOSVersion();
-    AC_COMMON_API char const* GetBuildDirectory();
-    AC_COMMON_API char const* GetSourceDirectory();
-    AC_COMMON_API char const* GetMySQLExecutable();
-    AC_COMMON_API char const* GetFullVersion();
-    AC_COMMON_API char const* GetCompanyNameStr();
-    AC_COMMON_API char const* GetLegalCopyrightStr();
-    AC_COMMON_API char const* GetFileVersionStr();
-    AC_COMMON_API char const* GetProductVersionStr();
+    WH_COMMON_API char const* GetHash();
+    WH_COMMON_API char const* GetDate();
+    WH_COMMON_API char const* GetBranch();
+    WH_COMMON_API char const* GetCMakeCommand();
+    WH_COMMON_API char const* GetCMakeVersion();
+    WH_COMMON_API char const* GetHostOSVersion();
+    WH_COMMON_API char const* GetBuildDirectory();
+    WH_COMMON_API char const* GetSourceDirectory();
+    WH_COMMON_API char const* GetMySQLExecutable();
+    WH_COMMON_API char const* GetFullVersion();
+    WH_COMMON_API char const* GetCompanyNameStr();
+    WH_COMMON_API char const* GetLegalCopyrightStr();
+    WH_COMMON_API char const* GetFileVersionStr();
+    WH_COMMON_API char const* GetProductVersionStr();
 }
 
 #endif

@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef _OBJECT_H
@@ -16,10 +27,6 @@
 #include "ObjectDefines.h"
 #include "GridDefines.h"
 #include "Map.h"
-
-#ifdef ELUNA
-class ElunaEventProcessor;
-#endif
 
 #include <set>
 #include <string>
@@ -450,7 +457,13 @@ class WorldLocation : public Position
     public:
         explicit WorldLocation(uint32 _mapid = MAPID_INVALID, float _x = 0, float _y = 0, float _z = 0, float _o = 0)
             : m_mapId(_mapid) { Relocate(_x, _y, _z, _o); }
-        WorldLocation(const WorldLocation &loc) { WorldRelocate(loc); }
+        WorldLocation(const WorldLocation &loc) : Position () { WorldRelocate(loc); }
+        /* requried as of C++ 11 */
+        #if __cplusplus >= 201103L
+        WorldLocation(WorldLocation&&) = default;
+        WorldLocation& operator=(const WorldLocation&) = default;
+        WorldLocation& operator=(WorldLocation&&) = default;
+        #endif
 
         void WorldRelocate(const WorldLocation &loc)
         {
@@ -537,11 +550,7 @@ class WorldObject : public Object, public WorldLocation
     public:
         virtual ~WorldObject();
 
-#ifdef ELUNA
-        virtual void Update(uint32 /*time_diff*/);
-#else
         virtual void Update(uint32 /*time_diff*/) { };
-#endif
         void _Create(uint32 guidlow, HighGuid guidhigh, uint32 phaseMask);
 
         virtual void RemoveFromWorld()
@@ -553,10 +562,6 @@ class WorldObject : public Object, public WorldLocation
 
             Object::RemoveFromWorld();
         }
-
-#ifdef ELUNA
-        ElunaEventProcessor* elunaEvents;
-#endif
 
         void GetNearPoint2D(float &x, float &y, float distance, float absAngle) const;
         void GetNearPoint(WorldObject const* searcher, float &x, float &y, float &z, float searcher_size, float distance2d, float absAngle, float controlZ = 0) const;
@@ -876,7 +881,7 @@ class WorldObject : public Object, public WorldLocation
         bool CanDetectStealthOf(WorldObject const* obj, bool checkAlert = false) const;
 };
 
-namespace acore
+namespace warhead
 {
     // Binary predicate to sort WorldObjects based on the distance to a reference WorldObject
     class ObjectDistanceOrderPred

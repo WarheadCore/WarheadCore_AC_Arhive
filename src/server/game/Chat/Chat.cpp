@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "Common.h"
@@ -24,10 +35,6 @@
 #include "ChatLink.h"
 #include "GameConfig.h"
 #include "GameLocale.h"
-
-#ifdef ELUNA
-#include "LuaEngine.h"
-#endif
 
 bool ChatHandler::load_command_table = true;
 
@@ -121,8 +128,8 @@ bool ChatHandler::HasLowerSecurityAccount(WorldSession* target, uint32 target_ac
     else
         return true;                                        // caller must report error for (target == NULL && target_account == 0)
 
-    AccountTypes target_ac_sec = AccountTypes(target_sec);
-    if (m_session->GetSecurity() < target_ac_sec || (strong && m_session->GetSecurity() <= target_ac_sec))
+    AccountTypes target_WH_sec = AccountTypes(target_sec);
+    if (m_session->GetSecurity() < target_WH_sec || (strong && m_session->GetSecurity() <= target_WH_sec))
     {
         SendSysMessage(LANG_YOURS_SECURITY_IS_LOW);
         SetSentErrorMessage(true);
@@ -277,10 +284,6 @@ bool ChatHandler::ExecuteCommandInTable(std::vector<ChatCommand> const& table, c
         {
             if (!ExecuteCommandInTable(table[i].ChildCommands, text, fullcmd.c_str()))
             {
-#ifdef ELUNA
-                if (!sEluna->OnCommand(GetSession() ? GetSession()->GetPlayer() : NULL, oldtext))
-                    return true;
-#endif
                 if (text[0] != '\0')
                     SendSysMessage(LANG_NO_SUBCMD);
                 else
@@ -374,12 +377,12 @@ bool ChatHandler::SetDataForCommandInTable(std::vector<ChatCommand>& table, char
         // expected subcommand by full name DB content
         else if (*text)
         {
-            sLog->outError("Table `command` have unexpected subcommand '%s' in command '%s', skip.", text, fullcommand.c_str());
+            LOG_ERROR("server", "Table `command` have unexpected subcommand '%s' in command '%s', skip.", text, fullcommand.c_str());
             return false;
         }
 
         //if (table[i].SecurityLevel != security)
-        //    sLog->outDetail("Table `command` overwrite for command '%s' default security (%u) by %u", fullcommand.c_str(), table[i].SecurityLevel, security);
+        //    LOG_INFO("server", "Table `command` overwrite for command '%s' default security (%u) by %u", fullcommand.c_str(), table[i].SecurityLevel, security);
 
         table[i].SecurityLevel = security;
         table[i].Help          = help;
@@ -390,9 +393,9 @@ bool ChatHandler::SetDataForCommandInTable(std::vector<ChatCommand>& table, char
     if (!cmd.empty())
     {
         if (&table == &getCommandTable())
-            sLog->outError("Table `command` have non-existing command '%s', skip.", cmd.c_str());
+            LOG_ERROR("server", "Table `command` have non-existing command '%s', skip.", cmd.c_str());
         else
-            sLog->outError("Table `command` have non-existing subcommand '%s' in command '%s', skip.", cmd.c_str(), fullcommand.c_str());
+            LOG_ERROR("server", "Table `command` have non-existing subcommand '%s' in command '%s', skip.", cmd.c_str(), fullcommand.c_str());
     }
 
     return false;
@@ -430,10 +433,6 @@ bool ChatHandler::ParseCommands(char const* text)
 
     if (!ExecuteCommandInTable(getCommandTable(), text, fullcmd))
     {
-#ifdef ELUNA
-        if (!sEluna->OnCommand(GetSession() ? GetSession()->GetPlayer() : NULL, text))
-            return true;
-#endif
         if (m_session && AccountMgr::IsPlayerAccount(m_session->GetSecurity()))
             return false;
 
@@ -887,8 +886,8 @@ GameObject* ChatHandler::GetNearbyGameObject()
 
     Player* pl = m_session->GetPlayer();
     GameObject* obj = NULL;
-    acore::NearestGameObjectCheck check(*pl);
-    acore::GameObjectLastSearcher<acore::NearestGameObjectCheck> searcher(pl, obj, check);
+    warhead::NearestGameObjectCheck check(*pl);
+    warhead::GameObjectLastSearcher<warhead::NearestGameObjectCheck> searcher(pl, obj, check);
     pl->VisitNearbyGridObject(SIZE_OF_GRIDS, searcher);
     return obj;
 }
@@ -905,13 +904,13 @@ GameObject* ChatHandler::GetObjectGlobalyWithGuidOrNearWithDbGuid(uint32 lowguid
     if (!obj && sObjectMgr->GetGOData(lowguid))                   // guid is DB guid of object
     {
         // search near player then
-        CellCoord p(acore::ComputeCellCoord(pl->GetPositionX(), pl->GetPositionY()));
+        CellCoord p(warhead::ComputeCellCoord(pl->GetPositionX(), pl->GetPositionY()));
         Cell cell(p);
 
-        acore::GameObjectWithDbGUIDCheck go_check(lowguid);
-        acore::GameObjectSearcher<acore::GameObjectWithDbGUIDCheck> checker(pl, obj, go_check);
+        warhead::GameObjectWithDbGUIDCheck go_check(lowguid);
+        warhead::GameObjectSearcher<warhead::GameObjectWithDbGUIDCheck> checker(pl, obj, go_check);
 
-        TypeContainerVisitor<acore::GameObjectSearcher<acore::GameObjectWithDbGUIDCheck>, GridTypeMapContainer > object_checker(checker);
+        TypeContainerVisitor<warhead::GameObjectSearcher<warhead::GameObjectWithDbGUIDCheck>, GridTypeMapContainer > object_checker(checker);
         cell.Visit(p, object_checker, *pl->GetMap(), *pl, pl->GetGridActivationRange());
     }
 

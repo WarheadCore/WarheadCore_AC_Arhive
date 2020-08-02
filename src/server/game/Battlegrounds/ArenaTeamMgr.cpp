@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "Define.h"
@@ -79,7 +90,7 @@ uint32 ArenaTeamMgr::GenerateArenaTeamId()
 {
     if (NextArenaTeamId >= 0xFFFFFFFE)
     {
-        sLog->outError("Arena team ids overflow!! Can't continue, shutting down server. ");
+        LOG_ERROR("server", "Arena team ids overflow!! Can't continue, shutting down server. ");
         World::StopNow(ERROR_EXIT_CODE);
     }
     return NextArenaTeamId++;
@@ -94,13 +105,13 @@ void ArenaTeamMgr::LoadArenaTeams()
 
     //                                                        0        1         2         3          4              5            6            7           8
     QueryResult result = CharacterDatabase.Query("SELECT arenaTeamId, name, captainGuid, type, backgroundColor, emblemStyle, emblemColor, borderStyle, borderColor, "
-    //      9        10        11         12           13       14
-        "rating, weekGames, weekWins, seasonGames, seasonWins, rank FROM arena_team ORDER BY arenaTeamId ASC");
+    //      9        10        11         12           13        14
+        "rating, weekGames, weekWins, seasonGames, seasonWins, `rank` FROM arena_team ORDER BY arenaTeamId ASC");
 
     if (!result)
     {
-        sLog->outString(">> Loaded 0 arena teams. DB table `arena_team` is empty!");
-        sLog->outString();
+        LOG_INFO("server", ">> Loaded 0 arena teams. DB table `arena_team` is empty!");
+        LOG_INFO("server", "");
         return;
     }
 
@@ -130,8 +141,8 @@ void ArenaTeamMgr::LoadArenaTeams()
     }
     while (result->NextRow());
 
-    sLog->outString(">> Loaded %u arena teams in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-    sLog->outString();
+    LOG_INFO("server", ">> Loaded %u arena teams in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+    LOG_INFO("server", "");
 }
 
 void ArenaTeamMgr::DistributeArenaPoints()

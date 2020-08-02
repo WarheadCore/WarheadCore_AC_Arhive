@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef _PREPAREDSTATEMENT_H
@@ -59,7 +70,7 @@ struct PreparedStatementData
 class MySQLPreparedStatement;
 
 //- Upper-level class that is used in code
-class AC_DATABASE_API PreparedStatement
+class WH_DATABASE_API PreparedStatement
 {
     friend class PreparedStatementTask;
     friend class MySQLPreparedStatement;
@@ -95,7 +106,7 @@ class AC_DATABASE_API PreparedStatement
 //- Class of which the instances are unique per MySQLConnection
 //- access to these class objects is only done when a prepared statement task
 //- is executed.
-class AC_DATABASE_API MySQLPreparedStatement
+class WH_DATABASE_API MySQLPreparedStatement
 {
     friend class MySQLConnection;
     friend class PreparedStatement;
@@ -139,7 +150,7 @@ class AC_DATABASE_API MySQLPreparedStatement
 typedef ACE_Future<PreparedQueryResult> PreparedQueryResultFuture;
 
 //- Lower-level class, enqueuable operation
-class AC_DATABASE_API PreparedStatementTask : public SQLOperation
+class WH_DATABASE_API PreparedStatementTask : public SQLOperation
 {
     public:
         PreparedStatementTask(PreparedStatement* stmt);

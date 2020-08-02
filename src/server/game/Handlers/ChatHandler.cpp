@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "Common.h"
@@ -28,10 +39,7 @@
 #include "AccountMgr.h"
 #include "GameTime.h"
 #include "GameConfig.h"
-
-#ifdef ELUNA
-#include "LuaEngine.h"
-#endif
+#include "MuteManager.h"
 
 void WorldSession::HandleMessagechatOpcode(WorldPacket & recvData)
 {
@@ -43,7 +51,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recvData)
 
     if (type >= MAX_CHAT_MSG_TYPE)
     {
-        sLog->outError("CHAT: Wrong message type received: %u", type);
+        LOG_ERROR("server", "CHAT: Wrong message type received: %u", type);
         recvData.rfinish();
         return;
     }
@@ -154,19 +162,10 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recvData)
 		            recvData.rfinish();
 		            return;
 	            }
-
-	            if (sGameConfig->GetBoolConfig("ChatLogs.Addon"))
-	            {
-		            std::string to, msg;
-		            recvData >> to >> msg;
-		            if (msg.empty())
-			            return;
-	            }
-
 	            break;
             default:
-                LOG_ERROR("chat", "Player %s (GUID: %u) sent a chatmessage with an invalid language/message type combination", 
-                                   GetPlayer()->GetName().c_str(), GetPlayer()->GetGUIDLow());
+                LOG_ERROR("network", "Player %s (GUID: %u) sent a chatmessage with an invalid language/message type combination", 
+                                     GetPlayer()->GetName().c_str(), GetPlayer()->GetGUIDLow());
 
                 recvData.rfinish();
                 return;
@@ -261,7 +260,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recvData)
         stripLineInvisibleChars(msg);
 
     // pussywizard:
-    if (lang != LANG_ADDON && msg.find("|0") != std::string::npos)
+    if (msg.length() > 255 || (lang != LANG_ADDON && msg.find("|0") != std::string::npos))
         return;
 
     if (!ignoreChecks)
@@ -272,10 +271,9 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recvData)
         if (ChatHandler(this).ParseCommands(msg.c_str()))
             return;
 
-        if (!_player->CanSpeak())
+        if (!sMute->CanSpeak(GetAccountId()))
         {
-            std::string timeStr = secsToTimeString(m_muteTime - GameTime::GetGameTime());
-            SendNotification(GetAcoreString(LANG_WAIT_BEFORE_SPEAKING), timeStr.c_str());
+            SendNotification(GetAcoreString(LANG_WAIT_BEFORE_SPEAKING), sMute->GetMuteTimeString(GetAccountId()).c_str());
             return;
         }
 
@@ -283,7 +281,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recvData)
         {
             if (sGameConfig->GetIntConfig("ChatStrictLinkChecking.Severity") && !ChatHandler(this).isValidChatMessage(msg.c_str()))
             {
-                //sLog->outError("Player %s (GUID: %u) sent a chatmessage with an invalid link: %s", GetPlayer()->GetName().c_str(),
+                //LOG_ERROR("server", "Player %s (GUID: %u) sent a chatmessage with an invalid link: %s", GetPlayer()->GetName().c_str(),
                 //    GetPlayer()->GetGUIDLow(), msg.c_str());
 
                 if (sGameConfig->GetIntConfig("ChatStrictLinkChecking.Kick"))
@@ -416,10 +414,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recvData)
                 return;
 
             sScriptMgr->OnPlayerChat(GetPlayer(), type, lang, msg, group);
-#ifdef ELUNA
-            if (!sEluna->OnChat(GetPlayer(), type, lang, msg, group))
-                return;
-#endif
+
             WorldPacket data;
             ChatHandler::BuildChatPacket(data, ChatMsg(type), Language(lang), sender, NULL, msg);
             group->BroadcastPacket(&data, false, group->GetMemberGroup(GetPlayer()->GetGUID()));
@@ -432,10 +427,6 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recvData)
                 {
                     sScriptMgr->OnPlayerChat(GetPlayer(), type, lang, msg, guild);
 
-#ifdef ELUNA
-                    if (!sEluna->OnChat(GetPlayer(), type, lang, msg, guild))
-                        return;
-#endif
                     guild->BroadcastToGuild(this, false, msg, lang == LANG_ADDON ? LANG_ADDON : LANG_UNIVERSAL);
                 }
             }
@@ -448,10 +439,6 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recvData)
                 {
                     sScriptMgr->OnPlayerChat(GetPlayer(), type, lang, msg, guild);
 
-#ifdef ELUNA
-                    if (!sEluna->OnChat(GetPlayer(), type, lang, msg, guild))
-                        return;
-#endif
                     guild->BroadcastToGuild(this, true, msg, lang == LANG_ADDON ? LANG_ADDON : LANG_UNIVERSAL);
                 }
             }
@@ -468,10 +455,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recvData)
             }
 
             sScriptMgr->OnPlayerChat(GetPlayer(), type, lang, msg, group);
-#ifdef ELUNA
-            if (!sEluna->OnChat(GetPlayer(), type, lang, msg, group))
-                return;
-#endif
+
             WorldPacket data;
             ChatHandler::BuildChatPacket(data, CHAT_MSG_RAID, Language(lang), sender, NULL, msg);
             group->BroadcastPacket(&data, false);
@@ -488,10 +472,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recvData)
             }
 
             sScriptMgr->OnPlayerChat(GetPlayer(), type, lang, msg, group);
-#ifdef ELUNA
-            if (!sEluna->OnChat(GetPlayer(), type, lang, msg, group))
-                return;
-#endif
+
             WorldPacket data;
             ChatHandler::BuildChatPacket(data, CHAT_MSG_RAID_LEADER, Language(lang), sender, NULL, msg);
             group->BroadcastPacket(&data, false);
@@ -503,10 +484,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recvData)
                 return;
 
             sScriptMgr->OnPlayerChat(GetPlayer(), type, lang, msg, group);
-#ifdef ELUNA
-            if (!sEluna->OnChat(GetPlayer(), type, lang, msg, group))
-                return;
-#endif
+
             WorldPacket data;
             //in battleground, raid warning is sent only to players in battleground - code is ok
             ChatHandler::BuildChatPacket(data, CHAT_MSG_RAID_WARNING, Language(lang), sender, NULL, msg);
@@ -520,10 +498,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recvData)
                 return;
 
             sScriptMgr->OnPlayerChat(GetPlayer(), type, lang, msg, group);
-#ifdef ELUNA
-            if (!sEluna->OnChat(GetPlayer(), type, lang, msg, group))
-                return;
-#endif
+
             WorldPacket data;
             ChatHandler::BuildChatPacket(data, CHAT_MSG_BATTLEGROUND, Language(lang), sender, NULL, msg);
             group->BroadcastPacket(&data, false);
@@ -536,10 +511,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recvData)
                 return;
 
             sScriptMgr->OnPlayerChat(GetPlayer(), type, lang, msg, group);
-#ifdef ELUNA
-            if (!sEluna->OnChat(GetPlayer(), type, lang, msg, group))
-                return;
-#endif
+
             WorldPacket data;
             ChatHandler::BuildChatPacket(data, CHAT_MSG_BATTLEGROUND_LEADER, Language(lang), sender, NULL, msg);
             group->BroadcastPacket(&data, false);
@@ -560,11 +532,6 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recvData)
                 if (Channel* chn = cMgr->GetChannel(channel, sender))
                 {
                     sScriptMgr->OnPlayerChat(sender, type, lang, msg, chn);
-
-#ifdef ELUNA
-                    if (!sEluna->OnChat(sender, type, lang, msg, chn))
-                        return;
-#endif
                     chn->Say(sender->GetGUID(), msg.c_str(), lang);
                 }
             }
@@ -591,10 +558,6 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recvData)
                 }
 
                 sScriptMgr->OnPlayerChat(sender, type, lang, msg);
-#ifdef ELUNA
-                if (!sEluna->OnChat(sender, type, lang, msg))
-                    return;
-#endif
             }
             break;
         }
@@ -618,14 +581,10 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recvData)
             }
 
             sScriptMgr->OnPlayerChat(sender, type, lang, msg);
-#ifdef ELUNA
-            if (!sEluna->OnChat(sender, type, lang, msg))
-                return;
-#endif
             break;
         }
         default:
-            sLog->outError("CHAT: unknown message type %u, lang: %u", type, lang);
+            LOG_ERROR("server", "CHAT: unknown message type %u, lang: %u", type, lang);
             break;
     }
 }
@@ -649,7 +608,7 @@ void WorldSession::HandleEmoteOpcode(WorldPacket & recvData)
     GetPlayer()->HandleEmoteCommand(emote);
 }
 
-namespace acore
+namespace warhead
 {
     class EmoteChatBuilder
     {
@@ -679,7 +638,7 @@ namespace acore
             uint32        i_emote_num;
             Unit const*   i_target;
     };
-}                                                           // namespace acore
+}                                                           // namespace warhead
 
 void WorldSession::HandleTextEmoteOpcode(WorldPacket & recvData)
 {
@@ -688,10 +647,9 @@ void WorldSession::HandleTextEmoteOpcode(WorldPacket & recvData)
 
     GetPlayer()->UpdateSpeakTime();
 
-    if (!GetPlayer()->CanSpeak())
+    if (!sMute->CanSpeak(GetAccountId()))
     {
-        std::string timeStr = secsToTimeString(m_muteTime - GameTime::GetGameTime());
-        SendNotification(GetAcoreString(LANG_WAIT_BEFORE_SPEAKING), timeStr.c_str());
+        SendNotification(GetAcoreString(LANG_WAIT_BEFORE_SPEAKING), sMute->GetMuteTimeString(GetAccountId()).c_str());
         return;
     }
 
@@ -730,15 +688,15 @@ void WorldSession::HandleTextEmoteOpcode(WorldPacket & recvData)
 
     Unit* unit = ObjectAccessor::GetUnit(*_player, guid);
 
-    CellCoord p = acore::ComputeCellCoord(GetPlayer()->GetPositionX(), GetPlayer()->GetPositionY());
+    CellCoord p = warhead::ComputeCellCoord(GetPlayer()->GetPositionX(), GetPlayer()->GetPositionY());
 
     Cell cell(p);
     cell.SetNoCreate();
 
-    acore::EmoteChatBuilder emote_builder(*GetPlayer(), text_emote, emoteNum, unit);
-    acore::LocalizedPacketDo<acore::EmoteChatBuilder > emote_do(emote_builder);
-    acore::PlayerDistWorker<acore::LocalizedPacketDo<acore::EmoteChatBuilder > > emote_worker(GetPlayer(), sGameConfig->GetFloatConfig("ListenRange.TextEmote"), emote_do);
-    TypeContainerVisitor<acore::PlayerDistWorker<acore::LocalizedPacketDo<acore::EmoteChatBuilder> >, WorldTypeMapContainer> message(emote_worker);
+    warhead::EmoteChatBuilder emote_builder(*GetPlayer(), text_emote, emoteNum, unit);
+    warhead::LocalizedPacketDo<warhead::EmoteChatBuilder > emote_do(emote_builder);
+    warhead::PlayerDistWorker<warhead::LocalizedPacketDo<warhead::EmoteChatBuilder > > emote_worker(GetPlayer(), sGameConfig->GetFloatConfig("ListenRange.TextEmote"), emote_do);
+    TypeContainerVisitor<warhead::PlayerDistWorker<warhead::LocalizedPacketDo<warhead::EmoteChatBuilder> >, WorldTypeMapContainer> message(emote_worker);
     cell.Visit(p, message, *GetPlayer()->GetMap(), *GetPlayer(), sGameConfig->GetFloatConfig("ListenRange.TextEmote"));
 
     GetPlayer()->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_DO_EMOTE, text_emote, 0, unit);

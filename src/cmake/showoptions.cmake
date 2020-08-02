@@ -1,8 +1,8 @@
 # output generic information about the core and buildtype chosen
 message("")
-message("* AzerothCore revision            : ${rev_hash} ${rev_date} (${rev_branch} branch)")
+message("* WarheadCore revision            : ${rev_hash} ${rev_date} (${rev_branch} branch)")
 if( UNIX )
-  message("* AzerothCore buildtype           : ${CMAKE_BUILD_TYPE}")
+  message("* WarheadCore buildtype           : ${CMAKE_BUILD_TYPE}")
 endif()
 message("")
 
@@ -73,14 +73,6 @@ if ( UNIX )
     message("* Use unix gperftools             : No  (default)")
   endif()
 endif( UNIX )
-
-if( WIN32 )
-  if( USE_MYSQL_SOURCES )
-  message("* Use MySQL sourcetree            : Yes (default)")
-  else()
-  message("* Use MySQL sourcetree            : No")
-  endif()
-endif( WIN32 )
 
 if ( WITHOUT_GIT )
   message("* Use GIT revision hash           : No")

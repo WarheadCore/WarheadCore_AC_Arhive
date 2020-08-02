@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019+ WarheadCore
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -26,7 +26,7 @@
 #include "Poco/AutoPtr.h"
 #include <sstream>
 
-#if AC_PLATFORM == AC_PLATFORM_WINDOWS
+#if WH_PLATFORM == WH_PLATFORM_WINDOWS
 #include "Poco/WindowsConsoleChannel.h"
 #include <filesystem>
 #define CONSOLE_CHANNEL WindowsColorConsoleChannel
@@ -147,7 +147,7 @@ void Log::InitLogsDir()
         if ((m_logsDir.at(m_logsDir.length() - 1) != '/') && (m_logsDir.at(m_logsDir.length() - 1) != '\\'))
             m_logsDir.push_back('/');
 
-#if AC_PLATFORM == AC_PLATFORM_WINDOWS
+#if WH_PLATFORM == WH_PLATFORM_WINDOWS
     std::filesystem::path LogsPath(m_logsDir);
     if (!std::filesystem::is_directory(LogsPath))
         m_logsDir = "";
@@ -697,5 +697,5 @@ void Log::outCharDump(std::string const& str, uint32 accountId, uint64 guid, std
     if (str.empty())
         return;
 
-    _Write(LOGGER_PLAYER_DUMP, LOG_LEVEL_INFO, acore::StringFormat("== START DUMP ==\n(Account: %u. Guid: %u. Name: %s)\n%s\n== END DUMP ==\n", accountId, guid, name, str));
+    _Write(LOGGER_PLAYER_DUMP, LOG_LEVEL_INFO, warhead::StringFormat("== START DUMP ==\n(Account: %u. Guid: %u. Name: %s)\n%s\n== END DUMP ==\n", accountId, guid, name, str));
 }

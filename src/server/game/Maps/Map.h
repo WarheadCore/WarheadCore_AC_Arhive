@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef ACORE_MAP_H
@@ -27,7 +38,6 @@
 #include "GameObjectModel.h"
 #include "Log.h"
 #include "DataMap.h"
-
 #include <bitset>
 #include <list>
 
@@ -51,7 +61,7 @@ class BattlegroundMap;
 class Transport;
 class StaticTransport;
 class MotionTransport;
-namespace acore
+namespace warhead
 {
     struct ObjectUpdater;
     struct LargeObjectUpdater;
@@ -296,14 +306,14 @@ class Map : public GridRefManager<NGridType>
         template<class T> bool AddToMap(T *, bool checkTransport = false);
         template<class T> void RemoveFromMap(T *, bool);
 
-        void VisitNearbyCellsOf(WorldObject* obj, TypeContainerVisitor<acore::ObjectUpdater, GridTypeMapContainer> &gridVisitor,
-            TypeContainerVisitor<acore::ObjectUpdater, WorldTypeMapContainer> &worldVisitor,
-            TypeContainerVisitor<acore::ObjectUpdater, GridTypeMapContainer> &largeGridVisitor,
-            TypeContainerVisitor<acore::ObjectUpdater, WorldTypeMapContainer> &largeWorldVisitor);
-        void VisitNearbyCellsOfPlayer(Player* player, TypeContainerVisitor<acore::ObjectUpdater, GridTypeMapContainer> &gridVisitor,
-            TypeContainerVisitor<acore::ObjectUpdater, WorldTypeMapContainer> &worldVisitor,
-            TypeContainerVisitor<acore::ObjectUpdater, GridTypeMapContainer> &largeGridVisitor,
-            TypeContainerVisitor<acore::ObjectUpdater, WorldTypeMapContainer> &largeWorldVisitor);
+        void VisitNearbyCellsOf(WorldObject* obj, TypeContainerVisitor<warhead::ObjectUpdater, GridTypeMapContainer> &gridVisitor,
+            TypeContainerVisitor<warhead::ObjectUpdater, WorldTypeMapContainer> &worldVisitor,
+            TypeContainerVisitor<warhead::ObjectUpdater, GridTypeMapContainer> &largeGridVisitor,
+            TypeContainerVisitor<warhead::ObjectUpdater, WorldTypeMapContainer> &largeWorldVisitor);
+        void VisitNearbyCellsOfPlayer(Player* player, TypeContainerVisitor<warhead::ObjectUpdater, GridTypeMapContainer> &gridVisitor,
+            TypeContainerVisitor<warhead::ObjectUpdater, WorldTypeMapContainer> &worldVisitor,
+            TypeContainerVisitor<warhead::ObjectUpdater, GridTypeMapContainer> &largeGridVisitor,
+            TypeContainerVisitor<warhead::ObjectUpdater, WorldTypeMapContainer> &largeWorldVisitor);
             
         virtual void Update(const uint32, const uint32, bool thread = true);
 
@@ -321,13 +331,13 @@ class Map : public GridRefManager<NGridType>
 
         bool IsRemovalGrid(float x, float y) const
         {
-            GridCoord p = acore::ComputeGridCoord(x, y);
+            GridCoord p = warhead::ComputeGridCoord(x, y);
             return !getNGrid(p.x_coord, p.y_coord);
         }
 
         bool IsGridLoaded(float x, float y) const
         {
-            return IsGridLoaded(acore::ComputeGridCoord(x, y));
+            return IsGridLoaded(warhead::ComputeGridCoord(x, y));
         }
 
         void LoadGrid(float x, float y);
@@ -738,7 +748,7 @@ inline void Map::Visit(Cell const& cell, TypeContainerVisitor<T, CONTAINER>& vis
 template<class NOTIFIER>
 inline void Map::VisitAll(float const& x, float const& y, float radius, NOTIFIER& notifier)
 { 
-    CellCoord p(acore::ComputeCellCoord(x, y));
+    CellCoord p(warhead::ComputeCellCoord(x, y));
     Cell cell(p);
     cell.SetNoCreate();
 
@@ -752,7 +762,7 @@ inline void Map::VisitAll(float const& x, float const& y, float radius, NOTIFIER
 template<class NOTIFIER>
 inline void Map::VisitFirstFound(const float &x, const float &y, float radius, NOTIFIER &notifier)
 { 
-    CellCoord p(acore::ComputeCellCoord(x, y));
+    CellCoord p(warhead::ComputeCellCoord(x, y));
     Cell cell(p);
     cell.SetNoCreate();
 
@@ -768,7 +778,7 @@ inline void Map::VisitFirstFound(const float &x, const float &y, float radius, N
 template<class NOTIFIER>
 inline void Map::VisitWorld(const float &x, const float &y, float radius, NOTIFIER &notifier)
 { 
-    CellCoord p(acore::ComputeCellCoord(x, y));
+    CellCoord p(warhead::ComputeCellCoord(x, y));
     Cell cell(p);
     cell.SetNoCreate();
 
@@ -779,7 +789,7 @@ inline void Map::VisitWorld(const float &x, const float &y, float radius, NOTIFI
 template<class NOTIFIER>
 inline void Map::VisitGrid(const float &x, const float &y, float radius, NOTIFIER &notifier)
 { 
-    CellCoord p(acore::ComputeCellCoord(x, y));
+    CellCoord p(warhead::ComputeCellCoord(x, y));
     Cell cell(p);
     cell.SetNoCreate();
 

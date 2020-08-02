@@ -1,5 +1,5 @@
 /*
- * This file is part of the TrinityCore Project. See AUTHORS file for Copyright information
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -19,7 +19,7 @@
 #define __GAMETIME_H
 
 #include "Define.h"
-#include <chrono>
+#include "Duration.h"
 
 namespace GameTime
 {
@@ -33,10 +33,10 @@ namespace GameTime
     uint32 GetGameTimeMS();
 
     /// Current chrono system_clock time point
-    std::chrono::system_clock::time_point GetGameTimeSystemPoint();
+    SystemTimePoint GetSystemTime();
 
     /// Current chrono steady_clock time point
-    std::chrono::steady_clock::time_point GetGameTimeSteadyPoint();
+    TimePoint GetGameTimeSteadyPoint();
 
     /// Uptime (in secs)
     uint32 GetUptime();

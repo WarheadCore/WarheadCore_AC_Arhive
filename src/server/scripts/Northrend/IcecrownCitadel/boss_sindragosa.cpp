@@ -1,6 +1,19 @@
 /*
- * Originally written by Pussywizard - Copyright (C) 2016+ AzerothCore <www.azerothcore.org>, released under GNU AGPL v3 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-AGPL3
-*/
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "ObjectMgr.h"
 #include "ScriptMgr.h"
@@ -228,7 +241,7 @@ class IceTombSummonEvent : public BasicEvent
         uint64 _sindragosaGUID;
 };
 
-struct LastPhaseIceTombTargetSelector : public acore::unary_function<Unit*, bool>
+struct LastPhaseIceTombTargetSelector : public warhead::unary_function<Unit*, bool>
 {
     public:
         LastPhaseIceTombTargetSelector(Creature* source) : _source(source) { }
@@ -546,7 +559,7 @@ class boss_sindragosa : public CreatureScript
                         me->SetControlled(true, UNIT_STATE_ROOT);
                         me->SendMovementFlagUpdate();
                         me->CastSpell(me->GetVictim(), SPELL_TAIL_SMASH, false);
-                        events.DelayEvents(1, 0);
+                        events.DelayEventsToMax(1, 0);
                         events.ScheduleEvent(EVENT_UNROOT, 0);
                         events.ScheduleEvent(EVENT_TAIL_SMASH, urand(22000, 27000), EVENT_GROUP_LAND_PHASE);
                         break;
@@ -555,7 +568,7 @@ class boss_sindragosa : public CreatureScript
                         me->SetControlled(true, UNIT_STATE_ROOT);
                         me->SendMovementFlagUpdate();
                         me->CastSpell(me->GetVictim(), _isThirdPhase ? SPELL_FROST_BREATH_P2 : SPELL_FROST_BREATH_P1, false);
-                        events.DelayEvents(1, 0);
+                        events.DelayEventsToMax(1, 0);
                         events.ScheduleEvent(EVENT_UNROOT, 0);
                         events.ScheduleEvent(EVENT_FROST_BREATH, urand(20000, 25000), EVENT_GROUP_LAND_PHASE);
                         break;
@@ -570,7 +583,7 @@ class boss_sindragosa : public CreatureScript
                         break;
                     case EVENT_ICY_GRIP:
                         me->CastSpell((Unit*)NULL, SPELL_ICY_GRIP, false);
-                        events.DelayEvents(1001, 0);
+                        events.DelayEventsToMax(1001, 0);
                         events.ScheduleEvent(EVENT_BLISTERING_COLD, 1000, EVENT_GROUP_LAND_PHASE);
                         if (uint32 evTime = events.GetNextEventTime(EVENT_ICE_TOMB))
                             if (events.GetTimer() > evTime || evTime - events.GetTimer() < 7000)
@@ -915,10 +928,10 @@ class spell_sindragosa_unchained_magic : public SpellScriptLoader
                 uint32 maxSize = uint32(GetCaster()->GetMap()->GetSpawnMode() & 1 ? 3 : 1);
                 healList.remove_if(UnchainedMagicTargetSelector(false));
                 if (healList.size() > maxSize)
-                    acore::Containers::RandomResizeList(healList, maxSize);
+                    warhead::Containers::RandomResizeList(healList, maxSize);
                 dpsList.remove_if(UnchainedMagicTargetSelector(true));
                 if (dpsList.size() > maxSize)
-                    acore::Containers::RandomResizeList(dpsList, maxSize);
+                    warhead::Containers::RandomResizeList(dpsList, maxSize);
                 unitList.splice(unitList.begin(), healList);
                 unitList.splice(unitList.begin(), dpsList);
             }
@@ -1215,7 +1228,7 @@ class spell_sindragosa_ice_tomb : public SpellScriptLoader
 
             void FilterTargets(std::list<WorldObject*>& unitList)
             {
-                unitList.remove_if(acore::UnitAuraCheck(true, GetSpellInfo()->Id));
+                unitList.remove_if(warhead::UnitAuraCheck(true, GetSpellInfo()->Id));
                 targetList.clear();
                 targetList = unitList;
             }
@@ -1934,11 +1947,11 @@ class spell_frostwarden_handler_order_whelp : public SpellScriptLoader
 
             void FilterTargets(std::list<WorldObject*>& targets)
             {
-                targets.remove_if(acore::ObjectTypeIdCheck(TYPEID_PLAYER, false));
+                targets.remove_if(warhead::ObjectTypeIdCheck(TYPEID_PLAYER, false));
                 if (targets.empty())
                     return;
 
-                WorldObject* target = acore::Containers::SelectRandomContainerElement(targets);
+                WorldObject* target = warhead::Containers::SelectRandomContainerElement(targets);
                 targets.clear();
                 targets.push_back(target);
             }
@@ -1955,7 +1968,7 @@ class spell_frostwarden_handler_order_whelp : public SpellScriptLoader
                 if (unitList.empty())
                     return;
 
-                acore::Containers::SelectRandomContainerElement(unitList)->CastSpell(GetHitUnit(), uint32(GetEffectValue()), true);
+                warhead::Containers::SelectRandomContainerElement(unitList)->CastSpell(GetHitUnit(), uint32(GetEffectValue()), true);
             }
 
             void Register()

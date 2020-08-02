@@ -1,3 +1,20 @@
+/*
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include <ace/Thread_Mutex.h>
 #include <ace/Log_Msg.h>
 #include "Threading.h"
@@ -79,8 +96,8 @@ int DelayExecutor::start(int num_threads, ACE_Method_Request* pre_svc_hook, ACE_
     queue_.queue()->activate();
 
     // pussywizard:
-    //acore::ThreadPriority tp;
-    //int _priority = tp.getPriority(acore::Priority_Highest);
+    //warhead::ThreadPriority tp;
+    //int _priority = tp.getPriority(warhead::Priority_Highest);
     //if (ACE_Task_Base::activate(THR_NEW_LWP | THR_JOINABLE, num_threads, 0, _priority) == -1)
     //    return -1;
 

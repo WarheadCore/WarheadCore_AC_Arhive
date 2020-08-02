@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "ArenaTeam.h"
@@ -35,11 +46,7 @@
 #include "GameGraveyard.h"
 #include "GameLocale.h"
 
-#ifdef ELUNA
-#include "LuaEngine.h"
-#endif
-
-namespace acore
+namespace warhead
 {
     class BattlegroundChatBuilder
     {
@@ -103,7 +110,7 @@ namespace acore
             uint32 _arg1;
             uint32 _arg2;
     };
-}                                                           // namespace acore
+}                                                           // namespace warhead
 
 template<class Do>
 void Battleground::BroadcastWorker(Do& _do)
@@ -209,11 +216,8 @@ Battleground::~Battleground()
     for (uint32 i = 0; i < size; ++i)
         DelObject(i);
 
-#ifdef ELUNA
-    sEluna->OnBGDestroy(this, GetBgTypeID(), GetInstanceID());
-#endif
-
     sBattlegroundMgr->RemoveBattleground(GetBgTypeID(), GetInstanceID());
+    
     // unload map
     if (m_Map)
     {
@@ -384,7 +388,7 @@ TeamId Battleground::GetPrematureWinner()
         return TEAM_ALLIANCE;
     else if (GetPlayersCountByTeam(TEAM_HORDE) >= GetMinPlayersPerTeam())
         return TEAM_HORDE;
-        
+
     return TEAM_NEUTRAL;
 }
 
@@ -444,7 +448,7 @@ inline void Battleground::_ProcessJoin(uint32 diff)
 
         if (!FindBgMap())
         {
-            sLog->outError("Battleground::_ProcessJoin: map (map id: %u, instance id: %u) is not created!", m_MapId, m_InstanceID);
+            LOG_ERROR("server", "Battleground::_ProcessJoin: map (map id: %u, instance id: %u) is not created!", m_MapId, m_InstanceID);
             EndNow();
             return;
         }
@@ -506,10 +510,6 @@ inline void Battleground::_ProcessJoin(uint32 diff)
         m_Events |= BG_STARTING_EVENT_4;
 
         StartingEventOpenDoors();
-
-#ifdef ELUNA
-        sEluna->OnBGStart(this, GetBgTypeID(), GetInstanceID());
-#endif
 
         SendWarningToAll(StartMessageIds[BG_STARTING_EVENT_FOURTH]);
         SetStatus(STATUS_IN_PROGRESS);
@@ -587,7 +587,7 @@ inline void Battleground::_ProcessJoin(uint32 diff)
             }
 
             // Announce BG starting
-            if (sGameConfig->GetBoolConfig("QueueAnnouncer.Enable"))
+            if (sGameConfig->GetBoolConfig("Battleground.QueueAnnouncer.Enable"))
                 sWorld->SendWorldText(LANG_BG_STARTED_ANNOUNCE_WORLD, GetName(), std::min(GetMinLevel(), (uint32)80), std::min(GetMaxLevel(), (uint32)80));
 
             sScriptMgr->OnBattlegroundStart(this);
@@ -976,13 +976,13 @@ void Battleground::EndBattleground(TeamId winnerTeamId)
                 // Arena lost => reset the win_rated_arena having the "no_lose" condition
                 player->ResetAchievementCriteria(ACHIEVEMENT_CRITERIA_CONDITION_NO_LOSE, 0);
             }
-            
+
             player->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_PLAY_ARENA, GetMapId());
         }
 
-        uint32 winner_kills = player->GetRandomWinner() ? BG_REWARD_WINNER_HONOR_LAST : BG_REWARD_WINNER_HONOR_FIRST;
-        uint32 loser_kills = player->GetRandomWinner() ? BG_REWARD_LOSER_HONOR_LAST : BG_REWARD_LOSER_HONOR_FIRST;
-        uint32 winner_arena = player->GetRandomWinner() ? BG_REWARD_WINNER_ARENA_LAST : BG_REWARD_WINNER_ARENA_FIRST;
+        uint32 winner_kills = player->GetRandomWinner() ? sGameConfig->GetIntConfig("Battleground.RewardWinnerHonorLast") : sGameConfig->GetIntConfig("Battleground.RewardWinnerHonorFirst");
+        uint32 loser_kills = player->GetRandomWinner() ? sGameConfig->GetIntConfig("Battleground.RewardLoserHonorLast") : sGameConfig->GetIntConfig("Battleground.RewardLoserHonorFirst");
+        uint32 winner_arena = player->GetRandomWinner() ? sGameConfig->GetIntConfig("Battleground.RewardWinnerArenaLast") : sGameConfig->GetIntConfig("Battleground.RewardWinnerArenaFirst");
 
         sScriptMgr->OnBattlegroundEndReward(this, player, winnerTeamId);
 
@@ -1059,17 +1059,13 @@ void Battleground::EndBattleground(TeamId winnerTeamId)
 
     if (winmsg_id)
         SendMessageToAll(winmsg_id, CHAT_MSG_BG_SYSTEM_NEUTRAL);
-
-#ifdef ELUNA
-    sEluna->OnBGEnd(this, GetBgTypeID(), GetInstanceID(), winnerTeamId);
-#endif
 }
 
 uint32 Battleground::GetBonusHonorFromKill(uint32 kills) const
 {
     //variable kills means how many honorable kills you scored (so we need kills * honor_for_one_kill)
     uint32 maxLevel = std::min<uint32>(GetMaxLevel(), 80U);
-    return acore::Honor::hk_honor_at_level(maxLevel, float(kills));
+    return warhead::Honor::hk_honor_at_level(maxLevel, float(kills));
 }
 
 void Battleground::BlockMovement(Player* player)
@@ -1172,7 +1168,7 @@ void Battleground::Init()
 
     if (m_BgInvitedPlayers[TEAM_ALLIANCE] > 0 || m_BgInvitedPlayers[TEAM_HORDE] > 0)
     {
-        sLog->outError("Battleground::Reset: one of the counters is not 0 (alliance: %u, horde: %u) for BG (map: %u, instance id: %u)!", m_BgInvitedPlayers[TEAM_ALLIANCE], m_BgInvitedPlayers[TEAM_HORDE], m_MapId, m_InstanceID);
+        LOG_ERROR("server", "Battleground::Reset: one of the counters is not 0 (alliance: %u, horde: %u) for BG (map: %u, instance id: %u)!", m_BgInvitedPlayers[TEAM_ALLIANCE], m_BgInvitedPlayers[TEAM_HORDE], m_MapId, m_InstanceID);
         ABORT();
     }
 
@@ -1272,7 +1268,7 @@ void Battleground::AddPlayer(Player* player)
 
     // Log
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDetail("BATTLEGROUND: Player %s joined the battle.", player->GetName().c_str());
+    LOG_INFO("server", "BATTLEGROUND: Player %s joined the battle.", player->GetName().c_str());
 #endif
 }
 
@@ -1281,7 +1277,7 @@ void Battleground::AddOrSetPlayerToCorrectBgGroup(Player* player, TeamId teamId)
 {
     if (player->GetGroup() && (player->GetGroup()->isBGGroup() || player->GetGroup()->isBFGroup()))
     {
-        sLog->outMisc("Battleground::AddOrSetPlayerToCorrectBgGroup - player is already in %s group!", (player->GetGroup()->isBGGroup() ? "BG" : "BF"));
+        LOG_INFO("misc", "Battleground::AddOrSetPlayerToCorrectBgGroup - player is already in %s group!", (player->GetGroup()->isBGGroup() ? "BG" : "BF"));
         return;
     }
 
@@ -1313,8 +1309,11 @@ void Battleground::AddOrSetPlayerToCorrectBgGroup(Player* player, TeamId teamId)
 
 uint32 Battleground::GetFreeSlotsForTeam(TeamId teamId) const
 {
-    // if BG is starting and "Battleground.InvitationType" == BG_QUEUE_INVITATION_TYPE_NO_BALANCE, invite anyone
-    if (GetStatus() == STATUS_WAIT_JOIN && sGameConfig->GetIntConfig("Battleground.InvitationType") == BG_QUEUE_INVITATION_TYPE_NO_BALANCE)
+    if (!(GetStatus() == STATUS_IN_PROGRESS || GetStatus() == STATUS_WAIT_JOIN))
+        return 0;
+
+    // if CONFIG_BATTLEGROUND_INVITATION_TYPE == BG_QUEUE_INVITATION_TYPE_NO_BALANCE, invite everyone unless the BG is full
+    if (sGameConfig->GetIntConfig("Battleground.InvitationType") == BG_QUEUE_INVITATION_TYPE_NO_BALANCE)
         return (GetInvitedCount(teamId) < GetMaxPlayersPerTeam()) ? GetMaxPlayersPerTeam() - GetInvitedCount(teamId) : 0;
 
     // if BG is already started or "Battleground.InvitationType" != BG_QUEUE_INVITATION_TYPE_NO_BALANCE, do not allow to join too many players of one faction
@@ -1323,41 +1322,36 @@ uint32 Battleground::GetFreeSlotsForTeam(TeamId teamId) const
     uint32 otherTeamInvitedCount = teamId == TEAM_ALLIANCE ? GetInvitedCount(TEAM_HORDE) : GetInvitedCount(TEAM_ALLIANCE);
     uint32 otherTeamPlayersCount = teamId == TEAM_ALLIANCE ? GetPlayersCountByTeam(TEAM_HORDE) : GetPlayersCountByTeam(TEAM_ALLIANCE);
 
-    if (GetStatus() == STATUS_IN_PROGRESS || GetStatus() == STATUS_WAIT_JOIN)
-    {
-        // difference based on ppl invited (not necessarily entered battle)
-        // default: allow 0
-        uint32 diff = 0;
-        uint32 maxPlayersPerTeam = GetMaxPlayersPerTeam();
-        uint32 minPlayersPerTeam = GetMinPlayersPerTeam();
+    // difference based on ppl invited (not necessarily entered battle)
+    // default: allow 0
+    uint32 diff = 0;
+    uint32 maxPlayersPerTeam = GetMaxPlayersPerTeam();
+    uint32 minPlayersPerTeam = GetMinPlayersPerTeam();
 
-        // allow join one person if the sides are equal (to fill up bg to minPlayerPerTeam)
-        if (otherTeamInvitedCount == thisTeamInvitedCount)
-            diff = 1;
-        else if (otherTeamInvitedCount > thisTeamInvitedCount) // allow join more ppl if the other side has more players
-            diff = otherTeamInvitedCount - thisTeamInvitedCount;
+    // allow join one person if the sides are equal (to fill up bg to minPlayerPerTeam)
+    if (otherTeamInvitedCount == thisTeamInvitedCount)
+        diff = 1;
+    else if (otherTeamInvitedCount > thisTeamInvitedCount) // allow join more ppl if the other side has more players
+        diff = otherTeamInvitedCount - thisTeamInvitedCount;
 
-        // difference based on max players per team (don't allow inviting more)
-        uint32 diff2 = (thisTeamInvitedCount < maxPlayersPerTeam) ? maxPlayersPerTeam - thisTeamInvitedCount : 0;
+    // difference based on max players per team (don't allow inviting more)
+    uint32 diff2 = (thisTeamInvitedCount < maxPlayersPerTeam) ? maxPlayersPerTeam - thisTeamInvitedCount : 0;
 
-        // difference based on players who already entered
-        // default: allow 0
-        uint32 diff3 = 0;
+    // difference based on players who already entered
+    // default: allow 0
+    uint32 diff3 = 0;
 
-        // allow join one person if the sides are equal (to fill up bg minPlayerPerTeam)
-        if (otherTeamPlayersCount == thisTeamPlayersCount)
-            diff3 = 1;
-        else if (otherTeamPlayersCount > thisTeamPlayersCount) // allow join more ppl if the other side has more players
-            diff3 = otherTeamPlayersCount - thisTeamPlayersCount;
-        else if (thisTeamInvitedCount <= minPlayersPerTeam) // or other side has less than minPlayersPerTeam
-            diff3 = minPlayersPerTeam - thisTeamInvitedCount + 1;
+    // allow join one person if the sides are equal (to fill up bg minPlayerPerTeam)
+    if (otherTeamPlayersCount == thisTeamPlayersCount)
+        diff3 = 1;
+    else if (otherTeamPlayersCount > thisTeamPlayersCount) // allow join more ppl if the other side has more players
+        diff3 = otherTeamPlayersCount - thisTeamPlayersCount;
+    else if (thisTeamInvitedCount <= minPlayersPerTeam) // or other side has less than minPlayersPerTeam
+        diff3 = minPlayersPerTeam - thisTeamInvitedCount + 1;
 
-        // return the minimum of the 3 differences
-        // min of diff, diff2 and diff3
-        return std::min({ diff, diff2, diff3 });
-    }
-
-    return 0;
+    // return the minimum of the 3 differences
+    // min of diff, diff2 and diff3
+    return std::min({ diff, diff2, diff3 });
 }
 
 uint32 Battleground::GetMaxFreeSlots() const
@@ -1452,7 +1446,7 @@ void Battleground::UpdatePlayerScore(Player* player, uint32 type, uint32 value, 
             }
             break;
         default:
-            sLog->outError("Battleground::UpdatePlayerScore: unknown score type (%u) for BG (map: %u, instance id: %u)!",
+            LOG_ERROR("server", "Battleground::UpdatePlayerScore: unknown score type (%u) for BG (map: %u, instance id: %u)!",
                 type, m_MapId, m_InstanceID);
             break;
     }
@@ -1519,9 +1513,9 @@ bool Battleground::AddObject(uint32 type, uint32 entry, float x, float y, float 
     if (!go->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_GAMEOBJECT), entry, GetBgMap(),
         PHASEMASK_NORMAL, x, y, z, o, G3D::Quat(rotation0, rotation1, rotation2, rotation3), 100, goState))
     {
-        sLog->outErrorDb("Battleground::AddObject: cannot create gameobject (entry: %u) for BG (map: %u, instance id: %u)!",
+        LOG_ERROR("sql.sql", "Battleground::AddObject: cannot create gameobject (entry: %u) for BG (map: %u, instance id: %u)!",
                 entry, m_MapId, m_InstanceID);
-        sLog->outError("Battleground::AddObject: cannot create gameobject (entry: %u) for BG (map: %u, instance id: %u)!",
+        LOG_ERROR("server", "Battleground::AddObject: cannot create gameobject (entry: %u) for BG (map: %u, instance id: %u)!",
                 entry, m_MapId, m_InstanceID);
         delete go;
         return false;
@@ -1572,7 +1566,7 @@ void Battleground::DoorClose(uint32 type)
         }
     }
     else
-        sLog->outError("Battleground::DoorClose: door gameobject (type: %u, GUID: %u) not found for BG (map: %u, instance id: %u)!",
+        LOG_ERROR("server", "Battleground::DoorClose: door gameobject (type: %u, GUID: %u) not found for BG (map: %u, instance id: %u)!",
             type, GUID_LOPART(BgObjects[type]), m_MapId, m_InstanceID);
 }
 
@@ -1584,7 +1578,7 @@ void Battleground::DoorOpen(uint32 type)
         obj->SetGoState(GO_STATE_ACTIVE);
     }
     else
-        sLog->outError("Battleground::DoorOpen: door gameobject (type: %u, GUID: %u) not found for BG (map: %u, instance id: %u)!",
+        LOG_ERROR("server", "Battleground::DoorOpen: door gameobject (type: %u, GUID: %u) not found for BG (map: %u, instance id: %u)!",
             type, GUID_LOPART(BgObjects[type]), m_MapId, m_InstanceID);
 }
 
@@ -1592,7 +1586,7 @@ GameObject* Battleground::GetBGObject(uint32 type)
 {
     GameObject* obj = GetBgMap()->GetGameObject(BgObjects[type]);
     if (!obj)
-        sLog->outError("Battleground::GetBGObject: gameobject (type: %u, GUID: %u) not found for BG (map: %u, instance id: %u)!",
+        LOG_ERROR("server", "Battleground::GetBGObject: gameobject (type: %u, GUID: %u) not found for BG (map: %u, instance id: %u)!",
             type, GUID_LOPART(BgObjects[type]), m_MapId, m_InstanceID);
     return obj;
 }
@@ -1601,7 +1595,7 @@ Creature* Battleground::GetBGCreature(uint32 type)
 {
     Creature* creature = GetBgMap()->GetCreature(BgCreatures[type]);
     if (!creature)
-        sLog->outError("Battleground::GetBGCreature: creature (type: %u, GUID: %u) not found for BG (map: %u, instance id: %u)!",
+        LOG_ERROR("server", "Battleground::GetBGCreature: creature (type: %u, GUID: %u) not found for BG (map: %u, instance id: %u)!",
             type, GUID_LOPART(BgCreatures[type]), m_MapId, m_InstanceID);
     return creature;
 }
@@ -1647,7 +1641,7 @@ Creature* Battleground::AddCreature(uint32 entry, uint32 type, float x, float y,
     Creature* creature = new Creature();
     if (!creature->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_UNIT), map, PHASEMASK_NORMAL, entry, 0, x, y, z, o))
     {
-        sLog->outError("Battleground::AddCreature: cannot create creature (entry: %u) for BG (map: %u, instance id: %u)!",
+        LOG_ERROR("server", "Battleground::AddCreature: cannot create creature (entry: %u) for BG (map: %u, instance id: %u)!",
             entry, m_MapId, m_InstanceID);
         delete creature;
         return NULL;
@@ -1658,7 +1652,7 @@ Creature* Battleground::AddCreature(uint32 entry, uint32 type, float x, float y,
     CreatureTemplate const* cinfo = sObjectMgr->GetCreatureTemplate(entry);
     if (!cinfo)
     {
-        sLog->outError("Battleground::AddCreature: creature template (entry: %u) does not exist for BG (map: %u, instance id: %u)!",
+        LOG_ERROR("server", "Battleground::AddCreature: creature template (entry: %u) does not exist for BG (map: %u, instance id: %u)!",
             entry, m_MapId, m_InstanceID);
         delete creature;
         return NULL;
@@ -1697,7 +1691,7 @@ bool Battleground::DelCreature(uint32 type)
         return true;
     }
 
-    sLog->outError("Battleground::DelCreature: creature (type: %u, GUID: %u) not found for BG (map: %u, instance id: %u)!",
+    LOG_ERROR("server", "Battleground::DelCreature: creature (type: %u, GUID: %u) not found for BG (map: %u, instance id: %u)!",
         type, GUID_LOPART(BgCreatures[type]), m_MapId, m_InstanceID);
     BgCreatures[type] = 0;
     return false;
@@ -1715,7 +1709,7 @@ bool Battleground::DelObject(uint32 type)
         BgObjects[type] = 0;
         return true;
     }
-    sLog->outError("Battleground::DelObject: gameobject (type: %u, GUID: %u) not found for BG (map: %u, instance id: %u)!",
+    LOG_ERROR("server", "Battleground::DelObject: gameobject (type: %u, GUID: %u) not found for BG (map: %u, instance id: %u)!",
         type, GUID_LOPART(BgObjects[type]), m_MapId, m_InstanceID);
     BgObjects[type] = 0;
     return false;
@@ -1739,7 +1733,7 @@ bool Battleground::AddSpiritGuide(uint32 type, float x, float y, float z, float 
         //creature->CastSpell(creature, SPELL_SPIRIT_HEAL_CHANNEL, true);
         return true;
     }
-    sLog->outError("Battleground::AddSpiritGuide: cannot create spirit guide (type: %u, entry: %u) for BG (map: %u, instance id: %u)!",
+    LOG_ERROR("server", "Battleground::AddSpiritGuide: cannot create spirit guide (type: %u, entry: %u) for BG (map: %u, instance id: %u)!",
         type, entry, m_MapId, m_InstanceID);
     EndNow();
     return false;
@@ -1750,8 +1744,8 @@ void Battleground::SendMessageToAll(uint32 entry, ChatMsg type, Player const* so
     if (!entry)
         return;
 
-    acore::BattlegroundChatBuilder bg_builder(type, entry, source);
-    acore::LocalizedPacketDo<acore::BattlegroundChatBuilder> bg_do(bg_builder);
+    warhead::BattlegroundChatBuilder bg_builder(type, entry, source);
+    warhead::LocalizedPacketDo<warhead::BattlegroundChatBuilder> bg_do(bg_builder);
     BroadcastWorker(bg_do);
 }
 
@@ -1763,8 +1757,8 @@ void Battleground::PSendMessageToAll(uint32 entry, ChatMsg type, Player const* s
     va_list ap;
     va_start(ap, source);
 
-    acore::BattlegroundChatBuilder bg_builder(type, entry, source, &ap);
-    acore::LocalizedPacketDo<acore::BattlegroundChatBuilder> bg_do(bg_builder);
+    warhead::BattlegroundChatBuilder bg_builder(type, entry, source, &ap);
+    warhead::LocalizedPacketDo<warhead::BattlegroundChatBuilder> bg_do(bg_builder);
     BroadcastWorker(bg_do);
 
     va_end(ap);
@@ -1797,8 +1791,8 @@ void Battleground::SendWarningToAll(uint32 entry, ...)
 
 void Battleground::SendMessage2ToAll(uint32 entry, ChatMsg type, Player const* source, uint32 arg1, uint32 arg2)
 {
-    acore::Battleground2ChatBuilder bg_builder(type, entry, source, arg1, arg2);
-    acore::LocalizedPacketDo<acore::Battleground2ChatBuilder> bg_do(bg_builder);
+    warhead::Battleground2ChatBuilder bg_builder(type, entry, source, arg1, arg2);
+    warhead::LocalizedPacketDo<warhead::Battleground2ChatBuilder> bg_do(bg_builder);
     BroadcastWorker(bg_do);
 }
 
@@ -1927,7 +1921,7 @@ int32 Battleground::GetObjectType(uint64 guid)
     for (uint32 i = 0; i < BgObjects.size(); ++i)
         if (BgObjects[i] == guid)
             return i;
-    sLog->outError("Battleground::GetObjectType: player used gameobject (GUID: %u) which is not in internal data for BG (map: %u, instance id: %u), cheating?",
+    LOG_ERROR("server", "Battleground::GetObjectType: player used gameobject (GUID: %u) which is not in internal data for BG (map: %u, instance id: %u), cheating?",
         GUID_LOPART(guid), m_MapId, m_InstanceID);
     return -1;
 }
@@ -1983,7 +1977,7 @@ uint32 Battleground::GetTeamScore(TeamId teamId) const
     if (teamId == TEAM_ALLIANCE || teamId == TEAM_HORDE)
         return m_TeamScores[teamId];
 
-    sLog->outError("GetTeamScore with wrong Team %u for BG %u", teamId, GetBgTypeID());
+    LOG_ERROR("server", "GetTeamScore with wrong Team %u for BG %u", teamId, GetBgTypeID());
     return 0;
 }
 

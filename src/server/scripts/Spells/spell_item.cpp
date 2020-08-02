@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /*
@@ -1913,7 +1924,7 @@ class spell_item_echoes_of_light : public SpellScriptLoader
                 if (targets.size() < 2)
                     return;
 
-                targets.sort(acore::HealthPctOrderPred());
+                targets.sort(warhead::HealthPctOrderPred());
 
                 WorldObject* target = targets.front();
                 targets.clear();
@@ -4078,6 +4089,45 @@ public:
     }
 };
 
+enum Eggnog
+{
+    SPELL_EGG_NOG_REINDEER = 21936,
+    SPELL_EGG_NOG_SNOWMAN  = 21980,
+};
+class spell_item_eggnog : public SpellScriptLoader
+{
+public:
+    spell_item_eggnog() : SpellScriptLoader("spell_item_eggnog") { }
+
+    class spell_item_eggnog_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_item_eggnog_SpellScript);
+
+        bool Validate(SpellInfo const* /*spellInfo*/) override
+        {
+            if (!sSpellMgr->GetSpellInfo(SPELL_EGG_NOG_REINDEER) || !sSpellMgr->GetSpellInfo(SPELL_EGG_NOG_SNOWMAN))
+                return false;
+            return true;
+        }
+
+        void HandleScript(SpellEffIndex /* effIndex */)
+        {
+            if (roll_chance_i(40))
+                GetCaster()->CastSpell(GetHitUnit(), roll_chance_i(50) ? SPELL_EGG_NOG_REINDEER : SPELL_EGG_NOG_SNOWMAN, GetCastItem());
+        }
+
+        void Register() override
+        {
+            OnEffectHitTarget += SpellEffectFn(spell_item_eggnog_SpellScript::HandleScript, EFFECT_2, SPELL_EFFECT_INEBRIATE);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_item_eggnog_SpellScript();
+    }
+};
+
 void AddSC_item_spell_scripts()
 {
     // Ours
@@ -4183,4 +4233,5 @@ void AddSC_item_spell_scripts()
     new spell_item_chicken_cover();
     new spell_item_muisek_vessel();
     new spell_item_greatmothers_soulcatcher();
+    new spell_item_eggnog();
 }

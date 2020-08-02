@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2019 TrinityCore <https://www.trinitycore.org/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -27,16 +27,16 @@ namespace BuiltInConfig
 {
     /// Returns the CMake command when any is specified in the config,
     /// returns the built-in path otherwise
-    AC_COMMON_API std::string GetCMakeCommand();
+    WH_COMMON_API std::string GetCMakeCommand();
     /// Returns the build directory path when any is specified in the config,
     /// returns the built-in one otherwise
-    AC_COMMON_API std::string GetBuildDirectory();
+    WH_COMMON_API std::string GetBuildDirectory();
     /// Returns the source directory path when any is specified in the config,
     /// returns the built-in one otherwise
-    AC_COMMON_API std::string GetSourceDirectory();
+    WH_COMMON_API std::string GetSourceDirectory();
     /// Returns the path to the mysql executable (`mysql`) when any is specified
     /// in the config, returns the built-in one otherwise
-    AC_COMMON_API std::string GetMySQLExecutable();
+    WH_COMMON_API std::string GetMySQLExecutable();
 
 } // namespace BuiltInConfig
 

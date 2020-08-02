@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "Common.h"
@@ -48,7 +59,7 @@ void UpdateData::Compress(void* dst, uint32 *dst_size, void* src, int src_size)
     int z_res = deflateInit(&c_stream, sGameConfig->GetIntConfig("Compression"));
     if (z_res != Z_OK)
     {
-        sLog->outError("Can't compress update packet (zlib: deflateInit) Error code: %i (%s)", z_res, zError(z_res));
+        LOG_ERROR("server", "Can't compress update packet (zlib: deflateInit) Error code: %i (%s)", z_res, zError(z_res));
         *dst_size = 0;
         return;
     }
@@ -61,14 +72,14 @@ void UpdateData::Compress(void* dst, uint32 *dst_size, void* src, int src_size)
     z_res = deflate(&c_stream, Z_NO_FLUSH);
     if (z_res != Z_OK)
     {
-        sLog->outError("Can't compress update packet (zlib: deflate) Error code: %i (%s)", z_res, zError(z_res));
+        LOG_ERROR("server", "Can't compress update packet (zlib: deflate) Error code: %i (%s)", z_res, zError(z_res));
         *dst_size = 0;
         return;
     }
 
     if (c_stream.avail_in != 0)
     {
-        sLog->outError("Can't compress update packet (zlib: deflate not greedy)");
+        LOG_ERROR("server", "Can't compress update packet (zlib: deflate not greedy)");
         *dst_size = 0;
         return;
     }
@@ -76,7 +87,7 @@ void UpdateData::Compress(void* dst, uint32 *dst_size, void* src, int src_size)
     z_res = deflate(&c_stream, Z_FINISH);
     if (z_res != Z_STREAM_END)
     {
-        sLog->outError("Can't compress update packet (zlib: deflate should report Z_STREAM_END instead %i (%s)", z_res, zError(z_res));
+        LOG_ERROR("server", "Can't compress update packet (zlib: deflate should report Z_STREAM_END instead %i (%s)", z_res, zError(z_res));
         *dst_size = 0;
         return;
     }
@@ -84,7 +95,7 @@ void UpdateData::Compress(void* dst, uint32 *dst_size, void* src, int src_size)
     z_res = deflateEnd(&c_stream);
     if (z_res != Z_OK)
     {
-        sLog->outError("Can't compress update packet (zlib: deflateEnd) Error code: %i (%s)", z_res, zError(z_res));
+        LOG_ERROR("server", "Can't compress update packet (zlib: deflateEnd) Error code: %i (%s)", z_res, zError(z_res));
         *dst_size = 0;
         return;
     }

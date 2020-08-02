@@ -1,5 +1,18 @@
 /*
-Xinef
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <time.h>
@@ -31,8 +44,8 @@ void LootItemStorage::LoadStorageFromDB()
     PreparedQueryResult result = CharacterDatabase.Query(stmt);
     if (!result)
     {
-        sLog->outString(">> Loaded 0 stored items!");
-        sLog->outString();
+        LOG_INFO("server", ">> Loaded 0 stored items!");
+        LOG_INFO("server", "");
         return;
     }
 
@@ -47,8 +60,8 @@ void LootItemStorage::LoadStorageFromDB()
         ++count;
     } while (result->NextRow());
 
-    sLog->outString(">> Loaded %d stored items in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-    sLog->outString();
+    LOG_INFO("server", ">> Loaded %d stored items in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+    LOG_INFO("server", "");
 }
 
 void LootItemStorage::RemoveEntryFromDB(uint32 containerId, uint32 itemid, uint32 count)
@@ -67,7 +80,7 @@ void LootItemStorage::AddNewStoredLoot(Loot* loot, Player* /*player*/)
 {
     if (lootItemStore.find(loot->containerId) != lootItemStore.end())
     {
-        sLog->outMisc("LootItemStorage::AddNewStoredLoot (A1) - %u!", loot->containerId);
+        LOG_INFO("misc", "LootItemStorage::AddNewStoredLoot (A1) - %u!", loot->containerId);
         return;
     }
 

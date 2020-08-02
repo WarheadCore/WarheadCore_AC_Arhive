@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
+# This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
 #
 # This file is free software; as a special exception the author gives
 # unlimited permission to copy and/or distribute it, with or without
@@ -9,12 +9,9 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #
-
-if(CMAKE_SYSTEM_NAME MATCHES "Windows")
-  if(USE_MYSQL_SOURCES)
-      add_subdirectory(mysqllite)
-  endif()
-endif()
+# User has manually chosen to ignore the git-tests, so throw them a warning.
+# This is done EACH compile so they can be alerted about the consequences.
+#
 
 add_subdirectory(threads)
 add_subdirectory(acelite)

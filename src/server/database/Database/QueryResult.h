@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef QUERYRESULT_H
@@ -16,9 +27,14 @@
 #ifdef _WIN32
   #include <winsock2.h>
 #endif
+
 #include <mysql.h>
 
-class AC_DATABASE_API ResultSet
+#if !defined(MARIADB_VERSION_ID) && MYSQL_VERSION_ID >= 80001
+typedef bool my_bool;
+#endif
+
+class WH_DATABASE_API ResultSet
 {
     public:
         ResultSet(MYSQL_RES* result, MYSQL_FIELD* fields, uint64 rowCount, uint32 fieldCount);
@@ -27,9 +43,6 @@ class AC_DATABASE_API ResultSet
         bool NextRow();
         uint64 GetRowCount() const { return _rowCount; }
         uint32 GetFieldCount() const { return _fieldCount; }
-#ifdef ELUNA
-        char* GetFieldName(uint32 index) const;
-#endif
         Field* Fetch() const { return _currentRow; }
         const Field & operator [] (uint32 index) const
         {
@@ -48,9 +61,9 @@ class AC_DATABASE_API ResultSet
         MYSQL_FIELD* _fields;
 };
 
-typedef acore::AutoPtr<ResultSet, ACE_Thread_Mutex> QueryResult;
+typedef warhead::AutoPtr<ResultSet, ACE_Thread_Mutex> QueryResult;
 
-class AC_DATABASE_API PreparedResultSet
+class WH_DATABASE_API PreparedResultSet
 {
     public:
         PreparedResultSet(MYSQL_STMT* stmt, MYSQL_RES* result, uint64 rowCount, uint32 fieldCount);
@@ -93,7 +106,7 @@ class AC_DATABASE_API PreparedResultSet
 
 };
 
-typedef acore::AutoPtr<PreparedResultSet, ACE_Thread_Mutex> PreparedQueryResult;
+typedef warhead::AutoPtr<PreparedResultSet, ACE_Thread_Mutex> PreparedQueryResult;
 
 #endif
 

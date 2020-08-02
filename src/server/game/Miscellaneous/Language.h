@@ -1,8 +1,18 @@
 /*
- * Copyright (C) MaNGOS, TrinityCore, AzerothCore
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
  *
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef __ACORE_LANGUAGE_H
@@ -1314,6 +1324,15 @@ enum AcoreStrings
     LANG_INSTANT_FLIGHT_ON                        = 30078,
     LANG_INSTANT_FLIGHT_OFF                       = 30079,
 
-    LANG_DEBUG_OPCODE_FILE_MISSING                = 30080
+    LANG_DEBUG_OPCODE_FILE_MISSING                = 30080,
+
+    LANG_REMOVEITEM_FAILURE                       = 30081,
+    LANG_REMOVEITEM_ERROR                         = 30082,
+
+    LANG_BG_SHARE_QUEST_ERROR                     = 30083,
+    LANG_BG_READY_CHECK_ERROR                     = 30084,
+
+    LANG_DEBUG_BG_CONF                            = 30085,
+    LANG_DEBUG_ARENA_CONF                         = 30086
 };
 #endif

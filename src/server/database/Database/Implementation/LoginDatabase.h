@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef _LOGINDATABASE_H
@@ -10,7 +21,7 @@
 #include "DatabaseWorkerPool.h"
 #include "MySQLConnection.h"
 
-class AC_DATABASE_API LoginDatabaseConnection : public MySQLConnection
+class WH_DATABASE_API LoginDatabaseConnection : public MySQLConnection
 {
     public:
         //- Constructors for sync and async connections
@@ -72,8 +83,6 @@ enum LoginDatabaseStatements
     LOGIN_UPD_ACCOUNT_LOCK_CONTRY,
     LOGIN_UPD_USERNAME,
     LOGIN_UPD_PASSWORD,
-    LOGIN_UPD_MUTE_TIME,
-    LOGIN_UPD_MUTE_TIME_LOGIN,
     LOGIN_UPD_LAST_IP,
     LOGIN_UPD_LAST_ATTEMPT_IP,
     LOGIN_UPD_ACCOUNT_ONLINE,
@@ -107,9 +116,12 @@ enum LoginDatabaseStatements
     LOGIN_INS_FACL_IP_LOGGING,
     LOGIN_INS_CHAR_IP_LOGGING,
     LOGIN_INS_FALP_IP_LOGGING,
-
     LOGIN_INS_ACCOUNT_MUTE,
+    LOGIN_UPD_ACCOUNT_MUTE,
     LOGIN_SEL_ACCOUNT_MUTE_INFO,
+    LOGIN_SEL_ACCOUNT_MUTE,
+    LOGIN_UPD_ACCOUNT_MUTE_EXPIRED,
+    LOGIN_DEL_ACCOUNT_MUTE,
 
     MAX_LOGINDATABASE_STATEMENTS
 };

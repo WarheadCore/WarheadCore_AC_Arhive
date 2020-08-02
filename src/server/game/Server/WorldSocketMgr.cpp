@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /** \file WorldSocketMgr.cpp
@@ -234,7 +245,7 @@ WorldSocketMgr::StartReactiveIO (uint16 port, const char* address)
 
     if (num_threads <= 0)
     {
-        sLog->outError("Network.Threads is wrong in your config file");
+        LOG_ERROR("server", "Network.Threads is wrong in your config file");
         return -1;
     }
 
@@ -242,7 +253,7 @@ WorldSocketMgr::StartReactiveIO (uint16 port, const char* address)
 
     m_NetThreads = new ReactorRunnable[m_NetThreadsCount];
 
-    sLog->outBasic ("Max allowed socket connections %d", ACE::max_handles());
+    LOG_INFO("network", "Max allowed socket connections %d", ACE::max_handles());
 
     // -1 means use default
     m_SockOutKBuff = sConfigMgr->GetIntDefault ("Network.OutKBuff", -1);
@@ -251,7 +262,7 @@ WorldSocketMgr::StartReactiveIO (uint16 port, const char* address)
 
     if (m_SockOutUBuff <= 0)
     {
-        sLog->outError("Network.OutUBuff is wrong in your config file");
+        LOG_ERROR("server", "Network.OutUBuff is wrong in your config file");
         return -1;
     }
 
@@ -261,7 +272,7 @@ WorldSocketMgr::StartReactiveIO (uint16 port, const char* address)
 
     if (m_Acceptor->open(listen_addr, m_NetThreads[0].GetReactor(), ACE_NONBLOCK) == -1)
     {
-        sLog->outError("Failed to open acceptor, check if the port is free");
+        LOG_ERROR("server", "Failed to open acceptor, check if the port is free");
         return -1;
     }
 
@@ -325,7 +336,7 @@ WorldSocketMgr::OnSocketOpen (WorldSocket* sock)
             (void*) & m_SockOutKBuff,
             sizeof (int)) == -1 && errno != ENOTSUP)
         {
-            sLog->outError("WorldSocketMgr::OnSocketOpen set_option SO_SNDBUF");
+            LOG_ERROR("server", "WorldSocketMgr::OnSocketOpen set_option SO_SNDBUF");
             return -1;
         }
     }
@@ -340,7 +351,7 @@ WorldSocketMgr::OnSocketOpen (WorldSocket* sock)
             (void*)&ndoption,
             sizeof (int)) == -1)
         {
-            sLog->outError("WorldSocketMgr::OnSocketOpen: peer().set_option TCP_NODELAY errno = %s", ACE_OS::strerror (errno));
+            LOG_ERROR("server", "WorldSocketMgr::OnSocketOpen: peer().set_option TCP_NODELAY errno = %s", ACE_OS::strerror (errno));
             return -1;
         }
     }

@@ -1,6 +1,19 @@
 /*
- * Originally written by Xinef - Copyright (C) 2016+ AzerothCore <www.azerothcore.org>, released under GNU AGPL v3 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-AGPL3
-*/
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "ScriptMgr.h"
 #include "ScriptedCreature.h"
@@ -166,7 +179,7 @@ const Position PosPlatform         = {2640.5f, -3360.6f, 285.26f, 0.0f};
 #define IN_LIVE_SIDE(who) (who->GetPositionY() < POS_Y_GATE)
 
 // Predicate function to check that the r   efzr unit is NOT on the same side as the source.
-struct NotOnSameSide : public acore::unary_function<Unit *, bool>
+struct NotOnSameSide : public warhead::unary_function<Unit *, bool>
 {
     bool m_inLiveSide;
     explicit NotOnSameSide(Unit *pSource) : m_inLiveSide(IN_LIVE_SIDE(pSource)) {}
@@ -385,7 +398,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case EVENT_INTRO_2:
                     Talk(SAY_INTRO_2);
@@ -583,7 +596,7 @@ public:
             if (me->GetUnitState() == UNIT_STATE_CASTING)
                 return;
 
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case EVENT_SPELL_DEATH_PLAGUE:
                     me->CastSpell(me->GetVictim(), SPELL_DEATH_PLAGUE, false);
@@ -673,7 +686,7 @@ class spell_gothik_shadow_bolt_volley : public SpellScriptLoader
 
             void FilterTargets(std::list<WorldObject*>& targets)
             {
-                targets.remove_if(acore::UnitAuraCheck(false, SPELL_SHADOW_MARK));
+                targets.remove_if(warhead::UnitAuraCheck(false, SPELL_SHADOW_MARK));
             }
 
             void Register() override

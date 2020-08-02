@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2019 TrinityCore <https://www.trinitycore.org/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -42,7 +42,7 @@ bool DBUpdaterUtil::CheckExecutable()
     boost::filesystem::path exe(GetCorrectedMySQLExecutable());
     if (!exists(exe))
     {
-        exe = acore::SearchExecutableInPath("mysql");
+        exe = warhead::SearchExecutableInPath("mysql");
         if (!exe.empty() && exists(exe))
         {
             // Correct the path to the cli
@@ -175,7 +175,7 @@ bool DBUpdater<T>::Create(DatabaseWorkerPool<T>& pool)
 
     std::string answer;
     std::getline(std::cin, answer);
-    if (!answer.empty() && !(answer.substr(0, 1) == "y"))
+    if (!sConfigMgr->isDryRun() && !answer.empty() && !(answer.substr(0, 1) == "y"))
         return false;
 
     LOG_INFO("sql.updates", "Creating database \"%s\"...", pool.GetConnectionInfo()->database.c_str());
@@ -248,7 +248,7 @@ bool DBUpdater<T>::Update(DatabaseWorkerPool<T>& pool)
         return false;
     }
 
-    std::string const info = acore::StringFormat("Containing " SZFMTD " new and " SZFMTD " archived updates.",
+    std::string const info = warhead::StringFormat("Containing " SZFMTD " new and " SZFMTD " archived updates.",
         result.recent, result.archived);
 
     if (!result.updated)
@@ -280,13 +280,13 @@ bool DBUpdater<T>::Populate(DatabaseWorkerPool<T>& pool)
     Path const DirPath(DirPathStr);
     if (!boost::filesystem::is_directory(DirPath))
     {
-        sLog->outError(">> Directory \"%s\" not exist", DirPath.generic_string().c_str());
+        LOG_ERROR("server", ">> Directory \"%s\" not exist", DirPath.generic_string().c_str());
         return false;
     }
 
     if (DirPath.empty())
     {
-        sLog->outError(">> Directory \"%s\" is empty", DirPath.generic_string().c_str());
+        LOG_ERROR("server", ">> Directory \"%s\" is empty", DirPath.generic_string().c_str());
         return false;
     }
 
@@ -301,7 +301,7 @@ bool DBUpdater<T>::Populate(DatabaseWorkerPool<T>& pool)
 
     if (!FilesCount)
     {
-        sLog->outError(">> In directory \"%s\" not exist '*.sql' files", DirPath.generic_string().c_str());
+        LOG_ERROR("server", ">> In directory \"%s\" not exist '*.sql' files", DirPath.generic_string().c_str());
         return false;
     }
 
@@ -390,7 +390,7 @@ void DBUpdater<T>::ApplyFile(DatabaseWorkerPool<T>& pool, std::string const& hos
         args.push_back(database);
 
     // Invokes a mysql process which doesn't leak credentials to logs
-    int const ret = acore::StartProcess(DBUpdaterUtil::GetCorrectedMySQLExecutable(), args,
+    int const ret = warhead::StartProcess(DBUpdaterUtil::GetCorrectedMySQLExecutable(), args,
                                  "sql.updates", path.generic_string(), true);
 
     if (ret != EXIT_SUCCESS)
@@ -406,6 +406,6 @@ void DBUpdater<T>::ApplyFile(DatabaseWorkerPool<T>& pool, std::string const& hos
     }
 }
 
-template class AC_DATABASE_API DBUpdater<LoginDatabaseConnection>;
-template class AC_DATABASE_API DBUpdater<WorldDatabaseConnection>;
-template class AC_DATABASE_API DBUpdater<CharacterDatabaseConnection>;
+template class WH_DATABASE_API DBUpdater<LoginDatabaseConnection>;
+template class WH_DATABASE_API DBUpdater<WorldDatabaseConnection>;
+template class WH_DATABASE_API DBUpdater<CharacterDatabaseConnection>;

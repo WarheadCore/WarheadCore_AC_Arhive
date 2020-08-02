@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef ACORE_CONDITIONMGR_H
@@ -72,10 +83,10 @@ enum ConditionTypes
     CONDITION_DIFFICULTY_ID            = 49,                // don't use on 3.3.5a
     CONDITION_TC_END                   = 50,                // placeholder
 
-    CONDITION_AC_START                 = 100,
+    CONDITION_WH_START                 = 100,
     CONDITION_QUEST_SATISFY_EXCLUSIVE  = 101,                // quest_id         0              0                  true if satisfied exclusive group
     CONDITION_HAS_AURA_TYPE            = 102,                // aura_type        0              0                  true if has aura type
-    CONDITION_AC_END                   = 103                 // placeholder
+    CONDITION_WH_END                   = 103                 // placeholder
 };
 
 /*! Documentation on implementing a new ConditionSourceType:
@@ -126,8 +137,8 @@ enum ConditionSourceType
     CONDITION_SOURCE_TYPE_CREATURE_TEMPLATE_VEHICLE      = 16,
     CONDITION_SOURCE_TYPE_SPELL                          = 17,
     CONDITION_SOURCE_TYPE_SPELL_CLICK_EVENT              = 18,
-    CONDITION_SOURCE_TYPE_QUEST_ACCEPT                   = 19,
-    CONDITION_SOURCE_TYPE_QUEST_SHOW_MARK                = 20,
+    CONDITION_SOURCE_TYPE_QUEST_AVAILABLE                = 19,
+    CONDITION_SOURCE_TYPE_UNUSED_20                      = 20, // placeholder
     CONDITION_SOURCE_TYPE_VEHICLE_SPELL                  = 21,
     CONDITION_SOURCE_TYPE_SMART_EVENT                    = 22,
     CONDITION_SOURCE_TYPE_NPC_VENDOR                     = 23,

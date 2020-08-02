@@ -1,6 +1,19 @@
 /*
- * Originally written by Pussywizard - Copyright (C) 2016+ AzerothCore <www.azerothcore.org>, released under GNU AGPL v3 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-AGPL3
-*/
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "ObjectMgr.h"
 #include "ScriptMgr.h"
@@ -1545,7 +1558,7 @@ class instance_icecrown_citadel : public InstanceMapScript
                         if (stalkers.empty())
                             return;
 
-                        stalkers.sort(acore::ObjectDistanceOrderPred(teleporter));
+                        stalkers.sort(warhead::ObjectDistanceOrderPred(teleporter));
                         stalkers.front()->CastSpell((Unit*)NULL, SPELL_ARTHAS_TELEPORTER_CEREMONY, false);
                         stalkers.pop_front();
                         for (std::list<Creature*>::iterator itr = stalkers.begin(); itr != stalkers.end(); ++itr)
@@ -1776,7 +1789,7 @@ class instance_icecrown_citadel : public InstanceMapScript
                             GetCreatureListWithEntryInGrid(triggers, terenas, NPC_WORLD_TRIGGER_INFINITE_AOI, 100.0f);
                             if (!triggers.empty())
                             {
-                                triggers.sort(acore::ObjectDistanceOrderPred(terenas, false));
+                                triggers.sort(warhead::ObjectDistanceOrderPred(terenas, false));
                                 Unit* visual = triggers.front();
                                 visual->CastSpell(visual, SPELL_FROSTMOURNE_TELEPORT_VISUAL, true);
                             }

@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "Util.h"
@@ -39,6 +50,14 @@ float frand(float min, float max)
 {
     ASSERT(max >= min);
     return float(sfmtRand->Random() * (max - min) + min);
+}
+
+Milliseconds randtime(Milliseconds min, Milliseconds max)
+{
+    long long diff = max.count() - min.count();
+    ASSERT(diff >= 0);
+    ASSERT(diff <= (uint32)-1);
+    return min + Milliseconds(urand(0, diff));
 }
 
 uint32 rand32()
@@ -376,7 +395,7 @@ bool Utf8toWStr(char const* utf8str, size_t csize, wchar_t* wstr, size_t& wsize)
 {
     try
     {
-        acore::CheckedBufferOutputIterator<wchar_t> out(wstr, wsize);
+        warhead::CheckedBufferOutputIterator<wchar_t> out(wstr, wsize);
         out = utf8::utf8to16(utf8str, utf8str+csize, out);
         wsize -= out.remaining(); // remaining unused space
         wstr[wsize] = L'\0';
@@ -531,7 +550,7 @@ std::wstring GetMainPartOfName(std::wstring const& wname, uint32 declension)
 
 bool utf8ToConsole(const std::string& utf8str, std::string& conStr)
 {
-#if AC_PLATFORM == AC_PLATFORM_WINDOWS
+#if WH_PLATFORM == WH_PLATFORM_WINDOWS
     std::wstring wstr;
     if (!Utf8toWStr(utf8str, wstr))
         return false;
@@ -548,7 +567,7 @@ bool utf8ToConsole(const std::string& utf8str, std::string& conStr)
 
 bool consoleToUtf8(const std::string& conStr, std::string& utf8str)
 {
-#if AC_PLATFORM == AC_PLATFORM_WINDOWS
+#if WH_PLATFORM == WH_PLATFORM_WINDOWS
     std::wstring wstr;
     wstr.resize(conStr.size());
     OemToCharBuffW(&conStr[0], &wstr[0], uint32(conStr.size()));
@@ -587,7 +606,7 @@ void utf8printf(FILE* out, const char *str, ...)
 
 void vutf8printf(FILE* out, const char *str, va_list* ap)
 {
-#if AC_PLATFORM == AC_PLATFORM_WINDOWS
+#if WH_PLATFORM == WH_PLATFORM_WINDOWS
     char temp_buf[32 * 1024];
     wchar_t wtemp_buf[32 * 1024];
 

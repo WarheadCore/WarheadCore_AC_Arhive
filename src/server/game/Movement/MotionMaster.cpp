@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "MotionMaster.h"
@@ -265,7 +276,7 @@ void MotionMaster::MoveTargetedHome()
     }
     else
     {
-        sLog->outError("Player (GUID: %u) attempt targeted home", _owner->GetGUIDLow());
+        LOG_ERROR("server", "Player (GUID: %u) attempt targeted home", _owner->GetGUIDLow());
     }
 }
 
@@ -588,7 +599,7 @@ void MotionMaster::MoveSeekAssistance(float x, float y, float z)
 
     if (_owner->GetTypeId() == TYPEID_PLAYER)
     {
-        sLog->outError("Player (GUID: %u) attempt to seek assistance", _owner->GetGUIDLow());
+        LOG_ERROR("server", "Player (GUID: %u) attempt to seek assistance", _owner->GetGUIDLow());
     }
     else
     {
@@ -611,7 +622,7 @@ void MotionMaster::MoveSeekAssistanceDistract(uint32 time)
 
     if (_owner->GetTypeId() == TYPEID_PLAYER)
     {
-        sLog->outError("Player (GUID: %u) attempt to call distract after assistance", _owner->GetGUIDLow());
+        LOG_ERROR("server", "Player (GUID: %u) attempt to call distract after assistance", _owner->GetGUIDLow());
     }
     else
     {
@@ -672,13 +683,13 @@ void MotionMaster::MoveTaxiFlight(uint32 path, uint32 pathnode)
         }
         else
         {
-            sLog->outError("%s attempt taxi to (not existed Path %u node %u)",
+            LOG_ERROR("server", "%s attempt taxi to (not existed Path %u node %u)",
             _owner->GetName().c_str(), path, pathnode);
         }
     }
     else
     {
-        sLog->outError("Creature (Entry: %u GUID: %u) attempt taxi to (Path %u node %u)",
+        LOG_ERROR("server", "Creature (Entry: %u GUID: %u) attempt taxi to (Path %u node %u)",
             _owner->GetEntry(), _owner->GetGUIDLow(), path, pathnode);
     }
 }
@@ -843,7 +854,7 @@ void MotionMaster::DirectDelete(_Ty curr)
 
 void MotionMaster::DelayedDelete(_Ty curr)
 {
-    sLog->outCrash("Unit (Entry %u) is trying to delete its updating MG (Type %u)!", _owner->GetEntry(), curr->GetMovementGeneratorType());
+    LOG_FATAL("server", "Unit (Entry %u) is trying to delete its updating MG (Type %u)!", _owner->GetEntry(), curr->GetMovementGeneratorType());
     if (isStatic(curr))
         return;
     if (!_expList)

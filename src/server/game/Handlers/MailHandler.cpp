@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "Chat.h"
@@ -28,8 +39,11 @@ bool WorldSession::CanOpenMailBox(uint64 guid)
 {
     if (guid == _player->GetGUID())
     {
-        sLog->outError("%s attempt open mailbox in cheating way.", _player->GetName().c_str());
-        return false;
+        if (_player->GetSession()->GetSecurity() < SEC_MODERATOR)
+        {
+            LOG_ERROR("server", "%s attempt open mailbox in cheating way.", _player->GetName().c_str());
+            return false;
+        }
     }
     else if (IS_GAMEOBJECT_GUID(guid))
     {
@@ -108,14 +122,14 @@ void WorldSession::HandleSendMail(WorldPacket & recvData)
     if (!rc)
     {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-        sLog->outDetail("Player %u is sending mail to %s (GUID: not existed!) with subject %s and body %s includes %u items, %u copper and %u COD copper with unk1 = %u, unk2 = %u", player->GetGUIDLow(), receiver.c_str(), subject.c_str(), body.c_str(), items_count, money, COD, unk1, unk2);
+        LOG_INFO("server", "Player %u is sending mail to %s (GUID: not existed!) with subject %s and body %s includes %u items, %u copper and %u COD copper with unk1 = %u, unk2 = %u", player->GetGUIDLow(), receiver.c_str(), subject.c_str(), body.c_str(), items_count, money, COD, unk1, unk2);
 #endif
         player->SendMailResult(0, MAIL_SEND, MAIL_ERR_RECIPIENT_NOT_FOUND);
         return;
     }
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDetail("Player %u is sending mail to %s (GUID: %u) with subject %s and body %s includes %u items, %u copper and %u COD copper with unk1 = %u, unk2 = %u", player->GetGUIDLow(), receiver.c_str(), GUID_LOPART(rc), subject.c_str(), body.c_str(), items_count, money, COD, unk1, unk2);
+    LOG_INFO("server", "Player %u is sending mail to %s (GUID: %u) with subject %s and body %s includes %u items, %u copper and %u COD copper with unk1 = %u, unk2 = %u", player->GetGUIDLow(), receiver.c_str(), GUID_LOPART(rc), subject.c_str(), body.c_str(), items_count, money, COD, unk1, unk2);
 #endif
 
     if (player->GetGUID() == rc)
@@ -126,7 +140,7 @@ void WorldSession::HandleSendMail(WorldPacket & recvData)
 
     if (money && COD) // cannot send money in a COD mail
     {
-        sLog->outError("%s attempt to dupe money!!!.", receiver.c_str());
+        LOG_ERROR("server", "%s attempt to dupe money!!!.", receiver.c_str());
         player->SendMailResult(0, MAIL_SEND, MAIL_ERR_INTERNAL_ERROR);
         return;
     }
@@ -737,7 +751,7 @@ void WorldSession::HandleMailCreateTextItem(WorldPacket & recvData)
     bodyItem->SetFlag(ITEM_FIELD_FLAGS, ITEM_FLAG_MAIL_TEXT_MASK);
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDetail("HandleMailCreateTextItem mailid=%u", mailId);
+    LOG_INFO("server", "HandleMailCreateTextItem mailid=%u", mailId);
 #endif
 
     ItemPosCountVec dest;

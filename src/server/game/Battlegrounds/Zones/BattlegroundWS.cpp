@@ -1,6 +1,19 @@
 /*
- * Originally written by Xinef - Copyright (C) 2016+ AzerothCore <www.azerothcore.org>, released under GNU AGPL v3 license: http://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-AGPL3
-*/
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "BattlegroundWS.h"
 #include "Creature.h"
@@ -415,14 +428,14 @@ bool BattlegroundWS::SetupBattleground()
     for (uint32 i = BG_WS_OBJECT_DOOR_A_1; i < BG_WS_OBJECT_MAX; ++i)
         if (BgObjects[i] == 0)
         {
-            sLog->outErrorDb("BatteGroundWS: Failed to spawn some object Battleground not created!");
+            LOG_ERROR("sql.sql", "BatteGroundWS: Failed to spawn some object Battleground not created!");
             return false;
         }
 
     for (uint32 i = WS_SPIRIT_MAIN_ALLIANCE; i < BG_CREATURES_MAX_WS; ++i)
         if (BgCreatures[i] == 0)
         {
-            sLog->outErrorDb("BatteGroundWS: Failed to spawn spirit guides Battleground not created!");
+            LOG_ERROR("sql.sql", "BatteGroundWS: Failed to spawn spirit guides Battleground not created!");
             return false;
         }
 

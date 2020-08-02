@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "MapInstanced.h"
@@ -14,10 +25,6 @@
 #include "World.h"
 #include "Group.h"
 #include "Player.h"
-
-#ifdef ELUNA
-#include "LuaEngine.h"
-#endif
 
 MapInstanced::MapInstanced(uint32 id) : Map(id, 0, DUNGEON_DIFFICULTY_NORMAL)
 {
@@ -181,13 +188,13 @@ InstanceMap* MapInstanced::CreateInstance(uint32 InstanceId, InstanceSave* save,
     const MapEntry* entry = sMapStore.LookupEntry(GetId());
     if (!entry)
     {
-        sLog->outError("CreateInstance: no entry for map %d", GetId());
+        LOG_ERROR("server", "CreateInstance: no entry for map %d", GetId());
         ABORT();
     }
     const InstanceTemplate* iTemplate = sObjectMgr->GetInstanceTemplate(GetId());
     if (!iTemplate)
     {
-        sLog->outError("CreateInstance: no instance template for map %d", GetId());
+        LOG_ERROR("server", "CreateInstance: no instance template for map %d", GetId());
         ABORT();
     }
 
@@ -257,11 +264,6 @@ bool MapInstanced::DestroyInstance(InstancedMaps::iterator &itr)
     // Free up the instance id and allow it to be reused for bgs and arenas (other instances are handled in the InstanceSaveMgr)
     //if (itr->second->IsBattlegroundOrArena())
     //    sMapMgr->FreeInstanceId(itr->second->GetInstanceId());
-
-#ifdef ELUNA
-    //todo:[ELUNA] I'm not sure this is right.
-    sEluna->FreeInstanceId(itr->second->GetInstanceId());
-#endif
 
     // erase map
     delete itr->second;

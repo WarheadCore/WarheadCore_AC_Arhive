@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
@@ -40,11 +51,11 @@
 #define _ACORE_REALM_CONFIG  "authserver.conf"
 #endif
 
-#if AC_PLATFORM == AC_PLATFORM_WINDOWS
+#if WH_PLATFORM == WH_PLATFORM_WINDOWS
 #include "ServiceWin32.h"
 char serviceName[] = "authserver";
-char serviceLongName[] = "AzerothCore auth service";
-char serviceDescription[] = "AzerothCore World of Warcraft emulator auth service";
+char serviceLongName[] = "WarheadCore auth service";
+char serviceDescription[] = "WarheadCore World of Warcraft emulator auth service";
 /*
  * -1 - not in service mode
  *  0 - stopped
@@ -59,7 +70,7 @@ void StopDB();
 bool stopEvent = false;                                     // Setting it to true stops the server
 
 /// Handle authserver's termination signals
-class AuthServerSignalHandler : public acore::SignalHandler
+class AuthServerSignalHandler : public warhead::SignalHandler
 {
 public:
     virtual void HandleSignal(int sigNum)
@@ -86,7 +97,7 @@ void usage(const char* prog)
 extern int main(int argc, char** argv)
 {
     // Command line parsing to get the configuration file name
-    char const* configFile = _ACORE_REALM_CONFIG;
+    std::string configFile = sConfigMgr->GetConfigPath() + std::string(_ACORE_REALM_CONFIG);
     int count = 1;
 
     while (count < argc)
@@ -113,7 +124,7 @@ extern int main(int argc, char** argv)
     // Init all logs
     sLog->Initialize();
 
-    acore::Logo::Show("authserver", configFile,
+    warhead::Logo::Show("authserver", configFile.c_str(),
         [](char const* text)
         {
             LOG_INFO("server.authserver", "%s", text);
@@ -133,10 +144,10 @@ extern int main(int argc, char** argv)
     if (!pidFile.empty())
     {
         if (uint32 pid = CreatePIDFile(pidFile))
-            sLog->outError("Daemon PID: %u\n", pid); // outError for red color in console
+            LOG_ERROR("server", "Daemon PID: %u\n", pid); // outError for red color in console
         else
         {
-            sLog->outError("Cannot create PID file %s (possible error: permission)\n", pidFile.c_str());
+            LOG_ERROR("server", "Cannot create PID file %s (possible error: permission)\n", pidFile.c_str());
             return 1;
         }
     }
@@ -149,7 +160,7 @@ extern int main(int argc, char** argv)
     sRealmList->Initialize(sConfigMgr->GetIntDefault("RealmsStateUpdateDelay", 20));
     if (sRealmList->size() == 0)
     {
-        sLog->outError("No valid realms specified.");
+        LOG_ERROR("server", "No valid realms specified.");
         return 1;
     }
 
@@ -159,7 +170,7 @@ extern int main(int argc, char** argv)
     int32 rmport = sConfigMgr->GetIntDefault("RealmServerPort", 3724);
     if (rmport < 0 || rmport > 0xFFFF)
     {
-        sLog->outError("The specified RealmServerPort (%d) is out of the allowed range (1-65535)", rmport);
+        LOG_ERROR("server", "The specified RealmServerPort (%d) is out of the allowed range (1-65535)", rmport);
         return 1;
     }
 
@@ -169,7 +180,7 @@ extern int main(int argc, char** argv)
 
     if (acceptor.open(bind_addr, ACE_Reactor::instance(), ACE_NONBLOCK) == -1)
     {
-        sLog->outError("Auth server can not bind to %s:%d (possible error: port already in use)", bind_ip.c_str(), rmport);
+        LOG_ERROR("server", "Auth server can not bind to %s:%d (possible error: port already in use)", bind_ip.c_str(), rmport);
         return 1;
     }
 
@@ -203,11 +214,11 @@ extern int main(int argc, char** argv)
             ULONG_PTR currentAffinity = affinity & appAff;
 
             if (!currentAffinity)
-                sLog->outError("server.authserver", "Processors marked in UseProcessors bitmask (hex) %x are not accessible for the authserver. Accessible processors bitmask (hex): %x", affinity, appAff);
+                LOG_ERROR("server", "server.authserver", "Processors marked in UseProcessors bitmask (hex) %x are not accessible for the authserver. Accessible processors bitmask (hex): %x", affinity, appAff);
             else if (SetProcessAffinityMask(hProcess, currentAffinity))
                 LOG_INFO("server.authserver", "server.authserver", "Using processors (bitmask, hex): %x", currentAffinity);
             else
-                sLog->outError("server.authserver", "Can't set used processors (hex): %x", currentAffinity);
+                LOG_ERROR("server", "server.authserver", "Can't set used processors (hex): %x", currentAffinity);
         }
     }
 
@@ -216,7 +227,7 @@ extern int main(int argc, char** argv)
         if (SetPriorityClass(hProcess, HIGH_PRIORITY_CLASS))
             LOG_INFO("server.authserver", "server.authserver", "authserver process priority class set to HIGH");
         else
-            sLog->outError("server.authserver", "Can't set authserver process priority class.");
+            LOG_ERROR("server", "server.authserver", "Can't set authserver process priority class.");
     }
 
 #else // Linux
@@ -231,7 +242,7 @@ extern int main(int argc, char** argv)
                 CPU_SET(i, &mask);
 
         if (sched_setaffinity(0, sizeof(mask), &mask))
-            sLog->outError("Can't set used processors (hex): %x, error: %s", affinity, strerror(errno));
+            LOG_ERROR("server", "Can't set used processors (hex): %x, error: %s", affinity, strerror(errno));
         else
         {
             CPU_ZERO(&mask);
@@ -243,7 +254,7 @@ extern int main(int argc, char** argv)
     if (highPriority)
     {
         if (setpriority(PRIO_PROCESS, 0, PROCESS_HIGH_PRIORITY))
-            sLog->outError("Can't set authserver process priority class, error: %s", strerror(errno));
+            LOG_ERROR("server", "Can't set authserver process priority class, error: %s", strerror(errno));
         else
             LOG_INFO("server.authserver", "authserver process priority class set to %i", getpriority(PRIO_PROCESS, 0));
     }
@@ -274,7 +285,7 @@ extern int main(int argc, char** argv)
         if ((++loopCounter) == numLoops)
         {
             loopCounter = 0;
-            sLog->outDetail("Ping MySQL to keep connection alive");
+            LOG_INFO("server", "Ping MySQL to keep connection alive");
             LoginDatabase.KeepAlive();
         }
     }

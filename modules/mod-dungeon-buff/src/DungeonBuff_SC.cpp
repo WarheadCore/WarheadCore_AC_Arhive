@@ -1,6 +1,18 @@
 /*
- * Copyright (C) since 2020 Andrei Guluaev (Winfidonarleyan/Kargatum) https://github.com/Winfidonarleyan
- * Licence MIT https://opensource.org/MIT
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "Log.h"
@@ -80,7 +92,6 @@ private:
     bool IsPlayerBuffed(Player* player)
     {
         auto const& itr = _playerBuffedStore.find(player->GetGUID());
-
         if (itr != _playerBuffedStore.end())
             return true;
 
@@ -90,6 +101,7 @@ private:
     uint32 GetPlayerCountInGroup(Player* player)
     {
         uint32 count = 1;
+        
         if (Group* group = player->GetGroup())
             count = static_cast<uint32>(group->GetMemberSlots().size());
 
@@ -132,7 +144,7 @@ public:
             return;
 
         if (!player)
-            return;        
+            return;
 
         sDB->ClearBuffs(player);
 
@@ -141,7 +153,7 @@ public:
         if (map->IsRaid() || map->Is25ManRaid())
             return;
 
-        if (player->GetMap()->IsDungeon())
+        if (map->IsDungeon())
             sDB->ApplyBuffs(player);
     }
 };
@@ -151,7 +163,7 @@ class DungeonBuff_World : public WorldScript
 public:
     DungeonBuff_World() : WorldScript("DungeonBuff_World") { }
 
-    void OnAfterConfigLoad(bool /*Reload*/) override
+    void OnAfterConfigLoad(bool /*reload*/) override
     {
         sDB->LoadConfig();
     }
@@ -161,4 +173,5 @@ public:
 void AddSC_DungeonBuff()
 {
     new DungeonBuff_World();
+    new DungeonBuff_Player();
 }

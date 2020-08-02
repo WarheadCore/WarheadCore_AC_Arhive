@@ -1,6 +1,16 @@
 #
-# Copyright (C) since 2020 Andrei Guluaev (Winfidonarleyan/Kargatum) https://github.com/Winfidonarleyan
-# Licence MIT https://opensource.org/MIT
+# This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+#
+# This file is free software; as a special exception the author gives
+# unlimited permission to copy and/or distribute it, with or without
+# modifications, as long as this notice is preserved.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# User has manually chosen to ignore the git-tests, so throw them a warning.
+# This is done EACH compile so they can be alerted about the consequences.
 #
 
 ########################################
@@ -13,7 +23,7 @@
 #   
 #   DB.Enable
 #       Описание: Включить систему выдачи бафов в подземельях
-#       По умолчанию: 1
+#       По умолчанию: 0
 #
 #   DB.Default.Enable
 #       Описание: Включить для подземелий обычной сложности
@@ -27,12 +37,12 @@
 #       Описание: Список номеров спеллов (баффов) для обычной сложности (по количеству игроков от 1 до 5)
 #       По умолчанию: 700201, 700202, 700203, 700204, 700205
 #
-#   DB.Buffs.Default
+#   DB.Buffs.Heroic
 #       Описание: Список номеров спеллов (баффов) для героической сложности (по количеству игроков от 1 до 5)
 #       По умолчанию: 700201, 700202, 700203, 700204, 700205
 #
 
-DB.Enable = 1
+DB.Enable = 0
 DB.Default.Enable = 1
 DB.Heroic.Enable = 1
 

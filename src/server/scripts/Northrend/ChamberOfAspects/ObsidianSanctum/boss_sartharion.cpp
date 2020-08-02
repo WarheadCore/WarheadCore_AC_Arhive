@@ -1,6 +1,19 @@
 ﻿/*
- * Originally written by Xinef - Copyright (C) 2016+ AzerothCore <www.azerothcore.org>, released under GNU AGPL v3 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-AGPL3
-*/
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "ScriptMgr.h"
 #include "ScriptedCreature.h"
@@ -424,7 +437,7 @@ public:
             events.Update(diff);
 
             // Special events which needs to be fired immidiately
-            switch(events.ExecuteEvent())
+            switch(events.GetEvent())
             {
                 case EVENT_SARTHARION_BOUNDARY:
                     if (me->GetPositionX() < 3218.86f || me->GetPositionX() > 3275.69f || me->GetPositionY() < 484.68f || me->GetPositionY() > 572.4f) // https://github.com/TrinityCore/TrinityCore/blob/3.3.5/src/server/scripts/Northrend/ChamberOfAspects/ObsidianSanctum/instance_obsidian_sanctum.cpp#L31
@@ -463,7 +476,7 @@ public:
 void boss_sartharion::boss_sartharionAI::HandleSartharionAbilities()
 {
     // Handling of Sartharion Events
-    switch (events.ExecuteEvent())
+    switch (events.GetEvent())
     {
         case EVENT_SARTHARION_CAST_CLEAVE:
             me->CastSpell(me->GetVictim(), SPELL_SARTHARION_CLEAVE, false);
@@ -538,7 +551,7 @@ void boss_sartharion::boss_sartharionAI::HandleSartharionAbilities()
 void boss_sartharion::boss_sartharionAI::HandleDrakeAbilities()
 {
     // Handling of Drakes Events
-    switch (events.ExecuteEvent())
+    switch (events.GetEvent())
     {
         // Dragon Calls
         case EVENT_SARTHARION_CALL_TENEBRON:
@@ -733,7 +746,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case EVENT_MINIBOSS_SHADOW_BREATH:
                     if (!urand(0,10))
@@ -1005,7 +1018,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case EVENT_MINIBOSS_SHADOW_BREATH:
                     if (!urand(0,10))
@@ -1235,7 +1248,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case EVENT_MINIBOSS_SHADOW_BREATH:
                     if (!urand(0,10))

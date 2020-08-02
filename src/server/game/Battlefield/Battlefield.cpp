@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "Battlefield.h"
@@ -296,7 +307,7 @@ void Battlefield::InitStalker(uint32 entry, float x, float y, float z, float o)
     if (Creature* creature = SpawnCreature(entry, x, y, z, o, TEAM_NEUTRAL))
         StalkerGuid = creature->GetGUID();
     else
-        sLog->outError("Battlefield::InitStalker: could not spawn Stalker (Creature entry %u), zone messeges will be un-available", entry);
+        LOG_ERROR("server", "Battlefield::InitStalker: could not spawn Stalker (Creature entry %u), zone messeges will be un-available", entry);
 }
 
 void Battlefield::KickAfkPlayers()
@@ -544,7 +555,7 @@ bool Battlefield::AddOrSetPlayerToCorrectBfGroup(Player* player)
 
     if (player->GetGroup() && (player->GetGroup()->isBGGroup() || player->GetGroup()->isBFGroup()))
     {
-        sLog->outMisc("Battlefield::AddOrSetPlayerToCorrectBfGroup - player is already in %s group!", (player->GetGroup()->isBGGroup() ? "BG" : "BF"));
+        LOG_INFO("misc", "Battlefield::AddOrSetPlayerToCorrectBfGroup - player is already in %s group!", (player->GetGroup()->isBGGroup() ? "BG" : "BF"));
         return false;
     }
 
@@ -584,10 +595,10 @@ BfGraveyard* Battlefield::GetGraveyardById(uint32 id) const
         if (m_GraveyardList[id])
             return m_GraveyardList[id];
         else
-            sLog->outError("Battlefield::GetGraveyardById Id:%u not existed", id);
+            LOG_ERROR("server", "Battlefield::GetGraveyardById Id:%u not existed", id);
     }
     else
-        sLog->outError("Battlefield::GetGraveyardById Id:%u cant be found", id);
+        LOG_ERROR("server", "Battlefield::GetGraveyardById Id:%u cant be found", id);
 
     return NULL;
 }
@@ -681,7 +692,7 @@ void BfGraveyard::SetSpirit(Creature* spirit, TeamId team)
 {
     if (!spirit)
     {
-        sLog->outError("BfGraveyard::SetSpirit: Invalid Spirit.");
+        LOG_ERROR("server", "BfGraveyard::SetSpirit: Invalid Spirit.");
         return;
     }
 
@@ -788,14 +799,14 @@ Creature* Battlefield::SpawnCreature(uint32 entry, float x, float y, float z, fl
     Map* map = sMapMgr->CreateBaseMap(m_MapId);
     if (!map)
     {
-        sLog->outError("Battlefield::SpawnCreature: Can't create creature entry: %u map not found", entry);
+        LOG_ERROR("server", "Battlefield::SpawnCreature: Can't create creature entry: %u map not found", entry);
         return 0;
     }
 
     Creature* creature = new Creature(true);
     if (!creature->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_UNIT), map, PHASEMASK_NORMAL, entry, 0, x, y, z, o))
     {
-        sLog->outError("Battlefield::SpawnCreature: Can't create creature entry: %u", entry);
+        LOG_ERROR("server", "Battlefield::SpawnCreature: Can't create creature entry: %u", entry);
         delete creature;
         return NULL;
     }
@@ -806,7 +817,7 @@ Creature* Battlefield::SpawnCreature(uint32 entry, float x, float y, float z, fl
     CreatureTemplate const* cinfo = sObjectMgr->GetCreatureTemplate(entry);
     if (!cinfo)
     {
-        sLog->outErrorDb("Battlefield::SpawnCreature: entry %u does not exist.", entry);
+        LOG_ERROR("sql.sql", "Battlefield::SpawnCreature: entry %u does not exist.", entry);
         return NULL;
     }
     // force using DB speeds -- do we really need this?
@@ -831,8 +842,8 @@ GameObject* Battlefield::SpawnGameObject(uint32 entry, float x, float y, float z
     GameObject* go = sObjectMgr->IsGameObjectStaticTransport(entry) ? new StaticTransport() : new GameObject();
     if (!go->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_GAMEOBJECT), entry, map, PHASEMASK_NORMAL, x, y, z, o, G3D::Quat(), 100, GO_STATE_READY))
     {
-        sLog->outErrorDb("Battlefield::SpawnGameObject: Gameobject template %u not found in database! Battlefield not created!", entry);
-        sLog->outError("Battlefield::SpawnGameObject: Cannot create gameobject template %u! Battlefield not created!", entry);
+        LOG_ERROR("sql.sql", "Battlefield::SpawnGameObject: Gameobject template %u not found in database! Battlefield not created!", entry);
+        LOG_ERROR("server", "Battlefield::SpawnGameObject: Cannot create gameobject template %u! Battlefield not created!", entry);
         delete go;
         return NULL;
     }
@@ -919,7 +930,7 @@ bool BfCapturePoint::SetCapturePointData(GameObject* capturePoint)
     GameObjectTemplate const* goinfo = capturePoint->GetGOInfo();
     if (goinfo->type != GAMEOBJECT_TYPE_CAPTURE_POINT)
     {
-        sLog->outError("OutdoorPvP: GO %u is not capture point!", capturePoint->GetEntry());
+        LOG_ERROR("server", "OutdoorPvP: GO %u is not capture point!", capturePoint->GetEntry());
         return false;
     }
 
@@ -979,8 +990,8 @@ bool BfCapturePoint::Update(uint32 diff)
     }
 
     std::list<Player*> players;
-    acore::AnyPlayerInObjectRangeCheck checker(capturePoint, radius);
-    acore::PlayerListSearcher<acore::AnyPlayerInObjectRangeCheck> searcher(capturePoint, players, checker);
+    warhead::AnyPlayerInObjectRangeCheck checker(capturePoint, radius);
+    warhead::PlayerListSearcher<warhead::AnyPlayerInObjectRangeCheck> searcher(capturePoint, players, checker);
     capturePoint->VisitNearbyWorldObject(radius, searcher);
 
     for (std::list<Player*>::iterator itr = players.begin(); itr != players.end(); ++itr)
@@ -1065,7 +1076,7 @@ bool BfCapturePoint::Update(uint32 diff)
 
     if (m_OldState != m_State)
     {
-        //sLog->outError("%u->%u", m_OldState, m_State);
+        //LOG_ERROR("server", "%u->%u", m_OldState, m_State);
         if (oldTeam != m_team)
             ChangeTeam(oldTeam);
         return true;

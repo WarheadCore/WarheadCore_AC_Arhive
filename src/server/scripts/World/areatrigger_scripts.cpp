@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /* ScriptData
@@ -477,6 +488,34 @@ class AreaTrigger_at_area_52_entrance : public AreaTriggerScript
         std::map<uint32, time_t> _triggerTimes;
 };
 
+class AreaTrigger_nax_frostwyrm_lair : public AreaTriggerScript
+{
+public: AreaTrigger_nax_frostwyrm_lair() : AreaTriggerScript("nax_frostwyrm_lair") { }
+
+    bool OnTrigger(Player* player, AreaTrigger const* /*trigger*/)
+    {
+        if (!player)
+            return true;
+
+        auto instanceScript = player->GetInstanceScript();
+        if (instanceScript->GetBossState(BOSS_LOATHEB) != EncounterState::DONE ||
+            instanceScript->GetBossState(BOSS_MAEXXNA) != EncounterState::DONE ||
+            instanceScript->GetBossState(BOSS_THADDIUS) != EncounterState::DONE ||
+            instanceScript->GetBossState(BOSS_HORSEMAN) != EncounterState::DONE)
+            return true;
+
+        return false;
+    }
+private:
+    enum NaxBosses
+    {
+        BOSS_LOATHEB   = 5,
+        BOSS_MAEXXNA   = 8,
+        BOSS_THADDIUS  = 9,
+        BOSS_HORSEMAN  = 12
+    };
+};
+
 void AddSC_areatrigger_scripts()
 {
     // Ours
@@ -493,4 +532,6 @@ void AddSC_areatrigger_scripts()
     new AreaTrigger_at_sentry_point();
     new AreaTrigger_at_brewfest();
     new AreaTrigger_at_area_52_entrance();
+
+    new AreaTrigger_nax_frostwyrm_lair();
 }

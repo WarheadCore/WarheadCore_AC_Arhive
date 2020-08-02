@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "Map.h"
@@ -27,10 +38,7 @@
 #include "Chat.h"
 #include "GameTime.h"
 #include "GameConfig.h"
-
-#ifdef ELUNA
-#include "LuaEngine.h"
-#endif
+#include "Metric.h"
 
 union u_map_magic
 {
@@ -76,14 +84,14 @@ bool Map::ExistMap(uint32 mapid, int gx, int gy)
     FILE* pf=fopen(tmp, "rb");
 
     if (!pf)
-        sLog->outError("Map file '%s': does not exist!", tmp);
+        LOG_ERROR("server", "Map file '%s': does not exist!", tmp);
     else
     {
         map_fileheader header;
         if (fread(&header, sizeof(header), 1, pf) == 1)
         {
             if (header.mapMagic != MapMagic.asUInt || header.versionMagic != MapVersionMagic.asUInt)
-                sLog->outError("Map file '%s' is from an incompatible clientversion. Please recreate using the mapextractor.", tmp);
+                LOG_ERROR("server", "Map file '%s' is from an incompatible clientversion. Please recreate using the mapextractor.", tmp);
             else
                 ret = true;
         }
@@ -103,7 +111,7 @@ bool Map::ExistVMap(uint32 mapid, int gx, int gy)
             if (!exists)
             {
                 std::string name = vmgr->getDirFileName(mapid, gx, gy);
-                sLog->outError("VMap file '%s' is missing or points to wrong version of vmap file. Redo vmaps with latest version of vmap_assembler.exe.", (sWorld->GetDataPath()+"vmaps/"+name).c_str());
+                LOG_ERROR("server", "VMap file '%s' is missing or points to wrong version of vmap file. Redo vmaps with latest version of vmap_assembler.exe.", (sWorld->GetDataPath()+"vmaps/"+name).c_str());
                 return false;
             }
         }
@@ -122,12 +130,12 @@ void Map::LoadMMap(int gx, int gy)
     {
         case MMAP::MMAP_LOAD_RESULT_OK:
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-            sLog->outDetail("MMAP loaded name:%s, id:%d, x:%d, y:%d (vmap rep.: x:%d, y:%d)", GetMapName(), GetId(), gx, gy, gx, gy);
+            LOG_INFO("server", "MMAP loaded name:%s, id:%d, x:%d, y:%d (vmap rep.: x:%d, y:%d)", GetMapName(), GetId(), gx, gy, gx, gy);
 #endif
             break;
         case MMAP::MMAP_LOAD_RESULT_ERROR:
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-            sLog->outDetail("Could not load MMAP name:%s, id:%d, x:%d, y:%d (vmap rep.: x:%d, y:%d)", GetMapName(), GetId(), gx, gy, gx, gy);
+            LOG_INFO("server", "Could not load MMAP name:%s, id:%d, x:%d, y:%d (vmap rep.: x:%d, y:%d)", GetMapName(), GetId(), gx, gy, gx, gy);
 #endif
             break;
         case MMAP::MMAP_LOAD_RESULT_IGNORED:
@@ -146,12 +154,12 @@ void Map::LoadVMap(int gx, int gy)
     {
         case VMAP::VMAP_LOAD_RESULT_OK:
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-            sLog->outDetail("VMAP loaded name:%s, id:%d, x:%d, y:%d (vmap rep.: x:%d, y:%d)", GetMapName(), GetId(), gx, gy, gx, gy);
+            LOG_INFO("server", "VMAP loaded name:%s, id:%d, x:%d, y:%d (vmap rep.: x:%d, y:%d)", GetMapName(), GetId(), gx, gy, gx, gy);
 #endif
             break;
         case VMAP::VMAP_LOAD_RESULT_ERROR:
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-            sLog->outDetail("Could not load VMAP name:%s, id:%d, x:%d, y:%d (vmap rep.: x:%d, y:%d)", GetMapName(), GetId(), gx, gy, gx, gy);
+            LOG_INFO("server", "Could not load VMAP name:%s, id:%d, x:%d, y:%d (vmap rep.: x:%d, y:%d)", GetMapName(), GetId(), gx, gy, gx, gy);
 #endif
             break;
         case VMAP::VMAP_LOAD_RESULT_IGNORED:
@@ -183,7 +191,7 @@ void Map::LoadMap(int gx, int gy, bool reload)
     if (GridMaps[gx][gy])
     {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-        sLog->outDetail("Unloading previously loaded map %u before reloading.", GetId());
+        LOG_INFO("server", "Unloading previously loaded map %u before reloading.", GetId());
 #endif
         sScriptMgr->OnUnloadGridMap(this, GridMaps[gx][gy], gx, gy);
 
@@ -197,13 +205,13 @@ void Map::LoadMap(int gx, int gy, bool reload)
     tmp = new char[len];
     snprintf(tmp, len, (char *)(sWorld->GetDataPath()+"maps/%03u%02u%02u.map").c_str(), GetId(), gx, gy);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDetail("Loading map %s", tmp);
+    LOG_INFO("server", "Loading map %s", tmp);
 #endif
     // loading data
     GridMaps[gx][gy] = new GridMap();
     if (!GridMaps[gx][gy]->loadData(tmp))
     {
-        sLog->outError("Error loading map file: \n %s\n", tmp);
+        LOG_ERROR("server", "Error loading map file: \n %s\n", tmp);
     }
     delete [] tmp;
 
@@ -312,10 +320,10 @@ template<>
 void Map::SwitchGridContainers(Creature* obj, bool on)
 { 
     ASSERT(!obj->IsPermanentWorldObject());
-    CellCoord p = acore::ComputeCellCoord(obj->GetPositionX(), obj->GetPositionY());
+    CellCoord p = warhead::ComputeCellCoord(obj->GetPositionX(), obj->GetPositionY());
     if (!p.IsCoordValid())
     {
-        sLog->outError("Map::SwitchGridContainers: Object " UI64FMTD " has invalid coordinates X:%f Y:%f grid cell [%u:%u]", obj->GetGUID(), obj->GetPositionX(), obj->GetPositionY(), p.x_coord, p.y_coord);
+        LOG_ERROR("server", "Map::SwitchGridContainers: Object " UI64FMTD " has invalid coordinates X:%f Y:%f grid cell [%u:%u]", obj->GetGUID(), obj->GetPositionX(), obj->GetPositionY(), p.x_coord, p.y_coord);
         return;
     }
 
@@ -351,10 +359,10 @@ template<>
 void Map::SwitchGridContainers(GameObject* obj, bool on)
 { 
     ASSERT(!obj->IsPermanentWorldObject());
-    CellCoord p = acore::ComputeCellCoord(obj->GetPositionX(), obj->GetPositionY());
+    CellCoord p = warhead::ComputeCellCoord(obj->GetPositionX(), obj->GetPositionY());
     if (!p.IsCoordValid())
     {
-        sLog->outError("Map::SwitchGridContainers: Object " UI64FMTD " has invalid coordinates X:%f Y:%f grid cell [%u:%u]", obj->GetGUID(), obj->GetPositionX(), obj->GetPositionY(), p.x_coord, p.y_coord);
+        LOG_ERROR("server", "Map::SwitchGridContainers: Object " UI64FMTD " has invalid coordinates X:%f Y:%f grid cell [%u:%u]", obj->GetGUID(), obj->GetPositionX(), obj->GetPositionY(), p.x_coord, p.y_coord);
         return;
     }
 
@@ -482,10 +490,10 @@ void Map::LoadAllCells()
 
 bool Map::AddPlayerToMap(Player* player)
 { 
-    CellCoord cellCoord = acore::ComputeCellCoord(player->GetPositionX(), player->GetPositionY());
+    CellCoord cellCoord = warhead::ComputeCellCoord(player->GetPositionX(), player->GetPositionY());
     if (!cellCoord.IsCoordValid())
     {
-        sLog->outError("Map::Add: Player (GUID: %u) has invalid coordinates X:%f Y:%f grid cell [%u:%u]", player->GetGUIDLow(), player->GetPositionX(), player->GetPositionY(), cellCoord.x_coord, cellCoord.y_coord);
+        LOG_ERROR("server", "Map::Add: Player (GUID: %u) has invalid coordinates X:%f Y:%f grid cell [%u:%u]", player->GetGUIDLow(), player->GetPositionX(), player->GetPositionY(), cellCoord.x_coord, cellCoord.y_coord);
         return false;
     }
 
@@ -537,14 +545,14 @@ bool Map::AddToMap(T* obj, bool checkTransport)
         return true;
     }
 
-    CellCoord cellCoord = acore::ComputeCellCoord(obj->GetPositionX(), obj->GetPositionY());
+    CellCoord cellCoord = warhead::ComputeCellCoord(obj->GetPositionX(), obj->GetPositionY());
     //It will create many problems (including crashes) if an object is not added to grid after creation
     //The correct way to fix it is to make AddToMap return false and delete the object if it is not added to grid
     //But now AddToMap is used in too many places, I will just see how many ASSERT failures it will cause
     ASSERT(cellCoord.IsCoordValid());
     if (!cellCoord.IsCoordValid())
     {
-        sLog->outError("Map::Add: Object " UI64FMTD " has invalid coordinates X:%f Y:%f grid cell [%u:%u]", obj->GetGUID(), obj->GetPositionX(), obj->GetPositionY(), cellCoord.x_coord, cellCoord.y_coord);
+        LOG_ERROR("server", "Map::Add: Object " UI64FMTD " has invalid coordinates X:%f Y:%f grid cell [%u:%u]", obj->GetGUID(), obj->GetPositionX(), obj->GetPositionY(), cellCoord.x_coord, cellCoord.y_coord);
         return false; //Should delete object
     }
 
@@ -589,10 +597,10 @@ bool Map::AddToMap(MotionTransport* obj, bool /*checkTransport*/)
     if (obj->IsInWorld())
         return true;
 
-    CellCoord cellCoord = acore::ComputeCellCoord(obj->GetPositionX(), obj->GetPositionY());
+    CellCoord cellCoord = warhead::ComputeCellCoord(obj->GetPositionX(), obj->GetPositionY());
     if (!cellCoord.IsCoordValid())
     {
-        sLog->outError("Map::Add: Object " UI64FMTD " has invalid coordinates X:%f Y:%f grid cell [%u:%u]", obj->GetGUID(), obj->GetPositionX(), obj->GetPositionY(), cellCoord.x_coord, cellCoord.y_coord);
+        LOG_ERROR("server", "Map::Add: Object " UI64FMTD " has invalid coordinates X:%f Y:%f grid cell [%u:%u]", obj->GetGUID(), obj->GetPositionX(), obj->GetPositionY(), cellCoord.x_coord, cellCoord.y_coord);
         return false; //Should delete object
     }
 
@@ -632,10 +640,10 @@ bool Map::IsGridLoaded(const GridCoord &p) const
 }
 
 
-void Map::VisitNearbyCellsOfPlayer(Player* player, TypeContainerVisitor<acore::ObjectUpdater, GridTypeMapContainer> &gridVisitor,
-    TypeContainerVisitor<acore::ObjectUpdater, WorldTypeMapContainer> &worldVisitor,
-    TypeContainerVisitor<acore::ObjectUpdater, GridTypeMapContainer> &largeGridVisitor,
-    TypeContainerVisitor<acore::ObjectUpdater, WorldTypeMapContainer> &largeWorldVisitor)
+void Map::VisitNearbyCellsOfPlayer(Player* player, TypeContainerVisitor<warhead::ObjectUpdater, GridTypeMapContainer> &gridVisitor,
+    TypeContainerVisitor<warhead::ObjectUpdater, WorldTypeMapContainer> &worldVisitor,
+    TypeContainerVisitor<warhead::ObjectUpdater, GridTypeMapContainer> &largeGridVisitor,
+    TypeContainerVisitor<warhead::ObjectUpdater, WorldTypeMapContainer> &largeWorldVisitor)
 {
     // check for valid position
     if (!player->IsPositionValid())
@@ -667,10 +675,10 @@ void Map::VisitNearbyCellsOfPlayer(Player* player, TypeContainerVisitor<acore::O
     }
 }
 
-void Map::VisitNearbyCellsOf(WorldObject* obj, TypeContainerVisitor<acore::ObjectUpdater, GridTypeMapContainer> &gridVisitor,
-    TypeContainerVisitor<acore::ObjectUpdater, WorldTypeMapContainer> &worldVisitor,
-    TypeContainerVisitor<acore::ObjectUpdater, GridTypeMapContainer> &largeGridVisitor,
-    TypeContainerVisitor<acore::ObjectUpdater, WorldTypeMapContainer> &largeWorldVisitor)
+void Map::VisitNearbyCellsOf(WorldObject* obj, TypeContainerVisitor<warhead::ObjectUpdater, GridTypeMapContainer> &gridVisitor,
+    TypeContainerVisitor<warhead::ObjectUpdater, WorldTypeMapContainer> &worldVisitor,
+    TypeContainerVisitor<warhead::ObjectUpdater, GridTypeMapContainer> &largeGridVisitor,
+    TypeContainerVisitor<warhead::ObjectUpdater, WorldTypeMapContainer> &largeWorldVisitor)
 { 
     // Check for valid position
     if (!obj->IsPositionValid())
@@ -751,17 +759,17 @@ void Map::Update(const uint32 t_diff, const uint32 s_diff, bool  /*thread*/)
     resetMarkedCells();
     resetMarkedCellsLarge();
 
-    acore::ObjectUpdater updater(t_diff, false);
+    warhead::ObjectUpdater updater(t_diff, false);
 
     // for creature
-    TypeContainerVisitor<acore::ObjectUpdater, GridTypeMapContainer  > grid_object_update(updater);
+    TypeContainerVisitor<warhead::ObjectUpdater, GridTypeMapContainer  > grid_object_update(updater);
     // for pets
-    TypeContainerVisitor<acore::ObjectUpdater, WorldTypeMapContainer > world_object_update(updater);
+    TypeContainerVisitor<warhead::ObjectUpdater, WorldTypeMapContainer > world_object_update(updater);
 
     // for large creatures
-    acore::ObjectUpdater largeObjectUpdater(t_diff, true);
-    TypeContainerVisitor<acore::ObjectUpdater, GridTypeMapContainer  > grid_large_object_update(largeObjectUpdater);
-    TypeContainerVisitor<acore::ObjectUpdater, WorldTypeMapContainer  > world_large_object_update(largeObjectUpdater);
+    warhead::ObjectUpdater largeObjectUpdater(t_diff, true);
+    TypeContainerVisitor<warhead::ObjectUpdater, GridTypeMapContainer  > grid_large_object_update(largeObjectUpdater);
+    TypeContainerVisitor<warhead::ObjectUpdater, WorldTypeMapContainer  > world_large_object_update(largeObjectUpdater);
 
     // pussywizard: container for far creatures in combat with players
     std::vector<Creature*> updateList; updateList.reserve(10);
@@ -839,8 +847,6 @@ void Map::Update(const uint32 t_diff, const uint32 s_diff, bool  /*thread*/)
     sScriptMgr->OnMapUpdate(this, t_diff);
 
     BuildAndSendUpdateForObjects(); // pussywizard
-
-    LOG_DEBUG("pool", "%u", mapId); // pussywizard: for crashlogs
 }
 
 void Map::HandleDelayedVisibility()
@@ -1223,7 +1229,7 @@ void Map::RemoveAllPlayers()
             if (!player->IsBeingTeleportedFar())
             {
                 // this is happening for bg
-                sLog->outError("Map::UnloadAll: player %s is still in map %u during unload, this should not happen!", player->GetName().c_str(), GetId());
+                LOG_ERROR("server", "Map::UnloadAll: player %s is still in map %u during unload, this should not happen!", player->GetName().c_str(), GetId());
                 player->TeleportTo(player->m_homebindMapId, player->m_homebindX, player->m_homebindY, player->m_homebindZ, player->GetOrientation());
             }
         }
@@ -1315,28 +1321,28 @@ bool GridMap::loadData(char *filename)
         // loadup area data
         if (header.areaMapOffset && !loadAreaData(in, header.areaMapOffset, header.areaMapSize))
         {
-            sLog->outError("Error loading map area data\n");
+            LOG_ERROR("server", "Error loading map area data\n");
             fclose(in);
             return false;
         }
         // loadup height data
         if (header.heightMapOffset && !loadHeightData(in, header.heightMapOffset, header.heightMapSize))
         {
-            sLog->outError("Error loading map height data\n");
+            LOG_ERROR("server", "Error loading map height data\n");
             fclose(in);
             return false;
         }
         // loadup liquid data
         if (header.liquidMapOffset && !loadLiquidData(in, header.liquidMapOffset, header.liquidMapSize))
         {
-            sLog->outError("Error loading map liquids data\n");
+            LOG_ERROR("server", "Error loading map liquids data\n");
             fclose(in);
             return false;
         }
         fclose(in);
         return true;
     }
-    sLog->outError("Map file '%s' is from an incompatible clientversion. Please recreate using the mapextractor.", filename);
+    LOG_ERROR("server", "Map file '%s' is from an incompatible clientversion. Please recreate using the mapextractor.", filename);
     fclose(in);
     return false;
 }
@@ -2281,7 +2287,7 @@ char const* Map::GetMapName() const
 void Map::SendInitSelf(Player* player)
 { 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDetail("Creating player data for himself %u", player->GetGUIDLow());
+    LOG_INFO("server", "Creating player data for himself %u", player->GetGUIDLow());
 #endif
 
     UpdateData data;
@@ -2346,7 +2352,7 @@ inline void Map::setNGrid(NGridType *grid, uint32 x, uint32 y)
 { 
     if (x >= MAX_NUMBER_OF_GRIDS || y >= MAX_NUMBER_OF_GRIDS)
     {
-        sLog->outError("map::setNGrid() Invalid grid coordinates found: %d, %d!", x, y);
+        LOG_ERROR("server", "map::setNGrid() Invalid grid coordinates found: %d, %d!", x, y);
         ABORT();
     }
     i_grids[x][y] = grid;
@@ -2433,7 +2439,7 @@ void Map::RemoveAllObjectsInRemoveList()
             {
                 Corpse* corpse = ObjectAccessor::GetCorpse(*obj, obj->GetGUID());
                 if (!corpse)
-                    sLog->outError("Tried to delete corpse/bones %u that is not in map.", obj->GetGUIDLow());
+                    LOG_ERROR("server", "Tried to delete corpse/bones %u that is not in map.", obj->GetGUIDLow());
                 else
                     RemoveFromMap(corpse, true);
                 break;
@@ -2454,7 +2460,7 @@ void Map::RemoveAllObjectsInRemoveList()
                 RemoveFromMap(obj->ToCreature(), true);
                 break;
             default:
-                sLog->outError("Non-grid object (TypeId: %u) is in grid object remove list, ignored.", obj->GetTypeId());
+                LOG_ERROR("server", "Non-grid object (TypeId: %u) is in grid object remove list, ignored.", obj->GetTypeId());
                 break;
         }
     }
@@ -2600,7 +2606,7 @@ bool InstanceMap::CanEnter(Player* player, bool loginCheck)
 {
     if (!loginCheck && player->GetMapRef().getTarget() == this)
     {
-        sLog->outError("InstanceMap::CanEnter - player %s(%u) already in map %d, %d, %d!", player->GetName().c_str(), player->GetGUIDLow(), GetId(), GetInstanceId(), GetSpawnMode());
+        LOG_ERROR("server", "InstanceMap::CanEnter - player %s(%u) already in map %d, %d, %d!", player->GetName().c_str(), player->GetGUIDLow(), GetId(), GetInstanceId(), GetSpawnMode());
         ABORT();
         return false;
     }
@@ -2614,7 +2620,7 @@ bool InstanceMap::CanEnter(Player* player, bool loginCheck)
     if (GetPlayersCountExceptGMs() >= (loginCheck ? maxPlayers+1 : maxPlayers))
     {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-        sLog->outDetail("MAP: Instance '%u' of map '%s' cannot have more than '%u' players. Player '%s' rejected", GetInstanceId(), GetMapName(), maxPlayers, player->GetName().c_str());
+        LOG_INFO("server", "MAP: Instance '%u' of map '%s' cannot have more than '%u' players. Player '%s' rejected", GetInstanceId(), GetMapName(), maxPlayers, player->GetName().c_str());
 #endif
         player->SendTransferAborted(GetId(), TRANSFER_ABORT_MAX_PLAYERS);
         return false;
@@ -2680,7 +2686,7 @@ bool InstanceMap::AddPlayerToMap(Player* player)
         InstanceSave* mapSave = sInstanceSaveMgr->GetInstanceSave(GetInstanceId());
         if (!mapSave)
         {
-            sLog->outError("InstanceMap::Add: InstanceSave does not exist for map %d spawnmode %d with instance id %d", GetId(), GetSpawnMode(), GetInstanceId());
+            LOG_ERROR("server", "InstanceMap::Add: InstanceSave does not exist for map %d spawnmode %d with instance id %d", GetId(), GetSpawnMode(), GetInstanceId());
             return false;
         }
 
@@ -2690,7 +2696,7 @@ bool InstanceMap::AddPlayerToMap(Player* player)
         {
             if (playerBind->save != mapSave)
             {
-                sLog->outError("InstanceMap::Add: player %s(%d) is permanently bound to instance %d, %d, %d, %d but he is being put into instance %d, %d, %d, %d", player->GetName().c_str(), player->GetGUIDLow(), playerBind->save->GetMapId(), playerBind->save->GetInstanceId(), playerBind->save->GetDifficulty(), playerBind->save->CanReset(), mapSave->GetMapId(), mapSave->GetInstanceId(), mapSave->GetDifficulty(), mapSave->CanReset());
+                LOG_ERROR("server", "InstanceMap::Add: player %s(%d) is permanently bound to instance %d, %d, %d, %d but he is being put into instance %d, %d, %d, %d", player->GetName().c_str(), player->GetGUIDLow(), playerBind->save->GetMapId(), playerBind->save->GetInstanceId(), playerBind->save->GetDifficulty(), playerBind->save->CanReset(), mapSave->GetMapId(), mapSave->GetInstanceId(), mapSave->GetDifficulty(), mapSave->CanReset());
                 return false;
             }
         }
@@ -2765,35 +2771,18 @@ void InstanceMap::CreateInstanceScript(bool load, std::string data, uint32 compl
 { 
     if (instance_script != NULL)
         return;
-#ifdef ELUNA
-    bool isElunaAI = false;
-    instance_script = sEluna->GetInstanceData(this);
-    if (instance_script)
-        isElunaAI = true;
 
-    // if Eluna AI was fetched succesfully we should not call CreateInstanceData nor set the unused scriptID
-    if (!isElunaAI)
+    InstanceTemplate const* mInstance = sObjectMgr->GetInstanceTemplate(GetId());
+    if (mInstance)
     {
-#endif
-        InstanceTemplate const* mInstance = sObjectMgr->GetInstanceTemplate(GetId());
-        if (mInstance)
-        {
-            i_script_id = mInstance->ScriptId;
-            instance_script = sScriptMgr->CreateInstanceScript(this);
-        }
-#ifdef ELUNA
+        i_script_id = mInstance->ScriptId;
+        instance_script = sScriptMgr->CreateInstanceScript(this);
     }
-#endif
 
     if (!instance_script)
         return;
 
-#ifdef ELUNA
-    // use mangos behavior if we are dealing with Eluna AI
-    // initialize should then be called only if load is false
-    if (!isElunaAI || !load)
-#endif
-        instance_script->Initialize();
+    instance_script->Initialize();
 
     if (load)
     {
@@ -2856,7 +2845,7 @@ void InstanceMap::PermBindAllPlayers()
     InstanceSave* save = sInstanceSaveMgr->GetInstanceSave(GetInstanceId());
     if (!save)
     {
-        sLog->outError("Cannot bind players because no instance save is available for instance map (Name: %s, Entry: %u, InstanceId: %u)!", GetMapName(), GetId(), GetInstanceId());
+        LOG_ERROR("server", "Cannot bind players because no instance save is available for instance map (Name: %s, Entry: %u, InstanceId: %u)!", GetMapName(), GetId(), GetInstanceId());
         return;
     }
 
@@ -2954,7 +2943,7 @@ bool BattlegroundMap::CanEnter(Player* player, bool loginCheck)
 {
     if (!loginCheck && player->GetMapRef().getTarget() == this)
     {
-        sLog->outError("BGMap::CanEnter - player %u is already in map!", player->GetGUIDLow());
+        LOG_ERROR("server", "BGMap::CanEnter - player %u is already in map!", player->GetGUIDLow());
         ABORT();
         return false;
     }

@@ -1,4 +1,19 @@
-// Scripted by Xinef
+/*
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "ScriptMgr.h"
 #include "ScriptedCreature.h"
@@ -353,7 +368,7 @@ class npc_love_in_air_hummel : public CreatureScript
                 if (me->HasUnitState(UNIT_STATE_CASTING))
                     return;
 
-                switch (events.ExecuteEvent())
+                switch (events.GetEvent())
                 {
                     case EVENT_CALL_BAXTER:
                     {
@@ -447,7 +462,7 @@ class npc_love_in_air_hummel_helper : public CreatureScript
                 if (me->HasUnitState(UNIT_STATE_CASTING))
                     return;
 
-                switch (events.ExecuteEvent())
+                switch (events.GetEvent())
                 {
                     case EVENT_SPELL_PERFUME_SPRAY:
                         me->CastSpell(me->GetVictim(), SPELL_COLOGNE_SPRAY, false);
@@ -667,8 +682,8 @@ class spell_love_is_in_the_air_romantic_picnic : public SpellScriptLoader
                 // For nearby players, check if they have the same aura. If so, cast Romantic Picnic (45123)
                 // required by achievement and "hearts" visual
                 std::list<Player*> playerList;
-                acore::AnyPlayerInObjectRangeCheck checker(target, INTERACTION_DISTANCE*2);
-                acore::PlayerListSearcher<acore::AnyPlayerInObjectRangeCheck> searcher(target, playerList, checker);
+                warhead::AnyPlayerInObjectRangeCheck checker(target, INTERACTION_DISTANCE*2);
+                warhead::PlayerListSearcher<warhead::AnyPlayerInObjectRangeCheck> searcher(target, playerList, checker);
                 target->VisitNearbyWorldObject(INTERACTION_DISTANCE*2, searcher);
                 for (std::list<Player*>::const_iterator itr = playerList.begin(); itr != playerList.end(); ++itr)
                 {

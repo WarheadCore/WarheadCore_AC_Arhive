@@ -1,6 +1,19 @@
 /*
- * Originally written by Pussywizard - Copyright (C) 2016+ AzerothCore <www.azerothcore.org>, released under GNU AGPL v3 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-AGPL3
-*/
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "ObjectMgr.h"
 #include "ScriptMgr.h"
@@ -144,7 +157,7 @@ class RisenArchmageCheck
         }
 };
 
-struct ManaVoidSelector : public acore::unary_function<Unit*, bool>
+struct ManaVoidSelector : public warhead::unary_function<Unit*, bool>
 {
         explicit ManaVoidSelector(WorldObject const* source) : _source(source) { }
 
@@ -205,7 +218,7 @@ class ValithriaDespawner : public BasicEvent
 
         bool Execute(uint64 /*currTime*/, uint32 /*diff*/)
         {
-            acore::CreatureWorker<ValithriaDespawner> worker(_creature, *this);
+            warhead::CreatureWorker<ValithriaDespawner> worker(_creature, *this);
             _creature->VisitNearbyGridObject(333.0f, worker);
             _creature->AI()->Reset();
             _creature->setActive(false);
@@ -525,7 +538,7 @@ class npc_green_dragon_combat_trigger : public CreatureScript
 
                 std::list<Creature*> archmages;
                 RisenArchmageCheck check;
-                acore::CreatureListSearcher<RisenArchmageCheck> searcher(me, archmages, check);
+                warhead::CreatureListSearcher<RisenArchmageCheck> searcher(me, archmages, check);
                 me->VisitNearbyGridObject(100.0f, searcher);
                 for (std::list<Creature*>::iterator itr = archmages.begin(); itr != archmages.end(); ++itr)
                     (*itr)->AI()->DoAction(ACTION_ENTER_COMBAT);
@@ -1305,9 +1318,9 @@ class spell_dreamwalker_summoner : public SpellScriptLoader
 
             void FilterTargets(std::list<WorldObject*>& targets)
             {
-                targets.remove_if(acore::AllWorldObjectsInExactRange(GetCaster(), 250.0f, true));
+                targets.remove_if(warhead::AllWorldObjectsInExactRange(GetCaster(), 250.0f, true));
                 std::list<WorldObject*> list_copy = targets;
-                targets.remove_if(acore::UnitAuraCheck(true, SPELL_RECENTLY_SPAWNED));
+                targets.remove_if(warhead::UnitAuraCheck(true, SPELL_RECENTLY_SPAWNED));
                 if (targets.empty())
                 {
                     if (list_copy.empty())
@@ -1315,7 +1328,7 @@ class spell_dreamwalker_summoner : public SpellScriptLoader
                     targets = list_copy;
                 }
 
-                WorldObject* target = acore::Containers::SelectRandomContainerElement(targets);
+                WorldObject* target = warhead::Containers::SelectRandomContainerElement(targets);
                 targets.clear();
                 targets.push_back(target);
             }
@@ -1361,14 +1374,14 @@ class spell_dreamwalker_summon_suppresser : public SpellScriptLoader
                 std::list<Creature*> summoners;
                 caster->GetCreaturesWithEntryInRange(summoners, 200.0f, NPC_WORLD_TRIGGER);
                 std::list<Creature*> list_copy = summoners;
-                summoners.remove_if(acore::UnitAuraCheck(true, SPELL_RECENTLY_SPAWNED));
+                summoners.remove_if(warhead::UnitAuraCheck(true, SPELL_RECENTLY_SPAWNED));
                 if (summoners.empty())
                 {
                     if (list_copy.empty())
                         return;
                     summoners = list_copy;
                 }
-                acore::Containers::RandomResizeList(summoners, 2);
+                warhead::Containers::RandomResizeList(summoners, 2);
 
                 for (uint32 i = 0; i < 3; ++i)
                     caster->CastSpell(summoners.front(), SPELL_SUMMON_SUPPRESSER, true);

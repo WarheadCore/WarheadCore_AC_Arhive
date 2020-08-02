@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "Player.h"
@@ -79,10 +90,7 @@
 #include "GameGraveyard.h"
 #include "GameTime.h"
 #include "GameLocale.h"
-
-#ifdef ELUNA
-#include "LuaEngine.h"
-#endif
+#include "MuteManager.h"
 
 #define ZONE_UPDATE_INTERVAL (2*IN_MILLISECONDS)
 
@@ -484,7 +492,7 @@ inline void KillRewarder::_InitGroupData()
                         _maxLevel = lvl;
                     // 2.4. _maxNotGrayMember - maximum level of alive group member within reward distance,
                     //      for whom victim is not gray;
-                    uint32 grayLevel = acore::XP::GetGrayLevel(lvl);
+                    uint32 grayLevel = warhead::XP::GetGrayLevel(lvl);
                     if (_victim->getLevel() > grayLevel && (!_maxNotGrayMember || _maxNotGrayMember->getLevel() < lvl))
                         _maxNotGrayMember = member;
                 }
@@ -504,7 +512,7 @@ inline void KillRewarder::_InitXP(Player* player)
     // * otherwise, not in PvP;
     // * not if killer is on vehicle.
     if (_victim && (_isBattleGround || (!_isPvP && !_killer->GetVehicle())))
-        _xp = acore::XP::Gain(player, _victim, _isBattleGround);
+        _xp = warhead::XP::Gain(player, _victim, _isBattleGround);
 
     if (_xp && !_isBattleGround && _victim) // pussywizard: npcs with relatively low hp give lower exp
         if (_victim->GetTypeId() == TYPEID_UNIT)
@@ -617,7 +625,7 @@ void KillRewarder::_RewardGroup()
             {
                 // 3.1.2. Alter group rate if group is in raid (not for battlegrounds).
                 const bool isRaid = !_isPvP && sMapStore.LookupEntry(_killer->GetMapId())->IsRaid() && _group->isRaidGroup();
-                _groupRate = acore::XP::xp_in_group_rate(_count, isRaid);
+                _groupRate = warhead::XP::xp_in_group_rate(_count, isRaid);
             }
 
             // 3.1.3. Reward each group member (even dead or corpse) within reward distance.
@@ -975,10 +983,10 @@ Player::~Player()
 
     if (!m_isInSharedVisionOf.empty())
     {
-        sLog->outMisc("Player::~Player (A1)");
+        LOG_INFO("misc", "Player::~Player (A1)");
         do
         {
-            sLog->outMisc("Player::~Player (A2)");
+            LOG_INFO("misc", "Player::~Player (A2)");
             Unit* u = *(m_isInSharedVisionOf.begin());
             u->RemovePlayerFromVision(this);
         } while (!m_isInSharedVisionOf.empty());
@@ -1007,7 +1015,7 @@ bool Player::Create(uint32 guidlow, CharacterCreateInfo* createInfo)
     PlayerInfo const* info = sObjectMgr->GetPlayerInfo(createInfo->Race, createInfo->Class);
     if (!info)
     {
-        sLog->outError("Player::Create: Possible hacking-attempt: Account %u tried creating a character named '%s' with an invalid race/class pair (%u/%u) - refusing to do so.",
+        LOG_ERROR("server", "Player::Create: Possible hacking-attempt: Account %u tried creating a character named '%s' with an invalid race/class pair (%u/%u) - refusing to do so.",
                 GetSession()->GetAccountId(), m_name.c_str(), createInfo->Race, createInfo->Class);
         return false;
     }
@@ -1020,7 +1028,7 @@ bool Player::Create(uint32 guidlow, CharacterCreateInfo* createInfo)
     ChrClassesEntry const* cEntry = sChrClassesStore.LookupEntry(createInfo->Class);
     if (!cEntry)
     {
-        sLog->outError("Player::Create: Possible hacking-attempt: Account %u tried creating a character named '%s' with an invalid character class (%u) - refusing to do so (wrong DBC-files?)",
+        LOG_ERROR("server", "Player::Create: Possible hacking-attempt: Account %u tried creating a character named '%s' with an invalid character class (%u) - refusing to do so (wrong DBC-files?)",
                 GetSession()->GetAccountId(), m_name.c_str(), createInfo->Class);
         return false;
     }
@@ -1038,7 +1046,7 @@ bool Player::Create(uint32 guidlow, CharacterCreateInfo* createInfo)
 
     if (!IsValidGender(createInfo->Gender))
     {
-        sLog->outError("Player::Create: Possible hacking-attempt: Account %u tried creating a character named '%s' with an invalid gender (%u) - refusing to do so",
+        LOG_ERROR("server", "Player::Create: Possible hacking-attempt: Account %u tried creating a character named '%s' with an invalid gender (%u) - refusing to do so",
                 GetSession()->GetAccountId(), m_name.c_str(), createInfo->Gender);
         return false;
     }
@@ -1256,7 +1264,7 @@ bool Player::StoreNewItemInBestSlots(uint32 titem_id, uint32 titem_amount)
     }
 
     // item can't be added
-    sLog->outError("STORAGE: Can't equip or store initial item %u for race %u class %u, error msg = %u", titem_id, getRace(true), getClass(), msg);
+    LOG_ERROR("server", "STORAGE: Can't equip or store initial item %u for race %u class %u, error msg = %u", titem_id, getRace(true), getClass(), msg);
     return false;
 }
 
@@ -1607,16 +1615,7 @@ void Player::Update(uint32 p_time)
     }
 
     // If mute expired, remove it from the DB
-    if (GetSession()->m_muteTime && GetSession()->m_muteTime < now)
-    {
-        GetSession()->m_muteTime = 0;
-        PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPD_MUTE_TIME);
-        stmt->setInt64(0, 0); // Set the mute time to 0
-        stmt->setString(1, "");
-        stmt->setString(2, "");
-        stmt->setUInt32(3, GetSession()->GetAccountId());
-        LoginDatabase.Execute(stmt);
-    }
+    sMute->CheckMuteExpired(GetSession()->GetAccountId());
 
     if (!m_timedquests.empty())
     {
@@ -1741,7 +1740,7 @@ void Player::Update(uint32 p_time)
 
     if (!IsPositionValid()) // pussywizard: will crash below at eg. GetZoneAndAreaId
     {
-        sLog->outMisc("Player::Update - invalid position (%.1f, %.1f, %.1f)! Map: %u, MapId: %u, GUID: %u", GetPositionX(), GetPositionY(), GetPositionZ(), (FindMap() ? FindMap()->GetId() : 0), GetMapId(), GetGUIDLow());
+        LOG_INFO("misc", "Player::Update - invalid position (%.1f, %.1f, %.1f)! Map: %u, MapId: %u, GUID: %u", GetPositionX(), GetPositionY(), GetPositionZ(), (FindMap() ? FindMap()->GetId() : 0), GetMapId(), GetGUIDLow());
         GetSession()->KickPlayer("Invalid position");
         return;
     }
@@ -1914,7 +1913,7 @@ void Player::setDeathState(DeathState s, bool /*despawn = false*/)
     {
         if (!cur)
         {
-            sLog->outError("setDeathState: attempt to kill a dead player %s(%d)", GetName().c_str(), GetGUIDLow());
+            LOG_ERROR("server", "setDeathState: attempt to kill a dead player %s(%d)", GetName().c_str(), GetGUIDLow());
             return;
         }
 
@@ -1997,12 +1996,12 @@ bool Player::BuildEnumData(PreparedQueryResult result, WorldPacket* data)
     PlayerInfo const* info = sObjectMgr->GetPlayerInfo(plrRace, plrClass);
     if (!info)
     {
-        sLog->outError("Player %u has incorrect race/class pair. Don't build enum.", guid);
+        LOG_ERROR("server", "Player %u has incorrect race/class pair. Don't build enum.", guid);
         return false;
     }
     else if (!IsValidGender(gender))
     {
-        sLog->outError("Player (%u) has incorrect gender (%u), don't build enum.", guid, gender);
+        LOG_ERROR("server", "Player (%u) has incorrect gender (%u), don't build enum.", guid, gender);
         return false;
     }
 
@@ -2172,14 +2171,14 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
 {
     if (!MapManager::IsValidMapCoord(mapid, x, y, z, orientation))
     {
-        sLog->outError("TeleportTo: invalid map (%d) or invalid coordinates (X: %f, Y: %f, Z: %f, O: %f) given when teleporting player (GUID: %u, name: %s, map: %d, X: %f, Y: %f, Z: %f, O: %f).",
+        LOG_ERROR("server", "TeleportTo: invalid map (%d) or invalid coordinates (X: %f, Y: %f, Z: %f, O: %f) given when teleporting player (GUID: %u, name: %s, map: %d, X: %f, Y: %f, Z: %f, O: %f).",
             mapid, x, y, z, orientation, GetGUIDLow(), GetName().c_str(), GetMapId(), GetPositionX(), GetPositionY(), GetPositionZ(), GetOrientation());
         return false;
     }
 
     if (AccountMgr::IsPlayerAccount(GetSession()->GetSecurity()) && DisableMgr::IsDisabledFor(DISABLE_TYPE_MAP, mapid, this))
     {
-        sLog->outError("Player (GUID: %u, name: %s) tried to enter a forbidden map %u", GetGUIDLow(), GetName().c_str(), mapid);
+        LOG_ERROR("server", "Player (GUID: %u, name: %s) tried to enter a forbidden map %u", GetGUIDLow(), GetName().c_str(), mapid);
         SendTransferAborted(mapid, TRANSFER_ABORT_MAP_NOT_ALLOWED);
         return false;
     }
@@ -2572,7 +2571,7 @@ void Player::RemoveFromWorld()
     {
         if (WorldObject* viewpoint = GetViewpoint())
         {
-            sLog->outCrash("Player %s has viewpoint %u %u when removed from world", GetName().c_str(), viewpoint->GetEntry(), viewpoint->GetTypeId());
+            LOG_FATAL("server", "Player %s has viewpoint %u %u when removed from world", GetName().c_str(), viewpoint->GetEntry(), viewpoint->GetTypeId());
             SetViewpoint(viewpoint, false);
         }
     }
@@ -3186,6 +3185,10 @@ void Player::GiveXP(uint32 xp, Unit* victim, float group_rate)
 
     sScriptMgr->OnGivePlayerXP(this, xp, victim);
 
+    // If experience set 0 after used hooks, don't give
+    if (!xp)
+        return;
+
     // Favored experience increase START
     uint32 zone = GetZoneId();
     float favored_exp_mult = 0;
@@ -3196,7 +3199,7 @@ void Player::GiveXP(uint32 xp, Unit* victim, float group_rate)
     // Favored experience increase END
 
     // XP to money conversion processed in Player::RewardQuest
-    if (level >= sGameConfig->GetIntConfig("MaxPlayerLevel"))
+    if (IsMaxLevel())
         return;
 
     uint32 bonus_xp = 0;
@@ -3214,11 +3217,11 @@ void Player::GiveXP(uint32 xp, Unit* victim, float group_rate)
     uint32 nextLvlXP = GetUInt32Value(PLAYER_NEXT_LEVEL_XP);
     uint32 newXP = curXP + xp + bonus_xp;
 
-    while (newXP >= nextLvlXP && level < sGameConfig->GetIntConfig("MaxPlayerLevel"))
+    while (newXP >= nextLvlXP && !IsMaxLevel())
     {
         newXP -= nextLvlXP;
 
-        if (level < sGameConfig->GetIntConfig("MaxPlayerLevel"))
+        if (!IsMaxLevel())
             GiveLevel(level + 1);
 
         level = getLevel();
@@ -3329,6 +3332,11 @@ void Player::GiveLevel(uint8 level)
     sScriptMgr->OnPlayerLevelChanged(this, oldLevel);
 }
 
+bool Player::IsMaxLevel() const
+{
+    return getLevel() >= GetUInt32Value(PLAYER_FIELD_MAX_LEVEL);
+}
+
 void Player::InitTalentForLevel()
 {
     uint32 talentPointsForLevel = CalculateTalentsPoints();
@@ -3355,7 +3363,14 @@ void Player::InitStatsForLevel(bool reapplyMods)
     PlayerLevelInfo info;
     sObjectMgr->GetPlayerLevelInfo(getRace(true), getClass(), getLevel(), &info);
 
-    SetUInt32Value(PLAYER_FIELD_MAX_LEVEL, sGameConfig->GetIntConfig("MaxPlayerLevel"));
+    uint8 exp_max_lvl = GetMaxLevelForExpansion(GetSession()->Expansion());
+    uint8 conf_max_lvl = sGameConfig->GetIntConfig("MaxPlayerLevel");
+    
+    if (exp_max_lvl == DEFAULT_MAX_LEVEL || exp_max_lvl >= conf_max_lvl)
+        SetUInt32Value(PLAYER_FIELD_MAX_LEVEL, conf_max_lvl);
+    else
+        SetUInt32Value(PLAYER_FIELD_MAX_LEVEL, exp_max_lvl);
+    
     SetUInt32Value(PLAYER_NEXT_LEVEL_XP, sObjectMgr->GetXPForLevel(getLevel()));
 
     // reset before any aura state sources (health set/aura apply)
@@ -3719,7 +3734,7 @@ bool Player::addTalent(uint32 spellId, uint8 addSpecMask, uint8 oldTalentRank)
     // xinef: error case, trying to add already present talent with present mask
     else
     {
-        //sLog->outError("Player (%u) tries to learn talent %u with covered specMask (curr: %u, add: %u)", GetGUIDLow(), spellId, static_cast<uint8>(itr->second->specMask), addSpecMask);
+        //LOG_ERROR("server", "Player (%u) tries to learn talent %u with covered specMask (curr: %u, add: %u)", GetGUIDLow(), spellId, static_cast<uint8>(itr->second->specMask), addSpecMask);
     }
 
     return false;
@@ -3890,7 +3905,7 @@ bool Player::_addSpell(uint32 spellId, uint8 addSpecMask, bool temporary)
             {
                 if (spellInfo->Effects[i].Effect != SPELL_EFFECT_LEARN_SPELL)
                 {
-                    sLog->outString("TRYING TO LEARN SPELL WITH EFFECT LEARN: %u, PLAYER: %u", spellId, GetGUIDLow());
+                    LOG_INFO("server", "TRYING TO LEARN SPELL WITH EFFECT LEARN: %u, PLAYER: %u", spellId, GetGUIDLow());
                     return false;
                     //ABORT();
                 }
@@ -3942,7 +3957,7 @@ bool Player::_addSpell(uint32 spellId, uint8 addSpecMask, bool temporary)
     // xinef: do not add spells with effect learn spell
     if (spellInfo->HasEffect(SPELL_EFFECT_LEARN_SPELL))
     {
-        sLog->outString("TRYING TO LEARN SPELL WITH EFFECT LEARN 2: %u, PLAYER: %u", spellId, GetGUIDLow());
+        LOG_INFO("server", "TRYING TO LEARN SPELL WITH EFFECT LEARN 2: %u, PLAYER: %u", spellId, GetGUIDLow());
         m_spells.erase(spellInfo->Id); // mem leak, but should never happen
         return false;
         //ABORT();
@@ -4061,7 +4076,7 @@ void Player::learnSpell(uint32 spellId)
     // Xinef: don't allow to learn active spell once more
     if (HasActiveSpell(spellId))
     {
-        sLog->outError("Player (%u) tries to learn already active spell: %u", GetGUIDLow(), spellId);
+        LOG_ERROR("server", "Player (%u) tries to learn already active spell: %u", GetGUIDLow(), spellId);
         return;
     }
 
@@ -4366,7 +4381,7 @@ void Player::_LoadSpellCooldowns(PreparedQueryResult result)
 
             if (!sSpellMgr->GetSpellInfo(spell_id))
             {
-                sLog->outError("Player %u has unknown spell %u in `character_spell_cooldown`, skipping.", GetGUIDLow(), spell_id);
+                LOG_ERROR("server", "Player %u has unknown spell %u in `character_spell_cooldown`, skipping.", GetGUIDLow(), spell_id);
                 continue;
             }
 
@@ -5067,7 +5082,7 @@ void Player::DeleteFromDB(uint64 playerguid, uint32 accountId, bool updateRealmC
             break;
         }
         default:
-            sLog->outError("Player::DeleteFromDB: Unsupported delete method: %u.", charDelete_method);
+            LOG_ERROR("server", "Player::DeleteFromDB: Unsupported delete method: %u.", charDelete_method);
             return;
     }
 
@@ -5092,7 +5107,7 @@ void Player::DeleteOldCharacters()
  */
 void Player::DeleteOldCharacters(uint32 keepDays)
 {
-    sLog->outString("Player::DeleteOldChars: Deleting all characters which have been deleted %u days before...", keepDays);
+    LOG_INFO("server", "Player::DeleteOldChars: Deleting all characters which have been deleted %u days before...", keepDays);
 
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CHAR_OLD_CHARS);
     stmt->setUInt32(0, uint32(GameTime::GetGameTime() - time_t(keepDays * DAY)));
@@ -5100,7 +5115,7 @@ void Player::DeleteOldCharacters(uint32 keepDays)
 
     if (result)
     {
-         sLog->outString("Player::DeleteOldChars: Found " UI64FMTD " character(s) to delete", result->GetRowCount());
+         LOG_INFO("server", "Player::DeleteOldChars: Found " UI64FMTD " character(s) to delete", result->GetRowCount());
          do
          {
             Field* fields = result->Fetch();
@@ -5120,7 +5135,7 @@ void Player::SetMovement(PlayerMovementType pType)
         case MOVE_WATER_WALK: data.Initialize(SMSG_MOVE_WATER_WALK,   GetPackGUID().size()+4); break;
         case MOVE_LAND_WALK:  data.Initialize(SMSG_MOVE_LAND_WALK,    GetPackGUID().size()+4); break;
         default:
-            sLog->outError("Player::SetMovement: Unsupported move type (%d), data not sent to client.", pType);
+            LOG_ERROR("server", "Player::SetMovement: Unsupported move type (%d), data not sent to client.", pType);
             return;
     }
     data.append(GetPackGUID());
@@ -5149,7 +5164,7 @@ void Player::BuildPlayerRepop()
     // the player cannot have a corpse already, only bones which are not returned by GetCorpse
     if (GetCorpse())
     {
-        sLog->outError("BuildPlayerRepop: player %s(%d) already has a corpse", GetName().c_str(), GetGUIDLow());
+        LOG_ERROR("server", "BuildPlayerRepop: player %s(%d) already has a corpse", GetName().c_str(), GetGUIDLow());
         return;
     }
 
@@ -5158,7 +5173,7 @@ void Player::BuildPlayerRepop()
     Corpse* corpse = GetCorpse();
     if (!corpse)
     {
-        sLog->outError("Error creating corpse for Player %s [%u]", GetName().c_str(), GetGUIDLow());
+        LOG_ERROR("server", "Error creating corpse for Player %s [%u]", GetName().c_str(), GetGUIDLow());
         return;
     }
     GetMap()->AddToMap(corpse);
@@ -5235,10 +5250,6 @@ void Player::ResurrectPlayer(float restore_percent, bool applySickness)
 
     // update visibility
     UpdateObjectVisibility();
-
-#ifdef ELUNA
-    sEluna->OnResurrect(this);
-#endif
 
     if(!applySickness)
         return;
@@ -5540,7 +5551,7 @@ uint32 Player::DurabilityRepair(uint16 pos, bool cost, float discountMod, bool g
             DurabilityCostsEntry const* dcost = sDurabilityCostsStore.LookupEntry(ditemProto->ItemLevel);
             if (!dcost)
             {
-                sLog->outError("RepairDurability: Wrong item lvl %u", ditemProto->ItemLevel);
+                LOG_ERROR("server", "RepairDurability: Wrong item lvl %u", ditemProto->ItemLevel);
                 return TotalCost;
             }
 
@@ -5548,7 +5559,7 @@ uint32 Player::DurabilityRepair(uint16 pos, bool cost, float discountMod, bool g
             DurabilityQualityEntry const* dQualitymodEntry = sDurabilityQualityStore.LookupEntry(dQualitymodEntryId);
             if (!dQualitymodEntry)
             {
-                sLog->outError("RepairDurability: Wrong dQualityModEntry %u", dQualitymodEntryId);
+                LOG_ERROR("server", "RepairDurability: Wrong dQualityModEntry %u", dQualitymodEntryId);
                 return TotalCost;
             }
 
@@ -5792,7 +5803,7 @@ void Player::HandleBaseModValue(BaseModGroup modGroup, BaseModType modType, floa
 {
     if (modGroup >= BASEMOD_END)
     {
-        sLog->outError("ERROR in HandleBaseModValue(): non existed BaseModGroup!");
+        LOG_ERROR("server", "ERROR in HandleBaseModValue(): non existed BaseModGroup!");
         return;
     }
 
@@ -5823,7 +5834,7 @@ float Player::GetBaseModValue(BaseModGroup modGroup, BaseModType modType) const
 {
     if (modGroup >= BASEMOD_END)
     {
-        sLog->outError("trial to access non existed BaseModGroup!");
+        LOG_ERROR("server", "trial to access non existed BaseModGroup!");
         return 0.0f;
     }
 
@@ -5837,7 +5848,7 @@ float Player::GetTotalBaseModValue(BaseModGroup modGroup) const
 {
     if (modGroup >= BASEMOD_END)
     {
-        sLog->outError("wrong BaseModGroup in GetTotalBaseModValue()!");
+        LOG_ERROR("server", "wrong BaseModGroup in GetTotalBaseModValue()!");
         return 0.0f;
     }
 
@@ -6390,7 +6401,7 @@ void Player::UpdateWeaponSkill(WeaponAttackType attType)
 void Player::UpdateCombatSkills(Unit* victim, WeaponAttackType attType, bool defence)
 {
     uint8 plevel = getLevel();                              // if defense than victim == attacker
-    uint8 greylevel = acore::XP::GetGrayLevel(plevel);
+    uint8 greylevel = warhead::XP::GetGrayLevel(plevel);
     uint8 moblevel = victim->getLevelForTarget(this);
     /*if (moblevel < greylevel)
         return;*/ // Patch 3.0.8 (2009-01-20): You can no longer skill up weapons on mobs that are immune to damage.
@@ -6575,7 +6586,7 @@ void Player::SetSkill(uint16 id, uint16 step, uint16 newVal, uint16 maxVal)
             SkillLineEntry const* pSkill = sSkillLineStore.LookupEntry(id);
             if (!pSkill)
             {
-                sLog->outError("Skill not found in SkillLineStore: skill #%u", id);
+                LOG_ERROR("server", "Skill not found in SkillLineStore: skill #%u", id);
                 return;
             }
 
@@ -6736,7 +6747,7 @@ int16 Player::GetSkillTempBonusValue(uint32 skill) const
 void Player::SendActionButtons(uint32 state) const
 {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDetail("Sending Action Buttons for '%u' spec '%u'", GetGUIDLow(), m_activeSpec);
+    LOG_INFO("server", "Sending Action Buttons for '%u' spec '%u'", GetGUIDLow(), m_activeSpec);
 #endif
 
     WorldPacket data(SMSG_ACTION_BUTTONS, 1+(MAX_ACTION_BUTTONS*4));
@@ -6761,7 +6772,7 @@ void Player::SendActionButtons(uint32 state) const
 
     GetSession()->SendPacket(&data);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDetail("Action Buttons for '%u' spec '%u' Sent", GetGUIDLow(), m_activeSpec);
+    LOG_INFO("server", "Action Buttons for '%u' spec '%u' Sent", GetGUIDLow(), m_activeSpec);
 #endif
 }
 
@@ -6769,13 +6780,13 @@ bool Player::IsActionButtonDataValid(uint8 button, uint32 action, uint8 type)
 {
     if (button >= MAX_ACTION_BUTTONS)
     {
-        sLog->outError("Action %u not added into button %u for player %s: button must be < %u", action, button, GetName().c_str(), MAX_ACTION_BUTTONS);
+        LOG_ERROR("server", "Action %u not added into button %u for player %s: button must be < %u", action, button, GetName().c_str(), MAX_ACTION_BUTTONS);
         return false;
     }
 
     if (action >= MAX_ACTION_BUTTON_ACTION_VALUE)
     {
-        sLog->outError("Action %u not added into button %u for player %s: action must be < %u", action, button, GetName().c_str(), MAX_ACTION_BUTTON_ACTION_VALUE);
+        LOG_ERROR("server", "Action %u not added into button %u for player %s: action must be < %u", action, button, GetName().c_str(), MAX_ACTION_BUTTON_ACTION_VALUE);
         return false;
     }
 
@@ -6784,7 +6795,7 @@ bool Player::IsActionButtonDataValid(uint8 button, uint32 action, uint8 type)
         case ACTION_BUTTON_SPELL:
             if (!sSpellMgr->GetSpellInfo(action))
             {
-                sLog->outError("Spell action %u not added into button %u for player %s: spell not exist", action, button, GetName().c_str());
+                LOG_ERROR("server", "Spell action %u not added into button %u for player %s: spell not exist", action, button, GetName().c_str());
                 return false;
             }
 
@@ -6799,7 +6810,7 @@ bool Player::IsActionButtonDataValid(uint8 button, uint32 action, uint8 type)
         case ACTION_BUTTON_ITEM:
             if (!sObjectMgr->GetItemTemplate(action))
             {
-                sLog->outError("Item action %u not added into button %u for player %s: item not exist", action, button, GetName().c_str());
+                LOG_ERROR("server", "Item action %u not added into button %u for player %s: item not exist", action, button, GetName().c_str());
                 return false;
             }
             break;
@@ -6822,7 +6833,7 @@ ActionButton* Player::addActionButton(uint8 button, uint32 action, uint8 type)
     ab.SetActionAndType(action, ActionButtonType(type));
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDetail("Player '%u' Added Action '%u' (type %u) to Button '%u'", GetGUIDLow(), action, type, button);
+    LOG_INFO("server", "Player '%u' Added Action '%u' (type %u) to Button '%u'", GetGUIDLow(), action, type, button);
 #endif
     return &ab;
 }
@@ -6839,7 +6850,7 @@ void Player::removeActionButton(uint8 button)
         buttonItr->second.uState = ACTIONBUTTON_DELETED;    // saved, will deleted at next save
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDetail("Action Button '%u' Removed from Player '%u'", button, GetGUIDLow());
+    LOG_INFO("server", "Action Button '%u' Removed from Player '%u'", button, GetGUIDLow());
 #endif
 }
 
@@ -6886,7 +6897,7 @@ void Player::SendMessageToSetInRange(WorldPacket* data, float dist, bool self, b
     dist += GetObjectSize();
     if (includeMargin)
         dist += VISIBILITY_COMPENSATION; // pussywizard: to ensure everyone receives all important packets
-    acore::MessageDistDeliverer notifier(this, data, dist, false, skipped_rcvr);
+    warhead::MessageDistDeliverer notifier(this, data, dist, false, skipped_rcvr);
     VisitNearbyWorldObject(dist, notifier);
 }
 
@@ -6896,7 +6907,7 @@ void Player::SendMessageToSetInRange_OwnTeam(WorldPacket* data, float dist, bool
     if (self)
         GetSession()->SendPacket(data);
 
-    acore::MessageDistDeliverer notifier(this, data, dist, true);
+    warhead::MessageDistDeliverer notifier(this, data, dist, true);
     VisitNearbyWorldObject(dist, notifier);
 }
 
@@ -6939,7 +6950,7 @@ void Player::CheckAreaExploreAndOutdoor()
 
     if (!areaEntry)
     {
-     sLog->outError("Player '%s' (%u) discovered unknown area (x: %f y: %f z: %f map: %u)",
+     LOG_ERROR("server", "Player '%s' (%u) discovered unknown area (x: %f y: %f z: %f map: %u)",
             GetName().c_str(), GetGUIDLow(), GetPositionX(), GetPositionY(), GetPositionZ(), GetMapId());
         return;
     }
@@ -6949,7 +6960,7 @@ void Player::CheckAreaExploreAndOutdoor()
     if (offset >= PLAYER_EXPLORED_ZONES_SIZE)
     {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-        sLog->outError("Wrong area flag %u in map data for (X: %f Y: %f) point to field PLAYER_EXPLORED_ZONES_1 + %u ( %u must be < %u ).", areaEntry->flags, GetPositionX(), GetPositionY(), offset, offset, PLAYER_EXPLORED_ZONES_SIZE);
+        LOG_ERROR("server", "Wrong area flag %u in map data for (X: %f Y: %f) point to field PLAYER_EXPLORED_ZONES_1 + %u ( %u must be < %u ).", areaEntry->flags, GetPositionX(), GetPositionY(), offset, offset, PLAYER_EXPLORED_ZONES_SIZE);
 #endif
         return;
     }
@@ -6965,7 +6976,7 @@ void Player::CheckAreaExploreAndOutdoor()
 
         if (areaEntry->area_level > 0)
         {
-            if (getLevel() >= sGameConfig->GetIntConfig("MaxPlayerLevel"))
+            if (IsMaxLevel())
             {
                 SendExplorationExperience(areaId, 0);
             }
@@ -6996,7 +7007,7 @@ void Player::CheckAreaExploreAndOutdoor()
                 SendExplorationExperience(areaId, XP);
             }
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-            sLog->outDetail("Player %u discovered a new area: %u", GetGUIDLow(), areaId);
+            LOG_INFO("server", "Player %u discovered a new area: %u", GetGUIDLow(), areaId);
 #endif
         }
     }
@@ -7011,10 +7022,10 @@ TeamId Player::TeamIdForRace(uint8 race)
             case 1: return TEAM_HORDE;
             case 7: return TEAM_ALLIANCE;
         }
-        sLog->outError("Race (%u) has wrong teamid (%u) in DBC: wrong DBC files?", uint32(race), rEntry->TeamID);
+        LOG_ERROR("server", "Race (%u) has wrong teamid (%u) in DBC: wrong DBC files?", uint32(race), rEntry->TeamID);
     }
     else
-        sLog->outError("Race (%u) not found in DBC: wrong DBC files?", uint32(race));
+        LOG_ERROR("server", "Race (%u) not found in DBC: wrong DBC files?", uint32(race));
 
     return TEAM_ALLIANCE;
 }
@@ -7070,7 +7081,7 @@ int32 Player::CalculateReputationGain(ReputationSource source, uint32 creatureOr
             break;
     }
 
-    if (rate != 1.0f && creatureOrQuestLevel <= acore::XP::GetGrayLevel(getLevel()))
+    if (rate != 1.0f && creatureOrQuestLevel <= warhead::XP::GetGrayLevel(getLevel()))
         percent *= rate;
 
     if (percent <= 0.0f)
@@ -7302,7 +7313,7 @@ bool Player::RewardHonor(Unit* uVictim, uint32 groupsize, int32 honor, bool awar
                 return false;
 
             uint8 k_level = getLevel();
-            uint8 k_grey = acore::XP::GetGrayLevel(k_level);
+            uint8 k_grey = warhead::XP::GetGrayLevel(k_level);
             uint8 v_level = victim->getLevel();
 
             if (v_level <= k_grey)
@@ -7329,7 +7340,7 @@ bool Player::RewardHonor(Unit* uVictim, uint32 groupsize, int32 honor, bool awar
             else
                 victim_guid = 0;                        // Don't show HK: <rank> message, only log.
 
-            honor_f = ceil(acore::Honor::hk_honor_at_level_f(k_level) * (v_level - k_grey) / (k_level - k_grey));
+            honor_f = ceil(warhead::Honor::hk_honor_at_level_f(k_level) * (v_level - k_grey) / (k_level - k_grey));
 
             // count the number of playerkills in one day
             ApplyModUInt32Value(PLAYER_FIELD_KILLS, 1, true);
@@ -7930,7 +7941,7 @@ void Player::_ApplyItemMods(Item* item, uint8 slot, bool apply)
         return;
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDetail("applying mods for item %u ", item->GetGUIDLow());
+    LOG_INFO("server", "applying mods for item %u ", item->GetGUIDLow());
 #endif
 
     uint8 attacktype = Player::GetAttackBySlot(slot);
@@ -8548,7 +8559,7 @@ void Player::CastItemCombatSpell(Unit* target, WeaponAttackType attType, uint32 
             SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(spellData.SpellId);
             if (!spellInfo)
             {
-                sLog->outError("WORLD: unknown Item spellid %i", spellData.SpellId);
+                LOG_ERROR("server", "WORLD: unknown Item spellid %i", spellData.SpellId);
                 continue;
             }
 
@@ -8606,7 +8617,7 @@ void Player::CastItemCombatSpell(Unit* target, WeaponAttackType attType, uint32 
             SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(pEnchant->spellid[s]);
             if (!spellInfo)
             {
-                sLog->outError("Player::CastItemCombatSpell(GUID: %u, name: %s, enchant: %i): unknown spell %i is casted, ignoring...",
+                LOG_ERROR("server", "Player::CastItemCombatSpell(GUID: %u, name: %s, enchant: %i): unknown spell %i is casted, ignoring...",
                     GetGUIDLow(), GetName().c_str(), pEnchant->ID, pEnchant->spellid[s]);
                 continue;
             }
@@ -8663,7 +8674,7 @@ void Player::CastItemUseSpell(Item* item, SpellCastTargets const& targets, uint8
         SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(learn_spell_id);
         if (!spellInfo)
         {
-            sLog->outError("Player::CastItemUseSpell: Item (Entry: %u) in have wrong spell id %u, ignoring ", proto->ItemId, learn_spell_id);
+            LOG_ERROR("server", "Player::CastItemUseSpell: Item (Entry: %u) in have wrong spell id %u, ignoring ", proto->ItemId, learn_spell_id);
             SendEquipError(EQUIP_ERR_NONE, item, NULL);
             return;
         }
@@ -8696,7 +8707,7 @@ void Player::CastItemUseSpell(Item* item, SpellCastTargets const& targets, uint8
         SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(spellData.SpellId);
         if (!spellInfo)
         {
-            sLog->outError("Player::CastItemUseSpell: Item (Entry: %u) in have wrong spell id %u, ignoring", proto->ItemId, spellData.SpellId);
+            LOG_ERROR("server", "Player::CastItemUseSpell: Item (Entry: %u) in have wrong spell id %u, ignoring", proto->ItemId, spellData.SpellId);
             continue;
         }
 
@@ -8741,7 +8752,7 @@ void Player::CastItemUseSpell(Item* item, SpellCastTargets const& targets, uint8
             SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(pEnchant->spellid[s]);
             if (!spellInfo)
             {
-                sLog->outError("Player::CastItemUseSpell Enchant %i, cast unknown spell %i", pEnchant->ID, pEnchant->spellid[s]);
+                LOG_ERROR("server", "Player::CastItemUseSpell Enchant %i, cast unknown spell %i", pEnchant->ID, pEnchant->spellid[s]);
                 continue;
             }
 
@@ -10087,7 +10098,7 @@ uint32 Player::GetXPRestBonus(uint32 xp)
     SetRestBonus(GetRestBonus() - rested_bonus);
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDetail("Player gain %u xp (+ %u Rested Bonus). Rested points=%f", xp+rested_bonus, rested_bonus, GetRestBonus());
+    LOG_INFO("server", "Player gain %u xp (+ %u Rested Bonus). Rested points=%f", xp+rested_bonus, rested_bonus, GetRestBonus());
 #endif
     return rested_bonus;
 }
@@ -10120,7 +10131,7 @@ void Player::ResetPetTalents()
     CharmInfo* charmInfo = pet->GetCharmInfo();
     if (!charmInfo)
     {
-        sLog->outError("Object (GUID: %u TypeId: %u) is considered pet-like but doesn't have a charminfo!", pet->GetGUIDLow(), pet->GetTypeId());
+        LOG_ERROR("server", "Object (GUID: %u TypeId: %u) is considered pet-like but doesn't have a charminfo!", pet->GetGUIDLow(), pet->GetTypeId());
         return;
     }
     pet->resetTalents();
@@ -12097,7 +12108,7 @@ InventoryResult Player::CanBankItem(uint8 bag, uint8 slot, ItemPosCountVec &dest
     uint8 pItemslot = pItem->GetSlot();
     if (pItemslot >= CURRENCYTOKEN_SLOT_START && pItemslot < CURRENCYTOKEN_SLOT_END)
     {
-        sLog->outError("Possible hacking attempt: Player %s [guid: %u] tried to move token [guid: %u, entry: %u] out of the currency bag!",
+        LOG_ERROR("server", "Possible hacking attempt: Player %s [guid: %u] tried to move token [guid: %u, entry: %u] out of the currency bag!",
                 GetName().c_str(), GetGUIDLow(), pItem->GetGUIDLow(), pProto->ItemId);
         return EQUIP_ERR_ITEMS_CANT_BE_SWAPPED;
     }
@@ -12357,11 +12368,7 @@ InventoryResult Player::CanUseItem(ItemTemplate const* proto) const
 
         return EQUIP_ERR_OK;
     }
-#ifdef ELUNA
-    InventoryResult eres = sEluna->OnCanUseItem(this, proto->ItemId);
-    if (eres != EQUIP_ERR_OK)
-        return eres;
-#endif
+
     return EQUIP_ERR_ITEM_NOT_FOUND;
 }
 
@@ -12737,7 +12744,7 @@ Item* Player::EquipItem(uint16 pos, Item* pItem, bool update)
                 SpellInfo const* spellProto = sSpellMgr->GetSpellInfo(cooldownSpell);
 
                 if (!spellProto)
-                    sLog->outError("Weapon switch cooldown spell %u couldn't be found in Spell.dbc", cooldownSpell);
+                    LOG_ERROR("server", "Weapon switch cooldown spell %u couldn't be found in Spell.dbc", cooldownSpell);
                 else
                 {
                     m_weaponChangeTimer = spellProto->StartRecoveryTime;
@@ -12802,19 +12809,13 @@ Item* Player::EquipItem(uint16 pos, Item* pItem, bool update)
         pItem2->SetState(ITEM_CHANGED, this);
 
         ApplyEquipCooldown(pItem2);
-#ifdef ELUNA
-        sEluna->OnEquip(this, pItem2, bag, slot);
-#endif
+
         return pItem2;
     }
 
     // only for full equip instead adding to stack
     UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_EQUIP_ITEM, pItem->GetEntry());
     UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_EQUIP_EPIC_ITEM, pItem->GetEntry(), slot);
-
-#ifdef ELUNA
-    sEluna->OnEquip(this, pItem, bag, slot);
-#endif
 
     sScriptMgr->OnEquip(this, pItem, bag, slot, update);
     UpdateForQuestWorldObjects();
@@ -12839,10 +12840,6 @@ void Player::QuickEquipItem(uint16 pos, Item* pItem)
 
         UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_EQUIP_ITEM, pItem->GetEntry());
         UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_EQUIP_EPIC_ITEM, pItem->GetEntry(), slot);
-
-#ifdef ELUNA
-        sEluna->OnEquip(this, pItem, (pos >> 8), slot);
-#endif
     }
 }
 
@@ -14698,7 +14695,7 @@ void Player::ApplyEnchantment(Item* item, EnchantmentSlot slot, bool apply, bool
                     // nothing do..
                     break;
                 default:
-                    sLog->outError("Unknown item enchantment (id = %d) display type: %d", enchant_id, enchant_display_type);
+                    LOG_ERROR("server", "Unknown item enchantment (id = %d) display type: %d", enchant_id, enchant_display_type);
                     break;
             }                                               /*switch (enchant_display_type)*/
         }                                                   /*for*/
@@ -14866,10 +14863,10 @@ void Player::PrepareGossipMenu(WorldObject* source, uint32 menuId /*= 0*/, bool 
                     break;
                 case GOSSIP_OPTION_VENDOR:
                 {
-                    VendorItemData const* vendorItems = creature->GetVendorItems();
+                    VendorItemData const* vendorItems = itr->second.ActionMenuID ? sObjectMgr->GetNpcVendorItemList(itr->second.ActionMenuID) : creature->GetVendorItems();
                     if (!vendorItems || vendorItems->Empty())
                     {
-                        sLog->outErrorDb("Creature %u (Entry: %u) have UNIT_NPC_FLAG_VENDOR but have empty trading item list.", creature->GetGUIDLow(), creature->GetEntry());
+                        LOG_ERROR("sql.sql", "Creature %u (Entry: %u) have UNIT_NPC_FLAG_VENDOR but have empty trading item list.", creature->GetGUIDLow(), creature->GetEntry());
                         canTalk = false;
                     }
                     break;
@@ -14916,7 +14913,7 @@ void Player::PrepareGossipMenu(WorldObject* source, uint32 menuId /*= 0*/, bool 
                         canTalk = false;
                     break;
                 default:
-                    sLog->outErrorDb("Creature entry %u has unknown gossip option %u for menu %u", creature->GetEntry(), itr->second.OptionType, itr->second.MenuID);
+                    LOG_ERROR("sql.sql", "Creature entry %u has unknown gossip option %u for menu %u", creature->GetEntry(), itr->second.OptionType, itr->second.MenuID);
                     canTalk = false;
                     break;
             }
@@ -15048,7 +15045,7 @@ void Player::OnGossipSelect(WorldObject* source, uint32 gossipListId, uint32 men
     {
         if (gossipOptionId > GOSSIP_OPTION_QUESTGIVER)
         {
-            sLog->outError("Player guid %u request invalid gossip option for GameObject entry %u", GetGUIDLow(), source->GetEntry());
+            LOG_ERROR("server", "Player guid %u request invalid gossip option for GameObject entry %u", GetGUIDLow(), source->GetEntry());
             return;
         }
     }
@@ -15094,7 +15091,7 @@ void Player::OnGossipSelect(WorldObject* source, uint32 gossipListId, uint32 men
             break;
         case GOSSIP_OPTION_VENDOR:
         case GOSSIP_OPTION_ARMORER:
-            GetSession()->SendListInventory(guid);
+            GetSession()->SendListInventory(guid, menuItemData->GossipActionMenuId);
             break;
         case GOSSIP_OPTION_STABLEPET:
             GetSession()->SendStablePet(guid);
@@ -15153,7 +15150,7 @@ void Player::OnGossipSelect(WorldObject* source, uint32 gossipListId, uint32 men
 
             if (bgTypeId == BATTLEGROUND_TYPE_NONE)
             {
-                sLog->outError("a user (guid %u) requested battlegroundlist from a npc who is no battlemaster", GetGUIDLow());
+                LOG_ERROR("server", "a user (guid %u) requested battlegroundlist from a npc who is no battlemaster", GetGUIDLow());
                 return;
             }
 
@@ -15592,9 +15589,6 @@ void Player::AddQuestAndCheckCompletion(Quest const* quest, Object* questGiver)
     switch (questGiver->GetTypeId())
     {
         case TYPEID_UNIT:
-#ifdef ELUNA
-            sEluna->OnQuestAccept(this, questGiver->ToCreature(), quest);
-#endif
             sScriptMgr->OnQuestAccept(this, (questGiver->ToCreature()), quest);
             questGiver->ToCreature()->AI()->sQuestAccept(this, quest);
             break;
@@ -15621,9 +15615,6 @@ void Player::AddQuestAndCheckCompletion(Quest const* quest, Object* questGiver)
             break;
         }
         case TYPEID_GAMEOBJECT:
-#ifdef ELUNA
-            sEluna->OnQuestAccept(this, questGiver->ToGameObject(), quest);
-#endif
             sScriptMgr->OnQuestAccept(this, questGiver->ToGameObject(), quest);
             questGiver->ToGameObject()->AI()->QuestAccept(this, quest);
             break;
@@ -15750,8 +15741,8 @@ void Player::AddQuest(Quest const* quest, Object* questGiver)
         PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_QUEST_TRACK);
         stmt->setUInt32(0, quest_id);
         stmt->setUInt32(1, GetGUIDLow());
-        stmt->setString(2, _HASH);
-        stmt->setString(3, _DATE);
+        stmt->setString(2, GitRevision::GetHash());
+        stmt->setString(3, GitRevision::GetDate());
 
         // add to Quest Tracker
         CharacterDatabase.Execute(stmt);
@@ -15917,8 +15908,8 @@ void Player::RewardQuest(Quest const* quest, uint32 reward, Object* questGiver, 
         AddPct(XP, (*i)->GetAmount());
 
     int32 moneyRew = 0;
-    if (getLevel() < sGameConfig->GetIntConfig("MaxPlayerLevel"))
-        GiveXP(XP, NULL);
+    if (!IsMaxLevel())
+        GiveXP(XP, nullptr);
     else
         moneyRew = int32(quest->GetRewMoneyMaxLevel() * sGameConfig->GetFloatConfig("Rate.Drop.Money"));
 
@@ -16315,8 +16306,8 @@ bool Player::SatisfyQuestStatus(Quest const* qInfo, bool msg) const
 }
 
 bool Player::SatisfyQuestConditions(Quest const* qInfo, bool msg)
-{
-    ConditionList conditions = sConditionMgr->GetConditionsForNotGroupedEntry(CONDITION_SOURCE_TYPE_QUEST_ACCEPT, qInfo->GetQuestId());
+{ 
+    ConditionList conditions = sConditionMgr->GetConditionsForNotGroupedEntry(CONDITION_SOURCE_TYPE_QUEST_AVAILABLE, qInfo->GetQuestId());
     if (!sConditionMgr->IsObjectMeetToConditions(this, conditions))
     {
         if (msg)
@@ -16735,9 +16726,6 @@ QuestGiverStatus Player::GetQuestDialogStatus(Object* questgiver)
     {
         case TYPEID_GAMEOBJECT:
         {
-#ifdef ELUNA
-            sEluna->GetDialogStatus(this, questgiver->ToGameObject());
-#endif
             QuestGiverStatus questStatus = QuestGiverStatus(sScriptMgr->GetDialogStatus(this, questgiver->ToGameObject()));
             if (questStatus != DIALOG_STATUS_SCRIPTED_NO_STATUS)
                 return questStatus;
@@ -16747,9 +16735,6 @@ QuestGiverStatus Player::GetQuestDialogStatus(Object* questgiver)
         }
         case TYPEID_UNIT:
         {
-#ifdef ELUNA
-            sEluna->GetDialogStatus(this, questgiver->ToCreature());
-#endif
             QuestGiverStatus questStatus = QuestGiverStatus(sScriptMgr->GetDialogStatus(this, questgiver->ToCreature()));
             if (questStatus != DIALOG_STATUS_SCRIPTED_NO_STATUS)
                 return questStatus;
@@ -16773,7 +16758,7 @@ QuestGiverStatus Player::GetQuestDialogStatus(Object* questgiver)
         if (!quest)
             continue;
 
-        ConditionList conditions = sConditionMgr->GetConditionsForNotGroupedEntry(CONDITION_SOURCE_TYPE_QUEST_SHOW_MARK, quest->GetQuestId());
+        ConditionList conditions = sConditionMgr->GetConditionsForNotGroupedEntry(CONDITION_SOURCE_TYPE_QUEST_AVAILABLE, quest->GetQuestId());
         if (!sConditionMgr->IsObjectMeetToConditions(this, conditions))
             continue;
 
@@ -16801,7 +16786,7 @@ QuestGiverStatus Player::GetQuestDialogStatus(Object* questgiver)
         if (!quest)
             continue;
 
-        ConditionList conditions = sConditionMgr->GetConditionsForNotGroupedEntry(CONDITION_SOURCE_TYPE_QUEST_SHOW_MARK, quest->GetQuestId());
+        ConditionList conditions = sConditionMgr->GetConditionsForNotGroupedEntry(CONDITION_SOURCE_TYPE_QUEST_AVAILABLE, quest->GetQuestId());
         if (!sConditionMgr->IsObjectMeetToConditions(this, conditions))
             continue;
 
@@ -17416,7 +17401,7 @@ void Player::SendQuestReward(Quest const* quest, uint32 XP)
     WorldPacket data(SMSG_QUESTGIVER_QUEST_COMPLETE, (4+4+4+4+4));
     data << uint32(questid);
 
-    if (getLevel() < sGameConfig->GetIntConfig("MaxPlayerLevel"))
+    if (!IsMaxLevel())
     {
         data << uint32(XP);
         data << uint32(quest->GetRewOrReqMoney());
@@ -17763,7 +17748,7 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
 
     if (!result)
     {
-        sLog->outError("Player (GUID: %u) not found in table `characters`, can't load. ", guid);
+        LOG_ERROR("server", "Player (GUID: %u) not found in table `characters`, can't load. ", guid);
         return false;
     }
 
@@ -17775,13 +17760,13 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
     // player should be able to load/delete character only with correct account!
     if (dbAccountId != GetSession()->GetAccountId())
     {
-        sLog->outError("Player (GUID: %u) loading from wrong account (is: %u, should be: %u)", guid, GetSession()->GetAccountId(), dbAccountId);
+        LOG_ERROR("server", "Player (GUID: %u) loading from wrong account (is: %u, should be: %u)", guid, GetSession()->GetAccountId(), dbAccountId);
         return false;
     }
 
     if (holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOAD_BANNED))
     {
-        sLog->outError("Player (GUID: %u) is banned, can't load.", guid);
+        LOG_ERROR("server", "Player (GUID: %u) is banned, can't load.", guid);
         return false;
     }
 
@@ -17806,7 +17791,7 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
     uint8 Gender = fields[5].GetUInt8();
     if (!IsValidGender(Gender))
     {
-        sLog->outError("Player (GUID: %u) has wrong gender (%u), can't be loaded.", guid, Gender);
+        LOG_ERROR("server", "Player (GUID: %u) has wrong gender (%u), can't be loaded.", guid, Gender);
         return false;
     }
 
@@ -17946,7 +17931,7 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
 
     if (!mapEntry || !IsPositionValid())
     {
-        sLog->outError("Player (guidlow %d) have invalid coordinates (MapId: %u X: %f Y: %f Z: %f O: %f). Teleport to default race/class locations.", guid, mapId, GetPositionX(), GetPositionY(), GetPositionZ(), GetOrientation());
+        LOG_ERROR("server", "Player (guidlow %d) have invalid coordinates (MapId: %u X: %f Y: %f Z: %f O: %f). Teleport to default race/class locations.", guid, mapId, GetPositionX(), GetPositionY(), GetPositionZ(), GetOrientation());
         RelocateToHomebind();
     }
     // Player was saved in Arena or Bg
@@ -18004,7 +17989,7 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
             m_movementInfo.transport.pos.Relocate(x, y, z, o);
             m_transport->CalculatePassengerPosition(x, y, z, &o);
 
-            if (!acore::IsValidMapCoord(x, y, z, o) || std::fabs(m_movementInfo.transport.pos.GetPositionX()) > 75.0f || std::fabs(m_movementInfo.transport.pos.GetPositionY()) > 75.0f || std::fabs(m_movementInfo.transport.pos.GetPositionZ()) > 75.0f)
+            if (!warhead::IsValidMapCoord(x, y, z, o) || std::fabs(m_movementInfo.transport.pos.GetPositionX()) > 75.0f || std::fabs(m_movementInfo.transport.pos.GetPositionY()) > 75.0f || std::fabs(m_movementInfo.transport.pos.GetPositionZ()) > 75.0f)
             {
                 m_transport = NULL;
                 m_movementInfo.transport.Reset();
@@ -18086,13 +18071,13 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
         AreaTriggerTeleport const* at = sObjectMgr->GetGoBackTrigger(mapId);
         if (at)
         {
-            sLog->outError("Player (guidlow %d) is teleported to gobacktrigger (Map: %u X: %f Y: %f Z: %f O: %f).", guid, mapId, GetPositionX(), GetPositionY(), GetPositionZ(), GetOrientation());
+            LOG_ERROR("server", "Player (guidlow %d) is teleported to gobacktrigger (Map: %u X: %f Y: %f Z: %f O: %f).", guid, mapId, GetPositionX(), GetPositionY(), GetPositionZ(), GetOrientation());
             Relocate(at->target_X, at->target_Y, at->target_Z, GetOrientation());
             mapId = at->target_mapId;
         }
         else
         {
-            sLog->outError("Player (guidlow %d) is teleported to home (Map: %u X: %f Y: %f Z: %f O: %f).", guid, mapId, GetPositionX(), GetPositionY(), GetPositionZ(), GetOrientation());
+            LOG_ERROR("server", "Player (guidlow %d) is teleported to home (Map: %u X: %f Y: %f Z: %f O: %f).", guid, mapId, GetPositionX(), GetPositionY(), GetPositionZ(), GetOrientation());
             RelocateToHomebind();
         }
 
@@ -18102,11 +18087,11 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
             PlayerInfo const* info = sObjectMgr->GetPlayerInfo(getRace(true), getClass());
             mapId = info->mapId;
             Relocate(info->positionX, info->positionY, info->positionZ, 0.0f);
-            sLog->outError("Player (guidlow %d) have invalid coordinates (X: %f Y: %f Z: %f O: %f). Teleport to default race/class locations.", guid, GetPositionX(), GetPositionY(), GetPositionZ(), GetOrientation());
+            LOG_ERROR("server", "Player (guidlow %d) have invalid coordinates (X: %f Y: %f Z: %f O: %f). Teleport to default race/class locations.", guid, GetPositionX(), GetPositionY(), GetPositionZ(), GetOrientation());
             map = sMapMgr->CreateMap(mapId, this);
             if (!map)
             {
-                sLog->outError("Player (guidlow %d) has invalid default map coordinates (X: %f Y: %f Z: %f O: %f). or instance couldn't be created", guid, GetPositionX(), GetPositionY(), GetPositionZ(), GetOrientation());
+                LOG_ERROR("server", "Player (guidlow %d) has invalid default map coordinates (X: %f Y: %f Z: %f O: %f). or instance couldn't be created", guid, GetPositionX(), GetPositionY(), GetPositionZ(), GetOrientation());
                 return false;
             }
         }
@@ -18145,7 +18130,7 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
     m_stableSlots = fields[37].GetUInt8();
     if (m_stableSlots > MAX_PET_STABLES)
     {
-        sLog->outError("Player can have not more %u stable slots, but have in DB %u", MAX_PET_STABLES, uint32(m_stableSlots));
+        LOG_ERROR("server", "Player can have not more %u stable slots, but have in DB %u", MAX_PET_STABLES, uint32(m_stableSlots));
         m_stableSlots = MAX_PET_STABLES;
     }
 
@@ -18153,7 +18138,7 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
 
     if (HasAtLoginFlag(AT_LOGIN_RENAME))
     {
-        sLog->outError("Player (GUID: %u) tried to login while forced to rename, can't load.'", GetGUIDLow());
+        LOG_ERROR("server", "Player (GUID: %u) tried to login while forced to rename, can't load.'", GetGUIDLow());
         return false;
     }
 
@@ -18477,7 +18462,7 @@ void Player::_LoadActions(PreparedQueryResult result)
             else
             {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                sLog->outError("ActionButton loading problem, will be deleted from db...");
+                LOG_ERROR("server", "ActionButton loading problem, will be deleted from db...");
 #endif
 
                 // Will deleted in DB at next save (it can create data until save but marked as deleted)
@@ -18524,7 +18509,7 @@ void Player::_LoadAuras(PreparedQueryResult result, uint32 timediff)
             SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(spellid);
             if (!spellInfo)
             {
-                sLog->outError("Unknown aura (spellid %u), ignore.", spellid);
+                LOG_ERROR("server", "Unknown aura (spellid %u), ignore.", spellid);
                 continue;
             }
 
@@ -18566,7 +18551,7 @@ void Player::_LoadAuras(PreparedQueryResult result, uint32 timediff)
                 aura->SetLoadedState(maxduration, remaintime, remaincharges, stackcount, recalculatemask, &damage[0]);
                 aura->ApplyForTargets();
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                sLog->outDetail("Added aura spellid %u, effectmask %u", spellInfo->Id, effmask);
+                LOG_INFO("server", "Added aura spellid %u, effectmask %u", spellInfo->Id, effmask);
 #endif
             }
         }
@@ -18592,13 +18577,13 @@ void Player::_LoadGlyphAuras()
                         continue;
                     }
                     else
-                        sLog->outError("Player %s has glyph with typeflags %u in slot with typeflags %u, removing.", m_name.c_str(), glyphEntry->TypeFlags, glyphSlotEntry->TypeFlags);
+                        LOG_ERROR("server", "Player %s has glyph with typeflags %u in slot with typeflags %u, removing.", m_name.c_str(), glyphEntry->TypeFlags, glyphSlotEntry->TypeFlags);
                 }
                 else
-                    sLog->outError("Player %s has not existing glyph slot entry %u on index %u", m_name.c_str(), GetGlyphSlot(i), i);
+                    LOG_ERROR("server", "Player %s has not existing glyph slot entry %u on index %u", m_name.c_str(), GetGlyphSlot(i), i);
             }
             else
-                sLog->outError("Player %s has not existing glyph entry %u on index %u", m_name.c_str(), glyph, i);
+                LOG_ERROR("server", "Player %s has not existing glyph entry %u on index %u", m_name.c_str(), glyph, i);
 
             // On any error remove glyph
             SetGlyph(i, 0, true);
@@ -18708,7 +18693,7 @@ void Player::_LoadInventory(PreparedQueryResult result, uint32 timeDiff)
                     }
                     else
                     {
-                        sLog->outError("Player::_LoadInventory: player (GUID: %u, name: '%s') has item (GUID: %u, entry: %u) which doesnt have a valid bag (Bag GUID: %u, slot: %u). Possible cheat?",
+                        LOG_ERROR("server", "Player::_LoadInventory: player (GUID: %u, name: '%s') has item (GUID: %u, entry: %u) which doesnt have a valid bag (Bag GUID: %u, slot: %u). Possible cheat?",
                             GetGUIDLow(), GetName().c_str(), item->GetGUIDLow(), item->GetEntry(), bagGuid, slot);
                         item->DeleteFromInventoryDB(trans);
                         delete item;
@@ -18722,7 +18707,7 @@ void Player::_LoadInventory(PreparedQueryResult result, uint32 timeDiff)
                     item->SetState(ITEM_UNCHANGED, this);
                 else
                 {
-                    sLog->outError("Player::_LoadInventory: player (GUID: %u, name: '%s') has item (GUID: %u, entry: %u) which can't be loaded into inventory (Bag GUID: %u, slot: %u) by reason %u. Item will be sent by mail.",
+                    LOG_ERROR("server", "Player::_LoadInventory: player (GUID: %u, name: '%s') has item (GUID: %u, entry: %u) which can't be loaded into inventory (Bag GUID: %u, slot: %u) by reason %u. Item will be sent by mail.",
                         GetGUIDLow(), GetName().c_str(), item->GetGUIDLow(), item->GetEntry(), bagGuid, slot, err);
                     item->DeleteFromInventoryDB(trans);
                     problematicItems.push_back(item);
@@ -18865,7 +18850,7 @@ Item* Player::_LoadItem(SQLTransaction& trans, uint32 zoneId, uint32 timeDiff, F
         }
         else
         {
-            sLog->outError("Player::_LoadInventory: player (GUID: %u, name: '%s') has broken item (GUID: %u, entry: %u) in inventory. Deleting item.",
+            LOG_ERROR("server", "Player::_LoadInventory: player (GUID: %u, name: '%s') has broken item (GUID: %u, entry: %u) in inventory. Deleting item.",
                 GetGUIDLow(), GetName().c_str(), itemGuid, itemEntry);
             remove = true;
         }
@@ -18880,7 +18865,7 @@ Item* Player::_LoadItem(SQLTransaction& trans, uint32 zoneId, uint32 timeDiff, F
     }
     else
     {
-        sLog->outError("Player::_LoadInventory: player (GUID: %u, name: '%s') has unknown item (entry: %u) in inventory. Deleting item.",
+        LOG_ERROR("server", "Player::_LoadInventory: player (GUID: %u, name: '%s') has unknown item (entry: %u) in inventory. Deleting item.",
             GetGUIDLow(), GetName().c_str(), itemEntry);
         Item::DeleteFromInventoryDB(trans, itemGuid);
         Item::DeleteFromDB(trans, itemGuid);
@@ -18911,7 +18896,7 @@ void Player::_LoadMailedItems(Mail* mail)
 
         if (!proto)
         {
-            sLog->outError("Player %u has unknown item_template (ProtoType) in mailed items(GUID: %u template: %u) in mail (%u), deleted.", GetGUIDLow(), itemGuid, itemTemplate, mail->messageID);
+            LOG_ERROR("server", "Player %u has unknown item_template (ProtoType) in mailed items(GUID: %u template: %u) in mail (%u), deleted.", GetGUIDLow(), itemGuid, itemTemplate, mail->messageID);
 
             stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_INVALID_MAIL_ITEM);
             stmt->setUInt32(0, itemGuid);
@@ -18927,7 +18912,7 @@ void Player::_LoadMailedItems(Mail* mail)
 
         if (!item->LoadFromDB(itemGuid, MAKE_NEW_GUID(fields[13].GetUInt32(), 0, HIGHGUID_PLAYER), fields, itemTemplate))
         {
-            sLog->outError("Player::_LoadMailedItems - Item in mail (%u) doesn't exist !!!! - item guid: %u, deleted from mail", mail->messageID, itemGuid);
+            LOG_ERROR("server", "Player::_LoadMailedItems - Item in mail (%u) doesn't exist !!!! - item guid: %u, deleted from mail", mail->messageID, itemGuid);
 
             stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_MAIL_ITEM);
             stmt->setUInt32(0, itemGuid);
@@ -18993,7 +18978,7 @@ void Player::_LoadMailAsynch(PreparedQueryResult result)
 
                 if (m->mailTemplateId && !sMailTemplateStore.LookupEntry(m->mailTemplateId))
                 {
-                    sLog->outError("Player::_LoadMail - Mail (%u) have not existed MailTemplateId (%u), remove at load", m->messageID, m->mailTemplateId);
+                    LOG_ERROR("server", "Player::_LoadMail - Mail (%u) have not existed MailTemplateId (%u), remove at load", m->messageID, m->mailTemplateId);
                     m->mailTemplateId = 0;
                 }
 
@@ -19011,7 +18996,7 @@ void Player::_LoadMailAsynch(PreparedQueryResult result)
 
                 if (!proto)
                 {
-                    sLog->outError("Player %u has unknown item_template (ProtoType) in mailed items(GUID: %u template: %u) in mail (%u), deleted.", GetGUIDLow(), itemGuid, itemTemplate, m->messageID);
+                    LOG_ERROR("server", "Player %u has unknown item_template (ProtoType) in mailed items(GUID: %u template: %u) in mail (%u), deleted.", GetGUIDLow(), itemGuid, itemTemplate, m->messageID);
 
                     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_INVALID_MAIL_ITEM);
                     stmt->setUInt32(0, itemGuid);
@@ -19027,7 +19012,7 @@ void Player::_LoadMailAsynch(PreparedQueryResult result)
 
                 if (!item->LoadFromDB(itemGuid, MAKE_NEW_GUID(fields[13].GetUInt32(), 0, HIGHGUID_PLAYER), fields, itemTemplate))
                 {
-                    sLog->outError("Player::_LoadMailedItems - Item in mail (%u) doesn't exist !!!! - item guid: %u, deleted from mail", m->messageID, itemGuid);
+                    LOG_ERROR("server", "Player::_LoadMailedItems - Item in mail (%u) doesn't exist !!!! - item guid: %u, deleted from mail", m->messageID, itemGuid);
 
                     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_MAIL_ITEM);
                     stmt->setUInt32(0, itemGuid);
@@ -19086,7 +19071,7 @@ void Player::_LoadMail()
 
             if (m->mailTemplateId && !sMailTemplateStore.LookupEntry(m->mailTemplateId))
             {
-                sLog->outError("Player::_LoadMail - Mail (%u) have not existed MailTemplateId (%u), remove at load", m->messageID, m->mailTemplateId);
+                LOG_ERROR("server", "Player::_LoadMail - Mail (%u) have not existed MailTemplateId (%u), remove at load", m->messageID, m->mailTemplateId);
                 m->mailTemplateId = 0;
             }
 
@@ -19141,7 +19126,7 @@ void Player::_LoadQuestStatus(PreparedQueryResult result)
                 else
                 {
                     questStatusData.Status = QUEST_STATUS_INCOMPLETE;
-                    sLog->outError("Player %s (GUID: %u) has invalid quest %d status (%u), replaced by QUEST_STATUS_INCOMPLETE(3).",
+                    LOG_ERROR("server", "Player %s (GUID: %u) has invalid quest %d status (%u), replaced by QUEST_STATUS_INCOMPLETE(3).",
                         GetName().c_str(), GetGUIDLow(), quest_id, qstatus);
                 }
 
@@ -19266,7 +19251,7 @@ void Player::_LoadDailyQuestStatus(PreparedQueryResult result)
 
             if (quest_daily_idx >= PLAYER_MAX_DAILY_QUESTS)  // max amount with exist data in query
             {
-                sLog->outError("Player (GUID: %u) have more 25 daily quest records in `charcter_queststatus_daily`", GetGUIDLow());
+                LOG_ERROR("server", "Player (GUID: %u) have more 25 daily quest records in `charcter_queststatus_daily`", GetGUIDLow());
                 break;
             }
 
@@ -19604,7 +19589,7 @@ bool Player::_LoadHomeBind(PreparedQueryResult result)
     PlayerInfo const* info = sObjectMgr->GetPlayerInfo(getRace(true), getClass());
     if (!info)
     {
-        sLog->outError("Player (Name %s) has incorrect race/class pair. Can't be loaded.", GetName().c_str());
+        LOG_ERROR("server", "Player (Name %s) has incorrect race/class pair. Can't be loaded.", GetName().c_str());
         return false;
     }
 
@@ -19909,7 +19894,7 @@ void Player::_SaveInventory(SQLTransaction& trans)
         }
         else
         {
-            sLog->outError("Can't find item guid %u but is in refundable storage for player %u ! Removing.", *itr, GetGUIDLow());
+            LOG_ERROR("server", "Can't find item guid %u but is in refundable storage for player %u ! Removing.", *itr, GetGUIDLow());
             m_refundableItems.erase(itr);
         }
     }
@@ -19940,7 +19925,7 @@ void Player::_SaveInventory(SQLTransaction& trans)
                 uint32 bagTestGUID = 0;
                 if (Item* test2 = GetItemByPos(INVENTORY_SLOT_BAG_0, item->GetBagSlot()))
                     bagTestGUID = test2->GetGUIDLow();
-                sLog->outError("Player(GUID: %u Name: %s)::_SaveInventory - the bag(%u) and slot(%u) values for the item with guid %u (state %d) are incorrect, the player doesn't have an item at that position!", lowGuid, GetName().c_str(), item->GetBagSlot(), item->GetSlot(), item->GetGUIDLow(), (int32)item->GetState());
+                LOG_ERROR("server", "Player(GUID: %u Name: %s)::_SaveInventory - the bag(%u) and slot(%u) values for the item with guid %u (state %d) are incorrect, the player doesn't have an item at that position!", lowGuid, GetName().c_str(), item->GetBagSlot(), item->GetSlot(), item->GetGUIDLow(), (int32)item->GetState());
                 // according to the test that was just performed nothing should be in this slot, delete
                 stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_INVENTORY_BY_BAG_SLOT);
                 stmt->setUInt32(0, bagTestGUID);
@@ -19960,7 +19945,7 @@ void Player::_SaveInventory(SQLTransaction& trans)
             }
             else if (test != item)
             {
-                sLog->outError("Player(GUID: %u Name: %s)::_SaveInventory - the bag(%u) and slot(%u) values for the item with guid %u are incorrect, the item with guid %u is there instead!", lowGuid, GetName().c_str(), item->GetBagSlot(), item->GetSlot(), item->GetGUIDLow(), test->GetGUIDLow());
+                LOG_ERROR("server", "Player(GUID: %u Name: %s)::_SaveInventory - the bag(%u) and slot(%u) values for the item with guid %u are incorrect, the item with guid %u is there instead!", lowGuid, GetName().c_str(), item->GetBagSlot(), item->GetSlot(), item->GetGUIDLow(), test->GetGUIDLow());
                 // save all changes to the item...
                 if (item->GetState() != ITEM_NEW) // only for existing items, no dupes
                     item->SaveToDB(trans);
@@ -20419,7 +20404,7 @@ void Player::UpdateSpeakTime(uint32 specialMessageLimit)
     if (!AccountMgr::IsPlayerAccount(GetSession()->GetSecurity()))
         return;
 
-    time_t current = time (NULL);
+    time_t current = GameTime::GetGameTime();
     if (m_speakTime > current)
     {
         uint32 max_count = specialMessageLimit ? specialMessageLimit : sGameConfig->GetIntConfig("ChatFlood.MessageCount");
@@ -20431,8 +20416,8 @@ void Player::UpdateSpeakTime(uint32 specialMessageLimit)
         {
             // prevent overwrite mute time, if message send just before mutes set, for example.
             time_t new_mute = current + sGameConfig->GetIntConfig("ChatFlood.MuteTime");
-            if (GetSession()->m_muteTime < new_mute)
-                GetSession()->m_muteTime = new_mute;
+            if (sMute->GetMuteTime(GetSession()->GetAccountId()) < new_mute)
+                sMute->SetMuteTime(GetSession()->GetAccountId(), new_mute);
 
             m_speakCount = 0;
         }
@@ -20445,7 +20430,7 @@ void Player::UpdateSpeakTime(uint32 specialMessageLimit)
 
 bool Player::CanSpeak() const
 {
-    return  GetSession()->m_muteTime <= time (NULL);
+    return sMute->CanSpeak(GetSession()->GetAccountId());
 }
 
 /*********************************************************/
@@ -20776,7 +20761,7 @@ Pet* Player::GetPet() const
             return pet;
 
         //there may be a guardian in slot
-        //sLog->outError("Player::GetPet: Pet %u not exist.", GUID_LOPART(pet_guid));
+        //LOG_ERROR("server", "Player::GetPet: Pet %u not exist.", GUID_LOPART(pet_guid));
         //const_cast<Player*>(this)->SetPetGUID(0);
     }
 
@@ -20878,10 +20863,10 @@ void Player::StopCastingCharm()
 
     if (GetCharmGUID())
     {
-        sLog->outCrash("Player %s (GUID: " UI64FMTD " is not able to uncharm unit (GUID: " UI64FMTD " Entry: %u, Type: %u)", GetName().c_str(), GetGUID(), GetCharmGUID(), charm->GetEntry(), charm->GetTypeId());
+        LOG_FATAL("server", "Player %s (GUID: " UI64FMTD " is not able to uncharm unit (GUID: " UI64FMTD " Entry: %u, Type: %u)", GetName().c_str(), GetGUID(), GetCharmGUID(), charm->GetEntry(), charm->GetTypeId());
         if (charm->GetCharmerGUID())
         {
-            sLog->outCrash("Charmed unit has charmer guid " UI64FMTD, charm->GetCharmerGUID());
+            LOG_FATAL("server", "Charmed unit has charmer guid " UI64FMTD, charm->GetCharmerGUID());
             ABORT();
         }
         else
@@ -20893,11 +20878,7 @@ void Player::Say(const std::string& text, const uint32 language)
 {
     std::string _text(text);
     sScriptMgr->OnPlayerChat(this, CHAT_MSG_SAY, language, _text);
-#ifdef ELUNA
-    if (!sEluna->OnChat(this, CHAT_MSG_SAY, language, _text))
-        return;
-#endif
-
+    
     WorldPacket data;
     ChatHandler::BuildChatPacket(data, CHAT_MSG_SAY, Language(language), this, this, _text);
     SendMessageToSetInRange(&data, sGameConfig->GetFloatConfig("ListenRange.Say"), true);
@@ -20907,10 +20888,6 @@ void Player::Yell(const std::string& text, const uint32 language)
 {
     std::string _text(text);
     sScriptMgr->OnPlayerChat(this, CHAT_MSG_YELL, language, _text);
-#ifdef ELUNA
-    if (!sEluna->OnChat(this, CHAT_MSG_YELL, language, _text))
-        return;
-#endif
 
     WorldPacket data;
     ChatHandler::BuildChatPacket(data, CHAT_MSG_YELL, Language(language), this, this, _text);
@@ -20921,15 +20898,11 @@ void Player::TextEmote(const std::string& text)
 {
     std::string _text(text);
     sScriptMgr->OnPlayerChat(this, CHAT_MSG_EMOTE, LANG_UNIVERSAL, _text);
-#ifdef ELUNA
-    if (!sEluna->OnChat(this, CHAT_MSG_EMOTE, LANG_UNIVERSAL, _text))
-        return;
-#endif
 
     WorldPacket data;
     std::list<Player*> players;
-    acore::AnyPlayerInObjectRangeCheck checker(this, sGameConfig->GetFloatConfig("ListenRange.TextEmote"));
-    acore::PlayerListSearcher<acore::AnyPlayerInObjectRangeCheck> searcher(this, players, checker);
+    warhead::AnyPlayerInObjectRangeCheck checker(this, sGameConfig->GetFloatConfig("ListenRange.TextEmote"));
+    warhead::PlayerListSearcher<warhead::AnyPlayerInObjectRangeCheck> searcher(this, players, checker);
     this->VisitNearbyWorldObject(sGameConfig->GetFloatConfig("ListenRange.TextEmote"), searcher);
 
     for (auto const& itr : players)
@@ -20962,10 +20935,6 @@ void Player::Whisper(const std::string& text, uint32 language, uint64 receiver)
 
     std::string _text(text);
     sScriptMgr->OnPlayerChat(this, CHAT_MSG_WHISPER, language, _text, rPlayer);
-#ifdef ELUNA
-    if (!sEluna->OnChat(this, CHAT_MSG_WHISPER, language, _text, rPlayer))
-        return;
-#endif
 
     WorldPacket data;
     ChatHandler::BuildChatPacket(data, CHAT_MSG_WHISPER, Language(language), this, this, _text);
@@ -21064,7 +21033,7 @@ void Player::PossessSpellInitialize()
 
     if (!charmInfo)
     {
-        sLog->outError("Player::PossessSpellInitialize(): charm (" UI64FMTD ") has no charminfo!", charm->GetGUID());
+        LOG_ERROR("server", "Player::PossessSpellInitialize(): charm (" UI64FMTD ") has no charminfo!", charm->GetGUID());
         return;
     }
 
@@ -21156,7 +21125,7 @@ void Player::CharmSpellInitialize()
     CharmInfo* charmInfo = charm->GetCharmInfo();
     if (!charmInfo)
     {
-        sLog->outError("Player::CharmSpellInitialize(): the player's charm (" UI64FMTD ") has no charminfo!", charm->GetGUID());
+        LOG_ERROR("server", "Player::CharmSpellInitialize(): the player's charm (" UI64FMTD ") has no charminfo!", charm->GetGUID());
         return;
     }
 
@@ -21454,17 +21423,17 @@ void Player::SetSpellModTakingSpell(Spell* spell, bool apply)
 {
     if (apply && m_spellModTakingSpell != NULL)
     {
-        sLog->outMisc("Player::SetSpellModTakingSpell (A1) - %u, %u", spell->m_spellInfo->Id, m_spellModTakingSpell->m_spellInfo->Id);
+        LOG_INFO("misc", "Player::SetSpellModTakingSpell (A1) - %u, %u", spell->m_spellInfo->Id, m_spellModTakingSpell->m_spellInfo->Id);
         return;
         //ASSERT(m_spellModTakingSpell == NULL);
     }
     else if (!apply)
     {
         if (!m_spellModTakingSpell)
-            sLog->outMisc("Player::SetSpellModTakingSpell (B1) - %u", spell->m_spellInfo->Id);
+            LOG_INFO("misc", "Player::SetSpellModTakingSpell (B1) - %u", spell->m_spellInfo->Id);
         else if (m_spellModTakingSpell != spell)
         {
-            sLog->outMisc("Player::SetSpellModTakingSpell (C1) - %u, %u", spell->m_spellInfo->Id, m_spellModTakingSpell->m_spellInfo->Id);
+            LOG_INFO("misc", "Player::SetSpellModTakingSpell (C1) - %u, %u", spell->m_spellInfo->Id, m_spellModTakingSpell->m_spellInfo->Id);
             return;
         }
         //ASSERT(m_spellModTakingSpell && m_spellModTakingSpell == spell);
@@ -21581,7 +21550,7 @@ void Player::LeaveAllArenaTeams(uint64 guid)
 void Player::SetRestBonus(float rest_bonus_new)
 {
     // Prevent resting on max level
-    if (getLevel() >= sGameConfig->GetIntConfig("MaxPlayerLevel"))
+    if (IsMaxLevel())
         rest_bonus_new = 0;
 
     if (rest_bonus_new < 0)
@@ -21961,7 +21930,7 @@ void Player::InitDisplayIds()
     PlayerInfo const* info = sObjectMgr->GetPlayerInfo(getRace(true), getClass());
     if (!info)
     {
-        sLog->outError("Player %u has incorrect race/class pair. Can't init display ids.", GetGUIDLow());
+        LOG_ERROR("server", "Player %u has incorrect race/class pair. Can't init display ids.", GetGUIDLow());
         return;
     }
 
@@ -21977,7 +21946,7 @@ void Player::InitDisplayIds()
             SetNativeDisplayId(info->displayId_m);
             break;
         default:
-            sLog->outError("Invalid gender %u for player", gender);
+            LOG_ERROR("server", "Invalid gender %u for player", gender);
             return;
     }
 }
@@ -22097,7 +22066,7 @@ bool Player::BuyItemFromVendorSlot(uint64 vendorguid, uint32 vendorslot, uint32 
         return false;
     }
 
-    VendorItemData const* vItems = creature->GetVendorItems();
+    VendorItemData const* vItems = GetSession()->GetCurrentVendor() ? sObjectMgr->GetNpcVendorItemList(GetSession()->GetCurrentVendor()) : creature->GetVendorItems();
     if (!vItems || vItems->Empty())
     {
         SendBuyError(BUY_ERR_CANT_FIND_ITEM, creature, item, 0);
@@ -22139,7 +22108,7 @@ bool Player::BuyItemFromVendorSlot(uint64 vendorguid, uint32 vendorslot, uint32 
         ItemExtendedCostEntry const* iece = sItemExtendedCostStore.LookupEntry(crItem->ExtendedCost);
         if (!iece)
         {
-            sLog->outError("Item %u have wrong ExtendedCost field value %u", pProto->ItemId, crItem->ExtendedCost);
+            LOG_ERROR("server", "Item %u have wrong ExtendedCost field value %u", pProto->ItemId, crItem->ExtendedCost);
             return false;
         }
 
@@ -22182,7 +22151,7 @@ bool Player::BuyItemFromVendorSlot(uint64 vendorguid, uint32 vendorslot, uint32 
         uint32 maxCount = MAX_MONEY_AMOUNT / pProto->BuyPrice;
         if ((uint32)count > maxCount)
         {
-            sLog->outError("Player %s tried to buy %u item id %u, causing overflow", GetName().c_str(), (uint32)count, pProto->ItemId);
+            LOG_ERROR("server", "Player %s tried to buy %u item id %u, causing overflow", GetName().c_str(), (uint32)count, pProto->ItemId);
             count = (uint8)maxCount;
         }
         price = pProto->BuyPrice * count; //it should not exceed MAX_MONEY_AMOUNT
@@ -22769,15 +22738,15 @@ void Player::ReportedAfkBy(Player* reporter)
         return;
 
     // Xinef: 2 minutes startup + 2 minute of match
-    if (bg->GetStartTime() < 4*MINUTE*IN_MILLISECONDS)
+    if (bg->GetStartTime() < CONF_GET_INT("Battleground.ReportAFK.Timer") * MINUTE * IN_MILLISECONDS)
         return;
 
     // check if player has 'Idle' or 'Inactive' debuff
     if (m_bgData.bgAfkReporter.find(reporter->GetGUIDLow()) == m_bgData.bgAfkReporter.end() && !HasAura(43680) && !HasAura(43681) && reporter->CanReportAfkDueToLimit())
     {
         m_bgData.bgAfkReporter.insert(reporter->GetGUIDLow());
-        // 3 players have to complain to apply debuff
-        if (m_bgData.bgAfkReporter.size() >= 3)
+        // by default 3 players have to complain to apply debuff
+        if (m_bgData.bgAfkReporter.size() >= CONF_GET_INT("Battleground.ReportAFK"))
         {
             // cast 'Idle' spell
             CastSpell(this, 43680, true);
@@ -23019,10 +22988,10 @@ void Player::UpdateObjectVisibility(bool forced, bool fromUpdate)
 
 void Player::UpdateVisibilityForPlayer(bool mapChange)
 {
-    acore::VisibleNotifier notifierNoLarge(*this, mapChange, false); // visit only objects which are not large; default distance
+    warhead::VisibleNotifier notifierNoLarge(*this, mapChange, false); // visit only objects which are not large; default distance
     m_seer->VisitNearbyObject(GetSightRange()+VISIBILITY_INC_FOR_GOBJECTS, notifierNoLarge);
     notifierNoLarge.SendToSelf();
-    acore::VisibleNotifier notifierLarge(*this, mapChange, true);    // visit only large objects; maximum distance
+    warhead::VisibleNotifier notifierLarge(*this, mapChange, true);    // visit only large objects; maximum distance
     m_seer->VisitNearbyObject(MAX_VISIBILITY_DISTANCE, notifierLarge);
     notifierLarge.SendToSelf();
 
@@ -23956,7 +23925,7 @@ bool Player::HasItemFitToSpellRequirements(SpellInfo const* spellInfo, Item cons
             break;
         }
         default:
-            sLog->outError("HasItemFitToSpellRequirements: Not handled spell requirement for item class %u", spellInfo->EquippedItemClass);
+            LOG_ERROR("server", "HasItemFitToSpellRequirements: Not handled spell requirement for item class %u", spellInfo->EquippedItemClass);
             break;
     }
 
@@ -24033,7 +24002,7 @@ uint32 Player::GetResurrectionSpellId()
                 case 27239: spell_id = 27240; break;        // rank 6
                 case 47883: spell_id = 47882; break;        // rank 7
                 default:
-                    sLog->outError("Unhandled spell %u: S.Resurrection", (*itr)->GetId());
+                    LOG_ERROR("server", "Unhandled spell %u: S.Resurrection", (*itr)->GetId());
                     continue;
             }
 
@@ -24058,7 +24027,7 @@ uint32 Player::GetResurrectionSpellId()
 bool Player::isHonorOrXPTarget(Unit* victim) const
 {
     uint8 v_level = victim->getLevel();
-    uint8 k_grey  = acore::XP::GetGrayLevel(getLevel());
+    uint8 k_grey  = warhead::XP::GetGrayLevel(getLevel());
 
     // Victim level less gray level
     if (v_level <= k_grey)
@@ -24263,14 +24232,14 @@ void Player::SetMover(Unit* target)
 {
     if (this != target && target->m_movedByPlayer && target->m_movedByPlayer != target && target->m_movedByPlayer != this)
     {
-        sLog->outMisc("Player::SetMover (A1) - %u, %u, %u, %u, %u, %u, %u, %u", GetGUIDLow(), GetMapId(), GetInstanceId(), FindMap()->GetId(), IsInWorld() ? 1 : 0, IsDuringRemoveFromWorld() ? 1 : 0, IsBeingTeleported() ? 1 : 0, isBeingLoaded() ? 1 : 0);
-        sLog->outMisc("Player::SetMover (A2) - %u, %u, %u, %u, %u, %u, %u, %u, %u, %u, %u", target->GetTypeId(), target->GetEntry(), target->GetUnitTypeMask(), target->GetGUIDLow(), target->GetMapId(), target->GetInstanceId(), target->FindMap()->GetId(), target->IsInWorld() ? 1 : 0, target->IsDuringRemoveFromWorld() ? 1 : 0, (target->ToPlayer() && target->ToPlayer()->IsBeingTeleported() ? 1 : 0), target->isBeingLoaded() ? 1 : 0);
-        sLog->outMisc("Player::SetMover (A3) - %u, %u, %u, %u, %u, %u, %u, %u", target->m_movedByPlayer->GetGUIDLow(), target->m_movedByPlayer->GetMapId(), target->m_movedByPlayer->GetInstanceId(), target->m_movedByPlayer->FindMap()->GetId(), target->m_movedByPlayer->IsInWorld() ? 1 : 0, target->m_movedByPlayer->IsDuringRemoveFromWorld() ? 1 : 0, target->m_movedByPlayer->ToPlayer()->IsBeingTeleported() ? 1 : 0, target->m_movedByPlayer->isBeingLoaded() ? 1 : 0);
+        LOG_INFO("misc", "Player::SetMover (A1) - %u, %u, %u, %u, %u, %u, %u, %u", GetGUIDLow(), GetMapId(), GetInstanceId(), FindMap()->GetId(), IsInWorld() ? 1 : 0, IsDuringRemoveFromWorld() ? 1 : 0, IsBeingTeleported() ? 1 : 0, isBeingLoaded() ? 1 : 0);
+        LOG_INFO("misc", "Player::SetMover (A2) - %u, %u, %u, %u, %u, %u, %u, %u, %u, %u, %u", target->GetTypeId(), target->GetEntry(), target->GetUnitTypeMask(), target->GetGUIDLow(), target->GetMapId(), target->GetInstanceId(), target->FindMap()->GetId(), target->IsInWorld() ? 1 : 0, target->IsDuringRemoveFromWorld() ? 1 : 0, (target->ToPlayer() && target->ToPlayer()->IsBeingTeleported() ? 1 : 0), target->isBeingLoaded() ? 1 : 0);
+        LOG_INFO("misc", "Player::SetMover (A3) - %u, %u, %u, %u, %u, %u, %u, %u", target->m_movedByPlayer->GetGUIDLow(), target->m_movedByPlayer->GetMapId(), target->m_movedByPlayer->GetInstanceId(), target->m_movedByPlayer->FindMap()->GetId(), target->m_movedByPlayer->IsInWorld() ? 1 : 0, target->m_movedByPlayer->IsDuringRemoveFromWorld() ? 1 : 0, target->m_movedByPlayer->ToPlayer()->IsBeingTeleported() ? 1 : 0, target->m_movedByPlayer->isBeingLoaded() ? 1 : 0);
     }
     if (this != target && (!target->IsInWorld() || target->IsDuringRemoveFromWorld() || GetMapId() != target->GetMapId() || GetInstanceId() != target->GetInstanceId()))
     {
-        sLog->outMisc("Player::SetMover (B1) - %u, %u, %u, %u, %u, %u, %u, %u", GetGUIDLow(), GetMapId(), GetInstanceId(), FindMap()->GetId(), IsInWorld() ? 1 : 0, IsDuringRemoveFromWorld() ? 1 : 0, IsBeingTeleported() ? 1 : 0, isBeingLoaded() ? 1 : 0);
-        sLog->outMisc("Player::SetMover (B2) - %u, %u, %u, %u, %u, %u, %u, %u, %u, %u, %u", target->GetTypeId(), target->GetEntry(), target->GetUnitTypeMask(), target->GetGUIDLow(), target->GetMapId(), target->GetInstanceId(), target->FindMap()->GetId(), target->IsInWorld() ? 1 : 0, target->IsDuringRemoveFromWorld() ? 1 : 0, (target->ToPlayer() && target->ToPlayer()->IsBeingTeleported() ? 1 : 0), target->isBeingLoaded() ? 1 : 0);
+        LOG_INFO("misc", "Player::SetMover (B1) - %u, %u, %u, %u, %u, %u, %u, %u", GetGUIDLow(), GetMapId(), GetInstanceId(), FindMap()->GetId(), IsInWorld() ? 1 : 0, IsDuringRemoveFromWorld() ? 1 : 0, IsBeingTeleported() ? 1 : 0, isBeingLoaded() ? 1 : 0);
+        LOG_INFO("misc", "Player::SetMover (B2) - %u, %u, %u, %u, %u, %u, %u, %u, %u, %u, %u", target->GetTypeId(), target->GetEntry(), target->GetUnitTypeMask(), target->GetGUIDLow(), target->GetMapId(), target->GetInstanceId(), target->FindMap()->GetId(), target->IsInWorld() ? 1 : 0, target->IsDuringRemoveFromWorld() ? 1 : 0, (target->ToPlayer() && target->ToPlayer()->IsBeingTeleported() ? 1 : 0), target->isBeingLoaded() ? 1 : 0);
     }
     m_mover->m_movedByPlayer = NULL;
     m_mover = target;
@@ -24521,7 +24490,7 @@ void Player::SetBattlegroundOrBattlefieldRaid(Group *group, int8 subgroup)
     //we must move references from m_group to m_originalGroup
     if (GetGroup() && (GetGroup()->isBGGroup() || GetGroup()->isBFGroup()))
     {
-        sLog->outMisc("Player::SetBattlegroundOrBattlefieldRaid - current group is %s group!", (GetGroup()->isBGGroup() ? "BG" : "BF"));
+        LOG_INFO("misc", "Player::SetBattlegroundOrBattlefieldRaid - current group is %s group!", (GetGroup()->isBGGroup() ? "BG" : "BF"));
         //ABORT(); // pussywizard: origanal group can never be bf/bg group
     }
 
@@ -24699,7 +24668,7 @@ void Player::SetViewpoint(WorldObject* target, bool apply)
 
         if (!AddUInt64Value(PLAYER_FARSIGHT, target->GetGUID()))
         {
-            sLog->outCrash("Player::CreateViewpoint: Player %s cannot add new viewpoint!", GetName().c_str());
+            LOG_FATAL("server", "Player::CreateViewpoint: Player %s cannot add new viewpoint!", GetName().c_str());
             return;
         }
 
@@ -24723,7 +24692,7 @@ void Player::SetViewpoint(WorldObject* target, bool apply)
 
         if (!RemoveUInt64Value(PLAYER_FARSIGHT, target->GetGUID()))
         {
-            sLog->outCrash("Player::CreateViewpoint: Player %s cannot remove current viewpoint!", GetName().c_str());
+            LOG_FATAL("server", "Player::CreateViewpoint: Player %s cannot remove current viewpoint!", GetName().c_str());
             return;
         }
 
@@ -25280,9 +25249,6 @@ void Player::StoreLootItem(uint8 lootSlot, Loot* loot)
         if (loot->containerId > 0)
             sLootItemStorage->RemoveStoredLootItem(loot->containerId, item->itemid, item->count, loot);
 
-#ifdef ELUNA
-        sEluna->OnLootItem(this, newitem, item->count, this->GetLootGUID());
-#endif
         sScriptMgr->OnLootItem(this, newitem, item->count, this->GetLootGUID());
     }
     else
@@ -25345,7 +25311,7 @@ void Player::_LoadSkills(PreparedQueryResult result)
             SkillLineEntry const* pSkill = sSkillLineStore.LookupEntry(skill);
             if (!pSkill)
             {
-                sLog->outError("Character %u has skill %u that does not exist.", GetGUIDLow(), skill);
+                LOG_ERROR("server", "Character %u has skill %u that does not exist.", GetGUIDLow(), skill);
                 continue;
             }
 
@@ -25363,7 +25329,7 @@ void Player::_LoadSkills(PreparedQueryResult result)
             }
             if (value == 0)
             {
-                sLog->outError("Character %u has skill %u with value 0. Will be deleted.", GetGUIDLow(), skill);
+                LOG_ERROR("server", "Character %u has skill %u with value 0. Will be deleted.", GetGUIDLow(), skill);
 
                 PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHARACTER_SKILL);
 
@@ -25392,7 +25358,7 @@ void Player::_LoadSkills(PreparedQueryResult result)
 
             if (count >= PLAYER_MAX_SKILLS)                      // client limit
             {
-                sLog->outError("Character %u has more than %u skills.", GetGUIDLow(), PLAYER_MAX_SKILLS);
+                LOG_ERROR("server", "Character %u has more than %u skills.", GetGUIDLow(), PLAYER_MAX_SKILLS);
                 break;
             }
         }
@@ -25722,10 +25688,6 @@ void Player::LearnTalent(uint32 talentId, uint32 talentRank)
     // xinef: update free talent points count
     m_usedTalentCount += talentPointsChange;
     SetFreeTalentPoints(CurTalentPoints - talentPointsChange);
-
-#ifdef ELUNA
-    sEluna->OnLearnTalents(this, talentId, talentRank, spellId);
-#endif
 }
 
 void Player::LearnPetTalent(uint64 petGuid, uint32 talentId, uint32 talentRank)
@@ -25847,7 +25809,7 @@ void Player::LearnPetTalent(uint64 petGuid, uint32 talentId, uint32 talentRank)
     uint32 spellid = talentInfo->RankID[talentRank];
     if (spellid == 0)
     {
-        sLog->outError("Talent.dbc have for talent: %u Rank: %u spell id = 0", talentId, talentRank);
+        LOG_ERROR("server", "Talent.dbc have for talent: %u Rank: %u spell id = 0", talentId, talentRank);
         return;
     }
 
@@ -25858,7 +25820,7 @@ void Player::LearnPetTalent(uint64 petGuid, uint32 talentId, uint32 talentRank)
     // learn! (other talent ranks will unlearned at learning)
     pet->learnSpell(spellid);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDetail("PetTalentID: %u Rank: %u Spell: %u\n", talentId, talentRank, spellid);
+    LOG_INFO("server", "PetTalentID: %u Rank: %u Spell: %u\n", talentId, talentRank, spellid);
 #endif
 
     // update free talent points
@@ -26104,9 +26066,9 @@ void Player::BuildEnchantmentsInfoData(WorldPacket* data)
 
         data->put<uint16>(enchantmentMaskPos, enchantmentMask);
 
-        *data << uint16(0);                                 // unknown
+        *data << uint16(item->GetItemRandomPropertyId());               // item random property id
         data->appendPackGUID(item->GetUInt64Value(ITEM_FIELD_CREATOR)); // item creator
-        *data << uint32(0);                                 // seed?
+        *data << uint32(item->GetItemSuffixFactor());                   // item suffix factor
     }
 
     data->put<uint32>(slotUsedMaskPos, slotUsedMask);
@@ -26159,7 +26121,7 @@ void Player::SetEquipmentSet(uint32 index, EquipmentSet eqset)
 
         if (!found)                                          // something wrong...
         {
-            sLog->outError("Player %s tried to save equipment set " UI64FMTD " (index %u), but that equipment set not found!", GetName().c_str(), eqset.Guid, index);
+            LOG_ERROR("server", "Player %s tried to save equipment set " UI64FMTD " (index %u), but that equipment set not found!", GetName().c_str(), eqset.Guid, index);
             return;
         }
     }

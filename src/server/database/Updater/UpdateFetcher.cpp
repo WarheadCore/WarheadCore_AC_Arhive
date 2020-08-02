@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2019 TrinityCore <https://www.trinitycore.org/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -126,7 +126,7 @@ UpdateFetcher::DirectoryStorage UpdateFetcher::ReceiveIncludedDirectories() cons
 
     std::vector<std::string> moduleList;
 
-    Tokenizer _modules(AC_MODULES_LIST, ',');
+    Tokenizer _modules(WH_MODULES_LIST, ',');
     for (auto const& itr : _modules)
         moduleList.push_back(itr);
 

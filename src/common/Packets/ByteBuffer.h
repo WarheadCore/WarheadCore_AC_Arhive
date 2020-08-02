@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef _BYTEBUFFER_H
@@ -20,7 +31,7 @@
 #include <time.h>
 
 // Root of ByteBuffer exception hierarchy
-class AC_COMMON_API ByteBufferException : public std::exception
+class WH_COMMON_API ByteBufferException : public std::exception
 {
 public:
     ~ByteBufferException() throw() { }
@@ -34,7 +45,7 @@ private:
     std::string msg_;
 };
 
-class AC_COMMON_API ByteBufferPositionException : public ByteBufferException
+class WH_COMMON_API ByteBufferPositionException : public ByteBufferException
 {
 public:
     ByteBufferPositionException(bool add, size_t pos, size_t size, size_t valueSize);
@@ -42,7 +53,7 @@ public:
     ~ByteBufferPositionException() throw() { }
 };
 
-class AC_COMMON_API ByteBufferSourceException : public ByteBufferException
+class WH_COMMON_API ByteBufferSourceException : public ByteBufferException
 {
 public:
     ByteBufferSourceException(size_t pos, size_t size, size_t valueSize);
@@ -50,7 +61,7 @@ public:
     ~ByteBufferSourceException() throw() { }
 };
 
-class AC_COMMON_API ByteBuffer
+class WH_COMMON_API ByteBuffer
 {
     public:
         const static size_t DEFAULT_SIZE = 0x1000;
@@ -71,6 +82,12 @@ class AC_COMMON_API ByteBuffer
             _storage(buf._storage)
         {
         }
+        /* requried as of C++ 11 */
+        #if __cplusplus >= 201103L
+        ByteBuffer(ByteBuffer&&) = default;
+        ByteBuffer& operator=(const ByteBuffer&) = default;
+        ByteBuffer& operator=(ByteBuffer&&) = default;
+        #endif
 
         void clear()
         {
@@ -373,18 +390,18 @@ class AC_COMMON_API ByteBuffer
             return *this;
         }
 
-        uint8 * contents() 
-        { 
+        uint8 * contents()
+        {
             if (_storage.empty())
                 throw ByteBufferException();
-            return &_storage[0]; 
+            return &_storage[0];
         }
 
-        const uint8 *contents() const 
-        { 
+        const uint8 *contents() const
+        {
             if (_storage.empty())
                 throw ByteBufferException();
-            return &_storage[0]; 
+            return &_storage[0];
         }
 
         size_t size() const { return _storage.size(); }
@@ -611,4 +628,3 @@ inline void ByteBuffer::read_skip<std::string>()
 }
 
 #endif
-

@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "PreparedStatement.h"
@@ -70,7 +81,7 @@ void PreparedStatement::BindParameters()
     }
     #ifdef _DEBUG
     if (i < m_stmt->m_paramCount)
-        sLog->outSQLDriver("[WARNING]: BindParameters() for statement %u did not bind all allocated parameters", m_index);
+        LOG_INFO("sql.driver", "[WARNING]: BindParameters() for statement %u did not bind all allocated parameters", m_index);
     #endif
 }
 
@@ -233,7 +244,7 @@ void MySQLPreparedStatement::ClearParameters()
 
 static bool ParamenterIndexAssertFail(uint32 stmtIndex, uint8 index, uint32 paramCount)
 {
-    sLog->outError("Attempted to bind parameter %u%s on a PreparedStatement %u (statement has only %u parameters)", uint32(index) + 1, (index == 1 ? "st" : (index == 2 ? "nd" : (index == 3 ? "rd" : "nd"))), stmtIndex, paramCount);
+    LOG_ERROR("server", "Attempted to bind parameter %u%s on a PreparedStatement %u (statement has only %u parameters)", uint32(index) + 1, (index == 1 ? "st" : (index == 2 ? "nd" : (index == 3 ? "rd" : "nd"))), stmtIndex, paramCount);
     return false;
 }
 
@@ -243,7 +254,7 @@ bool MySQLPreparedStatement::CheckValidIndex(uint8 index)
     ASSERT(index < m_paramCount || ParamenterIndexAssertFail(m_stmt->m_index, index, m_paramCount));
 
     if (m_paramsSet[index])
-        sLog->outSQLDriver("[WARNING] Prepared Statement (id: %u) trying to bind value on already bound index (%u).", m_stmt->m_index, index);
+        LOG_INFO("sql.driver", "[WARNING] Prepared Statement (id: %u) trying to bind value on already bound index (%u).", m_stmt->m_index, index);
     return true;
 }
 

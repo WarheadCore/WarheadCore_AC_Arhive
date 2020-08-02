@@ -1,6 +1,19 @@
 /*
- * Originally written by Xinef - Copyright (C) 2016+ AzerothCore <www.azerothcore.org>, released under GNU AGPL v3 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-AGPL3
-*/
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "ScriptMgr.h"
 #include "ScriptedCreature.h"
@@ -146,7 +159,6 @@ class boss_magus_telestra : public CreatureScript
                     if (++copiesDied >= 3)
                     {
                         copiesDied = 0;
-                        Talk(SAY_MERGE);
                         events.CancelEvent(EVENT_MAGUS_FAIL_ACHIEVEMENT);
                         events.ScheduleEvent(EVENT_MAGUS_MERGED, 5000);
                         me->CastSpell(me, SPELL_BURNING_WINDS, true);
@@ -170,6 +182,7 @@ class boss_magus_telestra : public CreatureScript
                         {
                             me->CastSpell(me, SPELL_START_SUMMON_CLONES, false);
                             events.ScheduleEvent(EVENT_MAGUS_RELOCATE, 3500);
+                            Talk(SAY_SPLIT);
                             break;
                         }
                         events.ScheduleEvent(EVENT_MAGUS_HEALTH1, 1000);
@@ -179,6 +192,7 @@ class boss_magus_telestra : public CreatureScript
                         {
                             me->CastSpell(me, SPELL_START_SUMMON_CLONES, false);
                             events.ScheduleEvent(EVENT_MAGUS_RELOCATE, 3500);
+                            Talk(SAY_SPLIT);
                             break;
                         }
                         events.ScheduleEvent(EVENT_MAGUS_HEALTH2, 1000);
@@ -205,6 +219,7 @@ class boss_magus_telestra : public CreatureScript
                     case EVENT_MAGUS_MERGED:
                         me->CastSpell(me, SPELL_TELESTRA_BACK, true);
                         me->RemoveAllAuras();
+                        Talk(SAY_MERGE);
                         break;
                 }
 
@@ -229,7 +244,6 @@ class spell_boss_magus_telestra_summon_telestra_clones : public SpellScriptLoade
 
             void HandleApply(AuraEffect const*  /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
-                GetUnitOwner()->ToCreature()->AI()->Talk(SAY_SPLIT);
                 GetUnitOwner()->CastSpell(GetUnitOwner(), SPELL_FIRE_MAGUS_SUMMON, true);
                 GetUnitOwner()->CastSpell(GetUnitOwner(), SPELL_FROST_MAGUS_SUMMON, true);
                 GetUnitOwner()->CastSpell(GetUnitOwner(), SPELL_ARCANE_MAGUS_SUMMON, true);
@@ -271,7 +285,7 @@ class spell_boss_magus_telestra_gravity_well : public SpellScriptLoader
 
             void SelectTarget(std::list<WorldObject*>& targets)
             {
-                targets.remove_if(acore::RandomCheck(50));
+                targets.remove_if(warhead::RandomCheck(50));
             }
 
             void HandlePull(SpellEffIndex effIndex)

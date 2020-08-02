@@ -1,6 +1,19 @@
 /*
- * Originally written by Pussywizard - Copyright (C) 2016+ AzerothCore <www.azerothcore.org>, released under GNU AGPL v3 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-AGPL3
-*/
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "CreatureTextMgr.h"
 #include "MoveSpline.h"
@@ -2204,7 +2217,7 @@ class spell_igb_explosion : public SpellScriptLoader
             void SelectTarget(std::list<WorldObject*>& targets)
             {
                 targets.remove_if(IgbExplosionCheck(GetCaster()));
-                acore::Containers::RandomResizeList(targets, 1);
+                warhead::Containers::RandomResizeList(targets, 1);
             }
 
             void Register()
@@ -2473,7 +2486,7 @@ class spell_igb_burning_pitch_selector : public SpellScriptLoader
                 targets.remove_if(BurningPitchFilterCheck(teamId == TEAM_HORDE ? GO_ORGRIMS_HAMMER_H : GO_THE_SKYBREAKER_A));
                 if (!targets.empty())
                 {
-                    WorldObject* target = acore::Containers::SelectRandomContainerElement(targets);
+                    WorldObject* target = warhead::Containers::SelectRandomContainerElement(targets);
                     targets.clear();
                     targets.push_back(target);
                 }
@@ -2558,7 +2571,7 @@ class spell_igb_rocket_artillery : public SpellScriptLoader
 
                 if (!targets.empty())
                 {
-                    WorldObject* target = acore::Containers::SelectRandomContainerElement(targets);
+                    WorldObject* target = warhead::Containers::SelectRandomContainerElement(targets);
                     targets.clear();
                     targets.push_back(target);
                 }

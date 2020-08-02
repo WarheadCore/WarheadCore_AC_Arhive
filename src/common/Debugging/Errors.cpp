@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2019 TrinityCore <https://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "Errors.h"
@@ -22,14 +33,14 @@
     terminates the application.
  */
 
-#if AC_PLATFORM == AC_PLATFORM_WINDOWS
+#if WH_PLATFORM == WH_PLATFORM_WINDOWS
 #include <Windows.h>
 #define Crash(message) \
     ULONG_PTR execeptionArgs[] = { reinterpret_cast<ULONG_PTR>(strdup(message)), reinterpret_cast<ULONG_PTR>(_ReturnAddress()) }; \
     RaiseException(EXCEPTION_ASSERTION_FAILURE, 0, 2, execeptionArgs);
 #else
 // should be easily accessible in gdb
-extern "C" { AC_COMMON_API char const* TrinityAssertionFailedMessage = nullptr; }
+extern "C" { WH_COMMON_API char const* TrinityAssertionFailedMessage = nullptr; }
 #define Crash(message) \
     TrinityAssertionFailedMessage = strdup(message); \
     *((volatile int*)nullptr) = 0; \
@@ -54,12 +65,12 @@ namespace
     }
 }
 
-namespace acore
+namespace warhead
 {
 
 void Assert(char const* file, int line, char const* function, std::string const& debugInfo, char const* message)
 {
-    std::string formattedMessage = acore::StringFormat("\n%s:%i in %s ASSERTION FAILED:\n  %s\n", file, line, function, message) + debugInfo + '\n';
+    std::string formattedMessage = StringFormat("\n%s:%i in %s ASSERTION FAILED:\n  %s\n", file, line, function, message) + debugInfo + '\n';
     fprintf(stderr, "%s", formattedMessage.c_str());
     fflush(stderr);
     Crash(formattedMessage.c_str());
@@ -70,7 +81,7 @@ void Assert(char const* file, int line, char const* function, std::string const&
     va_list args;
     va_start(args, format);
 
-    std::string formattedMessage = acore::StringFormat("\n%s:%i in %s ASSERTION FAILED:\n  %s\n", file, line, function, message) + FormatAssertionMessage(format, args) + '\n' + debugInfo + '\n';
+    std::string formattedMessage = StringFormat("\n%s:%i in %s ASSERTION FAILED:\n  %s\n", file, line, function, message) + FormatAssertionMessage(format, args) + '\n' + debugInfo + '\n';
     va_end(args);
 
     fprintf(stderr, "%s", formattedMessage.c_str());
@@ -84,7 +95,7 @@ void Fatal(char const* file, int line, char const* function, char const* message
     va_list args;
     va_start(args, message);
 
-    std::string formattedMessage = acore::StringFormat("\n%s:%i in %s FATAL ERROR:\n", file, line, function) + FormatAssertionMessage(message, args) + '\n';
+    std::string formattedMessage = StringFormat("\n%s:%i in %s FATAL ERROR:\n", file, line, function) + FormatAssertionMessage(message, args) + '\n';
     va_end(args);
 
     fprintf(stderr, "%s", formattedMessage.c_str());
@@ -96,7 +107,7 @@ void Fatal(char const* file, int line, char const* function, char const* message
 
 void Error(char const* file, int line, char const* function, char const* message)
 {
-    std::string formattedMessage = acore::StringFormat("\n%s:%i in %s ERROR:\n  %s\n", file, line, function, message);
+    std::string formattedMessage = StringFormat("\n%s:%i in %s ERROR:\n  %s\n", file, line, function, message);
     fprintf(stderr, "%s", formattedMessage.c_str());
     fflush(stderr);
     Crash(formattedMessage.c_str());
@@ -110,22 +121,36 @@ void Warning(char const* file, int line, char const* function, char const* messa
 
 void Abort(char const* file, int line, char const* function)
 {
-    std::string formattedMessage = acore::StringFormat("\n%s:%i in %s ABORTED.\n", file, line, function);
+    std::string formattedMessage = StringFormat("\n%s:%i in %s ABORTED.\n", file, line, function);
     fprintf(stderr, "%s", formattedMessage.c_str());
     fflush(stderr);
+    Crash(formattedMessage.c_str());
+}
+
+void Abort(char const* file, int line, char const* function, char const* message, ...)
+{
+    va_list args;
+    va_start(args, message);
+
+    std::string formattedMessage = StringFormat("\n%s:%i in %s ABORTED:\n", file, line, function) + FormatAssertionMessage(message, args) + '\n';
+    va_end(args);
+
+    fprintf(stderr, "%s", formattedMessage.c_str());
+    fflush(stderr);
+
     Crash(formattedMessage.c_str());
 }
 
 void AbortHandler(int sigval)
 {
     // nothing useful to log here, no way to pass args
-    std::string formattedMessage = acore::StringFormat("Caught signal %i\n", sigval);
+    std::string formattedMessage = StringFormat("Caught signal %i\n", sigval);
     fprintf(stderr, "%s", formattedMessage.c_str());
     fflush(stderr);
     Crash(formattedMessage.c_str());
 }
 
-} // namespace acore
+} // namespace warhead
 
 std::string GetDebugInfo()
 {

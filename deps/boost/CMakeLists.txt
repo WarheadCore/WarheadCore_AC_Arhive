@@ -1,4 +1,5 @@
-# This file is part of the TrinityCore Project. See AUTHORS file for Copyright information
+#
+# This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
 #
 # This file is free software; as a special exception the author gives
 # unlimited permission to copy and/or distribute it, with or without
@@ -7,28 +8,17 @@
 # This program is distributed in the hope that it will be useful, but
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# User has manually chosen to ignore the git-tests, so throw them a warning.
+# This is done EACH compile so they can be alerted about the consequences.
+#
 
 if(WIN32)
  set(BOOST_DEBUG ON)
   if(DEFINED ENV{BOOST_ROOT})
     set(BOOST_ROOT $ENV{BOOST_ROOT})
-    if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS 19.0)
-      set(BOOST_LIBRARYDIR ${BOOST_ROOT}/lib${PLATFORM}-msvc-12.0)
-    else()
-      if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 19.10)
-        set(BOOST_LIBRARYDIR ${BOOST_ROOT}/lib${PLATFORM}-msvc-14.0)
-      else()
-		if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 19.20)
-			list(APPEND BOOST_LIBRARYDIR
-			  ${BOOST_ROOT}/lib${PLATFORM}-msvc-14.1
-			  ${BOOST_ROOT}/lib${PLATFORM}-msvc-14.0 )
-		else()
-			list(APPEND BOOST_LIBRARYDIR
-			  ${BOOST_ROOT}/lib${PLATFORM}-msvc-14.2
-			  ${BOOST_ROOT}/lib${PLATFORM}-msvc-14.1 )
-		endif()
-      endif()
-    endif()
+    list(APPEND BOOST_LIBRARYDIR
+    ${BOOST_ROOT}/lib${PLATFORM}-msvc-14.2)
   else()
     message(FATAL_ERROR "No BOOST_ROOT environment variable could be found! Please make sure it is set and the points to your Boost installation.")
   endif()
@@ -42,26 +32,12 @@ include (CheckCXXSourceCompiles)
 
 if (WIN32)
   # On windows the requirements are higher according to the wiki.
-  set(BOOST_REQUIRED_VERSION 1.59)
+  set(BOOST_REQUIRED_VERSION 1.70)
 else()
-  set(BOOST_REQUIRED_VERSION 1.58)
+  set(BOOST_REQUIRED_VERSION 1.67)
 endif()
 
-find_package(Boost ${BOOST_REQUIRED_VERSION} REQUIRED system filesystem thread program_options iostreams regex)
-
-# Find if Boost was compiled in C++03 mode because it requires -DBOOST_NO_CXX11_SCOPED_ENUMS
-
-set(CMAKE_REQUIRED_INCLUDES ${Boost_INCLUDE_DIR})
-set(CMAKE_REQUIRED_LIBRARIES ${Boost_SYSTEM_LIBRARY} ${Boost_FILESYSTEM_LIBRARY} ${Boost_IOSTREAMS_LIBRARY})
-set(CMAKE_REQUIRED_FLAGS "-std=c++11")
-check_cxx_source_compiles("
-  #include <boost/filesystem/path.hpp>
-  #include <boost/filesystem/operations.hpp>
-  int main() { boost::filesystem::copy_file(boost::filesystem::path(), boost::filesystem::path()); }"
-boost_filesystem_copy_links_without_NO_SCOPED_ENUM)
-unset(CMAKE_REQUIRED_INCLUDES)
-unset(CMAKE_REQUIRED_LIBRARIES)
-unset(CMAKE_REQUIRED_FLAGS)
+find_package(Boost ${BOOST_REQUIRED_VERSION} REQUIRED system filesystem program_options iostreams regex)
 
 add_library(boost INTERFACE)
 
@@ -77,10 +53,6 @@ target_compile_definitions(boost
   INTERFACE
     -DBOOST_DATE_TIME_NO_LIB
     -DBOOST_REGEX_NO_LIB
-    -DBOOST_CHRONO_NO_LIB
-    # Due to MSVC linking error boost::none" already defined in scripts_...
-    # May be removed when the requirement is raised to boost 1.61 on windows.
-    -DBOOST_OPTIONAL_USE_OLD_DEFINITION_OF_NONE
     -DBOOST_CHRONO_NO_LIB
     -DBOOST_SERIALIZATION_NO_LIB
     -DBOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE

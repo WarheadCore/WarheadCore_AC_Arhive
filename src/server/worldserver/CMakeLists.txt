@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
+# This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
 #
 # This file is free software; as a special exception the author gives
 # unlimited permission to copy and/or distribute it, with or without
@@ -8,6 +8,10 @@
 # This program is distributed in the hope that it will be useful, but
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# User has manually chosen to ignore the git-tests, so throw them a warning.
+# This is done EACH compile so they can be alerted about the consequences.
+#
 
 CollectSourceFiles(
   ${CMAKE_CURRENT_SOURCE_DIR}
@@ -31,11 +35,6 @@ GroupSources(${CMAKE_CURRENT_SOURCE_DIR})
 
 add_executable(worldserver
   ${PRIVATE_SOURCES})
-
-if(NOT WIN32)
-  set_target_properties(worldserver PROPERTIES
-    COMPILE_DEFINITIONS _ACORE_CORE_CONFIG="${CONF_DIR}/worldserver.conf")
-endif()
 
 add_dependencies(worldserver revision.h)
 
@@ -83,13 +82,17 @@ if( WIN32 )
   if ( MSVC )
     add_custom_command(TARGET worldserver
       POST_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/worldserver.conf.dist ${CMAKE_BINARY_DIR}/bin/$(ConfigurationName)/
-    )
+      COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/bin/$(ConfigurationName)/configs/)
+    add_custom_command(TARGET worldserver
+      POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/worldserver.conf.dist ${CMAKE_BINARY_DIR}/bin/$(ConfigurationName)/configs/)
   elseif ( MINGW )
     add_custom_command(TARGET worldserver
       POST_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/worldserver.conf.dist ${CMAKE_BINARY_DIR}/bin/
-    )
+      COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/bin/configs)
+    add_custom_command(TARGET worldserver
+      POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/worldserver.conf.dist ${CMAKE_BINARY_DIR}/bin/configs)
   endif()
 endif()
 
@@ -113,16 +116,20 @@ if( WIN32 )
   if ( MSVC )
     add_custom_command(TARGET worldserver
       POST_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy "${configFile}" ${CMAKE_BINARY_DIR}/bin/$(ConfigurationName)/
-    )
+      COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/bin/$(ConfigurationName)/configs/modules/)  
+    add_custom_command(TARGET worldserver
+      POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy "${configFile}" ${CMAKE_BINARY_DIR}/bin/$(ConfigurationName)/configs/modules)
   elseif ( MINGW )
     add_custom_command(TARGET worldserver
       POST_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy "${configFile}" ${CMAKE_BINARY_DIR}/bin/
-    )
+      COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/bin/configs/modules/)
+    add_custom_command(TARGET worldserver
+      POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy "${configFile}" ${CMAKE_BINARY_DIR}/bin/configs/modules)
   endif()
 endif()
-install(FILES "${configFile}" DESTINATION ${CONF_DIR})
+install(FILES "${configFile}" DESTINATION ${CONF_DIR}/modules/)
 ENDFOREACH()
 
 CU_GET_GLOBAL("MODULE_CONFIG_FILE_LIST")

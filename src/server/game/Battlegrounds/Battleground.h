@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef __BATTLEGROUND_H
@@ -154,16 +165,6 @@ enum BattlegroundBuffObjects
     BG_OBJECTID_SPEEDBUFF_ENTRY     = 179871,
     BG_OBJECTID_REGENBUFF_ENTRY     = 179904,
     BG_OBJECTID_BERSERKERBUFF_ENTRY = 179905
-};
-
-enum BattlegroundRandomRewards
-{
-    BG_REWARD_WINNER_HONOR_FIRST    = 30,
-    BG_REWARD_WINNER_ARENA_FIRST    = 25,
-    BG_REWARD_WINNER_HONOR_LAST     = 15,
-    BG_REWARD_WINNER_ARENA_LAST     = 0,
-    BG_REWARD_LOSER_HONOR_FIRST    = 5,
-    BG_REWARD_LOSER_HONOR_LAST     = 5
 };
 
 const uint32 Buff_Entries[3] = { BG_OBJECTID_SPEEDBUFF_ENTRY, BG_OBJECTID_REGENBUFF_ENTRY, BG_OBJECTID_BERSERKERBUFF_ENTRY };
@@ -408,7 +409,7 @@ class Battleground
         bool HasFreeSlots() const;
         uint32 GetFreeSlotsForTeam(TeamId teamId) const;
         uint32 GetMaxFreeSlots() const;
- 
+
         typedef std::set<Player*> SpectatorList;
         typedef std::map<uint64, uint64> ToBeTeleportedMap;
         void AddSpectator(Player* p) { m_Spectators.insert(p); }
@@ -591,7 +592,7 @@ class Battleground
         virtual uint64 GetFlagPickerGUID(TeamId /*teamId*/ = TEAM_NEUTRAL) const { return 0; }
         virtual void SetDroppedFlagGUID(uint64 /*guid*/, TeamId /*teamId*/ = TEAM_NEUTRAL) {}
         uint32 GetTeamScore(TeamId teamId) const;
-        
+
         virtual TeamId GetPrematureWinner();
 
         // because BattleGrounds with different types and same level range has different m_BracketId

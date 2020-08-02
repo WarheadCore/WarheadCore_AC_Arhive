@@ -1,6 +1,19 @@
 /*
- * Originally written by Pussywizard - Copyright (C) 2016+ AzerothCore <www.azerothcore.org>, released under GNU AGPL v3 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-AGPL3
-*/
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "AccountMgr.h"
 #include "ObjectMgr.h"
@@ -831,7 +844,7 @@ class npc_crok_scourgebane : public CreatureScript
                     // get all nearby vrykul
                     std::list<Creature*> temp;
                     FrostwingVrykulSearcher check(me, 150.0f);
-                    acore::CreatureListSearcher<FrostwingVrykulSearcher> searcher(me, temp, check);
+                    warhead::CreatureListSearcher<FrostwingVrykulSearcher> searcher(me, temp, check);
                     me->VisitNearbyGridObject(150.0f, searcher);
 
                     _aliveTrash.clear();
@@ -875,15 +888,15 @@ class npc_crok_scourgebane : public CreatureScript
                     _wipeCheckTimer = 3000;
 
                     Player* player = NULL;
-                    acore::AnyPlayerInObjectRangeCheck check(me, 140.0f);
-                    acore::PlayerSearcher<acore::AnyPlayerInObjectRangeCheck> searcher(me, player, check);
+                    warhead::AnyPlayerInObjectRangeCheck check(me, 140.0f);
+                    warhead::PlayerSearcher<warhead::AnyPlayerInObjectRangeCheck> searcher(me, player, check);
                     me->VisitNearbyWorldObject(140.0f, searcher);
                     // wipe
                     if (!player || me->GetExactDist(4357.0f, 2606.0f, 350.0f) > 125.0f)
                     {
                         //Talk(SAY_CROK_DEATH);
                         FrostwingGauntletRespawner respawner;
-                        acore::CreatureWorker<FrostwingGauntletRespawner> worker(me, respawner);
+                        warhead::CreatureWorker<FrostwingGauntletRespawner> worker(me, respawner);
                         me->VisitNearbyGridObject(333.0f, worker);
                         return;
                     }
@@ -1330,7 +1343,7 @@ class npc_captain_arnath : public CreatureScript
                     {
                         std::list<Creature*> targets = DoFindFriendlyMissingBuff(40.0f, SPELL_POWER_WORD_SHIELD);
                         if (!targets.empty())
-                            DoCast(acore::Containers::SelectRandomContainerElement(targets), SPELL_POWER_WORD_SHIELD);
+                            DoCast(warhead::Containers::SelectRandomContainerElement(targets), SPELL_POWER_WORD_SHIELD);
                         Events.ScheduleEvent(EVENT_ARNATH_PW_SHIELD, urand(15000, 20000));
                         break;
                     }
@@ -1354,8 +1367,8 @@ class npc_captain_arnath : public CreatureScript
             Creature* FindFriendlyCreature() const
             {
                 Creature* target = NULL;
-                acore::MostHPMissingInRange u_check(me, 60.0f, 0);
-                acore::CreatureLastSearcher<acore::MostHPMissingInRange> searcher(me, target, u_check);
+                warhead::MostHPMissingInRange u_check(me, 60.0f, 0);
+                warhead::CreatureLastSearcher<warhead::MostHPMissingInRange> searcher(me, target, u_check);
                 me->VisitNearbyGridObject(60.0f, searcher);
                 return target;
             }
@@ -1677,7 +1690,7 @@ class npc_frostwing_vrykul : public CreatureScript
                 if (me->HasUnitState(UNIT_STATE_CASTING) || me->isFeared() || me->isFrozen() || me->HasUnitState(UNIT_STATE_STUNNED) || me->HasUnitState(UNIT_STATE_CONFUSED) || ((me->GetEntry() == NPC_YMIRJAR_DEATHBRINGER || me->GetEntry() == NPC_YMIRJAR_FROSTBINDER) && me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SILENCED)))
                     return;
 
-                switch (events.ExecuteEvent())
+                switch (events.GetEvent())
                 {
                     case 0:
                         break;
@@ -1957,7 +1970,7 @@ class spell_icc_sprit_alarm : public SpellScriptLoader
 
                 std::list<Creature*> wards;
                 GetCaster()->GetCreatureListWithEntryInGrid(wards, NPC_DEATHBOUND_WARD, range);
-                wards.sort(acore::ObjectDistanceOrderPred(GetCaster()));
+                wards.sort(warhead::ObjectDistanceOrderPred(GetCaster()));
                 for (std::list<Creature*>::iterator itr = wards.begin(); itr != wards.end(); ++itr)
                 {
                     if ((*itr)->IsAlive() && (*itr)->HasAura(SPELL_STONEFORM))
@@ -2056,8 +2069,8 @@ class spell_frost_giant_death_plague : public SpellScriptLoader
             // First effect
             void CountTargets(std::list<WorldObject*>& targets)
             {
-                targets.remove_if(acore::ObjectTypeIdCheck(TYPEID_PLAYER, false));
-                targets.remove_if(acore::ObjectGUIDCheck(GetCaster()->GetGUID(), true));
+                targets.remove_if(warhead::ObjectTypeIdCheck(TYPEID_PLAYER, false));
+                targets.remove_if(warhead::ObjectGUIDCheck(GetCaster()->GetGUID(), true));
 
                 bool kill = true;
                 for (std::list<WorldObject*>::const_iterator itr = targets.begin(); itr != targets.end(); ++itr)
@@ -2150,7 +2163,7 @@ class spell_svalna_revive_champion : public SpellScriptLoader
             void RemoveAliveTarget(std::list<WorldObject*>& targets)
             {
                 targets.remove_if(AliveCheck());
-                acore::Containers::RandomResizeList(targets, 2);
+                warhead::Containers::RandomResizeList(targets, 2);
             }
 
             void Land(SpellEffIndex /*effIndex*/)
@@ -2265,7 +2278,7 @@ class at_icc_saurfang_portal : public AreaTriggerScript
                 instance->SetData(DATA_COLDFLAME_JETS, IN_PROGRESS);
                 std::list<Creature*> traps;
                 GetCreatureListWithEntryInGrid(traps, player, NPC_FROST_FREEZE_TRAP, 120.0f);
-                traps.sort(acore::ObjectDistanceOrderPred(player));
+                traps.sort(warhead::ObjectDistanceOrderPred(player));
                 bool instant = false;
                 for (std::list<Creature*>::iterator itr = traps.begin(); itr != traps.end(); ++itr)
                 {
@@ -2323,7 +2336,7 @@ class at_icc_start_frostwing_gauntlet : public AreaTriggerScript
                         if (!crok->IsAlive())
                         {
                             FrostwingGauntletRespawner respawner;
-                            acore::CreatureWorker<FrostwingGauntletRespawner> worker(crok, respawner);
+                            warhead::CreatureWorker<FrostwingGauntletRespawner> worker(crok, respawner);
                             crok->VisitNearbyGridObject(333.0f, worker);
                             return true;
                         }
@@ -2573,7 +2586,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case 0:
                     break;
@@ -2638,7 +2651,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case 0:
                     break;
@@ -2693,7 +2706,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case 0:
                     break;
@@ -2755,7 +2768,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case 0:
                     break;
@@ -2874,7 +2887,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case 0:
                     break;
@@ -2997,7 +3010,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            if (uint32 e = events.ExecuteEvent())
+            if (uint32 e = events.GetEvent())
             {
                 Unit* target = NULL;
                 if (sesi_spells[e-1].targetType == 1)
@@ -3096,7 +3109,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case 1:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40.0f, true))
@@ -3245,7 +3258,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case 1:
                     if (me->GetVictim() && !me->GetVictim()->HasAura(71163) && me->GetVictim()->GetDistance(me) > 5.0f && me->GetVictim()->GetDistance(me) < 30.0f)
@@ -3386,7 +3399,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case 0:
                     break;

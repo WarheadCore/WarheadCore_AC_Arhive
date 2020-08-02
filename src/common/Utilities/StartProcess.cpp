@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2019 TrinityCore <https://www.trinitycore.org/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -27,7 +27,7 @@ using namespace boost::process;
 using namespace boost::process::initializers;
 using namespace boost::iostreams;
 
-namespace acore
+namespace warhead
 {
 
 template<typename T>
@@ -254,4 +254,4 @@ std::string SearchExecutableInPath(std::string const& filename)
     }
 }
 
-} // namespace acore
+} // namespace warhead

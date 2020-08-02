@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /** \file
@@ -22,7 +33,7 @@ namespace WeatherMgr
 
 namespace
 {
-    typedef std::unordered_map<uint32, acore::AutoPtr<Weather, ACE_Null_Mutex> > WeatherMap;
+    typedef std::unordered_map<uint32, warhead::AutoPtr<Weather, ACE_Null_Mutex> > WeatherMap;
     typedef std::unordered_map<uint32, WeatherData> WeatherZoneMap;
 
     WeatherMap m_weathers;
@@ -84,8 +95,8 @@ void LoadWeatherData()
 
     if (!result)
     {
-        sLog->outErrorDb(">> Loaded 0 weather definitions. DB table `game_weather` is empty.");
-        sLog->outString();
+        LOG_ERROR("sql.sql", ">> Loaded 0 weather definitions. DB table `game_weather` is empty.");
+        LOG_INFO("server", "");
         return;
     }
 
@@ -106,19 +117,19 @@ void LoadWeatherData()
             if (wzc.data[season].rainChance > 100)
             {
                 wzc.data[season].rainChance = 25;
-                sLog->outErrorDb("Weather for zone %u season %u has wrong rain chance > 100%%", zone_id, season);
+                LOG_ERROR("sql.sql", "Weather for zone %u season %u has wrong rain chance > 100%%", zone_id, season);
             }
 
             if (wzc.data[season].snowChance > 100)
             {
                 wzc.data[season].snowChance = 25;
-                sLog->outErrorDb("Weather for zone %u season %u has wrong snow chance > 100%%", zone_id, season);
+                LOG_ERROR("sql.sql", "Weather for zone %u season %u has wrong snow chance > 100%%", zone_id, season);
             }
 
             if (wzc.data[season].stormChance > 100)
             {
                 wzc.data[season].stormChance = 25;
-                sLog->outErrorDb("Weather for zone %u season %u has wrong storm chance > 100%%", zone_id, season);
+                LOG_ERROR("sql.sql", "Weather for zone %u season %u has wrong storm chance > 100%%", zone_id, season);
             }
         }
 
@@ -128,8 +139,8 @@ void LoadWeatherData()
     }
     while (result->NextRow());
 
-    sLog->outString(">> Loaded %u weather definitions in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-    sLog->outString();
+    LOG_INFO("server", ">> Loaded %u weather definitions in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+    LOG_INFO("server", "");
 }
 
 void SendFineWeatherUpdateToPlayer(Player* player)

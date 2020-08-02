@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -260,15 +260,15 @@ public:
         float radius = 40.0f;
         WorldObject* object = handler->GetSession()->GetPlayer();
 
-        CellCoord pair(acore::ComputeCellCoord(object->GetPositionX(), object->GetPositionY()));
+        CellCoord pair(warhead::ComputeCellCoord(object->GetPositionX(), object->GetPositionY()));
         Cell cell(pair);
         cell.SetNoCreate();
 
         std::list<Creature*> creatureList;
 
-        acore::AnyUnitInObjectRangeCheck go_check(object, radius);
-        acore::CreatureListSearcher<acore::AnyUnitInObjectRangeCheck> go_search(object, creatureList, go_check);
-        TypeContainerVisitor<acore::CreatureListSearcher<acore::AnyUnitInObjectRangeCheck>, GridTypeMapContainer> go_visit(go_search);
+        warhead::AnyUnitInObjectRangeCheck go_check(object, radius);
+        warhead::CreatureListSearcher<warhead::AnyUnitInObjectRangeCheck> go_search(object, creatureList, go_check);
+        TypeContainerVisitor<warhead::CreatureListSearcher<warhead::AnyUnitInObjectRangeCheck>, GridTypeMapContainer> go_visit(go_search);
 
         // Get Creatures
         cell.Visit(pair, go_visit, *(object->GetMap()), *object, radius);

@@ -1,6 +1,19 @@
 /*
- * Originally written by Pussywizard - Copyright (C) 2016+ AzerothCore <www.azerothcore.org>, released under GNU AGPL v3 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-AGPL3
-*/
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "ScriptMgr.h"
 #include "ScriptedCreature.h"
@@ -164,7 +177,7 @@ public:
             if (Spell* s = me->GetCurrentSpell(CURRENT_CHANNELED_SPELL))
                 if (s->m_spellInfo->Id == SPELL_MIRRORED_SOUL)
                 {
-                    switch (events.ExecuteEvent())
+                    switch (events.GetEvent())
                     {
                         case 0:
                             break;
@@ -190,7 +203,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch(events.ExecuteEvent())
+            switch(events.GetEvent())
             {
                 case 0:
                     break;
@@ -211,14 +224,14 @@ public:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40.0f, true))
                         me->CastSpell(target, SPELL_WELL_OF_SOULS, false);
                     events.RepeatEvent(urand(25000,30000));
-                    events.DelayEvents(4000, 0);
+                    events.DelayEventsToMax(4000, 0);
                     break;
                 case EVENT_SPELL_UNLEASHED_SOULS:
                     me->CastSpell(me, SPELL_UNLEASHED_SOULS, false);
                     Talk(SAY_FACE_UNLEASH_SOUL);
                     Talk(EMOTE_UNLEASH_SOUL);
                     events.RepeatEvent(urand(30000,40000));
-                    events.DelayEvents(5000, 0);
+                    events.DelayEventsToMax(5000, 0);
                     me->setAttackTimer(BASE_ATTACK, 5500);
                     break;
                 case EVENT_SPELL_WAILING_SOULS:
@@ -227,7 +240,7 @@ public:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
                         me->CastCustomSpell(SPELL_WAILING_SOULS_TARGETING, SPELLVALUE_MAX_TARGETS, 1, target, false);
                     events.RepeatEvent(80000);
-                    events.DelayEvents(20000, 0);
+                    events.DelayEventsToMax(20000, 0);
                     break;
             }
 

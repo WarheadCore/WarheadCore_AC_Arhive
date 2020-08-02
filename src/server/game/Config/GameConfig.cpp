@@ -1,5 +1,18 @@
 /*
- * Copyright (C)
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "GameConfig.h"
@@ -260,6 +273,8 @@ void GameConfig::LoadBoolConfigs(bool reload /*= false*/)
     AddBoolConfig("Battleground.StoreStatistics.Enable");
     AddBoolConfig("Battleground.TrackDeserters.Enable");
     AddBoolConfig("Battleground.GiveXPForKills");
+    AddBoolConfig("Battleground.DisableQuestShareInBG");
+    AddBoolConfig("Battleground.DisableReadyCheckInBG");
 
     AddBoolConfig("Arena.AutoDistributePoints");
     AddBoolConfig("Arena.ArenaSeason.InProgress", true);
@@ -286,6 +301,7 @@ void GameConfig::LoadBoolConfigs(bool reload /*= false*/)
     // AddBoolConfig("ShowKickInWorld"); //not used
     AddBoolConfig("ShowBanInWorld");
     AddBoolConfig("ShowMuteInWorld");
+    AddBoolConfig("Mute.AddAfterLogin.Enable");
 
     AddBoolConfig("Warden.Enabled");
     AddBoolConfig("AutoBroadcast.On");
@@ -321,6 +337,10 @@ void GameConfig::LoadBoolConfigs(bool reload /*= false*/)
 
     AddBoolConfig("SetAllCreaturesWithWaypointMovementActive");
 
+    // Debug
+    AddBoolConfig("Debug.Battleground");
+    AddBoolConfig("Debug.Arena");
+
     LOG_INFO("config", "> Loaded %u bool configs", static_cast<uint32>(_boolConfigs.size()));
 }
 
@@ -333,7 +353,7 @@ void GameConfig::LoadStringConfigs(bool reload /*= false*/)
     AddStringConfig("DataDir", "./");
 
     AddStringConfig("PlayerStart.String", "");
-    AddStringConfig("Motd", "Welcome to an AzerothCore server");
+    AddStringConfig("Motd", "Welcome to an WarheadCore server");
 
     LOG_INFO("config", "> Loaded %u string configs", static_cast<uint32>(_stringConfigs.size()));
 }
@@ -484,6 +504,8 @@ void GameConfig::LoadIntConfigs(bool reload /*= false*/)
 
     AddIntConfig("Battleground.PrematureFinishTimer", 5 * MINUTE * IN_MILLISECONDS);
     AddIntConfig("Battleground.InvitationType");
+    AddIntConfig("Battleground.ReportAFK.Timer", 4);
+    AddIntConfig("Battleground.ReportAFK", 3);
     AddIntConfig("Battleground.PremadeGroupWaitForMatch", 30 * MINUTE * IN_MILLISECONDS);
 
     AddIntConfig("Arena.MaxRatingDifference", 150);
@@ -567,6 +589,20 @@ void GameConfig::LoadIntConfigs(bool reload /*= false*/)
 
     // Calendar
     AddIntConfig("Calendar.DeleteOldEventsHour", 6);
+
+    // Random Battleground Rewards
+    AddIntConfig("Battleground.RewardWinnerHonorFirst", 30);
+    AddIntConfig("Battleground.RewardWinnerArenaFirst", 25);
+    AddIntConfig("Battleground.RewardWinnerHonorLast", 15);
+    AddIntConfig("Battleground.RewardWinnerArenaLast");
+    AddIntConfig("Battleground.RewardLoserHonorFirst", 5);
+    AddIntConfig("Battleground.RewardLoserHonorLast", 5);
+
+    // CharterCost
+    AddIntConfig("Guild.CharterCost", 1000);
+    AddIntConfig("ArenaTeam.CharterCost.2v2", 800000);
+    AddIntConfig("ArenaTeam.CharterCost.3v3", 1200000);
+    AddIntConfig("ArenaTeam.CharterCost.5v5", 2000000);
 
     // Check options can't be changed at worldserver.conf reload
     if (reload)

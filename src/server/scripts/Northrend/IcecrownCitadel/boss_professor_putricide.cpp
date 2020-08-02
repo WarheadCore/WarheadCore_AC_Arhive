@@ -1,6 +1,19 @@
 /*
- * Originally written by Pussywizard - Copyright (C) 2016+ AzerothCore <www.azerothcore.org>, released under GNU AGPL v3 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-AGPL3
-*/
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "ObjectMgr.h"
 #include "ScriptMgr.h"
@@ -188,7 +201,7 @@ private:
 };
 
 // xinef: malleable goo selector, check for target validity
-struct MalleableGooSelector : public acore::unary_function<Unit*, bool>
+struct MalleableGooSelector : public warhead::unary_function<Unit*, bool>
 {
     const Unit* me;
     MalleableGooSelector(Unit const* unit) : me(unit) {}
@@ -873,7 +886,7 @@ class spell_putricide_slime_puddle : public SpellScriptLoader
 
             void ScaleRange(std::list<WorldObject*>& targets)
             {
-                targets.remove_if(acore::AllWorldObjectsInExactRange(GetCaster(), 2.5f * GetCaster()->GetObjectScale(), true));
+                targets.remove_if(warhead::AllWorldObjectsInExactRange(GetCaster(), 2.5f * GetCaster()->GetObjectScale(), true));
             }
 
             // big hax to unlock Abomination Eat Ooze ability, requires caster aura spell from difficulty X, but unlocks clientside when got base aura
@@ -1023,10 +1036,10 @@ class spell_putricide_tear_gas_effect : public SpellScriptLoader
             void FilterTargets(std::list<WorldObject*>& targets)
             {
                 // vanish rank 1-3, mage invisibility
-                targets.remove_if(acore::UnitAuraCheck(true, 11327));
-                targets.remove_if(acore::UnitAuraCheck(true, 11329));
-                targets.remove_if(acore::UnitAuraCheck(true, 26888));
-                targets.remove_if(acore::UnitAuraCheck(true, 32612));
+                targets.remove_if(warhead::UnitAuraCheck(true, 11327));
+                targets.remove_if(warhead::UnitAuraCheck(true, 11329));
+                targets.remove_if(warhead::UnitAuraCheck(true, 26888));
+                targets.remove_if(warhead::UnitAuraCheck(true, 32612));
             }
 
             void Register()
@@ -1101,8 +1114,8 @@ class spell_putricide_ooze_channel : public SpellScriptLoader
             void SelectTarget(std::list<WorldObject*>& targets)
             {
                 // dbc has only 1 field for excluding, this will prevent anyone from getting both at the same time
-                targets.remove_if(acore::UnitAuraCheck(true, SPELL_VOLATILE_OOZE_PROTECTION));
-                targets.remove_if(acore::UnitAuraCheck(true, SPELL_GASEOUS_BLOAT_PROTECTION));
+                targets.remove_if(warhead::UnitAuraCheck(true, SPELL_VOLATILE_OOZE_PROTECTION));
+                targets.remove_if(warhead::UnitAuraCheck(true, SPELL_GASEOUS_BLOAT_PROTECTION));
 
                 if (targets.empty())
                 {
@@ -1111,7 +1124,7 @@ class spell_putricide_ooze_channel : public SpellScriptLoader
                     return;
                 }
 
-                WorldObject* target = acore::Containers::SelectRandomContainerElement(targets);
+                WorldObject* target = warhead::Containers::SelectRandomContainerElement(targets);
                 targets.clear();
                 targets.push_back(target);
                 _target = target;
@@ -1264,8 +1277,8 @@ class spell_putricide_unbound_plague : public SpellScriptLoader
                 }
 
 
-                targets.remove_if(acore::UnitAuraCheck(true, sSpellMgr->GetSpellIdForDifficulty(SPELL_UNBOUND_PLAGUE, GetCaster())));
-                acore::Containers::RandomResizeList(targets, 1);
+                targets.remove_if(warhead::UnitAuraCheck(true, sSpellMgr->GetSpellIdForDifficulty(SPELL_UNBOUND_PLAGUE, GetCaster())));
+                warhead::Containers::RandomResizeList(targets, 1);
             }
 
             void HandleScript(SpellEffIndex /*effIndex*/)
@@ -1635,7 +1648,7 @@ class spell_putricide_eat_ooze : public SpellScriptLoader
                 if (targets.empty())
                     return;
 
-                targets.sort(acore::ObjectDistanceOrderPred(GetCaster()));
+                targets.sort(warhead::ObjectDistanceOrderPred(GetCaster()));
                 WorldObject* target = targets.front();
                 targets.clear();
                 targets.push_back(target);

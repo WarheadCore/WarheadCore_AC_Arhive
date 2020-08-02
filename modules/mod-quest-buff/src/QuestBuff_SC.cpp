@@ -1,6 +1,18 @@
 /*
- * Copyright (C) since 2020 Andrei Guluaev (Winfidonarleyan/Kargatum) https://github.com/Winfidonarleyan
- * Licence MIT https://opensource.org/MIT
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "Log.h"
@@ -38,8 +50,8 @@ public:
         QueryResult result = WorldDatabase.Query("SELECT `QuestID`, `SpellID`, `SpellRank`, `Category` FROM quest_buff ORDER BY `Category`, `SpellRank`");
         if (!result)
         {
-            sLog->outString(">> In DB table `quest_buff` not data. Loading canceled");
-            sLog->outString();
+            LOG_INFO("modules", ">> In DB table `quest_buff` not data. Loading canceled");
+            LOG_INFO("modules", "");
             return;
         }
 
@@ -62,7 +74,7 @@ public:
             auto spell = sSpellStore.LookupEntry(QB.SpellID);
             if (!spell)
             {
-                sLog->outError("-> Spell with number (%u) not found. Skip.", QB.SpellID);
+                LOG_ERROR("modules", "-> Spell with number (%u) not found. Skip.", QB.SpellID);
                 continue;
             }
 
@@ -70,8 +82,8 @@ public:
 
         } while (result->NextRow());
 
-        sLog->outString(">> Loaded %u quest buffs in %u ms", (uint32)_Store.size(), GetMSTimeDiffToNow(msTime));
-        sLog->outString();
+        LOG_INFO("modules", ">> Loaded %u quest buffs in %u ms", (uint32)_Store.size(), GetMSTimeDiffToNow(msTime));
+        LOG_INFO("modules", "");
     }
 
     uint32 GetHighRankByCategory(Player* player, uint32 Cat)

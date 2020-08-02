@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "MapTree.h"
@@ -10,7 +21,7 @@
 #include "VMapDefinitions.h"
 #include "Log.h"
 #include "Errors.h"
-
+#include "Metric.h"
 #include <string>
 #include <sstream>
 #include <iomanip>
@@ -337,7 +348,7 @@ namespace VMAP
         }
         if (!iTreeValues)
         {
-            sLog->outError("StaticMapTree::LoadMapTile() : tree has not been initialized [%u, %u]", tileX, tileY);
+            LOG_ERROR("server", "StaticMapTree::LoadMapTile() : tree has not been initialized [%u, %u]", tileX, tileY);
             return false;
         }
         bool result = true;
@@ -363,7 +374,7 @@ namespace VMAP
                     // acquire model instance
                     WorldModel* model = vm->acquireModelInstance(iBasePath, spawn.name);
                     if (!model)
-                        sLog->outError("StaticMapTree::LoadMapTile() : could not acquire WorldModel pointer [%u, %u]", tileX, tileY);
+                        LOG_ERROR("server", "StaticMapTree::LoadMapTile() : could not acquire WorldModel pointer [%u, %u]", tileX, tileY);
 
                     // update tree
                     uint32 referencedVal;
@@ -402,6 +413,10 @@ namespace VMAP
         }
         else
             iLoadedTiles[packTileID(tileX, tileY)] = false;
+        
+        WH_METRIC_EVENT("map_events", "LoadMapTile",
+            "Map: " + std::to_string(iMapID) + " TileX: " + std::to_string(tileX) + " TileY: " + std::to_string(tileY));
+
         return result;
     }
 
@@ -413,7 +428,7 @@ namespace VMAP
         loadedTileMap::iterator tile = iLoadedTiles.find(tileID);
         if (tile == iLoadedTiles.end())
         {
-            sLog->outError("StaticMapTree::UnloadMapTile() : trying to unload non-loaded tile - Map:%u X:%u Y:%u", iMapID, tileX, tileY);
+            LOG_ERROR("server", "StaticMapTree::UnloadMapTile() : trying to unload non-loaded tile - Map:%u X:%u Y:%u", iMapID, tileX, tileY);
             return;
         }
         if (tile->second) // file associated with tile
@@ -447,7 +462,7 @@ namespace VMAP
                         else
                         {
                             if (!iLoadedSpawns.count(referencedNode))
-                            sLog->outError("StaticMapTree::UnloadMapTile() : trying to unload non-referenced model '%s' (ID:%u)", spawn.name.c_str(), spawn.ID);
+                            LOG_ERROR("server", "StaticMapTree::UnloadMapTile() : trying to unload non-referenced model '%s' (ID:%u)", spawn.name.c_str(), spawn.ID);
                             else if (--iLoadedSpawns[referencedNode] == 0)
                             {
                                 iTreeValues[referencedNode].setUnloaded();
@@ -459,7 +474,11 @@ namespace VMAP
                 fclose(tf);
             }
         }
+        
         iLoadedTiles.erase(tile);
+
+        WH_METRIC_EVENT("map_events", "UnloadMapTile",
+            "Map: " + std::to_string(iMapID) + " TileX: " + std::to_string(tileX) + " TileY: " + std::to_string(tileY));
     }
 
     void StaticMapTree::getModelInstances(ModelInstance*& models, uint32& count)

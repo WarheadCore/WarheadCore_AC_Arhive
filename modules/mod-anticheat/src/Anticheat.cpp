@@ -1,6 +1,18 @@
 /*
- * Copyright (C) since 2020 Andrei Guluaev (Winfidonarleyan/Kargatum) https://github.com/Winfidonarleyan
- * Licence MIT https://opensource.org/MIT
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "Anticheat.h"
@@ -60,7 +72,7 @@ void Anticheat::JumpHackDetection(Player* player, MovementInfo /* movementInfo *
 
     if (m_Players[key].GetLastOpcode() == MSG_MOVE_JUMP && opcode == MSG_MOVE_JUMP)
     {
-        LOG_INFO("module", "> Anticheat: Jump-Hack detected player %s (%u)", player->GetName().c_str(), player->GetGUIDLow());
+        LOG_INFO("modules", "> Anticheat: Jump-Hack detected player %s (%u)", player->GetName().c_str(), player->GetGUIDLow());
         BuildReport(player);
     }
 }
@@ -84,7 +96,7 @@ void Anticheat::WalkOnWaterHackDetection(Player* player, MovementInfo  movementI
         player->HasAuraType(SPELL_AURA_WATER_WALK))
         return;
 
-    LOG_INFO("module", "> Anticheat: Walk on Water - Hack detected player %s (%u)", player->GetName().c_str(), player->GetGUIDLow());
+    LOG_INFO("modules", "> Anticheat: Walk on Water - Hack detected player %s (%u)", player->GetName().c_str(), player->GetGUIDLow());
 
     BuildReport(player);
 }
@@ -108,7 +120,7 @@ void Anticheat::FlyHackDetection(Player* player, MovementInfo  movementInfo)
     if (!movementInfo.HasMovementFlag(MOVEMENTFLAG_CAN_FLY) && !movementInfo.HasMovementFlag(MOVEMENTFLAG_FLYING) && stricterChecks)
         return;
 
-    LOG_INFO("module", "> Anticheat: Fly-Hack detected player %s (%u)", player->GetName().c_str(), player->GetGUIDLow());
+    LOG_INFO("modules", "> Anticheat: Fly-Hack detected player %s (%u)", player->GetName().c_str(), player->GetGUIDLow());
 
     BuildReport(player);
 }
@@ -135,7 +147,7 @@ void Anticheat::TeleportPlaneHackDetection(Player* player, MovementInfo movement
     // we are not really walking there
     if (z_diff > 1.0f)
     {
-        sLog->outString("AnticheatMgr:: Teleport To Plane - Hack detected player %s (%u)", player->GetName().c_str(), player->GetGUIDLow());
+        LOG_INFO("modules", "AnticheatMgr:: Teleport To Plane - Hack detected player %s (%u)", player->GetName().c_str(), player->GetGUIDLow());
         BuildReport(player);
     }
 }
@@ -191,7 +203,7 @@ void Anticheat::ClimbHackDetection(Player* player, MovementInfo movementInfo, ui
 
     if (angle > CLIMB_ANGLE)
     {
-        LOG_INFO("module", "> Anticheat: Climb-Hack detected player %s (%u)", player->GetName().c_str(), player->GetGUIDLow());
+        LOG_INFO("modules", "> Anticheat: Climb-Hack detected player %s (%u)", player->GetName().c_str(), player->GetGUIDLow());
         BuildReport(player);
     }
 }
@@ -239,7 +251,7 @@ void Anticheat::SpeedHackDetection(Player* player, MovementInfo movementInfo)
     if (clientSpeedRate > speedRate)
     {
         BuildReport(player);
-        LOG_INFO("module", "> Anticheat: Speed-Hack detected player %s (%u)", player->GetName().c_str(), player->GetGUIDLow());
+        LOG_INFO("modules", "> Anticheat: Speed-Hack detected player %s (%u)", player->GetName().c_str(), player->GetGUIDLow());
     }
 }
 
@@ -268,7 +280,7 @@ void Anticheat::BuildReport(Player* player)
     uint32 key = player->GetGUIDLow();
 
     // display warning at the center of the screen, hacky way?
-    std::string str = acore::StringFormat("[%s] использует читы!", player->GetName().c_str());
+    std::string str = warhead::StringFormat("[%s] использует читы!", player->GetName().c_str());
     WorldPacket data(SMSG_NOTIFICATION, (str.size() + 1));
     data << str;
     sWorld->SendGlobalGMMessage(&data);

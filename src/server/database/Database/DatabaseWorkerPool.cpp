@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "DatabaseWorkerPool.h"
@@ -21,7 +32,7 @@ DatabaseWorkerPool<T>::DatabaseWorkerPool() :
     _connections.resize(IDX_SIZE);
 
     WPFatal(mysql_thread_safe(), "Used MySQL library isn't thread-safe.");
-    WPFatal(mysql_get_client_version() >= MIN_MYSQL_CLIENT_VERSION, "AzerothCore does not support MySQL versions below 5.6");
+    WPFatal(mysql_get_client_version() >= MIN_MYSQL_CLIENT_VERSION, "WarheadCore does not support MySQL versions below 5.6");
 }
 
 template <class T>
@@ -65,7 +76,7 @@ uint32 DatabaseWorkerPool<T>::Open()
 template <class T>
 void DatabaseWorkerPool<T>::Close()
 {
-    sLog->outSQLDriver("Closing down DatabasePool '%s'.", GetDatabaseName());
+    LOG_INFO("sql.driver", "Closing down DatabasePool '%s'.", GetDatabaseName());
 
     //! Shuts down delaythreads for this connection pool by underlying deactivate().
     //! The next dequeue attempt in the worker thread tasks will result in an error,
@@ -81,7 +92,7 @@ void DatabaseWorkerPool<T>::Close()
         t->Close();         //! Closes the actualy MySQL connection.
     }
 
-    sLog->outSQLDriver("Asynchronous connections on DatabasePool '%s' terminated. Proceeding with synchronous connections.",
+    LOG_INFO("sql.driver", "Asynchronous connections on DatabasePool '%s' terminated. Proceeding with synchronous connections.",
         GetDatabaseName());
 
     //! Shut down the synchronous connections
@@ -95,7 +106,7 @@ void DatabaseWorkerPool<T>::Close()
     delete _queue;
     delete _mqueue;
 
-    sLog->outSQLDriver("All connections on DatabasePool '%s' closed.", GetDatabaseName());
+    LOG_INFO("sql.driver", "All connections on DatabasePool '%s' closed.", GetDatabaseName());
 }
 
 template <class T>
@@ -290,10 +301,10 @@ void DatabaseWorkerPool<T>::CommitTransaction(SQLTransaction transaction)
     switch (transaction->GetSize())
     {
         case 0:
-            sLog->outSQLDriver("Transaction contains 0 queries. Not executing.");
+            LOG_INFO("sql.driver", "Transaction contains 0 queries. Not executing.");
             return;
         case 1:
-            sLog->outSQLDriver("Warning: Transaction only holds 1 query, consider removing Transaction context in code.");
+            LOG_INFO("sql.driver", "Warning: Transaction only holds 1 query, consider removing Transaction context in code.");
             break;
         default:
             break;
@@ -395,6 +406,6 @@ T* DatabaseWorkerPool<T>::GetFreeConnection()
     return t;
 }
 
-template class AC_DATABASE_API DatabaseWorkerPool<LoginDatabaseConnection>;
-template class AC_DATABASE_API DatabaseWorkerPool<WorldDatabaseConnection>;
-template class AC_DATABASE_API DatabaseWorkerPool<CharacterDatabaseConnection>;
+template class WH_DATABASE_API DatabaseWorkerPool<LoginDatabaseConnection>;
+template class WH_DATABASE_API DatabaseWorkerPool<WorldDatabaseConnection>;
+template class WH_DATABASE_API DatabaseWorkerPool<CharacterDatabaseConnection>;

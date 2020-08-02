@@ -1,4 +1,19 @@
-// Scripted by Xinef
+/*
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "ScriptMgr.h"
 #include "ScriptedCreature.h"
@@ -213,7 +228,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case EVENT_DIREBREW_RESPAWN1:
                     SummonSister(NPC_ILSA_DIREBREW);
@@ -326,7 +341,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case EVENT_SISTERS_BARREL:
                     me->CastSpell(me->GetVictim(), SPELL_BARRELED, false);
@@ -704,7 +719,7 @@ public:
         void UpdateAI(uint32 diff)
         {
             events.Update(diff);
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case EVENT_CHECK_HOUR:
                 {
@@ -1115,8 +1130,8 @@ public:
             {
                 timer = 0;
                 Player* player = NULL;
-                acore::AnyPlayerInObjectRangeCheck checker(me, 2.0f);
-                acore::PlayerSearcher<acore::AnyPlayerInObjectRangeCheck> searcher(me, player, checker);
+                warhead::AnyPlayerInObjectRangeCheck checker(me, 2.0f);
+                warhead::PlayerSearcher<warhead::AnyPlayerInObjectRangeCheck> searcher(me, player, checker);
                 me->VisitNearbyWorldObject(2.0f, searcher);
                 if (player)
                 {

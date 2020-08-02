@@ -1,6 +1,18 @@
 /*
- * Copyright (C) since 2020 Andrei Guluaev (Winfidonarleyan/Kargatum) https://github.com/Winfidonarleyan
- * Licence MIT https://opensource.org/MIT
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "Log.h"
@@ -11,6 +23,7 @@
 #include "AccountMgr.h"
 #include "GameTime.h"
 #include "GameLocale.h"
+#include "MuteManager.h"
 #include <vector>
 
 enum LocaleStrings
@@ -35,13 +48,13 @@ public:
 
         messages.clear();
 
-        LOG_INFO("module", "Loading forbidden words...");
+        LOG_INFO("modules", "Loading forbidden words...");
 
         QueryResult result = WorldDatabase.PQuery("SELECT message FROM `anti_ad_messages`");
         if (!result)
         {
-            sLog->outString(">> Loading 0 word. DB table `anti_ad_messages` is empty.");
-            sLog->outString();
+            LOG_INFO("modules", ">> Loading 0 word. DB table `anti_ad_messages` is empty.");
+            LOG_INFO("modules", "");
             return;
         }
 
@@ -52,8 +65,8 @@ public:
 
         } while (result->NextRow());
 
-        sLog->outString(">> Loaded forbidden words %u in %u ms", static_cast<uint32>(messages.size()), GetMSTimeDiffToNow(oldMSTime));
-        sLog->outString();
+        LOG_INFO("modules", ">> Loaded forbidden words %u in %u ms", static_cast<uint32>(messages.size()), GetMSTimeDiffToNow(oldMSTime));
+        LOG_INFO("modules", "");
     }
 
     bool IsBadMessage(std::string& msg)
@@ -117,7 +130,7 @@ private:
 
         uint32 muteTime = CONF_GET_INT("AntiAD.Mute.Time");
 
-        player->GetSession()->m_muteTime = time(nullptr) + muteTime * MINUTE;
+        sMute->MutePlayer(player->GetName(), muteTime, "Console", "Advertisment");
 
         if (CONF_GET_BOOL("AntiAD.SelfMessage.Enable"))
             sGameLocale->SendPlayerMessage(player, "mod-anti-ad", ANTIAD_SEND_SELF, muteTime);

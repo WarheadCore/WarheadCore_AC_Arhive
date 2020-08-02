@@ -1,6 +1,19 @@
 /*
- * Originally written by Pussywizard - Copyright (C) 2016+ AzerothCore <www.azerothcore.org>, released under GNU AGPL v3 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-AGPL3
-*/
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "ObjectMgr.h"
 #include "ScriptMgr.h"
@@ -539,7 +552,7 @@ class npc_high_overlord_saurfang_icc : public CreatureScript
                             if (_guardList.empty())
                             {
                                 GetCreatureListWithEntryInGrid(_guardList, me, NPC_SE_KOR_KRON_REAVER, 20.0f);
-                                _guardList.sort(acore::ObjectDistanceOrderPred(me));
+                                _guardList.sort(warhead::ObjectDistanceOrderPred(me));
                             }
                             uint32 x = 1;
                             for (std::list<Creature*>::iterator itr = _guardList.begin(); itr != _guardList.end(); ++itr)
@@ -801,7 +814,7 @@ class npc_muradin_bronzebeard_icc : public CreatureScript
                             if (_guardList.empty())
                             {
                                 GetCreatureListWithEntryInGrid(_guardList, me, NPC_SE_SKYBREAKER_MARINE, 20.0f);
-                                _guardList.sort(acore::ObjectDistanceOrderPred(me));
+                                _guardList.sort(warhead::ObjectDistanceOrderPred(me));
                             }
                             uint32 x = 1;
                             for (std::list<Creature*>::iterator itr = _guardList.begin(); itr != _guardList.end(); ++itr)
@@ -1240,7 +1253,7 @@ class spell_deathbringer_blood_nova_targeting : public SpellScriptLoader
                 // select one random target, with preference of ranged targets
                 uint32 targetsAtRange = 0;
                 uint32 const minTargets = uint32(GetCaster()->GetMap()->GetSpawnMode() & 1 ? 10 : 4);
-                targets.sort(acore::ObjectDistanceOrderPred(GetCaster(), false));
+                targets.sort(warhead::ObjectDistanceOrderPred(GetCaster(), false));
 
                 // get target count at range
                 for (std::list<WorldObject*>::iterator itr = targets.begin(); itr != targets.end(); ++itr, ++targetsAtRange)
@@ -1308,12 +1321,12 @@ class spell_deathbringer_boiling_blood : public SpellScriptLoader
 
                 if (GetSpellInfo()->Id == 72385 || GetSpellInfo()->Id == 72442) // 10n, 10h
                 {
-                    WorldObject* target = acore::Containers::SelectRandomContainerElement(targets);
+                    WorldObject* target = warhead::Containers::SelectRandomContainerElement(targets);
                     targets.clear();
                     targets.push_back(target);
                 }
                 else
-                    acore::Containers::RandomResizeList(targets, 3);
+                    warhead::Containers::RandomResizeList(targets, 3);
             }
 
             void Register()

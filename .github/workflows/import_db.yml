@@ -1,0 +1,19 @@
+name: import-db
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false      
+    runs-on: ubuntu-18.04
+    name: Import db    
+    steps:
+      - uses: actions/checkout@v2
+      - name: Configure OS
+        run: source ./apps/ci/ci-install.sh import-db
+        env:
+          CONTINUOUS_INTEGRATION: true
+      - name: Import db
+        run: source ./apps/ci/ci-import-db.sh

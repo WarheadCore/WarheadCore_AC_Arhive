@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "DatabaseEnv.h"
@@ -42,8 +53,8 @@ void WaypointMgr::Load()
 
     if (!result)
     {
-        sLog->outErrorDb(">> Loaded 0 waypoints. DB table `waypoint_data` is empty!");
-        sLog->outString();
+        LOG_ERROR("sql.sql", ">> Loaded 0 waypoints. DB table `waypoint_data` is empty!");
+        LOG_INFO("server", "");
         return;
     }
 
@@ -62,8 +73,8 @@ void WaypointMgr::Load()
         float z = fields[4].GetFloat();
         float o = fields[5].GetFloat();
 
-        acore::NormalizeMapCoord(x);
-        acore::NormalizeMapCoord(y);
+        warhead::NormalizeMapCoord(x);
+        warhead::NormalizeMapCoord(y);
 
         wp->id = fields[1].GetUInt32();
         wp->x = x;
@@ -88,8 +99,8 @@ void WaypointMgr::Load()
     }
     while (result->NextRow());
 
-    sLog->outString(">> Loaded %u waypoints in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-    sLog->outString();
+    LOG_INFO("server", ">> Loaded %u waypoints in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+    LOG_INFO("server", "");
 }
 
 void WaypointMgr::ReloadPath(uint32 id)
@@ -124,8 +135,8 @@ void WaypointMgr::ReloadPath(uint32 id)
         float z = fields[3].GetFloat();
         float o = fields[4].GetFloat();
 
-        acore::NormalizeMapCoord(x);
-        acore::NormalizeMapCoord(y);
+        warhead::NormalizeMapCoord(x);
+        warhead::NormalizeMapCoord(y);
 
         wp->id = fields[0].GetUInt32();
         wp->x = x;

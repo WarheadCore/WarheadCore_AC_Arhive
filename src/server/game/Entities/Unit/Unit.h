@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef __UNIT_H
@@ -657,7 +668,7 @@ enum NPCFlags
     UNIT_NPC_FLAG_GUILD_BANKER          = 0x00800000,       // cause client to send 997 opcode
     UNIT_NPC_FLAG_SPELLCLICK            = 0x01000000,       // cause client to send 1015 opcode (spell click)
     UNIT_NPC_FLAG_PLAYER_VEHICLE        = 0x02000000,       // players with mounts that have vehicle data should have it set
-    UNIT_NPC_FLAG_MAILBOX               = 0x04000000        // 
+    UNIT_NPC_FLAG_MAILBOX               = 0x04000000        //
 };
 
 enum MovementFlags
@@ -1314,6 +1325,12 @@ public:
         _posOwner.Relocate(c._posOwner);
         _posTarget.Relocate(c._posTarget);
     }
+    /* requried as of C++ 11 */
+    #if __cplusplus >= 201103L
+    MMapTargetData(MMapTargetData&&) = default;
+    MMapTargetData& operator=(const MMapTargetData&) = default;
+    MMapTargetData& operator=(MMapTargetData&&) = default;
+    #endif
     bool PosChanged(const Position& o, const Position& t) const
     {
         return _posOwner.GetExactDistSq(&o) > 0.5f*0.5f || _posTarget.GetExactDistSq(&t) > 0.5f*0.5f;
@@ -2566,7 +2583,7 @@ class Unit : public WorldObject
         bool m_petCatchUp;
 };
 
-namespace acore
+namespace warhead
 {
     // Binary predicate for sorting Units based on percent value of a power
     class PowerPctOrderPred

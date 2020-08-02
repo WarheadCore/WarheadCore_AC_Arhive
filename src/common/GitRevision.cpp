@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
+* Copyright (C) 2016+     WarheadCore <www.Warheadcore.org>
 * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
 */
 
@@ -51,19 +51,19 @@ char const* GitRevision::GetMySQLExecutable()
     return _MYSQL_EXECUTABLE;
 }
 
-#if AC_PLATFORM == AC_PLATFORM_WINDOWS
+#if WH_PLATFORM == WH_PLATFORM_WINDOWS
 #  ifdef _WIN64
-#    define AZEROTH_PLATFORM_STR "Win64"
+#    define Warhead_PLATFORM_STR "Win64"
 #  else
-#    define AZEROTH_PLATFORM_STR "Win32"
+#    define Warhead_PLATFORM_STR "Win32"
 #  endif
-#else // AC_PLATFORM
-#  define AZEROTH_PLATFORM_STR "Unix"
+#else // WH_PLATFORM
+#  define Warhead_PLATFORM_STR "Unix"
 #endif
 
 char const* GitRevision::GetFullVersion()
 {
-    return VER_COMPANYNAME_STR " rev. " VER_PRODUCTVERSION_STR " (" AZEROTH_PLATFORM_STR ", " _BUILD_DIRECTIVE ")";
+    return VER_COMPANYNAME_STR " rev. " VER_PRODUCTVERSION_STR " (" Warhead_PLATFORM_STR ", " _BUILD_DIRECTIVE ")";
 }
 
 char const* GitRevision::GetCompanyNameStr()

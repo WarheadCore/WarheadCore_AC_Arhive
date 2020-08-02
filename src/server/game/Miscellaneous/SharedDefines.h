@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef ACORE_SHAREDDEFINES_H
@@ -9,6 +20,7 @@
 
 #include "Define.h"
 #include "DetourNavMesh.h"
+#include "DBCEnums.h"
 #include <cassert>
 
 enum SpellEffIndex
@@ -40,6 +52,23 @@ enum Expansions
     EXPANSION_WRATH_OF_THE_LICH_KING   = 2,
     MAX_EXPANSIONS                     = 3
 };
+
+inline uint32 GetMaxLevelForExpansion(uint32 expansion)
+{
+    switch (expansion)
+    {
+        case EXPANSION_CLASSIC:
+            return 60;
+        case EXPANSION_THE_BURNING_CRUSADE:
+            return 70;
+        case EXPANSION_WRATH_OF_THE_LICH_KING:
+            return 80;
+        default:
+            break;
+    }
+
+    return DEFAULT_MAX_LEVEL;
+}
 
 enum Gender
 {
@@ -3535,5 +3564,7 @@ enum PartyResult
     ERR_PARTY_LFG_BOOT_LOOT_ROLLS       = 29,
     ERR_PARTY_LFG_TELEPORT_IN_COMBAT    = 30
 };
+
+
 
 #endif

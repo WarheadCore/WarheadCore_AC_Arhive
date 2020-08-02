@@ -1,6 +1,16 @@
 #
-# Copyright (C) since 2020 Andrei Guluaev (Winfidonarleyan/Kargatum) https://github.com/Winfidonarleyan
-# Licence MIT https://opensource.org/MIT
+# This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+#
+# This file is free software; as a special exception the author gives
+# unlimited permission to copy and/or distribute it, with or without
+# modifications, as long as this notice is preserved.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# User has manually chosen to ignore the git-tests, so throw them a warning.
+# This is done EACH compile so they can be alerted about the consequences.
 #
 
 ########################################
@@ -12,7 +22,7 @@
 #
 #    BGReward.Enable
 #        Description: Enable battleground reward system.
-#        Default: 1
+#        Default: 0
 #
 #    BGReward.ItemID.WSG
 #        Description: Reward item on battleground Warsong Gulch.
@@ -47,7 +57,7 @@
 #        Default: 1
 #
 
-BGReward.Enable = 1
+BGReward.Enable = 0
 
 BGReward.ItemID.WSG = 20558
 BGReward.ItemID.Arathi = 20559

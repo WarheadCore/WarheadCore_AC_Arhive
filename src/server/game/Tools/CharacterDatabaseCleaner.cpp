@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "Common.h"
@@ -18,7 +29,7 @@ void CharacterDatabaseCleaner::CleanDatabase()
     if (!sGameConfig->GetBoolConfig("CleanCharacterDB"))
         return;
 
-    sLog->outString("Cleaning character database...");
+    LOG_INFO("server", "Cleaning character database...");
 
     uint32 oldMSTime = getMSTime();
 
@@ -52,8 +63,8 @@ void CharacterDatabaseCleaner::CleanDatabase()
 
     sWorld->SetCleaningFlags(flags);
 
-    sLog->outString(">> Cleaned character database in %u ms", GetMSTimeDiffToNow(oldMSTime));
-    sLog->outString();
+    LOG_INFO("server", ">> Cleaned character database in %u ms", GetMSTimeDiffToNow(oldMSTime));
+    LOG_INFO("server", "");
 }
 
 void CharacterDatabaseCleaner::CheckUnique(const char* column, const char* table, bool (*check)(uint32))
@@ -61,7 +72,7 @@ void CharacterDatabaseCleaner::CheckUnique(const char* column, const char* table
     QueryResult result = CharacterDatabase.PQuery("SELECT DISTINCT %s FROM %s", column, table);
     if (!result)
     {
-        sLog->outString("Table %s is empty.", table);
+        LOG_INFO("server", "Table %s is empty.", table);
         return;
     }
 

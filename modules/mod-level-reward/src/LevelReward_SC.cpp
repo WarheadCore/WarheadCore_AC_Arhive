@@ -1,6 +1,18 @@
 /*
- * Copyright (C) since 2020 Andrei Guluaev (Winfidonarleyan/Kargatum) https://github.com/Winfidonarleyan
- * Licence MIT https://opensource.org/MIT
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "Log.h"
@@ -31,14 +43,14 @@ public:
         uint32 msTime = getMSTime();
         rewards.clear();
 
-        LOG_INFO("module", "Load level reward data...");
+        LOG_INFO("modules", "Load level reward data...");
 
         //                                                  0      1      2       3
         QueryResult result = WorldDatabase.Query("SELECT Level, Money, ItemID, ItemCount FROM level_reward ORDER BY Level");
         if (!result)
         {
-            sLog->outErrorDb("In DB table `level_reward` not data. Loading canceled"); 
-            sLog->outString();
+            LOG_ERROR("modules", "In DB table `level_reward` not data. Loading canceled"); 
+            LOG_ERROR("modules", "");
             return;
         }
 
@@ -57,7 +69,7 @@ public:
             // Проверка
             if (Level > CONF_GET_INT("MaxPlayerLevel"))
             {
-                sLog->outErrorDb("-> Level (%u) more, than max player level in world (%u). Skip", Level, CONF_GET_INT("MaxPlayerLevel"));
+                LOG_ERROR("modules", "-> Level (%u) more, than max player level in world (%u). Skip", Level, CONF_GET_INT("MaxPlayerLevel"));
                 continue;
             }
 
@@ -66,14 +78,14 @@ public:
                 ItemTemplate const* itemTemplate = sObjectMgr->GetItemTemplate(_levelReward.ItemID);
                 if (!itemTemplate)
                 {
-                    sLog->outErrorDb("-> For level (%u) item witch nuber %u not found. Item delete from reward", Level, _levelReward.ItemID);
+                    LOG_ERROR("modules", "-> For level (%u) item witch nuber %u not found. Item delete from reward", Level, _levelReward.ItemID);
                     _levelReward.ItemID = 0;
                 }
             }
 
             if (_levelReward.ItemID && !_levelReward.ItemCount)
             {
-                sLog->outErrorDb("-> For level (%u) item witch nuber %u adding 0 count - this useless. Set 1", Level, _levelReward.ItemID);
+                LOG_ERROR("modules", "-> For level (%u) item witch nuber %u adding 0 count - this useless. Set 1", Level, _levelReward.ItemID);
                 _levelReward.ItemCount = 1;
             }
 
@@ -81,8 +93,8 @@ public:
 
         } while (result->NextRow());
 
-        sLog->outString(">> Loaded %u reward for level in %u ms", static_cast<uint32>(rewards.size()), GetMSTimeDiffToNow(msTime));
-        sLog->outString();
+        LOG_INFO("modules", ">> Loaded %u reward for level in %u ms", static_cast<uint32>(rewards.size()), GetMSTimeDiffToNow(msTime));
+        LOG_INFO("modules", "");
     }
 
     void RewardPlayer(Player* player, uint8 oldLevel)
@@ -131,7 +143,7 @@ private:
         {
             if (ListItemPairs.size() > MAX_MAIL_ITEMS)
             {
-                sLog->outError("> SendMailItems: ListItemPairs.size() = %u", (uint32)ListItemPairs.size());
+                LOG_ERROR("modules", "> SendMailItems: ListItemPairs.size() = %u", (uint32)ListItemPairs.size());
                 return;
             }
 
@@ -160,7 +172,7 @@ private:
 
                 if (_listItemPairs.size() > MAX_MAIL_ITEMS)
                 {
-                    sLog->outError("> SendMailItems: _listItemPairs.size() = %u", (uint32)_listItemPairs.size());
+                    LOG_ERROR("modules", "> SendMailItems: _listItemPairs.size() = %u", (uint32)_listItemPairs.size());
                     break;
                 }
             }
@@ -192,9 +204,9 @@ private:
         MailItemsVector ListItemPairs;
         ListItemPairs.push_back(MailItemsPair(levelReward->ItemID, levelReward->ItemCount));
 
-        Subject = acore::StringFormat("Reward for level up to %u", Level);
-        Text = acore::StringFormat("You increased level to %u and get a reward!", Level);
-        SelfMessage = acore::StringFormat("You increased level to %u and get a reward!", Level);
+        Subject = warhead::StringFormat("Reward for level up to %u", Level);
+        Text = warhead::StringFormat("You increased level to %u and get a reward!", Level);
+        SelfMessage = warhead::StringFormat("You increased level to %u and get a reward!", Level);
 
         handler.PSendSysMessage("%s", SelfMessage.c_str());
         SendMailItems(player, Subject, Text, levelReward->Money, ListItemPairs);

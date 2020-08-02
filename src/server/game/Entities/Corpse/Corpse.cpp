@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "Common.h"
@@ -66,7 +77,7 @@ bool Corpse::Create(uint32 guidlow, Player* owner)
 
     if (!IsPositionValid())
     {
-        sLog->outError("Corpse (guidlow %d, owner %s) not created. Suggested coordinates isn't valid (X: %f Y: %f)",
+        LOG_ERROR("server", "Corpse (guidlow %d, owner %s) not created. Suggested coordinates isn't valid (X: %f Y: %f)",
             guidlow, owner->GetName().c_str(), owner->GetPositionX(), owner->GetPositionY());
         return false;
     }
@@ -80,7 +91,7 @@ bool Corpse::Create(uint32 guidlow, Player* owner)
     SetObjectScale(1);
     SetUInt64Value(CORPSE_FIELD_OWNER, owner->GetGUID());
 
-    _gridCoord = acore::ComputeGridCoord(GetPositionX(), GetPositionY());
+    _gridCoord = warhead::ComputeGridCoord(GetPositionX(), GetPositionY());
 
     return true;
 }
@@ -169,12 +180,12 @@ bool Corpse::LoadCorpseFromDB(uint32 guid, Field* fields)
 
     if (!IsPositionValid())
     {
-        sLog->outError("Corpse (guid: %u, owner: %u) is not created, given coordinates are not valid (X: %f, Y: %f, Z: %f)",
+        LOG_ERROR("server", "Corpse (guid: %u, owner: %u) is not created, given coordinates are not valid (X: %f, Y: %f, Z: %f)",
             GetGUIDLow(), GUID_LOPART(GetOwnerGUID()), posX, posY, posZ);
         return false;
     }
 
-    _gridCoord = acore::ComputeGridCoord(GetPositionX(), GetPositionY());
+    _gridCoord = warhead::ComputeGridCoord(GetPositionX(), GetPositionY());
     return true;
 }
 

@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "BattlegroundMgr.h"
@@ -43,10 +54,6 @@
 #include "GameTime.h"
 #include "GameLocale.h"
 #include "Transport.h"
-
-#ifdef ELUNA
-#include "LuaEngine.h"
-#endif
 
 VendorItemCount::VendorItemCount(uint32 _item, uint32 _count)
     : itemId(_item), count(_count), lastIncrementTime(GameTime::GetGameTime()) { }
@@ -199,7 +206,7 @@ Creature::~Creature()
     i_AI = NULL;
 
     //if (m_uint32Values)
-    //    sLog->outError("Deconstruct Creature Entry = %u", GetEntry());
+    //    LOG_ERROR("server", "Deconstruct Creature Entry = %u", GetEntry());
 }
 
 void Creature::AddToWorld()
@@ -220,9 +227,6 @@ void Creature::AddToWorld()
         AIM_Initialize();
         if (IsVehicle())
             GetVehicleKit()->Install();
-#ifdef ELUNA
-        sEluna->OnAddToWorld(this);
-#endif
     }
 }
 
@@ -230,9 +234,6 @@ void Creature::RemoveFromWorld()
 { 
     if (IsInWorld())
     {
-#ifdef ELUNA
-        sEluna->OnRemoveFromWorld(this);
-#endif
         if (GetZoneScript())
             GetZoneScript()->OnCreatureRemove(this);
         if (m_formation)
@@ -311,7 +312,7 @@ bool Creature::InitEntry(uint32 Entry, const CreatureData* data)
     CreatureTemplate const* normalInfo = sObjectMgr->GetCreatureTemplate(Entry);
     if (!normalInfo)
     {
-        sLog->outErrorDb("Creature::InitEntry creature entry %u does not exist.", Entry);
+        LOG_ERROR("sql.sql", "Creature::InitEntry creature entry %u does not exist.", Entry);
         return false;
     }
 
@@ -350,7 +351,7 @@ bool Creature::InitEntry(uint32 Entry, const CreatureData* data)
     // Cancel load if no model defined
     if (!(cinfo->GetFirstValidModelId()))
     {
-        sLog->outErrorDb("Creature (Entry: %u) has no model defined in table `creature_template`, can't load. ", Entry);
+        LOG_ERROR("sql.sql", "Creature (Entry: %u) has no model defined in table `creature_template`, can't load. ", Entry);
         return false;
     }
 
@@ -358,7 +359,7 @@ bool Creature::InitEntry(uint32 Entry, const CreatureData* data)
     CreatureModelInfo const* minfo = sObjectMgr->GetCreatureModelRandomGender(&displayID);
     if (!minfo)                                             // Cancel load if no model defined
     {
-        sLog->outErrorDb("Creature (Entry: %u) has no model defined in table `creature_template`, can't load. ", Entry);
+        LOG_ERROR("sql.sql", "Creature (Entry: %u) has no model defined in table `creature_template`, can't load. ", Entry);
         return false;
     }
 
@@ -503,11 +504,11 @@ void Creature::Update(uint32 diff)
     {
         case JUST_RESPAWNED:
             // Must not be called, see Creature::setDeathState JUST_RESPAWNED -> ALIVE promoting.
-            sLog->outError("Creature (GUID: %u Entry: %u) in wrong state: JUST_RESPAWNED (4)", GetGUIDLow(), GetEntry());
+            LOG_ERROR("server", "Creature (GUID: %u Entry: %u) in wrong state: JUST_RESPAWNED (4)", GetGUIDLow(), GetEntry());
             break;
         case JUST_DIED:
             // Must not be called, see Creature::setDeathState JUST_DIED -> CORPSE promoting.
-            sLog->outError("Creature (GUID: %u Entry: %u) in wrong state: JUST_DEAD (1)", GetGUIDLow(), GetEntry());
+            LOG_ERROR("server", "Creature (GUID: %u Entry: %u) in wrong state: JUST_DEAD (1)", GetGUIDLow(), GetEntry());
             break;
         case DEAD:
         {
@@ -763,13 +764,13 @@ void Creature::DoFleeToGetAssistance()
     {
         Creature* creature = NULL;
 
-        CellCoord p(acore::ComputeCellCoord(GetPositionX(), GetPositionY()));
+        CellCoord p(warhead::ComputeCellCoord(GetPositionX(), GetPositionY()));
         Cell cell(p);
         cell.SetNoCreate();
-        acore::NearestAssistCreatureInCreatureRangeCheck u_check(this, GetVictim(), radius);
-        acore::CreatureLastSearcher<acore::NearestAssistCreatureInCreatureRangeCheck> searcher(this, creature, u_check);
+        warhead::NearestAssistCreatureInCreatureRangeCheck u_check(this, GetVictim(), radius);
+        warhead::CreatureLastSearcher<warhead::NearestAssistCreatureInCreatureRangeCheck> searcher(this, creature, u_check);
 
-        TypeContainerVisitor<acore::CreatureLastSearcher<acore::NearestAssistCreatureInCreatureRangeCheck>, GridTypeMapContainer > grid_creature_searcher(searcher);
+        TypeContainerVisitor<warhead::CreatureLastSearcher<warhead::NearestAssistCreatureInCreatureRangeCheck>, GridTypeMapContainer > grid_creature_searcher(searcher);
 
         cell.Visit(p, grid_creature_searcher, *GetMap(), *this, radius);
 
@@ -836,7 +837,7 @@ bool Creature::Create(uint32 guidlow, Map* map, uint32 phaseMask, uint32 Entry, 
     CreatureTemplate const* cinfo = sObjectMgr->GetCreatureTemplate(Entry);
     if (!cinfo)
     {
-        sLog->outErrorDb("Creature::Create(): creature template (guidlow: %u, entry: %u) does not exist.", guidlow, Entry);
+        LOG_ERROR("sql.sql", "Creature::Create(): creature template (guidlow: %u, entry: %u) does not exist.", guidlow, Entry);
         return false;
     }
 
@@ -850,7 +851,7 @@ bool Creature::Create(uint32 guidlow, Map* map, uint32 phaseMask, uint32 Entry, 
 
     if (!IsPositionValid())
     {
-        sLog->outError("Creature::Create(): given coordinates for creature (guidlow %d, entry %d) are not valid (X: %f, Y: %f, Z: %f, O: %f)", guidlow, Entry, x, y, z, ang);
+        LOG_ERROR("server", "Creature::Create(): given coordinates for creature (guidlow %d, entry %d) are not valid (X: %f, Y: %f, Z: %f, O: %f)", guidlow, Entry, x, y, z, ang);
         return false;
     }
 
@@ -1015,7 +1016,7 @@ void Creature::SaveToDB()
     CreatureData const* data = sObjectMgr->GetCreatureData(m_DBTableGuid);
     if (!data)
     {
-        sLog->outError("Creature::SaveToDB failed, cannot get creature data!");
+        LOG_ERROR("server", "Creature::SaveToDB failed, cannot get creature data!");
         return;
     }
 
@@ -1266,7 +1267,7 @@ bool Creature::CreateFromProto(uint32 guidlow, uint32 Entry, uint32 vehId, const
     CreatureTemplate const* normalInfo = sObjectMgr->GetCreatureTemplate(Entry);
     if (!normalInfo)
     {
-        sLog->outErrorDb("Creature::CreateFromProto(): creature template (guidlow: %u, entry: %u) does not exist.", guidlow, Entry);
+        LOG_ERROR("sql.sql", "Creature::CreateFromProto(): creature template (guidlow: %u, entry: %u) does not exist.", guidlow, Entry);
         return false;
     }
 
@@ -1317,7 +1318,7 @@ bool Creature::LoadCreatureFromDB(uint32 guid, Map* map, bool addToMap, bool gri
 
     if (!data)
     {
-        sLog->outErrorDb("Creature (GUID: %u) not found in table `creature`, can't load. ", guid);
+        LOG_ERROR("sql.sql", "Creature (GUID: %u) not found in table `creature`, can't load. ", guid);
         return false;
     }
 
@@ -1449,7 +1450,7 @@ void Creature::DeleteFromDB()
 { 
     if (!m_DBTableGuid)
     {
-        sLog->outError("Trying to delete not saved creature! LowGUID: %u, Entry: %u", GetGUIDLow(), GetEntry());
+        LOG_ERROR("server", "Trying to delete not saved creature! LowGUID: %u, Entry: %u", GetGUIDLow(), GetEntry());
         return;
     }
 
@@ -1764,7 +1765,7 @@ SpellInfo const* Creature::reachWithSpellAttack(Unit* victim)
         SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(m_spells[i]);
         if (!spellInfo)
         {
-            sLog->outError("WORLD: unknown spell id %i", m_spells[i]);
+            LOG_ERROR("server", "WORLD: unknown spell id %i", m_spells[i]);
             continue;
         }
 
@@ -1812,7 +1813,7 @@ SpellInfo const* Creature::reachWithSpellCure(Unit* victim)
         SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(m_spells[i]);
         if (!spellInfo)
         {
-            sLog->outError("WORLD: unknown spell id %i", m_spells[i]);
+            LOG_ERROR("server", "WORLD: unknown spell id %i", m_spells[i]);
             continue;
         }
 
@@ -1850,7 +1851,7 @@ SpellInfo const* Creature::reachWithSpellCure(Unit* victim)
 // select nearest hostile unit within the given distance (regardless of threat list).
 Unit* Creature::SelectNearestTarget(float dist, bool playerOnly /* = false */) const
 { 
-    CellCoord p(acore::ComputeCellCoord(GetPositionX(), GetPositionY()));
+    CellCoord p(warhead::ComputeCellCoord(GetPositionX(), GetPositionY()));
     Cell cell(p);
     cell.SetNoCreate();
 
@@ -1860,11 +1861,11 @@ Unit* Creature::SelectNearestTarget(float dist, bool playerOnly /* = false */) c
         if (dist == 0.0f)
             dist = MAX_SEARCHER_DISTANCE;
 
-        acore::NearestHostileUnitCheck u_check(this, dist, playerOnly);
-        acore::UnitLastSearcher<acore::NearestHostileUnitCheck> searcher(this, target, u_check);
+        warhead::NearestHostileUnitCheck u_check(this, dist, playerOnly);
+        warhead::UnitLastSearcher<warhead::NearestHostileUnitCheck> searcher(this, target, u_check);
 
-        TypeContainerVisitor<acore::UnitLastSearcher<acore::NearestHostileUnitCheck>, WorldTypeMapContainer > world_unit_searcher(searcher);
-        TypeContainerVisitor<acore::UnitLastSearcher<acore::NearestHostileUnitCheck>, GridTypeMapContainer >  grid_unit_searcher(searcher);
+        TypeContainerVisitor<warhead::UnitLastSearcher<warhead::NearestHostileUnitCheck>, WorldTypeMapContainer > world_unit_searcher(searcher);
+        TypeContainerVisitor<warhead::UnitLastSearcher<warhead::NearestHostileUnitCheck>, GridTypeMapContainer >  grid_unit_searcher(searcher);
 
         cell.Visit(p, world_unit_searcher, *GetMap(), *this, dist);
         cell.Visit(p, grid_unit_searcher, *GetMap(), *this, dist);
@@ -1876,7 +1877,7 @@ Unit* Creature::SelectNearestTarget(float dist, bool playerOnly /* = false */) c
 // select nearest hostile unit within the given attack distance (i.e. distance is ignored if > than ATTACK_DISTANCE), regardless of threat list.
 Unit* Creature::SelectNearestTargetInAttackDistance(float dist) const
 { 
-    CellCoord p(acore::ComputeCellCoord(GetPositionX(), GetPositionY()));
+    CellCoord p(warhead::ComputeCellCoord(GetPositionX(), GetPositionY()));
     Cell cell(p);
     cell.SetNoCreate();
 
@@ -1888,11 +1889,11 @@ Unit* Creature::SelectNearestTargetInAttackDistance(float dist) const
         dist = MAX_SEARCHER_DISTANCE;
 
     {
-        acore::NearestHostileUnitInAttackDistanceCheck u_check(this, dist);
-        acore::UnitLastSearcher<acore::NearestHostileUnitInAttackDistanceCheck> searcher(this, target, u_check);
+        warhead::NearestHostileUnitInAttackDistanceCheck u_check(this, dist);
+        warhead::UnitLastSearcher<warhead::NearestHostileUnitInAttackDistanceCheck> searcher(this, target, u_check);
 
-        TypeContainerVisitor<acore::UnitLastSearcher<acore::NearestHostileUnitInAttackDistanceCheck>, WorldTypeMapContainer > world_unit_searcher(searcher);
-        TypeContainerVisitor<acore::UnitLastSearcher<acore::NearestHostileUnitInAttackDistanceCheck>, GridTypeMapContainer >  grid_unit_searcher(searcher);
+        TypeContainerVisitor<warhead::UnitLastSearcher<warhead::NearestHostileUnitInAttackDistanceCheck>, WorldTypeMapContainer > world_unit_searcher(searcher);
+        TypeContainerVisitor<warhead::UnitLastSearcher<warhead::NearestHostileUnitInAttackDistanceCheck>, GridTypeMapContainer >  grid_unit_searcher(searcher);
 
         cell.Visit(p, world_unit_searcher, *GetMap(), *this, dist);
         cell.Visit(p, grid_unit_searcher, *GetMap(), *this, dist);
@@ -1928,14 +1929,14 @@ void Creature::CallAssistance()
             std::list<Creature*> assistList;
 
             {
-                CellCoord p(acore::ComputeCellCoord(GetPositionX(), GetPositionY()));
+                CellCoord p(warhead::ComputeCellCoord(GetPositionX(), GetPositionY()));
                 Cell cell(p);
                 cell.SetNoCreate();
 
-                acore::AnyAssistCreatureInRangeCheck u_check(this, GetVictim(), radius);
-                acore::CreatureListSearcher<acore::AnyAssistCreatureInRangeCheck> searcher(this, assistList, u_check);
+                warhead::AnyAssistCreatureInRangeCheck u_check(this, GetVictim(), radius);
+                warhead::CreatureListSearcher<warhead::AnyAssistCreatureInRangeCheck> searcher(this, assistList, u_check);
 
-                TypeContainerVisitor<acore::CreatureListSearcher<acore::AnyAssistCreatureInRangeCheck>, GridTypeMapContainer >  grid_creature_searcher(searcher);
+                TypeContainerVisitor<warhead::CreatureListSearcher<warhead::AnyAssistCreatureInRangeCheck>, GridTypeMapContainer >  grid_creature_searcher(searcher);
 
                 cell.Visit(p, grid_creature_searcher, *GetMap(), *this, radius);
             }
@@ -1960,14 +1961,14 @@ void Creature::CallForHelp(float radius)
     if (radius <= 0.0f || !GetVictim() || IsPet() || IsCharmed())
         return;
 
-    CellCoord p(acore::ComputeCellCoord(GetPositionX(), GetPositionY()));
+    CellCoord p(warhead::ComputeCellCoord(GetPositionX(), GetPositionY()));
     Cell cell(p);
     cell.SetNoCreate();
 
-    acore::CallOfHelpCreatureInRangeDo u_do(this, GetVictim(), radius);
-    acore::CreatureWorker<acore::CallOfHelpCreatureInRangeDo> worker(this, u_do);
+    warhead::CallOfHelpCreatureInRangeDo u_do(this, GetVictim(), radius);
+    warhead::CreatureWorker<warhead::CallOfHelpCreatureInRangeDo> worker(this, u_do);
 
-    TypeContainerVisitor<acore::CreatureWorker<acore::CallOfHelpCreatureInRangeDo>, GridTypeMapContainer >  grid_creature_searcher(worker);
+    TypeContainerVisitor<warhead::CreatureWorker<warhead::CallOfHelpCreatureInRangeDo>, GridTypeMapContainer >  grid_creature_searcher(worker);
 
     cell.Visit(p, grid_creature_searcher, *GetMap(), *this, radius);
 }
@@ -2235,7 +2236,7 @@ bool Creature::LoadCreaturesAddon(bool reload)
             SpellInfo const* AdditionalSpellInfo = sSpellMgr->GetSpellInfo(*itr);
             if (!AdditionalSpellInfo)
             {
-                sLog->outErrorDb("Creature (GUID: %u Entry: %u) has wrong spell %u defined in `auras` field.", GetGUIDLow(), GetEntry(), *itr);
+                LOG_ERROR("sql.sql", "Creature (GUID: %u Entry: %u) has wrong spell %u defined in `auras` field.", GetGUIDLow(), GetEntry(), *itr);
                 continue;
             }
 
@@ -2243,7 +2244,7 @@ bool Creature::LoadCreaturesAddon(bool reload)
             if (HasAura(*itr))
             {
                 if (!reload)
-                    sLog->outErrorDb("Creature (GUID: %u Entry: %u) has duplicate aura (spell %u) in `auras` field.", GetGUIDLow(), GetEntry(), *itr);
+                    LOG_ERROR("sql.sql", "Creature (GUID: %u Entry: %u) has duplicate aura (spell %u) in `auras` field.", GetGUIDLow(), GetEntry(), *itr);
 
                 continue;
             }
@@ -2270,7 +2271,7 @@ void Creature::SetInCombatWithZone()
 { 
     if (!CanHaveThreatList())
     {
-        sLog->outError("Creature entry %u call SetInCombatWithZone but creature cannot have threat list.", GetEntry());
+        LOG_ERROR("server", "Creature entry %u call SetInCombatWithZone but creature cannot have threat list.", GetEntry());
         return;
     }
 
@@ -2278,7 +2279,7 @@ void Creature::SetInCombatWithZone()
 
     if (!map->IsDungeon())
     {
-        sLog->outError("Creature entry %u call SetInCombatWithZone for map (id: %u) that isn't an instance.", GetEntry(), map->GetId());
+        LOG_ERROR("server", "Creature entry %u call SetInCombatWithZone for map (id: %u) that isn't an instance.", GetEntry(), map->GetId());
         return;
     }
 
@@ -2599,7 +2600,7 @@ std::string const& Creature::GetNameForLocaleIdx(LocaleConstant loc_idx) const
 
 void Creature::SetPosition(float x, float y, float z, float o)
 { 
-    if (!acore::IsValidMapCoord(x, y, z, o))
+    if (!warhead::IsValidMapCoord(x, y, z, o))
         return;
 
     GetMap()->CreatureRelocation(this, x, y, z, o);

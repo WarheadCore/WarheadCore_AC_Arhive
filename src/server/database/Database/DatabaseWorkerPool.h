@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef _DATABASEWORKERPOOL_H
@@ -66,10 +77,10 @@ class DatabaseWorkerPool
         template<typename Format, typename... Args>
         void PExecute(Format&& sql, Args&&... args)
         {
-            if (acore::IsFormatEmptyOrNull(sql))
+            if (warhead::IsFormatEmptyOrNull(sql))
                 return;
 
-            Execute(acore::StringFormat(std::forward<Format>(sql), std::forward<Args>(args)...).c_str());
+            Execute(warhead::StringFormat(std::forward<Format>(sql), std::forward<Args>(args)...).c_str());
         }
 
         //! Enqueues a one-way SQL operation in prepared statement format that will be executed asynchronously.
@@ -89,10 +100,10 @@ class DatabaseWorkerPool
         template<typename Format, typename... Args>
         void DirectPExecute(Format&& sql, Args&&... args)
         {
-            if (acore::IsFormatEmptyOrNull(sql))
+            if (warhead::IsFormatEmptyOrNull(sql))
                 return;
 
-            DirectExecute(acore::StringFormat(std::forward<Format>(sql), std::forward<Args>(args)...).c_str());
+            DirectExecute(warhead::StringFormat(std::forward<Format>(sql), std::forward<Args>(args)...).c_str());
         }
 
         //! Directly executes a one-way SQL operation in prepared statement format, that will block the calling thread until finished.
@@ -112,10 +123,10 @@ class DatabaseWorkerPool
         template<typename Format, typename... Args>
         QueryResult PQuery(Format&& sql, T* conn, Args&&... args)
         {
-            if (acore::IsFormatEmptyOrNull(sql))
+            if (warhead::IsFormatEmptyOrNull(sql))
                 return QueryResult(nullptr);
 
-            return Query(acore::StringFormat(std::forward<Format>(sql), std::forward<Args>(args)...).c_str(), conn);
+            return Query(warhead::StringFormat(std::forward<Format>(sql), std::forward<Args>(args)...).c_str(), conn);
         }
 
         //! Directly executes an SQL query in string format -with variable args- that will block the calling thread until finished.
@@ -123,10 +134,10 @@ class DatabaseWorkerPool
         template<typename Format, typename... Args>
         QueryResult PQuery(Format&& sql, Args&&... args)
         {
-            if (acore::IsFormatEmptyOrNull(sql))
+            if (warhead::IsFormatEmptyOrNull(sql))
                 return QueryResult(nullptr);
 
-            return Query(acore::StringFormat(std::forward<Format>(sql), std::forward<Args>(args)...).c_str());
+            return Query(warhead::StringFormat(std::forward<Format>(sql), std::forward<Args>(args)...).c_str());
         }
 
         //! Directly executes an SQL query in prepared format that will block the calling thread until finished.
@@ -147,10 +158,10 @@ class DatabaseWorkerPool
         template<typename Format, typename... Args>
         QueryResultFuture AsyncPQuery(Format&& sql, Args&&... args)
         {
-            if (acore::IsFormatEmptyOrNull(sql))
+            if (warhead::IsFormatEmptyOrNull(sql))
                 return QueryResult(nullptr);
 
-            return AsyncQuery(acore::StringFormat(std::forward<Format>(sql), std::forward<Args>(args)...).c_str());
+            return AsyncQuery(warhead::StringFormat(std::forward<Format>(sql), std::forward<Args>(args)...).c_str());
         }
 
         //! Enqueues a query in prepared format that will set the value of the PreparedQueryResultFuture return object as soon as the query is executed.

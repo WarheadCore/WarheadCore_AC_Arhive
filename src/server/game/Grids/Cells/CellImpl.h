@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef ACORE_CELLIMPL_H
@@ -25,7 +36,7 @@ inline Cell::Cell(CellCoord const& p)
 
 inline Cell::Cell(float x, float y)
 {
-    CellCoord p = acore::ComputeCellCoord(x, y);
+    CellCoord p = warhead::ComputeCellCoord(x, y);
     data.Part.grid_x = p.x_coord / MAX_NUMBER_OF_CELLS;
     data.Part.grid_y = p.y_coord / MAX_NUMBER_OF_CELLS;
     data.Part.cell_x = p.x_coord % MAX_NUMBER_OF_CELLS;
@@ -38,12 +49,12 @@ inline CellArea Cell::CalculateCellArea(float x, float y, float radius)
 {
     if (radius <= 0.0f)
     {
-        CellCoord center = acore::ComputeCellCoord(x, y).normalize();
+        CellCoord center = warhead::ComputeCellCoord(x, y).normalize();
         return CellArea(center, center);
     }
 
-    CellCoord centerX = acore::ComputeCellCoord(x - radius, y - radius).normalize();
-    CellCoord centerY = acore::ComputeCellCoord(x + radius, y + radius).normalize();
+    CellCoord centerX = warhead::ComputeCellCoord(x - radius, y - radius).normalize();
+    CellCoord centerY = warhead::ComputeCellCoord(x + radius, y + radius).normalize();
 
     return CellArea(centerX, centerY);
 }

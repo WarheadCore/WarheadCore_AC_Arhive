@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef CONFIG_H
@@ -15,9 +26,9 @@
 #include <ace/Thread_Mutex.h>
 #include <AutoPtr.h>
 
-typedef acore::AutoPtr<ACE_Configuration_Heap, ACE_Null_Mutex> Config;
+typedef warhead::AutoPtr<ACE_Configuration_Heap, ACE_Null_Mutex> Config;
 
-class AC_COMMON_API ConfigMgr
+class WH_COMMON_API ConfigMgr
 {
     friend class ConfigLoader;
 
@@ -56,6 +67,8 @@ public:
     void setDryRun(bool mode) { dryRun = mode; }
 
     void SetConfigList(std::string const& fileName, std::string const& modulesConfigList = "");
+
+    std::string const GetConfigPath();
 
 private:
     bool dryRun = false;

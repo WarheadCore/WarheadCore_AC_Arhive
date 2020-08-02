@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "Common.h"
@@ -29,14 +40,6 @@ enum CharterItemIDs
     ARENA_TEAM_CHARTER_2v2                        = 23560,
     ARENA_TEAM_CHARTER_3v3                        = 23561,
     ARENA_TEAM_CHARTER_5v5                        = 23562
-};
-
-enum CharterCosts
-{
-    GUILD_CHARTER_COST                            = 1000,
-    ARENA_TEAM_CHARTER_2v2_COST                   = 800000,
-    ARENA_TEAM_CHARTER_3v3_COST                   = 1200000,
-    ARENA_TEAM_CHARTER_5v5_COST                   = 2000000
 };
 
 void WorldSession::HandlePetitionBuyOpcode(WorldPacket & recvData)
@@ -101,13 +104,13 @@ void WorldSession::HandlePetitionBuyOpcode(WorldPacket & recvData)
             return;
 
         charterid = GUILD_CHARTER;
-        cost = GUILD_CHARTER_COST;
+        cost = sGameConfig->GetIntConfig("Guild.CharterCost");
         type = GUILD_CHARTER_TYPE;
     }
     else
     {
         // TODO: find correct opcode
-        if (_player->getLevel() < sGameConfig->GetIntConfig("MaxPlayerLevel"))
+        if (!_player->IsMaxLevel())
         {
             SendNotification(LANG_ARENA_ONE_TOOLOW, sGameConfig->GetIntConfig("MaxPlayerLevel"));
             return;
@@ -117,17 +120,17 @@ void WorldSession::HandlePetitionBuyOpcode(WorldPacket & recvData)
         {
             case 1:
                 charterid = ARENA_TEAM_CHARTER_2v2;
-                cost = ARENA_TEAM_CHARTER_2v2_COST;
+                cost = sGameConfig->GetIntConfig("ArenaTeam.CharterCost.2v2");
                 type = ARENA_TEAM_CHARTER_2v2_TYPE;
                 break;
             case 2:
                 charterid = ARENA_TEAM_CHARTER_3v3;
-                cost = ARENA_TEAM_CHARTER_3v3_COST;
+                cost = sGameConfig->GetIntConfig("ArenaTeam.CharterCost.3v3");
                 type = ARENA_TEAM_CHARTER_3v3_TYPE;
                 break;
             case 3:
                 charterid = ARENA_TEAM_CHARTER_5v5;
-                cost = ARENA_TEAM_CHARTER_5v5_COST;
+                cost = sGameConfig->GetIntConfig("ArenaTeam.CharterCost.5v5");
                 type = ARENA_TEAM_CHARTER_5v5_TYPE;
                 break;
             default:
@@ -211,7 +214,7 @@ void WorldSession::HandlePetitionBuyOpcode(WorldPacket & recvData)
 
     CharacterDatabase.EscapeString(name);
     SQLTransaction trans = CharacterDatabase.BeginTransaction();
-    
+
     if (petition)
     {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
@@ -436,7 +439,7 @@ void WorldSession::HandlePetitionSignOpcode(WorldPacket & recvData)
     Petition const* petition = sPetitionMgr->GetPetition(GUID_LOPART(petitionGuid));
     if (!petition)
     {
-        sLog->outError("Petition %u is not found for player %u %s", GUID_LOPART(petitionGuid), GetPlayer()->GetGUIDLow(), GetPlayer()->GetName().c_str());
+        LOG_ERROR("server", "Petition %u is not found for player %u %s", GUID_LOPART(petitionGuid), GetPlayer()->GetGUIDLow(), GetPlayer()->GetName().c_str());
         return;
     }
 
@@ -463,7 +466,7 @@ void WorldSession::HandlePetitionSignOpcode(WorldPacket & recvData)
 
     if (type != GUILD_CHARTER_TYPE)
     {
-        if (_player->getLevel() < sGameConfig->GetIntConfig("MaxPlayerLevel"))
+        if (!_player->IsMaxLevel())
         {
             SendArenaTeamCommandResult(ERR_ARENA_TEAM_CREATE_S, "", _player->GetName().c_str(), ERR_ARENA_TEAM_TARGET_TOO_LOW_S);
             return;
@@ -499,14 +502,14 @@ void WorldSession::HandlePetitionSignOpcode(WorldPacket & recvData)
         }
     }
 
-    
+
     uint32 signs = signatures->signatureMap.size();
     if (++signs > type)                                        // client signs maximum
         return;
 
     // Client doesn't allow to sign petition two times by one character, but not check sign by another character from same account
     // not allow sign another player from already sign player account
- 
+
     bool found = false;
     for (SignatureMap::const_iterator itr = signatures->signatureMap.begin(); itr != signatures->signatureMap.end(); ++itr)
         if (itr->second == GetAccountId())
@@ -623,7 +626,7 @@ void WorldSession::HandleOfferPetitionOpcode(WorldPacket & recvData)
 
     if (petition->petitionType != GUILD_CHARTER_TYPE)
     {
-        if (player->getLevel() < sGameConfig->GetIntConfig("MaxPlayerLevel"))
+        if (!player->IsMaxLevel())
         {
             // player is too low level to join an arena team
             SendArenaTeamCommandResult(ERR_ARENA_TEAM_CREATE_S, player->GetName().c_str(), "", ERR_ARENA_TEAM_TARGET_TOO_LOW_S);
@@ -705,7 +708,7 @@ void WorldSession::HandleTurnInPetitionOpcode(WorldPacket & recvData)
     Petition const* petition = sPetitionMgr->GetPetition(GUID_LOPART(petitionGuid));
     if (!petition)
     {
-        sLog->outError("Player %s (guid: %u) tried to turn in petition (guid: %u) that is not present in the database", _player->GetName().c_str(), _player->GetGUIDLow(), GUID_LOPART(petitionGuid));
+        LOG_ERROR("server", "Player %s (guid: %u) tried to turn in petition (guid: %u) that is not present in the database", _player->GetName().c_str(), _player->GetGUIDLow(), GUID_LOPART(petitionGuid));
         return;
     }
 
@@ -895,7 +898,7 @@ void WorldSession::SendPetitionShowList(uint64 guid)
         data << uint32(1);                                  // index
         data << uint32(GUILD_CHARTER);                      // charter entry
         data << uint32(CHARTER_DISPLAY_ID);                 // charter display id
-        data << uint32(GUILD_CHARTER_COST);                 // charter cost
+        data << uint32(sGameConfig->GetIntConfig("Guild.CharterCost")); // charter cost
         data << uint32(0);                                  // unknown
         data << uint32(sGameConfig->GetIntConfig("MinPetitionSigns")); // required signs
     }
@@ -906,21 +909,21 @@ void WorldSession::SendPetitionShowList(uint64 guid)
         data << uint32(1);                                  // index
         data << uint32(ARENA_TEAM_CHARTER_2v2);             // charter entry
         data << uint32(CHARTER_DISPLAY_ID);                 // charter display id
-        data << uint32(ARENA_TEAM_CHARTER_2v2_COST);        // charter cost
+        data << uint32(sGameConfig->GetIntConfig("ArenaTeam.CharterCost.2v2")); // charter cost
         data << uint32(2);                                  // unknown
         data << uint32(2);                                  // required signs?
         // 3v3
         data << uint32(2);                                  // index
         data << uint32(ARENA_TEAM_CHARTER_3v3);             // charter entry
         data << uint32(CHARTER_DISPLAY_ID);                 // charter display id
-        data << uint32(ARENA_TEAM_CHARTER_3v3_COST);        // charter cost
+        data << uint32(sGameConfig->GetIntConfig("ArenaTeam.CharterCost.3v3")); // charter cost
         data << uint32(3);                                  // unknown
         data << uint32(3);                                  // required signs?
         // 5v5
         data << uint32(3);                                  // index
         data << uint32(ARENA_TEAM_CHARTER_5v5);             // charter entry
         data << uint32(CHARTER_DISPLAY_ID);                 // charter display id
-        data << uint32(ARENA_TEAM_CHARTER_5v5_COST);        // charter cost
+        data << uint32(sGameConfig->GetIntConfig("ArenaTeam.CharterCost.5v5")); // charter cost
         data << uint32(5);                                  // unknown
         data << uint32(5);                                  // required signs?
     }

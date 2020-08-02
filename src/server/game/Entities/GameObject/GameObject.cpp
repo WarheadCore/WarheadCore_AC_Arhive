@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <G3D/Quat.h>
@@ -26,10 +37,6 @@
 #include "AccountMgr.h"
 #include "GameTime.h"
 #include "GameLocale.h"
-
-#ifdef ELUNA
-#include "LuaEngine.h"
-#endif
 
 GameObject::GameObject() : WorldObject(false), MovableMapObject(),
     m_model(NULL), m_goValue(), m_AI(NULL)
@@ -129,7 +136,7 @@ void GameObject::RemoveFromOwner()
     else if (IS_PET_GUID(ownerGUID))
         ownerType = "pet";
 
-    sLog->outCrash("Delete GameObject (GUID: %u Entry: %u SpellId %u LinkedGO %u) that lost references to owner (GUID %u Type '%s') GO list. Crash possible later.",
+    LOG_FATAL("server", "Delete GameObject (GUID: %u Entry: %u SpellId %u LinkedGO %u) that lost references to owner (GUID %u Type '%s') GO list. Crash possible later.",
         GetGUIDLow(), GetGOInfo()->entry, m_spellId, GetGOInfo()->GetLinkedGameObjectEntry(), GUID_LOPART(ownerGUID), ownerType);*/
     SetOwnerGUID(0);
 }
@@ -153,9 +160,6 @@ void GameObject::AddToWorld()
         EnableCollision(GetGoState() == GO_STATE_READY || IsTransport()); // pussywizard: this startOpen is unneeded here, collision depends entirely on GOState
 
         WorldObject::AddToWorld();
-#ifdef ELUNA
-        sEluna->OnAddToWorld(this);
-#endif
     }
 }
 
@@ -164,9 +168,6 @@ void GameObject::RemoveFromWorld()
     ///- Remove the gameobject from the accessor
     if (IsInWorld())
     {
-#ifdef ELUNA
-        sEluna->OnRemoveFromWorld(this);
-#endif
         if (m_zoneScript)
             m_zoneScript->OnGameObjectRemove(this);
 
@@ -232,7 +233,7 @@ bool GameObject::Create(uint32 guidlow, uint32 name_id, Map* map, uint32 phaseMa
     m_stationaryPosition.Relocate(x, y, z, ang);
     if (!IsPositionValid())
     {
-        sLog->outError("Gameobject (GUID: %u Entry: %u) not created. Suggested coordinates isn't valid (X: %f Y: %f)", guidlow, name_id, x, y);
+        LOG_ERROR("server", "Gameobject (GUID: %u Entry: %u) not created. Suggested coordinates isn't valid (X: %f Y: %f)", guidlow, name_id, x, y);
         return false;
     }
 
@@ -249,7 +250,7 @@ bool GameObject::Create(uint32 guidlow, uint32 name_id, Map* map, uint32 phaseMa
     GameObjectTemplate const* goinfo = sObjectMgr->GetGameObjectTemplate(name_id);
     if (!goinfo)
     {
-        sLog->outErrorDb("Gameobject (GUID: %u Entry: %u) not created: non-existing entry in `gameobject_template`. Map: %u (X: %f Y: %f Z: %f)", guidlow, name_id, map->GetId(), x, y, z);
+        LOG_ERROR("sql.sql", "Gameobject (GUID: %u Entry: %u) not created: non-existing entry in `gameobject_template`. Map: %u (X: %f Y: %f Z: %f)", guidlow, name_id, map->GetId(), x, y, z);
         return false;
     }
 
@@ -259,7 +260,7 @@ bool GameObject::Create(uint32 guidlow, uint32 name_id, Map* map, uint32 phaseMa
 
     if (goinfo->type >= MAX_GAMEOBJECT_TYPE)
     {
-        sLog->outErrorDb("Gameobject (GUID: %u Entry: %u) not created: non-existing GO type '%u' in `gameobject_template`. It will crash client if created.", guidlow, name_id, goinfo->type);
+        LOG_ERROR("sql.sql", "Gameobject (GUID: %u Entry: %u) not created: non-existing GO type '%u' in `gameobject_template`. It will crash client if created.", guidlow, name_id, goinfo->type);
         return false;
     }
 
@@ -363,13 +364,10 @@ bool GameObject::Create(uint32 guidlow, uint32 name_id, Map* map, uint32 phaseMa
 
 void GameObject::Update(uint32 diff)
 {
-#ifdef ELUNA
-    sEluna->UpdateAI(this, diff);
-#endif
     if (AI())
         AI()->UpdateAI(diff);
     else if (!AIM_Initialize())
-        sLog->outError("Could not initialize GameObjectAI");
+        LOG_ERROR("server", "Could not initialize GameObjectAI");
 
     switch (m_lootState)
     {
@@ -456,7 +454,7 @@ void GameObject::Update(uint32 diff)
                     if (info->summoningRitual.casterTargetSpell && info->summoningRitual.casterTargetSpell != 1) // No idea why this field is a bool in some cases
                         for (uint32 i = 0; i < info->summoningRitual.casterTargetSpellTargets; i++)
                             // m_unique_users can contain only player GUIDs
-                            if (Player* target = ObjectAccessor::GetPlayer(*this, acore::Containers::SelectRandomContainerElement(m_unique_users)))
+                            if (Player* target = ObjectAccessor::GetPlayer(*this, warhead::Containers::SelectRandomContainerElement(m_unique_users)))
                                 spellCaster->CastSpell(target, info->summoningRitual.casterTargetSpell, true);
 
                     // finish owners spell
@@ -604,8 +602,8 @@ void GameObject::Update(uint32 diff)
                     // search unfriendly creature
                     if (owner)                    // hunter trap
                     {
-                        acore::AnyUnfriendlyNoTotemUnitInObjectRangeCheck checker(this, owner, radius);
-                        acore::UnitSearcher<acore::AnyUnfriendlyNoTotemUnitInObjectRangeCheck> searcher(this, target, checker);
+                        warhead::AnyUnfriendlyNoTotemUnitInObjectRangeCheck checker(this, owner, radius);
+                        warhead::UnitSearcher<warhead::AnyUnfriendlyNoTotemUnitInObjectRangeCheck> searcher(this, target, checker);
                         VisitNearbyGridObject(radius, searcher);
                         if (!target)
                             VisitNearbyWorldObject(radius, searcher);
@@ -615,8 +613,8 @@ void GameObject::Update(uint32 diff)
                         // environmental damage spells already have around enemies targeting but this not help in case not existed GO casting support
                         // affect only players
                         Player* player = NULL;
-                        acore::AnyPlayerInObjectRangeCheck checker(this, radius, true, true);
-                        acore::PlayerSearcher<acore::AnyPlayerInObjectRangeCheck> searcher(this, player, checker);
+                        warhead::AnyPlayerInObjectRangeCheck checker(this, radius, true, true);
+                        warhead::PlayerSearcher<warhead::AnyPlayerInObjectRangeCheck> searcher(this, player, checker);
                         VisitNearbyWorldObject(radius, searcher);
                         target = player;
                     }
@@ -839,7 +837,7 @@ void GameObject::SaveToDB()
     GameObjectData const* data = sObjectMgr->GetGOData(m_DBTableGuid);
     if (!data)
     {
-        sLog->outError("GameObject::SaveToDB failed, cannot get gameobject data!");
+        LOG_ERROR("server", "GameObject::SaveToDB failed, cannot get gameobject data!");
         return;
     }
 
@@ -910,7 +908,7 @@ bool GameObject::LoadGameObjectFromDB(uint32 guid, Map* map, bool addToMap)
 
     if (!data)
     {
-        sLog->outErrorDb("Gameobject (GUID: %u) not found in table `gameobject`, can't load. ", guid);
+        LOG_ERROR("sql.sql", "Gameobject (GUID: %u) not found in table `gameobject`, can't load. ", guid);
         return false;
     }
 
@@ -1188,13 +1186,13 @@ void GameObject::TriggeringLinkedGameObject(uint32 trapEntry, Unit* target)
     GameObject* trapGO = NULL;
     {
         // using original GO distance
-        CellCoord p(acore::ComputeCellCoord(GetPositionX(), GetPositionY()));
+        CellCoord p(warhead::ComputeCellCoord(GetPositionX(), GetPositionY()));
         Cell cell(p);
 
-        acore::NearestGameObjectEntryInObjectRangeCheck go_check(*target, trapEntry, range);
-        acore::GameObjectLastSearcher<acore::NearestGameObjectEntryInObjectRangeCheck> checker(this, trapGO, go_check);
+        warhead::NearestGameObjectEntryInObjectRangeCheck go_check(*target, trapEntry, range);
+        warhead::GameObjectLastSearcher<warhead::NearestGameObjectEntryInObjectRangeCheck> checker(this, trapGO, go_check);
 
-        TypeContainerVisitor<acore::GameObjectLastSearcher<acore::NearestGameObjectEntryInObjectRangeCheck>, GridTypeMapContainer > object_checker(checker);
+        TypeContainerVisitor<warhead::GameObjectLastSearcher<warhead::NearestGameObjectEntryInObjectRangeCheck>, GridTypeMapContainer > object_checker(checker);
         cell.Visit(p, object_checker, *GetMap(), *target, range);
     }
 
@@ -1208,12 +1206,12 @@ GameObject* GameObject::LookupFishingHoleAround(float range)
 { 
     GameObject* ok = NULL;
 
-    CellCoord p(acore::ComputeCellCoord(GetPositionX(), GetPositionY()));
+    CellCoord p(warhead::ComputeCellCoord(GetPositionX(), GetPositionY()));
     Cell cell(p);
-    acore::NearestGameObjectFishingHole u_check(*this, range);
-    acore::GameObjectSearcher<acore::NearestGameObjectFishingHole> checker(this, ok, u_check);
+    warhead::NearestGameObjectFishingHole u_check(*this, range);
+    warhead::GameObjectSearcher<warhead::NearestGameObjectFishingHole> checker(this, ok, u_check);
 
-    TypeContainerVisitor<acore::GameObjectSearcher<acore::NearestGameObjectFishingHole>, GridTypeMapContainer > grid_object_checker(checker);
+    TypeContainerVisitor<warhead::GameObjectSearcher<warhead::NearestGameObjectFishingHole>, GridTypeMapContainer > grid_object_checker(checker);
     cell.Visit(p, grid_object_checker, *GetMap(), *this, range);
 
     return ok;
@@ -1293,10 +1291,6 @@ void GameObject::Use(Unit* user)
 
     if (Player* playerUser = user->ToPlayer())
     {
-#ifdef ELUNA
-        if (sEluna->OnGossipHello(playerUser, this))
-            return;
-#endif
         if (sScriptMgr->OnGossipHello(playerUser, this))
             return;
 
@@ -1548,7 +1542,7 @@ void GameObject::Use(Unit* user)
 
                     //provide error, no fishable zone or area should be 0
                     if (!zone_skill)
-                        sLog->outErrorDb("Fishable areaId %u are not properly defined in `skill_fishing_base_level`.", subzone);
+                        LOG_ERROR("sql.sql", "Fishable areaId %u are not properly defined in `skill_fishing_base_level`.", subzone);
 
                     int32 skill = player->GetSkillValue(SKILL_FISHING);
 
@@ -1846,7 +1840,7 @@ void GameObject::Use(Unit* user)
         }
         default:
             if (GetGoType() >= MAX_GAMEOBJECT_TYPE)
-                sLog->outError("GameObject::Use(): unit (type: %u, guid: %u, name: %s) tries to use object (guid: %u, entry: %u, name: %s) of unknown type (%u)",
+                LOG_ERROR("server", "GameObject::Use(): unit (type: %u, guid: %u, name: %s) tries to use object (guid: %u, entry: %u, name: %s) of unknown type (%u)",
                     user->GetTypeId(), user->GetGUIDLow(), user->GetName().c_str(), GetGUIDLow(), GetEntry(), GetGOInfo()->name.c_str(), GetGoType());
             break;
     }
@@ -1858,7 +1852,7 @@ void GameObject::Use(Unit* user)
     if (!spellInfo)
     {
         if (user->GetTypeId() != TYPEID_PLAYER || !sOutdoorPvPMgr->HandleCustomSpell(user->ToPlayer(), spellId, this))
-            sLog->outError("WORLD: unknown spell id %u at use action for gameobject (Entry: %u GoType: %u)", spellId, GetEntry(), GetGoType());
+            LOG_ERROR("server", "WORLD: unknown spell id %u at use action for gameobject (Entry: %u GoType: %u)", spellId, GetEntry(), GetGoType());
         else
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
             LOG_DEBUG("outdoorpvp", "WORLD: %u non-dbc spell was handled by OutdoorPvP", spellId);
@@ -1976,7 +1970,7 @@ void GameObject::SendMessageToSetInRange(WorldPacket* data, float dist, bool /*s
     dist += GetObjectSize();
     if (includeMargin)
         dist += VISIBILITY_COMPENSATION * 2.0f; // pussywizard: to ensure everyone receives all important packets
-    acore::MessageDistDeliverer notifier(this, data, dist, false, skipped_rcvr);
+    warhead::MessageDistDeliverer notifier(this, data, dist, false, skipped_rcvr);
     VisitNearbyWorldObject(dist, notifier);
 }
 
@@ -2121,9 +2115,6 @@ void GameObject::SetDestructibleState(GameObjectDestructibleState state, Player*
             break;
         case GO_DESTRUCTIBLE_DAMAGED:
         {
-#ifdef ELUNA
-            sEluna->OnDamaged(this, eventInvoker);
-#endif
             EventInform(m_goInfo->building.damagedEvent);
             sScriptMgr->OnGameObjectDamaged(this, eventInvoker);
             if (BattlegroundMap* bgMap = GetMap()->ToBattlegroundMap())
@@ -2152,9 +2143,6 @@ void GameObject::SetDestructibleState(GameObjectDestructibleState state, Player*
         }
         case GO_DESTRUCTIBLE_DESTROYED:
         {
-#ifdef ELUNA
-            sEluna->OnDestroyed(this, eventInvoker);
-#endif
             sScriptMgr->OnGameObjectDestroyed(this, eventInvoker);
             EventInform(m_goInfo->building.destroyedEvent);
             if (BattlegroundMap* bgMap = GetMap()->ToBattlegroundMap())
@@ -2209,9 +2197,6 @@ void GameObject::SetDestructibleState(GameObjectDestructibleState state, Player*
 void GameObject::SetLootState(LootState state, Unit* unit)
 { 
     m_lootState = state;
-#ifdef ELUNA
-    sEluna->OnLootStateChanged(this, state);
-#endif
     AI()->OnStateChanged(state, unit);
     sScriptMgr->OnGameObjectLootStateChanged(this, state, unit);
     // pussywizard: lootState has nothing to do with collision, it depends entirely on GOState. Loot state is for timed close/open door and respawning, which then sets GOState
@@ -2239,9 +2224,6 @@ void GameObject::SetLootGenerationTime()
 void GameObject::SetGoState(GOState state)
 { 
     SetByteValue(GAMEOBJECT_BYTES_1, 0, state);
-#ifdef ELUNA
-    sEluna->OnGameObjectStateChanged(this, state);
-#endif
     sScriptMgr->OnGameObjectStateChanged(this, state);
     if (m_model)
     {
@@ -2488,7 +2470,7 @@ void GameObject::SetPosition(float x, float y, float z, float o)
 { 
     // pussywizard: do not call for MotionTransport and other gobjects not in grid
 
-    if (!acore::IsValidMapCoord(x, y, z, o))
+    if (!warhead::IsValidMapCoord(x, y, z, o))
         return;
 
     GetMap()->GameObjectRelocation(this, x, y, z, o);

@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef __BATTLEGROUNDQUEUE_H
@@ -55,18 +66,18 @@ class BattlegroundQueue
         BattlegroundQueue();
         ~BattlegroundQueue();
 
-        void BattlegroundQueueUpdate(BattlegroundBracketId bracket_id, uint8 actionMask, bool isRated, uint32 arenaRatedTeamId);
+        void BattlegroundQueueUpdate(BattlegroundBracketId bracket_id, bool isRated, uint32 arenaRatedTeamId);
         void UpdateEvents(uint32 diff);
 
-        void FillPlayersToBG(Battleground* bg, const int32 aliFree, const int32 hordeFree, BattlegroundBracketId bracket_id);
-        void FillPlayersToBGWithSpecific(Battleground* bg, const int32 aliFree, const int32 hordeFree, BattlegroundBracketId thisBracketId, BattlegroundQueue* specificQueue, BattlegroundBracketId specificBracketId);
+        void FillPlayersToBG(Battleground* bg, int32 aliFree, int32 hordeFree, BattlegroundBracketId bracket_id);
+        void FillPlayersToBGWithSpecific(Battleground* bg, int32 aliFree, int32 hordeFree, BattlegroundBracketId thisBracketId, BattlegroundQueue* specificQueue, BattlegroundBracketId specificBracketId);
         bool CheckPremadeMatch(BattlegroundBracketId bracket_id, uint32 MinPlayersPerTeam, uint32 MaxPlayersPerTeam);
         bool CheckNormalMatch(Battleground* bgTemplate, BattlegroundBracketId bracket_id, uint32 minPlayers, uint32 maxPlayers);
         bool CheckSkirmishForSameFaction(BattlegroundBracketId bracket_id, uint32 minPlayersPerTeam);
         GroupQueueInfo* AddGroup(Player* leader, Group* group, PvPDifficultyEntry const*  bracketEntry, bool isRated, bool isPremade, uint32 ArenaRating, uint32 MatchmakerRating, uint32 ArenaTeamId);
         void RemovePlayer(uint64 guid, bool sentToBg, uint32 playerQueueSlot);
         bool IsPlayerInvitedToRatedArena(uint64 pl_guid);
-        bool IsPlayerInvited(uint64 pl_guid, const uint32 bgInstanceGuid, const uint32 removeTime);
+        bool IsPlayerInvited(uint64 pl_guid, uint32 bgInstanceGuid, uint32 removeTime);
         bool GetPlayerGroupInfoData(uint64 guid, GroupQueueInfo* ginfo);
         void PlayerInvitedToBGUpdateAverageWaitTime(GroupQueueInfo* ginfo);
         uint32 GetAverageQueueWaitTime(GroupQueueInfo* ginfo) const;
@@ -101,8 +112,8 @@ class BattlegroundQueue
                 SelectionPool(): PlayerCount(0) {};
                 void Init();
                 bool AddGroup(GroupQueueInfo* ginfo, uint32 desiredCount);
-                bool KickGroup(const uint32 size);
-                uint32 GetPlayerCount() const {return PlayerCount;}
+                bool KickGroup(uint32 size);
+                [[nodiscard]] uint32 GetPlayerCount() const { return PlayerCount; }
             public:
                 GroupsQueueType SelectedGroups;
             private:
@@ -132,10 +143,10 @@ class BGQueueInviteEvent : public BasicEvent
         BGQueueInviteEvent(uint64 pl_guid, uint32 BgInstanceGUID, BattlegroundTypeId BgTypeId, uint8 arenaType, uint32 removeTime) :
           m_PlayerGuid(pl_guid), m_BgInstanceGUID(BgInstanceGUID), m_BgTypeId(BgTypeId), m_ArenaType(arenaType), m_RemoveTime(removeTime)
           { }
-        virtual ~BGQueueInviteEvent() { }
+        ~BGQueueInviteEvent() override = default;
 
-        virtual bool Execute(uint64 e_time, uint32 p_time);
-        virtual void Abort(uint64 e_time);
+        bool Execute(uint64 e_time, uint32 p_time) override;
+        void Abort(uint64 e_time) override;
     private:
         uint64 m_PlayerGuid;
         uint32 m_BgInstanceGUID;
@@ -156,10 +167,10 @@ class BGQueueRemoveEvent : public BasicEvent
             : m_PlayerGuid(pl_guid), m_BgInstanceGUID(bgInstanceGUID), m_RemoveTime(removeTime), m_BgQueueTypeId(bgQueueTypeId)
         {}
 
-        virtual ~BGQueueRemoveEvent() {}
+        ~BGQueueRemoveEvent() override = default;
 
-        virtual bool Execute(uint64 e_time, uint32 p_time);
-        virtual void Abort(uint64 e_time);
+        bool Execute(uint64 e_time, uint32 p_time) override;
+        void Abort(uint64 e_time) override;
     private:
         uint64 m_PlayerGuid;
         uint32 m_BgInstanceGUID;

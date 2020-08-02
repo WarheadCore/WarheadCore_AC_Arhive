@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019+ WarheadCore
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -68,7 +68,7 @@ enum LoggerOptions
 
 using Poco::FormattingChannel;
 
-class AC_COMMON_API Log
+class WH_COMMON_API Log
 {
 private:
     Log();
@@ -94,7 +94,7 @@ public:
     template<typename Format, typename... Args>
     inline void outMessage(std::string const& filter, LogLevel const level, Format&& fmt, Args&& ... args)
     {
-        outMessage(filter, level, acore::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
+        outMessage(filter, level, warhead::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
     }
 
     template<typename Format, typename... Args>
@@ -103,86 +103,14 @@ public:
         if (!ShouldLog(LOGGER_GM, LOG_LEVEL_INFO))
             return;
 
-        outCommand(std::to_string(account), acore::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
+        outCommand(std::to_string(account), warhead::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
     }
 
     template<typename Format, typename... Args>
     void outSys(LogLevel const level, Format&& fmt, Args&& ... args)
     {
-        outSys(level, acore::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
+        outSys(level, warhead::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
     }
-
-    // Support old func. Need delete later!
-    template<typename Format, typename... Args>
-    inline void outString(Format&& fmt, Args&& ... args)
-    {
-        outMessage("server", LOG_LEVEL_INFO, acore::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
-    }
-    
-    inline void outString()
-    {
-        outMessage("server", LOG_LEVEL_INFO, "");
-    }
-
-    template<typename Format, typename... Args>
-    inline void outError(Format&& fmt, Args&& ... args)
-    {
-        outMessage("server", LOG_LEVEL_ERROR, acore::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
-    }
-
-    template<typename Format, typename... Args>
-    inline void outErrorDb(Format&& fmt, Args&& ... args)
-    {
-        outMessage("sql.sql", LOG_LEVEL_ERROR, acore::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
-    }
-
-    template<typename Format, typename... Args>
-    inline void outDetail(Format&& fmt, Args&& ... args)
-    {
-        outMessage("server", LOG_LEVEL_INFO, acore::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
-    }
-
-    template<typename Format, typename... Args>
-    inline void outBasic(Format&& fmt, Args&& ... args)
-    {
-        outMessage("server", LOG_LEVEL_INFO, acore::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
-    }
-
-    template<typename Format, typename... Args>
-    inline void outSQLDev(Format&& fmt, Args&& ... args)
-    {
-        outMessage("sql", LOG_LEVEL_INFO, acore::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
-    }
-
-    template<typename Format, typename... Args>
-    inline void outSQLDriver(Format&& fmt, Args&& ... args)
-    {
-        outMessage("sql", LOG_LEVEL_INFO, acore::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
-    }
-
-    template<typename Format, typename... Args>
-    inline void outCrash(Format&& fmt, Args&& ... args)
-    {
-        outMessage("server", LOG_LEVEL_FATAL, acore::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
-    }
-
-    template<typename Format, typename... Args>
-    inline void outChar(Format&& fmt, Args&& ... args)
-    {
-        outMessage("server", LOG_LEVEL_INFO, acore::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
-    }
-
-    template<typename Format, typename... Args>
-    inline void outRemote(Format&& fmt, Args&& ... args)
-    {
-        outMessage("server", LOG_LEVEL_INFO, acore::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
-    }
-
-    template<typename Format, typename... Args>
-    inline void outMisc(Format&& fmt, Args&& ... args)
-    {
-        outMessage("server", LOG_LEVEL_INFO, acore::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
-    }    
 
 private:
     typedef std::unordered_map<std::string, FormattingChannel*> ChannelMapFiles;
@@ -268,7 +196,7 @@ private:
         } \
     }
 
-#if AC_PLATFORM != AC_PLATFORM_WINDOWS
+#if WH_PLATFORM != WH_PLATFORM_WINDOWS
 void check_args(char const*, ...) ATTR_PRINTF(1, 2);
 void check_args(std::string const&, ...);
 

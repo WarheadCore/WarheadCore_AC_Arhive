@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "Chat.h"
@@ -31,6 +42,7 @@
 #include "GameTime.h"
 #include "GameConfig.h"
 #include "GameLocale.h"
+#include "MuteManager.h"
 
 class misc_commandscript : public CommandScript
 {
@@ -85,7 +97,6 @@ public:
             { "unstuck",            SEC_GAMEMASTER,         true,  &HandleUnstuckCommand,               "" },
             { "linkgrave",          SEC_ADMINISTRATOR,      false, &HandleLinkGraveCommand,             "" },
             { "neargrave",          SEC_GAMEMASTER,         false, &HandleNearGraveCommand,             "" },
-            { "explorecheat",       SEC_ADMINISTRATOR,      false, &HandleExploreCheatCommand,          "" },
             { "showarea",           SEC_GAMEMASTER,         false, &HandleShowAreaCommand,              "" },
             { "hidearea",           SEC_ADMINISTRATOR,      false, &HandleHideAreaCommand,              "" },
             { "additem",            SEC_GAMEMASTER,         false, &HandleAddItemCommand,               "" },
@@ -175,7 +186,7 @@ public:
             }
         }
         ASSERT(!allowedArenas.empty());
-        BattlegroundTypeId randomizedArenaBgTypeId = acore::Containers::SelectRandomContainerElement(allowedArenas);
+        BattlegroundTypeId randomizedArenaBgTypeId = warhead::Containers::SelectRandomContainerElement(allowedArenas);
 
         uint8 count = 0;
         if (i != tokens.end())
@@ -396,7 +407,7 @@ public:
             }
         }
 
-        CellCoord cellCoord = acore::ComputeCellCoord(object->GetPositionX(), object->GetPositionY());
+        CellCoord cellCoord = warhead::ComputeCellCoord(object->GetPositionX(), object->GetPositionY());
         Cell cell(cellCoord);
 
         uint32 zoneId, areaId;
@@ -415,7 +426,7 @@ public:
         float groundZ = map->GetHeight(object->GetPhaseMask(), object->GetPositionX(), object->GetPositionY(), MAX_HEIGHT);
         float floorZ = map->GetHeight(object->GetPhaseMask(), object->GetPositionX(), object->GetPositionY(), object->GetPositionZ());
 
-        GridCoord gridCoord = acore::ComputeGridCoord(object->GetPositionX(), object->GetPositionY());
+        GridCoord gridCoord = warhead::ComputeGridCoord(object->GetPositionX(), object->GetPositionY());
 
         // 63? WHY?
         int gridX = 63 - gridCoord.x_coord;
@@ -480,15 +491,6 @@ public:
         if (!SpellMgr::IsSpellValid(spellInfo))
         {
             handler->PSendSysMessage(LANG_COMMAND_SPELL_BROKEN, spellId);
-            handler->SetSentErrorMessage(true);
-            return false;
-        }
-
-        SpellScriptsBounds bounds = sObjectMgr->GetSpellScriptsBounds(spellId);
-        uint32 spellDifficultyId = sSpellMgr->GetSpellDifficultyId(spellId);
-        if (bounds.first != bounds.second || spellDifficultyId)
-        {
-            handler->PSendSysMessage("Aura %u cannot be applied using a command!", spellId);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -1327,45 +1329,6 @@ public:
         return true;
     }
 
-    static bool HandleExploreCheatCommand(ChatHandler* handler, char const* args)
-    {
-        if (!*args)
-            return false;
-
-        int32 flag = int32(atoi((char*)args));
-
-        Player* playerTarget = handler->getSelectedPlayer();
-        if (!playerTarget)
-        {
-            handler->SendSysMessage(LANG_NO_CHAR_SELECTED);
-            handler->SetSentErrorMessage(true);
-            return false;
-        }
-
-        if (flag != 0)
-        {
-            handler->PSendSysMessage(LANG_YOU_SET_EXPLORE_ALL, handler->GetNameLink(playerTarget).c_str());
-            if (handler->needReportToTarget(playerTarget))
-                ChatHandler(playerTarget->GetSession()).PSendSysMessage(LANG_YOURS_EXPLORE_SET_ALL, handler->GetNameLink().c_str());
-        }
-        else
-        {
-            handler->PSendSysMessage(LANG_YOU_SET_EXPLORE_NOTHING, handler->GetNameLink(playerTarget).c_str());
-            if (handler->needReportToTarget(playerTarget))
-                ChatHandler(playerTarget->GetSession()).PSendSysMessage(LANG_YOURS_EXPLORE_SET_NOTHING, handler->GetNameLink().c_str());
-        }
-
-        for (uint8 i = 0; i < PLAYER_EXPLORED_ZONES_SIZE; ++i)
-        {
-            if (flag != 0)
-                handler->GetSession()->GetPlayer()->SetFlag(PLAYER_EXPLORED_ZONES_1 + i, 0xFFFFFFFF);
-            else
-                handler->GetSession()->GetPlayer()->SetFlag(PLAYER_EXPLORED_ZONES_1 + i, 0);
-        }
-
-        return true;
-    }
-
     static bool HandleShowAreaCommand(ChatHandler* handler, char const* args)
     {
         if (!*args)
@@ -1495,7 +1458,7 @@ public:
             playerTarget = player;
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-        sLog->outDetail(handler->GetAcoreString(LANG_ADDITEM), itemId, count);
+        LOG_INFO("server", handler->GetAcoreString(LANG_ADDITEM), itemId, count);
 #endif
 
         ItemTemplate const* itemTemplate = sObjectMgr->GetItemTemplate(itemId);
@@ -1509,8 +1472,23 @@ public:
         // Subtract
         if (count < 0)
         {
-            playerTarget->DestroyItemCount(itemId, -count, true, false);
-            handler->PSendSysMessage(LANG_REMOVEITEM, itemId, -count, handler->GetNameLink(playerTarget).c_str());
+            if (!playerTarget->HasItemCount(itemId, 0))
+            {
+                // output that player don't have any items to destroy
+                handler->PSendSysMessage(LANG_REMOVEITEM_FAILURE, handler->GetNameLink(playerTarget).c_str(), itemId);
+            }
+            else if (!playerTarget->HasItemCount(itemId, -count))
+            {
+                // output that player don't have as many items that you want to destroy
+                handler->PSendSysMessage(LANG_REMOVEITEM_ERROR, handler->GetNameLink(playerTarget).c_str(), itemId);
+            }
+            else
+            {
+                // output successful amount of destroyed items
+                playerTarget->DestroyItemCount(itemId, -count, true, false);
+                handler->PSendSysMessage(LANG_REMOVEITEM, itemId, -count, handler->GetNameLink(playerTarget).c_str());
+            }
+
             return true;
         }
 
@@ -1584,7 +1562,7 @@ public:
             playerTarget = player;
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-        sLog->outDetail(handler->GetAcoreString(LANG_ADDITEMSET), itemSetId);
+        LOG_INFO("server", handler->GetAcoreString(LANG_ADDITEMSET), itemSetId);
 #endif
 
         bool found = false;
@@ -1779,7 +1757,7 @@ public:
         std::string OS                = handler->GetAcoreString(LANG_UNKNOWN);
 
         // Mute data print variables
-        int64 muteTime                = -1;
+        int32 muteTime                = 0;
         std::string muteReason        = handler->GetAcoreString(LANG_NO_REASON);
         std::string muteBy            = handler->GetAcoreString(LANG_UNKNOWN);
 
@@ -1830,7 +1808,6 @@ public:
             latency           = target->GetSession()->GetLatency();
             raceid            = target->getRace();
             classid           = target->getClass();
-            muteTime          = target->GetSession()->m_muteTime;
             mapId             = target->GetMapId();
             areaId            = target->GetAreaId();
             alive             = target->IsAlive() ? handler->GetAcoreString(LANG_YES) : handler->GetAcoreString(LANG_NO);
@@ -1875,8 +1852,8 @@ public:
         stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_PINFO);
         stmt->setInt32(0, int32(realmID));
         stmt->setUInt32(1, accId);
+        
         PreparedQueryResult accInfoResult = LoginDatabase.Query(stmt);
-
         if (accInfoResult)
         {
             Field* fields = accInfoResult->Fetch();
@@ -1923,12 +1900,23 @@ public:
                 lastIp    = handler->GetAcoreString(LANG_UNAUTHORIZED);
                 lastLogin = handler->GetAcoreString(LANG_UNAUTHORIZED);
             }
-            muteTime      = fields[6].GetUInt64();
-            muteReason    = fields[7].GetString();
-            muteBy        = fields[8].GetString();
-            failedLogins  = fields[9].GetUInt32();
-            locked        = fields[10].GetUInt8();
-            OS            = fields[11].GetString();
+            
+            failedLogins  = fields[6].GetUInt32();
+            locked        = fields[7].GetUInt8();
+            OS            = fields[8].GetString();
+        }
+
+        // Check mute info if exist
+        stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_MUTE);
+        stmt->setUInt32(0, accId);
+
+        PreparedQueryResult accmuteInfoResult = LoginDatabase.Query(stmt);
+        if (accmuteInfoResult)
+        {
+            Field* fields   = accmuteInfoResult->Fetch();
+            muteTime        = std::abs(fields[1].GetInt32());
+            muteReason      = fields[2].GetString();
+            muteBy          = fields[3].GetString();
         }
 
         // Creates a chat link to the character. Returns nameLink
@@ -1937,6 +1925,7 @@ public:
         // Returns banType, banTime, bannedBy, banreason
         PreparedStatement* banQuery = LoginDatabase.GetPreparedStatement(LOGIN_SEL_PINFO_BANS);
         banQuery->setUInt32(0, accId);
+        
         PreparedQueryResult accBannedResult = LoginDatabase.Query(banQuery);
         if (!accBannedResult)
         {
@@ -1957,8 +1946,8 @@ public:
         // Can be used to query data from World database
         PreparedStatement* xpQuery = WorldDatabase.GetPreparedStatement(WORLD_SEL_REQ_XP);
         xpQuery->setUInt8(0, level);
+        
         PreparedQueryResult xpResult = WorldDatabase.Query(xpQuery);
-
         if (xpResult)
         {
             Field* fields = xpResult->Fetch();
@@ -1968,8 +1957,8 @@ public:
         // Can be used to query data from Characters database
         PreparedStatement* charXpQuery = CharacterDatabase.GetPreparedStatement(CHAR_SEL_PINFO_XP);
         charXpQuery->setUInt32(0, lowguid);
+        
         PreparedQueryResult charXpResult = CharacterDatabase.Query(charXpQuery);
-
         if (charXpResult)
         {
             Field* fields = charXpResult->Fetch();
@@ -1980,6 +1969,7 @@ public:
             {
                 PreparedStatement* guildQuery = CharacterDatabase.GetPreparedStatement(CHAR_SEL_GUILD_MEMBER_EXTENDED);
                 guildQuery->setUInt32(0, lowguid);
+                
                 PreparedQueryResult guildInfoResult = CharacterDatabase.Query(guildQuery);
                 if (guildInfoResult)
                 {
@@ -2006,8 +1996,8 @@ public:
             handler->PSendSysMessage(LANG_PINFO_BANNED, banType.c_str(), banReason.c_str(), banTime > 0 ? secsToTimeString(banTime - GameTime::GetGameTime(), true).c_str() : handler->GetAcoreString(LANG_PERMANENTLY), bannedBy.c_str());
 
         // Output IV. LANG_PINFO_MUTED if mute is applied
-        if (muteTime > 0)
-            handler->PSendSysMessage(LANG_PINFO_MUTED, muteReason.c_str(), secsToTimeString(muteTime - GameTime::GetGameTime(), true).c_str(), muteBy.c_str());
+        if (muteTime)
+            handler->PSendSysMessage(LANG_PINFO_MUTED, muteReason.c_str(), secsToTimeString(muteTime, true).c_str(), muteBy.c_str());
 
         // Output V. LANG_PINFO_ACC_ACCOUNT
         handler->PSendSysMessage(LANG_PINFO_ACC_ACCOUNT, userName.c_str(), accId, security);
@@ -2125,14 +2115,14 @@ public:
             return true;
         }
 
-        CellCoord p(acore::ComputeCellCoord(player->GetPositionX(), player->GetPositionY()));
+        CellCoord p(warhead::ComputeCellCoord(player->GetPositionX(), player->GetPositionY()));
         Cell cell(p);
         cell.SetNoCreate();
 
-        acore::RespawnDo u_do;
-        acore::WorldObjectWorker<acore::RespawnDo> worker(player, u_do);
+        warhead::RespawnDo u_do;
+        warhead::WorldObjectWorker<warhead::RespawnDo> worker(player, u_do);
 
-        TypeContainerVisitor<acore::WorldObjectWorker<acore::RespawnDo>, GridTypeMapContainer > obj_worker(worker);
+        TypeContainerVisitor<warhead::WorldObjectWorker<warhead::RespawnDo>, GridTypeMapContainer > obj_worker(worker);
         cell.Visit(p, obj_worker, *player->GetMap(), *player, player->GetGridActivationRange());
 
         return true;
@@ -2167,59 +2157,13 @@ public:
         uint32 notSpeakTime = uint32(atoi(delayStr));
 
         // must have strong lesser security level
-        if (handler->HasLowerSecurity (target, targetGuid, true))
+        if (handler->HasLowerSecurity(target, targetGuid, true))
             return false;
+       
+        sMute->MutePlayer(targetName, notSpeakTime, handler->GetSession() ? handler->GetSession()->GetPlayerName() : handler->GetAcoreString(LANG_CONSOLE), muteReasonStr);
 
-        PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPD_MUTE_TIME);
-        std::string muteBy = "";
-        if (handler->GetSession())
-            muteBy = handler->GetSession()->GetPlayerName();
-        else
-            muteBy = handler->GetAcoreString(LANG_CONSOLE);
-
-        if (target)
-        {
-            // Target is online, mute will be in effect right away.
-            int64 muteTime = GameTime::GetGameTime() + notSpeakTime * MINUTE;
-            target->GetSession()->m_muteTime = muteTime;
-            stmt->setInt64(0, muteTime);
-            std::string nameLink = handler->playerLink(targetName);
-
-            if (CONF_GET_BOOL("ShowMuteInWorld"))
-                sWorld->SendWorldText(LANG_COMMAND_MUTEMESSAGE_WORLD, muteBy.c_str(), nameLink.c_str(), notSpeakTime, muteReasonStr.c_str());
-
-            ChatHandler(target->GetSession()).PSendSysMessage(LANG_YOUR_CHAT_DISABLED, notSpeakTime, muteBy.c_str(), muteReasonStr.c_str());
-        }
-        else
-        {
-            // Target is offline, mute will be in effect starting from the next login.
-            int32 muteTime = -int32(notSpeakTime * MINUTE);
-            stmt->setInt64(0, muteTime);
-        }
-
-        stmt->setString(1, muteReasonStr);
-        stmt->setString(2, muteBy);
-        stmt->setUInt32(3, accountId);
-        LoginDatabase.Execute(stmt);
-        stmt = LoginDatabase.GetPreparedStatement(LOGIN_INS_ACCOUNT_MUTE);
-        stmt->setUInt32(0, accountId);
-        stmt->setUInt32(1, notSpeakTime);
-        stmt->setString(2, muteBy);
-        stmt->setString(3, muteReasonStr);
-        LoginDatabase.Execute(stmt);
-        std::string nameLink = handler->playerLink(targetName);
-
-        if (CONF_GET_BOOL("ShowMuteInWorld") && !target)
-            sWorld->SendWorldText(LANG_COMMAND_MUTEMESSAGE_WORLD, muteBy.c_str(), nameLink.c_str(), notSpeakTime, muteReasonStr.c_str());
-        else
-        {
-            // pussywizard: notify all online GMs
-            ACORE_READ_GUARD(HashMapHolder<Player>::LockType, *HashMapHolder<Player>::GetLock());
-            HashMapHolder<Player>::MapType const& m = sObjectAccessor->GetPlayers();
-            for (HashMapHolder<Player>::MapType::const_iterator itr = m.begin(); itr != m.end(); ++itr)
-                if (itr->second->GetSession()->GetSecurity())
-                    ChatHandler(itr->second->GetSession()).PSendSysMessage(target ? LANG_YOU_DISABLE_CHAT : LANG_COMMAND_DISABLE_CHAT_DELAYED, (handler->GetSession() ? handler->GetSession()->GetPlayerName().c_str() : handler->GetAcoreString(LANG_CONSOLE)), nameLink.c_str(), notSpeakTime, muteReasonStr.c_str());
-        }
+        if (!CONF_GET_BOOL("ShowMuteInWorld"))
+            handler->PSendSysMessage(LANG_YOU_DISABLE_CHAT, handler->playerLink(targetName).c_str(), notSpeakTime, muteReasonStr.c_str());
 
         return true;
     }
@@ -2241,34 +2185,19 @@ public:
                 target = session->GetPlayer();
 
         // must have strong lesser security level
-        if (handler->HasLowerSecurity (target, targetGuid, true))
+        if (handler->HasLowerSecurity(target, targetGuid, true))
             return false;
 
-        if (target)
+        if (target && target->CanSpeak())
         {
-            if (target->CanSpeak())
-            {
-                handler->SendSysMessage(LANG_CHAT_ALREADY_ENABLED);
-                handler->SetSentErrorMessage(true);
-                return false;
-            }
-
-            target->GetSession()->m_muteTime = 0;
+            handler->SendSysMessage(LANG_CHAT_ALREADY_ENABLED);
+            handler->SetSentErrorMessage(true);
+            return false;
         }
 
-        PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPD_MUTE_TIME);
-        stmt->setInt64(0, 0);
-        stmt->setString(1, "");
-        stmt->setString(2, "");
-        stmt->setUInt32(3, accountId);
-        LoginDatabase.Execute(stmt);
+        sMute->UnMutePlayer(targetName);
 
-        if (target)
-            ChatHandler(target->GetSession()).PSendSysMessage(LANG_YOUR_CHAT_ENABLED);
-
-        std::string nameLink = handler->playerLink(targetName);
-
-        handler->PSendSysMessage(LANG_YOU_ENABLE_CHAT, nameLink.c_str());
+        handler->PSendSysMessage(LANG_YOU_ENABLE_CHAT, handler->playerLink(targetName).c_str());
 
         return true;
     }
@@ -2306,8 +2235,8 @@ public:
     {
         PreparedStatement *stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_MUTE_INFO);
         stmt->setUInt16(0, accountId);
+        
         PreparedQueryResult result = LoginDatabase.Query(stmt);
-
         if (!result)
         {
             handler->PSendSysMessage(LANG_COMMAND_MUTEHISTORY_EMPTY, accountName);
@@ -2315,21 +2244,27 @@ public:
         }
 
         handler->PSendSysMessage(LANG_COMMAND_MUTEHISTORY, accountName);
+        
         do
         {
             Field* fields = result->Fetch();
 
             // we have to manually set the string for mutedate
             time_t sqlTime = fields[0].GetUInt32();
-            tm timeInfo;
-            char buffer[80];
+            std::tm aTm;
+            localtime_r(&sqlTime, &aTm);
 
-            // set it to string
-            localtime_r(&sqlTime, &timeInfo);
-            strftime(buffer, sizeof(buffer), "%Y-%m-%d %I:%M%p", &timeInfo);
+            //       YYYY   year
+            //       MM     month (2 digits 01-12)
+            //       DD     day (2 digits 01-31)
+            //       HH     hour (2 digits 00-23)
+            //       MM     minutes (2 digits 00-59)
+            //       SS     seconds (2 digits 00-59)
+            std::string const muteDate = warhead::StringFormat("%04d-%02d-%02d %02d:%02d:%02d", aTm.tm_year + 1900, aTm.tm_mon + 1, aTm.tm_mday, aTm.tm_hour, aTm.tm_min, aTm.tm_sec);
 
-            handler->PSendSysMessage(LANG_COMMAND_MUTEHISTORY_OUTPUT, buffer, fields[1].GetUInt32(), fields[2].GetCString(), fields[3].GetCString());
+            handler->PSendSysMessage(LANG_COMMAND_MUTEHISTORY_OUTPUT, muteDate.c_str(), secsToTimeString(fields[1].GetUInt32(), true).c_str(), fields[3].GetCString(), fields[2].GetCString());
         } while (result->NextRow());
+        
         return true;
     }
 
@@ -2833,7 +2768,7 @@ public:
 
         if (!pet->InitStatsForLevel(creatureTarget->getLevel()))
         {
-            sLog->outError("InitStatsForLevel() in EffectTameCreature failed! Pet deleted.");
+            LOG_ERROR("server", "InitStatsForLevel() in EffectTameCreature failed! Pet deleted.");
             handler->PSendSysMessage("Error 2");
             delete pet;
             return false;

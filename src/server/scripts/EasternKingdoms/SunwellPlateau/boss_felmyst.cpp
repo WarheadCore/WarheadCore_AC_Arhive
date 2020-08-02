@@ -1,6 +1,19 @@
 /*
- * Originally written by Xinef - Copyright (C) 2016+ AzerothCore <www.azerothcore.org>, released under GNU AGPL v3 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-AGPL3
-*/
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "ScriptMgr.h"
 #include "ScriptedCreature.h"
@@ -12,13 +25,13 @@
 
 enum Yells
 {
-    YELL_BIRTH                                  = 0,
-    YELL_KILL                                   = 1,
-    YELL_BREATH                                 = 2,
-    YELL_TAKEOFF                                = 3,
-    YELL_BERSERK                                = 4,
-    YELL_DEATH                                  = 5,
-    EMOTE_BREATH                                = 6
+    YELL_BIRTH                                  = 0, // Glory to Kil'jaeden! Death to all who oppose!
+    YELL_KILL                                   = 1, // I kill for the master! OR The end has come!
+    YELL_BREATH                                 = 2, // Choke on your final breath
+    YELL_TAKEOFF                                = 3, // I am stronger than ever before!
+    YELL_BERSERK                                = 4, // No more hesitation! Your fates are written!
+    YELL_DEATH                                  = 5, // Kil'jaeden will... prevail!  AND Kalecgos line
+    EMOTE_BREATH                                = 6  // Felmyst takes a deep breath...
 };
 
 enum Spells
@@ -343,6 +356,7 @@ public:
                     Talk(EMOTE_BREATH);
                     break;
                 case EVENT_CORRUPT_TRIGGERS:
+                    Talk(YELL_BREATH);
                     me->m_Events.AddEvent(new CorruptTriggers(me), me->m_Events.CalculateTime(0));
                     me->m_Events.AddEvent(new CorruptTriggers(me), me->m_Events.CalculateTime(500));
                     me->m_Events.AddEvent(new CorruptTriggers(me), me->m_Events.CalculateTime(1000));
@@ -508,6 +522,7 @@ class spell_felmyst_fog_of_corruption_charm : public SpellScriptLoader
 
             void HandleRemove(AuraEffect const*  /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
+                GetTarget()->RemoveAurasDueToSpell(SPELL_FOG_OF_CORRUPTION_CHARM);
                 GetTarget()->RemoveAurasDueToSpell(SPELL_FOG_OF_CORRUPTION_CHARM2);
                 Unit::Kill(GetCaster(), GetTarget(), false);
             }

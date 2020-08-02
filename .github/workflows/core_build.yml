@@ -1,6 +1,9 @@
 name: core-build
 on:
   push:
+    branches: 
+      - '**'         # matches every branch
+      - '!coverity_scan'   # excludes coverity_scan
   pull_request:
 
 jobs:
@@ -8,8 +11,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        compiler: [clang6, clang7]
-    runs-on: ubuntu-18.04
+        compiler: [clang7]
+    runs-on: ubuntu-20.04
     name: ${{ matrix.compiler }}
     env:
       COMPILER: ${{ matrix.compiler }}
@@ -23,15 +26,13 @@ jobs:
           restore-keys: |
             ccache:${{ matrix.compiler }}:${{ matrix.modules }}-modules:${{ github.ref }}
             ccache:${{ matrix.compiler }}:${{ matrix.modules }}-modules
-            ccache:${{ matrix.compiler }}
-            ccache
       - name: Configure OS
-        run: source ./apps/ci/ci-install.sh
+        run: source ./apps/ci/ci-install.sh core-build
         env:
-          CONTINUOUS_INTEGRATION: true
-      - name: Import db
-        run: source ./apps/ci/ci-import-db.sh
+          CONTINUOUS_INTEGRATION: true      
       - name: Build
         run: source ./apps/ci/ci-compile.sh
+      - name: Import DB
+        run: source ./apps/ci/ci-worldserver-import-db.sh
       - name: Dry run
         run: source ./apps/ci/ci-worldserver-dry-run.sh

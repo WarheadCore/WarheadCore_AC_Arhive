@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /* ScriptData
@@ -297,8 +308,9 @@ public:
             return false;
         }
 
-        uint32 vendor_entry = vendor->GetEntry();
-
+        char* addMulti = strtok(nullptr, " ");
+        uint32 vendor_entry = addMulti ? handler->GetSession()->GetCurrentVendor() : vendor->GetEntry();
+        
         if (!sObjectMgr->IsVendorItemValid(vendor_entry, itemId, maxcount, incrtime, extendedcost, handler->GetSession()->GetPlayer()))
         {
             handler->SetSentErrorMessage(true);
@@ -518,9 +530,11 @@ public:
             handler->SetSentErrorMessage(true);
             return false;
         }
+
         uint32 itemId = atol(pitem);
 
-        if (!sObjectMgr->RemoveVendorItem(vendor->GetEntry(), itemId))
+        char* addMulti = strtok(nullptr, " ");
+        if (!sObjectMgr->RemoveVendorItem(addMulti ? handler->GetSession()->GetCurrentVendor() : vendor->GetEntry(), itemId))
         {
             handler->PSendSysMessage(LANG_ITEM_NOT_IN_LIST, itemId);
             handler->SetSentErrorMessage(true);
@@ -969,7 +983,7 @@ public:
 
         if (dontdel_str)
         {
-            //sLog->outError("DEBUG: All 3 params are set");
+            //LOG_ERROR("server", "DEBUG: All 3 params are set");
 
             // All 3 params are set
             // GUID
@@ -977,7 +991,7 @@ public:
             // doNotDEL
             if (stricmp(dontdel_str, "NODEL") == 0)
             {
-                //sLog->outError("DEBUG: doNotDelete = true;");
+                //LOG_ERROR("server", "DEBUG: doNotDelete = true;");
                 doNotDelete = true;
             }
         }
@@ -986,10 +1000,10 @@ public:
             // Only 2 params - but maybe NODEL is set
             if (type_str)
             {
-                sLog->outError("DEBUG: Only 2 params ");
+                LOG_ERROR("server", "DEBUG: Only 2 params ");
                 if (stricmp(type_str, "NODEL") == 0)
                 {
-                    //sLog->outError("DEBUG: type_str, NODEL ");
+                    //LOG_ERROR("server", "DEBUG: type_str, NODEL ");
                     doNotDelete = true;
                     type_str = nullptr;
                 }

@@ -1,5 +1,5 @@
 ################################################
-# AzerothCore World Server configuration file #
+# WarheadCore World Server configuration file #
 ################################################
 [worldserver]
 
@@ -27,8 +27,11 @@
 #    CHARACTER DELETE OPTIONS
 #    ITEM DELETE OPTIONS
 #    CUSTOM SERVER OPTIONS
+#    PACKET SPOOF PROTECTION SETTINGS
+#    DEBUG
 #    UPDATE SETTINGS
 #    LOGGING SYSTEM SETTINGS
+#    METRIC SETTINGS
 #
 ###################################################################################################
 
@@ -61,7 +64,7 @@ RealmID = 1
 #    DataDir
 #        Description: Data directory setting.
 #        Important:   DataDir needs to be quoted, as the string might contain space characters.
-#        Example:     "/home/youruser/azeroth-server/data"
+#        Example:     "/home/youruser/Warhead-server/data"
 #        Default:     "."
 
 DataDir = "."
@@ -657,6 +660,22 @@ MinCharterName = 2
 MinPetName = 2
 
 #
+#    Guild.CharterCost
+#    ArenaTeam.CharterCost.2v2
+#    ArenaTeam.CharterCost.3v3
+#    ArenaTeam.CharterCost.5v5
+#        Description: Amount of money (in Copper) the petitions costs.
+#        Default:     1000 - (10 Silver)
+#                     800000 - (80 Gold)
+#                     1200000 - (120 Gold)
+#                     2000000 - (200 Gold)
+
+Guild.CharterCost = 1000
+ArenaTeam.CharterCost.2v2 = 800000
+ArenaTeam.CharterCost.3v3 = 1200000
+ArenaTeam.CharterCost.5v5 = 2000000
+
+#
 #    MaxWhoListReturns
 #        Description: Set the max number of players returned in the /who list and interface.
 #        Default:     49 - (stable)
@@ -1134,22 +1153,22 @@ BeepAtStart = 1
 #        Description: Message of the Day, displayed at login.
 #                     Use '@' for a newline and be sure to escape special characters.
 #        Example:     "Welcome to John\'s Server@"
-#        Default:     "Welcome to an AzerothCore server."
+#        Default:     "Welcome to an WarheadCore server."
 
-Motd = "Welcome to an AzerothCore server."
+Motd = "Welcome to an WarheadCore server."
 
 #    PLEASE NOTE: another (hardcoded) text will appear below the MOTD:
 #
-#        "This server runs on AzerothCore www.azerothcore.org"
+#        "This server runs on WarheadCore www.Warheadcore.org"
 #
-#    All the AzerothCore contributors, as well as its father projects (MaNGOS, TrinityCore, etc..),
+#    All the WarheadCore contributors, as well as its father projects (MaNGOS, TrinityCore, etc..),
 #    have worked for free to provide you this software. Please do not remove the credits.
 #
 #    Changing or removing such hardcoded text is considered a violation of our license
 #    and it's not allowed. We reserve the right to take legal action in case of violations.
 #    Furthermore, any kind of support will be always denied.
 #
-#    All AzerothCore contributors and its father projects are publicly listed in
+#    All WarheadCore contributors and its father projects are publicly listed in
 #    our official repository. Credits to open source contributions should always be shown.
 #
 
@@ -2406,6 +2425,59 @@ Battleground.TrackDeserters.Enable = 1
 Battleground.InvitationType = 0
 
 #
+#    Battleground.ReportAFK.Timer
+#         Description: After a few minutes that battle started you can report the player.
+#         Default:     4
+
+Battleground.ReportAFK.Timer = 4
+
+#
+#    Battleground.ReportAFK
+#        Description: Number of reports needed to kick someone AFK from Battleground.
+#        Range:       1-9
+#        Default:     3
+
+Battleground.ReportAFK = 3
+
+#    Battleground.DisableQuestShareInBG
+#        Description: Disables the ability to share quests while in a Battleground.
+#        Default:     0 - (Disabled)
+#                     1 - (Enabled)
+
+Battleground.DisableQuestShareInBG = 0
+
+#
+#    Battleground.DisableReadyCheckInBG
+#        Description: Disables the ability to send a Ready Check survey while in a Battleground.
+#        Default:     0 - (Disabled)
+#                     1 - (Enabled)
+
+Battleground.DisableReadyCheckInBG = 0
+
+#
+#     Battleground.RewardWinnerHonorFirst
+#     Battleground.RewardWinnerArenaFirst
+#     Battleground.RewardWinnerHonorLast
+#     Battleground.RewardWinnerArenaLast
+#     Battleground.RewardLoserHonorFirst
+#     Battleground.RewardLoserHonorLast
+#        Description: Random Battlegrounds / call to the arms rewards
+#        Default:     30 - Battleground.RewardWinnerHonorFirst
+#                     25 - Battleground.RewardWinnerArenaFirst
+#                     15 - Battleground.RewardWinnerHonorLast
+#                     0  - Battleground.RewardWinnerArenaLast
+#                     5  - Battleground.RewardLoserHonorFirst
+#                     5  - Battleground.RewardLoserHonorLast
+#
+
+Battleground.RewardWinnerHonorFirst = 30
+Battleground.RewardWinnerArenaFirst = 25
+Battleground.RewardWinnerHonorLast  = 15
+Battleground.RewardWinnerArenaLast  = 0
+Battleground.RewardLoserHonorFirst  = 5
+Battleground.RewardLoserHonorLast   = 5
+
+#
 ###################################################################################################
 
 ###################################################################################################
@@ -2875,6 +2947,14 @@ ShowKickInWorld = 0
 ShowMuteInWorld = 0
 
 #
+#     Mute.AddAfterLogin.Enable
+#        Description: Add mute time after login player.
+#        Default:     1 - (Enabled)
+#                     0 - (Disabled)
+
+Mute.AddAfterLogin.Enable = 1
+
+#
 #     ShowBanInWorld
 #        Description: Determines whether a message is broadcast to the entire server when a
 #                     player gets banned.
@@ -2882,23 +2962,6 @@ ShowMuteInWorld = 0
 #                     1 - (Enabled)
 
 ShowBanInWorld = 0
-
-#
-#     RecordUpdateTimeDiffInterval
-#        Description: Time (in milliseconds) update time diff is written to the log file.
-#                     Update diff can be used as a performance indicator. Diff < 300: good
-#                     performance. Diff > 600 bad performance, may be caused by high CPU usage.
-#        Default:     60000 - (Enabled, 1 minute)
-#                     0     - (Disabled)
-
-RecordUpdateTimeDiffInterval = 60000
-
-#
-#     MinRecordUpdateTimeDiff
-#        Description: Only record update time diff which is greater than this value.
-#        Default:     100
-
-MinRecordUpdateTimeDiff = 100
 
 #
 #     PlayerStart.String
@@ -3119,14 +3182,13 @@ ICC.Buff.Alliance = 73828
 ###################################################################################################
 
 ###################################################################################################
-#
-# Packet Spoof Protection Settings
+# PACKET SPOOF PROTECTION SETTINGS
 #
 # These settings determine which action to take when harmful packet spoofing is detected.
 #
 #    PacketSpoof.Policy
 #        Description: Determines the course of action when packet spoofing is detected.
-#        Values:     0 - Log only (LOG_FILTER_NETWORKIO)
+#        Values:     0 - Log only
 #                    1 - Log + kick
 #                    2 - Log + kick + ban
 
@@ -3150,6 +3212,27 @@ PacketSpoof.BanMode = 0
 #
 
 PacketSpoof.BanDuration = 86400
+
+#
+###################################################################################################
+
+###################################################################################################
+# DEBUG
+#
+#    Debug.Battleground
+#        Description: Enable or disable Battleground 1v0 mode. (If enabled, the in-game command is disabled.)
+#        Default: 0 - (Disabled)
+#                 1 - (Enabled)
+
+Debug.Battleground = 0
+
+#
+#    Debug.Arena
+#        Description: Enable or disable Arena 1v1 mode. (If enabled, the in-game command is disabled.)
+#        Default: 0 - (Disabled)
+#                 1 - (Enabled)
+
+Debug.Arena = 0
 
 #
 ###################################################################################################
@@ -3339,6 +3422,7 @@ LogChannel.Console = 1,local,%t,lightRed lightRed red brown magenta cyan lightMa
 LogChannel.Server = 2,local,%Y-%m-%d %H:%M:%S %t,Server.log,false,daily,false
 LogChannel.GM = 2,local,%Y-%m-%d %H:%M:%S %t,gm_%s.log,false,daily,false
 LogChannel.DBErrors = 2,local,%Y-%m-%d %H:%M:%S %t,DBErrors.log,false,daily,false
+LogChannel.Modules = 2,local,%Y-%m-%d %H:%M:%S %t,Modules.log,false,daily,false
 
 #
 #  Logger config values: Given a logger "name"
@@ -3365,9 +3449,9 @@ Logger.root = 6,Server
 Logger.server = 6,Server
 Logger.commands.gm = 6,GM
 Logger.sql = 4,DBErrors
-Logger.sql.updates = 4,Server
+Logger.sql.updates = 6,Server
 Logger.mmaps= 6,Server
-Logger.module= 6,Server
+Logger.modules = 6,Modules
 
 #Logger.achievement=6,Server
 #Logger.addon=6,Server
@@ -3425,4 +3509,43 @@ Logger.module= 6,Server
 #Logger.sql.dev=6,Server
 #Logger.sql.driver=6,Server
 #Logger.warden=6,Server
+###################################################################################################
+
+###################################################################################################
+# METRIC SETTINGS
+#
+# These settings control the statistics sent to the metric database (currently InfluxDB)
+#
+#    Metric.Enable
+#        Description: Enables statistics sent to the metric database.
+#        Default:     0 - (Disabled)
+#                     1 - (Enabled)
+
+Metric.Enable = 0
+
+#
+#    Metric.Interval
+#        Description: Interval between every batch of data sent in seconds
+#        Default:     10 seconds
+#
+
+Metric.Interval = 10
+
+#
+#    Metric.ConnectionInfo
+#        Description: Connection settings for metric database (currently InfluxDB).
+#        Example:     "hostname;port;database"
+#        Default:     "127.0.0.1;8086;worldserver"
+
+Metric.ConnectionInfo = "127.0.0.1;8086;worldserver"
+
+#
+#    Metric.OverallStatusInterval
+#        Description: Interval between every gathering of overall worldserver status data in seconds
+#        Default:     1 second
+#
+
+Metric.OverallStatusInterval = 1
+
+#
 ###################################################################################################

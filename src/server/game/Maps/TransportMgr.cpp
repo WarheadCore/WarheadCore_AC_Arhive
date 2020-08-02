@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "TransportMgr.h"
@@ -45,7 +56,7 @@ void TransportMgr::LoadTransportTemplates()
 
     if (!result)
     {
-        sLog->outString(">> Loaded 0 transport templates. DB table `gameobject_template` has no transports!");
+        LOG_INFO("server", ">> Loaded 0 transport templates. DB table `gameobject_template` has no transports!");
         return;
     }
 
@@ -58,13 +69,13 @@ void TransportMgr::LoadTransportTemplates()
         GameObjectTemplate const* goInfo = sObjectMgr->GetGameObjectTemplate(entry);
         if (goInfo == NULL)
         {
-            sLog->outError("Transport %u has no associated GameObjectTemplate from `gameobject_template` , skipped.", entry);
+            LOG_ERROR("server", "Transport %u has no associated GameObjectTemplate from `gameobject_template` , skipped.", entry);
             continue;
         }
 
         if (goInfo->moTransport.taxiPathId >= sTaxiPathNodesByPath.size())
         {
-            sLog->outError("Transport %u (name: %s) has an invalid path specified in `gameobject_template`.`data0` (%u) field, skipped.", entry, goInfo->name.c_str(), goInfo->moTransport.taxiPathId);
+            LOG_ERROR("server", "Transport %u (name: %s) has an invalid path specified in `gameobject_template`.`data0` (%u) field, skipped.", entry, goInfo->name.c_str(), goInfo->moTransport.taxiPathId);
             continue;
         }
 
@@ -80,7 +91,7 @@ void TransportMgr::LoadTransportTemplates()
         ++count;
     } while (result->NextRow());
 
-    sLog->outString(">> Loaded %u transport templates in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+    LOG_INFO("server", ">> Loaded %u transport templates in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
     LOG_INFO("server.loading", "");
 }
 
@@ -362,7 +373,7 @@ MotionTransport* TransportMgr::CreateTransport(uint32 entry, uint32 guid /*= 0*/
     TransportTemplate const* tInfo = GetTransportTemplate(entry);
     if (!tInfo)
     {
-        sLog->outError("Transport %u will not be loaded, `transport_template` missing", entry);
+        LOG_ERROR("server", "Transport %u will not be loaded, `transport_template` missing", entry);
         return NULL;
     }
 
@@ -389,7 +400,7 @@ MotionTransport* TransportMgr::CreateTransport(uint32 entry, uint32 guid /*= 0*/
     {
         if (mapEntry->Instanceable() != tInfo->inInstance)
         {
-            sLog->outError("Transport %u (name: %s) attempted creation in instance map (id: %u) but it is not an instanced transport!", entry, trans->GetName().c_str(), mapId);
+            LOG_ERROR("server", "Transport %u (name: %s) attempted creation in instance map (id: %u) but it is not an instanced transport!", entry, trans->GetName().c_str(), mapId);
             delete trans;
             return NULL;
         }
@@ -434,7 +445,7 @@ void TransportMgr::SpawnContinentTransports()
             } while (result->NextRow());
         }
 
-        sLog->outString(">> Spawned %u continent motion transports in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+        LOG_INFO("server", ">> Spawned %u continent motion transports in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
 
         if (sGameConfig->GetBoolConfig("IsPreloadedContinentTransport.Enabled"))
         {
@@ -462,11 +473,11 @@ void TransportMgr::SpawnContinentTransports()
                 } while (result->NextRow());
             }
 
-            sLog->outString(">> Preloaded grids for %u continent static transports in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+            LOG_INFO("server", ">> Preloaded grids for %u continent static transports in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
         }
     }
 
-    sLog->outString();
+    LOG_INFO("server", "");
 }
 
 void TransportMgr::CreateInstanceTransports(Map* map)

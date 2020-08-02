@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "WorldPacket.h"
@@ -64,7 +75,7 @@ void WorldSession::HandleChangeSeatsOnControlledVehicle(WorldPacket &recvData)
     if (!seat->CanSwitchFromSeat())
     {
         recvData.rfinish();                                // prevent warnings spam
-        sLog->outError("HandleChangeSeatsOnControlledVehicle, Opcode: %u, Player %u tried to switch seats but current seatflags %u don't permit that.",
+        LOG_ERROR("server", "HandleChangeSeatsOnControlledVehicle, Opcode: %u, Player %u tried to switch seats but current seatflags %u don't permit that.",
             recvData.GetOpcode(), GetPlayer()->GetGUIDLow(), seat->m_flags);
         return;
     }
@@ -159,7 +170,7 @@ void WorldSession::HandleEjectPassenger(WorldPacket &data)
     if (!vehicle)
     {
         data.rfinish();                                     // prevent warnings spam
-        sLog->outError("HandleEjectPassenger: Player %u is not in a vehicle!", GetPlayer()->GetGUIDLow());
+        LOG_ERROR("server", "HandleEjectPassenger: Player %u is not in a vehicle!", GetPlayer()->GetGUIDLow());
         return;
     }
 
@@ -171,13 +182,13 @@ void WorldSession::HandleEjectPassenger(WorldPacket &data)
         Player* player = ObjectAccessor::GetPlayer(*_player, guid);
         if (!player)
         {
-            sLog->outError("Player %u tried to eject player %u from vehicle, but the latter was not found in world!", GetPlayer()->GetGUIDLow(), GUID_LOPART(guid));
+            LOG_ERROR("server", "Player %u tried to eject player %u from vehicle, but the latter was not found in world!", GetPlayer()->GetGUIDLow(), GUID_LOPART(guid));
             return;
         }
 
         if (!player->IsOnVehicle(vehicle->GetBase()))
         {
-            sLog->outError("Player %u tried to eject player %u, but they are not in the same vehicle", GetPlayer()->GetGUIDLow(), GUID_LOPART(guid));
+            LOG_ERROR("server", "Player %u tried to eject player %u, but they are not in the same vehicle", GetPlayer()->GetGUIDLow(), GUID_LOPART(guid));
             return;
         }
 
@@ -186,7 +197,7 @@ void WorldSession::HandleEjectPassenger(WorldPacket &data)
         if (seat->IsEjectable())
             player->ExitVehicle();
         else
-            sLog->outError("Player %u attempted to eject player %u from non-ejectable seat.", GetPlayer()->GetGUIDLow(), GUID_LOPART(guid));
+            LOG_ERROR("server", "Player %u attempted to eject player %u from non-ejectable seat.", GetPlayer()->GetGUIDLow(), GUID_LOPART(guid));
     }
 
     else if (IS_CREATURE_GUID(guid))
@@ -194,13 +205,13 @@ void WorldSession::HandleEjectPassenger(WorldPacket &data)
         Unit* unit = ObjectAccessor::GetUnit(*_player, guid);
         if (!unit) // creatures can be ejected too from player mounts
         {
-            sLog->outError("Player %u tried to eject creature guid %u from vehicle, but the latter was not found in world!", GetPlayer()->GetGUIDLow(), GUID_LOPART(guid));
+            LOG_ERROR("server", "Player %u tried to eject creature guid %u from vehicle, but the latter was not found in world!", GetPlayer()->GetGUIDLow(), GUID_LOPART(guid));
             return;
         }
 
         if (!unit->IsOnVehicle(vehicle->GetBase()))
         {
-            sLog->outError("Player %u tried to eject unit %u, but they are not in the same vehicle", GetPlayer()->GetGUIDLow(), GUID_LOPART(guid));
+            LOG_ERROR("server", "Player %u tried to eject unit %u, but they are not in the same vehicle", GetPlayer()->GetGUIDLow(), GUID_LOPART(guid));
             return;
         }
 
@@ -212,10 +223,10 @@ void WorldSession::HandleEjectPassenger(WorldPacket &data)
             unit->ExitVehicle();
         }
         else
-            sLog->outError("Player %u attempted to eject creature GUID %u from non-ejectable seat.", GetPlayer()->GetGUIDLow(), GUID_LOPART(guid));
+            LOG_ERROR("server", "Player %u attempted to eject creature GUID %u from non-ejectable seat.", GetPlayer()->GetGUIDLow(), GUID_LOPART(guid));
     }
     else
-        sLog->outError("HandleEjectPassenger: Player %u tried to eject invalid GUID " UI64FMTD , GetPlayer()->GetGUIDLow(), guid);
+        LOG_ERROR("server", "HandleEjectPassenger: Player %u tried to eject invalid GUID " UI64FMTD , GetPlayer()->GetGUIDLow(), guid);
 }
 
 void WorldSession::HandleRequestVehicleExit(WorldPacket& /*recvData*/)
@@ -231,7 +242,7 @@ void WorldSession::HandleRequestVehicleExit(WorldPacket& /*recvData*/)
             if (seat->CanEnterOrExit())
                 GetPlayer()->ExitVehicle();
             else
-                sLog->outError("Player %u tried to exit vehicle, but seatflags %u (ID: %u) don't permit that.",
+                LOG_ERROR("server", "Player %u tried to exit vehicle, but seatflags %u (ID: %u) don't permit that.",
                 GetPlayer()->GetGUIDLow(), seat->m_ID, seat->m_flags);
         }
     }

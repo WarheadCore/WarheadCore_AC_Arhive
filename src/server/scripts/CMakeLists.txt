@@ -1,4 +1,5 @@
-# Copyright (C)
+#
+# This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
 #
 # This file is free software; as a special exception the author gives
 # unlimited permission to copy and/or distribute it, with or without
@@ -7,12 +8,16 @@
 # This program is distributed in the hope that it will be useful, but
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# User has manually chosen to ignore the git-tests, so throw them a warning.
+# This is done EACH compile so they can be alerted about the consequences.
+#
 
 # Enable precompiled headers when using the GCC compiler.
 
 CU_RUN_HOOK(BEFORE_SCRIPTS_LIBRARY)
 
-CU_SET_PATH("AC_SCRIPTS_DIR" "${CMAKE_CURRENT_LIST_DIR}")
+CU_SET_PATH("WH_SCRIPTS_DIR" "${CMAKE_CURRENT_LIST_DIR}")
 
 message(STATUS "SCRIPT PREPARATIONS")
 
@@ -22,20 +27,17 @@ macro(PrepareScripts name out)
     ${name}/*.cpp)
   
   list(APPEND ${out} ${found})
-  AC_ADD_DEF_SCRIPT_LOADER("${name}")
-  AC_ADD_SCRIPT_LOADER("${name}" "")
+  WH_ADD_DEF_SCRIPT_LOADER("${name}")
+  WH_ADD_SCRIPT_LOADER("${name}" "")
   message(STATUS "  -> Prepared: ${name}")
 endmacro(PrepareScripts)
-
-CU_GET_GLOBAL("AC_SCRIPTS_SOURCES")
 
 set(scripts_STAT_SRCS
   ${scripts_STAT_SRCS}
   ScriptLoader.h
-  ${BUILDDIR}/GenLoader.cpp
-  ${AC_SCRIPTS_SOURCES})
+  ${BUILDDIR}/GenLoader.cpp)
 
-CU_SET_PATH("CMAKE_AC_MODULE_DIR" "${CMAKE_CURRENT_LIST_DIR}")
+CU_SET_PATH("CMAKE_WH_MODULE_DIR" "${CMAKE_CURRENT_LIST_DIR}")
 
 PrepareScripts(Spells scripts_STAT_SRCS)
 PrepareScripts(Commands scripts_STAT_SRCS)
@@ -52,23 +54,23 @@ if(SCRIPTS)
   PrepareScripts(Pet scripts_STAT_SRCS)
 endif()
 
-CU_GET_GLOBAL("AC_ADD_SCRIPTS_LIST")
-CU_GET_GLOBAL("AC_ADD_SCRIPTS_INCLUDE")
+CU_GET_GLOBAL("WH_ADD_SCRIPTS_LIST")
+CU_GET_GLOBAL("WH_ADD_SCRIPTS_INCLUDE")
 
-set("AC_SCRIPTS_INCLUDES" "")
-set("AC_MODULE_LIST" "")
-set("AC_SCRIPTS_LIST" "")
+set("WH_SCRIPTS_INCLUDES" "")
+set("WH_MODULE_LIST" "")
+set("WH_SCRIPTS_LIST" "")
 
-FOREACH (include ${AC_ADD_SCRIPTS_INCLUDE})
-  set("AC_SCRIPTS_INCLUDES" "#include \"${include}\"\n${AC_SCRIPTS_INCLUDES}")
+FOREACH (include ${WH_ADD_SCRIPTS_INCLUDE})
+  set("WH_SCRIPTS_INCLUDES" "#include \"${include}\"\n${WH_SCRIPTS_INCLUDES}")
 ENDFOREACH()
 
-FOREACH (void ${AC_ADD_SCRIPTS_LIST})
-  set("AC_MODULE_LIST" "void ${void};\n${AC_MODULE_LIST}")
+FOREACH (void ${WH_ADD_SCRIPTS_LIST})
+  set("WH_MODULE_LIST" "void ${void};\n${WH_MODULE_LIST}")
 ENDFOREACH()
 
-FOREACH (scpript_list ${AC_DEF_SCRIPTS_LIST})
-  set("AC_SCRIPTS_LIST" "${scpript_list};\n${AC_SCRIPTS_LIST}")
+FOREACH (scpript_list ${WH_DEF_SCRIPTS_LIST})
+  set("WH_SCRIPTS_LIST" "${scpript_list};\n${WH_SCRIPTS_LIST}")
 ENDFOREACH()
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/GenLoader.cpp.cmake ${BUILDDIR}/GenLoader.cpp)

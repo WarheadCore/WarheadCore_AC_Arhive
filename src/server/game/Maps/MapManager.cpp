@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "MapManager.h"
@@ -27,10 +38,6 @@
 #include "Chat.h"
 #include "AvgDiffTracker.h"
 #include "GameConfig.h"
-
-#ifdef ELUNA
-#include "LuaEngine.h"
-#endif
 
 MapManager::MapManager()
     : _nextInstanceId(0), _scheduledScripts(0)
@@ -306,7 +313,7 @@ void MapManager::DoDelayedMovesAndRemoves()
 
 bool MapManager::ExistMapAndVMap(uint32 mapid, float x, float y)
 {
-    GridCoord p = acore::ComputeGridCoord(x, y);
+    GridCoord p = warhead::ComputeGridCoord(x, y);
 
     int gx=63-p.x_coord;
     int gy=63-p.y_coord;
@@ -414,7 +421,7 @@ uint32 MapManager::GenerateInstanceId()
 
     if (_nextInstanceId == 0xFFFFFFFF)
     {
-        sLog->outError("Instance ID overflow!! Can't continue, shutting down server. ");
+        LOG_ERROR("server", "Instance ID overflow!! Can't continue, shutting down server. ");
         World::StopNow(ERROR_EXIT_CODE);
     }
 

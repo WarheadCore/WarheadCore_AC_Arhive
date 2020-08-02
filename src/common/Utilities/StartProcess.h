@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2019 TrinityCore <https://www.trinitycore.org/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -24,7 +24,7 @@
 #include <vector>
 #include <string>
 
-namespace acore
+namespace warhead
 {
 
 /// Starts a process with the given arguments and parameters and will block
@@ -32,13 +32,13 @@ namespace acore
 /// When an input path is given, the file will be routed to the processes stdin.
 /// When the process is marked as secure no arguments are leaked to logs.
 /// Note that most executables expect it's name as the first argument.
-AC_COMMON_API int StartProcess(std::string const& executable, std::vector<std::string> const& args,
+WH_COMMON_API int StartProcess(std::string const& executable, std::vector<std::string> const& args,
                                std::string const& logger, std::string input_file = "",
                                bool secure = false);
 
 /// Platform and library independent representation
 /// of asynchronous process results
-class AC_COMMON_API AsyncProcessResult
+class WH_COMMON_API AsyncProcessResult
 {
 public:
     virtual ~AsyncProcessResult() { }
@@ -56,15 +56,15 @@ public:
 /// When an input path is given, the file will be routed to the processes stdin.
 /// When the process is marked as secure no arguments are leaked to logs.
 /// Note that most executables expect it's name as the first argument.
-AC_COMMON_API std::shared_ptr<AsyncProcessResult>
+WH_COMMON_API std::shared_ptr<AsyncProcessResult>
     StartAsyncProcess(std::string executable, std::vector<std::string> args,
                       std::string logger, std::string input_file = "",
                       bool secure = false);
 
 /// Searches for the given executable in the PATH variable
 /// and returns a non-empty string when it was found.
-AC_COMMON_API std::string SearchExecutableInPath(std::string const& filename);
+WH_COMMON_API std::string SearchExecutableInPath(std::string const& filename);
 
-} // namespace acore
+} // namespace warhead
 
 #endif // Process_h__

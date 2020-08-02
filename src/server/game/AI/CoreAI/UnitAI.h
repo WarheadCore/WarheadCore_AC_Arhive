@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef ACORE_UNITAI_H
@@ -29,7 +40,7 @@ enum SelectAggroTarget
 };
 
 // default predicate function to select target based on distance, player and/or aura criteria
-struct DefaultTargetSelector : public acore::unary_function<Unit*, bool>
+struct DefaultTargetSelector : public warhead::unary_function<Unit*, bool>
 {
     const Unit* me;
     float m_dist;
@@ -79,7 +90,7 @@ struct DefaultTargetSelector : public acore::unary_function<Unit*, bool>
 
 // Target selector for spell casts checking range, auras and attributes
 // TODO: Add more checks from Spell::CheckCast
-struct SpellTargetSelector : public acore::unary_function<Unit*, bool>
+struct SpellTargetSelector : public warhead::unary_function<Unit*, bool>
 {
     public:
         SpellTargetSelector(Unit* caster, uint32 spellId);
@@ -93,7 +104,7 @@ struct SpellTargetSelector : public acore::unary_function<Unit*, bool>
 // Very simple target selector, will just skip main target
 // NOTE: When passing to UnitAI::SelectTarget remember to use 0 as position for random selection
 //       because tank will not be in the temporary list
-struct NonTankTargetSelector : public acore::unary_function<Unit*, bool>
+struct NonTankTargetSelector : public warhead::unary_function<Unit*, bool>
 {
     public:
         NonTankTargetSelector(Creature* source, bool playerOnly = true) : _source(source), _playerOnly(playerOnly) { }
@@ -105,7 +116,7 @@ struct NonTankTargetSelector : public acore::unary_function<Unit*, bool>
 };
 
 // Simple selector for units using mana
-struct PowerUsersSelector : public acore::unary_function<Unit*, bool>
+struct PowerUsersSelector : public warhead::unary_function<Unit*, bool>
 {
     Unit const* _me;
     Powers const _power;
@@ -136,7 +147,7 @@ struct PowerUsersSelector : public acore::unary_function<Unit*, bool>
     }
 };
 
-struct FarthestTargetSelector : public acore::unary_function<Unit*, bool>
+struct FarthestTargetSelector : public warhead::unary_function<Unit*, bool>
 {
     FarthestTargetSelector(Unit const* unit, float dist, bool playerOnly, bool inLos) : _me(unit), _dist(dist), _playerOnly(playerOnly), _inLos(inLos) {}
 
@@ -192,7 +203,7 @@ class UnitAI
 
         Unit* SelectTarget(SelectAggroTarget targetType, uint32 position = 0, float dist = 0.0f, bool playerOnly = false, int32 aura = 0);
         // Select the targets satifying the predicate.
-        // predicate shall extend acore::unary_function<Unit*, bool>
+        // predicate shall extend warhead::unary_function<Unit*, bool>
         template <class PREDICATE> Unit* SelectTarget(SelectAggroTarget targetType, uint32 position, PREDICATE const& predicate)
         {
             ThreatContainer::StorageType const& threatlist = me->getThreatManager().getThreatList();
@@ -208,7 +219,7 @@ class UnitAI
                 return NULL;
 
             if (targetType == SELECT_TARGET_NEAREST || targetType == SELECT_TARGET_FARTHEST)
-                targetList.sort(acore::ObjectDistanceOrderPred(me));
+                targetList.sort(warhead::ObjectDistanceOrderPred(me));
 
             switch (targetType)
             {
@@ -242,7 +253,7 @@ class UnitAI
         void SelectTargetList(std::list<Unit*>& targetList, uint32 num, SelectAggroTarget targetType, float dist = 0.0f, bool playerOnly = false, int32 aura = 0);
 
         // Select the targets satifying the predicate.
-        // predicate shall extend acore::unary_function<Unit*, bool>
+        // predicate shall extend warhead::unary_function<Unit*, bool>
         template <class PREDICATE> void SelectTargetList(std::list<Unit*>& targetList, PREDICATE const& predicate, uint32 maxTargets, SelectAggroTarget targetType)
         {
             ThreatContainer::StorageType const& threatlist = me->getThreatManager().getThreatList();
@@ -257,13 +268,13 @@ class UnitAI
                 return;
 
             if (targetType == SELECT_TARGET_NEAREST || targetType == SELECT_TARGET_FARTHEST)
-                targetList.sort(acore::ObjectDistanceOrderPred(me));
+                targetList.sort(warhead::ObjectDistanceOrderPred(me));
 
             if (targetType == SELECT_TARGET_FARTHEST || targetType == SELECT_TARGET_BOTTOMAGGRO)
                 targetList.reverse();
 
             if (targetType == SELECT_TARGET_RANDOM)
-                acore::Containers::RandomResizeList(targetList, maxTargets);
+                warhead::Containers::RandomResizeList(targetList, maxTargets);
             else
                 targetList.resize(maxTargets);
         }

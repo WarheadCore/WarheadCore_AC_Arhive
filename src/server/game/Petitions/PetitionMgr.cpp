@@ -1,7 +1,19 @@
 /*
-Xinef
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 #include "PetitionMgr.h"
 #include "Timer.h"
 #include "QueryResult.h"
@@ -31,8 +43,8 @@ void PetitionMgr::LoadPetitions()
     QueryResult result = CharacterDatabase.Query("SELECT ownerguid, petitionguid, name, type FROM petition");
     if (!result)
     {
-        sLog->outString(">> Loaded 0 Petitions!");
-        sLog->outString();
+        LOG_INFO("server", ">> Loaded 0 Petitions!");
+        LOG_INFO("server", "");
         return;
     }
 
@@ -44,8 +56,8 @@ void PetitionMgr::LoadPetitions()
         ++count;
     } while (result->NextRow());
 
-    sLog->outString(">> Loaded %d Petitions in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-    sLog->outString();
+    LOG_INFO("server", ">> Loaded %d Petitions in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+    LOG_INFO("server", "");
 }
 
 void PetitionMgr::LoadSignatures()
@@ -56,8 +68,8 @@ void PetitionMgr::LoadSignatures()
     QueryResult result = CharacterDatabase.Query("SELECT petitionguid, playerguid, player_account FROM petition_sign");
     if (!result)
     {
-        sLog->outString(">> Loaded 0 Petition signs!");
-        sLog->outString();
+        LOG_INFO("server", ">> Loaded 0 Petition signs!");
+        LOG_INFO("server", "");
         return;
     }
 
@@ -69,8 +81,8 @@ void PetitionMgr::LoadSignatures()
         ++count;
     } while (result->NextRow());
 
-    sLog->outString(">> Loaded %d Petition signs in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-    sLog->outString();
+    LOG_INFO("server", ">> Loaded %d Petition signs in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+    LOG_INFO("server", "");
 }
 
 void PetitionMgr::AddPetition(uint32 petitionId, uint32 ownerGuid, std::string const& name, uint8 type)

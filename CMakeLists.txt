@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
+# This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
 #
 # This file is free software; as a special exception the author gives
 # unlimited permission to copy and/or distribute it, with or without
@@ -9,15 +9,26 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #
+# User has manually chosen to ignore the git-tests, so throw them a warning.
+# This is done EACH compile so they can be alerted about the consequences.
+#
 
 # Set projectname (must be done AFTER setting configurationtypes)
-project(AzerothCore)
+project(WarheadCore)
 
 # Require a min version Cmake
 cmake_minimum_required(VERSION 3.8)
 
 # CMake policies (can not be handled elsewhere)
 cmake_policy(SET CMP0005 NEW)
+
+if (CMAKE_VERSION VERSION_LESS "3.16.0")
+  cmake_policy(SET CMP0043 OLD) # Disable 'Ignore COMPILE_DEFINITIONS_<Config> properties'
+else()
+  cmake_policy(SET CMP0043 NEW) # Cotire isn't used so set to NEW
+endif()
+
+cmake_policy(SET CMP0054 NEW) # Only interpret if() arguments as variables or keywords when unquoted - prevents intepreting if (SOME_STRING_VARIABLE MATCHES "MSVC") as if (SOME_STRING_VARIABLE MATCHES "1")
 
 # add this options before PROJECT keyword
 set(CMAKE_DISABLE_SOURCE_CHANGES ON)
@@ -33,8 +44,12 @@ set(AC_PATH_ROOT "${CMAKE_SOURCE_DIR}")
 
 # set macro-directory
 list(APPEND CMAKE_MODULE_PATH
-  "${CMAKE_SOURCE_DIR}/src/cmake/macros"
-  "${CMAKE_SOURCE_DIR}/deps/cotire/CMake")
+  "${CMAKE_SOURCE_DIR}/src/cmake/macros")
+
+if (CMAKE_VERSION VERSION_LESS "3.16.0")
+  list(APPEND CMAKE_MODULE_PATH
+    "${CMAKE_SOURCE_DIR}/deps/cotire/CMake")
+endif()
 
 include(CheckCXXSourceRuns)
 include(CheckIncludeFiles)

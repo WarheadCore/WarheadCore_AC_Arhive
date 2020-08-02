@@ -1,7 +1,18 @@
 ﻿/*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /* ScriptData
@@ -147,18 +158,18 @@ class boss_akilzon : public CreatureScript
                     for (uint8 i = 2; i < StormCount; ++i)
                         bp0 *= 2;
 
-                    CellCoord p(acore::ComputeCellCoord(me->GetPositionX(), me->GetPositionY()));
+                    CellCoord p(warhead::ComputeCellCoord(me->GetPositionX(), me->GetPositionY()));
                     Cell cell(p);
                     cell.SetNoCreate();
 
                     std::list<Unit*> tempUnitMap;
 
                     {
-                        acore::AnyAoETargetUnitInObjectRangeCheck u_check(me, me, SIZE_OF_GRIDS);
-                        acore::UnitListSearcher<acore::AnyAoETargetUnitInObjectRangeCheck> searcher(me, tempUnitMap, u_check);
+                        warhead::AnyAoETargetUnitInObjectRangeCheck u_check(me, me, SIZE_OF_GRIDS);
+                        warhead::UnitListSearcher<warhead::AnyAoETargetUnitInObjectRangeCheck> searcher(me, tempUnitMap, u_check);
 
-                        TypeContainerVisitor<acore::UnitListSearcher<acore::AnyAoETargetUnitInObjectRangeCheck>, WorldTypeMapContainer > world_unit_searcher(searcher);
-                        TypeContainerVisitor<acore::UnitListSearcher<acore::AnyAoETargetUnitInObjectRangeCheck>, GridTypeMapContainer >  grid_unit_searcher(searcher);
+                        TypeContainerVisitor<warhead::UnitListSearcher<warhead::AnyAoETargetUnitInObjectRangeCheck>, WorldTypeMapContainer > world_unit_searcher(searcher);
+                        TypeContainerVisitor<warhead::UnitListSearcher<warhead::AnyAoETargetUnitInObjectRangeCheck>, GridTypeMapContainer >  grid_unit_searcher(searcher);
 
                         cell.Visit(p, world_unit_searcher, *me->GetMap(), *me, SIZE_OF_GRIDS);
                         cell.Visit(p, grid_unit_searcher, *me->GetMap(), *me, SIZE_OF_GRIDS);

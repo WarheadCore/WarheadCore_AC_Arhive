@@ -1,6 +1,19 @@
 /*
- * Originally written by Xinef - Copyright (C) 2016+ AzerothCore <www.azerothcore.org>, released under GNU AGPL v3 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-AGPL3
-*/
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "ScriptMgr.h"
 #include "ScriptedCreature.h"
@@ -180,8 +193,8 @@ class npc_belnistrasz : public CreatureScript
                             DoCast(me, SPELL_IDOM_ROOM_CAMERA_SHAKE);
                             me->SummonGameObject(GO_BELNISTRASZS_BRAZIER, 2577.196f, 947.0781f, 53.16757f, 2.356195f, 0, 0, 0.9238796f, 0.3826832f, 3600);
                             std::list<WorldObject*> ClusterList;
-                            acore::AllWorldObjectsInRange objects(me, 50.0f);
-                            acore::WorldObjectListSearcher<acore::AllWorldObjectsInRange> searcher(me, ClusterList, objects);
+                            warhead::AllWorldObjectsInRange objects(me, 50.0f);
+                            warhead::WorldObjectListSearcher<warhead::AllWorldObjectsInRange> searcher(me, ClusterList, objects);
                             me->VisitNearbyObject(50.0f, searcher);
                             for (std::list<WorldObject*>::const_iterator itr = ClusterList.begin(); itr != ClusterList.end(); ++itr)
                             {

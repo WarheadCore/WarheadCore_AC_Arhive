@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "Creature.h"
@@ -85,8 +96,8 @@ void FormationMgr::LoadCreatureFormations()
 
     if (!result)
     {
-        sLog->outErrorDb(">> Loaded 0 creatures in formations. DB table `creature_formations` is empty!");
-        sLog->outString();
+        LOG_ERROR("sql.sql", ">> Loaded 0 creatures in formations. DB table `creature_formations` is empty!");
+        LOG_INFO("server", "");
         return;
     }
 
@@ -121,14 +132,14 @@ void FormationMgr::LoadCreatureFormations()
         {
             if (!sObjectMgr->GetCreatureData(group_member->leaderGUID))
             {
-                sLog->outErrorDb("creature_formations table leader guid %u incorrect (not exist)", group_member->leaderGUID);
+                LOG_ERROR("sql.sql", "creature_formations table leader guid %u incorrect (not exist)", group_member->leaderGUID);
                 delete group_member;
                 continue;
             }
 
             if (!sObjectMgr->GetCreatureData(memberGUID))
             {
-                sLog->outErrorDb("creature_formations table member guid %u incorrect (not exist)", memberGUID);
+                LOG_ERROR("sql.sql", "creature_formations table member guid %u incorrect (not exist)", memberGUID);
                 delete group_member;
                 continue;
             }
@@ -139,8 +150,8 @@ void FormationMgr::LoadCreatureFormations()
     }
     while (result->NextRow());
 
-    sLog->outString(">> Loaded %u creatures in formations in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-    sLog->outString();
+    LOG_INFO("server", ">> Loaded %u creatures in formations in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+    LOG_INFO("server", "");
 }
 
 void CreatureGroup::AddMember(Creature* member)
@@ -264,8 +275,8 @@ void CreatureGroup::LeaderMoveTo(float x, float y, float z, bool run)
         float dy = y + sin(followAngle + pathAngle) * followDist;
         float dz = z;
 
-        acore::NormalizeMapCoord(dx);
-        acore::NormalizeMapCoord(dy);
+        warhead::NormalizeMapCoord(dx);
+        warhead::NormalizeMapCoord(dy);
 
         member->UpdateGroundPositionZ(dx, dy, dz);
 

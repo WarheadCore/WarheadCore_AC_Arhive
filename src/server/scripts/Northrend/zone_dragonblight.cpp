@@ -1,7 +1,18 @@
 /*
- * Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
- * Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /* ScriptData
@@ -347,7 +358,7 @@ public:
         void UpdateAI(uint32 diff)
         {
             events.Update(diff);
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case EVENT_START_EVENT:
                     if (Creature* cr = getFuture())
@@ -765,7 +776,7 @@ public:
             if (GameObject* go = me->FindNearestGameObject(GO_SAC_LIGHTS_VENGEANCE_2, 150.0f))
                 go->Delete();
             WretchedGhoulCleaner cleaner;
-            acore::CreatureWorker<WretchedGhoulCleaner> worker(me, cleaner);
+            warhead::CreatureWorker<WretchedGhoulCleaner> worker(me, cleaner);
             me->VisitNearbyGridObject(150.0f, worker);
         }
 
@@ -978,7 +989,7 @@ public:
                 case 17: // kill vegard
                     {
                         WretchedGhoulCleaner cleaner;
-                        acore::CreatureWorker<WretchedGhoulCleaner> worker(me, cleaner);
+                        warhead::CreatureWorker<WretchedGhoulCleaner> worker(me, cleaner);
                         me->VisitNearbyGridObject(150.0f, worker);
 
                         if (Creature* c = me->FindNearestCreature(NPC_SAC_LIGHTS_VENGEANCE, 150.0f, true))
@@ -1185,7 +1196,7 @@ class spell_q24545_aod_special : public SpellScriptLoader
             void FilterTargets(std::list<WorldObject*>& targets)
             {
                 targets.remove_if(GhoulTargetCheck(GetSpellInfo()->Id == 70790));
-                acore::Containers::RandomResizeList(targets, 2);
+                warhead::Containers::RandomResizeList(targets, 2);
             }
 
             void HandleScript(SpellEffIndex effIndex)
@@ -1287,7 +1298,7 @@ public:
             events.Update(diff);
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
-            switch (events.ExecuteEvent())
+            switch (events.GetEvent())
             {
                 case 0:
                     break;
