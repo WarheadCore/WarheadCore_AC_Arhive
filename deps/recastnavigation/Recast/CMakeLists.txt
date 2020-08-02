@@ -1,5 +1,3 @@
-# Copyright (C) 2008-2016 TrinityCore <http://www.trinitycore.org/>
-# Copyright (C) 2016+     AzerothCore <www.azerothcore.org>
 #
 # This file is free software; as a special exception the author gives
 # unlimited permission to copy and/or distribute it, with or without
@@ -12,7 +10,7 @@
 set(Recast_STAT_SRCS
     Source/Recast.cpp 
     Source/RecastAlloc.cpp 
-    Source/RecastAssert.cpp
+    Source/RecastAssert.cpp 
     Source/RecastArea.cpp 
     Source/RecastContour.cpp 
     Source/RecastFilter.cpp 
@@ -23,16 +21,7 @@ set(Recast_STAT_SRCS
     Source/RecastRegion.cpp 
 )
 
-if(WIN32)
-  include_directories(
-    ${CMAKE_SOURCE_DIR}/deps/zlib
-  )
-endif()
-
 add_library(Recast STATIC ${Recast_STAT_SRCS})
-
-# Group sources
-GroupSources(${CMAKE_CURRENT_SOURCE_DIR})
 
 target_include_directories(Recast
   PUBLIC
