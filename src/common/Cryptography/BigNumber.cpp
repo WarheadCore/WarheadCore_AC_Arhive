@@ -52,7 +52,7 @@ void BigNumber::SetQword(uint64 val)
     BN_add_word(_bn, (uint32)(val & 0xFFFFFFFF));
 }
 
-void BigNumber::SetBinary(uint8 const* bytes, int32 len)
+void BigNumber::SetBinary(uint8 const* bytes, int32 len, bool littleEndian)
 {
     if (littleEndian)
     {
@@ -200,6 +200,7 @@ bool BigNumber::AsByteArray(uint8* buf, std::size_t bufsize, bool littleEndian) 
 #else
     int res = littleEndian ? BN_bn2lebinpad(_bn, buf, bufsize) : BN_bn2binpad(_bn, buf, bufsize);
     ASSERT(res > 0, "Buffer of size %zu is too small to hold bignum with %d bytes.\n", bufsize, BN_num_bytes(_bn));
+    return true;
 #endif
 }
 

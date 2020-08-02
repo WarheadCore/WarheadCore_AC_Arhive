@@ -1220,10 +1220,6 @@ void GameEventMgr::ApplyNewEvent(uint16 event_id)
     if (announce == 1 || (announce == 2 && sGameConfig->GetIntConfig("Event.Announce")))
         sWorld->SendWorldText(LANG_EVENTMESSAGE, mGameEvent[event_id].description.c_str());
 
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    LOG_INFO("server", "GameEvent %u \"%s\" started.", event_id, mGameEvent[event_id].description.c_str());
-#endif
-
     //! Run SAI scripts with SMART_EVENT_GAME_EVENT_END
     RunSmartAIScripts(event_id, true);
 
