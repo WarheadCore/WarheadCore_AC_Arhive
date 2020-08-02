@@ -334,11 +334,9 @@ void PathGenerator::BuildPolyPath(G3D::Vector3 const& startPos, G3D::Vector3 con
 
     if (startPoly == endPoly)
     {
-        BuildShortcut();
-        _type = !farFromEndPoly || endInWaterFar ? PATHFIND_NORMAL : PATHFIND_INCOMPLETE;
         _pathPolyRefs[0] = startPoly;
-        _polyLength = 1;
-        return;
+        _pathPolyRefs[1] = endPoly;
+        _polyLength = 2;
     }
 
     // look for startPoly/endPoly in current path
