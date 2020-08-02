@@ -62,11 +62,6 @@ class npc_pet_mage_mirror_image : public CreatureScript
         {
             npc_pet_mage_mirror_imageAI(Creature* creature) : CasterAI(creature) { }
 
-            uint32 selectionTimer;
-            uint64 _ebonGargoyleGUID;
-            uint32 checktarget;
-            uint32 dist = urand(1, 5);
-
             void InitializeAI()
             {
                 CasterAI::InitializeAI();
@@ -185,12 +180,15 @@ class npc_pet_mage_mirror_image : public CreatureScript
             {
                 selectionTimer = 0;
                 checktarget = 0;
+                _combatTime = 0s;
             }
 
             void UpdateAI(uint32 diff)
             {
                 events.Update(diff);
-                if (events.GetTimer() < 1200)
+                _combatTime += Milliseconds(diff);
+                
+                if (_combatTime < 1200ms)
                     return;
 
                 if (!me->IsInCombat() || !me->GetVictim())
@@ -199,7 +197,7 @@ class npc_pet_mage_mirror_image : public CreatureScript
                     return;
                 }
 
-                checktarget += diff;
+                checktarget += diff;                
 
                 if (checktarget >= 1000)
                 {
@@ -220,6 +218,13 @@ class npc_pet_mage_mirror_image : public CreatureScript
                     me->CastSpell(me->GetVictim(), spellId, false);
                 }
             }
+
+            private:
+                uint32 selectionTimer;
+                uint64 _ebonGargoyleGUID;
+                uint32 checktarget;
+                uint32 dist = urand(1, 5);
+                Milliseconds _combatTime = 0s;
         };
 
         CreatureAI* GetAI(Creature* creature) const

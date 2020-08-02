@@ -64,15 +64,13 @@ public:
             me->SetHomePosition(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation());
         }
 
-        InstanceScript* pInstance;
-        EventMap events;
-        SummonList summons;
-
         void Reset() override
         {
             BossAI::Reset();
             events.Reset();
             summons.DespawnAll();
+            _combatTime = 0s;
+
             if (pInstance)
             {
                 pInstance->SetData(BOSS_LOATHEB, NOT_STARTED);
@@ -130,6 +128,9 @@ public:
                 return;
 
             events.Update(diff);
+
+            _combatTime += Milliseconds(diff);
+            
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
@@ -149,7 +150,7 @@ public:
                     break;
                 case EVENT_SPELL_INEVITABLE_DOOM:
                     me->CastSpell(me, RAID_MODE(SPELL_INEVITABLE_DOOM_10, SPELL_INEVITABLE_DOOM_25), false);
-                    events.Repeat(events.GetTimer() < Milliseconds(5min).count() ? 30s : 15s);
+                    events.Repeat(_combatTime < 5min ? 30s : 15s);
                     break;
                 case EVENT_SPELL_BERSERK:
                     me->CastSpell(me, SPELL_BERSERK, true);
@@ -171,6 +172,12 @@ public:
             }
             return true;
         }
+
+        private:
+            InstanceScript* pInstance;
+            EventMap events;
+            SummonList summons;
+            Milliseconds _combatTime = 0s;
     };
 };
 

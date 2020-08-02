@@ -5881,6 +5881,10 @@ float Player::GetMeleeCritFromAgility()
         return 0.0f;
 
     float crit = critBase->base + GetStat(STAT_AGILITY)*critRatio->ratio;
+    
+    LOG_INFO("server", "> GetMeleeCritFromAgility (%f)", crit * 100.0f);
+    LOG_INFO("server", "(pclass-1) * GT_MAX_LEVEL + level-1 (%u)", (pclass - 1) * GT_MAX_LEVEL + level - 1);
+    
     return crit*100.0f;
 }
 

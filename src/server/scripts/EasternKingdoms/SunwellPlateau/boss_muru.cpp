@@ -163,10 +163,7 @@ public:
     struct boss_entropiusAI : public ScriptedAI
     {
         boss_entropiusAI(Creature* creature) : ScriptedAI(creature) { }
-
-        EventMap events;
-        EventMap events2;
-
+        
         void Reset()
         {
             events.Reset();
@@ -174,6 +171,7 @@ public:
             events2.ScheduleEvent(EVENT_ENTROPIUS_AURAS, 0s);
             events2.ScheduleEvent(EVENT_ENTROPIUS_COMBAT, 3s);
             me->SetReactState(REACT_PASSIVE);
+            _combatTime = 0s;
         }
 
         void EnterEvadeMode()
@@ -201,7 +199,8 @@ public:
         uint32 GetData(uint32 type) const
         {
             if (type == DATA_NEGATIVE_ENERGY_TARGETS)
-                return 1 + uint32(events.GetTimer() / 12000);
+                return 1 + uint32(_combatTime.count() / 12000);
+
             return 0;
         }
 
@@ -215,6 +214,9 @@ public:
         void UpdateAI(uint32 diff)
         {
             events2.Update(diff);
+
+            _combatTime += Milliseconds(diff);
+            
             switch (events2.ExecuteEvent())
             {
                 case EVENT_ENTROPIUS_AURAS:
@@ -257,6 +259,11 @@ public:
 
             DoMeleeAttackIfReady();
         }
+        
+        private:
+            EventMap events;
+            EventMap events2;
+            Milliseconds _combatTime = 0s;
     };
 
     CreatureAI* GetAI(Creature* creature) const

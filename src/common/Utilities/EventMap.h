@@ -54,16 +54,7 @@ public:
     void Update(uint32 time)
     {
         _time += time;
-    }
-
-    /**
-    * @name GetTimer
-    * @return Current timer value.
-    */
-    uint32 GetTimer() const
-    {
-        return _time;
-    }
+    }    
 
     /**
     * @name SetTimer\

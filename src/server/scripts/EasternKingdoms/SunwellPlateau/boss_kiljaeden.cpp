@@ -369,7 +369,7 @@ public:
             events2.ScheduleEvent(EVENT_TEXT_SPEACH11, 26s, EVENT_GROUP_SPEACH);
             Talk(SAY_KJ_EMERGE);
 
-            events.SetTimer(200000);
+            //events.SetTimer(200000);
             events.ScheduleEvent(EVENT_CHECK_HEALTH85, 1s);
             events.ScheduleEvent(EVENT_CHECK_HEALTH55, 1s);
             events.ScheduleEvent(EVENT_CHECK_HEALTH25, 1s);
