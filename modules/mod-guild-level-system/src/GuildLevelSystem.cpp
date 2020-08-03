@@ -828,6 +828,7 @@ void GuildLevelSystem::ShowCriteriaInfo(Player* player, Creature* creature, uint
             AddGossipItemFor(player, 10, ">> Получить награды", GLS_GOSSIP_SHOW_REWARDS_SENDER, action);
     }
     
+    AddGossipItemFor(player, 10, ">> Просмотр наград и требований", GLS_GOSSIP_GET_ALL_LINK, action);
     AddGossipItemFor(player, 10, ">> К списку критериев", GOSSIP_SENDER_MAIN, 2);
     AddGossipItemFor(player, 10, ">> В главное меню", GOSSIP_SENDER_MAIN, 99);
     SendGossipMenuFor(player, 1, creature->GetGUID());
@@ -946,6 +947,49 @@ void GuildLevelSystem::GetRewardsCriteria(Player* player, Creature* creature, ui
     CloseGossipMenuFor(player);
 }
 
+void GuildLevelSystem::GetAllLink(Player* player, Creature* creature, uint32 sender, uint32 action)
+{
+    uint32 criteriaID = action - GLS_GOSSIP_CRITERIA_ID;
+
+    auto criteriaProgress = GetCriteriaProgress(player->GetGuildId(), true);
+    if (!criteriaProgress)
+        ABORT();
+
+    ChatHandler handler(player->GetSession());
+
+    handler.PSendSysMessage("# Требуемые предметы для критерия %u", criteriaID);
+
+    for (uint32 i = 0; i < GLS_ITEMS_COUNT; ++i)
+    {
+        uint32 itemID = criteriaProgress->GetCriteriaItemID(criteriaID, i);
+        if (!itemID)
+            continue;
+
+        auto itemLink = GetItemLink(itemID);
+        auto currentItems = criteriaProgress->GetItemCountProgress(criteriaID, i);
+        auto maxItems = criteriaProgress->GetMaxCriteriaItemCount(criteriaID, i);
+        float persents = float(currentItems) / float(maxItems) * 100.0f;
+
+        if (!itemLink.empty())
+            handler.PSendSysMessage("# %u. %s - %u/%u", i + 1, itemLink.c_str(), currentItems, maxItems);
+    }
+
+    handler.PSendSysMessage("#");
+    handler.PSendSysMessage("# Награды на выбор при выполнения критерия %u", criteriaID);
+
+    for (uint32 i = 0; i < GLS_SPELLS_REWARD_COUNT; ++i)
+    {
+        uint32 spellID = criteriaProgress->GetRewardSpellID(criteriaID, i);
+        if (!spellID)
+            continue;
+
+        handler.PSendSysMessage("# %u. %s", i + 1, GetSpellLink(spellID).c_str());
+    }
+
+    ShowCriteriaInfo(player, creature, GLS_GOSSIP_SHOW_CRITERIA_SENDER, action);
+}
+
+// Spells
 void GuildLevelSystem::UnLearnSpellsForPlayer(uint32 lowGuid, uint32 guildID)
 {
     auto criteriaProgress = GetCriteriaProgress(guildID);

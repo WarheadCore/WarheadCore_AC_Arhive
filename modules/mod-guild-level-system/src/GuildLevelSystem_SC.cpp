@@ -133,7 +133,7 @@ public: Kargatum_Guild_Creature() : CreatureScript("Kargatum_Guild_Creature") { 
     {
         ClearGossipMenuFor(player);
 
-        if (sender >= GLS_GOSSIP_GET_ALL_REWARDS_SENDER + GLS_SPELLS_REWARD_COUNT)
+        if (sender > GLS_GOSSIP_GET_ALL_LINK)
             ABORT();
 
         // Show details info criteria and rewards
@@ -150,6 +150,11 @@ public: Kargatum_Guild_Creature() : CreatureScript("Kargatum_Guild_Creature") { 
         else if (sender >= GLS_GOSSIP_CHOOSE_REWARD_SENDER && sender < GLS_GOSSIP_GET_ALL_REWARDS_SENDER + GLS_SPELLS_REWARD_COUNT/*sender < GLS_GOSSIP_CHOOSE_REWARD_SENDER + GLS_ITEMS_REWARD_CHOOSE_COUNT*/)
         {
             sGuildLevelSystem->GetRewardsCriteria(player, creature, sender, action);
+            return true;
+        }
+        else if (sender == GLS_GOSSIP_GET_ALL_LINK)
+        {
+            sGuildLevelSystem->GetAllLink(player, creature, sender, action);
             return true;
         }
 

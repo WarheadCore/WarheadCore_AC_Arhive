@@ -33,6 +33,7 @@ uint32 constexpr GLS_GOSSIP_SHOW_REWARDS_SENDER = GLS_GOSSIP_SHOW_CRITERIA_SENDE
 uint32 constexpr GLS_GOSSIP_GET_REWARDS_SENDER = GLS_GOSSIP_SHOW_REWARDS_SENDER + 1;
 uint32 constexpr GLS_GOSSIP_CHOOSE_REWARD_SENDER = GLS_GOSSIP_GET_REWARDS_SENDER + GLS_SPELLS_REWARD_COUNT;
 uint32 constexpr GLS_GOSSIP_GET_ALL_REWARDS_SENDER = GLS_GOSSIP_CHOOSE_REWARD_SENDER + GLS_SPELLS_REWARD_COUNT;
+uint32 constexpr GLS_GOSSIP_GET_ALL_LINK = 1000;
 
 struct GuildCriteriaStruct
 {
@@ -116,6 +117,7 @@ public:
     void ShowInvestedMenu(Player* player, Creature* creature, uint32 sender, uint32 action);
     void ShowRewardInfo(Player* player, Creature* creature, uint32 sender, uint32 action);
     void GetRewardsCriteria(Player* player, Creature* creature, uint32 sender, uint32 action);
+    void GetAllLink(Player* player, Creature* creature, uint32 sender, uint32 action);
 
     // Spells
     void UnLearnSpellsForPlayer(uint32 lowGuid, uint32 guildID);
