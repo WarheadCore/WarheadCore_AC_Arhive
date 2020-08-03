@@ -103,9 +103,11 @@ S& trimInPlace(S& str)
 	while (first <= last && Ascii::isSpace(str[first])) ++first;
 	while (last >= first && Ascii::isSpace(str[last])) --last;
 
-	str.resize(last + 1);
-	str.erase(0, first);
-
+	if (last >= 0)
+	{
+		str.resize(last + 1);
+		str.erase(0, first);
+	}
 	return str;
 }
 
@@ -686,7 +688,7 @@ struct i_char_traits : public std::char_traits<charT>
 };
 
 
-typedef std::basic_string<char, i_char_traits<char> > istring;
+typedef std::basic_string<char, i_char_traits<char>> istring;
 	/// Case-insensitive std::string counterpart.
 
 

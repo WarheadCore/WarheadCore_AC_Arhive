@@ -27,46 +27,25 @@
 
 namespace Poco {
 
-// STRUCT TEMPLATE unary_function
-template <class _Arg, class _Result>
-struct unary_function { // base class for unary functions
-    using argument_type = _Arg;
-    using result_type = _Result;
-};
-
-// CLASS TEMPLATE pointer_to_unary_function
-template <class _Arg, class _Result, class _Fn = _Result(*)(_Arg)>
-class pointer_to_unary_function : public unary_function<_Arg, _Result> { // functor adapter (*pfunc)(left)
-public:
-    explicit pointer_to_unary_function(_Fn _Left) : _Pfun(_Left) { // construct from pointer
-    }
-
-    _Result operator()(_Arg _Left) const { // call function with operand
-        return _Pfun(_Left);
-    }
-
-protected:
-    _Fn _Pfun; // the function pointer
-};
 
 class Foundation_API TraverseBase
 {
 public:
-	typedef std::stack<DirectoryIterator> Stack;
-	typedef pointer_to_unary_function<const Stack&, UInt16> DepthFunPtr;
+	using Stack = std::stack<DirectoryIterator>;
+	using DepthFun = std::function<UInt16(const Stack&)>;
 
 	enum
 	{
 		D_INFINITE = 0 /// Special value for infinite traverse depth.
 	};
 
-	TraverseBase(DepthFunPtr depthDeterminer, UInt16 maxDepth = D_INFINITE);
+	TraverseBase(DepthFun depthDeterminer, UInt16 maxDepth = D_INFINITE);
 
 protected:
 	bool isFiniteDepth();
 	bool isDirectory(Poco::File& file);
 
-	DepthFunPtr _depthDeterminer;
+	DepthFun _depthDeterminer;
 	UInt16 _maxDepth;
 	DirectoryIterator _itEnd;
 
@@ -80,7 +59,7 @@ private:
 class Foundation_API ChildrenFirstTraverse: public TraverseBase
 {
 public:
-	ChildrenFirstTraverse(DepthFunPtr depthDeterminer, UInt16 maxDepth = D_INFINITE);
+	ChildrenFirstTraverse(DepthFun depthDeterminer, UInt16 maxDepth = D_INFINITE);
 
 	const std::string next(Stack* itStack, bool* isFinished);
 
@@ -94,7 +73,7 @@ private:
 class Foundation_API SiblingsFirstTraverse: public TraverseBase
 {
 public:
-	SiblingsFirstTraverse(DepthFunPtr depthDeterminer, UInt16 maxDepth = D_INFINITE);
+	SiblingsFirstTraverse(DepthFun depthDeterminer, UInt16 maxDepth = D_INFINITE);
 
 	const std::string next(Stack* itStack, bool* isFinished);
 
@@ -103,7 +82,7 @@ private:
 	SiblingsFirstTraverse(const SiblingsFirstTraverse&);
 	SiblingsFirstTraverse& operator=(const SiblingsFirstTraverse&);
 
-	std::stack<std::queue<std::string> > _dirsStack;
+	std::stack<std::queue<std::string>> _dirsStack;
 };
 
 
