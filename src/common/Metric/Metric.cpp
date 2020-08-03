@@ -22,13 +22,13 @@
 #include "Util.h"
 #include "TaskScheduler.h"
 #include <boost/algorithm/string/replace.hpp>
-#include <boost/asio/ip/tcp.hpp>
+#include <asio/ip/tcp.hpp>
 
 TaskScheduler scheduler;
 
 void Metric::Initialize(std::string const& realmName, std::function<void()> overallStatusLogger)
 {
-    _dataStream = std::make_unique<boost::asio::ip::tcp::iostream>();
+    _dataStream = std::make_unique<asio::ip::tcp::iostream>();
     _realmName = FormatInfluxDBTagValue(realmName);
     _overallStatusLogger = overallStatusLogger;
     LoadFromConfigs();
@@ -36,7 +36,7 @@ void Metric::Initialize(std::string const& realmName, std::function<void()> over
 
 bool Metric::Connect()
 {
-    auto& stream = static_cast<boost::asio::ip::tcp::iostream&>(GetDataStream());
+    auto& stream = static_cast<asio::ip::tcp::iostream&>(GetDataStream());
     stream.connect(_hostname, _port);
     auto error = stream.error();
 
@@ -219,7 +219,7 @@ void Metric::SendBatch()
 
     while (std::getline(GetDataStream(), header) && header != "\r")
         if (header == "Connection: close\r")
-            static_cast<boost::asio::ip::tcp::iostream&>(GetDataStream()).close();
+            static_cast<asio::ip::tcp::iostream&>(GetDataStream()).close();
 }
 
 void Metric::ScheduleSend()
@@ -230,7 +230,7 @@ void Metric::ScheduleSend()
     }
     else
     {
-        static_cast<boost::asio::ip::tcp::iostream&>(GetDataStream()).close();
+        static_cast<asio::ip::tcp::iostream&>(GetDataStream()).close();
         MetricData* data;
 
         // Clear the queue
