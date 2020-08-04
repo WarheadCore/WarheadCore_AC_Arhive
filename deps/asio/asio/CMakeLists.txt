@@ -31,9 +31,9 @@ target_include_directories(asio
   INTERFACE
     ${PUBLIC_INCLUDES})
 
-# target_compile_definitions(asio
-#   PUBLIC
-#     ASIO_DYN_LINK)
+target_compile_definitions(asio
+  INTERFACE
+    ASIO_HAS_BOOST_DATE_TIME)
 
 # set_target_properties(asio
 #   PROPERTIES
