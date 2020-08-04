@@ -27,33 +27,33 @@ namespace boost
     {
         class ptime;
     }
+}
 
-    namespace asio
+namespace asio
+{
+    template <typename Time>
+    struct time_traits;
+
+    namespace ip
     {
-        template <typename Time>
-        struct time_traits;
+        class address;
 
-        namespace ip
-        {
-            class address;
+        class tcp;
 
-            class tcp;
+        template <typename InternetProtocol>
+        class basic_endpoint;
 
-            template <typename InternetProtocol>
-            class basic_endpoint;
+        typedef basic_endpoint<tcp> tcp_endpoint;
+    }
 
-            typedef basic_endpoint<tcp> tcp_endpoint;
-        }
+    class executor;
 
-        class executor;
+    namespace ip
+    {
+        template <typename InternetProtocol, typename Executor>
+        class basic_resolver;
 
-        namespace ip
-        {
-            template <typename InternetProtocol, typename Executor>
-            class basic_resolver;
-
-            typedef basic_resolver<tcp, executor> tcp_resolver;
-        }
+        typedef basic_resolver<tcp, executor> tcp_resolver;
     }
 }
 
