@@ -21,6 +21,7 @@
 #include "Define.h"
 #include "Errors.h"
 #include "Containers.h"
+#include "Duration.h"
 #include <algorithm>
 #include <cctype>
 #include <string>
@@ -87,6 +88,9 @@ WH_COMMON_API uint32 urand(uint32 min, uint32 max);
 
 /* Return a random number in the range 0 .. UINT32_MAX. */
 WH_COMMON_API uint32 rand32();
+
+/* Return a random time in the range min..max (up to millisecond precision). Only works for values where millisecond difference is a valid uint32. */
+WH_COMMON_API Milliseconds randtime(Milliseconds min, Milliseconds max);
 
 /* Return a random number in the range min..max */
 WH_COMMON_API float frand(float min, float max);

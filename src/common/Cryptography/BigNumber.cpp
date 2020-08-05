@@ -15,13 +15,11 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <ace/Guard_T.h>
-
 #include "Cryptography/BigNumber.h"
 #include <openssl/bn.h>
-#include <openssl/crypto.h>
+#include <cstring>
 #include <algorithm>
-#include <ace/Auto_Ptr.h>
+#include <memory>
 
 BigNumber::BigNumber()
     : _bn(BN_new())
@@ -169,23 +167,24 @@ bool BigNumber::isZero() const
     return BN_is_zero(_bn);
 }
 
-ACE_Auto_Array_Ptr<uint8> BigNumber::AsByteArray(int32 minSize, bool littleEndian)
+std::unique_ptr<uint8[]> BigNumber::AsByteArray(int32 minSize, bool littleEndian)
 {
-    int length = (minSize >= GetNumBytes()) ? minSize : GetNumBytes();
+    int numBytes = GetNumBytes();
+    int length = (minSize >= numBytes) ? minSize : numBytes;
 
     uint8* array = new uint8[length];
 
     // If we need more bytes than length of BigNumber set the rest to 0
-    if (length > GetNumBytes())
+    if (length > numBytes)
         memset((void*)array, 0, length);
 
-    BN_bn2bin(_bn, (unsigned char *)array);
+    BN_bn2bin(_bn, array + (length-numBytes));
 
     // openssl's BN stores data internally in big endian format, reverse if little endian desired
     if (littleEndian)
         std::reverse(array, array + length);
 
-    ACE_Auto_Array_Ptr<uint8> ret(array);
+    std::unique_ptr<uint8[]> ret(array);
     return ret;
 }
 

@@ -30,10 +30,10 @@ class BigNumber;
 class WH_COMMON_API HmacHash
 {
     public:
-        HmacHash(uint32 len, uint8 *seed);
+        HmacHash(uint32 len, uint8* seed);
         ~HmacHash();
-        void UpdateData(const std::string &str);
-        void UpdateData(const uint8* data, size_t len);
+        void UpdateData(std::string const& str);
+        void UpdateData(uint8 const* data, size_t len);
         void Finalize();
         uint8* ComputeHash(BigNumber* bn);
         uint8* GetDigest() { return m_digest; }
@@ -43,4 +43,3 @@ class WH_COMMON_API HmacHash
         uint8 m_digest[SHA_DIGEST_LENGTH];
 };
 #endif
-

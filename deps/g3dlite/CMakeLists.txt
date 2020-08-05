@@ -1,5 +1,4 @@
-#
-# This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+# Copyright (C) 2016+     AzerothCore <www.azerothcore.org>, released under GNU AGPL3 v3 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-AGPL3
 #
 # This file is free software; as a special exception the author gives
 # unlimited permission to copy and/or distribute it, with or without
@@ -8,14 +7,11 @@
 # This program is distributed in the hope that it will be useful, but
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-#
-# User has manually chosen to ignore the git-tests, so throw them a warning.
-# This is done EACH compile so they can be alerted about the consequences.
-#
 
 set(g3dlib_STAT_SRCS
   source/AABox.cpp
   source/Any.cpp
+  source/AnyTableReader.cpp
   source/BinaryFormat.cpp
   source/BinaryInput.cpp
   source/BinaryOutput.cpp
@@ -31,6 +27,7 @@ set(g3dlib_STAT_SRCS
   source/format.cpp
   source/g3dfnmatch.cpp
   source/g3dmath.cpp
+  source/GThread.cpp
   source/Line.cpp
   source/LineSegment.cpp
   source/Log.cpp
@@ -43,7 +40,6 @@ set(g3dlib_STAT_SRCS
   source/Quat.cpp
   source/Random.cpp
   source/Ray.cpp
-  source/ReferenceCount.cpp
   source/RegistryUtil.cpp
   source/Sphere.cpp
   source/stringutils.cpp
@@ -60,9 +56,6 @@ set(g3dlib_STAT_SRCS
 
 add_library(g3dlib STATIC ${g3dlib_STAT_SRCS})
 
-# Group sources
-GroupSources(${CMAKE_CURRENT_SOURCE_DIR})
-
 target_include_directories(g3dlib
   PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include)
@@ -75,6 +68,6 @@ target_link_libraries(g3dlib
     threads)
 
 set_target_properties(g3dlib
-  PROPERTIES
-    FOLDER
-      "deps")
+    PROPERTIES
+      FOLDER
+        "deps")
