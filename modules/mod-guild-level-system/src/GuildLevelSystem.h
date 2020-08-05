@@ -38,10 +38,11 @@ uint32 constexpr GLS_GOSSIP_GET_ALL_LINK = 1000;
 struct GuildCriteriaStruct
 {
     uint32 CriteriaID;
+    uint32 StageID;
     uint32 ItemID[GLS_ITEMS_COUNT];
     uint32 ItemCount[GLS_ITEMS_COUNT];
     uint32 MinPlayersCount;
-    float Coef;    
+    float Coef;
     uint32 RewardSpells[GLS_SPELLS_REWARD_COUNT];
 };
 
@@ -55,11 +56,12 @@ struct GuildCriteriaProgressStruct
 };
 
 typedef std::unordered_map<uint32 /*criteria id*/, GuildCriteriaStruct> GuildCriteriaBase;
+typedef std::map<uint32 /*stage id*/, std::vector<uint32> /*criteria id*/> GuildStages; // Need ordered
 
 class GuildCriteria
 {
 public:
-    GuildCriteria(uint32 guildID);
+    GuildCriteria(uint32 guildID, uint32 stageID);
     ~GuildCriteria() = default;
 
     // Progress
@@ -83,13 +85,19 @@ public:
     void SaveToDB(uint32 criteriaID);
     void SetProgressDone(uint32 criteriaID, bool isDone = true);
     bool IsProgressDone(uint32 criteriaID);
+    uint32 GetCountCriteriaProgressDone();
     void UnLearnSpells(uint32 lowGuid);
     void LearnSpells(Player* player);
+
+    // Stage
+    uint32 GetStageID() { return _stageID; }
+    void SetStageID(uint32 stage, bool saveDB = true);
 
 private:
     std::unordered_map<uint32 /*criteria id*/, GuildCriteriaProgressStruct> _guildCriteriaProgress; // for history
     std::unordered_map<uint32 /*criteria id*/, GuildCriteriaStruct> _guildCriteria;
     uint32 _guildID = 0;
+    uint32 _stageID = 1;
 };
 
 class GuildLevelSystem
@@ -102,6 +110,7 @@ public:
     // Criteria
     void LoadBaseCriteria();
     void LoadCriteriaProgress();
+    void LoadStageProgress();
     void AddEmptyGuildCriteria(uint32 guildID);
     void InvestItem(Player* player, Creature* creature, uint32 sender, uint32 action, uint32 itemCount); // from gossip
     void InvestItemFull(Player* player, Creature* creature, uint32 sender, uint32 action); // from gossip
@@ -111,6 +120,11 @@ public:
     const GuildCriteriaBase& GetBaseCriterias() { return _guildCriteriaBase; }
     void RescaleCriterias(uint32 guildID);
 
+    // Stages
+    uint32 GetCountCriteriaInStage(uint32 stageID);
+    const GuildStages& GetStages() { return _guildStages; }
+    uint32 GetNextStage(uint32 currStage);
+
     // Gossip criteria
     void ShowAllCriteriaInfo(Player* player, Creature* creature);
     void ShowCriteriaInfo(Player* player, Creature* creature, uint32 sender, uint32 action);
@@ -118,6 +132,7 @@ public:
     void ShowRewardInfo(Player* player, Creature* creature, uint32 sender, uint32 action);
     void GetRewardsCriteria(Player* player, Creature* creature, uint32 sender, uint32 action);
     void GetAllLink(Player* player, Creature* creature, uint32 sender, uint32 action);
+    void SetNextStage(Player* player);
 
     // Spells
     void UnLearnSpellsForPlayer(uint32 lowGuid, uint32 guildID);
@@ -137,6 +152,8 @@ public:
 private:
     // Criteria
     GuildCriteriaBase _guildCriteriaBase;
+    GuildStages _guildStages;
+
     std::unordered_map<uint32 /*guild id*/, GuildCriteria*> _guildCriteriaProgress;
 
     void SendGuildMessage(uint32 guildID, std::string&& message);

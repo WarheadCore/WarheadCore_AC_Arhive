@@ -29,8 +29,8 @@
 
 #define GLS_IRERATOR(a) for (uint32 i = 0; i < a; ++i)
 
-GuildCriteria::GuildCriteria(uint32 guildID)
-    : _guildID(guildID)
+GuildCriteria::GuildCriteria(uint32 guildID, uint32 stageID)
+    : _guildID(guildID), _stageID(stageID)
 {
     AddBaseCriterias();
     RescalingCriterias();
@@ -195,9 +195,10 @@ void GuildCriteria::SaveToDB(uint32 criteriaID)
 
     auto trans = CharacterDatabase.BeginTransaction();
 
+    // gls_criteria_progress
     trans->PAppend("DELETE FROM `gls_criteria_progress` WHERE `GuildID` = %u AND `CriteriaID` = %u", progressStruct->GuildID, progressStruct->CriteriaID);
     trans->PAppend("INSERT INTO `gls_criteria_progress`(`GuildID`, `CriteriaID`, `ItemCount`, `SelectedSpell`, `IsDone`) VALUES (%u, %u, '%s', %u, %d)",
-        progressStruct->GuildID, progressStruct->CriteriaID, itemsCount.c_str(), progressStruct->SelectedSpell, progressStruct->IsDone);
+        _guildID, progressStruct->CriteriaID, itemsCount.c_str(), progressStruct->SelectedSpell, progressStruct->IsDone);
 
     CharacterDatabase.CommitTransaction(trans);
 }
@@ -214,6 +215,25 @@ bool GuildCriteria::IsProgressDone(uint32 criteriaID)
         return false;
 
     return criteriaProgress->IsDone;
+}
+
+uint32 GuildCriteria::GetCountCriteriaProgressDone()
+{
+    uint32 count = 0;
+
+    auto const& stagesAll = sGuildLevelSystem->GetStages();
+    auto const& stages = stagesAll.find(_stageID);
+    if (stages == stagesAll.end())
+        return count;
+
+    for (auto const& itr : stages->second)
+    {
+        auto criteriaProgress = GetProgress(itr);
+        if (criteriaProgress && criteriaProgress->IsDone)
+            count ++;
+    }
+
+    return count;
 }
 
 void GuildCriteria::UnLearnSpells(uint32 lowGuid)
@@ -246,6 +266,22 @@ void GuildCriteria::LearnSpells(Player* player)
     }
 }
 
+void GuildCriteria::SetStageID(uint32 stage, bool saveDB /*= true*/)
+{
+    _stageID = stage;
+
+    if (!saveDB)
+        return;
+
+    auto trans = CharacterDatabase.BeginTransaction();
+
+    // gls_stages_progress
+    trans->PAppend("DELETE FROM `gls_stages_progress` WHERE `GuildID` = %u", _guildID);
+    trans->PAppend("INSERT INTO `gls_stages_progress`(`GuildID`, `StageID`) VALUES (%u, %u)", _guildID, _stageID);
+
+    CharacterDatabase.CommitTransaction(trans);
+}
+
 GuildLevelSystem* GuildLevelSystem::instance()
 {
     static GuildLevelSystem instance;
@@ -258,6 +294,7 @@ void GuildLevelSystem::Init()
 
     LoadBaseCriteria();
     LoadCriteriaProgress();
+    LoadStageProgress();
 
     LOG_INFO("modules", "");
 }
@@ -356,20 +393,22 @@ std::string const GuildLevelSystem::GetSpelllocale(uint32 spellID, int8 index_lo
     return spell->SpellName[index_loc];
 }
 
-// Criteria
+// Load data from DB
 void GuildLevelSystem::LoadBaseCriteria()
 {
     uint32 oldMSTime = getMSTime();
 
     _guildCriteriaBase.clear();
+    _guildStages.clear();
 
     QueryResult result = CharacterDatabase.Query("SELECT "
         "`CriteriaID`,"                 // 0
-        "`ListItemID`,"                 // 1
-        "`ListItemCount`,"              // 2
-        "`MinPlayersCount`,"            // 3
-        "`Coef`,"                       // 4
-        "`ListRewardSpells` "           // 5
+        "`StageID`,"                    // 1
+        "`ListItemID`,"                 // 2
+        "`ListItemCount`,"              // 3
+        "`MinPlayersCount`,"            // 4
+        "`Coef`,"                       // 5
+        "`ListRewardSpells` "           // 6
         "FROM `gls_criteria`");
 
     if (!result)
@@ -398,14 +437,16 @@ void GuildLevelSystem::LoadBaseCriteria()
         };
 
         uint32 criteriaID                       = fields[0].GetUInt32();
-        std::string listItemID                  = fields[1].GetString();
-        std::string listItemCount               = fields[2].GetString();
-        uint32 minPlayersCount                  = fields[3].GetUInt32();
-        float coef                              = fields[4].GetFloat();
-        std::string listRewardSpells            = fields[5].GetString();
+        uint32 stageID                          = fields[1].GetUInt32();
+        std::string listItemID                  = fields[2].GetString();
+        std::string listItemCount               = fields[3].GetString();
+        uint32 minPlayersCount                  = fields[4].GetUInt32();
+        float coef                              = fields[5].GetFloat();
+        std::string listRewardSpells            = fields[6].GetString();
         
         GuildCriteriaStruct _data;
         _data.CriteriaID        = criteriaID;
+        _data.StageID           = stageID;
         _data.MinPlayersCount   = minPlayersCount;
         _data.Coef              = coef;
 
@@ -483,6 +524,15 @@ void GuildLevelSystem::LoadBaseCriteria()
         }
 
         _guildCriteriaBase.insert(std::make_pair(criteriaID, _data));
+
+        auto const& _stages = _guildStages.find(stageID);
+        if (_stages == _guildStages.end())
+        {
+            std::vector<uint32> __vector = { criteriaID };
+            _guildStages.insert(std::make_pair(stageID, __vector));
+        }            
+        else
+            _stages->second.push_back(criteriaID);
 
     } while (result->NextRow());
 
@@ -565,7 +615,7 @@ void GuildLevelSystem::LoadCriteriaProgress()
 
         auto criteria = GetCriteriaProgress(guildID);
         if (!criteria)
-            criteria = new GuildCriteria(guildID);
+            criteria = new GuildCriteria(guildID, 1);
 
         criteria->AddProgress(criteriaID, _data);
 
@@ -577,6 +627,53 @@ void GuildLevelSystem::LoadCriteriaProgress()
     LOG_INFO("modules.gls", ">> Загружено %u GLS критерий прогресса за %u мс", count, GetMSTimeDiffToNow(oldMSTime));
 }
 
+void GuildLevelSystem::LoadStageProgress()
+{
+    uint32 oldMSTime = getMSTime();
+
+    QueryResult result = CharacterDatabase.Query("SELECT "
+        "`GuildID`,"     // 0
+        "`StageID` "     // 1
+        "FROM `gls_stages_progress`");
+
+    if (!result)
+    {
+        LOG_WARN("modules.gls", "> Загружено 0 GLS стадий прогресса. Таблица `gls_stages_progress` пустая.");
+        return;
+    }
+
+    uint32 count = 0;
+
+    do
+    {
+        Field* fields = result->Fetch();
+
+        uint32 guildID = fields[0].GetUInt32();
+        uint32 stageID = fields[1].GetUInt32();
+
+        // Check guild
+        if (!sGuildMgr->GetGuildById(guildID))
+        {
+            LOG_ERROR("modules.gls", "> GLS: guild id (%u) is not exist!. Skip", guildID);
+            continue;
+        }
+
+        auto criteriaProgress = GetCriteriaProgress(guildID);
+        if (!criteriaProgress)
+        {
+            LOG_ERROR("modules.gls", "> GLS: guild id (%u) is not exist in criteria progress!. Skip", guildID);
+            continue;
+        }
+
+        criteriaProgress->SetStageID(stageID, false);
+
+        count++;
+    } while (result->NextRow());
+
+    LOG_INFO("modules.gls", ">> Загружено %u GLS стадий прогресса за %u мс", count, GetMSTimeDiffToNow(oldMSTime));
+}
+
+// Gossip
 void GuildLevelSystem::InvestItem(Player* player, Creature* creature, uint32 sender, uint32 action, uint32 itemCount)
 {
     uint32 criteriaID = action - GLS_GOSSIP_CRITERIA_ID, itemType = sender;
@@ -742,37 +839,59 @@ void GuildLevelSystem::ShowAllCriteriaInfo(Player* player, Creature* creature)
     if (!criteriaProgress)
         ABORT();
 
-    AddGossipItemFor(player, 10, "Прогресс критерий:", GOSSIP_SENDER_MAIN, 2);
+    uint32 stageID = criteriaProgress->GetStageID();
 
-    for (auto const& itr : _guildCriteriaBase)
+    AddGossipItemFor(player, 10, warhead::StringFormat("# Текущая стадия: %u", stageID), GOSSIP_SENDER_MAIN, 2);
+
+    uint32 countDone = criteriaProgress->GetCountCriteriaProgressDone();
+
+    if (GetCountCriteriaInStage(stageID) != countDone)
     {
-        uint32 criteriaID = itr.first;
-        uint32 gossipAction = criteriaID + GLS_GOSSIP_CRITERIA_ID;
-        uint32 countNow = criteriaProgress->GetCountProgressDone(criteriaID);
-        uint32 countMax = criteriaProgress->GetMaxCountProgressDone(criteriaID);
+        AddGossipItemFor(player, 10, "# Прогресс критерий:", GOSSIP_SENDER_MAIN, 2);
+        AddGossipItemFor(player, 10, "#", GOSSIP_SENDER_MAIN, 2);
 
-        if (criteriaProgress->IsProgressDone(criteriaID))
-            continue;
-
-        AddGossipItemFor(player, 10, warhead::StringFormat("--- Критерий #%u. Прогресс (%u/%u)", criteriaID, countNow, countMax), GLS_GOSSIP_SHOW_CRITERIA_SENDER, gossipAction);
-
-        if (CONF_GET_BOOL("GLS.Criteria.ShowItems.Enable"))
+        for (auto const& itr : _guildCriteriaBase)
         {
-            for (uint32 i = 0; i < GLS_ITEMS_COUNT; ++i)
+            uint32 criteriaStage = itr.second.StageID;
+
+            if (criteriaStage != stageID)
+                continue;
+
+            uint32 criteriaID = itr.first;
+            uint32 gossipAction = criteriaID + GLS_GOSSIP_CRITERIA_ID;
+            uint32 countNow = criteriaProgress->GetCountProgressDone(criteriaID);
+            uint32 countMax = criteriaProgress->GetMaxCountProgressDone(criteriaID);
+
+            if (criteriaProgress->IsProgressDone(criteriaID))
+                continue;
+
+            AddGossipItemFor(player, 10, warhead::StringFormat("--- Критерий #%u. Прогресс (%u/%u)", criteriaID, countNow, countMax), GLS_GOSSIP_SHOW_CRITERIA_SENDER, gossipAction);
+
+            if (CONF_GET_BOOL("GLS.Criteria.ShowItems.Enable"))
             {
-                uint32 itemID = itr.second.ItemID[i];
-                if (!itemID)
-                    continue;
+                for (uint32 i = 0; i < GLS_ITEMS_COUNT; ++i)
+                {
+                    uint32 itemID = itr.second.ItemID[i];
+                    if (!itemID)
+                        continue;
 
-                auto itemLink = GetItemLink(itemID);
-                auto currentItems = criteriaProgress->GetItemCountProgress(criteriaID, i);
-                auto maxItems = criteriaProgress->GetMaxCriteriaItemCount(criteriaID, i);
-                float persents = float(currentItems) / float(maxItems) * 100.0f;
+                    auto itemLink = GetItemLink(itemID);
+                    auto currentItems = criteriaProgress->GetItemCountProgress(criteriaID, i);
+                    auto maxItems = criteriaProgress->GetMaxCriteriaItemCount(criteriaID, i);
+                    float persents = float(currentItems) / float(maxItems) * 100.0f;
 
-                if (!itemLink.empty())
-                    AddGossipItemFor(player, 10, warhead::StringFormat("- %u. %s - %u/%u", i + 1, itemLink.c_str(), currentItems, maxItems), i, gossipAction);
+                    if (!itemLink.empty())
+                        AddGossipItemFor(player, 10, warhead::StringFormat("- %u. %s - %u/%u", i + 1, itemLink.c_str(), currentItems, maxItems), i, gossipAction);
+                }
             }
         }
+    }
+    else
+    {
+        AddGossipItemFor(player, 10, "# Вы выполнили все возможные критерии", GOSSIP_SENDER_MAIN, 2);
+
+        if (player->GetRank() == 0 && GetNextStage(stageID) != stageID)
+            AddGossipItemFor(player, 10, warhead::StringFormat("# >> Завершить стадию - %u", countDone), GOSSIP_SENDER_MAIN, 4);
     }
     
     AddGossipItemFor(player, 10, ">> В главное меню", GOSSIP_SENDER_MAIN, 99);
@@ -989,6 +1108,26 @@ void GuildLevelSystem::GetAllLink(Player* player, Creature* creature, uint32 sen
     ShowCriteriaInfo(player, creature, GLS_GOSSIP_SHOW_CRITERIA_SENDER, action);
 }
 
+void GuildLevelSystem::SetNextStage(Player* player)
+{
+    uint32 guildID = player->GetGuildId();
+
+    if (player->GetRank() != 0)
+    {
+        ChatHandler(player->GetSession()).PSendSysMessage("Вы не глава гильдии!");
+        return;
+    }
+
+    auto criteriaProgress = GetCriteriaProgress(guildID);
+    if (!criteriaProgress)
+        ABORT();
+
+    uint32 nextStage = GetNextStage(criteriaProgress->GetStageID());
+
+    criteriaProgress->SetStageID(nextStage);
+    SendGuildFormat(guildID, "|cFFFF0000#|cff6C8CD5 Гильдия перешла на новую стадию -|r %u", nextStage);
+}
+
 // Spells
 void GuildLevelSystem::UnLearnSpellsForPlayer(uint32 lowGuid, uint32 guildID)
 {
@@ -1055,10 +1194,34 @@ void GuildLevelSystem::ShowInvestedMenu(Player* player, Creature* creature, uint
 
 void GuildLevelSystem::AddEmptyGuildCriteria(uint32 guildID)
 {
-    _guildCriteriaProgress.insert(std::make_pair(guildID, new GuildCriteria(guildID)));
+    _guildCriteriaProgress.insert(std::make_pair(guildID, new GuildCriteria(guildID, 1)));
 }
 
 void GuildLevelSystem::RescaleCriterias(uint32 guildID)
 {
     GetCriteriaProgress(guildID, true)->RescalingCriterias();
+}
+
+uint32 GuildLevelSystem::GetCountCriteriaInStage(uint32 stageID)
+{
+    auto const& _stages = _guildStages.find(stageID);
+    if (_stages != _guildStages.end())
+        return static_cast<uint32>(_stages->second.size());
+
+    ABORT_MSG("> GLS: Not find stage %u", stageID);
+
+    return 0;
+}
+
+uint32 GuildLevelSystem::GetNextStage(uint32 currStage)
+{
+    uint32 nextStage = currStage + 1;
+
+    for (auto const& itr : _guildStages)
+        if (nextStage == itr.first)
+            return nextStage;
+
+    LOG_FATAL("modules.gls", "> GLS: Not found next stage after %u", currStage);
+
+    return currStage;
 }

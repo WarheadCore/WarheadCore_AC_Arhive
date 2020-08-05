@@ -183,6 +183,10 @@ public: Kargatum_Guild_Creature() : CreatureScript("Kargatum_Guild_Creature") { 
         case 3: // Получить награды
             sGuildLevelSystem->ShowAllCriteriaInfo(player, creature);
             break;
+        case 4: // Завершить стадию
+            sGuildLevelSystem->SetNextStage(player);
+            CloseGossipMenuFor(player);
+            break;
         case 100: // Выход
             CloseGossipMenuFor(player);
             break;
