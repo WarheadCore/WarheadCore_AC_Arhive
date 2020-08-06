@@ -1702,7 +1702,7 @@ uint32 Unit::CalcArmorReducedDamage(Unit const* attacker, Unit const* victim, co
     return (newdamage > 1) ? newdamage : 1;
 }
 
-float Unit::CalculateAverageResistReduction(Unit const* owner, SpellSchoolMask schoolMask, Unit const* victim, SpellInfo const* spellInfo) const
+float Unit::CalculateAverageResistReduction(SpellSchoolMask schoolMask, Unit const* victim, SpellInfo const* spellInfo) const
 {
     float victimResistance = float(victim->GetResistance(schoolMask));
     // pets inherit 100% of masters penetration
@@ -1755,7 +1755,7 @@ void Unit::CalcAbsorbResist(Unit* attacker, Unit* victim, SpellSchoolMask school
     // Xinef: holy resistance exists for npcs
     if (!(schoolMask & SPELL_SCHOOL_MASK_NORMAL) && (!(schoolMask & SPELL_SCHOOL_MASK_HOLY) || victim->GetTypeId() == TYPEID_UNIT) && (!spellInfo || (!spellInfo->HasAttribute(SPELL_ATTR0_CU_BINARY_SPELL) && !spellInfo->HasAttribute(SPELL_ATTR4_IGNORE_RESISTANCES))))
     {
-        float const averageResist = CalculateAverageResistReduction(this, schoolMask, victim, spellInfo);
+        float const averageResist = CalculateAverageResistReduction(schoolMask, victim, spellInfo);
 
         float discreteResistProbability[11] = { };
         if (averageResist <= 0.1f)
@@ -2839,7 +2839,7 @@ SpellMissInfo Unit::MagicSpellHitResult(Unit* victim, SpellInfo const* spell)
 
         // Players resistance for binary spells
         if (spell->HasAttribute(SPELL_ATTR0_CU_BINARY_SPELL) && (spell->GetSchoolMask() & (SPELL_SCHOOL_MASK_NORMAL|SPELL_SCHOOL_MASK_HOLY)) == 0)
-            tmp += int32(CalculateAverageResistReduction(this, spell->GetSchoolMask(), victim, spell) * 10000.0f); // 100 for spell calculations, and 100 for return value percentage
+            tmp += int32(CalculateAverageResistReduction(spell->GetSchoolMask(), victim, spell) * 10000.0f); // 100 for spell calculations, and 100 for return value percentage
     }
 
     // Roll chance
