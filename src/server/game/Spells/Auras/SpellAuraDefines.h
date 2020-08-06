@@ -379,6 +379,7 @@ enum AuraType
     // Warhead auras
     SPELL_AURA_WARHEAD_MOD_HONOR_PCT,
     SPELL_AURA_WARHEAD_MOD_REPAIR_COST,
+    SPELL_AURA_WARHEAD_MOD_GOLD_PCT,
     
     // Total
     TOTAL_AURAS
