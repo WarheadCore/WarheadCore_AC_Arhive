@@ -5568,6 +5568,8 @@ uint32 Player::DurabilityRepair(uint16 pos, bool cost, float discountMod, bool g
 
             costs = uint32(costs * discountMod * sGameConfig->GetFloatConfig("Rate.RepairCost"));
 
+            sScriptMgr->OnDurabilityRepair(this, costs, pos, cost, discountMod, guildBank);
+
             if (costs == 0)                                   //fix for ITEM_QUALITY_ARTIFACT
                 costs = 1;
 

@@ -1008,6 +1008,8 @@ class PlayerScript : public ScriptObject
         virtual void OnBeforeLoadPetFromDB(Player* /*player*/, uint32& /*petentry*/, uint32& /*petnumber*/, bool& /*current*/, bool& /*forceLoadFromDB*/) { }
 
         virtual void OnRewardHonor(Player* /*player*/, Unit* /*victim*/, uint32 /*groupsize*/, float& /*honor*/, bool /*awardXP*/) { }
+
+        virtual void OnDurabilityRepair(Player* /*player*/, uint32& /*costs*/, uint16 /*pos*/, bool /*cost*/, float /*discountMod*/, bool /*guildBank*/) { }
 };
 
 class AccountScript : public ScriptObject
@@ -1504,6 +1506,7 @@ class ScriptMgr
         void OnAfterGuardianInitStatsForLevel(Player* player, Guardian* guardian);
         void OnBeforeLoadPetFromDB(Player* player, uint32& petentry, uint32& petnumber, bool& current, bool& forceLoadFromDB);
         void OnRewardHonor(Player* player, Unit* victim, uint32 groupsize, float& honor, bool awardXP);
+        void OnDurabilityRepair(Player* player, uint32& costs, uint16 pos, bool cost, float discountMod, bool guildBank);
 
     public: /* AccountScript */
 

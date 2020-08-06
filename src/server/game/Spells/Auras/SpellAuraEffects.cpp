@@ -376,7 +376,8 @@ pAuraEffectHandler AuraEffectHandler[TOTAL_AURAS]=
     &AuraEffect::HandleNoImmediateEffect,                         //316 SPELL_AURA_PERIODIC_HASTE implemented in AuraEffect::CalculatePeriodic
 
     // Warhead auras
-    &AuraEffect::HandleNoImmediateEffect,                         // 317 SPELL_AURA_MOD_HONOR_PCT
+    &AuraEffect::HandleNoImmediateEffect,                         // 317 SPELL_AURA_WARHEAD_MOD_HONOR_PCT
+    &AuraEffect::HandleNoImmediateEffect,                         // 318 SPELL_AURA_WARHEAD_MOD_REPAIR_COST
 };
 
 AuraEffect::AuraEffect(Aura* base, uint8 effIndex, int32 *baseAmount, Unit* caster):

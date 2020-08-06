@@ -1469,6 +1469,11 @@ void ScriptMgr::OnRewardHonor(Player* player, Unit* victim, uint32 groupsize, fl
     FOREACH_SCRIPT(PlayerScript)->OnRewardHonor(player, victim, groupsize, honor, awardXP);
 }
 
+void ScriptMgr::OnDurabilityRepair(Player* player, uint32& costs, uint16 pos, bool cost, float discountMod, bool guildBank)
+{
+    FOREACH_SCRIPT(PlayerScript)->OnDurabilityRepair(player, costs, pos, cost, discountMod, guildBank);
+}
+
 // Account
 void ScriptMgr::OnAccountLogin(uint32 accountId)
 {
