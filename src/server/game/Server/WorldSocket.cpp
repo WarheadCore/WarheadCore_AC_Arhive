@@ -715,7 +715,7 @@ int WorldSocket::ProcessIncoming(WorldPacket* new_pct)
                     // Catches people idling on the login screen and any lingering ingame connections.
                     m_Session->ResetTimeOutTime(false);
 
-                    m_session->QueuePacket(std::move(new_pct);
+                    m_Session->QueuePacket(std::move(aptr);
                     return 0;
                 }
                 else
