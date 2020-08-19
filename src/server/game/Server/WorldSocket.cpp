@@ -686,13 +686,13 @@ int WorldSocket::ProcessIncoming(WorldPacket* new_pct)
                     return HandlePing(*new_pct);
                 }
                 catch (ByteBufferPositionException const&) {}
-                sLog->outError("WorldSocket::ReadDataHandler(): client sent malformed CMSG_PING");
+                LOG_ERROR("server", "WorldSocket::ReadDataHandler(): client sent malformed CMSG_PING");
                 return -1;
             }
             case CMSG_AUTH_SESSION:
                 if (m_Session)
                 {
-                    sLog->outError("WorldSocket::ProcessIncoming: Player send CMSG_AUTH_SESSION again");
+                    LOG_ERROR("server", "WorldSocket::ProcessIncoming: Player send CMSG_AUTH_SESSION again");
                     return -1;
                 }
                 return HandleAuthSession (*new_pct);
@@ -718,7 +718,7 @@ int WorldSocket::ProcessIncoming(WorldPacket* new_pct)
                 }
                 else
                 {
-                    sLog->outError("WorldSocket::ProcessIncoming: Client not authed opcode = %u", uint32(opcode));
+                    LOG_ERROR("server", "WorldSocket::ProcessIncoming: Client not authed opcode = %u", uint32(opcode));
                     return -1;
                 }
             }
@@ -730,7 +730,7 @@ int WorldSocket::ProcessIncoming(WorldPacket* new_pct)
         if (sLog->ShouldLog("network", LOG_LEVEL_DEBUG))
         {
             LOG_DEBUG("network", "Dumping error causing packet:");
-            packet->hexlike();
+            new_pct->hexlike();
         }
 
         return -1;
