@@ -580,15 +580,17 @@ class boss_prince_taldaram_icc : public CreatureScript
             {
                 summons.Summon(summon);
 
-                Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, -10.0f, true);
+                Unit* target = nullptr;
                 if (!target)
                     target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true);
+
+                if (summon->GetEntry() == NPC_BALL_OF_INFERNO_FLAME && target)
+                    Talk(EMOTE_TALDARAM_FLAME, target);
+
                 if (target)
-                {
-                    if (summon->GetEntry() == NPC_BALL_OF_INFERNO_FLAME)
-                        Talk(EMOTE_TALDARAM_FLAME, target);
                     summon->AI()->SetGUID(target->GetGUID());
-                }
+
+                summon->AI()->AttackStart(target);
             }
 
             void SummonedCreatureDespawn(Creature* s)
@@ -1272,7 +1274,7 @@ class npc_ball_of_flame : public CreatureScript
             {
                 if (action != ACTION_FLAME_BALL_CHASE || me->IsInCombat())
                     return;
-                Player* target = NULL;
+                Player* target = nullptr;
                 if (_chaseGUID)
                     target = ObjectAccessor::GetPlayer(*me, _chaseGUID);
                 if (!target)
