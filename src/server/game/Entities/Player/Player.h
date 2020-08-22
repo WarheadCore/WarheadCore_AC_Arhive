@@ -1984,7 +1984,7 @@ class Player : public Unit, public GridObject<Player>
         inline void RecalculateRating(CombatRating cr) { ApplyRatingMod(cr, 0, true);}
         float GetMeleeCritFromAgility();
         void GetDodgeFromAgility(float &diminishing, float &nondiminishing);
-        float GetMissPercentageFromDefence() const;
+        float GetMissPercentageFromDefense() const;
         float GetSpellCritFromIntellect();
         float OCTRegenHPPerSpirit();
         float OCTRegenMPPerSpirit();

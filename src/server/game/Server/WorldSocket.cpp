@@ -24,7 +24,8 @@
 #include <ace/os_include/sys/os_socket.h>
 #include <ace/OS_NS_string.h>
 #include <ace/Reactor.h>
-#include <ace/Auto_Ptr.h>
+#include <memory>
+#include <chrono>
 #include "WorldSocket.h"
 #include "Common.h"
 #include "Player.h"
@@ -87,12 +88,6 @@ struct ServerPktHeader
     uint8 header[5];
 };
 
-struct ClientPktHeader
-{
-    uint16 size;
-    uint32 cmd;
-};
-
 #if defined(__GNUC__)
 #pragma pack()
 #else
@@ -100,7 +95,7 @@ struct ClientPktHeader
 #endif
 
 WorldSocket::WorldSocket(void): WorldHandler(),
-m_LastPingTime(ACE_Time_Value::zero), m_OverSpeedPings(0), m_Session(0),
+m_LastPingTime(std::chrono::system_clock::time_point::min()), m_OverSpeedPings(0), m_Session(0),
 m_RecvWPct(0), m_RecvPct(), m_Header(sizeof (ClientPktHeader)),
 m_OutBuffer(0), m_OutBufferSize(65536), m_OutActive(false),
 m_Seed(static_cast<uint32> (rand32()))
@@ -669,7 +664,7 @@ int WorldSocket::ProcessIncoming(WorldPacket* new_pct)
     ACE_ASSERT (new_pct);
 
     // manage memory ;)
-    ACE_Auto_Ptr<WorldPacket> aptr (new_pct);
+    std::unique_ptr<WorldPacket> aptr (new_pct);
 
     const uint16 opcode = new_pct->GetOpcode();
 
@@ -717,7 +712,8 @@ int WorldSocket::ProcessIncoming(WorldPacket* new_pct)
 
                     // OK, give the packet to WorldSession
                     aptr.release();
-                    m_Session->QueuePacket (new_pct);
+                    //m_Session->QueuePacket (new_pct);
+                    m_Session->QueuePacket(std::move(new_pct));
                     return 0;
                 }
                 else
@@ -1033,16 +1029,15 @@ int WorldSocket::HandlePing(WorldPacket& recvPacket)
     recvPacket >> ping;
     recvPacket >> latency;
 
-    if (m_LastPingTime == ACE_Time_Value::zero)
-        m_LastPingTime = ACE_OS::gettimeofday(); // for 1st ping
+    if (m_LastPingTime == std::chrono::system_clock::time_point::min())
+        m_LastPingTime = std::chrono::system_clock::now();              // for 1st ping
     else
     {
-        ACE_Time_Value cur_time = ACE_OS::gettimeofday();
-        ACE_Time_Value diff_time (cur_time);
-        diff_time -= m_LastPingTime;
-        m_LastPingTime = cur_time;
+        auto now = std::chrono::system_clock::now();
+        std::chrono::seconds seconds = std::chrono::duration_cast<std::chrono::seconds>(now - m_LastPingTime);
+        m_LastPingTime = now;
 
-        if (diff_time < ACE_Time_Value (27))
+        if (seconds.count() < 27)
         {
             ++m_OverSpeedPings;
 

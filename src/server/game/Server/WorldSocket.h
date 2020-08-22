@@ -24,7 +24,6 @@
 #ifndef _WORLDSOCKET_H
 #define _WORLDSOCKET_H
 
-#include <ace/Basic_Types.h>
 #include <ace/Synch_Traits.h>
 #include <ace/Svc_Handler.h>
 #include <ace/SOCK_Stream.h>
@@ -39,6 +38,8 @@
 
 #include "Common.h"
 #include "AuthCrypt.h"
+#include <chrono>
+#include <memory>
 
 class ACE_Message_Block;
 class WorldPacket;
@@ -85,6 +86,13 @@ typedef ACE_Svc_Handler<ACE_SOCK_STREAM, ACE_NULL_SYNCH> WorldHandler;
  */
 class WorldSocket : public WorldHandler
 {
+
+struct ClientPktHeader
+{
+    uint16 size;
+    uint32 cmd;
+};
+
     public:
         WorldSocket (void);
         virtual ~WorldSocket (void);
@@ -162,7 +170,7 @@ class WorldSocket : public WorldHandler
 
     private:
         /// Time in which the last ping was received
-        ACE_Time_Value m_LastPingTime;
+        std::chrono::system_clock::time_point m_LastPingTime;
 
         /// Keep track of over-speed pings, to prevent ping flood.
         uint32 m_OverSpeedPings;

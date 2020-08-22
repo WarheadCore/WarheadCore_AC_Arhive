@@ -658,7 +658,7 @@ void Player::UpdateAllCritPercentages()
     UpdateCritPercentage(RANGED_ATTACK);
 }
 
-const float m_diminishing_k[MAX_CLASSES] =
+float const m_diminishing_k[MAX_CLASSES] =
 {
     0.9560f,  // Warrior
     0.9560f,  // Paladin
@@ -673,54 +673,76 @@ const float m_diminishing_k[MAX_CLASSES] =
     0.9720f   // Druid
 };
 
-float Player::GetMissPercentageFromDefence() const
+float CalculateDiminishingReturns(float const (&capArray)[MAX_CLASSES], uint8 playerClass, float nonDiminishValue, float diminishValue)
 { 
-    float const miss_cap[MAX_CLASSES] =
-    {
-        16.00f,     // Warrior //correct
-        16.00f,     // Paladin //correct
-        16.00f,     // Hunter  //?
-        16.00f,     // Rogue   //?
-        16.00f,     // Priest  //?
-        16.00f,     // DK      //correct
-        16.00f,     // Shaman  //?
-        16.00f,     // Mage    //?
-        16.00f,     // Warlock //?
-        0.0f,       // ??
-        16.00f      // Druid   //?
-    };
+    //  1     1     k              cx
+    // --- = --- + --- <=> x' = --------
+    //  x'    c     x            x + ck
 
+    // where:
+    // k  is m_diminishing_k for that class
+    // c  is capArray for that class
+    // x  is chance before DR (diminishValue)
+    // x' is chance after DR (our result)
+
+    uint32 const classIdx = playerClass - 1;
+
+    float const k = m_diminishing_k[classIdx];
+    float const c = capArray[classIdx];
+
+    float result = c * diminishValue / (diminishValue + c * k);
+    result += nonDiminishValue;
+    return result;
+}
+
+float const miss_cap[MAX_CLASSES] =
+{
+    16.00f,     // Warrior //correct
+    16.00f,     // Paladin //correct
+    16.00f,     // Hunter  //?
+    16.00f,     // Rogue   //?
+    16.00f,     // Priest  //?
+    16.00f,     // DK      //correct
+    16.00f,     // Shaman  //?
+    16.00f,     // Mage    //?
+    16.00f,     // Warlock //?
+    0.0f,       // ??
+    16.00f      // Druid   //?
+};
+
+
+float Player::GetMissPercentageFromDefense() const
+{
     float diminishing = 0.0f, nondiminishing = 0.0f;
     // Modify value from defense skill (only bonus from defense rating diminishes)
     nondiminishing += (GetSkillValue(SKILL_DEFENSE) - GetMaxSkillValueForLevel()) * 0.04f;
     diminishing += (int32(GetRatingBonusValue(CR_DEFENSE_SKILL))) * 0.04f;
 
     // apply diminishing formula to diminishing miss chance
-    uint32 pclass = getClass()-1;
-    return nondiminishing + (diminishing * miss_cap[pclass] / (diminishing + miss_cap[pclass] * m_diminishing_k[pclass]));
+    return CalculateDiminishingReturns(miss_cap, getClass(), nondiminishing, diminishing);
 }
 
-void Player::UpdateParryPercentage()
+float const parry_cap[MAX_CLASSES] =
 { 
-    const float parry_cap[MAX_CLASSES] =
-    {
-        47.003525f,     // Warrior
-        47.003525f,     // Paladin
-        145.560408f,    // Hunter
-        145.560408f,    // Rogue
-        0.0f,           // Priest
-        47.003525f,     // DK
-        145.560408f,    // Shaman
-        0.0f,           // Mage
-        0.0f,           // Warlock
-        0.0f,           // ??
-        0.0f            // Druid
-    };
+    47.003525f,     // Warrior
+    47.003525f,     // Paladin
+    145.560408f,    // Hunter
+    145.560408f,    // Rogue
+    0.0f,           // Priest
+    47.003525f,     // DK
+    145.560408f,    // Shaman
+    0.0f,           // Mage
+    0.0f,           // Warlock
+    0.0f,           // ??
+    0.0f            // Druid
+};
 
+void Player::UpdateParryPercentage()
+{
     // No parry
     float value = 0.0f;
     m_realParry = 0.0f;
-    uint32 pclass = getClass()-1;
+    uint32 pclass = getClass() - 1;
     if (CanParry() && parry_cap[pclass] > 0.0f)
     {
         float nondiminishing  = 5.0f;
@@ -735,29 +757,29 @@ void Player::UpdateParryPercentage()
         m_realParry = nondiminishing + diminishing * parry_cap[pclass] / (diminishing + parry_cap[pclass] * m_diminishing_k[pclass]);
         m_realParry = m_realParry < 0.0f ? 0.0f : m_realParry;
 
-        value = std::max(diminishing + nondiminishing, 0.0f);
+        value = CalculateDiminishingReturns(parry_cap, getClass(), nondiminishing, diminishing);
     }
 
     SetStatFloatValue(PLAYER_PARRY_PERCENTAGE, value);
 }
 
-void Player::UpdateDodgePercentage()
+float const dodge_cap[MAX_CLASSES] =
 { 
-    const float dodge_cap[MAX_CLASSES] =
-    {
-        88.129021f,     // Warrior
-        88.129021f,     // Paladin
-        145.560408f,    // Hunter
-        145.560408f,    // Rogue
-        150.375940f,    // Priest
-        88.129021f,     // DK
-        145.560408f,    // Shaman
-        150.375940f,    // Mage
-        150.375940f,    // Warlock
-        0.0f,           // ??
-        116.890707f     // Druid
-    };
+    88.129021f,     // Warrior
+    88.129021f,     // Paladin
+    145.560408f,    // Hunter
+    145.560408f,    // Rogue
+    150.375940f,    // Priest
+    88.129021f,     // DK
+    145.560408f,    // Shaman
+    150.375940f,    // Mage
+    150.375940f,    // Warlock
+    0.0f,           // ??
+    116.890707f     // Druid
+};
 
+void Player::UpdateDodgePercentage()
+{
     float diminishing = 0.0f, nondiminishing = 0.0f;
     GetDodgeFromAgility(diminishing, nondiminishing);
     // Modify value from defense skill (only bonus from defense rating diminishes)
@@ -768,11 +790,11 @@ void Player::UpdateDodgePercentage()
     // Dodge from rating
     diminishing += GetRatingBonusValue(CR_DODGE);
     // apply diminishing formula to diminishing dodge chance
-    uint32 pclass = getClass()-1;
+    uint32 pclass = getClass() - 1;
     m_realDodge = nondiminishing + (diminishing * dodge_cap[pclass] / (diminishing + dodge_cap[pclass] * m_diminishing_k[pclass]));
     
     m_realDodge = m_realDodge < 0.0f ? 0.0f : m_realDodge;
-    float value = std::max(diminishing + nondiminishing, 0.0f);
+    float value = CalculateDiminishingReturns(dodge_cap, getClass(), nondiminishing, diminishing);
 
     SetStatFloatValue(PLAYER_DODGE_PERCENTAGE, value);
 }
