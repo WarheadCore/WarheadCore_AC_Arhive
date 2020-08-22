@@ -675,10 +675,9 @@ public:
     // Getters
     uint32 GetId() const { return m_id; }
     uint64 GetLeaderGUID() const { return m_leaderGuid; }
-    std::string const& GetName(bool isFull = false) const { return isFull ? m_full_name : m_name; }
+    std::string const& GetName() const { return m_name; }
     std::string const& GetMOTD() const { return m_motd; }
     std::string const& GetInfo() const { return m_info; }
-    void SetName(std::string const& name, bool isFull = false) { isFull ? m_full_name = name : m_name = name; }
 
     // Handle client commands
     void HandleRoster(WorldSession* session);
@@ -770,7 +769,6 @@ public:
 protected:
     uint32 m_id;
     std::string m_name;
-    std::string m_full_name;
     uint64 m_leaderGuid;
     std::string m_motd;
     std::string m_info;

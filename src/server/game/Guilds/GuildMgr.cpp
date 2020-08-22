@@ -79,10 +79,10 @@ Guild* GuildMgr::GetGuildByName(const std::string& guildName) const
     return NULL;
 }
 
-std::string GuildMgr::GetGuildNameById(uint32 guildId, bool isFull /*= false*/) const
+std::string GuildMgr::GetGuildNameById(uint32 guildId) const
 {
     if (Guild* guild = GetGuildById(guildId))
-        return guild->GetName(isFull);
+        return guild->GetName();
 
     return "";
 }

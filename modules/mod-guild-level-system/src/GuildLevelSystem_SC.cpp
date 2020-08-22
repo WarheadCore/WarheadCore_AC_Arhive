@@ -50,51 +50,6 @@ public: Kargatum_Guild() : GuildScript("Kargatum_Guild") { }
     }
 };
 
-class Kargatum_Guild_Player : public PlayerScript
-{
-public: Kargatum_Guild_Player() : PlayerScript("Kargatum_Guild_Player") { }
-
-    void OnChat(Player* player, uint32 /*type*/, uint32 /*lang*/, std::string& msg, Guild* guild) override
-    {
-        if (player->GetRank() > 1)
-            return;
-
-        if (!CONF_GET_BOOL("GLS.Enable"))
-            return;
-
-        std::string color = "|cffff0000";
-
-        switch (player->GetRank())
-        {
-        case 0:
-            color = CONF_GET_STR("GLS.ColorChat.Rank0");
-            break;
-        case 1:
-            color = CONF_GET_STR("GLS.ColorChat.Rank1");
-            break;
-        default:
-            break;
-        }
-
-        /*if (sGuildLevelSystem->IsAsseptSetting(GUILD_SETTING_FLAG_ADM_CHAT, guild) && player->GetRank() == 0)
-            msg = color + msg + "|r";
-
-        if (sGuildLevelSystem->IsAsseptSetting(GUILD_SETTING_FLAG_ASSISTANT_CHAT, guild) && player->GetRank() == 1)
-            msg = color + msg + "|r";*/
-    }
-
-    void OnLogin(Player* player) override
-    {
-        if (!CONF_GET_BOOL("GLS.Enable"))
-            return;
-
-        if (!player->GetGuild())
-            return;
-
-        //sGuildLevelSystem->RewardSpellGuildMember(player->GetGuild(), player);
-    }
-};
-
 class Kargatum_Guild_Creature : public CreatureScript
 {
 public: Kargatum_Guild_Creature() : CreatureScript("Kargatum_Guild_Creature") { }
@@ -118,8 +73,6 @@ public: Kargatum_Guild_Creature() : CreatureScript("Kargatum_Guild_Creature") { 
             handler.PSendSysMessage("Система уровней гильдий выключена");
             return true;
         }
-
-        // |TInterface/ICONS/Spell_Magic_ManaGain:32:32:-18:0|t
 
         AddGossipItemFor(player, 10, "Информация о гильдии", GOSSIP_SENDER_MAIN, 1);
         AddGossipItemFor(player, 10, "Критерии", GOSSIP_SENDER_MAIN, 2);
@@ -234,6 +187,5 @@ void AddSC_GuildLevelSystem()
 {
     new GuildLevelSystem_World();
     new Kargatum_Guild();
-    //new Kargatum_Guild_Player();
     new Kargatum_Guild_Creature();
 }

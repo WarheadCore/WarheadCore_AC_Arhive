@@ -34,7 +34,7 @@ public:
     Guild* GetGuildByLeader(uint64 guid) const;
     Guild* GetGuildById(uint32 guildId) const;
     Guild* GetGuildByName(std::string const& guildName) const;
-    std::string GetGuildNameById(uint32 guildId, bool isFull = false) const;
+    std::string GetGuildNameById(uint32 guildId) const;
 
     void LoadGuilds();
     void AddGuild(Guild* guild);
