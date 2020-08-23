@@ -4182,7 +4182,7 @@ void Player::removeSpell(uint32 spellId, uint8 removeSpecMask, bool onlyTemporar
     // pussywizard: update free primary prof points
     if (spellInfo->IsPrimaryProfessionFirstRank())
     {
-        uint32 freeProfs = GetFreePrimaryProfessionPoints()+1;
+        int32 freeProfs = GetFreePrimaryProfessionPoints()+1;
         if (freeProfs <= sGameConfig->GetIntConfig("MaxPrimaryTradeSkill"))
             SetFreePrimaryProfessions(freeProfs);
     }
@@ -7429,7 +7429,7 @@ bool Player::RewardHonor(Unit* uVictim, uint32 groupsize, int32 honor, bool awar
     return true;
 }
 
-void Player::SetHonorPoints(uint32 value)
+void Player::SetHonorPoints(int32 value)
 { 
     if (value > sGameConfig->GetIntConfig("MaxHonorPoints"))
         value = sGameConfig->GetIntConfig("MaxHonorPoints");
@@ -7440,7 +7440,7 @@ void Player::SetHonorPoints(uint32 value)
         AddKnownCurrency(ITEM_HONOR_POINTS_ID);
 }
 
-void Player::SetArenaPoints(uint32 value)
+void Player::SetArenaPoints(int32 value)
 { 
     if (value > sGameConfig->GetIntConfig("MaxArenaPoints"))
         value = sGameConfig->GetIntConfig("MaxArenaPoints");

@@ -11,7 +11,6 @@ CREATE TABLE `channels_rights`
 (
   `name` varchar(128) NOT NULL,
   `flags` int(10) unsigned NOT NULL,
-  `speakdelay` int(10) unsigned NOT NULL,
   `joinmessage` varchar(255) NOT NULL DEFAULT '',
   `delaymessage` varchar(255) NOT NULL DEFAULT '',
   `moderators` text,
