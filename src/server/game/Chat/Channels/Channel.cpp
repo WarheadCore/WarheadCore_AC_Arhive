@@ -36,7 +36,6 @@ Channel::Channel(std::string const& name, uint32 channelId, uint32 channelDBId, 
     _channelDBId(channelDBId),
     _teamId(teamId),
     _ownerGUID(0),
-    lastSpeakTime(0),
     _name(name),
     _password("")
 {
@@ -803,24 +802,6 @@ void Channel::Say(uint64 guid, std::string const& what, uint32 lang)
 
     Player* player = pinfo.plrPtr;
 
-    if (player && player->GetSession()->GetSecurity() == AccountTypes::SEC_PLAYER) // pussywizard: prevent spam on populated channels
-    {
-        uint32 speakDelay = 0;
-        if (_channelRights.speakDelay > 0)
-            speakDelay = _channelRights.speakDelay;
-        else if (playersStore.size() >= 10)
-            speakDelay = 5;
-
-        if (!IsAllowedToSpeak(speakDelay))
-        {
-            std::string timeStr = secsToTimeString(lastSpeakTime + speakDelay - GameTime::GetGameTime());
-            if (_channelRights.speakMessage.length() > 0)
-                player->GetSession()->SendNotification("%s", _channelRights.speakMessage.c_str());
-            player->GetSession()->SendNotification("You must wait %s before speaking again.", timeStr.c_str());
-            return;
-        }
-    }
-
     WorldPacket data;
     if (player)
         ChatHandler::BuildChatPacket(data, CHAT_MSG_CHANNEL, Language(lang), player, player, what, 0, _name);
@@ -1272,15 +1253,4 @@ void Channel::RemoveWatching(Player* p)
     PlayersWatchingContainer::iterator itr = playersWatchingStore.find(p);
     if (itr != playersWatchingStore.end())
         playersWatchingStore.erase(itr);
-}
-
-bool Channel::IsAllowedToSpeak(uint32 speakDelay)
-{
-    if (lastSpeakTime + speakDelay <= GameTime::GetGameTime())
-    {
-        lastSpeakTime = GameTime::GetGameTime();
-        return true;
-    }
-    else
-        return false;
 }

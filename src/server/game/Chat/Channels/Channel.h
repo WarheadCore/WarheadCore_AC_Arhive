@@ -122,10 +122,9 @@ enum ChannelMemberFlags
 class ChannelRights
 {
 public:
-    ChannelRights() : flags(0), speakDelay(0) {}
-    ChannelRights(const uint32& f, const uint32& d, const std::string& jm, const std::string& sm, const std::set<uint32>& ml) : flags(f), speakDelay(d), joinMessage(jm), speakMessage(sm), moderators(ml) {}
+    ChannelRights() : flags(0) {}
+    ChannelRights(const uint32& f, const std::string& jm, const std::string& sm, const std::set<uint32>& ml) : flags(f), joinMessage(jm), speakMessage(sm), moderators(ml) {}
     uint32 flags;
-    uint32 speakDelay;
     std::string joinMessage;
     std::string speakMessage;
     std::set<uint32> moderators;
@@ -223,7 +222,6 @@ class Channel
         // pussywizard:
         void AddWatching(Player* p);
         void RemoveWatching(Player* p);
-        bool IsAllowedToSpeak(uint32 speakDelay); // pussywizard
 
     private:
         // initial packet data (notify type and channel name)
@@ -326,7 +324,6 @@ class Channel
         uint32 _channelDBId;
         TeamId _teamId;
         uint64 _ownerGUID;
-        uint32 lastSpeakTime;
         std::string _name;
         std::string _password;
         ChannelRights _channelRights;

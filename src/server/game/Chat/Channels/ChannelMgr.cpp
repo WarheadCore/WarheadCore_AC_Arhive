@@ -145,7 +145,7 @@ void ChannelMgr::LoadChannelRights()
     uint32 oldMSTime = getMSTime();
     channels_rights.clear();
 
-    QueryResult result = CharacterDatabase.Query("SELECT name, flags, speakdelay, joinmessage, delaymessage, moderators FROM channels_rights");
+    QueryResult result = CharacterDatabase.Query("SELECT name, flags, joinmessage, delaymessage, moderators FROM channels_rights");
     if (!result)
     {
         LOG_INFO("server", ">> Loaded 0 Channel Rights!");
@@ -158,7 +158,7 @@ void ChannelMgr::LoadChannelRights()
     {
         Field* fields = result->Fetch();
         std::set<uint32> moderators;
-        const char* moderatorList = fields[5].GetCString();
+        const char* moderatorList = fields[4].GetCString();
         if (moderatorList)
         {
             Tokenizer tokens(moderatorList, ' ');
@@ -170,7 +170,7 @@ void ChannelMgr::LoadChannelRights()
             }
         }
 
-        SetChannelRightsFor(fields[0].GetString(), fields[1].GetUInt32(), fields[2].GetUInt32(), fields[3].GetString(), fields[4].GetString(), moderators);
+        SetChannelRightsFor(fields[0].GetString(), fields[1].GetUInt32(), fields[2].GetString(), fields[3].GetString(), moderators);
 
         ++count;
     } while (result->NextRow());
@@ -189,11 +189,11 @@ const ChannelRights& ChannelMgr::GetChannelRightsFor(const std::string& name)
     return channelRightsEmpty;
 }
 
-void ChannelMgr::SetChannelRightsFor(const std::string& name, const uint32& flags, const uint32& speakDelay, const std::string& joinmessage, const std::string& speakmessage, const std::set<uint32>& moderators)
+void ChannelMgr::SetChannelRightsFor(const std::string& name, const uint32& flags, const std::string& joinmessage, const std::string& speakmessage, const std::set<uint32>& moderators)
 {
     std::string nameStr = name;
     std::transform(nameStr.begin(), nameStr.end(), nameStr.begin(), ::tolower);
-    channels_rights[nameStr] = ChannelRights(flags, speakDelay, joinmessage, speakmessage, moderators);
+    channels_rights[nameStr] = ChannelRights(flags, joinmessage, speakmessage, moderators);
 }
 
 void ChannelMgr::MakeNotOnPacket(WorldPacket* data, std::string const& name)
