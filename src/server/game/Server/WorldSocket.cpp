@@ -712,8 +712,8 @@ int WorldSocket::ProcessIncoming(WorldPacket* new_pct)
 
                     // OK, give the packet to WorldSession
                     aptr.release();
-                    //m_Session->QueuePacket (new_pct);
-                    m_Session->QueuePacket(std::move(new_pct));
+                    m_Session->QueuePacket (new_pct);
+                    //m_Session->QueuePacket(std::move(new_pct));
                     return 0;
                 }
                 else
