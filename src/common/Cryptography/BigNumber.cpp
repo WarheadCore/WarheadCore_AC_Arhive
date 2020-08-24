@@ -101,7 +101,7 @@ BigNumber BigNumber::operator*=(BigNumber const &bn)
     return *this;
 }
 
-BigNumber BigNumber::operator/=(BigNumber const &bn)ы
+BigNumber BigNumber::operator/=(BigNumber const &bn)
 {
     BN_CTX *bnctx;
 
