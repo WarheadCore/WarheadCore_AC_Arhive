@@ -30,49 +30,48 @@ class WH_COMMON_API BigNumber
 {
     public:
         BigNumber();
-        BigNumber(BigNumber const& bn);
+        BigNumber(BigNumber const &bn);
         BigNumber(uint32);
         ~BigNumber();
 
         void SetDword(uint32);
         void SetQword(uint64);
-        void SetBinary(uint8 const* bytes, int32 len);
-        void SetHexStr(char const* str);
-
+        void SetBinary(uint8 const *bytes, int32 len);
+        void SetHexStr(char const *str);
         void SetRand(int32 numbits);
 
-        BigNumber& operator=(BigNumber const& bn);
+        BigNumber& operator=(BigNumber const &bn);
 
-        BigNumber operator+=(BigNumber const& bn);
-        BigNumber operator+(BigNumber const& bn)
+        BigNumber operator+=(BigNumber const &bn);
+        BigNumber operator+(BigNumber const &bn)
         {
             BigNumber t(*this);
             return t += bn;
         }
 
-        BigNumber operator-=(BigNumber const& bn);
-        BigNumber operator-(BigNumber const& bn)
+        BigNumber operator-=(BigNumber const &bn);
+        BigNumber operator-(BigNumber const &bn)
         {
             BigNumber t(*this);
             return t -= bn;
         }
 
-        BigNumber operator*=(BigNumber const& bn);
-        BigNumber operator*(BigNumber const& bn)
+        BigNumber operator*=(BigNumber const &bn);
+        BigNumber operator*(BigNumber const &bn)
         {
             BigNumber t(*this);
             return t *= bn;
         }
 
-        BigNumber operator/=(BigNumber const& bn);
-        BigNumber operator/(BigNumber const& bn)
+        BigNumber operator/=(BigNumber const &bn);
+        BigNumber operator/(BigNumber const &bn)
         {
             BigNumber t(*this);
             return t /= bn;
         }
 
-        BigNumber operator%=(BigNumber const& bn);
-        BigNumber operator%(BigNumber const& bn)
+        BigNumber operator%=(BigNumber const &bn);
+        BigNumber operator%(BigNumber const &bn)
         {
             BigNumber t(*this);
             return t %= bn;
@@ -80,8 +79,8 @@ class WH_COMMON_API BigNumber
 
         bool isZero() const;
 
-        BigNumber ModExp(BigNumber const& bn1, BigNumber const& bn2);
-        BigNumber Exp(BigNumber const&);
+        BigNumber ModExp(BigNumber const &bn1, BigNumber const &bn2);
+        BigNumber Exp(BigNumber const &);
 
         int32 GetNumBytes(void);
 
@@ -91,8 +90,8 @@ class WH_COMMON_API BigNumber
 
         std::unique_ptr<uint8[]> AsByteArray(int32 minSize = 0, bool littleEndian = true);
 
-        char * AsHexStr() const;
-        char * AsDecStr() const;
+        char *AsHexStr() const;
+        char *AsDecStr() const;
 
     private:
         struct bignum_st *_bn;
