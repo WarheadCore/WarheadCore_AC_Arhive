@@ -26,17 +26,7 @@
 #include "GameConfig.h"
 
 WardenCheckMgr::WardenCheckMgr()
-{
-}
-
-WardenCheckMgr::~WardenCheckMgr()
-{
-    for (uint16 i = 0; i < CheckStore.size(); ++i)
-        delete CheckStore[i];
-
-    for (CheckResultContainer::iterator itr = CheckResultStore.begin(); itr != CheckResultStore.end(); ++itr)
-        delete itr->second;
-}
+{}
 
 WardenCheckMgr* WardenCheckMgr::instance()
 {
@@ -77,75 +67,41 @@ void WardenCheckMgr::LoadWardenChecks()
     {
         fields = result->Fetch();
 
-        uint16 id               = fields[0].GetUInt16();
-        uint8 checkType         = fields[1].GetUInt8();
-        std::string data        = fields[2].GetString();
-        std::string checkResult = fields[3].GetString();
-        uint32 address          = fields[4].GetUInt32();
-        uint8 length            = fields[5].GetUInt8();
-        std::string str         = fields[6].GetString();
-        std::string comment     = fields[7].GetString();
+        uint16 const id  = fields[0].GetUInt16();
+        uint8 const type = fields[1].GetUInt8();
 
-        WardenCheck* wardenCheck = new WardenCheck();
-        wardenCheck->Type = checkType;
-        wardenCheck->CheckId = id;
+        wardenCheck.CheckId = id;
+        wardenCheck.Type = WardenCheckType(type);
 
         // Initialize action with default action from config
-        wardenCheck->Action = WardenActions(sGameConfig->GetIntConfig("Warden.ClientCheckFailAction"));
+        wardenCheck.Action = WardenActions(sGameConfig->GetIntConfig("Warden.ClientCheckFailAction"));
 
-        if (checkType == PAGE_CHECK_A || checkType == PAGE_CHECK_B || checkType == DRIVER_CHECK)
+        if (type == PAGE_CHECK_A || type == PAGE_CHECK_B || type == DRIVER_CHECK)
+            wardenCheck.Data = fields[2].GetBinary();
+
+        if (type == MPQ_CHECK || type == MEM_CHECK)
+            CheckResultStore.emplace(id, fields[3].GetBinary());
+
+        if (type == MEM_CHECK || type == PAGE_CHECK_A || type == PAGE_CHECK_B || type == PROC_CHECK)
         {
-            wardenCheck->Data.SetHexStr(data.c_str());
-            int len = data.size() / 2;
-
-            if (wardenCheck->Data.GetNumBytes() < len)
-            {
-                uint8 temp[24];
-                memset(temp, 0, len);
-                memcpy(temp, wardenCheck->Data.AsByteArray().get(), wardenCheck->Data.GetNumBytes());
-                std::reverse(temp, temp + len);
-                wardenCheck->Data.SetBinary((uint8*)temp, len);
-            }
-        }
-
-        if (checkType == MEM_CHECK || checkType == MODULE_CHECK)
-            MemChecksIdPool.push_back(id);
-        else
-            OtherChecksIdPool.push_back(id);
-
-        if (checkType == MEM_CHECK || checkType == PAGE_CHECK_A || checkType == PAGE_CHECK_B || checkType == PROC_CHECK)
-        {
-            wardenCheck->Address = address;
-            wardenCheck->Length = length;
+            wardenCheck.Address = fields[4].GetUInt32();
+            wardenCheck.Length = fields[5].GetUInt8();
         }
 
         // PROC_CHECK support missing
-        if (checkType == MEM_CHECK || checkType == MPQ_CHECK || checkType == LUA_STR_CHECK || checkType == DRIVER_CHECK || checkType == MODULE_CHECK)
-            wardenCheck->Str = str;
+        if (type == MEM_CHECK || type == MPQ_CHECK || type == LUA_STR_CHECK || type == DRIVER_CHECK || type == MODULE_CHECK)
+            wardenCheck.Str = fields[6].GetString();
 
         CheckStore[id] = wardenCheck;
 
-        if (checkType == MPQ_CHECK || checkType == MEM_CHECK)
-        {
-            WardenCheckResult *wr = new WardenCheckResult();
-            wr->Result.SetHexStr(checkResult.c_str());
-            int len = checkResult.size() / 2;
-            if (wr->Result.GetNumBytes() < len)
-            {
-                uint8 *temp = new uint8[len];
-                memset(temp, 0, len);
-                memcpy(temp, wr->Result.AsByteArray().get(), wr->Result.GetNumBytes());
-                std::reverse(temp, temp + len);
-                wr->Result.SetBinary((uint8*)temp, len);
-                delete [] temp;
-            }
-            CheckResultStore[id] = wr;
-        }
+        wardenCheck.Comment = fields[7].GetString();
+        if (wardenCheck.Comment.empty())
+            wardenCheck.Comment = "Undocumented Check";
 
-        if (comment.empty())
-            wardenCheck->Comment = "Undocumented Check";
+        if (type == MEM_CHECK || type == MODULE_CHECK)
+            MemChecksIdPool.push_back(id);
         else
-            wardenCheck->Comment = comment;
+            OtherChecksIdPool.push_back(id);
 
         ++count;
     }
@@ -177,8 +133,6 @@ void WardenCheckMgr::LoadWardenOverrides()
 
     uint32 count = 0;
 
-    ACE_WRITE_GUARD(ACE_RW_Mutex, g, _checkStoreLock);
-
     do
     {
         Field* fields = result->Fetch();
@@ -194,7 +148,7 @@ void WardenCheckMgr::LoadWardenOverrides()
             LOG_ERROR("server", "Warden check action override for non-existing check (ID: %u, action: %u), skipped", checkId, action);
         else
         {
-            CheckStore[checkId]->Action = WardenActions(action);
+            CheckStore[checkId].Action = WardenActions(action);
             ++count;
         }
     }
@@ -204,18 +158,15 @@ void WardenCheckMgr::LoadWardenOverrides()
     LOG_INFO("server", "");
 }
 
-WardenCheck* WardenCheckMgr::GetWardenDataById(uint16 Id)
+WardenCheck const& WardenCheckMgr::GetCheckDataById(uint16 Id) const
 {
-    if (Id < CheckStore.size())
-        return CheckStore[Id];
-
-    return NULL;
+    ASSERT(Id < CheckStore.size(), "Requested Warden data for invalid check ID %u", uint32(Id));
+    return CheckStore[Id];
 }
 
-WardenCheckResult* WardenCheckMgr::GetWardenResultById(uint16 Id)
+WardenCheckResult const& WardenCheckMgr::GetCheckResultById(uint16 Id) const
 {
-    CheckResultContainer::const_iterator itr = CheckResultStore.find(Id);
-    if (itr != CheckResultStore.end())
-        return itr->second;
-    return NULL;
+    auto it = CheckResultStore.find(Id);
+    ASSERT(it != CheckResultStore.end(), "Requested Warden result for invalid check ID %u", uint32(Id));
+    return it->second;
 }

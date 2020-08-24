@@ -32,36 +32,28 @@
 #include "AccountMgr.h"
 #include "GameTime.h"
 #include "GameConfig.h"
-#include <openssl/md5.h>
+#include "SmartEnum.h"
+#include "Containers.h"
 
-WardenWin::WardenWin() : Warden(), _serverTicks(0) { }
-
-WardenWin::~WardenWin()
+WardenWin::WardenWin() : Warden(), _serverTicks(0)
 {
-    // Xinef: ZOMG! CRASH DEBUG INFO
-    uint32 otherSize = _otherChecksTodo.size();
-    uint32 memSize = _memChecksTodo.size();
-    uint32 curSize = _currentChecks.size();
-    bool otherClear = _otherChecksTodo.empty();
-    bool memClear = _memChecksTodo.empty();
-    bool curClear = _currentChecks.empty();
-
-    LOG_DEBUG("pool", "IM DESTRUCTING MYSELF QQ, OTHERSIZE: %u, OTHEREM: %u, MEMSIZE: %u, MEMEM: %u, CURSIZE: %u, CUREM: %u!\n", otherSize, otherClear, memSize, memClear, curSize, curClear);
-    _otherChecksTodo.clear();
-    _memChecksTodo.clear();
-    _currentChecks.clear();
-    LOG_DEBUG("pool", "IM DESTRUCTING MYSELF QQ, OTHERSIZE: %u, OTHEREM: %u, MEMSIZE: %u, MEMEM: %u, CURSIZE: %u, CUREM: %u!\n", otherSize, otherClear, memSize, memClear, curSize, curClear);
+    _memChecks = sWardenCheckMgr->GetAvailableMemoryChecks();
+    warhead::Containers::RandomShuffle(_memChecks);
+    _memChecksIt = _memChecks.begin();
+    _otherChecks = sWardenCheckMgr->GetAvailableOtherChecks();
+    warhead::Containers::RandomShuffle(_otherChecks);
+    _otherChecksIt = _otherChecks.begin();
 }
 
 void WardenWin::Init(WorldSession* session, BigNumber *k)
 {
     _session = session;
     // Generate Warden Key
-    SHA1Randx WK(k->AsByteArray().get(), k->GetNumBytes());
-    WK.Generate(_inputKey, 16);
-    WK.Generate(_outputKey, 16);
+    SessionKeyGenerator<warhead::SHA1> WK(K);
+    WK.Generate(_inputKey.data(), _inputKey.size());
+    WK.Generate(_outputKey.data(), _outputKey.size());
 
-    memcpy(_seed, Module.Seed, 16);
+    _seed = Module.Seed;
 
     _inputCrypto.Init(_inputKey);
     _outputCrypto.Init(_outputKey);
@@ -73,7 +65,7 @@ void WardenWin::Init(WorldSession* session, BigNumber *k)
     LOG_DEBUG("warden", "Loading Module...");
 #endif
 
-    _module = GetModuleForClient();
+    MakeModuleForClient();
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("warden", "Module Key: %s", ByteArrayToHexStr(_module->Key, 16).c_str());
@@ -82,25 +74,12 @@ void WardenWin::Init(WorldSession* session, BigNumber *k)
     RequestModule();
 }
 
-ClientWardenModule* WardenWin::GetModuleForClient()
+void WardenWin::InitializeModuleForClient(ClientWardenModule& module)
 {
-    ClientWardenModule *mod = new ClientWardenModule;
-
-    uint32 length = sizeof(Module.Module);
-
     // data assign
-    mod->CompressedSize = length;
-    mod->CompressedData = new uint8[length];
-    memcpy(mod->CompressedData, Module.Module, length);
-    memcpy(mod->Key, Module.ModuleKey, 16);
-
-    // md5 hash
-    MD5_CTX ctx;
-    MD5_Init(&ctx);
-    MD5_Update(&ctx, mod->CompressedData, length);
-    MD5_Final((uint8*)&mod->Id, &ctx);
-
-    return mod;
+    module.CompressedData = Module.Module.data();
+    module.CompressedSize = Module.Module.size();
+    module.Key = Module.ModuleKey;
 }
 
 void WardenWin::InitializeModule()
@@ -141,11 +120,24 @@ void WardenWin::InitializeModule()
     Request.Function3_set = 1;
     Request.CheckSumm3 = BuildChecksum(&Request.Unk5, 8);
 
+    EndianConvert(Request.Size1);
+    EndianConvert(Request.CheckSumm1);
+    EndianConvert(Request.Function1[0]);
+    EndianConvert(Request.Function1[1]);
+    EndianConvert(Request.Function1[2]);
+    EndianConvert(Request.Function1[3]);
+    EndianConvert(Request.Size2);
+    EndianConvert(Request.CheckSumm2);
+    EndianConvert(Request.Function2);
+    EndianConvert(Request.Size3);
+    EndianConvert(Request.CheckSumm3);
+    EndianConvert(Request.Function3);
+
     // Encrypt with warden RC4 key.
-    EncryptData((uint8*)&Request, sizeof(WardenInitModuleRequest));
+    EncryptData(reinterpret_cast<uint8*>(&Request), sizeof(WardenInitModuleRequest));
 
     WorldPacket pkt(SMSG_WARDEN_DATA, sizeof(WardenInitModuleRequest));
-    pkt.append((uint8*)&Request, sizeof(WardenInitModuleRequest));
+    pkt.append(reinterpret_cast<uint8*>(&Request), sizeof(WardenInitModuleRequest));
     _session->SendPacket(&pkt);
 }
 
@@ -158,115 +150,91 @@ void WardenWin::RequestHash()
     // Create packet structure
     WardenHashRequest Request;
     Request.Command = WARDEN_SMSG_HASH_REQUEST;
-    memcpy(Request.Seed, _seed, 16);
+    Request.Seed = _seed;
 
     // Encrypt with warden RC4 key.
-    EncryptData((uint8*)&Request, sizeof(WardenHashRequest));
+    EncryptData(reinterpret_cast<uint8*>(&Request), sizeof(WardenHashRequest));
 
     WorldPacket pkt(SMSG_WARDEN_DATA, sizeof(WardenHashRequest));
-    pkt.append((uint8*)&Request, sizeof(WardenHashRequest));
+    pkt.append(reinterpret_cast<uint8*>(&Request), sizeof(WardenHashRequest));
     _session->SendPacket(&pkt);
 }
 
 void WardenWin::HandleHashResult(ByteBuffer &buff)
 {
-    buff.rpos(buff.wpos());
-
-    // Verify key
-    if (memcmp(buff.contents() + 1, Module.ClientKeySeedHash, 20) != 0)
+    warhead::SHA1::Digest response;
+    buff.read(response);
+    if (response != Module.ClientKeySeedHash)
     {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
         LOG_DEBUG("warden", "Request hash reply: failed");
-#endif
-        Penalty();
+        char const* penalty = ApplyPenalty(nullptr);
+        LOG_WARN("warden", "%s failed hash reply. Action: %s", _session->GetPlayerInfo().c_str(), penalty);
         return;
     }
 
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("warden", "Request hash reply: succeed");
-#endif
 
     // Change keys here
-    memcpy(_inputKey, Module.ClientKeySeed, 16);
-    memcpy(_outputKey, Module.ServerKeySeed, 16);
+    _inputKey = Module.ClientKeySeed;
+    _outputKey = Module.ServerKeySeed;
 
     _inputCrypto.Init(_inputKey);
     _outputCrypto.Init(_outputKey);
 
     _initialized = true;
-
-    _previousTimestamp = GameTime::GetGameTimeMS();
 }
 
-void WardenWin::RequestData()
+void WardenWin::RequestChecks()
 {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("warden", "Request data");
-#endif
 
     // If all checks were done, fill the todo list again
-    if (_memChecksTodo.empty())
-        _memChecksTodo.assign(sWardenCheckMgr->MemChecksIdPool.begin(), sWardenCheckMgr->MemChecksIdPool.end());
+    if (_memChecksIt == _memChecks.end())
+    {
+        LOG_DEBUG("warden", "Finished all mem checks, re-shuffling");
+        warhead::Containers::RandomShuffle(_memChecks);
+        _memChecksIt = _memChecks.begin();
+    }
 
-    if (_otherChecksTodo.empty())
-        _otherChecksTodo.assign(sWardenCheckMgr->OtherChecksIdPool.begin(), sWardenCheckMgr->OtherChecksIdPool.end());
+    if (_otherChecksIt == _otherChecks.end())
+    {
+        LOG_DEBUG("warden", "Finished all other checks, re-shuffling");
+        warhead::Containers::RandomShuffle(_otherChecks);
+        _otherChecksIt = _otherChecks.begin();
+    }
 
     _serverTicks = GameTime::GetGameTimeMS();
 
-    uint16 id;
-    uint8 type;
-    WardenCheck* wd;
     _currentChecks.clear();
 
     // Build check request
+    ByteBuffer buff;
+    buff << uint8(WARDEN_SMSG_CHEAT_CHECKS_REQUEST);
     for (int32 i = 0; i < sGameConfig->GetIntConfig("Warden.NumMemChecks"); ++i)
     {
         // If todo list is done break loop (will be filled on next Update() run)
-        if (_memChecksTodo.empty())
+        if (_memChecksIt == _memChecks.end())
             break;
 
-        // Get check id from the end and remove it from todo
-        id = _memChecksTodo.back();
-        _memChecksTodo.pop_back();
-
-        // Add the id to the list sent in this cycle
-        if (id != 786 /*WPE PRO*/ && id != 209 /*WoWEmuHacker*/)
-            _currentChecks.push_back(id);
+        _currentChecks.push_back(*(_memChecksIt++));
     }
     _currentChecks.push_back(786); _currentChecks.push_back(209);
-
-    ByteBuffer buff;
-    buff << uint8(WARDEN_SMSG_CHEAT_CHECKS_REQUEST);
-
-    ACE_READ_GUARD(ACE_RW_Mutex, g, sWardenCheckMgr->_checkStoreLock);
 
     for (int32 i = 0; i < sGameConfig->GetIntConfig("Warden.NumOtherChecks"); ++i)
     {
         // If todo list is done break loop (will be filled on next Update() run)
-        if (_otherChecksTodo.empty())
+        if (_otherChecksIt == _otherChecks.end())
             break;
 
-        // Get check id from the end and remove it from todo
-        id = _otherChecksTodo.back();
-        _otherChecksTodo.pop_back();
+        uint16 const id = *(_otherChecksIt++);
 
-        // Add the id to the list sent in this cycle
+        WardenCheck const& check = sWardenCheckMgr->GetCheckDataById(id);
+        if (!check.Str.empty())
+        {
+            buff << uint8(check.Str.size());
+            buff.append(check.Str.data(), check.Str.size());
+        }
         _currentChecks.push_back(id);
-
-        wd = sWardenCheckMgr->GetWardenDataById(id);
-
-        if (wd)
-            switch (wd->Type)
-            {
-                case MPQ_CHECK:
-                case LUA_STR_CHECK:
-                case DRIVER_CHECK:
-                    buff << uint8(wd->Str.size());
-                    buff.append(wd->Str.c_str(), wd->Str.size());
-                    break;
-                default:
-                    break;
-            }
     }
 
     uint8 xorByte = _inputKey[0];
@@ -277,27 +245,27 @@ void WardenWin::RequestData()
 
     uint8 index = 1;
 
-    for (std::list<uint16>::iterator itr = _currentChecks.begin(); itr != _currentChecks.end(); ++itr)
+    for (uint16 const id : _currentChecks)
     {
-        wd = sWardenCheckMgr->GetWardenDataById(*itr);
+        WardenCheck const& check = sWardenCheckMgr->GetCheckDataById(id);
 
-        type = wd->Type;
+        WardenCheckType const type = check.Type;
         buff << uint8(type ^ xorByte);
         switch (type)
         {
             case MEM_CHECK:
             {
                 buff << uint8(0x00);
-                buff << uint32(wd->Address);
-                buff << uint8(wd->Length);
+                buff << uint32(check.Address);
+                buff << uint8(check.Length);
                 break;
             }
             case PAGE_CHECK_A:
             case PAGE_CHECK_B:
             {
-                buff.append(wd->Data.AsByteArray(0, false).get(), wd->Data.GetNumBytes());
-                buff << uint32(wd->Address);
-                buff << uint8(wd->Length);
+                buff.append(check.Data.data(), check.Data.size());
+                buff << uint32(check.Address);
+                buff << uint8(check.Length);
                 break;
             }
             case MPQ_CHECK:
@@ -308,18 +276,16 @@ void WardenWin::RequestData()
             }
             case DRIVER_CHECK:
             {
-                buff.append(wd->Data.AsByteArray(0, false).get(), wd->Data.GetNumBytes());
+                buff.append(check.Data.data(), check.Data.size());
                 buff << uint8(index++);
                 break;
             }
             case MODULE_CHECK:
             {
-                uint32 seed = rand32();
-                buff << uint32(seed);
-                HmacHash hmac(4, (uint8*)&seed);
-                hmac.UpdateData(wd->Str);
-                hmac.Finalize();
-                buff.append(hmac.GetDigest(), hmac.GetLength());
+                std::array<uint8, 4> seed = warhead::GetRandomBytes<4>();
+                buff.append(seed);
+                buff.append(warhead::HMAC_SHA1::GetDigestOf(seed, wd->Str));
+                buff.append(warhead::HMAC_SHA1::GetDigestOf(seed, check.Str));
                 break;
             }
             /*case PROC_CHECK:

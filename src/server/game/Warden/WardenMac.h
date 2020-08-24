@@ -33,13 +33,13 @@ class WardenMac : public Warden
         WardenMac();
         ~WardenMac();
 
-        void Init(WorldSession* session, BigNumber* k);
-        ClientWardenModule* GetModuleForClient();
-        void InitializeModule();
-        void RequestHash();
-        void HandleHashResult(ByteBuffer& buff);
-        void RequestData();
-        void HandleData(ByteBuffer& buff);
+        void Init(WorldSession* session, BigNumber* k)override;
+        void InitializeModuleForClient(ClientWardenModule& module) override;
+        void InitializeModule() override;
+        void RequestHash() override;
+        void HandleHashResult(ByteBuffer& buff) override;
+        void RequestChecks() override;
+        void HandleCheckResult(ByteBuffer& buff) override;
 };
 
 #endif

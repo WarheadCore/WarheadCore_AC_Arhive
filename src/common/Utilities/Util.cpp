@@ -676,6 +676,15 @@ void HexStrToByteArray(std::string_view str, uint8* out, bool reverse /*= false*
     }
 }
 
+inline std::vector<uint8> HexStrToByteVector(std::string const& str, bool reverse = false)
+{
+    std::vector<uint8> buf;
+    size_t const sz = (str.size() / 2);
+    buf.resize(sz);
+    HexStrToByteArray(str, buf.data(), reverse);
+    return buf;
+}
+
 bool StringToBool(std::string_view str)
 {
     return ((str == "1") || StringEqualI(str, "true") || StringEqualI(str, "yes"));
