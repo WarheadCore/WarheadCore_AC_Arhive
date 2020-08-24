@@ -533,7 +533,7 @@ void World::LoadConfigSettings(bool reload)
     if (reload)
         sMapMgr->SetMapUpdateInterval(tempIntOption);
    
-    auto CheckMinName = [](std::string const& optionName, uint32 const& maxNameSymols)
+    auto CheckMinName = [](std::string const& optionName, int32 const& maxNameSymols)
     {       
         int32 confSymbols = sGameConfig->GetIntConfig(optionName);
         if (confSymbols < 1 || confSymbols > maxNameSymols)
@@ -547,7 +547,7 @@ void World::LoadConfigSettings(bool reload)
     CheckMinName("MinCharterName", MAX_CHARTER_NAME);
     CheckMinName("MinPetName", MAX_PET_NAME);
 
-    uint32 charactersPerRealm = sGameConfig->GetIntConfig("CharactersPerRealm");
+    int32 charactersPerRealm = sGameConfig->GetIntConfig("CharactersPerRealm");
     if (charactersPerRealm < 1 || charactersPerRealm > 10)
     {
         LOG_ERROR("config", "CharactersPerRealm (%i) must be in range 1..10. Set to 10.", charactersPerRealm);
@@ -576,7 +576,7 @@ void World::LoadConfigSettings(bool reload)
         sGameConfig->SetInt("SkipCinematics", 0);
     }
 
-    uint32 maxPlayerLevel = sGameConfig->GetIntConfig("MaxPlayerLevel");
+    int32 maxPlayerLevel = sGameConfig->GetIntConfig("MaxPlayerLevel");
     if (maxPlayerLevel > MAX_LEVEL)
     {
         LOG_ERROR("config", "MaxPlayerLevel (%i) must be in range 1..%u. Set to %u.", maxPlayerLevel, MAX_LEVEL, MAX_LEVEL);
@@ -737,7 +737,7 @@ void World::LoadConfigSettings(bool reload)
             LOG_ERROR("config", "ClientCacheVersion can't be negative %d, ignored.", clientCacheId);
     }
 
-    auto CheckLogRecordsCount = [](std::string const& optionName, uint32 const& maxRecords)
+    auto CheckLogRecordsCount = [](std::string const& optionName, int32 const& maxRecords)
     {       
         int32 records = sGameConfig->GetIntConfig(optionName);
         if (records > maxRecords)
