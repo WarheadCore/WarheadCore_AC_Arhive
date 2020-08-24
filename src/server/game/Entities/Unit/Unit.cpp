@@ -16368,20 +16368,29 @@ void Unit::Kill(Unit* killer, Unit* victim, bool durabilityLoss, WeaponAttackTyp
             creature->SetLootRecipient(NULL);
     }
 
-    // pussywizard: remade this if section (player is on the same map
     if (isRewardAllowed && creature)
     {
-        Player* lr = creature->GetLootRecipient();
-        if (lr && lr->IsInMap(creature))
-            player = creature->GetLootRecipient();
-        else if (Group* lrg = creature->GetLootRecipientGroup())
-            for (GroupReference* itr = lrg->GetFirstMember(); itr != NULL; itr = itr->next())
-                if (Player* member = itr->GetSource())
-                    if (member->IsAtGroupRewardDistance(creature))
+        if (Player* lootRecipient = creature->GetLootRecipient())
+        {
+            // Loot recipient can be in a different map
+            if (!creature->IsInMap(lootRecipient))
+            {
+                if (Group* group = creature->GetLootRecipientGroup())
+                {
+                    for (GroupReference* itr = group->GetFirstMember(); itr != nullptr; itr = itr->next())
                     {
+                        Player* member = itr->GetSource();
+                        if (!member || !creature->IsInMap(member))
+                            continue;
+
                         player = member;
                         break;
                     }
+                }
+            }
+            else
+                player = creature->GetLootRecipient();
+        }
     }
 
     // Exploit fix
