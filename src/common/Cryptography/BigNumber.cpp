@@ -173,7 +173,7 @@ std::unique_ptr<uint8[]> BigNumber::AsByteArray(int32 minSize, bool littleEndian
     if (length > numBytes)
         memset((void *)array, 0, length);
 
-    BN_bn2bin(_bn, (unsigned char*)array);
+    BN_bn2bin(_bn, array + (length - numBytes));
 
     // openssl's BN stores data internally in big endian format, reverse if little endian desired
     if (littleEndian)
