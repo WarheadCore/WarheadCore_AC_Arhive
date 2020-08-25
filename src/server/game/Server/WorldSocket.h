@@ -86,13 +86,6 @@ typedef ACE_Svc_Handler<ACE_SOCK_STREAM, ACE_NULL_SYNCH> WorldHandler;
  */
 class WorldSocket : public WorldHandler
 {
-
-struct ClientPktHeader
-{
-    uint16 size;
-    uint32 cmd;
-};
-
     public:
         WorldSocket (void);
         virtual ~WorldSocket (void);

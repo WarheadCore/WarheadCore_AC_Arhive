@@ -16,7 +16,7 @@
  */
 
 #include "Common.h"
-#include "HMACSHA1.h"
+#include "HmacHash.h"
 #include "WardenKeyGeneration.h"
 #include "WorldPacket.h"
 #include "WorldSession.h"
@@ -219,7 +219,7 @@ void WardenWin::RequestData()
     _currentChecks.clear();
 
     // Build check request
-    for (uint32 i = 0; i < sGameConfig->GetIntConfig("Warden.NumMemChecks"); ++i)
+    for (int32 i = 0; i < sGameConfig->GetIntConfig("Warden.NumMemChecks"); ++i)
     {
         // If todo list is done break loop (will be filled on next Update() run)
         if (_memChecksTodo.empty())
@@ -240,7 +240,7 @@ void WardenWin::RequestData()
 
     ACE_READ_GUARD(ACE_RW_Mutex, g, sWardenCheckMgr->_checkStoreLock);
 
-    for (uint32 i = 0; i < sGameConfig->GetIntConfig("Warden.NumOtherChecks"); ++i)
+    for (int32 i = 0; i < sGameConfig->GetIntConfig("Warden.NumOtherChecks"); ++i)
     {
         // If todo list is done break loop (will be filled on next Update() run)
         if (_otherChecksTodo.empty())
