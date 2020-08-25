@@ -16,7 +16,7 @@
  */
 
 #include "AuthCrypt.h"
-#include "Cryptography/HMACSHA1.h"
+#include "Cryptography/HmacHash.h"
 #include "Cryptography/BigNumber.h"
 
 AuthCrypt::AuthCrypt() :

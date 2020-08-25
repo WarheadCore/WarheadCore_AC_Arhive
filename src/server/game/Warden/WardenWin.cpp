@@ -16,7 +16,7 @@
  */
 
 #include "Common.h"
-#include "HMACSHA1.h"
+#include "HmacHash.h"
 #include "WardenKeyGeneration.h"
 #include "WorldPacket.h"
 #include "WorldSession.h"
