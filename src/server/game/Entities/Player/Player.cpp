@@ -725,6 +725,8 @@ Player::Player(WorldSession* session): Unit(true), m_mover(this)
     m_zoneUpdateId = uint32(-1);
     m_zoneUpdateTimer = 0;
 
+    m_nextSave = sWorld->getIntConfig(CONFIG_INTERVAL_SAVE);
+
     m_areaUpdateId = 0;
     m_team = TEAM_NEUTRAL;
 
@@ -16306,7 +16308,7 @@ bool Player::SatisfyQuestStatus(Quest const* qInfo, bool msg) const
 }
 
 bool Player::SatisfyQuestConditions(Quest const* qInfo, bool msg)
-{ 
+{
     ConditionList conditions = sConditionMgr->GetConditionsForNotGroupedEntry(CONDITION_SOURCE_TYPE_QUEST_AVAILABLE, qInfo->GetQuestId());
     if (!sConditionMgr->IsObjectMeetToConditions(this, conditions))
     {
@@ -18108,6 +18110,10 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
     // since last logout (in seconds)
     uint32 time_diff = uint32(now - logoutTime); //uint64 is excessive for a time_diff in seconds.. uint32 allows for 136~ year difference.
 
+    // randomize first save time in range [CONFIG_INTERVAL_SAVE] around [CONFIG_INTERVAL_SAVE]
+    // this must help in case next save after mass player load after server startup
+    m_nextSave = urand(m_nextSave / 2, m_nextSave * 3 / 2);
+
     // set value, including drunk invisibility detection
     // calculate sobering. after 15 minutes logged out, the player will be sober again
     uint8 newDrunkValue = 0;
@@ -19650,6 +19656,9 @@ bool Player::_LoadHomeBind(PreparedQueryResult result)
 
 void Player::SaveToDB(bool create, bool logout)
 {
+    // delay auto save at any saves (manual, in code, or autosave)
+    m_nextSave = sWorld->getIntConfig(CONFIG_INTERVAL_SAVE);
+
     //lets allow only players in world to be saved
     if (IsBeingTeleportedFar())
     {

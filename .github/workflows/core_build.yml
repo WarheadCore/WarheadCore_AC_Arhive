@@ -22,10 +22,10 @@ jobs:
         uses: actions/cache@v1.1.2
         with:
           path: /home/runner/.ccache
-          key: ccache:${{ matrix.compiler }}:${{ matrix.modules }}-modules:${{ github.ref }}:${{ github.sha }}
+          key: ccache:${{ matrix.os }}:${{ matrix.compiler }}:${{ matrix.modules }}-modules:${{ github.ref }}:${{ github.sha }}
           restore-keys: |
-            ccache:${{ matrix.compiler }}:${{ matrix.modules }}-modules:${{ github.ref }}
-            ccache:${{ matrix.compiler }}:${{ matrix.modules }}-modules
+            ccache:${{ matrix.os }}:${{ matrix.compiler }}:${{ matrix.modules }}-modules:${{ github.ref }}
+            ccache:${{ matrix.os }}:${{ matrix.compiler }}:${{ matrix.modules }}-modules
       - name: Configure OS
         run: source ./apps/ci/ci-install.sh core-build
         env:

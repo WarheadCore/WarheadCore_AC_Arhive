@@ -1097,6 +1097,9 @@ public:
                             events.PopEvent();
                         }
                     }
+                    events.ScheduleEvent(EVENT_ARGENT_CHALLENGE_ATTACK, 3000);
+                    events.PopEvent();
+                    }
                     break;
                 case EVENT_ARGENT_CHALLENGE_ATTACK:
                     {

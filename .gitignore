@@ -3,7 +3,7 @@
 #
 
 conf/*
-!conf/*.dist
+!conf/dist
 apps/drassil/*
 env/dist/*
 env/user/*
@@ -63,6 +63,8 @@ nbproject/
 .vscode
 .idea
 cmake-build-debug/*
+cmake-build-debug-coverage/*
+coverage-report/
 
 #
 # Eclipse
