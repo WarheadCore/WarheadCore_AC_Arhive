@@ -604,7 +604,9 @@ void GameConfig::LoadIntConfigs(bool reload /*= false*/)
     AddIntConfig("ArenaTeam.CharterCost.3v3", 1200000);
     AddIntConfig("ArenaTeam.CharterCost.5v5", 2000000);
 
+    // Misc
     AddIntConfig("MaxWhoListReturns", 49);
+    AddIntConfig("PlayerSaveInterval", Milliseconds(15min).count());
 
     // Check options can't be changed at worldserver.conf reload
     if (reload)

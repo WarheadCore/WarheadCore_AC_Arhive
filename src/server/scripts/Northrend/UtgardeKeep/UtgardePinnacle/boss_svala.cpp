@@ -21,6 +21,7 @@
 #include "SpellScript.h"
 #include "Player.h"
 #include "PassiveAI.h"
+#include "GameConfig.h"
 
 enum Misc
 {
@@ -248,7 +249,7 @@ public:
                 {
                     me->CastSpell(me, SPELL_SVALA_TRANSFORMING1, true);
                     me->UpdateEntry(NPC_SVALA_SORROWGRAVE);
-                    me->SetCorpseDelay(sWorld->getIntConfig(CONFIG_CORPSE_DECAY_ELITE));
+                    me->SetCorpseDelay(sGameConfig->GetIntConfig("Corpse.Decay.ELITE"));
                     me->SetFloatValue(UNIT_FIELD_HOVERHEIGHT, 6.0f);
                     me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC|UNIT_FLAG_IMMUNE_TO_NPC);
                     if (Creature* Arthas = ObjectAccessor::GetCreature(*me, ArthasGUID))

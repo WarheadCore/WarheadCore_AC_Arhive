@@ -2772,7 +2772,7 @@ void SpellMgr::LoadSpellCustomAttr()
 
                     if ((attributes & (SPELL_ATTR0_CU_POSITIVE_EFF0 << i)) != 0)
                     {
-                        sLog->outErrorDb("Table `spell_custom_attr` has attribute SPELL_ATTR0_CU_POSITIVE_EFF%u for spell %u with no EFFECT_%u", uint32(i), spellId, uint32(i));
+                        LOG_ERROR("sql.sql", "Table `spell_custom_attr` has attribute SPELL_ATTR0_CU_POSITIVE_EFF%u for spell %u with no EFFECT_%u", uint32(i), spellId, uint32(i));
                         continue;
                     }
                 }

@@ -1120,7 +1120,7 @@ public:
         }
 
         // save if the player has last been saved over 20 seconds ago
-        uint32 saveInterval = sWorld->getIntConfig(CONFIG_INTERVAL_SAVE);
+        uint32 saveInterval = sGameConfig->GetIntConfig("PlayerSaveInterval");
         if (saveInterval == 0 || (saveInterval > 20 * IN_MILLISECONDS && player->GetSaveTimer() <= saveInterval - 20 * IN_MILLISECONDS))
         {
             player->SaveToDB(true, false);

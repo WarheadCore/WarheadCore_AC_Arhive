@@ -725,7 +725,7 @@ Player::Player(WorldSession* session): Unit(true), m_mover(this)
     m_zoneUpdateId = uint32(-1);
     m_zoneUpdateTimer = 0;
 
-    m_nextSave = sWorld->getIntConfig(CONFIG_INTERVAL_SAVE);
+    m_nextSave = sGameConfig->GetIntConfig("PlayerSaveInterval");
 
     m_areaUpdateId = 0;
     m_team = TEAM_NEUTRAL;
@@ -19657,7 +19657,7 @@ bool Player::_LoadHomeBind(PreparedQueryResult result)
 void Player::SaveToDB(bool create, bool logout)
 {
     // delay auto save at any saves (manual, in code, or autosave)
-    m_nextSave = sWorld->getIntConfig(CONFIG_INTERVAL_SAVE);
+    m_nextSave = sGameConfig->GetIntConfig("PlayerSaveInterval");
 
     //lets allow only players in world to be saved
     if (IsBeingTeleportedFar())
