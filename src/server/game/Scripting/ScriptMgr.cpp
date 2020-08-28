@@ -1464,6 +1464,16 @@ void ScriptMgr::OnBeforeLoadPetFromDB(Player* player, uint32& petentry, uint32& 
     FOREACH_SCRIPT(PlayerScript)->OnBeforeLoadPetFromDB(player, petentry, petnumber, current, forceLoadFromDB);
 }
 
+void ScriptMgr::OnRewardHonor(Player* player, Unit* victim, uint32 groupsize, float& honor, bool awardXP)
+{
+    FOREACH_SCRIPT(PlayerScript)->OnRewardHonor(player, victim, groupsize, honor, awardXP);
+}
+
+void ScriptMgr::OnDurabilityRepair(Player* player, uint32& costs, uint16 pos, bool cost, float discountMod, bool guildBank)
+{
+    FOREACH_SCRIPT(PlayerScript)->OnDurabilityRepair(player, costs, pos, cost, discountMod, guildBank);
+}
+
 // Account
 void ScriptMgr::OnAccountLogin(uint32 accountId)
 {
@@ -1506,9 +1516,9 @@ void ScriptMgr::OnGuildAddMember(Guild* guild, Player* player, uint8& plRank)
     FOREACH_SCRIPT(GuildScript)->OnAddMember(guild, player, plRank);
 }
 
-void ScriptMgr::OnGuildRemoveMember(Guild* guild, Player* player, bool isDisbanding, bool isKicked)
+void ScriptMgr::OnGuildRemoveMember(Guild* guild, Player* player, uint32 lowGuid, bool isDisbanding, bool isKicked)
 {
-    FOREACH_SCRIPT(GuildScript)->OnRemoveMember(guild, player, isDisbanding, isKicked);
+    FOREACH_SCRIPT(GuildScript)->OnRemoveMember(guild, player, lowGuid, isDisbanding, isKicked);
 }
 
 void ScriptMgr::OnGuildMOTDChanged(Guild* guild, const std::string& newMotd)

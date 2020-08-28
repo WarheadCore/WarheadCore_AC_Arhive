@@ -1006,6 +1006,10 @@ class PlayerScript : public ScriptObject
 
         // Called before loading a player's pet from the DB
         virtual void OnBeforeLoadPetFromDB(Player* /*player*/, uint32& /*petentry*/, uint32& /*petnumber*/, bool& /*current*/, bool& /*forceLoadFromDB*/) { }
+
+        virtual void OnRewardHonor(Player* /*player*/, Unit* /*victim*/, uint32 /*groupsize*/, float& /*honor*/, bool /*awardXP*/) { }
+
+        virtual void OnDurabilityRepair(Player* /*player*/, uint32& /*costs*/, uint16 /*pos*/, bool /*cost*/, float /*discountMod*/, bool /*guildBank*/) { }
 };
 
 class AccountScript : public ScriptObject
@@ -1057,7 +1061,7 @@ class GuildScript : public ScriptObject
         virtual void OnAddMember(Guild* /*guild*/, Player* /*player*/, uint8& /*plRank*/) { }
 
         // Called when a member is removed from the guild.
-        virtual void OnRemoveMember(Guild* /*guild*/, Player* /*player*/, bool /*isDisbanding*/, bool /*isKicked*/) { }
+        virtual void OnRemoveMember(Guild* /*guild*/, Player* /*player*/, uint32 /*lowGuid*/, bool /*isDisbanding*/, bool /*isKicked*/) { }
 
         // Called when the guild MOTD (message of the day) changes.
         virtual void OnMOTDChanged(Guild* /*guild*/, const std::string& /*newMotd*/) { }
@@ -1495,6 +1499,8 @@ class ScriptMgr
         void OnBeforeGuardianInitStatsForLevel(Player* player, Guardian* guardian, CreatureTemplate const* cinfo, PetType& petType);
         void OnAfterGuardianInitStatsForLevel(Player* player, Guardian* guardian);
         void OnBeforeLoadPetFromDB(Player* player, uint32& petentry, uint32& petnumber, bool& current, bool& forceLoadFromDB);
+        void OnRewardHonor(Player* player, Unit* victim, uint32 groupsize, float& honor, bool awardXP);
+        void OnDurabilityRepair(Player* player, uint32& costs, uint16 pos, bool cost, float discountMod, bool guildBank);
 
     public: /* AccountScript */
 
@@ -1509,7 +1515,7 @@ class ScriptMgr
     public: /* GuildScript */
 
         void OnGuildAddMember(Guild* guild, Player* player, uint8& plRank);
-        void OnGuildRemoveMember(Guild* guild, Player* player, bool isDisbanding, bool isKicked);
+        void OnGuildRemoveMember(Guild* guild, Player* player, uint32 lowGuid, bool isDisbanding, bool isKicked);
         void OnGuildMOTDChanged(Guild* guild, const std::string& newMotd);
         void OnGuildInfoChanged(Guild* guild, const std::string& newInfo);
         void OnGuildCreate(Guild* guild, Player* leader, const std::string& name);

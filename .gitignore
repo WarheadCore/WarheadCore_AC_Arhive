@@ -110,6 +110,7 @@ local.properties
 !modules/mod-external-mail
 !modules/mod-factions-icons-channel
 !modules/mod-gm-chat-color
+!modules/mod-guild-level-system
 !modules/mod-level-reward
 !modules/mod-notify-muted
 !modules/mod-online-reward

@@ -42,6 +42,7 @@ public:
     void SetNextGuildId(uint32 Id) { NextGuildId = Id; }
 
     void ResetTimes();
+
 protected:
     typedef std::unordered_map<uint32, Guild*> GuildContainer;
     uint32 NextGuildId;

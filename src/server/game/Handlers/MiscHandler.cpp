@@ -361,6 +361,7 @@ void WorldSession::HandleWhoOpcode(WorldPacket& recvData)
         std::wstring wgname;
         if (!Utf8toWStr(gname, wgname))
             continue;
+
         wstrToLower(wgname);
 
         if (!(wguild_name.empty() || wgname.find(wguild_name) != std::wstring::npos))

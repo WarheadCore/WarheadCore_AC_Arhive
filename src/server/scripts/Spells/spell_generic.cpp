@@ -5014,6 +5014,42 @@ class spell_gen_eject_passenger : public SpellScriptLoader
         }
 };
 
+class spell_aura_warhead_player : public PlayerScript
+{
+public:
+    spell_aura_warhead_player() : PlayerScript("spell_aura_warhead_player") { }
+
+    void OnRewardHonor(Player* player, Unit* /*victim*/, uint32 /*groupsize*/, float& honor, bool /*awardXP*/) override
+    {
+        if (!player)
+            return;
+
+        for (auto const& aura : player->GetAuraEffectsByType(SPELL_AURA_WARHEAD_MOD_HONOR_PCT))
+            AddPct(honor, aura->GetAmount());
+    }
+
+    void OnDurabilityRepair(Player* player, uint32& costs, uint16 /*pos*/, bool cost, float /*discountMod*/, bool /*guildBank*/) override
+    {
+        if (!player || !cost)
+            return;
+
+        for (auto const& aura : player->GetAuraEffectsByType(SPELL_AURA_WARHEAD_MOD_REPAIR_COST))
+        {
+            float coef = 1.0f - aura->GetAmount() / 100.0f; // example: 1 - 20% / 100 = 1 - 0,2 = 0,8
+            costs *= coef;
+        }
+    }
+
+    void OnMoneyChanged(Player* player, int32& amount) override
+    {
+        if (amount <= 0 || !player)
+            return;
+
+        for (auto const& aura : player->GetAuraEffectsByType(SPELL_AURA_WARHEAD_MOD_GOLD_PCT))
+            AddPct(amount, aura->GetAmount());
+    }
+};
+
 void AddSC_generic_spell_scripts()
 {
     // ours:
@@ -5141,4 +5177,7 @@ void AddSC_generic_spell_scripts()
     new spell_gen_whisper_gulch_yogg_saron_whisper();
     new spell_gen_eject_all_passengers();
     new spell_gen_eject_passenger();
+
+    // Warhead spells
+    new spell_aura_warhead_player();
 }

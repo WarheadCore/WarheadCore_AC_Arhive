@@ -1183,6 +1183,7 @@ bool Guild::Create(Player* pLeader, std::string const& name)
     m_motd = "No message set.";
     m_bankMoney = 0;
     m_createdDate = GameTime::GetGameTime();
+
     _CreateLogHolders();
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
@@ -2343,7 +2344,7 @@ void Guild::DeleteMember(uint64 guid, bool isDisbanding, bool isKicked, bool can
         }
     }
     // Call script on remove before member is actually removed from guild (and database)
-    sScriptMgr->OnGuildRemoveMember(this, player, isDisbanding, isKicked);
+    sScriptMgr->OnGuildRemoveMember(this, player, lowguid, isDisbanding, isKicked);
 
     auto memberItr = m_members.find(lowguid);
     if (memberItr != m_members.end())
