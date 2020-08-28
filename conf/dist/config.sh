@@ -8,6 +8,15 @@ BUILDPATH="$AC_PATH_ROOT/var/build/obj"
 # absolute path where binary files must be stored
 BINPATH="$AC_PATH_ROOT/env/dist"
 
+# bash fills it by default with your os type. No need to change it.
+# Change it if you really know what you're doing.
+# OSTYPE=""
+
+# When using linux, our installer automatically get information about your distro
+# using lsb_release. If your distro is not supported but it's based on ubuntu or debian,
+# please change it to one of these values.
+#OSDISTRO="ubuntu"
+
 # absolute path where config. files must be stored
 # default: the system will use binpath by default
 # CONFDIR="$AC_PATH_ROOT/env/dist/etc/"
@@ -38,6 +47,8 @@ CDEBUG=OFF
 CTYPE=Release
 # compile scripts
 CSCRIPTS=ON
+# compile unit tests
+CUNIT_TESTS=OFF
 # compile server
 CSERVERS=ON
 # compile tools
@@ -48,7 +59,7 @@ CCOREPCH=ON
 
 # Skip specific modules from compilation (cmake reconfigure needed)
 # use semicolon ; to separate modules
-CDISABLED_WH_MODULES=""
+CDISABLED_AC_MODULES=""
 
 # you can add your custom definitions here ( -D )
 # example:  CCUSTOMOPTIONS=" -DWITH_PERFTOOLS=ON -DENABLE_EXTRA_LOGS=ON"

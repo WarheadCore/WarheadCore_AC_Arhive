@@ -182,6 +182,31 @@ Position const introFinalPos = {4660.490f, 2769.200f, 430.0000f, 0.000000f};
 Position const triggerPos    = {4680.231f, 2769.134f, 379.9256f, 3.121708f};
 Position const triggerEndPos = {4680.180f, 2769.150f, 365.5000f, 3.121708f};
 
+struct BallOfInfernoTargetSelector : public warhead::unary_function<Unit*, bool>
+{
+    public:
+        BallOfInfernoTargetSelector(Creature* source) : _source(source) { }
+        bool operator()(Unit const* target) const
+        {
+            if (!target)
+                return false;
+
+            if (target->GetExactDist(_source) > 125.0f)
+                return false;
+
+            if (target->GetTypeId() != TYPEID_PLAYER)
+                return false;
+
+            if (target->GetPositionX() > -287.0f)
+                return false;
+
+            return target != _source->GetVictim();
+        }
+
+    private:
+        Creature const* _source;
+};
+
 class boss_prince_keleseth_icc : public CreatureScript
 {
     public:
@@ -582,7 +607,7 @@ class boss_prince_taldaram_icc : public CreatureScript
 
                 Unit* target = nullptr;
                 if (!target)
-                    target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true);
+                    target = SelectTarget(SELECT_TARGET_RANDOM, 0, BallOfInfernoTargetSelector(me));
 
                 if (summon->GetEntry() == NPC_BALL_OF_INFERNO_FLAME && target)
                     Talk(EMOTE_TALDARAM_FLAME, target);

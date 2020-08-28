@@ -15095,7 +15095,7 @@ void Unit::ProcDamageAndSpellFor(bool isVictim, Unit* target, uint32 procFlag, u
                     continue;
                 // Some spells must always trigger
                 //if (isAlwaysTriggeredAura[aurEff->GetAuraType()])
-                    triggerData.effMask |= 1<<i;
+                triggerData.effMask |= 1<<i;
             }
         }
         if (triggerData.effMask)

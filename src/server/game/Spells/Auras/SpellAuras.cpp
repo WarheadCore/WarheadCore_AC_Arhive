@@ -86,7 +86,6 @@ _flags(AFLAG_NONE), _effectsToApply(effMask), _needClientUpdate(false), _disable
 #endif
         }
     }
-
     _InitFlags(caster, effMask);
 }
 

@@ -60,11 +60,11 @@ include(deps/drassil/cmake-utils/utils.cmake)
 include(src/cmake/ac_macros.cmake)
 
 # set default buildoptions and print them
-include(conf/config.cmake.dist)
+include(conf/dist/config.cmake)
 
 # load custom configurations for cmake if exists
 if(EXISTS "${CMAKE_SOURCE_DIR}/conf/config.cmake")
-  include(conf/config.cmake)
+    include(conf/config.cmake)
 endif()
 
 # Load modules
@@ -74,13 +74,13 @@ CU_RUN_HOOK("AFTER_LOAD_CONF")
 
 # build in Release-mode by default if not explicitly set
 if( NOT CMAKE_BUILD_TYPE )
-  set(CMAKE_BUILD_TYPE "Release")
+    set(CMAKE_BUILD_TYPE "Release")
 endif()
 
 # turn off PCH totally if enabled (hidden setting, mainly for devs)
 if( NOPCH )
-  set(USE_COREPCH 0)
-  set(USE_SCRIPTPCH 0)
+    set(USE_COREPCH 0)
+    set(USE_SCRIPTPCH 0)
 endif()
 
 include(ConfigureBaseTargets)
@@ -96,6 +96,9 @@ set(ACE_EXPECTED_VERSION 6.0.3)
 
 find_package(PCHSupport)
 find_package(ACE REQUIRED)
+if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
+  add_definitions(-DACE_LACKS_AUTO_PTR=1)
+endif()
 find_package(MySQL REQUIRED)
 
 if(UNIX AND WITH_PERFTOOLS)
@@ -119,11 +122,11 @@ include(src/cmake/showoptions.cmake)
 add_subdirectory(deps)
 
 if( SERVERS OR TOOLS)
-  add_subdirectory(src/common)
+    add_subdirectory(src/common)
 endif()
 
 if( TOOLS )
-  add_subdirectory(src/tools)
+    add_subdirectory(src/tools)
 endif()
 
 #
