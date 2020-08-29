@@ -1971,16 +1971,17 @@ class spell_icc_sprit_alarm : public SpellScriptLoader
                 std::list<Creature*> wards;
                 GetCaster()->GetCreatureListWithEntryInGrid(wards, NPC_DEATHBOUND_WARD, range);
                 wards.sort(warhead::ObjectDistanceOrderPred(GetCaster()));
-                for (std::list<Creature*>::iterator itr = wards.begin(); itr != wards.end(); ++itr)
+
+                for (auto const& itr : wards)
                 {
-                    if ((*itr)->IsAlive() && (*itr)->HasAura(SPELL_STONEFORM))
+                    Creature* deathboundWard = itr;
+
+                    if (deathboundWard->IsAlive() && deathboundWard->HasAura(SPELL_STONEFORM))
                     {
-                        if (Player* target = (*itr)->SelectNearestPlayer(150.0f))
-                        {
-                            (*itr)->AI()->Talk(SAY_TRAP_ACTIVATE);
-                            (*itr)->RemoveAurasDueToSpell(SPELL_STONEFORM);
-                            (*itr)->AI()->AttackStart(target);
-                        }
+                        deathboundWard->AI()->Talk(SAY_TRAP_ACTIVATE);
+                        deathboundWard->RemoveAurasDueToSpell(SPELL_STONEFORM);
+                        deathboundWard->AI()->DoMeleeAttackIfReady();
+                        deathboundWard->AI()->SetData(1, 1);
                         break;
                     }
                 }
