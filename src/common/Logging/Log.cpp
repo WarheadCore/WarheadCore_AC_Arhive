@@ -40,56 +40,56 @@ using namespace Poco;
 
 namespace
 {
-    // Const loggers name
-    std::string const& LOGGER_ROOT = "root";
-    std::string const& LOGGER_GM = "commands.gm";
-    std::string const& LOGGER_PLAYER_DUMP = "entities.player.dump";
+// Const loggers name
+std::string const& LOGGER_ROOT = "root";
+std::string const& LOGGER_GM = "commands.gm";
+std::string const& LOGGER_PLAYER_DUMP = "entities.player.dump";
 
-    // Prefix's
-    std::string const& PREFIX_LOGGER = "Logger.";
-    std::string const& PREFIX_CHANNEL = "LogChannel.";
+// Prefix's
+std::string const& PREFIX_LOGGER = "Logger.";
+std::string const& PREFIX_CHANNEL = "LogChannel.";
 
-    std::string m_logsDir;
-    LogLevel highestLogLevel;
+std::string m_logsDir;
+LogLevel highestLogLevel;
 
-    std::unordered_map<std::string, FormattingChannel*> _channelStore;
+std::unordered_map<std::string, FormattingChannel*> _channelStore;
 
-    FormattingChannel* const* GetFormattingChannel(std::string const& channelName)
+FormattingChannel* const* GetFormattingChannel(std::string const& channelName)
+{
+    auto const& itr = _channelStore.find(channelName);
+    if (itr != _channelStore.end())
+        return &_channelStore.at(channelName);
+
+    return nullptr;
+}
+
+void AddFormattingChannel(std::string const& channelName, FormattingChannel* channel)
+{
+    if (GetFormattingChannel(channelName))
     {
-        auto const& itr = _channelStore.find(channelName);
-        if (itr != _channelStore.end())
-            return &_channelStore.at(channelName);
+        SYS_LOG_ERROR("> Formatting channel (%s) is already exist!", channelName.c_str());
+        return;
+    }
 
+    _channelStore.insert(std::make_pair(channelName, channel));
+}
+
+Logger* GetLoggerByType(std::string_view type)
+{
+    if (Logger::has(std::string(type)))
+        return &Logger::get(std::string(type));
+
+    if (type == LOGGER_ROOT)
         return nullptr;
-    }
 
-    void AddFormattingChannel(std::string const& channelName, FormattingChannel* channel)
-    {
-        if (GetFormattingChannel(channelName))
-        {
-            SYS_LOG_ERROR("> Formatting channel (%s) is already exist!", channelName.c_str());
-            return;
-        }
+    auto parentLogger = LOGGER_ROOT;
+    size_t found = type.find_last_of('.');
 
-        _channelStore.insert(std::make_pair(channelName, channel));
-    }
+    if (found != std::string::npos)
+        parentLogger = type.substr(0, found);
 
-    Logger* GetLoggerByType(std::string_view type)
-    {
-        if (Logger::has(std::string(type)))
-            return &Logger::get(std::string(type));
-
-        if (type == LOGGER_ROOT)
-            return nullptr;
-
-        auto parentLogger = LOGGER_ROOT;
-        size_t found = type.find_last_of('.');
-
-        if (found != std::string::npos)
-            parentLogger = type.substr(0, found);
-
-        return GetLoggerByType(parentLogger);
-    }
+    return GetLoggerByType(parentLogger);
+}
 }
 
 Log::Log()

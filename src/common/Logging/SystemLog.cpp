@@ -36,7 +36,7 @@ using namespace Poco;
 
 namespace
 {
-   std::string const& LOGGER_SYSTEM = "system";
+std::string const& LOGGER_SYSTEM = "system";
 }
 
 SystemLog::SystemLog()

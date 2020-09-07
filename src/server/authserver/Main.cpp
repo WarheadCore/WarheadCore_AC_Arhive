@@ -91,7 +91,7 @@ void usage(const char* prog)
 {
     SYS_LOG_INFO("Usage: \n %s [<options>]\n"
                  "    -c config_file           use config_file as configuration file\n\r",
-        prog);
+                 prog);
 }
 
 /// Launch the auth server
@@ -126,11 +126,11 @@ extern int main(int argc, char** argv)
     sLog->Initialize();
 
     warhead::Logo::Show("authserver", configFile.c_str(),
-        [](char const* text)
-        {
-            LOG_INFO("server.authserver", "%s", text);
-        }
-    );
+                        [](char const* text)
+    {
+        LOG_INFO("server.authserver", "%s", text);
+    }
+                       );
 
 #if defined (ACE_HAS_EVENT_POLL) || defined (ACE_HAS_DEV_POLL)
     ACE_Reactor::instance(new ACE_Reactor(new ACE_Dev_Poll_Reactor(ACE::max_handles(), 1), 1), true);
@@ -266,7 +266,7 @@ extern int main(int argc, char** argv)
     // maximum counter for next ping
     uint32 numLoops = (sConfigMgr->GetIntDefault("MaxPingTime", 30) * (MINUTE * 1000000 / 100000));
     uint32 loopCounter = 0;
-    
+
     // Wait for termination signal
     while (!stopEvent)
     {
@@ -301,7 +301,7 @@ bool StartDB()
     // Increasing it is just silly since only 1 will be used ever.
     DatabaseLoader loader("server.authserver", DatabaseLoader::DATABASE_NONE);
     loader
-        .AddDatabase(LoginDatabase, "Login");
+    .AddDatabase(LoginDatabase, "Login");
 
     if (!loader.Load())
         return false;
