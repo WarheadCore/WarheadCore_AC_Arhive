@@ -1,0 +1,37 @@
+enabled: true
+
+exclude:
+  - ".github/workflows/**/*"
+  - "dep/**"
+  - "contrib/**"
+
+changed_paths:
+  maximum: 1000
+  outcome: error
+
+remote_files: []
+
+auto: false
+
+pull_requests: true
+
+comments: false
+
+statuses:
+  differences: true
+  no_differences: true
+  error: true
+
+request_review: none
+
+labels: []
+
+ignore_labels:
+  - restyled-ignore
+
+restylers_version: stable
+
+restylers:
+  - clang-format:
+      enabled: false
+  - "*"
