@@ -23,6 +23,7 @@
 #include "DatabaseEnv.h"
 #include "Config.h"
 #include "Log.h"
+#include "SystemLog.h"
 #include "Logo.h"
 #include "GitRevision.h"
 #include "SignalHandler.h"
@@ -191,8 +192,6 @@ public:
                 Sleep(1000);
 #endif
         }
-
-        sLog->SetRealmID(0, false);
 
         sScriptMgr->OnShutdown();
 

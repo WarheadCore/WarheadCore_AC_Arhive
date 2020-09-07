@@ -169,7 +169,7 @@ void Log::ReadChannelsFromConfig()
         CreateChannelsFromConfig(channelName);
 }
 
-std::string_view Log::GetPositionOptions(std::string_view options, uint8 position, std::string_view _default /*= ""*/)
+std::string const Log::GetPositionOptions(std::string_view options, uint8 position, std::string const& _default /*= ""*/)
 {
     auto const& tokens = Tokenizer(options, ',');
     if (static_cast<uint8>(tokens.size()) < position + 1u)
@@ -200,7 +200,7 @@ std::string const Log::GetChannelsFromLogger(std::string const& loggerName)
     if (!tokensOptions.size())
         return "";
 
-    return std::string(tokensOptions[LOGGER_OPTIONS_CHANNELS_NAME]);
+    return tokensOptions[LOGGER_OPTIONS_CHANNELS_NAME];
 }
 
 void Log::CreateLoggerFromConfig(std::string const& configLoggerName)
@@ -230,7 +230,7 @@ void Log::CreateLoggerFromConfig(std::string const& configLoggerName)
         return;
     }
 
-    LogLevel level = static_cast<LogLevel>(std::stoi(std::string(GetPositionOptions(options, LOGGER_OPTIONS_LOG_LEVEL))));
+    LogLevel level = static_cast<LogLevel>(std::stoi(GetPositionOptions(options, LOGGER_OPTIONS_LOG_LEVEL)));
     if (level >= LogLevel::LOG_LEVEL_MAX)
     {
         SYS_LOG_ERROR("Log::CreateLoggerFromConfig: Wrong Log Level for logger %s", loggerName.c_str());
@@ -241,11 +241,10 @@ void Log::CreateLoggerFromConfig(std::string const& configLoggerName)
         highestLogLevel = level;
 
     AutoPtr<SplitterChannel> splitterChannel(new SplitterChannel);
-    auto const& channelsName = GetPositionOptions(options, LOGGER_OPTIONS_CHANNELS_NAME);
 
-    for (auto const& tokensFmtChannels : Tokenizer(channelsName, ' '))
+    for (auto const& tokensFmtChannels : Tokenizer(GetPositionOptions(options, LOGGER_OPTIONS_CHANNELS_NAME), ' '))
     {
-        std::string channelName = std::string(tokensFmtChannels);
+        std::string channelName = tokensFmtChannels;
 
         auto fmtChannel = GetFormattingChannel(channelName);
         if (!fmtChannel)
@@ -294,7 +293,7 @@ void Log::CreateChannelsFromConfig(std::string const& logChannelName)
         return;
     }
 
-    auto channelType = std::stoi(std::string(GetPositionOptions(options, CHANNEL_OPTIONS_TYPE)));
+    auto channelType = std::stoi(GetPositionOptions(options, CHANNEL_OPTIONS_TYPE));
     if (!channelType || (channelType && channelType > (uint8)FormattingChannelType::FORMATTING_CHANNEL_TYPE_FILE))
     {
         SYS_LOG_ERROR("Log::CreateLoggerFromConfig: Wrong channel type for LogChannel.%s\n", channelName.c_str());
@@ -320,8 +319,8 @@ void Log::CreateChannelsFromConfig(std::string const& logChannelName)
 
     try
     {
-        _pattern->setProperty("pattern", std::string(pattern));
-        _pattern->setProperty("times", std::string(times));
+        _pattern->setProperty("pattern", pattern);
+        _pattern->setProperty("times", times);
     }
     catch (const std::exception& e)
     {
@@ -343,14 +342,14 @@ void Log::CreateChannelsFromConfig(std::string const& logChannelName)
             {
                 try
                 {
-                    _channel->setProperty("fatalColor", std::string(tokensColor[0]));
-                    _channel->setProperty("criticalColor", std::string(tokensColor[1]));
-                    _channel->setProperty("errorColor", std::string(tokensColor[2]));
-                    _channel->setProperty("warningColor", std::string(tokensColor[3]));
-                    _channel->setProperty("noticeColor", std::string(tokensColor[4]));
-                    _channel->setProperty("informationColor", std::string(tokensColor[5]));
-                    _channel->setProperty("debugColor", std::string(tokensColor[6]));
-                    _channel->setProperty("traceColor", std::string(tokensColor[7]));
+                    _channel->setProperty("fatalColor", tokensColor[0]);
+                    _channel->setProperty("criticalColor", tokensColor[1]);
+                    _channel->setProperty("errorColor", tokensColor[2]);
+                    _channel->setProperty("warningColor", tokensColor[3]);
+                    _channel->setProperty("noticeColor", tokensColor[4]);
+                    _channel->setProperty("informationColor", tokensColor[5]);
+                    _channel->setProperty("debugColor", tokensColor[6]);
+                    _channel->setProperty("traceColor", tokensColor[7]);
                 }
                 catch (const std::exception& e)
                 {
@@ -374,10 +373,10 @@ void Log::CreateChannelsFromConfig(std::string const& logChannelName)
         }
 
         auto fileName = GetPositionOptions(options, CHANNEL_OPTIONS_OPTION_1);
-        auto rotateOnOpen = GetPositionOptions(options, CHANNEL_OPTIONS_OPTION_2, "false");
-        auto rotation = GetPositionOptions(options, CHANNEL_OPTIONS_OPTION_3, "daily");
-        auto flush = GetPositionOptions(options, CHANNEL_OPTIONS_OPTION_4, "false");
-        auto purgeAge = GetPositionOptions(options, CHANNEL_OPTIONS_OPTION_5, "1 months");
+        auto rotateOnOpen = GetPositionOptions(options, CHANNEL_OPTIONS_OPTION_2);
+        auto rotation = GetPositionOptions(options, CHANNEL_OPTIONS_OPTION_3);
+        auto flush = GetPositionOptions(options, CHANNEL_OPTIONS_OPTION_4);
+        auto purgeAge = GetPositionOptions(options, CHANNEL_OPTIONS_OPTION_5);
         auto archive = GetPositionOptions(options, CHANNEL_OPTIONS_OPTION_6);
 
         // Configuration file channel
@@ -385,23 +384,23 @@ void Log::CreateChannelsFromConfig(std::string const& logChannelName)
 
         try
         {
-            _fileChannel->setProperty("path", m_logsDir + std::string(fileName));
-            _fileChannel->setProperty("times", std::string(times));
+            _fileChannel->setProperty("path", m_logsDir + fileName);
+            _fileChannel->setProperty("times", times);
 
             if (!rotateOnOpen.empty())
-                _fileChannel->setProperty("rotateOnOpen", std::string(rotateOnOpen));
+                _fileChannel->setProperty("rotateOnOpen", rotateOnOpen);
 
             if (!rotation.empty())
-                _fileChannel->setProperty("rotation", std::string(rotation));
+                _fileChannel->setProperty("rotation", rotation);
 
             if (!flush.empty())
-                _fileChannel->setProperty("flush", std::string(flush));
+                _fileChannel->setProperty("flush", flush);
 
             if (!purgeAge.empty())
-                _fileChannel->setProperty("purgeAge", std::string(purgeAge));
+                _fileChannel->setProperty("purgeAge", purgeAge);
 
             if (!archive.empty())
-                _fileChannel->setProperty("archive", std::string(archive));
+                _fileChannel->setProperty("archive", archive);
         }
         catch (const std::exception& e)
         {

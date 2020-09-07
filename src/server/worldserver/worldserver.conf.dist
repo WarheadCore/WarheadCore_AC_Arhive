@@ -3424,7 +3424,7 @@ LogChannel.Console = "1","local","%H:%M:%S %t","lightRed lightRed red brown mage
 LogChannel.Server = "2","local","%Y-%m-%d %H:%M:%S %t","Server.log","true","daily","false","30 days","number"
 LogChannel.GM = "2","local","%Y-%m-%d %H:%M:%S %t","GM.log","true","daily","false","30 days","number"
 LogChannel.DBErrors = "2","local","%Y-%m-%d %H:%M:%S %t","DBErrors.log","true","daily","false","30 days","number"
-LogChannel.Modules = "2","local","%Y-%m-%d %H:%M:%S %t","Modules.log""true","daily","false","30 days","number"
+LogChannel.Modules = "2","local","%Y-%m-%d %H:%M:%S %t","Modules.log","true","daily","false","30 days","number"
 
 #
 #  Logger config values: Given a logger "name"
@@ -3447,7 +3447,7 @@ LogChannel.Modules = "2","local","%Y-%m-%d %H:%M:%S %t","Modules.log""true","dai
 #                     (Using spaces as separator).
 #
 
-Logger.root = 6,Console Server
+Logger.root = 4,Console Server
 Logger.server = 6,Console Server
 Logger.commands.gm = 6,GM
 Logger.sql = 4,Console DBErrors

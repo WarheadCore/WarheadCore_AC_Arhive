@@ -378,8 +378,8 @@ Updates.CleanDeadRefMaxCount = 3
 #
 #
 
-LogChannel.Console = 1,local,%t,lightRed lightRed red brown magenta cyan lightMagenta green
-LogChannel.Auth = 2,local,%Y-%m-%d %H:%M:%S %t,Auth.log,false,never,false
+LogChannel.Console = "1","local","%H:%M:%S %t","lightRed lightRed red brown magenta cyan lightMagenta green"
+LogChannel.Auth = "2","local","%Y-%m-%d %H:%M:%S %t","Auth.log","false","never","false","30 days","number"
 
 #
 #  Logger config values: Given a logger "name"
@@ -402,7 +402,7 @@ LogChannel.Auth = 2,local,%Y-%m-%d %H:%M:%S %t,Auth.log,false,never,false
 #                     (Using spaces as separator).
 #
 
-Logger.root = 6,Console Auth
+Logger.root = 4,Console Auth
 Logger.server = 6,Console Auth
 Logger.sql = 6,Console Auth
 Logger.network= 6,Console Auth
