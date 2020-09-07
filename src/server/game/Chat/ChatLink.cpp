@@ -712,18 +712,67 @@ bool LinkExtractor::IsValidMessage()
 
         switch (commandChar)
         {
-            case 'c':
-                if (!ReadHex(_iss, color, 8))
+        case 'c':
+            if (!ReadHex(_iss, color, 8))
+            {
+#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
+                LOG_DEBUG("chat.system", "ChatHandler::isValidChatMessage('%s'): invalid hexadecimal number while reading color", _iss.str().c_str());
+#endif
+                return false;
+            }
+            break;
+        case 'H':
+            // read chars up to colon = link type
+            _iss.getline(buffer, 256, DELIMITER);
+            if (_iss.eof())
+            {
+#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
+                LOG_DEBUG("chat.system", "ChatHandler::isValidChatMessage('%s'): sequence finished unexpectedly", _iss.str().c_str());
+#endif
+                return false;
+            }
+
+            if (strcmp(buffer, "item") == 0)
+                link = new ItemChatLink();
+            else if (strcmp(buffer, "quest") == 0)
+                link = new QuestChatLink();
+            else if (strcmp(buffer, "trade") == 0)
+                link = new TradeChatLink();
+            else if (strcmp(buffer, "talent") == 0)
+                link = new TalentChatLink();
+            else if (strcmp(buffer, "spell") == 0)
+                link = new SpellChatLink();
+            else if (strcmp(buffer, "enchant") == 0)
+                link = new EnchantmentChatLink();
+            else if (strcmp(buffer, "achievement") == 0)
+                link = new AchievementChatLink();
+            else if (strcmp(buffer, "glyph") == 0)
+                link = new GlyphChatLink();
+            else
+            {
+#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
+                LOG_DEBUG("chat.system", "ChatHandler::isValidChatMessage('%s'): user sent unsupported link type '%s'", _iss.str().c_str(), buffer);
+#endif
+                return false;
+            }
+            _links.push_back(link);
+            link->SetColor(color);
+            if (!link->Initialize(_iss))
+                return false;
+            break;
+        case 'h':
+            // if h is next element in sequence, this one must contain the linked text :)
+            if (*validSequenceIterator == 'h')
+            {
+                // links start with '['
+                if (_iss.get() != '[')
                 {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                    LOG_DEBUG("chat.system", "ChatHandler::isValidChatMessage('%s'): invalid hexadecimal number while reading color", _iss.str().c_str());
+                    LOG_DEBUG("chat.system", "ChatHandler::isValidChatMessage('%s'): link caption doesn't start with '['", _iss.str().c_str());
 #endif
                     return false;
                 }
-                break;
-            case 'H':
-                // read chars up to colon = link type
-                _iss.getline(buffer, 256, DELIMITER);
+                _iss.getline(buffer, 256, ']');
                 if (_iss.eof())
                 {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
@@ -732,73 +781,24 @@ bool LinkExtractor::IsValidMessage()
                     return false;
                 }
 
-                if (strcmp(buffer, "item") == 0)
-                    link = new ItemChatLink();
-                else if (strcmp(buffer, "quest") == 0)
-                    link = new QuestChatLink();
-                else if (strcmp(buffer, "trade") == 0)
-                    link = new TradeChatLink();
-                else if (strcmp(buffer, "talent") == 0)
-                    link = new TalentChatLink();
-                else if (strcmp(buffer, "spell") == 0)
-                    link = new SpellChatLink();
-                else if (strcmp(buffer, "enchant") == 0)
-                    link = new EnchantmentChatLink();
-                else if (strcmp(buffer, "achievement") == 0)
-                    link = new AchievementChatLink();
-                else if (strcmp(buffer, "glyph") == 0)
-                    link = new GlyphChatLink();
-                else
-                {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                    LOG_DEBUG("chat.system", "ChatHandler::isValidChatMessage('%s'): user sent unsupported link type '%s'", _iss.str().c_str(), buffer);
-#endif
+                if (!link)
                     return false;
-                }
-                _links.push_back(link);
-                link->SetColor(color);
-                if (!link->Initialize(_iss))
+
+                if (!link->ValidateName(buffer, _iss.str().c_str()))
                     return false;
-                break;
-            case 'h':
-                // if h is next element in sequence, this one must contain the linked text :)
-                if (*validSequenceIterator == 'h')
-                {
-                    // links start with '['
-                    if (_iss.get() != '[')
-                    {
+            }
+            break;
+        case 'r':
+            if (link)
+                link->SetBounds(startPos, _iss.tellg());
+        case '|':
+            // no further payload
+            break;
+        default:
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                        LOG_DEBUG("chat.system", "ChatHandler::isValidChatMessage('%s'): link caption doesn't start with '['", _iss.str().c_str());
+            LOG_DEBUG("chat.system", "ChatHandler::isValidChatMessage('%s'): got invalid command |%c", _iss.str().c_str(), commandChar);
 #endif
-                        return false;
-                    }
-                    _iss.getline(buffer, 256, ']');
-                    if (_iss.eof())
-                    {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                        LOG_DEBUG("chat.system", "ChatHandler::isValidChatMessage('%s'): sequence finished unexpectedly", _iss.str().c_str());
-#endif
-                        return false;
-                    }
-
-                    if (!link)
-                        return false;
-
-                    if (!link->ValidateName(buffer, _iss.str().c_str()))
-                        return false;
-                }
-                break;
-            case 'r':
-                if (link)
-                    link->SetBounds(startPos, _iss.tellg());
-            case '|':
-                // no further payload
-                break;
-            default:
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                LOG_DEBUG("chat.system", "ChatHandler::isValidChatMessage('%s'): got invalid command |%c", _iss.str().c_str(), commandChar);
-#endif
-                return false;
+            return false;
         }
     }
 

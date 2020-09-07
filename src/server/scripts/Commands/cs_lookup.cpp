@@ -673,17 +673,17 @@ public:
 
                                 switch (status)
                                 {
-                                    case QUEST_STATUS_COMPLETE:
-                                        statusStr = handler->GetAcoreString(LANG_COMMAND_QUEST_COMPLETE);
-                                        break;
-                                    case QUEST_STATUS_INCOMPLETE:
-                                        statusStr = handler->GetAcoreString(LANG_COMMAND_QUEST_ACTIVE);
-                                        break;
-                                    case QUEST_STATUS_REWARDED:
-                                        statusStr = handler->GetAcoreString(LANG_COMMAND_QUEST_REWARDED);
-                                        break;
-                                    default:
-                                        break;
+                                case QUEST_STATUS_COMPLETE:
+                                    statusStr = handler->GetAcoreString(LANG_COMMAND_QUEST_COMPLETE);
+                                    break;
+                                case QUEST_STATUS_INCOMPLETE:
+                                    statusStr = handler->GetAcoreString(LANG_COMMAND_QUEST_ACTIVE);
+                                    break;
+                                case QUEST_STATUS_REWARDED:
+                                    statusStr = handler->GetAcoreString(LANG_COMMAND_QUEST_REWARDED);
+                                    break;
+                                default:
+                                    break;
                                 }
                             }
 
@@ -720,17 +720,17 @@ public:
 
                     switch (status)
                     {
-                        case QUEST_STATUS_COMPLETE:
-                            statusStr = handler->GetAcoreString(LANG_COMMAND_QUEST_COMPLETE);
-                            break;
-                        case QUEST_STATUS_INCOMPLETE:
-                            statusStr = handler->GetAcoreString(LANG_COMMAND_QUEST_ACTIVE);
-                            break;
-                        case QUEST_STATUS_REWARDED:
-                            statusStr = handler->GetAcoreString(LANG_COMMAND_QUEST_REWARDED);
-                            break;
-                        default:
-                            break;
+                    case QUEST_STATUS_COMPLETE:
+                        statusStr = handler->GetAcoreString(LANG_COMMAND_QUEST_COMPLETE);
+                        break;
+                    case QUEST_STATUS_INCOMPLETE:
+                        statusStr = handler->GetAcoreString(LANG_COMMAND_QUEST_ACTIVE);
+                        break;
+                    case QUEST_STATUS_REWARDED:
+                        statusStr = handler->GetAcoreString(LANG_COMMAND_QUEST_REWARDED);
+                        break;
+                    default:
+                        break;
                     }
                 }
 
@@ -1095,10 +1095,10 @@ public:
                     // send taxinode in "id - [name] (Map:m X:x Y:y Z:z)" format
                     if (handler->GetSession())
                         handler->PSendSysMessage(LANG_TAXINODE_ENTRY_LIST_CHAT, id, id, name.c_str(), localeNames[locale],
-                            nodeEntry->map_id, nodeEntry->x, nodeEntry->y, nodeEntry->z);
+                                                 nodeEntry->map_id, nodeEntry->x, nodeEntry->y, nodeEntry->z);
                     else
                         handler->PSendSysMessage(LANG_TAXINODE_ENTRY_LIST_CONSOLE, id, name.c_str(), localeNames[locale],
-                            nodeEntry->map_id, nodeEntry->x, nodeEntry->y, nodeEntry->z);
+                                                 nodeEntry->map_id, nodeEntry->x, nodeEntry->y, nodeEntry->z);
 
                     if (!found)
                         found = true;
@@ -1232,8 +1232,8 @@ public:
                     char const* knownStr = target && target->HasTitle(titleInfo) ? handler->GetAcoreString(LANG_KNOWN) : "";
 
                     char const* activeStr = target && target->GetUInt32Value(PLAYER_CHOSEN_TITLE) == titleInfo->bit_index
-                        ? handler->GetAcoreString(LANG_ACTIVE)
-                        : "";
+                                            ? handler->GetAcoreString(LANG_ACTIVE)
+                                            : "";
 
                     char titleNameStr[80];
                     snprintf(titleNameStr, 80, name.c_str(), targetName);
@@ -1296,18 +1296,18 @@ public:
 
                     switch (mapInfo->map_type)
                     {
-                        case MAP_INSTANCE:
-                            ss << handler->GetAcoreString(LANG_INSTANCE);
-                            break;
-                        case MAP_RAID:
-                            ss << handler->GetAcoreString(LANG_RAID);
-                            break;
-                        case MAP_BATTLEGROUND:
-                            ss << handler->GetAcoreString(LANG_BATTLEGROUND);
-                            break;
-                        case MAP_ARENA:
-                            ss << handler->GetAcoreString(LANG_ARENA);
-                            break;
+                    case MAP_INSTANCE:
+                        ss << handler->GetAcoreString(LANG_INSTANCE);
+                        break;
+                    case MAP_RAID:
+                        ss << handler->GetAcoreString(LANG_RAID);
+                        break;
+                    case MAP_BATTLEGROUND:
+                        ss << handler->GetAcoreString(LANG_BATTLEGROUND);
+                        break;
+                    case MAP_ARENA:
+                        ss << handler->GetAcoreString(LANG_ARENA);
+                        break;
                     }
 
                     handler->SendSysMessage(ss.str().c_str());
@@ -1363,7 +1363,7 @@ public:
         int32 limit = limitStr ? atoi(limitStr) : -1;
 
         if (!Utf8ToUpperOnlyLatin
-            (account))
+                (account))
             return false;
 
         PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_LIST_BY_NAME);

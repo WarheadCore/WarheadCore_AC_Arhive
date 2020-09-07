@@ -169,36 +169,61 @@ void PlayerTaxi::InitTaxiNodesForLevel(uint32 race, uint32 chrClass, uint8 level
     // class specific initial known nodes
     switch (chrClass)
     {
-        case CLASS_DEATH_KNIGHT:
-        {
-            for (uint8 i = 0; i < TaxiMaskSize; ++i)
-                m_taximask[i] |= sOldContinentsNodesMask[i];
-            break;
-        }
+    case CLASS_DEATH_KNIGHT:
+    {
+        for (uint8 i = 0; i < TaxiMaskSize; ++i)
+            m_taximask[i] |= sOldContinentsNodesMask[i];
+        break;
+    }
     }
 
     // race specific initial known nodes: capital and taxi hub masks
     switch (race)
     {
-        case RACE_HUMAN:    SetTaximaskNode(2);  break;     // Human
-        case RACE_ORC:      SetTaximaskNode(23); break;     // Orc
-        case RACE_DWARF:    SetTaximaskNode(6);  break;     // Dwarf
-        case RACE_NIGHTELF: SetTaximaskNode(26);
-                            SetTaximaskNode(27); break;     // Night Elf
-        case RACE_UNDEAD_PLAYER: SetTaximaskNode(11); break;// Undead
-        case RACE_TAUREN:   SetTaximaskNode(22); break;     // Tauren
-        case RACE_GNOME:    SetTaximaskNode(6);  break;     // Gnome
-        case RACE_TROLL:    SetTaximaskNode(23); break;     // Troll
-        case RACE_BLOODELF: SetTaximaskNode(82); break;     // Blood Elf
-        case RACE_DRAENEI:  SetTaximaskNode(94); break;     // Draenei
+    case RACE_HUMAN:
+        SetTaximaskNode(2);
+        break;     // Human
+    case RACE_ORC:
+        SetTaximaskNode(23);
+        break;     // Orc
+    case RACE_DWARF:
+        SetTaximaskNode(6);
+        break;     // Dwarf
+    case RACE_NIGHTELF:
+        SetTaximaskNode(26);
+        SetTaximaskNode(27);
+        break;     // Night Elf
+    case RACE_UNDEAD_PLAYER:
+        SetTaximaskNode(11);
+        break;// Undead
+    case RACE_TAUREN:
+        SetTaximaskNode(22);
+        break;     // Tauren
+    case RACE_GNOME:
+        SetTaximaskNode(6);
+        break;     // Gnome
+    case RACE_TROLL:
+        SetTaximaskNode(23);
+        break;     // Troll
+    case RACE_BLOODELF:
+        SetTaximaskNode(82);
+        break;     // Blood Elf
+    case RACE_DRAENEI:
+        SetTaximaskNode(94);
+        break;     // Draenei
     }
 
     // new continent starting masks (It will be accessible only at new map)
     switch (Player::TeamIdForRace(race))
     {
-        case TEAM_ALLIANCE: SetTaximaskNode(100); break;
-        case TEAM_HORDE:    SetTaximaskNode(99);  break;
-        default: break;
+    case TEAM_ALLIANCE:
+        SetTaximaskNode(100);
+        break;
+    case TEAM_HORDE:
+        SetTaximaskNode(99);
+        break;
+    default:
+        break;
     }
     // level dependent taxi hubs
     if (level >= 68)
@@ -212,7 +237,7 @@ void PlayerTaxi::LoadTaxiMask(std::string const& data)
     uint8 index;
     Tokenizer::const_iterator iter;
     for (iter = tokens.begin(), index = 0;
-        (index < TaxiMaskSize) && (iter != tokens.end()); ++iter, ++index)
+            (index < TaxiMaskSize) && (iter != tokens.end()); ++iter, ++index)
     {
         // load and set bits only for existed taxi nodes
         m_taximask[index] = sTaxiNodesMask[index] & uint32(atol(*iter));
@@ -537,10 +562,10 @@ inline void KillRewarder::_RewardXP(Player* player, float rate)
         //        * set to 0 if player's level is more than maximum level of not gray member;
         //        * cut XP in half if _isFullXP is false.
         if (_maxNotGrayMember && player->IsAlive() &&
-            _maxNotGrayMember->getLevel() >= player->getLevel())
+                _maxNotGrayMember->getLevel() >= player->getLevel())
             xp = _isFullXP ?
-                uint32(xp * rate) :             // Reward FULL XP if all group members are not gray.
-                uint32(xp * rate / 2) + 1;      // Reward only HALF of XP if some of group members are gray.
+                 uint32(xp * rate) :             // Reward FULL XP if all group members are not gray.
+                 uint32(xp * rate / 2) + 1;      // Reward only HALF of XP if some of group members are gray.
         else
             xp = 0;
     }
@@ -593,8 +618,8 @@ void KillRewarder::_RewardPlayer(Player* player, bool isDungeon)
     if (!_isPvP || _isBattleGround)
     {
         const float rate = _group ?
-            _groupRate * float(player->getLevel()) / _sumLevel : // Group rate depends on summary level.
-            1.0f;                                                // Personal rate is 100%.
+                           _groupRate * float(player->getLevel()) / _sumLevel : // Group rate depends on summary level.
+                           1.0f;                                                // Personal rate is 100%.
         if (_xp)
             // 4.2. Give XP.
             _RewardXP(player, rate);
@@ -1018,7 +1043,7 @@ bool Player::Create(uint32 guidlow, CharacterCreateInfo* createInfo)
     if (!info)
     {
         LOG_ERROR("server", "Player::Create: Possible hacking-attempt: Account %u tried creating a character named '%s' with an invalid race/class pair (%u/%u) - refusing to do so.",
-                GetSession()->GetAccountId(), m_name.c_str(), createInfo->Race, createInfo->Class);
+                  GetSession()->GetAccountId(), m_name.c_str(), createInfo->Race, createInfo->Class);
         return false;
     }
 
@@ -1031,7 +1056,7 @@ bool Player::Create(uint32 guidlow, CharacterCreateInfo* createInfo)
     if (!cEntry)
     {
         LOG_ERROR("server", "Player::Create: Possible hacking-attempt: Account %u tried creating a character named '%s' with an invalid character class (%u) - refusing to do so (wrong DBC-files?)",
-                GetSession()->GetAccountId(), m_name.c_str(), createInfo->Class);
+                  GetSession()->GetAccountId(), m_name.c_str(), createInfo->Class);
         return false;
     }
 
@@ -1049,7 +1074,7 @@ bool Player::Create(uint32 guidlow, CharacterCreateInfo* createInfo)
     if (!IsValidGender(createInfo->Gender))
     {
         LOG_ERROR("server", "Player::Create: Possible hacking-attempt: Account %u tried creating a character named '%s' with an invalid gender (%u) - refusing to do so",
-                GetSession()->GetAccountId(), m_name.c_str(), createInfo->Gender);
+                  GetSession()->GetAccountId(), m_name.c_str(), createInfo->Gender);
         return false;
     }
 
@@ -1066,14 +1091,14 @@ bool Player::Create(uint32 guidlow, CharacterCreateInfo* createInfo)
     SetFloatValue(UNIT_MOD_CAST_SPEED, 1.0f);               // fix cast time showed in spell tooltip on client
     SetFloatValue(UNIT_FIELD_HOVERHEIGHT, 1.0f);            // default for players in 3.0.3
 
-                                                            // -1 is default value
+    // -1 is default value
     SetInt32Value(PLAYER_FIELD_WATCHED_FACTION_INDEX, uint32(-1));
 
     SetUInt32Value(PLAYER_BYTES, (createInfo->Skin | (createInfo->Face << 8) | (createInfo->HairStyle << 16) | (createInfo->HairColor << 24)));
     SetUInt32Value(PLAYER_BYTES_2, (createInfo->FacialHair |
-                                   (0x00 << 8) |
-                                   (0x00 << 16) |
-                                   (((GetSession()->IsARecruiter() || GetSession()->GetRecruiterId() != 0) ? REST_STATE_RAF_LINKED : REST_STATE_NOT_RAF_LINKED) << 24)));
+                                    (0x00 << 8) |
+                                    (0x00 << 16) |
+                                    (((GetSession()->IsARecruiter() || GetSession()->GetRecruiterId() != 0) ? REST_STATE_RAF_LINKED : REST_STATE_NOT_RAF_LINKED) << 24)));
     SetByteValue(PLAYER_BYTES_3, 0, createInfo->Gender);
     SetByteValue(PLAYER_BYTES_3, 3, 0);                     // BattlefieldArenaFaction (0 or 1)
 
@@ -1092,8 +1117,8 @@ bool Player::Create(uint32 guidlow, CharacterCreateInfo* createInfo)
 
     // set starting level
     uint32 start_level = getClass() != CLASS_DEATH_KNIGHT
-        ? sGameConfig->GetIntConfig("StartPlayerLevel")
-        : sGameConfig->GetIntConfig("StartHeroicPlayerLevel");
+                         ? sGameConfig->GetIntConfig("StartPlayerLevel")
+                         : sGameConfig->GetIntConfig("StartHeroicPlayerLevel");
 
     if (!AccountMgr::IsPlayerAccount(GetSession()->GetSecurity()))
     {
@@ -1176,12 +1201,12 @@ bool Player::Create(uint32 guidlow, CharacterCreateInfo* createInfo)
             {
                 switch (iProto->Spells[0].SpellCategory)
                 {
-                    case SPELL_CATEGORY_FOOD:                                // food
-                        count = getClass() == CLASS_DEATH_KNIGHT ? 10 : 4;
-                        break;
-                    case SPELL_CATEGORY_DRINK:                                // drink
-                        count = 2;
-                        break;
+                case SPELL_CATEGORY_FOOD:                                // food
+                    count = getClass() == CLASS_DEATH_KNIGHT ? 10 : 4;
+                    break;
+                case SPELL_CATEGORY_DRINK:                                // drink
+                    count = 2;
+                    break;
                 }
                 if (iProto->GetMaxStackSize() < count)
                     count = iProto->GetMaxStackSize();
@@ -1352,26 +1377,26 @@ int32 Player::getMaxTimer(MirrorTimerType timer)
 {
     switch (timer)
     {
-        case FATIGUE_TIMER:
-            return MINUTE * IN_MILLISECONDS;
-        case BREATH_TIMER:
-        {
-            if (!IsAlive() || HasAuraType(SPELL_AURA_WATER_BREATHING) || GetSession()->GetSecurity() >= AccountTypes(sGameConfig->GetIntConfig("DisableWaterBreath")))
-                return DISABLED_MIRROR_TIMER;
-            int32 UnderWaterTime = 3 * MINUTE * IN_MILLISECONDS;
-            AuraEffectList const& mModWaterBreathing = GetAuraEffectsByType(SPELL_AURA_MOD_WATER_BREATHING);
-            for (AuraEffectList::const_iterator i = mModWaterBreathing.begin(); i != mModWaterBreathing.end(); ++i)
-                AddPct(UnderWaterTime, (*i)->GetAmount());
-            return UnderWaterTime;
-        }
-        case FIRE_TIMER:
-        {
-            if (!IsAlive())
-                return DISABLED_MIRROR_TIMER;
-            return 1 * IN_MILLISECONDS;
-        }
-        default:
-            return 0;
+    case FATIGUE_TIMER:
+        return MINUTE * IN_MILLISECONDS;
+    case BREATH_TIMER:
+    {
+        if (!IsAlive() || HasAuraType(SPELL_AURA_WATER_BREATHING) || GetSession()->GetSecurity() >= AccountTypes(sGameConfig->GetIntConfig("DisableWaterBreath")))
+            return DISABLED_MIRROR_TIMER;
+        int32 UnderWaterTime = 3 * MINUTE * IN_MILLISECONDS;
+        AuraEffectList const& mModWaterBreathing = GetAuraEffectsByType(SPELL_AURA_MOD_WATER_BREATHING);
+        for (AuraEffectList::const_iterator i = mModWaterBreathing.begin(); i != mModWaterBreathing.end(); ++i)
+            AddPct(UnderWaterTime, (*i)->GetAmount());
+        return UnderWaterTime;
+    }
+    case FIRE_TIMER:
+    {
+        if (!IsAlive())
+            return DISABLED_MIRROR_TIMER;
+        return 1 * IN_MILLISECONDS;
+    }
+    default:
+        return 0;
     }
 }
 
@@ -1874,7 +1899,7 @@ void Player::Update(uint32 p_time)
 
     Pet* pet = GetPet();
     if (pet && !pet->IsWithinDistInMap(this, GetMap()->GetVisibilityRange()) && !pet->isPossessed())
-    //if (pet && !pet->IsWithinDistInMap(this, GetMap()->GetVisibilityDistance()) && (GetCharmGUID() && (pet->GetGUID() != GetCharmGUID())))
+        //if (pet && !pet->IsWithinDistInMap(this, GetMap()->GetVisibilityDistance()) && (GetCharmGUID() && (pet->GetGUID() != GetCharmGUID())))
         RemovePet(pet, PET_SAVE_NOT_IN_SLOT, true);
 
     // pussywizard:
@@ -2174,7 +2199,7 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
     if (!MapManager::IsValidMapCoord(mapid, x, y, z, orientation))
     {
         LOG_ERROR("server", "TeleportTo: invalid map (%d) or invalid coordinates (X: %f, Y: %f, Z: %f, O: %f) given when teleporting player (GUID: %u, name: %s, map: %d, X: %f, Y: %f, Z: %f, O: %f).",
-            mapid, x, y, z, orientation, GetGUIDLow(), GetName().c_str(), GetMapId(), GetPositionX(), GetPositionY(), GetPositionZ(), GetOrientation());
+                  mapid, x, y, z, orientation, GetGUIDLow(), GetName().c_str(), GetMapId(), GetPositionX(), GetPositionY(), GetPositionZ(), GetOrientation());
         return false;
     }
 
@@ -2616,8 +2641,8 @@ void Player::RegenerateAll()
     {
         // Not in combat or they have regeneration
         if (!IsInCombat() || IsPolymorphed() || m_baseHealthRegen ||
-            HasAuraType(SPELL_AURA_MOD_REGEN_DURING_COMBAT) ||
-            HasAuraType(SPELL_AURA_MOD_HEALTH_REGEN_IN_COMBAT))
+                HasAuraType(SPELL_AURA_MOD_REGEN_DURING_COMBAT) ||
+                HasAuraType(SPELL_AURA_MOD_HEALTH_REGEN_IN_COMBAT))
         {
             RegenerateHealth();
         }
@@ -2679,46 +2704,49 @@ void Player::Regenerate(Powers power)
 
     switch (power)
     {
-        case POWER_MANA:
-        {
-            bool recentCast = IsUnderLastManaUseEffect();
-            float ManaIncreaseRate = sGameConfig->GetFloatConfig("Rate.Mana");
+    case POWER_MANA:
+    {
+        bool recentCast = IsUnderLastManaUseEffect();
+        float ManaIncreaseRate = sGameConfig->GetFloatConfig("Rate.Mana");
 
-            if (getLevel() < 15)
-                ManaIncreaseRate = sGameConfig->GetFloatConfig("Rate.Mana") * (2.066f - (getLevel() * 0.066f));
+        if (getLevel() < 15)
+            ManaIncreaseRate = sGameConfig->GetFloatConfig("Rate.Mana") * (2.066f - (getLevel() * 0.066f));
 
-            if (recentCast) // Trinity Updates Mana in intervals of 2s, which is correct
-                addvalue += GetFloatValue(UNIT_FIELD_POWER_REGEN_INTERRUPTED_FLAT_MODIFIER) *  ManaIncreaseRate * 0.001f * m_regenTimer;
-            else
-                addvalue += GetFloatValue(UNIT_FIELD_POWER_REGEN_FLAT_MODIFIER) * ManaIncreaseRate * 0.001f * m_regenTimer;
-        }   break;
-        case POWER_RAGE:                                    // Regenerate rage
+        if (recentCast) // Trinity Updates Mana in intervals of 2s, which is correct
+            addvalue += GetFloatValue(UNIT_FIELD_POWER_REGEN_INTERRUPTED_FLAT_MODIFIER) *  ManaIncreaseRate * 0.001f * m_regenTimer;
+        else
+            addvalue += GetFloatValue(UNIT_FIELD_POWER_REGEN_FLAT_MODIFIER) * ManaIncreaseRate * 0.001f * m_regenTimer;
+    }
+    break;
+    case POWER_RAGE:                                    // Regenerate rage
+    {
+        if (!IsInCombat() && !HasAuraType(SPELL_AURA_INTERRUPT_REGEN))
         {
-            if (!IsInCombat() && !HasAuraType(SPELL_AURA_INTERRUPT_REGEN))
-            {
-                float RageDecreaseRate = sGameConfig->GetFloatConfig("Rate.Rage.Loss");
-                addvalue += -20 * RageDecreaseRate;               // 2 rage by tick (= 2 seconds => 1 rage/sec)
-            }
-        }   break;
-        case POWER_ENERGY:                                  // Regenerate energy (rogue)
-            addvalue += 0.01f * m_regenTimer * sGameConfig->GetFloatConfig("Rate.Energy");
-            break;
-        case POWER_RUNIC_POWER:
+            float RageDecreaseRate = sGameConfig->GetFloatConfig("Rate.Rage.Loss");
+            addvalue += -20 * RageDecreaseRate;               // 2 rage by tick (= 2 seconds => 1 rage/sec)
+        }
+    }
+    break;
+    case POWER_ENERGY:                                  // Regenerate energy (rogue)
+        addvalue += 0.01f * m_regenTimer * sGameConfig->GetFloatConfig("Rate.Energy");
+        break;
+    case POWER_RUNIC_POWER:
+    {
+        if (!IsInCombat() && !HasAuraType(SPELL_AURA_INTERRUPT_REGEN))
         {
-            if (!IsInCombat() && !HasAuraType(SPELL_AURA_INTERRUPT_REGEN))
-            {
-                float RunicPowerDecreaseRate = sGameConfig->GetFloatConfig("Rate.RunicPower.Loss");
-                addvalue += -30 * RunicPowerDecreaseRate;         // 3 RunicPower by tick
-            }
-        }   break;
-        case POWER_RUNE:
-        case POWER_FOCUS:
-        case POWER_HAPPINESS:
-            break;
-        case POWER_HEALTH:
-            return;
-        default:
-            break;
+            float RunicPowerDecreaseRate = sGameConfig->GetFloatConfig("Rate.RunicPower.Loss");
+            addvalue += -30 * RunicPowerDecreaseRate;         // 3 RunicPower by tick
+        }
+    }
+    break;
+    case POWER_RUNE:
+    case POWER_FOCUS:
+    case POWER_HAPPINESS:
+        break;
+    case POWER_HEALTH:
+        return;
+    default:
+        break;
     }
 
     // Mana regen calculated in Player::UpdateManaRegen()
@@ -2833,20 +2861,20 @@ void Player::ResetAllPowers()
     SetHealth(GetMaxHealth());
     switch (getPowerType())
     {
-        case POWER_MANA:
-            SetPower(POWER_MANA, GetMaxPower(POWER_MANA));
-            break;
-        case POWER_RAGE:
-            SetPower(POWER_RAGE, 0);
-            break;
-        case POWER_ENERGY:
-            SetPower(POWER_ENERGY, GetMaxPower(POWER_ENERGY));
-            break;
-        case POWER_RUNIC_POWER:
-            SetPower(POWER_RUNIC_POWER, 0);
-            break;
-        default:
-            break;
+    case POWER_MANA:
+        SetPower(POWER_MANA, GetMaxPower(POWER_MANA));
+        break;
+    case POWER_RAGE:
+        SetPower(POWER_RAGE, 0);
+        break;
+    case POWER_ENERGY:
+        SetPower(POWER_ENERGY, GetMaxPower(POWER_ENERGY));
+        break;
+    case POWER_RUNIC_POWER:
+        SetPower(POWER_RUNIC_POWER, 0);
+        break;
+    default:
+        break;
     }
 }
 
@@ -2854,16 +2882,16 @@ bool Player::CanInteractWithQuestGiver(Object* questGiver)
 {
     switch (questGiver->GetTypeId())
     {
-        case TYPEID_UNIT:
-            return GetNPCIfCanInteractWith(questGiver->GetGUID(), UNIT_NPC_FLAG_QUESTGIVER) != nullptr;
-        case TYPEID_GAMEOBJECT:
-            return GetGameObjectIfCanInteractWith(questGiver->GetGUID(), GAMEOBJECT_TYPE_QUESTGIVER) != nullptr;
-        case TYPEID_PLAYER:
-            return IsAlive() && questGiver->ToPlayer()->IsAlive();
-        case TYPEID_ITEM:
-            return IsAlive();
-        default:
-            break;
+    case TYPEID_UNIT:
+        return GetNPCIfCanInteractWith(questGiver->GetGUID(), UNIT_NPC_FLAG_QUESTGIVER) != nullptr;
+    case TYPEID_GAMEOBJECT:
+        return GetGameObjectIfCanInteractWith(questGiver->GetGUID(), GAMEOBJECT_TYPE_QUESTGIVER) != nullptr;
+    case TYPEID_PLAYER:
+        return IsAlive() && questGiver->ToPlayer()->IsAlive();
+    case TYPEID_ITEM:
+        return IsAlive();
+    default:
+        break;
     }
     return false;
 }
@@ -2952,7 +2980,8 @@ bool Player::IsInWater(bool allowAbove) const
         return m_last_islittleabovewater_status;
     else
     {
-        LiquidData liqData; liqData.level = INVALID_HEIGHT;
+        LiquidData liqData;
+        liqData.level = INVALID_HEIGHT;
         const_cast<Position*>(&m_last_environment_position)->Relocate(GetPositionX(), GetPositionY(), GetPositionZ());
         bool inWater = GetBaseMap()->IsInWater(GetPositionX(), GetPositionY(), GetPositionZ(), &liqData);
         *(const_cast<bool*>(&m_last_islittleabovewater_status)) = inWater || (liqData.level > INVALID_HEIGHT && liqData.level > liqData.depth_level && liqData.level <= GetPositionZ()+3.0f && liqData.level > GetPositionZ()-1.0f);
@@ -2963,7 +2992,7 @@ bool Player::IsInWater(bool allowAbove) const
 bool Player::IsUnderWater() const
 {
     return IsInWater() &&
-        GetPositionZ() < (GetBaseMap()->GetWaterLevel(GetPositionX(), GetPositionY())-2);
+           GetPositionZ() < (GetBaseMap()->GetWaterLevel(GetPositionX(), GetPositionY())-2);
 }
 
 bool Player::IsFalling() const
@@ -3099,20 +3128,23 @@ void Player::SetGMVisible(bool on)
 }
 
 bool Player::IsGroupVisibleFor(Player const* p) const
-{ 
+{
     switch (sGameConfig->GetIntConfig("Visibility.GroupMode"))
     {
-        default: return IsInSameGroupWith(p);
-        case 1:  return IsInSameRaidWith(p);
-        case 2:  return GetTeamId() == p->GetTeamId();
+    default:
+        return IsInSameGroupWith(p);
+    case 1:
+        return IsInSameRaidWith(p);
+    case 2:
+        return GetTeamId() == p->GetTeamId();
     }
 }
 
 bool Player::IsInSameGroupWith(Player const* p) const
 {
     return p == this || (GetGroup() != NULL &&
-        GetGroup() == p->GetGroup() &&
-        GetGroup()->SameSubGroup(this, p));
+                         GetGroup() == p->GetGroup() &&
+                         GetGroup()->SameSubGroup(this, p));
 }
 
 ///- If the player is invited, remove him. If the group if then only 1 person, disband the group.
@@ -3367,12 +3399,12 @@ void Player::InitStatsForLevel(bool reapplyMods)
 
     uint8 exp_max_lvl = GetMaxLevelForExpansion(GetSession()->Expansion());
     uint8 conf_max_lvl = sGameConfig->GetIntConfig("MaxPlayerLevel");
-    
+
     if (exp_max_lvl == DEFAULT_MAX_LEVEL || exp_max_lvl >= conf_max_lvl)
         SetUInt32Value(PLAYER_FIELD_MAX_LEVEL, conf_max_lvl);
     else
         SetUInt32Value(PLAYER_FIELD_MAX_LEVEL, exp_max_lvl);
-    
+
     SetUInt32Value(PLAYER_NEXT_LEVEL_XP, sObjectMgr->GetXPForLevel(getLevel()));
 
     // reset before any aura state sources (health set/aura apply)
@@ -3485,12 +3517,12 @@ void Player::InitStatsForLevel(bool reapplyMods)
 
     // cleanup unit flags (will be re-applied if need at aura load).
     RemoveFlag(UNIT_FIELD_FLAGS,
-        UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_DISABLE_MOVE | UNIT_FLAG_NOT_ATTACKABLE_1 |
-        UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_IMMUNE_TO_NPC  | UNIT_FLAG_LOOTING          |
-        UNIT_FLAG_PET_IN_COMBAT  | UNIT_FLAG_SILENCED     | UNIT_FLAG_PACIFIED         |
-        UNIT_FLAG_STUNNED        | UNIT_FLAG_IN_COMBAT    | UNIT_FLAG_DISARMED         |
-        UNIT_FLAG_CONFUSED       | UNIT_FLAG_FLEEING      | UNIT_FLAG_NOT_SELECTABLE   |
-        UNIT_FLAG_SKINNABLE      | UNIT_FLAG_MOUNT        | UNIT_FLAG_TAXI_FLIGHT      );
+               UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_DISABLE_MOVE | UNIT_FLAG_NOT_ATTACKABLE_1 |
+               UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_IMMUNE_TO_NPC  | UNIT_FLAG_LOOTING          |
+               UNIT_FLAG_PET_IN_COMBAT  | UNIT_FLAG_SILENCED     | UNIT_FLAG_PACIFIED         |
+               UNIT_FLAG_STUNNED        | UNIT_FLAG_IN_COMBAT    | UNIT_FLAG_DISARMED         |
+               UNIT_FLAG_CONFUSED       | UNIT_FLAG_FLEEING      | UNIT_FLAG_NOT_SELECTABLE   |
+               UNIT_FLAG_SKINNABLE      | UNIT_FLAG_MOUNT        | UNIT_FLAG_TAXI_FLIGHT      );
     SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE);   // must be set
 
     SetFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_REGENERATE_POWER);// must be set
@@ -3523,7 +3555,7 @@ void Player::InitStatsForLevel(bool reapplyMods)
 }
 
 void Player::SendInitialSpells()
-{ 
+{
     uint32 curTime = GameTime::GetGameTimeMS();
     uint32 infTime = GameTime::GetGameTimeMS() + infinityCooldownDelayCheck;
 
@@ -3669,7 +3701,7 @@ void Player::UpdateNextMailTimeAndUnreads()
 }
 
 void Player::AddNewMailDeliverTime(time_t deliver_time)
-{ 
+{
     if (deliver_time <= GameTime::GetGameTime())                          // ready now
     {
         ++unReadMails;
@@ -3983,8 +4015,8 @@ bool Player::_addSpell(uint32 spellId, uint8 addSpecMask, bool temporary)
         if (Aura* aura = GetAura(spellId))
         {
             if (aura->GetSpellInfo()->CasterAuraState == AURA_STATE_HEALTHLESS_35_PERCENT ||
-                aura->GetSpellInfo()->CasterAuraState == AURA_STATE_HEALTH_ABOVE_75_PERCENT ||
-                aura->GetSpellInfo()->CasterAuraState == AURA_STATE_HEALTHLESS_20_PERCENT )
+                    aura->GetSpellInfo()->CasterAuraState == AURA_STATE_HEALTH_ABOVE_75_PERCENT ||
+                    aura->GetSpellInfo()->CasterAuraState == AURA_STATE_HEALTHLESS_20_PERCENT )
                 if (!HasAuraState((AuraStateType)aura->GetSpellInfo()->CasterAuraState))
                     aura->HandleAllEffects(aura->GetApplicationOfTarget(GetGUID()), AURA_EFFECT_HANDLE_REAL, false);
         }
@@ -4029,21 +4061,21 @@ bool Player::_addSpell(uint32 spellId, uint8 addSpecMask, bool temporary)
                 continue;
 
             if (_spell_idx->second->learnOnGetSkill == ABILITY_LEARNED_ON_GET_RACE_OR_CLASS_SKILL || // pussywizard: learning autolearned spell from skill ensures having the skill
-                ((pSkill->id == SKILL_LOCKPICKING || pSkill->id == SKILL_RUNEFORGING) && _spell_idx->second->max_value == 0)) // pussywizard: learning any spell from lockpicking or runeforging ensures having the skill
+                    ((pSkill->id == SKILL_LOCKPICKING || pSkill->id == SKILL_RUNEFORGING) && _spell_idx->second->max_value == 0)) // pussywizard: learning any spell from lockpicking or runeforging ensures having the skill
             {
                 switch (GetSkillRangeType(pSkill, _spell_idx->second->racemask != 0))
                 {
-                    case SKILL_RANGE_LANGUAGE:
-                        SetSkill(pSkill->id, GetSkillStep(pSkill->id), 300, 300);
-                        break;
-                    case SKILL_RANGE_LEVEL:
-                        SetSkill(pSkill->id, GetSkillStep(pSkill->id), 1, GetMaxSkillValueForLevel());
-                        break;
-                    case SKILL_RANGE_MONO:
-                        SetSkill(pSkill->id, GetSkillStep(pSkill->id), 1, 1);
-                        break;
-                    default:
-                        break;
+                case SKILL_RANGE_LANGUAGE:
+                    SetSkill(pSkill->id, GetSkillStep(pSkill->id), 300, 300);
+                    break;
+                case SKILL_RANGE_LEVEL:
+                    SetSkill(pSkill->id, GetSkillStep(pSkill->id), 1, GetMaxSkillValueForLevel());
+                    break;
+                case SKILL_RANGE_MONO:
+                    SetSkill(pSkill->id, GetSkillStep(pSkill->id), 1, 1);
+                    break;
+                default:
+                    break;
                 }
             }
         }
@@ -4069,7 +4101,7 @@ bool Player::IsNeedCastPassiveSpellAtLearn(SpellInfo const* spellInfo) const
     // talent dependent passives activated at form apply have proper stance data
     ShapeshiftForm form = GetShapeshiftForm();
     return (!spellInfo->Stances || (form && (spellInfo->Stances & (1 << (form - 1)))) ||
-        (!form && spellInfo->HasAttribute(SPELL_ATTR2_NOT_NEED_SHAPESHIFT)));
+            (!form && spellInfo->HasAttribute(SPELL_ATTR2_NOT_NEED_SHAPESHIFT)));
 
 }
 
@@ -4241,7 +4273,7 @@ void Player::removeSpell(uint32 spellId, uint8 removeSpecMask, bool onlyTemporar
 
             // pussywizard: don't understand why whole skill is removed when just single spell from it is removed
             if ((_spell_idx->second->learnOnGetSkill == ABILITY_LEARNED_ON_GET_RACE_OR_CLASS_SKILL && pSkill->categoryId != SKILL_CATEGORY_CLASS) || // pussywizard: don't unlearn class skills
-                ((pSkill->id == SKILL_LOCKPICKING || pSkill->id == SKILL_RUNEFORGING) && _spell_idx->second->max_value == 0))
+                    ((pSkill->id == SKILL_LOCKPICKING || pSkill->id == SKILL_RUNEFORGING) && _spell_idx->second->max_value == 0))
             {
                 // not reset skills for professions and racial abilities
                 if ((pSkill->categoryId == SKILL_CATEGORY_SECONDARY || pSkill->categoryId == SKILL_CATEGORY_PROFESSION) && (IsProfessionSkill(pSkill->id) || _spell_idx->second->racemask != 0))
@@ -4287,7 +4319,7 @@ bool Player::Has310Flyer(bool checkAllSpells, uint32 excludeSpellId)
                 spellInfo = sSpellMgr->GetSpellInfo(itr->first);
                 for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
                     if (spellInfo->Effects[i].ApplyAuraName == SPELL_AURA_MOD_INCREASE_MOUNTED_FLIGHT_SPEED &&
-                        spellInfo->Effects[i].CalcValue() == 310)
+                            spellInfo->Effects[i].CalcValue() == 310)
                     {
                         SetHas310Flyer(true);
                         return true;
@@ -4332,7 +4364,7 @@ void Player::RemoveArenaSpellCooldowns(bool removeActivePetCooldowns)
         if (spellInfo->HasAttribute(SPELL_ATTR4_USABLE_IN_ARENA))
             RemoveSpellCooldown(itr->first, true);
         else if (spellInfo->RecoveryTime < 10 * MINUTE * IN_MILLISECONDS && spellInfo->CategoryRecoveryTime < 10 * MINUTE * IN_MILLISECONDS && itr->second.end < infTime// xinef: dont remove active cooldowns - bugz
-            && itr->second.maxduration < 10 * MINUTE * IN_MILLISECONDS) // xinef: dont clear cooldowns that have maxduration > 10 minutes (eg item cooldowns with no spell.dbc cooldown info)
+                 && itr->second.maxduration < 10 * MINUTE * IN_MILLISECONDS) // xinef: dont clear cooldowns that have maxduration > 10 minutes (eg item cooldowns with no spell.dbc cooldown info)
             RemoveSpellCooldown(itr->first, true);
     }
 
@@ -4350,9 +4382,9 @@ void Player::RemoveArenaSpellCooldowns(bool removeActivePetCooldowns)
 }
 
 void Player::RemoveAllSpellCooldown()
-{ 
+{
     uint32 infTime = GameTime::GetGameTimeMS()+infinityCooldownDelayCheck;
-    
+
     if (!m_spellCooldowns.empty())
     {
         for (SpellCooldowns::const_iterator itr = m_spellCooldowns.begin(); itr != m_spellCooldowns.end(); ++itr)
@@ -4794,298 +4826,298 @@ void Player::DeleteFromDB(uint64 playerguid, uint32 accountId, bool updateRealmC
 
     switch (charDelete_method)
     {
-        // Completely remove from the database
-        case CHAR_DELETE_REMOVE:
+    // Completely remove from the database
+    case CHAR_DELETE_REMOVE:
+    {
+        SQLTransaction trans = CharacterDatabase.BeginTransaction();
+
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CHAR_COD_ITEM_MAIL);
+        stmt->setUInt32(0, guid);
+        PreparedQueryResult resultMail = CharacterDatabase.Query(stmt);
+
+        if (resultMail)
         {
-            SQLTransaction trans = CharacterDatabase.BeginTransaction();
-
-            stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CHAR_COD_ITEM_MAIL);
-            stmt->setUInt32(0, guid);
-            PreparedQueryResult resultMail = CharacterDatabase.Query(stmt);
-
-            if (resultMail)
+            do
             {
-                do
+                Field* mailFields = resultMail->Fetch();
+
+                uint32 mail_id       = mailFields[0].GetUInt32();
+                uint8 mailType       = mailFields[1].GetUInt8();
+                uint16 mailTemplateId= mailFields[2].GetUInt16();
+                uint32 sender        = mailFields[3].GetUInt32();
+                std::string subject  = mailFields[4].GetString();
+                std::string body     = mailFields[5].GetString();
+                uint32 money         = mailFields[6].GetUInt32();
+                bool has_items       = mailFields[7].GetBool();
+
+                // We can return mail now
+                // So firstly delete the old one
+                stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_MAIL_BY_ID);
+                stmt->setUInt32(0, mail_id);
+                trans->Append(stmt);
+
+                // Mail is not from player
+                if (mailType != MAIL_NORMAL)
                 {
-                    Field* mailFields = resultMail->Fetch();
-
-                    uint32 mail_id       = mailFields[0].GetUInt32();
-                    uint8 mailType       = mailFields[1].GetUInt8();
-                    uint16 mailTemplateId= mailFields[2].GetUInt16();
-                    uint32 sender        = mailFields[3].GetUInt32();
-                    std::string subject  = mailFields[4].GetString();
-                    std::string body     = mailFields[5].GetString();
-                    uint32 money         = mailFields[6].GetUInt32();
-                    bool has_items       = mailFields[7].GetBool();
-
-                    // We can return mail now
-                    // So firstly delete the old one
-                    stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_MAIL_BY_ID);
-                    stmt->setUInt32(0, mail_id);
-                    trans->Append(stmt);
-
-                    // Mail is not from player
-                    if (mailType != MAIL_NORMAL)
-                    {
-                        if (has_items)
-                        {
-                            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_MAIL_ITEM_BY_ID);
-                            stmt->setUInt32(0, mail_id);
-                            trans->Append(stmt);
-                        }
-                        continue;
-                    }
-
-                    MailDraft draft(subject, body);
-                    if (mailTemplateId)
-                        draft = MailDraft(mailTemplateId, false);    // items are already included
-
                     if (has_items)
                     {
-                        // Data needs to be at first place for Item::LoadFromDB
-                        stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_MAILITEMS);
+                        stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_MAIL_ITEM_BY_ID);
                         stmt->setUInt32(0, mail_id);
-                        PreparedQueryResult resultItems = CharacterDatabase.Query(stmt);
-                        if (resultItems)
-                        {
-                            do
-                            {
-                                Field* itemFields = resultItems->Fetch();
-                                uint32 item_guidlow = itemFields[11].GetUInt32();
-                                uint32 item_template = itemFields[12].GetUInt32();
-
-                                ItemTemplate const* itemProto = sObjectMgr->GetItemTemplate(item_template);
-                                if (!itemProto)
-                                {
-                                    stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_ITEM_INSTANCE);
-                                    stmt->setUInt32(0, item_guidlow);
-                                    trans->Append(stmt);
-                                    continue;
-                                }
-
-                                Item* pItem = NewItemOrBag(itemProto);
-                                if (!pItem->LoadFromDB(item_guidlow, MAKE_NEW_GUID(guid, 0, HIGHGUID_PLAYER), itemFields, item_template))
-                                {
-                                    pItem->FSetState(ITEM_REMOVED);
-                                    pItem->SaveToDB(trans);              // it also deletes item object!
-                                    continue;
-                                }
-
-                                draft.AddItem(pItem);
-                            }
-                            while (resultItems->NextRow());
-                        }
+                        trans->Append(stmt);
                     }
-
-                    stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_MAIL_ITEM_BY_ID);
-                    stmt->setUInt32(0, mail_id);
-                    trans->Append(stmt);
-
-                    uint32 pl_account = sObjectMgr->GetPlayerAccountIdByGUID(MAKE_NEW_GUID(guid, 0, HIGHGUID_PLAYER));
-
-                    draft.AddMoney(money).SendReturnToSender(pl_account, guid, sender, trans);
+                    continue;
                 }
-                while (resultMail->NextRow());
-            }
 
-            // Unsummon and delete for pets in world is not required: player deleted from CLI or character list with not loaded pet.
-            // NOW we can finally clear other DB data related to character
-            stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CHAR_PETS);
-            stmt->setUInt32(0, guid);
-            PreparedQueryResult resultPets = CharacterDatabase.Query(stmt);
+                MailDraft draft(subject, body);
+                if (mailTemplateId)
+                    draft = MailDraft(mailTemplateId, false);    // items are already included
 
-            if (resultPets)
-            {
-                do
+                if (has_items)
                 {
-                    uint32 petguidlow = (*resultPets)[0].GetUInt32();
-                    Pet::DeleteFromDB(petguidlow);
-                } while (resultPets->NextRow());
-            }
-
-            // Delete char from social list of online chars
-            stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CHAR_SOCIAL);
-            stmt->setUInt32(0, guid);
-            PreparedQueryResult resultFriends = CharacterDatabase.Query(stmt);
-
-            if (resultFriends)
-            {
-                do
-                {
-                    if (Player* pFriend = ObjectAccessor::FindPlayerInOrOutOfWorld(MAKE_NEW_GUID((*resultFriends)[0].GetUInt32(), 0, HIGHGUID_PLAYER)))
+                    // Data needs to be at first place for Item::LoadFromDB
+                    stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_MAILITEMS);
+                    stmt->setUInt32(0, mail_id);
+                    PreparedQueryResult resultItems = CharacterDatabase.Query(stmt);
+                    if (resultItems)
                     {
-                        pFriend->GetSocial()->RemoveFromSocialList(guid, false);
-                        sSocialMgr->SendFriendStatus(pFriend, FRIEND_REMOVED, guid, false);
+                        do
+                        {
+                            Field* itemFields = resultItems->Fetch();
+                            uint32 item_guidlow = itemFields[11].GetUInt32();
+                            uint32 item_template = itemFields[12].GetUInt32();
+
+                            ItemTemplate const* itemProto = sObjectMgr->GetItemTemplate(item_template);
+                            if (!itemProto)
+                            {
+                                stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_ITEM_INSTANCE);
+                                stmt->setUInt32(0, item_guidlow);
+                                trans->Append(stmt);
+                                continue;
+                            }
+
+                            Item* pItem = NewItemOrBag(itemProto);
+                            if (!pItem->LoadFromDB(item_guidlow, MAKE_NEW_GUID(guid, 0, HIGHGUID_PLAYER), itemFields, item_template))
+                            {
+                                pItem->FSetState(ITEM_REMOVED);
+                                pItem->SaveToDB(trans);              // it also deletes item object!
+                                continue;
+                            }
+
+                            draft.AddItem(pItem);
+                        }
+                        while (resultItems->NextRow());
                     }
-                } while (resultFriends->NextRow());
-            }
+                }
 
-            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHARACTER);
-            stmt->setUInt32(0, guid);
-            trans->Append(stmt);
-
-            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_PLAYER_ACCOUNT_DATA);
-            stmt->setUInt32(0, guid);
-            trans->Append(stmt);
-
-            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_DECLINED_NAME);
-            stmt->setUInt32(0, guid);
-            trans->Append(stmt);
-
-            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_ACTION);
-            stmt->setUInt32(0, guid);
-            trans->Append(stmt);
-
-            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_AURA);
-            stmt->setUInt32(0, guid);
-            trans->Append(stmt);
-
-            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_GIFT);
-            stmt->setUInt32(0, guid);
-            trans->Append(stmt);
-
-            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_PLAYER_HOMEBIND);
-            stmt->setUInt32(0, guid);
-            trans->Append(stmt);
-
-            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_INSTANCE);
-            stmt->setUInt32(0, guid);
-            trans->Append(stmt);
-
-            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_INVENTORY);
-            stmt->setUInt32(0, guid);
-            trans->Append(stmt);
-
-            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_QUESTSTATUS);
-            stmt->setUInt32(0, guid);
-            trans->Append(stmt);
-
-            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_QUESTSTATUS_REWARDED);
-            stmt->setUInt32(0, guid);
-            trans->Append(stmt);
-
-            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_REPUTATION);
-            stmt->setUInt32(0, guid);
-            trans->Append(stmt);
-
-            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_SPELL);
-            stmt->setUInt32(0, guid);
-            trans->Append(stmt);
-
-            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_SPELL_COOLDOWN);
-            stmt->setUInt32(0, guid);
-            trans->Append(stmt);
-
-            if (sGameConfig->GetBoolConfig("DeletedCharacterTicketTrace"))
-            {
-                stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_PLAYER_GM_TICKETS_ON_CHAR_DELETION);
-                stmt->setUInt32(0, guid);
+                stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_MAIL_ITEM_BY_ID);
+                stmt->setUInt32(0, mail_id);
                 trans->Append(stmt);
+
+                uint32 pl_account = sObjectMgr->GetPlayerAccountIdByGUID(MAKE_NEW_GUID(guid, 0, HIGHGUID_PLAYER));
+
+                draft.AddMoney(money).SendReturnToSender(pl_account, guid, sender, trans);
             }
-            else
-            {
-                stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_PLAYER_GM_TICKETS);
-                stmt->setUInt32(0, guid);
-                trans->Append(stmt);
-            }
-
-            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_ITEM_INSTANCE_BY_OWNER);
-            stmt->setUInt32(0, guid);
-            trans->Append(stmt);
-
-            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_SOCIAL_BY_FRIEND);
-            stmt->setUInt32(0, guid);
-            trans->Append(stmt);
-
-            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_SOCIAL_BY_GUID);
-            stmt->setUInt32(0, guid);
-            trans->Append(stmt);
-
-            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_MAIL);
-            stmt->setUInt32(0, guid);
-            trans->Append(stmt);
-
-            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_MAIL_ITEMS);
-            stmt->setUInt32(0, guid);
-            trans->Append(stmt);
-
-            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_PET_BY_OWNER);
-            stmt->setUInt32(0, guid);
-            trans->Append(stmt);
-
-            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_PET_DECLINEDNAME_BY_OWNER);
-            stmt->setUInt32(0, guid);
-            trans->Append(stmt);
-
-            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_ACHIEVEMENTS);
-            stmt->setUInt32(0, guid);
-            trans->Append(stmt);
-
-            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_ACHIEVEMENT_PROGRESS);
-            stmt->setUInt32(0, guid);
-            trans->Append(stmt);
-
-            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_EQUIPMENTSETS);
-            stmt->setUInt32(0, guid);
-            trans->Append(stmt);
-
-            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_GUILD_EVENTLOG_BY_PLAYER);
-            stmt->setUInt32(0, guid);
-            stmt->setUInt32(1, guid);
-            trans->Append(stmt);
-
-            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_GUILD_BANK_EVENTLOG_BY_PLAYER);
-            stmt->setUInt32(0, guid);
-            trans->Append(stmt);
-
-            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_PLAYER_ENTRY_POINT);
-            stmt->setUInt32(0, guid);
-            trans->Append(stmt);
-
-            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_GLYPHS);
-            stmt->setUInt32(0, guid);
-            trans->Append(stmt);
-
-            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_QUEST_STATUS_DAILY_CHAR);
-            stmt->setUInt32(0, guid);
-            trans->Append(stmt);
-
-            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_QUEST_STATUS_WEEKLY_CHAR);
-            stmt->setUInt32(0, guid);
-            trans->Append(stmt);
-
-            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_QUEST_STATUS_MONTHLY_CHAR);
-            stmt->setUInt32(0, guid);
-            trans->Append(stmt);
-
-            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_QUEST_STATUS_SEASONAL_CHAR);
-            stmt->setUInt32(0, guid);
-            trans->Append(stmt);
-
-            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_TALENT);
-            stmt->setUInt32(0, guid);
-            trans->Append(stmt);
-
-            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_SKILLS);
-            stmt->setUInt32(0, guid);
-            trans->Append(stmt);
-
-            CharacterDatabase.CommitTransaction(trans);
-            break;
+            while (resultMail->NextRow());
         }
-        // The character gets unlinked from the account, the name gets freed up and appears as deleted ingame
-        case CHAR_DELETE_UNLINK:
+
+        // Unsummon and delete for pets in world is not required: player deleted from CLI or character list with not loaded pet.
+        // NOW we can finally clear other DB data related to character
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CHAR_PETS);
+        stmt->setUInt32(0, guid);
+        PreparedQueryResult resultPets = CharacterDatabase.Query(stmt);
+
+        if (resultPets)
         {
-            stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_DELETE_INFO);
-
-            stmt->setUInt32(0, guid);
-
-            CharacterDatabase.Execute(stmt);
-            break;
+            do
+            {
+                uint32 petguidlow = (*resultPets)[0].GetUInt32();
+                Pet::DeleteFromDB(petguidlow);
+            } while (resultPets->NextRow());
         }
-        default:
-            LOG_ERROR("server", "Player::DeleteFromDB: Unsupported delete method: %u.", charDelete_method);
-            return;
+
+        // Delete char from social list of online chars
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CHAR_SOCIAL);
+        stmt->setUInt32(0, guid);
+        PreparedQueryResult resultFriends = CharacterDatabase.Query(stmt);
+
+        if (resultFriends)
+        {
+            do
+            {
+                if (Player* pFriend = ObjectAccessor::FindPlayerInOrOutOfWorld(MAKE_NEW_GUID((*resultFriends)[0].GetUInt32(), 0, HIGHGUID_PLAYER)))
+                {
+                    pFriend->GetSocial()->RemoveFromSocialList(guid, false);
+                    sSocialMgr->SendFriendStatus(pFriend, FRIEND_REMOVED, guid, false);
+                }
+            } while (resultFriends->NextRow());
+        }
+
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHARACTER);
+        stmt->setUInt32(0, guid);
+        trans->Append(stmt);
+
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_PLAYER_ACCOUNT_DATA);
+        stmt->setUInt32(0, guid);
+        trans->Append(stmt);
+
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_DECLINED_NAME);
+        stmt->setUInt32(0, guid);
+        trans->Append(stmt);
+
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_ACTION);
+        stmt->setUInt32(0, guid);
+        trans->Append(stmt);
+
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_AURA);
+        stmt->setUInt32(0, guid);
+        trans->Append(stmt);
+
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_GIFT);
+        stmt->setUInt32(0, guid);
+        trans->Append(stmt);
+
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_PLAYER_HOMEBIND);
+        stmt->setUInt32(0, guid);
+        trans->Append(stmt);
+
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_INSTANCE);
+        stmt->setUInt32(0, guid);
+        trans->Append(stmt);
+
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_INVENTORY);
+        stmt->setUInt32(0, guid);
+        trans->Append(stmt);
+
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_QUESTSTATUS);
+        stmt->setUInt32(0, guid);
+        trans->Append(stmt);
+
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_QUESTSTATUS_REWARDED);
+        stmt->setUInt32(0, guid);
+        trans->Append(stmt);
+
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_REPUTATION);
+        stmt->setUInt32(0, guid);
+        trans->Append(stmt);
+
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_SPELL);
+        stmt->setUInt32(0, guid);
+        trans->Append(stmt);
+
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_SPELL_COOLDOWN);
+        stmt->setUInt32(0, guid);
+        trans->Append(stmt);
+
+        if (sGameConfig->GetBoolConfig("DeletedCharacterTicketTrace"))
+        {
+            stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_PLAYER_GM_TICKETS_ON_CHAR_DELETION);
+            stmt->setUInt32(0, guid);
+            trans->Append(stmt);
+        }
+        else
+        {
+            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_PLAYER_GM_TICKETS);
+            stmt->setUInt32(0, guid);
+            trans->Append(stmt);
+        }
+
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_ITEM_INSTANCE_BY_OWNER);
+        stmt->setUInt32(0, guid);
+        trans->Append(stmt);
+
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_SOCIAL_BY_FRIEND);
+        stmt->setUInt32(0, guid);
+        trans->Append(stmt);
+
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_SOCIAL_BY_GUID);
+        stmt->setUInt32(0, guid);
+        trans->Append(stmt);
+
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_MAIL);
+        stmt->setUInt32(0, guid);
+        trans->Append(stmt);
+
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_MAIL_ITEMS);
+        stmt->setUInt32(0, guid);
+        trans->Append(stmt);
+
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_PET_BY_OWNER);
+        stmt->setUInt32(0, guid);
+        trans->Append(stmt);
+
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_PET_DECLINEDNAME_BY_OWNER);
+        stmt->setUInt32(0, guid);
+        trans->Append(stmt);
+
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_ACHIEVEMENTS);
+        stmt->setUInt32(0, guid);
+        trans->Append(stmt);
+
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_ACHIEVEMENT_PROGRESS);
+        stmt->setUInt32(0, guid);
+        trans->Append(stmt);
+
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_EQUIPMENTSETS);
+        stmt->setUInt32(0, guid);
+        trans->Append(stmt);
+
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_GUILD_EVENTLOG_BY_PLAYER);
+        stmt->setUInt32(0, guid);
+        stmt->setUInt32(1, guid);
+        trans->Append(stmt);
+
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_GUILD_BANK_EVENTLOG_BY_PLAYER);
+        stmt->setUInt32(0, guid);
+        trans->Append(stmt);
+
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_PLAYER_ENTRY_POINT);
+        stmt->setUInt32(0, guid);
+        trans->Append(stmt);
+
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_GLYPHS);
+        stmt->setUInt32(0, guid);
+        trans->Append(stmt);
+
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_QUEST_STATUS_DAILY_CHAR);
+        stmt->setUInt32(0, guid);
+        trans->Append(stmt);
+
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_QUEST_STATUS_WEEKLY_CHAR);
+        stmt->setUInt32(0, guid);
+        trans->Append(stmt);
+
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_QUEST_STATUS_MONTHLY_CHAR);
+        stmt->setUInt32(0, guid);
+        trans->Append(stmt);
+
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_QUEST_STATUS_SEASONAL_CHAR);
+        stmt->setUInt32(0, guid);
+        trans->Append(stmt);
+
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_TALENT);
+        stmt->setUInt32(0, guid);
+        trans->Append(stmt);
+
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_SKILLS);
+        stmt->setUInt32(0, guid);
+        trans->Append(stmt);
+
+        CharacterDatabase.CommitTransaction(trans);
+        break;
+    }
+    // The character gets unlinked from the account, the name gets freed up and appears as deleted ingame
+    case CHAR_DELETE_UNLINK:
+    {
+        stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_DELETE_INFO);
+
+        stmt->setUInt32(0, guid);
+
+        CharacterDatabase.Execute(stmt);
+        break;
+    }
+    default:
+        LOG_ERROR("server", "Player::DeleteFromDB: Unsupported delete method: %u.", charDelete_method);
+        return;
     }
 
     if (updateRealmChars)
@@ -5117,13 +5149,13 @@ void Player::DeleteOldCharacters(uint32 keepDays)
 
     if (result)
     {
-         LOG_INFO("server", "Player::DeleteOldChars: Found " UI64FMTD " character(s) to delete", result->GetRowCount());
-         do
-         {
+        LOG_INFO("server", "Player::DeleteOldChars: Found " UI64FMTD " character(s) to delete", result->GetRowCount());
+        do
+        {
             Field* fields = result->Fetch();
             Player::DeleteFromDB(fields[0].GetUInt32(), fields[1].GetUInt32(), true, true);
-         }
-         while (result->NextRow());
+        }
+        while (result->NextRow());
     }
 }
 
@@ -5132,13 +5164,21 @@ void Player::SetMovement(PlayerMovementType pType)
     WorldPacket data;
     switch (pType)
     {
-        case MOVE_ROOT:       data.Initialize(SMSG_FORCE_MOVE_ROOT,   GetPackGUID().size()+4); break;
-        case MOVE_UNROOT:     data.Initialize(SMSG_FORCE_MOVE_UNROOT, GetPackGUID().size()+4); break;
-        case MOVE_WATER_WALK: data.Initialize(SMSG_MOVE_WATER_WALK,   GetPackGUID().size()+4); break;
-        case MOVE_LAND_WALK:  data.Initialize(SMSG_MOVE_LAND_WALK,    GetPackGUID().size()+4); break;
-        default:
-            LOG_ERROR("server", "Player::SetMovement: Unsupported move type (%d), data not sent to client.", pType);
-            return;
+    case MOVE_ROOT:
+        data.Initialize(SMSG_FORCE_MOVE_ROOT,   GetPackGUID().size()+4);
+        break;
+    case MOVE_UNROOT:
+        data.Initialize(SMSG_FORCE_MOVE_UNROOT, GetPackGUID().size()+4);
+        break;
+    case MOVE_WATER_WALK:
+        data.Initialize(SMSG_MOVE_WATER_WALK,   GetPackGUID().size()+4);
+        break;
+    case MOVE_LAND_WALK:
+        data.Initialize(SMSG_MOVE_LAND_WALK,    GetPackGUID().size()+4);
+        break;
+    default:
+        LOG_ERROR("server", "Player::SetMovement: Unsupported move type (%d), data not sent to client.", pType);
+        return;
     }
     data.append(GetPackGUID());
     data << uint32(0);
@@ -5669,7 +5709,7 @@ void Player::RepopAtGraveyard()
 
 bool Player::CanJoinConstantChannelInZone(ChatChannelsEntry const* channel, AreaTableEntry const* zone)
 {
-    // Player can join LFG anywhere  
+    // Player can join LFG anywhere
     if (channel->flags & CHANNEL_DBC_FLAG_LFG && sGameConfig->GetBoolConfig("LFG.Location.All"))
         return true;
 
@@ -5798,7 +5838,7 @@ void Player::UpdateLocalChannels(uint32 newZone)
 }
 
 void Player::UpdateDefense()
-{ 
+{
     if (UpdateSkill(SKILL_DEFENSE, sGameConfig->GetIntConfig("SkillGain.Defense")))
         UpdateDefenseBonusesMod(); // update dependent from defense skill part
 }
@@ -5813,12 +5853,12 @@ void Player::HandleBaseModValue(BaseModGroup modGroup, BaseModType modType, floa
 
     switch (modType)
     {
-        case FLAT_MOD:
-            m_auraBaseMod[modGroup][modType] += apply ? amount : -amount;
-            break;
-        case PCT_MOD:
-            ApplyPercentModFloatVar(m_auraBaseMod[modGroup][modType], amount, apply);
-            break;
+    case FLAT_MOD:
+        m_auraBaseMod[modGroup][modType] += apply ? amount : -amount;
+        break;
+    case PCT_MOD:
+        ApplyPercentModFloatVar(m_auraBaseMod[modGroup][modType], amount, apply);
+        break;
     }
 
     if (!CanModifyStats())
@@ -5826,11 +5866,20 @@ void Player::HandleBaseModValue(BaseModGroup modGroup, BaseModType modType, floa
 
     switch (modGroup)
     {
-        case CRIT_PERCENTAGE:              UpdateCritPercentage(BASE_ATTACK);                          break;
-        case RANGED_CRIT_PERCENTAGE:       UpdateCritPercentage(RANGED_ATTACK);                        break;
-        case OFFHAND_CRIT_PERCENTAGE:      UpdateCritPercentage(OFF_ATTACK);                           break;
-        case SHIELD_BLOCK_VALUE:           UpdateShieldBlockValue();                                   break;
-        default: break;
+    case CRIT_PERCENTAGE:
+        UpdateCritPercentage(BASE_ATTACK);
+        break;
+    case RANGED_CRIT_PERCENTAGE:
+        UpdateCritPercentage(RANGED_ATTACK);
+        break;
+    case OFFHAND_CRIT_PERCENTAGE:
+        UpdateCritPercentage(OFF_ATTACK);
+        break;
+    case SHIELD_BLOCK_VALUE:
+        UpdateShieldBlockValue();
+        break;
+    default:
+        break;
     }
 }
 
@@ -5893,32 +5942,32 @@ void Player::GetDodgeFromAgility(float &diminishing, float &nondiminishing)
     // Table for base dodge values
     const float dodge_base[MAX_CLASSES] =
     {
-         0.036640f, // Warrior
-         0.034943f, // Paladi
+        0.036640f, // Warrior
+        0.034943f, // Paladi
         -0.040873f, // Hunter
-         0.020957f, // Rogue
-         0.034178f, // Priest
-         0.036640f, // DK
-         0.021080f, // Shaman
-         0.036587f, // Mage
-         0.024211f, // Warlock
-         0.0f,      // ??
-         0.056097f  // Druid
+        0.020957f, // Rogue
+        0.034178f, // Priest
+        0.036640f, // DK
+        0.021080f, // Shaman
+        0.036587f, // Mage
+        0.024211f, // Warlock
+        0.0f,      // ??
+        0.056097f  // Druid
     };
     // Crit/agility to dodge/agility coefficient multipliers; 3.2.0 increased required agility by 15%
     const float crit_to_dodge[MAX_CLASSES] =
     {
-         0.85f/1.15f,    // Warrior
-         1.00f/1.15f,    // Paladin
-         1.11f/1.15f,    // Hunter
-         2.00f/1.15f,    // Rogue
-         1.00f/1.15f,    // Priest
-         0.85f/1.15f,    // DK
-         1.60f/1.15f,    // Shaman
-         1.00f/1.15f,    // Mage
-         0.97f/1.15f,    // Warlock (?)
-         0.0f,           // ??
-         2.00f/1.15f     // Druid
+        0.85f/1.15f,    // Warrior
+        1.00f/1.15f,    // Paladin
+        1.11f/1.15f,    // Hunter
+        2.00f/1.15f,    // Rogue
+        1.00f/1.15f,    // Priest
+        0.85f/1.15f,    // DK
+        1.60f/1.15f,    // Shaman
+        1.00f/1.15f,    // Mage
+        0.97f/1.15f,    // Warlock (?)
+        0.0f,           // ??
+        2.00f/1.15f     // Druid
     };
 
     uint8 level = getLevel();
@@ -5983,12 +6032,12 @@ float Player::GetExpertiseDodgeOrParryReduction(WeaponAttackType attType) const
 {
     switch (attType)
     {
-        case BASE_ATTACK:
-            return GetUInt32Value(PLAYER_EXPERTISE) / 4.0f;
-        case OFF_ATTACK:
-            return GetUInt32Value(PLAYER_OFFHAND_EXPERTISE) / 4.0f;
-        default:
-            break;
+    case BASE_ATTACK:
+        return GetUInt32Value(PLAYER_EXPERTISE) / 4.0f;
+    case OFF_ATTACK:
+        return GetUInt32Value(PLAYER_OFFHAND_EXPERTISE) / 4.0f;
+    default:
+        break;
     }
     return 0.0f;
 }
@@ -6047,22 +6096,22 @@ void Player::ApplyRatingMod(CombatRating cr, int32 value, bool apply)
         float const newVal = m_baseRatingValue[cr] * mult;
         switch (cr)
         {
-            case CR_HASTE_MELEE:
-                ApplyAttackTimePercentMod(BASE_ATTACK, oldVal, false);
-                ApplyAttackTimePercentMod(OFF_ATTACK, oldVal, false);
-                ApplyAttackTimePercentMod(BASE_ATTACK, newVal, true);
-                ApplyAttackTimePercentMod(OFF_ATTACK, newVal, true);
-                break;
-            case CR_HASTE_RANGED:
-                ApplyAttackTimePercentMod(RANGED_ATTACK, oldVal, false);
-                ApplyAttackTimePercentMod(RANGED_ATTACK, newVal, true);
-                break;
-            case CR_HASTE_SPELL:
-                ApplyCastTimePercentMod(oldVal, false);
-                ApplyCastTimePercentMod(newVal, true);
-                break;
-            default:
-                break;
+        case CR_HASTE_MELEE:
+            ApplyAttackTimePercentMod(BASE_ATTACK, oldVal, false);
+            ApplyAttackTimePercentMod(OFF_ATTACK, oldVal, false);
+            ApplyAttackTimePercentMod(BASE_ATTACK, newVal, true);
+            ApplyAttackTimePercentMod(OFF_ATTACK, newVal, true);
+            break;
+        case CR_HASTE_RANGED:
+            ApplyAttackTimePercentMod(RANGED_ATTACK, oldVal, false);
+            ApplyAttackTimePercentMod(RANGED_ATTACK, newVal, true);
+            break;
+        case CR_HASTE_SPELL:
+            ApplyCastTimePercentMod(oldVal, false);
+            ApplyCastTimePercentMod(newVal, true);
+            break;
+        default:
+            break;
         }
     }
 
@@ -6086,72 +6135,72 @@ void Player::UpdateRating(CombatRating cr)
 
     switch (cr)
     {
-        case CR_WEAPON_SKILL:                               // Implemented in Unit::RollMeleeOutcomeAgainst
-        case CR_DEFENSE_SKILL:
-            UpdateDefenseBonusesMod();
-            break;
-        case CR_DODGE:
-            UpdateDodgePercentage();
-            break;
-        case CR_PARRY:
-            UpdateParryPercentage();
-            break;
-        case CR_BLOCK:
-            UpdateBlockPercentage();
-            break;
-        case CR_HIT_MELEE:
-            UpdateMeleeHitChances();
-            break;
-        case CR_HIT_RANGED:
-            UpdateRangedHitChances();
-            break;
-        case CR_HIT_SPELL:
-            UpdateSpellHitChances();
-            break;
-        case CR_CRIT_MELEE:
-            if (affectStats)
-            {
-                UpdateCritPercentage(BASE_ATTACK);
-                UpdateCritPercentage(OFF_ATTACK);
-            }
-            break;
-        case CR_CRIT_RANGED:
-            if (affectStats)
-                UpdateCritPercentage(RANGED_ATTACK);
-            break;
-        case CR_CRIT_SPELL:
-            if (affectStats)
-                UpdateAllSpellCritChances();
-            break;
-        case CR_HIT_TAKEN_MELEE:                            // Implemented in Unit::MeleeMissChanceCalc
-        case CR_HIT_TAKEN_RANGED:
-            break;
-        case CR_HIT_TAKEN_SPELL:                            // Implemented in Unit::MagicSpellHitResult
-            break;
-        case CR_CRIT_TAKEN_MELEE:                           // Implemented in Unit::RollMeleeOutcomeAgainst (only for chance to crit)
-        case CR_CRIT_TAKEN_RANGED:
-            break;
-        case CR_CRIT_TAKEN_SPELL:                           // Implemented in Unit::SpellCriticalBonus (only for chance to crit)
-            break;
-        case CR_HASTE_MELEE:                                // Implemented in Player::ApplyRatingMod
-        case CR_HASTE_RANGED:
-        case CR_HASTE_SPELL:
-            break;
-        case CR_WEAPON_SKILL_MAINHAND:                      // Implemented in Unit::RollMeleeOutcomeAgainst
-        case CR_WEAPON_SKILL_OFFHAND:
-        case CR_WEAPON_SKILL_RANGED:
-            break;
-        case CR_EXPERTISE:
-            if (affectStats)
-            {
-                UpdateExpertise(BASE_ATTACK);
-                UpdateExpertise(OFF_ATTACK);
-            }
-            break;
-        case CR_ARMOR_PENETRATION:
-            if (affectStats)
-                UpdateArmorPenetration(amount);
-            break;
+    case CR_WEAPON_SKILL:                               // Implemented in Unit::RollMeleeOutcomeAgainst
+    case CR_DEFENSE_SKILL:
+        UpdateDefenseBonusesMod();
+        break;
+    case CR_DODGE:
+        UpdateDodgePercentage();
+        break;
+    case CR_PARRY:
+        UpdateParryPercentage();
+        break;
+    case CR_BLOCK:
+        UpdateBlockPercentage();
+        break;
+    case CR_HIT_MELEE:
+        UpdateMeleeHitChances();
+        break;
+    case CR_HIT_RANGED:
+        UpdateRangedHitChances();
+        break;
+    case CR_HIT_SPELL:
+        UpdateSpellHitChances();
+        break;
+    case CR_CRIT_MELEE:
+        if (affectStats)
+        {
+            UpdateCritPercentage(BASE_ATTACK);
+            UpdateCritPercentage(OFF_ATTACK);
+        }
+        break;
+    case CR_CRIT_RANGED:
+        if (affectStats)
+            UpdateCritPercentage(RANGED_ATTACK);
+        break;
+    case CR_CRIT_SPELL:
+        if (affectStats)
+            UpdateAllSpellCritChances();
+        break;
+    case CR_HIT_TAKEN_MELEE:                            // Implemented in Unit::MeleeMissChanceCalc
+    case CR_HIT_TAKEN_RANGED:
+        break;
+    case CR_HIT_TAKEN_SPELL:                            // Implemented in Unit::MagicSpellHitResult
+        break;
+    case CR_CRIT_TAKEN_MELEE:                           // Implemented in Unit::RollMeleeOutcomeAgainst (only for chance to crit)
+    case CR_CRIT_TAKEN_RANGED:
+        break;
+    case CR_CRIT_TAKEN_SPELL:                           // Implemented in Unit::SpellCriticalBonus (only for chance to crit)
+        break;
+    case CR_HASTE_MELEE:                                // Implemented in Player::ApplyRatingMod
+    case CR_HASTE_RANGED:
+    case CR_HASTE_SPELL:
+        break;
+    case CR_WEAPON_SKILL_MAINHAND:                      // Implemented in Unit::RollMeleeOutcomeAgainst
+    case CR_WEAPON_SKILL_OFFHAND:
+    case CR_WEAPON_SKILL_RANGED:
+        break;
+    case CR_EXPERTISE:
+        if (affectStats)
+        {
+            UpdateExpertise(BASE_ATTACK);
+            UpdateExpertise(OFF_ATTACK);
+        }
+        break;
+    case CR_ARMOR_PENETRATION:
+        if (affectStats)
+            UpdateArmorPenetration(amount);
+        break;
     }
 }
 
@@ -6251,10 +6300,10 @@ bool Player::UpdateCraftSkill(uint32 spellid)
             uint32 craft_skill_gain = sGameConfig->GetIntConfig("SkillGain.Crafting");
 
             return UpdateSkillPro(_spell_idx->second->skillId, SkillGainChance(SkillValue,
-                _spell_idx->second->max_value,
-                (_spell_idx->second->max_value + _spell_idx->second->min_value)/2,
-                _spell_idx->second->min_value),
-                craft_skill_gain);
+                                  _spell_idx->second->max_value,
+                                  (_spell_idx->second->max_value + _spell_idx->second->min_value)/2,
+                                  _spell_idx->second->min_value),
+                                  craft_skill_gain);
         }
     }
     return false;
@@ -6271,21 +6320,21 @@ bool Player::UpdateGatherSkill(uint32 SkillId, uint32 SkillValue, uint32 RedLeve
     // For skinning and Mining chance decrease with level. 1-74 - no decrease, 75-149 - 2 times, 225-299 - 8 times
     switch (SkillId)
     {
-        case SKILL_HERBALISM:
-        case SKILL_LOCKPICKING:
-        case SKILL_JEWELCRAFTING:
-        case SKILL_INSCRIPTION:
+    case SKILL_HERBALISM:
+    case SKILL_LOCKPICKING:
+    case SKILL_JEWELCRAFTING:
+    case SKILL_INSCRIPTION:
+        return UpdateSkillPro(SkillId, SkillGainChance(SkillValue, RedLevel+100, RedLevel+50, RedLevel+25)*Multiplicator, gathering_skill_gain);
+    case SKILL_SKINNING:
+        if (sGameConfig->GetIntConfig("SkillChance.SkinningSteps") == 0)
             return UpdateSkillPro(SkillId, SkillGainChance(SkillValue, RedLevel+100, RedLevel+50, RedLevel+25)*Multiplicator, gathering_skill_gain);
-        case SKILL_SKINNING:
-            if (sGameConfig->GetIntConfig("SkillChance.SkinningSteps") == 0)
-                return UpdateSkillPro(SkillId, SkillGainChance(SkillValue, RedLevel+100, RedLevel+50, RedLevel+25)*Multiplicator, gathering_skill_gain);
-            else
-                return UpdateSkillPro(SkillId, (SkillGainChance(SkillValue, RedLevel+100, RedLevel+50, RedLevel+25)*Multiplicator) >> (SkillValue/sGameConfig->GetIntConfig("SkillChance.SkinningSteps")), gathering_skill_gain);
-        case SKILL_MINING:
-            if (sGameConfig->GetIntConfig("SkillChance.MiningSteps") == 0)
-                return UpdateSkillPro(SkillId, SkillGainChance(SkillValue, RedLevel+100, RedLevel+50, RedLevel+25)*Multiplicator, gathering_skill_gain);
-            else
-                return UpdateSkillPro(SkillId, (SkillGainChance(SkillValue, RedLevel+100, RedLevel+50, RedLevel+25)*Multiplicator) >> (SkillValue/sGameConfig->GetIntConfig("SkillChance.MiningSteps")), gathering_skill_gain);
+        else
+            return UpdateSkillPro(SkillId, (SkillGainChance(SkillValue, RedLevel+100, RedLevel+50, RedLevel+25)*Multiplicator) >> (SkillValue/sGameConfig->GetIntConfig("SkillChance.SkinningSteps")), gathering_skill_gain);
+    case SKILL_MINING:
+        if (sGameConfig->GetIntConfig("SkillChance.MiningSteps") == 0)
+            return UpdateSkillPro(SkillId, SkillGainChance(SkillValue, RedLevel+100, RedLevel+50, RedLevel+25)*Multiplicator, gathering_skill_gain);
+        else
+            return UpdateSkillPro(SkillId, (SkillGainChance(SkillValue, RedLevel+100, RedLevel+50, RedLevel+25)*Multiplicator) >> (SkillValue/sGameConfig->GetIntConfig("SkillChance.MiningSteps")), gathering_skill_gain);
     }
     return false;
 }
@@ -6586,48 +6635,48 @@ void Player::SetSkill(uint16 id, uint16 step, uint16 newVal, uint16 maxVal)
         currVal = 0;
         for (int i=0; i < PLAYER_MAX_SKILLS; ++i)
             if (!GetUInt32Value(PLAYER_SKILL_INDEX(i)))
-        {
-            SkillLineEntry const* pSkill = sSkillLineStore.LookupEntry(id);
-            if (!pSkill)
             {
-                LOG_ERROR("server", "Skill not found in SkillLineStore: skill #%u", id);
+                SkillLineEntry const* pSkill = sSkillLineStore.LookupEntry(id);
+                if (!pSkill)
+                {
+                    LOG_ERROR("server", "Skill not found in SkillLineStore: skill #%u", id);
+                    return;
+                }
+
+                SetUInt32Value(PLAYER_SKILL_INDEX(i), MAKE_PAIR32(id, step));
+                SetUInt32Value(PLAYER_SKILL_VALUE_INDEX(i), MAKE_SKILL_VALUE(newVal, maxVal));
+                UpdateSkillEnchantments(id, currVal, newVal);
+
+                // insert new entry or update if not deleted old entry yet
+                if (itr != mSkillStatus.end())
+                {
+                    itr->second.pos = i;
+                    itr->second.uState = SKILL_CHANGED;
+                }
+                else
+                    mSkillStatus.insert(SkillStatusMap::value_type(id, SkillStatusData(i, SKILL_NEW)));
+
+                // apply skill bonuses
+                SetUInt32Value(PLAYER_SKILL_BONUS_INDEX(i), 0);
+
+                // temporary bonuses
+                AuraEffectList const& mModSkill = GetAuraEffectsByType(SPELL_AURA_MOD_SKILL);
+                for (AuraEffectList::const_iterator j = mModSkill.begin(); j != mModSkill.end(); ++j)
+                    if ((*j)->GetMiscValue() == int32(id))
+                        (*j)->HandleEffect(this, AURA_EFFECT_HANDLE_SKILL, true);
+
+                // permanent bonuses
+                AuraEffectList const& mModSkillTalent = GetAuraEffectsByType(SPELL_AURA_MOD_SKILL_TALENT);
+                for (AuraEffectList::const_iterator j = mModSkillTalent.begin(); j != mModSkillTalent.end(); ++j)
+                    if ((*j)->GetMiscValue() == int32(id))
+                        (*j)->HandleEffect(this, AURA_EFFECT_HANDLE_SKILL, true);
+
+                // Learn all spells for skill
+                learnSkillRewardedSpells(id, newVal);
+                UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_REACH_SKILL_LEVEL, id);
+                UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_LEARN_SKILL_LEVEL, id);
                 return;
             }
-
-            SetUInt32Value(PLAYER_SKILL_INDEX(i), MAKE_PAIR32(id, step));
-            SetUInt32Value(PLAYER_SKILL_VALUE_INDEX(i), MAKE_SKILL_VALUE(newVal, maxVal));
-            UpdateSkillEnchantments(id, currVal, newVal);
-
-            // insert new entry or update if not deleted old entry yet
-            if (itr != mSkillStatus.end())
-            {
-                itr->second.pos = i;
-                itr->second.uState = SKILL_CHANGED;
-            }
-            else
-                mSkillStatus.insert(SkillStatusMap::value_type(id, SkillStatusData(i, SKILL_NEW)));
-
-            // apply skill bonuses
-            SetUInt32Value(PLAYER_SKILL_BONUS_INDEX(i), 0);
-
-            // temporary bonuses
-            AuraEffectList const& mModSkill = GetAuraEffectsByType(SPELL_AURA_MOD_SKILL);
-            for (AuraEffectList::const_iterator j = mModSkill.begin(); j != mModSkill.end(); ++j)
-                if ((*j)->GetMiscValue() == int32(id))
-                        (*j)->HandleEffect(this, AURA_EFFECT_HANDLE_SKILL, true);
-
-            // permanent bonuses
-            AuraEffectList const& mModSkillTalent = GetAuraEffectsByType(SPELL_AURA_MOD_SKILL_TALENT);
-            for (AuraEffectList::const_iterator j = mModSkillTalent.begin(); j != mModSkillTalent.end(); ++j)
-                if ((*j)->GetMiscValue() == int32(id))
-                        (*j)->HandleEffect(this, AURA_EFFECT_HANDLE_SKILL, true);
-
-            // Learn all spells for skill
-            learnSkillRewardedSpells(id, newVal);
-			UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_REACH_SKILL_LEVEL, id);
-			UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_LEARN_SKILL_LEVEL, id);
-            return;
-        }
     }
 }
 
@@ -6796,30 +6845,30 @@ bool Player::IsActionButtonDataValid(uint8 button, uint32 action, uint8 type)
 
     switch (type)
     {
-        case ACTION_BUTTON_SPELL:
-            if (!sSpellMgr->GetSpellInfo(action))
-            {
-                LOG_ERROR("server", "Spell action %u not added into button %u for player %s: spell not exist", action, button, GetName().c_str());
-                return false;
-            }
+    case ACTION_BUTTON_SPELL:
+        if (!sSpellMgr->GetSpellInfo(action))
+        {
+            LOG_ERROR("server", "Spell action %u not added into button %u for player %s: spell not exist", action, button, GetName().c_str());
+            return false;
+        }
 
-            if (!HasSpell(action))
-            {
+        if (!HasSpell(action))
+        {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                LOG_DEBUG("entities.player.loading", "Player::IsActionButtonDataValid Spell action %u not added into button %u for player %s: player don't known this spell", action, button, GetName().c_str());
+            LOG_DEBUG("entities.player.loading", "Player::IsActionButtonDataValid Spell action %u not added into button %u for player %s: player don't known this spell", action, button, GetName().c_str());
 #endif
-                return false;
-            }
-            break;
-        case ACTION_BUTTON_ITEM:
-            if (!sObjectMgr->GetItemTemplate(action))
-            {
-                LOG_ERROR("server", "Item action %u not added into button %u for player %s: item not exist", action, button, GetName().c_str());
-                return false;
-            }
-            break;
-        default:
-            break;                                          // other cases not checked at this moment
+            return false;
+        }
+        break;
+    case ACTION_BUTTON_ITEM:
+        if (!sObjectMgr->GetItemTemplate(action))
+        {
+            LOG_ERROR("server", "Item action %u not added into button %u for player %s: item not exist", action, button, GetName().c_str());
+            return false;
+        }
+        break;
+    default:
+        break;                                          // other cases not checked at this moment
     }
 
     return true;
@@ -6945,7 +6994,7 @@ void Player::CheckAreaExploreAndOutdoor()
     bool isOutdoor = IsOutdoors();
     uint32 areaId = GetBaseMap()->GetAreaId(GetPositionX(), GetPositionY(), GetPositionZ(), &isOutdoor);
     AreaTableEntry const* areaEntry = sAreaTableStore.LookupEntry(areaId);
- 
+
     if (sGameConfig->GetBoolConfig("vmap.enableIndoorCheck") && !isOutdoor)
         RemoveAurasWithAttribute(SPELL_ATTR0_OUTDOORS_ONLY);
 
@@ -6954,8 +7003,8 @@ void Player::CheckAreaExploreAndOutdoor()
 
     if (!areaEntry)
     {
-     LOG_ERROR("server", "Player '%s' (%u) discovered unknown area (x: %f y: %f z: %f map: %u)",
-            GetName().c_str(), GetGUIDLow(), GetPositionX(), GetPositionY(), GetPositionZ(), GetMapId());
+        LOG_ERROR("server", "Player '%s' (%u) discovered unknown area (x: %f y: %f z: %f map: %u)",
+                  GetName().c_str(), GetGUIDLow(), GetPositionX(), GetPositionY(), GetPositionZ(), GetMapId());
         return;
     }
 
@@ -7023,8 +7072,10 @@ TeamId Player::TeamIdForRace(uint8 race)
     {
         switch (rEntry->TeamID)
         {
-            case 1: return TEAM_HORDE;
-            case 7: return TEAM_ALLIANCE;
+        case 1:
+            return TEAM_HORDE;
+        case 7:
+            return TEAM_ALLIANCE;
         }
         LOG_ERROR("server", "Race (%u) has wrong teamid (%u) in DBC: wrong DBC files?", uint32(race), rEntry->TeamID);
     }
@@ -7069,20 +7120,20 @@ int32 Player::CalculateReputationGain(ReputationSource source, uint32 creatureOr
     float rate;
     switch (source)
     {
-        case REPUTATION_SOURCE_KILL:
-            rate = sGameConfig->GetFloatConfig("Rate.Reputation.LowLevel.Kill");
-            break;
-        case REPUTATION_SOURCE_QUEST:
-        case REPUTATION_SOURCE_DAILY_QUEST:
-        case REPUTATION_SOURCE_WEEKLY_QUEST:
-        case REPUTATION_SOURCE_MONTHLY_QUEST:
-        case REPUTATION_SOURCE_REPEATABLE_QUEST:
-            rate = sGameConfig->GetFloatConfig("Rate.Reputation.LowLevel.Quest");
-            break;
-        case REPUTATION_SOURCE_SPELL:
-        default:
-            rate = 1.0f;
-            break;
+    case REPUTATION_SOURCE_KILL:
+        rate = sGameConfig->GetFloatConfig("Rate.Reputation.LowLevel.Kill");
+        break;
+    case REPUTATION_SOURCE_QUEST:
+    case REPUTATION_SOURCE_DAILY_QUEST:
+    case REPUTATION_SOURCE_WEEKLY_QUEST:
+    case REPUTATION_SOURCE_MONTHLY_QUEST:
+    case REPUTATION_SOURCE_REPEATABLE_QUEST:
+        rate = sGameConfig->GetFloatConfig("Rate.Reputation.LowLevel.Quest");
+        break;
+    case REPUTATION_SOURCE_SPELL:
+    default:
+        rate = 1.0f;
+        break;
     }
 
     if (rate != 1.0f && creatureOrQuestLevel <= warhead::XP::GetGrayLevel(getLevel()))
@@ -7097,27 +7148,27 @@ int32 Player::CalculateReputationGain(ReputationSource source, uint32 creatureOr
         float repRate = 0.0f;
         switch (source)
         {
-            case REPUTATION_SOURCE_KILL:
-                repRate = repData->creatureRate;
-                break;
-            case REPUTATION_SOURCE_QUEST:
-                repRate = repData->questRate;
-                break;
-            case REPUTATION_SOURCE_DAILY_QUEST:
-                repRate = repData->questDailyRate;
-                break;
-            case REPUTATION_SOURCE_WEEKLY_QUEST:
-                repRate = repData->questWeeklyRate;
-                break;
-            case REPUTATION_SOURCE_MONTHLY_QUEST:
-                repRate = repData->questMonthlyRate;
-                break;
-            case REPUTATION_SOURCE_REPEATABLE_QUEST:
-                repRate = repData->questRepeatableRate;
-                break;
-            case REPUTATION_SOURCE_SPELL:
-                repRate = repData->spellRate;
-                break;
+        case REPUTATION_SOURCE_KILL:
+            repRate = repData->creatureRate;
+            break;
+        case REPUTATION_SOURCE_QUEST:
+            repRate = repData->questRate;
+            break;
+        case REPUTATION_SOURCE_DAILY_QUEST:
+            repRate = repData->questDailyRate;
+            break;
+        case REPUTATION_SOURCE_WEEKLY_QUEST:
+            repRate = repData->questWeeklyRate;
+            break;
+        case REPUTATION_SOURCE_MONTHLY_QUEST:
+            repRate = repData->questMonthlyRate;
+            break;
+        case REPUTATION_SOURCE_REPEATABLE_QUEST:
+            repRate = repData->questRepeatableRate;
+            break;
+        case REPUTATION_SOURCE_SPELL:
+            repRate = repData->spellRate;
+            break;
         }
 
         // for custom, a rate of 0.0 will totally disable reputation gain for this faction/type
@@ -7421,8 +7472,8 @@ bool Player::RewardHonor(Unit* uVictim, uint32 groupsize, int32 honor, bool awar
             // Check if allowed to receive it in current map
             uint8 MapType = sGameConfig->GetIntConfig("PvPToken.MapAllowType");
             if ((MapType == 1 && !InBattleground() && !IsFFAPvP())
-                || (MapType == 2 && !IsFFAPvP())
-                || (MapType == 3 && !InBattleground()))
+                    || (MapType == 2 && !IsFFAPvP())
+                    || (MapType == 3 && !InBattleground()))
                 return true;
 
             uint32 itemID = sGameConfig->GetIntConfig("PvPToken.ItemID");
@@ -7437,7 +7488,7 @@ bool Player::RewardHonor(Unit* uVictim, uint32 groupsize, int32 honor, bool awar
 }
 
 void Player::SetHonorPoints(int32 value)
-{ 
+{
     if (value > sGameConfig->GetIntConfig("MaxHonorPoints"))
         value = sGameConfig->GetIntConfig("MaxHonorPoints");
 
@@ -7448,12 +7499,12 @@ void Player::SetHonorPoints(int32 value)
 }
 
 void Player::SetArenaPoints(int32 value)
-{ 
+{
     if (value > sGameConfig->GetIntConfig("MaxArenaPoints"))
         value = sGameConfig->GetIntConfig("MaxArenaPoints");
-    
+
     SetUInt32Value(PLAYER_FIELD_ARENA_CURRENCY, value);
-    
+
     if (value)
         AddKnownCurrency(ITEM_ARENA_POINTS_ID);
 }
@@ -7734,19 +7785,19 @@ void Player::UpdateZone(uint32 newZone, uint32 newArea)
     // in PvE, only opposition team capital
     switch (zone->team)
     {
-        case AREATEAM_ALLY:
-            pvpInfo.IsInHostileArea = GetTeamId(true) != TEAM_ALLIANCE && (sWorld->IsPvPRealm() || zone->flags & AREA_FLAG_CAPITAL);
-            break;
-        case AREATEAM_HORDE:
-            pvpInfo.IsInHostileArea = GetTeamId(true) != TEAM_HORDE && (sWorld->IsPvPRealm() || zone->flags & AREA_FLAG_CAPITAL);
-            break;
-        case AREATEAM_NONE:
-            // overwrite for battlegrounds, maybe batter some zone flags but current known not 100% fit to this
-            pvpInfo.IsInHostileArea = sWorld->IsPvPRealm() || InBattleground() || zone->flags & AREA_FLAG_WINTERGRASP;
-            break;
-        default:                                            // 6 in fact
-            pvpInfo.IsInHostileArea = false;
-            break;
+    case AREATEAM_ALLY:
+        pvpInfo.IsInHostileArea = GetTeamId(true) != TEAM_ALLIANCE && (sWorld->IsPvPRealm() || zone->flags & AREA_FLAG_CAPITAL);
+        break;
+    case AREATEAM_HORDE:
+        pvpInfo.IsInHostileArea = GetTeamId(true) != TEAM_HORDE && (sWorld->IsPvPRealm() || zone->flags & AREA_FLAG_CAPITAL);
+        break;
+    case AREATEAM_NONE:
+        // overwrite for battlegrounds, maybe batter some zone flags but current known not 100% fit to this
+        pvpInfo.IsInHostileArea = sWorld->IsPvPRealm() || InBattleground() || zone->flags & AREA_FLAG_WINTERGRASP;
+        break;
+    default:                                            // 6 in fact
+        pvpInfo.IsInHostileArea = false;
+        break;
     }
 
     // Treat players having a quest flagging for PvP as always in hostile area
@@ -7845,37 +7896,37 @@ void Player::DuelComplete(DuelCompleteType type)
 
     switch (type)
     {
-        case DUEL_FLED:
-            // if initiator and opponent are on the same team
-            // or initiator and opponent are not PvP enabled, forcibly stop attacking
-            if (duel->initiator->GetTeamId() == duel->opponent->GetTeamId())
-            {
+    case DUEL_FLED:
+        // if initiator and opponent are on the same team
+        // or initiator and opponent are not PvP enabled, forcibly stop attacking
+        if (duel->initiator->GetTeamId() == duel->opponent->GetTeamId())
+        {
+            duel->initiator->AttackStop();
+            duel->opponent->AttackStop();
+        }
+        else
+        {
+            if (!duel->initiator->IsPvP())
                 duel->initiator->AttackStop();
+            if (!duel->opponent->IsPvP())
                 duel->opponent->AttackStop();
-            }
-            else
-            {
-                if (!duel->initiator->IsPvP())
-                    duel->initiator->AttackStop();
-                if (!duel->opponent->IsPvP())
-                    duel->opponent->AttackStop();
-            }
-            break;
-        case DUEL_WON:
-            UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_LOSE_DUEL, 1);
-            duel->opponent->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_WIN_DUEL, 1);
+        }
+        break;
+    case DUEL_WON:
+        UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_LOSE_DUEL, 1);
+        duel->opponent->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_WIN_DUEL, 1);
 
-            // Credit for quest Death's Challenge
-            if (getClass() == CLASS_DEATH_KNIGHT && duel->opponent->GetQuestStatus(12733) == QUEST_STATUS_INCOMPLETE)
-                duel->opponent->CastSpell(duel->opponent, 52994, true);
+        // Credit for quest Death's Challenge
+        if (getClass() == CLASS_DEATH_KNIGHT && duel->opponent->GetQuestStatus(12733) == QUEST_STATUS_INCOMPLETE)
+            duel->opponent->CastSpell(duel->opponent, 52994, true);
 
-            // Honor points after duel (the winner) - ImpConfig
-            if (uint32 amount = sGameConfig->GetIntConfig("HonorPointsAfterDuel"))
-                duel->opponent->RewardHonor(NULL, 1, amount);
+        // Honor points after duel (the winner) - ImpConfig
+        if (uint32 amount = sGameConfig->GetIntConfig("HonorPointsAfterDuel"))
+            duel->opponent->RewardHonor(NULL, 1, amount);
 
-            break;
-        default:
-            break;
+        break;
+    default:
+        break;
     }
 
     // Victory emote spell
@@ -8015,150 +8066,150 @@ void Player::_ApplyItemBonuses(ItemTemplate const* proto, uint8 slot, bool apply
 
         switch (statType)
         {
-            case ITEM_MOD_MANA:
-                HandleStatModifier(UNIT_MOD_MANA, BASE_VALUE, float(val), apply);
-                break;
-            case ITEM_MOD_HEALTH:                           // modify HP
-                HandleStatModifier(UNIT_MOD_HEALTH, BASE_VALUE, float(val), apply);
-                break;
-            case ITEM_MOD_AGILITY:                          // modify agility
-                HandleStatModifier(UNIT_MOD_STAT_AGILITY, BASE_VALUE, float(val), apply);
-                ApplyStatBuffMod(STAT_AGILITY, float(val), apply);
-                break;
-            case ITEM_MOD_STRENGTH:                         //modify strength
-                HandleStatModifier(UNIT_MOD_STAT_STRENGTH, BASE_VALUE, float(val), apply);
-                ApplyStatBuffMod(STAT_STRENGTH, float(val), apply);
-                break;
-            case ITEM_MOD_INTELLECT:                        //modify intellect
-                HandleStatModifier(UNIT_MOD_STAT_INTELLECT, BASE_VALUE, float(val), apply);
-                ApplyStatBuffMod(STAT_INTELLECT, float(val), apply);
-                break;
-            case ITEM_MOD_SPIRIT:                           //modify spirit
-                HandleStatModifier(UNIT_MOD_STAT_SPIRIT, BASE_VALUE, float(val), apply);
-                ApplyStatBuffMod(STAT_SPIRIT, float(val), apply);
-                break;
-            case ITEM_MOD_STAMINA:                          //modify stamina
-                HandleStatModifier(UNIT_MOD_STAT_STAMINA, BASE_VALUE, float(val), apply);
-                ApplyStatBuffMod(STAT_STAMINA, float(val), apply);
-                break;
-            case ITEM_MOD_DEFENSE_SKILL_RATING:
-                ApplyRatingMod(CR_DEFENSE_SKILL, int32(val), apply);
-                break;
-            case ITEM_MOD_DODGE_RATING:
-                ApplyRatingMod(CR_DODGE, int32(val), apply);
-                break;
-            case ITEM_MOD_PARRY_RATING:
-                ApplyRatingMod(CR_PARRY, int32(val), apply);
-                break;
-            case ITEM_MOD_BLOCK_RATING:
-                ApplyRatingMod(CR_BLOCK, int32(val), apply);
-                break;
-            case ITEM_MOD_HIT_MELEE_RATING:
-                ApplyRatingMod(CR_HIT_MELEE, int32(val), apply);
-                break;
-            case ITEM_MOD_HIT_RANGED_RATING:
-                ApplyRatingMod(CR_HIT_RANGED, int32(val), apply);
-                break;
-            case ITEM_MOD_HIT_SPELL_RATING:
-                ApplyRatingMod(CR_HIT_SPELL, int32(val), apply);
-                break;
-            case ITEM_MOD_CRIT_MELEE_RATING:
-                ApplyRatingMod(CR_CRIT_MELEE, int32(val), apply);
-                break;
-            case ITEM_MOD_CRIT_RANGED_RATING:
-                ApplyRatingMod(CR_CRIT_RANGED, int32(val), apply);
-                break;
-            case ITEM_MOD_CRIT_SPELL_RATING:
-                ApplyRatingMod(CR_CRIT_SPELL, int32(val), apply);
-                break;
-            case ITEM_MOD_HIT_TAKEN_MELEE_RATING:
-                ApplyRatingMod(CR_HIT_TAKEN_MELEE, int32(val), apply);
-                break;
-            case ITEM_MOD_HIT_TAKEN_RANGED_RATING:
-                ApplyRatingMod(CR_HIT_TAKEN_RANGED, int32(val), apply);
-                break;
-            case ITEM_MOD_HIT_TAKEN_SPELL_RATING:
-                ApplyRatingMod(CR_HIT_TAKEN_SPELL, int32(val), apply);
-                break;
-            case ITEM_MOD_CRIT_TAKEN_MELEE_RATING:
-                ApplyRatingMod(CR_CRIT_TAKEN_MELEE, int32(val), apply);
-                break;
-            case ITEM_MOD_CRIT_TAKEN_RANGED_RATING:
-                ApplyRatingMod(CR_CRIT_TAKEN_RANGED, int32(val), apply);
-                break;
-            case ITEM_MOD_CRIT_TAKEN_SPELL_RATING:
-                ApplyRatingMod(CR_CRIT_TAKEN_SPELL, int32(val), apply);
-                break;
-            case ITEM_MOD_HASTE_MELEE_RATING:
-                ApplyRatingMod(CR_HASTE_MELEE, int32(val), apply);
-                break;
-            case ITEM_MOD_HASTE_RANGED_RATING:
-                ApplyRatingMod(CR_HASTE_RANGED, int32(val), apply);
-                break;
-            case ITEM_MOD_HASTE_SPELL_RATING:
-                ApplyRatingMod(CR_HASTE_SPELL, int32(val), apply);
-                break;
-            case ITEM_MOD_HIT_RATING:
-                ApplyRatingMod(CR_HIT_MELEE, int32(val), apply);
-                ApplyRatingMod(CR_HIT_RANGED, int32(val), apply);
-                ApplyRatingMod(CR_HIT_SPELL, int32(val), apply);
-                break;
-            case ITEM_MOD_CRIT_RATING:
-                ApplyRatingMod(CR_CRIT_MELEE, int32(val), apply);
-                ApplyRatingMod(CR_CRIT_RANGED, int32(val), apply);
-                ApplyRatingMod(CR_CRIT_SPELL, int32(val), apply);
-                break;
-            case ITEM_MOD_HIT_TAKEN_RATING:
-                ApplyRatingMod(CR_HIT_TAKEN_MELEE, int32(val), apply);
-                ApplyRatingMod(CR_HIT_TAKEN_RANGED, int32(val), apply);
-                ApplyRatingMod(CR_HIT_TAKEN_SPELL, int32(val), apply);
-                break;
-            case ITEM_MOD_CRIT_TAKEN_RATING:
-            case ITEM_MOD_RESILIENCE_RATING:
-                ApplyRatingMod(CR_CRIT_TAKEN_MELEE, int32(val), apply);
-                ApplyRatingMod(CR_CRIT_TAKEN_RANGED, int32(val), apply);
-                ApplyRatingMod(CR_CRIT_TAKEN_SPELL, int32(val), apply);
-                break;
-            case ITEM_MOD_HASTE_RATING:
-                ApplyRatingMod(CR_HASTE_MELEE, int32(val), apply);
-                ApplyRatingMod(CR_HASTE_RANGED, int32(val), apply);
-                ApplyRatingMod(CR_HASTE_SPELL, int32(val), apply);
-                break;
-            case ITEM_MOD_EXPERTISE_RATING:
-                ApplyRatingMod(CR_EXPERTISE, int32(val), apply);
-                break;
-            case ITEM_MOD_ATTACK_POWER:
-                HandleStatModifier(UNIT_MOD_ATTACK_POWER, TOTAL_VALUE, float(val), apply);
-                HandleStatModifier(UNIT_MOD_ATTACK_POWER_RANGED, TOTAL_VALUE, float(val), apply);
-                break;
-            case ITEM_MOD_RANGED_ATTACK_POWER:
-                HandleStatModifier(UNIT_MOD_ATTACK_POWER_RANGED, TOTAL_VALUE, float(val), apply);
-                break;
+        case ITEM_MOD_MANA:
+            HandleStatModifier(UNIT_MOD_MANA, BASE_VALUE, float(val), apply);
+            break;
+        case ITEM_MOD_HEALTH:                           // modify HP
+            HandleStatModifier(UNIT_MOD_HEALTH, BASE_VALUE, float(val), apply);
+            break;
+        case ITEM_MOD_AGILITY:                          // modify agility
+            HandleStatModifier(UNIT_MOD_STAT_AGILITY, BASE_VALUE, float(val), apply);
+            ApplyStatBuffMod(STAT_AGILITY, float(val), apply);
+            break;
+        case ITEM_MOD_STRENGTH:                         //modify strength
+            HandleStatModifier(UNIT_MOD_STAT_STRENGTH, BASE_VALUE, float(val), apply);
+            ApplyStatBuffMod(STAT_STRENGTH, float(val), apply);
+            break;
+        case ITEM_MOD_INTELLECT:                        //modify intellect
+            HandleStatModifier(UNIT_MOD_STAT_INTELLECT, BASE_VALUE, float(val), apply);
+            ApplyStatBuffMod(STAT_INTELLECT, float(val), apply);
+            break;
+        case ITEM_MOD_SPIRIT:                           //modify spirit
+            HandleStatModifier(UNIT_MOD_STAT_SPIRIT, BASE_VALUE, float(val), apply);
+            ApplyStatBuffMod(STAT_SPIRIT, float(val), apply);
+            break;
+        case ITEM_MOD_STAMINA:                          //modify stamina
+            HandleStatModifier(UNIT_MOD_STAT_STAMINA, BASE_VALUE, float(val), apply);
+            ApplyStatBuffMod(STAT_STAMINA, float(val), apply);
+            break;
+        case ITEM_MOD_DEFENSE_SKILL_RATING:
+            ApplyRatingMod(CR_DEFENSE_SKILL, int32(val), apply);
+            break;
+        case ITEM_MOD_DODGE_RATING:
+            ApplyRatingMod(CR_DODGE, int32(val), apply);
+            break;
+        case ITEM_MOD_PARRY_RATING:
+            ApplyRatingMod(CR_PARRY, int32(val), apply);
+            break;
+        case ITEM_MOD_BLOCK_RATING:
+            ApplyRatingMod(CR_BLOCK, int32(val), apply);
+            break;
+        case ITEM_MOD_HIT_MELEE_RATING:
+            ApplyRatingMod(CR_HIT_MELEE, int32(val), apply);
+            break;
+        case ITEM_MOD_HIT_RANGED_RATING:
+            ApplyRatingMod(CR_HIT_RANGED, int32(val), apply);
+            break;
+        case ITEM_MOD_HIT_SPELL_RATING:
+            ApplyRatingMod(CR_HIT_SPELL, int32(val), apply);
+            break;
+        case ITEM_MOD_CRIT_MELEE_RATING:
+            ApplyRatingMod(CR_CRIT_MELEE, int32(val), apply);
+            break;
+        case ITEM_MOD_CRIT_RANGED_RATING:
+            ApplyRatingMod(CR_CRIT_RANGED, int32(val), apply);
+            break;
+        case ITEM_MOD_CRIT_SPELL_RATING:
+            ApplyRatingMod(CR_CRIT_SPELL, int32(val), apply);
+            break;
+        case ITEM_MOD_HIT_TAKEN_MELEE_RATING:
+            ApplyRatingMod(CR_HIT_TAKEN_MELEE, int32(val), apply);
+            break;
+        case ITEM_MOD_HIT_TAKEN_RANGED_RATING:
+            ApplyRatingMod(CR_HIT_TAKEN_RANGED, int32(val), apply);
+            break;
+        case ITEM_MOD_HIT_TAKEN_SPELL_RATING:
+            ApplyRatingMod(CR_HIT_TAKEN_SPELL, int32(val), apply);
+            break;
+        case ITEM_MOD_CRIT_TAKEN_MELEE_RATING:
+            ApplyRatingMod(CR_CRIT_TAKEN_MELEE, int32(val), apply);
+            break;
+        case ITEM_MOD_CRIT_TAKEN_RANGED_RATING:
+            ApplyRatingMod(CR_CRIT_TAKEN_RANGED, int32(val), apply);
+            break;
+        case ITEM_MOD_CRIT_TAKEN_SPELL_RATING:
+            ApplyRatingMod(CR_CRIT_TAKEN_SPELL, int32(val), apply);
+            break;
+        case ITEM_MOD_HASTE_MELEE_RATING:
+            ApplyRatingMod(CR_HASTE_MELEE, int32(val), apply);
+            break;
+        case ITEM_MOD_HASTE_RANGED_RATING:
+            ApplyRatingMod(CR_HASTE_RANGED, int32(val), apply);
+            break;
+        case ITEM_MOD_HASTE_SPELL_RATING:
+            ApplyRatingMod(CR_HASTE_SPELL, int32(val), apply);
+            break;
+        case ITEM_MOD_HIT_RATING:
+            ApplyRatingMod(CR_HIT_MELEE, int32(val), apply);
+            ApplyRatingMod(CR_HIT_RANGED, int32(val), apply);
+            ApplyRatingMod(CR_HIT_SPELL, int32(val), apply);
+            break;
+        case ITEM_MOD_CRIT_RATING:
+            ApplyRatingMod(CR_CRIT_MELEE, int32(val), apply);
+            ApplyRatingMod(CR_CRIT_RANGED, int32(val), apply);
+            ApplyRatingMod(CR_CRIT_SPELL, int32(val), apply);
+            break;
+        case ITEM_MOD_HIT_TAKEN_RATING:
+            ApplyRatingMod(CR_HIT_TAKEN_MELEE, int32(val), apply);
+            ApplyRatingMod(CR_HIT_TAKEN_RANGED, int32(val), apply);
+            ApplyRatingMod(CR_HIT_TAKEN_SPELL, int32(val), apply);
+            break;
+        case ITEM_MOD_CRIT_TAKEN_RATING:
+        case ITEM_MOD_RESILIENCE_RATING:
+            ApplyRatingMod(CR_CRIT_TAKEN_MELEE, int32(val), apply);
+            ApplyRatingMod(CR_CRIT_TAKEN_RANGED, int32(val), apply);
+            ApplyRatingMod(CR_CRIT_TAKEN_SPELL, int32(val), apply);
+            break;
+        case ITEM_MOD_HASTE_RATING:
+            ApplyRatingMod(CR_HASTE_MELEE, int32(val), apply);
+            ApplyRatingMod(CR_HASTE_RANGED, int32(val), apply);
+            ApplyRatingMod(CR_HASTE_SPELL, int32(val), apply);
+            break;
+        case ITEM_MOD_EXPERTISE_RATING:
+            ApplyRatingMod(CR_EXPERTISE, int32(val), apply);
+            break;
+        case ITEM_MOD_ATTACK_POWER:
+            HandleStatModifier(UNIT_MOD_ATTACK_POWER, TOTAL_VALUE, float(val), apply);
+            HandleStatModifier(UNIT_MOD_ATTACK_POWER_RANGED, TOTAL_VALUE, float(val), apply);
+            break;
+        case ITEM_MOD_RANGED_ATTACK_POWER:
+            HandleStatModifier(UNIT_MOD_ATTACK_POWER_RANGED, TOTAL_VALUE, float(val), apply);
+            break;
 //            case ITEM_MOD_FERAL_ATTACK_POWER:
 //                ApplyFeralAPBonus(int32(val), apply);
 //                break;
-            case ITEM_MOD_MANA_REGENERATION:
-                ApplyManaRegenBonus(int32(val), apply);
-                break;
-            case ITEM_MOD_ARMOR_PENETRATION_RATING:
-                ApplyRatingMod(CR_ARMOR_PENETRATION, int32(val), apply);
-                break;
-            case ITEM_MOD_SPELL_POWER:
-                ApplySpellPowerBonus(int32(val), apply);
-                break;
-            case ITEM_MOD_HEALTH_REGEN:
-                ApplyHealthRegenBonus(int32(val), apply);
-                break;
-            case ITEM_MOD_SPELL_PENETRATION:
-                ApplySpellPenetrationBonus(val, apply);
-                break;
-            case ITEM_MOD_BLOCK_VALUE:
-                HandleBaseModValue(SHIELD_BLOCK_VALUE, FLAT_MOD, float(val), apply);
-                break;
-            // deprecated item mods
-            case ITEM_MOD_SPELL_HEALING_DONE:
-            case ITEM_MOD_SPELL_DAMAGE_DONE:
-                break;
+        case ITEM_MOD_MANA_REGENERATION:
+            ApplyManaRegenBonus(int32(val), apply);
+            break;
+        case ITEM_MOD_ARMOR_PENETRATION_RATING:
+            ApplyRatingMod(CR_ARMOR_PENETRATION, int32(val), apply);
+            break;
+        case ITEM_MOD_SPELL_POWER:
+            ApplySpellPowerBonus(int32(val), apply);
+            break;
+        case ITEM_MOD_HEALTH_REGEN:
+            ApplyHealthRegenBonus(int32(val), apply);
+            break;
+        case ITEM_MOD_SPELL_PENETRATION:
+            ApplySpellPenetrationBonus(val, apply);
+            break;
+        case ITEM_MOD_BLOCK_VALUE:
+            HandleBaseModValue(SHIELD_BLOCK_VALUE, FLAT_MOD, float(val), apply);
+            break;
+        // deprecated item mods
+        case ITEM_MOD_SPELL_HEALING_DONE:
+        case ITEM_MOD_SPELL_DAMAGE_DONE:
+            break;
         }
     }
 
@@ -8184,12 +8235,12 @@ void Player::_ApplyItemBonuses(ItemTemplate const* proto, uint8 slot, bool apply
         {
             switch (proto->SubClass)
             {
-                case ITEM_SUBCLASS_ARMOR_CLOTH:
-                case ITEM_SUBCLASS_ARMOR_LEATHER:
-                case ITEM_SUBCLASS_ARMOR_MAIL:
-                case ITEM_SUBCLASS_ARMOR_PLATE:
-                case ITEM_SUBCLASS_ARMOR_SHIELD:
-                    modType = BASE_VALUE;
+            case ITEM_SUBCLASS_ARMOR_CLOTH:
+            case ITEM_SUBCLASS_ARMOR_LEATHER:
+            case ITEM_SUBCLASS_ARMOR_MAIL:
+            case ITEM_SUBCLASS_ARMOR_PLATE:
+            case ITEM_SUBCLASS_ARMOR_SHIELD:
+                modType = BASE_VALUE;
                 break;
             }
         }
@@ -8224,8 +8275,8 @@ void Player::_ApplyItemBonuses(ItemTemplate const* proto, uint8 slot, bool apply
     WeaponAttackType attType = BASE_ATTACK;
 
     if (slot == EQUIPMENT_SLOT_RANGED && (
-        proto->InventoryType == INVTYPE_RANGED || proto->InventoryType == INVTYPE_THROWN ||
-        proto->InventoryType == INVTYPE_RANGEDRIGHT))
+                proto->InventoryType == INVTYPE_RANGED || proto->InventoryType == INVTYPE_THROWN ||
+                proto->InventoryType == INVTYPE_RANGEDRIGHT))
     {
         attType = RANGED_ATTACK;
     }
@@ -8261,8 +8312,8 @@ void Player::_ApplyWeaponDamage(uint8 slot, ItemTemplate const* proto, ScalingSt
     float damage = 0.0f;
 
     if (slot == EQUIPMENT_SLOT_RANGED && (
-        proto->InventoryType == INVTYPE_RANGED || proto->InventoryType == INVTYPE_THROWN ||
-        proto->InventoryType == INVTYPE_RANGEDRIGHT))
+                proto->InventoryType == INVTYPE_RANGED || proto->InventoryType == INVTYPE_THROWN ||
+                proto->InventoryType == INVTYPE_RANGEDRIGHT))
     {
         attType = RANGED_ATTACK;
     }
@@ -8344,10 +8395,17 @@ void Player::_ApplyWeaponDependentAuraCritMod(Item* item, WeaponAttackType attac
     BaseModGroup mod = BASEMOD_END;
     switch (attackType)
     {
-        case BASE_ATTACK:   mod = CRIT_PERCENTAGE;        break;
-        case OFF_ATTACK:    mod = OFFHAND_CRIT_PERCENTAGE;break;
-        case RANGED_ATTACK: mod = RANGED_CRIT_PERCENTAGE; break;
-        default: return;
+    case BASE_ATTACK:
+        mod = CRIT_PERCENTAGE;
+        break;
+    case OFF_ATTACK:
+        mod = OFFHAND_CRIT_PERCENTAGE;
+        break;
+    case RANGED_ATTACK:
+        mod = RANGED_CRIT_PERCENTAGE;
+        break;
+    default:
+        return;
     }
 
     if (item->IsFitToSpellRequirements(aura->GetSpellInfo()))
@@ -8371,18 +8429,30 @@ void Player::_ApplyWeaponDependentAuraDamageMod(Item* item, WeaponAttackType att
     UnitMods unitMod = UNIT_MOD_END;
     switch (attackType)
     {
-        case BASE_ATTACK:   unitMod = UNIT_MOD_DAMAGE_MAINHAND; break;
-        case OFF_ATTACK:    unitMod = UNIT_MOD_DAMAGE_OFFHAND;  break;
-        case RANGED_ATTACK: unitMod = UNIT_MOD_DAMAGE_RANGED;   break;
-        default: return;
+    case BASE_ATTACK:
+        unitMod = UNIT_MOD_DAMAGE_MAINHAND;
+        break;
+    case OFF_ATTACK:
+        unitMod = UNIT_MOD_DAMAGE_OFFHAND;
+        break;
+    case RANGED_ATTACK:
+        unitMod = UNIT_MOD_DAMAGE_RANGED;
+        break;
+    default:
+        return;
     }
 
     UnitModifierType unitModType = TOTAL_VALUE;
     switch (aura->GetAuraType())
     {
-        case SPELL_AURA_MOD_DAMAGE_DONE:         unitModType = TOTAL_VALUE; break;
-        case SPELL_AURA_MOD_DAMAGE_PERCENT_DONE: unitModType = TOTAL_PCT;   break;
-        default: return;
+    case SPELL_AURA_MOD_DAMAGE_DONE:
+        unitModType = TOTAL_VALUE;
+        break;
+    case SPELL_AURA_MOD_DAMAGE_PERCENT_DONE:
+        unitModType = TOTAL_PCT;
+        break;
+    default:
+        return;
     }
 
     if (item->IsFitToSpellRequirements(aura->GetSpellInfo()))
@@ -8531,10 +8601,18 @@ void Player::CastItemCombatSpell(Unit* target, WeaponAttackType attType, uint32 
                         EquipmentSlots slot;
                         switch (attType)
                         {
-                            case BASE_ATTACK:   slot = EQUIPMENT_SLOT_MAINHAND; break;
-                            case OFF_ATTACK:    slot = EQUIPMENT_SLOT_OFFHAND;  break;
-                            case RANGED_ATTACK: slot = EQUIPMENT_SLOT_RANGED;   break;
-                            default: slot = EQUIPMENT_SLOT_END; break;
+                        case BASE_ATTACK:
+                            slot = EQUIPMENT_SLOT_MAINHAND;
+                            break;
+                        case OFF_ATTACK:
+                            slot = EQUIPMENT_SLOT_OFFHAND;
+                            break;
+                        case RANGED_ATTACK:
+                            slot = EQUIPMENT_SLOT_RANGED;
+                            break;
+                        default:
+                            slot = EQUIPMENT_SLOT_END;
+                            break;
                         }
                         if (slot != i)
                             continue;
@@ -8549,7 +8627,7 @@ void Player::CastItemCombatSpell(Unit* target, WeaponAttackType attType, uint32 
 {
     // Can do effect if any damage done to target
     if (procVictim & PROC_FLAG_TAKEN_DAMAGE)
-    //if (damageInfo->procVictim & PROC_FLAG_TAKEN_ANY_DAMAGE)
+        //if (damageInfo->procVictim & PROC_FLAG_TAKEN_ANY_DAMAGE)
     {
         for (uint8 i = 0; i < MAX_ITEM_SPELLS; ++i)
         {
@@ -8617,7 +8695,7 @@ void Player::CastItemCombatSpell(Unit* target, WeaponAttackType attType, uint32 
             {
                 // Can do effect if any damage done to target
                 if (!(procVictim & PROC_FLAG_TAKEN_DAMAGE))
-                //if (!(damageInfo->procVictim & PROC_FLAG_TAKEN_ANY_DAMAGE))
+                    //if (!(damageInfo->procVictim & PROC_FLAG_TAKEN_ANY_DAMAGE))
                     continue;
             }
 
@@ -8625,7 +8703,7 @@ void Player::CastItemCombatSpell(Unit* target, WeaponAttackType attType, uint32 
             if (!spellInfo)
             {
                 LOG_ERROR("server", "Player::CastItemCombatSpell(GUID: %u, name: %s, enchant: %i): unknown spell %i is casted, ignoring...",
-                    GetGUIDLow(), GetName().c_str(), pEnchant->ID, pEnchant->spellid[s]);
+                          GetGUIDLow(), GetName().c_str(), pEnchant->ID, pEnchant->spellid[s]);
                 continue;
             }
 
@@ -8959,17 +9037,17 @@ bool Player::CheckAmmoCompatibility(const ItemTemplate* ammo_proto) const
     // check ammo ws. weapon compatibility
     switch (weapon_proto->SubClass)
     {
-        case ITEM_SUBCLASS_WEAPON_BOW:
-        case ITEM_SUBCLASS_WEAPON_CROSSBOW:
-            if (ammo_proto->SubClass != ITEM_SUBCLASS_ARROW)
-                return false;
-            break;
-        case ITEM_SUBCLASS_WEAPON_GUN:
-            if (ammo_proto->SubClass != ITEM_SUBCLASS_BULLET)
-                return false;
-            break;
-        default:
+    case ITEM_SUBCLASS_WEAPON_BOW:
+    case ITEM_SUBCLASS_WEAPON_CROSSBOW:
+        if (ammo_proto->SubClass != ITEM_SUBCLASS_ARROW)
             return false;
+        break;
+    case ITEM_SUBCLASS_WEAPON_GUN:
+        if (ammo_proto->SubClass != ITEM_SUBCLASS_BULLET)
+            return false;
+        break;
+    default:
+        return false;
     }
 
     return true;
@@ -9095,18 +9173,18 @@ void Player::SendLoot(uint64 guid, LootType loot_type)
                 {
                     switch (group->GetLootMethod())
                     {
-                        case GROUP_LOOT:
-                            // GroupLoot: rolls items over threshold. Items with quality < threshold, round robin
-                            group->GroupLoot(loot, go);
-                            break;
-                        case NEED_BEFORE_GREED:
-                            group->NeedBeforeGreed(loot, go);
-                            break;
-                        case MASTER_LOOT:
-                            group->MasterLoot(loot, go);
-                            break;
-                        default:
-                            break;
+                    case GROUP_LOOT:
+                        // GroupLoot: rolls items over threshold. Items with quality < threshold, round robin
+                        group->GroupLoot(loot, go);
+                        break;
+                    case NEED_BEFORE_GREED:
+                        group->NeedBeforeGreed(loot, go);
+                        break;
+                    case MASTER_LOOT:
+                        group->MasterLoot(loot, go);
+                        break;
+                    default:
+                        break;
                     }
                 }
             }
@@ -9120,18 +9198,18 @@ void Player::SendLoot(uint64 guid, LootType loot_type)
             {
                 switch (group->GetLootMethod())
                 {
-                    case MASTER_LOOT:
-                        permission = group->GetMasterLooterGuid() == GetGUID() ? MASTER_PERMISSION : RESTRICTED_PERMISSION;
-                        break;
-                    case FREE_FOR_ALL:
-                        permission = ALL_PERMISSION;
-                        break;
-                    case ROUND_ROBIN:
-                        permission = ROUND_ROBIN_PERMISSION;
-                        break;
-                    default:
-                        permission = GROUP_PERMISSION;
-                        break;
+                case MASTER_LOOT:
+                    permission = group->GetMasterLooterGuid() == GetGUID() ? MASTER_PERMISSION : RESTRICTED_PERMISSION;
+                    break;
+                case FREE_FOR_ALL:
+                    permission = ALL_PERMISSION;
+                    break;
+                case ROUND_ROBIN:
+                    permission = ROUND_ROBIN_PERMISSION;
+                    break;
+                default:
+                    permission = GROUP_PERMISSION;
+                    break;
                 }
             }
             else
@@ -9162,24 +9240,24 @@ void Player::SendLoot(uint64 guid, LootType loot_type)
 
             switch (loot_type)
             {
-                case LOOT_DISENCHANTING:
-                    loot->FillLoot(item->GetTemplate()->DisenchantID, LootTemplates_Disenchant, this, true);
-                    break;
-                case LOOT_PROSPECTING:
-                    loot->FillLoot(item->GetEntry(), LootTemplates_Prospecting, this, true);
-                    break;
-                case LOOT_MILLING:
-                    loot->FillLoot(item->GetEntry(), LootTemplates_Milling, this, true);
-                    break;
-                default:
-                    loot->generateMoneyLoot(item->GetTemplate()->MinMoneyLoot, item->GetTemplate()->MaxMoneyLoot);
-                    loot->FillLoot(item->GetEntry(), LootTemplates_Item, this, true, loot->gold != 0);
+            case LOOT_DISENCHANTING:
+                loot->FillLoot(item->GetTemplate()->DisenchantID, LootTemplates_Disenchant, this, true);
+                break;
+            case LOOT_PROSPECTING:
+                loot->FillLoot(item->GetEntry(), LootTemplates_Prospecting, this, true);
+                break;
+            case LOOT_MILLING:
+                loot->FillLoot(item->GetEntry(), LootTemplates_Milling, this, true);
+                break;
+            default:
+                loot->generateMoneyLoot(item->GetTemplate()->MinMoneyLoot, item->GetTemplate()->MaxMoneyLoot);
+                loot->FillLoot(item->GetEntry(), LootTemplates_Item, this, true, loot->gold != 0);
 
-                    // Xinef: Add to storage
-                    if (loot->gold > 0 || loot->unlootedCount > 0)
-                        sLootItemStorage->AddNewStoredLoot(loot, this);
+                // Xinef: Add to storage
+                if (loot->gold > 0 || loot->unlootedCount > 0)
+                    sLootItemStorage->AddNewStoredLoot(loot, this);
 
-                    break;
+                break;
             }
         }
     }
@@ -9287,18 +9365,18 @@ void Player::SendLoot(uint64 guid, LootType loot_type)
                 {
                     switch (recipientGroup->GetLootMethod())
                     {
-                        case GROUP_LOOT:
-                            // GroupLoot: rolls items over threshold. Items with quality < threshold, round robin
-                            recipientGroup->GroupLoot(loot, creature);
-                            break;
-                        case NEED_BEFORE_GREED:
-                            recipientGroup->NeedBeforeGreed(loot, creature);
-                            break;
-                        case MASTER_LOOT:
-                            recipientGroup->MasterLoot(loot, creature);
-                            break;
-                        default:
-                            break;
+                    case GROUP_LOOT:
+                        // GroupLoot: rolls items over threshold. Items with quality < threshold, round robin
+                        recipientGroup->GroupLoot(loot, creature);
+                        break;
+                    case NEED_BEFORE_GREED:
+                        recipientGroup->NeedBeforeGreed(loot, creature);
+                        break;
+                    case MASTER_LOOT:
+                        recipientGroup->MasterLoot(loot, creature);
+                        break;
+                    default:
+                        break;
                     }
                 }
             }
@@ -9333,18 +9411,18 @@ void Player::SendLoot(uint64 guid, LootType loot_type)
                     {
                         switch (recipientGroup->GetLootMethod())
                         {
-                            case MASTER_LOOT:
-                                permission = recipientGroup->GetMasterLooterGuid() == GetGUID() ? MASTER_PERMISSION : RESTRICTED_PERMISSION;
-                                break;
-                            case FREE_FOR_ALL:
-                                permission = ALL_PERMISSION;
-                                break;
-                            case ROUND_ROBIN:
-                                permission = ROUND_ROBIN_PERMISSION;
-                                break;
-                            default:
-                                permission = GROUP_PERMISSION;
-                                break;
+                        case MASTER_LOOT:
+                            permission = recipientGroup->GetMasterLooterGuid() == GetGUID() ? MASTER_PERMISSION : RESTRICTED_PERMISSION;
+                            break;
+                        case FREE_FOR_ALL:
+                            permission = ALL_PERMISSION;
+                            break;
+                        case ROUND_ROBIN:
+                            permission = ROUND_ROBIN_PERMISSION;
+                            break;
+                        default:
+                            permission = GROUP_PERMISSION;
+                            break;
                         }
                     }
                     else
@@ -9361,10 +9439,17 @@ void Player::SendLoot(uint64 guid, LootType loot_type)
     // LOOT_INSIGNIA and LOOT_FISHINGHOLE unsupported by client
     switch (loot_type)
     {
-        case LOOT_INSIGNIA:    loot_type = LOOT_SKINNING; break;
-        case LOOT_FISHINGHOLE: loot_type = LOOT_FISHING; break;
-        case LOOT_FISHING_JUNK: loot_type = LOOT_FISHING; break;
-        default: break;
+    case LOOT_INSIGNIA:
+        loot_type = LOOT_SKINNING;
+        break;
+    case LOOT_FISHINGHOLE:
+        loot_type = LOOT_FISHING;
+        break;
+    case LOOT_FISHING_JUNK:
+        loot_type = LOOT_FISHING;
+        break;
+    default:
+        break;
     }
 
     // need know merged fishing/corpse loot type for achievements
@@ -9446,9 +9531,9 @@ void Player::SendInitWorldStates(uint32 zoneid, uint32 areaid)
     data << uint32(0x8d5) << uint32(0x0);                   // 4
     data << uint32(0x8d4) << uint32(0x0);                   // 5
     data << uint32(0x8d3) << uint32(0x0);                   // 6
-                                                            // 7 1 - Arena season in progress, 0 - end of season
+    // 7 1 - Arena season in progress, 0 - end of season
     data << uint32(0xC77) << uint32(sGameConfig->GetBoolConfig("Arena.ArenaSeason.InProgress"));
-                                                            // 8 Arena season id
+    // 8 Arena season id
     data << uint32(0xF3D) << uint32(sGameConfig->GetIntConfig("Arena.ArenaSeason.ID"));
 
     if (mapid == 530)                                       // Outland
@@ -9467,590 +9552,590 @@ void Player::SendInitWorldStates(uint32 zoneid, uint32 areaid)
         // insert <field> <value>
         switch (zoneid)
         {
-            case 1:                                             // Dun Morogh
-            case 11:                                            // Wetlands
-            case 12:                                            // Elwynn Forest
-            case 38:                                            // Loch Modan
-            case 40:                                            // Westfall
-            case 51:                                            // Searing Gorge
-            case 1519:                                          // Stormwind City
-            case 1537:                                          // Ironforge
-            case 2257:                                          // Deeprun Tram
-            case 3703:                                          // Shattrath City
-                break;
-            case 139:                                           // Eastern Plaguelands
-                if (pvp && pvp->GetTypeId() == OUTDOOR_PVP_EP)
-                    pvp->FillInitialWorldStates(data);
-                else
-                {
-                    data << uint32(0x97a) << uint32(0x0); // 10 2426
-                    data << uint32(0x917) << uint32(0x0); // 11 2327
-                    data << uint32(0x918) << uint32(0x0); // 12 2328
-                    data << uint32(0x97b) << uint32(0x32); // 13 2427
-                    data << uint32(0x97c) << uint32(0x32); // 14 2428
-                    data << uint32(0x933) << uint32(0x1); // 15 2355
-                    data << uint32(0x946) << uint32(0x0); // 16 2374
-                    data << uint32(0x947) << uint32(0x0); // 17 2375
-                    data << uint32(0x948) << uint32(0x0); // 18 2376
-                    data << uint32(0x949) << uint32(0x0); // 19 2377
-                    data << uint32(0x94a) << uint32(0x0); // 20 2378
-                    data << uint32(0x94b) << uint32(0x0); // 21 2379
-                    data << uint32(0x932) << uint32(0x0); // 22 2354
-                    data << uint32(0x934) << uint32(0x0); // 23 2356
-                    data << uint32(0x935) << uint32(0x0); // 24 2357
-                    data << uint32(0x936) << uint32(0x0); // 25 2358
-                    data << uint32(0x937) << uint32(0x0); // 26 2359
-                    data << uint32(0x938) << uint32(0x0); // 27 2360
-                    data << uint32(0x939) << uint32(0x1); // 28 2361
-                    data << uint32(0x930) << uint32(0x1); // 29 2352
-                    data << uint32(0x93a) << uint32(0x0); // 30 2362
-                    data << uint32(0x93b) << uint32(0x0); // 31 2363
-                    data << uint32(0x93c) << uint32(0x0); // 32 2364
-                    data << uint32(0x93d) << uint32(0x0); // 33 2365
-                    data << uint32(0x944) << uint32(0x0); // 34 2372
-                    data << uint32(0x945) << uint32(0x0); // 35 2373
-                    data << uint32(0x931) << uint32(0x1); // 36 2353
-                    data << uint32(0x93e) << uint32(0x0); // 37 2366
-                    data << uint32(0x931) << uint32(0x1); // 38 2367 ??  grey horde not in dbc! send for consistency's sake, and to match field count
-                    data << uint32(0x940) << uint32(0x0); // 39 2368
-                    data << uint32(0x941) << uint32(0x0); // 7 2369
-                    data << uint32(0x942) << uint32(0x0); // 8 2370
-                    data << uint32(0x943) << uint32(0x0); // 9 2371
-                }
-                break;
-            case 1377:                                          // Silithus
-                if (pvp && pvp->GetTypeId() == OUTDOOR_PVP_SI)
-                    pvp->FillInitialWorldStates(data);
-                else
-                {
-                    // states are always shown
-                    data << uint32(2313) << uint32(0x0); // 7 ally silityst gathered
-                    data << uint32(2314) << uint32(0x0); // 8 horde silityst gathered
-                    data << uint32(2317) << uint32(0x0); // 9 max silithyst
-                }
-                // dunno about these... aq opening event maybe?
-                data << uint32(2322) << uint32(0x0); // 10 sandworm N
-                data << uint32(2323) << uint32(0x0); // 11 sandworm S
-                data << uint32(2324) << uint32(0x0); // 12 sandworm SW
-                data << uint32(2325) << uint32(0x0); // 13 sandworm E
-                break;
-            case 2597:                                          // Alterac Valley
-                if (bg && bg->GetBgTypeID(true) == BATTLEGROUND_AV)
-                    bg->FillInitialWorldStates(data);
-                else
-                {
-                    data << uint32(0x7ae) << uint32(0x1);           // 7 snowfall n
-                    data << uint32(0x532) << uint32(0x1);           // 8 frostwolfhut hc
-                    data << uint32(0x531) << uint32(0x0);           // 9 frostwolfhut ac
-                    data << uint32(0x52e) << uint32(0x0);           // 10 stormpike firstaid a_a
-                    data << uint32(0x571) << uint32(0x0);           // 11 east frostwolf tower horde assaulted -unused
-                    data << uint32(0x570) << uint32(0x0);           // 12 west frostwolf tower horde assaulted - unused
-                    data << uint32(0x567) << uint32(0x1);           // 13 frostwolfe c
-                    data << uint32(0x566) << uint32(0x1);           // 14 frostwolfw c
-                    data << uint32(0x550) << uint32(0x1);           // 15 irondeep (N) ally
-                    data << uint32(0x544) << uint32(0x0);           // 16 ice grave a_a
-                    data << uint32(0x536) << uint32(0x0);           // 17 stormpike grave h_c
-                    data << uint32(0x535) << uint32(0x1);           // 18 stormpike grave a_c
-                    data << uint32(0x518) << uint32(0x0);           // 19 stoneheart grave a_a
-                    data << uint32(0x517) << uint32(0x0);           // 20 stoneheart grave h_a
-                    data << uint32(0x574) << uint32(0x0);           // 21 1396 unk
-                    data << uint32(0x573) << uint32(0x0);           // 22 iceblood tower horde assaulted -unused
-                    data << uint32(0x572) << uint32(0x0);           // 23 towerpoint horde assaulted - unused
-                    data << uint32(0x56f) << uint32(0x0);           // 24 1391 unk
-                    data << uint32(0x56e) << uint32(0x0);           // 25 iceblood a
-                    data << uint32(0x56d) << uint32(0x0);           // 26 towerp a
-                    data << uint32(0x56c) << uint32(0x0);           // 27 frostwolfe a
-                    data << uint32(0x56b) << uint32(0x0);           // 28 froswolfw a
-                    data << uint32(0x56a) << uint32(0x1);           // 29 1386 unk
-                    data << uint32(0x569) << uint32(0x1);           // 30 iceblood c
-                    data << uint32(0x568) << uint32(0x1);           // 31 towerp c
-                    data << uint32(0x565) << uint32(0x0);           // 32 stoneh tower a
-                    data << uint32(0x564) << uint32(0x0);           // 33 icewing tower a
-                    data << uint32(0x563) << uint32(0x0);           // 34 dunn a
-                    data << uint32(0x562) << uint32(0x0);           // 35 duns a
-                    data << uint32(0x561) << uint32(0x0);           // 36 stoneheart bunker alliance assaulted - unused
-                    data << uint32(0x560) << uint32(0x0);           // 37 icewing bunker alliance assaulted - unused
-                    data << uint32(0x55f) << uint32(0x0);           // 38 dunbaldar south alliance assaulted - unused
-                    data << uint32(0x55e) << uint32(0x0);           // 39 dunbaldar north alliance assaulted - unused
-                    data << uint32(0x55d) << uint32(0x0);           // 40 stone tower d
-                    data << uint32(0x3c6) << uint32(0x0);           // 41 966 unk
-                    data << uint32(0x3c4) << uint32(0x0);           // 42 964 unk
-                    data << uint32(0x3c2) << uint32(0x0);           // 43 962 unk
-                    data << uint32(0x516) << uint32(0x1);           // 44 stoneheart grave a_c
-                    data << uint32(0x515) << uint32(0x0);           // 45 stonheart grave h_c
-                    data << uint32(0x3b6) << uint32(0x0);           // 46 950 unk
-                    data << uint32(0x55c) << uint32(0x0);           // 47 icewing tower d
-                    data << uint32(0x55b) << uint32(0x0);           // 48 dunn d
-                    data << uint32(0x55a) << uint32(0x0);           // 49 duns d
-                    data << uint32(0x559) << uint32(0x0);           // 50 1369 unk
-                    data << uint32(0x558) << uint32(0x0);           // 51 iceblood d
-                    data << uint32(0x557) << uint32(0x0);           // 52 towerp d
-                    data << uint32(0x556) << uint32(0x0);           // 53 frostwolfe d
-                    data << uint32(0x555) << uint32(0x0);           // 54 frostwolfw d
-                    data << uint32(0x554) << uint32(0x1);           // 55 stoneh tower c
-                    data << uint32(0x553) << uint32(0x1);           // 56 icewing tower c
-                    data << uint32(0x552) << uint32(0x1);           // 57 dunn c
-                    data << uint32(0x551) << uint32(0x1);           // 58 duns c
-                    data << uint32(0x54f) << uint32(0x0);           // 59 irondeep (N) horde
-                    data << uint32(0x54e) << uint32(0x0);           // 60 irondeep (N) ally
-                    data << uint32(0x54d) << uint32(0x1);           // 61 mine (S) neutral
-                    data << uint32(0x54c) << uint32(0x0);           // 62 mine (S) horde
-                    data << uint32(0x54b) << uint32(0x0);           // 63 mine (S) ally
-                    data << uint32(0x545) << uint32(0x0);           // 64 iceblood h_a
-                    data << uint32(0x543) << uint32(0x1);           // 65 iceblod h_c
-                    data << uint32(0x542) << uint32(0x0);           // 66 iceblood a_c
-                    data << uint32(0x540) << uint32(0x0);           // 67 snowfall h_a
-                    data << uint32(0x53f) << uint32(0x0);           // 68 snowfall a_a
-                    data << uint32(0x53e) << uint32(0x0);           // 69 snowfall h_c
-                    data << uint32(0x53d) << uint32(0x0);           // 70 snowfall a_c
-                    data << uint32(0x53c) << uint32(0x0);           // 71 frostwolf g h_a
-                    data << uint32(0x53b) << uint32(0x0);           // 72 frostwolf g a_a
-                    data << uint32(0x53a) << uint32(0x1);           // 73 frostwolf g h_c
-                    data << uint32(0x539) << uint32(0x0);           // 74 frostwolf g a_c
-                    data << uint32(0x538) << uint32(0x0);           // 75 stormpike grave h_a
-                    data << uint32(0x537) << uint32(0x0);           // 76 stormpike grave a_a
-                    data << uint32(0x534) << uint32(0x0);           // 77 frostwolf hut h_a
-                    data << uint32(0x533) << uint32(0x0);           // 78 frostwolf hut a_a
-                    data << uint32(0x530) << uint32(0x0);           // 79 stormpike first aid h_a
-                    data << uint32(0x52f) << uint32(0x0);           // 80 stormpike first aid h_c
-                    data << uint32(0x52d) << uint32(0x1);           // 81 stormpike first aid a_c
-                }
-                break;
-            case 3277:                                          // Warsong Gulch
-                if (bg && bg->GetBgTypeID(true) == BATTLEGROUND_WS)
-                    bg->FillInitialWorldStates(data);
-                else
-                {
-                    data << uint32(0x62d) << uint32(0x0);       // 7 1581 alliance flag captures
-                    data << uint32(0x62e) << uint32(0x0);       // 8 1582 horde flag captures
-                    data << uint32(0x609) << uint32(0x0);       // 9 1545 unk, set to 1 on alliance flag pickup...
-                    data << uint32(0x60a) << uint32(0x0);       // 10 1546 unk, set to 1 on horde flag pickup, after drop it's -1
-                    data << uint32(0x60b) << uint32(0x2);       // 11 1547 unk
-                    data << uint32(0x641) << uint32(0x3);       // 12 1601 unk (max flag captures?)
-                    data << uint32(0x922) << uint32(0x1);       // 13 2338 horde (0 - hide, 1 - flag ok, 2 - flag picked up (flashing), 3 - flag picked up (not flashing)
-                    data << uint32(0x923) << uint32(0x1);       // 14 2339 alliance (0 - hide, 1 - flag ok, 2 - flag picked up (flashing), 3 - flag picked up (not flashing)
-                }
-                break;
-            case 3358:                                          // Arathi Basin
-                if (bg && bg->GetBgTypeID(true) == BATTLEGROUND_AB)
-                    bg->FillInitialWorldStates(data);
-                else
-                {
-                    data << uint32(0x6e7) << uint32(0x0);       // 7 1767 stables alliance
-                    data << uint32(0x6e8) << uint32(0x0);       // 8 1768 stables horde
-                    data << uint32(0x6e9) << uint32(0x0);       // 9 1769 unk, ST?
-                    data << uint32(0x6ea) << uint32(0x0);       // 10 1770 stables (show/hide)
-                    data << uint32(0x6ec) << uint32(0x0);       // 11 1772 farm (0 - horde controlled, 1 - alliance controlled)
-                    data << uint32(0x6ed) << uint32(0x0);       // 12 1773 farm (show/hide)
-                    data << uint32(0x6ee) << uint32(0x0);       // 13 1774 farm color
-                    data << uint32(0x6ef) << uint32(0x0);       // 14 1775 gold mine color, may be FM?
-                    data << uint32(0x6f0) << uint32(0x0);       // 15 1776 alliance resources
-                    data << uint32(0x6f1) << uint32(0x0);       // 16 1777 horde resources
-                    data << uint32(0x6f2) << uint32(0x0);       // 17 1778 horde bases
-                    data << uint32(0x6f3) << uint32(0x0);       // 18 1779 alliance bases
-                    data << uint32(0x6f4) << uint32(0x640);     // 19 1780 max resources (1600)
-                    data << uint32(0x6f6) << uint32(0x0);       // 20 1782 blacksmith color
-                    data << uint32(0x6f7) << uint32(0x0);       // 21 1783 blacksmith (show/hide)
-                    data << uint32(0x6f8) << uint32(0x0);       // 22 1784 unk, bs?
-                    data << uint32(0x6f9) << uint32(0x0);       // 23 1785 unk, bs?
-                    data << uint32(0x6fb) << uint32(0x0);       // 24 1787 gold mine (0 - horde contr, 1 - alliance contr)
-                    data << uint32(0x6fc) << uint32(0x0);       // 25 1788 gold mine (0 - conflict, 1 - horde)
-                    data << uint32(0x6fd) << uint32(0x0);       // 26 1789 gold mine (1 - show/0 - hide)
-                    data << uint32(0x6fe) << uint32(0x0);       // 27 1790 gold mine color
-                    data << uint32(0x700) << uint32(0x0);       // 28 1792 gold mine color, wtf?, may be LM?
-                    data << uint32(0x701) << uint32(0x0);       // 29 1793 lumber mill color (0 - conflict, 1 - horde contr)
-                    data << uint32(0x702) << uint32(0x0);       // 30 1794 lumber mill (show/hide)
-                    data << uint32(0x703) << uint32(0x0);       // 31 1795 lumber mill color color
-                    data << uint32(0x732) << uint32(0x1);       // 32 1842 stables (1 - uncontrolled)
-                    data << uint32(0x733) << uint32(0x1);       // 33 1843 gold mine (1 - uncontrolled)
-                    data << uint32(0x734) << uint32(0x1);       // 34 1844 lumber mill (1 - uncontrolled)
-                    data << uint32(0x735) << uint32(0x1);       // 35 1845 farm (1 - uncontrolled)
-                    data << uint32(0x736) << uint32(0x1);       // 36 1846 blacksmith (1 - uncontrolled)
-                    data << uint32(0x745) << uint32(0x2);       // 37 1861 unk
-                    data << uint32(0x7a3) << uint32(0x578);     // 38 1955 warning limit (1400)
-                }
-                break;
-            case 3820:                                          // Eye of the Storm
-                if (bg && bg->GetBgTypeID(true) == BATTLEGROUND_EY)
-                    bg->FillInitialWorldStates(data);
-                else
-                {
-                    data << uint32(0xac1) << uint32(0x0);       // 7  2753 Horde Bases
-                    data << uint32(0xac0) << uint32(0x0);       // 8  2752 Alliance Bases
-                    data << uint32(0xab6) << uint32(0x0);       // 9  2742 Mage Tower - Horde conflict
-                    data << uint32(0xab5) << uint32(0x0);       // 10 2741 Mage Tower - Alliance conflict
-                    data << uint32(0xab4) << uint32(0x0);       // 11 2740 Fel Reaver - Horde conflict
-                    data << uint32(0xab3) << uint32(0x0);       // 12 2739 Fel Reaver - Alliance conflict
-                    data << uint32(0xab2) << uint32(0x0);       // 13 2738 Draenei - Alliance conflict
-                    data << uint32(0xab1) << uint32(0x0);       // 14 2737 Draenei - Horde conflict
-                    data << uint32(0xab0) << uint32(0x0);       // 15 2736 unk // 0 at start
-                    data << uint32(0xaaf) << uint32(0x0);       // 16 2735 unk // 0 at start
-                    data << uint32(0xaad) << uint32(0x0);       // 17 2733 Draenei - Horde control
-                    data << uint32(0xaac) << uint32(0x0);       // 18 2732 Draenei - Alliance control
-                    data << uint32(0xaab) << uint32(0x1);       // 19 2731 Draenei uncontrolled (1 - yes, 0 - no)
-                    data << uint32(0xaaa) << uint32(0x0);       // 20 2730 Mage Tower - Alliance control
-                    data << uint32(0xaa9) << uint32(0x0);       // 21 2729 Mage Tower - Horde control
-                    data << uint32(0xaa8) << uint32(0x1);       // 22 2728 Mage Tower uncontrolled (1 - yes, 0 - no)
-                    data << uint32(0xaa7) << uint32(0x0);       // 23 2727 Fel Reaver - Horde control
-                    data << uint32(0xaa6) << uint32(0x0);       // 24 2726 Fel Reaver - Alliance control
-                    data << uint32(0xaa5) << uint32(0x1);       // 25 2725 Fel Reaver uncontrolled (1 - yes, 0 - no)
-                    data << uint32(0xaa4) << uint32(0x0);       // 26 2724 Boold Elf - Horde control
-                    data << uint32(0xaa3) << uint32(0x0);       // 27 2723 Boold Elf - Alliance control
-                    data << uint32(0xaa2) << uint32(0x1);       // 28 2722 Boold Elf uncontrolled (1 - yes, 0 - no)
-                    data << uint32(0xac5) << uint32(0x1);       // 29 2757 Flag (1 - show, 0 - hide) - doesn't work exactly this way!
-                    data << uint32(0xad2) << uint32(0x1);       // 30 2770 Horde top-stats (1 - show, 0 - hide) // 02 -> horde picked up the flag
-                    data << uint32(0xad1) << uint32(0x1);       // 31 2769 Alliance top-stats (1 - show, 0 - hide) // 02 -> alliance picked up the flag
-                    data << uint32(0xabe) << uint32(0x0);       // 32 2750 Horde resources
-                    data << uint32(0xabd) << uint32(0x0);       // 33 2749 Alliance resources
-                    data << uint32(0xa05) << uint32(0x8e);      // 34 2565 unk, constant?
-                    data << uint32(0xaa0) << uint32(0x0);       // 35 2720 Capturing progress-bar (100 -> empty (only grey), 0 -> blue|red (no grey), default 0)
-                    data << uint32(0xa9f) << uint32(0x0);       // 36 2719 Capturing progress-bar (0 - left, 100 - right)
-                    data << uint32(0xa9e) << uint32(0x0);       // 37 2718 Capturing progress-bar (1 - show, 0 - hide)
-                    data << uint32(0xc0d) << uint32(0x17b);     // 38 3085 unk
-                    // and some more ... unknown
-                }
-                break;
-            // any of these needs change! the client remembers the prev setting!
-            // ON EVERY ZONE LEAVE, RESET THE OLD ZONE'S WORLD STATE, BUT AT LEAST THE UI STUFF!
-            case 3483:                                          // Hellfire Peninsula
-                if (pvp && pvp->GetTypeId() == OUTDOOR_PVP_HP)
-                    pvp->FillInitialWorldStates(data);
-                else
-                {
-                    data << uint32(0x9ba) << uint32(0x1);           // 10 // add ally tower main gui icon       // maybe should be sent only on login?
-                    data << uint32(0x9b9) << uint32(0x1);           // 11 // add horde tower main gui icon      // maybe should be sent only on login?
-                    data << uint32(0x9b5) << uint32(0x0);           // 12 // show neutral broken hill icon      // 2485
-                    data << uint32(0x9b4) << uint32(0x1);           // 13 // show icon above broken hill        // 2484
-                    data << uint32(0x9b3) << uint32(0x0);           // 14 // show ally broken hill icon         // 2483
-                    data << uint32(0x9b2) << uint32(0x0);           // 15 // show neutral overlook icon         // 2482
-                    data << uint32(0x9b1) << uint32(0x1);           // 16 // show the overlook arrow            // 2481
-                    data << uint32(0x9b0) << uint32(0x0);           // 17 // show ally overlook icon            // 2480
-                    data << uint32(0x9ae) << uint32(0x0);           // 18 // horde pvp objectives captured      // 2478
-                    data << uint32(0x9ac) << uint32(0x0);           // 19 // ally pvp objectives captured       // 2476
-                    data << uint32(2475)  << uint32(100);           //: ally / horde slider grey area                              // show only in direct vicinity!
-                    data << uint32(2474)  << uint32(50);            //: ally / horde slider percentage, 100 for ally, 0 for horde  // show only in direct vicinity!
-                    data << uint32(2473)  << uint32(0);             //: ally / horde slider display                                // show only in direct vicinity!
-                    data << uint32(0x9a8) << uint32(0x0);           // 20 // show the neutral stadium icon      // 2472
-                    data << uint32(0x9a7) << uint32(0x0);           // 21 // show the ally stadium icon         // 2471
-                    data << uint32(0x9a6) << uint32(0x1);           // 22 // show the horde stadium icon        // 2470
-                }
-                break;
-            case 3518:                                          // Nagrand
-                if (pvp && pvp->GetTypeId() == OUTDOOR_PVP_NA)
-                    pvp->FillInitialWorldStates(data);
-                else
-                {
-                    data << uint32(2503) << uint32(0x0);    // 10
-                    data << uint32(2502) << uint32(0x0);    // 11
-                    data << uint32(2493) << uint32(0x0);    // 12
-                    data << uint32(2491) << uint32(0x0);    // 13
+        case 1:                                             // Dun Morogh
+        case 11:                                            // Wetlands
+        case 12:                                            // Elwynn Forest
+        case 38:                                            // Loch Modan
+        case 40:                                            // Westfall
+        case 51:                                            // Searing Gorge
+        case 1519:                                          // Stormwind City
+        case 1537:                                          // Ironforge
+        case 2257:                                          // Deeprun Tram
+        case 3703:                                          // Shattrath City
+            break;
+        case 139:                                           // Eastern Plaguelands
+            if (pvp && pvp->GetTypeId() == OUTDOOR_PVP_EP)
+                pvp->FillInitialWorldStates(data);
+            else
+            {
+                data << uint32(0x97a) << uint32(0x0); // 10 2426
+                data << uint32(0x917) << uint32(0x0); // 11 2327
+                data << uint32(0x918) << uint32(0x0); // 12 2328
+                data << uint32(0x97b) << uint32(0x32); // 13 2427
+                data << uint32(0x97c) << uint32(0x32); // 14 2428
+                data << uint32(0x933) << uint32(0x1); // 15 2355
+                data << uint32(0x946) << uint32(0x0); // 16 2374
+                data << uint32(0x947) << uint32(0x0); // 17 2375
+                data << uint32(0x948) << uint32(0x0); // 18 2376
+                data << uint32(0x949) << uint32(0x0); // 19 2377
+                data << uint32(0x94a) << uint32(0x0); // 20 2378
+                data << uint32(0x94b) << uint32(0x0); // 21 2379
+                data << uint32(0x932) << uint32(0x0); // 22 2354
+                data << uint32(0x934) << uint32(0x0); // 23 2356
+                data << uint32(0x935) << uint32(0x0); // 24 2357
+                data << uint32(0x936) << uint32(0x0); // 25 2358
+                data << uint32(0x937) << uint32(0x0); // 26 2359
+                data << uint32(0x938) << uint32(0x0); // 27 2360
+                data << uint32(0x939) << uint32(0x1); // 28 2361
+                data << uint32(0x930) << uint32(0x1); // 29 2352
+                data << uint32(0x93a) << uint32(0x0); // 30 2362
+                data << uint32(0x93b) << uint32(0x0); // 31 2363
+                data << uint32(0x93c) << uint32(0x0); // 32 2364
+                data << uint32(0x93d) << uint32(0x0); // 33 2365
+                data << uint32(0x944) << uint32(0x0); // 34 2372
+                data << uint32(0x945) << uint32(0x0); // 35 2373
+                data << uint32(0x931) << uint32(0x1); // 36 2353
+                data << uint32(0x93e) << uint32(0x0); // 37 2366
+                data << uint32(0x931) << uint32(0x1); // 38 2367 ??  grey horde not in dbc! send for consistency's sake, and to match field count
+                data << uint32(0x940) << uint32(0x0); // 39 2368
+                data << uint32(0x941) << uint32(0x0); // 7 2369
+                data << uint32(0x942) << uint32(0x0); // 8 2370
+                data << uint32(0x943) << uint32(0x0); // 9 2371
+            }
+            break;
+        case 1377:                                          // Silithus
+            if (pvp && pvp->GetTypeId() == OUTDOOR_PVP_SI)
+                pvp->FillInitialWorldStates(data);
+            else
+            {
+                // states are always shown
+                data << uint32(2313) << uint32(0x0); // 7 ally silityst gathered
+                data << uint32(2314) << uint32(0x0); // 8 horde silityst gathered
+                data << uint32(2317) << uint32(0x0); // 9 max silithyst
+            }
+            // dunno about these... aq opening event maybe?
+            data << uint32(2322) << uint32(0x0); // 10 sandworm N
+            data << uint32(2323) << uint32(0x0); // 11 sandworm S
+            data << uint32(2324) << uint32(0x0); // 12 sandworm SW
+            data << uint32(2325) << uint32(0x0); // 13 sandworm E
+            break;
+        case 2597:                                          // Alterac Valley
+            if (bg && bg->GetBgTypeID(true) == BATTLEGROUND_AV)
+                bg->FillInitialWorldStates(data);
+            else
+            {
+                data << uint32(0x7ae) << uint32(0x1);           // 7 snowfall n
+                data << uint32(0x532) << uint32(0x1);           // 8 frostwolfhut hc
+                data << uint32(0x531) << uint32(0x0);           // 9 frostwolfhut ac
+                data << uint32(0x52e) << uint32(0x0);           // 10 stormpike firstaid a_a
+                data << uint32(0x571) << uint32(0x0);           // 11 east frostwolf tower horde assaulted -unused
+                data << uint32(0x570) << uint32(0x0);           // 12 west frostwolf tower horde assaulted - unused
+                data << uint32(0x567) << uint32(0x1);           // 13 frostwolfe c
+                data << uint32(0x566) << uint32(0x1);           // 14 frostwolfw c
+                data << uint32(0x550) << uint32(0x1);           // 15 irondeep (N) ally
+                data << uint32(0x544) << uint32(0x0);           // 16 ice grave a_a
+                data << uint32(0x536) << uint32(0x0);           // 17 stormpike grave h_c
+                data << uint32(0x535) << uint32(0x1);           // 18 stormpike grave a_c
+                data << uint32(0x518) << uint32(0x0);           // 19 stoneheart grave a_a
+                data << uint32(0x517) << uint32(0x0);           // 20 stoneheart grave h_a
+                data << uint32(0x574) << uint32(0x0);           // 21 1396 unk
+                data << uint32(0x573) << uint32(0x0);           // 22 iceblood tower horde assaulted -unused
+                data << uint32(0x572) << uint32(0x0);           // 23 towerpoint horde assaulted - unused
+                data << uint32(0x56f) << uint32(0x0);           // 24 1391 unk
+                data << uint32(0x56e) << uint32(0x0);           // 25 iceblood a
+                data << uint32(0x56d) << uint32(0x0);           // 26 towerp a
+                data << uint32(0x56c) << uint32(0x0);           // 27 frostwolfe a
+                data << uint32(0x56b) << uint32(0x0);           // 28 froswolfw a
+                data << uint32(0x56a) << uint32(0x1);           // 29 1386 unk
+                data << uint32(0x569) << uint32(0x1);           // 30 iceblood c
+                data << uint32(0x568) << uint32(0x1);           // 31 towerp c
+                data << uint32(0x565) << uint32(0x0);           // 32 stoneh tower a
+                data << uint32(0x564) << uint32(0x0);           // 33 icewing tower a
+                data << uint32(0x563) << uint32(0x0);           // 34 dunn a
+                data << uint32(0x562) << uint32(0x0);           // 35 duns a
+                data << uint32(0x561) << uint32(0x0);           // 36 stoneheart bunker alliance assaulted - unused
+                data << uint32(0x560) << uint32(0x0);           // 37 icewing bunker alliance assaulted - unused
+                data << uint32(0x55f) << uint32(0x0);           // 38 dunbaldar south alliance assaulted - unused
+                data << uint32(0x55e) << uint32(0x0);           // 39 dunbaldar north alliance assaulted - unused
+                data << uint32(0x55d) << uint32(0x0);           // 40 stone tower d
+                data << uint32(0x3c6) << uint32(0x0);           // 41 966 unk
+                data << uint32(0x3c4) << uint32(0x0);           // 42 964 unk
+                data << uint32(0x3c2) << uint32(0x0);           // 43 962 unk
+                data << uint32(0x516) << uint32(0x1);           // 44 stoneheart grave a_c
+                data << uint32(0x515) << uint32(0x0);           // 45 stonheart grave h_c
+                data << uint32(0x3b6) << uint32(0x0);           // 46 950 unk
+                data << uint32(0x55c) << uint32(0x0);           // 47 icewing tower d
+                data << uint32(0x55b) << uint32(0x0);           // 48 dunn d
+                data << uint32(0x55a) << uint32(0x0);           // 49 duns d
+                data << uint32(0x559) << uint32(0x0);           // 50 1369 unk
+                data << uint32(0x558) << uint32(0x0);           // 51 iceblood d
+                data << uint32(0x557) << uint32(0x0);           // 52 towerp d
+                data << uint32(0x556) << uint32(0x0);           // 53 frostwolfe d
+                data << uint32(0x555) << uint32(0x0);           // 54 frostwolfw d
+                data << uint32(0x554) << uint32(0x1);           // 55 stoneh tower c
+                data << uint32(0x553) << uint32(0x1);           // 56 icewing tower c
+                data << uint32(0x552) << uint32(0x1);           // 57 dunn c
+                data << uint32(0x551) << uint32(0x1);           // 58 duns c
+                data << uint32(0x54f) << uint32(0x0);           // 59 irondeep (N) horde
+                data << uint32(0x54e) << uint32(0x0);           // 60 irondeep (N) ally
+                data << uint32(0x54d) << uint32(0x1);           // 61 mine (S) neutral
+                data << uint32(0x54c) << uint32(0x0);           // 62 mine (S) horde
+                data << uint32(0x54b) << uint32(0x0);           // 63 mine (S) ally
+                data << uint32(0x545) << uint32(0x0);           // 64 iceblood h_a
+                data << uint32(0x543) << uint32(0x1);           // 65 iceblod h_c
+                data << uint32(0x542) << uint32(0x0);           // 66 iceblood a_c
+                data << uint32(0x540) << uint32(0x0);           // 67 snowfall h_a
+                data << uint32(0x53f) << uint32(0x0);           // 68 snowfall a_a
+                data << uint32(0x53e) << uint32(0x0);           // 69 snowfall h_c
+                data << uint32(0x53d) << uint32(0x0);           // 70 snowfall a_c
+                data << uint32(0x53c) << uint32(0x0);           // 71 frostwolf g h_a
+                data << uint32(0x53b) << uint32(0x0);           // 72 frostwolf g a_a
+                data << uint32(0x53a) << uint32(0x1);           // 73 frostwolf g h_c
+                data << uint32(0x539) << uint32(0x0);           // 74 frostwolf g a_c
+                data << uint32(0x538) << uint32(0x0);           // 75 stormpike grave h_a
+                data << uint32(0x537) << uint32(0x0);           // 76 stormpike grave a_a
+                data << uint32(0x534) << uint32(0x0);           // 77 frostwolf hut h_a
+                data << uint32(0x533) << uint32(0x0);           // 78 frostwolf hut a_a
+                data << uint32(0x530) << uint32(0x0);           // 79 stormpike first aid h_a
+                data << uint32(0x52f) << uint32(0x0);           // 80 stormpike first aid h_c
+                data << uint32(0x52d) << uint32(0x1);           // 81 stormpike first aid a_c
+            }
+            break;
+        case 3277:                                          // Warsong Gulch
+            if (bg && bg->GetBgTypeID(true) == BATTLEGROUND_WS)
+                bg->FillInitialWorldStates(data);
+            else
+            {
+                data << uint32(0x62d) << uint32(0x0);       // 7 1581 alliance flag captures
+                data << uint32(0x62e) << uint32(0x0);       // 8 1582 horde flag captures
+                data << uint32(0x609) << uint32(0x0);       // 9 1545 unk, set to 1 on alliance flag pickup...
+                data << uint32(0x60a) << uint32(0x0);       // 10 1546 unk, set to 1 on horde flag pickup, after drop it's -1
+                data << uint32(0x60b) << uint32(0x2);       // 11 1547 unk
+                data << uint32(0x641) << uint32(0x3);       // 12 1601 unk (max flag captures?)
+                data << uint32(0x922) << uint32(0x1);       // 13 2338 horde (0 - hide, 1 - flag ok, 2 - flag picked up (flashing), 3 - flag picked up (not flashing)
+                data << uint32(0x923) << uint32(0x1);       // 14 2339 alliance (0 - hide, 1 - flag ok, 2 - flag picked up (flashing), 3 - flag picked up (not flashing)
+            }
+            break;
+        case 3358:                                          // Arathi Basin
+            if (bg && bg->GetBgTypeID(true) == BATTLEGROUND_AB)
+                bg->FillInitialWorldStates(data);
+            else
+            {
+                data << uint32(0x6e7) << uint32(0x0);       // 7 1767 stables alliance
+                data << uint32(0x6e8) << uint32(0x0);       // 8 1768 stables horde
+                data << uint32(0x6e9) << uint32(0x0);       // 9 1769 unk, ST?
+                data << uint32(0x6ea) << uint32(0x0);       // 10 1770 stables (show/hide)
+                data << uint32(0x6ec) << uint32(0x0);       // 11 1772 farm (0 - horde controlled, 1 - alliance controlled)
+                data << uint32(0x6ed) << uint32(0x0);       // 12 1773 farm (show/hide)
+                data << uint32(0x6ee) << uint32(0x0);       // 13 1774 farm color
+                data << uint32(0x6ef) << uint32(0x0);       // 14 1775 gold mine color, may be FM?
+                data << uint32(0x6f0) << uint32(0x0);       // 15 1776 alliance resources
+                data << uint32(0x6f1) << uint32(0x0);       // 16 1777 horde resources
+                data << uint32(0x6f2) << uint32(0x0);       // 17 1778 horde bases
+                data << uint32(0x6f3) << uint32(0x0);       // 18 1779 alliance bases
+                data << uint32(0x6f4) << uint32(0x640);     // 19 1780 max resources (1600)
+                data << uint32(0x6f6) << uint32(0x0);       // 20 1782 blacksmith color
+                data << uint32(0x6f7) << uint32(0x0);       // 21 1783 blacksmith (show/hide)
+                data << uint32(0x6f8) << uint32(0x0);       // 22 1784 unk, bs?
+                data << uint32(0x6f9) << uint32(0x0);       // 23 1785 unk, bs?
+                data << uint32(0x6fb) << uint32(0x0);       // 24 1787 gold mine (0 - horde contr, 1 - alliance contr)
+                data << uint32(0x6fc) << uint32(0x0);       // 25 1788 gold mine (0 - conflict, 1 - horde)
+                data << uint32(0x6fd) << uint32(0x0);       // 26 1789 gold mine (1 - show/0 - hide)
+                data << uint32(0x6fe) << uint32(0x0);       // 27 1790 gold mine color
+                data << uint32(0x700) << uint32(0x0);       // 28 1792 gold mine color, wtf?, may be LM?
+                data << uint32(0x701) << uint32(0x0);       // 29 1793 lumber mill color (0 - conflict, 1 - horde contr)
+                data << uint32(0x702) << uint32(0x0);       // 30 1794 lumber mill (show/hide)
+                data << uint32(0x703) << uint32(0x0);       // 31 1795 lumber mill color color
+                data << uint32(0x732) << uint32(0x1);       // 32 1842 stables (1 - uncontrolled)
+                data << uint32(0x733) << uint32(0x1);       // 33 1843 gold mine (1 - uncontrolled)
+                data << uint32(0x734) << uint32(0x1);       // 34 1844 lumber mill (1 - uncontrolled)
+                data << uint32(0x735) << uint32(0x1);       // 35 1845 farm (1 - uncontrolled)
+                data << uint32(0x736) << uint32(0x1);       // 36 1846 blacksmith (1 - uncontrolled)
+                data << uint32(0x745) << uint32(0x2);       // 37 1861 unk
+                data << uint32(0x7a3) << uint32(0x578);     // 38 1955 warning limit (1400)
+            }
+            break;
+        case 3820:                                          // Eye of the Storm
+            if (bg && bg->GetBgTypeID(true) == BATTLEGROUND_EY)
+                bg->FillInitialWorldStates(data);
+            else
+            {
+                data << uint32(0xac1) << uint32(0x0);       // 7  2753 Horde Bases
+                data << uint32(0xac0) << uint32(0x0);       // 8  2752 Alliance Bases
+                data << uint32(0xab6) << uint32(0x0);       // 9  2742 Mage Tower - Horde conflict
+                data << uint32(0xab5) << uint32(0x0);       // 10 2741 Mage Tower - Alliance conflict
+                data << uint32(0xab4) << uint32(0x0);       // 11 2740 Fel Reaver - Horde conflict
+                data << uint32(0xab3) << uint32(0x0);       // 12 2739 Fel Reaver - Alliance conflict
+                data << uint32(0xab2) << uint32(0x0);       // 13 2738 Draenei - Alliance conflict
+                data << uint32(0xab1) << uint32(0x0);       // 14 2737 Draenei - Horde conflict
+                data << uint32(0xab0) << uint32(0x0);       // 15 2736 unk // 0 at start
+                data << uint32(0xaaf) << uint32(0x0);       // 16 2735 unk // 0 at start
+                data << uint32(0xaad) << uint32(0x0);       // 17 2733 Draenei - Horde control
+                data << uint32(0xaac) << uint32(0x0);       // 18 2732 Draenei - Alliance control
+                data << uint32(0xaab) << uint32(0x1);       // 19 2731 Draenei uncontrolled (1 - yes, 0 - no)
+                data << uint32(0xaaa) << uint32(0x0);       // 20 2730 Mage Tower - Alliance control
+                data << uint32(0xaa9) << uint32(0x0);       // 21 2729 Mage Tower - Horde control
+                data << uint32(0xaa8) << uint32(0x1);       // 22 2728 Mage Tower uncontrolled (1 - yes, 0 - no)
+                data << uint32(0xaa7) << uint32(0x0);       // 23 2727 Fel Reaver - Horde control
+                data << uint32(0xaa6) << uint32(0x0);       // 24 2726 Fel Reaver - Alliance control
+                data << uint32(0xaa5) << uint32(0x1);       // 25 2725 Fel Reaver uncontrolled (1 - yes, 0 - no)
+                data << uint32(0xaa4) << uint32(0x0);       // 26 2724 Boold Elf - Horde control
+                data << uint32(0xaa3) << uint32(0x0);       // 27 2723 Boold Elf - Alliance control
+                data << uint32(0xaa2) << uint32(0x1);       // 28 2722 Boold Elf uncontrolled (1 - yes, 0 - no)
+                data << uint32(0xac5) << uint32(0x1);       // 29 2757 Flag (1 - show, 0 - hide) - doesn't work exactly this way!
+                data << uint32(0xad2) << uint32(0x1);       // 30 2770 Horde top-stats (1 - show, 0 - hide) // 02 -> horde picked up the flag
+                data << uint32(0xad1) << uint32(0x1);       // 31 2769 Alliance top-stats (1 - show, 0 - hide) // 02 -> alliance picked up the flag
+                data << uint32(0xabe) << uint32(0x0);       // 32 2750 Horde resources
+                data << uint32(0xabd) << uint32(0x0);       // 33 2749 Alliance resources
+                data << uint32(0xa05) << uint32(0x8e);      // 34 2565 unk, constant?
+                data << uint32(0xaa0) << uint32(0x0);       // 35 2720 Capturing progress-bar (100 -> empty (only grey), 0 -> blue|red (no grey), default 0)
+                data << uint32(0xa9f) << uint32(0x0);       // 36 2719 Capturing progress-bar (0 - left, 100 - right)
+                data << uint32(0xa9e) << uint32(0x0);       // 37 2718 Capturing progress-bar (1 - show, 0 - hide)
+                data << uint32(0xc0d) << uint32(0x17b);     // 38 3085 unk
+                // and some more ... unknown
+            }
+            break;
+        // any of these needs change! the client remembers the prev setting!
+        // ON EVERY ZONE LEAVE, RESET THE OLD ZONE'S WORLD STATE, BUT AT LEAST THE UI STUFF!
+        case 3483:                                          // Hellfire Peninsula
+            if (pvp && pvp->GetTypeId() == OUTDOOR_PVP_HP)
+                pvp->FillInitialWorldStates(data);
+            else
+            {
+                data << uint32(0x9ba) << uint32(0x1);           // 10 // add ally tower main gui icon       // maybe should be sent only on login?
+                data << uint32(0x9b9) << uint32(0x1);           // 11 // add horde tower main gui icon      // maybe should be sent only on login?
+                data << uint32(0x9b5) << uint32(0x0);           // 12 // show neutral broken hill icon      // 2485
+                data << uint32(0x9b4) << uint32(0x1);           // 13 // show icon above broken hill        // 2484
+                data << uint32(0x9b3) << uint32(0x0);           // 14 // show ally broken hill icon         // 2483
+                data << uint32(0x9b2) << uint32(0x0);           // 15 // show neutral overlook icon         // 2482
+                data << uint32(0x9b1) << uint32(0x1);           // 16 // show the overlook arrow            // 2481
+                data << uint32(0x9b0) << uint32(0x0);           // 17 // show ally overlook icon            // 2480
+                data << uint32(0x9ae) << uint32(0x0);           // 18 // horde pvp objectives captured      // 2478
+                data << uint32(0x9ac) << uint32(0x0);           // 19 // ally pvp objectives captured       // 2476
+                data << uint32(2475)  << uint32(100);           //: ally / horde slider grey area                              // show only in direct vicinity!
+                data << uint32(2474)  << uint32(50);            //: ally / horde slider percentage, 100 for ally, 0 for horde  // show only in direct vicinity!
+                data << uint32(2473)  << uint32(0);             //: ally / horde slider display                                // show only in direct vicinity!
+                data << uint32(0x9a8) << uint32(0x0);           // 20 // show the neutral stadium icon      // 2472
+                data << uint32(0x9a7) << uint32(0x0);           // 21 // show the ally stadium icon         // 2471
+                data << uint32(0x9a6) << uint32(0x1);           // 22 // show the horde stadium icon        // 2470
+            }
+            break;
+        case 3518:                                          // Nagrand
+            if (pvp && pvp->GetTypeId() == OUTDOOR_PVP_NA)
+                pvp->FillInitialWorldStates(data);
+            else
+            {
+                data << uint32(2503) << uint32(0x0);    // 10
+                data << uint32(2502) << uint32(0x0);    // 11
+                data << uint32(2493) << uint32(0x0);    // 12
+                data << uint32(2491) << uint32(0x0);    // 13
 
-                    data << uint32(2495) << uint32(0x0);    // 14
-                    data << uint32(2494) << uint32(0x0);    // 15
-                    data << uint32(2497) << uint32(0x0);    // 16
+                data << uint32(2495) << uint32(0x0);    // 14
+                data << uint32(2494) << uint32(0x0);    // 15
+                data << uint32(2497) << uint32(0x0);    // 16
 
-                    data << uint32(2762) << uint32(0x0);    // 17
-                    data << uint32(2662) << uint32(0x0);    // 18
-                    data << uint32(2663) << uint32(0x0);    // 19
-                    data << uint32(2664) << uint32(0x0);    // 20
+                data << uint32(2762) << uint32(0x0);    // 17
+                data << uint32(2662) << uint32(0x0);    // 18
+                data << uint32(2663) << uint32(0x0);    // 19
+                data << uint32(2664) << uint32(0x0);    // 20
 
-                    data << uint32(2760) << uint32(0x0);    // 21
-                    data << uint32(2670) << uint32(0x0);    // 22
-                    data << uint32(2668) << uint32(0x0);    // 23
-                    data << uint32(2669) << uint32(0x0);    // 24
+                data << uint32(2760) << uint32(0x0);    // 21
+                data << uint32(2670) << uint32(0x0);    // 22
+                data << uint32(2668) << uint32(0x0);    // 23
+                data << uint32(2669) << uint32(0x0);    // 24
 
-                    data << uint32(2761) << uint32(0x0);    // 25
-                    data << uint32(2667) << uint32(0x0);    // 26
-                    data << uint32(2665) << uint32(0x0);    // 27
-                    data << uint32(2666) << uint32(0x0);    // 28
+                data << uint32(2761) << uint32(0x0);    // 25
+                data << uint32(2667) << uint32(0x0);    // 26
+                data << uint32(2665) << uint32(0x0);    // 27
+                data << uint32(2666) << uint32(0x0);    // 28
 
-                    data << uint32(2763) << uint32(0x0);    // 29
-                    data << uint32(2659) << uint32(0x0);    // 30
-                    data << uint32(2660) << uint32(0x0);    // 31
-                    data << uint32(2661) << uint32(0x0);    // 32
+                data << uint32(2763) << uint32(0x0);    // 29
+                data << uint32(2659) << uint32(0x0);    // 30
+                data << uint32(2660) << uint32(0x0);    // 31
+                data << uint32(2661) << uint32(0x0);    // 32
 
-                    data << uint32(2671) << uint32(0x0);    // 33
-                    data << uint32(2676) << uint32(0x0);    // 34
-                    data << uint32(2677) << uint32(0x0);    // 35
-                    data << uint32(2672) << uint32(0x0);    // 36
-                    data << uint32(2673) << uint32(0x0);    // 37
-                }
-                break;
-            case 3519:                                          // Terokkar Forest
-                if (pvp && pvp->GetTypeId() == OUTDOOR_PVP_TF)
-                    pvp->FillInitialWorldStates(data);
-                else
-                {
-                    data << uint32(0xa41) << uint32(0x0);           // 10 // 2625 capture bar pos
-                    data << uint32(0xa40) << uint32(0x14);          // 11 // 2624 capture bar neutral
-                    data << uint32(0xa3f) << uint32(0x0);           // 12 // 2623 show capture bar
-                    data << uint32(0xa3e) << uint32(0x0);           // 13 // 2622 horde towers controlled
-                    data << uint32(0xa3d) << uint32(0x5);           // 14 // 2621 ally towers controlled
-                    data << uint32(0xa3c) << uint32(0x0);           // 15 // 2620 show towers controlled
-                    data << uint32(0xa88) << uint32(0x0);           // 16 // 2696 SE Neu
-                    data << uint32(0xa87) << uint32(0x0);           // 17 // SE Horde
-                    data << uint32(0xa86) << uint32(0x0);           // 18 // SE Ally
-                    data << uint32(0xa85) << uint32(0x0);           // 19 //S Neu
-                    data << uint32(0xa84) << uint32(0x0);           // 20 S Horde
-                    data << uint32(0xa83) << uint32(0x0);           // 21 S Ally
-                    data << uint32(0xa82) << uint32(0x0);           // 22 NE Neu
-                    data << uint32(0xa81) << uint32(0x0);           // 23 NE Horde
-                    data << uint32(0xa80) << uint32(0x0);           // 24 NE Ally
-                    data << uint32(0xa7e) << uint32(0x0);           // 25 // 2686 N Neu
-                    data << uint32(0xa7d) << uint32(0x0);           // 26 N Horde
-                    data << uint32(0xa7c) << uint32(0x0);           // 27 N Ally
-                    data << uint32(0xa7b) << uint32(0x0);           // 28 NW Ally
-                    data << uint32(0xa7a) << uint32(0x0);           // 29 NW Horde
-                    data << uint32(0xa79) << uint32(0x0);           // 30 NW Neutral
-                    data << uint32(0x9d0) << uint32(0x5);           // 31 // 2512 locked time remaining seconds first digit
-                    data << uint32(0x9ce) << uint32(0x0);           // 32 // 2510 locked time remaining seconds second digit
-                    data << uint32(0x9cd) << uint32(0x0);           // 33 // 2509 locked time remaining minutes
-                    data << uint32(0x9cc) << uint32(0x0);           // 34 // 2508 neutral locked time show
-                    data << uint32(0xad0) << uint32(0x0);           // 35 // 2768 horde locked time show
-                    data << uint32(0xacf) << uint32(0x1);           // 36 // 2767 ally locked time show
-                }
-                break;
-            case 3521:                                          // Zangarmarsh
-                if (pvp && pvp->GetTypeId() == OUTDOOR_PVP_ZM)
-                    pvp->FillInitialWorldStates(data);
-                else
-                {
-                    data << uint32(0x9e1) << uint32(0x0);           // 10 //2529
-                    data << uint32(0x9e0) << uint32(0x0);           // 11
-                    data << uint32(0x9df) << uint32(0x0);           // 12
-                    data << uint32(0xa5d) << uint32(0x1);           // 13 //2653
-                    data << uint32(0xa5c) << uint32(0x0);           // 14 //2652 east beacon neutral
-                    data << uint32(0xa5b) << uint32(0x1);           // 15 horde
-                    data << uint32(0xa5a) << uint32(0x0);           // 16 ally
-                    data << uint32(0xa59) << uint32(0x1);           // 17 // 2649 Twin spire graveyard horde  12???
-                    data << uint32(0xa58) << uint32(0x0);           // 18 ally     14 ???
-                    data << uint32(0xa57) << uint32(0x0);           // 19 neutral  7???
-                    data << uint32(0xa56) << uint32(0x0);           // 20 // 2646 west beacon neutral
-                    data << uint32(0xa55) << uint32(0x1);           // 21 horde
-                    data << uint32(0xa54) << uint32(0x0);           // 22 ally
-                    data << uint32(0x9e7) << uint32(0x0);           // 23 // 2535
-                    data << uint32(0x9e6) << uint32(0x0);           // 24
-                    data << uint32(0x9e5) << uint32(0x0);           // 25
-                    data << uint32(0xa00) << uint32(0x0);           // 26 // 2560
-                    data << uint32(0x9ff) << uint32(0x1);           // 27
-                    data << uint32(0x9fe) << uint32(0x0);           // 28
-                    data << uint32(0x9fd) << uint32(0x0);           // 29
-                    data << uint32(0x9fc) << uint32(0x1);           // 30
-                    data << uint32(0x9fb) << uint32(0x0);           // 31
-                    data << uint32(0xa62) << uint32(0x0);           // 32 // 2658
-                    data << uint32(0xa61) << uint32(0x1);           // 33
-                    data << uint32(0xa60) << uint32(0x1);           // 34
-                    data << uint32(0xa5f) << uint32(0x0);           // 35
-                }
-                break;
-            case 3698:                                          // Nagrand Arena
-                if (bg && bg->GetBgTypeID(true) == BATTLEGROUND_NA)
-                    bg->FillInitialWorldStates(data);
-                else
-                {
-                    data << uint32(0xa0f) << uint32(0x0);           // 7
-                    data << uint32(0xa10) << uint32(0x0);           // 8
-                    data << uint32(0xa11) << uint32(0x0);           // 9 show
-                }
-                break;
-            case 3702:                                          // Blade's Edge Arena
-                if (bg && bg->GetBgTypeID(true) == BATTLEGROUND_BE)
-                    bg->FillInitialWorldStates(data);
-                else
-                {
-                    data << uint32(0x9f0) << uint32(0x0);           // 7 gold
-                    data << uint32(0x9f1) << uint32(0x0);           // 8 green
-                    data << uint32(0x9f3) << uint32(0x0);           // 9 show
-                }
-                break;
-            case 3968:                                          // Ruins of Lordaeron
-                if (bg && bg->GetBgTypeID(true) == BATTLEGROUND_RL)
-                    bg->FillInitialWorldStates(data);
-                else
-                {
-                    data << uint32(0xbb8) << uint32(0x0);           // 7 gold
-                    data << uint32(0xbb9) << uint32(0x0);           // 8 green
-                    data << uint32(0xbba) << uint32(0x0);           // 9 show
-                }
-                break;
-            case 4378:                                          // Dalaran Sewers
-                if (bg && bg->GetBgTypeID(true) == BATTLEGROUND_DS)
-                    bg->FillInitialWorldStates(data);
-                else
-                {
-                    data << uint32(3601) << uint32(0x0);           // 7 gold
-                    data << uint32(3600) << uint32(0x0);           // 8 green
-                    data << uint32(3610) << uint32(0x0);           // 9 show
-                }
-                break;
-            case 4384:                                          // Strand of the Ancients
-                if (bg && bg->GetBgTypeID(true) == BATTLEGROUND_SA)
-                    bg->FillInitialWorldStates(data);
-                else
-                {
-                    // 1-3 A defend, 4-6 H defend, 7-9 unk defend, 1 - ok, 2 - half destroyed, 3 - destroyed
-                    data << uint32(0xf09) << uint32(0x0);       // 7  3849 Gate of Temple
-                    data << uint32(0xe36) << uint32(0x0);       // 8  3638 Gate of Yellow Moon
-                    data << uint32(0xe27) << uint32(0x0);       // 9  3623 Gate of Green Emerald
-                    data << uint32(0xe24) << uint32(0x0);       // 10 3620 Gate of Blue Sapphire
-                    data << uint32(0xe21) << uint32(0x0);       // 11 3617 Gate of Red Sun
-                    data << uint32(0xe1e) << uint32(0x0);       // 12 3614 Gate of Purple Ametyst
+                data << uint32(2671) << uint32(0x0);    // 33
+                data << uint32(2676) << uint32(0x0);    // 34
+                data << uint32(2677) << uint32(0x0);    // 35
+                data << uint32(2672) << uint32(0x0);    // 36
+                data << uint32(2673) << uint32(0x0);    // 37
+            }
+            break;
+        case 3519:                                          // Terokkar Forest
+            if (pvp && pvp->GetTypeId() == OUTDOOR_PVP_TF)
+                pvp->FillInitialWorldStates(data);
+            else
+            {
+                data << uint32(0xa41) << uint32(0x0);           // 10 // 2625 capture bar pos
+                data << uint32(0xa40) << uint32(0x14);          // 11 // 2624 capture bar neutral
+                data << uint32(0xa3f) << uint32(0x0);           // 12 // 2623 show capture bar
+                data << uint32(0xa3e) << uint32(0x0);           // 13 // 2622 horde towers controlled
+                data << uint32(0xa3d) << uint32(0x5);           // 14 // 2621 ally towers controlled
+                data << uint32(0xa3c) << uint32(0x0);           // 15 // 2620 show towers controlled
+                data << uint32(0xa88) << uint32(0x0);           // 16 // 2696 SE Neu
+                data << uint32(0xa87) << uint32(0x0);           // 17 // SE Horde
+                data << uint32(0xa86) << uint32(0x0);           // 18 // SE Ally
+                data << uint32(0xa85) << uint32(0x0);           // 19 //S Neu
+                data << uint32(0xa84) << uint32(0x0);           // 20 S Horde
+                data << uint32(0xa83) << uint32(0x0);           // 21 S Ally
+                data << uint32(0xa82) << uint32(0x0);           // 22 NE Neu
+                data << uint32(0xa81) << uint32(0x0);           // 23 NE Horde
+                data << uint32(0xa80) << uint32(0x0);           // 24 NE Ally
+                data << uint32(0xa7e) << uint32(0x0);           // 25 // 2686 N Neu
+                data << uint32(0xa7d) << uint32(0x0);           // 26 N Horde
+                data << uint32(0xa7c) << uint32(0x0);           // 27 N Ally
+                data << uint32(0xa7b) << uint32(0x0);           // 28 NW Ally
+                data << uint32(0xa7a) << uint32(0x0);           // 29 NW Horde
+                data << uint32(0xa79) << uint32(0x0);           // 30 NW Neutral
+                data << uint32(0x9d0) << uint32(0x5);           // 31 // 2512 locked time remaining seconds first digit
+                data << uint32(0x9ce) << uint32(0x0);           // 32 // 2510 locked time remaining seconds second digit
+                data << uint32(0x9cd) << uint32(0x0);           // 33 // 2509 locked time remaining minutes
+                data << uint32(0x9cc) << uint32(0x0);           // 34 // 2508 neutral locked time show
+                data << uint32(0xad0) << uint32(0x0);           // 35 // 2768 horde locked time show
+                data << uint32(0xacf) << uint32(0x1);           // 36 // 2767 ally locked time show
+            }
+            break;
+        case 3521:                                          // Zangarmarsh
+            if (pvp && pvp->GetTypeId() == OUTDOOR_PVP_ZM)
+                pvp->FillInitialWorldStates(data);
+            else
+            {
+                data << uint32(0x9e1) << uint32(0x0);           // 10 //2529
+                data << uint32(0x9e0) << uint32(0x0);           // 11
+                data << uint32(0x9df) << uint32(0x0);           // 12
+                data << uint32(0xa5d) << uint32(0x1);           // 13 //2653
+                data << uint32(0xa5c) << uint32(0x0);           // 14 //2652 east beacon neutral
+                data << uint32(0xa5b) << uint32(0x1);           // 15 horde
+                data << uint32(0xa5a) << uint32(0x0);           // 16 ally
+                data << uint32(0xa59) << uint32(0x1);           // 17 // 2649 Twin spire graveyard horde  12???
+                data << uint32(0xa58) << uint32(0x0);           // 18 ally     14 ???
+                data << uint32(0xa57) << uint32(0x0);           // 19 neutral  7???
+                data << uint32(0xa56) << uint32(0x0);           // 20 // 2646 west beacon neutral
+                data << uint32(0xa55) << uint32(0x1);           // 21 horde
+                data << uint32(0xa54) << uint32(0x0);           // 22 ally
+                data << uint32(0x9e7) << uint32(0x0);           // 23 // 2535
+                data << uint32(0x9e6) << uint32(0x0);           // 24
+                data << uint32(0x9e5) << uint32(0x0);           // 25
+                data << uint32(0xa00) << uint32(0x0);           // 26 // 2560
+                data << uint32(0x9ff) << uint32(0x1);           // 27
+                data << uint32(0x9fe) << uint32(0x0);           // 28
+                data << uint32(0x9fd) << uint32(0x0);           // 29
+                data << uint32(0x9fc) << uint32(0x1);           // 30
+                data << uint32(0x9fb) << uint32(0x0);           // 31
+                data << uint32(0xa62) << uint32(0x0);           // 32 // 2658
+                data << uint32(0xa61) << uint32(0x1);           // 33
+                data << uint32(0xa60) << uint32(0x1);           // 34
+                data << uint32(0xa5f) << uint32(0x0);           // 35
+            }
+            break;
+        case 3698:                                          // Nagrand Arena
+            if (bg && bg->GetBgTypeID(true) == BATTLEGROUND_NA)
+                bg->FillInitialWorldStates(data);
+            else
+            {
+                data << uint32(0xa0f) << uint32(0x0);           // 7
+                data << uint32(0xa10) << uint32(0x0);           // 8
+                data << uint32(0xa11) << uint32(0x0);           // 9 show
+            }
+            break;
+        case 3702:                                          // Blade's Edge Arena
+            if (bg && bg->GetBgTypeID(true) == BATTLEGROUND_BE)
+                bg->FillInitialWorldStates(data);
+            else
+            {
+                data << uint32(0x9f0) << uint32(0x0);           // 7 gold
+                data << uint32(0x9f1) << uint32(0x0);           // 8 green
+                data << uint32(0x9f3) << uint32(0x0);           // 9 show
+            }
+            break;
+        case 3968:                                          // Ruins of Lordaeron
+            if (bg && bg->GetBgTypeID(true) == BATTLEGROUND_RL)
+                bg->FillInitialWorldStates(data);
+            else
+            {
+                data << uint32(0xbb8) << uint32(0x0);           // 7 gold
+                data << uint32(0xbb9) << uint32(0x0);           // 8 green
+                data << uint32(0xbba) << uint32(0x0);           // 9 show
+            }
+            break;
+        case 4378:                                          // Dalaran Sewers
+            if (bg && bg->GetBgTypeID(true) == BATTLEGROUND_DS)
+                bg->FillInitialWorldStates(data);
+            else
+            {
+                data << uint32(3601) << uint32(0x0);           // 7 gold
+                data << uint32(3600) << uint32(0x0);           // 8 green
+                data << uint32(3610) << uint32(0x0);           // 9 show
+            }
+            break;
+        case 4384:                                          // Strand of the Ancients
+            if (bg && bg->GetBgTypeID(true) == BATTLEGROUND_SA)
+                bg->FillInitialWorldStates(data);
+            else
+            {
+                // 1-3 A defend, 4-6 H defend, 7-9 unk defend, 1 - ok, 2 - half destroyed, 3 - destroyed
+                data << uint32(0xf09) << uint32(0x0);       // 7  3849 Gate of Temple
+                data << uint32(0xe36) << uint32(0x0);       // 8  3638 Gate of Yellow Moon
+                data << uint32(0xe27) << uint32(0x0);       // 9  3623 Gate of Green Emerald
+                data << uint32(0xe24) << uint32(0x0);       // 10 3620 Gate of Blue Sapphire
+                data << uint32(0xe21) << uint32(0x0);       // 11 3617 Gate of Red Sun
+                data << uint32(0xe1e) << uint32(0x0);       // 12 3614 Gate of Purple Ametyst
 
-                    data << uint32(0xdf3) << uint32(0x0);       // 13 3571 bonus timer (1 - on, 0 - off)
-                    data << uint32(0xded) << uint32(0x0);       // 14 3565 Horde Attacker
-                    data << uint32(0xdec) << uint32(0x0);       // 15 3564 Alliance Attacker
-                    // End Round (timer), better explain this by example, eg. ends in 19:59 -> A:BC
-                    data << uint32(0xde9) << uint32(0x0);       // 16 3561 C
-                    data << uint32(0xde8) << uint32(0x0);       // 17 3560 B
-                    data << uint32(0xde7) << uint32(0x0);       // 18 3559 A
-                    data << uint32(0xe35) << uint32(0x0);       // 19 3637 East g - Horde control
-                    data << uint32(0xe34) << uint32(0x0);       // 20 3636 West g - Horde control
-                    data << uint32(0xe33) << uint32(0x0);       // 21 3635 South g - Horde control
-                    data << uint32(0xe32) << uint32(0x0);       // 22 3634 East g - Alliance control
-                    data << uint32(0xe31) << uint32(0x0);       // 23 3633 West g - Alliance control
-                    data << uint32(0xe30) << uint32(0x0);       // 24 3632 South g - Alliance control
-                    data << uint32(0xe2f) << uint32(0x0);       // 25 3631 Chamber of Ancients - Horde control
-                    data << uint32(0xe2e) << uint32(0x0);       // 26 3630 Chamber of Ancients - Alliance control
-                    data << uint32(0xe2d) << uint32(0x0);       // 27 3629 Beach1 - Horde control
-                    data << uint32(0xe2c) << uint32(0x0);       // 28 3628 Beach2 - Horde control
-                    data << uint32(0xe2b) << uint32(0x0);       // 29 3627 Beach1 - Alliance control
-                    data << uint32(0xe2a) << uint32(0x0);       // 30 3626 Beach2 - Alliance control
-                    // and many unks...
-                }
-                break;
-            case 4406:                                          // Ring of Valor
-                if (bg && bg->GetBgTypeID(true) == BATTLEGROUND_RV)
-                    bg->FillInitialWorldStates(data);
-                else
-                {
-                    data << uint32(0xe10) << uint32(0x0);           // 7 gold
-                    data << uint32(0xe11) << uint32(0x0);           // 8 green
-                    data << uint32(0xe1a) << uint32(0x0);           // 9 show
-                }
-                break;
-            case 4710:                                          // Isle of Conquest
-                if (bg && bg->GetBgTypeID(true) == BATTLEGROUND_IC)
-                    bg->FillInitialWorldStates(data);
-                else
-                {
-                    data << uint32(4221) << uint32(1); // 7 BG_IC_ALLIANCE_RENFORT_SET
-                    data << uint32(4222) << uint32(1); // 8 BG_IC_HORDE_RENFORT_SET
-                    data << uint32(4226) << uint32(300); // 9 BG_IC_ALLIANCE_RENFORT
-                    data << uint32(4227) << uint32(300); // 10 BG_IC_HORDE_RENFORT
-                    data << uint32(4322) << uint32(1); // 11 BG_IC_GATE_FRONT_H_WS_OPEN
-                    data << uint32(4321) << uint32(1); // 12 BG_IC_GATE_WEST_H_WS_OPEN
-                    data << uint32(4320) << uint32(1); // 13 BG_IC_GATE_EAST_H_WS_OPEN
-                    data << uint32(4323) << uint32(1); // 14 BG_IC_GATE_FRONT_A_WS_OPEN
-                    data << uint32(4324) << uint32(1); // 15 BG_IC_GATE_WEST_A_WS_OPEN
-                    data << uint32(4325) << uint32(1); // 16 BG_IC_GATE_EAST_A_WS_OPEN
-                    data << uint32(4317) << uint32(1); // 17 unknown
+                data << uint32(0xdf3) << uint32(0x0);       // 13 3571 bonus timer (1 - on, 0 - off)
+                data << uint32(0xded) << uint32(0x0);       // 14 3565 Horde Attacker
+                data << uint32(0xdec) << uint32(0x0);       // 15 3564 Alliance Attacker
+                // End Round (timer), better explain this by example, eg. ends in 19:59 -> A:BC
+                data << uint32(0xde9) << uint32(0x0);       // 16 3561 C
+                data << uint32(0xde8) << uint32(0x0);       // 17 3560 B
+                data << uint32(0xde7) << uint32(0x0);       // 18 3559 A
+                data << uint32(0xe35) << uint32(0x0);       // 19 3637 East g - Horde control
+                data << uint32(0xe34) << uint32(0x0);       // 20 3636 West g - Horde control
+                data << uint32(0xe33) << uint32(0x0);       // 21 3635 South g - Horde control
+                data << uint32(0xe32) << uint32(0x0);       // 22 3634 East g - Alliance control
+                data << uint32(0xe31) << uint32(0x0);       // 23 3633 West g - Alliance control
+                data << uint32(0xe30) << uint32(0x0);       // 24 3632 South g - Alliance control
+                data << uint32(0xe2f) << uint32(0x0);       // 25 3631 Chamber of Ancients - Horde control
+                data << uint32(0xe2e) << uint32(0x0);       // 26 3630 Chamber of Ancients - Alliance control
+                data << uint32(0xe2d) << uint32(0x0);       // 27 3629 Beach1 - Horde control
+                data << uint32(0xe2c) << uint32(0x0);       // 28 3628 Beach2 - Horde control
+                data << uint32(0xe2b) << uint32(0x0);       // 29 3627 Beach1 - Alliance control
+                data << uint32(0xe2a) << uint32(0x0);       // 30 3626 Beach2 - Alliance control
+                // and many unks...
+            }
+            break;
+        case 4406:                                          // Ring of Valor
+            if (bg && bg->GetBgTypeID(true) == BATTLEGROUND_RV)
+                bg->FillInitialWorldStates(data);
+            else
+            {
+                data << uint32(0xe10) << uint32(0x0);           // 7 gold
+                data << uint32(0xe11) << uint32(0x0);           // 8 green
+                data << uint32(0xe1a) << uint32(0x0);           // 9 show
+            }
+            break;
+        case 4710:                                          // Isle of Conquest
+            if (bg && bg->GetBgTypeID(true) == BATTLEGROUND_IC)
+                bg->FillInitialWorldStates(data);
+            else
+            {
+                data << uint32(4221) << uint32(1); // 7 BG_IC_ALLIANCE_RENFORT_SET
+                data << uint32(4222) << uint32(1); // 8 BG_IC_HORDE_RENFORT_SET
+                data << uint32(4226) << uint32(300); // 9 BG_IC_ALLIANCE_RENFORT
+                data << uint32(4227) << uint32(300); // 10 BG_IC_HORDE_RENFORT
+                data << uint32(4322) << uint32(1); // 11 BG_IC_GATE_FRONT_H_WS_OPEN
+                data << uint32(4321) << uint32(1); // 12 BG_IC_GATE_WEST_H_WS_OPEN
+                data << uint32(4320) << uint32(1); // 13 BG_IC_GATE_EAST_H_WS_OPEN
+                data << uint32(4323) << uint32(1); // 14 BG_IC_GATE_FRONT_A_WS_OPEN
+                data << uint32(4324) << uint32(1); // 15 BG_IC_GATE_WEST_A_WS_OPEN
+                data << uint32(4325) << uint32(1); // 16 BG_IC_GATE_EAST_A_WS_OPEN
+                data << uint32(4317) << uint32(1); // 17 unknown
 
-                    data << uint32(4301) << uint32(1); // 18 BG_IC_DOCKS_UNCONTROLLED
-                    data << uint32(4296) << uint32(1); // 19 BG_IC_HANGAR_UNCONTROLLED
-                    data << uint32(4306) << uint32(1); // 20 BG_IC_QUARRY_UNCONTROLLED
-                    data << uint32(4311) << uint32(1); // 21 BG_IC_REFINERY_UNCONTROLLED
-                    data << uint32(4294) << uint32(1); // 22 BG_IC_WORKSHOP_UNCONTROLLED
-                    data << uint32(4243) << uint32(1); // 23 unknown
-                    data << uint32(4345) << uint32(1); // 24 unknown
-                }
-                break;
-            // The Ruby Sanctum
-            case 4987:
-                if (instance && mapid == 724)
-                    instance->FillInitialWorldStates(data);
-                else
+                data << uint32(4301) << uint32(1); // 18 BG_IC_DOCKS_UNCONTROLLED
+                data << uint32(4296) << uint32(1); // 19 BG_IC_HANGAR_UNCONTROLLED
+                data << uint32(4306) << uint32(1); // 20 BG_IC_QUARRY_UNCONTROLLED
+                data << uint32(4311) << uint32(1); // 21 BG_IC_REFINERY_UNCONTROLLED
+                data << uint32(4294) << uint32(1); // 22 BG_IC_WORKSHOP_UNCONTROLLED
+                data << uint32(4243) << uint32(1); // 23 unknown
+                data << uint32(4345) << uint32(1); // 24 unknown
+            }
+            break;
+        // The Ruby Sanctum
+        case 4987:
+            if (instance && mapid == 724)
+                instance->FillInitialWorldStates(data);
+            else
+            {
+                data << uint32(5049) << uint32(50);             // 9  WORLDSTATE_CORPOREALITY_MATERIAL
+                data << uint32(5050) << uint32(50);             // 10 WORLDSTATE_CORPOREALITY_TWILIGHT
+                data << uint32(5051) << uint32(0);              // 11 WORLDSTATE_CORPOREALITY_TOGGLE
+            }
+            break;
+        // Icecrown Citadel
+        case 4812:
+            if (instance && mapid == 631)
+                instance->FillInitialWorldStates(data);
+            else
+            {
+                data << uint32(4903) << uint32(0);              // 9  WORLDSTATE_SHOW_TIMER (Blood Quickening weekly)
+                data << uint32(4904) << uint32(30);             // 10 WORLDSTATE_EXECUTION_TIME
+                data << uint32(4940) << uint32(0);              // 11 WORLDSTATE_SHOW_ATTEMPTS
+                data << uint32(4941) << uint32(50);             // 12 WORLDSTATE_ATTEMPTS_REMAINING
+                data << uint32(4942) << uint32(50);             // 13 WORLDSTATE_ATTEMPTS_MAX
+            }
+            break;
+        // The Culling of Stratholme
+        case 4100:
+            if (instance && mapid == 595)
+                instance->FillInitialWorldStates(data);
+            else
+            {
+                data << uint32(3479) << uint32(0);              // 9  WORLDSTATE_SHOW_CRATES
+                data << uint32(3480) << uint32(0);              // 10 WORLDSTATE_CRATES_REVEALED
+                data << uint32(3504) << uint32(0);              // 11 WORLDSTATE_WAVE_COUNT
+                data << uint32(3931) << uint32(25);             // 12 WORLDSTATE_TIME_GUARDIAN
+                data << uint32(3932) << uint32(0);              // 13 WORLDSTATE_TIME_GUARDIAN_SHOW
+            }
+            break;
+        // The Oculus
+        case 4228:
+            if (instance && mapid == 578)
+                instance->FillInitialWorldStates(data);
+            else
+            {
+                data << uint32(3524) << uint32(0);              // 9  WORLD_STATE_CENTRIFUGE_CONSTRUCT_SHOW
+                data << uint32(3486) << uint32(0);              // 10 WORLD_STATE_CENTRIFUGE_CONSTRUCT_AMOUNT
+            }
+            break;
+        // Ulduar
+        case 4273:
+            if (instance && mapid == 603)
+                instance->FillInitialWorldStates(data);
+            else
+            {
+                data << uint32(4132) << uint32(0);              // 9  WORLDSTATE_ALGALON_TIMER_ENABLED
+                data << uint32(4131) << uint32(0);              // 10 WORLDSTATE_ALGALON_DESPAWN_TIMER
+            }
+            break;
+        // Halls of Refection
+        case 4820:
+            if (instance && mapid == 668)
+                instance->FillInitialWorldStates(data);
+            else
+            {
+                data << uint32(4884) << uint32(0);              // 9  WORLD_STATE_HOR_WAVES_ENABLED
+                data << uint32(4882) << uint32(0);              // 10 WORLD_STATE_HOR_WAVE_COUNT
+            }
+            break;
+        // Scarlet Enclave (DK starting zone)
+        case 4298:
+            // Get Mograine, GUID and ENTRY should NEVER change
+            if (Creature* mograine = ObjectAccessor::GetCreature(*this, MAKE_NEW_GUID(130956, 29173, HIGHGUID_UNIT)))
+            {
+                if (CreatureAI* mograineAI = mograine->AI())
                 {
-                    data << uint32(5049) << uint32(50);             // 9  WORLDSTATE_CORPOREALITY_MATERIAL
-                    data << uint32(5050) << uint32(50);             // 10 WORLDSTATE_CORPOREALITY_TWILIGHT
-                    data << uint32(5051) << uint32(0);              // 11 WORLDSTATE_CORPOREALITY_TOGGLE
+                    data << uint32(3590) << uint32(mograineAI->GetData(3590));
+                    data << uint32(3591) << uint32(mograineAI->GetData(3591));
+                    data << uint32(3592) << uint32(mograineAI->GetData(3592));
+                    data << uint32(3603) << uint32(mograineAI->GetData(3603));
+                    data << uint32(3604) << uint32(mograineAI->GetData(3604));
+                    data << uint32(3605) << uint32(mograineAI->GetData(3605));
                 }
+            }
+            break;
+        // Wintergrasp
+        case 4197:
+            if (bf && bf->GetTypeId() == BATTLEFIELD_WG)
+            {
+                bf->FillInitialWorldStates(data);
                 break;
-            // Icecrown Citadel
-            case 4812:
-                if (instance && mapid == 631)
-                    instance->FillInitialWorldStates(data);
-                else
-                {
-                    data << uint32(4903) << uint32(0);              // 9  WORLDSTATE_SHOW_TIMER (Blood Quickening weekly)
-                    data << uint32(4904) << uint32(30);             // 10 WORLDSTATE_EXECUTION_TIME
-                    data << uint32(4940) << uint32(0);              // 11 WORLDSTATE_SHOW_ATTEMPTS
-                    data << uint32(4941) << uint32(50);             // 12 WORLDSTATE_ATTEMPTS_REMAINING
-                    data << uint32(4942) << uint32(50);             // 13 WORLDSTATE_ATTEMPTS_MAX
-                }
-                break;
-            // The Culling of Stratholme
-            case 4100:
-                if (instance && mapid == 595)
-                    instance->FillInitialWorldStates(data);
-                else
-                {
-                    data << uint32(3479) << uint32(0);              // 9  WORLDSTATE_SHOW_CRATES
-                    data << uint32(3480) << uint32(0);              // 10 WORLDSTATE_CRATES_REVEALED
-                    data << uint32(3504) << uint32(0);              // 11 WORLDSTATE_WAVE_COUNT
-                    data << uint32(3931) << uint32(25);             // 12 WORLDSTATE_TIME_GUARDIAN
-                    data << uint32(3932) << uint32(0);              // 13 WORLDSTATE_TIME_GUARDIAN_SHOW
-                }
-                break;
-            // The Oculus
-            case 4228:
-                if (instance && mapid == 578)
-                    instance->FillInitialWorldStates(data);
-                else
-                {
-                    data << uint32(3524) << uint32(0);              // 9  WORLD_STATE_CENTRIFUGE_CONSTRUCT_SHOW
-                    data << uint32(3486) << uint32(0);              // 10 WORLD_STATE_CENTRIFUGE_CONSTRUCT_AMOUNT
-                }
-                break;
-            // Ulduar
-            case 4273:
-                if (instance && mapid == 603)
-                    instance->FillInitialWorldStates(data);
-                else
-                {
-                    data << uint32(4132) << uint32(0);              // 9  WORLDSTATE_ALGALON_TIMER_ENABLED
-                    data << uint32(4131) << uint32(0);              // 10 WORLDSTATE_ALGALON_DESPAWN_TIMER
-                }
-                break;
-            // Halls of Refection
-            case 4820:
-                if (instance && mapid == 668)
-                    instance->FillInitialWorldStates(data);
-                else
-                {
-                    data << uint32(4884) << uint32(0);              // 9  WORLD_STATE_HOR_WAVES_ENABLED
-                    data << uint32(4882) << uint32(0);              // 10 WORLD_STATE_HOR_WAVE_COUNT
-                }
-                break;
-            // Scarlet Enclave (DK starting zone)
-            case 4298:
-                // Get Mograine, GUID and ENTRY should NEVER change
-                if (Creature* mograine = ObjectAccessor::GetCreature(*this, MAKE_NEW_GUID(130956, 29173, HIGHGUID_UNIT)))
-                {
-                    if (CreatureAI* mograineAI = mograine->AI())
-                    {
-                        data << uint32(3590) << uint32(mograineAI->GetData(3590));
-                        data << uint32(3591) << uint32(mograineAI->GetData(3591));
-                        data << uint32(3592) << uint32(mograineAI->GetData(3592));
-                        data << uint32(3603) << uint32(mograineAI->GetData(3603));
-                        data << uint32(3604) << uint32(mograineAI->GetData(3604));
-                        data << uint32(3605) << uint32(mograineAI->GetData(3605));
-                    }
-                }
-                break;
-            // Wintergrasp
-            case 4197:
-                if (bf && bf->GetTypeId() == BATTLEFIELD_WG)
-                {
-                    bf->FillInitialWorldStates(data);
-                    break;
-                }
-            // No break here, intended.
-            default:
-                data << uint32(0x914) << uint32(0x0);           // 7
-                data << uint32(0x913) << uint32(0x0);           // 8
-                data << uint32(0x912) << uint32(0x0);           // 9
-                data << uint32(0x915) << uint32(0x0);           // 10
-                break;
+            }
+        // No break here, intended.
+        default:
+            data << uint32(0x914) << uint32(0x0);           // 7
+            data << uint32(0x913) << uint32(0x0);           // 8
+            data << uint32(0x912) << uint32(0x0);           // 9
+            data << uint32(0x915) << uint32(0x0);           // 10
+            break;
         }
     }
 
@@ -10173,26 +10258,26 @@ void Player::SetSheath(SheathState sheathed)
 {
     switch (sheathed)
     {
-        case SHEATH_STATE_UNARMED:                          // no prepared weapon
-            SetVirtualItemSlot(0, nullptr);
-            SetVirtualItemSlot(1, nullptr);
-            SetVirtualItemSlot(2, nullptr);
-            break;
-        case SHEATH_STATE_MELEE:                            // prepared melee weapon
-            SetVirtualItemSlot(0, GetWeaponForAttack(BASE_ATTACK, true));
-            SetVirtualItemSlot(1, GetWeaponForAttack(OFF_ATTACK, true));
-            SetVirtualItemSlot(2, nullptr);
-            break;
-        case SHEATH_STATE_RANGED:                           // prepared ranged weapon
-            SetVirtualItemSlot(0, nullptr);
-            SetVirtualItemSlot(1, nullptr);
-            SetVirtualItemSlot(2, GetWeaponForAttack(RANGED_ATTACK, true));
-            break;
-        default:
-            SetVirtualItemSlot(0, nullptr);
-            SetVirtualItemSlot(1, nullptr);
-            SetVirtualItemSlot(2, nullptr);
-            break;
+    case SHEATH_STATE_UNARMED:                          // no prepared weapon
+        SetVirtualItemSlot(0, nullptr);
+        SetVirtualItemSlot(1, nullptr);
+        SetVirtualItemSlot(2, nullptr);
+        break;
+    case SHEATH_STATE_MELEE:                            // prepared melee weapon
+        SetVirtualItemSlot(0, GetWeaponForAttack(BASE_ATTACK, true));
+        SetVirtualItemSlot(1, GetWeaponForAttack(OFF_ATTACK, true));
+        SetVirtualItemSlot(2, nullptr);
+        break;
+    case SHEATH_STATE_RANGED:                           // prepared ranged weapon
+        SetVirtualItemSlot(0, nullptr);
+        SetVirtualItemSlot(1, nullptr);
+        SetVirtualItemSlot(2, GetWeaponForAttack(RANGED_ATTACK, true));
+        break;
+    default:
+        SetVirtualItemSlot(0, nullptr);
+        SetVirtualItemSlot(1, nullptr);
+        SetVirtualItemSlot(2, nullptr);
+        break;
     }
     Unit::SetSheath(sheathed);                              // this must visualize Sheath changing for other players...
 }
@@ -10208,134 +10293,134 @@ uint8 Player::FindEquipSlot(ItemTemplate const* proto, uint32 slot, bool swap) c
     slots[3] = NULL_SLOT;
     switch (proto->InventoryType)
     {
-        case INVTYPE_HEAD:
-            slots[0] = EQUIPMENT_SLOT_HEAD;
-            break;
-        case INVTYPE_NECK:
-            slots[0] = EQUIPMENT_SLOT_NECK;
-            break;
-        case INVTYPE_SHOULDERS:
-            slots[0] = EQUIPMENT_SLOT_SHOULDERS;
-            break;
-        case INVTYPE_BODY:
-            slots[0] = EQUIPMENT_SLOT_BODY;
-            break;
-        case INVTYPE_CHEST:
-        case INVTYPE_ROBE:
-            slots[0] = EQUIPMENT_SLOT_CHEST;
-            break;
-        case INVTYPE_WAIST:
-            slots[0] = EQUIPMENT_SLOT_WAIST;
-            break;
-        case INVTYPE_LEGS:
-            slots[0] = EQUIPMENT_SLOT_LEGS;
-            break;
-        case INVTYPE_FEET:
-            slots[0] = EQUIPMENT_SLOT_FEET;
-            break;
-        case INVTYPE_WRISTS:
-            slots[0] = EQUIPMENT_SLOT_WRISTS;
-            break;
-        case INVTYPE_HANDS:
-            slots[0] = EQUIPMENT_SLOT_HANDS;
-            break;
-        case INVTYPE_FINGER:
-            slots[0] = EQUIPMENT_SLOT_FINGER1;
-            slots[1] = EQUIPMENT_SLOT_FINGER2;
-            break;
-        case INVTYPE_TRINKET:
-            slots[0] = EQUIPMENT_SLOT_TRINKET1;
-            slots[1] = EQUIPMENT_SLOT_TRINKET2;
-            break;
-        case INVTYPE_CLOAK:
-            slots[0] = EQUIPMENT_SLOT_BACK;
-            break;
-        case INVTYPE_WEAPON:
+    case INVTYPE_HEAD:
+        slots[0] = EQUIPMENT_SLOT_HEAD;
+        break;
+    case INVTYPE_NECK:
+        slots[0] = EQUIPMENT_SLOT_NECK;
+        break;
+    case INVTYPE_SHOULDERS:
+        slots[0] = EQUIPMENT_SLOT_SHOULDERS;
+        break;
+    case INVTYPE_BODY:
+        slots[0] = EQUIPMENT_SLOT_BODY;
+        break;
+    case INVTYPE_CHEST:
+    case INVTYPE_ROBE:
+        slots[0] = EQUIPMENT_SLOT_CHEST;
+        break;
+    case INVTYPE_WAIST:
+        slots[0] = EQUIPMENT_SLOT_WAIST;
+        break;
+    case INVTYPE_LEGS:
+        slots[0] = EQUIPMENT_SLOT_LEGS;
+        break;
+    case INVTYPE_FEET:
+        slots[0] = EQUIPMENT_SLOT_FEET;
+        break;
+    case INVTYPE_WRISTS:
+        slots[0] = EQUIPMENT_SLOT_WRISTS;
+        break;
+    case INVTYPE_HANDS:
+        slots[0] = EQUIPMENT_SLOT_HANDS;
+        break;
+    case INVTYPE_FINGER:
+        slots[0] = EQUIPMENT_SLOT_FINGER1;
+        slots[1] = EQUIPMENT_SLOT_FINGER2;
+        break;
+    case INVTYPE_TRINKET:
+        slots[0] = EQUIPMENT_SLOT_TRINKET1;
+        slots[1] = EQUIPMENT_SLOT_TRINKET2;
+        break;
+    case INVTYPE_CLOAK:
+        slots[0] = EQUIPMENT_SLOT_BACK;
+        break;
+    case INVTYPE_WEAPON:
+    {
+        slots[0] = EQUIPMENT_SLOT_MAINHAND;
+
+        // suggest offhand slot only if know dual wielding
+        // (this will be replace mainhand weapon at auto equip instead unwonted "you don't known dual wielding" ...
+        if (CanDualWield())
+            slots[1] = EQUIPMENT_SLOT_OFFHAND;
+        break;
+    }
+    case INVTYPE_SHIELD:
+    case INVTYPE_WEAPONOFFHAND:
+    case INVTYPE_HOLDABLE:
+        slots[0] = EQUIPMENT_SLOT_OFFHAND;
+        break;
+    case INVTYPE_RANGED:
+    case INVTYPE_RANGEDRIGHT:
+    case INVTYPE_THROWN:
+        slots[0] = EQUIPMENT_SLOT_RANGED;
+        break;
+    case INVTYPE_2HWEAPON:
+        slots[0] = EQUIPMENT_SLOT_MAINHAND;
+        if (Item* mhWeapon = GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND))
         {
-            slots[0] = EQUIPMENT_SLOT_MAINHAND;
-
-            // suggest offhand slot only if know dual wielding
-            // (this will be replace mainhand weapon at auto equip instead unwonted "you don't known dual wielding" ...
-            if (CanDualWield())
-                slots[1] = EQUIPMENT_SLOT_OFFHAND;
-            break;
-        }
-        case INVTYPE_SHIELD:
-        case INVTYPE_WEAPONOFFHAND:
-        case INVTYPE_HOLDABLE:
-            slots[0] = EQUIPMENT_SLOT_OFFHAND;
-            break;
-        case INVTYPE_RANGED:
-        case INVTYPE_RANGEDRIGHT:
-        case INVTYPE_THROWN:
-            slots[0] = EQUIPMENT_SLOT_RANGED;
-            break;
-        case INVTYPE_2HWEAPON:
-            slots[0] = EQUIPMENT_SLOT_MAINHAND;
-            if (Item* mhWeapon = GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND))
+            if (ItemTemplate const* mhWeaponProto = mhWeapon->GetTemplate())
             {
-                if (ItemTemplate const* mhWeaponProto = mhWeapon->GetTemplate())
-                {
-                    if (mhWeaponProto->SubClass == ITEM_SUBCLASS_WEAPON_POLEARM || mhWeaponProto->SubClass == ITEM_SUBCLASS_WEAPON_STAFF)
-                    {
-                        const_cast<Player*>(this)->AutoUnequipOffhandIfNeed(true);
-                        break;
-                    }
-                }
-            }
-
-            if (GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND))
-            {
-                if (proto->SubClass == ITEM_SUBCLASS_WEAPON_POLEARM || proto->SubClass == ITEM_SUBCLASS_WEAPON_STAFF)
+                if (mhWeaponProto->SubClass == ITEM_SUBCLASS_WEAPON_POLEARM || mhWeaponProto->SubClass == ITEM_SUBCLASS_WEAPON_STAFF)
                 {
                     const_cast<Player*>(this)->AutoUnequipOffhandIfNeed(true);
                     break;
                 }
             }
-            if (CanDualWield() && CanTitanGrip() && proto->SubClass != ITEM_SUBCLASS_WEAPON_POLEARM && proto->SubClass != ITEM_SUBCLASS_WEAPON_STAFF && proto->SubClass != ITEM_SUBCLASS_WEAPON_FISHING_POLE)
-                slots[1] = EQUIPMENT_SLOT_OFFHAND;
-            break;
-        case INVTYPE_TABARD:
-            slots[0] = EQUIPMENT_SLOT_TABARD;
-            break;
-        case INVTYPE_WEAPONMAINHAND:
-            slots[0] = EQUIPMENT_SLOT_MAINHAND;
-            break;
-        case INVTYPE_BAG:
-            slots[0] = INVENTORY_SLOT_BAG_START + 0;
-            slots[1] = INVENTORY_SLOT_BAG_START + 1;
-            slots[2] = INVENTORY_SLOT_BAG_START + 2;
-            slots[3] = INVENTORY_SLOT_BAG_START + 3;
-            break;
-        case INVTYPE_RELIC:
+        }
+
+        if (GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND))
         {
-            switch (proto->SubClass)
+            if (proto->SubClass == ITEM_SUBCLASS_WEAPON_POLEARM || proto->SubClass == ITEM_SUBCLASS_WEAPON_STAFF)
             {
-                case ITEM_SUBCLASS_ARMOR_LIBRAM:
-                    if (playerClass == CLASS_PALADIN)
-                        slots[0] = EQUIPMENT_SLOT_RANGED;
-                    break;
-                case ITEM_SUBCLASS_ARMOR_IDOL:
-                    if (playerClass == CLASS_DRUID)
-                        slots[0] = EQUIPMENT_SLOT_RANGED;
-                    break;
-                case ITEM_SUBCLASS_ARMOR_TOTEM:
-                    if (playerClass == CLASS_SHAMAN)
-                        slots[0] = EQUIPMENT_SLOT_RANGED;
-                    break;
-                case ITEM_SUBCLASS_ARMOR_MISC:
-                    if (playerClass == CLASS_WARLOCK)
-                        slots[0] = EQUIPMENT_SLOT_RANGED;
-                    break;
-                case ITEM_SUBCLASS_ARMOR_SIGIL:
-                    if (playerClass == CLASS_DEATH_KNIGHT)
-                        slots[0] = EQUIPMENT_SLOT_RANGED;
-                    break;
+                const_cast<Player*>(this)->AutoUnequipOffhandIfNeed(true);
+                break;
             }
+        }
+        if (CanDualWield() && CanTitanGrip() && proto->SubClass != ITEM_SUBCLASS_WEAPON_POLEARM && proto->SubClass != ITEM_SUBCLASS_WEAPON_STAFF && proto->SubClass != ITEM_SUBCLASS_WEAPON_FISHING_POLE)
+            slots[1] = EQUIPMENT_SLOT_OFFHAND;
+        break;
+    case INVTYPE_TABARD:
+        slots[0] = EQUIPMENT_SLOT_TABARD;
+        break;
+    case INVTYPE_WEAPONMAINHAND:
+        slots[0] = EQUIPMENT_SLOT_MAINHAND;
+        break;
+    case INVTYPE_BAG:
+        slots[0] = INVENTORY_SLOT_BAG_START + 0;
+        slots[1] = INVENTORY_SLOT_BAG_START + 1;
+        slots[2] = INVENTORY_SLOT_BAG_START + 2;
+        slots[3] = INVENTORY_SLOT_BAG_START + 3;
+        break;
+    case INVTYPE_RELIC:
+    {
+        switch (proto->SubClass)
+        {
+        case ITEM_SUBCLASS_ARMOR_LIBRAM:
+            if (playerClass == CLASS_PALADIN)
+                slots[0] = EQUIPMENT_SLOT_RANGED;
+            break;
+        case ITEM_SUBCLASS_ARMOR_IDOL:
+            if (playerClass == CLASS_DRUID)
+                slots[0] = EQUIPMENT_SLOT_RANGED;
+            break;
+        case ITEM_SUBCLASS_ARMOR_TOTEM:
+            if (playerClass == CLASS_SHAMAN)
+                slots[0] = EQUIPMENT_SLOT_RANGED;
+            break;
+        case ITEM_SUBCLASS_ARMOR_MISC:
+            if (playerClass == CLASS_WARLOCK)
+                slots[0] = EQUIPMENT_SLOT_RANGED;
+            break;
+        case ITEM_SUBCLASS_ARMOR_SIGIL:
+            if (playerClass == CLASS_DEATH_KNIGHT)
+                slots[0] = EQUIPMENT_SLOT_RANGED;
             break;
         }
-        default:
-            return NULL_SLOT;
+        break;
+    }
+    default:
+        return NULL_SLOT;
     }
 
     if (slot != NULL_SLOT)
@@ -10551,7 +10636,7 @@ Item* Player::GetItemByPos(uint8 bag, uint8 slot) const
 Bag* Player::GetBagByPos(uint8 bag) const
 {
     if ((bag >= INVENTORY_SLOT_BAG_START && bag < INVENTORY_SLOT_BAG_END)
-        || (bag >= BANK_SLOT_BAG_START && bag < BANK_SLOT_BAG_END))
+            || (bag >= BANK_SLOT_BAG_START && bag < BANK_SLOT_BAG_END))
         if (Item* item = GetItemByPos(INVENTORY_SLOT_BAG_0, bag))
             return item->ToBag();
     return nullptr;
@@ -10562,10 +10647,17 @@ Item* Player::GetWeaponForAttack(WeaponAttackType attackType, bool useable /*= f
     uint8 slot;
     switch (attackType)
     {
-        case BASE_ATTACK:   slot = EQUIPMENT_SLOT_MAINHAND; break;
-        case OFF_ATTACK:    slot = EQUIPMENT_SLOT_OFFHAND;  break;
-        case RANGED_ATTACK: slot = EQUIPMENT_SLOT_RANGED;   break;
-        default: return nullptr;
+    case BASE_ATTACK:
+        slot = EQUIPMENT_SLOT_MAINHAND;
+        break;
+    case OFF_ATTACK:
+        slot = EQUIPMENT_SLOT_OFFHAND;
+        break;
+    case RANGED_ATTACK:
+        slot = EQUIPMENT_SLOT_RANGED;
+        break;
+    default:
+        return nullptr;
     }
 
     Item* item = nullptr;
@@ -10608,10 +10700,14 @@ uint8 Player::GetAttackBySlot(uint8 slot)
 {
     switch (slot)
     {
-        case EQUIPMENT_SLOT_MAINHAND: return BASE_ATTACK;
-        case EQUIPMENT_SLOT_OFFHAND:  return OFF_ATTACK;
-        case EQUIPMENT_SLOT_RANGED:   return RANGED_ATTACK;
-        default:                      return MAX_ATTACK;
+    case EQUIPMENT_SLOT_MAINHAND:
+        return BASE_ATTACK;
+    case EQUIPMENT_SLOT_OFFHAND:
+        return OFF_ATTACK;
+    case EQUIPMENT_SLOT_RANGED:
+        return RANGED_ATTACK;
+    default:
+        return MAX_ATTACK;
     }
 }
 
@@ -11795,7 +11891,7 @@ InventoryResult Player::CanStoreItems(Item** pItems, int count) const
 
                     // not plain container check
                     if (pBagProto && (pBagProto->Class != ITEM_CLASS_CONTAINER || pBagProto->SubClass != ITEM_SUBCLASS_CONTAINER) &&
-                        ItemCanGoIntoBag(pProto, pBagProto))
+                            ItemCanGoIntoBag(pProto, pBagProto))
                     {
                         for (uint32 j = 0; j < bag->GetBagSize(); j++)
                         {
@@ -11951,24 +12047,24 @@ InventoryResult Player::CanEquipItem(uint8 slot, uint16 &dest, Item* pItem, bool
             uint8 ignore = uint8(NULL_SLOT);
             switch (eslot)
             {
-                case EQUIPMENT_SLOT_MAINHAND:
-                    ignore = EQUIPMENT_SLOT_OFFHAND;
-                    break;
-                case EQUIPMENT_SLOT_OFFHAND:
-                    ignore = EQUIPMENT_SLOT_MAINHAND;
-                    break;
-                case EQUIPMENT_SLOT_FINGER1:
-                    ignore = EQUIPMENT_SLOT_FINGER2;
-                    break;
-                case EQUIPMENT_SLOT_FINGER2:
-                    ignore = EQUIPMENT_SLOT_FINGER1;
-                    break;
-                case EQUIPMENT_SLOT_TRINKET1:
-                    ignore = EQUIPMENT_SLOT_TRINKET2;
-                    break;
-                case EQUIPMENT_SLOT_TRINKET2:
-                    ignore = EQUIPMENT_SLOT_TRINKET1;
-                    break;
+            case EQUIPMENT_SLOT_MAINHAND:
+                ignore = EQUIPMENT_SLOT_OFFHAND;
+                break;
+            case EQUIPMENT_SLOT_OFFHAND:
+                ignore = EQUIPMENT_SLOT_MAINHAND;
+                break;
+            case EQUIPMENT_SLOT_FINGER1:
+                ignore = EQUIPMENT_SLOT_FINGER2;
+                break;
+            case EQUIPMENT_SLOT_FINGER2:
+                ignore = EQUIPMENT_SLOT_FINGER1;
+                break;
+            case EQUIPMENT_SLOT_TRINKET1:
+                ignore = EQUIPMENT_SLOT_TRINKET2;
+                break;
+            case EQUIPMENT_SLOT_TRINKET2:
+                ignore = EQUIPMENT_SLOT_TRINKET1;
+                break;
             }
 
             if (ignore == uint8(NULL_SLOT) || pItem != GetItemByPos(INVENTORY_SLOT_BAG_0, ignore))
@@ -11986,8 +12082,8 @@ InventoryResult Player::CanEquipItem(uint8 slot, uint16 &dest, Item* pItem, bool
                             if (ItemTemplate const* pBagProto = pBag->GetTemplate())
                                 if (pBagProto->Class == pProto->Class && (!swap || pBag->GetSlot() != eslot))
                                     return (pBagProto->SubClass == ITEM_SUBCLASS_AMMO_POUCH)
-                                        ? EQUIP_ERR_CAN_EQUIP_ONLY1_AMMOPOUCH
-                                        : EQUIP_ERR_CAN_EQUIP_ONLY1_QUIVER;
+                                           ? EQUIP_ERR_CAN_EQUIP_ONLY1_AMMOPOUCH
+                                           : EQUIP_ERR_CAN_EQUIP_ONLY1_QUIVER;
 
             uint32 type = pProto->InventoryType;
 
@@ -12030,8 +12126,8 @@ InventoryResult Player::CanEquipItem(uint8 slot, uint16 &dest, Item* pItem, bool
                     Item* offItem = GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND);
                     ItemPosCountVec off_dest;
                     if (offItem && (!not_loading ||
-                        CanUnequipItem(uint16(INVENTORY_SLOT_BAG_0) << 8 | EQUIPMENT_SLOT_OFFHAND, false) != EQUIP_ERR_OK ||
-                        CanStoreItem(NULL_BAG, NULL_SLOT, off_dest, offItem, false) != EQUIP_ERR_OK))
+                                    CanUnequipItem(uint16(INVENTORY_SLOT_BAG_0) << 8 | EQUIPMENT_SLOT_OFFHAND, false) != EQUIP_ERR_OK ||
+                                    CanStoreItem(NULL_BAG, NULL_SLOT, off_dest, offItem, false) != EQUIP_ERR_OK))
                         return swap ? EQUIP_ERR_ITEMS_CANT_BE_SWAPPED : EQUIP_ERR_INVENTORY_FULL;
                 }
             }
@@ -12116,7 +12212,7 @@ InventoryResult Player::CanBankItem(uint8 bag, uint8 slot, ItemPosCountVec &dest
     if (pItemslot >= CURRENCYTOKEN_SLOT_START && pItemslot < CURRENCYTOKEN_SLOT_END)
     {
         LOG_ERROR("server", "Possible hacking attempt: Player %s [guid: %u] tried to move token [guid: %u, entry: %u] out of the currency bag!",
-                GetName().c_str(), GetGUIDLow(), pItem->GetGUIDLow(), pProto->ItemId);
+                  GetName().c_str(), GetGUIDLow(), pItem->GetGUIDLow(), pProto->ItemId);
         return EQUIP_ERR_ITEMS_CANT_BE_SWAPPED;
     }
 
@@ -12317,14 +12413,14 @@ InventoryResult Player::CanUseItem(Item* pItem, bool not_loading) const
 
                     switch (getClass())
                     {
-                        case CLASS_HUNTER:
-                        case CLASS_SHAMAN:
-                            allowEquip = (itemSkill == SKILL_MAIL);
-                            break;
-                        case CLASS_PALADIN:
-                        case CLASS_WARRIOR:
-                            allowEquip = (itemSkill == SKILL_PLATE_MAIL);
-                            break;
+                    case CLASS_HUNTER:
+                    case CLASS_SHAMAN:
+                        allowEquip = (itemSkill == SKILL_MAIL);
+                        break;
+                    case CLASS_PALADIN:
+                    case CLASS_WARRIOR:
+                        allowEquip = (itemSkill == SKILL_PLATE_MAIL);
+                        break;
                     }
                 }
                 if (!allowEquip && GetSkillValue(itemSkill) == 0)
@@ -12391,7 +12487,7 @@ InventoryResult Player::CanRollForItemInLFG(ItemTemplate const* proto, WorldObje
 
     if (!proto)
         return EQUIP_ERR_ITEM_NOT_FOUND;
-   // Used by group, function NeedBeforeGreed, to know if a prototype can be used by a player
+    // Used by group, function NeedBeforeGreed, to know if a prototype can be used by a player
 
     const static uint32 item_weapon_skills[MAX_ITEM_SUBCLASS_WEAPON] =
     {
@@ -12629,8 +12725,8 @@ Item* Player::_StoreItem(uint16 pos, Item* pItem, uint32 count, bool clone, bool
             return nullptr;
 
         if (pItem->GetTemplate()->Bonding == BIND_WHEN_PICKED_UP ||
-            pItem->GetTemplate()->Bonding == BIND_QUEST_ITEM ||
-            (pItem->GetTemplate()->Bonding == BIND_WHEN_EQUIPED && IsBagPos(pos)))
+                pItem->GetTemplate()->Bonding == BIND_QUEST_ITEM ||
+                (pItem->GetTemplate()->Bonding == BIND_WHEN_EQUIPED && IsBagPos(pos)))
             pItem->SetBinding(true);
 
         Bag* pBag = (bag == INVENTORY_SLOT_BAG_0) ? NULL : GetBagByPos(bag);
@@ -12669,8 +12765,8 @@ Item* Player::_StoreItem(uint16 pos, Item* pItem, uint32 count, bool clone, bool
     else
     {
         if (pItem2->GetTemplate()->Bonding == BIND_WHEN_PICKED_UP ||
-            pItem2->GetTemplate()->Bonding == BIND_QUEST_ITEM ||
-            (pItem2->GetTemplate()->Bonding == BIND_WHEN_EQUIPED && IsBagPos(pos)))
+                pItem2->GetTemplate()->Bonding == BIND_QUEST_ITEM ||
+                (pItem2->GetTemplate()->Bonding == BIND_WHEN_EQUIPED && IsBagPos(pos)))
             pItem2->SetBinding(true);
 
         pItem2->SetCount(pItem2->GetCount() + count);
@@ -12773,7 +12869,7 @@ Item* Player::EquipItem(uint16 pos, Item* pItem, bool update)
 
         ApplyEquipCooldown(pItem);
 
-         // update expertise and armor penetration - passive auras may need it
+        // update expertise and armor penetration - passive auras may need it
 
         if (slot == EQUIPMENT_SLOT_MAINHAND)
             UpdateExpertise(BASE_ATTACK);
@@ -12783,12 +12879,12 @@ Item* Player::EquipItem(uint16 pos, Item* pItem, bool update)
 
         switch (slot)
         {
-            case EQUIPMENT_SLOT_MAINHAND:
-            case EQUIPMENT_SLOT_OFFHAND:
-            case EQUIPMENT_SLOT_RANGED:
-                RecalculateRating(CR_ARMOR_PENETRATION);
-            default:
-                break;
+        case EQUIPMENT_SLOT_MAINHAND:
+        case EQUIPMENT_SLOT_OFFHAND:
+        case EQUIPMENT_SLOT_RANGED:
+            RecalculateRating(CR_ARMOR_PENETRATION);
+        default:
+            break;
         }
     }
     else
@@ -12938,12 +13034,12 @@ void Player::RemoveItem(uint8 bag, uint8 slot, bool update, bool swap)
                     // update armor penetration - passive auras may need it
                     switch (slot)
                     {
-                        case EQUIPMENT_SLOT_MAINHAND:
-                        case EQUIPMENT_SLOT_OFFHAND:
-                        case EQUIPMENT_SLOT_RANGED:
-                            RecalculateRating(CR_ARMOR_PENETRATION);
-                        default:
-                            break;
+                    case EQUIPMENT_SLOT_MAINHAND:
+                    case EQUIPMENT_SLOT_OFFHAND:
+                    case EQUIPMENT_SLOT_RANGED:
+                        RecalculateRating(CR_ARMOR_PENETRATION);
+                    default:
+                        break;
                     }
                 }
             }
@@ -13074,12 +13170,12 @@ void Player::DestroyItem(uint8 bag, uint8 slot, bool update)
                 // update expertise and armor penetration - passive auras may need it
                 switch (slot)
                 {
-                    case EQUIPMENT_SLOT_MAINHAND:
-                    case EQUIPMENT_SLOT_OFFHAND:
-                    case EQUIPMENT_SLOT_RANGED:
-                        RecalculateRating(CR_ARMOR_PENETRATION);
-                    default:
-                        break;
+                case EQUIPMENT_SLOT_MAINHAND:
+                case EQUIPMENT_SLOT_OFFHAND:
+                case EQUIPMENT_SLOT_RANGED:
+                    RecalculateRating(CR_ARMOR_PENETRATION);
+                default:
+                    break;
                 }
 
                 if (slot == EQUIPMENT_SLOT_MAINHAND)
@@ -14021,30 +14117,30 @@ void Player::SendEquipError(InventoryResult msg, Item* pItem, Item* pItem2, uint
 
         switch (msg)
         {
-            case EQUIP_ERR_CANT_EQUIP_LEVEL_I:
-            case EQUIP_ERR_PURCHASE_LEVEL_TOO_LOW:
-            {
-                ItemTemplate const* proto = pItem ? pItem->GetTemplate() : sObjectMgr->GetItemTemplate(itemid);
-                data << uint32(proto ? proto->RequiredLevel : 0);
-                break;
-            }
-            case EQUIP_ERR_EVENT_AUTOEQUIP_BIND_CONFIRM:    // no idea about this one...
-            {
-                data << uint64(0); // item guid
-                data << uint32(0); // slot
-                data << uint64(0); // container
-                break;
-            }
-            case EQUIP_ERR_ITEM_MAX_LIMIT_CATEGORY_COUNT_EXCEEDED:
-            case EQUIP_ERR_ITEM_MAX_LIMIT_CATEGORY_SOCKETED_EXCEEDED:
-            case EQUIP_ERR_ITEM_MAX_LIMIT_CATEGORY_EQUIPPED_EXCEEDED:
-            {
-                ItemTemplate const* proto = pItem ? pItem->GetTemplate() : sObjectMgr->GetItemTemplate(itemid);
-                data << uint32(proto ? proto->ItemLimitCategory : 0);
-                break;
-            }
-            default:
-                break;
+        case EQUIP_ERR_CANT_EQUIP_LEVEL_I:
+        case EQUIP_ERR_PURCHASE_LEVEL_TOO_LOW:
+        {
+            ItemTemplate const* proto = pItem ? pItem->GetTemplate() : sObjectMgr->GetItemTemplate(itemid);
+            data << uint32(proto ? proto->RequiredLevel : 0);
+            break;
+        }
+        case EQUIP_ERR_EVENT_AUTOEQUIP_BIND_CONFIRM:    // no idea about this one...
+        {
+            data << uint64(0); // item guid
+            data << uint32(0); // slot
+            data << uint64(0); // container
+            break;
+        }
+        case EQUIP_ERR_ITEM_MAX_LIMIT_CATEGORY_COUNT_EXCEEDED:
+        case EQUIP_ERR_ITEM_MAX_LIMIT_CATEGORY_SOCKETED_EXCEEDED:
+        case EQUIP_ERR_ITEM_MAX_LIMIT_CATEGORY_EQUIPPED_EXCEEDED:
+        {
+            ItemTemplate const* proto = pItem ? pItem->GetTemplate() : sObjectMgr->GetItemTemplate(itemid);
+            data << uint32(proto ? proto->ItemLimitCategory : 0);
+            break;
+        }
+        default:
+            break;
         }
     }
     GetSession()->SendPacket(&data);
@@ -14324,12 +14420,12 @@ void Player::ApplyEnchantment(Item* item, EnchantmentSlot slot, bool apply, bool
     // If we're dealing with a gem inside a prismatic socket we need to check the prismatic socket requirements
     // rather than the gem requirements itself. If the socket has no color it is a prismatic socket.
     if ((slot == SOCK_ENCHANTMENT_SLOT || slot == SOCK_ENCHANTMENT_SLOT_2 || slot == SOCK_ENCHANTMENT_SLOT_3)
-        && !item->GetTemplate()->Socket[slot-SOCK_ENCHANTMENT_SLOT].Color)
+            && !item->GetTemplate()->Socket[slot-SOCK_ENCHANTMENT_SLOT].Color)
     {
         // Check if the requirements for the prismatic socket are met before applying the gem stats
-         SpellItemEnchantmentEntry const* pPrismaticEnchant = sSpellItemEnchantmentStore.LookupEntry(item->GetEnchantmentId(PRISMATIC_ENCHANTMENT_SLOT));
-         if (!pPrismaticEnchant || (pPrismaticEnchant->requiredSkill > 0 && pPrismaticEnchant->requiredSkillValue > GetSkillValue(pPrismaticEnchant->requiredSkill)))
-             return;
+        SpellItemEnchantmentEntry const* pPrismaticEnchant = sSpellItemEnchantmentStore.LookupEntry(item->GetEnchantmentId(PRISMATIC_ENCHANTMENT_SLOT));
+        if (!pPrismaticEnchant || (pPrismaticEnchant->requiredSkill > 0 && pPrismaticEnchant->requiredSkillValue > GetSkillValue(pPrismaticEnchant->requiredSkill)))
+            return;
     }
 
     if (!item->IsBroken())
@@ -14342,201 +14438,201 @@ void Player::ApplyEnchantment(Item* item, EnchantmentSlot slot, bool apply, bool
 
             switch (enchant_display_type)
             {
-                case ITEM_ENCHANTMENT_TYPE_NONE:
-                    break;
-                case ITEM_ENCHANTMENT_TYPE_COMBAT_SPELL:
-                    // processed in Player::CastItemCombatSpell
-                    break;
-                case ITEM_ENCHANTMENT_TYPE_DAMAGE:
-                    if (item->GetSlot() == EQUIPMENT_SLOT_MAINHAND)
-                        HandleStatModifier(UNIT_MOD_DAMAGE_MAINHAND, TOTAL_VALUE, float(enchant_amount), apply);
-                    else if (item->GetSlot() == EQUIPMENT_SLOT_OFFHAND)
-                        HandleStatModifier(UNIT_MOD_DAMAGE_OFFHAND, TOTAL_VALUE, float(enchant_amount), apply);
-                    else if (item->GetSlot() == EQUIPMENT_SLOT_RANGED)
-                        HandleStatModifier(UNIT_MOD_DAMAGE_RANGED, TOTAL_VALUE, float(enchant_amount), apply);
-                    break;
-                case ITEM_ENCHANTMENT_TYPE_EQUIP_SPELL:
-                    if (enchant_spell_id)
+            case ITEM_ENCHANTMENT_TYPE_NONE:
+                break;
+            case ITEM_ENCHANTMENT_TYPE_COMBAT_SPELL:
+                // processed in Player::CastItemCombatSpell
+                break;
+            case ITEM_ENCHANTMENT_TYPE_DAMAGE:
+                if (item->GetSlot() == EQUIPMENT_SLOT_MAINHAND)
+                    HandleStatModifier(UNIT_MOD_DAMAGE_MAINHAND, TOTAL_VALUE, float(enchant_amount), apply);
+                else if (item->GetSlot() == EQUIPMENT_SLOT_OFFHAND)
+                    HandleStatModifier(UNIT_MOD_DAMAGE_OFFHAND, TOTAL_VALUE, float(enchant_amount), apply);
+                else if (item->GetSlot() == EQUIPMENT_SLOT_RANGED)
+                    HandleStatModifier(UNIT_MOD_DAMAGE_RANGED, TOTAL_VALUE, float(enchant_amount), apply);
+                break;
+            case ITEM_ENCHANTMENT_TYPE_EQUIP_SPELL:
+                if (enchant_spell_id)
+                {
+                    if (apply)
                     {
-                        if (apply)
+                        int32 basepoints = 0;
+                        // Random Property Exist - try found basepoints for spell (basepoints depends from item suffix factor)
+                        if (item->GetItemRandomPropertyId())
                         {
-                            int32 basepoints = 0;
-                            // Random Property Exist - try found basepoints for spell (basepoints depends from item suffix factor)
-                            if (item->GetItemRandomPropertyId())
+                            ItemRandomSuffixEntry const* item_rand = sItemRandomSuffixStore.LookupEntry(abs(item->GetItemRandomPropertyId()));
+                            if (item_rand)
                             {
-                                ItemRandomSuffixEntry const* item_rand = sItemRandomSuffixStore.LookupEntry(abs(item->GetItemRandomPropertyId()));
-                                if (item_rand)
+                                // Search enchant_amount
+                                for (int k = 0; k < MAX_ITEM_ENCHANTMENT_EFFECTS; ++k)
                                 {
-                                    // Search enchant_amount
-                                    for (int k = 0; k < MAX_ITEM_ENCHANTMENT_EFFECTS; ++k)
+                                    if (item_rand->enchant_id[k] == enchant_id)
                                     {
-                                        if (item_rand->enchant_id[k] == enchant_id)
-                                        {
-                                            basepoints = int32((item_rand->prefix[k] * item->GetItemSuffixFactor()) / 10000);
-                                            break;
-                                        }
+                                        basepoints = int32((item_rand->prefix[k] * item->GetItemSuffixFactor()) / 10000);
+                                        break;
                                     }
                                 }
                             }
-                            // Cast custom spell vs all equal basepoints got from enchant_amount
-                            if (basepoints)
-                                CastCustomSpell(this, enchant_spell_id, &basepoints, &basepoints, &basepoints, true, item);
-                            else
-                                CastSpell(this, enchant_spell_id, true, item);
                         }
+                        // Cast custom spell vs all equal basepoints got from enchant_amount
+                        if (basepoints)
+                            CastCustomSpell(this, enchant_spell_id, &basepoints, &basepoints, &basepoints, true, item);
                         else
-                            RemoveAurasDueToItemSpell(enchant_spell_id, item->GetGUID());
+                            CastSpell(this, enchant_spell_id, true, item);
                     }
-                    break;
-                case ITEM_ENCHANTMENT_TYPE_RESISTANCE:
-                    if (!enchant_amount)
-                    {
-                        ItemRandomSuffixEntry const* item_rand = sItemRandomSuffixStore.LookupEntry(abs(item->GetItemRandomPropertyId()));
-                        if (item_rand)
-                        {
-                            for (int k = 0; k < MAX_ITEM_ENCHANTMENT_EFFECTS; ++k)
-                            {
-                                if (item_rand->enchant_id[k] == enchant_id)
-                                {
-                                    enchant_amount = uint32((item_rand->prefix[k] * item->GetItemSuffixFactor()) / 10000);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-
-                    HandleStatModifier(UnitMods(UNIT_MOD_RESISTANCE_START + enchant_spell_id), TOTAL_VALUE, float(enchant_amount), apply);
-                    break;
-                case ITEM_ENCHANTMENT_TYPE_STAT:
+                    else
+                        RemoveAurasDueToItemSpell(enchant_spell_id, item->GetGUID());
+                }
+                break;
+            case ITEM_ENCHANTMENT_TYPE_RESISTANCE:
+                if (!enchant_amount)
                 {
-                    if (!enchant_amount)
+                    ItemRandomSuffixEntry const* item_rand = sItemRandomSuffixStore.LookupEntry(abs(item->GetItemRandomPropertyId()));
+                    if (item_rand)
                     {
-                        ItemRandomSuffixEntry const* item_rand_suffix = sItemRandomSuffixStore.LookupEntry(abs(item->GetItemRandomPropertyId()));
-                        if (item_rand_suffix)
+                        for (int k = 0; k < MAX_ITEM_ENCHANTMENT_EFFECTS; ++k)
                         {
-                            for (int k = 0; k < MAX_ITEM_ENCHANTMENT_EFFECTS; ++k)
+                            if (item_rand->enchant_id[k] == enchant_id)
                             {
-                                if (item_rand_suffix->enchant_id[k] == enchant_id)
-                                {
-                                    enchant_amount = uint32((item_rand_suffix->prefix[k] * item->GetItemSuffixFactor()) / 10000);
-                                    break;
-                                }
+                                enchant_amount = uint32((item_rand->prefix[k] * item->GetItemSuffixFactor()) / 10000);
+                                break;
                             }
                         }
                     }
+                }
+
+                HandleStatModifier(UnitMods(UNIT_MOD_RESISTANCE_START + enchant_spell_id), TOTAL_VALUE, float(enchant_amount), apply);
+                break;
+            case ITEM_ENCHANTMENT_TYPE_STAT:
+            {
+                if (!enchant_amount)
+                {
+                    ItemRandomSuffixEntry const* item_rand_suffix = sItemRandomSuffixStore.LookupEntry(abs(item->GetItemRandomPropertyId()));
+                    if (item_rand_suffix)
+                    {
+                        for (int k = 0; k < MAX_ITEM_ENCHANTMENT_EFFECTS; ++k)
+                        {
+                            if (item_rand_suffix->enchant_id[k] == enchant_id)
+                            {
+                                enchant_amount = uint32((item_rand_suffix->prefix[k] * item->GetItemSuffixFactor()) / 10000);
+                                break;
+                            }
+                        }
+                    }
+                }
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                    LOG_DEBUG("entities.player.items", "Adding %u to stat nb %u", enchant_amount, enchant_spell_id);
+                LOG_DEBUG("entities.player.items", "Adding %u to stat nb %u", enchant_amount, enchant_spell_id);
 #endif
-                    switch (enchant_spell_id)
-                    {
-                        case ITEM_MOD_MANA:
+                switch (enchant_spell_id)
+                {
+                case ITEM_MOD_MANA:
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                            LOG_DEBUG("entities.player.items", "+ %u MANA", enchant_amount);
+                    LOG_DEBUG("entities.player.items", "+ %u MANA", enchant_amount);
 #endif
-                            HandleStatModifier(UNIT_MOD_MANA, BASE_VALUE, float(enchant_amount), apply);
-                            break;
-                        case ITEM_MOD_HEALTH:
+                    HandleStatModifier(UNIT_MOD_MANA, BASE_VALUE, float(enchant_amount), apply);
+                    break;
+                case ITEM_MOD_HEALTH:
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                            LOG_DEBUG("entities.player.items", "+ %u HEALTH", enchant_amount);
+                    LOG_DEBUG("entities.player.items", "+ %u HEALTH", enchant_amount);
 #endif
-                            HandleStatModifier(UNIT_MOD_HEALTH, BASE_VALUE, float(enchant_amount), apply);
-                            break;
-                        case ITEM_MOD_AGILITY:
+                    HandleStatModifier(UNIT_MOD_HEALTH, BASE_VALUE, float(enchant_amount), apply);
+                    break;
+                case ITEM_MOD_AGILITY:
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                            LOG_DEBUG("entities.player.items", "+ %u AGILITY", enchant_amount);
+                    LOG_DEBUG("entities.player.items", "+ %u AGILITY", enchant_amount);
 #endif
-                            HandleStatModifier(UNIT_MOD_STAT_AGILITY, TOTAL_VALUE, float(enchant_amount), apply);
-                            ApplyStatBuffMod(STAT_AGILITY, (float)enchant_amount, apply);
-                            break;
-                        case ITEM_MOD_STRENGTH:
+                    HandleStatModifier(UNIT_MOD_STAT_AGILITY, TOTAL_VALUE, float(enchant_amount), apply);
+                    ApplyStatBuffMod(STAT_AGILITY, (float)enchant_amount, apply);
+                    break;
+                case ITEM_MOD_STRENGTH:
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                            LOG_DEBUG("entities.player.items", "+ %u STRENGTH", enchant_amount);
+                    LOG_DEBUG("entities.player.items", "+ %u STRENGTH", enchant_amount);
 #endif
-                            HandleStatModifier(UNIT_MOD_STAT_STRENGTH, TOTAL_VALUE, float(enchant_amount), apply);
-                            ApplyStatBuffMod(STAT_STRENGTH, (float)enchant_amount, apply);
-                            break;
-                        case ITEM_MOD_INTELLECT:
+                    HandleStatModifier(UNIT_MOD_STAT_STRENGTH, TOTAL_VALUE, float(enchant_amount), apply);
+                    ApplyStatBuffMod(STAT_STRENGTH, (float)enchant_amount, apply);
+                    break;
+                case ITEM_MOD_INTELLECT:
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                            LOG_DEBUG("entities.player.items", "+ %u INTELLECT", enchant_amount);
+                    LOG_DEBUG("entities.player.items", "+ %u INTELLECT", enchant_amount);
 #endif
-                            HandleStatModifier(UNIT_MOD_STAT_INTELLECT, TOTAL_VALUE, float(enchant_amount), apply);
-                            ApplyStatBuffMod(STAT_INTELLECT, (float)enchant_amount, apply);
-                            break;
-                        case ITEM_MOD_SPIRIT:
+                    HandleStatModifier(UNIT_MOD_STAT_INTELLECT, TOTAL_VALUE, float(enchant_amount), apply);
+                    ApplyStatBuffMod(STAT_INTELLECT, (float)enchant_amount, apply);
+                    break;
+                case ITEM_MOD_SPIRIT:
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                            LOG_DEBUG("entities.player.items", "+ %u SPIRIT", enchant_amount);
+                    LOG_DEBUG("entities.player.items", "+ %u SPIRIT", enchant_amount);
 #endif
-                            HandleStatModifier(UNIT_MOD_STAT_SPIRIT, TOTAL_VALUE, float(enchant_amount), apply);
-                            ApplyStatBuffMod(STAT_SPIRIT, (float)enchant_amount, apply);
-                            break;
-                        case ITEM_MOD_STAMINA:
+                    HandleStatModifier(UNIT_MOD_STAT_SPIRIT, TOTAL_VALUE, float(enchant_amount), apply);
+                    ApplyStatBuffMod(STAT_SPIRIT, (float)enchant_amount, apply);
+                    break;
+                case ITEM_MOD_STAMINA:
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                            LOG_DEBUG("entities.player.items", "+ %u STAMINA", enchant_amount);
+                    LOG_DEBUG("entities.player.items", "+ %u STAMINA", enchant_amount);
 #endif
-                            HandleStatModifier(UNIT_MOD_STAT_STAMINA, TOTAL_VALUE, float(enchant_amount), apply);
-                            ApplyStatBuffMod(STAT_STAMINA, (float)enchant_amount, apply);
-                            break;
-                        case ITEM_MOD_DEFENSE_SKILL_RATING:
-                            ApplyRatingMod(CR_DEFENSE_SKILL, enchant_amount, apply);
+                    HandleStatModifier(UNIT_MOD_STAT_STAMINA, TOTAL_VALUE, float(enchant_amount), apply);
+                    ApplyStatBuffMod(STAT_STAMINA, (float)enchant_amount, apply);
+                    break;
+                case ITEM_MOD_DEFENSE_SKILL_RATING:
+                    ApplyRatingMod(CR_DEFENSE_SKILL, enchant_amount, apply);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                            LOG_DEBUG("entities.player.items", "+ %u DEFENCE", enchant_amount);
+                    LOG_DEBUG("entities.player.items", "+ %u DEFENCE", enchant_amount);
 #endif
-                            break;
-                        case  ITEM_MOD_DODGE_RATING:
-                            ApplyRatingMod(CR_DODGE, enchant_amount, apply);
+                    break;
+                case  ITEM_MOD_DODGE_RATING:
+                    ApplyRatingMod(CR_DODGE, enchant_amount, apply);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                            LOG_DEBUG("entities.player.items", "+ %u DODGE", enchant_amount);
+                    LOG_DEBUG("entities.player.items", "+ %u DODGE", enchant_amount);
 #endif
-                            break;
-                        case ITEM_MOD_PARRY_RATING:
-                            ApplyRatingMod(CR_PARRY, enchant_amount, apply);
+                    break;
+                case ITEM_MOD_PARRY_RATING:
+                    ApplyRatingMod(CR_PARRY, enchant_amount, apply);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                            LOG_DEBUG("entities.player.items", "+ %u PARRY", enchant_amount);
+                    LOG_DEBUG("entities.player.items", "+ %u PARRY", enchant_amount);
 #endif
-                            break;
-                        case ITEM_MOD_BLOCK_RATING:
-                            ApplyRatingMod(CR_BLOCK, enchant_amount, apply);
+                    break;
+                case ITEM_MOD_BLOCK_RATING:
+                    ApplyRatingMod(CR_BLOCK, enchant_amount, apply);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                            LOG_DEBUG("entities.player.items", "+ %u SHIELD_BLOCK", enchant_amount);
+                    LOG_DEBUG("entities.player.items", "+ %u SHIELD_BLOCK", enchant_amount);
 #endif
-                            break;
-                        case ITEM_MOD_HIT_MELEE_RATING:
-                            ApplyRatingMod(CR_HIT_MELEE, enchant_amount, apply);
+                    break;
+                case ITEM_MOD_HIT_MELEE_RATING:
+                    ApplyRatingMod(CR_HIT_MELEE, enchant_amount, apply);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                            LOG_DEBUG("entities.player.items", "+ %u MELEE_HIT", enchant_amount);
+                    LOG_DEBUG("entities.player.items", "+ %u MELEE_HIT", enchant_amount);
 #endif
-                            break;
-                        case ITEM_MOD_HIT_RANGED_RATING:
-                            ApplyRatingMod(CR_HIT_RANGED, enchant_amount, apply);
+                    break;
+                case ITEM_MOD_HIT_RANGED_RATING:
+                    ApplyRatingMod(CR_HIT_RANGED, enchant_amount, apply);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                            LOG_DEBUG("entities.player.items", "+ %u RANGED_HIT", enchant_amount);
+                    LOG_DEBUG("entities.player.items", "+ %u RANGED_HIT", enchant_amount);
 #endif
-                            break;
-                        case ITEM_MOD_HIT_SPELL_RATING:
-                            ApplyRatingMod(CR_HIT_SPELL, enchant_amount, apply);
+                    break;
+                case ITEM_MOD_HIT_SPELL_RATING:
+                    ApplyRatingMod(CR_HIT_SPELL, enchant_amount, apply);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                            LOG_DEBUG("entities.player.items", "+ %u SPELL_HIT", enchant_amount);
+                    LOG_DEBUG("entities.player.items", "+ %u SPELL_HIT", enchant_amount);
 #endif
-                            break;
-                        case ITEM_MOD_CRIT_MELEE_RATING:
-                            ApplyRatingMod(CR_CRIT_MELEE, enchant_amount, apply);
+                    break;
+                case ITEM_MOD_CRIT_MELEE_RATING:
+                    ApplyRatingMod(CR_CRIT_MELEE, enchant_amount, apply);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                            LOG_DEBUG("entities.player.items", "+ %u MELEE_CRIT", enchant_amount);
+                    LOG_DEBUG("entities.player.items", "+ %u MELEE_CRIT", enchant_amount);
 #endif
-                            break;
-                        case ITEM_MOD_CRIT_RANGED_RATING:
-                            ApplyRatingMod(CR_CRIT_RANGED, enchant_amount, apply);
+                    break;
+                case ITEM_MOD_CRIT_RANGED_RATING:
+                    ApplyRatingMod(CR_CRIT_RANGED, enchant_amount, apply);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                            LOG_DEBUG("entities.player.items", "+ %u RANGED_CRIT", enchant_amount);
+                    LOG_DEBUG("entities.player.items", "+ %u RANGED_CRIT", enchant_amount);
 #endif
-                            break;
-                        case ITEM_MOD_CRIT_SPELL_RATING:
-                            ApplyRatingMod(CR_CRIT_SPELL, enchant_amount, apply);
+                    break;
+                case ITEM_MOD_CRIT_SPELL_RATING:
+                    ApplyRatingMod(CR_CRIT_SPELL, enchant_amount, apply);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                            LOG_DEBUG("entities.player.items", "+ %u SPELL_CRIT", enchant_amount);
+                    LOG_DEBUG("entities.player.items", "+ %u SPELL_CRIT", enchant_amount);
 #endif
-                            break;
+                    break;
 //                        Values from ITEM_STAT_MELEE_HA_RATING to ITEM_MOD_HASTE_RANGED_RATING are never used
 //                        in Enchantments
 //                        case ITEM_MOD_HIT_TAKEN_MELEE_RATING:
@@ -14560,28 +14656,28 @@ void Player::ApplyEnchantment(Item* item, EnchantmentSlot slot, bool apply, bool
 //                        case ITEM_MOD_HASTE_MELEE_RATING:
 //                            ApplyRatingMod(CR_HASTE_MELEE, enchant_amount, apply);
 //                            break;
-                        case ITEM_MOD_HASTE_RANGED_RATING:
-                            ApplyRatingMod(CR_HASTE_RANGED, enchant_amount, apply);
-                            break;
-                        case ITEM_MOD_HASTE_SPELL_RATING:
-                            ApplyRatingMod(CR_HASTE_SPELL, enchant_amount, apply);
-                            break;
-                        case ITEM_MOD_HIT_RATING:
-                            ApplyRatingMod(CR_HIT_MELEE, enchant_amount, apply);
-                            ApplyRatingMod(CR_HIT_RANGED, enchant_amount, apply);
-                            ApplyRatingMod(CR_HIT_SPELL, enchant_amount, apply);
+                case ITEM_MOD_HASTE_RANGED_RATING:
+                    ApplyRatingMod(CR_HASTE_RANGED, enchant_amount, apply);
+                    break;
+                case ITEM_MOD_HASTE_SPELL_RATING:
+                    ApplyRatingMod(CR_HASTE_SPELL, enchant_amount, apply);
+                    break;
+                case ITEM_MOD_HIT_RATING:
+                    ApplyRatingMod(CR_HIT_MELEE, enchant_amount, apply);
+                    ApplyRatingMod(CR_HIT_RANGED, enchant_amount, apply);
+                    ApplyRatingMod(CR_HIT_SPELL, enchant_amount, apply);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                            LOG_DEBUG("entities.player.items", "+ %u HIT", enchant_amount);
+                    LOG_DEBUG("entities.player.items", "+ %u HIT", enchant_amount);
 #endif
-                            break;
-                        case ITEM_MOD_CRIT_RATING:
-                            ApplyRatingMod(CR_CRIT_MELEE, enchant_amount, apply);
-                            ApplyRatingMod(CR_CRIT_RANGED, enchant_amount, apply);
-                            ApplyRatingMod(CR_CRIT_SPELL, enchant_amount, apply);
+                    break;
+                case ITEM_MOD_CRIT_RATING:
+                    ApplyRatingMod(CR_CRIT_MELEE, enchant_amount, apply);
+                    ApplyRatingMod(CR_CRIT_RANGED, enchant_amount, apply);
+                    ApplyRatingMod(CR_CRIT_SPELL, enchant_amount, apply);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                            LOG_DEBUG("entities.player.items", "+ %u CRITICAL", enchant_amount);
+                    LOG_DEBUG("entities.player.items", "+ %u CRITICAL", enchant_amount);
 #endif
-                            break;
+                    break;
 //                        Values ITEM_MOD_HIT_TAKEN_RATING and ITEM_MOD_CRIT_TAKEN_RATING are never used in Enchantment
 //                        case ITEM_MOD_HIT_TAKEN_RATING:
 //                            ApplyRatingMod(CR_HIT_TAKEN_MELEE, enchant_amount, apply);
@@ -14593,117 +14689,117 @@ void Player::ApplyEnchantment(Item* item, EnchantmentSlot slot, bool apply, bool
 //                            ApplyRatingMod(CR_CRIT_TAKEN_RANGED, enchant_amount, apply);
 //                            ApplyRatingMod(CR_CRIT_TAKEN_SPELL, enchant_amount, apply);
 //                            break;
-                        case ITEM_MOD_RESILIENCE_RATING:
-                            ApplyRatingMod(CR_CRIT_TAKEN_MELEE, enchant_amount, apply);
-                            ApplyRatingMod(CR_CRIT_TAKEN_RANGED, enchant_amount, apply);
-                            ApplyRatingMod(CR_CRIT_TAKEN_SPELL, enchant_amount, apply);
+                case ITEM_MOD_RESILIENCE_RATING:
+                    ApplyRatingMod(CR_CRIT_TAKEN_MELEE, enchant_amount, apply);
+                    ApplyRatingMod(CR_CRIT_TAKEN_RANGED, enchant_amount, apply);
+                    ApplyRatingMod(CR_CRIT_TAKEN_SPELL, enchant_amount, apply);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                            LOG_DEBUG("entities.player.items", "+ %u RESILIENCE", enchant_amount);
+                    LOG_DEBUG("entities.player.items", "+ %u RESILIENCE", enchant_amount);
 #endif
-                            break;
-                        case ITEM_MOD_HASTE_RATING:
-                            ApplyRatingMod(CR_HASTE_MELEE, enchant_amount, apply);
-                            ApplyRatingMod(CR_HASTE_RANGED, enchant_amount, apply);
-                            ApplyRatingMod(CR_HASTE_SPELL, enchant_amount, apply);
+                    break;
+                case ITEM_MOD_HASTE_RATING:
+                    ApplyRatingMod(CR_HASTE_MELEE, enchant_amount, apply);
+                    ApplyRatingMod(CR_HASTE_RANGED, enchant_amount, apply);
+                    ApplyRatingMod(CR_HASTE_SPELL, enchant_amount, apply);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                            LOG_DEBUG("entities.player.items", "+ %u HASTE", enchant_amount);
+                    LOG_DEBUG("entities.player.items", "+ %u HASTE", enchant_amount);
 #endif
-                            break;
-                        case ITEM_MOD_EXPERTISE_RATING:
-                            ApplyRatingMod(CR_EXPERTISE, enchant_amount, apply);
+                    break;
+                case ITEM_MOD_EXPERTISE_RATING:
+                    ApplyRatingMod(CR_EXPERTISE, enchant_amount, apply);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                            LOG_DEBUG("entities.player.items", "+ %u EXPERTISE", enchant_amount);
+                    LOG_DEBUG("entities.player.items", "+ %u EXPERTISE", enchant_amount);
 #endif
-                            break;
-                        case ITEM_MOD_ATTACK_POWER:
-                            HandleStatModifier(UNIT_MOD_ATTACK_POWER, TOTAL_VALUE, float(enchant_amount), apply);
-                            HandleStatModifier(UNIT_MOD_ATTACK_POWER_RANGED, TOTAL_VALUE, float(enchant_amount), apply);
+                    break;
+                case ITEM_MOD_ATTACK_POWER:
+                    HandleStatModifier(UNIT_MOD_ATTACK_POWER, TOTAL_VALUE, float(enchant_amount), apply);
+                    HandleStatModifier(UNIT_MOD_ATTACK_POWER_RANGED, TOTAL_VALUE, float(enchant_amount), apply);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                            LOG_DEBUG("entities.player.items", "+ %u ATTACK_POWER", enchant_amount);
+                    LOG_DEBUG("entities.player.items", "+ %u ATTACK_POWER", enchant_amount);
 #endif
-                            break;
-                        case ITEM_MOD_RANGED_ATTACK_POWER:
-                            HandleStatModifier(UNIT_MOD_ATTACK_POWER_RANGED, TOTAL_VALUE, float(enchant_amount), apply);
+                    break;
+                case ITEM_MOD_RANGED_ATTACK_POWER:
+                    HandleStatModifier(UNIT_MOD_ATTACK_POWER_RANGED, TOTAL_VALUE, float(enchant_amount), apply);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                            LOG_DEBUG("entities.player.items", "+ %u RANGED_ATTACK_POWER", enchant_amount);
+                    LOG_DEBUG("entities.player.items", "+ %u RANGED_ATTACK_POWER", enchant_amount);
 #endif
-                            break;
+                    break;
 //                        case ITEM_MOD_FERAL_ATTACK_POWER:
 //                            ApplyFeralAPBonus(enchant_amount, apply);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
 //                            LOG_DEBUG("entities.player.items", "+ %u FERAL_ATTACK_POWER", enchant_amount);
 #endif
 //                            break;
-                        case ITEM_MOD_MANA_REGENERATION:
-                            ApplyManaRegenBonus(enchant_amount, apply);
+                case ITEM_MOD_MANA_REGENERATION:
+                    ApplyManaRegenBonus(enchant_amount, apply);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                            LOG_DEBUG("entities.player.items", "+ %u MANA_REGENERATION", enchant_amount);
+                    LOG_DEBUG("entities.player.items", "+ %u MANA_REGENERATION", enchant_amount);
 #endif
-                            break;
-                        case ITEM_MOD_ARMOR_PENETRATION_RATING:
-                            ApplyRatingMod(CR_ARMOR_PENETRATION, enchant_amount, apply);
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                            LOG_DEBUG("entities.player.items", "+ %u ARMOR PENETRATION", enchant_amount);
-#endif
-                            break;
-                        case ITEM_MOD_SPELL_POWER:
-                            ApplySpellPowerBonus(enchant_amount, apply);
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                            LOG_DEBUG("entities.player.items", "+ %u SPELL_POWER", enchant_amount);
-#endif
-                            break;
-                        case ITEM_MOD_HEALTH_REGEN:
-                            ApplyHealthRegenBonus(enchant_amount, apply);
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                            LOG_DEBUG("entities.player.items", "+ %u HEALTH_REGENERATION", enchant_amount);
-#endif
-                            break;
-                        case ITEM_MOD_SPELL_PENETRATION:
-                            ApplySpellPenetrationBonus(enchant_amount, apply);
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                            LOG_DEBUG("entities.player.items", "+ %u SPELL_PENETRATION", enchant_amount);
-#endif
-                            break;
-                        case ITEM_MOD_BLOCK_VALUE:
-                            HandleBaseModValue(SHIELD_BLOCK_VALUE, FLAT_MOD, float(enchant_amount), apply);
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                            LOG_DEBUG("entities.player.items", "+ %u BLOCK_VALUE", enchant_amount);
-#endif
-                            break;
-                        case ITEM_MOD_SPELL_HEALING_DONE:   // deprecated
-                        case ITEM_MOD_SPELL_DAMAGE_DONE:    // deprecated
-                        default:
-                            break;
-                    }
                     break;
-                }
-                case ITEM_ENCHANTMENT_TYPE_TOTEM:           // Shaman Rockbiter Weapon
-                {
-                    if (getClass() == CLASS_SHAMAN)
-                    {
-                        float addValue = 0.0f;
-                        if (item->GetSlot() == EQUIPMENT_SLOT_MAINHAND)
-                        {
-                            addValue = float(enchant_amount * item->GetTemplate()->Delay / 1000.0f);
-                            HandleStatModifier(UNIT_MOD_DAMAGE_MAINHAND, TOTAL_VALUE, addValue, apply);
-                        }
-                        else if (item->GetSlot() == EQUIPMENT_SLOT_OFFHAND)
-                        {
-                            addValue = float(enchant_amount * item->GetTemplate()->Delay / 1000.0f);
-                            HandleStatModifier(UNIT_MOD_DAMAGE_OFFHAND, TOTAL_VALUE, addValue, apply);
-                        }
-                    }
+                case ITEM_MOD_ARMOR_PENETRATION_RATING:
+                    ApplyRatingMod(CR_ARMOR_PENETRATION, enchant_amount, apply);
+#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
+                    LOG_DEBUG("entities.player.items", "+ %u ARMOR PENETRATION", enchant_amount);
+#endif
                     break;
-                }
-                case ITEM_ENCHANTMENT_TYPE_USE_SPELL:
-                    // processed in Player::CastItemUseSpell
+                case ITEM_MOD_SPELL_POWER:
+                    ApplySpellPowerBonus(enchant_amount, apply);
+#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
+                    LOG_DEBUG("entities.player.items", "+ %u SPELL_POWER", enchant_amount);
+#endif
                     break;
-                case ITEM_ENCHANTMENT_TYPE_PRISMATIC_SOCKET:
-                    // nothing do..
+                case ITEM_MOD_HEALTH_REGEN:
+                    ApplyHealthRegenBonus(enchant_amount, apply);
+#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
+                    LOG_DEBUG("entities.player.items", "+ %u HEALTH_REGENERATION", enchant_amount);
+#endif
                     break;
+                case ITEM_MOD_SPELL_PENETRATION:
+                    ApplySpellPenetrationBonus(enchant_amount, apply);
+#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
+                    LOG_DEBUG("entities.player.items", "+ %u SPELL_PENETRATION", enchant_amount);
+#endif
+                    break;
+                case ITEM_MOD_BLOCK_VALUE:
+                    HandleBaseModValue(SHIELD_BLOCK_VALUE, FLAT_MOD, float(enchant_amount), apply);
+#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
+                    LOG_DEBUG("entities.player.items", "+ %u BLOCK_VALUE", enchant_amount);
+#endif
+                    break;
+                case ITEM_MOD_SPELL_HEALING_DONE:   // deprecated
+                case ITEM_MOD_SPELL_DAMAGE_DONE:    // deprecated
                 default:
-                    LOG_ERROR("server", "Unknown item enchantment (id = %d) display type: %d", enchant_id, enchant_display_type);
                     break;
+                }
+                break;
+            }
+            case ITEM_ENCHANTMENT_TYPE_TOTEM:           // Shaman Rockbiter Weapon
+            {
+                if (getClass() == CLASS_SHAMAN)
+                {
+                    float addValue = 0.0f;
+                    if (item->GetSlot() == EQUIPMENT_SLOT_MAINHAND)
+                    {
+                        addValue = float(enchant_amount * item->GetTemplate()->Delay / 1000.0f);
+                        HandleStatModifier(UNIT_MOD_DAMAGE_MAINHAND, TOTAL_VALUE, addValue, apply);
+                    }
+                    else if (item->GetSlot() == EQUIPMENT_SLOT_OFFHAND)
+                    {
+                        addValue = float(enchant_amount * item->GetTemplate()->Delay / 1000.0f);
+                        HandleStatModifier(UNIT_MOD_DAMAGE_OFFHAND, TOTAL_VALUE, addValue, apply);
+                    }
+                }
+                break;
+            }
+            case ITEM_ENCHANTMENT_TYPE_USE_SPELL:
+                // processed in Player::CastItemUseSpell
+                break;
+            case ITEM_ENCHANTMENT_TYPE_PRISMATIC_SOCKET:
+                // nothing do..
+                break;
+            default:
+                LOG_ERROR("server", "Unknown item enchantment (id = %d) display type: %d", enchant_id, enchant_display_type);
+                break;
             }                                               /*switch (enchant_display_type)*/
         }                                                   /*for*/
     }
@@ -14760,7 +14856,7 @@ void Player::UpdateSkillEnchantments(uint16 skill_id, uint16 curr_value, uint16 
                 // If we're dealing with a gem inside a prismatic socket we need to check the prismatic socket requirements
                 // rather than the gem requirements itself. If the socket has no color it is a prismatic socket.
                 if ((slot == SOCK_ENCHANTMENT_SLOT || slot == SOCK_ENCHANTMENT_SLOT_2 || slot == SOCK_ENCHANTMENT_SLOT_3)
-                    && !m_items[i]->GetTemplate()->Socket[slot-SOCK_ENCHANTMENT_SLOT].Color)
+                        && !m_items[i]->GetTemplate()->Socket[slot-SOCK_ENCHANTMENT_SLOT].Color)
                 {
                     SpellItemEnchantmentEntry const* pPrismaticEnchant = sSpellItemEnchantmentStore.LookupEntry(m_items[i]->GetEnchantmentId(PRISMATIC_ENCHANTMENT_SLOT));
 
@@ -14798,14 +14894,14 @@ void Player::SendNewItem(Item* item, uint32 count, bool received, bool created, 
     if (!item)                                               // prevent crash
         return;
 
-                                                            // last check 2.0.10
+    // last check 2.0.10
     WorldPacket data(SMSG_ITEM_PUSH_RESULT, (8+4+4+4+1+4+4+4+4+4));
     data << uint64(GetGUID());                              // player GUID
     data << uint32(received);                               // 0=looted, 1=from npc
     data << uint32(created);                                // 0=received, 1=created
     data << uint32(sendChatMessage);                        // bool print message to chat
     data << uint8(item->GetBagSlot());                      // bagslot
-                                                            // item slot, but when added to stack: 0xFFFFFFFF
+    // item slot, but when added to stack: 0xFFFFFFFF
     data << uint32((item->GetCount() == count) ? item->GetSlot() : -1);
     data << uint32(item->GetEntry());                       // item id
     data << uint32(item->GetItemSuffixFactor());            // SuffixFactor
@@ -14861,81 +14957,81 @@ void Player::PrepareGossipMenu(WorldObject* source, uint32 menuId /*= 0*/, bool 
 
             switch (itr->second.OptionType)
             {
-                case GOSSIP_OPTION_ARMORER:
-                    canTalk = false;                       // added in special mode
-                    break;
-                case GOSSIP_OPTION_SPIRITHEALER:
-                    if (!isDead())
-                        canTalk = false;
-                    break;
-                case GOSSIP_OPTION_VENDOR:
+            case GOSSIP_OPTION_ARMORER:
+                canTalk = false;                       // added in special mode
+                break;
+            case GOSSIP_OPTION_SPIRITHEALER:
+                if (!isDead())
+                    canTalk = false;
+                break;
+            case GOSSIP_OPTION_VENDOR:
+            {
+                VendorItemData const* vendorItems = itr->second.ActionMenuID ? sObjectMgr->GetNpcVendorItemList(itr->second.ActionMenuID) : creature->GetVendorItems();
+                if (!vendorItems || vendorItems->Empty())
                 {
-                    VendorItemData const* vendorItems = itr->second.ActionMenuID ? sObjectMgr->GetNpcVendorItemList(itr->second.ActionMenuID) : creature->GetVendorItems();
-                    if (!vendorItems || vendorItems->Empty())
-                    {
-                        LOG_ERROR("sql.sql", "Creature %u (Entry: %u) have UNIT_NPC_FLAG_VENDOR but have empty trading item list.", creature->GetGUIDLow(), creature->GetEntry());
-                        canTalk = false;
-                    }
-                    break;
+                    LOG_ERROR("sql.sql", "Creature %u (Entry: %u) have UNIT_NPC_FLAG_VENDOR but have empty trading item list.", creature->GetGUIDLow(), creature->GetEntry());
+                    canTalk = false;
                 }
-                case GOSSIP_OPTION_LEARNDUALSPEC:
-                case GOSSIP_OPTION_DUALSPEC_INFO:
-                    if (!(GetSpecsCount() == 1 && creature->isCanTrainingAndResetTalentsOf(this) && !(getLevel() < sGameConfig->GetIntConfig("MinDualSpecLevel"))))
-                        canTalk = false;
-                    break;
-                case GOSSIP_OPTION_UNLEARNTALENTS:
-                    if (!creature->isCanTrainingAndResetTalentsOf(this))
-                        canTalk = false;
-                    break;
-                case GOSSIP_OPTION_UNLEARNPETTALENTS:
-                    if (!GetPet() || GetPet()->getPetType() != HUNTER_PET || GetPet()->m_spells.size() <= 1 || creature->GetCreatureTemplate()->trainer_type != TRAINER_TYPE_PETS || creature->GetCreatureTemplate()->trainer_class != CLASS_HUNTER)
-                        canTalk = false;
-                    break;
-                case GOSSIP_OPTION_TAXIVENDOR:
-                    if (GetSession()->SendLearnNewTaxiNode(creature))
-                        return;
-                    break;
-                case GOSSIP_OPTION_BATTLEFIELD:
-                    if (!creature->isCanInteractWithBattleMaster(this, false))
-                        canTalk = false;
-                    break;
-                case GOSSIP_OPTION_STABLEPET:
-                    if (getClass() != CLASS_HUNTER)
-                        canTalk = false;
-                    break;
-                case GOSSIP_OPTION_QUESTGIVER:
+                break;
+            }
+            case GOSSIP_OPTION_LEARNDUALSPEC:
+            case GOSSIP_OPTION_DUALSPEC_INFO:
+                if (!(GetSpecsCount() == 1 && creature->isCanTrainingAndResetTalentsOf(this) && !(getLevel() < sGameConfig->GetIntConfig("MinDualSpecLevel"))))
                     canTalk = false;
-                    break;
-                case GOSSIP_OPTION_TRAINER:
-                case GOSSIP_OPTION_GOSSIP:
-                case GOSSIP_OPTION_SPIRITGUIDE:
-                case GOSSIP_OPTION_INNKEEPER:
-                case GOSSIP_OPTION_BANKER:
-                case GOSSIP_OPTION_PETITIONER:
-                case GOSSIP_OPTION_TABARDDESIGNER:
-                case GOSSIP_OPTION_AUCTIONEER:
-                    break;                                  // no checks
-                case GOSSIP_OPTION_OUTDOORPVP:
-                    if (!sOutdoorPvPMgr->CanTalkTo(this, creature, itr->second))
-                        canTalk = false;
-                    break;
-                default:
-                    LOG_ERROR("sql.sql", "Creature entry %u has unknown gossip option %u for menu %u", creature->GetEntry(), itr->second.OptionType, itr->second.MenuID);
+                break;
+            case GOSSIP_OPTION_UNLEARNTALENTS:
+                if (!creature->isCanTrainingAndResetTalentsOf(this))
                     canTalk = false;
-                    break;
+                break;
+            case GOSSIP_OPTION_UNLEARNPETTALENTS:
+                if (!GetPet() || GetPet()->getPetType() != HUNTER_PET || GetPet()->m_spells.size() <= 1 || creature->GetCreatureTemplate()->trainer_type != TRAINER_TYPE_PETS || creature->GetCreatureTemplate()->trainer_class != CLASS_HUNTER)
+                    canTalk = false;
+                break;
+            case GOSSIP_OPTION_TAXIVENDOR:
+                if (GetSession()->SendLearnNewTaxiNode(creature))
+                    return;
+                break;
+            case GOSSIP_OPTION_BATTLEFIELD:
+                if (!creature->isCanInteractWithBattleMaster(this, false))
+                    canTalk = false;
+                break;
+            case GOSSIP_OPTION_STABLEPET:
+                if (getClass() != CLASS_HUNTER)
+                    canTalk = false;
+                break;
+            case GOSSIP_OPTION_QUESTGIVER:
+                canTalk = false;
+                break;
+            case GOSSIP_OPTION_TRAINER:
+            case GOSSIP_OPTION_GOSSIP:
+            case GOSSIP_OPTION_SPIRITGUIDE:
+            case GOSSIP_OPTION_INNKEEPER:
+            case GOSSIP_OPTION_BANKER:
+            case GOSSIP_OPTION_PETITIONER:
+            case GOSSIP_OPTION_TABARDDESIGNER:
+            case GOSSIP_OPTION_AUCTIONEER:
+                break;                                  // no checks
+            case GOSSIP_OPTION_OUTDOORPVP:
+                if (!sOutdoorPvPMgr->CanTalkTo(this, creature, itr->second))
+                    canTalk = false;
+                break;
+            default:
+                LOG_ERROR("sql.sql", "Creature entry %u has unknown gossip option %u for menu %u", creature->GetEntry(), itr->second.OptionType, itr->second.MenuID);
+                canTalk = false;
+                break;
             }
         }
         else if (GameObject* go = source->ToGameObject())
         {
             switch (itr->second.OptionType)
             {
-                case GOSSIP_OPTION_GOSSIP:
-                    if (go->GetGoType() != GAMEOBJECT_TYPE_QUESTGIVER && go->GetGoType() != GAMEOBJECT_TYPE_GOOBER)
-                        canTalk = false;
-                    break;
-                default:
+            case GOSSIP_OPTION_GOSSIP:
+                if (go->GetGoType() != GAMEOBJECT_TYPE_QUESTGIVER && go->GetGoType() != GAMEOBJECT_TYPE_GOOBER)
                     canTalk = false;
-                    break;
+                break;
+            default:
+                canTalk = false;
+                break;
             }
         }
 
@@ -15071,99 +15167,99 @@ void Player::OnGossipSelect(WorldObject* source, uint32 gossipListId, uint32 men
 
     switch (gossipOptionId)
     {
-        case GOSSIP_OPTION_GOSSIP:
-        case GOSSIP_OPTION_DUALSPEC_INFO:
+    case GOSSIP_OPTION_GOSSIP:
+    case GOSSIP_OPTION_DUALSPEC_INFO:
+    {
+        if (menuItemData->GossipActionPoi)
+            PlayerTalkClass->SendPointOfInterest(menuItemData->GossipActionPoi);
+
+        if (menuItemData->GossipActionMenuId)
         {
-            if (menuItemData->GossipActionPoi)
-                PlayerTalkClass->SendPointOfInterest(menuItemData->GossipActionPoi);
-
-            if (menuItemData->GossipActionMenuId)
-            {
-                PrepareGossipMenu(source, menuItemData->GossipActionMenuId);
-                SendPreparedGossip(source);
-            }
-
-            break;
-        }
-        case GOSSIP_OPTION_OUTDOORPVP:
-            sOutdoorPvPMgr->HandleGossipOption(this, source->GetGUID(), gossipListId);
-            break;
-        case GOSSIP_OPTION_SPIRITHEALER:
-            if (isDead())
-                source->ToCreature()->CastSpell(source->ToCreature(), 17251, true, nullptr, nullptr, GetGUID());
-            break;
-        case GOSSIP_OPTION_QUESTGIVER:
-            PrepareQuestMenu(guid);
-            SendPreparedQuest(guid);
-            break;
-        case GOSSIP_OPTION_VENDOR:
-        case GOSSIP_OPTION_ARMORER:
-            GetSession()->SendListInventory(guid, menuItemData->GossipActionMenuId);
-            break;
-        case GOSSIP_OPTION_STABLEPET:
-            GetSession()->SendStablePet(guid);
-            break;
-        case GOSSIP_OPTION_TRAINER:
-            GetSession()->SendTrainerList(guid);
-            break;
-        case GOSSIP_OPTION_LEARNDUALSPEC:
-            if (GetSpecsCount() == 1 && getLevel() >= sGameConfig->GetIntConfig("MinDualSpecLevel"))
-            {
-                // Cast spells that teach dual spec
-                // Both are also ImplicitTarget self and must be cast by player
-                CastSpell(this, 63680, true, nullptr, nullptr, GetGUID());
-                CastSpell(this, 63624, true, nullptr, nullptr, GetGUID());
-
-                PrepareGossipMenu(source, menuItemData->GossipActionMenuId);
-                SendPreparedGossip(source);
-            }
-            break;
-        case GOSSIP_OPTION_UNLEARNTALENTS:
-            PlayerTalkClass->SendCloseGossip();
-            SendTalentWipeConfirm(guid);
-            break;
-        case GOSSIP_OPTION_UNLEARNPETTALENTS:
-            PlayerTalkClass->SendCloseGossip();
-            ResetPetTalents();
-            break;
-        case GOSSIP_OPTION_TAXIVENDOR:
-            GetSession()->SendTaxiMenu(source->ToCreature());
-            break;
-        case GOSSIP_OPTION_INNKEEPER:
-            PlayerTalkClass->SendCloseGossip();
-            SetBindPoint(guid);
-            break;
-        case GOSSIP_OPTION_BANKER:
-            GetSession()->SendShowBank(guid);
-            break;
-        case GOSSIP_OPTION_PETITIONER:
-            PlayerTalkClass->SendCloseGossip();
-            GetSession()->SendPetitionShowList(guid);
-            break;
-        case GOSSIP_OPTION_TABARDDESIGNER:
-            PlayerTalkClass->SendCloseGossip();
-            GetSession()->SendTabardVendorActivate(guid);
-            break;
-        case GOSSIP_OPTION_AUCTIONEER:
-            GetSession()->SendAuctionHello(guid, source->ToCreature());
-            break;
-        case GOSSIP_OPTION_SPIRITGUIDE:
-            PrepareGossipMenu(source);
+            PrepareGossipMenu(source, menuItemData->GossipActionMenuId);
             SendPreparedGossip(source);
-            break;
-        case GOSSIP_OPTION_BATTLEFIELD:
-        {
-            BattlegroundTypeId bgTypeId = sBattlegroundMgr->GetBattleMasterBG(source->GetEntry());
-
-            if (bgTypeId == BATTLEGROUND_TYPE_NONE)
-            {
-                LOG_ERROR("server", "a user (guid %u) requested battlegroundlist from a npc who is no battlemaster", GetGUIDLow());
-                return;
-            }
-
-            GetSession()->SendBattleGroundList(guid, bgTypeId);
-            break;
         }
+
+        break;
+    }
+    case GOSSIP_OPTION_OUTDOORPVP:
+        sOutdoorPvPMgr->HandleGossipOption(this, source->GetGUID(), gossipListId);
+        break;
+    case GOSSIP_OPTION_SPIRITHEALER:
+        if (isDead())
+            source->ToCreature()->CastSpell(source->ToCreature(), 17251, true, nullptr, nullptr, GetGUID());
+        break;
+    case GOSSIP_OPTION_QUESTGIVER:
+        PrepareQuestMenu(guid);
+        SendPreparedQuest(guid);
+        break;
+    case GOSSIP_OPTION_VENDOR:
+    case GOSSIP_OPTION_ARMORER:
+        GetSession()->SendListInventory(guid, menuItemData->GossipActionMenuId);
+        break;
+    case GOSSIP_OPTION_STABLEPET:
+        GetSession()->SendStablePet(guid);
+        break;
+    case GOSSIP_OPTION_TRAINER:
+        GetSession()->SendTrainerList(guid);
+        break;
+    case GOSSIP_OPTION_LEARNDUALSPEC:
+        if (GetSpecsCount() == 1 && getLevel() >= sGameConfig->GetIntConfig("MinDualSpecLevel"))
+        {
+            // Cast spells that teach dual spec
+            // Both are also ImplicitTarget self and must be cast by player
+            CastSpell(this, 63680, true, nullptr, nullptr, GetGUID());
+            CastSpell(this, 63624, true, nullptr, nullptr, GetGUID());
+
+            PrepareGossipMenu(source, menuItemData->GossipActionMenuId);
+            SendPreparedGossip(source);
+        }
+        break;
+    case GOSSIP_OPTION_UNLEARNTALENTS:
+        PlayerTalkClass->SendCloseGossip();
+        SendTalentWipeConfirm(guid);
+        break;
+    case GOSSIP_OPTION_UNLEARNPETTALENTS:
+        PlayerTalkClass->SendCloseGossip();
+        ResetPetTalents();
+        break;
+    case GOSSIP_OPTION_TAXIVENDOR:
+        GetSession()->SendTaxiMenu(source->ToCreature());
+        break;
+    case GOSSIP_OPTION_INNKEEPER:
+        PlayerTalkClass->SendCloseGossip();
+        SetBindPoint(guid);
+        break;
+    case GOSSIP_OPTION_BANKER:
+        GetSession()->SendShowBank(guid);
+        break;
+    case GOSSIP_OPTION_PETITIONER:
+        PlayerTalkClass->SendCloseGossip();
+        GetSession()->SendPetitionShowList(guid);
+        break;
+    case GOSSIP_OPTION_TABARDDESIGNER:
+        PlayerTalkClass->SendCloseGossip();
+        GetSession()->SendTabardVendorActivate(guid);
+        break;
+    case GOSSIP_OPTION_AUCTIONEER:
+        GetSession()->SendAuctionHello(guid, source->ToCreature());
+        break;
+    case GOSSIP_OPTION_SPIRITGUIDE:
+        PrepareGossipMenu(source);
+        SendPreparedGossip(source);
+        break;
+    case GOSSIP_OPTION_BATTLEFIELD:
+    {
+        BattlegroundTypeId bgTypeId = sBattlegroundMgr->GetBattleMasterBG(source->GetEntry());
+
+        if (bgTypeId == BATTLEGROUND_TYPE_NONE)
+        {
+            LOG_ERROR("server", "a user (guid %u) requested battlegroundlist from a npc who is no battlemaster", GetGUIDLow());
+            return;
+        }
+
+        GetSession()->SendBattleGroundList(guid, bgTypeId);
+        break;
+    }
     }
 
     ModifyMoney(-cost);
@@ -15199,12 +15295,12 @@ uint32 Player::GetDefaultGossipMenuForSource(WorldObject* source)
 {
     switch (source->GetTypeId())
     {
-        case TYPEID_UNIT:
-            return source->ToCreature()->GetCreatureTemplate()->GossipMenuId;
-        case TYPEID_GAMEOBJECT:
-            return source->ToGameObject()->GetGOInfo()->GetGossipMenuId();
-        default:
-            break;
+    case TYPEID_UNIT:
+        return source->ToCreature()->GetCreatureTemplate()->GossipMenuId;
+    case TYPEID_GAMEOBJECT:
+        return source->ToGameObject()->GetGOInfo()->GetGossipMenuId();
+    default:
+        break;
     }
 
     return 0;
@@ -15403,10 +15499,10 @@ Quest const* Player::GetNextQuest(uint64 guid, Quest const* quest)
 bool Player::CanSeeStartQuest(Quest const* quest)
 {
     if (!DisableMgr::IsDisabledFor(DISABLE_TYPE_QUEST, quest->GetQuestId(), this) && SatisfyQuestClass(quest, false) && SatisfyQuestRace(quest, false) &&
-        SatisfyQuestSkill(quest, false) && SatisfyQuestExclusiveGroup(quest, false) && SatisfyQuestReputation(quest, false) &&
-        SatisfyQuestPreviousQuest(quest, false) && SatisfyQuestNextChain(quest, false) &&
-        SatisfyQuestPrevChain(quest, false) && SatisfyQuestDay(quest, false) && SatisfyQuestWeek(quest, false) &&
-        SatisfyQuestMonth(quest, false) && SatisfyQuestSeasonal(quest, false))
+            SatisfyQuestSkill(quest, false) && SatisfyQuestExclusiveGroup(quest, false) && SatisfyQuestReputation(quest, false) &&
+            SatisfyQuestPreviousQuest(quest, false) && SatisfyQuestNextChain(quest, false) &&
+            SatisfyQuestPrevChain(quest, false) && SatisfyQuestDay(quest, false) && SatisfyQuestWeek(quest, false) &&
+            SatisfyQuestMonth(quest, false) && SatisfyQuestSeasonal(quest, false))
     {
         return getLevel() + (uint32)sGameConfig->GetIntConfig("Quests.HighLevelHideDiff") >= quest->GetMinLevel();
     }
@@ -15417,14 +15513,14 @@ bool Player::CanSeeStartQuest(Quest const* quest)
 bool Player::CanTakeQuest(Quest const* quest, bool msg)
 {
     return !DisableMgr::IsDisabledFor(DISABLE_TYPE_QUEST, quest->GetQuestId(), this)
-        && SatisfyQuestStatus(quest, msg) && SatisfyQuestExclusiveGroup(quest, msg)
-        && SatisfyQuestClass(quest, msg) && SatisfyQuestRace(quest, msg) && SatisfyQuestLevel(quest, msg)
-        && SatisfyQuestSkill(quest, msg) && SatisfyQuestReputation(quest, msg)
-        && SatisfyQuestPreviousQuest(quest, msg) && SatisfyQuestTimed(quest, msg)
-        && SatisfyQuestNextChain(quest, msg) && SatisfyQuestPrevChain(quest, msg)
-        && SatisfyQuestDay(quest, msg) && SatisfyQuestWeek(quest, msg)
-        && SatisfyQuestMonth(quest, msg) && SatisfyQuestSeasonal(quest, msg)
-        && SatisfyQuestConditions(quest, msg);
+           && SatisfyQuestStatus(quest, msg) && SatisfyQuestExclusiveGroup(quest, msg)
+           && SatisfyQuestClass(quest, msg) && SatisfyQuestRace(quest, msg) && SatisfyQuestLevel(quest, msg)
+           && SatisfyQuestSkill(quest, msg) && SatisfyQuestReputation(quest, msg)
+           && SatisfyQuestPreviousQuest(quest, msg) && SatisfyQuestTimed(quest, msg)
+           && SatisfyQuestNextChain(quest, msg) && SatisfyQuestPrevChain(quest, msg)
+           && SatisfyQuestDay(quest, msg) && SatisfyQuestWeek(quest, msg)
+           && SatisfyQuestMonth(quest, msg) && SatisfyQuestSeasonal(quest, msg)
+           && SatisfyQuestConditions(quest, msg);
 }
 
 bool Player::CanAddQuest(Quest const* quest, bool msg)
@@ -15567,7 +15663,7 @@ bool Player::CanRewardQuest(Quest const* quest, bool msg)
         for (uint8 i = 0; i < QUEST_ITEM_OBJECTIVES_COUNT; i++)
         {
             if (quest->RequiredItemCount[i]!= 0 &&
-                GetItemCount(quest->RequiredItemId[i]) < quest->RequiredItemCount[i])
+                    GetItemCount(quest->RequiredItemId[i]) < quest->RequiredItemCount[i])
             {
                 if (msg)
                     SendEquipError(EQUIP_ERR_ITEM_NOT_FOUND, nullptr, nullptr, quest->RequiredItemId[i]);
@@ -15595,38 +15691,38 @@ void Player::AddQuestAndCheckCompletion(Quest const* quest, Object* questGiver)
 
     switch (questGiver->GetTypeId())
     {
-        case TYPEID_UNIT:
-            sScriptMgr->OnQuestAccept(this, (questGiver->ToCreature()), quest);
-            questGiver->ToCreature()->AI()->sQuestAccept(this, quest);
-            break;
-        case TYPEID_ITEM:
-        case TYPEID_CONTAINER:
+    case TYPEID_UNIT:
+        sScriptMgr->OnQuestAccept(this, (questGiver->ToCreature()), quest);
+        questGiver->ToCreature()->AI()->sQuestAccept(this, quest);
+        break;
+    case TYPEID_ITEM:
+    case TYPEID_CONTAINER:
+    {
+        Item* item = (Item*)questGiver;
+        sScriptMgr->OnQuestAccept(this, item, quest);
+
+        // destroy not required for quest finish quest starting item
+        bool destroyItem = true;
+        for (int i = 0; i < QUEST_ITEM_OBJECTIVES_COUNT; ++i)
         {
-            Item* item = (Item*)questGiver;
-            sScriptMgr->OnQuestAccept(this, item, quest);
-
-            // destroy not required for quest finish quest starting item
-            bool destroyItem = true;
-            for (int i = 0; i < QUEST_ITEM_OBJECTIVES_COUNT; ++i)
+            if (quest->RequiredItemId[i] == item->GetEntry() && item->GetTemplate()->MaxCount > 0)
             {
-                if (quest->RequiredItemId[i] == item->GetEntry() && item->GetTemplate()->MaxCount > 0)
-                {
-                    destroyItem = false;
-                    break;
-                }
+                destroyItem = false;
+                break;
             }
-
-            if (destroyItem)
-                DestroyItem(item->GetBagSlot(), item->GetSlot(), true);
-
-            break;
         }
-        case TYPEID_GAMEOBJECT:
-            sScriptMgr->OnQuestAccept(this, questGiver->ToGameObject(), quest);
-            questGiver->ToGameObject()->AI()->QuestAccept(this, quest);
-            break;
-        default:
-            break;
+
+        if (destroyItem)
+            DestroyItem(item->GetBagSlot(), item->GetSlot(), true);
+
+        break;
+    }
+    case TYPEID_GAMEOBJECT:
+        sScriptMgr->OnQuestAccept(this, questGiver->ToGameObject(), quest);
+        questGiver->ToGameObject()->AI()->QuestAccept(this, quest);
+        break;
+    default:
+        break;
     }
 }
 
@@ -16731,28 +16827,28 @@ QuestGiverStatus Player::GetQuestDialogStatus(Object* questgiver)
 
     switch (questgiver->GetTypeId())
     {
-        case TYPEID_GAMEOBJECT:
-        {
-            QuestGiverStatus questStatus = QuestGiverStatus(sScriptMgr->GetDialogStatus(this, questgiver->ToGameObject()));
-            if (questStatus != DIALOG_STATUS_SCRIPTED_NO_STATUS)
-                return questStatus;
-            qr = sObjectMgr->GetGOQuestRelationBounds(questgiver->GetEntry());
-            qir = sObjectMgr->GetGOQuestInvolvedRelationBounds(questgiver->GetEntry());
-            break;
-        }
-        case TYPEID_UNIT:
-        {
-            QuestGiverStatus questStatus = QuestGiverStatus(sScriptMgr->GetDialogStatus(this, questgiver->ToCreature()));
-            if (questStatus != DIALOG_STATUS_SCRIPTED_NO_STATUS)
-                return questStatus;
-            qr = sObjectMgr->GetCreatureQuestRelationBounds(questgiver->GetEntry());
-            qir = sObjectMgr->GetCreatureQuestInvolvedRelationBounds(questgiver->GetEntry());
-            break;
-        }
-        default:
-            // it's impossible, but check
-            //TC_LOG_ERROR("entities.player.quest", "GetQuestDialogStatus called for unexpected type %u", questgiver->GetTypeId());
-            return DIALOG_STATUS_NONE;
+    case TYPEID_GAMEOBJECT:
+    {
+        QuestGiverStatus questStatus = QuestGiverStatus(sScriptMgr->GetDialogStatus(this, questgiver->ToGameObject()));
+        if (questStatus != DIALOG_STATUS_SCRIPTED_NO_STATUS)
+            return questStatus;
+        qr = sObjectMgr->GetGOQuestRelationBounds(questgiver->GetEntry());
+        qir = sObjectMgr->GetGOQuestInvolvedRelationBounds(questgiver->GetEntry());
+        break;
+    }
+    case TYPEID_UNIT:
+    {
+        QuestGiverStatus questStatus = QuestGiverStatus(sScriptMgr->GetDialogStatus(this, questgiver->ToCreature()));
+        if (questStatus != DIALOG_STATUS_SCRIPTED_NO_STATUS)
+            return questStatus;
+        qr = sObjectMgr->GetCreatureQuestRelationBounds(questgiver->GetEntry());
+        qir = sObjectMgr->GetCreatureQuestInvolvedRelationBounds(questgiver->GetEntry());
+        break;
+    }
+    default:
+        // it's impossible, but check
+        //TC_LOG_ERROR("entities.player.quest", "GetQuestDialogStatus called for unexpected type %u", questgiver->GetTypeId());
+        return DIALOG_STATUS_NONE;
     }
 
     QuestGiverStatus result = DIALOG_STATUS_NONE;
@@ -16771,7 +16867,7 @@ QuestGiverStatus Player::GetQuestDialogStatus(Object* questgiver)
 
         QuestStatus status = GetQuestStatus(questId);
         if ((status == QUEST_STATUS_COMPLETE && !GetQuestRewardStatus(questId)) ||
-            (quest->IsAutoComplete() && CanTakeQuest(quest, false)))
+                (quest->IsAutoComplete() && CanTakeQuest(quest, false)))
         {
             if (quest->IsAutoComplete() && quest->IsRepeatable() && !quest->IsDailyOrWeekly())
                 result2 = DIALOG_STATUS_REWARD_REP;
@@ -17046,7 +17142,7 @@ void Player::KilledMonsterCredit(uint32 entry, uint64 guid)
         // xinef: or is pvp quest, and player in BG/BF group
         QuestStatusData& q_status = m_QuestStatus[questid];
         if (q_status.Status == QUEST_STATUS_INCOMPLETE && (!GetGroup() || !GetGroup()->isRaidGroup() || qInfo->IsAllowedInRaid(GetMap()->GetDifficulty()) ||
-            (qInfo->IsPVPQuest() && (GetGroup()->isBFGroup() || GetGroup()->isBGGroup()))))
+                (qInfo->IsPVPQuest() && (GetGroup()->isBFGroup() || GetGroup()->isBGGroup()))))
         {
             if (qInfo->HasSpecialFlag(QUEST_SPECIAL_FLAGS_KILL) /*&& !qInfo->HasSpecialFlag(QUEST_SPECIAL_FLAGS_CAST)*/)
             {
@@ -17202,14 +17298,14 @@ void Player::TalkedToCreature(uint32 entry, uint64 guid)
             {
                 for (uint8 j = 0; j < QUEST_OBJECTIVES_COUNT; ++j)
                 {
-                                                            // skip Gameobject objectives
+                    // skip Gameobject objectives
                     if (qInfo->RequiredNpcOrGo[j] < 0)
                         continue;
 
                     uint32 reqTarget = 0;
 
                     if (qInfo->RequiredNpcOrGo[j] > 0)    // creature activate objectives
-                                                            // checked at quest_template loading
+                        // checked at quest_template loading
                         reqTarget = qInfo->RequiredNpcOrGo[j];
                     else
                         continue;
@@ -17473,7 +17569,7 @@ void Player::SendQuestConfirmAccept(const Quest* quest, Player* pReceiver)
         if (loc_idx >= 0)
             if (const QuestLocale* pLocale = sGameLocale->GetQuestLocale(quest->GetQuestId()))
                 sGameLocale->GetLocaleString(pLocale->Title, loc_idx, strTitle);
-			
+
         WorldPacket data(SMSG_QUEST_CONFIRM_ACCEPT, (4 + quest->GetTitle().size() + 8));
         data << uint32(quest->GetQuestId());
         data << quest->GetTitle();
@@ -17656,10 +17752,10 @@ void Player::_LoadEntryPointData(PreparedQueryResult result)
 
     Field* fields = result->Fetch();
     m_entryPointData.joinPos      = WorldLocation(fields[4].GetUInt32(),  // Map
-                                                  fields[0].GetFloat(),   // X
-                                                  fields[1].GetFloat(),   // Y
-                                                  fields[2].GetFloat(),   // Z
-                                                  fields[3].GetFloat());  // Orientation
+                                    fields[0].GetFloat(),   // X
+                                    fields[1].GetFloat(),   // Y
+                                    fields[2].GetFloat(),   // Z
+                                    fields[3].GetFloat());  // Orientation
 
     std::string taxi = fields[5].GetString();
     if (!taxi.empty())
@@ -17743,7 +17839,7 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
 {
     ////                                                     0     1        2     3     4        5      6    7      8     9    10    11         12         13           14         15         16
     //QueryResult* result = CharacterDatabase.PQuery("SELECT guid, account, name, race, class, gender, level, xp, money, skin, face, hairStyle, hairColor, facialStyle, bankSlots, restState, playerFlags, "
-     // 17          18          19          20   21           22        23        24         25         26          27           28                 29
+    // 17          18          19          20   21           22        23        24         25         26          27           28                 29
     //"position_x, position_y, position_z, map, orientation, taximask, cinematic, totaltime, leveltime, rest_bonus, logout_time, is_logout_resting, resettalents_cost, "
     // 30                 31       32       33       34       35         36           37             38        39    40      41                 42         43
     //"resettalents_time, trans_x, trans_y, trans_z, trans_o, transguid, extra_flags, stable_slots, at_login, zone, online, death_expire_time, taxi_path, instance_mode_mask, "
@@ -17783,7 +17879,7 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
 
     // check name limitations
     if (ObjectMgr::CheckPlayerName(m_name) != CHAR_NAME_SUCCESS ||
-        (AccountMgr::IsPlayerAccount(GetSession()->GetSecurity()) && sObjectMgr->IsReservedName(m_name)))
+            (AccountMgr::IsPlayerAccount(GetSession()->GetSecurity()) && sObjectMgr->IsReservedName(m_name)))
     {
         PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_ADD_AT_LOGIN_FLAG);
         stmt->setUInt16(0, uint16(AT_LOGIN_RENAME));
@@ -18206,8 +18302,8 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
         //speed collect rest bonus in offline, in logout, in tavern, city (section/in hour)
         float bubble1 = 0.125f;
         float bubble = fields[28].GetUInt8() > 0
-            ? bubble1*sGameConfig->GetFloatConfig("Rate.Rest.Offline.InTavernOrCity")
-            : bubble0*sGameConfig->GetFloatConfig("Rate.Rest.Offline.InWilderness");
+                       ? bubble1*sGameConfig->GetFloatConfig("Rate.Rest.Offline.InTavernOrCity")
+                       : bubble0*sGameConfig->GetFloatConfig("Rate.Rest.Offline.InWilderness");
 
         SetRestBonus(GetRestBonus() + time_diff*((float)GetUInt32Value(PLAYER_NEXT_LEVEL_XP) / 72000)*bubble);
     }
@@ -18315,46 +18411,58 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
     {
         switch (sGameConfig->GetIntConfig("GM.LoginState"))
         {
-            default:
-            case 0:                      break;             // disable
-            case 1: SetGameMaster(true); break;             // enable
-            case 2:                                         // save state
-                if (extraflags & PLAYER_EXTRA_GM_ON)
-                    SetGameMaster(true);
-                break;
+        default:
+        case 0:
+            break;             // disable
+        case 1:
+            SetGameMaster(true);
+            break;             // enable
+        case 2:                                         // save state
+            if (extraflags & PLAYER_EXTRA_GM_ON)
+                SetGameMaster(true);
+            break;
         }
 
         switch (sGameConfig->GetIntConfig("GM.Visible"))
         {
-            default:
-            case 0: SetGMVisible(false); break;             // invisible
-            case 1:                      break;             // visible
-            case 2:                                         // save state
-                if (extraflags & PLAYER_EXTRA_GM_INVISIBLE)
-                    SetGMVisible(false);
-                break;
+        default:
+        case 0:
+            SetGMVisible(false);
+            break;             // invisible
+        case 1:
+            break;             // visible
+        case 2:                                         // save state
+            if (extraflags & PLAYER_EXTRA_GM_INVISIBLE)
+                SetGMVisible(false);
+            break;
         }
 
         switch (sGameConfig->GetIntConfig("GM.Chat"))
         {
-            default:
-            case 0:                  break;                 // disable
-            case 1: SetGMChat(true); break;                 // enable
-            case 2:                                         // save state
-                if (extraflags & PLAYER_EXTRA_GM_CHAT)
-                    SetGMChat(true);
-                break;
+        default:
+        case 0:
+            break;                 // disable
+        case 1:
+            SetGMChat(true);
+            break;                 // enable
+        case 2:                                         // save state
+            if (extraflags & PLAYER_EXTRA_GM_CHAT)
+                SetGMChat(true);
+            break;
         }
 
         switch (sGameConfig->GetIntConfig("GM.WhisperingTo"))
         {
-            default:
-            case 0:                          break;         // disable
-            case 1: SetAcceptWhispers(true); break;         // enable
-            case 2:                                         // save state
-                if (extraflags & PLAYER_EXTRA_ACCEPT_WHISPERS)
-                    SetAcceptWhispers(true);
-                break;
+        default:
+        case 0:
+            break;         // disable
+        case 1:
+            SetAcceptWhispers(true);
+            break;         // enable
+        case 2:                                         // save state
+            if (extraflags & PLAYER_EXTRA_ACCEPT_WHISPERS)
+                SetAcceptWhispers(true);
+            break;
         }
     }
 
@@ -18391,15 +18499,15 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
         SetFlag(UNIT_FIELD_AURASTATE, 1<<(AURA_STATE_HEALTH_ABOVE_75_PERCENT-1));
 
     // unapply aura stats if dont meet requirements
-     AuraApplicationMap const& Auras = GetAppliedAuras();
+    AuraApplicationMap const& Auras = GetAppliedAuras();
     for (AuraApplicationMap::const_iterator itr = Auras.begin(); itr != Auras.end(); ++itr)
     {
         // we assume that all auras are applied now, aurastate was modfied MANUALY preventing any apply/unapply state switching
         Aura* aura = itr->second->GetBase();
         SpellInfo const* m_spellInfo = aura->GetSpellInfo();
         if (m_spellInfo->CasterAuraState != AURA_STATE_HEALTHLESS_20_PERCENT &&
-            m_spellInfo->CasterAuraState != AURA_STATE_HEALTHLESS_35_PERCENT &&
-            m_spellInfo->CasterAuraState != AURA_STATE_HEALTH_ABOVE_75_PERCENT)
+                m_spellInfo->CasterAuraState != AURA_STATE_HEALTHLESS_35_PERCENT &&
+                m_spellInfo->CasterAuraState != AURA_STATE_HEALTH_ABOVE_75_PERCENT)
             continue;
 
         if (!HasAuraState((AuraStateType)m_spellInfo->CasterAuraState))
@@ -18428,28 +18536,28 @@ bool Player::isAllowedToLoot(const Creature* creature)
 
     switch (thisGroup->GetLootMethod())
     {
-        case MASTER_LOOT:
-        case FREE_FOR_ALL:
+    case MASTER_LOOT:
+    case FREE_FOR_ALL:
+        return true;
+    case ROUND_ROBIN:
+        // may only loot if the player is the loot roundrobin player
+        // or if there are free/quest/conditional item for the player
+        if (loot->roundRobinPlayer == 0 || loot->roundRobinPlayer == GetGUID())
             return true;
-        case ROUND_ROBIN:
-            // may only loot if the player is the loot roundrobin player
-            // or if there are free/quest/conditional item for the player
-            if (loot->roundRobinPlayer == 0 || loot->roundRobinPlayer == GetGUID())
-                return true;
 
-            return loot->hasItemFor(this);
-        case GROUP_LOOT:
-        case NEED_BEFORE_GREED:
-            // may only loot if the player is the loot roundrobin player
-            // or item over threshold (so roll(s) can be launched)
-            // or if there are free/quest/conditional item for the player
-            if (loot->roundRobinPlayer == 0 || loot->roundRobinPlayer == GetGUID())
-                return true;
+        return loot->hasItemFor(this);
+    case GROUP_LOOT:
+    case NEED_BEFORE_GREED:
+        // may only loot if the player is the loot roundrobin player
+        // or item over threshold (so roll(s) can be launched)
+        // or if there are free/quest/conditional item for the player
+        if (loot->roundRobinPlayer == 0 || loot->roundRobinPlayer == GetGUID())
+            return true;
 
-            if (loot->hasOverThresholdItem())
-                return true;
+        if (loot->hasOverThresholdItem())
+            return true;
 
-            return loot->hasItemFor(this);
+        return loot->hasItemFor(this);
     }
 
     return false;
@@ -18679,10 +18787,9 @@ void Player::_LoadInventory(PreparedQueryResult result, uint32 timeDiff)
                             if (Bag* pBag = item->ToBag())
                                 bagMap[item->GetGUIDLow()] = pBag;
                     }
-                    else
-                        if (IsBagPos(item->GetPos()))
-                            if (item->IsBag())
-                                invalidBagMap[item->GetGUIDLow()] = item;
+                    else if (IsBagPos(item->GetPos()))
+                        if (item->IsBag())
+                            invalidBagMap[item->GetGUIDLow()] = item;
                 }
                 else
                 {
@@ -18705,7 +18812,7 @@ void Player::_LoadInventory(PreparedQueryResult result, uint32 timeDiff)
                     else
                     {
                         LOG_ERROR("server", "Player::_LoadInventory: player (GUID: %u, name: '%s') has item (GUID: %u, entry: %u) which doesnt have a valid bag (Bag GUID: %u, slot: %u). Possible cheat?",
-                            GetGUIDLow(), GetName().c_str(), item->GetGUIDLow(), item->GetEntry(), bagGuid, slot);
+                                  GetGUIDLow(), GetName().c_str(), item->GetGUIDLow(), item->GetEntry(), bagGuid, slot);
                         item->DeleteFromInventoryDB(trans);
                         delete item;
                         continue;
@@ -18719,7 +18826,7 @@ void Player::_LoadInventory(PreparedQueryResult result, uint32 timeDiff)
                 else
                 {
                     LOG_ERROR("server", "Player::_LoadInventory: player (GUID: %u, name: '%s') has item (GUID: %u, entry: %u) which can't be loaded into inventory (Bag GUID: %u, slot: %u) by reason %u. Item will be sent by mail.",
-                        GetGUIDLow(), GetName().c_str(), item->GetGUIDLow(), item->GetEntry(), bagGuid, slot, err);
+                              GetGUIDLow(), GetName().c_str(), item->GetGUIDLow(), item->GetEntry(), bagGuid, slot, err);
                     item->DeleteFromInventoryDB(trans);
                     problematicItems.push_back(item);
                 }
@@ -18765,7 +18872,7 @@ Item* Player::_LoadItem(SQLTransaction& trans, uint32 zoneId, uint32 timeDiff, F
             {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
                 LOG_DEBUG("entities.player.loading", "Player::_LoadInventory: player (GUID: %u, name: '%s', map: %u) has item (GUID: %u, entry: %u) limited to another map (%u). Deleting item.",
-                    GetGUIDLow(), GetName().c_str(), GetMapId(), item->GetGUIDLow(), item->GetEntry(), zoneId);
+                          GetGUIDLow(), GetName().c_str(), GetMapId(), item->GetGUIDLow(), item->GetEntry(), zoneId);
 #endif
                 remove = true;
             }
@@ -18774,7 +18881,7 @@ Item* Player::_LoadItem(SQLTransaction& trans, uint32 zoneId, uint32 timeDiff, F
             {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
                 LOG_DEBUG("entities.player.loading", "Player::_LoadInventory: player (GUID: %u, name: '%s', diff: %u) has conjured item (GUID: %u, entry: %u) with expired lifetime (15 minutes). Deleting item.",
-                    GetGUIDLow(), GetName().c_str(), timeDiff, item->GetGUIDLow(), item->GetEntry());
+                          GetGUIDLow(), GetName().c_str(), timeDiff, item->GetGUIDLow(), item->GetEntry());
 #endif
                 remove = true;
             }
@@ -18784,7 +18891,7 @@ Item* Player::_LoadItem(SQLTransaction& trans, uint32 zoneId, uint32 timeDiff, F
                 {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
                     LOG_DEBUG("entities.player.loading", "Player::_LoadInventory: player (GUID: %u, name: '%s') has item (GUID: %u, entry: %u) with expired refund time (%u). Deleting refund data and removing refundable flag.",
-                        GetGUIDLow(), GetName().c_str(), item->GetGUIDLow(), item->GetEntry(), item->GetPlayedTime());
+                              GetGUIDLow(), GetName().c_str(), item->GetGUIDLow(), item->GetEntry(), item->GetPlayedTime());
 #endif
                     stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_ITEM_REFUND_INSTANCE);
                     stmt->setUInt32(0, item->GetGUIDLow());
@@ -18809,7 +18916,7 @@ Item* Player::_LoadItem(SQLTransaction& trans, uint32 zoneId, uint32 timeDiff, F
                     {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
                         LOG_DEBUG("entities.player.loading", "Player::_LoadInventory: player (GUID: %u, name: '%s') has item (GUID: %u, entry: %u) with refundable flags, but without data in item_refund_instance. Removing flag.",
-                            GetGUIDLow(), GetName().c_str(), item->GetGUIDLow(), item->GetEntry());
+                                  GetGUIDLow(), GetName().c_str(), item->GetGUIDLow(), item->GetEntry());
 #endif
                         item->RemoveFlag(ITEM_FIELD_FLAGS, ITEM_FIELD_FLAG_REFUNDABLE);
                     }
@@ -18839,7 +18946,7 @@ Item* Player::_LoadItem(SQLTransaction& trans, uint32 zoneId, uint32 timeDiff, F
                 {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
                     LOG_DEBUG("entities.player.loading", "Player::_LoadInventory: player (GUID: %u, name: '%s') has item (GUID: %u, entry: %u) with ITEM_FIELD_FLAG_BOP_TRADEABLE flag, but without data in item_soulbound_trade_data. Removing flag.",
-                        GetGUIDLow(), GetName().c_str(), item->GetGUIDLow(), item->GetEntry());
+                              GetGUIDLow(), GetName().c_str(), item->GetGUIDLow(), item->GetEntry());
 #endif
                     item->RemoveFlag(ITEM_FIELD_FLAGS, ITEM_FIELD_FLAG_BOP_TRADEABLE);
                 }
@@ -18862,7 +18969,7 @@ Item* Player::_LoadItem(SQLTransaction& trans, uint32 zoneId, uint32 timeDiff, F
         else
         {
             LOG_ERROR("server", "Player::_LoadInventory: player (GUID: %u, name: '%s') has broken item (GUID: %u, entry: %u) in inventory. Deleting item.",
-                GetGUIDLow(), GetName().c_str(), itemGuid, itemEntry);
+                      GetGUIDLow(), GetName().c_str(), itemGuid, itemEntry);
             remove = true;
         }
         // Remove item from inventory if necessary
@@ -18877,7 +18984,7 @@ Item* Player::_LoadItem(SQLTransaction& trans, uint32 zoneId, uint32 timeDiff, F
     else
     {
         LOG_ERROR("server", "Player::_LoadInventory: player (GUID: %u, name: '%s') has unknown item (entry: %u) in inventory. Deleting item.",
-            GetGUIDLow(), GetName().c_str(), itemEntry);
+                  GetGUIDLow(), GetName().c_str(), itemEntry);
         Item::DeleteFromInventoryDB(trans, itemGuid);
         Item::DeleteFromDB(trans, itemGuid);
     }
@@ -19124,7 +19231,7 @@ void Player::_LoadQuestStatus(PreparedQueryResult result)
             Field* fields = result->Fetch();
 
             uint32 quest_id = fields[0].GetUInt32();
-                                                            // used to be new, no delete?
+            // used to be new, no delete?
             Quest const* quest = sObjectMgr->GetQuestTemplate(quest_id);
             if (quest)
             {
@@ -19138,7 +19245,7 @@ void Player::_LoadQuestStatus(PreparedQueryResult result)
                 {
                     questStatusData.Status = QUEST_STATUS_INCOMPLETE;
                     LOG_ERROR("server", "Player %s (GUID: %u) has invalid quest %d status (%u), replaced by QUEST_STATUS_INCOMPLETE(3).",
-                        GetName().c_str(), GetGUIDLow(), quest_id, qstatus);
+                              GetName().c_str(), GetGUIDLow(), quest_id, qstatus);
                 }
 
                 questStatusData.Explored = (fields[2].GetUInt8() > 0);
@@ -19210,7 +19317,7 @@ void Player::_LoadQuestStatusRewarded(PreparedQueryResult result)
             Field* fields = result->Fetch();
 
             uint32 quest_id = fields[0].GetUInt32();
-                                                            // used to be new, no delete?
+            // used to be new, no delete?
             Quest const* quest = sObjectMgr->GetQuestTemplate(quest_id);
             if (quest)
             {
@@ -19509,7 +19616,7 @@ bool Player::Satisfy(AccessRequirement const* ar, uint32 target_map, bool report
         if (ar->item)
         {
             if (!HasItemCount(ar->item, 1) &&
-                (!ar->item2 || !HasItemCount(ar->item2)))
+                    (!ar->item2 || !HasItemCount(ar->item2)))
                 missingItem = ar->item;
         }
         else if (ar->item2 && !HasItemCount(ar->item2))
@@ -19588,10 +19695,10 @@ bool Player::CheckInstanceLoginValid()
 }
 
 bool Player::CheckInstanceCount(uint32 instanceId) const
-{ 
+{
     if (_instanceResetTimes.size() < sGameConfig->GetIntConfig("AccountInstancesPerHour"))
         return true;
-    
+
     return _instanceResetTimes.find(instanceId) != _instanceResetTimes.end();
 }
 
@@ -19620,7 +19727,7 @@ bool Player::_LoadHomeBind(PreparedQueryResult result)
 
         // accept saved data only for valid position (and non instanceable), and accessable
         if (MapManager::IsValidMapCoord(m_homebindMapId, m_homebindX, m_homebindY, m_homebindZ) &&
-            !bindMapEntry->Instanceable() && GetSession()->Expansion() >= bindMapEntry->Expansion())
+                !bindMapEntry->Instanceable() && GetSession()->Expansion() >= bindMapEntry->Expansion())
             ok = true;
         else
         {
@@ -19650,7 +19757,7 @@ bool Player::_LoadHomeBind(PreparedQueryResult result)
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("server", "Setting player home position - mapid: %u, areaid: %u, X: %f, Y: %f, Z: %f",
-        m_homebindMapId, m_homebindAreaId, m_homebindX, m_homebindY, m_homebindZ);
+              m_homebindMapId, m_homebindAreaId, m_homebindX, m_homebindY, m_homebindZ);
 #endif
     return true;
 }
@@ -19758,42 +19865,42 @@ void Player::_SaveActions(SQLTransaction& trans)
     {
         switch (itr->second.uState)
         {
-            case ACTIONBUTTON_NEW:
-                stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_CHAR_ACTION);
-                stmt->setUInt32(0, GetGUIDLow());
-                stmt->setUInt8(1, m_activeSpec);
-                stmt->setUInt8(2, itr->first);
-                stmt->setUInt32(3, itr->second.GetAction());
-                stmt->setUInt8(4, uint8(itr->second.GetType()));
-                trans->Append(stmt);
+        case ACTIONBUTTON_NEW:
+            stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_CHAR_ACTION);
+            stmt->setUInt32(0, GetGUIDLow());
+            stmt->setUInt8(1, m_activeSpec);
+            stmt->setUInt8(2, itr->first);
+            stmt->setUInt32(3, itr->second.GetAction());
+            stmt->setUInt8(4, uint8(itr->second.GetType()));
+            trans->Append(stmt);
 
-                itr->second.uState = ACTIONBUTTON_UNCHANGED;
-                ++itr;
-                break;
-            case ACTIONBUTTON_CHANGED:
-                stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_CHAR_ACTION);
-                stmt->setUInt32(0, itr->second.GetAction());
-                stmt->setUInt8(1, uint8(itr->second.GetType()));
-                stmt->setUInt32(2,  GetGUIDLow());
-                stmt->setUInt8(3, itr->first);
-                stmt->setUInt8(4, m_activeSpec);
-                trans->Append(stmt);
+            itr->second.uState = ACTIONBUTTON_UNCHANGED;
+            ++itr;
+            break;
+        case ACTIONBUTTON_CHANGED:
+            stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_CHAR_ACTION);
+            stmt->setUInt32(0, itr->second.GetAction());
+            stmt->setUInt8(1, uint8(itr->second.GetType()));
+            stmt->setUInt32(2,  GetGUIDLow());
+            stmt->setUInt8(3, itr->first);
+            stmt->setUInt8(4, m_activeSpec);
+            trans->Append(stmt);
 
-                itr->second.uState = ACTIONBUTTON_UNCHANGED;
-                ++itr;
-                break;
-            case ACTIONBUTTON_DELETED:
-                stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_ACTION_BY_BUTTON_SPEC);
-                stmt->setUInt32(0, GetGUIDLow());
-                stmt->setUInt8(1, itr->first);
-                stmt->setUInt8(2, m_activeSpec);
-                trans->Append(stmt);
+            itr->second.uState = ACTIONBUTTON_UNCHANGED;
+            ++itr;
+            break;
+        case ACTIONBUTTON_DELETED:
+            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_ACTION_BY_BUTTON_SPEC);
+            stmt->setUInt32(0, GetGUIDLow());
+            stmt->setUInt8(1, itr->first);
+            stmt->setUInt8(2, m_activeSpec);
+            trans->Append(stmt);
 
-                m_actionButtons.erase(itr++);
-                break;
-            default:
-                ++itr;
-                break;
+            m_actionButtons.erase(itr++);
+            break;
+        default:
+            ++itr;
+            break;
         }
     }
 }
@@ -19970,21 +20077,21 @@ void Player::_SaveInventory(SQLTransaction& trans)
 
         switch (item->GetState())
         {
-            case ITEM_NEW:
-            case ITEM_CHANGED:
-                stmt = CharacterDatabase.GetPreparedStatement(CHAR_REP_INVENTORY_ITEM);
-                stmt->setUInt32(0, lowGuid);
-                stmt->setUInt32(1, bag_guid);
-                stmt->setUInt8 (2, item->GetSlot());
-                stmt->setUInt32(3, item->GetGUIDLow());
-                trans->Append(stmt);
-                break;
-            case ITEM_REMOVED:
-                stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_INVENTORY_BY_ITEM);
-                stmt->setUInt32(0, item->GetGUIDLow());
-                trans->Append(stmt);
-            case ITEM_UNCHANGED:
-                break;
+        case ITEM_NEW:
+        case ITEM_CHANGED:
+            stmt = CharacterDatabase.GetPreparedStatement(CHAR_REP_INVENTORY_ITEM);
+            stmt->setUInt32(0, lowGuid);
+            stmt->setUInt32(1, bag_guid);
+            stmt->setUInt8 (2, item->GetSlot());
+            stmt->setUInt32(3, item->GetGUIDLow());
+            trans->Append(stmt);
+            break;
+        case ITEM_REMOVED:
+            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_INVENTORY_BY_ITEM);
+            stmt->setUInt32(0, item->GetGUIDLow());
+            trans->Append(stmt);
+        case ITEM_UNCHANGED:
+            break;
         }
 
         item->SaveToDB(trans);                                   // item have unchanged inventory record and can be save standalone
@@ -20272,26 +20379,26 @@ void Player::_SaveSkills(SQLTransaction& trans)
 
         switch (itr->second.uState)
         {
-            case SKILL_NEW:
-                stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_CHAR_SKILLS);
-                stmt->setUInt32(0, GetGUIDLow());
-                stmt->setUInt16(1, uint16(itr->first));
-                stmt->setUInt16(2, value);
-                stmt->setUInt16(3, max);
-                trans->Append(stmt);
+        case SKILL_NEW:
+            stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_CHAR_SKILLS);
+            stmt->setUInt32(0, GetGUIDLow());
+            stmt->setUInt16(1, uint16(itr->first));
+            stmt->setUInt16(2, value);
+            stmt->setUInt16(3, max);
+            trans->Append(stmt);
 
-                break;
-            case SKILL_CHANGED:
-                stmt = CharacterDatabase.GetPreparedStatement(CHAR_UDP_CHAR_SKILLS);
-                stmt->setUInt16(0, value);
-                stmt->setUInt16(1, max);
-                stmt->setUInt32(2, GetGUIDLow());
-                stmt->setUInt16(3, uint16(itr->first));
-                trans->Append(stmt);
+            break;
+        case SKILL_CHANGED:
+            stmt = CharacterDatabase.GetPreparedStatement(CHAR_UDP_CHAR_SKILLS);
+            stmt->setUInt16(0, value);
+            stmt->setUInt16(1, max);
+            stmt->setUInt32(2, GetGUIDLow());
+            stmt->setUInt16(3, uint16(itr->first));
+            trans->Append(stmt);
 
-                break;
-            default:
-                break;
+            break;
+        default:
+            break;
         }
         itr->second.uState = SKILL_UNCHANGED;
 
@@ -20388,7 +20495,7 @@ void Player::_SaveStats(SQLTransaction& trans)
 }
 
 void Player::outDebugValues() const
-{ 
+{
     if (!sLog->ShouldLog("entities.player", LogLevel::LOG_LEVEL_DEBUG))                                  // optimize disabled debug output
         return;
 
@@ -20570,114 +20677,114 @@ void Player::ResetInstances(uint64 guid, uint8 method, bool isRaid)
 {
     switch (method)
     {
-        case INSTANCE_RESET_ALL:
-            {
-                Player* p = ObjectAccessor::FindPlayerInOrOutOfWorld(guid);
-                if (!p || p->GetDifficulty(false) != DUNGEON_DIFFICULTY_NORMAL)
-                    break;
-                std::vector<InstanceSave*> toUnbind;
-                BoundInstancesMap const& m_boundInstances = sInstanceSaveMgr->PlayerGetBoundInstances(p->GetGUIDLow(), Difficulty(DUNGEON_DIFFICULTY_NORMAL));
-                for (BoundInstancesMap::const_iterator itr = m_boundInstances.begin(); itr != m_boundInstances.end(); ++itr)
-                {
-                    InstanceSave* instanceSave = itr->second.save;
-                    const MapEntry* entry = sMapStore.LookupEntry(itr->first);
-                    if (!entry || entry->IsRaid() || !instanceSave->CanReset())
-                        continue;
+    case INSTANCE_RESET_ALL:
+    {
+        Player* p = ObjectAccessor::FindPlayerInOrOutOfWorld(guid);
+        if (!p || p->GetDifficulty(false) != DUNGEON_DIFFICULTY_NORMAL)
+            break;
+        std::vector<InstanceSave*> toUnbind;
+        BoundInstancesMap const& m_boundInstances = sInstanceSaveMgr->PlayerGetBoundInstances(p->GetGUIDLow(), Difficulty(DUNGEON_DIFFICULTY_NORMAL));
+        for (BoundInstancesMap::const_iterator itr = m_boundInstances.begin(); itr != m_boundInstances.end(); ++itr)
+        {
+            InstanceSave* instanceSave = itr->second.save;
+            const MapEntry* entry = sMapStore.LookupEntry(itr->first);
+            if (!entry || entry->IsRaid() || !instanceSave->CanReset())
+                continue;
 
-                    Map* map = sMapMgr->FindMap(instanceSave->GetMapId(), instanceSave->GetInstanceId());
-                    if (!map || map->ToInstanceMap()->Reset(method))
-                    {
-                        p->SendResetInstanceSuccess(instanceSave->GetMapId());
-                        toUnbind.push_back(instanceSave);
-                    }
-                    else
-                        p->SendResetInstanceFailed(0, instanceSave->GetMapId());
-                }
-                for (std::vector<InstanceSave*>::const_iterator itr = toUnbind.begin(); itr != toUnbind.end(); ++itr)
-                    sInstanceSaveMgr->UnbindAllFor(*itr);
-            }
-            break;
-        case INSTANCE_RESET_CHANGE_DIFFICULTY:
+            Map* map = sMapMgr->FindMap(instanceSave->GetMapId(), instanceSave->GetInstanceId());
+            if (!map || map->ToInstanceMap()->Reset(method))
             {
-                Player* p = ObjectAccessor::FindPlayerInOrOutOfWorld(guid);
-                if (!p)
-                    break;
-                std::vector<InstanceSave*> toUnbind;
-                BoundInstancesMap const& m_boundInstances = sInstanceSaveMgr->PlayerGetBoundInstances(p->GetGUIDLow(), p->GetDifficulty(isRaid));
-                for (BoundInstancesMap::const_iterator itr = m_boundInstances.begin(); itr != m_boundInstances.end(); ++itr)
-                {
-                    InstanceSave* instanceSave = itr->second.save;
-                    const MapEntry* entry = sMapStore.LookupEntry(itr->first);
-                    if (!entry || entry->IsRaid() != isRaid || !instanceSave->CanReset())
-                        continue;
+                p->SendResetInstanceSuccess(instanceSave->GetMapId());
+                toUnbind.push_back(instanceSave);
+            }
+            else
+                p->SendResetInstanceFailed(0, instanceSave->GetMapId());
+        }
+        for (std::vector<InstanceSave*>::const_iterator itr = toUnbind.begin(); itr != toUnbind.end(); ++itr)
+            sInstanceSaveMgr->UnbindAllFor(*itr);
+    }
+    break;
+    case INSTANCE_RESET_CHANGE_DIFFICULTY:
+    {
+        Player* p = ObjectAccessor::FindPlayerInOrOutOfWorld(guid);
+        if (!p)
+            break;
+        std::vector<InstanceSave*> toUnbind;
+        BoundInstancesMap const& m_boundInstances = sInstanceSaveMgr->PlayerGetBoundInstances(p->GetGUIDLow(), p->GetDifficulty(isRaid));
+        for (BoundInstancesMap::const_iterator itr = m_boundInstances.begin(); itr != m_boundInstances.end(); ++itr)
+        {
+            InstanceSave* instanceSave = itr->second.save;
+            const MapEntry* entry = sMapStore.LookupEntry(itr->first);
+            if (!entry || entry->IsRaid() != isRaid || !instanceSave->CanReset())
+                continue;
 
-                    Map* map = sMapMgr->FindMap(instanceSave->GetMapId(), instanceSave->GetInstanceId());
-                    if (!map || map->ToInstanceMap()->Reset(method))
-                    {
-                        p->SendResetInstanceSuccess(instanceSave->GetMapId());
-                        toUnbind.push_back(instanceSave);
-                    }
-                    else
-                        p->SendResetInstanceFailed(0, instanceSave->GetMapId());
-                }
-                for (std::vector<InstanceSave*>::const_iterator itr = toUnbind.begin(); itr != toUnbind.end(); ++itr)
-                    sInstanceSaveMgr->UnbindAllFor(*itr);
-            }
-            break;
-        case INSTANCE_RESET_GROUP_JOIN:
+            Map* map = sMapMgr->FindMap(instanceSave->GetMapId(), instanceSave->GetInstanceId());
+            if (!map || map->ToInstanceMap()->Reset(method))
             {
-                Player* p = ObjectAccessor::FindPlayerInOrOutOfWorld(guid);
-                if (!p)
-                    break;
-                for (uint8 d = 0; d < MAX_DIFFICULTY; ++d)
-                {
-                    std::vector<InstanceSave*> toUnbind;
-                    BoundInstancesMap const& m_boundInstances = sInstanceSaveMgr->PlayerGetBoundInstances(p->GetGUIDLow(), Difficulty(d));
-                    for (BoundInstancesMap::const_iterator itr = m_boundInstances.begin(); itr != m_boundInstances.end(); ++itr)
-                    {
-                        if (itr->second.perm)
-                            continue;
-                        InstanceSave* instanceSave = itr->second.save;
-                        Map* map = sMapMgr->FindMap(instanceSave->GetMapId(), instanceSave->GetInstanceId());
-                        if (!map || p->FindMap() != map)
-                        {
-                            //p->SendResetInstanceSuccess(instanceSave->GetMapId());
-                            toUnbind.push_back(instanceSave);
-                        }
-                        //else
-                        //  p->SendResetInstanceFailed(0, instanceSave->GetMapId());
-                    }
-                    for (std::vector<InstanceSave*>::const_iterator itr = toUnbind.begin(); itr != toUnbind.end(); ++itr)
-                        sInstanceSaveMgr->PlayerUnbindInstance(p->GetGUIDLow(), (*itr)->GetMapId(), (*itr)->GetDifficulty(), true, p);
-                }
+                p->SendResetInstanceSuccess(instanceSave->GetMapId());
+                toUnbind.push_back(instanceSave);
             }
+            else
+                p->SendResetInstanceFailed(0, instanceSave->GetMapId());
+        }
+        for (std::vector<InstanceSave*>::const_iterator itr = toUnbind.begin(); itr != toUnbind.end(); ++itr)
+            sInstanceSaveMgr->UnbindAllFor(*itr);
+    }
+    break;
+    case INSTANCE_RESET_GROUP_JOIN:
+    {
+        Player* p = ObjectAccessor::FindPlayerInOrOutOfWorld(guid);
+        if (!p)
             break;
-        case INSTANCE_RESET_GROUP_LEAVE:
+        for (uint8 d = 0; d < MAX_DIFFICULTY; ++d)
+        {
+            std::vector<InstanceSave*> toUnbind;
+            BoundInstancesMap const& m_boundInstances = sInstanceSaveMgr->PlayerGetBoundInstances(p->GetGUIDLow(), Difficulty(d));
+            for (BoundInstancesMap::const_iterator itr = m_boundInstances.begin(); itr != m_boundInstances.end(); ++itr)
             {
-                Player* p = ObjectAccessor::FindPlayerInOrOutOfWorld(guid);
-                for (uint8 d = 0; d < MAX_DIFFICULTY; ++d)
+                if (itr->second.perm)
+                    continue;
+                InstanceSave* instanceSave = itr->second.save;
+                Map* map = sMapMgr->FindMap(instanceSave->GetMapId(), instanceSave->GetInstanceId());
+                if (!map || p->FindMap() != map)
                 {
-                    std::vector<InstanceSave*> toUnbind;
-                    BoundInstancesMap const& m_boundInstances = sInstanceSaveMgr->PlayerGetBoundInstances(GUID_LOPART(guid), Difficulty(d));
-                    for (BoundInstancesMap::const_iterator itr = m_boundInstances.begin(); itr != m_boundInstances.end(); ++itr)
-                    {
-                        if (itr->second.perm)
-                            continue;
-                        InstanceSave* instanceSave = itr->second.save;
-                        Map* map = sMapMgr->FindMap(instanceSave->GetMapId(), instanceSave->GetInstanceId());
-                        if (!p || !map || p->FindMap() != map)
-                        {
-                            //p->SendResetInstanceSuccess(instanceSave->GetMapId());
-                            toUnbind.push_back(instanceSave);
-                        }
-                        //else
-                        //  p->SendResetInstanceFailed(0, instanceSave->GetMapId());
-                    }
-                    for (std::vector<InstanceSave*>::const_iterator itr = toUnbind.begin(); itr != toUnbind.end(); ++itr)
-                        sInstanceSaveMgr->PlayerUnbindInstance(GUID_LOPART(guid), (*itr)->GetMapId(), (*itr)->GetDifficulty(), true, p);
+                    //p->SendResetInstanceSuccess(instanceSave->GetMapId());
+                    toUnbind.push_back(instanceSave);
                 }
+                //else
+                //  p->SendResetInstanceFailed(0, instanceSave->GetMapId());
             }
-            break;
+            for (std::vector<InstanceSave*>::const_iterator itr = toUnbind.begin(); itr != toUnbind.end(); ++itr)
+                sInstanceSaveMgr->PlayerUnbindInstance(p->GetGUIDLow(), (*itr)->GetMapId(), (*itr)->GetDifficulty(), true, p);
+        }
+    }
+    break;
+    case INSTANCE_RESET_GROUP_LEAVE:
+    {
+        Player* p = ObjectAccessor::FindPlayerInOrOutOfWorld(guid);
+        for (uint8 d = 0; d < MAX_DIFFICULTY; ++d)
+        {
+            std::vector<InstanceSave*> toUnbind;
+            BoundInstancesMap const& m_boundInstances = sInstanceSaveMgr->PlayerGetBoundInstances(GUID_LOPART(guid), Difficulty(d));
+            for (BoundInstancesMap::const_iterator itr = m_boundInstances.begin(); itr != m_boundInstances.end(); ++itr)
+            {
+                if (itr->second.perm)
+                    continue;
+                InstanceSave* instanceSave = itr->second.save;
+                Map* map = sMapMgr->FindMap(instanceSave->GetMapId(), instanceSave->GetInstanceId());
+                if (!p || !map || p->FindMap() != map)
+                {
+                    //p->SendResetInstanceSuccess(instanceSave->GetMapId());
+                    toUnbind.push_back(instanceSave);
+                }
+                //else
+                //  p->SendResetInstanceFailed(0, instanceSave->GetMapId());
+            }
+            for (std::vector<InstanceSave*>::const_iterator itr = toUnbind.begin(); itr != toUnbind.end(); ++itr)
+                sInstanceSaveMgr->PlayerUnbindInstance(GUID_LOPART(guid), (*itr)->GetMapId(), (*itr)->GetDifficulty(), true, p);
+        }
+    }
+    break;
     }
 }
 
@@ -20892,7 +20999,7 @@ void Player::Say(const std::string& text, const uint32 language)
 {
     std::string _text(text);
     sScriptMgr->OnPlayerChat(this, CHAT_MSG_SAY, language, _text);
-    
+
     WorldPacket data;
     ChatHandler::BuildChatPacket(data, CHAT_MSG_SAY, Language(language), this, this, _text);
     SendMessageToSetInRange(&data, sGameConfig->GetFloatConfig("ListenRange.Say"), true);
@@ -21218,29 +21325,29 @@ bool Player::IsAffectedBySpellmod(SpellInfo const* spellInfo, SpellModifier* mod
 // Binary predicate for sorting SpellModifiers
 class SpellModPred
 {
-    public:
-        SpellModPred() {}
-        bool operator() (const SpellModifier* a, const SpellModifier* b) const
-        {
-            if (a->type != b->type)
-                return a->type == SPELLMOD_FLAT;
-            return a->value < b->value;
-        }
+public:
+    SpellModPred() {}
+    bool operator() (const SpellModifier* a, const SpellModifier* b) const
+    {
+        if (a->type != b->type)
+            return a->type == SPELLMOD_FLAT;
+        return a->value < b->value;
+    }
 };
 class MageSpellModPred
 {
-    public:
-        MageSpellModPred() {}
-        bool operator() (const SpellModifier* a, const SpellModifier* b) const
-        {
-            if (a->type != b->type)
-                return a->type == SPELLMOD_FLAT;
-            if (a->spellId == 44401)
-                return true;
-            if (b->spellId == 44401)
-                return false;
-            return a->value < b->value;
-        }
+public:
+    MageSpellModPred() {}
+    bool operator() (const SpellModifier* a, const SpellModifier* b) const
+    {
+        if (a->type != b->type)
+            return a->type == SPELLMOD_FLAT;
+        if (a->spellId == 44401)
+            return true;
+        if (b->spellId == 44401)
+            return false;
+        return a->value < b->value;
+    }
 };
 
 void Player::AddSpellMod(SpellModifier* mod, bool apply)
@@ -21663,10 +21770,10 @@ bool Player::ActivateTaxiPathTo(std::vector<uint32> const& nodes, Creature* npc 
     if (node->x != 0.0f || node->y != 0.0f || node->z != 0.0f)
     {
         if (node->map_id != GetMapId() ||
-            (node->x - GetPositionX())*(node->x - GetPositionX())+
-            (node->y - GetPositionY())*(node->y - GetPositionY())+
-            (node->z - GetPositionZ())*(node->z - GetPositionZ()) >
-            (2*INTERACTION_DISTANCE)*(2*INTERACTION_DISTANCE)*(2*INTERACTION_DISTANCE))
+                (node->x - GetPositionX())*(node->x - GetPositionX())+
+                (node->y - GetPositionY())*(node->y - GetPositionY())+
+                (node->z - GetPositionZ())*(node->z - GetPositionZ()) >
+                (2*INTERACTION_DISTANCE)*(2*INTERACTION_DISTANCE)*(2*INTERACTION_DISTANCE))
         {
             GetSession()->SendActivateTaxiReply(ERR_TAXITOOFARAWAY);
             return false;
@@ -21908,27 +22015,27 @@ void Player::InitDataForForm(bool reapplyMods)
 
     switch (form)
     {
-        case FORM_GHOUL:
-        case FORM_CAT:
-        {
-            if (getPowerType() != POWER_ENERGY)
-                setPowerType(POWER_ENERGY);
-            break;
-        }
-        case FORM_BEAR:
-        case FORM_DIREBEAR:
-        {
-            if (getPowerType() != POWER_RAGE)
-                setPowerType(POWER_RAGE);
-            break;
-        }
-        default:                                            // 0, for example
-        {
-            ChrClassesEntry const* cEntry = sChrClassesStore.LookupEntry(getClass());
-            if (cEntry && cEntry->powerType < MAX_POWERS && uint32(getPowerType()) != cEntry->powerType)
-                setPowerType(Powers(cEntry->powerType));
-            break;
-        }
+    case FORM_GHOUL:
+    case FORM_CAT:
+    {
+        if (getPowerType() != POWER_ENERGY)
+            setPowerType(POWER_ENERGY);
+        break;
+    }
+    case FORM_BEAR:
+    case FORM_DIREBEAR:
+    {
+        if (getPowerType() != POWER_RAGE)
+            setPowerType(POWER_RAGE);
+        break;
+    }
+    default:                                            // 0, for example
+    {
+        ChrClassesEntry const* cEntry = sChrClassesStore.LookupEntry(getClass());
+        if (cEntry && cEntry->powerType < MAX_POWERS && uint32(getPowerType()) != cEntry->powerType)
+            setPowerType(Powers(cEntry->powerType));
+        break;
+    }
     }
 
     // update auras at form change, ignore this at mods reapply (.reset stats/etc) when form not change.
@@ -21951,17 +22058,17 @@ void Player::InitDisplayIds()
     uint8 gender = getGender();
     switch (gender)
     {
-        case GENDER_FEMALE:
-            SetDisplayId(info->displayId_f);
-            SetNativeDisplayId(info->displayId_f);
-            break;
-        case GENDER_MALE:
-            SetDisplayId(info->displayId_m);
-            SetNativeDisplayId(info->displayId_m);
-            break;
-        default:
-            LOG_ERROR("server", "Invalid gender %u for player", gender);
-            return;
+    case GENDER_FEMALE:
+        SetDisplayId(info->displayId_f);
+        SetNativeDisplayId(info->displayId_f);
+        break;
+    case GENDER_MALE:
+        SetDisplayId(info->displayId_m);
+        SetNativeDisplayId(info->displayId_m);
+        break;
+    default:
+        LOG_ERROR("server", "Invalid gender %u for player", gender);
+        return;
     }
 }
 
@@ -21970,8 +22077,8 @@ inline bool Player::_StoreOrEquipNewItem(uint32 vendorslot, uint32 item, uint8 c
     ItemPosCountVec vDest;
     uint16 uiDest = 0;
     InventoryResult msg = bStore ?
-        CanStoreNewItem(bag, slot, vDest, item, pProto->BuyCount * count) :
-        CanEquipNewItem(slot, uiDest, item, false);
+                          CanStoreNewItem(bag, slot, vDest, item, pProto->BuyCount * count) :
+                          CanEquipNewItem(slot, uiDest, item, false);
     if (msg != EQUIP_ERR_OK)
     {
         SendEquipError(msg, nullptr, nullptr, item);
@@ -21997,8 +22104,8 @@ inline bool Player::_StoreOrEquipNewItem(uint32 vendorslot, uint32 item, uint8 c
     }
 
     Item* it = bStore ?
-        StoreNewItem(vDest, item, true) :
-        EquipNewItem(uiDest, item, true);
+               StoreNewItem(vDest, item, true) :
+               EquipNewItem(uiDest, item, true);
     if (it)
     {
         uint32 new_count = pVendor->UpdateVendorItemCurrentCount(crItem, pProto->BuyCount * count);
@@ -22270,7 +22377,7 @@ void Player::UpdatePvPState(bool onlyFFA)
     // TODO: should we always synchronize UNIT_FIELD_BYTES_2, 1 of controller and controlled?
     // no, we shouldn't, those are checked for affecting player by client
     if (!pvpInfo.IsInNoPvPArea && !IsGameMaster()
-        && (pvpInfo.IsInFFAPvPArea || sWorld->IsFFAPvPRealm()))
+            && (pvpInfo.IsInFFAPvPArea || sWorld->IsFFAPvPRealm()))
     {
         if (!IsFFAPvP())
         {
@@ -22493,7 +22600,7 @@ void Player::UpdatePotionCooldown()
     SetLastPotionId(0);
 }
 
-                                                           //slot to be excluded while counting
+//slot to be excluded while counting
 bool Player::EnchantmentFitsRequirements(uint32 enchantmentcondition, int8 slot)
 {
     if (!enchantmentcondition)
@@ -22564,15 +22671,15 @@ bool Player::EnchantmentFitsRequirements(uint32 enchantmentcondition, int8 slot)
 
         switch (Condition->Comparator[i])
         {
-            case 2:                                         // requires less <color> than (<value> || <comparecolor>) gems
-                activate &= (_cur_gem < _cmp_gem) ? true : false;
-                break;
-            case 3:                                         // requires more <color> than (<value> || <comparecolor>) gems
-                activate &= (_cur_gem > _cmp_gem) ? true : false;
-                break;
-            case 5:                                         // requires at least <color> than (<value> || <comparecolor>) gems
-                activate &= (_cur_gem >= _cmp_gem) ? true : false;
-                break;
+        case 2:                                         // requires less <color> than (<value> || <comparecolor>) gems
+            activate &= (_cur_gem < _cmp_gem) ? true : false;
+            break;
+        case 3:                                         // requires more <color> than (<value> || <comparecolor>) gems
+            activate &= (_cur_gem > _cmp_gem) ? true : false;
+            break;
+        case 5:                                         // requires at least <color> than (<value> || <comparecolor>) gems
+            activate &= (_cur_gem >= _cmp_gem) ? true : false;
+            break;
         }
     }
 
@@ -22585,7 +22692,7 @@ bool Player::EnchantmentFitsRequirements(uint32 enchantmentcondition, int8 slot)
 
 void Player::CorrectMetaGemEnchants(uint8 exceptslot, bool apply)
 {
-                                                            //cycle all equipped items
+    //cycle all equipped items
     for (uint32 slot = EQUIPMENT_SLOT_START; slot < EQUIPMENT_SLOT_END; ++slot)
     {
         //enchants for the slot being socketed are handled by Player::ApplyItemMods
@@ -22610,13 +22717,13 @@ void Player::CorrectMetaGemEnchants(uint8 exceptslot, bool apply)
             uint32 condition = enchantEntry->EnchantmentCondition;
             if (condition)
             {
-                                                            //was enchant active with/without item?
+                //was enchant active with/without item?
                 bool wasactive = EnchantmentFitsRequirements(condition, apply ? exceptslot : -1);
-                                                            //should it now be?
+                //should it now be?
                 if (wasactive ^ EnchantmentFitsRequirements(condition, apply ? -1 : exceptslot))
                 {
                     // ignore item gem conditions
-                                                            //if state changed, (dis)apply enchant
+                    //if state changed, (dis)apply enchant
                     ApplyEnchantment(pItem, EnchantmentSlot(enchant_slot), !wasactive, true, true);
                 }
             }
@@ -22624,7 +22731,7 @@ void Player::CorrectMetaGemEnchants(uint8 exceptslot, bool apply)
     }
 }
 
-                                                            //if false -> then toggled off if was on| if true -> toggled on if was off AND meets requirements
+//if false -> then toggled off if was on| if true -> toggled on if was off AND meets requirements
 void Player::ToggleMetaGemsActive(uint8 exceptslot, bool apply)
 {
     //cycle all equipped items
@@ -22707,8 +22814,8 @@ void Player::LeaveBattleground(Battleground* bg)
         return;
 
     // Deserter tracker - leave BG
-    if (bg->isBattleground() && sGameConfig->GetBoolConfig("Battleground.TrackDeserters.Enable") 
-        && (bg->GetStatus() == STATUS_IN_PROGRESS || bg->GetStatus() == STATUS_WAIT_JOIN))
+    if (bg->isBattleground() && sGameConfig->GetBoolConfig("Battleground.TrackDeserters.Enable")
+            && (bg->GetStatus() == STATUS_IN_PROGRESS || bg->GetStatus() == STATUS_WAIT_JOIN))
     {
         PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_DESERTER_TRACK);
         stmt->setUInt32(0, GetGUIDLow());
@@ -23014,7 +23121,7 @@ void Player::UpdateVisibilityForPlayer(bool mapChange)
 }
 
 void Player::InitPrimaryProfessions()
-{ 
+{
     SetFreePrimaryProfessions(sGameConfig->GetIntConfig("MaxPrimaryTradeSkill"));
 }
 
@@ -23292,14 +23399,14 @@ void Player::SendTransferAborted(uint32 mapid, TransferAbortReason reason, uint8
     data << uint8(reason);                                 // transfer abort reason
     switch (reason)
     {
-        case TRANSFER_ABORT_INSUF_EXPAN_LVL:
-        case TRANSFER_ABORT_DIFFICULTY:
-        case TRANSFER_ABORT_UNIQUE_MESSAGE:
-            // these are the ONLY cases that have an extra argument in the packet!!!
-            data << uint8(arg);
-            break;
-        default:
-            break;
+    case TRANSFER_ABORT_INSUF_EXPAN_LVL:
+    case TRANSFER_ABORT_DIFFICULTY:
+    case TRANSFER_ABORT_UNIQUE_MESSAGE:
+        // these are the ONLY cases that have an extra argument in the packet!!!
+        data << uint8(arg);
+        break;
+    default:
+        break;
     }
     GetSession()->SendPacket(&data);
 }
@@ -23910,37 +24017,37 @@ bool Player::HasItemFitToSpellRequirements(SpellInfo const* spellInfo, Item cons
     // for optimize check 2 used cases only
     switch (spellInfo->EquippedItemClass)
     {
-        case ITEM_CLASS_WEAPON:
-        {
-            for (uint8 i= EQUIPMENT_SLOT_MAINHAND; i < EQUIPMENT_SLOT_TABARD; ++i)
-                if (Item* item = GetUseableItemByPos(INVENTORY_SLOT_BAG_0, i))
-                    if (item != ignoreItem && item->IsFitToSpellRequirements(spellInfo))
-                        return true;
-            break;
-        }
-        case ITEM_CLASS_ARMOR:
-        {
-            // tabard not have dependent spells
-            for (uint8 i= EQUIPMENT_SLOT_START; i< EQUIPMENT_SLOT_MAINHAND; ++i)
-                if (Item* item = GetUseableItemByPos(INVENTORY_SLOT_BAG_0, i))
-                    if (item != ignoreItem && item->IsFitToSpellRequirements(spellInfo))
-                        return true;
-
-            // shields can be equipped to offhand slot
-            if (Item* item = GetUseableItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND))
+    case ITEM_CLASS_WEAPON:
+    {
+        for (uint8 i= EQUIPMENT_SLOT_MAINHAND; i < EQUIPMENT_SLOT_TABARD; ++i)
+            if (Item* item = GetUseableItemByPos(INVENTORY_SLOT_BAG_0, i))
+                if (item != ignoreItem && item->IsFitToSpellRequirements(spellInfo))
+                    return true;
+        break;
+    }
+    case ITEM_CLASS_ARMOR:
+    {
+        // tabard not have dependent spells
+        for (uint8 i= EQUIPMENT_SLOT_START; i< EQUIPMENT_SLOT_MAINHAND; ++i)
+            if (Item* item = GetUseableItemByPos(INVENTORY_SLOT_BAG_0, i))
                 if (item != ignoreItem && item->IsFitToSpellRequirements(spellInfo))
                     return true;
 
-            // ranged slot can have some armor subclasses
-            if (Item* item = GetUseableItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_RANGED))
-                if (item != ignoreItem && item->IsFitToSpellRequirements(spellInfo))
-                    return true;
+        // shields can be equipped to offhand slot
+        if (Item* item = GetUseableItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND))
+            if (item != ignoreItem && item->IsFitToSpellRequirements(spellInfo))
+                return true;
 
-            break;
-        }
-        default:
-            LOG_ERROR("server", "HasItemFitToSpellRequirements: Not handled spell requirement for item class %u", spellInfo->EquippedItemClass);
-            break;
+        // ranged slot can have some armor subclasses
+        if (Item* item = GetUseableItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_RANGED))
+            if (item != ignoreItem && item->IsFitToSpellRequirements(spellInfo))
+                return true;
+
+        break;
+    }
+    default:
+        LOG_ERROR("server", "HasItemFitToSpellRequirements: Not handled spell requirement for item class %u", spellInfo->EquippedItemClass);
+        break;
     }
 
     return false;
@@ -24008,16 +24115,30 @@ uint32 Player::GetResurrectionSpellId()
         {
             switch ((*itr)->GetId())
             {
-                case 20707: spell_id =  3026; break;        // rank 1
-                case 20762: spell_id = 20758; break;        // rank 2
-                case 20763: spell_id = 20759; break;        // rank 3
-                case 20764: spell_id = 20760; break;        // rank 4
-                case 20765: spell_id = 20761; break;        // rank 5
-                case 27239: spell_id = 27240; break;        // rank 6
-                case 47883: spell_id = 47882; break;        // rank 7
-                default:
-                    LOG_ERROR("server", "Unhandled spell %u: S.Resurrection", (*itr)->GetId());
-                    continue;
+            case 20707:
+                spell_id =  3026;
+                break;        // rank 1
+            case 20762:
+                spell_id = 20758;
+                break;        // rank 2
+            case 20763:
+                spell_id = 20759;
+                break;        // rank 3
+            case 20764:
+                spell_id = 20760;
+                break;        // rank 4
+            case 20765:
+                spell_id = 20761;
+                break;        // rank 5
+            case 27239:
+                spell_id = 27240;
+                break;        // rank 6
+            case 47883:
+                spell_id = 47882;
+                break;        // rank 7
+            default:
+                LOG_ERROR("server", "Unhandled spell %u: S.Resurrection", (*itr)->GetId());
+                continue;
             }
 
             prio = 3;
@@ -24050,9 +24171,9 @@ bool Player::isHonorOrXPTarget(Unit* victim) const
     if (victim->GetTypeId() == TYPEID_UNIT)
     {
         if (victim->IsTotem() ||
-            victim->IsPet() ||
-            victim->ToCreature()->GetCreatureTemplate()->flags_extra & CREATURE_FLAG_EXTRA_NO_XP_AT_KILL)
-                return false;
+                victim->IsPet() ||
+                victim->ToCreature()->GetCreatureTemplate()->flags_extra & CREATURE_FLAG_EXTRA_NO_XP_AT_KILL)
+            return false;
     }
     return true;
 }
@@ -24312,11 +24433,11 @@ void Player::UpdateAreaDependentAuras(uint32 newArea)
     {
         switch (GetVehicleBase()->GetEntry())
         {
-            case 33062:
-            case 33109:
-            case 33060:
-                GetVehicle()->Dismiss();
-                break;
+        case 33062:
+        case 33109:
+        case 33060:
+            GetVehicle()->Dismiss();
+            break;
         }
     }
 }
@@ -24343,7 +24464,7 @@ void Player::UpdateCorpseReclaimDelay()
     bool pvp = m_ExtraFlags & PLAYER_EXTRA_PVP_DEATH;
 
     if ((pvp && !sGameConfig->GetBoolConfig("Death.CorpseReclaimDelay.PvP")) ||
-        (!pvp && !sGameConfig->GetBoolConfig("Death.CorpseReclaimDelay.PvE")))
+            (!pvp && !sGameConfig->GetBoolConfig("Death.CorpseReclaimDelay.PvE")))
         return;
 
     time_t now = GameTime::GetGameTime();
@@ -24381,7 +24502,7 @@ int32 Player::CalculateCorpseReclaimDelay(bool load)
         uint64 count = 0;
 
         if ((pvp && sGameConfig->GetBoolConfig("Death.CorpseReclaimDelay.PvP")) ||
-           (!pvp && sGameConfig->GetBoolConfig("Death.CorpseReclaimDelay.PvE")))
+                (!pvp && sGameConfig->GetBoolConfig("Death.CorpseReclaimDelay.PvE")))
         {
             count = (m_deathExpireTime - corpse->GetGhostTime()) / DEATH_EXPIRE_STEP;
 
@@ -24425,7 +24546,7 @@ Player* Player::GetNextRandomRaidMember(float radius)
 
         // IsHostileTo check duel and controlled by enemy
         if (Target && Target != this && IsWithinDistInMap(Target, radius) &&
-            !Target->HasInvisibilityAura() && !IsHostileTo(Target))
+                !Target->HasInvisibilityAura() && !IsHostileTo(Target))
             nearMembers.push_back(Target);
     }
 
@@ -24744,9 +24865,9 @@ bool Player::CanUseBattlegroundObject(GameObject* gameobject) const
 bool Player::CanCaptureTowerPoint() const
 {
     return (!HasStealthAura() &&                            // not stealthed
-             !HasInvisibilityAura() &&                      // not invisible
-             IsAlive()                                      // live player
-);
+            !HasInvisibilityAura() &&                      // not invisible
+            IsAlive()                                      // live player
+           );
 }
 
 uint32 Player::GetBarberShopCost(uint8 newhairstyle, uint8 newhaircolor, uint8 newfacialhair, BarberShopStyleEntry const* newSkin)
@@ -25010,18 +25131,18 @@ void Player::UpdateCharmedAI()
 
             switch (urand(0,2))
             {
-                case 0:
-                    if (m_charmAISpells[SPELL_INSTANT_DAMAGE+rnd] && !HasSpellCooldown(m_charmAISpells[SPELL_INSTANT_DAMAGE+rnd]))
-                        CastSpell(target, m_charmAISpells[SPELL_INSTANT_DAMAGE+rnd], false);
-                    break;
-                case 1:
-                    if (m_charmAISpells[SPELL_HIGH_DAMAGE1+rnd] && !HasSpellCooldown(m_charmAISpells[SPELL_HIGH_DAMAGE1+rnd]))
-                        CastSpell(target, m_charmAISpells[SPELL_HIGH_DAMAGE1+rnd], false);
-                    break;
-                case 2:
-                    if (m_charmAISpells[SPELL_DOT_DAMAGE] && !HasSpellCooldown(m_charmAISpells[SPELL_DOT_DAMAGE]))
-                        CastSpell(target, m_charmAISpells[SPELL_DOT_DAMAGE], false);
-                    break;
+            case 0:
+                if (m_charmAISpells[SPELL_INSTANT_DAMAGE+rnd] && !HasSpellCooldown(m_charmAISpells[SPELL_INSTANT_DAMAGE+rnd]))
+                    CastSpell(target, m_charmAISpells[SPELL_INSTANT_DAMAGE+rnd], false);
+                break;
+            case 1:
+                if (m_charmAISpells[SPELL_HIGH_DAMAGE1+rnd] && !HasSpellCooldown(m_charmAISpells[SPELL_HIGH_DAMAGE1+rnd]))
+                    CastSpell(target, m_charmAISpells[SPELL_HIGH_DAMAGE1+rnd], false);
+                break;
+            case 2:
+                if (m_charmAISpells[SPELL_DOT_DAMAGE] && !HasSpellCooldown(m_charmAISpells[SPELL_DOT_DAMAGE]))
+                    CastSpell(target, m_charmAISpells[SPELL_DOT_DAMAGE], false);
+                break;
             }
         }
     }
@@ -25035,7 +25156,7 @@ uint32 Player::GetRuneBaseCooldown(uint8 index, bool skipGrace)
         cooldown -= GetGracePeriod(index) < 250 ? 0 : GetGracePeriod(index)-250;    // xinef: reduce by grace period, treat first 250ms as instant use of rune
 
     AuraEffectList const& regenAura = GetAuraEffectsByType(SPELL_AURA_MOD_POWER_REGEN_PERCENT);
-    for (AuraEffectList::const_iterator i = regenAura.begin();i != regenAura.end(); ++i)
+    for (AuraEffectList::const_iterator i = regenAura.begin(); i != regenAura.end(); ++i)
     {
         if ((*i)->GetMiscValue() == POWER_RUNE && (*i)->GetMiscValueB() == rune)
             cooldown = cooldown*(100-(*i)->GetAmount())/100;
@@ -25332,14 +25453,14 @@ void Player::_LoadSkills(PreparedQueryResult result)
             // set fixed skill ranges
             switch (GetSkillRangeType(pSkill, false))
             {
-                case SKILL_RANGE_LANGUAGE:                      // 300..300
-                    value = max = 300;
-                    break;
-                case SKILL_RANGE_MONO:                          // 1..1, grey monolite bar
-                    value = max = 1;
-                    break;
-                default:
-                    break;
+            case SKILL_RANGE_LANGUAGE:                      // 300..300
+                value = max = 300;
+                break;
+            case SKILL_RANGE_MONO:                          // 1..1, grey monolite bar
+                value = max = 1;
+                break;
+            default:
+                break;
             }
             if (value == 0)
             {
@@ -25455,7 +25576,7 @@ InventoryResult Player::CanEquipUniqueItem(Item* pItem, uint8 eslot, uint32 limi
 
         // include for check equip another gems with same limit category for not equipped item (and then not counted)
         uint32 gem_limit_count = !pItem->IsEquipped() && pGem->ItemLimitCategory
-            ? pItem->GetGemCountWithLimitCategory(pGem->ItemLimitCategory) : 1;
+                                 ? pItem->GetGemCountWithLimitCategory(pGem->ItemLimitCategory) : 1;
 
         if (InventoryResult res = CanEquipUniqueItem(pGem, eslot, gem_limit_count))
             return res;
@@ -25503,8 +25624,8 @@ void Player::HandleFall(MovementInfo const& movementInfo)
     //Players with low fall distance, Feather Fall or physical immunity (charges used) are ignored
     // 14.57 can be calculated by resolving damageperc formula below to 0
     if (z_diff >= 14.57f && !isDead() && !IsGameMaster() &&
-        !HasAuraType(SPELL_AURA_HOVER) && !HasAuraType(SPELL_AURA_FEATHER_FALL) &&
-        !HasAuraType(SPELL_AURA_FLY))
+            !HasAuraType(SPELL_AURA_HOVER) && !HasAuraType(SPELL_AURA_FEATHER_FALL) &&
+            !HasAuraType(SPELL_AURA_FLY))
     {
         //Safe fall, fall height reduction
         int32 safe_fall = GetTotalAuraModifier(SPELL_AURA_SAFE_FALL);
@@ -26169,43 +26290,43 @@ void Player::_SaveEquipmentSets(SQLTransaction& trans)
         uint8 j = 0;
         switch (eqset.state)
         {
-            case EQUIPMENT_SET_UNCHANGED:
-                ++itr;
-                break;                                      // nothing do
-            case EQUIPMENT_SET_CHANGED:
-                stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_EQUIP_SET);
-                stmt->setString(j++, eqset.Name.c_str());
-                stmt->setString(j++, eqset.IconName.c_str());
-                stmt->setUInt32(j++, eqset.IgnoreMask);
-                for (uint8 i=0; i<EQUIPMENT_SLOT_END; ++i)
-                    stmt->setUInt32(j++, eqset.Items[i]);
-                stmt->setUInt32(j++, GetGUIDLow());
-                stmt->setUInt64(j++, eqset.Guid);
-                stmt->setUInt32(j, index);
-                trans->Append(stmt);
-                eqset.state = EQUIPMENT_SET_UNCHANGED;
-                ++itr;
-                break;
-            case EQUIPMENT_SET_NEW:
-                stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_EQUIP_SET);
-                stmt->setUInt32(j++, GetGUIDLow());
-                stmt->setUInt64(j++, eqset.Guid);
-                stmt->setUInt32(j++, index);
-                stmt->setString(j++, eqset.Name.c_str());
-                stmt->setString(j++, eqset.IconName.c_str());
-                stmt->setUInt32(j++, eqset.IgnoreMask);
-                for (uint8 i=0; i<EQUIPMENT_SLOT_END; ++i)
-                    stmt->setUInt32(j++, eqset.Items[i]);
-                trans->Append(stmt);
-                eqset.state = EQUIPMENT_SET_UNCHANGED;
-                ++itr;
-                break;
-            case EQUIPMENT_SET_DELETED:
-                stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_EQUIP_SET);
-                stmt->setUInt64(0, eqset.Guid);
-                trans->Append(stmt);
-                m_EquipmentSets.erase(itr++);
-                break;
+        case EQUIPMENT_SET_UNCHANGED:
+            ++itr;
+            break;                                      // nothing do
+        case EQUIPMENT_SET_CHANGED:
+            stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_EQUIP_SET);
+            stmt->setString(j++, eqset.Name.c_str());
+            stmt->setString(j++, eqset.IconName.c_str());
+            stmt->setUInt32(j++, eqset.IgnoreMask);
+            for (uint8 i=0; i<EQUIPMENT_SLOT_END; ++i)
+                stmt->setUInt32(j++, eqset.Items[i]);
+            stmt->setUInt32(j++, GetGUIDLow());
+            stmt->setUInt64(j++, eqset.Guid);
+            stmt->setUInt32(j, index);
+            trans->Append(stmt);
+            eqset.state = EQUIPMENT_SET_UNCHANGED;
+            ++itr;
+            break;
+        case EQUIPMENT_SET_NEW:
+            stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_EQUIP_SET);
+            stmt->setUInt32(j++, GetGUIDLow());
+            stmt->setUInt64(j++, eqset.Guid);
+            stmt->setUInt32(j++, index);
+            stmt->setString(j++, eqset.Name.c_str());
+            stmt->setString(j++, eqset.IconName.c_str());
+            stmt->setUInt32(j++, eqset.IgnoreMask);
+            for (uint8 i=0; i<EQUIPMENT_SLOT_END; ++i)
+                stmt->setUInt32(j++, eqset.Items[i]);
+            trans->Append(stmt);
+            eqset.state = EQUIPMENT_SET_UNCHANGED;
+            ++itr;
+            break;
+        case EQUIPMENT_SET_DELETED:
+            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_EQUIP_SET);
+            stmt->setUInt64(0, eqset.Guid);
+            trans->Append(stmt);
+            m_EquipmentSets.erase(itr++);
+            break;
         }
     }
 }
@@ -27229,7 +27350,7 @@ void Player::RefundItem(Item* item)
                 store_error = true;
                 break;
             }
-         }
+        }
     }
 
     if (store_error)
