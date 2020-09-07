@@ -184,12 +184,12 @@ void WorldSession::HandleAuctionSellItem(WorldPacket & recvData)
 
     switch (etime)
     {
-        case 1*MIN_AUCTION_TIME:
-        case 2*MIN_AUCTION_TIME:
-        case 4*MIN_AUCTION_TIME:
-            break;
-        default:
-            return;
+    case 1*MIN_AUCTION_TIME:
+    case 2*MIN_AUCTION_TIME:
+    case 4*MIN_AUCTION_TIME:
+        break;
+    default:
+        return;
     }
 
     if (GetPlayer()->HasUnitState(UNIT_STATE_DIED))
@@ -214,8 +214,8 @@ void WorldSession::HandleAuctionSellItem(WorldPacket & recvData)
             itemEntry = item->GetTemplate()->ItemId;
 
         if (sAuctionMgr->GetAItem(item->GetGUIDLow()) || !item->CanBeTraded() || item->IsNotEmptyBag() ||
-            item->GetTemplate()->Flags & ITEM_FLAG_CONJURED || item->GetUInt32Value(ITEM_FIELD_DURATION) ||
-            item->GetCount() < count[i] || itemEntry != item->GetTemplate()->ItemId)
+                item->GetTemplate()->Flags & ITEM_FLAG_CONJURED || item->GetUInt32Value(ITEM_FIELD_DURATION) ||
+                item->GetCount() < count[i] || itemEntry != item->GetTemplate()->ItemId)
         {
             SendAuctionCommandResult(0, AUCTION_SELL_ITEM, ERR_AUCTION_DATABASE_ERROR);
             return;
@@ -440,7 +440,7 @@ void WorldSession::HandleAuctionPlaceBid(WorldPacket & recvData)
 
     // price too low for next bid if not buyout
     if ((price < auction->buyout || auction->buyout == 0) &&
-        price < auction->bid + auction->GetAuctionOutBid())
+            price < auction->bid + auction->GetAuctionOutBid())
     {
         //auction has already higher bid, client tests it!
         return;
@@ -563,8 +563,8 @@ void WorldSession::HandleAuctionRemoveItem(WorldPacket & recvData)
 
             // item will deleted or added to received mail list
             MailDraft(auction->BuildAuctionMailSubject(AUCTION_CANCELED), AuctionEntry::BuildAuctionMailBody(0, 0, auction->buyout, auction->deposit, 0))
-                .AddItem(pItem)
-                .SendMailTo(trans, player, auction, MAIL_CHECK_MASK_COPIED);
+            .AddItem(pItem)
+            .SendMailTo(trans, player, auction, MAIL_CHECK_MASK_COPIED);
         }
         else
         {
@@ -688,7 +688,7 @@ void WorldSession::HandleAuctionListOwnerItemsEvent(uint64 creatureGuid)
     LOG_DEBUG("network", "WORLD: Received CMSG_AUCTION_LIST_OWNER_ITEMS");
 #endif
 
-    _lastAuctionListOwnerItemsMSTime = GameTime::GetGameTimeMS(); // pussywizard    
+    _lastAuctionListOwnerItemsMSTime = GameTime::GetGameTimeMS(); // pussywizard
 
     Creature* creature = GetPlayer()->GetNPCIfCanInteractWith(creatureGuid, UNIT_NPC_FLAG_AUCTIONEER);
     if (!creature)

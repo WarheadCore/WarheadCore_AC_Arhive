@@ -25,57 +25,59 @@
 
 namespace warhead
 {
-    class WH_COMMON_API Runnable
+class WH_COMMON_API Runnable
+{
+public:
+    virtual ~Runnable() {}
+    virtual void run() = 0;
+
+    void incReference() {
+        ++m_refs;
+    }
+    void decReference()
     {
-        public:
-            virtual ~Runnable() {}
-            virtual void run() = 0;
+        if (!--m_refs)
+            delete this;
+    }
+private:
+    std::atomic_long m_refs;
+};
 
-            void incReference() { ++m_refs; }
-            void decReference()
-            {
-                if (!--m_refs)
-                    delete this;
-            }
-        private:
-            std::atomic_long m_refs;
-    };
+enum Priority
+{
+    Priority_Idle,
+    Priority_Lowest,
+    Priority_Low,
+    Priority_Normal,
+    Priority_High,
+    Priority_Highest,
+    Priority_Realtime,
+};
 
-    enum Priority
-    {
-        Priority_Idle,
-        Priority_Lowest,
-        Priority_Low,
-        Priority_Normal,
-        Priority_High,
-        Priority_Highest,
-        Priority_Realtime,
-    };
+class WH_COMMON_API Thread
+{
+public:
+    Thread();
+    explicit Thread(Runnable* instance);
+    ~Thread();
 
-    class WH_COMMON_API Thread
-    {
-        public:
-            Thread();
-            explicit Thread(Runnable* instance);
-            ~Thread();
+    bool wait();
+    void destroy();
 
-            bool wait();
-            void destroy();
+    void setPriority(Priority type);
 
-            void setPriority(Priority type);
+    static void Sleep(unsigned long msecs);
+    static std::thread::id currentId();
 
-            static void Sleep(unsigned long msecs);
-            static std::thread::id currentId();
+private:
+    Thread(const Thread&);
+    Thread& operator=(const Thread&);
 
-        private:
-            Thread(const Thread&);
-            Thread& operator=(const Thread&);
+    static void ThreadTask(void* param);
 
-            static void ThreadTask(void* param);
-
-            Runnable* const m_task;
-            std::thread::id m_iThreadId;
-            std::thread m_ThreadImp;
-    };
+    Runnable* const m_task;
+    std::thread::id m_iThreadId;
+    std::thread m_ThreadImp;
+};
 }
 #endif

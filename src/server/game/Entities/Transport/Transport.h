@@ -29,16 +29,26 @@ class Transport : public GameObject, public TransportBase
 {
 public:
     Transport() : GameObject() {}
-    void CalculatePassengerPosition(float& x, float& y, float& z, float* o = nullptr) const { TransportBase::CalculatePassengerPosition(x, y, z, o, GetPositionX(), GetPositionY(), GetPositionZ(), GetOrientation()); }
-    void CalculatePassengerOffset(float& x, float& y, float& z, float* o = nullptr) const { TransportBase::CalculatePassengerOffset(x, y, z, o, GetPositionX(), GetPositionY(), GetPositionZ(), GetOrientation()); }
+    void CalculatePassengerPosition(float& x, float& y, float& z, float* o = nullptr) const {
+        TransportBase::CalculatePassengerPosition(x, y, z, o, GetPositionX(), GetPositionY(), GetPositionZ(), GetOrientation());
+    }
+    void CalculatePassengerOffset(float& x, float& y, float& z, float* o = nullptr) const {
+        TransportBase::CalculatePassengerOffset(x, y, z, o, GetPositionX(), GetPositionY(), GetPositionZ(), GetOrientation());
+    }
 
     typedef std::set<WorldObject*> PassengerSet;
     virtual void AddPassenger(WorldObject* passenger, bool withAll = false) = 0;
     virtual void RemovePassenger(WorldObject* passenger, bool withAll = false) = 0;
-    PassengerSet const& GetPassengers() const { return _passengers; }
+    PassengerSet const& GetPassengers() const {
+        return _passengers;
+    }
 
-    uint32 GetPathProgress() const { return GetGOValue()->Transport.PathProgress; }
-    void SetPathProgress(uint32 val) { m_goValue.Transport.PathProgress = val; }
+    uint32 GetPathProgress() const {
+        return GetGOValue()->Transport.PathProgress;
+    }
+    void SetPathProgress(uint32 val) {
+        m_goValue.Transport.PathProgress = val;
+    }
 
 protected:
     PassengerSet _passengers;
@@ -65,18 +75,32 @@ public:
     GameObject* CreateGOPassenger(uint32 guid, GameObjectData const* data);
 
     void LoadStaticPassengers();
-    PassengerSet const& GetStaticPassengers() const { return _staticPassengers; }
+    PassengerSet const& GetStaticPassengers() const {
+        return _staticPassengers;
+    }
     void UnloadStaticPassengers();
     void UnloadNonStaticPassengers();
-    void SetPassengersLoaded(bool loaded) { _passengersLoaded = loaded; }
-    bool PassengersLoaded() const { return _passengersLoaded; }
+    void SetPassengersLoaded(bool loaded) {
+        _passengersLoaded = loaded;
+    }
+    bool PassengersLoaded() const {
+        return _passengersLoaded;
+    }
 
-    KeyFrameVec const& GetKeyFrames() const { return _transportInfo->keyFrames; }
+    KeyFrameVec const& GetKeyFrames() const {
+        return _transportInfo->keyFrames;
+    }
     void EnableMovement(bool enabled);
-    TransportTemplate const* GetTransportTemplate() const { return _transportInfo; }
+    TransportTemplate const* GetTransportTemplate() const {
+        return _transportInfo;
+    }
 
-    uint32 GetPeriod() const { return GetUInt32Value(GAMEOBJECT_LEVEL); }
-    void SetPeriod(uint32 period) { SetUInt32Value(GAMEOBJECT_LEVEL, period); }
+    uint32 GetPeriod() const {
+        return GetUInt32Value(GAMEOBJECT_LEVEL);
+    }
+    void SetPeriod(uint32 period) {
+        SetUInt32Value(GAMEOBJECT_LEVEL, period);
+    }
 
 private:
     void MoveToNextWaypoint();
@@ -87,8 +111,12 @@ private:
     void DoEventIfAny(KeyFrame const& node, bool departure);
 
     //! Helpers to know if stop frame was reached
-    bool IsMoving() const { return _isMoving; }
-    void SetMoving(bool val) { _isMoving = val; }
+    bool IsMoving() const {
+        return _isMoving;
+    }
+    void SetMoving(bool val) {
+        _isMoving = val;
+    }
 
     TransportTemplate const* _transportInfo;
     KeyFrameVec::const_iterator _currentFrame;
@@ -125,9 +153,15 @@ public:
     void AddPassenger(WorldObject* passenger, bool withAll = false);
     void RemovePassenger(WorldObject* passenger, bool withAll = false);
 
-    uint32 GetPauseTime() const { return GetUInt32Value(GAMEOBJECT_LEVEL); }
-    void SetPauseTime(uint32 val) { SetUInt32Value(GAMEOBJECT_LEVEL, val); }
-    uint32 GetPeriod() const { return m_goValue.Transport.AnimationInfo ? m_goValue.Transport.AnimationInfo->TotalTime : GetPauseTime()+2; }
+    uint32 GetPauseTime() const {
+        return GetUInt32Value(GAMEOBJECT_LEVEL);
+    }
+    void SetPauseTime(uint32 val) {
+        SetUInt32Value(GAMEOBJECT_LEVEL, val);
+    }
+    uint32 GetPeriod() const {
+        return m_goValue.Transport.AnimationInfo ? m_goValue.Transport.AnimationInfo->TotalTime : GetPauseTime()+2;
+    }
 private:
     bool _needDoInitialRelocation;
 };

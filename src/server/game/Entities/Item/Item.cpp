@@ -177,60 +177,60 @@ bool ItemCanGoIntoBag(ItemTemplate const* pProto, ItemTemplate const* pBagProto)
 
     switch (pBagProto->Class)
     {
-        case ITEM_CLASS_CONTAINER:
-            switch (pBagProto->SubClass)
-            {
-                case ITEM_SUBCLASS_CONTAINER:
-                    return true;
-                case ITEM_SUBCLASS_SOUL_CONTAINER:
-                    if (!(pProto->BagFamily & BAG_FAMILY_MASK_SOUL_SHARDS))
-                        return false;
-                    return true;
-                case ITEM_SUBCLASS_HERB_CONTAINER:
-                    if (!(pProto->BagFamily & BAG_FAMILY_MASK_HERBS))
-                        return false;
-                    return true;
-                case ITEM_SUBCLASS_ENCHANTING_CONTAINER:
-                    if (!(pProto->BagFamily & BAG_FAMILY_MASK_ENCHANTING_SUPP))
-                        return false;
-                    return true;
-                case ITEM_SUBCLASS_MINING_CONTAINER:
-                    if (!(pProto->BagFamily & BAG_FAMILY_MASK_MINING_SUPP))
-                        return false;
-                    return true;
-                case ITEM_SUBCLASS_ENGINEERING_CONTAINER:
-                    if (!(pProto->BagFamily & BAG_FAMILY_MASK_ENGINEERING_SUPP))
-                        return false;
-                    return true;
-                case ITEM_SUBCLASS_GEM_CONTAINER:
-                    if (!(pProto->BagFamily & BAG_FAMILY_MASK_GEMS))
-                        return false;
-                    return true;
-                case ITEM_SUBCLASS_LEATHERWORKING_CONTAINER:
-                    if (!(pProto->BagFamily & BAG_FAMILY_MASK_LEATHERWORKING_SUPP))
-                        return false;
-                    return true;
-                case ITEM_SUBCLASS_INSCRIPTION_CONTAINER:
-                    if (!(pProto->BagFamily & BAG_FAMILY_MASK_INSCRIPTION_SUPP))
-                        return false;
-                    return true;
-                default:
-                    return false;
-            }
-        case ITEM_CLASS_QUIVER:
-            switch (pBagProto->SubClass)
-            {
-                case ITEM_SUBCLASS_QUIVER:
-                    if (!(pProto->BagFamily & BAG_FAMILY_MASK_ARROWS))
-                        return false;
-                    return true;
-                case ITEM_SUBCLASS_AMMO_POUCH:
-                    if (!(pProto->BagFamily & BAG_FAMILY_MASK_BULLETS))
-                        return false;
-                    return true;
-                default:
-                    return false;
-            }
+    case ITEM_CLASS_CONTAINER:
+        switch (pBagProto->SubClass)
+        {
+        case ITEM_SUBCLASS_CONTAINER:
+            return true;
+        case ITEM_SUBCLASS_SOUL_CONTAINER:
+            if (!(pProto->BagFamily & BAG_FAMILY_MASK_SOUL_SHARDS))
+                return false;
+            return true;
+        case ITEM_SUBCLASS_HERB_CONTAINER:
+            if (!(pProto->BagFamily & BAG_FAMILY_MASK_HERBS))
+                return false;
+            return true;
+        case ITEM_SUBCLASS_ENCHANTING_CONTAINER:
+            if (!(pProto->BagFamily & BAG_FAMILY_MASK_ENCHANTING_SUPP))
+                return false;
+            return true;
+        case ITEM_SUBCLASS_MINING_CONTAINER:
+            if (!(pProto->BagFamily & BAG_FAMILY_MASK_MINING_SUPP))
+                return false;
+            return true;
+        case ITEM_SUBCLASS_ENGINEERING_CONTAINER:
+            if (!(pProto->BagFamily & BAG_FAMILY_MASK_ENGINEERING_SUPP))
+                return false;
+            return true;
+        case ITEM_SUBCLASS_GEM_CONTAINER:
+            if (!(pProto->BagFamily & BAG_FAMILY_MASK_GEMS))
+                return false;
+            return true;
+        case ITEM_SUBCLASS_LEATHERWORKING_CONTAINER:
+            if (!(pProto->BagFamily & BAG_FAMILY_MASK_LEATHERWORKING_SUPP))
+                return false;
+            return true;
+        case ITEM_SUBCLASS_INSCRIPTION_CONTAINER:
+            if (!(pProto->BagFamily & BAG_FAMILY_MASK_INSCRIPTION_SUPP))
+                return false;
+            return true;
+        default:
+            return false;
+        }
+    case ITEM_CLASS_QUIVER:
+        switch (pBagProto->SubClass)
+        {
+        case ITEM_SUBCLASS_QUIVER:
+            if (!(pProto->BagFamily & BAG_FAMILY_MASK_ARROWS))
+                return false;
+            return true;
+        case ITEM_SUBCLASS_AMMO_POUCH:
+            if (!(pProto->BagFamily & BAG_FAMILY_MASK_BULLETS))
+                return false;
+            return true;
+        default:
+            return false;
+        }
     }
     return false;
 }
@@ -320,72 +320,72 @@ void Item::SaveToDB(SQLTransaction& trans)
     uint32 guid = GetGUIDLow();
     switch (uState)
     {
-        case ITEM_NEW:
-        case ITEM_CHANGED:
+    case ITEM_NEW:
+    case ITEM_CHANGED:
+    {
+        uint8 index = 0;
+        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(uState == ITEM_NEW ? CHAR_REP_ITEM_INSTANCE : CHAR_UPD_ITEM_INSTANCE);
+        stmt->setUInt32(  index, GetEntry());
+        stmt->setUInt32(++index, GUID_LOPART(GetOwnerGUID()));
+        stmt->setUInt32(++index, GUID_LOPART(GetUInt64Value(ITEM_FIELD_CREATOR)));
+        stmt->setUInt32(++index, GUID_LOPART(GetUInt64Value(ITEM_FIELD_GIFTCREATOR)));
+        stmt->setUInt32(++index, GetCount());
+        stmt->setUInt32(++index, GetUInt32Value(ITEM_FIELD_DURATION));
+
+        std::ostringstream ssSpells;
+        for (uint8 i = 0; i < MAX_ITEM_PROTO_SPELLS; ++i)
+            ssSpells << GetSpellCharges(i) << ' ';
+        stmt->setString(++index, ssSpells.str());
+
+        stmt->setUInt32(++index, GetUInt32Value(ITEM_FIELD_FLAGS));
+
+        std::ostringstream ssEnchants;
+        for (uint8 i = 0; i < MAX_ENCHANTMENT_SLOT; ++i)
         {
-            uint8 index = 0;
-            PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(uState == ITEM_NEW ? CHAR_REP_ITEM_INSTANCE : CHAR_UPD_ITEM_INSTANCE);
-            stmt->setUInt32(  index, GetEntry());
-            stmt->setUInt32(++index, GUID_LOPART(GetOwnerGUID()));
-            stmt->setUInt32(++index, GUID_LOPART(GetUInt64Value(ITEM_FIELD_CREATOR)));
-            stmt->setUInt32(++index, GUID_LOPART(GetUInt64Value(ITEM_FIELD_GIFTCREATOR)));
-            stmt->setUInt32(++index, GetCount());
-            stmt->setUInt32(++index, GetUInt32Value(ITEM_FIELD_DURATION));
-
-            std::ostringstream ssSpells;
-            for (uint8 i = 0; i < MAX_ITEM_PROTO_SPELLS; ++i)
-                ssSpells << GetSpellCharges(i) << ' ';
-            stmt->setString(++index, ssSpells.str());
-
-            stmt->setUInt32(++index, GetUInt32Value(ITEM_FIELD_FLAGS));
-
-            std::ostringstream ssEnchants;
-            for (uint8 i = 0; i < MAX_ENCHANTMENT_SLOT; ++i)
-            {
-                ssEnchants << GetEnchantmentId(EnchantmentSlot(i)) << ' ';
-                ssEnchants << GetEnchantmentDuration(EnchantmentSlot(i)) << ' ';
-                ssEnchants << GetEnchantmentCharges(EnchantmentSlot(i)) << ' ';
-            }
-            stmt->setString(++index, ssEnchants.str());
-
-            stmt->setInt16 (++index, GetItemRandomPropertyId());
-            stmt->setUInt16(++index, GetUInt32Value(ITEM_FIELD_DURABILITY));
-            stmt->setUInt32(++index, GetUInt32Value(ITEM_FIELD_CREATE_PLAYED_TIME));
-            stmt->setString(++index, m_text);
-            stmt->setUInt32(++index, guid);
-
-            trans->Append(stmt);
-
-            if ((uState == ITEM_CHANGED) && HasFlag(ITEM_FIELD_FLAGS, ITEM_FIELD_FLAG_WRAPPED))
-            {
-                stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_GIFT_OWNER);
-                stmt->setUInt32(0, GUID_LOPART(GetOwnerGUID()));
-                stmt->setUInt32(1, guid);
-                trans->Append(stmt);
-            }
-            break;
+            ssEnchants << GetEnchantmentId(EnchantmentSlot(i)) << ' ';
+            ssEnchants << GetEnchantmentDuration(EnchantmentSlot(i)) << ' ';
+            ssEnchants << GetEnchantmentCharges(EnchantmentSlot(i)) << ' ';
         }
-        case ITEM_REMOVED:
+        stmt->setString(++index, ssEnchants.str());
+
+        stmt->setInt16 (++index, GetItemRandomPropertyId());
+        stmt->setUInt16(++index, GetUInt32Value(ITEM_FIELD_DURABILITY));
+        stmt->setUInt32(++index, GetUInt32Value(ITEM_FIELD_CREATE_PLAYED_TIME));
+        stmt->setString(++index, m_text);
+        stmt->setUInt32(++index, guid);
+
+        trans->Append(stmt);
+
+        if ((uState == ITEM_CHANGED) && HasFlag(ITEM_FIELD_FLAGS, ITEM_FIELD_FLAG_WRAPPED))
         {
-            PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_ITEM_INSTANCE);
+            stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_GIFT_OWNER);
+            stmt->setUInt32(0, GUID_LOPART(GetOwnerGUID()));
+            stmt->setUInt32(1, guid);
+            trans->Append(stmt);
+        }
+        break;
+    }
+    case ITEM_REMOVED:
+    {
+        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_ITEM_INSTANCE);
+        stmt->setUInt32(0, guid);
+        trans->Append(stmt);
+
+        if (HasFlag(ITEM_FIELD_FLAGS, ITEM_FIELD_FLAG_WRAPPED))
+        {
+            stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_GIFT);
             stmt->setUInt32(0, guid);
             trans->Append(stmt);
-
-            if (HasFlag(ITEM_FIELD_FLAGS, ITEM_FIELD_FLAG_WRAPPED))
-            {
-                stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_GIFT);
-                stmt->setUInt32(0, guid);
-                trans->Append(stmt);
-            }
-
-            if (!isInTransaction)
-                CharacterDatabase.CommitTransaction(trans);
-
-            delete this;
-            return;
         }
-        case ITEM_UNCHANGED:
-            break;
+
+        if (!isInTransaction)
+            CharacterDatabase.CommitTransaction(trans);
+
+        delete this;
+        return;
+    }
+    case ITEM_UNCHANGED:
+        break;
     }
 
     SetState(ITEM_UNCHANGED);
@@ -526,36 +526,58 @@ uint32 Item::GetSpell()
 
     switch (proto->Class)
     {
-        case ITEM_CLASS_WEAPON:
-            switch (proto->SubClass)
-            {
-                case ITEM_SUBCLASS_WEAPON_AXE:     return  196;
-                case ITEM_SUBCLASS_WEAPON_AXE2:    return  197;
-                case ITEM_SUBCLASS_WEAPON_BOW:     return  264;
-                case ITEM_SUBCLASS_WEAPON_GUN:     return  266;
-                case ITEM_SUBCLASS_WEAPON_MACE:    return  198;
-                case ITEM_SUBCLASS_WEAPON_MACE2:   return  199;
-                case ITEM_SUBCLASS_WEAPON_POLEARM: return  200;
-                case ITEM_SUBCLASS_WEAPON_SWORD:   return  201;
-                case ITEM_SUBCLASS_WEAPON_SWORD2:  return  202;
-                case ITEM_SUBCLASS_WEAPON_STAFF:   return  227;
-                case ITEM_SUBCLASS_WEAPON_DAGGER:  return 1180;
-                case ITEM_SUBCLASS_WEAPON_THROWN:  return 2567;
-                case ITEM_SUBCLASS_WEAPON_SPEAR:   return 3386;
-                case ITEM_SUBCLASS_WEAPON_CROSSBOW:return 5011;
-                case ITEM_SUBCLASS_WEAPON_WAND:    return 5009;
-                default: return 0;
-            }
-        case ITEM_CLASS_ARMOR:
-            switch (proto->SubClass)
-            {
-                case ITEM_SUBCLASS_ARMOR_CLOTH:    return 9078;
-                case ITEM_SUBCLASS_ARMOR_LEATHER:  return 9077;
-                case ITEM_SUBCLASS_ARMOR_MAIL:     return 8737;
-                case ITEM_SUBCLASS_ARMOR_PLATE:    return  750;
-                case ITEM_SUBCLASS_ARMOR_SHIELD:   return 9116;
-                default: return 0;
-            }
+    case ITEM_CLASS_WEAPON:
+        switch (proto->SubClass)
+        {
+        case ITEM_SUBCLASS_WEAPON_AXE:
+            return  196;
+        case ITEM_SUBCLASS_WEAPON_AXE2:
+            return  197;
+        case ITEM_SUBCLASS_WEAPON_BOW:
+            return  264;
+        case ITEM_SUBCLASS_WEAPON_GUN:
+            return  266;
+        case ITEM_SUBCLASS_WEAPON_MACE:
+            return  198;
+        case ITEM_SUBCLASS_WEAPON_MACE2:
+            return  199;
+        case ITEM_SUBCLASS_WEAPON_POLEARM:
+            return  200;
+        case ITEM_SUBCLASS_WEAPON_SWORD:
+            return  201;
+        case ITEM_SUBCLASS_WEAPON_SWORD2:
+            return  202;
+        case ITEM_SUBCLASS_WEAPON_STAFF:
+            return  227;
+        case ITEM_SUBCLASS_WEAPON_DAGGER:
+            return 1180;
+        case ITEM_SUBCLASS_WEAPON_THROWN:
+            return 2567;
+        case ITEM_SUBCLASS_WEAPON_SPEAR:
+            return 3386;
+        case ITEM_SUBCLASS_WEAPON_CROSSBOW:
+            return 5011;
+        case ITEM_SUBCLASS_WEAPON_WAND:
+            return 5009;
+        default:
+            return 0;
+        }
+    case ITEM_CLASS_ARMOR:
+        switch (proto->SubClass)
+        {
+        case ITEM_SUBCLASS_ARMOR_CLOTH:
+            return 9078;
+        case ITEM_SUBCLASS_ARMOR_LEATHER:
+            return 9077;
+        case ITEM_SUBCLASS_ARMOR_MAIL:
+            return 8737;
+        case ITEM_SUBCLASS_ARMOR_PLATE:
+            return  750;
+        case ITEM_SUBCLASS_ARMOR_SHIELD:
+            return 9116;
+        default:
+            return 0;
+        }
     }
     return 0;
 }
@@ -631,7 +653,7 @@ void Item::SetItemRandomProperties(int32 randomPropId)
         if (item_rand)
         {
             if (GetInt32Value(ITEM_FIELD_RANDOM_PROPERTIES_ID) != -int32(item_rand->ID) ||
-                !GetItemSuffixFactor())
+                    !GetItemSuffixFactor())
             {
                 SetInt32Value(ITEM_FIELD_RANDOM_PROPERTIES_ID, -int32(item_rand->ID));
                 UpdateItemSuffixFactor();
@@ -776,7 +798,7 @@ bool Item::HasEnchantRequiredSkill(const Player* player) const
                 if (enchantEntry->requiredSkill && player->GetSkillValue(enchantEntry->requiredSkill) < enchantEntry->requiredSkillValue)
                     return false;
 
-  return true;
+    return true;
 }
 
 uint32 Item::GetEnchantRequiredLevel() const
@@ -838,7 +860,7 @@ bool Item::IsFitToSpellRequirements(SpellInfo const* spellInfo) const
     {
         // Special case - accept vellum for armor/weapon requirements
         if ((spellInfo->EquippedItemClass == ITEM_CLASS_ARMOR && proto->IsArmorVellum())
-            ||(spellInfo->EquippedItemClass == ITEM_CLASS_WEAPON && proto->IsWeaponVellum()))
+                ||(spellInfo->EquippedItemClass == ITEM_CLASS_WEAPON && proto->IsWeaponVellum()))
             if (spellInfo->IsAbilityOfSkillType(SKILL_ENCHANTING)) // only for enchanting spells
                 return true;
 
@@ -856,8 +878,8 @@ bool Item::IsFitToSpellRequirements(SpellInfo const* spellInfo) const
     {
         // Special case - accept weapon type for main and offhand requirements
         if (proto->InventoryType == INVTYPE_WEAPON &&
-            (spellInfo->EquippedItemInventoryTypeMask & (1 << INVTYPE_WEAPONMAINHAND) ||
-             spellInfo->EquippedItemInventoryTypeMask & (1 << INVTYPE_WEAPONOFFHAND)))
+                (spellInfo->EquippedItemInventoryTypeMask & (1 << INVTYPE_WEAPONMAINHAND) ||
+                 spellInfo->EquippedItemInventoryTypeMask & (1 << INVTYPE_WEAPONOFFHAND)))
             return true;
         else if ((spellInfo->EquippedItemInventoryTypeMask & (1 << proto->InventoryType)) == 0)
             return false;                                   // inventory type not present in mask
@@ -1045,9 +1067,8 @@ Item* Item::CreateItem(uint32 item, uint32 count, Player const* player, bool clo
             pItem->SetCount(count);
             if (!clone)
                 pItem->SetItemRandomProperties(randomPropertyId ? randomPropertyId : Item::GenerateItemRandomPropertyId(item));
-            else
-                if (randomPropertyId)
-                    pItem->SetItemRandomProperties(randomPropertyId);
+            else if (randomPropertyId)
+                pItem->SetItemRandomProperties(randomPropertyId);
             return pItem;
         }
         else

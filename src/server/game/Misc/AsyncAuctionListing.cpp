@@ -65,9 +65,9 @@ bool AuctionListItemsDelayEvent::Execute()
     wstrToLower(wsearchedname);
 
     bool result = auctionHouse->BuildListAuctionItems(data, plr,
-        wsearchedname, _listfrom, _levelmin, _levelmax, _usable,
-        _auctionSlotID, _auctionMainCategory, _auctionSubCategory, _quality,
-        count, totalcount, _getAll);
+                  wsearchedname, _listfrom, _levelmin, _levelmax, _usable,
+                  _auctionSlotID, _auctionMainCategory, _auctionSubCategory, _quality,
+                  count, totalcount, _getAll);
 
     if (!result)
         return false;

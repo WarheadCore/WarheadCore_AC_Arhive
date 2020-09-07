@@ -62,16 +62,23 @@ WorldObject* ObjectAccessor::GetWorldObject(WorldObject const& p, uint64 guid)
 {
     switch (GUID_HIPART(guid))
     {
-        case HIGHGUID_PLAYER:        return GetPlayer(p, guid);
-        case HIGHGUID_TRANSPORT:
-        case HIGHGUID_MO_TRANSPORT:
-        case HIGHGUID_GAMEOBJECT:    return GetGameObject(p, guid);
-        case HIGHGUID_VEHICLE:
-        case HIGHGUID_UNIT:          return GetCreature(p, guid);
-        case HIGHGUID_PET:           return GetPet(p, guid);
-        case HIGHGUID_DYNAMICOBJECT: return GetDynamicObject(p, guid);
-        case HIGHGUID_CORPSE:        return GetCorpse(p, guid);
-        default:                     return nullptr;
+    case HIGHGUID_PLAYER:
+        return GetPlayer(p, guid);
+    case HIGHGUID_TRANSPORT:
+    case HIGHGUID_MO_TRANSPORT:
+    case HIGHGUID_GAMEOBJECT:
+        return GetGameObject(p, guid);
+    case HIGHGUID_VEHICLE:
+    case HIGHGUID_UNIT:
+        return GetCreature(p, guid);
+    case HIGHGUID_PET:
+        return GetPet(p, guid);
+    case HIGHGUID_DYNAMICOBJECT:
+        return GetDynamicObject(p, guid);
+    case HIGHGUID_CORPSE:
+        return GetCorpse(p, guid);
+    default:
+        return nullptr;
     }
 }
 
@@ -79,35 +86,35 @@ Object* ObjectAccessor::GetObjectByTypeMask(WorldObject const& p, uint64 guid, u
 {
     switch (GUID_HIPART(guid))
     {
-        case HIGHGUID_ITEM:
-            if (typemask & TYPEMASK_ITEM && p.GetTypeId() == TYPEID_PLAYER)
-                return ((Player const&)p).GetItemByGuid(guid);
-            break;
-        case HIGHGUID_PLAYER:
-            if (typemask & TYPEMASK_PLAYER)
-                return GetPlayer(p, guid);
-            break;
-        case HIGHGUID_TRANSPORT:
-        case HIGHGUID_MO_TRANSPORT:
-        case HIGHGUID_GAMEOBJECT:
-            if (typemask & TYPEMASK_GAMEOBJECT)
-                return GetGameObject(p, guid);
-            break;
-        case HIGHGUID_UNIT:
-        case HIGHGUID_VEHICLE:
-            if (typemask & TYPEMASK_UNIT)
-                return GetCreature(p, guid);
-            break;
-        case HIGHGUID_PET:
-            if (typemask & TYPEMASK_UNIT)
-                return GetPet(p, guid);
-            break;
-        case HIGHGUID_DYNAMICOBJECT:
-            if (typemask & TYPEMASK_DYNAMICOBJECT)
-                return GetDynamicObject(p, guid);
-            break;
-        case HIGHGUID_CORPSE:
-            break;
+    case HIGHGUID_ITEM:
+        if (typemask & TYPEMASK_ITEM && p.GetTypeId() == TYPEID_PLAYER)
+            return ((Player const&)p).GetItemByGuid(guid);
+        break;
+    case HIGHGUID_PLAYER:
+        if (typemask & TYPEMASK_PLAYER)
+            return GetPlayer(p, guid);
+        break;
+    case HIGHGUID_TRANSPORT:
+    case HIGHGUID_MO_TRANSPORT:
+    case HIGHGUID_GAMEOBJECT:
+        if (typemask & TYPEMASK_GAMEOBJECT)
+            return GetGameObject(p, guid);
+        break;
+    case HIGHGUID_UNIT:
+    case HIGHGUID_VEHICLE:
+        if (typemask & TYPEMASK_UNIT)
+            return GetCreature(p, guid);
+        break;
+    case HIGHGUID_PET:
+        if (typemask & TYPEMASK_UNIT)
+            return GetPet(p, guid);
+        break;
+    case HIGHGUID_DYNAMICOBJECT:
+        if (typemask & TYPEMASK_DYNAMICOBJECT)
+            return GetDynamicObject(p, guid);
+        break;
+    case HIGHGUID_CORPSE:
+        break;
     }
 
     return nullptr;
@@ -342,8 +349,8 @@ Corpse* ObjectAccessor::ConvertCorpseForPlayer(uint64 player_guid, bool insignia
     // ignore bones creating option in case insignia
 
     if (map && corpse->IsPositionValid() && inWorld && (insignia ||
-        (map->IsBattlegroundOrArena() ? sGameConfig->GetBoolConfig("Death.Bones.BattlegroundOrArena") : sGameConfig->GetBoolConfig("Death.Bones.World"))) &&
-        !map->IsRemovalGrid(corpse->GetPositionX(), corpse->GetPositionY()))
+            (map->IsBattlegroundOrArena() ? sGameConfig->GetBoolConfig("Death.Bones.BattlegroundOrArena") : sGameConfig->GetBoolConfig("Death.Bones.World"))) &&
+            !map->IsRemovalGrid(corpse->GetPositionX(), corpse->GetPositionY()))
     {
         // Create bones, don't change Corpse
         bones = new Corpse;
@@ -449,17 +456,17 @@ void ObjectAccessor::ProcessDelayedCorpseActions()
         DelayedCorpseAction a = (*itr);
         switch (a._action)
         {
-            case 0: // remove corpse
-                RemoveCorpse(a._corpse, true);
-                break;
-            case 1: // add bones
-                if (Map* map = sMapMgr->FindMap(a._mapId, a._instanceId))
-                    if (!map->IsRemovalGrid(a._corpse->GetPositionX(), a._corpse->GetPositionY()))
-                    {
-                        a._corpse->SetMap(map);
-                        map->AddToMap(a._corpse);
-                    }
-                break;
+        case 0: // remove corpse
+            RemoveCorpse(a._corpse, true);
+            break;
+        case 1: // add bones
+            if (Map* map = sMapMgr->FindMap(a._mapId, a._instanceId))
+                if (!map->IsRemovalGrid(a._corpse->GetPositionX(), a._corpse->GetPositionY()))
+                {
+                    a._corpse->SetMap(map);
+                    map->AddToMap(a._corpse);
+                }
+            break;
         }
     }
     i_delayedCorpseActions.clear();

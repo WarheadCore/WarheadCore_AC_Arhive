@@ -101,10 +101,10 @@ struct ClientPktHeader
 #endif
 
 WorldSocket::WorldSocket(void): WorldHandler(),
-m_LastPingTime(std::chrono::system_clock::time_point::min()), m_OverSpeedPings(0), m_Session(0),
-m_RecvWPct(0), m_RecvPct(), m_Header(sizeof (ClientPktHeader)),
-m_OutBuffer(0), m_OutBufferSize(65536), m_OutActive(false),
-m_Seed(static_cast<uint32> (rand32()))
+    m_LastPingTime(std::chrono::system_clock::time_point::min()), m_OverSpeedPings(0), m_Session(0),
+    m_RecvWPct(0), m_RecvPct(), m_Header(sizeof (ClientPktHeader)),
+    m_OutBuffer(0), m_OutBufferSize(65536), m_OutActive(false),
+    m_Seed(static_cast<uint32> (rand32()))
 {
     reference_counting_policy().value (ACE_Event_Handler::Reference_Counting_Policy::ENABLED);
 
@@ -145,7 +145,7 @@ void WorldSocket::CloseSocket(std::string const& reason)
     }
 
     {
-       std::lock_guard<std::mutex> guard(m_SessionLock);
+        std::lock_guard<std::mutex> guard(m_SessionLock);
 
         m_Session = nullptr;
     }
@@ -290,34 +290,34 @@ int WorldSocket::handle_input(ACE_HANDLE)
 
     switch (handle_input_missing_data())
     {
-        case -1 :
-        {
-            if ((errno == EWOULDBLOCK) ||
+    case -1 :
+    {
+        if ((errno == EWOULDBLOCK) ||
                 (errno == EAGAIN))
-            {
-                return Update();                           // interesting line, isn't it ?
-            }
-
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-            LOG_DEBUG("server", "WorldSocket::handle_input: Peer error closing connection errno = %s", ACE_OS::strerror (errno));
-#endif
-
-            errno = ECONNRESET;
-            return -1;
-        }
-        case 0:
         {
+            return Update();                           // interesting line, isn't it ?
+        }
+
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-            LOG_DEBUG("server", "WorldSocket::handle_input: Peer has closed connection");
+        LOG_DEBUG("server", "WorldSocket::handle_input: Peer error closing connection errno = %s", ACE_OS::strerror (errno));
 #endif
 
-            errno = ECONNRESET;
-            return -1;
-        }
-        case 1:
-            return 1;
-        default:
-            return Update();                               // another interesting line ;)
+        errno = ECONNRESET;
+        return -1;
+    }
+    case 0:
+    {
+#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
+        LOG_DEBUG("server", "WorldSocket::handle_input: Peer has closed connection");
+#endif
+
+        errno = ECONNRESET;
+        return -1;
+    }
+    case 1:
+        return 1;
+    default:
+        return Update();                               // another interesting line ;)
     }
 
     ACE_NOTREACHED(return -1);
@@ -542,12 +542,12 @@ int WorldSocket::handle_input_missing_data(void)
     char buf [4096];
 
     ACE_Data_Block db (sizeof (buf),
-                        ACE_Message_Block::MB_DATA,
-                        buf,
-                        0,
-                        0,
-                        ACE_Message_Block::DONT_DELETE,
-                        0);
+                       ACE_Message_Block::MB_DATA,
+                       buf,
+                       0,
+                       0,
+                       ACE_Message_Block::DONT_DELETE,
+                       0);
 
     ACE_Message_Block message_block(&db,
                                     ACE_Message_Block::DONT_DELETE,
@@ -556,7 +556,7 @@ int WorldSocket::handle_input_missing_data(void)
     const size_t recv_size = message_block.space();
 
     const ssize_t n = peer().recv (message_block.wr_ptr(),
-                                          recv_size);
+                                   recv_size);
 
     if (n <= 0)
         return int(n);
@@ -636,7 +636,7 @@ int WorldSocket::cancel_wakeup_output(GuardType& g)
     //g.unlock();
 
     if (reactor()->cancel_wakeup
-        (this, ACE_Event_Handler::WRITE_MASK) == -1)
+            (this, ACE_Event_Handler::WRITE_MASK) == -1)
     {
         // would be good to store errno from reactor with errno guard
         LOG_ERROR("server", "WorldSocket::cancel_wakeup_output");
@@ -656,7 +656,7 @@ int WorldSocket::schedule_wakeup_output(GuardType& g)
     //g.release();
 
     if (reactor()->schedule_wakeup
-        (this, ACE_Event_Handler::WRITE_MASK) == -1)
+            (this, ACE_Event_Handler::WRITE_MASK) == -1)
     {
         LOG_ERROR("server", "WorldSocket::schedule_wakeup_output");
         return -1;
@@ -685,48 +685,48 @@ int WorldSocket::ProcessIncoming(WorldPacket* new_pct)
     {
         switch (opcode)
         {
-            case CMSG_PING:
+        case CMSG_PING:
+        {
+            try
             {
-                try
-                {
-                    return HandlePing(*new_pct);
-                }
-                catch (ByteBufferPositionException const&) {}
-                LOG_ERROR("server", "WorldSocket::ReadDataHandler(): client sent malformed CMSG_PING");
+                return HandlePing(*new_pct);
+            }
+            catch (ByteBufferPositionException const&) {}
+            LOG_ERROR("server", "WorldSocket::ReadDataHandler(): client sent malformed CMSG_PING");
+            return -1;
+        }
+        case CMSG_AUTH_SESSION:
+            if (m_Session)
+            {
+                LOG_ERROR("server", "WorldSocket::ProcessIncoming: Player send CMSG_AUTH_SESSION again");
                 return -1;
             }
-            case CMSG_AUTH_SESSION:
-                if (m_Session)
-                {
-                    LOG_ERROR("server", "WorldSocket::ProcessIncoming: Player send CMSG_AUTH_SESSION again");
-                    return -1;
-                }
-                return HandleAuthSession (*new_pct);
-            case CMSG_KEEP_ALIVE:           
-                if (m_Session)
-                    m_Session->ResetTimeOutTime(true);
-                return 0;
-            default:
+            return HandleAuthSession (*new_pct);
+        case CMSG_KEEP_ALIVE:
+            if (m_Session)
+                m_Session->ResetTimeOutTime(true);
+            return 0;
+        default:
+        {
+            ACORE_GUARD_RETURN(m_SessionLock, -1);
+
+            if (m_Session != nullptr)
             {
-                ACORE_GUARD_RETURN(m_SessionLock, -1);
+                // Our Idle timer will reset on any non PING opcodes.
+                // Catches people idling on the login screen and any lingering ingame connections.
+                m_Session->ResetTimeOutTime(false);
 
-                if (m_Session != nullptr)
-                {
-                    // Our Idle timer will reset on any non PING opcodes.
-                    // Catches people idling on the login screen and any lingering ingame connections.
-                    m_Session->ResetTimeOutTime(false);
-
-                    // OK, give the packet to WorldSession
-                    aptr.release();
-                    m_Session->QueuePacket (new_pct);
-                    return 0;
-                }
-                else
-                {
-                    LOG_ERROR("server", "WorldSocket::ProcessIncoming: Client not authed opcode = %u", uint32(opcode));
-                    return -1;
-                }
+                // OK, give the packet to WorldSession
+                aptr.release();
+                m_Session->QueuePacket (new_pct);
+                return 0;
             }
+            else
+            {
+                LOG_ERROR("server", "WorldSocket::ProcessIncoming: Client not authed opcode = %u", uint32(opcode));
+                return -1;
+            }
+        }
         }
     }
     catch (ByteBufferException const&)
@@ -954,8 +954,8 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("server", "WorldSocket::HandleAuthSession: Client '%s' authenticated successfully from %s.",
-                account.c_str(),
-                address.c_str());
+              account.c_str(),
+              address.c_str());
 #endif
     // Check if this user is by any chance a recruiter
     stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_RECRUITER);
@@ -1000,7 +1000,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
         SendPacket(packet);
 
         LOG_ERROR("server", "WorldSocket::HandleAuthSession: Client %s requested connecting with realm id %u but this realm has id %u set in config.",
-            address.c_str(), realm, realmID);
+                  address.c_str(), realm, realmID);
         sScriptMgr->OnFailedAccountLogin(id);
         return -1;
     }
@@ -1056,10 +1056,10 @@ int WorldSocket::HandlePing(WorldPacket& recvPacket)
                 {
                     Player* _player = m_Session->GetPlayer();
                     LOG_ERROR("server", "WorldSocket::HandlePing: Player (account: %u, GUID: %u, name: %s) kicked for over-speed pings (address: %s)",
-                        m_Session->GetAccountId(),
-                        _player ? _player->GetGUIDLow() : 0,
-                        _player ? _player->GetName().c_str() : "<none>",
-                        GetRemoteAddress().c_str());
+                              m_Session->GetAccountId(),
+                              _player ? _player->GetGUIDLow() : 0,
+                              _player ? _player->GetName().c_str() : "<none>",
+                              GetRemoteAddress().c_str());
 
                     return -1;
                 }
@@ -1081,10 +1081,10 @@ int WorldSocket::HandlePing(WorldPacket& recvPacket)
         else
         {
             LOG_ERROR("server", "WorldSocket::HandlePing: peer sent CMSG_PING, "
-                            "but is not authenticated or got recently kicked, "
-                            " address = %s",
-                            GetRemoteAddress().c_str());
-             return -1;
+                      "but is not authenticated or got recently kicked, "
+                      " address = %s",
+                      GetRemoteAddress().c_str());
+            return -1;
         }
     }
 

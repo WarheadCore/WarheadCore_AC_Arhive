@@ -163,8 +163,12 @@ public:
     typedef std::map<std::string, PATCH_INFO*> Patches;
     ~Patcher();
     Patcher();
-    Patches::const_iterator begin() const { return _patches.begin(); }
-    Patches::const_iterator end() const { return _patches.end(); }
+    Patches::const_iterator begin() const {
+        return _patches.begin();
+    }
+    Patches::const_iterator end() const {
+        return _patches.end();
+    }
     void LoadPatchMD5(char*);
     bool GetHash(char * pat, uint8 mymd5[16]);
 
@@ -218,10 +222,10 @@ void AuthSocket::OnClose(void)
 // Read the packet from the client
 void AuthSocket::OnRead()
 {
-    #define MAX_AUTH_LOGON_CHALLENGES_IN_A_ROW 3
+#define MAX_AUTH_LOGON_CHALLENGES_IN_A_ROW 3
     uint32 challengesInARow = 0;
 
-    #define MAX_AUTH_GET_REALM_LIST 10
+#define MAX_AUTH_GET_REALM_LIST 10
     uint32 challengesInARowRealmList = 0;
 
     uint8 _cmd;
@@ -241,13 +245,13 @@ void AuthSocket::OnRead()
             }
         }
         else if (_cmd == REALM_LIST) {
-          challengesInARowRealmList++;
-          if (challengesInARowRealmList == MAX_AUTH_GET_REALM_LIST)
-          {
-              LOG_INFO("server", "Got %u REALM_LIST in a row from '%s', possible ongoing DoS", challengesInARowRealmList, socket().getRemoteAddress().c_str());
-              socket().shutdown();
-              return;
-          }
+            challengesInARowRealmList++;
+            if (challengesInARowRealmList == MAX_AUTH_GET_REALM_LIST)
+            {
+                LOG_INFO("server", "Got %u REALM_LIST in a row from '%s', possible ongoing DoS", challengesInARowRealmList, socket().getRemoteAddress().c_str());
+                socket().shutdown();
+                return;
+            }
         }
 
         size_t i;
@@ -559,12 +563,12 @@ bool AuthSocket::_HandleLogonChallenge()
                     pkt.append(s.AsByteArray().get(), s.GetNumBytes());   // 32 bytes
                     pkt.append(unk3.AsByteArray(16).get(), 16);
                     uint8 securityFlags = 0;
-					
-					// Check if token is used
+
+                    // Check if token is used
                     _tokenKey = fields[8].GetString();
                     if (!_tokenKey.empty())
                         securityFlags = 4;
-					
+
                     pkt << uint8(securityFlags);            // security flags (0x0...0x04)
 
                     if (securityFlags & 0x01)               // PIN input
@@ -594,7 +598,7 @@ bool AuthSocket::_HandleLogonChallenge()
 
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                                        sLog->outDebug( LOG_FILTER_NETWORKIO, "'%s:%d' [AuthChallenge] account %s is using '%c%c%c%c' locale (%u)", socket().getRemoteAddress().c_str(), socket().getRemotePort(), _login.c_str (), ch->country[3], ch->country[2], ch->country[1], ch->country[0], GetLocaleByName(_localizationName) );
+                    sLog->outDebug( LOG_FILTER_NETWORKIO, "'%s:%d' [AuthChallenge] account %s is using '%c%c%c%c' locale (%u)", socket().getRemoteAddress().c_str(), socket().getRemotePort(), _login.c_str (), ch->country[3], ch->country[2], ch->country[1], ch->country[0], GetLocaleByName(_localizationName) );
 #endif
 
                     ///- All good, await client's proof
@@ -737,7 +741,7 @@ bool AuthSocket::_HandleLogonProof()
         sha.UpdateBigNumbers(&A, &M, &K, nullptr);
         sha.Finalize();
 
-		// Check auth token
+        // Check auth token
         if ((lp.securityFlags & 0x04) || !_tokenKey.empty())
         {
             uint8 size;
@@ -755,7 +759,7 @@ bool AuthSocket::_HandleLogonProof()
                 return false;
             }
         }
-		
+
         if (_expversion & POST_BC_EXP_FLAG)                 // 2.x and 3.x clients
         {
             sAuthLogonProof_S proof;
@@ -842,7 +846,7 @@ bool AuthSocket::_HandleLogonProof()
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
                         LOG_DEBUG("network", "'%s:%d' [AuthChallenge] IP %s got banned for '%u' seconds because account %s failed to authenticate '%u' times",
-                            socket().getRemoteAddress().c_str(), socket().getRemotePort(), socket().getRemoteAddress().c_str(), WrongPassBanTime, _login.c_str(), failed_logins);
+                                  socket().getRemoteAddress().c_str(), socket().getRemotePort(), socket().getRemoteAddress().c_str(), WrongPassBanTime, _login.c_str(), failed_logins);
 #endif
                     }
                 }

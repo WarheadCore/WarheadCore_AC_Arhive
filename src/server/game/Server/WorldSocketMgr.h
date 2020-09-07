@@ -38,7 +38,7 @@ public:
     friend class WorldSocket;
 
     static WorldSocketMgr* instance();
-    
+
     /// Start network, listen at address:port .
     int StartNetwork(uint16 port, const char* address);
 

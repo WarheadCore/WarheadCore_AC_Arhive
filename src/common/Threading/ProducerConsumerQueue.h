@@ -103,7 +103,9 @@ public:
 
 private:
     template<typename E = T>
-    typename std::enable_if<std::is_pointer<E>::value>::type DeleteQueuedObject(E& obj) { delete obj; }
+    typename std::enable_if<std::is_pointer<E>::value>::type DeleteQueuedObject(E& obj) {
+        delete obj;
+    }
 
     template<typename E = T>
     typename std::enable_if<!std::is_pointer<E>::value>::type DeleteQueuedObject(E const& /*packet*/) { }
