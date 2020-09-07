@@ -3301,14 +3301,14 @@ Updates.CleanDeadRefMaxCount = 3
 #    Log.Channel.name
 #        Description: Defines 'where to log'
 #        Format:      Type,Times,Pattern,Optional1,Optional2,Optional3,Optional4,Optional5
-#                       
+#
 #                     Type
 #                       1 - (Console)
 #                       2 - (File)
-#                              
+#
 #                    Times (all types)
 #                       utc: Rotation strategy is based on UTC time (default).
-#                       local: Rotation strategy is based on local time.   
+#                       local: Rotation strategy is based on local time.
 #
 #                    Pattern (all type)
 #                       %s - message source
@@ -3351,7 +3351,7 @@ Updates.CleanDeadRefMaxCount = 3
 #                       %v[width] - the message source (%s) but text length is padded/cropped to 'width'
 #                       %[name] - the value of the message parameter with the given name
 #                       %% - percent sign
-#                           Example for file "%Y-%m-%d %H:%M:%S %t" 
+#                           Example for file "%Y-%m-%d %H:%M:%S %t"
 #                           Example for console "%H:%M:%S %t"
 #
 #                    Optional1 - Colors (is type Console)
@@ -3412,11 +3412,11 @@ Updates.CleanDeadRefMaxCount = 3
 #                           Example: "30 days", "none"
 #
 #                     Optional6 - Archive (is type File)
-#                       number: A number, starting with 0, is appended to the name of archived log files. 
-#                               The newest archived log file always has the number 0. 
-#                               For example, if the log file is named "access.log", and it fulfils the criteria for rotation, the file is renamed to "access.log.0". 
+#                       number: A number, starting with 0, is appended to the name of archived log files.
+#                               The newest archived log file always has the number 0.
+#                               For example, if the log file is named "access.log", and it fulfils the criteria for rotation, the file is renamed to "access.log.0".
 #                               If a file named "access.log.0" already exists, it is renamed to "access.log.1", and so on. This is the default.
-#                       timestamp: A timestamp is appended to the log file name. 
+#                       timestamp: A timestamp is appended to the log file name.
 #                                  For example, if the log file is named "access.log", and it fulfils the criteria for rotation, the file is renamed to "access.log.20050802110300".
 #
 
