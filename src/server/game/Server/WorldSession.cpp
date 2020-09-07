@@ -361,7 +361,7 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
             catch (ByteBufferException const&)
             {
                 LOG_ERROR("server", "WorldSession::Update ByteBufferException occured while parsing a packet (opcode: %u) from client %s, accountid=%i. Skipped packet.", packet->GetOpcode(), GetRemoteAddress().c_str(), GetAccountId());
-                if (sLog->ShouldLog("network", LOG_LEVEL_DEBUG))
+                if (sLog->ShouldLog("network", LogLevel::LOG_LEVEL_DEBUG))
                 {
                     LOG_DEBUG("network", "Dumping error causing packet:");
                     packet->hexlike();

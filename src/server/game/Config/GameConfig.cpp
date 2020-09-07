@@ -332,9 +332,6 @@ void GameConfig::LoadBoolConfigs(bool reload /*= false*/)
     // Preload all grids of all non-instanced maps
     AddBoolConfig("PreloadAllNonInstancedMapGrids");
 
-    // DB logging
-    AddBoolConfig("EnableLogDB");
-
     AddBoolConfig("SetAllCreaturesWithWaypointMovementActive");
 
     // Debug
@@ -406,7 +403,7 @@ void GameConfig::LoadIntConfigs(bool reload /*= false*/)
 
     AddIntConfig("SocketTimeOutTime", 900000);
     AddIntConfig("SocketTimeOutTimeActive", 60000);
-    
+
     AddIntConfig("SessionAddDelay", 10000);
 
     AddIntConfig("StrictPlayerNames");
@@ -522,7 +519,7 @@ void GameConfig::LoadIntConfigs(bool reload /*= false*/)
     AddIntConfig("Guild.EventLogRecordsCount", GUILD_EVENTLOG_MAX_RECORDS);
     AddIntConfig("Guild.BankEventLogRecordsCount", GUILD_BANKLOG_MAX_RECORDS);
 
-    AddIntConfig("InstantLogout", SEC_MODERATOR);    
+    AddIntConfig("InstantLogout", SEC_MODERATOR);
 
     ///- Load the CharDelete related config options
     AddIntConfig("CharDelete.Method");

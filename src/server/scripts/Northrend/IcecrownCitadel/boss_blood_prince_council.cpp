@@ -1318,17 +1318,15 @@ class npc_ball_of_flame : public CreatureScript
             void DoAction(int32 action)
             {
                 if (action != ACTION_FLAME_BALL_CHASE || me->IsInCombat())
-                {
                     return;
+                    
                 Player* target = nullptr;
                 if (_chaseGUID)
-                {
                     target = ObjectAccessor::GetPlayer(*me, _chaseGUID);
-                }
+
                 if (!target)
-                {
                     target = ScriptedAI::SelectTargetFromPlayerList(150.0f, 0, true);
-                }
+
                 if (target)
                 {
                     // need to clear states now because this call is before AuraEffect is fully removed
@@ -1345,6 +1343,7 @@ class npc_ball_of_flame : public CreatureScript
                     me->SetInCombatWithZone();
                     return;
                 }
+
                 me->DespawnOrUnsummon(1);
             }
 

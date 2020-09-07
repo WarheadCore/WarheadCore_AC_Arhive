@@ -18,6 +18,7 @@
 #include "Config.h"
 #include "Errors.h"
 #include "Log.h"
+#include "SystemLog.h"
 #include "Util.h"
 #include "StringFormat.h"
 
@@ -103,7 +104,11 @@ std::string ConfigMgr::GetStringDefault(std::string const& name, const std::stri
     ACE_TString val;
 
     if (GetValueHelper(name.c_str(), val))
-        return val.c_str();
+    {
+        std::string value = val.c_str();
+        value.erase(std::remove(value.begin(), value.end(), '"'), value.end());
+        return value;
+    }
     else
     {
         if (logUnused)

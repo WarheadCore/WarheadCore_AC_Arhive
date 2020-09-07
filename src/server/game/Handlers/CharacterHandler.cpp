@@ -748,7 +748,7 @@ void WorldSession::HandleCharDeleteOpcode(WorldPacket& recvData)
     sScriptMgr->OnPlayerDelete(guid, initAccountId); // To prevent race conditioning, but as it also makes sense, we hand the accountId over for successful delete.
     // Shouldn't interfere with character deletion though
 
-    if (sLog->ShouldLog("entities.player.dump", LOG_LEVEL_INFO))                                // optimize GetPlayerDump call
+    if (sLog->ShouldLog("entities.player.dump", LogLevel::LOG_LEVEL_INFO))                                // optimize GetPlayerDump call
     {
         std::string dump;
         if (PlayerDumpWriter().GetDump(GUID_LOPART(guid), dump))

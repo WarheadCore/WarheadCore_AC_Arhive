@@ -372,6 +372,31 @@ void SendPacketToPlayers(WorldPacket const* data, Unit* source)
                     player->GetSession()->SendPacket(data);
 }
 
+struct ShadowTrapLKTargetSelector : public warhead::unary_function<Unit*, bool>
+{
+public:
+    ShadowTrapLKTargetSelector(Creature* source, bool playerOnly = true, bool reqLOS = false, float maxDist = 0.0f) : _source(source), _playerOnly(playerOnly), _reqLOS(reqLOS), _maxDist(maxDist) { }
+    bool operator()(Unit const* target) const
+    {
+        if (!target)
+            return false;
+        if (!target->IsAlive())
+            return false;
+        if (_playerOnly && target->GetTypeId() != TYPEID_PLAYER)
+            return false;
+        if (_maxDist && _source->GetExactDist(target) > _maxDist)
+            return false;
+        if (_reqLOS && !_source->IsWithinLOSInMap(target))
+            return false;
+        return true;
+    }
+
+private:
+    Creature const* _source;
+    bool _playerOnly;
+    bool _reqLOS;
+    float _maxDist;
+};
 
 struct NonTankLKTargetSelector : public warhead::unary_function<Unit*, bool>
 {

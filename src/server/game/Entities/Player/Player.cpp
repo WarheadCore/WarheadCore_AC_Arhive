@@ -15408,7 +15408,7 @@ bool Player::CanSeeStartQuest(Quest const* quest)
         SatisfyQuestPrevChain(quest, false) && SatisfyQuestDay(quest, false) && SatisfyQuestWeek(quest, false) &&
         SatisfyQuestMonth(quest, false) && SatisfyQuestSeasonal(quest, false))
     {
-        return getLevel() + sGameConfig->GetIntConfig("Quests.HighLevelHideDiff") >= quest->GetMinLevel();
+        return getLevel() + (uint32)sGameConfig->GetIntConfig("Quests.HighLevelHideDiff") >= quest->GetMinLevel();
     }
 
     return false;
@@ -20389,7 +20389,7 @@ void Player::_SaveStats(SQLTransaction& trans)
 
 void Player::outDebugValues() const
 { 
-    if (!sLog->ShouldLog("entities.player", LOG_LEVEL_DEBUG))                                  // optimize disabled debug output
+    if (!sLog->ShouldLog("entities.player", LogLevel::LOG_LEVEL_DEBUG))                                  // optimize disabled debug output
         return;
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
