@@ -1519,13 +1519,6 @@ void World::SetInitialWorldSettings()
 
     WH_METRIC_EVENT("events", "World initialized", "World initialized in " + std::to_string(startupDuration / 60000) + " minutes " + std::to_string((startupDuration % 60000) / 1000) + " seconds");
 
-    // possibly enable db logging; avoid massive startup spam by doing it here.
-    if (sGameConfig->GetBoolConfig("EnableLogDB"))
-    {
-        LOG_INFO("server", "Enabling database logging...");
-        sLog->SetRealmID(realmID);
-    }
-
     if (sConfigMgr->isDryRun()) 
     {
         LOG_INFO("server", "WarheadCore dry run completed, terminating.");

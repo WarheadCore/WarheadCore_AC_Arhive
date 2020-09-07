@@ -71,14 +71,6 @@ BindIP = "0.0.0.0"
 PidFile = ""
 
 #
-#    EnableLogDB
-#        Description: Write log messages to database (LogDatabaseInfo).
-#        Default:     0 - (Disabled)
-#                     1 - (Enabled)
-
-EnableLogDB = 0
-
-#
 #    UseProcessors
 #        Description: Processors mask for Windows and Linux based multi-processor systems.
 #        Example:  For a computer with 3 CPUs:
@@ -260,15 +252,16 @@ Updates.CleanDeadRefMaxCount = 3
 ###################################################################################################
 
 ###################################################################################################
+#
 #  LOGGING SYSTEM SETTINGS
 #
 #  Log channel config values: Given an channel "name"
 #    Log.Channel.name
 #        Description: Defines 'where to log'
-#        Format:      Type,Times,Pattern,Optional1,Optional2,Optional3,Optional4
+#        Format:      Type,Times,Pattern,Optional1,Optional2,Optional3,Optional4,Optional5
 #                       
 #                     Type
-#                       1 - (Console) (is unique)
+#                       1 - (Console)
 #                       2 - (File)
 #                              
 #                    Times (all types)
@@ -317,7 +310,7 @@ Updates.CleanDeadRefMaxCount = 3
 #                       %[name] - the value of the message parameter with the given name
 #                       %% - percent sign
 #                           Example for file "%Y-%m-%d %H:%M:%S %t" 
-#                           Example for console "%t"
+#                           Example for console "%H:%M:%S %t"
 #
 #                    Optional1 - Colors (is type Console)
 #                       Format: "fatal critical error warning notice info debug trace"
@@ -362,17 +355,27 @@ Updates.CleanDeadRefMaxCount = 3
 #                       <n> M: the file is rotated when its size exceeds <n> Megabytes.
 #                           Example: "daily"
 #
-#                     Optional4 - Archive (is type File)
+#                     Optional4 - Flush (is type File)
+#                       true: Every essages is immediately flushed to the log file.
+#                       false: Messages are not immediately flushed to the log file (default).
+#
+#                     Optional5 - PurgeAge (is type File)
+#                       <n> [seconds]: the maximum age is <n> seconds.
+#                       <n> minutes: the maximum age is <n> minutes.
+#                       <n> hours: the maximum age is <n> hours.
+#                       <n> days: the maximum age is <n> days.
+#                       <n> weeks: the maximum age is <n> weeks.
+#                       <n> months: the maximum age is <n> months, where a month has 30 days.
+#                           Example: "30 days"
+#
+#                     Optional6 - Archive (is type File)
 #                       number: A number, starting with 0, is appended to the name of archived log files. 
 #                               The newest archived log file always has the number 0. 
 #                               For example, if the log file is named "access.log", and it fulfils the criteria for rotation, the file is renamed to "access.log.0". 
-#                               If a file named "access.log.0" already exists, it is renamed to "access.log.1", and so on.
+#                               If a file named "access.log.0" already exists, it is renamed to "access.log.1", and so on. This is the default.
 #                       timestamp: A timestamp is appended to the log file name. 
 #                                  For example, if the log file is named "access.log", and it fulfils the criteria for rotation, the file is renamed to "access.log.20050802110300".
 #
-#                     Optional5 - Flush (is type File).
-#                       true: Every essages is immediately flushed to the log file.
-#                       false: Messages are not immediately flushed to the log file (default).
 #
 
 LogChannel.Console = 1,local,%t,lightRed lightRed red brown magenta cyan lightMagenta green
@@ -399,8 +402,8 @@ LogChannel.Auth = 2,local,%Y-%m-%d %H:%M:%S %t,Auth.log,false,never,false
 #                     (Using spaces as separator).
 #
 
-Logger.root = 6,Auth
-Logger.server = 6,Auth
-Logger.sql = 6,Auth
-Logger.network= 6,Auth
+Logger.root = 6,Console Auth
+Logger.server = 6,Console Auth
+Logger.sql = 6,Console Auth
+Logger.network= 6,Console Auth
 ###################################################################################################

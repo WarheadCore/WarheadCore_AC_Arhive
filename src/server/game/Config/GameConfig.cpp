@@ -332,9 +332,6 @@ void GameConfig::LoadBoolConfigs(bool reload /*= false*/)
     // Preload all grids of all non-instanced maps
     AddBoolConfig("PreloadAllNonInstancedMapGrids");
 
-    // DB logging
-    AddBoolConfig("EnableLogDB");
-
     AddBoolConfig("SetAllCreaturesWithWaypointMovementActive");
 
     // Debug

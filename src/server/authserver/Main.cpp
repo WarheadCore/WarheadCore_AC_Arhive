@@ -33,6 +33,7 @@
 #include "DatabaseEnv.h"
 #include "Config.h"
 #include "Log.h"
+#include "SystemLog.h"
 #include "GitRevision.h"
 #include "Util.h"
 #include "SignalHandler.h"
@@ -265,14 +266,7 @@ extern int main(int argc, char** argv)
     // maximum counter for next ping
     uint32 numLoops = (sConfigMgr->GetIntDefault("MaxPingTime", 30) * (MINUTE * 1000000 / 100000));
     uint32 loopCounter = 0;
-
-    // possibly enable db logging; avoid massive startup spam by doing it here.
-    if (sConfigMgr->GetBoolDefault("EnableLogDB", false))
-    {
-        LOG_INFO("server.authserver", "Enabling database logging...");
-        sLog->SetRealmID(0, false);
-    }
-
+    
     // Wait for termination signal
     while (!stopEvent)
     {
