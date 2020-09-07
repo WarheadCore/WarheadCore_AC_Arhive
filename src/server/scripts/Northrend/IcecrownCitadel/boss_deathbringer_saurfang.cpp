@@ -1244,7 +1244,7 @@ class spell_deathbringer_blood_nova_targeting : public SpellScriptLoader
             bool Load()
             {
                 // initialize variable
-                target = NULL;
+                target = nullptr;
                 return true;
             }
 

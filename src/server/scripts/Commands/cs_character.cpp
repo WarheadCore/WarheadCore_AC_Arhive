@@ -50,7 +50,7 @@ public:
             { "delete",        SEC_CONSOLE,         true,  &HandleCharacterDeletedDeleteCommand,  "" },
             { "list",          SEC_ADMINISTRATOR,   true,  &HandleCharacterDeletedListCommand,    "" },
             { "restore",       SEC_ADMINISTRATOR,   true,  &HandleCharacterDeletedRestoreCommand, "" },
-            { "old",           SEC_CONSOLE,         true,  &HandleCharacterDeletedOldCommand,     "" },
+            { "purge",         SEC_CONSOLE,         true,  &HandleCharacterDeletedPurgeCommand,   "" },
         };
 
         static std::vector<ChatCommand> characterCheckCommandTable =
@@ -659,7 +659,7 @@ public:
      *
      * @param args the search string which either contains a player GUID or a part of the character-name
      */
-    static bool HandleCharacterDeletedOldCommand(ChatHandler* /*handler*/, char const* args)
+    static bool HandleCharacterDeletedPurgeCommand(ChatHandler* /*handler*/, char const* args)
     {
         int32 keepDays = sGameConfig->GetIntConfig("CharDelete.KeepDays");
 

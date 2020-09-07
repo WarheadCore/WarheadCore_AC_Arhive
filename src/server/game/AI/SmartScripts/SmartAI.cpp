@@ -35,13 +35,13 @@ SmartAI::SmartAI(Creature* c) : CreatureAI(c)
 {
     // copy script to local (protection for table reload)
 
-    mWayPoints = NULL;
+    mWayPoints = nullptr;
     mEscortState = SMART_ESCORT_NONE;
     mCurrentWPID = 0;//first wp id is 1 !!
     mWPReached = false;
     mOOCReached = false;
     mWPPauseTimer = 0;
-    mLastWP = NULL;
+    mLastWP = nullptr;
     mEscortNPCFlags = 0;
 
     mCanRepeatPath = false;
@@ -102,7 +102,7 @@ void SmartAI::UpdateDespawn(const uint32 diff)
 WayPoint* SmartAI::GetNextWayPoint()
 {
     if (!mWayPoints || mWayPoints->empty())
-        return NULL;
+        return nullptr;
 
     mCurrentWPID++;
     WPPath::const_iterator itr = mWayPoints->find(mCurrentWPID);
@@ -114,7 +114,7 @@ WayPoint* SmartAI::GetNextWayPoint()
 
         return (*itr).second;
     }
-    return NULL;
+    return nullptr;
 }
 
 void SmartAI::GenerateWayPointArray(Movement::PointsArray* points)
@@ -284,8 +284,8 @@ void SmartAI::StopPath(uint32 DespawnTime, uint32 quest, bool fail)
 void SmartAI::EndPath(bool fail)
 {
     RemoveEscortState(SMART_ESCORT_ESCORTING | SMART_ESCORT_PAUSED | SMART_ESCORT_RETURNING);
-    mWayPoints = NULL;
-    mLastWP = NULL;
+    mWayPoints = nullptr;
+    mLastWP = nullptr;
     mWPPauseTimer = 0;
 
     if (mEscortNPCFlags)
@@ -302,7 +302,7 @@ void SmartAI::EndPath(bool fail)
             Player* player = (*targets->begin())->ToPlayer();
             if (Group* group = player->GetGroup())
             {
-                for (GroupReference* groupRef = group->GetFirstMember(); groupRef != NULL; groupRef = groupRef->next())
+                for (GroupReference* groupRef = group->GetFirstMember(); groupRef != nullptr; groupRef = groupRef->next())
                 {
                     Player* groupGuy = groupRef->GetSource();
                     if (!groupGuy || !player->IsInMap(groupGuy))
@@ -536,7 +536,7 @@ bool SmartAI::IsEscortInvokerInRange()
 
             if (Group* group = player->GetGroup())
             {
-                for (GroupReference* groupRef = group->GetFirstMember(); groupRef != NULL; groupRef = groupRef->next())
+                for (GroupReference* groupRef = group->GetFirstMember(); groupRef != nullptr; groupRef = groupRef->next())
                 {
                     Player* groupGuy = groupRef->GetSource();
 
@@ -640,7 +640,7 @@ void SmartAI::EnterEvadeMode()
     me->DeleteThreatList();
     me->CombatStop(true);
     me->LoadCreaturesAddon(true);
-    me->SetLootRecipient(NULL);
+    me->SetLootRecipient(nullptr);
     me->ResetPlayerDamageReq();
     me->SetLastDamagedTime(0);
 
@@ -1201,7 +1201,7 @@ class SmartTrigger : public AreaTriggerScript
             LOG_DEBUG("scripts.ai", "AreaTrigger %u is using SmartTrigger script", trigger->entry);
 #endif
             SmartScript script;
-            script.OnInitialize(NULL, trigger);
+            script.OnInitialize(nullptr, trigger);
             script.ProcessEventsFor(SMART_EVENT_AREATRIGGER_ONTRIGGER, player, trigger->entry);
             return true;
         }

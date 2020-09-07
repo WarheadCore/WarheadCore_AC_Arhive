@@ -489,7 +489,7 @@ void WorldSession::HandleCharCreateCallback(PreparedQueryResult result, Characte
             }
 
             _charCreateCallback.NextStage();
-            HandleCharCreateCallback(PreparedQueryResult(NULL), createInfo);   // Will jump to case 3
+            HandleCharCreateCallback(PreparedQueryResult(nullptr), createInfo);   // Will jump to case 3
         }
         break;
         case 3:
@@ -766,7 +766,7 @@ void WorldSession::HandleCharDeleteOpcode(WorldPacket& recvData)
 
 void WorldSession::HandlePlayerLoginOpcode(WorldPacket & recvData)
 {
-    if (PlayerLoading() || GetPlayer() != NULL)
+    if (PlayerLoading() || GetPlayer() != nullptr)
     {
         LOG_ERROR("server", "Player tries to login again, AccountId = %d", GetAccountId());
         KickPlayer("Player tries to login again");
@@ -859,7 +859,7 @@ void WorldSession::HandlePlayerLoginOpcode(WorldPacket & recvData)
                 return;
             }
 
-            sess->SetPlayer(NULL);
+            sess->SetPlayer(nullptr);
             SetPlayer(p);
             p->SetSession(this);
             delete p->PlayerTalkClass;
@@ -893,7 +893,7 @@ void WorldSession::HandlePlayerLoginFromDB(LoginQueryHolder* holder)
     // "GetAccountId() == db stored account id" checked in LoadFromDB (prevent login not own character using cheating tools)
     if (!pCurrChar->LoadFromDB(GUID_LOPART(playerGuid), holder))
     {
-        SetPlayer(NULL);
+        SetPlayer(nullptr);
         KickPlayer("HandlePlayerLoginFromDB");              // disconnect client, player no set to session and it will not deleted or saved at kick
         delete pCurrChar;                                   // delete it manually
         delete holder;                                      // delete all unprocessed queries
@@ -937,7 +937,7 @@ void WorldSession::HandlePlayerLoginFromDB(LoginQueryHolder* holder)
     if (uint32 guildId = Player::GetGuildIdFromStorage(pCurrChar->GetGUIDLow()))
     {
         Guild* guild = sGuildMgr->GetGuildById(guildId);
-        Guild::Member const* member = guild ? guild->GetMember(pCurrChar->GetGUID()) : NULL;
+        Guild::Member const* member = guild ? guild->GetMember(pCurrChar->GetGUID()) : nullptr;
         if (member)
         {
             pCurrChar->SetInGuild(guildId);
@@ -1037,7 +1037,7 @@ void WorldSession::HandlePlayerLoginFromDB(LoginQueryHolder* holder)
         if (!t->IsInMap(pCurrChar))
         {
             t->RemovePassenger(pCurrChar);
-            pCurrChar->m_transport = NULL;
+            pCurrChar->m_transport = nullptr;
             pCurrChar->m_movementInfo.transport.Reset();
             pCurrChar->m_movementInfo.RemoveMovementFlag(MOVEMENTFLAG_ONTRANSPORT);
         }
@@ -1197,7 +1197,7 @@ void WorldSession::HandlePlayerLoginFromDB(LoginQueryHolder* holder)
             if ((isReferrer && pCurrChar->GetSession()->GetAccountId() == itr->second->GetRecruiterId()) || (!isReferrer && pCurrChar->GetSession()->GetRecruiterId() == itr->second->GetAccountId()))
             {
                 Player * rf = itr->second->GetPlayer();
-                if (rf != NULL)
+                if (rf != nullptr)
                 {
                     pCurrChar->SendUpdateToPlayer(rf);
                     rf->SendUpdateToPlayer(pCurrChar);
@@ -1989,7 +1989,7 @@ void WorldSession::HandleEquipmentSetUse(WorldPacket &recvData)
         if (_player->IsInCombat() && i != EQUIPMENT_SLOT_MAINHAND && i != EQUIPMENT_SLOT_OFFHAND && i != EQUIPMENT_SLOT_RANGED)
             continue;
 
-        Item* item = NULL;
+        Item* item = nullptr;
         if (itemGuid > 0)
             item = _player->GetItemByGuid(itemGuid);
 
@@ -2002,7 +2002,7 @@ void WorldSession::HandleEquipmentSetUse(WorldPacket &recvData)
             if (uItem->IsEquipped()) {
                 msg = _player->CanUnequipItem(dstpos, true);
                 if (msg != EQUIP_ERR_OK) {
-                    _player->SendEquipError(msg, uItem, NULL);
+                    _player->SendEquipError(msg, uItem, nullptr);
                     continue;
                 }
             }
@@ -2017,7 +2017,7 @@ void WorldSession::HandleEquipmentSetUse(WorldPacket &recvData)
                     _player->StoreItem(sDest, uItem, true);
                 }
                 else
-                    _player->SendEquipError(msg, uItem, NULL);
+                    _player->SendEquipError(msg, uItem, nullptr);
 
                 continue;
             }
@@ -2031,7 +2031,7 @@ void WorldSession::HandleEquipmentSetUse(WorldPacket &recvData)
                 uint16 _candidatePos;
                 msg = _player->CanEquipItem(NULL_SLOT, _candidatePos, item, true);
                 if (msg != EQUIP_ERR_OK) {
-                    _player->SendEquipError(msg, item, NULL);
+                    _player->SendEquipError(msg, item, nullptr);
                     continue;
                 }
             }

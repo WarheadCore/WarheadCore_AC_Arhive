@@ -354,7 +354,7 @@ void TicketMgr::AddTicket(GmTicket* ticket)
     _ticketList[ticket->GetId()] = ticket;
     if (!ticket->IsClosed())
         ++_openTicketCount;
-    SQLTransaction trans = SQLTransaction(NULL);
+    SQLTransaction trans = SQLTransaction(nullptr);
     ticket->SaveToDB(trans);
 }
 
@@ -362,7 +362,7 @@ void TicketMgr::CloseTicket(uint32 ticketId, int64 source)
 {
     if (GmTicket* ticket = GetTicket(ticketId))
     {
-        SQLTransaction trans = SQLTransaction(NULL);
+        SQLTransaction trans = SQLTransaction(nullptr);
         ticket->SetClosedBy(source);
         if (source)
             --_openTicketCount;
@@ -384,7 +384,7 @@ void TicketMgr::ResolveAndCloseTicket(uint32 ticketId, int64 source)
 {
     if (GmTicket* ticket = GetTicket(ticketId))
     {
-        SQLTransaction trans = SQLTransaction(NULL);
+        SQLTransaction trans = SQLTransaction(nullptr);
         ticket->SetClosedBy(source);
         ticket->SetResolvedBy(source);
         if (source)

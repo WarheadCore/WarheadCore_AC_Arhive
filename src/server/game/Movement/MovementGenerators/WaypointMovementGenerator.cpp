@@ -84,7 +84,7 @@ void WaypointMovementGenerator<Creature>::OnArrived(Creature* creature)
         LOG_DEBUG("maps.script", "Creature movement start script %u at point %u for " UI64FMTD ".", i_path->at(i_currentNode)->event_id, i_currentNode, creature->GetGUID());
 #endif
         creature->ClearUnitState(UNIT_STATE_ROAMING_MOVE);
-        creature->GetMap()->ScriptsStart(sWaypointScripts, i_path->at(i_currentNode)->event_id, creature, NULL);
+        creature->GetMap()->ScriptsStart(sWaypointScripts, i_path->at(i_currentNode)->event_id, creature, nullptr);
     }
 
     // Inform script
@@ -126,7 +126,7 @@ bool WaypointMovementGenerator<Creature>::StartMove(Creature* creature)
                 creature->SetHomePosition(x, y, z, o);
             else
             {
-                if (Transport* trans = (creature->GetTransport() ? creature->GetTransport()->ToMotionTransport() : NULL))
+                if (Transport* trans = (creature->GetTransport() ? creature->GetTransport()->ToMotionTransport() : nullptr))
                 {
                     o -= trans->GetOrientation();
                     creature->SetTransportHomePosition(x, y, z, o);

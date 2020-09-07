@@ -401,7 +401,7 @@ class PassengerController
 public:
     PassengerController()
     {
-        ResetSlots(TEAM_HORDE, NULL);
+        ResetSlots(TEAM_HORDE, nullptr);
     }
 
     void ResetSlots(TeamId teamId, MotionTransport* t)
@@ -548,7 +548,7 @@ class npc_gunship : public CreatureScript
 
                 if (damage >= me->GetHealth())
                 {
-                    JustDied(NULL);
+                    JustDied(nullptr);
                     damage = me->GetHealth() - 1;
                     return;
                 }
@@ -588,7 +588,7 @@ class npc_gunship : public CreatureScript
                     a->SetDuration(0);
 
                 uint32 explosionSpell = isVictory ? SPELL_EXPLOSION_VICTORY : SPELL_EXPLOSION_WIPE;
-                if (MotionTransport* t = (me->GetTransport() ? me->GetTransport()->ToMotionTransport() : NULL))
+                if (MotionTransport* t = (me->GetTransport() ? me->GetTransport()->ToMotionTransport() : nullptr))
                 {
                     Transport::PassengerSet const& passengers = t->GetStaticPassengers();
                     for (Transport::PassengerSet::const_iterator itr = passengers.begin(); itr != passengers.end(); ++itr)
@@ -725,7 +725,7 @@ class npc_gunship : public CreatureScript
         CreatureAI* GetAI(Creature* creature) const
         {
             if (!creature->GetTransport())
-                return NULL;
+                return nullptr;
 
             return GetIcecrownCitadelAI<npc_gunshipAI>(creature);
         }
@@ -957,7 +957,7 @@ class npc_high_overlord_saurfang_igb : public CreatureScript
                         _controller.SummonCreatures(me, SLOT_MAGE_1, SLOT_MAGE_2);
                         _controller.SummonCreatures(me, SLOT_MARINE_1, Is25ManRaid() ? SLOT_MARINE_4 : SLOT_MARINE_2);
                         _controller.SummonCreatures(me, SLOT_SERGEANT_1, Is25ManRaid() ? SLOT_SERGEANT_2 : SLOT_SERGEANT_1);
-                        if (MotionTransport* orgrimsHammer = (me->GetTransport() ? me->GetTransport()->ToMotionTransport() : NULL))
+                        if (MotionTransport* orgrimsHammer = (me->GetTransport() ? me->GetTransport()->ToMotionTransport() : nullptr))
                         {
                             float x,y,z,o;
                             OrgrimsHammerTeleportPortal.GetPosition(x,y,z,o);
@@ -1296,7 +1296,7 @@ class npc_muradin_bronzebeard_igb : public CreatureScript
                         _controller.SummonCreatures(me, SLOT_MAGE_1, SLOT_MAGE_2);
                         _controller.SummonCreatures(me, SLOT_MARINE_1, Is25ManRaid() ? SLOT_MARINE_4 : SLOT_MARINE_2);
                         _controller.SummonCreatures(me, SLOT_SERGEANT_1, Is25ManRaid() ? SLOT_SERGEANT_2 : SLOT_SERGEANT_1);
-                        if (MotionTransport* skybreaker = (me->GetTransport() ? me->GetTransport()->ToMotionTransport() : NULL))
+                        if (MotionTransport* skybreaker = (me->GetTransport() ? me->GetTransport()->ToMotionTransport() : nullptr))
                         {
                             float x,y,z,o;
                             SkybreakerTeleportPortal.GetPosition(x,y,z,o);
@@ -1466,7 +1466,7 @@ void TriggerBurningPitch(Creature* c)
 
 struct gunship_npc_AI : public ScriptedAI
 {
-    gunship_npc_AI(Creature* creature) : ScriptedAI(creature), Instance(creature->GetInstanceScript()), Slot(NULL), Index(uint32(-1))
+    gunship_npc_AI(Creature* creature) : ScriptedAI(creature), Instance(creature->GetInstanceScript()), Slot(nullptr), Index(uint32(-1))
     {
         me->SetRegeneratingHealth(false);
     }
@@ -1528,7 +1528,7 @@ protected:
 
 struct npc_gunship_boarding_addAI : public ScriptedAI
 {
-    npc_gunship_boarding_addAI(Creature* creature) : ScriptedAI(creature), Instance(creature->GetInstanceScript()), Slot(NULL), Index(uint32(-1))
+    npc_gunship_boarding_addAI(Creature* creature) : ScriptedAI(creature), Instance(creature->GetInstanceScript()), Slot(nullptr), Index(uint32(-1))
     {
         anyValid = true;
         checkTimer = 1000;
@@ -2091,7 +2091,7 @@ class spell_igb_check_for_players : public SpellScriptLoader
             void TriggerWipe()
             {
                 if (!_playerCount)
-                    GetCaster()->ToCreature()->AI()->JustDied(NULL);
+                    GetCaster()->ToCreature()->AI()->JustDied(nullptr);
             }
 
             void TeleportPlayer(SpellEffIndex /*effIndex*/)

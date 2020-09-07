@@ -78,7 +78,7 @@ Object::Object() : m_PackGUID(sizeof(uint64)+1)
     m_objectTypeId      = TYPEID_OBJECT;
     m_objectType        = TYPEMASK_OBJECT;
 
-    m_uint32Values      = NULL;
+    m_uint32Values      = nullptr;
     m_valuesCount       = 0;
     _fieldNotifyFlags   = UF_FLAG_DYNAMIC;
 
@@ -303,8 +303,8 @@ void Object::DestroyForPlayer(Player* target, bool onDeath) const
 
 void Object::BuildMovementUpdate(ByteBuffer* data, uint16 flags) const
 {
-    Unit const* unit = NULL;
-    WorldObject const* object = NULL;
+    Unit const* unit = nullptr;
+    WorldObject const* object = nullptr;
 
     if (isType(TYPEMASK_UNIT))
         unit = ToUnit();
@@ -466,7 +466,7 @@ void Object::BuildValuesUpdate(uint8 updateType, ByteBuffer* data, Player* targe
     UpdateMask updateMask;
     updateMask.SetCount(m_valuesCount);
 
-    uint32* flags = NULL;
+    uint32* flags = nullptr;
     uint32 visibleFlag = GetUpdateFieldData(target, flags);
 
     for (uint16 index = 0; index < m_valuesCount; ++index)
@@ -1024,7 +1024,7 @@ void WorldObject::GetZoneAndAreaId(uint32& zoneid, uint32& areaid, bool /*forceR
 InstanceScript* WorldObject::GetInstanceScript()
 {
     Map* map = GetMap();
-    return map->IsDungeon() ? map->ToInstanceMap()->GetInstanceScript() : NULL;
+    return map->IsDungeon() ? map->ToInstanceMap()->GetInstanceScript() : nullptr;
 }
 
 float WorldObject::GetDistanceZ(const WorldObject* obj) const
@@ -1971,7 +1971,7 @@ TempSummon* Map::SummonCreature(uint32 entry, Position const& pos, SummonPropert
                 break;
             }
             default:
-                return NULL;
+                return nullptr;
         }
     }
 
@@ -1979,7 +1979,7 @@ TempSummon* Map::SummonCreature(uint32 entry, Position const& pos, SummonPropert
     if (summoner)
         phase = summoner->GetPhaseMask();
 
-    TempSummon* summon = NULL;
+    TempSummon* summon = nullptr;
     switch (mask)
     {
         case UNIT_MASK_SUMMON:
@@ -1998,14 +1998,14 @@ TempSummon* Map::SummonCreature(uint32 entry, Position const& pos, SummonPropert
             summon = new Minion(properties, summoner ? summoner->GetGUID() : 0, false);
             break;
         default:
-            return NULL;
+            return nullptr;
     }
 
     EnsureGridLoaded(Cell(pos.GetPositionX(), pos.GetPositionY()));
     if (!summon->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_UNIT), this, phase, entry, vehId, pos.GetPositionX(), pos.GetPositionY(), pos.GetPositionZ(), pos.GetOrientation()))
     {
         delete summon;
-        return NULL;
+        return nullptr;
     }
 
     summon->SetUInt32Value(UNIT_CREATED_BY_SPELL, spellId);
@@ -2053,7 +2053,7 @@ GameObject* Map::SummonGameObject(uint32 entry, float x, float y, float z, float
     if (!go->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_GAMEOBJECT), entry, this, PHASEMASK_NORMAL, x, y, z, ang, G3D::Quat(rotation0, rotation1, rotation2, rotation3), 100, GO_STATE_READY))
     {
         delete go;
-        return NULL;
+        return nullptr;
     }
 
     // Xinef: if gameobject is temporary, set custom spellid
@@ -2087,20 +2087,20 @@ TempSummon* WorldObject::SummonCreature(uint32 entry, const Position &pos, TempS
 {
     if (Map* map = FindMap())
     {
-        if (TempSummon* summon = map->SummonCreature(entry, pos, properties, duration, isType(TYPEMASK_UNIT) ? (Unit*)this : NULL))
+        if (TempSummon* summon = map->SummonCreature(entry, pos, properties, duration, isType(TYPEMASK_UNIT) ? (Unit*)this : nullptr))
         {
             summon->SetTempSummonType(spwtype);
             return summon;
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 GameObject* WorldObject::SummonGameObject(uint32 entry, float x, float y, float z, float ang, float rotation0, float rotation1, float rotation2, float rotation3, uint32 respawnTime, bool checkTransport)
 {
     if (!IsInWorld())
-        return NULL;
+        return nullptr;
 
     GameObjectTemplate const* goinfo = sObjectMgr->GetGameObjectTemplate(entry);
     if (!goinfo)
@@ -2114,7 +2114,7 @@ GameObject* WorldObject::SummonGameObject(uint32 entry, float x, float y, float 
     if (!go->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_GAMEOBJECT), entry, map, GetPhaseMask(), x, y, z, ang, G3D::Quat(rotation0, rotation1, rotation2, rotation3), 100, GO_STATE_READY))
     {
         delete go;
-        return NULL;
+        return nullptr;
     }
 
     go->SetRespawnTime(respawnTime);
@@ -2137,7 +2137,7 @@ Creature* WorldObject::SummonTrigger(float x, float y, float z, float ang, uint3
     TempSummonType summonType = (duration == 0) ? TEMPSUMMON_DEAD_DESPAWN : TEMPSUMMON_TIMED_DESPAWN;
     Creature* summon = SummonCreature(WORLD_TRIGGER, x, y, z, ang, summonType, duration);
     if (!summon)
-        return NULL;
+        return nullptr;
 
     //summon->SetName(GetName());
     if (setLevel && (GetTypeId() == TYPEID_PLAYER || GetTypeId() == TYPEID_UNIT))
@@ -2203,7 +2203,7 @@ GameObject* WorldObject::FindNearestGameObjectOfType(GameobjectTypes type, float
 
 Player* WorldObject::SelectNearestPlayer(float distance) const
 {
-    Player* target = NULL;
+    Player* target = nullptr;
 
     warhead::NearestPlayerInObjectRangeCheck checker(this, distance);
     warhead::PlayerLastSearcher<warhead::NearestPlayerInObjectRangeCheck> searcher(this, target, checker);
@@ -2695,6 +2695,21 @@ void WorldObject::PlayDirectSound(uint32 sound_id, Player* target /*= NULL*/)
         SendMessageToSet(&data, true);
 }
 
+
+void WorldObject::PlayDirectMusic(uint32 music_id, Player* target /*= NULL*/)
+{
+    WorldPacket data(SMSG_PLAY_MUSIC, 4);
+    data << uint32(music_id);
+    if (target)
+    {
+        target->SendDirectMessage(&data);
+    }
+    else
+    {
+        SendMessageToSet(&data, true);
+    }
+}
+
 void WorldObject::DestroyForNearbyPlayers()
 {
     if (!IsInWorld())
@@ -2766,7 +2781,7 @@ struct WorldObjectChangeAccumulator
     }
     void Visit(PlayerMapType &m)
     {
-        Player* source = NULL;
+        Player* source = nullptr;
         for (PlayerMapType::iterator iter = m.begin(); iter != m.end(); ++iter)
         {
             source = iter->GetSource();
@@ -2784,7 +2799,7 @@ struct WorldObjectChangeAccumulator
 
     void Visit(CreatureMapType &m)
     {
-        Creature* source = NULL;
+        Creature* source = nullptr;
         for (CreatureMapType::iterator iter = m.begin(); iter != m.end(); ++iter)
         {
             source = iter->GetSource();
@@ -2799,7 +2814,7 @@ struct WorldObjectChangeAccumulator
 
     void Visit(DynamicObjectMapType &m)
     {
-        DynamicObject* source = NULL;
+        DynamicObject* source = nullptr;
         for (DynamicObjectMapType::iterator iter = m.begin(); iter != m.end(); ++iter)
         {
             source = iter->GetSource();

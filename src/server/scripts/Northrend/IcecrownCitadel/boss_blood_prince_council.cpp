@@ -904,7 +904,7 @@ class boss_prince_valanar_icc : public CreatureScript
                 {
                     case NPC_KINETIC_BOMB_TARGET:
                         summon->SetReactState(REACT_PASSIVE);
-                        summon->CastSpell(summon, SPELL_KINETIC_BOMB, true, NULL, NULL, me->GetGUID());
+                        summon->CastSpell(summon, SPELL_KINETIC_BOMB, true, nullptr, nullptr, me->GetGUID());
                         break;
                     case NPC_SHOCK_VORTEX:
                         summon->m_Events.AddEvent(new ShockVortexExplodeEvent(*summon), summon->m_Events.CalculateTime(4500));
@@ -1109,7 +1109,9 @@ class npc_blood_queen_lana_thel : public CreatureScript
                     _introDone = true;
                 }
                 else
+                {
                     me->SetVisible(true);
+                }
             }
 
             void MoveInLineOfSight(Unit* who)
@@ -1118,7 +1120,9 @@ class npc_blood_queen_lana_thel : public CreatureScript
                     return;
 
                 if (who->GetTypeId() != TYPEID_PLAYER || me->GetExactDist2d(who) > 100.0f)
+                {
                     return;
+                }
 
                 _introDone = true;
                 Talk(SAY_INTRO_1);
@@ -1137,13 +1141,17 @@ class npc_blood_queen_lana_thel : public CreatureScript
             void MovementInform(uint32 type, uint32 id)
             {
                 if (type == POINT_MOTION_TYPE && id == POINT_INTRO_DESPAWN)
+                {
                     me->SetVisible(false);
+                }
             }
 
             void UpdateAI(uint32 diff)
             {
                 if (!_events.GetPhaseMask())
+                {
                     return;
+                }
 
                 _events.Update(diff);
 
@@ -1154,11 +1162,17 @@ class npc_blood_queen_lana_thel : public CreatureScript
                     _events.Reset();
 
                     if (Creature* keleseth = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_PRINCE_KELESETH_GUID)))
+                    {
                         keleseth->AI()->DoAction(ACTION_STAND_UP);
+                    }
                     if (Creature* taldaram = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_PRINCE_TALDARAM_GUID)))
+                    {
                         taldaram->AI()->DoAction(ACTION_STAND_UP);
+                    }
                     if (Creature* valanar = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_PRINCE_VALANAR_GUID)))
+                    {
                         valanar->AI()->DoAction(ACTION_STAND_UP);
+                    }
                 }
             }
 
@@ -1221,21 +1235,27 @@ class npc_dark_nucleus : public CreatureScript
             void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim())
+                {
                     return;
+                }
 
                 if (timer <= diff)
                 {
                     timer = 1000;
                     if (Unit* victim = me->GetVictim())
+                    {
                         if (me->GetDistance(victim) < 15.0f && !victim->HasAura(SPELL_SHADOW_RESONANCE_RESIST, me->GetGUID()))
                         {
                             me->InterruptNonMeleeSpells(true, 0, true);
                             me->CastSpell(victim, SPELL_SHADOW_RESONANCE_RESIST, false);
                             me->ClearUnitState(UNIT_STATE_CASTING);
                         }
+                    }
                 }
                 else
+                {
                     timer -= diff;
+                }
             }
         };
 
@@ -1298,12 +1318,17 @@ class npc_ball_of_flame : public CreatureScript
             void DoAction(int32 action)
             {
                 if (action != ACTION_FLAME_BALL_CHASE || me->IsInCombat())
+                {
                     return;
                 Player* target = nullptr;
                 if (_chaseGUID)
+                {
                     target = ObjectAccessor::GetPlayer(*me, _chaseGUID);
+                }
                 if (!target)
+                {
                     target = ScriptedAI::SelectTargetFromPlayerList(150.0f, 0, true);
+                }
                 if (target)
                 {
                     // need to clear states now because this call is before AuraEffect is fully removed
@@ -1326,10 +1351,14 @@ class npc_ball_of_flame : public CreatureScript
             void DamageDealt(Unit* target, uint32& damage, DamageEffectType  /*damageType*/)
             {
                 if (target->GetTypeId() != TYPEID_PLAYER)
+                {
                     return;
+                }
 
                 if (damage > RAID_MODE<uint32>(23000, 25000, 23000, 25000))
+                {
                     _instance->SetData(DATA_ORB_WHISPERER_ACHIEVEMENT, 0);
+                }
             }
         };
 
@@ -1359,8 +1388,12 @@ class npc_kinetic_bomb : public CreatureScript
             void IsSummonedBy(Unit* /*summoner*/)
             {
                 if (InstanceScript* instance = me->GetInstanceScript())
+                {
                     if (Creature* valanar = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_PRINCE_VALANAR_GUID)))
+                    {
                         valanar->AI()->JustSummoned(me);
+                    }
+                }
             }
 
             void Reset()
@@ -1434,7 +1467,9 @@ class spell_blood_council_shadow_prison : public SpellScriptLoader
             void HandleDummyTick(AuraEffect const* aurEff)
             {
                 if (GetTarget()->GetTypeId() == TYPEID_PLAYER && GetTarget()->isMoving())
+                {
                     GetTarget()->CastSpell(GetTarget(), SPELL_SHADOW_PRISON_DAMAGE, true, NULL, aurEff);
+                }
             }
 
             void Register()
@@ -1461,8 +1496,12 @@ class spell_blood_council_shadow_prison_damage : public SpellScriptLoader
             void AddExtraDamage()
             {
                 if (Aura* aur = GetHitUnit()->GetAura(GetSpellInfo()->Id))
+                {
                     if (AuraEffect const* eff = aur->GetEffect(EFFECT_1))
+                    {
                         SetHitDamage(GetHitDamage() + eff->GetAmount());
+                    }
+                }
             }
 
             void Register()
@@ -1516,7 +1555,9 @@ class spell_taldaram_summon_flame_ball : public SpellScriptLoader
             bool Load()
             {
                 if (GetCaster()->GetTypeId() != TYPEID_UNIT)
+                {
                     return false;
+                }
                 GetCaster()->CastSpell(GetCaster(), uint32(GetSpellInfo()->Effects[0].CalcValue()), true);
                 return true;
             }

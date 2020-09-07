@@ -62,7 +62,7 @@ Guild* GuildMgr::GetGuildById(uint32 guildId) const
     if (itr != GuildStore.end())
         return itr->second;
 
-    return NULL;
+    return nullptr;
 }
 
 Guild* GuildMgr::GetGuildByName(const std::string& guildName) const
@@ -76,7 +76,7 @@ Guild* GuildMgr::GetGuildByName(const std::string& guildName) const
         if (search == gname)
             return itr->second;
     }
-    return NULL;
+    return nullptr;
 }
 
 std::string GuildMgr::GetGuildNameById(uint32 guildId) const
@@ -93,7 +93,7 @@ Guild* GuildMgr::GetGuildByLeader(uint64 guid) const
         if (itr->second->GetLeaderGUID() == guid)
             return itr->second;
 
-    return NULL;
+    return nullptr;
 }
 
 void GuildMgr::LoadGuilds()

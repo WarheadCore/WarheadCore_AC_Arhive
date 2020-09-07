@@ -293,13 +293,13 @@ void MailDraft::SendMailTo(SQLTransaction& trans, MailReceiver const& receiver, 
         }
         else if (!m_items.empty())
         {
-            SQLTransaction temp = SQLTransaction(NULL);
+            SQLTransaction temp = SQLTransaction(nullptr);
             deleteIncludedItems(temp);
         }
     }
     else if (!m_items.empty())
     {
-        SQLTransaction temp = SQLTransaction(NULL);
+        SQLTransaction temp = SQLTransaction(nullptr);
         deleteIncludedItems(temp);
     }
 }

@@ -121,7 +121,7 @@ SavedAddon const* GetAddonInfo(const std::string& name)
             return &addon;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 BannedAddonList const* GetBannedAddons()

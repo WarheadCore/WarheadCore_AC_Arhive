@@ -134,7 +134,7 @@ Creature* SummonList::GetCreatureWithEntry(uint32 entry) const
                 return summon;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 ScriptedAI::ScriptedAI(Creature* creature) : CreatureAI(creature),
@@ -218,7 +218,7 @@ void ScriptedAI::DoPlaySoundToSet(WorldObject* source, uint32 soundId)
 
 void ScriptedAI::DoPlayMusic(uint32 soundId, bool zone)
 {
-    ObjectList* targets = NULL;
+    ObjectList* targets = nullptr;
 
     if (me && me->FindMap())
     {
@@ -264,11 +264,11 @@ SpellInfo const* ScriptedAI::SelectSpell(Unit* target, uint32 school, uint32 mec
 {
     //No target so we can't cast
     if (!target)
-        return NULL;
+        return nullptr;
 
     //Silenced so we can't cast
     if (me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SILENCED))
-        return NULL;
+        return nullptr;
 
     //Using the extended script system we first create a list of viable spells
     SpellInfo const* apSpell[CREATURE_MAX_SPELLS];
@@ -276,7 +276,7 @@ SpellInfo const* ScriptedAI::SelectSpell(Unit* target, uint32 school, uint32 mec
 
     uint32 spellCount = 0;
 
-    SpellInfo const* tempSpell = NULL;
+    SpellInfo const* tempSpell = nullptr;
 
     //Check if each spell is viable(set it to null if not)
     for (uint32 i = 0; i < CREATURE_MAX_SPELLS; i++)
@@ -332,7 +332,7 @@ SpellInfo const* ScriptedAI::SelectSpell(Unit* target, uint32 school, uint32 mec
 
     //We got our usable spells so now lets randomly pick one
     if (!spellCount)
-        return NULL;
+        return nullptr;
 
     return apSpell[urand(0, spellCount - 1)];
 }
@@ -388,7 +388,7 @@ void ScriptedAI::DoTeleportAll(float x, float y, float z, float o)
 
 Unit* ScriptedAI::DoSelectLowestHpFriendly(float range, uint32 minHPDiff)
 {
-    Unit* unit = NULL;
+    Unit* unit = nullptr;
     warhead::MostHPMissingInRange u_check(me, range, minHPDiff);
     warhead::UnitLastSearcher<warhead::MostHPMissingInRange> searcher(me, unit, u_check);
     me->VisitNearbyObject(range, searcher);
@@ -416,7 +416,7 @@ std::list<Creature*> ScriptedAI::DoFindFriendlyMissingBuff(float range, uint32 u
 
 Player* ScriptedAI::GetPlayerAtMinimumRange(float minimumRange)
 {
-    Player* player = NULL;
+    Player* player = nullptr;
 
     CellCoord pair(warhead::ComputeCellCoord(me->GetPositionX(), me->GetPositionY()));
     Cell cell(pair);
@@ -495,7 +495,7 @@ Player* ScriptedAI::SelectTargetFromPlayerList(float maxdist, uint32 excludeAura
     if (!tList.empty())
         return tList[urand(0,tList.size()-1)];
     else
-        return NULL;
+        return nullptr;
 }
 
 // BossAI - for instanced bosses
@@ -503,7 +503,7 @@ Player* ScriptedAI::SelectTargetFromPlayerList(float maxdist, uint32 excludeAura
 BossAI::BossAI(Creature* creature, uint32 bossId) : ScriptedAI(creature),
     instance(creature->GetInstanceScript()),
     summons(creature),
-    _boundary(instance ? instance->GetBossBoundary(bossId) : NULL),
+    _boundary(instance ? instance->GetBossBoundary(bossId) : nullptr),
     _bossId(bossId)
 {
 }

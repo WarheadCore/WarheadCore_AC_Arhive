@@ -1020,7 +1020,7 @@ public:
 
             pInstance->SetData(TYPE_ICEHOWL, DONE);
 
-            Player* plr = NULL;
+            Player* plr = nullptr;
             if( !pInstance->instance->GetPlayers().isEmpty() )
                 plr = pInstance->instance->GetPlayers().begin()->GetSource();
 

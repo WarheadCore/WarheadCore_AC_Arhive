@@ -105,7 +105,7 @@ WorldSession::WorldSession(uint32 id, WorldSocket* sock, AccountTypes sec, uint8
     _lastAuctionListOwnerItemsMSTime(0),
     AntiDOS(this),
     m_GUIDLow(0),
-    _player(NULL),
+    _player(nullptr),
     m_Socket(sock),
     _security(sec),
     _skipQueue(skipQueue),
@@ -131,7 +131,7 @@ WorldSession::WorldSession(uint32 id, WorldSocket* sock, AccountTypes sec, uint8
 {
     memset(m_Tutorials, 0, sizeof(m_Tutorials));
 
-    _warden = NULL;
+    _warden = nullptr;
     _offlineTime = 0;
     _kicked = false;
     _shouldSetOfflineInDB = true;
@@ -161,17 +161,17 @@ WorldSession::~WorldSession()
     {
         m_Socket->CloseSocket("WorldSession destructor");
         m_Socket->RemoveReference();
-        m_Socket = NULL;
+        m_Socket = nullptr;
     }
 
     if (_warden)
     {
         delete _warden;
-        _warden = NULL;
+        _warden = nullptr;
     }
 
     ///- empty incoming packet queue
-    WorldPacket* packet = NULL;
+    WorldPacket* packet = nullptr;
     while (_recvQueue.next(packet))
         delete packet;
 
@@ -271,10 +271,10 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
     HandleTeleportTimeout(updater.ProcessLogout());
 
     uint32 _startMSTime = getMSTime();
-    WorldPacket* packet = NULL;
-    WorldPacket* movementPacket = NULL;
+    WorldPacket* packet = nullptr;
+    WorldPacket* movementPacket = nullptr;
     bool deletePacket = true;
-    WorldPacket* firstDelayedPacket = NULL;
+    WorldPacket* firstDelayedPacket = nullptr;
     uint32 processedPackets = 0;
     time_t currentTime = GameTime::GetGameTime();
 
@@ -316,7 +316,7 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
                             {
                                 HandleMovementOpcodes(*movementPacket);
                                 delete movementPacket;
-                                movementPacket = NULL;
+                                movementPacket = nullptr;
                             }
                             
                             sScriptMgr->OnPacketReceive(this, *packet);
@@ -330,7 +330,7 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
                             if (movementPacket)
                             {
                                 delete movementPacket;
-                                movementPacket = NULL;
+                                movementPacket = nullptr;
                             }
 
                             if (AntiDOS.EvaluateOpcode(*packet, currentTime))
@@ -403,7 +403,7 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
         if (m_Socket && m_Socket->IsClosed())
         {
             m_Socket->RemoveReference();
-            m_Socket = NULL;
+            m_Socket = nullptr;
         }
 
         if (!m_Socket)
@@ -418,7 +418,7 @@ bool WorldSession::HandleSocketClosed()
     if (m_Socket && m_Socket->IsClosed() && !IsKicked() && GetPlayer() && !PlayerLogout() && GetPlayer()->m_taxi.empty() && GetPlayer()->IsInWorld() && !World::IsStopped())
     {
         m_Socket->RemoveReference();
-        m_Socket = NULL;
+        m_Socket = nullptr;
         GetPlayer()->TradeCancel(false);
         return true;
     }
@@ -523,7 +523,7 @@ void WorldSession::LogoutPlayer(bool save)
             guild->HandleMemberLogout(this);
 
         ///- Remove pet
-        _player->RemovePet(NULL, PET_SAVE_AS_CURRENT);
+        _player->RemovePet(nullptr, PET_SAVE_AS_CURRENT);
 
         // pussywizard: on logout remove auras that are removed at map change (before saving to db)
         // there are some positive auras from boss encounters that can be kept by logging out and logging in after boss is dead, and may be used on next bosses
@@ -601,7 +601,7 @@ void WorldSession::LogoutPlayer(bool save)
             _map->AfterPlayerUnlinkFromMap();
         }
 
-        SetPlayer(NULL); // pointer already deleted
+        SetPlayer(nullptr); // pointer already deleted
 
         //! Send the 'logout complete' packet to the client
         //! Client will respond by sending 3x CMSG_CANCEL_TRADE, which we currently dont handle

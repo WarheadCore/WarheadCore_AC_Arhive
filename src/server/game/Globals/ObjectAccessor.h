@@ -63,7 +63,7 @@ class HashMapHolder
         {
             ACORE_READ_GUARD(LockType, i_lock);
             typename MapType::iterator itr = m_objectMap.find(guid);
-            return (itr != m_objectMap.end()) ? itr->second : NULL;
+            return (itr != m_objectMap.end()) ? itr->second : nullptr;
         }
 
         static MapType& GetContainer() { return m_objectMap; }
@@ -150,14 +150,14 @@ class ObjectAccessor
             if (T * obj = GetObjectInWorld(guid, (T*)NULL))
                 if (obj->GetMap() == map)
                     return obj;
-            return NULL;
+            return nullptr;
         }
 
         template<class T> static T* GetObjectInWorld(uint32 mapid, float x, float y, uint64 guid, T* /*fake*/)
         {
             T* obj = HashMapHolder<T>::Find(guid);
             if (!obj || obj->GetMapId() != mapid)
-                return NULL;
+                return nullptr;
 
             CellCoord p = warhead::ComputeCellCoord(x, y);
             if (!p.IsCoordValid())
@@ -179,7 +179,7 @@ class ObjectAccessor
             if (dx > -2 && dx < 2 && dy > -2 && dy < 2)
                 return obj;
             else
-                return NULL;
+                return nullptr;
         }
 
         // these functions return objects only if in map of specified object

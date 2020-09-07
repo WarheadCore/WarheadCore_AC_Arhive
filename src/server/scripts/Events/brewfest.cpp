@@ -157,7 +157,7 @@ public:
         {
             if (param == ACTION_START_FIGHT)
             {
-                Creature* cr = NULL;
+                Creature* cr = nullptr;
 
                 for (int i = 0; i < 3; ++i)
                 {
@@ -301,7 +301,7 @@ public:
                 if (Unit* coren = me->ToTempSummon()->GetSummoner())
                     return coren->ToCreature();
 
-            return NULL;
+            return nullptr;
         }
 
         void JustDied(Unit*)
@@ -1487,7 +1487,7 @@ public:
                     if (item && player->AddItem(item, 1)) // ensure filled keg is stored
                     {
                         player->DestroyItemCount(itemCaster->GetEntry(), 1, true);
-                        GetSpell()->m_CastItem = NULL;
+                        GetSpell()->m_CastItem = nullptr;
                         GetSpell()->m_castItemGUID = 0;
                     }
                 }
@@ -1554,7 +1554,7 @@ public:
                     if (item && player->AddItem(item, 1)) // ensure filled keg is stored
                     {
                         player->DestroyItemCount(itemCaster->GetEntry(), 1, true);
-                        GetSpell()->m_CastItem = NULL;
+                        GetSpell()->m_CastItem = nullptr;
                         GetSpell()->m_castItemGUID = 0;
                     }
                 }
@@ -1600,7 +1600,7 @@ public:
             if (!caster)
                 return;
 
-            WorldObject* target = NULL;
+            WorldObject* target = nullptr;
             for (std::list<WorldObject*>::iterator itr = targets.begin(); itr != targets.end(); ++itr)
                 if (caster->HasInLine((*itr), 2.0f))
                 {
@@ -1629,7 +1629,7 @@ public:
 
         void HandleScriptEffect(SpellEffIndex /*effIndex*/)
         {
-            Creature* cr = NULL;
+            Creature* cr = nullptr;
             Unit* caster = GetCaster();
             if (!caster)
                 return;

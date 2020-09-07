@@ -216,7 +216,7 @@ public:
 
             outroTimer = 0;
             outroStep = 0;
-            T1 = NULL;
+            T1 = nullptr;
         }
 
         bool IsEncounterInProgress() const

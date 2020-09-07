@@ -112,9 +112,9 @@ void MapInstanced::UnloadAll()
 Map* MapInstanced::CreateInstanceForPlayer(const uint32 mapId, Player* player)
 { 
     if (GetId() != mapId || !player)
-        return NULL;
+        return nullptr;
 
-    Map* map = NULL;
+    Map* map = nullptr;
 
     if (IsBattlegroundOrArena())
     {
@@ -122,7 +122,7 @@ Map* MapInstanced::CreateInstanceForPlayer(const uint32 mapId, Player* player)
         // the instance id is set in battlegroundid
         uint32 newInstanceId = player->GetBattlegroundId();
         if (!newInstanceId)
-            return NULL;
+            return nullptr;
 
         map = sMapMgr->FindMap(mapId, newInstanceId);
         if (!map)
@@ -133,7 +133,7 @@ Map* MapInstanced::CreateInstanceForPlayer(const uint32 mapId, Player* player)
             else
             {
                 player->TeleportToEntryPoint();
-                return NULL;
+                return nullptr;
             }
         }
     }
@@ -153,7 +153,7 @@ Map* MapInstanced::CreateInstanceForPlayer(const uint32 mapId, Player* player)
             else if (IsSharedDifficultyMap(mapId) && !map->HavePlayers() && map->GetDifficulty() != realdiff)
             {
                 if (player->isBeingLoaded()) // pussywizard: crashfix (assert(passengers.empty) fail in ~transport), could be added to a transport during loading from db
-                    return NULL;
+                    return nullptr;
 
                 if (!map->AllTransportsEmpty())
                     map->AllTransportsRemovePassengers(); // pussywizard: gameobjects / summons (assert(passengers.empty) fail in ~transport)

@@ -21,7 +21,7 @@
 #include "WorldPacket.h"
 #include "GameTime.h"
 
-PacketLog::PacketLog() : _file(NULL)
+PacketLog::PacketLog() : _file(nullptr)
 {
     Initialize();
 }
@@ -31,7 +31,7 @@ PacketLog::~PacketLog()
     if (_file)
         fclose(_file);
 
-    _file = NULL;
+    _file = nullptr;
 }
 
 PacketLog* PacketLog::instance()

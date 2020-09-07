@@ -243,7 +243,7 @@ LootTemplate const* LootStore::GetLootFor(uint32 loot_id) const
     LootTemplateMap::const_iterator tab = m_LootTemplates.find(loot_id);
 
     if (tab == m_LootTemplates.end())
-        return NULL;
+        return nullptr;
 
     return tab->second;
 }
@@ -253,7 +253,7 @@ LootTemplate* LootStore::GetLootForConditionFill(uint32 loot_id) const
     LootTemplateMap::const_iterator tab = m_LootTemplates.find(loot_id);
 
     if (tab == m_LootTemplates.end())
-        return NULL;
+        return nullptr;
 
     return tab->second;
 }
@@ -492,7 +492,7 @@ bool Loot::FillLoot(uint32 lootId, LootStore const& store, Player* lootOwner, bo
     {
         roundRobinPlayer = lootOwner->GetGUID();
 
-        for (GroupReference* itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
+        for (GroupReference* itr = group->GetFirstMember(); itr != nullptr; itr = itr->next())
             if (Player* player = itr->GetSource())   // should actually be looted object instead of lootOwner but looter has to be really close so doesnt really matter
                 if (player->IsInMap(lootOwner)) // pussywizard: multithreading crashfix
                     FillNotNormalLootFor(player, player->IsAtGroupRewardDistance(lootOwner));
@@ -533,7 +533,7 @@ void Loot::FillNotNormalLootFor(Player* player, bool presentAtLooting)
 
     // Process currency items
     uint32 max_slot = GetMaxSlotInLootFor(player);
-    LootItem const* item = NULL;
+    LootItem const* item = nullptr;
     uint32 itemsSize = uint32(items.size());
     for (uint32 i = 0; i < max_slot; ++i)
     {
@@ -565,7 +565,7 @@ QuestItemList* Loot::FillFFALoot(Player* player)
     if (ql->empty())
     {
         delete ql;
-        return NULL;
+        return nullptr;
     }
 
     PlayerFFAItems[player->GetGUIDLow()] = ql;
@@ -575,7 +575,7 @@ QuestItemList* Loot::FillFFALoot(Player* player)
 QuestItemList* Loot::FillQuestLoot(Player* player)
 {
     if (items.size() == MAX_NR_LOOT_ITEMS)
-        return NULL;
+        return nullptr;
 
     QuestItemList* ql = new QuestItemList();
 
@@ -603,7 +603,7 @@ QuestItemList* Loot::FillQuestLoot(Player* player)
     if (ql->empty())
     {
         delete ql;
-        return NULL;
+        return nullptr;
     }
 
     PlayerQuestItems[player->GetGUIDLow()] = ql;
@@ -635,7 +635,7 @@ QuestItemList* Loot::FillNonQuestNonFFAConditionalLoot(Player* player, bool pres
     if (ql->empty())
     {
         delete ql;
-        return NULL;
+        return nullptr;
     }
 
     PlayerNonQuestNonFFAConditionalItems[player->GetGUIDLow()] = ql;
@@ -724,7 +724,7 @@ void Loot::generateMoneyLoot(uint32 minAmount, uint32 maxAmount)
 
 LootItem* Loot::LootItemInSlot(uint32 lootSlot, Player* player, QuestItem* *qitem, QuestItem* *ffaitem, QuestItem* *conditem)
 {
-    LootItem* item = NULL;
+    LootItem* item = nullptr;
     bool is_looted = true;
     if (lootSlot >= items.size())
     {
@@ -737,7 +737,7 @@ LootItem* Loot::LootItemInSlot(uint32 lootSlot, Player* player, QuestItem* *qite
                 *qitem = qitem2;
             item = &quest_items[qitem2->index];
             if (item->follow_loot_rules && !item->AllowedForPlayer(player)) // pussywizard: such items (follow_loot_rules) are added to every player, but not everyone is allowed, check it here
-                return NULL;
+                return nullptr;
             is_looted = qitem2->is_looted;
         }
     }
@@ -782,7 +782,7 @@ LootItem* Loot::LootItemInSlot(uint32 lootSlot, Player* player, QuestItem* *qite
     }
 
     if (is_looted)
-        return NULL;
+        return nullptr;
 
     return item;
 }
@@ -1154,7 +1154,7 @@ LootStoreItem const* LootTemplate::LootGroup::Roll(Loot& loot, Player const *pla
     if (!possibleLoot.empty())                              // If nothing selected yet - an item is taken from equal-chanced part
         return warhead::Containers::SelectRandomContainerElement(possibleLoot);
 
-    return NULL;                                            // Empty drop from the group
+    return nullptr;                                            // Empty drop from the group
 }
 
 // True if group includes at least 1 quest drop entry
@@ -1288,7 +1288,7 @@ void LootTemplate::AddEntry(LootStoreItem* item)
     if (item->groupid > 0 && item->reference == 0)            // Group
     {
         if (item->groupid >= Groups.size())
-            Groups.resize(item->groupid, NULL);               // Adds new group the the loot template if needed
+            Groups.resize(item->groupid, nullptr);               // Adds new group the the loot template if needed
         if (!Groups[item->groupid - 1])
             Groups[item->groupid - 1] = new LootGroup();
 

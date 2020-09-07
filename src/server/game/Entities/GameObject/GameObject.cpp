@@ -39,7 +39,7 @@
 #include "GameLocale.h"
 
 GameObject::GameObject() : WorldObject(false), MovableMapObject(),
-    m_model(NULL), m_goValue(), m_AI(NULL)
+    m_model(nullptr), m_goValue(), m_AI(nullptr)
 {
     m_objectType |= TYPEMASK_GAMEOBJECT;
     m_objectTypeId = TYPEID_GAMEOBJECT;
@@ -55,9 +55,9 @@ GameObject::GameObject() : WorldObject(false), MovableMapObject(),
     m_usetimes = 0;
     m_spellId = 0;
     m_cooldownTime = 0;
-    m_goInfo = NULL;
+    m_goInfo = nullptr;
     m_ritualOwnerGUIDLow = 0;
-    m_goData = NULL;
+    m_goData = nullptr;
     m_packedRotation = 0;
 
     m_DBTableGuid = 0;
@@ -104,7 +104,7 @@ void GameObject::CleanupsBeforeDelete(bool /*finalCleanup*/)
     if (GetTransport() && !ToTransport())
     {
         GetTransport()->RemovePassenger(this);
-        SetTransport(NULL);
+        SetTransport(nullptr);
         m_movementInfo.transport.Reset();
         m_movementInfo.RemoveMovementFlag(MOVEMENTFLAG_ONTRANSPORT);
     }
@@ -572,7 +572,7 @@ void GameObject::Update(uint32 diff)
                     if (goInfo->trap.type == 2)
                     {
                         if (goInfo->trap.spellId)
-                            CastSpell(NULL, goInfo->trap.spellId);  // FIXME: null target won't work for target type 1
+                            CastSpell(nullptr, goInfo->trap.spellId);  // FIXME: null target won't work for target type 1
                         SetLootState(GO_JUST_DEACTIVATED);
                         break;
                     }
@@ -596,7 +596,7 @@ void GameObject::Update(uint32 diff)
 
                     // Type 0 and 1 - trap (type 0 will not get removed after casting a spell)
                     Unit* owner = GetOwner();
-                    Unit* target = NULL;                            // pointer to appropriate target if found any
+                    Unit* target = nullptr;                            // pointer to appropriate target if found any
 
                     // Note: this hack with search required until GO casting not implemented
                     // search unfriendly creature
@@ -1183,7 +1183,7 @@ void GameObject::TriggeringLinkedGameObject(uint32 trapEntry, Unit* target)
         range = 5.0f;
 
     // search nearest linked GO
-    GameObject* trapGO = NULL;
+    GameObject* trapGO = nullptr;
     {
         // using original GO distance
         CellCoord p(warhead::ComputeCellCoord(GetPositionX(), GetPositionY()));
@@ -1204,7 +1204,7 @@ void GameObject::TriggeringLinkedGameObject(uint32 trapEntry, Unit* target)
 
 GameObject* GameObject::LookupFishingHoleAround(float range)
 { 
-    GameObject* ok = NULL;
+    GameObject* ok = nullptr;
 
     CellCoord p(warhead::ComputeCellCoord(GetPositionX(), GetPositionY()));
     Cell cell(p);
@@ -1251,7 +1251,7 @@ void GameObject::SetGoArtKit(uint8 kit)
 
 void GameObject::SetGoArtKit(uint8 artkit, GameObject* go, uint32 lowguid)
 {
-    const GameObjectData* data = NULL;
+    const GameObjectData* data = nullptr;
     if (go)
     {
         go->SetGoArtKit(artkit);
@@ -2270,7 +2270,7 @@ void GameObject::EnableCollision(bool enable)
         GetMap()->InsertGameObjectModel(*m_model);*/
 
     uint32 phaseMask = 0;
-    if (enable && !DisableMgr::IsDisabledFor(DISABLE_TYPE_GO_LOS, GetEntry(), NULL))
+    if (enable && !DisableMgr::IsDisabledFor(DISABLE_TYPE_GO_LOS, GetEntry(), nullptr))
         phaseMask = GetPhaseMask();
 
     m_model->enable(phaseMask);
@@ -2295,14 +2295,14 @@ void GameObject::UpdateModel()
 Player* GameObject::GetLootRecipient() const
 { 
     if (!m_lootRecipient)
-        return NULL;
+        return nullptr;
     return ObjectAccessor::FindPlayerInOrOutOfWorld(m_lootRecipient);
 }
 
 Group* GameObject::GetLootRecipientGroup() const
 { 
     if (!m_lootRecipientGroup)
-        return NULL;
+        return nullptr;
     return sGroupMgr->GetGroupByGUID(m_lootRecipientGroup);
 }
 

@@ -102,7 +102,7 @@ public:
     CreatureAI* GetAI(Creature* creature) const override
     {
         if (!creature->GetInstanceScript())
-            return NULL;
+            return nullptr;
 
         hyjalAI* ai = new hyjalAI(creature);
 
@@ -187,7 +187,7 @@ public:
     CreatureAI* GetAI(Creature* creature) const override
     {
         if (!creature->GetInstanceScript())
-            return NULL;
+            return nullptr;
 
         hyjalAI* ai = new hyjalAI(creature);
 
@@ -215,7 +215,7 @@ public:
     CreatureAI* GetAI(Creature* creature) const override
     {
         if (!creature->GetInstanceScript())
-            return NULL;
+            return nullptr;
 
         hyjalAI* ai = new hyjalAI(creature);
         ai->Reset();

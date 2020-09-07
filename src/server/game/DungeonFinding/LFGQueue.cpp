@@ -212,7 +212,7 @@ LfgCompatibility LFGQueue::FindNewGroups(const uint64& newGuid)
         {
             // unset roles here so they are not copied, restore after insertion
             LfgRolesMap* r = it->roles; 
-            it->roles = NULL;
+            it->roles = nullptr;
             currentCompatibles.insert(*it);
             it->roles = r;
         }

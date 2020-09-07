@@ -339,7 +339,7 @@ void WorldSession::HandleCalendarAddEvent(WorldPacket& recvData)
         catch (ByteBufferException const&)
         {
             delete calendarEvent;
-            calendarEvent = NULL;
+            calendarEvent = nullptr;
             throw;
         }
 

@@ -246,7 +246,7 @@ public:
         {
             me->DeleteThreatList();
             me->CombatStop(false);
-            me->SetLootRecipient(NULL);
+            me->SetLootRecipient(nullptr);
 
             if (HasEscortState(STATE_ESCORT_ESCORTING))
             {

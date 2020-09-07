@@ -33,7 +33,7 @@
 #include "Spell.h"
 #include "GameTime.h"
 
-MotionTransport::MotionTransport() : Transport(), _transportInfo(NULL), _isMoving(true), _pendingStop(false), _triggeredArrivalEvent(false), _triggeredDepartureEvent(false), _passengersLoaded(false), _delayedTeleport(false)
+MotionTransport::MotionTransport() : Transport(), _transportInfo(nullptr), _isMoving(true), _pendingStop(false), _triggeredArrivalEvent(false), _triggeredDepartureEvent(false), _passengersLoaded(false), _delayedTeleport(false)
 {
     m_updateFlag = UPDATEFLAG_TRANSPORT | UPDATEFLAG_LOWGUID | UPDATEFLAG_STATIONARY_POSITION | UPDATEFLAG_ROTATION;
 }
@@ -114,7 +114,7 @@ void MotionTransport::CleanupsBeforeDelete(bool finalCleanup /*= true*/)
     {
         WorldObject* obj = *_passengers.begin();
         RemovePassenger(obj);
-        obj->SetTransport(NULL);
+        obj->SetTransport(nullptr);
         obj->m_movementInfo.transport.Reset();
         obj->m_movementInfo.RemoveMovementFlag(MOVEMENTFLAG_ONTRANSPORT);
     }
@@ -298,7 +298,7 @@ void MotionTransport::RemovePassenger(WorldObject* passenger, bool withAll)
 
         if (withAll)
         {
-            passenger->SetTransport(NULL);
+            passenger->SetTransport(nullptr);
             passenger->m_movementInfo.flags &= ~MOVEMENTFLAG_ONTRANSPORT;
             passenger->m_movementInfo.transport.guid = 0;
             passenger->m_movementInfo.transport.pos.Relocate(0.0f, 0.0f, 0.0f, 0.0f);
@@ -314,7 +314,7 @@ Creature* MotionTransport::CreateNPCPassenger(uint32 guid, CreatureData const* d
     if (!creature->LoadCreatureFromDB(guid, map, false))
     {
         delete creature;
-        return NULL;
+        return nullptr;
     }
 
     float x = data->posX;
@@ -339,13 +339,13 @@ Creature* MotionTransport::CreateNPCPassenger(uint32 guid, CreatureData const* d
     {
         LOG_ERROR("server", "Creature (guidlow %d, entry %d) not created. Suggested coordinates aren't valid (X: %f Y: %f)",creature->GetGUIDLow(),creature->GetEntry(),creature->GetPositionX(),creature->GetPositionY());
         delete creature;
-        return NULL;
+        return nullptr;
     }
 
     if (!map->AddToMap(creature))
     {
         delete creature;
-        return NULL;
+        return nullptr;
     }
 
     _staticPassengers.insert(creature);
@@ -362,7 +362,7 @@ GameObject* MotionTransport::CreateGOPassenger(uint32 guid, GameObjectData const
     if (!go->LoadGameObjectFromDB(guid, map, false))
     {
         delete go;
-        return NULL;
+        return nullptr;
     }
 
     float x = data->posX;
@@ -380,13 +380,13 @@ GameObject* MotionTransport::CreateGOPassenger(uint32 guid, GameObjectData const
     {
         LOG_ERROR("server", "GameObject (guidlow %d, entry %d) not created. Suggested coordinates aren't valid (X: %f Y: %f)", go->GetGUIDLow(), go->GetEntry(), go->GetPositionX(), go->GetPositionY());
         delete go;
-        return NULL;
+        return nullptr;
     }
 
     if (!map->AddToMap(go))
     {
         delete go;
-        return NULL;
+        return nullptr;
     }
 
     _staticPassengers.insert(go);
@@ -766,7 +766,7 @@ void StaticTransport::CleanupsBeforeDelete(bool finalCleanup /*= true*/)
     {
         WorldObject* obj = *_passengers.begin();
         RemovePassenger(obj);
-        obj->SetTransport(NULL);
+        obj->SetTransport(nullptr);
         obj->m_movementInfo.transport.Reset();
         obj->m_movementInfo.RemoveMovementFlag(MOVEMENTFLAG_ONTRANSPORT);
     }
@@ -841,7 +841,7 @@ void StaticTransport::Update(uint32 diff)
 
 void StaticTransport::RelocateToProgress(uint32 progress)
 {
-    TransportAnimationEntry const *curr = NULL, *next = NULL;
+    TransportAnimationEntry const *curr = NULL, *next = nullptr;
     float percPos;
     if (m_goValue.Transport.AnimationInfo->GetAnimNode(progress, curr, next, percPos))
     {
@@ -972,7 +972,7 @@ void StaticTransport::RemovePassenger(WorldObject* passenger, bool withAll)
 
         if (withAll)
         {
-            passenger->SetTransport(NULL);
+            passenger->SetTransport(nullptr);
             passenger->m_movementInfo.flags &= ~MOVEMENTFLAG_ONTRANSPORT;
             passenger->m_movementInfo.transport.guid = 0;
             passenger->m_movementInfo.transport.pos.Relocate(0.0f, 0.0f, 0.0f, 0.0f);

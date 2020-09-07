@@ -241,7 +241,7 @@ _transportsUpdateIter(_transports.end()), i_scriptLock(false), _defaultLight(Get
         {
             //z code
             GridMaps[idx][j] =NULL;
-            setNGrid(NULL, idx, j);
+            setNGrid(nullptr, idx, j);
         }
     }
 
@@ -335,7 +335,7 @@ void Map::SwitchGridContainers(Creature* obj, bool on)
     LOG_DEBUG("server", "Switch object " UI64FMTD " from grid[%u, %u] %u", obj->GetGUID(), cell.data.Part.grid_x, cell.data.Part.grid_y, on);
 #endif
     NGridType *ngrid = getNGrid(cell.GridX(), cell.GridY());
-    ASSERT(ngrid != NULL);
+    ASSERT(ngrid != nullptr);
 
     GridType &grid = ngrid->GetGridType(cell.CellX(), cell.CellY());
 
@@ -372,7 +372,7 @@ void Map::SwitchGridContainers(GameObject* obj, bool on)
 
     //TC_LOG_DEBUG(LOG_FILTER_MAPS, "Switch object " UI64FMTD " from grid[%u, %u] %u", obj->GetGUID(), cell.data.Part.grid_x, cell.data.Part.grid_y, on);
     NGridType *ngrid = getNGrid(cell.GridX(), cell.GridY());
-    ASSERT(ngrid != NULL);
+    ASSERT(ngrid != nullptr);
 
     GridType &grid = ngrid->GetGridType(cell.CellX(), cell.CellY());
 
@@ -452,7 +452,7 @@ bool Map::EnsureGridLoaded(const Cell &cell)
     EnsureGridCreated(GridCoord(cell.GridX(), cell.GridY()));
     NGridType *grid = getNGrid(cell.GridX(), cell.GridY());
 
-    ASSERT(grid != NULL);
+    ASSERT(grid != nullptr);
     if (!isGridObjectDataLoaded(cell.GridX(), cell.GridY()))
     {
     //if (!isGridObjectDataLoaded(cell.GridX(), cell.GridY()))
@@ -1194,7 +1194,7 @@ bool Map::UnloadGrid(NGridType& ngrid)
     ASSERT(i_objectsToRemove.empty());
 
     delete &ngrid;
-    setNGrid(NULL, x, y);
+    setNGrid(nullptr, x, y);
 
     int gx = (MAX_NUMBER_OF_GRIDS - 1) - x;
     int gy = (MAX_NUMBER_OF_GRIDS - 1) - y;
@@ -1211,7 +1211,7 @@ bool Map::UnloadGrid(NGridType& ngrid)
         MMAP::MMapFactory::createOrGetMMapManager()->unloadMap(GetId(), gx, gy);
     }
 
-    GridMaps[gx][gy] = NULL;
+    GridMaps[gx][gy] = nullptr;
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("server", "Unloading grid[%u, %u] for map %u finished", x, y, GetId());
@@ -1951,7 +1951,7 @@ Transport* Map::GetTransportForPos(uint32 phase, float x, float y, float z, Worl
                         return staticTrans->ToTransport();
             }
 
-    return NULL;
+    return nullptr;
 }
 
 float Map::GetHeight(float x, float y, float z, bool checkVMap /*= true*/, float maxSearchDist /*= DEFAULT_HEIGHT_SEARCH*/) const
@@ -2546,7 +2546,7 @@ template void Map::RemoveFromMap(DynamicObject*, bool);
 InstanceMap::InstanceMap(uint32 id, uint32 InstanceId, uint8 SpawnMode, Map* _parent)
   : Map(id, InstanceId, SpawnMode, _parent),
     m_resetAfterUnload(false), m_unloadWhenEmpty(false),
-    instance_script(NULL), i_script_id(0)
+    instance_script(nullptr), i_script_id(0)
 {
     //lets initialize visibility distance for dungeons
     InstanceMap::InitVisibilityDistance();
@@ -2565,7 +2565,7 @@ InstanceMap::InstanceMap(uint32 id, uint32 InstanceId, uint8 SpawnMode, Map* _pa
 InstanceMap::~InstanceMap()
 {
     delete instance_script;
-    instance_script = NULL;
+    instance_script = nullptr;
     sInstanceSaveMgr->DeleteInstanceSaveIfNeeded(GetInstanceId(), true);
 }
 
@@ -2769,7 +2769,7 @@ void InstanceMap::AfterPlayerUnlinkFromMap()
 
 void InstanceMap::CreateInstanceScript(bool load, std::string data, uint32 completedEncounterMask)
 { 
-    if (instance_script != NULL)
+    if (instance_script != nullptr)
         return;
 
     InstanceTemplate const* mInstance = sObjectMgr->GetInstanceTemplate(GetId());
@@ -2914,7 +2914,7 @@ uint32 InstanceMap::GetMaxResetDelay() const
 /* ******* Battleground Instance Maps ******* */
 
 BattlegroundMap::BattlegroundMap(uint32 id, uint32 InstanceId, Map* _parent, uint8 spawnMode)
-  : Map(id, InstanceId, spawnMode, _parent), m_bg(NULL)
+  : Map(id, InstanceId, spawnMode, _parent), m_bg(nullptr)
 {
     //lets initialize visibility distance for BG/Arenas
     BattlegroundMap::InitVisibilityDistance();
@@ -2925,8 +2925,8 @@ BattlegroundMap::~BattlegroundMap()
     if (m_bg)
     {
         //unlink to prevent crash, always unlink all pointer reference before destruction
-        m_bg->SetBgMap(NULL);
-        m_bg = NULL;
+        m_bg->SetBgMap(nullptr);
+        m_bg = nullptr;
     }
 }
 
@@ -3009,10 +3009,10 @@ GameObject* Map::GetGameObject(uint64 guid)
 Transport* Map::GetTransport(uint64 guid)
 { 
     if (GUID_HIPART(guid) != HIGHGUID_MO_TRANSPORT && GUID_HIPART(guid) != HIGHGUID_TRANSPORT)
-        return NULL;
+        return nullptr;
 
     GameObject* go = GetGameObject(guid);
-    return go ? go->ToTransport() : NULL;
+    return go ? go->ToTransport() : nullptr;
 }
 
 DynamicObject* Map::GetDynamicObject(uint64 guid)

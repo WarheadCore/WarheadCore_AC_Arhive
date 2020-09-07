@@ -75,7 +75,7 @@ public:
             {
             case 0:
                 {
-                    GameObject* cage = NULL;
+                    GameObject* cage = nullptr;
                     if (galensCageGUID)
                         cage = me->GetMap()->GetGameObject(galensCageGUID);
                     else

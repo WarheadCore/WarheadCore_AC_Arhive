@@ -199,7 +199,7 @@ class npc_cork_gizelton : public CreatureScript
                 RemoveSummons();
                 me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
 
-                Creature* cr = NULL;
+                Creature* cr = nullptr;
                 if ((cr = me->SummonCreature(NPC_RIGGER_GIZELTON, *me)))
                 {
                     cr->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
@@ -339,7 +339,7 @@ class npc_cork_gizelton : public CreatureScript
                         if (!_playerGUID)
                             return;
                         ImmuneFlagSet(true, _faction);
-                        Creature* cr = NULL;
+                        Creature* cr = nullptr;
                         for (uint8 i = 0; i < 4; ++i)
                         {
                             float o = (i*M_PI/2)+(M_PI/4);
@@ -364,7 +364,7 @@ class npc_cork_gizelton : public CreatureScript
                         if (!_playerGUID)
                             return;
                         ImmuneFlagSet(true, _faction);
-                        Creature* cr = NULL;
+                        Creature* cr = nullptr;
                         for (uint8 i = 0; i < 3; ++i)
                         {
                             float o = i*2*M_PI/3;

@@ -85,7 +85,7 @@ void LootItemStorage::AddNewStoredLoot(Loot* loot, Player* /*player*/)
     }
 
     SQLTransaction trans = CharacterDatabase.BeginTransaction();
-    PreparedStatement* stmt = NULL;
+    PreparedStatement* stmt = nullptr;
 
     StoredLootItemList& itemList = lootItemStore[loot->containerId];
 

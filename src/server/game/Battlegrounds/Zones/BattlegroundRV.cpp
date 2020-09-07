@@ -345,6 +345,6 @@ GameObject* BattlegroundRV::GetPillarAtPosition(Position* p)
 {
     uint32 pillar = GetPillarIdForPos(p);
     if (!pillar)
-        return NULL;
+        return nullptr;
     return GetBgMap()->GetGameObject(BgObjects[pillar]);
 }

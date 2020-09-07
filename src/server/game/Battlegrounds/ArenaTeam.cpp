@@ -403,7 +403,7 @@ void ArenaTeam::Disband()
 
 void ArenaTeam::Roster(WorldSession* session)
 {
-    Player* player = NULL;
+    Player* player = nullptr;
 
     uint8 unk308 = 0;
     std::string tempName;
@@ -962,5 +962,5 @@ ArenaTeamMember* ArenaTeam::GetMember(uint64 guid)
         if (itr->Guid == guid)
             return &(*itr);
 
-    return NULL;
+    return nullptr;
 }

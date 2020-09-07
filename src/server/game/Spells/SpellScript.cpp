@@ -396,7 +396,7 @@ WorldLocation const* SpellScript::GetExplTargetDest()
 {
     if (m_spell->m_targets.HasDst())
         return m_spell->m_targets.GetDstPos();
-    return NULL;
+    return nullptr;
 }
 
 void SpellScript::SetExplTargetDest(WorldLocation& loc)
@@ -444,7 +444,7 @@ Creature* SpellScript::GetHitCreature()
     if (m_spell->unitTarget)
         return m_spell->unitTarget->ToCreature();
     else
-        return NULL;
+        return nullptr;
 }
 
 Player* SpellScript::GetHitPlayer()
@@ -457,7 +457,7 @@ Player* SpellScript::GetHitPlayer()
     if (m_spell->unitTarget)
         return m_spell->unitTarget->ToPlayer();
     else
-        return NULL;
+        return nullptr;
 }
 
 Item* SpellScript::GetHitItem()
@@ -538,9 +538,9 @@ Aura* SpellScript::GetHitAura()
         return NULL;
     }
     if (!m_spell->m_spellAura)
-        return NULL;
+        return nullptr;
     if (m_spell->m_spellAura->IsRemoved())
-        return NULL;
+        return nullptr;
     return m_spell->m_spellAura;
 }
 
@@ -905,7 +905,7 @@ void AuraScript::EffectProcHandler::Call(AuraScript* auraScript, AuraEffect cons
 bool AuraScript::_Load(Aura* aura)
 {
     m_aura = aura;
-    _PrepareScriptCall((AuraScriptHookType)SPELL_SCRIPT_STATE_LOADING, NULL);
+    _PrepareScriptCall((AuraScriptHookType)SPELL_SCRIPT_STATE_LOADING, nullptr);
     bool load = Load();
     _FinishScriptCall();
     return load;
@@ -1152,7 +1152,7 @@ Unit* AuraScript::GetTarget() const
             LOG_ERROR("server", "TSCR: Script: `%s` Spell: `%u` AuraScript::GetTarget called in a hook in which the call won't have effect!", m_scriptName->c_str(), m_scriptSpellId);
     }
 
-    return NULL;
+    return nullptr;
 }
 
 AuraApplication const* AuraScript::GetTargetApplication() const

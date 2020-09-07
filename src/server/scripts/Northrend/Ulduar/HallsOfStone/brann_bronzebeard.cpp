@@ -267,7 +267,7 @@ public:
             if (!pInstance)
                 return;
 
-            GameObject *go = NULL;
+            GameObject *go = nullptr;
             if (headMask & 0x1) // Kaddrak
                 if ((go = me->GetMap()->GetGameObject(pInstance->GetData64(GO_KADDRAK))))
                     activate ? go->SendCustomAnim(0) : go->SetGoState(GO_STATE_READY);
@@ -558,7 +558,7 @@ public:
                 SpeechPause += diff;
                 if (SpeechPause >= Conversation[SpeechCount].timer)
                 {
-                    Creature* cs = NULL;
+                    Creature* cs = nullptr;
                     switch (Conversation[SpeechCount].creature)
                     {
                         case NPC_BRANN:     cs = me; break;
@@ -615,7 +615,7 @@ public:
 
 void brann_bronzebeard::brann_bronzebeardAI::InitializeEvent()
 {
-    Creature* cr = NULL;
+    Creature* cr = nullptr;
     if ((cr = me->SummonCreature(NPC_KADDRAK, 923.7f, 326.9f, 219.5f, 2.1f, TEMPSUMMON_TIMED_DESPAWN, 580000)))
     {
         cr->SetInCombatWithZone();

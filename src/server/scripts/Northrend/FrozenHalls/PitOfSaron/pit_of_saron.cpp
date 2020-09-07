@@ -1128,7 +1128,7 @@ public:
             me->DeleteThreatList();
             me->CombatStop(true);
             me->LoadCreaturesAddon(true);
-            me->SetLootRecipient(NULL);
+            me->SetLootRecipient(nullptr);
             me->ResetPlayerDamageReq();
             me->SetLastDamagedTime(0);
         }

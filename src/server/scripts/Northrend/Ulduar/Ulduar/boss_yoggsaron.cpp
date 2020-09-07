@@ -490,7 +490,7 @@ public:
 
         void InformCloud()
         {
-            Creature* cloud = NULL;
+            Creature* cloud = nullptr;
             for (SummonList::const_iterator itr = summons.begin(); itr != summons.end();)
             {
                 Creature* summon = ObjectAccessor::GetCreature(*me, *itr);
@@ -533,7 +533,7 @@ public:
         void AddPortals()
         {
             _summonSpeed -= 0.1f;
-            Creature* cr = NULL;
+            Creature* cr = nullptr;
 
             // Spawn Portals
             for (uint8 i = 0; i < RAID_MODE(4, 10); ++i)
@@ -948,7 +948,7 @@ public:
             _checkTimer += diff;
             if (_checkTimer >= 500 && !_isSummoning)
             {
-                Unit* who = me->SelectNearbyTarget(NULL, 6.0f);
+                Unit* who = me->SelectNearbyTarget(nullptr, 6.0f);
                 if (who && who->GetTypeId() == TYPEID_PLAYER && !me->HasAura(SPELL_SUMMON_GUARDIAN_OF_YS) && !who->HasAura(SPELL_HODIR_FLASH_FREEZE))
                 {
                     _isSummoning = true;
@@ -1546,7 +1546,7 @@ public:
 
         Unit* SelectCorruptionTarget()
         {
-            Player* target = NULL;
+            Player* target = nullptr;
             Map::PlayerList const& pList = me->GetMap()->GetPlayers();
             uint8 num = urand(0, pList.getSize()-1);
             uint8 count = 0;
@@ -1602,7 +1602,7 @@ public:
 
         Unit* SelectConstrictTarget()
         {
-            Player *target = NULL;
+            Player *target = nullptr;
             Map::PlayerList const& pList = me->GetMap()->GetPlayers();
             uint8 num = urand(0, pList.getSize()-1);
             uint8 count = 0;
@@ -2301,7 +2301,7 @@ class spell_yogg_saron_brain_link : public SpellScriptLoader
             void HandleOnEffectApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
                 PreventDefaultAction();
-                Player* target = NULL;
+                Player* target = nullptr;
                 Map::PlayerList const& pList = GetUnitOwner()->GetMap()->GetPlayers();
                 uint8 _offset = urand(0, pList.getSize()-1);
                 uint8 _counter = 0;
@@ -2408,7 +2408,7 @@ class spell_yogg_saron_destabilization_matrix : public SpellScriptLoader
 
             void FilterTargets(std::list<WorldObject*>& targets)
             {
-                WorldObject* target = NULL;
+                WorldObject* target = nullptr;
                 for (std::list<WorldObject*>::iterator itr = targets.begin(); itr != targets.end(); ++itr)
                     if (!(*itr)->ToUnit()->HasAura(SPELL_DESTABILIZATION_MATRIX_ATTACK))
                     {
@@ -2452,7 +2452,7 @@ class spell_yogg_saron_titanic_storm : public SpellScriptLoader
 
             void FilterTargets(std::list<WorldObject*>& targets)
             {
-                WorldObject* target = NULL;
+                WorldObject* target = nullptr;
                 for (std::list<WorldObject*>::iterator itr = targets.begin(); itr != targets.end(); ++itr)
                     if ((*itr)->ToUnit()->HasAura(SPELL_WEAKENED))
                     {

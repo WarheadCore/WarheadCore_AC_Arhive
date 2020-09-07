@@ -257,7 +257,7 @@ public:
 
         void SendLavaWaves(bool start)
         {
-            Unit* cr = NULL;
+            Unit* cr = nullptr;
             for (SummonList::const_iterator itr = summons.begin(); itr != summons.end(); ++itr)
             {
                 cr = ObjectAccessor::GetUnit(*me, *itr);
@@ -275,7 +275,7 @@ public:
         {
             if (pInstance)
             {
-                Unit* cr = NULL;
+                Unit* cr = nullptr;
                 for (uint8 i = 0; i < 3; ++i)
                     if ((cr = ObjectAccessor::GetUnit(*me, pInstance->GetData64(DATA_TENEBRON+i))))
                     {
@@ -314,7 +314,7 @@ public:
         {
             if (pInstance)
             {
-                Creature* cr = NULL;
+                Creature* cr = nullptr;
                 for (uint8 i = 0; i < 3; ++i)
                     if (dragons[i])
                         if ((cr = ObjectAccessor::GetCreature(*me, dragons[i])))
@@ -495,7 +495,7 @@ void boss_sartharion::boss_sartharionAI::HandleSartharionAbilities()
             if (!urand(0,2))
                 Talk(SAY_SARTHARION_SPECIAL_4);
 
-            Creature* cr = NULL;
+            Creature* cr = nullptr;
             summons.RemoveNotExisting();
             uint8 rand = urand(0,4); // 5 - numer of cyclones
             uint8 iter = 0;
@@ -527,7 +527,7 @@ void boss_sartharion::boss_sartharionAI::HandleSartharionAbilities()
 
             if (me->HealthBelowPct(11))
             {
-                Creature* cr = NULL;
+                Creature* cr = nullptr;
                 summons.RemoveNotExisting();
                 for (SummonList::iterator i = summons.begin(); i != summons.end(); ++i)
                 {
@@ -778,7 +778,7 @@ public:
                 case EVENT_MINIBOSS_SPAWN_HELPERS:
                 {
                     Talk(WHISPER_HATCH_EGGS);
-                    Creature* cr = NULL;
+                    Creature* cr = nullptr;
                     for (uint8 i = 0; i < 6; ++i)
                     {
                         if ((cr = me->SummonCreature(NPC_TWILIGHT_EGG, EggsPos[isSartharion ? i+6 : i].GetPositionX(), EggsPos[isSartharion ? i+6 : i].GetPositionY(), EggsPos[isSartharion ? i+6 : i].GetPositionZ(), EggsPos[isSartharion ? i+6 : i].GetOrientation(), TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 60000)))
@@ -794,7 +794,7 @@ public:
                 }
                 case EVENT_MINIBOSS_HATCH_EGGS:
                 {
-                    Creature* cr = NULL;
+                    Creature* cr = nullptr;
                     summons.RemoveNotExisting();
                     summons.DespawnEntry(NPC_TWILIGHT_WHELP);
                     for (SummonList::iterator i = summons.begin(); i != summons.end(); ++i)

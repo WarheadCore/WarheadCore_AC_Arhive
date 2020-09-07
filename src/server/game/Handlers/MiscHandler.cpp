@@ -85,7 +85,7 @@ void WorldSession::HandleRepopRequestOpcode(WorldPacket & recv_data)
     }
 
     //this is spirit release confirm?
-    GetPlayer()->RemovePet(NULL, PET_SAVE_NOT_IN_SLOT, true);
+    GetPlayer()->RemovePet(nullptr, PET_SAVE_NOT_IN_SLOT, true);
     GetPlayer()->BuildPlayerRepop();
     GetPlayer()->RepopAtGraveyard();
 }
@@ -106,9 +106,9 @@ void WorldSession::HandleGossipSelectOptionOpcode(WorldPacket & recv_data)
     if (_player->PlayerTalkClass->IsGossipOptionCoded(gossipListId))
         recv_data >> code;
 
-    Creature* unit = NULL;
-    GameObject* go = NULL;
-    Item* item = NULL;
+    Creature* unit = nullptr;
+    GameObject* go = nullptr;
+    Item* item = nullptr;
     if (IS_CRE_OR_VEH_GUID(guid))
     {
         unit = GetPlayer()->GetNPCIfCanInteractWith(guid, UNIT_NPC_FLAG_NONE);
@@ -1569,7 +1569,7 @@ void WorldSession::HandleSetDungeonDifficultyOpcode(WorldPacket & recv_data)
     {
         if (group->IsLeader(_player->GetGUID()))
         {
-            for (GroupReference* itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
+            for (GroupReference* itr = group->GetFirstMember(); itr != nullptr; itr = itr->next())
             {
                 Player* groupGuy = itr->GetSource();
                 if (!groupGuy)
@@ -1577,13 +1577,13 @@ void WorldSession::HandleSetDungeonDifficultyOpcode(WorldPacket & recv_data)
 
                 if (!groupGuy->IsInWorld())
                 {
-                    _player->SendDungeonDifficulty(group != NULL);
+                    _player->SendDungeonDifficulty(group != nullptr);
                     return;
                 }
 
                 if (groupGuy->GetGUID() == _player->GetGUID() ? groupGuy->GetMap()->IsDungeon() : groupGuy->GetMap()->IsNonRaidDungeon())
                 {
-                    _player->SendDungeonDifficulty(group != NULL);
+                    _player->SendDungeonDifficulty(group != nullptr);
                     return;
                 }
             }
@@ -1596,7 +1596,7 @@ void WorldSession::HandleSetDungeonDifficultyOpcode(WorldPacket & recv_data)
     {
         if (_player->FindMap() && _player->FindMap()->IsDungeon())
         {
-            _player->SendDungeonDifficulty(group != NULL);
+            _player->SendDungeonDifficulty(group != nullptr);
             return;
         }
         Player::ResetInstances(_player->GetGUIDLow(), INSTANCE_RESET_CHANGE_DIFFICULTY, false);
@@ -1626,7 +1626,7 @@ void WorldSession::HandleSetRaidDifficultyOpcode(WorldPacket & recv_data)
         {
             std::set<uint32> foundMaps;
             std::set<Map*> foundMapsPtr;
-            Map* currMap = NULL;
+            Map* currMap = nullptr;
 
             if (uint32 preventionTime = group->GetDifficultyChangePreventionTime())
             {
@@ -1641,11 +1641,11 @@ void WorldSession::HandleSetRaidDifficultyOpcode(WorldPacket & recv_data)
                         break;
                 }
 
-                _player->SendRaidDifficulty(group != NULL);
+                _player->SendRaidDifficulty(group != nullptr);
                 return;
             }
 
-            for (GroupReference* itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
+            for (GroupReference* itr = group->GetFirstMember(); itr != nullptr; itr = itr->next())
             {
                 Player* groupGuy = itr->GetSource();
                 if (!groupGuy)
@@ -1653,7 +1653,7 @@ void WorldSession::HandleSetRaidDifficultyOpcode(WorldPacket & recv_data)
 
                 if (!groupGuy->IsInWorld())
                 {
-                    _player->SendRaidDifficulty(group != NULL);
+                    _player->SendRaidDifficulty(group != nullptr);
                     return;
                 }
 
@@ -1665,7 +1665,7 @@ void WorldSession::HandleSetRaidDifficultyOpcode(WorldPacket & recv_data)
                     foundMapsPtr.insert(groupGuy->GetMap());
                     if (foundMaps.size() > 1 || foundMapsPtr.size() > 1)
                     {
-                        _player->SendRaidDifficulty(group != NULL);
+                        _player->SendRaidDifficulty(group != nullptr);
                         return;
                     }
 
@@ -1673,19 +1673,19 @@ void WorldSession::HandleSetRaidDifficultyOpcode(WorldPacket & recv_data)
                         || !groupGuy->movespline->Finalized() || !groupGuy->GetMap()->ToInstanceMap() || !groupGuy->GetMap()->ToInstanceMap()->GetInstanceScript() || groupGuy->GetMap()->ToInstanceMap()->GetInstanceScript()->IsEncounterInProgress()
                         || !groupGuy->Satisfy(sObjectMgr->GetAccessRequirement(groupGuy->GetMap()->GetId(), Difficulty(mode)), groupGuy->GetMap()->GetId(), false))
                     {
-                        _player->SendRaidDifficulty(group != NULL);
+                        _player->SendRaidDifficulty(group != nullptr);
                         return;
                     }
                 }
                 else if (groupGuy->GetGUID() == _player->GetGUID() ? groupGuy->GetMap()->IsDungeon() : groupGuy->GetMap()->IsRaid())
                 {
-                    _player->SendRaidDifficulty(group != NULL);
+                    _player->SendRaidDifficulty(group != nullptr);
                     return;
                 }
             }
 
-            Map* homeMap571 = sMapMgr->CreateMap(571, NULL);
-            Map* homeMap0 = sMapMgr->CreateMap(0, NULL);
+            Map* homeMap571 = sMapMgr->CreateMap(571, nullptr);
+            Map* homeMap0 = sMapMgr->CreateMap(0, nullptr);
             ASSERT(homeMap0 && homeMap571);
 
             std::map<Player*, Position> playerTeleport;
@@ -1698,7 +1698,7 @@ void WorldSession::HandleSetRaidDifficultyOpcode(WorldPacket & recv_data)
                             if (!p->IsInWorld() || !p->IsAlive() || p->IsInCombat() || p->GetVictim() || p->m_mover != p || p->IsNonMeleeSpellCast(true) || (!p->GetMotionMaster()->empty() && p->GetMotionMaster()->GetCurrentMovementGeneratorType() != IDLE_MOTION_TYPE)
                                 || !p->movespline->Finalized() || !p->GetMap()->ToInstanceMap() || !p->GetMap()->ToInstanceMap()->GetInstanceScript() || p->GetMap()->ToInstanceMap()->GetInstanceScript()->IsEncounterInProgress())
                             {
-                                _player->SendRaidDifficulty(group != NULL);
+                                _player->SendRaidDifficulty(group != nullptr);
                                 return;
                             }
                             playerTeleport[p];
@@ -1718,7 +1718,7 @@ void WorldSession::HandleSetRaidDifficultyOpcode(WorldPacket & recv_data)
 
             bool anyoneInside = false;
             playerTeleport.clear();
-            for (GroupReference* itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
+            for (GroupReference* itr = group->GetFirstMember(); itr != nullptr; itr = itr->next())
             {
                 Player* groupGuy = itr->GetSource();
                 if (!groupGuy)
@@ -1758,7 +1758,7 @@ void WorldSession::HandleSetRaidDifficultyOpcode(WorldPacket & recv_data)
     {
         if (_player->FindMap() && _player->FindMap()->IsDungeon())
         {
-            _player->SendRaidDifficulty(group != NULL);
+            _player->SendRaidDifficulty(group != nullptr);
             return;
         }
         Player::ResetInstances(_player->GetGUIDLow(), INSTANCE_RESET_CHANGE_DIFFICULTY, true);
@@ -1997,7 +1997,7 @@ void WorldSession::HandleUpdateMissileTrajectory(WorldPacket& recvPacket)
     recvPacket >> moveStop;
 
     Unit* caster = ObjectAccessor::GetUnit(*_player, guid);
-    Spell* spell = caster ? caster->GetCurrentSpell(CURRENT_GENERIC_SPELL) : NULL;
+    Spell* spell = caster ? caster->GetCurrentSpell(CURRENT_GENERIC_SPELL) : nullptr;
     if (!spell || spell->m_spellInfo->Id != spellId || !spell->m_targets.HasDst() || !spell->m_targets.HasSrc())
     {
         recvPacket.rfinish();

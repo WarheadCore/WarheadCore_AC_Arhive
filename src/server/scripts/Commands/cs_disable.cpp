@@ -75,10 +75,10 @@ public:
         if (!entryStr || !atoi(entryStr))
             return false;
 
-        char* flagsStr = strtok(NULL, " ");
+        char* flagsStr = strtok(nullptr, " ");
         uint8 flags = flagsStr ? uint8(atoi(flagsStr)) : 0;
 
-        char* commentStr = strtok(NULL, "");
+        char* commentStr = strtok(nullptr, "");
         if (!commentStr)
             return false;
 
@@ -159,7 +159,7 @@ public:
                 break;
         }
 
-        PreparedStatement* stmt = NULL;
+        PreparedStatement* stmt = nullptr;
         stmt = WorldDatabase.GetPreparedStatement(WORLD_SEL_DISABLES);
         stmt->setUInt32(0, entry);
         stmt->setUInt8(1, disableType);
@@ -274,7 +274,7 @@ public:
                 break;
         }
 
-        PreparedStatement* stmt = NULL;
+        PreparedStatement* stmt = nullptr;
         stmt = WorldDatabase.GetPreparedStatement(WORLD_SEL_DISABLES);
         stmt->setUInt32(0, entry);
         stmt->setUInt8(1, disableType);
