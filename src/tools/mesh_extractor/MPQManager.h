@@ -22,6 +22,7 @@
 #include <ace/Synch.h>
 #include <set>
 #include <map>
+#include <mutex>
 
 class DBC;
 class MPQManager
@@ -46,7 +47,7 @@ public:
 protected:
     void InitializeDBC();
 private:
-    ACE_Thread_Mutex mutex;
+    std::mutex _mutex;
 };
 
 extern MPQManager* MPQHandler;

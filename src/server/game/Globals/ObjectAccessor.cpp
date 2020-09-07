@@ -195,20 +195,6 @@ Player* ObjectAccessor::FindConnectedPlayer(uint64 const& guid)
 
 Player* ObjectAccessor::FindPlayerByName(std::string const& name, bool checkInWorld)
 {
-    /*ACORE_READ_GUARD(HashMapHolder<Player>::LockType, *HashMapHolder<Player>::GetLock());
-    std::string nameStr = name;
-    std::transform(nameStr.begin(), nameStr.end(), nameStr.begin(), ::tolower);
-    HashMapHolder<Player>::MapType const& m = GetPlayers();
-    for (HashMapHolder<Player>::MapType::const_iterator iter = m.begin(); iter != m.end(); ++iter)
-    {
-        if (!iter->second->IsInWorld())
-            continue;
-        std::string currentName = iter->second->GetName();
-        std::transform(currentName.begin(), currentName.end(), currentName.begin(), ::tolower);
-        if (nameStr.compare(currentName) == 0)
-            return iter->second;
-    }*/
-
     // pussywizard: optimization
     std::string nameStr = name;
     std::transform(nameStr.begin(), nameStr.end(), nameStr.begin(), ::tolower);
@@ -222,7 +208,7 @@ Player* ObjectAccessor::FindPlayerByName(std::string const& name, bool checkInWo
 
 void ObjectAccessor::SaveAllPlayers()
 {
-    ACORE_READ_GUARD(HashMapHolder<Player>::LockType, *HashMapHolder<Player>::GetLock());
+    std::lock_guard<std::mutex> guard(*HashMapHolder<Player>::GetLock());
     HashMapHolder<Player>::MapType const& m = GetPlayers();
     for (HashMapHolder<Player>::MapType::const_iterator itr = m.begin(); itr != m.end(); ++itr)
         itr->second->SaveToDB(false, false);
@@ -230,7 +216,7 @@ void ObjectAccessor::SaveAllPlayers()
 
 Corpse* ObjectAccessor::GetCorpseForPlayerGUID(uint64 guid)
 {
-    ACORE_READ_GUARD(ACE_RW_Thread_Mutex, i_corpseLock);
+    std::lock_guard<std::mutex> guard( i_corpseLock);
 
     Player2CorpsesMapType::iterator iter = i_player2corpse.find(guid);
     if (iter == i_player2corpse.end())
@@ -247,7 +233,7 @@ void ObjectAccessor::RemoveCorpse(Corpse* corpse, bool final)
 
     if (!final)
     {
-        ACORE_WRITE_GUARD(ACE_RW_Thread_Mutex, i_corpseLock);
+        std::lock_guard<std::mutex> guard(i_corpseLock);
         Player2CorpsesMapType::iterator iter = i_player2corpse.find(corpse->GetOwnerGUID());
         if (iter == i_player2corpse.end())
             return;
@@ -274,7 +260,7 @@ void ObjectAccessor::RemoveCorpse(Corpse* corpse, bool final)
 
     // Critical section
     {
-        ACORE_WRITE_GUARD(ACE_RW_Thread_Mutex, i_corpseLock);
+        std::lock_guard<std::mutex> guard(i_corpseLock);
 
         // build mapid*cellid -> guid_set map
         CellCoord cellCoord = warhead::ComputeCellCoord(corpse->GetPositionX(), corpse->GetPositionY());
@@ -290,7 +276,7 @@ void ObjectAccessor::AddCorpse(Corpse* corpse)
 
     // Critical section
     {
-        ACORE_WRITE_GUARD(ACE_RW_Thread_Mutex, i_corpseLock);
+        std::lock_guard<std::mutex> guard(i_corpseLock);
 
         ASSERT(i_player2corpse.find(corpse->GetOwnerGUID()) == i_player2corpse.end());
         i_player2corpse[corpse->GetOwnerGUID()] = corpse;
@@ -303,7 +289,7 @@ void ObjectAccessor::AddCorpse(Corpse* corpse)
 
 void ObjectAccessor::AddCorpsesToGrid(GridCoord const& gridpair, GridType& grid, Map* map)
 {
-    ACORE_READ_GUARD(ACE_RW_Thread_Mutex, i_corpseLock);
+    std::lock_guard<std::mutex> guard(i_corpseLock);
 
     for (Player2CorpsesMapType::iterator iter = i_player2corpse.begin(); iter != i_player2corpse.end(); ++iter)
     {
@@ -391,7 +377,7 @@ Corpse* ObjectAccessor::ConvertCorpseForPlayer(uint64 player_guid, bool insignia
         }
 
         // pussywizard: for deleting bones
-        ACORE_WRITE_GUARD(ACE_RW_Thread_Mutex, i_corpseLock);
+        std::lock_guard<std::mutex> guard(i_corpseLock);
         i_playerBones.push_back(bones->GetGUID());
     }
 
@@ -418,7 +404,7 @@ void ObjectAccessor::RemoveOldCorpses()
 
     // pussywizard: for deleting bones
     std::list<uint64>::iterator next2;
-    ACORE_WRITE_GUARD(ACE_RW_Thread_Mutex, i_corpseLock);
+    std::lock_guard<std::mutex> guard(i_corpseLock);
     for (std::list<uint64>::iterator itr = i_playerBones.begin(); itr != i_playerBones.end(); itr = next2)
     {
         next2 = itr;
@@ -451,13 +437,13 @@ void ObjectAccessor::RemoveOldCorpses()
 
 void ObjectAccessor::AddDelayedCorpseAction(Corpse* corpse, uint8 action, uint32 mapId, uint32 instanceId)
 {
-    ACORE_GUARD(ACE_Thread_Mutex, DelayedCorpseLock);
+    std::lock_guard<std::mutex> guard(DelayedCorpseLock);
     i_delayedCorpseActions.push_back(DelayedCorpseAction(corpse, action, mapId, instanceId));
 }
 
 void ObjectAccessor::ProcessDelayedCorpseActions()
 {
-    ACORE_GUARD(ACE_Thread_Mutex, DelayedCorpseLock);
+    std::lock_guard<std::mutex> guard(DelayedCorpseLock);
     for (std::list<DelayedCorpseAction>::iterator itr = i_delayedCorpseActions.begin(); itr != i_delayedCorpseActions.end(); ++itr)
     {
         DelayedCorpseAction a = (*itr);

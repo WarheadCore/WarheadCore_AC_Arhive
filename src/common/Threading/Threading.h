@@ -22,7 +22,6 @@
 #include <thread>
 #include <atomic>
 #include <thread>
-#include <atomic>
 
 namespace warhead
 {

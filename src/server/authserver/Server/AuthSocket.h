@@ -21,6 +21,7 @@
 #include "Common.h"
 #include "BigNumber.h"
 #include "RealmSocket.h"
+#include <mutex>
 
 class ACE_INET_Addr;
 struct Realm;
@@ -64,7 +65,7 @@ public:
     void _SetVSFields(const std::string& rI);
 
     FILE* pPatch;
-    ACE_Thread_Mutex patcherLock;
+    std::mutex patcherLock;
 
 private:
     RealmSocket& socket_;

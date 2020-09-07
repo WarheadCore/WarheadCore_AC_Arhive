@@ -32,6 +32,7 @@
 #include "ObjectMgr.h"
 #include <string>
 #include <vector>
+#include <mutex>
 
 struct CreatureTemplate;
 struct Mail;
@@ -2847,7 +2848,7 @@ class Player : public Unit, public GridObject<Player>
         EnchantDurationList m_enchantDuration;
         ItemDurationList m_itemDuration;
         ItemDurationList m_itemSoulboundTradeable;
-        ACE_Thread_Mutex m_soulboundTradableLock;
+        std::mutex m_soulboundTradableLock;
 
         void ResetTimeSync();
         void SendTimeSync();

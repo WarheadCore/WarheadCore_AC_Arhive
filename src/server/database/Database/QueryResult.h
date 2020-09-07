@@ -18,9 +18,6 @@
 #ifndef QUERYRESULT_H
 #define QUERYRESULT_H
 
-#include "AutoPtr.h"
-#include <ace/Thread_Mutex.h>
-
 #include "Errors.h"
 #include "Field.h"
 
@@ -61,7 +58,8 @@ class WH_DATABASE_API ResultSet
         MYSQL_FIELD* _fields;
 };
 
-typedef warhead::AutoPtr<ResultSet, ACE_Thread_Mutex> QueryResult;
+
+typedef std::shared_ptr<ResultSet> QueryResult;
 
 class WH_DATABASE_API PreparedResultSet
 {
@@ -106,7 +104,7 @@ class WH_DATABASE_API PreparedResultSet
 
 };
 
-typedef warhead::AutoPtr<PreparedResultSet, ACE_Thread_Mutex> PreparedQueryResult;
+typedef std::shared_ptr<PreparedResultSet> PreparedQueryResult;
 
 #endif
 

@@ -19,7 +19,6 @@
 #include "MPQ.h"
 #include "DBC.h"
 #include "Utils.h"
-#include <ace/Guard_T.h>
 
 char const* MPQManager::Files[] = {
     "common.MPQ",
@@ -81,9 +80,9 @@ void MPQManager::InitializeDBC()
         printf("Using default locale: %s\n", Languages[BaseLocale]);
 }
 
-FILE* MPQManager::GetFile(const std::string& path )
+FILE* MPQManager::GetFile(const std::string& path)
 {
-    ACE_GUARD_RETURN(ACE_Thread_Mutex, g, mutex, NULL);
+    ACORE_GUARD_RETURN(_mutex, false);
     MPQFile file(path.c_str());
     if (file.isEof())
         return NULL;
@@ -98,7 +97,7 @@ DBC* MPQManager::GetDBC(const std::string& name )
 
 FILE* MPQManager::GetFileFrom(const std::string& path, MPQArchive* file )
 {
-    ACE_GUARD_RETURN(ACE_Thread_Mutex, g, mutex, NULL);
+    ACORE_GUARD_RETURN(_mutex, false);
     mpq_archive* mpq_a = file->mpq_a;
 
     uint32_t filenum;

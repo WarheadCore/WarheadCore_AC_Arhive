@@ -26,7 +26,6 @@
 
 #include "Common.h"
 #include <ace/Basic_Types.h>
-#include <ace/Thread_Mutex.h>
 
 class WorldSocket;
 class ReactorRunnable;

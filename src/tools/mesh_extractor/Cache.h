@@ -17,13 +17,13 @@
 
 #ifndef CACHE_H
 #define CACHE_H
-#include <string>
-#include <map>
-#include "Define.h"
-#include <ace/Guard_T.h>
-#include <ace/Synch.h>
+
+#include "Common.h"
 #include "WorldModelRoot.h"
 #include "Model.h"
+#include "Lock.h"
+#include <map>
+#include <mutex>
 
 template<class K, class T>
 class GenericCache
@@ -35,31 +35,34 @@ public:
 
     void Insert(K key, T* val)
     {
-        ACE_GUARD(ACE_Thread_Mutex, g, mutex);
+        std::lock_guard<std::mutex> guard(_mutex);
 
         if (_items.size() > FlushLimit)
             Clear();
+
         _items[key] = val;
     }
 
     T* Get(K key)
     {
-        ACE_GUARD_RETURN(ACE_Thread_Mutex, g, mutex, NULL);
+        ACORE_GUARD_RETURN(_mutex, false);
         typename std::map<K, T*>::iterator itr = _items.find(key);
         if (itr != _items.end())
             return itr->second;
-        return NULL;
+
+        return nullptr;
     }
 
     void Clear()
     {
         for (typename std::map<K, T*>::iterator itr = _items.begin(); itr != _items.end(); ++itr)
             delete itr->second;
+
         _items.clear();
     }
 private:
     std::map<K, T*> _items;
-    ACE_Thread_Mutex mutex;
+    std::mutex _mutex;
 };
 
 class CacheClass
