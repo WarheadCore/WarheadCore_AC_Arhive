@@ -20,6 +20,7 @@
 #include "MapDefines.h"
 #include "Log.h"
 #include "StringFormat.h"
+#include "Errors.h"
 
 namespace MMAP
 {
