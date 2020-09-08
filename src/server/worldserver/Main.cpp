@@ -244,13 +244,13 @@ public:
                     }
 
                     for (std::list<AuctionListItemsDelayEvent>::iterator itr = AsyncAuctionListingMgr::GetList().begin(); itr != AsyncAuctionListingMgr::GetList().end(); ++itr)
-                    if ((*itr)._msTimer == 0)
-                    {
-                        if ((*itr).Execute())
-                            AsyncAuctionListingMgr::GetList().erase(itr);
+                        if ((*itr)._msTimer == 0)
+                        {
+                            if ((*itr).Execute())
+                                AsyncAuctionListingMgr::GetList().erase(itr);
 
-                        break;
-                    }
+                            break;
+                        }
                 }
             }
 
@@ -291,7 +291,7 @@ extern int main(int argc, char** argv)
                 configFile = argv[c];
         }
 
-        #if WH_PLATFORM == WH_PLATFORM_WINDOWS
+#if WH_PLATFORM == WH_PLATFORM_WINDOWS
         if (strcmp(argv[c], "-s") == 0) // Services
         {
             if (++c >= argc)
@@ -323,7 +323,7 @@ extern int main(int argc, char** argv)
 
         if (strcmp(argv[c], "--service") == 0)
             WinServiceRun();
-        #endif
+#endif
         ++c;
     }
 
@@ -336,11 +336,11 @@ extern int main(int argc, char** argv)
     sLog->Initialize();
 
     warhead::Logo::Show("worldserver", configFile.c_str(),
-        [](char const* text)
-        {
-            LOG_INFO("server.worldserver", "%s", text);
-        }
-    );
+                        [](char const* text)
+    {
+        LOG_INFO("server.worldserver", "%s", text);
+    }
+                       );
 
     sConfigMgr->LoadModulesConfigs();
 
@@ -405,7 +405,7 @@ extern int main(int argc, char** argv)
     warhead::Thread worldThread(new WorldRunnable);
     warhead::Thread rarThread(new RARunnable);
     warhead::Thread auctionLising_thread(new AuctionListRunnable);
-    warhead::Thread* cliThread = nullptr;   
+    warhead::Thread* cliThread = nullptr;
     warhead::Thread* soapThread = nullptr;
     warhead::Thread* freezeThread = nullptr;
 
@@ -421,7 +421,7 @@ extern int main(int argc, char** argv)
     {
         ///- Launch CliRunnable thread
         cliThread = new warhead::Thread(new CliRunnable);
-    }    
+    }
 
 #if defined(WH_PLATFORM_WINDOWS) || defined(WH_PLATFORM_UNIX)
 
@@ -490,7 +490,7 @@ extern int main(int argc, char** argv)
 
 #endif
 #endif
-    // Start soap serving thread    
+    // Start soap serving thread
     if (sConfigMgr->GetBoolDefault("SOAP.Enabled", false))
     {
         ACSoapRunnable* runnable = new ACSoapRunnable();
@@ -498,7 +498,7 @@ extern int main(int argc, char** argv)
         soapThread = new warhead::Thread(runnable);
     }
 
-    // Start up freeze catcher thread    
+    // Start up freeze catcher thread
     if (uint32 freezeDelay = sConfigMgr->GetIntDefault("MaxCoreStuckTime", 0))
     {
         FreezeDetectorRunnable* runnable = new FreezeDetectorRunnable(freezeDelay * 1000);
@@ -512,7 +512,7 @@ extern int main(int argc, char** argv)
     if (sWorldSocketMgr->StartNetwork(worldPort, bindIp.c_str()) == -1)
     {
         LOG_ERROR("server", "Failed to start network");
-        World::StopNow(ERROR_EXIT_CODE); // go down and shutdown the server        
+        World::StopNow(ERROR_EXIT_CODE); // go down and shutdown the server
     }
 
     // set server online (allow connecting now)
@@ -615,9 +615,9 @@ bool _StartDB()
     // Load databases
     DatabaseLoader loader("server.worldserver", DatabaseLoader::DATABASE_NONE);
     loader
-        .AddDatabase(LoginDatabase, "Login")
-        .AddDatabase(CharacterDatabase, "Character")
-        .AddDatabase(WorldDatabase, "World");
+    .AddDatabase(LoginDatabase, "Login")
+    .AddDatabase(CharacterDatabase, "Character")
+    .AddDatabase(WorldDatabase, "World");
 
     if (!loader.Load())
         return false;

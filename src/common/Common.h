@@ -127,9 +127,13 @@
 
 using namespace std;
 
-inline float finiteAlways(float f) { return isfinite(f) ? f : 0.0f; }
+inline float finiteAlways(float f) {
+    return isfinite(f) ? f : 0.0f;
+}
 
-inline bool myisfinite(float f) { return isfinite(f) && !isnan(f); }
+inline bool myisfinite(float f) {
+    return isfinite(f) && !isnan(f);
+}
 
 #define STRINGIZE(a) #a
 
@@ -198,12 +202,12 @@ typedef std::vector<std::string> StringVector;
 
 namespace warhead
 {
-    template<class ArgumentType, class ResultType>
-    struct unary_function
-    {
-        typedef ArgumentType argument_type;
-        typedef ResultType result_type;
-    };
+template<class ArgumentType, class ResultType>
+struct unary_function
+{
+    typedef ArgumentType argument_type;
+    typedef ResultType result_type;
+};
 }
 
 #endif

@@ -377,8 +377,8 @@ void WorldSession::HandleWhoOpcode(WorldPacket& recvData)
             if (!str[i].empty())
             {
                 if (wgname.find(str[i]) != std::wstring::npos ||
-                    wpname.find(str[i]) != std::wstring::npos ||
-                    Utf8FitTo(aname, str[i]))
+                        wpname.find(str[i]) != std::wstring::npos ||
+                        Utf8FitTo(aname, str[i]))
                 {
                     s_show = true;
                     break;
@@ -423,13 +423,13 @@ void WorldSession::HandleLogoutRequestOpcode(WorldPacket & /*recv_data*/)
         DoLootRelease(lguid);
 
     bool instantLogout = ((GetSecurity() >= 0 && uint32(GetSecurity()) >= sGameConfig->GetIntConfig("InstantLogout"))
-        || (GetPlayer()->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING) && !GetPlayer()->IsInCombat())) || GetPlayer()->IsInFlight();
+                          || (GetPlayer()->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING) && !GetPlayer()->IsInCombat())) || GetPlayer()->IsInFlight();
 
     bool preventAfkSanctuaryLogout = sGameConfig->GetIntConfig("PreventAFKLogout") == 1
-        && GetPlayer()->isAFK() && sAreaTableStore.LookupEntry(GetPlayer()->GetAreaId())->IsSanctuary();
+                                     && GetPlayer()->isAFK() && sAreaTableStore.LookupEntry(GetPlayer()->GetAreaId())->IsSanctuary();
 
     bool preventAfkLogout = sGameConfig->GetIntConfig("PreventAFKLogout") == 2
-        && GetPlayer()->isAFK();
+                            && GetPlayer()->isAFK();
 
     /// TODO: Possibly add RBAC permission to log out in combat
     bool canLogoutInCombat = GetPlayer()->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING);
@@ -555,13 +555,13 @@ void WorldSession::HandleStandStateChangeOpcode(WorldPacket & recv_data)
 
     switch (animstate)
     {
-        case UNIT_STAND_STATE_STAND:
-        case UNIT_STAND_STATE_SIT:
-        case UNIT_STAND_STATE_SLEEP:
-        case UNIT_STAND_STATE_KNEEL:
-            break;
-        default:
-            return;
+    case UNIT_STAND_STATE_STAND:
+    case UNIT_STAND_STATE_SIT:
+    case UNIT_STAND_STATE_SLEEP:
+    case UNIT_STAND_STATE_KNEEL:
+        break;
+    default:
+        return;
     }
 
     _player->SetStandState(animstate);
@@ -902,7 +902,7 @@ void WorldSession::HandleAreaTriggerOpcode(WorldPacket& recv_data)
     {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
         LOG_DEBUG("network", "HandleAreaTriggerOpcode: Player '%s' (GUID: %u) in flight, ignore Area Trigger ID:%u",
-            player->GetName().c_str(), player->GetGUIDLow(), triggerId);
+                  player->GetName().c_str(), player->GetGUIDLow(), triggerId);
 #endif
         return;
     }
@@ -912,7 +912,7 @@ void WorldSession::HandleAreaTriggerOpcode(WorldPacket& recv_data)
     {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
         LOG_DEBUG("network", "HandleAreaTriggerOpcode: Player '%s' (GUID: %u) send unknown (by DBC) Area Trigger ID:%u",
-            player->GetName().c_str(), player->GetGUIDLow(), triggerId);
+                  player->GetName().c_str(), player->GetGUIDLow(), triggerId);
 #endif
         return;
     }
@@ -921,7 +921,7 @@ void WorldSession::HandleAreaTriggerOpcode(WorldPacket& recv_data)
     {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
         LOG_DEBUG("network", "HandleAreaTriggerOpcode: Player '%s' (GUID: %u) too far (trigger map: %u player map: %u), ignore Area Trigger ID: %u",
-            player->GetName().c_str(), atEntry->map, player->GetMapId(), player->GetGUIDLow(), triggerId);
+                  player->GetName().c_str(), atEntry->map, player->GetMapId(), player->GetGUIDLow(), triggerId);
 #endif
         return;
     }
@@ -1107,30 +1107,30 @@ void WorldSession::HandleSetActionButtonOpcode(WorldPacket& recv_data)
     {
         switch (type)
         {
-            case ACTION_BUTTON_MACRO:
-            case ACTION_BUTTON_CMACRO:
+        case ACTION_BUTTON_MACRO:
+        case ACTION_BUTTON_CMACRO:
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                LOG_INFO("server", "MISC: Added Macro %u into button %u", action, button);
+            LOG_INFO("server", "MISC: Added Macro %u into button %u", action, button);
 #endif
-                break;
-            case ACTION_BUTTON_EQSET:
+            break;
+        case ACTION_BUTTON_EQSET:
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                LOG_INFO("server", "MISC: Added EquipmentSet %u into button %u", action, button);
+            LOG_INFO("server", "MISC: Added EquipmentSet %u into button %u", action, button);
 #endif
-                break;
-            case ACTION_BUTTON_SPELL:
+            break;
+        case ACTION_BUTTON_SPELL:
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                LOG_INFO("server", "MISC: Added Spell %u into button %u", action, button);
+            LOG_INFO("server", "MISC: Added Spell %u into button %u", action, button);
 #endif
-                break;
-            case ACTION_BUTTON_ITEM:
+            break;
+        case ACTION_BUTTON_ITEM:
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                LOG_INFO("server", "MISC: Added Item %u into button %u", action, button);
+            LOG_INFO("server", "MISC: Added Item %u into button %u", action, button);
 #endif
-                break;
-            default:
-                LOG_ERROR("server", "MISC: Unknown action button type %u for action %u into button %u for player %s (GUID: %u)", type, action, button, _player->GetName().c_str(), _player->GetGUIDLow());
-                return;
+            break;
+        default:
+            LOG_ERROR("server", "MISC: Unknown action button type %u for action %u into button %u for player %s (GUID: %u)", type, action, button, _player->GetName().c_str(), _player->GetGUIDLow());
+            return;
         }
         GetPlayer()->addActionButton(button, action, type);
     }
@@ -1164,54 +1164,54 @@ void WorldSession::HandleMoveUnRootAck(WorldPacket& recv_data)
 {
     // no used
     recv_data.rfinish();                       // prevent warnings spam
-/*
-    uint64 guid;
-    recv_data >> guid;
+    /*
+        uint64 guid;
+        recv_data >> guid;
 
-    // now can skip not our packet
-    if (_player->GetGUID() != guid)
-    {
-        recv_data.rfinish();                   // prevent warnings spam
-        return;
-    }
+        // now can skip not our packet
+        if (_player->GetGUID() != guid)
+        {
+            recv_data.rfinish();                   // prevent warnings spam
+            return;
+        }
 
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_PACKETIO, "WORLD: CMSG_FORCE_MOVE_UNROOT_ACK");
-#endif
+    #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
+        sLog->outDebug(LOG_FILTER_PACKETIO, "WORLD: CMSG_FORCE_MOVE_UNROOT_ACK");
+    #endif
 
-    recv_data.read_skip<uint32>();                          // unk
+        recv_data.read_skip<uint32>();                          // unk
 
-    MovementInfo movementInfo;
-    movementInfo.guid = guid;
-    ReadMovementInfo(recv_data, &movementInfo);
-    recv_data.read_skip<float>();                           // unk2
-*/
+        MovementInfo movementInfo;
+        movementInfo.guid = guid;
+        ReadMovementInfo(recv_data, &movementInfo);
+        recv_data.read_skip<float>();                           // unk2
+    */
 }
 
 void WorldSession::HandleMoveRootAck(WorldPacket& recv_data)
 {
     // no used
     recv_data.rfinish();                       // prevent warnings spam
-/*
-    uint64 guid;
-    recv_data >> guid;
+    /*
+        uint64 guid;
+        recv_data >> guid;
 
-    // now can skip not our packet
-    if (_player->GetGUID() != guid)
-    {
-        recv_data.rfinish();                   // prevent warnings spam
-        return;
-    }
+        // now can skip not our packet
+        if (_player->GetGUID() != guid)
+        {
+            recv_data.rfinish();                   // prevent warnings spam
+            return;
+        }
 
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outDebug(LOG_FILTER_PACKETIO, "WORLD: CMSG_FORCE_MOVE_ROOT_ACK");
-#endif
+    #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
+        sLog->outDebug(LOG_FILTER_PACKETIO, "WORLD: CMSG_FORCE_MOVE_ROOT_ACK");
+    #endif
 
-    recv_data.read_skip<uint32>();                          // unk
+        recv_data.read_skip<uint32>();                          // unk
 
-    MovementInfo movementInfo;
-    ReadMovementInfo(recv_data, &movementInfo);
-*/
+        MovementInfo movementInfo;
+        ReadMovementInfo(recv_data, &movementInfo);
+    */
 }
 
 void WorldSession::HandleSetActionBarToggles(WorldPacket& recv_data)
@@ -1423,18 +1423,18 @@ void WorldSession::HandleComplainOpcode(WorldPacket & recv_data)
     recv_data >> spammer_guid;                              // player guid
     switch (spam_type)
     {
-        case 0:
-            recv_data >> unk1;                              // const 0
-            recv_data >> unk2;                              // probably mail id
-            recv_data >> unk3;                              // const 0
-            break;
-        case 1:
-            recv_data >> unk1;                              // probably language
-            recv_data >> unk2;                              // message type?
-            recv_data >> unk3;                              // probably channel id
-            recv_data >> unk4;                              // unk random value
-            recv_data >> description;                       // spam description string (messagetype, channel name, player name, message)
-            break;
+    case 0:
+        recv_data >> unk1;                              // const 0
+        recv_data >> unk2;                              // probably mail id
+        recv_data >> unk3;                              // const 0
+        break;
+    case 1:
+        recv_data >> unk1;                              // probably language
+        recv_data >> unk2;                              // message type?
+        recv_data >> unk3;                              // probably channel id
+        recv_data >> unk4;                              // unk random value
+        recv_data >> description;                       // spam description string (messagetype, channel name, player name, message)
+        break;
     }
 
     // NOTE: all chat messages from this spammer automatically ignored by spam reporter until logout in case chat spam.
@@ -1517,7 +1517,7 @@ void WorldSession::HandleSetTitleOpcode(WorldPacket & recv_data)
     // -1 at none
     if (title > 0 && title < MAX_TITLE_INDEX)
     {
-       if (!GetPlayer()->HasTitle(title))
+        if (!GetPlayer()->HasTitle(title))
             return;
     }
     else
@@ -1632,13 +1632,13 @@ void WorldSession::HandleSetRaidDifficultyOpcode(WorldPacket & recv_data)
             {
                 switch (group->GetDifficultyChangePreventionReason())
                 {
-                    case DIFFICULTY_PREVENTION_CHANGE_BOSS_KILLED:
-                        ChatHandler(this).PSendSysMessage("Raid was in combat recently and may not change difficulty again for %u sec.", preventionTime);
-                        break;
-                    case DIFFICULTY_PREVENTION_CHANGE_RECENTLY_CHANGED:
-                    default:
-                        ChatHandler(this).PSendSysMessage("Raid difficulty has changed recently, and may not change again for %u sec.", preventionTime);
-                        break;
+                case DIFFICULTY_PREVENTION_CHANGE_BOSS_KILLED:
+                    ChatHandler(this).PSendSysMessage("Raid was in combat recently and may not change difficulty again for %u sec.", preventionTime);
+                    break;
+                case DIFFICULTY_PREVENTION_CHANGE_RECENTLY_CHANGED:
+                default:
+                    ChatHandler(this).PSendSysMessage("Raid difficulty has changed recently, and may not change again for %u sec.", preventionTime);
+                    break;
                 }
 
                 _player->SendRaidDifficulty(group != nullptr);
@@ -1670,8 +1670,8 @@ void WorldSession::HandleSetRaidDifficultyOpcode(WorldPacket & recv_data)
                     }
 
                     if (!groupGuy->IsAlive() || groupGuy->IsInCombat() || groupGuy->GetVictim() || groupGuy->m_mover != groupGuy || groupGuy->IsNonMeleeSpellCast(true) || (!groupGuy->GetMotionMaster()->empty() && groupGuy->GetMotionMaster()->GetCurrentMovementGeneratorType() != IDLE_MOTION_TYPE)
-                        || !groupGuy->movespline->Finalized() || !groupGuy->GetMap()->ToInstanceMap() || !groupGuy->GetMap()->ToInstanceMap()->GetInstanceScript() || groupGuy->GetMap()->ToInstanceMap()->GetInstanceScript()->IsEncounterInProgress()
-                        || !groupGuy->Satisfy(sObjectMgr->GetAccessRequirement(groupGuy->GetMap()->GetId(), Difficulty(mode)), groupGuy->GetMap()->GetId(), false))
+                            || !groupGuy->movespline->Finalized() || !groupGuy->GetMap()->ToInstanceMap() || !groupGuy->GetMap()->ToInstanceMap()->GetInstanceScript() || groupGuy->GetMap()->ToInstanceMap()->GetInstanceScript()->IsEncounterInProgress()
+                            || !groupGuy->Satisfy(sObjectMgr->GetAccessRequirement(groupGuy->GetMap()->GetId(), Difficulty(mode)), groupGuy->GetMap()->GetId(), false))
                     {
                         _player->SendRaidDifficulty(group != nullptr);
                         return;
@@ -1696,7 +1696,7 @@ void WorldSession::HandleSetRaidDifficultyOpcode(WorldPacket & recv_data)
                         if (p->GetGroup() != group)
                         {
                             if (!p->IsInWorld() || !p->IsAlive() || p->IsInCombat() || p->GetVictim() || p->m_mover != p || p->IsNonMeleeSpellCast(true) || (!p->GetMotionMaster()->empty() && p->GetMotionMaster()->GetCurrentMovementGeneratorType() != IDLE_MOTION_TYPE)
-                                || !p->movespline->Finalized() || !p->GetMap()->ToInstanceMap() || !p->GetMap()->ToInstanceMap()->GetInstanceScript() || p->GetMap()->ToInstanceMap()->GetInstanceScript()->IsEncounterInProgress())
+                                    || !p->movespline->Finalized() || !p->GetMap()->ToInstanceMap() || !p->GetMap()->ToInstanceMap()->GetInstanceScript() || p->GetMap()->ToInstanceMap()->GetInstanceScript()->IsEncounterInProgress())
                             {
                                 _player->SendRaidDifficulty(group != nullptr);
                                 return;
@@ -1820,9 +1820,9 @@ void WorldSession::HandleMoveSetCanFlyAckOpcode(WorldPacket & recv_data)
 void WorldSession::HandleRequestPetInfoOpcode(WorldPacket & /*recv_data */)
 {
     /*
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
+    #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
         sLog->outDebug(LOG_FILTER_PACKETIO, "WORLD: CMSG_REQUEST_PET_INFO");
-#endif
+    #endif
         recv_data.hexlike();
     */
 

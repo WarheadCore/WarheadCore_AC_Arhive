@@ -32,17 +32,17 @@ namespace WeatherMgr
 
 namespace
 {
-    typedef std::unordered_map<uint32, std::unique_ptr<Weather>> WeatherMap;
-    typedef std::unordered_map<uint32, WeatherData> WeatherZoneMap;
+typedef std::unordered_map<uint32, std::unique_ptr<Weather>> WeatherMap;
+typedef std::unordered_map<uint32, WeatherData> WeatherZoneMap;
 
-    WeatherMap m_weathers;
-    WeatherZoneMap mWeatherZoneMap;
+WeatherMap m_weathers;
+WeatherZoneMap mWeatherZoneMap;
 
-    WeatherData const* GetWeatherData(uint32 zone_id)
-    {
-        WeatherZoneMap::const_iterator itr = mWeatherZoneMap.find(zone_id);
-        return (itr != mWeatherZoneMap.end()) ? &itr->second : nullptr;
-    }
+WeatherData const* GetWeatherData(uint32 zone_id)
+{
+    WeatherZoneMap::const_iterator itr = mWeatherZoneMap.find(zone_id);
+    return (itr != mWeatherZoneMap.end()) ? &itr->second : nullptr;
+}
 }
 
 /// Find a Weather object by the given zoneid
@@ -86,11 +86,11 @@ void LoadWeatherData()
     uint32 count = 0;
 
     QueryResult result = WorldDatabase.Query("SELECT "
-        "zone, spring_rain_chance, spring_snow_chance, spring_storm_chance,"
-        "summer_rain_chance, summer_snow_chance, summer_storm_chance,"
-        "fall_rain_chance, fall_snow_chance, fall_storm_chance,"
-        "winter_rain_chance, winter_snow_chance, winter_storm_chance,"
-        "ScriptName FROM game_weather");
+                         "zone, spring_rain_chance, spring_snow_chance, spring_storm_chance,"
+                         "summer_rain_chance, summer_snow_chance, summer_storm_chance,"
+                         "fall_rain_chance, fall_snow_chance, fall_storm_chance,"
+                         "winter_rain_chance, winter_snow_chance, winter_storm_chance,"
+                         "ScriptName FROM game_weather");
 
     if (!result)
     {

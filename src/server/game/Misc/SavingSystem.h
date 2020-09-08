@@ -27,11 +27,25 @@ class SavingSystemMgr
 public:
     static void Update(uint32 diff);
 
-    static uint32 GetSavingCurrentValue()                       { return m_savingCurrentValue; } // modified only during single thread
-    static uint32 GetSavingMaxValue()                           { return m_savingMaxValueAssigned; } // modified only during single thread
-    static void IncreaseSavingCurrentValue(uint32 inc)          { m_savingCurrentValue += inc; } // used and modified only during single thread
-    static uint32 IncreaseSavingMaxValue(uint32 inc)            { std::lock_guard<std::mutex> guard(_savingLock); return (m_savingMaxValueAssigned += inc); }
-    static void InsertToSavingSkipListIfNeeded(uint32 id)       { if (id > m_savingCurrentValue) { std::lock_guard<std::mutex> guard(_savingLock); m_savingSkipList.push_back(id); } }
+    static uint32 GetSavingCurrentValue()                       {
+        return m_savingCurrentValue;    // modified only during single thread
+    }
+    static uint32 GetSavingMaxValue()                           {
+        return m_savingMaxValueAssigned;    // modified only during single thread
+    }
+    static void IncreaseSavingCurrentValue(uint32 inc)          {
+        m_savingCurrentValue += inc;    // used and modified only during single thread
+    }
+    static uint32 IncreaseSavingMaxValue(uint32 inc)            {
+        std::lock_guard<std::mutex> guard(_savingLock);
+        return (m_savingMaxValueAssigned += inc);
+    }
+    static void InsertToSavingSkipListIfNeeded(uint32 id)       {
+        if (id > m_savingCurrentValue) {
+            std::lock_guard<std::mutex> guard(_savingLock);
+            m_savingSkipList.push_back(id);
+        }
+    }
 
 protected:
     static uint32 m_savingCurrentValue;
