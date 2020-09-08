@@ -28,6 +28,7 @@
 #include <ace/Svc_Handler.h>
 #include <ace/SOCK_Stream.h>
 #include <ace/SOCK_Acceptor.h>
+#include <atomic>
 
 /// Remote Administration socket
 class RASocket : public ACE_Svc_Handler<ACE_SOCK_STREAM, ACE_MT_SYNCH>
@@ -55,7 +56,7 @@ class RASocket : public ACE_Svc_Handler<ACE_SOCK_STREAM, ACE_MT_SYNCH>
 
     private:
         uint8 _minLevel; ///< Minimum security level required to connect
-        ACE_Atomic_Op<ACE_Thread_Mutex, bool> _commandExecuting;
+        std::atomic_long _commandExecuting;
 };
 
 #endif
