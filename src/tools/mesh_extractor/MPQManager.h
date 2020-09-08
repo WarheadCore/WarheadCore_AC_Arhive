@@ -23,6 +23,7 @@
 #include <mutex>
 #include <set>
 #include <map>
+#include <mutex>
 
 class DBC;
 class MPQManager

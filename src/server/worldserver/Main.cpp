@@ -224,10 +224,10 @@ public:
 
                 if (AsyncAuctionListingMgr::GetTempList().size() || AsyncAuctionListingMgr::GetList().size())
                 {
-                    ACORE_GUARD(ACE_Thread_Mutex, AsyncAuctionListingMgr::GetLock());
+                    std::lock_guard<std::mutex> guard(AsyncAuctionListingMgr::GetLock());
 
                     {
-                        ACORE_GUARD(ACE_Thread_Mutex, AsyncAuctionListingMgr::GetTempLock());
+                        std::lock_guard<std::mutex> guard(AsyncAuctionListingMgr::GetTempLock());
 
                         for (auto itr : AsyncAuctionListingMgr::GetTempList())
                             AsyncAuctionListingMgr::GetList().push_back(itr);

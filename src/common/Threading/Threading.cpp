@@ -17,7 +17,7 @@
 
 #include "Threading.h"
 #include "Errors.h"
-
+#include "Duration.h"
 #include <chrono>
 #include <system_error>
 
@@ -38,8 +38,6 @@ Thread::Thread(Runnable* instance) : m_task(instance), m_ThreadImp(&Thread::Thre
 
 Thread::~Thread()
 {
-    // Wait();
-
     // deleted runnable object (if no other references)
     if (m_task)
         m_task->decReference();
@@ -118,5 +116,5 @@ void Thread::setPriority(Priority priority)
 
 void Thread::Sleep(unsigned long msecs)
 {
-    std::this_thread::sleep_for(std::chrono::milliseconds(msecs));
+    std::this_thread::sleep_for(Milliseconds(msecs));
 }

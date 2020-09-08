@@ -24,6 +24,9 @@
 #include <mutex>
 #include "WorldModelRoot.h"
 #include "Model.h"
+#include "Lock.h"
+#include <map>
+#include <mutex>
 
 template<class K, class T>
 class GenericCache
@@ -39,6 +42,7 @@ public:
 
         if (_items.size() > FlushLimit)
             Clear();
+
         _items[key] = val;
     }
 
@@ -55,6 +59,7 @@ public:
     {
         for (typename std::map<K, T*>::iterator itr = _items.begin(); itr != _items.end(); ++itr)
             delete itr->second;
+
         _items.clear();
     }
 private:

@@ -23,7 +23,7 @@
 #define _RASOCKET_H
 
 #include "Common.h"
-
+#include <atomic>
 #include <ace/Synch_Traits.h>
 #include <ace/Svc_Handler.h>
 #include <ace/SOCK_Stream.h>
@@ -55,7 +55,7 @@ class RASocket : public ACE_Svc_Handler<ACE_SOCK_STREAM, ACE_MT_SYNCH>
 
     private:
         uint8 _minLevel; ///< Minimum security level required to connect
-        ACE_Atomic_Op<ACE_Thread_Mutex, bool> _commandExecuting;
+        std::atomic<bool> _commandExecuting;
 };
 
 #endif

@@ -232,7 +232,7 @@ QueryResult DatabaseWorkerPool<T>::Query(const char* sql, T* conn /* = nullptr*/
     if (!result || !result->GetRowCount())
     {
         delete result;
-        return QueryResult(NULL);
+        return QueryResult(nullptr);
     }
 
     result->NextRow();
@@ -252,7 +252,7 @@ PreparedQueryResult DatabaseWorkerPool<T>::Query(PreparedStatement* stmt)
     if (!ret || !ret->GetRowCount())
     {
         delete ret;
-        return PreparedQueryResult(NULL);
+        return PreparedQueryResult(nullptr);
     }
 
     return PreparedQueryResult(ret);
@@ -345,7 +345,7 @@ void DatabaseWorkerPool<T>::DirectCommitTransaction(SQLTransaction& transaction)
 template <class T>
 void DatabaseWorkerPool<T>::ExecuteOrAppend(SQLTransaction& trans, PreparedStatement* stmt)
 {
-    if (trans.null())
+    if (!trans)
         Execute(stmt);
     else
         trans->Append(stmt);
@@ -354,7 +354,7 @@ void DatabaseWorkerPool<T>::ExecuteOrAppend(SQLTransaction& trans, PreparedState
 template <class T>
 void DatabaseWorkerPool<T>::ExecuteOrAppend(SQLTransaction& trans, const char* sql)
 {
-    if (trans.null())
+    if (!trans)
         Execute(sql);
     else
         trans->Append(sql);

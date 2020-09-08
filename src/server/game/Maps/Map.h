@@ -22,11 +22,7 @@
 #include "DetourAlloc.h"
 #include "DetourNavMesh.h"
 #include "DetourNavMeshQuery.h"
-
 #include "Define.h"
-#include <ace/RW_Thread_Mutex.h>
-#include <ace/Thread_Mutex.h>
-
 #include "DBCStructure.h"
 #include "GridDefines.h"
 #include "Cell.h"
@@ -353,7 +349,7 @@ class Map : public GridRefManager<NGridType>
         Map const* GetParent() const { return m_parentMap; }
 
         // pussywizard: movemaps, mmaps
-        ACE_RW_Thread_Mutex& GetMMapLock() const { return *(const_cast<ACE_RW_Thread_Mutex*>(&MMapLock)); }
+        std::mutex& GetMMapLock() const { return *(const_cast<std::mutex*>(&MMapLock)); }
         // pussywizard:
         std::unordered_set<Object*> i_objectsToUpdate;
         void BuildAndSendUpdateForObjects(); // definition in ObjectAccessor.cpp, below ObjectAccessor::Update, because it does the same for a map
@@ -586,9 +582,9 @@ class Map : public GridRefManager<NGridType>
 
     protected:
 
-        ACE_Thread_Mutex Lock;
-        ACE_Thread_Mutex GridLock;
-        ACE_RW_Thread_Mutex MMapLock;
+        std::mutex Lock;
+        std::mutex GridLock;
+        std::mutex MMapLock;
 
         MapEntry const* i_mapEntry;
         uint8 i_spawnMode;

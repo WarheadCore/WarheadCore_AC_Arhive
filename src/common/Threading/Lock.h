@@ -15,39 +15,14 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _ACORE_AUTO_PTR_H
-#define _ACORE_AUTO_PTR_H
+#ifndef __LOCK_H_
+#define __LOCK_H_
 
-#include <ace/Bound_Ptr.h>
+#include <mutex>
 
-namespace warhead
-{
+#define GUARD_RETURN(mutex, retval) \
+        if (!mutex.try_lock())      \
+            return retval;          \
+        std::lock_guard<decltype(mutex)> guard(mutex, std::adopt_lock)
 
-template <class Pointer, class Lock>
-class AutoPtr : public ACE_Strong_Bound_Ptr<Pointer, Lock>
-{
-    typedef ACE_Strong_Bound_Ptr<Pointer, Lock> Base;
-
-public:
-    AutoPtr()
-        : Base()
-    { }
-
-    AutoPtr(Pointer* x)
-        : Base(x)
-    { }
-
-    operator bool() const
-    {
-        return !Base::null();
-    }
-
-    bool operator !() const
-    {
-        return Base::null();
-    }
-};
-
-} // namespace warhead
-
-#endif
+#endif // __LOCK_H_

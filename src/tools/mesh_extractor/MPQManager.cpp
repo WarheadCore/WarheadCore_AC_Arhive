@@ -80,7 +80,7 @@ void MPQManager::InitializeDBC()
         printf("Using default locale: %s\n", Languages[BaseLocale]);
 }
 
-FILE* MPQManager::GetFile(const std::string& path )
+FILE* MPQManager::GetFile(const std::string& path)
 {
     RETURN_GUAD(mutex, false);
     MPQFile file(path.c_str());

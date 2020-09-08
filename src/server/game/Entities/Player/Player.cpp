@@ -5714,8 +5714,8 @@ void Player::ClearChannelWatch()
 void Player::UpdateLocalChannels(uint32 newZone)
 {
     // pussywizard: mutex needed (tc changed opcode to THREAD UNSAFE)
-    static ACE_Thread_Mutex channelsLock;
-    ACORE_GUARD(ACE_Thread_Mutex, channelsLock);
+    static std::mutex channelsLock;
+    std::lock_guard<std::mutex> guard(channelsLock);
 
     if (GetSession()->PlayerLoading() && !IsBeingTeleportedFar())
         return;                                              // The client handles it automatically after loading, but not after teleporting
@@ -7461,11 +7461,13 @@ void Player::SetArenaPoints(int32 value)
 void Player::ModifyHonorPoints(int32 value, SQLTransaction* trans /*=NULL*/)
 {
     int32 newValue = int32(GetHonorPoints()) + value;
+
     if (newValue < 0)
         newValue = 0;
+
     SetHonorPoints(uint32(newValue));
 
-    if (trans && !trans->null())
+    if (trans)
     {
         PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UDP_CHAR_HONOR_POINTS);
         stmt->setUInt32(0, newValue);
@@ -7477,11 +7479,13 @@ void Player::ModifyHonorPoints(int32 value, SQLTransaction* trans /*=NULL*/)
 void Player::ModifyArenaPoints(int32 value, SQLTransaction* trans /*=NULL*/)
 {
     int32 newValue = int32(GetArenaPoints()) + value;
+
     if (newValue < 0)
         newValue = 0;
+
     SetArenaPoints(uint32(newValue));
 
-    if (trans && !trans->null())
+    if (trans)
     {
         PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UDP_CHAR_ARENA_POINTS);
         stmt->setUInt32(0, newValue);
@@ -14100,7 +14104,7 @@ void Player::TradeCancel(bool sendback)
 
 void Player::UpdateSoulboundTradeItems()
 {
-    ACORE_GUARD(ACE_Thread_Mutex, m_soulboundTradableLock);
+    std::lock_guard<std::mutex> guard(m_soulboundTradableLock);
     if (m_itemSoulboundTradeable.empty())
         return;
 
@@ -14124,14 +14128,14 @@ void Player::UpdateSoulboundTradeItems()
 
 void Player::AddTradeableItem(Item* item)
 {
-    ACORE_GUARD(ACE_Thread_Mutex, m_soulboundTradableLock);
+    std::lock_guard<std::mutex> guard(m_soulboundTradableLock);
     m_itemSoulboundTradeable.push_back(item);
 }
 
 //TODO: should never allow an item to be added to m_itemSoulboundTradeable twice
 void Player::RemoveTradeableItem(Item* item)
 {
-    ACORE_GUARD(ACE_Thread_Mutex, m_soulboundTradableLock);
+    std::lock_guard<std::mutex> guard(m_soulboundTradableLock);
     m_itemSoulboundTradeable.remove(item);
 }
 
@@ -20067,7 +20071,7 @@ void Player::_SaveMail(SQLTransaction& trans)
 
 void Player::_SaveQuestStatus(SQLTransaction& trans)
 {
-    bool isTransaction = !trans.null();
+    bool isTransaction = static_cast<bool>(trans);
     if (!isTransaction)
         trans = CharacterDatabase.BeginTransaction();
 
