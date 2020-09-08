@@ -18,10 +18,9 @@
 #ifndef _MAP_UPDATER_H_INCLUDED
 #define _MAP_UPDATER_H_INCLUDED
 
-#include <ace/Thread_Mutex.h>
-#include <ace/Condition_Thread_Mutex.h>
 #include "DelayExecutor.h"
 #include "World.h"
+#include <condition_variable>
 
 class Map;
 
@@ -49,8 +48,8 @@ class MapUpdater
     private:
 
         DelayExecutor m_executor;
-        ACE_Thread_Mutex m_mutex;
-        ACE_Condition_Thread_Mutex m_condition;
+        std::mutex _lock;
+        std::condition_variable m_condition;
         size_t pending_requests;
 
         void update_finished();

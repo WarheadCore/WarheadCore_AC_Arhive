@@ -22,7 +22,6 @@
 #include "LFGMgr.h"
 #include "AvgDiffTracker.h"
 #include "Metric.h"
-#include <ace/Guard_T.h>
 #include <ace/Method_Request.h>
 
 class WDBThreadStartReq1 : public ACE_Method_Request
@@ -100,7 +99,7 @@ class LFGUpdateRequest : public ACE_Method_Request
 };
 
 MapUpdater::MapUpdater():
-m_executor(), m_mutex(), m_condition(m_mutex), pending_requests(0)
+m_executor(), pending_requests(0)
 {
 }
 
@@ -123,17 +122,17 @@ int MapUpdater::deactivate()
 
 int MapUpdater::wait()
 {
-    ACORE_GUARD(ACE_Thread_Mutex, m_mutex);
+    std::unique_lock<std::mutex> guard(_lock_queue);
 
     while (pending_requests > 0)
-        m_condition.wait();
+        m_condition.wait(guard);
 
     return 0;
 }
 
 int MapUpdater::schedule_update(Map& map, uint32 diff, uint32 s_diff)
 {
-    ACORE_GUARD(ACE_Thread_Mutex, m_mutex);
+    std::lock_guard<std::mutex> guard(_lock);
 
     ++pending_requests;
 
@@ -150,7 +149,7 @@ int MapUpdater::schedule_update(Map& map, uint32 diff, uint32 s_diff)
 
 int MapUpdater::schedule_lfg_update(uint32 diff)
 {
-    ACORE_GUARD(ACE_Thread_Mutex, m_mutex);
+    std::unique_lock<std::mutex> guard(_lock);
 
     ++pending_requests;
 
@@ -172,17 +171,17 @@ bool MapUpdater::activated()
 
 void MapUpdater::update_finished()
 {
-    ACORE_GUARD(ACE_Thread_Mutex, m_mutex);
+    std::lock_guard<std::mutex> guard(_lock);
 
     if (pending_requests == 0)
     {
         ACE_ERROR((LM_ERROR, ACE_TEXT("(%t)\n"), ACE_TEXT("MapUpdater::update_finished BUG, report to devs")));
         LOG_INFO("misc", "WOOT! pending_requests == 0 before decrement!");
-        m_condition.broadcast();
+        m_condition.notify_all();
         return;
     }
 
     --pending_requests;
 
-    m_condition.broadcast();
+    m_condition.notify_all();
 }

@@ -416,7 +416,8 @@ void Map::EnsureGridCreated(const GridCoord &p)
 { 
     if (getNGrid(p.x_coord, p.y_coord)) // pussywizard
         return;
-    ACORE_GUARD(ACE_Thread_Mutex, GridLock);
+
+    std::lock_guard<std::mutex> guard(_gridLock);
     EnsureGridCreated_i(p);
 }
 
@@ -2675,6 +2676,8 @@ bool InstanceMap::CanEnter(Player* player, bool loginCheck)
 */
 bool InstanceMap::AddPlayerToMap(Player* player)
 { 
+    std::lock_guard<std::mutex> lock(_mapLock);
+    
     if (m_resetAfterUnload) // this instance has been reset, it's not meant to be used anymore
         return false;
 
@@ -2958,9 +2961,13 @@ bool BattlegroundMap::CanEnter(Player* player, bool loginCheck)
 
 bool BattlegroundMap::AddPlayerToMap(Player* player)
 { 
+    std::lock_guard<std::mutex> lock(_mapLock);
+
     player->m_InstanceValid = true;
+
     if (IsBattleArena())
         player->CastSpell(player, 100102, true);
+
     return Map::AddPlayerToMap(player);
 }
 
