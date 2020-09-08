@@ -90,13 +90,13 @@ QueryResult SQLQueryHolder::GetResult(size_t index)
     {
         ResultSet* result = m_queries[index].second.qresult;
         if (!result || !result->GetRowCount())
-            return QueryResult(NULL);
+            return QueryResult(nullptr);
 
         result->NextRow();
         return QueryResult(result);
     }
     else
-        return QueryResult(NULL);
+        return QueryResult(nullptr);
 }
 
 PreparedQueryResult SQLQueryHolder::GetPreparedResult(size_t index)
@@ -106,12 +106,12 @@ PreparedQueryResult SQLQueryHolder::GetPreparedResult(size_t index)
     {
         PreparedResultSet* result = m_queries[index].second.presult;
         if (!result || !result->GetRowCount())
-            return PreparedQueryResult(NULL);
+            return PreparedQueryResult(nullptr);
 
         return PreparedQueryResult(result);
     }
     else
-        return PreparedQueryResult(NULL);
+        return PreparedQueryResult(nullptr);
 }
 
 void SQLQueryHolder::SetResult(size_t index, ResultSet* result)
