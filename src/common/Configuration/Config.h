@@ -54,8 +54,12 @@ public:
 
     std::list<std::string> GetKeysByString(std::string const& name);
 
-    bool isDryRun() { return dryRun; }
-    void setDryRun(bool mode) { dryRun = mode; }
+    bool isDryRun() {
+        return dryRun;
+    }
+    void setDryRun(bool mode) {
+        dryRun = mode;
+    }
 
     void SetConfigList(std::string const& fileName, std::string const& modulesConfigList = "");
 
@@ -63,7 +67,7 @@ public:
 
 private:
     bool dryRun = false;
-    
+
     bool LoadData(std::string const& file);
 };
 
