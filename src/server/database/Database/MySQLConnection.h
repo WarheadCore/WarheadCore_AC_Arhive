@@ -16,10 +16,10 @@
  */
 
 #include <ace/Activation_Queue.h>
-
 #include "DatabaseWorkerPool.h"
 #include "Transaction.h"
 #include "Util.h"
+#include <mutex>
 
 #ifndef _MYSQLCONNECTION_H
 #define _MYSQLCONNECTION_H
@@ -98,18 +98,12 @@ class WH_DATABASE_API MySQLConnection
         uint32 GetLastError() { return mysql_errno(m_Mysql); }
 
     protected:
-        bool LockIfReady()
-        {
-            /// Tries to acquire lock. If lock is acquired by another thread
-            /// the calling parent will just try another connection
-            return m_Mutex.tryacquire() != -1;
-        }
+        /// Tries to acquire lock. If lock is acquired by another thread
+         /// the calling parent will just try another connection
+        bool LockIfReady();
 
-        void Unlock()
-        {
-            /// Called by parent databasepool. Will let other threads access this connection
-            m_Mutex.release();
-        }
+        /// Called by parent databasepool. Will let other threads access this connection
+        void Unlock();
 
         MYSQL* GetHandle() { return m_Mysql; }
         MySQLPreparedStatement* GetPreparedStatement(uint32 index);
@@ -131,7 +125,7 @@ class WH_DATABASE_API MySQLConnection
         MYSQL *               m_Mysql;                      //! MySQL Handle.
         MySQLConnectionInfo&  m_connectionInfo;             //! Connection info (used for logging)
         ConnectionFlags       m_connectionFlags;            //! Connection flags (for preparing relevant statements)
-        ACE_Thread_Mutex      m_Mutex;
+        std::mutex            m_Mutex;
 };
 
 #endif

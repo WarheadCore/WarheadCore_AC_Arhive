@@ -15,18 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include "Common.h"
-
-#ifdef _WIN32
-  #include <winsock2.h>
-#endif
-#include <mysql.h>
-#include <mysqld_error.h>
-#include <errmsg.h>
-#include <chrono>
-#include <thread>
-
 #include "MySQLConnection.h"
 #include "MySQLThreading.h"
 #include "QueryResult.h"
@@ -35,6 +24,15 @@
 #include "DatabaseWorker.h"
 #include "Timer.h"
 #include "Log.h"
+#include <mysql.h>
+#include <mysqld_error.h>
+#include <errmsg.h>
+#include <chrono>
+#include <thread>
+
+#ifdef _WIN32
+#include <winsock2.h>
+#endif
 
 using namespace std::this_thread;
 using namespace std::chrono;
@@ -541,4 +539,14 @@ bool MySQLConnection::_HandleMySQLErrno(uint32 errNo)
             LOG_ERROR("server", "Unhandled MySQL errno %u. Unexpected behaviour possible.", errNo);
             return false;
     }
+}
+
+bool MySQLConnection::LockIfReady()
+{
+    return m_Mutex.try_lock();
+}
+
+void MySQLConnection::Unlock()
+{
+    m_Mutex.unlock();
 }
