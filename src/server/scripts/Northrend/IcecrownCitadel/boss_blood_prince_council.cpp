@@ -236,6 +236,7 @@ class boss_prince_keleseth_icc : public CreatureScript
                     }
 
                     me->SetFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_DEAD);
+                    me->SetFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_FEIGN_DEATH);
                     me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC|UNIT_FLAG_IMMUNE_TO_NPC);
                     me->SetReactState(REACT_PASSIVE);
                 }
@@ -393,6 +394,7 @@ class boss_prince_keleseth_icc : public CreatureScript
                         summons.DespawnEntry(WORLD_TRIGGER);
                         me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_UNK_29 | UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_IMMUNE_TO_NPC);
                         me->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_DEAD);
+                        me->RemoveFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_FEIGN_DEATH);
                         me->SetReactState(REACT_AGGRESSIVE);
                         me->ForceValuesUpdateAtIndex(UNIT_NPC_FLAGS);   // was in sniff. don't ask why
                         me->m_Events.AddEvent(new StandUpEvent(*me), me->m_Events.CalculateTime(1000));
@@ -493,6 +495,7 @@ class boss_prince_taldaram_icc : public CreatureScript
                     }
 
                     me->SetFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_DEAD);
+                    me->SetFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_FEIGN_DEATH);
                     me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC|UNIT_FLAG_IMMUNE_TO_NPC);
                     me->SetReactState(REACT_PASSIVE);
                 }
@@ -662,6 +665,7 @@ class boss_prince_taldaram_icc : public CreatureScript
                         summons.DespawnEntry(WORLD_TRIGGER);
                         me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_UNK_29 | UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_IMMUNE_TO_NPC);
                         me->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_DEAD);
+                        me->RemoveFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_FEIGN_DEATH);
                         me->SetReactState(REACT_AGGRESSIVE);
                         me->ForceValuesUpdateAtIndex(UNIT_NPC_FLAGS);   // was in sniff. don't ask why
                         me->m_Events.AddEvent(new StandUpEvent(*me), me->m_Events.CalculateTime(1000));
@@ -777,6 +781,7 @@ class boss_prince_valanar_icc : public CreatureScript
                     }
 
                     me->SetFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_DEAD);
+                    me->SetFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_FEIGN_DEATH);
                     me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC|UNIT_FLAG_IMMUNE_TO_NPC);
                     me->SetReactState(REACT_PASSIVE);
                 }
@@ -953,6 +958,7 @@ class boss_prince_valanar_icc : public CreatureScript
                         summons.DespawnEntry(WORLD_TRIGGER);
                         me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_UNK_29 | UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_IMMUNE_TO_NPC);
                         me->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_DEAD);
+                        me->RemoveFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_FEIGN_DEATH);
                         me->SetReactState(REACT_AGGRESSIVE);
                         me->ForceValuesUpdateAtIndex(UNIT_NPC_FLAGS);   // was in sniff. don't ask why
                         me->m_Events.AddEvent(new StandUpEvent(*me), me->m_Events.CalculateTime(1000));

@@ -19,7 +19,8 @@
 #define MPQ_MANAGER_H
 
 #include "MPQ.h"
-#include <ace/Synch.h>
+#include "PolicyLock.h"
+#include <mutex>
 #include <set>
 #include <map>
 
@@ -46,7 +47,7 @@ public:
 protected:
     void InitializeDBC();
 private:
-    ACE_Thread_Mutex mutex;
+    std::mutex mutex;
 };
 
 extern MPQManager* MPQHandler;
