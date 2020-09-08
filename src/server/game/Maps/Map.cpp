@@ -721,11 +721,9 @@ void Map::VisitNearbyCellsOf(WorldObject* obj, TypeContainerVisitor<warhead::Obj
 
 void Map::Update(const uint32 t_diff, const uint32 s_diff, bool  /*thread*/)
 {
-    uint32 mapId = GetId(); // pussywizard: for crashlogs
-    LOG_DEBUG("pool", "%u", mapId); // pussywizard: for crashlogs
-
     if (t_diff)
         _dynamicTree.update(t_diff);
+    
     /// update worldsessions for existing players
     for (m_mapRefIter = m_mapRefManager.begin(); m_mapRefIter != m_mapRefManager.end(); ++m_mapRefIter)
     {
