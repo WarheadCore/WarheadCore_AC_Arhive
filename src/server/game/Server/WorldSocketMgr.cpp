@@ -35,6 +35,7 @@
 #include <ace/os_include/sys/os_types.h>
 #include <ace/os_include/sys/os_socket.h>
 
+#include <atomic>
 #include <set>
 
 #include "Log.h"
@@ -103,7 +104,7 @@ class ReactorRunnable : protected ACE_Task_Base
 
         long Connections()
         {
-            return static_cast<long> (m_Connections);
+            return m_Connections;
         }
 
         int AddSocket (WorldSocket* sock)
