@@ -1904,7 +1904,7 @@ inline ZLiquidStatus GridMap::getLiquidStatus(float x, float y, float z, uint8 R
 
     if (delta > -0.1f)                  // Walk on water
         return LIQUID_MAP_WATER_WALK;
-                                      
+
     // Above water
     return LIQUID_MAP_ABOVE_WATER;
 }
