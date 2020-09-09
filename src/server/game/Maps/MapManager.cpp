@@ -79,22 +79,18 @@ Map* MapManager::CreateBaseMap(uint32 id)
     {
         std::lock_guard<std::mutex> guard(_mapsLock);
 
-        map = FindBaseMap(id);
-        if (map == nullptr) // pussywizard: check again after acquiring mutex
+        MapEntry const* entry = sMapStore.LookupEntry(id);
+        ASSERT(entry);
+
+        if (entry->Instanceable())
+            map = new MapInstanced(id);
+        else
         {
-            MapEntry const* entry = sMapStore.LookupEntry(id);
-            ASSERT(entry);
-
-            if (entry->Instanceable())
-                map = new MapInstanced(id);
-            else
-            {
-                map = new Map(id, 0, REGULAR_DIFFICULTY);
-                map->LoadRespawnTimes();
-            }
-
-            i_maps[id] = map;
+            map = new Map(id, 0, REGULAR_DIFFICULTY);
+            map->LoadRespawnTimes();
         }
+
+        i_maps[id] = map;
     }
 
     ASSERT(map);
@@ -106,6 +102,7 @@ Map* MapManager::FindBaseNonInstanceMap(uint32 mapId) const
     Map* map = FindBaseMap(mapId);
     if (map && map->Instanceable())
         return nullptr;
+
     return map;
 }
 
@@ -146,6 +143,7 @@ bool MapManager::CanPlayerEnter(uint32 mapid, Player* player, bool loginCheck)
 
     Difficulty targetDifficulty, requestedDifficulty;
     targetDifficulty = requestedDifficulty = player->GetDifficulty(entry->IsRaid());
+
     // Get the highest available difficulty if current setting is higher than the instance allows
     MapDifficulty const* mapDiff = GetDownscaledMapDifficultyData(entry->MapID, targetDifficulty);
     if (!mapDiff)
@@ -169,21 +167,18 @@ bool MapManager::CanPlayerEnter(uint32 mapid, Player* player, bool loginCheck)
             // probably there must be special opcode, because client has this string constant in GlobalStrings.lua
             // TODO: this is not a good place to send the message
             player->GetSession()->SendAreaTriggerMessage(player->GetSession()->GetAcoreString(LANG_INSTANCE_RAID_GROUP_ONLY), mapName);
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
+
             LOG_DEBUG("maps", "MAP: Player '%s' must be in a raid group to enter instance '%s'", player->GetName().c_str(), mapName);
-#endif
             return false;
         }
     }
 
     // xinef: dont allow LFG Group to enter other instance that is selected
-    if (group)
-        if (group->isLFGGroup())
-            if (!sLFGMgr->inLfgDungeonMap(group->GetGUID(), mapid, targetDifficulty))
-            {
-                player->SendTransferAborted(mapid, TRANSFER_ABORT_MAP_NOT_ALLOWED);
-                return false;
-            }
+    if (group && group->isLFGGroup() && !sLFGMgr->inLfgDungeonMap(group->GetGUID(), mapid, targetDifficulty))
+    {
+        player->SendTransferAborted(mapid, TRANSFER_ABORT_MAP_NOT_ALLOWED);
+        return false;
+    }
 
     if (!player->IsAlive())
     {
@@ -204,22 +199,17 @@ bool MapManager::CanPlayerEnter(uint32 mapid, Player* player, bool loginCheck)
             {
                 WorldPacket data(SMSG_CORPSE_NOT_IN_INSTANCE, 0);
                 player->GetSession()->SendPacket(&data);
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
                 LOG_DEBUG("maps", "MAP: Player '%s' does not have a corpse in instance '%s' and cannot enter.", player->GetName().c_str(), mapName);
-#endif
                 return false;
             }
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
+
             LOG_DEBUG("maps", "MAP: Player '%s' has corpse in instance '%s' and can enter.", player->GetName().c_str(), mapName);
-#endif
+
             player->ResurrectPlayer(0.5f, false);
             player->SpawnCorpseBones();
         }
-        else {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
+        else
             LOG_DEBUG("maps", "Map::CanPlayerEnter - player '%s' is dead but does not have a corpse!", player->GetName().c_str());
-#endif
-        }
     }
 
     // if map exists - check for being full, etc.
@@ -307,9 +297,7 @@ void MapManager::Update(uint32 diff)
     }
 }
 
-void MapManager::DoDelayedMovesAndRemoves()
-{
-}
+void MapManager::DoDelayedMovesAndRemoves() { }
 
 bool MapManager::ExistMapAndVMap(uint32 mapid, float x, float y)
 {
@@ -355,6 +343,7 @@ void MapManager::GetNumInstances(uint32& dungeons, uint32& battlegrounds, uint32
         Map* map = itr->second;
         if (!map->Instanceable())
             continue;
+
         MapInstanced::InstancedMaps &maps = ((MapInstanced*)map)->GetInstancedMaps();
         for (MapInstanced::InstancedMaps::iterator mitr = maps.begin(); mitr != maps.end(); ++mitr)
         {
@@ -374,6 +363,7 @@ void MapManager::GetNumPlayersInInstances(uint32& dungeons, uint32& battleground
         Map* map = itr->second;
         if (!map->Instanceable())
             continue;
+
         MapInstanced::InstancedMaps &maps = ((MapInstanced*)map)->GetInstancedMaps();
         for (MapInstanced::InstancedMaps::iterator mitr = maps.begin(); mitr != maps.end(); ++mitr)
         {
