@@ -39,5 +39,5 @@ restylers:
   - clang-format:
       enabled: false
   - astyle:
-      arguments: ["-A1 -xV -S -N -K -Y -p -xg -k1 -W1 -xj"]
+      arguments: ["-A1", "-xV", "-S", "-N", "-K", "-Y", "-p", "-xg", "-k1", "-W1", -xj"]
   - "*"
