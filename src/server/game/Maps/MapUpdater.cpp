@@ -122,7 +122,7 @@ int MapUpdater::deactivate()
 
 int MapUpdater::wait()
 {
-    std::unique_lock<std::mutex> guard(_lock_queue);
+    std::unique_lock<std::mutex> guard(_lock);
 
     while (pending_requests > 0)
         m_condition.wait(guard);
