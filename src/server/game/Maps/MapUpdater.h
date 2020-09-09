@@ -39,9 +39,9 @@ public:
     void activate(size_t num_threads);
     void deactivate();
     bool activated();
+    void update_finished();
 
 private:
-    void update_finished();
     void WorkerThread();
 
     ProducerConsumerQueue<UpdateRequest*> _queue;
