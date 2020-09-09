@@ -25,8 +25,8 @@
 class UpdateRequest
 {
 public:
-    UpdateRequest() = default;
-    ~UpdateRequest() = default;
+    virtual UpdateRequest() = default;
+    virtual ~UpdateRequest() = default;
 
     virtual void call() = 0;
 };
