@@ -349,7 +349,7 @@ void MapManager::UnloadAll()
 void MapManager::GetNumInstances(uint32& dungeons, uint32& battlegrounds, uint32& arenas)
 {
     std::lock_guard<std::mutex> lock(_mapsLock);
-    
+
     for (MapMapType::iterator itr = i_maps.begin(); itr != i_maps.end(); ++itr)
     {
         Map* map = itr->second;
@@ -368,7 +368,7 @@ void MapManager::GetNumInstances(uint32& dungeons, uint32& battlegrounds, uint32
 void MapManager::GetNumPlayersInInstances(uint32& dungeons, uint32& battlegrounds, uint32& arenas, uint32& spectators)
 {
     std::lock_guard<std::mutex> lock(_mapsLock);
-    
+
     for (MapMapType::iterator itr = i_maps.begin(); itr != i_maps.end(); ++itr)
     {
         Map* map = itr->second;
