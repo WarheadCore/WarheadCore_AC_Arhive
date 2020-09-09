@@ -19,7 +19,7 @@
 #define TRINITYSERVER_SPLINE_H
 
 #include "MovementTypedefs.h"
-#include "Error.h"
+#include "Errors.h"
 #include <G3D/Vector3.h>
 #include <limits>
 
