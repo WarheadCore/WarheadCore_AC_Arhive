@@ -13,6 +13,9 @@ remote_files: []
 
 auto: false
 
+commit_template: |
+  [Restyler] ${restyler.name}
+
 pull_requests: true
 
 comments: false
@@ -24,7 +27,8 @@ statuses:
 
 request_review: none
 
-labels: []
+labels:
+  - restyled
 
 ignore_labels:
   - restyled-ignore
@@ -32,4 +36,8 @@ ignore_labels:
 restylers_version: stable
 
 restylers:
-  - "whitespace"
+  - clang-format:
+      enabled: false
+  - astyle:
+      arguments: ["-A1 -xV -S -N -K -Y -p -xg -k1 -W1 -xj"]
+  - "*"
