@@ -271,4 +271,3 @@ void AddSC_Transmogrification()
     new Transmogrification_Player();
     new Transmogrification_World();
 }
-
