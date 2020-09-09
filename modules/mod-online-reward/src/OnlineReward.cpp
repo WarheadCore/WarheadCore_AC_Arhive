@@ -184,7 +184,7 @@ void OnlineReward::RewardPerTime(Player* player)
 {
     uint32 lowGuid = player->GetGUIDLow();
     uint32 LastRewarded = GetHistoryPerTime(lowGuid);
-    uint32 playedTimeSec = player->GetTotalPlayedTime();    
+    uint32 playedTimeSec = player->GetTotalPlayedTime();
     uint32 diffTime = 0;
 
     while (diffTime < playedTimeSec)
@@ -300,7 +300,7 @@ void OnlineReward::SaveDataForDB(uint32 lowGuid, uint32 seconds, bool isPerOnlin
         {
             _data.PerOnline.insert(seconds);
             _data.PerTime = 0;
-        }            
+        }
         else
             _data.PerTime = seconds;
 

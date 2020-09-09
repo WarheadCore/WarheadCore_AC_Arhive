@@ -395,7 +395,7 @@ bool CFBG::FillPlayersToCFBG(BattlegroundQueue* bgqueue, Battleground* bg, const
 
     // quick check if nothing we can do:
     if (!sBattlegroundMgr->isTesting())
-        if ((aliFree > hordeFree&& bgqueue->m_QueuedGroups[bracket_id][BG_QUEUE_CFBG].empty()))
+        if ((aliFree > hordeFree && bgqueue->m_QueuedGroups[bracket_id][BG_QUEUE_CFBG].empty()))
             return false;
 
     // ally: at first fill as much as possible

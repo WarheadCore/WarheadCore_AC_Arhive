@@ -92,8 +92,8 @@ void Anticheat::WalkOnWaterHackDetection(Player* player, MovementInfo  movementI
         return;
 
     if (player->HasAuraType(SPELL_AURA_FEATHER_FALL) ||
-        player->HasAuraType(SPELL_AURA_SAFE_FALL) ||
-        player->HasAuraType(SPELL_AURA_WATER_WALK))
+            player->HasAuraType(SPELL_AURA_SAFE_FALL) ||
+            player->HasAuraType(SPELL_AURA_WATER_WALK))
         return;
 
     LOG_INFO("modules", "> Anticheat: Walk on Water - Hack detected player %s (%u)", player->GetName().c_str(), player->GetGUIDLow());
@@ -133,7 +133,7 @@ void Anticheat::TeleportPlaneHackDetection(Player* player, MovementInfo movement
     uint32 key = player->GetGUIDLow();
 
     if (m_Players[key].GetLastMovementInfo().pos.GetPositionZ() != 0 ||
-        movementInfo.pos.GetPositionZ() != 0)
+            movementInfo.pos.GetPositionZ() != 0)
         return;
 
     if (movementInfo.HasMovementFlag(MOVEMENTFLAG_FALLING))

@@ -24,7 +24,7 @@ void AddSC_CFBG();
 // Add all
 void AddCFBGScripts()
 {
-   AddSC_CFBG();
+    AddSC_CFBG();
 }
 
 #endif /* _CFBG_LOADER_H_ */

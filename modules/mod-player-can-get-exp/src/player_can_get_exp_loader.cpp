@@ -24,7 +24,7 @@ void AddSC_PlayerCanGetExp();
 // Add all
 void AddPlayerCanGetExpScripts()
 {
-   AddSC_PlayerCanGetExp();
+    AddSC_PlayerCanGetExp();
 }
 
 #endif /* _PLAYER_CAN_GET_EXP_LOADER_H_ */

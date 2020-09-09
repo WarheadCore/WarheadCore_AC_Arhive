@@ -24,7 +24,7 @@ void AddSC_AntiAD();
 // Add all
 void AddAntiADScripts()
 {
-   AddSC_AntiAD();
+    AddSC_AntiAD();
 }
 
 #endif /* _ANTI_AD_LOADER_H_ */

@@ -24,7 +24,7 @@ void AddSC_GMChatColor();
 // Add all
 void AddGMChatColorScripts()
 {
-   AddSC_GMChatColor();
+    AddSC_GMChatColor();
 }
 
 #endif /* _GM_CHAT_COLOR_LOADER_H_ */

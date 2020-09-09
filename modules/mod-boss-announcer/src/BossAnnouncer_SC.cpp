@@ -26,10 +26,10 @@ class Boss_Announcer_Player : public PlayerScript
 {
 public:
     Boss_Announcer_Player() : PlayerScript("Boss_Announcer_Player") {}
-	
-	void OnCreatureKill(Player* player, Creature* creature) override
-	{
-		if (!CONF_GET_BOOL("BossAnnouncer.Enable"))
+
+    void OnCreatureKill(Player* player, Creature* creature) override
+    {
+        if (!CONF_GET_BOOL("BossAnnouncer.Enable"))
             return;
 
         if (!creature->isWorldBoss())
@@ -45,10 +45,10 @@ public:
         if (!name)
             name = "Unknown creature";
 
-        std::string message = warhead::StringFormat("|cffff0000# |cff7bbef7%s|r и его группа убили мирового босса |cffff0000%s|r", player->GetName(), name);       
+        std::string message = warhead::StringFormat("|cffff0000# |cff7bbef7%s|r и его группа убили мирового босса |cffff0000%s|r", player->GetName(), name);
 
         sWorld->SendServerMessage(SERVER_MSG_STRING, message.c_str());
-	};
+    };
 };
 
 class Boss_Announcer_World : public WorldScript

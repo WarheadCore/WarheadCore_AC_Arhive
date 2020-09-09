@@ -41,7 +41,7 @@ GuildCriteriaProgressStruct* GuildCriteria::GetProgress(uint32 criteriaID, bool 
     auto const& progress = _guildCriteriaProgress.find(criteriaID);
     if (progress != _guildCriteriaProgress.end())
         return &progress->second;
-   
+
     if (forceCreate)
     {
         AddEmptyProgress(criteriaID);
@@ -198,7 +198,7 @@ void GuildCriteria::SaveToDB(uint32 criteriaID)
     // gls_criteria_progress
     trans->PAppend("DELETE FROM `gls_criteria_progress` WHERE `GuildID` = %u AND `CriteriaID` = %u", progressStruct->GuildID, progressStruct->CriteriaID);
     trans->PAppend("INSERT INTO `gls_criteria_progress`(`GuildID`, `CriteriaID`, `ItemCount`, `SelectedSpell`, `IsDone`) VALUES (%u, %u, '%s', %u, %d)",
-        _guildID, progressStruct->CriteriaID, itemsCount.c_str(), progressStruct->SelectedSpell, progressStruct->IsDone);
+                   _guildID, progressStruct->CriteriaID, itemsCount.c_str(), progressStruct->SelectedSpell, progressStruct->IsDone);
 
     CharacterDatabase.CommitTransaction(trans);
 }
@@ -346,30 +346,30 @@ std::string const GuildLevelSystem::GetItemLink(uint32 itemID, int8 index_loc)
 
     switch (itemTemplate->Quality)
     {
-    case 0:
-        color = "cff9d9d9d";
-        break;
-    case 1:
-        color = "cffffffff";
-        break;
-    case 2:
-        color = "cff1eff00";
-        break;
-    case 3:
-        color = "cff0070dd";
-        break;
-    case 4:
-        color = "cffa335ee";
-        break;
-    case 5:
-        color = "cffff8000";
-        break;
-    case 6:
-    case 7:
-        color = "cffe6cc80";
-        break;
-    default:
-        break;
+        case 0:
+            color = "cff9d9d9d";
+            break;
+        case 1:
+            color = "cffffffff";
+            break;
+        case 2:
+            color = "cff1eff00";
+            break;
+        case 3:
+            color = "cff0070dd";
+            break;
+        case 4:
+            color = "cffa335ee";
+            break;
+        case 5:
+            color = "cffff8000";
+            break;
+        case 6:
+        case 7:
+            color = "cffe6cc80";
+            break;
+        default:
+            break;
     }
 
     return warhead::StringFormat("|%s|Hitem:%u:0:0:0:0:0:0:0:0|h[%s]|h|r", color.c_str(), itemID, name.c_str());
@@ -402,14 +402,14 @@ void GuildLevelSystem::LoadBaseCriteria()
     _guildStages.clear();
 
     QueryResult result = CharacterDatabase.Query("SELECT "
-        "`CriteriaID`,"                 // 0
-        "`StageID`,"                    // 1
-        "`ListItemID`,"                 // 2
-        "`ListItemCount`,"              // 3
-        "`MinPlayersCount`,"            // 4
-        "`Coef`,"                       // 5
-        "`ListRewardSpells` "           // 6
-        "FROM `gls_criteria`");
+                         "`CriteriaID`,"                 // 0
+                         "`StageID`,"                    // 1
+                         "`ListItemID`,"                 // 2
+                         "`ListItemCount`,"              // 3
+                         "`MinPlayersCount`,"            // 4
+                         "`Coef`,"                       // 5
+                         "`ListRewardSpells` "           // 6
+                         "FROM `gls_criteria`");
 
     if (!result)
     {
@@ -443,7 +443,7 @@ void GuildLevelSystem::LoadBaseCriteria()
         uint32 minPlayersCount                  = fields[4].GetUInt32();
         float coef                              = fields[5].GetFloat();
         std::string listRewardSpells            = fields[6].GetString();
-        
+
         GuildCriteriaStruct _data;
         _data.CriteriaID        = criteriaID;
         _data.StageID           = stageID;
@@ -459,7 +459,7 @@ void GuildLevelSystem::LoadBaseCriteria()
 
         // Set empty spells
         GLS_IRERATOR(GLS_SPELLS_REWARD_COUNT)
-            _data.RewardSpells[i] = 0;
+        _data.RewardSpells[i] = 0;
 
         Tokenizer listItemIDTokens(listItemID, ',');
         Tokenizer listItemCountTokens(listItemCount, ',');
@@ -530,7 +530,7 @@ void GuildLevelSystem::LoadBaseCriteria()
         {
             std::vector<uint32> __vector = { criteriaID };
             _guildStages.insert(std::make_pair(stageID, __vector));
-        }            
+        }
         else
             _stages->second.push_back(criteriaID);
 
@@ -546,12 +546,12 @@ void GuildLevelSystem::LoadCriteriaProgress()
     _guildCriteriaProgress.clear();
 
     QueryResult result = CharacterDatabase.Query("SELECT "
-        "`GuildID`,"        // 0
-        "`CriteriaID`,"     // 1
-        "`ItemCount`,"      // 2
-        "`SelectedSpell`,"  // 3
-        "`IsDone` "         // 4
-        "FROM `gls_criteria_progress`");
+                         "`GuildID`,"        // 0
+                         "`CriteriaID`,"     // 1
+                         "`ItemCount`,"      // 2
+                         "`SelectedSpell`,"  // 3
+                         "`IsDone` "         // 4
+                         "FROM `gls_criteria_progress`");
 
     if (!result)
     {
@@ -586,7 +586,7 @@ void GuildLevelSystem::LoadCriteriaProgress()
 
         // Set empty items
         GLS_IRERATOR(GLS_ITEMS_COUNT)
-            _data.ItemCount[i] = 0;
+        _data.ItemCount[i] = 0;
 
         Tokenizer listItemCountTokens(listItemCount, ',');
 
@@ -632,9 +632,9 @@ void GuildLevelSystem::LoadStageProgress()
     uint32 oldMSTime = getMSTime();
 
     QueryResult result = CharacterDatabase.Query("SELECT "
-        "`GuildID`,"     // 0
-        "`StageID` "     // 1
-        "FROM `gls_stages_progress`");
+                         "`GuildID`,"     // 0
+                         "`StageID` "     // 1
+                         "FROM `gls_stages_progress`");
 
     if (!result)
     {
@@ -893,7 +893,7 @@ void GuildLevelSystem::ShowAllCriteriaInfo(Player* player, Creature* creature)
         if (player->GetRank() == 0 && GetNextStage(stageID) != stageID)
             AddGossipItemFor(player, 10, warhead::StringFormat("# >> Завершить стадию - %u", countDone), GOSSIP_SENDER_MAIN, 4);
     }
-    
+
     AddGossipItemFor(player, 10, ">> В главное меню", GOSSIP_SENDER_MAIN, 99);
     SendGossipMenuFor(player, 1, creature->GetGUID());
 }
@@ -925,7 +925,7 @@ void GuildLevelSystem::ShowCriteriaInfo(Player* player, Creature* creature, uint
         if (!itemLink.empty())
             AddGossipItemFor(player, 10, warhead::StringFormat("- %u. %s - %u/%u", i + 1, itemLink.c_str(), currentItems, maxItems), i, action);
     }
-    
+
     AddGossipItemFor(player, 10, "#", sender, action);
     AddGossipItemFor(player, 10, "# Награды на выбор:", sender, action);
 
@@ -946,7 +946,7 @@ void GuildLevelSystem::ShowCriteriaInfo(Player* player, Creature* creature, uint
         if (player->GetRank() == 0 && !criteriaProgress->IsProgressDone(criteriaID))
             AddGossipItemFor(player, 10, ">> Получить награды", GLS_GOSSIP_SHOW_REWARDS_SENDER, action);
     }
-    
+
     AddGossipItemFor(player, 10, ">> Просмотр наград и требований", GLS_GOSSIP_GET_ALL_LINK, action);
     AddGossipItemFor(player, 10, ">> К списку критериев", GOSSIP_SENDER_MAIN, 2);
     AddGossipItemFor(player, 10, ">> В главное меню", GOSSIP_SENDER_MAIN, 99);
@@ -1002,11 +1002,11 @@ void GuildLevelSystem::ShowRewardInfo(Player* player, Creature* creature, uint32
         auto spellLink = GetSpelllocale(spellID);
 
         AddGossipItemFor(player, 10, warhead::StringFormat("# %u. %s%s", i + 1, stringSelect(selectShoose, i).c_str(), spellLink.c_str()), GLS_GOSSIP_GET_REWARDS_SENDER + i, action,
-            warhead::StringFormat("Вы уверены, что хотите выбрать %s?", spellLink.c_str()), 0, false);
+                         warhead::StringFormat("Вы уверены, что хотите выбрать %s?", spellLink.c_str()), 0, false);
     }
 
     AddGossipItemFor(player, 10, "#", sender, action);
-    
+
     if (selectShoose && !criteriaProgress->IsProgressDone(criteriaID))
         AddGossipItemFor(player, 10, "--- Получить награды", selectShoose + GLS_GOSSIP_GET_ALL_REWARDS_SENDER - 1, action);
 
@@ -1156,7 +1156,7 @@ void GuildLevelSystem::ShowInvestedMenu(Player* player, Creature* creature, uint
     auto criteriaProgress = GetCriteriaProgress(player->GetGuildId(), true);
     if (!criteriaProgress)
         ABORT();
-  
+
     uint32 itemID = criteriaProgress->GetCriteriaItemID(criteriaID, sender);
     if (!itemID)
         ABORT();
@@ -1164,7 +1164,7 @@ void GuildLevelSystem::ShowInvestedMenu(Player* player, Creature* creature, uint
     auto itemLink = GetItemLink(itemID, player->GetSession()->GetSessionDbLocaleIndex());
     uint32 currentItems = criteriaProgress->GetItemCountProgress(criteriaID, sender);
     uint32 maxItems = criteriaProgress->GetMaxCriteriaItemCount(criteriaID, sender);
-    uint32 playerItemCount = player->GetItemCount(itemID);    
+    uint32 playerItemCount = player->GetItemCount(itemID);
     uint32 itemsNeed = maxItems - currentItems;
     uint32 itemCount = playerItemCount;
     float persents = float(currentItems) / float(maxItems) * 100.0f;
@@ -1184,9 +1184,9 @@ void GuildLevelSystem::ShowInvestedMenu(Player* player, Creature* creature, uint
     {
         AddGossipItemFor(player, 10, "- Вложить выборочно", sender, action, "Введите количество", 0, true);
         AddGossipItemFor(player, 10, warhead::StringFormat("- Вложить %s (%u)", itemCount == itemsNeed ? "до конца" : "всё что есть", itemCount), sender, criteriaID + GLS_GOSSIP_CRITERIA_ID_FULL,
-            warhead::StringFormat("Вы уверены, что хотите вложить %s %u?", itemLink.c_str(), playerItemCount), 0, false);
+                         warhead::StringFormat("Вы уверены, что хотите вложить %s %u?", itemLink.c_str(), playerItemCount), 0, false);
     }
-    
+
     AddGossipItemFor(player, 10, ">> К списку критериев", GOSSIP_SENDER_MAIN, 2);
     AddGossipItemFor(player, 10, ">> В главное меню", GOSSIP_SENDER_MAIN, 99);
     SendGossipMenuFor(player, 1, creature->GetGUID());

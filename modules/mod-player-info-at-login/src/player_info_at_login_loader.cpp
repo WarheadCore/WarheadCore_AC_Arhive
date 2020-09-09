@@ -24,7 +24,7 @@ void AddSC_PlayerInfoAtLogin();
 // Add all
 void AddPlayerInfoAtLoginScripts()
 {
-   AddSC_PlayerInfoAtLogin();
+    AddSC_PlayerInfoAtLogin();
 }
 
 #endif /* _PLAYER_INFO_AT_LOGIN_LOADER_H_ */

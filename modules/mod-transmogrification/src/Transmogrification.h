@@ -191,7 +191,7 @@ private:
     bool EnableSets;
     uint8 MaxSets;
     float SetCostModifier;
-    int32 SetCopperCost;   
+    int32 SetCopperCost;
 };
 
 #define sTransmog Transmogrification::instance()

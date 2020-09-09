@@ -24,7 +24,7 @@ void AddSC_FactionsIconsChannel();
 // Add all
 void AddFactionsIconsChannelScripts()
 {
-   AddSC_FactionsIconsChannel();
+    AddSC_FactionsIconsChannel();
 }
 
 #endif /* _FACTIONS_ICONS_CHANNEL_LOADER_H_ */

@@ -121,7 +121,7 @@ public:
     {
         CheckMessage(player, msg);
     }
-    
+
 private:
     void Mute(Player* player)
     {
@@ -186,7 +186,7 @@ public:
     {
         if (!CONF_GET_BOOL("AntiAD.Enable"))
             return;
-        
+
         sAD->LoadDataFromDB();
     }
 };

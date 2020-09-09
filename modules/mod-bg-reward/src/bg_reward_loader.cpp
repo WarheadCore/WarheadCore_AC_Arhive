@@ -24,7 +24,7 @@ void AddSC_BGReward();
 // Add all
 void AddBGRewardScripts()
 {
-   AddSC_BGReward();
+    AddSC_BGReward();
 }
 
 #endif /* _BG_REWARD_LOADER_H_ */

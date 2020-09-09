@@ -24,7 +24,7 @@ void AddSC_BossAnnouncer();
 // Add all
 void AddBossAnnouncerScripts()
 {
-   AddSC_BossAnnouncer();
+    AddSC_BossAnnouncer();
 }
 
 #endif /* _BOSS_ANNOUNCER_LOADER_H_ */

@@ -24,7 +24,7 @@ void AddSC_OnlineReward();
 // Add all
 void AddOnlineRewardScripts()
 {
-   AddSC_OnlineReward();
+    AddSC_OnlineReward();
 }
 
 #endif /* _ONLINE_REWARD_LOADER_H_ */

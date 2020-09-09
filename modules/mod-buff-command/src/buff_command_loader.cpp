@@ -24,7 +24,7 @@ void AddSC_BuffCommand();
 // Add all
 void AddBuffCommandScripts()
 {
-   AddSC_BuffCommand();
+    AddSC_BuffCommand();
 }
 
 #endif /* _BUFF_COMMAND_LOADER_H_ */

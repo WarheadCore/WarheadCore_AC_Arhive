@@ -35,7 +35,7 @@ public:
         // Not reward on end arena
         if (bg->isArena())
             return;
-       
+
         TeamId bgTeamId = player->GetBgTeamId();
         uint32 RewardCount = 0;
 
@@ -43,26 +43,26 @@ public:
 
         switch (player->GetZoneId())
         {
-        case 3277: // Warsong Gulch
-            player->AddItem(CONF_GET_INT("BGReward.ItemID.WSG"), RewardCount);
-            break;
-        case 3358: // Arathi Basin
-            player->AddItem(CONF_GET_INT("BGReward.ItemID.Arathi"), RewardCount);
-            break;
-        case 3820: // Eye of the Storm
-            player->AddItem(CONF_GET_INT("BGReward.ItemID.Eye"), RewardCount);
-            break;
-        case 4710: // Isle of Conquest
-            player->AddItem(CONF_GET_INT("BGReward.ItemID.Isle"), RewardCount);
-            break;
-        case 4384: // Strand of the Ancients
-            player->AddItem(CONF_GET_INT("BGReward.ItemID.Ancients"), RewardCount);
-            break;
-        case 2597: // Alterac Valley
-            player->AddItem(CONF_GET_INT("BGReward.ItemID.Alterac"), RewardCount);
-            break;
-        default:
-            break;
+            case 3277: // Warsong Gulch
+                player->AddItem(CONF_GET_INT("BGReward.ItemID.WSG"), RewardCount);
+                break;
+            case 3358: // Arathi Basin
+                player->AddItem(CONF_GET_INT("BGReward.ItemID.Arathi"), RewardCount);
+                break;
+            case 3820: // Eye of the Storm
+                player->AddItem(CONF_GET_INT("BGReward.ItemID.Eye"), RewardCount);
+                break;
+            case 4710: // Isle of Conquest
+                player->AddItem(CONF_GET_INT("BGReward.ItemID.Isle"), RewardCount);
+                break;
+            case 4384: // Strand of the Ancients
+                player->AddItem(CONF_GET_INT("BGReward.ItemID.Ancients"), RewardCount);
+                break;
+            case 2597: // Alterac Valley
+                player->AddItem(CONF_GET_INT("BGReward.ItemID.Alterac"), RewardCount);
+                break;
+            default:
+                break;
         }
     }
 };

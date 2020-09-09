@@ -72,7 +72,7 @@ public:
         // Health and mana restore
         if (!CONF_GET_BOOL("DuelResetHealthMana"))
             return;
-        
+
         winner->RestoreHealthAfterDuel();
         loser->RestoreHealthAfterDuel();
 
