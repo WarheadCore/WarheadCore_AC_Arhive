@@ -25,42 +25,33 @@
 #include <thread>
 
 class Map;
+class UpdateRequest;
 
 class MapUpdater
 {
-    public:
+public:
+    MapUpdater();
+    virtual ~MapUpdater();
 
-        MapUpdater();
-        virtual ~MapUpdater();
+    void schedule_update(Map& map, uint32 diff, uint32 s_diff);
+    void schedule_lfg_update(uint32 diff);
+    void wait();
+    void activate(size_t num_threads);
+    void deactivate();
+    bool activated();
 
-        friend class UpdateRequest;
-        friend class MapUpdateRequest;
-        friend class LFGUpdateRequest;
+private:
+    void update_finished();
+    void WorkerThread();
+    
+    ProducerConsumerQueue<UpdateRequest*> _queue;
 
-        void schedule_update(Map& map, uint32 diff, uint32 s_diff);
-        void schedule_lfg_update(uint32 diff);
+    std::vector<std::thread> _workerThreads;
+    std::atomic<bool> _cancelationToken;
 
-        void wait();
-
-        void activate(size_t num_threads);
-
-        void deactivate();
-
-        bool activated();
-
-    private:
-        ProducerConsumerQueue<UpdateRequest*> _queue;
-
-        std::vector<std::thread> _workerThreads;
-        std::atomic<bool> _cancelationToken;
-
-        std::mutex _lock;
-        std::condition_variable _condition;
-        size_t pending_requests;
-
-        void update_finished();
-
-        void WorkerThread();
+    std::mutex _lock;
+    std::condition_variable _condition;
+    size_t pending_requests;       
 };
 
 #endif //_MAP_UPDATER_H_INCLUDED
