@@ -39,5 +39,5 @@ restylers:
   - clang-format:
       enabled: false
   - astyle:
-      arguments: ["--attach-closing-while --indent-switches --indent-namespaces --indent-col1-comments --break-blocks --pad-oper --pad-comma --delete-empty-lines --align-pointer=type --align-reference=type --remove-braces"]
+      arguments: ["-A1 -xV -S -N -K -Y -p -xg -k1 -W1 -xj"]
   - "*"
