@@ -24,7 +24,7 @@ void AddSC_LevelReward();
 // Add all
 void AddLevelRewardScripts()
 {
-   AddSC_LevelReward();
+    AddSC_LevelReward();
 }
 
 #endif /* _LEVEL_REWARD_LOADER_H_ */

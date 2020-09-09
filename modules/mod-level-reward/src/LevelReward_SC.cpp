@@ -49,7 +49,7 @@ public:
         QueryResult result = WorldDatabase.Query("SELECT Level, Money, ItemID, ItemCount FROM level_reward ORDER BY Level");
         if (!result)
         {
-            LOG_ERROR("modules", "In DB table `level_reward` not data. Loading canceled"); 
+            LOG_ERROR("modules", "In DB table `level_reward` not data. Loading canceled");
             LOG_ERROR("modules", "");
             return;
         }
@@ -110,7 +110,7 @@ public:
             RewardForLevel(player, PlayerLevel + 1 - Diff);
             Diff--;
         }
-    }    
+    }
 
 private:
     std::map<uint32, LevelRewardStruct> rewards;

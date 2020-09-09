@@ -27,7 +27,7 @@ bool ExMail::AddItems(uint32 itemID, uint32 itemCount)
     ItemTemplate const* itemTemplate = sObjectMgr->GetItemTemplate(itemID);
     if (!itemTemplate)
     {
-        LOG_ERROR("modules","> External Mail: Предмета под номером %u не существует. ID (%u)", itemID, ID);
+        LOG_ERROR("modules", "> External Mail: Предмета под номером %u не существует. ID (%u)", itemID, ID);
         return false;
     }
 
@@ -140,7 +140,7 @@ void ExternalMail::SendMails()
         return;
 
     LOG_TRACE("modules.em", "> External Mail: SendMails");
-    
+
     SQLTransaction trans = CharacterDatabase.BeginTransaction();
 
     for (auto const& itr : _store)
@@ -154,7 +154,7 @@ void ExternalMail::SendMails()
 
             if (exmail.Money)
                 mail->AddMoney(exmail.Money);
-        
+
             for (auto const& itr : items)
             {
                 if (Item* mailItem = Item::CreateItem(itr.first, itr.second))
@@ -184,5 +184,5 @@ void ExternalMail::AddMail(std::string charName, std::string const thanksSubject
 {
     // Add mail item
     CharacterDatabase.PExecute("INSERT INTO `mail_external` (PlayerName, Subject, ItemID, ItemCount, Message, CreatureEntry) VALUES ('%s', '%s', %u, %u, '%s', %u)",
-        charName.c_str(), thanksSubject.c_str(), itemID, itemCount, thanksText.c_str(), creatureEntry);
+                               charName.c_str(), thanksSubject.c_str(), itemID, itemCount, thanksText.c_str(), creatureEntry);
 }

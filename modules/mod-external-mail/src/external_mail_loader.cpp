@@ -24,7 +24,7 @@ void AddSC_ExternalMail();
 // Add all
 void AddExternalMailScripts()
 {
-   AddSC_ExternalMail();
+    AddSC_ExternalMail();
 }
 
 #endif /* _EXTERNAL_MAIL_LOADER_H_ */

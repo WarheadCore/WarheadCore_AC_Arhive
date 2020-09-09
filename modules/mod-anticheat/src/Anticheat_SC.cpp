@@ -34,7 +34,7 @@ public:
 
     void OnLogin(Player* player) override
     {
-        sAnticheat->HandlePlayerLogin(player);        
+        sAnticheat->HandlePlayerLogin(player);
     }
 };
 

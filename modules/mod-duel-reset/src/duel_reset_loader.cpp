@@ -24,7 +24,7 @@ void AddSC_DuelReset();
 // Add all
 void AddDuelResetScripts()
 {
-   AddSC_DuelReset();
+    AddSC_DuelReset();
 }
 
 #endif /* _DUEL_RESET_LOADER_H_ */

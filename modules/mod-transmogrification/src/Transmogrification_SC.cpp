@@ -28,7 +28,7 @@ public:
     {
         if (sTransmog->GetEnableTransmogInfo())
             AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, sTransmog->GetGossipItemName(player, ITEM_HOW_WORKS), EQUIPMENT_SLOT_END + 9, 0);
-        
+
         for (uint8 slot = EQUIPMENT_SLOT_START; slot < EQUIPMENT_SLOT_END; ++slot)
         {
             auto const& gossipIcon = sTransmog->GetGossipIcon(slot, player);
@@ -40,7 +40,7 @@ public:
 
         if (sTransmog->GetEnableSets())
             AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, sTransmog->GetGossipItemName(player, ITEM_MANAGE_SETS), EQUIPMENT_SLOT_END + 4, 0);
-        
+
         AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, sTransmog->GetGossipItemName(player, ITEM_REMOVE_ALL_TRANSMOG), EQUIPMENT_SLOT_END + 2, 0, sTransmog->GetGossipItemName(player, ITEM_REMOVE_ALL_TRANSMOG_Q), 0, false);
         AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, sTransmog->GetGossipItemName(player, ITEM_UPDATE_MENU), EQUIPMENT_SLOT_END + 1, 0);
 
@@ -93,18 +93,18 @@ public:
                 SendGossipMenuFor(player, sTransmog->GetTransmogNpcText(), creature->GetGUID());
                 break;
             default: // Transmogrify
-            {
-                if (!sender && !action)
                 {
-                    OnGossipHello(player, creature);
-                    return true;
-                }
+                    if (!sender && !action)
+                    {
+                        OnGossipHello(player, creature);
+                        return true;
+                    }
 
-                sTransmog->GossipTransmogrify(player, creature, action, sender);
-                
-                CloseGossipMenuFor(player); // Wait for SetMoney to get fixed, issue #10053
-            }
-            break;
+                    sTransmog->GossipTransmogrify(player, creature, action, sender);
+
+                    CloseGossipMenuFor(player); // Wait for SetMoney to get fixed, issue #10053
+                }
+                break;
         }
 
         return true;
@@ -224,7 +224,7 @@ public:
     {
         sTransmog->DeleteFakeFromDB(item->GetGUIDLow());
     }
-    
+
     void OnLogin(Player* player) override
     {
         sTransmog->LoadPlayerAtLogin(player);
@@ -247,24 +247,24 @@ public:
     }
 };
 
-class Transmogrification_Global : public GlobalScript 
+class Transmogrification_Global : public GlobalScript
 {
 public:
     Transmogrification_Global() : GlobalScript("Transmogrification_Global") { }
-    
+
     void OnItemDelFromDB(SQLTransaction& trans, uint32 itemGuid) override
     {
         sTransmog->DeleteFakeFromDB(itemGuid, &trans);
     }
-    
-    void OnMirrorImageDisplayItem(const Item *item, uint32& display) override
+
+    void OnMirrorImageDisplayItem(const Item* item, uint32& display) override
     {
         if (uint32 entry = sTransmog->GetFakeEntry(item->GetGUID()))
             display = uint32(sObjectMgr->GetItemTemplate(entry)->DisplayInfoID);
     }
 };
 
-void AddSC_Transmogrification() 
+void AddSC_Transmogrification()
 {
     new Transmogrification_Global();
     new Transmogrification_NPC();

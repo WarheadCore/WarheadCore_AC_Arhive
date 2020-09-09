@@ -24,7 +24,7 @@ void AddSC_NotifyMuted();
 // Add all
 void AddNotifyMutedScripts()
 {
-   AddSC_NotifyMuted();
+    AddSC_NotifyMuted();
 }
 
 #endif /* _NOTIFY_MUTED_LOADER_H_ */
