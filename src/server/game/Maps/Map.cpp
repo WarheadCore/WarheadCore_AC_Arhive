@@ -3147,6 +3147,7 @@ void Map::LoadRespawnTimes()
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CREATURE_RESPAWNS);
     stmt->setUInt16(0, GetId());
     stmt->setUInt32(1, GetInstanceId());
+    
     if (PreparedQueryResult result = CharacterDatabase.Query(stmt))
     {
         do
@@ -3162,6 +3163,7 @@ void Map::LoadRespawnTimes()
     stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_GO_RESPAWNS);
     stmt->setUInt16(0, GetId());
     stmt->setUInt32(1, GetInstanceId());
+    
     if (PreparedQueryResult result = CharacterDatabase.Query(stmt))
     {
         do
