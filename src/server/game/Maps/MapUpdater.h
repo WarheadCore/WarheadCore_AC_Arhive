@@ -43,7 +43,7 @@ public:
 private:
     void update_finished();
     void WorkerThread();
-    
+
     ProducerConsumerQueue<UpdateRequest*> _queue;
 
     std::vector<std::thread> _workerThreads;
@@ -51,7 +51,7 @@ private:
 
     std::mutex _lock;
     std::condition_variable _condition;
-    size_t pending_requests;       
+    size_t pending_requests;
 };
 
 #endif //_MAP_UPDATER_H_INCLUDED
