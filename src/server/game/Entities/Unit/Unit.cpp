@@ -65,6 +65,7 @@
 #include "AccountMgr.h"
 #include "DisableMgr.h"
 #include <math.h>
+#include <ace/Stack_Trace.h>
 
 float baseMoveSpeed[MAX_MOVE_TYPE] =
 {

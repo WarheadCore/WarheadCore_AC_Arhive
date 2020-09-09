@@ -27,8 +27,6 @@
 #include <ace/Synch_Traits.h>
 #include <ace/Svc_Handler.h>
 #include <ace/SOCK_Stream.h>
-#include <ace/Thread_Mutex.h>
-#include <ace/Guard_T.h>
 #include <ace/Unbounded_Queue.h>
 #include <ace/Message_Block.h>
 
@@ -93,8 +91,8 @@ class WorldSocket : public WorldHandler
         friend class WorldSocketMgr;
 
         /// Mutex type used for various synchronizations.
-        typedef ACE_Thread_Mutex LockType;
-        typedef ACE_Guard<LockType> GuardType;
+        typedef std::mutex LockType;
+        typedef std::lock_guard<LockType> GuardType;
 
         /// Check if socket is closed.
         bool IsClosed (void) const;
@@ -204,10 +202,8 @@ class WorldSocket : public WorldHandler
         bool m_OutActive;
 
         uint32 m_Seed;
-
 };
 
 #endif  /* _WORLDSOCKET_H */
 
 /// @}
-

@@ -21,23 +21,18 @@
 */
 
 #include "WorldSocketMgr.h"
-
 #include <ace/ACE.h>
 #include <ace/Log_Msg.h>
 #include <ace/Reactor.h>
 #include <ace/Reactor_Impl.h>
 #include <ace/TP_Reactor.h>
 #include <ace/Dev_Poll_Reactor.h>
-#include <ace/Guard_T.h>
 #include <atomic>
 #include <ace/os_include/arpa/os_inet.h>
 #include <ace/os_include/netinet/os_tcp.h>
 #include <ace/os_include/sys/os_types.h>
 #include <ace/os_include/sys/os_socket.h>
-
-#include <atomic>
 #include <set>
-
 #include "Log.h"
 #include "Common.h"
 #include "Config.h"
@@ -130,7 +125,7 @@ class ReactorRunnable : protected ACE_Task_Base
 
         void AddNewSockets()
         {
-            ACORE_GUARD(ACE_Thread_Mutex, m_NewSockets_Lock);
+            std::lock_guard<std::mutex> guard(m_NewSockets_Lock);
 
             if (m_NewSockets.empty())
                 return;
@@ -212,7 +207,7 @@ class ReactorRunnable : protected ACE_Task_Base
         SocketSet m_Sockets;
 
         SocketSet m_NewSockets;
-        ACE_Thread_Mutex m_NewSockets_Lock;
+        std::mutex m_NewSockets_Lock;
 };
 
 WorldSocketMgr::WorldSocketMgr() :
