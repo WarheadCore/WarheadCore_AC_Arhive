@@ -19,7 +19,7 @@
 #include "Common.h"
 #include "Config.h"
 #include "Log.h"
-#include "Util.h"
+#include "Tokenize.h"
 #include "TaskScheduler.h"
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/asio/ip/tcp.hpp>
@@ -84,7 +84,7 @@ void Metric::LoadFromConfigs()
             return;
         }
 
-        Tokenizer tokens(connectionInfo, ';');
+        std::vector<std::string_view> tokens = warhead::Tokenize(connectionInfo, ';', true);
         if (tokens.size() != 3)
         {
             LOG_ERROR("metric", "'Metric.ConnectionInfo' specified with wrong format in configuration file.");
