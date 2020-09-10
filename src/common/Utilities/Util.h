@@ -364,7 +364,6 @@ WH_COMMON_API uint32 GetPID();
 
 WH_COMMON_API std::string ByteArrayToHexStr(uint8 const* bytes, uint32 length, bool reverse = false);
 WH_COMMON_API void HexStrToByteArray(std::string_view str, uint8* out, bool reverse = false);
-WH_COMMON_API bool StringToBool(std::string_view str);
 WH_COMMON_API bool StringEqualI(std::string_view str1, std::string_view str2);
 WH_COMMON_API bool StringStartsWith(std::string_view haystack, std::string_view needle);
 

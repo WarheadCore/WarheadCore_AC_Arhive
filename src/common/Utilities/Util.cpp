@@ -656,20 +656,13 @@ void HexStrToByteArray(std::string_view str, uint8* out, bool reverse /*= false*
     }
 }
 
-bool StringToBool(std::string_view str)
-{
-    return ((str == "1") || StringEqualI(str, "true") || StringEqualI(str, "yes"));
-}
-
 bool StringEqualI(std::string_view str1, std::string_view str2)
 {
-    return std::equal(str1.begin(), str1.end(), str2.begin(), str2.end(),
-                      [](char a, char b)
+    return std::equal(str1.begin(), str1.end(), str2.begin(), str2.end(), [](char a, char b)
     {
         return std::tolower(a) == std::tolower(b);
     });
 }
-
 
 bool StringStartsWith(std::string_view haystack, std::string_view needle)
 {
