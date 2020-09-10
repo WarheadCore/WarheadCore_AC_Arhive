@@ -1,5 +1,5 @@
 /*
- * This file is part of the acoreCore Project. See AUTHORS file for Copyright information
+ * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef acore_HYPERLINKS_H
-#define acore_HYPERLINKS_H
+#ifndef WARHEAD_HYPERLINKS_H
+#define WARHEAD_HYPERLINKS_H
 
 #include <string>
 #include <type_traits>
