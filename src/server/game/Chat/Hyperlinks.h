@@ -18,6 +18,7 @@
 #ifndef WARHEAD_HYPERLINKS_H
 #define WARHEAD_HYPERLINKS_H
 
+#include "Common.h"
 #include <string>
 #include <type_traits>
 #include <utility>
