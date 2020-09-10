@@ -47,7 +47,7 @@ WH_COMMON_API time_t LocalTimeToUTCTime(time_t time);
 WH_COMMON_API time_t GetLocalHourTimestamp(time_t time, uint8 hour, bool onlyAfterTime = true);
 WH_COMMON_API tm TimeBreakdown(time_t t);
 
-WH_COMMON_API void stripLineInvisibleChars(std::string &src);
+WH_COMMON_API void stripLineInvisibleChars(std::string& src);
 WH_COMMON_API std::optional<int32> MoneyStringToMoney(const std::string& moneyString);
 WH_COMMON_API std::string secsToTimeString(uint64 timeInSecs, bool shortText = false);
 WH_COMMON_API uint32 TimeStringToSecs(const std::string& timestring);

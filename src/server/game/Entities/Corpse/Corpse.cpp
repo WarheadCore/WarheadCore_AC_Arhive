@@ -45,7 +45,7 @@ Corpse::~Corpse()
 }
 
 void Corpse::AddToWorld()
-{ 
+{
     ///- Register the corpse for guid lookup
     if (!IsInWorld())
         sObjectAccessor->AddObject(this);
@@ -54,7 +54,7 @@ void Corpse::AddToWorld()
 }
 
 void Corpse::RemoveFromWorld()
-{ 
+{
     ///- Remove the corpse from the accessor
     if (IsInWorld())
         sObjectAccessor->RemoveObject(this);
@@ -63,14 +63,14 @@ void Corpse::RemoveFromWorld()
 }
 
 bool Corpse::Create(uint32 guidlow, Map* map)
-{ 
+{
     SetMap(map);
     Object::_Create(guidlow, 0, HIGHGUID_CORPSE);
     return true;
 }
 
 bool Corpse::Create(uint32 guidlow, Player* owner)
-{ 
+{
     ASSERT(owner);
 
     Relocate(owner->GetPositionX(), owner->GetPositionY(), owner->GetPositionZ(), owner->GetOrientation());
@@ -78,7 +78,7 @@ bool Corpse::Create(uint32 guidlow, Player* owner)
     if (!IsPositionValid())
     {
         LOG_ERROR("server", "Corpse (guidlow %d, owner %s) not created. Suggested coordinates isn't valid (X: %f Y: %f)",
-            guidlow, owner->GetName().c_str(), owner->GetPositionX(), owner->GetPositionY());
+                  guidlow, owner->GetName().c_str(), owner->GetPositionX(), owner->GetPositionY());
         return false;
     }
 
@@ -97,7 +97,7 @@ bool Corpse::Create(uint32 guidlow, Player* owner)
 }
 
 void Corpse::SaveToDB()
-{ 
+{
     // prevent DB data inconsistence problems and duplicates
     SQLTransaction trans = CharacterDatabase.BeginTransaction();
     DeleteFromDB(trans);
@@ -127,7 +127,7 @@ void Corpse::SaveToDB()
 }
 
 void Corpse::DeleteFromDB(SQLTransaction& trans)
-{ 
+{
     PreparedStatement* stmt = nullptr;
     if (GetType() == CORPSE_BONES)
     {
@@ -145,7 +145,7 @@ void Corpse::DeleteFromDB(SQLTransaction& trans)
 }
 
 bool Corpse::LoadCorpseFromDB(uint32 guid, Field* fields)
-{ 
+{
     uint32 ownerGuid = fields[17].GetUInt32();
     //        0     1     2     3            4      5          6          7       8       9        10     11        12    13          14          15         16          17
     // SELECT posX, posY, posZ, orientation, mapId, displayId, itemCache, bytes1, bytes2, guildId, flags, dynFlags, time, corpseType, instanceId, phaseMask, corpseGuid, guid FROM corpse WHERE corpseType <> 0
@@ -159,13 +159,13 @@ bool Corpse::LoadCorpseFromDB(uint32 guid, Field* fields)
 
     SetObjectScale(1.0f);
     SetUInt32Value(CORPSE_FIELD_DISPLAY_ID, fields[5].GetUInt32());
-    
+
     if (!_LoadIntoDataField(fields[6].GetString(), CORPSE_FIELD_ITEM, EQUIPMENT_SLOT_END))
     {
         LOG_ERROR("entities.player", "Corpse (%u, owner: %u) is not created, given equipment info is not valid ('%s')",
-            GetGUID(), GetOwnerGUID(), fields[6].GetString().c_str());
+                  GetGUID(), GetOwnerGUID(), fields[6].GetString().c_str());
     }
-    
+
     SetUInt32Value(CORPSE_FIELD_BYTES_1, fields[7].GetUInt32());
     SetUInt32Value(CORPSE_FIELD_BYTES_2, fields[8].GetUInt32());
     SetUInt32Value(CORPSE_FIELD_GUILD, fields[9].GetUInt32());
@@ -187,7 +187,7 @@ bool Corpse::LoadCorpseFromDB(uint32 guid, Field* fields)
     if (!IsPositionValid())
     {
         LOG_ERROR("server", "Corpse (guid: %u, owner: %u) is not created, given coordinates are not valid (X: %f, Y: %f, Z: %f)",
-            GetGUIDLow(), GUID_LOPART(GetOwnerGUID()), posX, posY, posZ);
+                  GetGUIDLow(), GUID_LOPART(GetOwnerGUID()), posX, posY, posZ);
         return false;
     }
 
@@ -196,7 +196,7 @@ bool Corpse::LoadCorpseFromDB(uint32 guid, Field* fields)
 }
 
 bool Corpse::IsExpired(time_t t) const
-{ 
+{
     if (m_type == CORPSE_BONES)
         return m_time < t - 60 * MINUTE;
     else
