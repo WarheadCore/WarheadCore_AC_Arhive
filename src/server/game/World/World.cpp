@@ -133,18 +133,14 @@ World::World()
 World::~World()
 {
     ///- Empty the kicked session set
-    while (!m_sessions.empty())
-    {
-        // not remove from queue, prevent loading new sessions
-        delete m_sessions.begin()->second;
-        m_sessions.erase(m_sessions.begin());
-    }
+    for (auto const session : m_sessions)
+        delete session.second;
 
-    while (!m_offlineSessions.empty())
-    {
-        delete m_offlineSessions.begin()->second;
-        m_offlineSessions.erase(m_offlineSessions.begin());
-    }
+    for (auto const cliCommand : m_cliCommandQueue)
+        delete cliCommand;
+
+    for (auto const session : m_sessionAddQueue)
+        delete session;
 
     CliCommandHolder* command = nullptr;
     while (cliCmdQueue.next(command))
@@ -2187,69 +2183,29 @@ void World::SendServerMessage(ServerMessageType type, const char *text, Player* 
         SendGlobalMessage(&data);
 }
 
-void World::UpdateSessions(uint32 diff)
+void World::UpdateSessions(uint32 /*diff*/)
 {
     ///- Add new sessions
-    WorldSession* sess = nullptr;
-    while (addSessQueue.next(sess))
-        AddSession_ (sess);
-
+    {
+        std::lock_guard<std::mutex> guard(m_sessionAddQueueLock);
+        std::for_each(m_sessionAddQueue.begin(), m_sessionAddQueue.end(), [&](WorldSession *session) { AddSession_(session); });
+        m_sessionAddQueue.clear();
+    }
     ///- Then send an update signal to remaining ones
     for (SessionMap::iterator itr = m_sessions.begin(), next; itr != m_sessions.end(); itr = next)
     {
         next = itr;
         ++next;
-
         ///- and remove not active sessions from the list
         WorldSession* pSession = itr->second;
         WorldSessionFilter updater(pSession);
 
-        // pussywizard:
-        if (pSession->HandleSocketClosed())
+        // the session itself is owned by the socket which created it.  that is where the destruction of the session will happen.
+        if (!pSession->Update(updater))
         {
-            if (!RemoveQueuedPlayer(pSession) && sGameConfig->GetIntConfig("DisconnectToleranceInterval"))
-                m_disconnects[pSession->GetAccountId()] = GameTime::GetGameTime();
+            RemoveQueuedSession(pSession);
             m_sessions.erase(itr);
-            // there should be no offline session if current one is logged onto a character
-            SessionMap::iterator iter;
-            if ((iter = m_offlineSessions.find(pSession->GetAccountId())) != m_offlineSessions.end())
-            {
-                WorldSession* tmp = iter->second;
-                m_offlineSessions.erase(iter);
-                tmp->SetShouldSetOfflineInDB(false);
-                delete tmp;
-            }
-            pSession->SetOfflineTime(GameTime::GetGameTime());
-            m_offlineSessions[pSession->GetAccountId()] = pSession;
-            continue;
-        }
-
-        if (!pSession->Update(diff, updater))
-        {
-            if (!RemoveQueuedPlayer(pSession) && sGameConfig->GetIntConfig("DisconnectToleranceInterval"))
-                m_disconnects[pSession->GetAccountId()] = GameTime::GetGameTime();
-            m_sessions.erase(itr);
-            if (m_offlineSessions.find(pSession->GetAccountId()) != m_offlineSessions.end()) // pussywizard: don't set offline in db because offline session for that acc is present (character is in world)
-                pSession->SetShouldSetOfflineInDB(false);
-            delete pSession;
-        }
-    }
-
-    // pussywizard:
-    if (m_offlineSessions.empty())
-        return;
-    uint32 currTime = GameTime::GetGameTime();
-    for (SessionMap::iterator itr = m_offlineSessions.begin(), next; itr != m_offlineSessions.end(); itr = next)
-    {
-        next = itr;
-        ++next;
-        WorldSession* pSession = itr->second;
-        if (!pSession->GetPlayer() || pSession->GetOfflineTime()+60 < currTime || pSession->IsKicked())
-        {
-            m_offlineSessions.erase(itr);
-            if (m_sessions.find(pSession->GetAccountId()) != m_sessions.end())
-                pSession->SetShouldSetOfflineInDB(false); // pussywizard: don't set offline in db because new session for that acc is already created
-            delete pSession;
+            pSession->Finalize();
         }
     }
 }

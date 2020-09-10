@@ -63,12 +63,12 @@ bool MapSessionFilter::Process(WorldPacket* packet)
     if (packet->GetOpcode() >= NUM_MSG_TYPES)
         return true;
 
-    OpcodeHandler const& opHandle = opcodeTable[packet->GetOpcode()];
+    OpcodeHandler const& opcode = opcodeTable[packet->GetOpcode()];
 
-    if (opHandle.packetProcessing == PROCESS_INPLACE)
+    if (opcode.packetProcessing == PROCESS_INPLACE)
         return true;
 
-    if (opHandle.packetProcessing == PROCESS_THREADUNSAFE)
+    if (opcode.packetProcessing == PROCESS_THREADUNSAFE)
         return false;
 
     Player* player = m_pSession->GetPlayer();
@@ -83,12 +83,12 @@ bool WorldSessionFilter::Process(WorldPacket* packet)
     if (packet->GetOpcode() >= NUM_MSG_TYPES)
         return true;
 
-    OpcodeHandler const& opHandle = opcodeTable[packet->GetOpcode()];
+    OpcodeHandler const& opcode = opcodeTable[packet->GetOpcode()];
 
-    if (opHandle.packetProcessing == PROCESS_INPLACE)
+    if (opcode.packetProcessing == PROCESS_INPLACE)
         return true;
 
-    if (opHandle.packetProcessing == PROCESS_THREADUNSAFE)
+    if (opcode.packetProcessing == PROCESS_THREADUNSAFE)
         return true;
 
     Player* player = m_pSession->GetPlayer();
@@ -100,52 +100,10 @@ bool WorldSessionFilter::Process(WorldPacket* packet)
 
 /// WorldSession constructor
 WorldSession::WorldSession(uint32 id, WorldSocket* sock, AccountTypes sec, uint8 expansion, LocaleConstant locale, uint32 recruiter, bool isARecruiter, bool skipQueue, uint32 TotalTime) :
-    m_timeOutTime(0),
-    _lastAuctionListItemsMSTime(0),
-    _lastAuctionListOwnerItemsMSTime(0),
-    AntiDOS(this),
-    m_GUIDLow(0),
-    _player(nullptr),
-    m_Socket(sock),
-    _security(sec),
-    _skipQueue(skipQueue),
-    _accountId(id),
-    m_expansion(expansion),
-    m_total_time(TotalTime),
-    _logoutTime(0),
-    m_inQueue(false),
-    m_playerLoading(false),
-    m_playerLogout(false),
-    m_playerSave(false),
-    m_sessionDbcLocale(sWorld->GetDefaultDbcLocale()),
-    m_sessionDbLocaleIndex(locale),
-    m_latency(0),
-    m_clientTimeDelay(0),
-    m_TutorialsChanged(false),
-    recruiterId(recruiter),
-    isRecruiter(isARecruiter),
-    m_currentVendorEntry(0),
-    m_currentBankerGUID(0),
-    timerGsSpam(0),
-    _calendarEventCreationCooldown(0)
-{
-    memset(m_Tutorials, 0, sizeof(m_Tutorials));
-
-    _warden = nullptr;
-    _offlineTime = 0;
-    _kicked = false;
-    _shouldSetOfflineInDB = true;
-
-    if (sock)
-    {
-        m_Address = sock->GetRemoteAddress();
-        sock->AddReference();
-        ResetTimeOutTime(false);
-        LoginDatabase.PExecute("UPDATE account SET online = 1 WHERE id = %u;", GetAccountId());
-    }
-
-    InitializeQueryCallbackParameters();
-}
+    m_timeOutTime(0), _lastAuctionListItemsMSTime(0), _lastAuctionListOwnerItemsMSTime(0), AntiDOS(this), m_GUIDLow(0), _player(nullptr), m_Socket(sock), _security(sec),
+    _skipQueue(skipQueue), _accountId(id), m_expansion(expansion), m_total_time(TotalTime), _logoutTime(0), m_inQueue(false), m_playerLoading(false), m_playerLogout(false),
+    m_playerSave(false), m_sessionDbcLocale(sWorld->GetDefaultDbcLocale()), m_sessionDbLocaleIndex(locale), m_latency(0), m_clientTimeDelay(0), m_TutorialsChanged(false),
+    recruiterId(recruiter), isRecruiter(isARecruiter), m_currentVendorEntry(0), m_currentBankerGUID(0), timerGsSpam(0), _calendarEventCreationCooldown(0) {}
 
 /// WorldSession destructor
 WorldSession::~WorldSession()
@@ -156,27 +114,14 @@ WorldSession::~WorldSession()
     if (_player)
         LogoutPlayer(true);
 
-    /// - If have unclosed socket, close it
-    if (m_Socket)
-    {
-        m_Socket->CloseSocket("WorldSession destructor");
-        m_Socket->RemoveReference();
-        m_Socket = nullptr;
-    }
-
     if (_warden)
     {
         delete _warden;
         _warden = nullptr;
     }
 
-    ///- empty incoming packet queue
-    WorldPacket* packet = nullptr;
-    while (_recvQueue.next(packet))
+    for (auto const packet : m_recvQueue)
         delete packet;
-
-    if (GetShouldSetOfflineInDB())
-        LoginDatabase.PExecute("UPDATE account SET online = 0 WHERE id = %u;", GetAccountId());     // One-time query
 }
 
 std::string const & WorldSession::GetPlayerName() const
@@ -204,7 +149,7 @@ uint32 WorldSession::GetGuidLow() const
 /// Send a packet to the client
 void WorldSession::SendPacket(WorldPacket const* packet)
 {
-    if (!m_Socket)
+    if (m_Socket->IsClosed())
         return;
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS) && defined(ACORE_DEBUG)
@@ -245,8 +190,7 @@ void WorldSession::SendPacket(WorldPacket const* packet)
 
     sScriptMgr->OnPacketSend(this, *packet);
 
-    if (m_Socket->SendPacket(*packet) == -1)
-        m_Socket->CloseSocket("m_Socket->SendPacket(*packet) == -1");
+    m_Socket->SendPacket(*packet);
 }
 
 /// Add an incoming packet to the queue
@@ -280,16 +224,19 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
 
     while (m_Socket && !m_Socket->IsClosed() && !_recvQueue.empty() && _recvQueue.peek(true) != firstDelayedPacket && _recvQueue.next(packet, updater))
     {
+        WorldPacket* packet = m_recvQueue.front();
+        m_recvQueue.pop_front();
+
         if (packet->GetOpcode() >= NUM_MSG_TYPES)
         {
             LOG_ERROR("server", "WorldSession Packet filter: received non-existent opcode %s (0x%.4X)", LookupOpcodeName(packet->GetOpcode()), packet->GetOpcode());
         }
         else
         {
-            OpcodeHandler &opHandle = opcodeTable[packet->GetOpcode()];
+            OpcodeHandler &opcode = opcodeTable[packet->GetOpcode()];
             try
             {
-                switch (opHandle.status)
+                switch (opcode.status)
                 {
                     case STATUS_LOGGEDIN:
                         if (!_player)
@@ -302,7 +249,7 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
                             // pussywizard: previously such were skipped, so leave it as it is xD proper code below if we wish to change that
 
                             // pussywizard: requeue only important packets not related to maps (PROCESS_THREADUNSAFE)
-                            /*if (opHandle.packetProcessing == PROCESS_THREADUNSAFE)
+                            /*if (opcode.packetProcessing == PROCESS_THREADUNSAFE)
                             {
                                 if (!firstDelayedPacket)
                                     firstDelayedPacket = packet;
@@ -321,7 +268,7 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
                             
                             sScriptMgr->OnPacketReceive(this, *packet);
                             
-                            (this->*opHandle.handler)(*packet);
+                            (this->*opcode.handler)(*packet);
                         }
                         break;
                     case STATUS_TRANSFER:
@@ -337,7 +284,7 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
                             {
                                 sScriptMgr->OnPacketReceive(this, *packet);
 
-                                (this->*opHandle.handler)(*packet);
+                                (this->*opcode.handler)(*packet);
                             }
                         }
                         break;
@@ -349,7 +296,7 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
                         {
                             sScriptMgr->OnPacketReceive(this, *packet);
 
-                            (this->*opHandle.handler)(*packet);
+                            (this->*opcode.handler)(*packet);
                         }
                         break;
                     case STATUS_NEVER:
@@ -388,26 +335,21 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
         delete movementPacket;
     }
 
-    if (m_Socket && !m_Socket->IsClosed())
+    if (m_Socket->IsClosed())
         ProcessQueryCallbacks();
 
     if (updater.ProcessLogout())
     {
-        time_t currTime = GameTime::GetGameTime();
-        if (ShouldLogOut(currTime) && !m_playerLoading)
-            LogoutPlayer(true);
+        const time_t currTime = time(nullptr);
 
-        if (m_Socket && !m_Socket->IsClosed() && _warden)
+        if (m_Socket->IsClosed() && _warden)
             _warden->Update();
 
-        if (m_Socket && m_Socket->IsClosed())
+        if (m_Socket->IsClosed() || (ShouldLogOut(currTime) && !m_playerLoading))
         {
-            m_Socket->RemoveReference();
-            m_Socket = nullptr;
-        }
-
-        if (!m_Socket)
+            LogoutPlayer(true);
             return false;
+        }
     }
 
     return true;
