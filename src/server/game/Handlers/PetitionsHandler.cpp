@@ -455,7 +455,7 @@ void WorldSession::HandlePetitionSignOpcode(WorldPacket & recvData)
         return;
 
     // not let enemies sign guild charter
-    if (!sGameConfig->GetBoolConfig("AllowTwoSide.Interaction.Guild") && GetPlayer()->GetTeamId() != sObjectMgr->GetPlayerTeamIdByGUID(ownerGuid))
+    if (!sGameConfig->GetBoolConfig("AllowTwoSide.Interaction.Guild") && GetPlayer()->GetTeamId() != sObjectMgr->GetPlayerTeamIdByGUID(ownerGuid) || _player->GetBattleground())
     {
         if (type != GUILD_CHARTER_TYPE)
             SendArenaTeamCommandResult(ERR_ARENA_TEAM_INVITE_SS, "", "", ERR_ARENA_TEAM_NOT_ALLIED);
