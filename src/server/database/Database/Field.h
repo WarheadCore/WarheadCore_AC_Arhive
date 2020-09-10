@@ -20,7 +20,6 @@
 
 #include "Common.h"
 #include "Log.h"
-
 #include <mysql.h>
 
 class WH_DATABASE_API Field

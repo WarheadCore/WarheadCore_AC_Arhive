@@ -22,6 +22,7 @@
 #include "Errors.h"
 #include "TypeList.h"
 #include "Tokenize.h"
+#include "StringConvert.h"
 #include <ace/Task.h>
 #include "SFMT.h"
 #include "Errors.h" // for ASSERT
@@ -189,10 +190,9 @@ std::optional<int32> MoneyStringToMoney(const std::string& moneyString)
 {
     int32 money = 0;
 
-    if (!(std::count(moneyString.begin(), moneyString.end(), 'g') == 1 ||
-            std::count(moneyString.begin(), moneyString.end(), 's') == 1 ||
-            std::count(moneyString.begin(), moneyString.end(), 'c') == 1))
-        return 0; // Bad format
+    bool hadG = false;
+    bool hadS = false;
+    bool hadC = false;
 
     for (std::string_view token : warhead::Tokenize(moneyString, ' ', false))
     {
@@ -218,7 +218,7 @@ std::optional<int32> MoneyStringToMoney(const std::string& moneyString)
             return std::nullopt;
         }
 
-        std::optional<uint32> amount = std::stoi(token.substr(0, token.length() - 1));
+        std::optional<uint32> amount = warhead::StringTo<uint32>(token.substr(0, token.length() - 1));
         if (amount)
             money += (unit * *amount);
         else

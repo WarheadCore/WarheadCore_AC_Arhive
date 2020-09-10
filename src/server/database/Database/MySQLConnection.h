@@ -18,7 +18,7 @@
 #include <ace/Activation_Queue.h>
 #include "DatabaseWorkerPool.h"
 #include "Transaction.h"
-#include "Util.h"
+#include "Tokenize.h"
 #include <mutex>
 
 #ifndef _MYSQLCONNECTION_H
@@ -41,18 +41,16 @@ struct WH_DATABASE_API MySQLConnectionInfo
     MySQLConnectionInfo() { }
     MySQLConnectionInfo(const std::string& infoString)
     {
-        Tokenizer tokens(infoString, ';');
+        std::vector<std::string_view> tokens = warhead::Tokenize(infoString, ';', true);
 
         if (tokens.size() != 5)
             return;
 
-        uint8 i = 0;
-
-        host.assign(tokens[i++]);
-        port_or_socket.assign(tokens[i++]);
-        user.assign(tokens[i++]);
-        password.assign(tokens[i++]);
-        database.assign(tokens[i++]);
+        host.assign(tokens[0]);
+        port_or_socket.assign(tokens[1]);
+        user.assign(tokens[2]);
+        password.assign(tokens[3]);
+        database.assign(tokens[4]);
     }
 
     std::string user;

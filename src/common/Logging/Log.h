@@ -117,7 +117,7 @@ private:
     void InitLogsDir();
     void Clear();
 
-    std::string const GetPositionOptions(std::string_view options, uint8 position, std::string const& _default = "");
+    std::string_view GetPositionOptions(std::string_view options, uint8 position, std::string_view _default = "");
     std::string const GetChannelsFromLogger(std::string const& loggerName);
 };
 
