@@ -40,7 +40,7 @@ namespace warhead::Impl::StringConvertImpl
     };
 
     template <typename T>
-    struct For<T, std::enable_if_t<std::is_integral_v<T> && !std::is_same_v<T, bool>>>
+    struct For < T, std::enable_if_t < std::is_integral_v<T>&& !std::is_same_v<T, bool >>>
     {
         static std::optional<T> FromString(std::string_view str, int base = 10)
         {
@@ -76,7 +76,7 @@ namespace warhead::Impl::StringConvertImpl
 
         static std::string ToString(T val)
         {
-            std::string buf(20,'\0'); /* 2^64 is 20 decimal characters, -(2^63) is 20 including the sign */
+            std::string buf(20, '\0'); /* 2^64 is 20 decimal characters, -(2^63) is 20 including the sign */
             char* const start = buf.data();
             char* const end = (start + buf.length());
             std::to_chars_result const res = std::to_chars(start, end, val);
@@ -123,7 +123,8 @@ namespace warhead::Impl::StringConvertImpl
     {
         static std::optional<int64> FromString(std::string_view str, int base = 10)
         {
-            try {
+            try
+            {
                 if (str.empty())
                     return std::nullopt;
                 size_t n;
@@ -228,7 +229,8 @@ namespace warhead::Impl::StringConvertImpl
     {
         static std::optional<T> FromString(std::string_view str, int base = 0)
         {
-            try {
+            try
+            {
                 if (str.empty())
                     return std::nullopt;
 
@@ -260,13 +262,13 @@ namespace warhead::Impl::StringConvertImpl
 namespace warhead
 {
     template <typename Result, typename... Params>
-    std::optional<Result> StringTo(std::string_view str, Params&&... params)
+    std::optional<Result> StringTo(std::string_view str, Params&& ... params)
     {
         return warhead::Impl::StringConvertImpl::For<Result>::FromString(str, std::forward<Params>(params)...);
     }
 
     template <typename Type, typename... Params>
-    std::string ToString(Type&& val, Params&&... params)
+    std::string ToString(Type&& val, Params&& ... params)
     {
         return warhead::Impl::StringConvertImpl::For<std::decay_t<Type>>::ToString(std::forward<Type>(val), std::forward<Params>(params)...);
     }
