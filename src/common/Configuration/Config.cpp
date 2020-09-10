@@ -236,7 +236,7 @@ void ConfigMgr::SetConfigList(std::string const& fileName, std::string const& mo
     // Clean config list before load
     _modulesConfigFiles.clear();
 
-    std::vector<std::string_view> tokens = warhead::Tokenize(modulesConfigList, ';', true);
+    std::vector<std::string_view> tokens = warhead::Tokenize(modulesConfigList, ',', false);
     for (auto const& itr : tokens)
         _modulesConfigFiles.push_back(std::string(itr));
 }

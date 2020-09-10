@@ -29,6 +29,7 @@
 #include "WorldSession.h"
 #include "Opcodes.h"
 #include "GameTime.h"
+#include "StringConvert.h"
 
 void AddItemsSetItem(Player* player, Item* item)
 {
@@ -409,7 +410,10 @@ bool Item::LoadFromDB(uint32 guid, uint64 owner_guid, Field* fields, uint32 entr
 
     ItemTemplate const* proto = GetTemplate();
     if (!proto)
+    {
+        LOG_ERROR("entities.item", "Invalid entry %u for item %u. Refusing to load.", GetEntry(), GetGUID());
         return false;
+    }
 
     // set owner (not if item is only loaded for gbank/auction/mail
     if (owner_guid != 0)
@@ -429,12 +433,20 @@ bool Item::LoadFromDB(uint32 guid, uint64 owner_guid, Field* fields, uint32 entr
         need_save = true;
     }
 
-    Tokenizer tokens(fields[4].GetString(), ' ', MAX_ITEM_PROTO_SPELLS);
+    std::vector<std::string_view> tokens = warhead::Tokenize(fields[4].GetStringView(), ' ', false);
     if (tokens.size() == MAX_ITEM_PROTO_SPELLS)
+    {
         for (uint8 i = 0; i < MAX_ITEM_PROTO_SPELLS; ++i)
-            SetSpellCharges(i, atoi(tokens[i]));
+        {
+            if (std::optional<int32> charges = warhead::StringTo<int32>(tokens[i]))
+                SetSpellCharges(i, *charges);
+            else
+                LOG_ERROR("entities.item", "Invalid charge info '%s' for item %s, charge data not loaded.", std::string(tokens[i]).c_str(), GetGUID());
+        }
+    }
 
     SetUInt32Value(ITEM_FIELD_FLAGS, fields[5].GetUInt32());
+    
     // Remove bind flag for items vs NO_BIND set
     if (IsSoulBound() && proto->Bonding == NO_BIND)
     {
@@ -442,9 +454,11 @@ bool Item::LoadFromDB(uint32 guid, uint64 owner_guid, Field* fields, uint32 entr
         need_save = true;
     }
 
-    std::string enchants = fields[6].GetString();
-    _LoadIntoDataField(enchants.c_str(), ITEM_FIELD_ENCHANTMENT_1_1, MAX_ENCHANTMENT_SLOT * MAX_ENCHANTMENT_OFFSET);
+    if (!_LoadIntoDataField(fields[6].GetString(), ITEM_FIELD_ENCHANTMENT_1_1, MAX_ENCHANTMENT_SLOT * MAX_ENCHANTMENT_OFFSET))
+        LOG_WARN("entities.item", "Invalid enchantment data '%s' for item %u. Forcing partial load.", fields[6].GetString().c_str(), GetGUID());
+
     SetInt32Value(ITEM_FIELD_RANDOM_PROPERTIES_ID, fields[7].GetInt16());
+    
     // recalculate suffix factor
     if (GetItemRandomPropertyId() < 0)
         UpdateItemSuffixFactor();

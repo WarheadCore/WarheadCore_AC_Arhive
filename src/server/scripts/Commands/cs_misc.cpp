@@ -43,6 +43,7 @@
 #include "GameConfig.h"
 #include "GameLocale.h"
 #include "MuteManager.h"
+#include "StringConvert.h"
 
 class misc_commandscript : public CommandScript
 {
@@ -133,7 +134,7 @@ public:
 
     static bool HandleSkirmishCommand(ChatHandler* handler, char const* args)
     {
-        Tokenizer tokens(args, ' ');
+        auto const& tokens = warhead::Tokenize(args, ' ', false);
 
         if (!*args || !tokens.size())
         {
@@ -144,15 +145,18 @@ public:
             return false;
         }
 
-        Tokenizer::const_iterator i = tokens.begin();
+        auto iter = tokens.begin();
 
         std::set<BattlegroundTypeId> allowedArenas;
-        std::string arenasStr = *(i++);
+        std::string arenasStr = std::string(*iter++);
         std::string tmpStr;
-        Tokenizer arenaTokens(arenasStr, ',');
-        for (Tokenizer::const_iterator itr = arenaTokens.begin(); itr != arenaTokens.end(); ++itr)
+
+        auto const& arenaTokens = warhead::Tokenize(arenasStr, ',', true);
+
+        for (auto const& _arena : arenaTokens)
         {
-            tmpStr = std::string(*itr);
+            tmpStr = _arena;
+
             if (tmpStr == "all")
             {
                 if (arenaTokens.size() > 1)
@@ -161,6 +165,7 @@ public:
                     handler->SetSentErrorMessage(true);
                     return false;
                 }
+
                 allowedArenas.insert(BATTLEGROUND_NA);
                 allowedArenas.insert(BATTLEGROUND_BE);
                 allowedArenas.insert(BATTLEGROUND_RL);
@@ -184,13 +189,14 @@ public:
                 return false;
             }
         }
+
         ASSERT(!allowedArenas.empty());
         BattlegroundTypeId randomizedArenaBgTypeId = warhead::Containers::SelectRandomContainerElement(allowedArenas);
 
         uint8 count = 0;
-        if (i != tokens.end())
+        if (iter != tokens.end())
         {
-            std::string mode = *(i++);
+            std::string mode = std::string(*iter++);
             if (mode == "1v1") count = 2;
             else if (mode == "2v2") count = 4;
             else if (mode == "3v3") count = 6;
@@ -217,9 +223,9 @@ public:
         Player* plr = nullptr;
         Player* players[10] = {nullptr};
         uint8 cnt = 0;
-        for (; i != tokens.end(); ++i)
+        for (; iter != tokens.end(); ++iter)
         {
-            last_name = std::string(*i);
+            last_name = std::string(*iter);
             plr = ObjectAccessor::FindPlayerByName(last_name, false);
             if (!plr) { error = 1; break; }
             if (!plr->IsInWorld() || !plr->FindMap() || plr->IsBeingTeleported()) { error = 2; break; }

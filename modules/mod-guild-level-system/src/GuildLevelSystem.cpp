@@ -26,6 +26,8 @@
 #include "SpellMgr.h"
 #include "SpellInfo.h"
 #include "ExternalMail.h"
+#include "StringConvert.h"
+#include "Tokenize.h"
 
 #define GLS_IRERATOR(a) for (uint32 i = 0; i < a; ++i)
 
@@ -461,8 +463,8 @@ void GuildLevelSystem::LoadBaseCriteria()
         GLS_IRERATOR(GLS_SPELLS_REWARD_COUNT)
         _data.RewardSpells[i] = 0;
 
-        Tokenizer listItemIDTokens(listItemID, ',');
-        Tokenizer listItemCountTokens(listItemCount, ',');
+        auto const& listItemIDTokens = warhead::Tokenize(listItemID, ',', true);
+        auto const& listItemCountTokens = warhead::Tokenize(listItemCount, ',', true);
 
         if (static_cast<uint32>(listItemIDTokens.size()) > GLS_ITEMS_COUNT)
         {
@@ -484,7 +486,7 @@ void GuildLevelSystem::LoadBaseCriteria()
 
         GLS_IRERATOR(static_cast<uint32>(listItemIDTokens.size()))
         {
-            uint32 itemID = atoi(listItemIDTokens[i]);
+            uint32 itemID = warhead::StringTo<uint32>(listItemIDTokens[i]).value_or(0);
 
             if (!CheckItemIDs(itemID))
                 itemID = 0;
@@ -493,7 +495,7 @@ void GuildLevelSystem::LoadBaseCriteria()
         }
 
         for (uint32 i = 0; i < static_cast<uint32>(listItemCountTokens.size()); ++i)
-            _data.ItemCount[i] = atoi(listItemCountTokens[i]);
+            _data.ItemCount[i] = warhead::StringTo<uint32>(listItemCountTokens[i]).value_or(0);
 
         // Reward spells
         if (listRewardSpells.empty())
@@ -502,7 +504,7 @@ void GuildLevelSystem::LoadBaseCriteria()
             continue;
         }
 
-        Tokenizer listRewardSpellsTokens(listRewardSpells, ',');
+        auto const& listRewardSpellsTokens = warhead::Tokenize(listRewardSpells, ',', true);
 
         if (static_cast<uint32>(listRewardSpellsTokens.size()) > GLS_SPELLS_REWARD_COUNT)
         {
@@ -512,7 +514,7 @@ void GuildLevelSystem::LoadBaseCriteria()
 
         GLS_IRERATOR(static_cast<uint32>(listRewardSpellsTokens.size()))
         {
-            uint32 spellID = atoi(listRewardSpellsTokens[i]);
+            uint32 spellID = warhead::StringTo<uint32>(listRewardSpellsTokens[i]).value_or(0);
 
             if (!sSpellMgr->GetSpellInfo(spellID))
             {
@@ -588,7 +590,7 @@ void GuildLevelSystem::LoadCriteriaProgress()
         GLS_IRERATOR(GLS_ITEMS_COUNT)
         _data.ItemCount[i] = 0;
 
-        Tokenizer listItemCountTokens(listItemCount, ',');
+        auto const& listItemCountTokens = warhead::Tokenize(listItemCount, ',', true);
 
         if (static_cast<uint32>(listItemCountTokens.size()) > GLS_ITEMS_COUNT)
         {
@@ -611,7 +613,7 @@ void GuildLevelSystem::LoadCriteriaProgress()
         }
 
         for (uint32 i = 0; i < static_cast<uint32>(listItemCountTokens.size()); ++i)
-            _data.ItemCount[i] = atoi(listItemCountTokens[i]);
+            _data.ItemCount[i] = warhead::StringTo<uint32>(listItemCountTokens[i]).value_or(0);
 
         auto criteria = GetCriteriaProgress(guildID);
         if (!criteria)

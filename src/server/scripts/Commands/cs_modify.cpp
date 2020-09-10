@@ -30,6 +30,7 @@ EndScriptData */
 #include "ReputationMgr.h"
 #include "ScriptMgr.h"
 #include "AccountMgr.h"
+#include "StringConvert.h"
 
 class modify_commandscript : public CommandScript
 {
@@ -1013,13 +1014,18 @@ public:
         if (handler->HasLowerSecurity(target, 0))
             return false;
 
-        int32 moneyToAdd = 0;
+        std::optional<int32> moneyToAddO = 0;
         if (strchr(args, 'g') || strchr(args, 's') || strchr(args, 'c'))
-            moneyToAdd = MoneyStringToMoney(std::string(args));
+            moneyToAddO = MoneyStringToMoney(std::string(args));
         else
-            moneyToAdd = atoi(args);
+            moneyToAddO = warhead::StringTo<int32>(args);
 
         uint32 targetMoney = target->GetMoney();
+
+        if (!moneyToAddO)
+            return false;
+
+        int32 moneyToAdd = *moneyToAddO;
 
         if (moneyToAdd < 0)
         {

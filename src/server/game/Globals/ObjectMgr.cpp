@@ -50,6 +50,7 @@
 #include "GameTime.h"
 #include "GameConfig.h"
 #include "GameLocale.h"
+#include "StringConvert.h"
 
 ScriptMapMap sSpellScripts;
 ScriptMapMap sEventScripts;
@@ -469,18 +470,19 @@ void ObjectMgr::LoadCreatureTemplateAddons()
         creatureAddon.emote   = fields[5].GetUInt32();
         creatureAddon.isLarge = fields[6].GetBool();
 
-        Tokenizer tokens(fields[7].GetString(), ' ');
-        uint8 i = 0;
-        creatureAddon.auras.resize(tokens.size());
-        for (Tokenizer::const_iterator itr = tokens.begin(); itr != tokens.end(); ++itr)
+        for (std::string_view aura : warhead::Tokenize(fields[7].GetStringView(), ' ', false))
         {
-            SpellInfo const* AdditionalSpellInfo = sSpellMgr->GetSpellInfo(uint32(atol(*itr)));
-            if (!AdditionalSpellInfo)
+            SpellInfo const* spellInfo = nullptr;
+            if (std::optional<uint32> spellId = warhead::StringTo<uint32>(aura))
+                spellInfo = sSpellMgr->GetSpellInfo(*spellId);
+
+            if (!spellInfo)
             {
-                LOG_ERROR("sql.sql", "Creature (Entry: %u) has wrong spell %u defined in `auras` field in `creature_template_addon`.", entry, uint32(atol(*itr)));
+                LOG_ERROR("sql.sql", "Creature (Entry: %u) has wrong spell %s defined in `auras` field in `creature_template_addon`.", entry, std::string(aura).c_str());
                 continue;
             }
-            creatureAddon.auras[i++] = uint32(atol(*itr));
+
+            creatureAddon.auras.push_back(spellInfo->Id);
         }
 
         if (creatureAddon.mount)
@@ -889,18 +891,19 @@ void ObjectMgr::LoadCreatureAddons()
         creatureAddon.emote   = fields[5].GetUInt32();
         creatureAddon.isLarge = fields[6].GetBool();
 
-        Tokenizer tokens(fields[7].GetString(), ' ');
-        uint8 i = 0;
-        creatureAddon.auras.resize(tokens.size());
-        for (Tokenizer::const_iterator itr = tokens.begin(); itr != tokens.end(); ++itr)
+        for (std::string_view aura : warhead::Tokenize(fields[7].GetStringView(), ' ', false))
         {
-            SpellInfo const* AdditionalSpellInfo = sSpellMgr->GetSpellInfo(uint32(atol(*itr)));
-            if (!AdditionalSpellInfo)
+            SpellInfo const* spellInfo = nullptr;
+            if (std::optional<uint32> spellId = warhead::StringTo<uint32>(aura))
+                spellInfo = sSpellMgr->GetSpellInfo(*spellId);
+
+            if (!spellInfo)
             {
-                LOG_ERROR("sql.sql", "Creature (GUID: %u) has wrong spell %u defined in `auras` field in `creature_addon`.", guid, uint32(atol(*itr)));
+                LOG_ERROR("sql.sql", "Creature (GUID: %u) has wrong spell %s defined in `auras` field in `creature_addon`.", guid, std::string(aura).c_str());
                 continue;
             }
-            creatureAddon.auras[i++] = uint32(atol(*itr));
+
+            creatureAddon.auras.push_back(spellInfo->Id);
         }
 
         if (creatureAddon.mount)

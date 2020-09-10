@@ -54,6 +54,7 @@
 #include "GameTime.h"
 #include "GameConfig.h"
 #include "GameLocale.h"
+#include "StringConvert.h"
 
 uint32 GuidHigh2TypeId(uint32 guid_hi)
 {
@@ -563,21 +564,27 @@ uint32 Object::GetUpdateFieldData(Player const* target, uint32*& flags) const
     return visibleFlag;
 }
 
-void Object::_LoadIntoDataField(std::string const& data, uint32 startOffset, uint32 count)
+bool Object::_LoadIntoDataField(std::string const& data, uint32 startOffset, uint32 count)
 {
     if (data.empty())
-        return;
+        return false;
 
-    Tokenizer tokens(data, ' ', count);
+    std::vector<std::string_view> tokens = warhead::Tokenize(data, ' ', false);
 
     if (tokens.size() != count)
-        return;
+        return false;
 
     for (uint32 index = 0; index < count; ++index)
     {
-        m_uint32Values[startOffset + index] = atol(tokens[index]);
+        std::optional<uint32> val = warhead::StringTo<uint32>(tokens[index]);
+        if (!val)
+            return false;
+        
+        m_uint32Values[startOffset + index] = *val;
         _changesMask.SetBit(startOffset + index);
     }
+
+    return true;
 }
 
 void Object::SetInt32Value(uint16 index, int32 value)

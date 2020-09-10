@@ -85,6 +85,7 @@
 #include "GameObjectAI.h"
 #include "PoolMgr.h"
 #include "SavingSystem.h"
+#include "StringConvert.h"
 #include "TicketMgr.h"
 #include "ScriptMgr.h"
 #include "GameGraveyard.h"
@@ -205,18 +206,28 @@ void PlayerTaxi::InitTaxiNodesForLevel(uint32 race, uint32 chrClass, uint8 level
         SetTaximaskNode(213);                               //Shattered Sun Staging Area
 }
 
-void PlayerTaxi::LoadTaxiMask(std::string const& data)
+bool PlayerTaxi::LoadTaxiMask(std::string const& data)
 {
-    Tokenizer tokens(data, ' ');
+    bool warn = false;
 
-    uint8 index;
-    Tokenizer::const_iterator iter;
-    for (iter = tokens.begin(), index = 0;
-        (index < TaxiMaskSize) && (iter != tokens.end()); ++iter, ++index)
+    std::vector<std::string_view> tokens = warhead::Tokenize(data, ' ', false);
+    for (uint8 index = 0; (index < TaxiMaskSize) && (index < tokens.size()); ++index)
     {
-        // load and set bits only for existed taxi nodes
-        m_taximask[index] = sTaxiNodesMask[index] & uint32(atol(*iter));
+        if (std::optional<uint32> mask = warhead::StringTo<uint32>(tokens[index]))
+        {
+            // load and set bits only for existing taxi nodes
+            m_taximask[index] = sTaxiNodesMask[index] & *mask;
+            if (m_taximask[index] != *mask)
+                warn = true;
+        }
+        else
+        {
+            m_taximask[index] = 0;
+            warn = true;
+        }
     }
+
+    return !warn;
 }
 
 void PlayerTaxi::AppendTaximaskTo(ByteBuffer& data, bool all)
@@ -237,12 +248,12 @@ bool PlayerTaxi::LoadTaxiDestinationsFromString(const std::string& values, TeamI
 {
     ClearTaxiDestinations();
 
-    Tokenizer tokens(values, ' ');
-
-    for (Tokenizer::const_iterator iter = tokens.begin(); iter != tokens.end(); ++iter)
+    for (auto const& itr : warhead::Tokenize(values, ' ', false))
     {
-        uint32 node = uint32(atol(*iter));
-        AddTaxiDestination(node);
+        if (std::optional<uint32> node = warhead::StringTo<uint32>(itr))
+            AddTaxiDestination(*node);
+        else
+            return false;
     }
 
     // Check integrity
@@ -2093,27 +2104,51 @@ bool Player::BuildEnumData(PreparedQueryResult result, WorldPacket* data)
     *data << uint32(petLevel);
     *data << uint32(petFamily);
 
-    Tokenizer equipment(fields[22].GetString(), ' ');
+    std::vector<std::string_view> equipment = warhead::Tokenize(fields[22].GetStringView(), ' ', false);
     for (uint8 slot = 0; slot < INVENTORY_SLOT_BAG_END; ++slot)
     {
-        uint32 visualBase = slot * 2;
-        uint32 itemId = GetUInt32ValueFromArray(equipment, visualBase);
-        ItemTemplate const* proto = sObjectMgr->GetItemTemplate(itemId);
+        uint32 const visualBase = slot * 2;
+        std::optional<uint32> itemId;
+        if (visualBase < equipment.size())
+            itemId = warhead::StringTo<uint32>(equipment[visualBase]);
+
+        ItemTemplate const* proto = nullptr;
+        if (itemId)
+            proto = sObjectMgr->GetItemTemplate(*itemId);
+
         if (!proto)
         {
+            if (!itemId || *itemId)
+            {
+                LOG_WARN("entities.player.loading", "Player %u has invalid equipment '%s' in `equipmentcache` at index %u. Skipped.",
+                    guid, (visualBase < equipment.size()) ? std::string(equipment[visualBase]).c_str() : "<none>", visualBase);
+            }
+
             *data << uint32(0);
             *data << uint8(0);
             *data << uint32(0);
+
             continue;
         }
 
         SpellItemEnchantmentEntry const* enchant = nullptr;
 
-        uint32 enchants = GetUInt32ValueFromArray(equipment, visualBase + 1);
+        std::optional<uint32> enchants;
+        if ((visualBase + 1) < equipment.size())
+            enchants = warhead::StringTo<uint32>(equipment[visualBase + 1]);
+
+        if (!enchants)
+        {
+            LOG_WARN("entities.player.loading", "Player %u has invalid enchantment info '%s' in `equipmentcache` at index %u. Skipped.",
+                guid, ((visualBase + 1) < equipment.size()) ? std::string(equipment[visualBase + 1]).c_str() : "<none>", visualBase + 1);
+
+            enchants = 0;
+        }
+
         for (uint8 enchantSlot = PERM_ENCHANTMENT_SLOT; enchantSlot <= TEMP_ENCHANTMENT_SLOT; ++enchantSlot)
         {
             // values stored in 2 uint16
-            uint32 enchantId = 0x0000FFFF & (enchants >> enchantSlot * 16);
+            uint32 enchantId = 0x0000FFFF & ((*enchants) >> enchantSlot * 16);
             if (!enchantId)
                 continue;
 
@@ -17668,11 +17703,10 @@ void Player::_LoadEntryPointData(PreparedQueryResult result)
     std::string taxi = fields[5].GetString();
     if (!taxi.empty())
     {
-        Tokenizer tokens(taxi, ' ');
-        for (Tokenizer::const_iterator iter = tokens.begin(); iter != tokens.end(); ++iter)
+        for (auto const& taxiToken : warhead::Tokenize(taxi, ' ', false))
         {
-            uint32 node = uint32(atol(*iter));
-            m_entryPointData.taxiPath.push_back(node);
+            if (std::optional<uint32> node = warhead::StringTo<uint32>(taxiToken))
+                m_entryPointData.taxiPath.push_back(*node);
         }
 
         // Check integrity
@@ -17719,23 +17753,6 @@ void Player::SetHomebind(WorldLocation const& loc, uint32 areaId)
     stmt->setFloat (4, m_homebindZ);
     stmt->setUInt32(5, GetGUIDLow());
     CharacterDatabase.Execute(stmt);
-}
-
-uint32 Player::GetUInt32ValueFromArray(Tokenizer const& data, uint16 index)
-{
-    if (index >= data.size())
-        return 0;
-
-    return (uint32)atoi(data[index]);
-}
-
-float Player::GetFloatValueFromArray(Tokenizer const& data, uint16 index)
-{
-    float result;
-    uint32 temp = Player::GetUInt32ValueFromArray(data, index);
-    memcpy(&result, &temp, sizeof(result));
-
-    return result;
 }
 
 bool Player::isBeingLoaded() const
@@ -17818,9 +17835,12 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
 
     SetUInt32Value(UNIT_FIELD_LEVEL, fields[6].GetUInt8());
     SetUInt32Value(PLAYER_XP, fields[7].GetUInt32());
+    
+    if (!_LoadIntoDataField(fields[66].GetString(), PLAYER_EXPLORED_ZONES_1, PLAYER_EXPLORED_ZONES_SIZE))
+        LOG_WARN("entities.player.loading", "Player::LoadFromDB: Player (%г) has invalid exploredzones data (%s). Forcing partial load.", guid, fields[66].GetCString());
 
-    _LoadIntoDataField(fields[66].GetCString(), PLAYER_EXPLORED_ZONES_1, PLAYER_EXPLORED_ZONES_SIZE);
-    _LoadIntoDataField(fields[69].GetCString(), PLAYER__FIELD_KNOWN_TITLES, KNOWN_TITLES_SIZE*2);
+    if (!_LoadIntoDataField(fields[69].GetString(), PLAYER__FIELD_KNOWN_TITLES, KNOWN_TITLES_SIZE * 2))
+        LOG_WARN("entities.player.loading", "Player::LoadFromDB: Player (%г) has invalid knowntitles mask (%s). Forcing partial load.", guid, fields[69].GetCString());
 
     SetObjectScale(1.0f);
     SetFloatValue(UNIT_FIELD_HOVERHEIGHT, 1.0f);
@@ -17829,8 +17849,10 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
     m_achievementMgr->LoadFromDB(holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOAD_ACHIEVEMENTS), holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOAD_CRITERIA_PROGRESS));
 
     uint32 money = fields[8].GetUInt32();
+    
     if (money > MAX_MONEY_AMOUNT)
         money = MAX_MONEY_AMOUNT;
+    
     SetMoney(money);
 
     SetByteValue(PLAYER_BYTES, 0, fields[9].GetUInt8());
@@ -18823,13 +18845,18 @@ Item* Player::_LoadItem(SQLTransaction& trans, uint32 zoneId, uint32 timeDiff, F
             {
                 stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_ITEM_BOP_TRADE);
                 stmt->setUInt32(0, item->GetGUIDLow());
+
                 if (PreparedQueryResult result = CharacterDatabase.Query(stmt))
                 {
-                    std::string strGUID = (*result)[0].GetString();
-                    Tokenizer GUIDlist(strGUID, ' ');
                     AllowedLooterSet looters;
-                    for (Tokenizer::const_iterator itr = GUIDlist.begin(); itr != GUIDlist.end(); ++itr)
-                        looters.insert(atol(*itr));
+
+                    for (std::string_view guidStr : warhead::Tokenize((*result)[0].GetStringView(), ' ', false))
+                    {
+                        if (std::optional<uint32> guid = warhead::StringTo<uint32>(guidStr))
+                            looters.insert(*guid);
+                        else
+                            LOG_WARN("entities.player.loading", "Player::_LoadInventory: invalid item_soulbound_trade_data GUID '%s' for item (%u). Skipped.", std::string(guidStr).c_str(), item->GetGUID());
+                    }
 
                     if (looters.size() > 1 && item->GetTemplate()->GetMaxStackSize() == 1 && item->IsSoulBound())
                     {
@@ -20474,17 +20501,6 @@ void Player::SavePositionInDB(uint32 mapid, float x, float y, float z, float o, 
     stmt->setUInt32(6, GUID_LOPART(guid));
 
     CharacterDatabase.Execute(stmt);
-}
-
-void Player::SetUInt32ValueInArray(Tokenizer& tokens, uint16 index, uint32 value)
-{
-    char buf[11];
-    snprintf(buf, 11, "%u", value);
-
-    if (index >= tokens.size())
-        return;
-
-    tokens[index] = buf;
 }
 
 void Player::Customize(uint64 guid, uint8 gender, uint8 skin, uint8 face, uint8 hairStyle, uint8 hairColor, uint8 facialHair)
