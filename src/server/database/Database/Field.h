@@ -28,59 +28,59 @@ class WH_DATABASE_API Field
     friend class ResultSet;
     friend class PreparedResultSet;
 
-    public:
+public:
 
-        bool GetBool() const;
-        uint8 GetUInt8() const;
-        int8 GetInt8() const;
-        uint16 GetUInt16() const;
-        int16 GetInt16() const;
-        uint32 GetUInt32() const;
-        int32 GetInt32() const;
-        uint64 GetUInt64() const;
-        int64 GetInt64() const;
-        float GetFloat() const;
-        double GetDouble() const;
-        char const* GetCString() const;
-        std::string GetString() const;
-        std::string_view GetStringView() const;
-        bool IsNull() const;
+    bool GetBool() const;
+    uint8 GetUInt8() const;
+    int8 GetInt8() const;
+    uint16 GetUInt16() const;
+    int16 GetInt16() const;
+    uint32 GetUInt32() const;
+    int32 GetInt32() const;
+    uint64 GetUInt64() const;
+    int64 GetInt64() const;
+    float GetFloat() const;
+    double GetDouble() const;
+    char const* GetCString() const;
+    std::string GetString() const;
+    std::string_view GetStringView() const;
+    bool IsNull() const;
 
-    protected:
-        Field();
-        ~Field();
+protected:
+    Field();
+    ~Field();
 
-        #if defined(__GNUC__)
-        #pragma pack(1)
-        #else
-        #pragma pack(push, 1)
-        #endif
-        struct
-        {
-            uint32 length;          // Length (prepared strings only)
-            void* value;            // Actual data in memory
-            enum_field_types type;  // Field type
-            bool raw;               // Raw bytes? (Prepared statement or ad hoc)
-         } data;
-        #if defined(__GNUC__)
-        #pragma pack()
-        #else
-        #pragma pack(pop)
-        #endif
+#if defined(__GNUC__)
+#pragma pack(1)
+#else
+#pragma pack(push, 1)
+#endif
+    struct
+    {
+        uint32 length;          // Length (prepared strings only)
+        void* value;            // Actual data in memory
+        enum_field_types type;  // Field type
+        bool raw;               // Raw bytes? (Prepared statement or ad hoc)
+    } data;
+#if defined(__GNUC__)
+#pragma pack()
+#else
+#pragma pack(pop)
+#endif
 
-        void SetByteValue(void const* newValue, size_t const newSize, enum_field_types newType, uint32 length);
-        void SetStructuredValue(char* newValue, enum_field_types newType);
+    void SetByteValue(void const* newValue, size_t const newSize, enum_field_types newType, uint32 length);
+    void SetStructuredValue(char* newValue, enum_field_types newType);
 
-        void CleanUp();
+    void CleanUp();
 
-        static size_t SizeForType(MYSQL_FIELD* field);
-        bool IsType(enum_field_types type) const;
-        bool IsNumeric() const;
+    static size_t SizeForType(MYSQL_FIELD* field);
+    bool IsType(enum_field_types type) const;
+    bool IsNumeric() const;
 
-    private:
-        
+private:
+
 #ifdef ACORE_DEBUG
-        static char const* FieldTypeToString(enum_field_types type);
+    static char const* FieldTypeToString(enum_field_types type);
 #endif
 };
 
