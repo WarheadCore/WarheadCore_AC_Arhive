@@ -56,7 +56,7 @@ Milliseconds randtime(Milliseconds min, Milliseconds max)
 {
     long long diff = max.count() - min.count();
     ASSERT(diff >= 0);
-    ASSERT(diff <= (uint32)-1);
+    ASSERT(diff <= (uint32) - 1);
     return min + Milliseconds(urand(0, diff));
 }
 
@@ -178,8 +178,8 @@ std::string secsToTimeString(uint64 timeInSecs, bool shortText)
 
     std::string str = ss.str();
 
-    if (!shortText && !str.empty() && str[str.size()-1] == ' ')
-        str.resize(str.size()-1);
+    if (!shortText && !str.empty() && str[str.size() - 1] == ' ')
+        str.resize(str.size() - 1);
 
     return str;
 }
@@ -189,8 +189,8 @@ int32 MoneyStringToMoney(const std::string& moneyString)
     int32 money = 0;
 
     if (!(std::count(moneyString.begin(), moneyString.end(), 'g') == 1 ||
-        std::count(moneyString.begin(), moneyString.end(), 's') == 1 ||
-        std::count(moneyString.begin(), moneyString.end(), 'c') == 1))
+            std::count(moneyString.begin(), moneyString.end(), 's') == 1 ||
+            std::count(moneyString.begin(), moneyString.end(), 'c') == 1))
         return 0; // Bad format
 
     Tokenizer tokens(moneyString, ' ');
@@ -225,22 +225,31 @@ uint32 TimeStringToSecs(const std::string& timestring)
     {
         if (isdigit(*itr))
         {
-            buffer*=10;
-            buffer+= (*itr)-'0';
+            buffer *= 10;
+            buffer += (*itr) - '0';
         }
         else
         {
             switch (*itr)
             {
-                case 'd': multiplier = DAY;     break;
-                case 'h': multiplier = HOUR;    break;
-                case 'm': multiplier = MINUTE;  break;
-                case 's': multiplier = 1;       break;
-                default : return 0;                         //bad format
+                case 'd':
+                    multiplier = DAY;
+                    break;
+                case 'h':
+                    multiplier = HOUR;
+                    break;
+                case 'm':
+                    multiplier = MINUTE;
+                    break;
+                case 's':
+                    multiplier = 1;
+                    break;
+                default :
+                    return 0;                         //bad format
             }
-            buffer*=multiplier;
-            secs+=buffer;
-            buffer=0;
+            buffer *= multiplier;
+            secs += buffer;
+            buffer = 0;
         }
     }
 
@@ -258,12 +267,10 @@ std::string TimeToTimestampStr(time_t t)
     //       MM     minutes (2 digits 00-59)
     //       SS     seconds (2 digits 00-59)
     char buf[20];
-    int ret = snprintf(buf, 20, "%04d-%02d-%02d_%02d-%02d-%02d", aTm.tm_year+1900, aTm.tm_mon+1, aTm.tm_mday, aTm.tm_hour, aTm.tm_min, aTm.tm_sec);
+    int ret = snprintf(buf, 20, "%04d-%02d-%02d_%02d-%02d-%02d", aTm.tm_year + 1900, aTm.tm_mon + 1, aTm.tm_mday, aTm.tm_hour, aTm.tm_min, aTm.tm_sec);
 
     if (ret < 0)
-    {
         return std::string("ERROR");
-    }
 
     return std::string(buf);
 }
@@ -333,7 +340,7 @@ size_t utf8length(std::string& utf8str)
 {
     try
     {
-        return utf8::distance(utf8str.c_str(), utf8str.c_str()+utf8str.size());
+        return utf8::distance(utf8str.c_str(), utf8str.c_str() + utf8str.size());
     }
     catch(std::exception const&)
     {
@@ -346,16 +353,16 @@ void utf8truncate(std::string& utf8str, size_t len)
 {
     try
     {
-        size_t wlen = utf8::distance(utf8str.c_str(), utf8str.c_str()+utf8str.size());
+        size_t wlen = utf8::distance(utf8str.c_str(), utf8str.c_str() + utf8str.size());
         if (wlen <= len)
             return;
 
         std::wstring wstr;
         wstr.resize(wlen);
-        utf8::utf8to16(utf8str.c_str(), utf8str.c_str()+utf8str.size(), &wstr[0]);
+        utf8::utf8to16(utf8str.c_str(), utf8str.c_str() + utf8str.size(), &wstr[0]);
         wstr.resize(len);
-        char* oend = utf8::utf16to8(wstr.c_str(), wstr.c_str()+wstr.size(), &utf8str[0]);
-        utf8str.resize(oend-(&utf8str[0]));                 // remove unused tail
+        char* oend = utf8::utf16to8(wstr.c_str(), wstr.c_str() + wstr.size(), &utf8str[0]);
+        utf8str.resize(oend - (&utf8str[0]));               // remove unused tail
     }
     catch(std::exception const&)
     {
@@ -368,7 +375,7 @@ bool Utf8toWStr(char const* utf8str, size_t csize, wchar_t* wstr, size_t& wsize)
     try
     {
         warhead::CheckedBufferOutputIterator<wchar_t> out(wstr, wsize);
-        out = utf8::utf8to16(utf8str, utf8str+csize, out);
+        out = utf8::utf8to16(utf8str, utf8str + csize, out);
         wsize -= out.remaining(); // remaining unused space
         wstr[wsize] = L'\0';
     }
@@ -402,7 +409,7 @@ bool Utf8toWStr(std::string_view utf8str, std::wstring& wstr)
     wstr.clear();
     try
     {
-         utf8::utf8to16(utf8str.begin(), utf8str.end(), std::back_inserter(wstr));
+        utf8::utf8to16(utf8str.begin(), utf8str.end(), std::back_inserter(wstr));
     }
     catch(std::exception const&)
     {
@@ -418,12 +425,12 @@ bool WStrToUtf8(wchar_t* wstr, size_t size, std::string& utf8str)
     try
     {
         std::string utf8str2;
-        utf8str2.resize(size*4);                            // allocate for most long case
+        utf8str2.resize(size * 4);                          // allocate for most long case
 
         if (size)
         {
-            char* oend = utf8::utf16to8(wstr, wstr+size, &utf8str2[0]);
-            utf8str2.resize(oend-(&utf8str2[0]));               // remove unused tail
+            char* oend = utf8::utf16to8(wstr, wstr + size, &utf8str2[0]);
+            utf8str2.resize(oend - (&utf8str2[0]));             // remove unused tail
         }
         utf8str = utf8str2;
     }
@@ -441,12 +448,12 @@ bool WStrToUtf8(std::wstring_view wstr, std::string& utf8str)
     try
     {
         std::string utf8str2;
-        utf8str2.resize(wstr.size()*4);                     // allocate for most long case
+        utf8str2.resize(wstr.size() * 4);                   // allocate for most long case
 
         if (wstr.size())
         {
             char* oend = utf8::utf16to8(wstr.begin(), wstr.end(), &utf8str2[0]);
-            utf8str2.resize(oend-(&utf8str2[0]));                // remove unused tail
+            utf8str2.resize(oend - (&utf8str2[0]));              // remove unused tail
         }
         utf8str = utf8str2;
     }
@@ -489,13 +496,14 @@ std::wstring GetMainPartOfName(std::wstring const& wname, uint32 declension)
     static std::wstring const j_End    = { wchar_t(0x0439), wchar_t(0x0000) };
 
     static std::array<std::array<std::wstring const*, 7>, 6> const dropEnds = {{
-        { &a_End,  &o_End,    &ya_End,   &ie_End,  &soft_End, &j_End,    nullptr },
-        { &a_End,  &ya_End,   &yeru_End, &i_End,   nullptr,   nullptr,   nullptr },
-        { &ie_End, &u_End,    &yu_End,   &i_End,   nullptr,   nullptr,   nullptr },
-        { &u_End,  &yu_End,   &o_End,    &ie_End,  &soft_End, &ya_End,   &a_End  },
-        { &oj_End, &io_j_End, &ie_j_End, &o_m_End, &io_m_End, &ie_m_End, &yu_End },
-        { &ie_End, &i_End,    nullptr,   nullptr,  nullptr,   nullptr,   nullptr }
-    }};
+            { &a_End,  &o_End,    &ya_End,   &ie_End,  &soft_End, &j_End,    nullptr },
+            { &a_End,  &ya_End,   &yeru_End, &i_End,   nullptr,   nullptr,   nullptr },
+            { &ie_End, &u_End,    &yu_End,   &i_End,   nullptr,   nullptr,   nullptr },
+            { &u_End,  &yu_End,   &o_End,    &ie_End,  &soft_End, &ya_End,   &a_End  },
+            { &oj_End, &io_j_End, &ie_j_End, &o_m_End, &io_m_End, &ie_m_End, &yu_End },
+            { &ie_End, &i_End,    nullptr,   nullptr,  nullptr,   nullptr,   nullptr }
+        }
+    };
 
     std::size_t const thisLen = wname.length();
     std::array<std::wstring const*, 7> const& endings = dropEnds[declension];
@@ -506,8 +514,8 @@ std::wstring GetMainPartOfName(std::wstring const& wname, uint32 declension)
         if (!(endLen <= thisLen))
             continue;
 
-        if (wname.substr(thisLen-endLen, thisLen) == ending)
-            return wname.substr(0, thisLen-endLen);
+        if (wname.substr(thisLen - endLen, thisLen) == ending)
+            return wname.substr(0, thisLen - endLen);
     }
 
     return wname;
@@ -559,7 +567,7 @@ bool Utf8FitTo(std::string_view str, std::wstring_view search)
     return true;
 }
 
-void utf8printf(FILE* out, const char *str, ...)
+void utf8printf(FILE* out, const char* str, ...)
 {
     va_list ap;
     va_start(ap, str);
@@ -567,7 +575,7 @@ void utf8printf(FILE* out, const char *str, ...)
     va_end(ap);
 }
 
-void vutf8printf(FILE* out, const char *str, va_list* ap)
+void vutf8printf(FILE* out, const char* str, va_list* ap)
 {
 #if WH_PLATFORM == WH_PLATFORM_WINDOWS
     char temp_buf[32 * 1024];
@@ -576,9 +584,9 @@ void vutf8printf(FILE* out, const char *str, va_list* ap)
     size_t temp_len = vsnprintf(temp_buf, 32 * 1024, str, *ap);
     //vsnprintf returns -1 if the buffer is too small
     if (temp_len == size_t(-1))
-        temp_len = 32*1024-1;
+        temp_len = 32 * 1024 - 1;
 
-    size_t wtemp_len = 32*1024-1;
+    size_t wtemp_len = 32 * 1024 - 1;
     Utf8toWStr(temp_buf, temp_len, wtemp_buf, wtemp_len);
 
     CharToOemBuffW(&wtemp_buf[0], &temp_buf[0], uint32(wtemp_len + 1));
@@ -657,9 +665,9 @@ bool StringEqualI(std::string_view str1, std::string_view str2)
 {
     return std::equal(str1.begin(), str1.end(), str2.begin(), str2.end(),
                       [](char a, char b)
-                      {
-                          return std::tolower(a) == std::tolower(b);
-                      });
+    {
+        return std::tolower(a) == std::tolower(b);
+    });
 }
 
 
@@ -671,5 +679,5 @@ bool StringStartsWith(std::string_view haystack, std::string_view needle)
 bool StringContainsStringI(std::string_view haystack, std::string_view needle)
 {
     return haystack.end() !=
-        std::search(haystack.begin(), haystack.end(), needle.begin(), needle.end(), [](char c1, char c2) { return std::toupper(c1) == std::toupper(c2); });
+    std::search(haystack.begin(), haystack.end(), needle.begin(), needle.end(), [](char c1, char c2) { return std::toupper(c1) == std::toupper(c2); });
 }

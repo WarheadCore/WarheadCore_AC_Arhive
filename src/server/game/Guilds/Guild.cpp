@@ -88,13 +88,20 @@ inline uint32 _GetGuildBankTabPrice(uint8 tabId)
 {
     switch (tabId)
     {
-        case 0: return 100;
-        case 1: return 250;
-        case 2: return 500;
-        case 3: return 1000;
-        case 4: return 2500;
-        case 5: return 5000;
-        default: return 0;
+        case 0:
+            return 100;
+        case 1:
+            return 250;
+        case 2:
+            return 500;
+        case 3:
+            return 1000;
+        case 4:
+            return 2500;
+        case 5:
+            return 5000;
+        default:
+            return 0;
     }
 }
 
@@ -582,7 +589,7 @@ void Guild::BankTab::SendText(Guild const* guild, WorldSession* session) const
     {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
         LOG_DEBUG("guild", "MSG_QUERY_GUILD_BANK_TEXT [%s]: Tabid: %u, Text: %s"
-            , session->GetPlayerInfo().c_str(), m_tabId, m_text.c_str());
+                  , session->GetPlayerInfo().c_str(), m_tabId, m_text.c_str());
 #endif
         session->SendPacket(&data);
     }
@@ -848,8 +855,8 @@ void Guild::MoveItemData::LogAction(MoveItemData* pFrom) const
     ASSERT(pFrom->GetItem());
 
     sScriptMgr->OnGuildItemMove(m_pGuild, m_pPlayer, pFrom->GetItem(),
-        pFrom->IsBank(), pFrom->GetContainer(), pFrom->GetSlotId(),
-        IsBank(), GetContainer(), GetSlotId());
+                                pFrom->IsBank(), pFrom->GetContainer(), pFrom->GetSlotId(),
+                                IsBank(), GetContainer(), GetSlotId());
 }
 
 inline void Guild::MoveItemData::CopySlots(SlotIds& ids) const
@@ -909,7 +916,7 @@ void Guild::PlayerMoveItemData::LogBankEvent(SQLTransaction& trans, MoveItemData
     ASSERT(pFrom);
     // Bank -> Char
     m_pGuild->_LogBankEvent(trans, GUILD_BANK_LOG_WITHDRAW_ITEM, pFrom->GetContainer(), m_pPlayer->GetGUIDLow(),
-        pFrom->GetItem()->GetEntry(), count);
+                            pFrom->GetItem()->GetEntry(), count);
 }
 
 inline InventoryResult Guild::PlayerMoveItemData::CanStore(Item* pItem, bool swap)
@@ -983,7 +990,7 @@ Item* Guild::BankMoveItemData::StoreItem(SQLTransaction& trans, Item* pItem)
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
         LOG_DEBUG("guild", "GUILD STORAGE: StoreItem tab = %u, slot = %u, item = %u, count = %u",
-            m_container, m_slotId, pItem->GetEntry(), pItem->GetCount());
+                  m_container, m_slotId, pItem->GetEntry(), pItem->GetCount());
 #endif
         pLastItem = _StoreItem(trans, pTab, pItem, pos, itr != m_vec.end());
     }
@@ -996,11 +1003,11 @@ void Guild::BankMoveItemData::LogBankEvent(SQLTransaction& trans, MoveItemData* 
     if (pFrom->IsBank())
         // Bank -> Bank
         m_pGuild->_LogBankEvent(trans, GUILD_BANK_LOG_MOVE_ITEM, pFrom->GetContainer(), m_pPlayer->GetGUIDLow(),
-            pFrom->GetItem()->GetEntry(), count, m_container);
+                                pFrom->GetItem()->GetEntry(), count, m_container);
     else
         // Char -> Bank
         m_pGuild->_LogBankEvent(trans, GUILD_BANK_LOG_DEPOSIT_ITEM, m_container, m_pPlayer->GetGUIDLow(),
-            pFrom->GetItem()->GetEntry(), count);
+                                pFrom->GetItem()->GetEntry(), count);
 }
 
 void Guild::BankMoveItemData::LogAction(MoveItemData* pFrom) const
@@ -1088,7 +1095,7 @@ InventoryResult Guild::BankMoveItemData::CanStore(Item* pItem, bool swap)
 {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("guild", "GUILD STORAGE: CanStore() tab = %u, slot = %u, item = %u, count = %u",
-        m_container, m_slotId, pItem->GetEntry(), pItem->GetCount());
+              m_container, m_slotId, pItem->GetEntry(), pItem->GetCount());
 #endif
     uint32 count = pItem->GetCount();
     // Soulbound items cannot be moved
@@ -1188,7 +1195,7 @@ bool Guild::Create(Player* pLeader, std::string const& name)
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("guild", "GUILD: creating guild [%s] for leader %s (%u)",
-        name.c_str(), pLeader->GetName().c_str(), GUID_LOPART(m_leaderGuid));
+              name.c_str(), pLeader->GetName().c_str(), GUID_LOPART(m_leaderGuid));
 #endif
     SQLTransaction trans = CharacterDatabase.BeginTransaction();
 
@@ -1345,7 +1352,7 @@ void Guild::HandleQuery(WorldSession* session)
 
     session->SendPacket(&data);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-   LOG_DEBUG("guild", "SMSG_GUILD_QUERY_RESPONSE [%s]", session->GetPlayerInfo().c_str());
+    LOG_DEBUG("guild", "SMSG_GUILD_QUERY_RESPONSE [%s]", session->GetPlayerInfo().c_str());
 #endif
 }
 
@@ -1436,7 +1443,7 @@ void Guild::HandleSetBankTabInfo(WorldSession* session, uint8 tabId, std::string
     if (!tab)
     {
         LOG_ERROR("server", "Guild::HandleSetBankTabInfo: Player %s trying to change bank tab info from unexisting tab %d.",
-                       session->GetPlayerInfo().c_str(), tabId);
+                  session->GetPlayerInfo().c_str(), tabId);
         return;
     }
 
@@ -1468,7 +1475,7 @@ void Guild::HandleSetRankInfo(WorldSession* session, uint8 rankId, std::string c
     else if (RankInfo* rankInfo = GetRankInfo(rankId))
     {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-       LOG_DEBUG("guild", "Changed RankName to '%s', rights to 0x%08X", name.c_str(), rights);
+        LOG_DEBUG("guild", "Changed RankName to '%s', rights to 0x%08X", name.c_str(), rights);
 #endif
 
         rankInfo->SetName(name);
@@ -1558,7 +1565,7 @@ void Guild::HandleInviteMember(WorldSession* session, std::string const& name)
     SendCommandResult(session, GUILD_COMMAND_INVITE, ERR_GUILD_COMMAND_SUCCESS, name);
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-   LOG_DEBUG("guild", "Player %s invited %s to join his Guild", player->GetName().c_str(), name.c_str());
+    LOG_DEBUG("guild", "Player %s invited %s to join his Guild", player->GetName().c_str(), name.c_str());
 #endif
 
     pInvitee->SetGuildIdInvited(m_id);
@@ -1569,15 +1576,15 @@ void Guild::HandleInviteMember(WorldSession* session, std::string const& name)
     data << m_name;
     pInvitee->GetSession()->SendPacket(&data);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-   LOG_DEBUG("guild", "SMSG_GUILD_INVITE [%s]", pInvitee->GetName().c_str());
+    LOG_DEBUG("guild", "SMSG_GUILD_INVITE [%s]", pInvitee->GetName().c_str());
 #endif
 }
 
 void Guild::HandleAcceptMember(WorldSession* session)
 {
     Player* player = session->GetPlayer();
-    if (!sGameConfig->GetBoolConfig("AllowTwoSide.Interaction.Guild") && 
-        player->GetTeamId() != sObjectMgr->GetPlayerTeamIdByGUID(GetLeaderGUID()))
+    if (!sGameConfig->GetBoolConfig("AllowTwoSide.Interaction.Guild") &&
+            player->GetTeamId() != sObjectMgr->GetPlayerTeamIdByGUID(GetLeaderGUID()))
         return;
 
     AddMember(player->GetGUID());
@@ -1756,8 +1763,8 @@ void Guild::HandleMemberDepositMoney(WorldSession* session, uint32 amount)
     std::string aux = ByteArrayToHexStr(reinterpret_cast<uint8*>(&m_bankMoney), 8, true);
     _BroadcastEvent(GE_BANK_MONEY_SET, 0, aux.c_str());
 
-    if (amount > 10*GOLD)
-        CharacterDatabase.PExecute("INSERT INTO log_money VALUES(%u, %u, \"%s\", \"%s\", %u, \"%s\", %u, \"<GB DEPOSIT> %s (guild id: %u, members: %u, new amount: %u, leader guid low: %u, char level: %u)\", NOW())", session->GetAccountId(), player->GetGUIDLow(), player->GetName().c_str(), session->GetRemoteAddress().c_str(), 0, "", amount, GetName().c_str(), GetId(), GetMemberCount(), GetTotalBankMoney(), (uint32)(GetLeaderGUID()&0xFFFFFFFF), player->getLevel());
+    if (amount > 10 * GOLD)
+        CharacterDatabase.PExecute("INSERT INTO log_money VALUES(%u, %u, \"%s\", \"%s\", %u, \"%s\", %u, \"<GB DEPOSIT> %s (guild id: %u, members: %u, new amount: %u, leader guid low: %u, char level: %u)\", NOW())", session->GetAccountId(), player->GetGUIDLow(), player->GetName().c_str(), session->GetRemoteAddress().c_str(), 0, "", amount, GetName().c_str(), GetId(), GetMemberCount(), GetTotalBankMoney(), (uint32)(GetLeaderGUID() & 0xFFFFFFFF), player->getLevel());
 }
 
 bool Guild::HandleMemberWithdrawMoney(WorldSession* session, uint32 amount, bool repair)
@@ -1774,8 +1781,8 @@ bool Guild::HandleMemberWithdrawMoney(WorldSession* session, uint32 amount, bool
     if (!member)
         return false;
 
-   if (uint32(_GetMemberRemainingMoney(member)) < amount)   // Check if we have enough slot/money today
-       return false;
+    if (uint32(_GetMemberRemainingMoney(member)) < amount)   // Check if we have enough slot/money today
+        return false;
 
     // Call script after validation and before money transfer.
     sScriptMgr->OnGuildMemberWitdrawMoney(this, player, amount, repair);
@@ -1799,8 +1806,8 @@ bool Guild::HandleMemberWithdrawMoney(WorldSession* session, uint32 amount, bool
     _LogBankEvent(trans, repair ? GUILD_BANK_LOG_REPAIR_MONEY : GUILD_BANK_LOG_WITHDRAW_MONEY, uint8(0), player->GetGUIDLow(), amount);
     CharacterDatabase.CommitTransaction(trans);
 
-    if (amount > 10*GOLD)
-        CharacterDatabase.PExecute("INSERT INTO log_money VALUES(%u, %u, \"%s\", \"%s\", %u, \"%s\", %u, \"<GB WITHDRAW> %s (guild id: %u, members: %u, new amount: %u, leader guid low: %u, char level: %u)\", NOW())", session->GetAccountId(), player->GetGUIDLow(), player->GetName().c_str(), session->GetRemoteAddress().c_str(), 0, "", amount, GetName().c_str(), GetId(), GetMemberCount(), GetTotalBankMoney(), (uint32)(GetLeaderGUID()&0xFFFFFFFF), player->getLevel());
+    if (amount > 10 * GOLD)
+        CharacterDatabase.PExecute("INSERT INTO log_money VALUES(%u, %u, \"%s\", \"%s\", %u, \"%s\", %u, \"<GB WITHDRAW> %s (guild id: %u, members: %u, new amount: %u, leader guid low: %u, char level: %u)\", NOW())", session->GetAccountId(), player->GetGUIDLow(), player->GetName().c_str(), session->GetRemoteAddress().c_str(), 0, "", amount, GetName().c_str(), GetId(), GetMemberCount(), GetTotalBankMoney(), (uint32)(GetLeaderGUID() & 0xFFFFFFFF), player->getLevel());
 
     std::string aux = ByteArrayToHexStr(reinterpret_cast<uint8*>(&m_bankMoney), 8, true);
     _BroadcastEvent(GE_BANK_MONEY_SET, 0, aux.c_str());
@@ -1826,7 +1833,7 @@ void Guild::HandleDisband(WorldSession* session)
     {
         Disband();
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-       LOG_DEBUG("guild", "Guild Successfully Disbanded");
+        LOG_DEBUG("guild", "Guild Successfully Disbanded");
 #endif
         delete this;
     }
@@ -1843,7 +1850,7 @@ void Guild::SendInfo(WorldSession* session) const
 
     session->SendPacket(&data);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-   LOG_DEBUG("guild", "SMSG_GUILD_INFO [%s]", session->GetPlayerInfo().c_str());
+    LOG_DEBUG("guild", "SMSG_GUILD_INFO [%s]", session->GetPlayerInfo().c_str());
 #endif
 }
 
@@ -1853,7 +1860,7 @@ void Guild::SendEventLog(WorldSession* session) const
     m_eventLog->WritePacket(data);
     session->SendPacket(&data);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-   LOG_DEBUG("guild", "MSG_GUILD_EVENT_LOG_QUERY [%s]", session->GetPlayerInfo().c_str());
+    LOG_DEBUG("guild", "MSG_GUILD_EVENT_LOG_QUERY [%s]", session->GetPlayerInfo().c_str());
 #endif
 }
 
@@ -1868,7 +1875,7 @@ void Guild::SendBankLog(WorldSession* session, uint8 tabId) const
         pLog->WritePacket(data);
         session->SendPacket(&data);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-       LOG_DEBUG("guild", "MSG_GUILD_BANK_LOG_QUERY [%s]", session->GetPlayerInfo().c_str());
+        LOG_DEBUG("guild", "MSG_GUILD_BANK_LOG_QUERY [%s]", session->GetPlayerInfo().c_str());
 #endif
     }
 }
@@ -1911,7 +1918,7 @@ void Guild::SendPermissions(WorldSession* session) const
 
     session->SendPacket(&data);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-   LOG_DEBUG("guild", "MSG_GUILD_PERMISSIONS [%s] Rank: %u", session->GetPlayerInfo().c_str(), rankId);
+    LOG_DEBUG("guild", "MSG_GUILD_PERMISSIONS [%s] Rank: %u", session->GetPlayerInfo().c_str(), rankId);
 #endif
 }
 
@@ -1926,7 +1933,7 @@ void Guild::SendMoneyInfo(WorldSession* session) const
     data << int32(amount);
     session->SendPacket(&data);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-   LOG_DEBUG("guild", "MSG_GUILD_BANK_MONEY_WITHDRAWN [%s] Money: %u", session->GetPlayerInfo().c_str(), amount);
+    LOG_DEBUG("guild", "MSG_GUILD_BANK_MONEY_WITHDRAWN [%s] Money: %u", session->GetPlayerInfo().c_str(), amount);
 #endif
 }
 
@@ -1939,7 +1946,7 @@ void Guild::SendLoginInfo(WorldSession* session)
     session->SendPacket(&data);
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-   LOG_DEBUG("guild", "SMSG_GUILD_EVENT [%s] MOTD", session->GetPlayerInfo().c_str());
+    LOG_DEBUG("guild", "SMSG_GUILD_EVENT [%s] MOTD", session->GetPlayerInfo().c_str());
 #endif
 
     SendBankTabsInfo(session);
@@ -1992,7 +1999,7 @@ void Guild::LoadRankFromDB(Field* fields)
 bool Guild::LoadMemberFromDB(Field* fields)
 {
     uint32 lowguid = fields[1].GetUInt32();
-    Member *member = new Member(m_id, MAKE_NEW_GUID(lowguid, 0, HIGHGUID_PLAYER), fields[2].GetUInt8());
+    Member* member = new Member(m_id, MAKE_NEW_GUID(lowguid, 0, HIGHGUID_PLAYER), fields[2].GetUInt8());
     if (!member->LoadFromDB(fields))
     {
         _DeleteMemberFromDB(lowguid);
@@ -2006,9 +2013,9 @@ bool Guild::LoadMemberFromDB(Field* fields)
 
 void Guild::LoadBankRightFromDB(Field* fields)
 {
-                                           // tabId              rights                slots
+    // tabId              rights                slots
     GuildBankRightsAndSlots rightsAndSlots(fields[1].GetUInt8(), fields[3].GetUInt8(), fields[4].GetUInt32());
-                                  // rankId
+    // rankId
     _SetRankBankTabRightsAndSlots(fields[2].GetUInt8(), rightsAndSlots, false);
 }
 
@@ -2017,13 +2024,13 @@ bool Guild::LoadEventLogFromDB(Field* fields)
     if (m_eventLog->CanInsert())
     {
         m_eventLog->LoadEvent(new EventLogEntry(
-            m_id,                                       // guild id
-            fields[1].GetUInt32(),                      // guid
-            time_t(fields[6].GetUInt32()),              // timestamp
-            GuildEventLogTypes(fields[2].GetUInt8()),   // event type
-            fields[3].GetUInt32(),                      // player guid 1
-            fields[4].GetUInt32(),                      // player guid 2
-            fields[5].GetUInt8()));                     // rank
+                                  m_id,                                       // guild id
+                                  fields[1].GetUInt32(),                      // guid
+                                  time_t(fields[6].GetUInt32()),              // timestamp
+                                  GuildEventLogTypes(fields[2].GetUInt8()),   // event type
+                                  fields[3].GetUInt32(),                      // player guid 1
+                                  fields[4].GetUInt32(),                      // player guid 2
+                                  fields[5].GetUInt8()));                     // rank
         return true;
     }
     return false;
@@ -2055,15 +2062,15 @@ bool Guild::LoadBankEventLogFromDB(Field* fields)
                 return false;
             }
             pLog->LoadEvent(new BankEventLogEntry(
-                m_id,                                   // guild id
-                guid,                                   // guid
-                time_t(fields[8].GetUInt32()),          // timestamp
-                dbTabId,                                // tab id
-                eventType,                              // event type
-                fields[4].GetUInt32(),                  // player guid
-                fields[5].GetUInt32(),                  // item or money
-                fields[6].GetUInt16(),                  // itam stack count
-                fields[7].GetUInt8()));                 // dest tab id
+                                m_id,                                   // guild id
+                                guid,                                   // guid
+                                time_t(fields[8].GetUInt32()),          // timestamp
+                                dbTabId,                                // tab id
+                                eventType,                              // event type
+                                fields[4].GetUInt32(),                  // player guid
+                                fields[5].GetUInt32(),                  // item or money
+                                fields[6].GetUInt16(),                  // itam stack count
+                                fields[7].GetUInt8()));                 // dest tab id
         }
     }
     return true;
@@ -2084,7 +2091,7 @@ bool Guild::LoadBankItemFromDB(Field* fields)
     if (tabId >= _GetPurchasedTabsSize())
     {
         LOG_ERROR("server", "Invalid tab for item (GUID: %u, id: #%u) in guild bank, skipped.",
-            fields[14].GetUInt32(), fields[15].GetUInt32());
+                  fields[14].GetUInt32(), fields[15].GetUInt32());
         return false;
     }
     return m_bankTabs[tabId]->LoadItemFromDB(fields);
@@ -2382,7 +2389,7 @@ bool Guild::ChangeMemberRank(uint64 guid, uint8 newRank)
 void Guild::SwapItems(Player* player, uint8 tabId, uint8 slotId, uint8 destTabId, uint8 destSlotId, uint32 splitedAmount)
 {
     if (tabId >= _GetPurchasedTabsSize() || slotId >= GUILD_BANK_MAX_SLOTS ||
-        destTabId >= _GetPurchasedTabsSize() || destSlotId >= GUILD_BANK_MAX_SLOTS)
+            destTabId >= _GetPurchasedTabsSize() || destSlotId >= GUILD_BANK_MAX_SLOTS)
         return;
 
     if (tabId == destTabId && slotId == destSlotId)
@@ -2643,7 +2650,7 @@ inline void Guild::_UpdateMemberWithdrawSlots(SQLTransaction& trans, uint64 guid
     {
         uint8 rankId = member->GetRankId();
         if (rankId != GR_GUILDMASTER
-            && member->GetBankWithdrawValue(tabId) < _GetRankBankTabSlotsPerDay(rankId, tabId))
+                && member->GetBankWithdrawValue(tabId) < _GetRankBankTabSlotsPerDay(rankId, tabId))
             member->UpdateBankWithdrawValue(trans, tabId, 1);
     }
 }
@@ -2881,11 +2888,11 @@ void Guild::_BroadcastEvent(GuildEvents guildEvent, uint64 guid, const char* par
 
     BroadcastPacket(&data);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-   LOG_DEBUG("guild", "SMSG_GUILD_EVENT [Broadcast] Event: %u", guildEvent);
+    LOG_DEBUG("guild", "SMSG_GUILD_EVENT [Broadcast] Event: %u", guildEvent);
 #endif
 }
 
-void Guild::_SendBankList(WorldSession* session /* = NULL*/, uint8 tabId /*= 0*/, bool sendAllSlots /*= false*/, SlotIds *slots /*= NULL*/) const
+void Guild::_SendBankList(WorldSession* session /* = NULL*/, uint8 tabId /*= 0*/, bool sendAllSlots /*= false*/, SlotIds* slots /*= NULL*/) const
 {
     WorldPacket data(SMSG_GUILD_BANK_LIST, 500);
     data << uint64(m_bankMoney);
@@ -2923,8 +2930,8 @@ void Guild::_SendBankList(WorldSession* session /* = NULL*/, uint8 tabId /*= 0*/
         data.put<uint32>(rempos, numSlots);
         session->SendPacket(&data);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-       LOG_DEBUG("guild", "SMSG_GUILD_BANK_LIST [%s]: TabId: %u, FullSlots: %u, slots: %d",
-                       session->GetPlayerInfo().c_str(), tabId, sendAllSlots, numSlots);
+        LOG_DEBUG("guild", "SMSG_GUILD_BANK_LIST [%s]: TabId: %u, FullSlots: %u, slots: %d",
+                  session->GetPlayerInfo().c_str(), tabId, sendAllSlots, numSlots);
 #endif
     }
     else // TODO - Probably this is just sent to session + those that have sent CMSG_GUILD_BANKER_ACTIVATE
@@ -2941,8 +2948,8 @@ void Guild::_SendBankList(WorldSession* session /* = NULL*/, uint8 tabId /*= 0*/
             data.put<uint32>(rempos, numSlots);
             player->GetSession()->SendPacket(&data);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-           LOG_DEBUG("guild", "SMSG_GUILD_BANK_LIST [%s]: TabId: %u, FullSlots: %u, slots: %u"
-                , player->GetName().c_str(), tabId, sendAllSlots, numSlots);
+            LOG_DEBUG("guild", "SMSG_GUILD_BANK_LIST [%s]: TabId: %u, FullSlots: %u, slots: %u"
+                      , player->GetName().c_str(), tabId, sendAllSlots, numSlots);
 #endif
         }
     }
