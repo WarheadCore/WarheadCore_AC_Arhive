@@ -210,6 +210,7 @@ void CharacterDatabaseConnection::DoPrepareStatements()
 
     // 0: uint32, 1: uint32, 2: uint32
     PrepareStatement(CHAR_SEL_CHAR_DATA_FOR_GUILD, "SELECT name, level, class, zone, account FROM characters WHERE guid = ?", CONNECTION_SYNCH);
+    PrepareStatement(CHAR_SEL_GUILD_MEMBER, "SELECT guildid, `rank` FROM guild_member WHERE guid = ?", CONNECTION_BOTH);
 
     // Chat channel handling
     PrepareStatement(CHAR_INS_CHANNEL, "INSERT INTO channels(channelId, name, team, announce, lastUsed) VALUES (?, ?, ?, ?, UNIX_TIMESTAMP())", CONNECTION_ASYNC);

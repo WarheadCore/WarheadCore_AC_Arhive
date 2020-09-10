@@ -202,6 +202,10 @@ bool LoginQueryHolder::Initialize()
     stmt->setUInt32(0, m_accountId);
     res &= SetPreparedQuery(PLAYER_LOGIN_QUERY_LOAD_INSTANCE_LOCK_TIMES, stmt);
 
+    stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_GUILD_MEMBER);
+    stmt->setUInt64(0, lowGuid);
+    res &= SetPreparedQuery(PLAYER_LOGIN_QUERY_LOAD_GUILD, stmt);
+
     return res;
 }
 
@@ -934,29 +938,20 @@ void WorldSession::HandlePlayerLoginFromDB(LoginQueryHolder* holder)
 #endif
     }
 
-    if (uint32 guildId = Player::GetGuildIdFromStorage(pCurrChar->GetGUIDLow()))
+    if (PreparedQueryResult resultGuild = holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOAD_GUILD))
     {
-        Guild* guild = sGuildMgr->GetGuildById(guildId);
-        Guild::Member const* member = guild ? guild->GetMember(pCurrChar->GetGUID()) : nullptr;
-        if (member)
-        {
-            pCurrChar->SetInGuild(guildId);
-            pCurrChar->SetRank(member->GetRankId());
+        Field* fields = resultGuild->Fetch();
+        pCurrChar->SetInGuild(fields[0].GetUInt32());
+        pCurrChar->SetRank(fields[1].GetUInt8());
+
+        if (Guild* guild = sGuildMgr->GetGuildById(pCurrChar->GetGuildId()))
             guild->SendLoginInfo(this);
-        }
-        else
-        {
-            LOG_ERROR("server", "Player %s (GUID: %u) marked as member of not existing guild (id: %u), removing guild membership for player.", pCurrChar->GetName().c_str(), pCurrChar->GetGUIDLow(), guildId);
-            pCurrChar->SetInGuild(0);
-            pCurrChar->SetRank(0);
-        }
     }
     else
     {
         pCurrChar->SetInGuild(0);
         pCurrChar->SetRank(0);
     }
-
 
     data.Initialize(SMSG_LEARNED_DANCE_MOVES, 4+4);
     data << uint32(0);
