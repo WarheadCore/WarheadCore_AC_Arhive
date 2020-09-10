@@ -242,7 +242,6 @@ char const* Field::GetCString() const
     }
 #endif
     return static_cast<char const*>(data.value);
-
 }
 
 std::string Field::GetString() const
