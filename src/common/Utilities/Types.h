@@ -20,7 +20,7 @@
 
 #include "advstd.h"
 
-namespace Warhead
+namespace warhead
 {
     // end "iterator" tag for find_type_if
     struct find_type_end;
