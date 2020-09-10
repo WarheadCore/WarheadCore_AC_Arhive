@@ -259,7 +259,20 @@ std::string Field::GetString() const
 
         return std::string(string, data.length);
     }
+
     return std::string((char*)data.value);
+}
+
+std::string_view Field::GetStringView() const
+{
+    if (!data.value)
+        return {};
+
+    char const* const string = GetCString();
+    if (!string)
+        return {};
+
+    return { string, data.length };
 }
 
 bool Field::IsNull() const

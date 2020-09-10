@@ -20,7 +20,7 @@
 
 #include "Common.h"
 #include "Log.h"
-
+#include <string_view>
 #include <mysql.h>
 
 class WH_DATABASE_API Field
@@ -43,6 +43,7 @@ class WH_DATABASE_API Field
         double GetDouble() const;
         char const* GetCString() const;
         std::string GetString() const;
+        std::string_view GetStringView() const;
         bool IsNull() const;
 
     protected:
@@ -73,22 +74,8 @@ class WH_DATABASE_API Field
         void CleanUp();
 
         static size_t SizeForType(MYSQL_FIELD* field);
-
-        bool IsType(enum_field_types type) const
-        {
-            return data.type == type;
-        }
-
-        bool IsNumeric() const
-        {
-            return (data.type == MYSQL_TYPE_TINY ||
-                    data.type == MYSQL_TYPE_SHORT ||
-                    data.type == MYSQL_TYPE_INT24 ||
-                    data.type == MYSQL_TYPE_LONG ||
-                    data.type == MYSQL_TYPE_FLOAT ||
-                    data.type == MYSQL_TYPE_DOUBLE ||
-                    data.type == MYSQL_TYPE_LONGLONG );
-        }
+        bool IsType(enum_field_types type) const;
+        bool IsNumeric() const;
 
     private:
         
