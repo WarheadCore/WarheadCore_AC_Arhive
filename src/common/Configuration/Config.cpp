@@ -20,9 +20,11 @@
 #include "Log.h"
 #include "SystemLog.h"
 #include "Util.h"
+#include "StringConvert.h"
 #include <ace/Configuration_Import_Export.h>
 #include <memory>
 #include <mutex>
+#include <optional>
 
 namespace
 {
@@ -140,7 +142,14 @@ bool ConfigMgr::GetBoolDefault(std::string const& name, bool def, bool logUnused
         return def;
     }
 
-    return StringToBool(val.c_str());
+    std::optional<bool> boolVal = warhead::StringTo<bool>(val.c_str());
+    if (boolVal)
+        return *boolVal;
+    else
+    {
+        LOG_ERROR("server", "Bad value defined for name %s, going to use '%s' instead", name.c_str(), def ? "true" : "false");
+        return def;
+    }
 }
 
 int ConfigMgr::GetIntDefault(std::string const& name, int def, bool logUnused /*= true*/)

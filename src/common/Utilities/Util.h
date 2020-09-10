@@ -38,7 +38,7 @@ template<typename T, class S> struct Finder
     T S::* idMember_;
 
     Finder(T val, T S::* idMember) : val_(val), idMember_(idMember) {}
-    bool operator()(const std::pair<int, S> &obj) { return obj.second.*idMember_ == val_; }
+    bool operator()(const std::pair<int, S>& obj) { return obj.second.*idMember_ == val_; }
 };
 
 class WH_COMMON_API Tokenizer
@@ -74,7 +74,7 @@ WH_COMMON_API time_t LocalTimeToUTCTime(time_t time);
 WH_COMMON_API time_t GetLocalHourTimestamp(time_t time, uint8 hour, bool onlyAfterTime = true);
 WH_COMMON_API tm TimeBreakdown(time_t t);
 
-WH_COMMON_API void stripLineInvisibleChars(std::string &src);
+WH_COMMON_API void stripLineInvisibleChars(std::string& src);
 WH_COMMON_API int32 MoneyStringToMoney(const std::string& moneyString);
 WH_COMMON_API std::string secsToTimeString(uint64 timeInSecs, bool shortText = false);
 WH_COMMON_API uint32 TimeStringToSecs(const std::string& timestring);
@@ -131,13 +131,13 @@ inline T CalculatePct(T base, U pct)
 }
 
 template <class T, class U>
-inline T AddPct(T &base, U pct)
+inline T AddPct(T& base, U pct)
 {
     return base += CalculatePct(base, pct);
 }
 
 template <class T, class U>
-inline T ApplyPct(T &base, U pct)
+inline T ApplyPct(T& base, U pct)
 {
     return base = CalculatePct(base, pct);
 }
@@ -230,12 +230,12 @@ inline bool isEastAsianCharacter(wchar_t wchar)
 
 inline bool isNumeric(wchar_t wchar)
 {
-    return (wchar >= L'0' && wchar <=L'9');
+    return (wchar >= L'0' && wchar <= L'9');
 }
 
 inline bool isNumeric(char c)
 {
-    return (c >= '0' && c <='9');
+    return (c >= '0' && c <= '9');
 }
 
 inline bool isNumeric(char const* str)
@@ -287,20 +287,20 @@ inline bool isEastAsianString(std::wstring_view wstr, bool numericOrSpace)
 inline wchar_t wcharToUpper(wchar_t wchar)
 {
     if (wchar >= L'a' && wchar <= L'z')                      // LATIN SMALL LETTER A - LATIN SMALL LETTER Z
-        return wchar_t(uint16(wchar)-0x0020);
+        return wchar_t(uint16(wchar) - 0x0020);
     if (wchar == 0x00DF)                                     // LATIN SMALL LETTER SHARP S
         return wchar_t(0x1E9E);
     if (wchar >= 0x00E0 && wchar <= 0x00F6)                  // LATIN SMALL LETTER A WITH GRAVE - LATIN SMALL LETTER O WITH DIAERESIS
-        return wchar_t(uint16(wchar)-0x0020);
+        return wchar_t(uint16(wchar) - 0x0020);
     if (wchar >= 0x00F8 && wchar <= 0x00FE)                  // LATIN SMALL LETTER O WITH STROKE - LATIN SMALL LETTER THORN
-        return wchar_t(uint16(wchar)-0x0020);
+        return wchar_t(uint16(wchar) - 0x0020);
     if (wchar >= 0x0101 && wchar <= 0x012F)                  // LATIN SMALL LETTER A WITH MACRON - LATIN SMALL LETTER I WITH OGONEK (only %2=1)
     {
         if (wchar % 2 == 1)
-            return wchar_t(uint16(wchar)-0x0001);
+            return wchar_t(uint16(wchar) - 0x0001);
     }
     if (wchar >= 0x0430 && wchar <= 0x044F)                  // CYRILLIC SMALL LETTER A - CYRILLIC SMALL LETTER YA
-        return wchar_t(uint16(wchar)-0x0020);
+        return wchar_t(uint16(wchar) - 0x0020);
     if (wchar == 0x0451)                                     // CYRILLIC SMALL LETTER IO
         return wchar_t(0x0401);
 
@@ -315,22 +315,22 @@ inline wchar_t wcharToUpperOnlyLatin(wchar_t wchar)
 inline wchar_t wcharToLower(wchar_t wchar)
 {
     if (wchar >= L'A' && wchar <= L'Z')                      // LATIN CAPITAL LETTER A - LATIN CAPITAL LETTER Z
-        return wchar_t(uint16(wchar)+0x0020);
+        return wchar_t(uint16(wchar) + 0x0020);
     if (wchar >= 0x00C0 && wchar <= 0x00D6)                  // LATIN CAPITAL LETTER A WITH GRAVE - LATIN CAPITAL LETTER O WITH DIAERESIS
-        return wchar_t(uint16(wchar)+0x0020);
+        return wchar_t(uint16(wchar) + 0x0020);
     if (wchar >= 0x00D8 && wchar <= 0x00DE)                  // LATIN CAPITAL LETTER O WITH STROKE - LATIN CAPITAL LETTER THORN
-        return wchar_t(uint16(wchar)+0x0020);
+        return wchar_t(uint16(wchar) + 0x0020);
     if (wchar >= 0x0100 && wchar <= 0x012E)                  // LATIN CAPITAL LETTER A WITH MACRON - LATIN CAPITAL LETTER I WITH OGONEK (only %2=0)
     {
         if (wchar % 2 == 0)
-            return wchar_t(uint16(wchar)+0x0001);
+            return wchar_t(uint16(wchar) + 0x0001);
     }
     if (wchar == 0x1E9E)                                     // LATIN CAPITAL LETTER SHARP S
         return wchar_t(0x00DF);
     if (wchar == 0x0401)                                     // CYRILLIC CAPITAL LETTER IO
         return wchar_t(0x0451);
     if (wchar >= 0x0410 && wchar <= 0x042F)                  // CYRILLIC CAPITAL LETTER A - CYRILLIC CAPITAL LETTER YA
-        return wchar_t(uint16(wchar)+0x0020);
+        return wchar_t(uint16(wchar) + 0x0020);
 
     return wchar;
 }
@@ -348,8 +348,8 @@ WH_COMMON_API std::wstring GetMainPartOfName(std::wstring const& wname, uint32 d
 WH_COMMON_API bool utf8ToConsole(std::string_view utf8str, std::string& conStr);
 WH_COMMON_API bool consoleToUtf8(std::string_view conStr, std::string& utf8str);
 WH_COMMON_API bool Utf8FitTo(std::string_view str, std::wstring_view search);
-WH_COMMON_API void utf8printf(FILE* out, const char *str, ...);
-WH_COMMON_API void vutf8printf(FILE* out, const char *str, va_list* ap);
+WH_COMMON_API void utf8printf(FILE* out, const char* str, ...);
+WH_COMMON_API void vutf8printf(FILE* out, const char* str, va_list* ap);
 WH_COMMON_API bool Utf8ToUpperOnlyLatin(std::string& utf8String);
 
 WH_COMMON_API bool IsIPAddress(char const* ipaddress);
@@ -365,7 +365,6 @@ WH_COMMON_API uint32 GetPID();
 
 WH_COMMON_API std::string ByteArrayToHexStr(uint8 const* bytes, uint32 length, bool reverse = false);
 WH_COMMON_API void HexStrToByteArray(std::string_view str, uint8* out, bool reverse = false);
-WH_COMMON_API bool StringToBool(std::string_view str);
 WH_COMMON_API bool StringEqualI(std::string_view str1, std::string_view str2);
 WH_COMMON_API bool StringStartsWith(std::string_view haystack, std::string_view needle);
 
@@ -386,31 +385,31 @@ template <typename T>
 class HookList
 {
     typedef typename std::list<T>::iterator ListIterator;
-    private:
-        typename std::list<T> m_list;
-    public:
-        HookList<T> & operator+=(T t)
-        {
-            m_list.push_back(t);
-            return *this;
-        }
-        HookList<T> & operator-=(T t)
-        {
-            m_list.remove(t);
-            return *this;
-        }
-        size_t size()
-        {
-            return m_list.size();
-        }
-        ListIterator begin()
-        {
-            return m_list.begin();
-        }
-        ListIterator end()
-        {
-            return m_list.end();
-        }
+private:
+    typename std::list<T> m_list;
+public:
+    HookList<T>& operator+=(T t)
+    {
+        m_list.push_back(t);
+        return *this;
+    }
+    HookList<T>& operator-=(T t)
+    {
+        m_list.remove(t);
+        return *this;
+    }
+    size_t size()
+    {
+        return m_list.size();
+    }
+    ListIterator begin()
+    {
+        return m_list.begin();
+    }
+    ListIterator end()
+    {
+        return m_list.end();
+    }
 };
 
 class WH_COMMON_API flag96
@@ -458,11 +457,11 @@ public:
     inline bool operator==(flag96 const& right) const
     {
         return
-        (
-            part[0] == right.part[0] &&
-            part[1] == right.part[1] &&
-            part[2] == right.part[2]
-        );
+            (
+                part[0] == right.part[0] &&
+                part[1] == right.part[1] &&
+                part[2] == right.part[2]
+            );
     }
 
     inline bool operator!=(flag96 const& right) const
@@ -478,10 +477,10 @@ public:
         return *this;
     }
     /* requried as of C++ 11 */
-    #if __cplusplus >= 201103L
+#if __cplusplus >= 201103L
     flag96(const flag96&) = default;
     flag96(flag96&&) = default;
-    #endif
+#endif
 
     inline flag96 operator&(flag96 const& right) const
     {
