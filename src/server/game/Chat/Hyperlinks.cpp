@@ -150,9 +150,9 @@ struct LinkValidator<LinkTags::item>
             if (randomSuffix)
             {
                 if (len > name.length() + 1 &&
-                  (strncmp(name.c_str(), pos, name.length()) == 0) &&
-                  (*(pos + name.length()) == ' ') &&
-                  equal_with_len(randomSuffix[i], pos + name.length() + 1, len - name.length() - 1))
+                        (strncmp(name.c_str(), pos, name.length()) == 0) &&
+                        (*(pos + name.length()) == ' ') &&
+                        equal_with_len(randomSuffix[i], pos + name.length() + 1, len - name.length() - 1))
                     return true;
             }
             else if (equal_with_len(name.c_str(), pos, len))
@@ -236,8 +236,8 @@ struct LinkValidator<LinkTags::enchant>
                 char const* skillName = skill->name[i];
                 size_t skillLen = strlen(skillName);
                 if (len > skillLen + 2 &&                         // or of form [Skill Name: Spell Name]
-                    !strncmp(pos, skillName, skillLen) && !strncmp(pos + skillLen, ": ", 2) &&
-                    equal_with_len(info->SpellName[i], pos + (skillLen + 2), len - (skillLen + 2)))
+                        !strncmp(pos, skillName, skillLen) && !strncmp(pos + skillLen, ": ", 2) &&
+                        equal_with_len(info->SpellName[i], pos + (skillLen + 2), len - (skillLen + 2)))
                     return true;
             }
         }

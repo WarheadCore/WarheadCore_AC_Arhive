@@ -25,7 +25,7 @@ static constexpr char HYPERLINK_DATA_DELIMITER = ':';
 
 class HyperlinkDataTokenizer
 {
-    public:
+public:
     HyperlinkDataTokenizer(char const* pos, size_t len) : _pos(pos), _len(len), _empty(false) {}
 
     template <typename T>
@@ -48,7 +48,7 @@ class HyperlinkDataTokenizer
 
     bool IsEmpty() { return _empty; }
 
-    private:
+private:
     char const* _pos;
     size_t _len;
     bool _empty;
@@ -62,8 +62,8 @@ bool acore::Hyperlinks::LinkTags::achievement::StoreTo(AchievementLinkData& val,
         return false;
     val.Achievement = sAchievementStore.LookupEntry(achievementId);
     return val.Achievement && t.TryConsumeTo(val.CharacterId) && t.TryConsumeTo(val.IsFinished) &&
-        t.TryConsumeTo(val.Month) && t.TryConsumeTo(val.Day) && t.TryConsumeTo(val.Year) && t.TryConsumeTo(val.Criteria[0]) &&
-        t.TryConsumeTo(val.Criteria[1]) && t.TryConsumeTo(val.Criteria[2]) && t.TryConsumeTo(val.Criteria[3]) && t.IsEmpty();
+           t.TryConsumeTo(val.Month) && t.TryConsumeTo(val.Day) && t.TryConsumeTo(val.Year) && t.TryConsumeTo(val.Criteria[0]) &&
+           t.TryConsumeTo(val.Criteria[1]) && t.TryConsumeTo(val.Criteria[2]) && t.TryConsumeTo(val.Criteria[3]) && t.IsEmpty();
 }
 
 bool acore::Hyperlinks::LinkTags::enchant::StoreTo(SpellInfo const*& val, char const* pos, size_t len)
@@ -96,8 +96,8 @@ bool acore::Hyperlinks::LinkTags::item::StoreTo(ItemLinkData& val, char const* p
         return false;
     val.Item = sObjectMgr->GetItemTemplate(itemId);
     return val.Item && t.TryConsumeTo(val.EnchantId) && t.TryConsumeTo(val.GemEnchantId[0]) && t.TryConsumeTo(val.GemEnchantId[1]) &&
-        t.TryConsumeTo(val.GemEnchantId[2]) && t.TryConsumeTo(dummy) && t.TryConsumeTo(val.RandomPropertyId) && t.TryConsumeTo(val.RandomPropertySeed) &&
-        t.TryConsumeTo(val.RenderLevel) && t.IsEmpty() && !dummy;
+           t.TryConsumeTo(val.GemEnchantId[2]) && t.TryConsumeTo(dummy) && t.TryConsumeTo(val.RandomPropertyId) && t.TryConsumeTo(val.RandomPropertySeed) &&
+           t.TryConsumeTo(val.RenderLevel) && t.IsEmpty() && !dummy;
 }
 
 bool acore::Hyperlinks::LinkTags::quest::StoreTo(QuestLinkData& val, char const* pos, size_t len)
@@ -127,7 +127,7 @@ bool acore::Hyperlinks::LinkTags::talent::StoreTo(TalentLinkData& val, char cons
         return false;
     if (rank < -1 || rank > 4)
         return false;
-    val.Rank = rank+1;
+    val.Rank = rank + 1;
     if (!(val.Talent = sTalentStore.LookupEntry(talentId)))
         return false;
     if (val.Rank > 0 && !val.Talent->RankID[val.Rank - 1])
@@ -143,5 +143,5 @@ bool acore::Hyperlinks::LinkTags::trade::StoreTo(TradeskillLinkData& val, char c
         return false;
     val.Spell = sSpellMgr->GetSpellInfo(spellId);
     return (val.Spell && val.Spell->Effects[0].Effect == SPELL_EFFECT_TRADE_SKILL && t.TryConsumeTo(val.CurValue) &&
-        t.TryConsumeTo(val.MaxValue) && t.TryConsumeTo(val.Owner) && t.TryConsumeTo(val.KnownRecipes) && t.IsEmpty());
+            t.TryConsumeTo(val.MaxValue) && t.TryConsumeTo(val.Owner) && t.TryConsumeTo(val.KnownRecipes) && t.IsEmpty());
 }
