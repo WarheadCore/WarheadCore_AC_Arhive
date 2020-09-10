@@ -51,6 +51,8 @@
 #include "GameConfig.h"
 #include "GameLocale.h"
 #include "Metric.h"
+#include "Chat.h"
+#include "Hyperlinks.h"
 
 namespace {
 
@@ -631,6 +633,21 @@ void WorldSession::KickPlayer(std::string const& reason, bool setKicked)
     if (setKicked)
         SetKicked(true); // pussywizard: the session won't be left ingame for 60 seconds and to also kick offline session
 }
+
+bool WorldSession::ValidateHyperlinksAndMaybeKick(std::string const& str)
+{
+    if (acore::Hyperlinks::CheckAllLinks(str.c_str()))
+        return true;
+
+    LOG_ERROR("network", "Player %s (GUID: %u) sent a message with an invalid link:\n%s", GetPlayer()->GetName().c_str(),
+        GetPlayer()->GetGUID(), str.c_str());
+
+    if (sGameConfig->GetIntConfig("ChatStrictLinkChecking.Kick"))
+        KickPlayer();
+
+    return false;
+}
+
 
 void WorldSession::SendNotification(const char *format, ...)
 {

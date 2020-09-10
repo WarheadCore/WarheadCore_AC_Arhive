@@ -159,7 +159,7 @@ void WorldSession::HandleArenaTeamInviteOpcode(WorldPacket & recvData)
 
     //check for fake packets and bad addons that cause client to crash
     std::string arenaTeamName = arenaTeam->GetName();
-    if (!ChatHandler(this).isValidChatMessage(arenaTeamName.c_str()))
+    if (!ValidateHyperlinksAndMaybeKick(arenaTeamName))
         return;
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)

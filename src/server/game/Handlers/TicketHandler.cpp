@@ -65,6 +65,12 @@ void WorldSession::HandleGMTicketCreateOpcode(WorldPacket& recvData)
         recvData >> x >> y >> z;
         recvData >> message;
 
+        if (!ValidateHyperlinksAndMaybeKick(message))
+        {
+            recvData.rfinish();
+            return;
+        }
+
         recvData >> needResponse;
         recvData >> needMoreHelp;
 
@@ -100,6 +106,9 @@ void WorldSession::HandleGMTicketCreateOpcode(WorldPacket& recvData)
             recvData.rfinish(); // Will still have compressed data in buffer.
         }
 
+        if (!chatLog.empty() && !ValidateHyperlinksAndMaybeKick(chatLog))
+            return;
+
         ticket = new GmTicket(GetPlayer());
         ticket->SetPosition(mapId, x, y, z);
         ticket->SetMessage(message);
@@ -125,6 +134,9 @@ void WorldSession::HandleGMTicketUpdateOpcode(WorldPacket & recv_data)
 {
     std::string message;
     recv_data >> message;
+
+    if (!ValidateHyperlinksAndMaybeKick(message))
+        return;
 
     GMTicketResponse response = GMTICKET_RESPONSE_UPDATE_ERROR;
     if (GmTicket* ticket = sTicketMgr->GetTicketByPlayer(GetPlayer()->GetGUID()))
@@ -208,6 +220,9 @@ void WorldSession::HandleGMSurveySubmit(WorldPacket& recv_data)
         if (!surveyIds.insert(subSurveyId).second)
             continue;
 
+        if (!ValidateHyperlinksAndMaybeKick(comment))
+            return;
+
         PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_GM_SUBSURVEY);
         stmt->setUInt32(0, nextSurveyID);
         stmt->setUInt32(1, subSurveyId);
@@ -218,6 +233,9 @@ void WorldSession::HandleGMSurveySubmit(WorldPacket& recv_data)
 
     std::string comment; // just a guess
     recv_data >> comment;
+
+    if (!ValidateHyperlinksAndMaybeKick(comment))
+        return;
 
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_GM_SURVEY);
     stmt->setUInt32(0, GUID_LOPART(GetPlayer()->GetGUID()));

@@ -221,7 +221,7 @@ void WorldSession::HandleSendMail(WorldPacket & recvData)
     }
 
     //check for fake packets and bad addons that cause client to crash
-    if (!ChatHandler(this).isValidChatMessage(subject.c_str()) || !ChatHandler(this).isValidChatMessage(body.c_str()))
+    if (!ValidateHyperlinksAndMaybeKick(subject) || !ValidateHyperlinksAndMaybeKick(body))
         return;
 
     Item* items[MAX_MAIL_ITEMS];

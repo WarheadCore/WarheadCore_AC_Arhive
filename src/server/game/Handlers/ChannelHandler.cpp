@@ -56,6 +56,9 @@ void WorldSession::HandleJoinChannel(WorldPacket& recvPacket)
     if (channelName.find("|") != std::string::npos || channelName.size() >= 100 || !utf8::is_valid(channelName.begin(), channelName.end()))
         return;
 
+    if (!ValidateHyperlinksAndMaybeKick(channelName))
+        return;
+
     if (ChannelMgr* cMgr = ChannelMgr::forTeam(GetPlayer()->GetTeamId()))
     {
         if (Channel* channel = cMgr->GetJoinChannel(channelName, channelId))
@@ -70,7 +73,7 @@ void WorldSession::HandleLeaveChannel(WorldPacket& recvPacket)
     recvPacket >> unk >> channelName;
 
     //check for fake packets and bad addons that cause client to crash
-    if (!ChatHandler(this).isValidChatMessage(channelName.c_str()))
+    if (!ValidateHyperlinksAndMaybeKick(channelName))
         return;
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
@@ -93,7 +96,7 @@ void WorldSession::HandleChannelList(WorldPacket& recvPacket)
     recvPacket >> channelName;
 
     //check for fake packets and bad addons that cause client to crash
-    if (!ChatHandler(this).isValidChatMessage(channelName.c_str()))
+    if (!ValidateHyperlinksAndMaybeKick(channelName))
         return;
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
@@ -112,7 +115,7 @@ void WorldSession::HandleChannelPassword(WorldPacket& recvPacket)
     recvPacket >> channelName >> password;
 
     //check for fake packets and bad addons that cause client to crash
-    if (!ChatHandler(this).isValidChatMessage(channelName.c_str()))
+    if (!ValidateHyperlinksAndMaybeKick(channelName))
         return;
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
@@ -133,7 +136,7 @@ void WorldSession::HandleChannelSetOwner(WorldPacket& recvPacket)
     recvPacket >> channelName >> targetName;
 
     //check for fake packets and bad addons that cause client to crash
-    if (!ChatHandler(this).isValidChatMessage(channelName.c_str()))
+    if (!ValidateHyperlinksAndMaybeKick(channelName))
         return;
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
@@ -154,7 +157,7 @@ void WorldSession::HandleChannelOwner(WorldPacket& recvPacket)
     recvPacket >> channelName;
 
     //check for fake packets and bad addons that cause client to crash
-    if (!ChatHandler(this).isValidChatMessage(channelName.c_str()))
+    if (!ValidateHyperlinksAndMaybeKick(channelName))
         return;
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
@@ -172,7 +175,7 @@ void WorldSession::HandleChannelModerator(WorldPacket& recvPacket)
     recvPacket >> channelName >> targetName;
 
     //check for fake packets and bad addons that cause client to crash
-    if (!ChatHandler(this).isValidChatMessage(channelName.c_str()))
+    if (!ValidateHyperlinksAndMaybeKick(channelName))
         return;
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
@@ -193,7 +196,7 @@ void WorldSession::HandleChannelUnmoderator(WorldPacket& recvPacket)
     recvPacket >> channelName >> targetName;
 
     //check for fake packets and bad addons that cause client to crash
-    if (!ChatHandler(this).isValidChatMessage(channelName.c_str()))
+    if (!ValidateHyperlinksAndMaybeKick(channelName))
         return;
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
@@ -214,7 +217,7 @@ void WorldSession::HandleChannelMute(WorldPacket& recvPacket)
     recvPacket >> channelName >> targetName;
 
     //check for fake packets and bad addons that cause client to crash
-    if (!ChatHandler(this).isValidChatMessage(channelName.c_str()))
+    if (!ValidateHyperlinksAndMaybeKick(channelName))
         return;
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
@@ -235,7 +238,7 @@ void WorldSession::HandleChannelUnmute(WorldPacket& recvPacket)
     recvPacket >> channelName >> targetName;
 
     //check for fake packets and bad addons that cause client to crash
-    if (!ChatHandler(this).isValidChatMessage(channelName.c_str()))
+    if (!ValidateHyperlinksAndMaybeKick(channelName))
         return;
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
@@ -256,7 +259,7 @@ void WorldSession::HandleChannelInvite(WorldPacket& recvPacket)
     recvPacket >> channelName >> targetName;
 
     //check for fake packets and bad addons that cause client to crash
-    if (!ChatHandler(this).isValidChatMessage(channelName.c_str()))
+    if (!ValidateHyperlinksAndMaybeKick(channelName))
         return;
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
@@ -277,7 +280,7 @@ void WorldSession::HandleChannelKick(WorldPacket& recvPacket)
     recvPacket >> channelName >> targetName;
 
     //check for fake packets and bad addons that cause client to crash
-    if (!ChatHandler(this).isValidChatMessage(channelName.c_str()))
+    if (!ValidateHyperlinksAndMaybeKick(channelName))
         return;
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
@@ -298,7 +301,7 @@ void WorldSession::HandleChannelBan(WorldPacket& recvPacket)
     recvPacket >> channelName >> targetName;
 
     //check for fake packets and bad addons that cause client to crash
-    if (!ChatHandler(this).isValidChatMessage(channelName.c_str()))
+    if (!ValidateHyperlinksAndMaybeKick(channelName))
         return;
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
@@ -319,7 +322,7 @@ void WorldSession::HandleChannelUnban(WorldPacket& recvPacket)
     recvPacket >> channelName >> targetName;
 
     //check for fake packets and bad addons that cause client to crash
-    if (!ChatHandler(this).isValidChatMessage(channelName.c_str()))
+    if (!ValidateHyperlinksAndMaybeKick(channelName))
         return;
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
@@ -340,7 +343,7 @@ void WorldSession::HandleChannelAnnouncements(WorldPacket& recvPacket)
     recvPacket >> channelName;
 
     //check for fake packets and bad addons that cause client to crash
-    if (!ChatHandler(this).isValidChatMessage(channelName.c_str()))
+    if (!ValidateHyperlinksAndMaybeKick(channelName))
         return;
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
@@ -364,7 +367,7 @@ void WorldSession::HandleGetChannelMemberCount(WorldPacket &recvPacket)
     recvPacket >> channelName;
 
     //check for fake packets and bad addons that cause client to crash
-    if (!ChatHandler(this).isValidChatMessage(channelName.c_str()))
+    if (!ValidateHyperlinksAndMaybeKick(channelName))
         return;
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
@@ -393,7 +396,7 @@ void WorldSession::HandleSetChannelWatch(WorldPacket &recvPacket)
     recvPacket >> channelName;
 
     //check for fake packets and bad addons that cause client to crash
-    if (!ChatHandler(this).isValidChatMessage(channelName.c_str()))
+    if (!ValidateHyperlinksAndMaybeKick(channelName))
         return;
 
     GetPlayer()->ClearChannelWatch();
@@ -412,7 +415,7 @@ void WorldSession::HandleClearChannelWatch(WorldPacket &recvPacket)
     recvPacket >> channelName;
 
     //check for fake packets and bad addons that cause client to crash
-    if (!ChatHandler(this).isValidChatMessage(channelName.c_str()))
+    if (!ValidateHyperlinksAndMaybeKick(channelName))
         return;
 
     if (channelName.empty())
