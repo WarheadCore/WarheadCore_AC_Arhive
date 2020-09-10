@@ -199,23 +199,23 @@ std::optional<int32> MoneyStringToMoney(const std::string& moneyString)
         uint32 unit;
         switch (token[token.length() - 1])
         {
-        case 'g':
-            if (hadG) return std::nullopt;
-            hadG = true;
-            unit = 100 * 100;
-            break;
-        case 's':
-            if (hadS) return std::nullopt;
-            hadS = true;
-            unit = 100;
-            break;
-        case 'c':
-            if (hadC) return std::nullopt;
-            hadC = true;
-            unit = 1;
-            break;
-        default:
-            return std::nullopt;
+            case 'g':
+                if (hadG) return std::nullopt;
+                hadG = true;
+                unit = 100 * 100;
+                break;
+            case 's':
+                if (hadS) return std::nullopt;
+                hadS = true;
+                unit = 100;
+                break;
+            case 'c':
+                if (hadC) return std::nullopt;
+                hadC = true;
+                unit = 1;
+                break;
+            default:
+                return std::nullopt;
         }
 
         std::optional<uint32> amount = warhead::StringTo<uint32>(token.substr(0, token.length() - 1));

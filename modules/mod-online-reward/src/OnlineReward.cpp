@@ -207,7 +207,7 @@ void OnlineReward::SaveRewardDB()
     {
         uint32 lowGuid = itr.first;
 
-        auto GetRewardedData = [&]() -> RewardTimeHistory*
+        auto GetRewardedData = [&]() -> RewardTimeHistory *
         {
             auto const& _historyData = _rewardHistoryDB.find(lowGuid);
             if (_historyData != _rewardHistoryDB.end())
