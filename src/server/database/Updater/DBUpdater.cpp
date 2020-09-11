@@ -51,7 +51,7 @@ bool DBUpdaterUtil::CheckExecutable()
         }
 
         LOG_FATAL("sql.updates", "Didn't find any executable MySQL binary at \'%s\' or in path, correct the path in the *.conf (\"MySQLExecutable\").",
-            absolute(exe).generic_string().c_str());
+                  absolute(exe).generic_string().c_str());
 
         return false;
     }
@@ -171,7 +171,7 @@ template<class T>
 bool DBUpdater<T>::Create(DatabaseWorkerPool<T>& pool)
 {
     LOG_WARN("sql.updates", "Database \"%s\" does not exist, do you want to create it? [yes (default) / no]: ",
-        pool.GetConnectionInfo()->database.c_str());
+             pool.GetConnectionInfo()->database.c_str());
 
     std::string answer;
     std::getline(std::cin, answer);
@@ -198,7 +198,7 @@ bool DBUpdater<T>::Create(DatabaseWorkerPool<T>& pool)
     try
     {
         DBUpdater<T>::ApplyFile(pool, pool.GetConnectionInfo()->host, pool.GetConnectionInfo()->user, pool.GetConnectionInfo()->password,
-            pool.GetConnectionInfo()->port_or_socket, "", temp);
+                                pool.GetConnectionInfo()->port_or_socket, "", temp);
     }
     catch (UpdateException&)
     {
@@ -226,22 +226,22 @@ bool DBUpdater<T>::Update(DatabaseWorkerPool<T>& pool)
     if (!is_directory(sourceDirectory))
     {
         LOG_ERROR("sql.updates", "DBUpdater: The given source directory %s does not exist, change the path to the directory where your sql directory exists (for example c:\\source\\trinitycore). Shutting down.",
-            sourceDirectory.generic_string().c_str());
+                  sourceDirectory.generic_string().c_str());
         return false;
     }
 
-    UpdateFetcher updateFetcher(sourceDirectory, [&](std::string const& query) { DBUpdater<T>::Apply(pool, query); },
-        [&](Path const& file) { DBUpdater<T>::ApplyFile(pool, file); },
-            [&](std::string const& query) -> QueryResult { return DBUpdater<T>::Retrieve(pool, query); }, DBUpdater<T>::GetDBModuleName());
+    UpdateFetcher updateFetcher(sourceDirectory, [&](std::string const & query) { DBUpdater<T>::Apply(pool, query); },
+    [&](Path const & file) { DBUpdater<T>::ApplyFile(pool, file); },
+    [&](std::string const & query) -> QueryResult { return DBUpdater<T>::Retrieve(pool, query); }, DBUpdater<T>::GetDBModuleName());
 
     UpdateResult result;
     try
     {
         result = updateFetcher.Update(
-            sConfigMgr->GetBoolDefault("Updates.Redundancy", true),
-            sConfigMgr->GetBoolDefault("Updates.AllowRehash", true),
-            sConfigMgr->GetBoolDefault("Updates.ArchivedRedundancy", false),
-            sConfigMgr->GetIntDefault("Updates.CleanDeadRefMaxCount", 3));
+                     sConfigMgr->GetBoolDefault("Updates.Redundancy", true),
+                     sConfigMgr->GetBoolDefault("Updates.AllowRehash", true),
+                     sConfigMgr->GetBoolDefault("Updates.ArchivedRedundancy", false),
+                     sConfigMgr->GetIntDefault("Updates.CleanDeadRefMaxCount", 3));
     }
     catch (UpdateException&)
     {
@@ -249,7 +249,7 @@ bool DBUpdater<T>::Update(DatabaseWorkerPool<T>& pool)
     }
 
     std::string const info = warhead::StringFormat("Containing " SZFMTD " new and " SZFMTD " archived updates.",
-        result.recent, result.archived);
+                             result.recent, result.archived);
 
     if (!result.updated)
         LOG_INFO("sql.updates", ">> %s database is up-to-date! %s", DBUpdater<T>::GetTableName().c_str(), info.c_str());
@@ -291,7 +291,7 @@ bool DBUpdater<T>::Populate(DatabaseWorkerPool<T>& pool)
     }
 
     boost::filesystem::directory_iterator const DirItr;
-    uint32 FilesCount = 0;    
+    uint32 FilesCount = 0;
 
     for (boost::filesystem::directory_iterator itr(DirPath); itr != DirItr; ++itr)
     {
@@ -343,12 +343,12 @@ template<class T>
 void DBUpdater<T>::ApplyFile(DatabaseWorkerPool<T>& pool, Path const& path)
 {
     DBUpdater<T>::ApplyFile(pool, pool.GetConnectionInfo()->host, pool.GetConnectionInfo()->user, pool.GetConnectionInfo()->password,
-        pool.GetConnectionInfo()->port_or_socket, pool.GetConnectionInfo()->database, path);
+                            pool.GetConnectionInfo()->port_or_socket, pool.GetConnectionInfo()->database, path);
 }
 
 template<class T>
 void DBUpdater<T>::ApplyFile(DatabaseWorkerPool<T>& pool, std::string const& host, std::string const& user,
-    std::string const& password, std::string const& port_or_socket, std::string const& database, Path const& path)
+                             std::string const& password, std::string const& port_or_socket, std::string const& database, Path const& path)
 {
     std::vector<std::string> args;
     args.reserve(8);
@@ -391,16 +391,16 @@ void DBUpdater<T>::ApplyFile(DatabaseWorkerPool<T>& pool, std::string const& hos
 
     // Invokes a mysql process which doesn't leak credentials to logs
     int const ret = warhead::StartProcess(DBUpdaterUtil::GetCorrectedMySQLExecutable(), args,
-                                 "sql.updates", path.generic_string(), true);
+                                          "sql.updates", path.generic_string(), true);
 
     if (ret != EXIT_SUCCESS)
     {
         LOG_FATAL("sql.updates", "Applying of file \'%s\' to database \'%s\' failed!" \
-            /*" If you are a user, please pull the latest revision from the repository. "
-            "Also make sure you have not applied any of the databases with your sql client. "
-            "You cannot use auto-update system and import sql files from TrinityCore repository with your sql client. "
-            "If you are a developer, please fix your sql query."*/,
-            path.generic_string().c_str(), pool.GetConnectionInfo()->database.c_str());
+                  /*" If you are a user, please pull the latest revision from the repository. "
+                  "Also make sure you have not applied any of the databases with your sql client. "
+                  "You cannot use auto-update system and import sql files from TrinityCore repository with your sql client. "
+                  "If you are a developer, please fix your sql query."*/,
+                  path.generic_string().c_str(), pool.GetConnectionInfo()->database.c_str());
 
         throw UpdateException("update failed");
     }

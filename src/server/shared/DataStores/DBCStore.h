@@ -23,7 +23,7 @@
 #include "Errors.h"
 #include <vector>
 
- /// Interface class for common access
+/// Interface class for common access
 class WH_SHARED_API DBCStorageBase
 {
 public:

@@ -1448,7 +1448,7 @@ public:
             if( DoNeedCleanup(true) )
                 InstanceCleanup();
 
-            // if missing spawn anub'arak 
+            // if missing spawn anub'arak
             SpawnAnubArak();
 
             events.RescheduleEvent(EVENT_CHECK_PLAYERS, CLEANUP_CHECK_INTERVAL);
@@ -1661,8 +1661,8 @@ public:
                     uint32 data1 = 0, data2 = 0, data3 = 0;
                     loadStream >> data1 >> data2 >> data3;
                     AttemptsLeft = data1;
-                    bDedicatedInsanity = data2 ? true : false;
-                    bNooneDied = data3 ? true : false;
+                    bDedicatedInsanity = !!data2;
+                    bNooneDied = !!data3;
                 }
             }
             else

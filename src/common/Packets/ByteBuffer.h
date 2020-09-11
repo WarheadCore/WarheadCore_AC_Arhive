@@ -20,6 +20,7 @@
 
 #include "Common.h"
 #include "Errors.h"
+#include "Util.h"
 #include "ByteConverter.h"
 #include "Util.h"
 #include <exception>
@@ -28,7 +29,6 @@
 #include <string>
 #include <vector>
 #include <cstring>
-#include <time.h>
 
 // Root of ByteBuffer exception hierarchy
 class WH_COMMON_API ByteBufferException : public std::exception
@@ -187,7 +187,7 @@ class WH_COMMON_API ByteBuffer
 
         ByteBuffer &operator>>(bool &value)
         {
-            value = read<char>() > 0 ? true : false;
+            value = (read<char>() > 0);
             return *this;
         }
 
