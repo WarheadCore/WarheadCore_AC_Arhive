@@ -101,7 +101,6 @@ primary_domain = "cpp"
 # A list of ignored prefixes for module index sorting.
 # modindex_common_prefix = []
 
-
 # -- Options for HTML output ---------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
@@ -147,7 +146,8 @@ html_static_path = ["_static"]
 
 # Custom sidebar templates, maps document names to template names.
 html_sidebars = {
-    "**": ["localtoc.html", "relations.html", "sourcelink.html", "searchbox.html"]
+    "**":
+    ["localtoc.html", "relations.html", "sourcelink.html", "searchbox.html"]
 }
 
 # Additional templates that should be rendered to pages, maps page names to
@@ -183,7 +183,6 @@ html_sidebars = {
 # Output file base name for HTML help builder.
 htmlhelp_basename = "formatdoc"
 
-
 # -- Options for LaTeX output --------------------------------------------------
 
 latex_elements = {
@@ -198,7 +197,8 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-    ("index", "format.tex", u"fmt documentation", u"Victor Zverovich", "manual"),
+    ("index", "format.tex", u"fmt documentation", u"Victor Zverovich",
+     "manual"),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -221,7 +221,6 @@ latex_documents = [
 # If false, no module index is generated.
 # latex_domain_indices = True
 
-
 # -- Options for manual page output --------------------------------------------
 
 # One entry per manual page. List of tuples
@@ -230,7 +229,6 @@ man_pages = [("index", "fmt", u"fmt documentation", [u"Victor Zverovich"], 1)]
 
 # If true, show URL addresses after external links.
 # man_show_urls = False
-
 
 # -- Options for Texinfo output ------------------------------------------------
 

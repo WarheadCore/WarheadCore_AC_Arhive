@@ -46,7 +46,8 @@ def pip_install(package, commit=None, **kwargs):
         from pkg_resources import DistributionNotFound, get_distribution
 
         try:
-            installed_version = get_distribution(os.path.basename(package)).version
+            installed_version = get_distribution(
+                os.path.basename(package)).version
             if LooseVersion(installed_version) >= min_version:
                 print("{} {} already installed".format(package, min_version))
                 return
@@ -101,17 +102,17 @@ def create_build_env(dirname="virtualenv"):
 
 
 def build_docs(version="dev", **kwargs):
-    doc_dir = kwargs.get("doc_dir", os.path.dirname(os.path.realpath(__file__)))
+    doc_dir = kwargs.get("doc_dir",
+                         os.path.dirname(os.path.realpath(__file__)))
     work_dir = kwargs.get("work_dir", ".")
     include_dir = kwargs.get(
-        "include_dir", os.path.join(os.path.dirname(doc_dir), "include", "fmt")
-    )
+        "include_dir", os.path.join(os.path.dirname(doc_dir), "include",
+                                    "fmt"))
     # Build docs.
     cmd = ["doxygen", "-"]
     p = Popen(cmd, stdin=PIPE)
     doxyxml_dir = os.path.join(work_dir, "doxyxml")
-    p.communicate(
-        input=r"""
+    p.communicate(input=r"""
       PROJECT_NAME      = fmt
       GENERATE_LATEX    = NO
       GENERATE_MAN      = NO
@@ -139,47 +140,36 @@ def build_docs(version="dev", **kwargs):
                           "FMT_STRING_ALIAS=1" \
                           "FMT_ENABLE_IF(B)="
       EXCLUDE_SYMBOLS   = fmt::internal::* StringValue write_str
-    """.format(
-            include_dir, doxyxml_dir
-        ).encode(
-            "UTF-8"
-        )
-    )
+    """.format(include_dir, doxyxml_dir).encode("UTF-8"))
     if p.returncode != 0:
         raise CalledProcessError(p.returncode, cmd)
     html_dir = os.path.join(work_dir, "html")
     main_versions = reversed(versions[-3:])
-    check_call(
-        [
-            "sphinx-build",
-            "-Dbreathe_projects.format=" + os.path.abspath(doxyxml_dir),
-            "-Dversion=" + version,
-            "-Drelease=" + version,
-            "-Aversion=" + version,
-            "-Aversions=" + ",".join(main_versions),
-            "-b",
-            "html",
-            doc_dir,
-            html_dir,
-        ]
-    )
+    check_call([
+        "sphinx-build",
+        "-Dbreathe_projects.format=" + os.path.abspath(doxyxml_dir),
+        "-Dversion=" + version,
+        "-Drelease=" + version,
+        "-Aversion=" + version,
+        "-Aversions=" + ",".join(main_versions),
+        "-b",
+        "html",
+        doc_dir,
+        html_dir,
+    ])
     try:
-        check_call(
-            [
-                "lessc",
-                "--clean-css",
-                "--include-path=" + os.path.join(doc_dir, "bootstrap"),
-                os.path.join(doc_dir, "fmt.less"),
-                os.path.join(html_dir, "_static", "fmt.css"),
-            ]
-        )
+        check_call([
+            "lessc",
+            "--clean-css",
+            "--include-path=" + os.path.join(doc_dir, "bootstrap"),
+            os.path.join(doc_dir, "fmt.less"),
+            os.path.join(html_dir, "_static", "fmt.css"),
+        ])
     except OSError as e:
         if e.errno != errno.ENOENT:
             raise
-        print(
-            "lessc not found; make sure that Less (http://lesscss.org/) "
-            + "is installed"
-        )
+        print("lessc not found; make sure that Less (http://lesscss.org/) " +
+              "is installed")
         sys.exit(1)
     return html_dir
 
