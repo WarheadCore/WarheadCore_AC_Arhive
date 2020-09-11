@@ -351,7 +351,8 @@ namespace MMAP
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
             LOG_INFO("server", "MMAP:GetNavMeshQuery: created dtNavMeshQuery for mapId %03u instanceId %u", mapId, instanceId);
 #endif
-            mmap->navMeshQueries.insert(std::pair<uint32, dtNavMeshQuery*>(instanceId, query));
+                mmap->navMeshQueries.insert(std::pair<uint32, dtNavMeshQuery*>(instanceId, query));
+            }
         }
 
         return mmap->navMeshQueries[instanceId];
