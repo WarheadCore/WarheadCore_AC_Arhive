@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # Build the documentation.
-
 from __future__ import print_function
 
 import errno
@@ -9,7 +8,11 @@ import shutil
 import sys
 import tempfile
 from distutils.version import LooseVersion
-from subprocess import PIPE, CalledProcessError, Popen, check_call, check_output
+from subprocess import CalledProcessError
+from subprocess import check_call
+from subprocess import check_output
+from subprocess import PIPE
+from subprocess import Popen
 
 versions = [
     "1.0.0",
