@@ -30,23 +30,23 @@ static std::string GetStringWithDefaultValueFromFunction(
 std::string BuiltInConfig::GetCMakeCommand()
 {
     return GetStringWithDefaultValueFromFunction(
-        "CMakeCommand", GitRevision::GetCMakeCommand);
+               "CMakeCommand", GitRevision::GetCMakeCommand);
 }
 
 std::string BuiltInConfig::GetBuildDirectory()
 {
     return GetStringWithDefaultValueFromFunction(
-        "BuildDirectory", GitRevision::GetBuildDirectory);
+               "BuildDirectory", GitRevision::GetBuildDirectory);
 }
 
 std::string BuiltInConfig::GetSourceDirectory()
 {
     return GetStringWithDefaultValueFromFunction(
-        "SourceDirectory", GitRevision::GetSourceDirectory);
+               "SourceDirectory", GitRevision::GetSourceDirectory);
 }
 
 std::string BuiltInConfig::GetMySQLExecutable()
 {
     return GetStringWithDefaultValueFromFunction(
-        "MySQLExecutable", GitRevision::GetMySQLExecutable);
+               "MySQLExecutable", GitRevision::GetMySQLExecutable);
 }

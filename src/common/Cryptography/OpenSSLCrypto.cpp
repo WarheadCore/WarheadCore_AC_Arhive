@@ -30,7 +30,7 @@ static void lockingCallback(int mode, int type, char const* /*file*/, int /*line
     else
         cryptoLocks[type]->unlock();
 }
-static void threadIdCallback(CRYPTO_THREADID * id)
+static void threadIdCallback(CRYPTO_THREADID* id)
 {
     (void)id;
     CRYPTO_THREADID_set_numeric(id, std::hash<std::thread::id>()(std::this_thread::get_id()));
@@ -39,9 +39,7 @@ void OpenSSLCrypto::threadsSetup()
 {
     cryptoLocks.resize(CRYPTO_num_locks());
     for(int i = 0 ; i < CRYPTO_num_locks(); ++i)
-    {
         cryptoLocks[i] = new std::mutex();
-    }
     (void)&threadIdCallback;
     CRYPTO_THREADID_set_callback(threadIdCallback);
     (void)&lockingCallback;
@@ -52,9 +50,7 @@ void OpenSSLCrypto::threadsCleanup()
     CRYPTO_set_locking_callback(nullptr);
     CRYPTO_THREADID_set_callback(nullptr);
     for(int i = 0 ; i < CRYPTO_num_locks(); ++i)
-    {
         delete cryptoLocks[i];
-    }
     cryptoLocks.resize(0);
 }
 #endif

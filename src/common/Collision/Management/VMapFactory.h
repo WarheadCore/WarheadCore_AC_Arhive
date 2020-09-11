@@ -30,9 +30,9 @@ namespace VMAP
 
     class WH_COMMON_API VMapFactory
     {
-        public:
-            static IVMapManager* createOrGetVMapManager();
-            static void clear();
+    public:
+        static IVMapManager* createOrGetVMapManager();
+        static void clear();
     };
 
 }

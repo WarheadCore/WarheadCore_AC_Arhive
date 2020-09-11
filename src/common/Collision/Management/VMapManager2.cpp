@@ -42,13 +42,9 @@ namespace VMAP
     VMapManager2::~VMapManager2(void)
     {
         for (InstanceTreeMap::iterator i = iInstanceMapTrees.begin(); i != iInstanceMapTrees.end(); ++i)
-        {
             delete i->second;
-        }
         for (ModelFileMap::iterator i = iLoadedModelFiles.begin(); i != iLoadedModelFiles.end(); ++i)
-        {
             delete i->second.getModel();
-        }
     }
 
     void VMapManager2::InitializeThreadUnsafe(const std::vector<uint32>& mapIds)
@@ -115,7 +111,7 @@ namespace VMAP
                 instanceTree = iInstanceMapTrees.insert(InstanceTreeMap::value_type(mapId, nullptr)).first;
             else
                 ASSERT(false, "Invalid mapId %u tile [%u, %u] passed to VMapManager2 after startup in thread unsafe environment",
-                    mapId, tileX, tileY);
+                       mapId, tileX, tileY);
         }
 
         if (!instanceTree->second)
@@ -123,10 +119,10 @@ namespace VMAP
             std::string mapFileName = getMapFileName(mapId);
             StaticMapTree* newTree = new StaticMapTree(mapId, basePath);
             if (!newTree->InitMap(mapFileName, this))
-			{
-				delete newTree;
+            {
+                delete newTree;
                 return false;
-			}
+            }
 
             instanceTree->second = newTree;
         }
@@ -175,9 +171,7 @@ namespace VMAP
             Vector3 pos1 = convertPositionToInternalRep(x1, y1, z1);
             Vector3 pos2 = convertPositionToInternalRep(x2, y2, z2);
             if (pos1 != pos2)
-            {
                 return instanceTree->second->isInLineOfSight(pos1, pos2);
-            }
         }
 
         return true;
@@ -187,7 +181,7 @@ namespace VMAP
     get the hit position and return true if we hit something
     otherwise the result pos will be the dest pos
     */
-    bool VMapManager2::getObjectHitPos(unsigned int mapId, float x1, float y1, float z1, float x2, float y2, float z2, float& rx, float &ry, float& rz, float modifyDist)
+    bool VMapManager2::getObjectHitPos(unsigned int mapId, float x1, float y1, float z1, float x2, float y2, float z2, float& rx, float& ry, float& rz, float modifyDist)
     {
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_VMAP_CHECKS)
         if (isLineOfSightCalcEnabled() && !IsVMAPDisabledForPtr(mapId, VMAP_DISABLE_LOS))
@@ -312,7 +306,7 @@ namespace VMAP
         return model->second.getModel();
     }
 
-    void VMapManager2::releaseModelInstance(const std::string &filename)
+    void VMapManager2::releaseModelInstance(const std::string& filename)
     {
         //! Critical section, thread safe access to iLoadedModelFiles
         std::lock_guard<std::mutex> lock(LoadedModelFilesLock);

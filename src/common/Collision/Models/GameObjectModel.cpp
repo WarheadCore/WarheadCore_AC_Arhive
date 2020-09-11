@@ -60,10 +60,10 @@ void LoadGameObjectModelList(std::string const& dataPath)
                 break;
 
         if (fread(&name_length, sizeof(uint32), 1, model_list_file) != 1
-            || name_length >= sizeof(buff)
-            || fread(&buff, sizeof(char), name_length, model_list_file) != name_length
-            || fread(&v1, sizeof(Vector3), 1, model_list_file) != 1
-            || fread(&v2, sizeof(Vector3), 1, model_list_file) != 1)
+                || name_length >= sizeof(buff)
+                || fread(&buff, sizeof(char), name_length, model_list_file) != name_length
+                || fread(&v1, sizeof(Vector3), 1, model_list_file) != 1
+                || fread(&v2, sizeof(Vector3), 1, model_list_file) != 1)
         {
             LOG_ERROR("server", "File '%s' seems to be corrupted!", VMAP::GAMEOBJECT_MODELS);
             fclose(model_list_file);
