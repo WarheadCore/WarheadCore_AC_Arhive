@@ -25,7 +25,7 @@
 
 DatabaseLoader::DatabaseLoader(std::string const& logger, uint32 const defaultUpdateMask)
     : _logger(logger), _autoSetup(sConfigMgr->GetBoolDefault("Updates.AutoSetup", true)),
-    _updateFlags(sConfigMgr->GetIntDefault("Updates.EnableDatabases", defaultUpdateMask))
+      _updateFlags(sConfigMgr->GetIntDefault("Updates.EnableDatabases", defaultUpdateMask))
 {
 }
 
@@ -47,7 +47,7 @@ DatabaseLoader& DatabaseLoader::AddDatabase(DatabaseWorkerPool<T>& pool, std::st
         if (asyncThreads < 1 || asyncThreads > 32)
         {
             LOG_ERROR(_logger, "%s database: invalid number of worker threads specified. "
-                "Please pick a value between 1 and 32.", name.c_str());
+                      "Please pick a value between 1 and 32.", name.c_str());
             return false;
         }
 
@@ -101,7 +101,7 @@ DatabaseLoader& DatabaseLoader::AddDatabase(DatabaseWorkerPool<T>& pool, std::st
             if (error)
             {
                 LOG_ERROR("sql.driver", "DatabasePool %s NOT opened. There were errors opening the MySQL connections. "
-                    "Check your SQLDriverLogFile for specific errors", name.c_str());
+                          "Check your SQLDriverLogFile for specific errors", name.c_str());
 
                 return false;
             }
@@ -216,9 +216,9 @@ bool DatabaseLoader::Process(std::queue<Predicate>& queue)
     return true;
 }
 
-template WH_DATABASE_API 
+template WH_DATABASE_API
 DatabaseLoader& DatabaseLoader::AddDatabase<LoginDatabaseConnection>(DatabaseWorkerPool<LoginDatabaseConnection>&, std::string const&);
-template WH_DATABASE_API 
+template WH_DATABASE_API
 DatabaseLoader& DatabaseLoader::AddDatabase<CharacterDatabaseConnection>(DatabaseWorkerPool<CharacterDatabaseConnection>&, std::string const&);
-template WH_DATABASE_API 
+template WH_DATABASE_API
 DatabaseLoader& DatabaseLoader::AddDatabase<WorldDatabaseConnection>(DatabaseWorkerPool<WorldDatabaseConnection>&, std::string const&);
