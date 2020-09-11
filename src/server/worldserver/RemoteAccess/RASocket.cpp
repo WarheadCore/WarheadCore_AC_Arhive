@@ -36,7 +36,7 @@ RASocket::RASocket()
     _commandExecuting = false;
 }
 
-int RASocket::open(void *)
+int RASocket::open(void*)
 {
     ACE_INET_Addr remoteAddress;
 
@@ -116,16 +116,16 @@ int RASocket::recv_line(std::string& out_line)
     char buf[4096];
 
     ACE_Data_Block db(sizeof (buf),
-            ACE_Message_Block::MB_DATA,
-            buf,
-            0,
-            0,
-            ACE_Message_Block::DONT_DELETE,
-            0);
+                      ACE_Message_Block::MB_DATA,
+                      buf,
+                      0,
+                      0,
+                      ACE_Message_Block::DONT_DELETE,
+                      0);
 
     ACE_Message_Block message_block(&db,
-            ACE_Message_Block::DONT_DELETE,
-            0);
+                                    ACE_Message_Block::DONT_DELETE,
+                                    0);
 
     if (recv_line(message_block) == -1)
     {
@@ -146,7 +146,8 @@ int RASocket::process_command(const std::string& command)
     LOG_INFO("commands.ra", "Got command: %s", command.c_str());
 
     // handle quit, exit and logout commands to terminate connection
-    if (command == "quit" || command == "exit" || command == "logout") {
+    if (command == "quit" || command == "exit" || command == "logout")
+    {
         (void) send("Bye\r\n");
         return -1;
     }
@@ -273,23 +274,23 @@ int RASocket::subnegotiate()
     char buf[1024];
 
     ACE_Data_Block db(sizeof (buf),
-        ACE_Message_Block::MB_DATA,
-        buf,
-        0,
-        0,
-        ACE_Message_Block::DONT_DELETE,
-        0);
+                      ACE_Message_Block::MB_DATA,
+                      buf,
+                      0,
+                      0,
+                      ACE_Message_Block::DONT_DELETE,
+                      0);
 
     ACE_Message_Block message_block(&db,
-        ACE_Message_Block::DONT_DELETE,
-        0);
+                                    ACE_Message_Block::DONT_DELETE,
+                                    0);
 
     const size_t recv_size = message_block.space();
 
     // Wait a maximum of 1000ms for negotiation packet - not all telnet clients may send it
     ACE_Time_Value waitTime = ACE_Time_Value(1);
     const ssize_t n = peer().recv(message_block.wr_ptr(),
-        recv_size, &waitTime);
+                                  recv_size, &waitTime);
 
     if (n <= 0)
         return int(n);
@@ -302,7 +303,7 @@ int RASocket::subnegotiate()
 
     buf[n] = '\0';
 
-    #ifdef _DEBUG
+#ifdef _DEBUG
     for (uint8 i = 0; i < n; )
     {
         uint8 iac = buf[i];
@@ -334,7 +335,7 @@ int RASocket::subnegotiate()
         }
         ++i;
     }
-    #endif
+#endif
 
     //! Just send back end of subnegotiation packet
     uint8 const reply[2] = {0xFF, 0xF0};
@@ -382,7 +383,7 @@ int RASocket::svc(void)
     return 0;
 }
 
-void RASocket::zprint(void* callbackArg, const char * szText)
+void RASocket::zprint(void* callbackArg, const char* szText)
 {
     if (!szText || !callbackArg)
         return;
@@ -416,8 +417,8 @@ void RASocket::commandFinished(void* callbackArg, bool /*success*/)
     // hence we don't put timeout, because it shouldn't increase queue size and shouldn't block
     if (socket->putq(mb->duplicate()) == -1)
     {
-         // getting here is bad, command can't be marked as complete
-         //sLog->outDebug(LOG_FILTER_REMOTECOMMAND, "Failed to enqueue command end message. Error is %s", ACE_OS::strerror(errno));
+        // getting here is bad, command can't be marked as complete
+        //sLog->outDebug(LOG_FILTER_REMOTECOMMAND, "Failed to enqueue command end message. Error is %s", ACE_OS::strerror(errno));
     }
 
     mb->release();

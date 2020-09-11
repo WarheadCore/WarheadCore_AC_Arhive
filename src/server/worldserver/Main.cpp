@@ -323,7 +323,7 @@ extern int main(int argc, char** argv)
 
         if (strcmp(argv[c], "--service") == 0)
             WinServiceRun();
-        #endif
+#endif
         ++c;
     }
 
