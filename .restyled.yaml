@@ -2,7 +2,7 @@ enabled: true
 
 exclude:
   - ".github/workflows/**/*"
-  - "dep/**"
+  - "deps/**"
   - "contrib/**"
 
 changed_paths:
