@@ -455,13 +455,12 @@ m_has_result(false)
 {
 }
 
-PreparedStatementTask::PreparedStatementTask(PreparedStatement* stmt, PreparedQueryResultFuture result) :
+PreparedStatementTask::PreparedStatementTask(PreparedStatement* stmt, PreparedQueryResultPromise& result) :
 m_stmt(stmt),
 m_has_result(true),
-m_result(result)
+m_result(std::move(result))
 {
 }
-
 
 PreparedStatementTask::~PreparedStatementTask()
 {
@@ -476,10 +475,11 @@ bool PreparedStatementTask::Execute()
         if (!result || !result->GetRowCount())
         {
             delete result;
-            m_result.set(PreparedQueryResult(nullptr));
+            m_result.set_value(PreparedQueryResult(nullptr));
             return false;
         }
-        m_result.set(PreparedQueryResult(result));
+        
+        m_result.set_value(PreparedQueryResult(result));
         return true;
     }
 

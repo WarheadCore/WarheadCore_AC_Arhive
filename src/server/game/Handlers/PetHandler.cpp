@@ -281,14 +281,12 @@ uint8 WorldSession::HandleLoadPetFromDBFirstCallback(PreparedQueryResult result,
     pet->SetAsynchLoadType(asynchLoadType);
 
     // xinef: clear any old result
-    if (_loadPetFromDBSecondCallback.ready())
+    if (_loadPetFromDBSecondCallback.wait_for(Seconds(0)) == std::future_status::ready)
     {
-        SQLQueryHolder* param;
-        _loadPetFromDBSecondCallback.get(param);
+        SQLQueryHolder* param = _loadPetFromDBSecondCallback.get();
         delete param;
     }
-    _loadPetFromDBSecondCallback.cancel();
-
+    
     _loadPetFromDBSecondCallback = CharacterDatabase.DelayQueryHolder((SQLQueryHolder*)holder);
     return PET_LOAD_OK;
 }

@@ -261,28 +261,28 @@ PreparedQueryResult DatabaseWorkerPool<T>::Query(PreparedStatement* stmt)
 template <class T>
 QueryResultFuture DatabaseWorkerPool<T>::AsyncQuery(const char* sql)
 {
-    QueryResultFuture res;
+    QueryResultPromise res;
     BasicStatementTask* task = new BasicStatementTask(sql, res);
     Enqueue(task);
-    return res;         //! Actual return value has no use yet
+    return res.get_future();         //! Actual return value has no use yet
 }
 
 template <class T>
 PreparedQueryResultFuture DatabaseWorkerPool<T>::AsyncQuery(PreparedStatement* stmt)
 {
-    PreparedQueryResultFuture res;
+    PreparedQueryResultPromise res;
     PreparedStatementTask* task = new PreparedStatementTask(stmt, res);
     Enqueue(task);
-    return res;
+    return res.get_future();
 }
 
 template <class T>
 QueryResultHolderFuture DatabaseWorkerPool<T>::DelayQueryHolder(SQLQueryHolder* holder)
 {
-    QueryResultHolderFuture res;
+    QueryResultHolderPromise res;
     SQLQueryHolderTask* task = new SQLQueryHolderTask(holder, res);
     Enqueue(task);
-    return res;     //! Fool compiler, has no use yet
+    return res.get_future();     //! Fool compiler, has no use yet
 }
 
 template <class T>

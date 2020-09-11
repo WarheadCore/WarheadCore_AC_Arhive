@@ -1197,11 +1197,10 @@ void WorldSession::ProcessQueryCallbackPlayer()
     }
 
     //- Player - ActivateSpec
-    if (_loadActionsSwitchSpecCallback.ready())
+    if (_loadActionsSwitchSpecCallback.wait_for(Seconds(0)) == std::future_status::ready)
     {
-        _loadActionsSwitchSpecCallback.get(result);
+        result = _loadActionsSwitchSpecCallback.get();
         HandleLoadActionsSwitchSpec(result);
-        _loadActionsSwitchSpecCallback.cancel();
     }
 }
 
@@ -1220,11 +1219,10 @@ void WorldSession::ProcessQueryCallbackPet()
     }
 
     //- HandleStablePet
-    if (_stablePetCallback.ready())
+    if (_stablePetCallback.wait_for(Seconds(0)) == std::future_status::ready)
     {
-        _stablePetCallback.get(result);
+        result = _stablePetCallback.get(result);
         HandleStablePetCallback(result);
-        _stablePetCallback.cancel();
         return;
     }
 
@@ -1278,25 +1276,16 @@ void WorldSession::ProcessQueryCallbackPet()
     }
 
     //- LoadPetFromDB second part
-    if (_loadPetFromDBSecondCallback.ready())
+    if (_loadPetFromDBSecondCallback.wait_for(Seconds(0)) == std::future_status::ready)
     {
         Player* player = GetPlayer();
-        if (!player)
+        if (player && player->IsInWorld())
         {
-            _loadPetFromDBSecondCallback.cancel();
-        }
-        else if (!player->IsInWorld())
-        {
-            // wait
-        }
-        else
-        {
-            SQLQueryHolder* param;
-            _loadPetFromDBSecondCallback.get(param);
+            SQLQueryHolder* param = _loadPetFromDBSecondCallback.get();            
             HandleLoadPetFromDBSecondCallback((LoadPetFromDBQueryHolder*)param);
             delete param;
-            _loadPetFromDBSecondCallback.cancel();
         }
+        
         return;
     }
 }
@@ -1306,27 +1295,23 @@ void WorldSession::ProcessQueryCallbackLogin()
     PreparedQueryResult result;
 
     //! HandleCharEnumOpcode
-    if (_charEnumCallback.ready())
+    if (_charEnumCallback.wait_for(Seconds(0)) == std::future_status::ready)
     {
-        _charEnumCallback.get(result);
+        result = _charEnumCallback.get();
         HandleCharEnum(result);
-        _charEnumCallback.cancel();
     }
 
     if (_charCreateCallback.IsReady())
     {
         _charCreateCallback.GetResult(result);
         HandleCharCreateCallback(result, _charCreateCallback.GetParam());
-        // Don't call FreeResult() here, the callback handler will do that depending on the events in the callback chain
     }
 
     //! HandlePlayerLoginOpcode
-    if (_charLoginCallback.ready())
+    if (_charLoginCallback.wait_for(Seconds(0)) == std::future_status::ready)
     {
-        SQLQueryHolder* param;
-        _charLoginCallback.get(param);
+        SQLQueryHolder* param = _charLoginCallback.get();
         HandlePlayerLoginFromDB((LoginQueryHolder*)param);
-        _charLoginCallback.cancel();
     }
 }
 

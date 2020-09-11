@@ -485,7 +485,7 @@ class World
         AutobroadcastsWeightMap m_AutobroadcastsWeights;
 
         void ProcessQueryCallbacks();
-        ACE_Future_Set<PreparedQueryResult> m_realmCharCallbacks;
+        std::deque<std::future<PreparedQueryResult>> m_realmCharCallbacks;
 };
 
 #define sWorld World::instance()
