@@ -38,8 +38,7 @@
 
 #include "Common.h"
 #include "AuthCrypt.h"
-#include <chrono>
-#include <memory>
+#include "Duration.h"
 
 class ACE_Message_Block;
 class WorldPacket;
@@ -163,7 +162,7 @@ class WorldSocket : public WorldHandler
 
     private:
         /// Time in which the last ping was received
-        std::chrono::system_clock::time_point m_LastPingTime;
+        SystemTimePoint m_LastPingTime;
 
         /// Keep track of over-speed pings, to prevent ping flood.
         uint32 m_OverSpeedPings;

@@ -45,6 +45,7 @@
 #include "AccountMgr.h"
 #include "GameTime.h"
 #include "GameConfig.h"
+#include <thread>
 
 #if defined(__GNUC__)
 #pragma pack(1)
@@ -100,7 +101,7 @@ struct ClientPktHeader
 #endif
 
 WorldSocket::WorldSocket(void): WorldHandler(),
-m_LastPingTime(std::chrono::system_clock::time_point::min()), m_OverSpeedPings(0), m_Session(0),
+m_LastPingTime(SystemTimePoint::min()), m_OverSpeedPings(0), m_Session(0),
 m_RecvWPct(0), m_RecvPct(), m_Header(sizeof (ClientPktHeader)),
 m_OutBuffer(0), m_OutBufferSize(65536), m_OutActive(false),
 m_Seed(static_cast<uint32> (rand32()))
@@ -1014,9 +1015,9 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
 
     // Sleep this Network thread for
     uint32 sleepTime = sGameConfig->GetIntConfig("SessionAddDelay");
-    ACE_OS::sleep (ACE_Time_Value (0, sleepTime));
+    std::this_thread::sleep_for(Microseconds(sleepTime));
 
-    sWorld->AddSession (m_Session);
+    sWorld->AddSession(m_Session);
 
     // At this point, we can safely hook a successful login
     sScriptMgr->OnAccountLogin(id);
@@ -1033,12 +1034,12 @@ int WorldSocket::HandlePing(WorldPacket& recvPacket)
     recvPacket >> ping;
     recvPacket >> latency;
 
-    if (m_LastPingTime == std::chrono::system_clock::time_point::min())
-        m_LastPingTime = std::chrono::system_clock::now();              // for 1st ping
+    if (m_LastPingTime == SystemTimePoint::min())
+        m_LastPingTime = std::chrono::system_clock::now(); // for 1st ping
     else
     {
         auto now = std::chrono::system_clock::now();
-        std::chrono::seconds seconds = std::chrono::duration_cast<std::chrono::seconds>(now - m_LastPingTime);
+        Seconds seconds = std::chrono::duration_cast<Seconds>(now - m_LastPingTime);        
         m_LastPingTime = now;
 
         if (seconds.count() < 27)
