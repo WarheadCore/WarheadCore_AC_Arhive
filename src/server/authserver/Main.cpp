@@ -125,7 +125,7 @@ extern int main(int argc, char** argv)
     // Init all logs
     sLog->Initialize();
 
-    warhead::Logo::Show("authserver", configFile.c_str(), [](char const* text)
+    warhead::Logo::Show("authserver", configFile.c_str(), [](char const * text)
     {
         LOG_INFO("server.authserver", "%s", text);
     });

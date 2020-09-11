@@ -198,8 +198,6 @@ void CliRunnable::run()
 #endif
         }
         else if (feof(stdin))
-        {
             World::StopNow(SHUTDOWN_EXIT_CODE);
-        }
     }
 }

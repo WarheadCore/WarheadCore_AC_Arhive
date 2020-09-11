@@ -240,14 +240,15 @@ void AuthSocket::OnRead()
                 return;
             }
         }
-        else if (_cmd == REALM_LIST) {
-          challengesInARowRealmList++;
-          if (challengesInARowRealmList == MAX_AUTH_GET_REALM_LIST)
-          {
-              LOG_INFO("server", "Got %u REALM_LIST in a row from '%s', possible ongoing DoS", challengesInARowRealmList, socket().getRemoteAddress().c_str());
-              socket().shutdown();
-              return;
-          }
+        else if (_cmd == REALM_LIST)
+        {
+            challengesInARowRealmList++;
+            if (challengesInARowRealmList == MAX_AUTH_GET_REALM_LIST)
+            {
+                LOG_INFO("server", "Got %u REALM_LIST in a row from '%s', possible ongoing DoS", challengesInARowRealmList, socket().getRemoteAddress().c_str());
+                socket().shutdown();
+                return;
+            }
         }
 
         size_t i;
@@ -429,7 +430,7 @@ bool AuthSocket::_HandleLogonChallenge()
     {
         pkt << uint8(WOW_FAIL_BANNED);
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-        LOG_DEBUG("network", "'%s:%d' [AuthChallenge] Banned ip tries to login!",socket().getRemoteAddress().c_str(), socket().getRemotePort());
+        LOG_DEBUG("network", "'%s:%d' [AuthChallenge] Banned ip tries to login!", socket().getRemoteAddress().c_str(), socket().getRemotePort());
 #endif
     }
     else
@@ -842,7 +843,7 @@ bool AuthSocket::_HandleLogonProof()
 
 #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
                         LOG_DEBUG("network", "'%s:%d' [AuthChallenge] IP %s got banned for '%u' seconds because account %s failed to authenticate '%u' times",
-                            socket().getRemoteAddress().c_str(), socket().getRemotePort(), socket().getRemoteAddress().c_str(), WrongPassBanTime, _login.c_str(), failed_logins);
+                                  socket().getRemoteAddress().c_str(), socket().getRemotePort(), socket().getRemoteAddress().c_str(), WrongPassBanTime, _login.c_str(), failed_logins);
 #endif
                     }
                 }
