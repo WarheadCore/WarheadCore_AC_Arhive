@@ -309,11 +309,11 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
     if (lang != LANG_ADDON && sGameConfig->GetBoolConfig("ChatFakeMessagePreventing"))
         StripInvisibleChars(msg);
 
-    // pussywizard: |  remove hack?
+    // pussywizard:
     if (msg.length() > 255 || (lang != LANG_ADDON && msg.find("|0") != std::string::npos))
         return;
 
-    // exploit | remove hack?
+    // exploit
     size_t found1 = msg.find("|Hquest");
     if (found1 != std::string::npos)
     {
@@ -328,7 +328,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
         }
     }
 
-    // prevent crash player | remove hack?
+    // prevent crash player
     if (msg.find("| |Hquest") != std::string::npos)
         return;
 
