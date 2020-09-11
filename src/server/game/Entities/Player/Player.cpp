@@ -17897,10 +17897,10 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder* holder)
     SetUInt32Value(PLAYER_XP, fields[7].GetUInt32());
 
     if (!_LoadIntoDataField(fields[66].GetString(), PLAYER_EXPLORED_ZONES_1, PLAYER_EXPLORED_ZONES_SIZE))
-        LOG_WARN("entities.player.loading", "Player::LoadFromDB: Player (%г) has invalid exploredzones data (%s). Forcing partial load.", guid, fields[66].GetCString());
+        LOG_WARN("entities.player.loading", "Player::LoadFromDB: Player (%u) has invalid exploredzones data (%s). Forcing partial load.", guid, fields[66].GetCString());
 
     if (!_LoadIntoDataField(fields[69].GetString(), PLAYER__FIELD_KNOWN_TITLES, KNOWN_TITLES_SIZE * 2))
-        LOG_WARN("entities.player.loading", "Player::LoadFromDB: Player (%г) has invalid knowntitles mask (%s). Forcing partial load.", guid, fields[69].GetCString());
+        LOG_WARN("entities.player.loading", "Player::LoadFromDB: Player (%u) has invalid knowntitles mask (%s). Forcing partial load.", guid, fields[69].GetCString());
 
     SetObjectScale(1.0f);
     SetFloatValue(UNIT_FIELD_HOVERHEIGHT, 1.0f);
@@ -18923,7 +18923,7 @@ Item* Player::_LoadItem(SQLTransaction& trans, uint32 zoneId, uint32 timeDiff, F
                         if (std::optional<uint32> guid = warhead::StringTo<uint32>(guidStr))
                             looters.insert(*guid);
                         else
-                            LOG_WARN("entities.player.loading", "Player::_LoadInventory: invalid item_soulbound_trade_data GUID '%s' for item (%u). Skipped.", std::string(guidStr).c_str(), item->GetGUID());
+                            LOG_WARN("entities.player.loading", "Player::_LoadInventory: invalid item_soulbound_trade_data GUID '%s' for item (%u). Skipped.", std::string(guidStr).c_str(), item->GetGUIDLow());
                     }
 
                     if (looters.size() > 1 && item->GetTemplate()->GetMaxStackSize() == 1 && item->IsSoulBound())

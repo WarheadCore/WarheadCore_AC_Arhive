@@ -411,7 +411,7 @@ bool Item::LoadFromDB(uint32 guid, uint64 owner_guid, Field* fields, uint32 entr
     ItemTemplate const* proto = GetTemplate();
     if (!proto)
     {
-        LOG_ERROR("entities.item", "Invalid entry %u for item %u. Refusing to load.", GetEntry(), GetGUID());
+        LOG_ERROR("entities.item", "Invalid entry %u for item %u. Refusing to load.", GetEntry(), GetGUIDLow());
         return false;
     }
 
@@ -441,7 +441,7 @@ bool Item::LoadFromDB(uint32 guid, uint64 owner_guid, Field* fields, uint32 entr
             if (std::optional<int32> charges = warhead::StringTo<int32>(tokens[i]))
                 SetSpellCharges(i, *charges);
             else
-                LOG_ERROR("entities.item", "Invalid charge info '%s' for item %s, charge data not loaded.", std::string(tokens[i]).c_str(), GetGUID());
+                LOG_ERROR("entities.item", "Invalid charge info '%s' for item %s, charge data not loaded.", std::string(tokens[i]).c_str(), GetGUIDLow());
         }
     }
 
@@ -455,7 +455,7 @@ bool Item::LoadFromDB(uint32 guid, uint64 owner_guid, Field* fields, uint32 entr
     }
 
     if (!_LoadIntoDataField(fields[6].GetString(), ITEM_FIELD_ENCHANTMENT_1_1, MAX_ENCHANTMENT_SLOT * MAX_ENCHANTMENT_OFFSET))
-        LOG_WARN("entities.item", "Invalid enchantment data '%s' for item %u. Forcing partial load.", fields[6].GetString().c_str(), GetGUID());
+        LOG_WARN("entities.item", "Invalid enchantment data '%s' for item %u. Forcing partial load.", fields[6].GetString().c_str(), GetGUIDLow());
 
     SetInt32Value(ITEM_FIELD_RANDOM_PROPERTIES_ID, fields[7].GetInt16());
 
