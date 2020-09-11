@@ -65,6 +65,12 @@ void WorldSession::HandleGMTicketCreateOpcode(WorldPacket& recvData)
         recvData >> x >> y >> z;
         recvData >> message;
 
+        if (!ValidateHyperlinksAndMaybeKick(message))
+        {
+            recvData.rfinish();
+            return;
+        }
+
         recvData >> needResponse;
         recvData >> needMoreHelp;
 
@@ -87,9 +93,7 @@ void WorldSession::HandleGMTicketCreateOpcode(WorldPacket& recvData)
 
             uLongf realSize = decompressedSize;
             if (uncompress(dest.contents(), &realSize, recvData.contents() + pos, recvData.size() - pos) == Z_OK)
-            {
                 dest >> chatLog;
-            }
             else
             {
                 LOG_ERROR("server", "CMSG_GMTICKET_CREATE possibly corrupt. Uncompression failed.");
@@ -99,6 +103,9 @@ void WorldSession::HandleGMTicketCreateOpcode(WorldPacket& recvData)
 
             recvData.rfinish(); // Will still have compressed data in buffer.
         }
+
+        if (!chatLog.empty() && !ValidateHyperlinksAndMaybeKick(chatLog))
+            return;
 
         ticket = new GmTicket(GetPlayer());
         ticket->SetPosition(mapId, x, y, z);
@@ -121,10 +128,13 @@ void WorldSession::HandleGMTicketCreateOpcode(WorldPacket& recvData)
     SendPacket(&data);
 }
 
-void WorldSession::HandleGMTicketUpdateOpcode(WorldPacket & recv_data)
+void WorldSession::HandleGMTicketUpdateOpcode(WorldPacket& recv_data)
 {
     std::string message;
     recv_data >> message;
+
+    if (!ValidateHyperlinksAndMaybeKick(message))
+        return;
 
     GMTicketResponse response = GMTICKET_RESPONSE_UPDATE_ERROR;
     if (GmTicket* ticket = sTicketMgr->GetTicketByPlayer(GetPlayer()->GetGUID()))
@@ -143,7 +153,7 @@ void WorldSession::HandleGMTicketUpdateOpcode(WorldPacket & recv_data)
     SendPacket(&data);
 }
 
-void WorldSession::HandleGMTicketDeleteOpcode(WorldPacket & /*recv_data*/)
+void WorldSession::HandleGMTicketDeleteOpcode(WorldPacket& /*recv_data*/)
 {
     if (GmTicket* ticket = sTicketMgr->GetTicketByPlayer(GetPlayer()->GetGUID()))
     {
@@ -158,7 +168,7 @@ void WorldSession::HandleGMTicketDeleteOpcode(WorldPacket & /*recv_data*/)
     }
 }
 
-void WorldSession::HandleGMTicketGetTicketOpcode(WorldPacket & /*recv_data*/)
+void WorldSession::HandleGMTicketGetTicketOpcode(WorldPacket& /*recv_data*/)
 {
     SendQueryTimeResponse();
 
@@ -173,7 +183,7 @@ void WorldSession::HandleGMTicketGetTicketOpcode(WorldPacket & /*recv_data*/)
         sTicketMgr->SendTicket(this, nullptr);
 }
 
-void WorldSession::HandleGMTicketSystemStatusOpcode(WorldPacket & /*recv_data*/)
+void WorldSession::HandleGMTicketSystemStatusOpcode(WorldPacket& /*recv_data*/)
 {
     // Note: This only disables the ticket UI at client side and is not fully reliable
     // are we sure this is a uint32? Should ask Zor
@@ -208,6 +218,9 @@ void WorldSession::HandleGMSurveySubmit(WorldPacket& recv_data)
         if (!surveyIds.insert(subSurveyId).second)
             continue;
 
+        if (!ValidateHyperlinksAndMaybeKick(comment))
+            return;
+
         PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_GM_SUBSURVEY);
         stmt->setUInt32(0, nextSurveyID);
         stmt->setUInt32(1, subSurveyId);
@@ -218,6 +231,9 @@ void WorldSession::HandleGMSurveySubmit(WorldPacket& recv_data)
 
     std::string comment; // just a guess
     recv_data >> comment;
+
+    if (!ValidateHyperlinksAndMaybeKick(comment))
+        return;
 
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_GM_SURVEY);
     stmt->setUInt32(0, GUID_LOPART(GetPlayer()->GetGUID()));
