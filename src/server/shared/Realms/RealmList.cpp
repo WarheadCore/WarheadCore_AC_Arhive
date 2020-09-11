@@ -105,7 +105,6 @@ void RealmList::UpdateRealms(bool init)
 
             if (init)
                 LOG_INFO("server", "> Added realm \"%s\" at %s:%u.", name.c_str(), m_realms[name].ExternalAddress.get_host_addr(), port);
-        }
-        while (result->NextRow());
+        } while (result->NextRow());
     }
 }
