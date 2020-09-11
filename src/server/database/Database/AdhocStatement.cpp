@@ -20,14 +20,14 @@
 
 /*! Basic, ad-hoc queries. */
 BasicStatementTask::BasicStatementTask(const char* sql) :
-m_has_result(false)
+    m_has_result(false)
 {
     m_sql = strdup(sql);
 }
 
 BasicStatementTask::BasicStatementTask(const char* sql, QueryResultPromise& result) :
-m_has_result(true),
-m_result(std::move(result))
+    m_has_result(true),
+    m_result(std::move(result))
 {
     m_sql = strdup(sql);
 }
@@ -48,7 +48,7 @@ bool BasicStatementTask::Execute()
             m_result.set_value(QueryResult(nullptr));
             return false;
         }
-        
+
         result->NextRow();
         m_result.set_value(QueryResult(result));
         return true;
