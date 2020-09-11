@@ -23,13 +23,13 @@
 
 class WH_DATABASE_API CharacterDatabaseConnection : public MySQLConnection
 {
-    public:
-        //- Constructors for sync and async connections
-        CharacterDatabaseConnection(MySQLConnectionInfo& connInfo) : MySQLConnection(connInfo) {}
-        CharacterDatabaseConnection(ACE_Activation_Queue* q, MySQLConnectionInfo& connInfo) : MySQLConnection(q, connInfo) {}
+public:
+    //- Constructors for sync and async connections
+    CharacterDatabaseConnection(MySQLConnectionInfo& connInfo) : MySQLConnection(connInfo) {}
+    CharacterDatabaseConnection(ACE_Activation_Queue* q, MySQLConnectionInfo& connInfo) : MySQLConnection(q, connInfo) {}
 
-        //- Loads database type specific prepared statements
-        void DoPrepareStatements();
+    //- Loads database type specific prepared statements
+    void DoPrepareStatements();
 };
 
 typedef DatabaseWorkerPool<CharacterDatabaseConnection> CharacterDatabaseWorkerPool;
@@ -190,6 +190,7 @@ enum CharacterDatabaseStatements
     CHAR_INS_GUILD_MEMBER_WITHDRAW,
     CHAR_DEL_GUILD_MEMBER_WITHDRAW,
     CHAR_SEL_CHAR_DATA_FOR_GUILD,
+    CHAR_SEL_GUILD_MEMBER,
 
     CHAR_INS_CHANNEL,
     CHAR_UPD_CHANNEL,
