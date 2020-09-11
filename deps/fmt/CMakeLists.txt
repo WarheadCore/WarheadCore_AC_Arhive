@@ -14,11 +14,13 @@ include(CheckSymbolExists)
 
 set(strtod_l_headers stdlib.h)
 
+if (APPLE)
+  set(strtod_l_headers ${strtod_l_headers} xlocale.h)
+endif ()
+
 if(WIN32)
-  check_symbol_exists(open io.h HAVE_OPEN)
   check_symbol_exists(_strtod_l "${strtod_l_headers}" HAVE_STRTOD_L)
 else()
-  check_symbol_exists(open fcntl.h HAVE_OPEN)
   check_symbol_exists(strtod_l "${strtod_l_headers}" HAVE_STRTOD_L)
 endif()
 
@@ -32,28 +34,23 @@ endfunction()
 
 # Define the fmt library, its includes and the needed defines.
 add_headers(FMT_HEADERS 
-  chrono.h 
-  color.h 
-  compile.h 
-  core.h 
-  format.h 
+  chrono.h
+  color.h
+  compile.h
+  core.h
+  format.h
   format-inl.h
-  locale.h 
-  ostream.h 
-  printf.h 
-  ranges.h
-  safe-duration-cast.h)
+  locale.h
+  os.h
+  ostream.h
+  posix.h
+  printf.h
+  ranges.h)
 
-set(FMT_SOURCES fmt/format.cc)
+set(FMT_SOURCES fmt/format.cc fmt/os.cc)
 
-if(HAVE_OPEN)
-  add_headers(FMT_HEADERS posix.h)
-  set(FMT_SOURCES ${FMT_SOURCES} fmt/posix.cc)
-endif()
-
-add_library(fmt STATIC 
-  ${FMT_SOURCES}
-  ${FMT_HEADERS})
+add_library(fmt STATIC ${FMT_SOURCES} ${FMT_HEADERS})
+add_library(fmt::fmt ALIAS fmt)
 
 GroupSources(${CMAKE_CURRENT_SOURCE_DIR})
 
