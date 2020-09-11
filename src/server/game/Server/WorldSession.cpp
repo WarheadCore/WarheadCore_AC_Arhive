@@ -234,7 +234,7 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
             LOG_ERROR("server", "WorldSession Packet filter: received non-existent opcode %s (0x%.4X)", LookupOpcodeName(packet->GetOpcode()), packet->GetOpcode());
         else
         {
-            OpcodeHandler &opcode = opcodeTable[packet->GetOpcode()];
+            OpcodeHandler& opcode = opcodeTable[packet->GetOpcode()];
             try
             {
                 switch (opcode.status)
@@ -268,7 +268,7 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
                             }
 
                             sScriptMgr->OnPacketReceive(this, *packet);
-                            
+
                             (this->*opcode.handler)(*packet);
                         }
                         break;
