@@ -2,13 +2,14 @@
 # Build the documentation.
 
 from __future__ import print_function
+
 import errno
 import os
 import shutil
 import sys
 import tempfile
-from subprocess import check_call, check_output, CalledProcessError, Popen, PIPE
 from distutils.version import LooseVersion
+from subprocess import PIPE, CalledProcessError, Popen, check_call, check_output
 
 versions = [
     "1.0.0",
@@ -39,7 +40,7 @@ def pip_install(package, commit=None, **kwargs):
     "Install package using pip."
     min_version = kwargs.get("min_version")
     if min_version:
-        from pkg_resources import get_distribution, DistributionNotFound
+        from pkg_resources import DistributionNotFound, get_distribution
 
         try:
             installed_version = get_distribution(os.path.basename(package)).version
@@ -66,7 +67,7 @@ def create_build_env(dirname="virtualenv"):
         exec(f.read(), dict(__file__=activate_this_file))
     # Import get_distribution after activating virtualenv to get info about
     # the correct packages.
-    from pkg_resources import get_distribution, DistributionNotFound
+    from pkg_resources import DistributionNotFound, get_distribution
 
     # Upgrade pip because installation of sphinx with pip 1.1 available on Travis
     # is broken (see #207) and it doesn't support the show command.
