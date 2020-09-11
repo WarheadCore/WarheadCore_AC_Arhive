@@ -33,7 +33,7 @@ function(add_headers VAR)
 endfunction()
 
 # Define the fmt library, its includes and the needed defines.
-add_headers(FMT_HEADERS 
+add_headers(FMT_HEADERS
   chrono.h
   color.h
   compile.h
@@ -55,8 +55,8 @@ add_library(fmt::fmt ALIAS fmt)
 GroupSources(${CMAKE_CURRENT_SOURCE_DIR})
 
 if (HAVE_STRTOD_L)
-  target_compile_definitions(fmt 
-    PUBLIC 
+  target_compile_definitions(fmt
+    PUBLIC
       FMT_LOCALE)
 endif()
 

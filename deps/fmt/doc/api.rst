@@ -307,7 +307,7 @@ The {fmt} library supports custom dynamic memory allocators.
 A custom allocator class can be specified as a template argument to
 :class:`fmt::basic_memory_buffer`::
 
-    using custom_memory_buffer = 
+    using custom_memory_buffer =
       fmt::basic_memory_buffer<char, fmt::inline_buffer_size, custom_allocator>;
 
 It is also possible to write a formatting function that uses a custom

@@ -425,7 +425,7 @@
      store.push_back("answer");
      store.push_back(42);
      fmt::vprint("The {} is {}.\n", store);
-  
+
   prints::
 
      The answer is 42.
@@ -1814,7 +1814,7 @@
   function for capturing formatting arguments:
 
   .. code:: c++
-  
+
      // Prints formatted error message.
      void vreport_error(const char *format, fmt::format_args args) {
        fmt::print("Error: ");
@@ -1836,7 +1836,7 @@
   .. code:: c++
 
      std::string vformat(string_view format_str, format_args args);
-     
+
      template <typename... Args>
      std::string format(string_view format_str, const Args & ... args);
 
@@ -2007,7 +2007,7 @@
 * Improved generated binary code on GCC 7 and older
   (`#668 <https://github.com/fmtlib/fmt/issues/668>`_).
 
-* Fixed handling of numeric alignment with no width 
+* Fixed handling of numeric alignment with no width
   (`#675 <https://github.com/fmtlib/fmt/issues/675>`_).
 
 * Fixed handling of empty strings in UTF8/16 converters
@@ -2017,7 +2017,7 @@
 * Fixed formatting of an empty ``string_view``
   (`#689 <https://github.com/fmtlib/fmt/issues/689>`_).
 
-* Fixed detection of ``string_view`` on libc++ 
+* Fixed detection of ``string_view`` on libc++
   (`#686 <https://github.com/fmtlib/fmt/issues/686>`_).
 
 * Fixed DLL issues (`#696 <https://github.com/fmtlib/fmt/pull/696>`_).
@@ -2121,7 +2121,7 @@
   .. code:: c++
 
     #include "fmt/string.h"
-  
+
     std::string answer = fmt::to_string(42);
 
   Thanks to `@glebov-andrey (Andrey Glebov)
@@ -2139,7 +2139,7 @@
   .. code:: c++
 
     #include "fmt/printf.h"
- 
+
     // %s format specifier can be used with any argument type.
     fmt::printf("%s", 42);
 
@@ -2162,7 +2162,7 @@
   .. code:: c++
 
     #include "fmt/format.h"
- 
+
     std::vector<double> v = {1.2, 3.4, 5.6};
     // Prints "(+01.20, +03.40, +05.60)".
     fmt::print("({:+06.2f})", fmt::join(v.begin(), v.end(), ", "));
@@ -2352,7 +2352,7 @@
 
   Including ``format.h`` from the ``cppformat`` directory is deprecated
   but works via a proxy header which will be removed in the next major version.
-  
+
   The documentation is now available at https://fmt.dev.
 
 * Added support for `strftime <http://en.cppreference.com/w/cpp/chrono/c/strftime>`_-like
@@ -2604,7 +2604,7 @@ General
   (`#170 <https://github.com/fmtlib/fmt/issues/170>`_):
 
   .. code:: c++
-  
+
     fmt::print("{}", true); // prints "true"
 
   To print ``bool`` as a number use numeric format specifier such as ``d``:
@@ -2739,7 +2739,7 @@ Distribution
 
 * C++ Format is now available in `Debian <https://www.debian.org/>`_ GNU/Linux
   (`stretch <https://packages.debian.org/source/stretch/cppformat>`_,
-  `sid <https://packages.debian.org/source/sid/cppformat>`_) and 
+  `sid <https://packages.debian.org/source/sid/cppformat>`_) and
   derived distributions such as
   `Ubuntu <https://launchpad.net/ubuntu/+source/cppformat>`_ 15.10 and later
   (`#155 <https://github.com/fmtlib/fmt/issues/155>`_)::
@@ -2750,7 +2750,7 @@ Distribution
 
 * `Packages for Fedora and RHEL <https://admin.fedoraproject.org/pkgdb/package/cppformat/>`_
   are now available. Thanks to Dave Johansen.
-  
+
 * C++ Format can now be installed via `Homebrew <http://brew.sh/>`_ on OS X
   (`#157 <https://github.com/fmtlib/fmt/issues/157>`_)::
 
@@ -2776,7 +2776,7 @@ Documentation
   `#209 <https://github.com/fmtlib/fmt/issues/209>`_).
   Thanks to `@JodiTheTigger <https://github.com/JodiTheTigger>`_ and
   `@xentec <https://github.com/xentec>`_.
-  
+
 * Documentation fixes and improvements
   (`#36 <https://github.com/fmtlib/fmt/issues/36>`_,
   `#75 <https://github.com/fmtlib/fmt/issues/75>`_,
@@ -2801,7 +2801,7 @@ Fixes
   Thanks to `@Gachapen (Magnus Bjerke Vik) <https://github.com/Gachapen>`_.
 
 * [Breaking] Fixed formatting of enums with numeric format specifiers in
-  ``fmt::(s)printf`` 
+  ``fmt::(s)printf``
   (`#131 <https://github.com/fmtlib/fmt/issues/131>`_,
   `#139 <https://github.com/fmtlib/fmt/issues/139>`_):
 
@@ -2917,7 +2917,7 @@ Fixes
   `#122 <https://github.com/fmtlib/fmt/issues/122>`_):
 
   .. code:: c++
-  
+
     char buffer[100];
     fmt::ArrayWriter w(buffer);
     w.write("The answer is {}", 42);
@@ -2949,7 +2949,7 @@ Fixes
   <https://developer.android.com/tools/sdk/ndk/index.html>`_
   (`#107 <https://github.com/fmtlib/fmt/pull/107>`_).
   Thanks to `@newnon <https://github.com/newnon>`_.
-  
+
   The `android-ndk-example <https://github.com/fmtlib/android-ndk-example>`_
   repository provides and example of using C++ Format with Android NDK:
 
@@ -3040,7 +3040,7 @@ Fixes
 
     fmt::Writer w;
 
-  New code: 
+  New code:
 
   .. code:: c++
 
@@ -3077,7 +3077,7 @@ Fixes
 
   .. |new| image:: https://cloud.githubusercontent.com/assets/576385/4792131/
                    cd29896c-5de3-11e4-8f59-cac952942bf0.png
-  
+
   +-------+-------+
   |  Old  |  New  |
   +-------+-------+

@@ -32,7 +32,7 @@ Python:
 .. code:: c++
 
   fmt::format("The answer is {}.", 42);
-  
+
 The ``fmt::format`` function returns a string "The answer is 42.". You can use
 ``fmt::memory_buffer`` to avoid constructing ``std::string``:
 
@@ -61,7 +61,7 @@ The Format API also supports positional arguments useful for localization:
 
   fmt::print("I'd rather be {1} than {0}.", "right", "happy");
 
-Named arguments can be created with ``fmt::arg``. This makes it easier to track 
+Named arguments can be created with ``fmt::arg``. This makes it easier to track
 what goes where when multiple arguments are being formatted:
 
 .. code:: c++
@@ -69,7 +69,7 @@ what goes where when multiple arguments are being formatted:
   fmt::print("Hello, {name}! The answer is {number}. Goodbye, {name}.",
              fmt::arg("name", "World"), fmt::arg("number", 42));
 
-If your compiler supports C++11 user-defined literals, the suffix ``_a`` offers 
+If your compiler supports C++11 user-defined literals, the suffix ``_a`` offers
 an alternative, slightly terser syntax for named arguments:
 
 .. code:: c++
@@ -107,7 +107,7 @@ The following code
 .. code:: c++
 
   fmt::format("Cyrillic letter {}", L'\x42e');
-  
+
 produces a compile-time error because wide character ``L'\x42e'`` cannot be
 formatted into a narrow string. You can use a wide format string instead:
 
