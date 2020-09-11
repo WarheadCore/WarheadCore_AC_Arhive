@@ -1702,10 +1702,10 @@ public:
         mMitems[it->GetGUIDLow()] = it;
     }
 
-    bool RemoveMItem(uint32 id)
-    {
-        return mMitems.erase(id) ? true : false;
-    }
+        bool RemoveMItem(uint32 id)
+        {
+            return !!mMitems.erase(id);
+        }
 
     void PetSpellInitialize();
     void CharmSpellInitialize();

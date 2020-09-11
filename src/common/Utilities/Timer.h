@@ -18,9 +18,8 @@
 #ifndef ACORE_TIMER_H
 #define ACORE_TIMER_H
 
-#include "Define.h"
+#include "Common.h"
 #include "Duration.h"
-#include <chrono>
 
 inline TimePoint GetApplicationStartTime()
 {

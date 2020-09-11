@@ -23,7 +23,7 @@
 
 template <class T>
 DatabaseWorkerPool<T>::DatabaseWorkerPool() :
-    _mqueue(new ACE_Message_Queue<ACE_SYNCH>(2*1024*1024, 2*1024*1024)),
+    _mqueue(new ACE_Message_Queue<ACE_SYNCH>(2 * 1024 * 1024, 2 * 1024 * 1024)),
     _queue(new ACE_Activation_Queue(_mqueue)),
     _async_threads(0),
     _synch_threads(0)
@@ -37,7 +37,7 @@ DatabaseWorkerPool<T>::DatabaseWorkerPool() :
 
 template <class T>
 void DatabaseWorkerPool<T>::SetConnectionInfo(std::string const& infoString,
-    uint8 const asyncThreads, uint8 const synchThreads)
+        uint8 const asyncThreads, uint8 const synchThreads)
 {
     _connectionInfo = std::make_unique<MySQLConnectionInfo>(infoString);
 
@@ -51,8 +51,8 @@ uint32 DatabaseWorkerPool<T>::Open()
     WPFatal(_connectionInfo.get(), "Connection info was not set!");
 
     LOG_INFO("sql.driver", "Try opening DatabasePool '%s'. "
-        "Asynchronous connections: %u, synchronous connections: %u.",
-        GetDatabaseName(), _async_threads, _synch_threads);
+             "Asynchronous connections: %u, synchronous connections: %u.",
+             GetDatabaseName(), _async_threads, _synch_threads);
 
     uint32 error = OpenConnections(IDX_ASYNC, _async_threads);
 
@@ -64,8 +64,8 @@ uint32 DatabaseWorkerPool<T>::Open()
     if (!error)
     {
         LOG_INFO("sql.driver", "> DatabasePool '%s' opened successfully. " SZFMTD
-            " total connections running.", GetDatabaseName(),
-            (_connections[IDX_SYNCH].size() + _connections[IDX_ASYNC].size()));
+                 " total connections running.", GetDatabaseName(),
+                 (_connections[IDX_SYNCH].size() + _connections[IDX_ASYNC].size()));
 
         LOG_INFO("sql.driver", "");
     }
@@ -93,7 +93,7 @@ void DatabaseWorkerPool<T>::Close()
     }
 
     LOG_INFO("sql.driver", "Asynchronous connections on DatabasePool '%s' terminated. Proceeding with synchronous connections.",
-        GetDatabaseName());
+             GetDatabaseName());
 
     //! Shut down the synchronous connections
     //! There's no need for locking the connection, because DatabaseWorkerPool<>::Close
@@ -294,7 +294,7 @@ SQLTransaction DatabaseWorkerPool<T>::BeginTransaction()
 template <class T>
 void DatabaseWorkerPool<T>::CommitTransaction(SQLTransaction transaction)
 {
-    #ifdef ACORE_DEBUG
+#ifdef ACORE_DEBUG
     //! Only analyze transaction weaknesses in Debug mode.
     //! Ideally we catch the faults in Debug mode and then correct them,
     //! so there's no need to waste these CPU cycles in Release mode.
@@ -309,7 +309,7 @@ void DatabaseWorkerPool<T>::CommitTransaction(SQLTransaction transaction)
         default:
             break;
     }
-    #endif // ACORE_DEBUG
+#endif // ACORE_DEBUG
 
     Enqueue(new TransactionTask(transaction));
 }
@@ -393,7 +393,7 @@ T* DatabaseWorkerPool<T>::GetFreeConnection()
     uint8 i = 0;
     size_t num_cons = _connectionCount[IDX_SYNCH];
     T* t = nullptr;
-    
+
     //! Block forever until a connection is free
     for (;;)
     {

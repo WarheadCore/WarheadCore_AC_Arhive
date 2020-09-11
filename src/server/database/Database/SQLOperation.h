@@ -58,17 +58,17 @@ class MySQLConnection;
 
 class WH_DATABASE_API SQLOperation : public ACE_Method_Request
 {
-    public:
-        SQLOperation(): m_conn(NULL) { }
-        virtual int call()
-        {
-            Execute();
-            return 0;
-        }
-        virtual bool Execute() = 0;
-        virtual void SetConnection(MySQLConnection* con) { m_conn = con; }
+public:
+    SQLOperation(): m_conn(NULL) { }
+    virtual int call()
+    {
+        Execute();
+        return 0;
+    }
+    virtual bool Execute() = 0;
+    virtual void SetConnection(MySQLConnection* con) { m_conn = con; }
 
-        MySQLConnection* m_conn;
+    MySQLConnection* m_conn;
 };
 
 #endif

@@ -20,21 +20,24 @@
 
 #include <chrono>
 
+/// Microseconds shorthand typedef.
+using Microseconds = std::chrono::microseconds;
+
 /// Milliseconds shorthand typedef.
-typedef std::chrono::milliseconds Milliseconds;
+using Milliseconds = std::chrono::milliseconds;
 
 /// Seconds shorthand typedef.
-typedef std::chrono::seconds Seconds;
+using Seconds = std::chrono::seconds;
 
 /// Minutes shorthand typedef.
-typedef std::chrono::minutes Minutes;
+using Minutes = std::chrono::minutes;
 
 /// Hours shorthand typedef.
-typedef std::chrono::hours Hours;
+using Hours = std::chrono::hours;
 
 /// time_point shorthand typedefs
-typedef std::chrono::steady_clock::time_point TimePoint;
-typedef std::chrono::system_clock::time_point SystemTimePoint;
+using TimePoint = std::chrono::steady_clock::time_point;
+using SystemTimePoint = std::chrono::system_clock::time_point;
 
 /// Makes std::chrono_literals globally available.
 using namespace std::chrono_literals;
