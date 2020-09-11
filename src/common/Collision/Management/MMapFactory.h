@@ -38,11 +38,11 @@ namespace MMAP
     // access point to MMapManager singleton
     class WH_COMMON_API MMapFactory
     {
-        public:
-            static MMapManager* createOrGetMMapManager();
-            static void clear();
-            static void InitializeDisabledMaps();
-            static bool forbiddenMaps[1000];
+    public:
+        static MMapManager* createOrGetMMapManager();
+        static void clear();
+        static void InitializeDisabledMaps();
+        static bool forbiddenMaps[1000];
     };
 }
 

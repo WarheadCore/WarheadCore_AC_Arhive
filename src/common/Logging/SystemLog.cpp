@@ -36,7 +36,7 @@ using namespace Poco;
 
 namespace
 {
-std::string const& LOGGER_SYSTEM = "system";
+    std::string const& LOGGER_SYSTEM = "system";
 }
 
 SystemLog::SystemLog()
@@ -122,14 +122,14 @@ void SystemLog::outSys(uint8 logLevel, std::string&& message)
     {
         switch (logLevel)
         {
-        case 3:
-            logger.error(message);
-            break;
-        case 6:
-            logger.information(message);
-            break;
-        default:
-            break;
+            case 3:
+                logger.error(message);
+                break;
+            case 6:
+                logger.information(message);
+                break;
+            default:
+                break;
         }
     }
     catch (const std::exception& e)

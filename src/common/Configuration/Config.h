@@ -63,7 +63,7 @@ public:
 
 private:
     bool dryRun = false;
-    
+
     bool LoadData(std::string const& file);
 };
 

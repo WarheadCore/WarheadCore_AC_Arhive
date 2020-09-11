@@ -40,56 +40,56 @@ using namespace Poco;
 
 namespace
 {
-// Const loggers name
-std::string const& LOGGER_ROOT = "root";
-std::string const& LOGGER_GM = "commands.gm";
-std::string const& LOGGER_PLAYER_DUMP = "entities.player.dump";
+    // Const loggers name
+    std::string const& LOGGER_ROOT = "root";
+    std::string const& LOGGER_GM = "commands.gm";
+    std::string const& LOGGER_PLAYER_DUMP = "entities.player.dump";
 
-// Prefix's
-std::string const& PREFIX_LOGGER = "Logger.";
-std::string const& PREFIX_CHANNEL = "LogChannel.";
+    // Prefix's
+    std::string const& PREFIX_LOGGER = "Logger.";
+    std::string const& PREFIX_CHANNEL = "LogChannel.";
 
-std::string m_logsDir;
-LogLevel highestLogLevel;
+    std::string m_logsDir;
+    LogLevel highestLogLevel;
 
-std::unordered_map<std::string, FormattingChannel*> _channelStore;
+    std::unordered_map<std::string, FormattingChannel*> _channelStore;
 
-FormattingChannel* const* GetFormattingChannel(std::string const& channelName)
-{
-    auto const& itr = _channelStore.find(channelName);
-    if (itr != _channelStore.end())
-        return &_channelStore.at(channelName);
-
-    return nullptr;
-}
-
-void AddFormattingChannel(std::string const& channelName, FormattingChannel* channel)
-{
-    if (GetFormattingChannel(channelName))
+    FormattingChannel* const* GetFormattingChannel(std::string const& channelName)
     {
-        SYS_LOG_ERROR("> Formatting channel (%s) is already exist!", channelName.c_str());
-        return;
+        auto const& itr = _channelStore.find(channelName);
+        if (itr != _channelStore.end())
+            return &_channelStore.at(channelName);
+
+        return nullptr;
     }
 
-    _channelStore.insert(std::make_pair(channelName, channel));
-}
+    void AddFormattingChannel(std::string const& channelName, FormattingChannel* channel)
+    {
+        if (GetFormattingChannel(channelName))
+        {
+            SYS_LOG_ERROR("> Formatting channel (%s) is already exist!", channelName.c_str());
+            return;
+        }
 
-Logger* GetLoggerByType(std::string_view type)
-{
-    if (Logger::has(std::string(type)))
-        return &Logger::get(std::string(type));
+        _channelStore.insert(std::make_pair(channelName, channel));
+    }
 
-    if (type == LOGGER_ROOT)
-        return nullptr;
+    Logger* GetLoggerByType(std::string_view type)
+    {
+        if (Logger::has(std::string(type)))
+            return &Logger::get(std::string(type));
 
-    auto parentLogger = LOGGER_ROOT;
-    size_t found = type.find_last_of('.');
+        if (type == LOGGER_ROOT)
+            return nullptr;
 
-    if (found != std::string::npos)
-        parentLogger = type.substr(0, found);
+        auto parentLogger = LOGGER_ROOT;
+        size_t found = type.find_last_of('.');
 
-    return GetLoggerByType(parentLogger);
-}
+        if (found != std::string::npos)
+            parentLogger = type.substr(0, found);
+
+        return GetLoggerByType(parentLogger);
+    }
 }
 
 Log::Log()
@@ -423,32 +423,32 @@ void Log::_Write(std::string_view filter, LogLevel const level, std::string cons
     {
         switch (level)
         {
-        case LogLevel::LOG_LEVEL_FATAL:
-            logger->fatal(message);
-            break;
-        case LogLevel::LOG_LEVEL_CRITICAL:
-            logger->critical(message);
-            break;
-        case LogLevel::LOG_LEVEL_ERROR:
-            logger->error(message);
-            break;
-        case LogLevel::LOG_LEVEL_WARNING:
-            logger->warning(message);
-            break;
-        case LogLevel::LOG_LEVEL_NOTICE:
-            logger->notice(message);
-            break;
-        case LogLevel::LOG_LEVEL_INFO:
-            logger->information(message);
-            break;
-        case LogLevel::LOG_LEVEL_DEBUG:
-            logger->debug(message);
-            break;
-        case LogLevel::LOG_LEVEL_TRACE:
-            logger->trace(message);
-            break;
-        default:
-            break;
+            case LogLevel::LOG_LEVEL_FATAL:
+                logger->fatal(message);
+                break;
+            case LogLevel::LOG_LEVEL_CRITICAL:
+                logger->critical(message);
+                break;
+            case LogLevel::LOG_LEVEL_ERROR:
+                logger->error(message);
+                break;
+            case LogLevel::LOG_LEVEL_WARNING:
+                logger->warning(message);
+                break;
+            case LogLevel::LOG_LEVEL_NOTICE:
+                logger->notice(message);
+                break;
+            case LogLevel::LOG_LEVEL_INFO:
+                logger->information(message);
+                break;
+            case LogLevel::LOG_LEVEL_DEBUG:
+                logger->debug(message);
+                break;
+            case LogLevel::LOG_LEVEL_TRACE:
+                logger->trace(message);
+                break;
+            default:
+                break;
         }
     }
     catch (const std::exception& e)

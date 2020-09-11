@@ -189,7 +189,7 @@ public:
     {
         RepeatEvent(uint32(time.count()));
     }
-    
+
     /**
     * @name RepeatEvent
     * @brief Repeats the mostly recently executed event, Equivalent to Repeat(urand(minTime, maxTime).
