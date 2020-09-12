@@ -30,228 +30,228 @@ using namespace boost::iostreams;
 namespace warhead
 {
 
-template<typename T>
-class TCLogSink
-{
-    T callback_;
-
-public:
-    typedef char      char_type;
-    typedef sink_tag  category;
-
-    // Requires a callback type which has a void(std::string) signature
-    TCLogSink(T callback)
-        : callback_(std::move(callback)) { }
-
-    std::streamsize write(char const* str, std::streamsize size)
+    template<typename T>
+    class TCLogSink
     {
-        callback_(std::string(str, size));
-        return size;
-    }
-};
+        T callback_;
 
-template<typename T>
-auto MakeTCLogSink(T&& callback)
+    public:
+        typedef char      char_type;
+        typedef sink_tag  category;
+
+        // Requires a callback type which has a void(std::string) signature
+        TCLogSink(T callback)
+            : callback_(std::move(callback)) { }
+
+        std::streamsize write(char const* str, std::streamsize size)
+        {
+            callback_(std::string(str, size));
+            return size;
+        }
+    };
+
+    template<typename T>
+    auto MakeTCLogSink(T&& callback)
     -> TCLogSink<typename std::decay<T>::type>
-{
-    return { std::forward<T>(callback) };
-}
-
-template<typename T>
-static int CreateChildProcess(T waiter, std::string const& executable,
-                              std::vector<std::string> const& args,
-                              std::string const& logger, std::string const& input,
-                              bool secure)
-{
-    auto outPipe = create_pipe();
-    auto errPipe = create_pipe();
-
-    std::optional<file_descriptor_source> inputSource;
-
-    if (!secure)
     {
-        LOG_TRACE(logger, "Starting process \"%s\" with arguments: \"%s\".",
-                executable.c_str(), boost::algorithm::join(args, " ").c_str());
+        return { std::forward<T>(callback) };
     }
 
-    // Start the child process
-    child c = [&]
+    template<typename T>
+    static int CreateChildProcess(T waiter, std::string const& executable,
+                                  std::vector<std::string> const& args,
+                                  std::string const& logger, std::string const& input,
+                                  bool secure)
     {
-        if (!input.empty())
+        auto outPipe = create_pipe();
+        auto errPipe = create_pipe();
+
+        std::optional<file_descriptor_source> inputSource;
+
+        if (!secure)
         {
-            inputSource = file_descriptor_source(input);
-
-            // With binding stdin
-            return execute(run_exe(boost::filesystem::absolute(executable)),
-                set_args(args),
-                inherit_env(),
-                bind_stdin(*inputSource),
-                bind_stdout(file_descriptor_sink(outPipe.sink, close_handle)),
-                bind_stderr(file_descriptor_sink(errPipe.sink, close_handle)));
+            LOG_TRACE(logger, "Starting process \"%s\" with arguments: \"%s\".",
+                      executable.c_str(), boost::algorithm::join(args, " ").c_str());
         }
-        else
+
+        // Start the child process
+        child c = [&]
         {
-            // Without binding stdin
-            return execute(run_exe(boost::filesystem::absolute(executable)),
-                set_args(args),
-                inherit_env(),
-                bind_stdout(file_descriptor_sink(outPipe.sink, close_handle)),
-                bind_stderr(file_descriptor_sink(errPipe.sink, close_handle)));
+            if (!input.empty())
+            {
+                inputSource = file_descriptor_source(input);
+
+                // With binding stdin
+                return execute(run_exe(boost::filesystem::absolute(executable)),
+                               set_args(args),
+                               inherit_env(),
+                               bind_stdin(*inputSource),
+                               bind_stdout(file_descriptor_sink(outPipe.sink, close_handle)),
+                               bind_stderr(file_descriptor_sink(errPipe.sink, close_handle)));
+            }
+            else
+            {
+                // Without binding stdin
+                return execute(run_exe(boost::filesystem::absolute(executable)),
+                               set_args(args),
+                               inherit_env(),
+                               bind_stdout(file_descriptor_sink(outPipe.sink, close_handle)),
+                               bind_stderr(file_descriptor_sink(errPipe.sink, close_handle)));
+            }
+        }();
+
+        file_descriptor_source outFd(outPipe.source, close_handle);
+        file_descriptor_source errFd(errPipe.source, close_handle);
+
+        auto outInfo = MakeTCLogSink([&](std::string msg)
+        {
+            LOG_INFO(logger, "%s", msg.c_str());
+        });
+
+        auto outError = MakeTCLogSink([&](std::string msg)
+        {
+            LOG_ERROR(logger, "%s", msg.c_str());
+        });
+
+        copy(outFd, outInfo);
+        copy(errFd, outError);
+
+        // Call the waiter in the current scope to prevent
+        // the streams from closing too early on leaving the scope.
+        int const result = waiter(c);
+
+        if (!secure)
+        {
+            LOG_TRACE(logger, ">> Process \"%s\" finished with return value %i.",
+                      executable.c_str(), result);
         }
-    }();
 
-    file_descriptor_source outFd(outPipe.source, close_handle);
-    file_descriptor_source errFd(errPipe.source, close_handle);
+        if (inputSource)
+            inputSource->close();
 
-    auto outInfo = MakeTCLogSink([&](std::string msg)
-    {
-        LOG_INFO(logger, "%s", msg.c_str());
-    });
-
-    auto outError = MakeTCLogSink([&](std::string msg)
-    {
-        LOG_ERROR(logger, "%s", msg.c_str());
-    });
-
-    copy(outFd, outInfo);
-    copy(errFd, outError);
-
-    // Call the waiter in the current scope to prevent
-    // the streams from closing too early on leaving the scope.
-    int const result = waiter(c);
-
-    if (!secure)
-    {
-        LOG_TRACE(logger, ">> Process \"%s\" finished with return value %i.",
-                executable.c_str(), result);
+        return result;
     }
 
-    if (inputSource)
-        inputSource->close();
-
-    return result;
-}
-
-int StartProcess(std::string const& executable, std::vector<std::string> const& args,
-                 std::string const& logger, std::string input_file, bool secure)
-{
-    return CreateChildProcess([](child& c) -> int
+    int StartProcess(std::string const& executable, std::vector<std::string> const& args,
+                     std::string const& logger, std::string input_file, bool secure)
     {
-        try
+        return CreateChildProcess([](child & c) -> int
         {
-            return wait_for_exit(c);
-        }
-        catch (...)
-        {
-            return EXIT_FAILURE;
-        }
-    }, executable, args, logger, input_file, secure);
-}
-
-class AsyncProcessResultImplementation
-    : public AsyncProcessResult
-{
-    std::string const executable;
-    std::vector<std::string> const args;
-    std::string const logger;
-    std::string const input_file;
-    bool const is_secure;
-
-    std::atomic<bool> was_terminated;
-
-    // Workaround for missing move support in boost < 1.57
-    std::optional<std::shared_ptr<std::future<int>>> result;
-    std::optional<std::reference_wrapper<child>> my_child;
-
-public:
-    explicit AsyncProcessResultImplementation(std::string executable_, std::vector<std::string> args_,
-                                     std::string logger_, std::string input_file_,
-                                     bool secure)
-        : executable(std::move(executable_)), args(std::move(args_)),
-          logger(std::move(logger_)), input_file(input_file_),
-          is_secure(secure), was_terminated(false) { }
-
-    AsyncProcessResultImplementation(AsyncProcessResultImplementation const&) = delete;
-    AsyncProcessResultImplementation& operator= (AsyncProcessResultImplementation const&) = delete;
-    AsyncProcessResultImplementation(AsyncProcessResultImplementation&&) = delete;
-    AsyncProcessResultImplementation& operator= (AsyncProcessResultImplementation&&) = delete;
-
-    int StartProcess()
-    {
-        ASSERT(!my_child, "Process started already!");
-
-        return CreateChildProcess([&](child& c) -> int
-        {
-            int result;
-            my_child = std::reference_wrapper<child>(c);
-
             try
             {
-                result = wait_for_exit(c);
+                return wait_for_exit(c);
             }
             catch (...)
             {
-                result = EXIT_FAILURE;
+                return EXIT_FAILURE;
             }
-
-            my_child.reset();
-            return was_terminated ? EXIT_FAILURE : result;
-
-        }, executable, args, logger, input_file, is_secure);
+        }, executable, args, logger, input_file, secure);
     }
 
-    void SetFuture(std::future<int> result_)
+    class AsyncProcessResultImplementation
+        : public AsyncProcessResult
     {
-        result = std::make_shared<std::future<int>>(std::move(result_));
-    }
+        std::string const executable;
+        std::vector<std::string> const args;
+        std::string const logger;
+        std::string const input_file;
+        bool const is_secure;
 
-    /// Returns the future which contains the result of the process
-    /// as soon it is finished.
-    std::future<int>& GetFutureResult() override
-    {
-        ASSERT(*result, "The process wasn't started!");
-        return **result;
-    }
+        std::atomic<bool> was_terminated;
 
-    /// Tries to terminate the process
-    void Terminate() override
-    {
-        if (!my_child)
+        // Workaround for missing move support in boost < 1.57
+        std::optional<std::shared_ptr<std::future<int>>> result;
+        std::optional<std::reference_wrapper<child>> my_child;
+
+    public:
+        explicit AsyncProcessResultImplementation(std::string executable_, std::vector<std::string> args_,
+                std::string logger_, std::string input_file_,
+                bool secure)
+            : executable(std::move(executable_)), args(std::move(args_)),
+              logger(std::move(logger_)), input_file(input_file_),
+              is_secure(secure), was_terminated(false) { }
+
+        AsyncProcessResultImplementation(AsyncProcessResultImplementation const&) = delete;
+        AsyncProcessResultImplementation& operator= (AsyncProcessResultImplementation const&) = delete;
+        AsyncProcessResultImplementation(AsyncProcessResultImplementation&&) = delete;
+        AsyncProcessResultImplementation& operator= (AsyncProcessResultImplementation&&) = delete;
+
+        int StartProcess()
         {
-            was_terminated = true;
-            try
+            ASSERT(!my_child, "Process started already!");
+
+            return CreateChildProcess([&](child & c) -> int
             {
-                terminate(my_child->get());
-            }
-            catch(...)
+                int result;
+                my_child = std::reference_wrapper<child>(c);
+
+                try
+                {
+                    result = wait_for_exit(c);
+                }
+                catch (...)
+                {
+                    result = EXIT_FAILURE;
+                }
+
+                my_child.reset();
+                return was_terminated ? EXIT_FAILURE : result;
+
+            }, executable, args, logger, input_file, is_secure);
+        }
+
+        void SetFuture(std::future<int> result_)
+        {
+            result = std::make_shared<std::future<int>>(std::move(result_));
+        }
+
+        /// Returns the future which contains the result of the process
+        /// as soon it is finished.
+        std::future<int>& GetFutureResult() override
+        {
+            ASSERT(*result, "The process wasn't started!");
+            return **result;
+        }
+
+        /// Tries to terminate the process
+        void Terminate() override
+        {
+            if (!my_child)
             {
-                // Do nothing
+                was_terminated = true;
+                try
+                {
+                    terminate(my_child->get());
+                }
+                catch(...)
+                {
+                    // Do nothing
+                }
             }
         }
-    }
-};
+    };
 
-std::shared_ptr<AsyncProcessResult>
+    std::shared_ptr<AsyncProcessResult>
     StartAsyncProcess(std::string executable, std::vector<std::string> args,
                       std::string logger, std::string input_file, bool secure)
-{
-    auto handle = std::make_shared<AsyncProcessResultImplementation>(
-        std::move(executable), std::move(args), std::move(logger), std::move(input_file), secure);
-
-    handle->SetFuture(std::async(std::launch::async, [handle] { return handle->StartProcess(); }));
-    return handle;
-}
-
-std::string SearchExecutableInPath(std::string const& filename)
-{
-    try
     {
-        return search_path(filename);
+        auto handle = std::make_shared<AsyncProcessResultImplementation>(
+                          std::move(executable), std::move(args), std::move(logger), std::move(input_file), secure);
+
+        handle->SetFuture(std::async(std::launch::async, [handle] { return handle->StartProcess(); }));
+        return handle;
     }
-    catch (...)
+
+    std::string SearchExecutableInPath(std::string const& filename)
     {
-        return "";
+        try
+        {
+            return search_path(filename);
+        }
+        catch (...)
+        {
+            return "";
+        }
     }
-}
 
 } // namespace warhead

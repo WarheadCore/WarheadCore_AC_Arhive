@@ -31,7 +31,7 @@ struct DynTreeImpl;
 
 class WH_COMMON_API DynamicMapTree
 {
-    DynTreeImpl *impl;
+    DynTreeImpl* impl;
 
 public:
 

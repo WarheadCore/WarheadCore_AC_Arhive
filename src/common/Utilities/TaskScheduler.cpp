@@ -52,7 +52,7 @@ TaskScheduler& TaskScheduler::CancelAll()
 
 TaskScheduler& TaskScheduler::CancelGroup(group_t const group)
 {
-    _task_holder.RemoveIf([group](TaskContainer const& task) -> bool
+    _task_holder.RemoveIf([group](TaskContainer const & task) -> bool
     {
         return task->IsInGroup(group);
     });
@@ -62,7 +62,7 @@ TaskScheduler& TaskScheduler::CancelGroup(group_t const group)
 TaskScheduler& TaskScheduler::CancelGroupsOf(std::vector<group_t> const& groups)
 {
     std::for_each(groups.begin(), groups.end(),
-        std::bind(&TaskScheduler::CancelGroup, this, std::placeholders::_1));
+                  std::bind(&TaskScheduler::CancelGroup, this, std::placeholders::_1));
 
     return *this;
 }

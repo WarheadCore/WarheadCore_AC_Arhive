@@ -67,30 +67,30 @@ namespace MMAP
     // holds all all access to mmap loading unloading and meshes
     class WH_COMMON_API MMapManager
     {
-        public:
-            MMapManager() : loadedTiles(0), thread_safe_environment(true) {}
-            ~MMapManager();
+    public:
+        MMapManager() : loadedTiles(0), thread_safe_environment(true) {}
+        ~MMapManager();
 
-            void InitializeThreadUnsafe(const std::vector<uint32>& mapIds);
-            bool loadMap(uint32 mapId, int32 x, int32 y);
-            bool unloadMap(uint32 mapId, int32 x, int32 y);
-            bool unloadMap(uint32 mapId);
-            bool unloadMapInstance(uint32 mapId, uint32 instanceId);
+        void InitializeThreadUnsafe(const std::vector<uint32>& mapIds);
+        bool loadMap(uint32 mapId, int32 x, int32 y);
+        bool unloadMap(uint32 mapId, int32 x, int32 y);
+        bool unloadMap(uint32 mapId);
+        bool unloadMapInstance(uint32 mapId, uint32 instanceId);
 
-            // the returned [dtNavMeshQuery const*] is NOT threadsafe
-            dtNavMeshQuery const* GetNavMeshQuery(uint32 mapId, uint32 instanceId);
-            dtNavMesh const* GetNavMesh(uint32 mapId);
+        // the returned [dtNavMeshQuery const*] is NOT threadsafe
+        dtNavMeshQuery const* GetNavMeshQuery(uint32 mapId, uint32 instanceId);
+        dtNavMesh const* GetNavMesh(uint32 mapId);
 
-            uint32 getLoadedTilesCount() const { return loadedTiles; }
-            uint32 getLoadedMapsCount() const { return loadedMMaps.size(); }
-        private:
-            bool loadMapData(uint32 mapId);
-            uint32 packTileID(int32 x, int32 y);
+        uint32 getLoadedTilesCount() const { return loadedTiles; }
+        uint32 getLoadedMapsCount() const { return loadedMMaps.size(); }
+    private:
+        bool loadMapData(uint32 mapId);
+        uint32 packTileID(int32 x, int32 y);
 
-            MMapDataSet::const_iterator GetMMapData(uint32 mapId) const;
-            MMapDataSet loadedMMaps;
-            uint32 loadedTiles;
-            bool thread_safe_environment;
+        MMapDataSet::const_iterator GetMMapData(uint32 mapId) const;
+        MMapDataSet loadedMMaps;
+        uint32 loadedTiles;
+        bool thread_safe_environment;
     };
 }
 

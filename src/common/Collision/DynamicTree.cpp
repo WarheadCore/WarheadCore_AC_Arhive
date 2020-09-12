@@ -30,21 +30,25 @@
 
 using VMAP::ModelInstance;
 
-namespace {
+namespace
+{
 
-int CHECK_TREE_PERIOD = 200;
+    int CHECK_TREE_PERIOD = 200;
 
 } // namespace
 
-template<> struct HashTrait< GameObjectModel>{
+template<> struct HashTrait< GameObjectModel>
+{
     static size_t hashCode(const GameObjectModel& g) { return (size_t)(void*)&g; }
 };
 
-template<> struct PositionTrait< GameObjectModel> {
+template<> struct PositionTrait< GameObjectModel>
+{
     static void getPosition(const GameObjectModel& g, G3D::Vector3& p) { p = g.getPosition(); }
 };
 
-template<> struct BoundsTrait< GameObjectModel> {
+template<> struct BoundsTrait< GameObjectModel>
+{
     static void getBounds(const GameObjectModel& g, G3D::AABox& out) { out = g.getBounds();}
     static void getBounds2(const GameObjectModel* g, G3D::AABox& out) { out = g->getBounds();}
 };
@@ -151,7 +155,7 @@ struct DynamicTreeIntersectionCallback
 };
 
 bool DynamicMapTree::getIntersectionTime(const uint32 phasemask, const G3D::Ray& ray,
-                                         const G3D::Vector3& endPos, float& maxDist) const
+        const G3D::Vector3& endPos, float& maxDist) const
 {
     float distance = maxDist;
     DynamicTreeIntersectionCallback callback(phasemask);
@@ -175,7 +179,7 @@ bool DynamicMapTree::getObjectHitPos(const uint32 phasemask, const G3D::Vector3&
         resultHit = endPos;
         return false;
     }
-    G3D::Vector3 dir = (endPos - startPos)/maxDist;              // direction with length of 1
+    G3D::Vector3 dir = (endPos - startPos) / maxDist;            // direction with length of 1
     G3D::Ray ray(startPos, dir);
     float dist = maxDist;
     if (getIntersectionTime(phasemask, ray, endPos, dist))
@@ -184,12 +188,12 @@ bool DynamicMapTree::getObjectHitPos(const uint32 phasemask, const G3D::Vector3&
         if (modifyDist < 0)
         {
             if ((resultHit - startPos).magnitude() > -modifyDist)
-                resultHit = resultHit + dir*modifyDist;
+                resultHit = resultHit + dir * modifyDist;
             else
                 resultHit = startPos;
         }
         else
-            resultHit = resultHit + dir*modifyDist;
+            resultHit = resultHit + dir * modifyDist;
 
         result = true;
     }
@@ -210,7 +214,7 @@ bool DynamicMapTree::isInLineOfSight(float x1, float y1, float z1, float x2, flo
     if (!G3D::fuzzyGt(maxDist, 0) )
         return true;
 
-    G3D::Ray r(v1, (v2-v1) / maxDist);
+    G3D::Ray r(v1, (v2 - v1) / maxDist);
     DynamicTreeIntersectionCallback callback(phasemask);
     impl->intersectRay(r, callback, maxDist, v2, true);
 

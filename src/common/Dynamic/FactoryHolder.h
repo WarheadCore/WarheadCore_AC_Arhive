@@ -52,9 +52,9 @@ private:
 template<class T>
 class Permissible
 {
-    public:
-        virtual ~Permissible() { }
-        virtual int Permit(const T *) const = 0;
+public:
+    virtual ~Permissible() { }
+    virtual int Permit(const T*) const = 0;
 };
 
 #endif
