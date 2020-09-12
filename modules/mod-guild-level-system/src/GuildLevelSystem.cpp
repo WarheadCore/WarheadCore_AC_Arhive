@@ -29,6 +29,14 @@
 #include "StringConvert.h"
 #include "Tokenize.h"
 
+namespace
+{
+    void EraseWhitespace(std::string& str)
+    {
+        str.erase(std::remove(str.begin(), str.end(), ' '), str.end());
+    }
+}
+
 #define GLS_IRERATOR(a) for (uint32 i = 0; i < a; ++i)
 
 GuildCriteria::GuildCriteria(uint32 guildID, uint32 stageID)
@@ -463,6 +471,11 @@ void GuildLevelSystem::LoadBaseCriteria()
         GLS_IRERATOR(GLS_SPELLS_REWARD_COUNT)
         _data.RewardSpells[i] = 0;
 
+        // Delele whitespace
+        ::EraseWhitespace(listItemID);
+        ::EraseWhitespace(listItemCount);
+        ::EraseWhitespace(listRewardSpells);
+
         auto const& listItemIDTokens = warhead::Tokenize(listItemID, ',', true);
         auto const& listItemCountTokens = warhead::Tokenize(listItemCount, ',', true);
 
@@ -589,6 +602,9 @@ void GuildLevelSystem::LoadCriteriaProgress()
         // Set empty items
         GLS_IRERATOR(GLS_ITEMS_COUNT)
         _data.ItemCount[i] = 0;
+
+        // Delete whilespace
+        ::EraseWhitespace(listItemCount);
 
         auto const& listItemCountTokens = warhead::Tokenize(listItemCount, ',', true);
 
