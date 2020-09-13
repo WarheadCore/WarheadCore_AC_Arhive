@@ -22,6 +22,8 @@
 #include "Chat.h"
 #include "ExternalMail.h"
 #include "GameLocale.h"
+#include "Tokenize.h"
+#include "StringConvert.h"
 
 OnlineReward* OnlineReward::instance()
 {
@@ -103,8 +105,8 @@ void OnlineReward::AddRewardHistory(uint32 lowGuid)
 
     RewardTimeHistory _data;
 
-    for (auto const& itr : Tokenizer(fields[0].GetString(), ','))
-        _data.PerOnline.insert(atoi(itr));
+    for (auto const& itr : warhead::Tokenize(fields[0].GetStringView(), ',', true))
+        _data.PerOnline.insert(warhead::StringTo<uint32>(itr).value_or(0));
 
     _data.PerTime = fields[1].GetUInt32();
 
@@ -205,7 +207,7 @@ void OnlineReward::SaveRewardDB()
     {
         uint32 lowGuid = itr.first;
 
-        auto GetRewardedData = [&]() -> RewardTimeHistory*
+        auto GetRewardedData = [&]() -> RewardTimeHistory *
         {
             auto const& _historyData = _rewardHistoryDB.find(lowGuid);
             if (_historyData != _rewardHistoryDB.end())

@@ -43,6 +43,7 @@
 #include "SocialMgr.h"
 #include "SpellAuras.h"
 #include "SpellAuraEffects.h"
+#include "StringConvert.h"
 #include "GitRevision.h"
 #include "UpdateMask.h"
 #include "Util.h"
@@ -2182,16 +2183,14 @@ void WorldSession::HandleCharFactionOrRaceChange(WorldPacket& recvData)
 
     // pussywizard: check titles here to prevent return while building queries
     const uint32 ktcount = KNOWN_TITLES_SIZE * 2;
-    Tokenizer tokensTitles(knownTitlesStr, ' ', ktcount);
-    if (recvData.GetOpcode() == CMSG_CHAR_FACTION_CHANGE)
+    std::vector<std::string_view> tokens = warhead::Tokenize(knownTitlesStr, ' ', false);
+
+    if (recvData.GetOpcode() == CMSG_CHAR_FACTION_CHANGE && tokens.size() != ktcount)
     {
-        if (tokensTitles.size() != ktcount)
-        {
-            WorldPacket data(SMSG_CHAR_FACTION_CHANGE, 1);
-            data << uint8(CHAR_CREATE_ERROR);
-            SendPacket(&data);
-            return;
-        }
+        WorldPacket data(SMSG_CHAR_FACTION_CHANGE, 1);
+        data << uint8(CHAR_CREATE_ERROR);
+        SendPacket(&data);
+        return;
     }
 
     if (!sObjectMgr->GetPlayerInfo(race, playerClass))
@@ -2611,13 +2610,25 @@ void WorldSession::HandleCharFactionOrRaceChange(WorldPacket& recvData)
             // Title conversion
             if (knownTitlesStr)
             {
-                uint32 knownTitles[ktcount];
+                std::array<uint32, KNOWN_TITLES_SIZE * 2> knownTitles;
 
-                //if (tokens.size() != ktcount) // pussywizard: checked at the beginning
-                //    return;
+                for (uint32 index = 0; index < knownTitles.size(); ++index)
+                {
+                    std::optional<uint32> thisMask;
+                    if (index < tokens.size())
+                        thisMask = warhead::StringTo<uint32>(tokens[index]);
 
-                for (uint32 index = 0; index < ktcount; ++index)
-                    knownTitles[index] = atol(tokensTitles[index]);
+                    if (thisMask)
+                        knownTitles[index] = *thisMask;
+                    else
+                    {
+                        LOG_WARN("entities.player", "%s has invalid title data '%s' at index %u - skipped, this may result in titles being lost",
+                                 GetPlayerInfo().c_str(), (index < tokens.size()) ? std::string(tokens[index]).c_str() : "<none>", index);
+
+                        knownTitles[index] = 0;
+                    }
+
+                }
 
                 for (std::map<uint32, uint32>::const_iterator it = sObjectMgr->FactionChangeTitles.begin(); it != sObjectMgr->FactionChangeTitles.end(); ++it)
                 {
@@ -2655,8 +2666,8 @@ void WorldSession::HandleCharFactionOrRaceChange(WorldPacket& recvData)
                     }
 
                     std::ostringstream ss;
-                    for (uint32 index = 0; index < ktcount; ++index)
-                        ss << knownTitles[index] << ' ';
+                    for (uint32 mask : knownTitles)
+                        ss << mask << ' ';
 
                     stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_CHAR_TITLES_FACTION_CHANGE);
                     stmt->setString(0, ss.str().c_str());

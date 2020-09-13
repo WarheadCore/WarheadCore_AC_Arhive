@@ -43,6 +43,7 @@ EndScriptData */
 #include "GameGraveyard.h"
 #include "GameConfig.h"
 #include "GameLocale.h"
+#include "StringConvert.h"
 
 class reload_commandscript : public CommandScript
 {
@@ -240,7 +241,7 @@ public:
     static bool HandleReloadAllNpcCommand(ChatHandler* handler, const char* args)
     {
         if (*args != 'a')                                          // will be reloaded from all_gossips
-        HandleReloadNpcTrainerCommand(handler, "a");
+            HandleReloadNpcTrainerCommand(handler, "a");
         HandleReloadNpcVendorCommand(handler, "a");
         HandleReloadPointsOfInterestCommand(handler, "a");
         HandleReloadSpellClickSpellsCommand(handler, "a");
@@ -300,7 +301,7 @@ public:
         HandleReloadGossipMenuCommand(handler, "a");
         HandleReloadGossipMenuOptionCommand(handler, "a");
         if (*args != 'a')                                          // already reload from all_scripts
-        HandleReloadPointsOfInterestCommand(handler, "a");
+            HandleReloadPointsOfInterestCommand(handler, "a");
         return true;
     }
 
@@ -422,11 +423,9 @@ public:
         if (!*args)
             return false;
 
-        Tokenizer entries(std::string(args), ' ');
-
-        for (Tokenizer::const_iterator itr = entries.begin(); itr != entries.end(); ++itr)
+        for (auto const& entryStr : warhead::Tokenize(args, ' ', false))
         {
-            uint32 entry = uint32(atoi(*itr));
+            uint32 entry = warhead::StringTo<uint32>(entryStr).value_or(0);
 
             PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_SEL_CREATURE_TEMPLATE);
             stmt->setUInt32(0, entry);
@@ -497,7 +496,7 @@ public:
             cInfo->SkinLootId         = fields[45].GetUInt32();
 
             for (uint8 i = SPELL_SCHOOL_HOLY; i < MAX_SPELL_SCHOOL; ++i)
-                cInfo->resistance[i] = fields[46 + i -1].GetUInt16();
+                cInfo->resistance[i] = fields[46 + i - 1].GetUInt16();
 
             cInfo->spells[0]          = fields[52].GetUInt32();
             cInfo->spells[1]          = fields[53].GetUInt32();

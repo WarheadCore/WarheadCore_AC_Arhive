@@ -29,6 +29,7 @@
 #include <vector>
 #include <list>
 #include <map>
+#include <optional>
 #include <ace/INET_Addr.h>
 
 // Searcher for map of structs
@@ -41,40 +42,12 @@ template<typename T, class S> struct Finder
     bool operator()(const std::pair<int, S>& obj) { return obj.second.*idMember_ == val_; }
 };
 
-class WH_COMMON_API Tokenizer
-{
-public:
-    typedef std::vector<char const*> StorageType;
-
-    typedef StorageType::size_type size_type;
-
-    typedef StorageType::const_iterator const_iterator;
-    typedef StorageType::reference reference;
-    typedef StorageType::const_reference const_reference;
-
-public:
-    Tokenizer(std::string_view src, char const sep, uint32 vectorReserve = 0);
-    ~Tokenizer() { delete[] m_str; }
-
-    const_iterator begin() const { return m_storage.begin(); }
-    const_iterator end() const { return m_storage.end(); }
-
-    size_type size() const { return m_storage.size(); }
-
-    reference operator [] (size_type i) { return m_storage[i]; }
-    const_reference operator [] (size_type i) const { return m_storage[i]; }
-
-private:
-    char* m_str;
-    StorageType m_storage;
-};
-
 WH_COMMON_API struct tm* localtime_r(time_t const* time, struct tm* result);
 WH_COMMON_API time_t LocalTimeToUTCTime(time_t time);
 WH_COMMON_API time_t GetLocalHourTimestamp(time_t time, uint8 hour, bool onlyAfterTime = true);
 WH_COMMON_API tm TimeBreakdown(time_t t);
 
-WH_COMMON_API int32 MoneyStringToMoney(const std::string& moneyString);
+WH_COMMON_API std::optional<int32> MoneyStringToMoney(const std::string& moneyString);
 WH_COMMON_API std::string secsToTimeString(uint64 timeInSecs, bool shortText = false);
 WH_COMMON_API uint32 TimeStringToSecs(const std::string& timestring);
 WH_COMMON_API std::string TimeToTimestampStr(time_t t);

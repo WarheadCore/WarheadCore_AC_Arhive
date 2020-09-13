@@ -21,6 +21,8 @@
 #include "Log.h"
 #include "Errors.h"
 #include "TypeList.h"
+#include "Tokenize.h"
+#include "StringConvert.h"
 #include <ace/Task.h>
 #include "SFMT.h"
 #include "Errors.h" // for ASSERT
@@ -84,40 +86,6 @@ uint32 urandweighted(size_t count, double const* chances)
 SFMTEngine& SFMTEngine::Instance()
 {
     return engine;
-}
-
-Tokenizer::Tokenizer(std::string_view src, const char sep, uint32 vectorReserve)
-{
-    m_str = new char[src.length() + 1];
-    memcpy(m_str, src.data(), src.length() + 1);
-
-    if (vectorReserve)
-        m_storage.reserve(vectorReserve);
-
-    char* posold = m_str;
-    char* posnew = m_str;
-
-    for (;;)
-    {
-        if (*posnew == sep)
-        {
-            m_storage.push_back(posold);
-            posold = posnew + 1;
-
-            *posnew = '\0';
-        }
-        else if (*posnew == '\0')
-        {
-            // Hack like, but the old code accepted these kind of broken strings,
-            // so changing it would break other things
-            if (posold != posnew)
-                m_storage.push_back(posold);
-
-            break;
-        }
-
-        ++posnew;
-    }
 }
 
 #if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__))
@@ -184,32 +152,43 @@ std::string secsToTimeString(uint64 timeInSecs, bool shortText)
     return str;
 }
 
-int32 MoneyStringToMoney(const std::string& moneyString)
+std::optional<int32> MoneyStringToMoney(const std::string& moneyString)
 {
     int32 money = 0;
 
-    if (!(std::count(moneyString.begin(), moneyString.end(), 'g') == 1 ||
-            std::count(moneyString.begin(), moneyString.end(), 's') == 1 ||
-            std::count(moneyString.begin(), moneyString.end(), 'c') == 1))
-        return 0; // Bad format
+    bool hadG = false;
+    bool hadS = false;
+    bool hadC = false;
 
-    Tokenizer tokens(moneyString, ' ');
-    for (Tokenizer::const_iterator itr = tokens.begin(); itr != tokens.end(); ++itr)
+    for (std::string_view token : warhead::Tokenize(moneyString, ' ', false))
     {
-        std::string tokenString(*itr);
-        size_t gCount = std::count(tokenString.begin(), tokenString.end(), 'g');
-        size_t sCount = std::count(tokenString.begin(), tokenString.end(), 's');
-        size_t cCount = std::count(tokenString.begin(), tokenString.end(), 'c');
-        if (gCount + sCount + cCount != 1)
-            return 0;
+        uint32 unit;
+        switch (token[token.length() - 1])
+        {
+            case 'g':
+                if (hadG) return std::nullopt;
+                hadG = true;
+                unit = 100 * 100;
+                break;
+            case 's':
+                if (hadS) return std::nullopt;
+                hadS = true;
+                unit = 100;
+                break;
+            case 'c':
+                if (hadC) return std::nullopt;
+                hadC = true;
+                unit = 1;
+                break;
+            default:
+                return std::nullopt;
+        }
 
-        uint32 amount = atoi(*itr);
-        if (gCount == 1)
-            money += amount * 100 * 100;
-        else if (sCount == 1)
-            money += amount * 100;
-        else if (cCount == 1)
-            money += amount;
+        std::optional<uint32> amount = warhead::StringTo<uint32>(token.substr(0, token.length() - 1));
+        if (amount)
+            money += (unit * *amount);
+        else
+            return std::nullopt;
     }
 
     return money;

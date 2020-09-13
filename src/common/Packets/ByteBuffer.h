@@ -169,20 +169,23 @@ public:
         return *this;
     }
 
-    ByteBuffer& operator<<(const std::string& value)
+    ByteBuffer& operator<<(std::string_view value)
     {
         if (size_t len = value.length())
-            append((uint8 const*)value.c_str(), len);
-        append((uint8)0);
+            append(reinterpret_cast<uint8 const*>(value.data()), len);
+
+        append(static_cast<uint8>(0));
         return *this;
+    }
+
+    ByteBuffer& operator<<(std::string const& str)
+    {
+        return operator<<(std::string_view(str));
     }
 
     ByteBuffer& operator<<(const char* str)
     {
-        if (size_t len = (str ? strlen(str) : 0))
-            append((uint8 const*)str, len);
-        append((uint8)0);
-        return *this;
+        return operator<<(std::string_view(str ? str : ""));
     }
 
     ByteBuffer& operator>>(bool& value)

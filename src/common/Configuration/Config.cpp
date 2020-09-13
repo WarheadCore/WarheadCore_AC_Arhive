@@ -19,8 +19,8 @@
 #include "Errors.h"
 #include "Log.h"
 #include "SystemLog.h"
-#include "Util.h"
 #include "StringConvert.h"
+#include "Tokenize.h"
 #include <ace/Configuration_Import_Export.h>
 #include <memory>
 #include <mutex>
@@ -236,9 +236,9 @@ void ConfigMgr::SetConfigList(std::string const& fileName, std::string const& mo
     // Clean config list before load
     _modulesConfigFiles.clear();
 
-    Tokenizer configFileList(modulesConfigList, ',');
-    for (auto const& itr : configFileList)
-        _modulesConfigFiles.push_back(itr);
+    std::vector<std::string_view> tokens = warhead::Tokenize(modulesConfigList, ',', false);
+    for (auto const& itr : tokens)
+        _modulesConfigFiles.push_back(std::string(itr));
 }
 
 bool ConfigMgr::LoadAppConfigs(std::string const& applicationName /*= "worldserver"*/)

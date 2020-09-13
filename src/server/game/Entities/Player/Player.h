@@ -972,7 +972,7 @@ public:
     ~PlayerTaxi() {}
     // Nodes
     void InitTaxiNodesForLevel(uint32 race, uint32 chrClass, uint8 level);
-    void LoadTaxiMask(std::string const& data);
+    bool LoadTaxiMask(std::string const& data);
 
     bool IsTaximaskNodeKnown(uint32 nodeidx) const
     {
@@ -995,7 +995,7 @@ public:
     void AppendTaximaskTo(ByteBuffer& data, bool all);
 
     // Destinations
-    bool LoadTaxiDestinationsFromString(std::string const& values, TeamId teamId);
+    [[nodiscard]] bool LoadTaxiDestinationsFromString(std::string const& values, TeamId teamId);
     std::string SaveTaxiDestinationsToString();
 
     void ClearTaxiDestinations() { m_TaxiDestinations.clear(); _taxiSegment = 0; }
@@ -1590,8 +1590,6 @@ public:
     bool isBeingLoaded() const override;
 
     void Initialize(uint32 guid);
-    static uint32 GetUInt32ValueFromArray(Tokenizer const& data, uint16 index);
-    static float  GetFloatValueFromArray(Tokenizer const& data, uint16 index);
     static uint32 GetZoneIdFromDB(uint64 guid);
     static uint32 GetLevelFromStorage(uint64 guid);
     static bool   LoadPositionFromDB(uint32& mapid, float& x, float& y, float& z, float& o, bool& in_flight, uint64 guid);
@@ -1606,8 +1604,6 @@ public:
     void SaveInventoryAndGoldToDB(SQLTransaction& trans);                    // fast save function for item/money cheating preventing
     void SaveGoldToDB(SQLTransaction& trans);
 
-    static void SetUInt32ValueInArray(Tokenizer& data, uint16 index, uint32 value);
-    static void SetFloatValueInArray(Tokenizer& data, uint16 index, float value);
     static void Customize(uint64 guid, uint8 gender, uint8 skin, uint8 face, uint8 hairStyle, uint8 hairColor, uint8 facialHair);
     static void SavePositionInDB(uint32 mapid, float x, float y, float z, float o, uint32 zone, uint64 guid);
 
@@ -1706,10 +1702,10 @@ public:
         mMitems[it->GetGUIDLow()] = it;
     }
 
-        bool RemoveMItem(uint32 id)
-        {
-            return !!mMitems.erase(id);
-        }
+    bool RemoveMItem(uint32 id)
+    {
+        return !!mMitems.erase(id);
+    }
 
     void PetSpellInitialize();
     void CharmSpellInitialize();

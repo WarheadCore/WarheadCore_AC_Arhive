@@ -21,7 +21,7 @@
 #include "Field.h"
 #include "Log.h"
 #include "QueryResult.h"
-#include "Util.h"
+#include "Tokenize.h"
 #include "SHA1.h"
 #include <boost/filesystem/operations.hpp>
 #include <fstream>
@@ -126,9 +126,9 @@ UpdateFetcher::DirectoryStorage UpdateFetcher::ReceiveIncludedDirectories() cons
 
     std::vector<std::string> moduleList;
 
-    Tokenizer _modules(WH_MODULES_LIST, ',');
-    for (auto const& itr : _modules)
-        moduleList.push_back(itr);
+    auto const& _modulesTokens = warhead::Tokenize(WH_MODULES_LIST, ',', true);
+    for (auto const& itr : _modulesTokens)
+        moduleList.push_back(std::string(itr));
 
     for (auto const& itr : moduleList)
     {

@@ -18,6 +18,8 @@
 #include "ChannelMgr.h"
 #include "Player.h"
 #include "GameConfig.h"
+#include "StringConvert.h"
+#include "Tokenize.h"
 
 ChannelMgr::~ChannelMgr()
 {
@@ -80,16 +82,14 @@ void ChannelMgr::LoadChannels()
                 Field* banFields = banResult->Fetch();
                 if (!banFields)
                     break;
-                newChannel->AddBan(banFields[0].GetUInt32(), banFields[1].GetUInt32());     
-            }
-            while (banResult->NextRow());
+                newChannel->AddBan(banFields[0].GetUInt32(), banFields[1].GetUInt32());
+            } while (banResult->NextRow());
         }
 
-        if (channelDBId > ChannelMgr::_channelIdMax) 
+        if (channelDBId > ChannelMgr::_channelIdMax)
             ChannelMgr::_channelIdMax = channelDBId;
         ++count;
-    }
-    while (result->NextRow());
+    } while (result->NextRow());
 
     LOG_INFO("server", ">> Loaded %u channels for %s in %ums", count, _teamId == TEAM_ALLIANCE ? "Alliance" : "Horde", GetMSTimeDiffToNow(oldMSTime));
 }
@@ -161,10 +161,9 @@ void ChannelMgr::LoadChannelRights()
         const char* moderatorList = fields[4].GetCString();
         if (moderatorList)
         {
-            Tokenizer tokens(moderatorList, ' ');
-            for (Tokenizer::const_iterator i = tokens.begin(); i != tokens.end(); ++i)
+            for (auto const& accountID : warhead::Tokenize(moderatorList, ' ', false))
             {
-                uint64 moderator_acc = atol(*i);
+                uint64 moderator_acc = warhead::StringTo<uint64>(accountID).value_or(0);
                 if (moderator_acc && ((uint32)moderator_acc) == moderator_acc)
                     moderators.insert((uint32)moderator_acc);
             }
