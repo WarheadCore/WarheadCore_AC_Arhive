@@ -441,7 +441,7 @@ bool Item::LoadFromDB(uint32 guid, uint64 owner_guid, Field* fields, uint32 entr
             if (std::optional<int32> charges = warhead::StringTo<int32>(tokens[i]))
                 SetSpellCharges(i, *charges);
             else
-                LOG_ERROR("entities.item", "Invalid charge info '%s' for item %s, charge data not loaded.", std::string(tokens[i]).c_str(), GetGUIDLow());
+                LOG_ERROR("entities.item", "Invalid charge info '%s' for item %u, charge data not loaded.", std::string(tokens[i]).c_str(), GetGUIDLow());
         }
     }
 
