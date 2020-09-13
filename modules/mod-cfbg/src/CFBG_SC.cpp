@@ -32,7 +32,7 @@ public:
 
     void OnBattlegroundBeforeAddPlayer(Battleground* bg, Player* player) override
     {
-        if (!bg || bg->isArena() || !player)
+        if (!bg || !player)
             return;
 
         if (!sCFBG->IsEnableSystem())
@@ -188,7 +188,7 @@ public:
             timeCheck -= diff;
     }
 
-    void OnBeforeSendChatMessage(Player* player, uint32& type, uint32& lang, std::string& msg) override
+    void OnBeforeSendChatMessage(Player* player, uint32& type, uint32& lang, std::string& /*msg*/) override
     {
         if (!player || !sCFBG->IsEnableSystem())
             return;

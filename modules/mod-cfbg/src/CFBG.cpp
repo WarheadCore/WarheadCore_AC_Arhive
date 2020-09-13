@@ -68,7 +68,7 @@ uint32 CFBG::GetBGTeamAverageItemLevel(Battleground* bg, TeamId team)
     uint32 Sum = 0;
     uint32 Count = 0;
 
-    for (auto const& itr : bg->GetPlayers())
+    for (auto itr : bg->GetPlayers())
     {
         Player* player = itr.second;
         if (!player)
@@ -278,7 +278,7 @@ void CFBG::FitPlayerInTeam(Player* player, bool action, Battleground* bg)
     if (!bg)
         bg = player->GetBattleground();
 
-    if ((!bg || bg->isArena()) && action)
+    if (!bg && action)
         return;
 
     if (action)
@@ -309,7 +309,7 @@ bool CFBG::ShouldForgetInListPlayers(Player* player)
 
 void CFBG::DoForgetPlayersInBG(Player* player, Battleground* bg)
 {
-    for (auto const& itr : bg->GetPlayers())
+    for (auto itr : bg->GetPlayers())
     {
         // Here we invalidate players in the bg to the added player
         WorldPacket data1(SMSG_INVALIDATE_PLAYER, 8);
@@ -355,7 +355,7 @@ bool CFBG::IsPlayingNative(Player* player)
 
 bool CFBG::FillPlayersToCFBGWithSpecific(BattlegroundQueue* bgqueue, Battleground* bg, const int32 aliFree, const int32 hordeFree, BattlegroundBracketId thisBracketId, BattlegroundQueue* specificQueue, BattlegroundBracketId specificBracketId)
 {
-    if (!IsEnableSystem() || bg->isArena() || bg->isRated())
+    if (!IsEnableSystem() || bg->isRated())
         return false;
 
     // clear selection pools
@@ -386,7 +386,7 @@ bool CFBG::FillPlayersToCFBGWithSpecific(BattlegroundQueue* bgqueue, Battlegroun
 
 bool CFBG::FillPlayersToCFBG(BattlegroundQueue* bgqueue, Battleground* bg, const int32 aliFree, const int32 hordeFree, BattlegroundBracketId bracket_id)
 {
-    if (!IsEnableSystem() || bg->isArena() || bg->isRated())
+    if (!IsEnableSystem() || bg->isRated())
         return false;
 
     // clear selection pools
@@ -412,11 +412,13 @@ bool CFBG::FillPlayersToCFBG(BattlegroundQueue* bgqueue, Battleground* bg, const
 void CFBG::UpdateForget(Player* player)
 {
     Battleground* bg = player->GetBattleground();
-
-    if (bg && ShouldForgetBGPlayers(player))
+    if (bg)
     {
-        DoForgetPlayersInBG(player, bg);
-        SetForgetBGPlayers(player, false);
+        if (ShouldForgetBGPlayers(player) && bg)
+        {
+            DoForgetPlayersInBG(player, bg);
+            SetForgetBGPlayers(player, false);
+        }
     }
     else if (ShouldForgetInListPlayers(player))
     {
