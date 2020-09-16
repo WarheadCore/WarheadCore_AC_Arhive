@@ -617,7 +617,7 @@ class boss_prince_taldaram_icc : public CreatureScript
 
                 Unit* target = nullptr;
                 if (!target)
-                    target = SelectTarget(SELECT_TARGET_RANDOM, 0, NonTankBOFTargetSelector(me));
+                    target = SelectTarget(SELECT_TARGET_RANDOM, 0, NonTankBOFTargetSelector(me, true, true, 100.0f));
 
                 if (summon->GetEntry() == NPC_BALL_OF_INFERNO_FLAME && target)
                     Talk(EMOTE_TALDARAM_FLAME, target);
