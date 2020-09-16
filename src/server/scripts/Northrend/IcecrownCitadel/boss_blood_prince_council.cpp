@@ -182,29 +182,36 @@ Position const introFinalPos = {4660.490f, 2769.200f, 430.0000f, 0.000000f};
 Position const triggerPos    = {4680.231f, 2769.134f, 379.9256f, 3.121708f};
 Position const triggerEndPos = {4680.180f, 2769.150f, 365.5000f, 3.121708f};
 
-struct BallOfInfernoTargetSelector : public warhead::unary_function<Unit*, bool>
+struct NonTankBOFTargetSelector : public warhead::unary_function<Unit*, bool>
 {
     public:
-        BallOfInfernoTargetSelector(Creature* source) : _source(source) { }
+        NonTankBOFTargetSelector(Creature* source, bool playerOnly = true, bool reqLOS = false, float maxDist = 0.0f) :
+        _source(source),
+        _playerOnly(playerOnly),
+        _reqLOS(reqLOS),
+        _maxDist(maxDist) { }
         bool operator()(Unit const* target) const
         {
             if (!target)
                 return false;
-
-            if (target->GetExactDist(_source) > 125.0f)
+            if (!target->IsAlive())
                 return false;
-
-            if (target->GetTypeId() != TYPEID_PLAYER)
+            if (_playerOnly && target->GetTypeId() != TYPEID_PLAYER)
                 return false;
-
-            if (target->GetPositionX() > -287.0f)
+            if (target == _source->GetVictim())
                 return false;
-
-            return target != _source->GetVictim();
+            if (_maxDist && _source->GetExactDist(target) > _maxDist)
+                return false;
+            if (_reqLOS && !_source->IsWithinLOSInMap(target))
+                return false;
+            return true;
         }
-
+    
     private:
         Creature const* _source;
+        bool _playerOnly;
+        bool _reqLOS;
+        float _maxDist;
 };
 
 class boss_prince_keleseth_icc : public CreatureScript
@@ -610,7 +617,7 @@ class boss_prince_taldaram_icc : public CreatureScript
 
                 Unit* target = nullptr;
                 if (!target)
-                    target = SelectTarget(SELECT_TARGET_RANDOM, 0, BallOfInfernoTargetSelector(me));
+                    target = SelectTarget(SELECT_TARGET_RANDOM, 0, NonTankBOFTargetSelector(me));
 
                 if (summon->GetEntry() == NPC_BALL_OF_INFERNO_FLAME && target)
                     Talk(EMOTE_TALDARAM_FLAME, target);
@@ -1326,12 +1333,12 @@ class npc_ball_of_flame : public CreatureScript
                 if (action != ACTION_FLAME_BALL_CHASE || me->IsInCombat())
                     return;
                     
-                Player* target = nullptr;
+                Unit* target = nullptr;
                 if (_chaseGUID)
                     target = ObjectAccessor::GetPlayer(*me, _chaseGUID);
 
                 if (!target)
-                    target = ScriptedAI::SelectTargetFromPlayerList(150.0f, 0, true);
+                    target = SelectTarget(SELECT_TARGET_RANDOM, 0, NonTankBOFTargetSelector(me, true, true, 100.0f));
 
                 if (target)
                 {
