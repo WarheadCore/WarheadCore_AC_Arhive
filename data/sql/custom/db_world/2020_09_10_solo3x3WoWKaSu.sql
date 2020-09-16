@@ -14,4 +14,3 @@ WHERE
             battlemaster_entry
         WHERE
             bg_template = 6);
-

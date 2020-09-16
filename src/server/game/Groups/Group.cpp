@@ -2364,4 +2364,3 @@ void Group::SetDifficultyChangePrevention(DifficultyPreventionChangeType type)
     _difficultyChangePreventionTime = GameTime::GetGameTime() + MINUTE;
     _difficultyChangePreventionType = type;
 }
-

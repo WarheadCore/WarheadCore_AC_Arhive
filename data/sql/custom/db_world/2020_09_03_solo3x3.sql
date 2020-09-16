@@ -85,4 +85,3 @@ VALUES (32000,
 REPLACE gossip_menu
 VALUES (32000,
     32000);
-
