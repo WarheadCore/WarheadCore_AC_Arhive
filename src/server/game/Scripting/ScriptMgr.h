@@ -33,6 +33,7 @@
 #include "AuctionHouseMgr.h"
 #include <atomic>
 
+class ArenaTeam;
 class AuctionHouseObject;
 class AuraScript;
 class Battleground;
@@ -1118,6 +1119,8 @@ class GroupScript : public ScriptObject
 
         // Called when a group is disbanded.
         virtual void OnDisband(Group* /*group*/) { }
+
+        virtual bool CanGroupJoinBattlegroundQueue(Group const* group, Player* member, Battleground const* bgTemplate, uint32 MinPlayerCount, bool isRated, uint32 arenaSlot) { return true; }
 };
 
 // following hooks can be used anywhere and are not db bounded
@@ -1189,6 +1192,10 @@ public:
     virtual void OnCheckNormalMatch(BattlegroundQueue* /*queue*/, uint32& /*Coef*/, Battleground* /*bgTemplate*/, BattlegroundBracketId /*bracket_id*/, uint32& /*minPlayers*/, uint32& /*maxPlayers*/) { }
 
     virtual bool CanSendMessageQueue(BattlegroundQueue* /*queue*/, Player* /*leader*/, Battleground* /*bg*/, PvPDifficultyEntry const* /*bracketEntry*/) { return true; }
+
+    virtual void OnBattlegroundDestructor(Battleground* /*bg*/) { }
+
+    virtual void OnQueueUpdate(BattlegroundQueue* /*queue*/, BattlegroundBracketId /*bracket_id*/, bool /*isRated*/, uint32 /*arenaRatedTeamId*/) { }
 };
 
 class SpellSC : public ScriptObject
@@ -1204,6 +1211,7 @@ public:
     // Calculate max duration in applying aura
     virtual void OnCalcMaxDuration(Aura const* /*aura*/, int32& /*maxDuration*/) { }
 
+    virtual bool CanSelectSpecTalent(Spell* /*spell*/) { return true; }
 };
 
 // this class can be used to be extended by Modules
@@ -1238,6 +1246,27 @@ class MailScript : public ScriptObject
 
         // Called before mail is sent
         virtual void OnBeforeMailDraftSendMailTo(MailDraft* /*mailDraft*/, MailReceiver const& /*receiver*/, MailSender const& /*sender*/, MailCheckMask& /*checked*/, uint32& /*deliver_delay*/, uint32& /*custom_expiration*/, bool& /*deleteMailItemsFromDB*/, bool& /*sendMail*/) { }
+};
+
+class ArenaScript : public ScriptObject
+{
+protected:
+
+    ArenaScript(const char* name);
+
+public:
+
+    bool IsDatabaseBound() const { return false; }
+
+    // Called before create ArenaTeam
+    virtual bool CanCreateArenaTeam(ArenaTeam* /*arenaTeam*/, uint64 /*captainGuid*/, uint8 /*type*/, std::string const& /*teamName*/) { return true; }
+
+    // Called afetr before save ArenaTeam to DB
+    virtual void OnCreateArenaTeam(ArenaTeam* /*arenaTeam*/, uint64 /*captainGuid*/, uint8 /*type*/, std::string& /*teamName*/) { }
+
+    virtual bool CanAddMember(ArenaTeam* /*arenaTeam*/, uint64 /*playerGuid*/) { return true; }
+
+    virtual bool CanArenaTeamInvite(WorldSession* /*session*/, ArenaTeam* /*arenaTeam*/, Player* /*player*/) { return true; }
 };
 
 // Manages registration, loading, and execution of scripts.
@@ -1539,6 +1568,7 @@ class ScriptMgr
         void OnGroupRemoveMember(Group* group, uint64 guid, RemoveMethod method, uint64 kicker, const char* reason);
         void OnGroupChangeLeader(Group* group, uint64 newLeaderGuid, uint64 oldLeaderGuid);
         void OnGroupDisband(Group* group);
+        bool CanGroupJoinBattlegroundQueue(Group const* group, Player* member, Battleground const* bgTemplate, uint32 MinPlayerCount, bool isRated, uint32 arenaSlot);
 
     public: /* GlobalScript */
 
@@ -1595,10 +1625,13 @@ class ScriptMgr
             BattlegroundBracketId thisBracketId, BattlegroundQueue* specificQueue, BattlegroundBracketId specificBracketId);
         void OnCheckNormalMatch(BattlegroundQueue* queue, uint32& Coef, Battleground* bgTemplate, BattlegroundBracketId bracket_id, uint32& minPlayers, uint32& maxPlayers);
         bool CanSendMessageQueue(BattlegroundQueue* queue, Player* leader, Battleground* bg, PvPDifficultyEntry const* bracketEntry);
+        void OnBattlegroundDestructor(Battleground* bg);
+        void OnQueueUpdate(BattlegroundQueue* queue, BattlegroundBracketId bracket_id, bool isRated, uint32 arenaRatedTeamId);
 
     public: /* SpellSC */
 
         void OnCalcMaxDuration(Aura const* aura, int32& maxDuration);
+        bool CanSelectSpecTalent(Spell* spell);
 
     public: /* GameEventScript */
 
@@ -1608,7 +1641,14 @@ class ScriptMgr
     public: /* MailScript */
 
         void OnBeforeMailDraftSendMailTo(MailDraft* mailDraft, MailReceiver const& receiver, MailSender const& sender, MailCheckMask& checked, uint32& deliver_delay, uint32& custom_expiration, bool& deleteMailItemsFromDB, bool& sendMail);
-
+    
+    public: /* ArenaScript */
+        
+        bool CanCreateArenaTeam(ArenaTeam* arenaTeam, uint64 captainGuid, uint8 type, std::string const& teamName);    
+        void OnCreateArenaTeam(ArenaTeam* arenaTeam, uint64 captainGuid, uint8 type, std::string& teamName);
+        bool CanAddMember(ArenaTeam* arenaTeam, uint64 playerGuid);
+        bool CanArenaTeamInvite(WorldSession* session, ArenaTeam* arenaTeam, Player* player);
+    
     private:
 
         uint32 _scriptCount;

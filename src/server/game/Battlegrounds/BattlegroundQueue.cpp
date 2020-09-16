@@ -126,6 +126,46 @@ bool BattlegroundQueue::SelectionPool::AddGroup(GroupQueueInfo * ginfo, uint32 d
 /***               BATTLEGROUND QUEUES                 ***/
 /*********************************************************/
 
+bool BattlegroundQueue::CheckIPExistsInQueue(std::string const& remote_addr, PvPDifficultyEntry const* bracketEntry, uint8 arenaType, bool isRated, bool isPremade)
+{
+    BattlegroundBracketId bracketId = bracketEntry->GetBracketId();
+
+    uint32 index = 0;
+    if (!isRated && !isPremade)
+        index += BG_TEAMS_COUNT;
+
+    for (GroupsQueueType::iterator queue_itr = m_QueuedGroups[bracketId][index].begin(); queue_itr != m_QueuedGroups[bracketId][index].end(); ++queue_itr)
+        for (std::set<uint64>::iterator group_itr = (*queue_itr)->Players.begin(); group_itr != (*queue_itr)->Players.end(); ++group_itr)
+            if (Player* player = ObjectAccessor::FindPlayer(*group_itr))
+                if (player->GetSession()->GetRemoteAddress() == remote_addr)
+                    return true;
+
+    index++;
+
+    for (GroupsQueueType::iterator queue_itr = m_QueuedGroups[bracketId][index].begin(); queue_itr != m_QueuedGroups[bracketId][index].end(); ++queue_itr)
+        for (std::set<uint64>::iterator group_itr = (*queue_itr)->Players.begin(); group_itr != (*queue_itr)->Players.end(); ++group_itr)
+            if (Player* player = ObjectAccessor::FindPlayer(*group_itr))
+                if (player->GetSession()->GetRemoteAddress() == remote_addr)
+                    return true;
+
+     return false;
+}
+
+bool BattlegroundQueue::IPExistsInQueue(Player* leader, Group* group, PvPDifficultyEntry const* bracketEntry, uint8 arenaType, bool isRated, bool isPremade)
+{
+    if (group)
+    {
+        for (GroupReference* itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
+            if (Player* player = itr->GetSource())
+                if (CheckIPExistsInQueue(player->GetSession()->GetRemoteAddress(), bracketEntry, arenaType, isRated, isPremade))
+                    return true;
+    }
+    else
+        return CheckIPExistsInQueue(leader->GetSession()->GetRemoteAddress(), bracketEntry, arenaType, isRated, isPremade);
+
+    return false;
+}
+
 // add group or player (grp == nullptr) to bg queue with the given leader and bg specifications
 GroupQueueInfo* BattlegroundQueue::AddGroup(Player * leader, Group * grp, PvPDifficultyEntry const* bracketEntry, bool isRated, bool isPremade, uint32 ArenaRating, uint32 MatchmakerRating, uint32 arenateamid)
 {
@@ -257,15 +297,6 @@ uint32 BattlegroundQueue::GetAverageQueueWaitTime(GroupQueueInfo * ginfo) const
 //remove player from queue and from group info, if group info is empty then remove it too
 void BattlegroundQueue::RemovePlayer(uint64 guid, bool sentToBg, uint32 playerQueueSlot)
 {
-    // pussywizard: leave queue packet
-    if (playerQueueSlot < PLAYER_MAX_BATTLEGROUND_QUEUES)
-        if (Player * p = ObjectAccessor::FindPlayerInOrOutOfWorld(guid))
-        {
-            WorldPacket data;
-            sBattlegroundMgr->BuildBattlegroundStatusPacket(&data, nullptr, playerQueueSlot, STATUS_NONE, 0, 0, 0, TEAM_NEUTRAL);
-            p->GetSession()->SendPacket(&data);
-        }
-
     //remove player from map, if he's there
     auto itr = m_QueuedPlayers.find(guid);
     if (itr == m_QueuedPlayers.end())
@@ -276,24 +307,56 @@ void BattlegroundQueue::RemovePlayer(uint64 guid, bool sentToBg, uint32 playerQu
 
     GroupQueueInfo* groupInfo = itr->second;
 
-    uint32 _bracketId = groupInfo->_bracketId;
-    uint32 _groupType = groupInfo->_groupType;
+    int32 bracket_id = -1;                                     // signed for proper for-loop finish
+    GroupsQueueType::iterator group_itr;
+
+    uint32 index = (groupInfo->teamId == TEAM_HORDE) ? BG_QUEUE_PREMADE_HORDE : BG_QUEUE_PREMADE_ALLIANCE;
+
+    for (int32 bracket_id_tmp = MAX_BATTLEGROUND_BRACKETS - 1; bracket_id_tmp >= 0 && bracket_id == -1; --bracket_id_tmp)
+    {
+        //we must check premade and normal team's queue - because when players from premade are joining bg,
+        //they leave groupinfo so we can't use its players size to find out index
+        for (uint32 j = index; j < BG_QUEUE_MAX; j += BG_TEAMS_COUNT)
+        {
+            GroupsQueueType::iterator k = m_QueuedGroups[bracket_id_tmp][j].begin();
+            for (; k != m_QueuedGroups[bracket_id_tmp][j].end(); ++k)
+            {
+                if ((*k) == groupInfo)
+                {
+                    bracket_id = bracket_id_tmp;
+                    group_itr = k;
+                    //we must store index to be able to erase iterator
+                    index = j;
+                    break;
+                }
+            }
+        }
+    }
 
     // find iterator
-    auto group_itr = m_QueuedGroups[_bracketId][_groupType].end();
+    /*auto group_itr = m_QueuedGroups[_bracketId][_groupType].end();
     for (auto k = m_QueuedGroups[_bracketId][_groupType].begin(); k != m_QueuedGroups[_bracketId][_groupType].end(); ++k)
         if ((*k) == groupInfo)
         {
             group_itr = k;
             break;
-        }
+        }*/
 
     //player can't be in queue without group, but just in case
-    if (group_itr == m_QueuedGroups[_bracketId][_groupType].end())
+    if (bracket_id == -1)
     {
-        ABORT();
+        //ABORT();
         return;
     }
+
+    // pussywizard: leave queue packet
+    if (playerQueueSlot < PLAYER_MAX_BATTLEGROUND_QUEUES)
+        if (Player* p = ObjectAccessor::FindPlayerInOrOutOfWorld(guid))
+        {
+            WorldPacket data;
+            sBattlegroundMgr->BuildBattlegroundStatusPacket(&data, nullptr, playerQueueSlot, STATUS_NONE, 0, 0, 0, TEAM_NEUTRAL);
+            p->GetSession()->SendPacket(&data);
+        }
 
     // remove player from group queue info
     auto pitr = groupInfo->Players.find(guid);
@@ -327,7 +390,7 @@ void BattlegroundQueue::RemovePlayer(uint64 guid, bool sentToBg, uint32 playerQu
     // remove group queue info no players left
     if (groupInfo->Players.empty())
     {
-        m_QueuedGroups[_bracketId][_groupType].erase(group_itr);
+        m_QueuedGroups[bracket_id][index].erase(group_itr);
         delete groupInfo;
         return;
     }
@@ -739,6 +802,8 @@ void BattlegroundQueue::BattlegroundQueueUpdate(BattlegroundBracketId bracket_id
         MinPlayersPerTeam = sBattlegroundMgr->isArenaTesting() ? 1 : m_arenaType;
         MaxPlayersPerTeam = m_arenaType;
     }
+
+    sScriptMgr->OnQueueUpdate(this, bracket_id, isRated, arenaRatedTeamId);
 
     // check if can start new premade battleground
     if (bg_template->isBattleground() && m_bgTypeId != BATTLEGROUND_RB)

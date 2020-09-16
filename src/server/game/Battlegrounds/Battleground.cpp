@@ -229,6 +229,8 @@ Battleground::~Battleground()
 
     for (BattlegroundScoreMap::const_iterator itr = PlayerScores.begin(); itr != PlayerScores.end(); ++itr)
         delete itr->second;
+
+    sScriptMgr->OnBattlegroundDestructor(this);
 }
 
 void Battleground::Update(uint32 diff)
@@ -716,7 +718,6 @@ uint32 Battleground::GetRealRepFactionForPlayer(uint32 factionId, Player* player
 
     return factionId;
 }
-
 
 void Battleground::UpdateWorldState(uint32 Field, uint32 Value)
 {
@@ -1379,10 +1380,14 @@ void Battleground::ReadyMarkerClicked(Player* p)
 {
     if (!isArena() || GetStatus() >= STATUS_IN_PROGRESS || GetStartDelayTime() <= BG_START_DELAY_15S || (m_Events & BG_STARTING_EVENT_3) || p->IsSpectator())
         return;
+
     readyMarkerClickedSet.insert(p->GetGUIDLow());
+
     uint32 count = readyMarkerClickedSet.size();
-    uint32 req = GetArenaType()*2;
+    uint32 req = ArenaTeam::GetReqPlayersForType(GetArenaType());
+
     p->GetSession()->SendNotification("You are marked as ready %u/%u", count, req);
+
     if (count == req)
     {
         m_Events |= BG_STARTING_EVENT_2;

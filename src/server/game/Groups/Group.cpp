@@ -1852,6 +1852,9 @@ GroupJoinBattlegroundResult Group::CanJoinBattlegroundQueue(Battleground const* 
         if (!member)
             return ERR_BATTLEGROUND_JOIN_FAILED;
 
+        if (!sScriptMgr->CanGroupJoinBattlegroundQueue(this, member, bgTemplate, MinPlayerCount, isRated, arenaSlot))
+            return ERR_BATTLEGROUND_JOIN_FAILED;
+
         // don't allow cross-faction groups to join queue
         if (member->GetTeamId() != teamId)
             return ERR_BATTLEGROUND_JOIN_TIMED_OUT;

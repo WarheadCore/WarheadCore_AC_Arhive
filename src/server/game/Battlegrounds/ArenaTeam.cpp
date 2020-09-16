@@ -25,7 +25,7 @@
 #include "WorldSession.h"
 #include "Opcodes.h"
 #include "GameConfig.h"
-#include <Config.h>
+#include "ScriptMgr.h"
 
 ArenaTeam::ArenaTeam()
     : TeamId(0), Type(0), TeamName(), CaptainGuid(0), BackgroundColor(0), EmblemStyle(0), EmblemColor(0),
@@ -49,6 +49,10 @@ bool ArenaTeam::Create(uint64 captainGuid, uint8 type, std::string const& teamNa
     if (!ObjectAccessor::FindPlayerInOrOutOfWorld(captainGuid))
         return false;
 
+    // Check can create
+    if (!sScriptMgr->CanCreateArenaTeam(this, captainGuid, type, teamName))
+        return false;
+    
     // Check if arena team name is already taken
     if (sArenaTeamMgr->GetArenaTeamByName(TeamName))
         return false;
@@ -65,13 +69,14 @@ bool ArenaTeam::Create(uint64 captainGuid, uint8 type, std::string const& teamNa
     EmblemColor = emblemColor;
     BorderStyle = borderStyle;
     BorderColor = borderColor;
-    uint32 captainLowGuid = GUID_LOPART(captainGuid);
+
+    sScriptMgr->OnCreateArenaTeam(this, captainGuid, type, TeamName);
 
     // Save arena team to db
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_ARENA_TEAM);
     stmt->setUInt32(0, TeamId);
     stmt->setString(1, TeamName);
-    stmt->setUInt32(2, captainLowGuid);
+    stmt->setUInt32(2, GUID_LOPART(captainGuid));
     stmt->setUInt8(3, Type);
     stmt->setUInt16(4, Stats.Rating);
     stmt->setUInt32(5, BackgroundColor);
@@ -91,9 +96,11 @@ bool ArenaTeam::AddMember(uint64 playerGuid)
     std::string playerName;
     uint8 playerClass;
 
-    // Check if arena team is full (Can't have more than type * 2 players)
-    if (GetMembersSize() >= GetType() * 2)
+    // Check if arena team is full
+    if (GetMembersSize() >= GetReqPlayersForType(GetType()))
         return false;
+
+    sScriptMgr->CanAddMember(this, playerGuid);
 
     // xinef: Get player name and class from player storage or global data storage
     Player* player = ObjectAccessor::FindPlayerInOrOutOfWorld(playerGuid);
@@ -590,20 +597,6 @@ void ArenaTeam::MassInviteToEvent(WorldSession* session)
     session->SendPacket(&data);
 }
 
-uint8 ArenaTeam::GetSlotByType(uint32 type)
-{
-    switch (type)
-    {
-        case ARENA_TEAM_2v2: return 0;
-        case ARENA_TEAM_3v3: return 1;
-        case ARENA_TEAM_5v5: return 2;
-        default:
-            break;
-    }
-    LOG_ERROR("server", "FATAL: Unknown arena team type %u for some arena team", type);
-    return 0xFF;
-}
-
 bool ArenaTeam::IsMember(uint64 guid) const
 {
     for (MemberList::const_iterator itr = Members.begin(); itr != Members.end(); ++itr)
@@ -815,8 +808,8 @@ void ArenaTeam::MemberLost(Player* player, uint32 againstMatchmakerRating, int32
             itr->ModifyMatchmakerRating(MatchmakerRatingChange, GetSlot());
 
             // Update personal played stats
-            itr->WeekGames +=1;
-            itr->SeasonGames +=1;
+            itr->WeekGames += 1;
+            itr->SeasonGames += 1;
 
             // update the unit fields
             player->SetArenaTeamInfoField(GetSlot(), ARENA_TEAM_GAMES_WEEK,  itr->WeekGames);
@@ -845,10 +838,11 @@ void ArenaTeam::MemberWon(Player* player, uint32 againstMatchmakerRating, int32 
             }
 
             // update personal stats
-            itr->WeekGames +=1;
-            itr->SeasonGames +=1;
-            itr->SeasonWins += 1;
+            itr->WeekGames += 1;
+            itr->SeasonGames += 1;
             itr->WeekWins += 1;
+            itr->SeasonWins += 1;
+
             // update unit fields
             player->SetArenaTeamInfoField(GetSlot(), ARENA_TEAM_GAMES_WEEK, itr->WeekGames);
             player->SetArenaTeamInfoField(GetSlot(), ARENA_TEAM_GAMES_SEASON, itr->SeasonGames);
@@ -888,6 +882,97 @@ void ArenaTeam::UpdateArenaPointsHelper(std::map<uint32, uint32>& playerPoints)
 }
 
 void ArenaTeam::SaveToDB()
+{
+    // If not a temp arena team, just save this one (normal 2v2 and 3v3)
+    if (TeamId < MAX_ARENA_TEAM_ID)
+    {
+        SaveToDBHelper();
+        return;
+    }
+
+    uint8 playerCount = ArenaTeam::GetReqPlayersForType(GetType()) / 2;
+
+    // Init some variables for speedup the programm
+    std::array<ArenaTeam*, 10> realTeams;
+    uint32 itrRealTeam = 0;
+
+    for (auto& itr : realTeams)
+        itr = nullptr;
+
+    itrRealTeam = 0;
+    uint32 oldRating = 0;
+
+    // First get the old average rating by looping through all members in temp team and add up the rating
+    for (auto const& itr : GetMembers())
+    {
+        ArenaTeam* plrArenaTeam = nullptr;
+
+        // Find real arena team for player
+        for (auto const& itrMgr : sArenaTeamMgr->GetArenaTeams())
+        {
+            if (itrMgr.first < MAX_ARENA_TEAM_ID && itrMgr.second->GetCaptain() == itr.Guid && itrMgr.second->GetType() == GetType())
+            {
+                plrArenaTeam = itrMgr.second; // found!
+                break;
+            }
+        }
+
+        if (!plrArenaTeam)
+            continue; // Not found? Maybe player has left the game and deleted it before the arena game ends.
+
+        ASSERT(itrRealTeam < playerCount);
+        realTeams[itrRealTeam++] = plrArenaTeam;
+
+        oldRating += plrArenaTeam->GetRating(); // add up all ratings from each player team
+    }
+
+    if (GetMembersSize())
+        oldRating /= GetMembersSize(); // Get average
+
+    int32 ratingModifier = GetRating() - oldRating; // GetRating() contains the new rating and oldRating is the old average rating
+
+    itrRealTeam = 0;
+
+    // Let's loop again through temp arena team and add the new rating
+    for (auto const& _itr : GetMembers())
+    {
+        ArenaTeam* plrArenaTeam = realTeams[itrRealTeam++];
+
+        if (!plrArenaTeam)
+            continue;
+
+        ArenaTeamStats atStats = plrArenaTeam->GetStats();
+
+        if (int32(atStats.Rating) + ratingModifier < 0)
+            atStats.Rating = 0;
+        else
+            atStats.Rating += ratingModifier;
+
+        atStats.SeasonGames = _itr.SeasonGames;
+        atStats.SeasonWins = _itr.SeasonWins;
+        atStats.WeekGames = _itr.WeekGames;
+        atStats.WeekWins = _itr.WeekWins;
+
+        for (auto realMemberItr : plrArenaTeam->GetMembers())
+        {
+            if (realMemberItr.Guid != plrArenaTeam->GetCaptain())
+                continue;
+
+            realMemberItr.PersonalRating = _itr.PersonalRating;
+            realMemberItr.MatchMakerRating = _itr.MatchMakerRating;
+            realMemberItr.SeasonGames = _itr.SeasonGames;
+            realMemberItr.SeasonWins = _itr.SeasonWins;
+            realMemberItr.WeekGames = _itr.WeekGames;
+            realMemberItr.WeekWins = _itr.WeekWins;
+        }
+
+        plrArenaTeam->SetArenaTeamStats(atStats);
+        plrArenaTeam->NotifyStatsChanged();
+        plrArenaTeam->SaveToDBHelper();
+    }
+}
+
+void ArenaTeam::SaveToDBHelper()
 {
     // Save team and member stats to db
     // Called after a match has ended or when calculating arena_points
@@ -964,3 +1049,99 @@ ArenaTeamMember* ArenaTeam::GetMember(uint64 guid)
 
     return nullptr;
 }
+
+void ArenaTeam::CreateTempArenaTeam(std::vector<Player*> playerList, uint8 arenaType, std::string const& teamName)
+{
+    uint32 playerCountInTeam = static_cast<uint32>(playerList.size());
+
+    if (playerCountInTeam != GetReqPlayersForType(arenaType))
+    {
+        LOG_FATAL("bg.arena", "> playerCountInTeam(%u) != GetReqPlayersForType(%u)", playerCountInTeam, GetReqPlayersForType(arenaType));
+        return;
+    }
+
+    // Generate new arena team id
+    TeamId = sArenaTeamMgr->GenerateTempArenaTeamId();
+
+    // Assign member variables
+    CaptainGuid = (*playerList.begin())->GetGUID();
+    Type = arenaType;
+    TeamName = teamName;
+
+    BackgroundColor = 0;
+    EmblemStyle = 0;
+    EmblemColor = 0;
+    BorderStyle = 0;
+    BorderColor = 0;
+
+    Stats.WeekGames = 0;
+    Stats.SeasonGames = 0;
+    Stats.Rating = 0;
+    Stats.WeekWins = 0;
+    Stats.SeasonWins = 0;
+
+    for (auto const& _player : playerList)
+    {
+        ArenaTeam* team = sArenaTeamMgr->GetArenaTeamById(_player->GetArenaTeamId(GetSlotByType(arenaType)));
+        if (!team)
+            continue;
+
+        ArenaTeamMember newMember;
+        for (auto const& itr : Members)
+            newMember = itr;
+
+        Stats.WeekGames += team->Stats.WeekGames;
+        Stats.SeasonGames += team->Stats.SeasonGames;
+        Stats.Rating += team->GetRating();
+        Stats.WeekWins += team->Stats.WeekWins;
+        Stats.SeasonWins += team->Stats.SeasonWins;
+
+        Members.push_back(newMember);
+    }
+
+    Stats.WeekGames /= playerCountInTeam;
+    Stats.SeasonGames /= playerCountInTeam;
+    Stats.Rating /= playerCountInTeam;
+    Stats.WeekWins /= playerCountInTeam;
+    Stats.SeasonWins /= playerCountInTeam;
+}
+
+uint8 ArenaTeam::GetSlotByType(uint32 type)
+{
+    auto const& itr = ArenaSlotByType.find(type);
+    if (itr == ArenaSlotByType.end())
+    {
+        LOG_FATAL("bg.arena", "FATAL: Unknown arena team type %u for some arena team", type);
+        return 0xFF;
+    }
+
+    return ArenaSlotByType.at(type);
+}
+
+uint8 ArenaTeam::GetReqPlayersForType(uint32 type)
+{
+    auto const& itr = ArenaReqPlayersForType.find(type);
+    if (itr == ArenaReqPlayersForType.end())
+    {
+        LOG_FATAL("bg.arena", "FATAL: Unknown arena type %u!", type);
+        return 0xFF;
+    }
+
+    return ArenaReqPlayersForType.at(type);
+}
+
+// init/update unordered_map ArenaSlotByType
+std::unordered_map<uint32, uint8> ArenaTeam::ArenaSlotByType =
+{
+    { ARENA_TYPE_2v2, ARENA_SLOT_2v2},
+    { ARENA_TYPE_3v3, ARENA_SLOT_3v3},
+    { ARENA_TYPE_5v5, ARENA_SLOT_5v5}
+};
+
+// init/update unordered_map ArenaReqPlayersForType
+std::unordered_map<uint8, uint8> ArenaTeam::ArenaReqPlayersForType =
+{
+    { ARENA_TYPE_2v2, 4},
+    { ARENA_TYPE_3v3, 6},
+    { ARENA_TYPE_5v5, 10}
+};

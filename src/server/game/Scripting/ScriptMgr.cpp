@@ -110,6 +110,7 @@ void ScriptMgr::Unload()
     SCR_CLEAR(SpellSC);
     SCR_CLEAR(GameEventScript);
     SCR_CLEAR(MailScript);
+    SCR_CLEAR(ArenaScript);
 
     #undef SCR_CLEAR
 
@@ -183,6 +184,7 @@ void ScriptMgr::CheckIfScriptsInDatabaseExist()
             !ScriptRegistry<GuildScript>::GetScriptById(sid) &&
             !ScriptRegistry<BGScript>::GetScriptById(sid) &&
             !ScriptRegistry<SpellSC>::GetScriptById(sid) &&
+            !ScriptRegistry<ArenaScript>::GetScriptById(sid) &&
             !ScriptRegistry<GroupScript>::GetScriptById(sid))
             LOG_ERROR("sql.sql", "Script named '%s' is assigned in database, but has no code!", itr.c_str());
     }
@@ -1614,6 +1616,17 @@ void ScriptMgr::OnGroupDisband(Group* group)
     FOREACH_SCRIPT(GroupScript)->OnDisband(group);
 }
 
+bool ScriptMgr::CanGroupJoinBattlegroundQueue(Group const* group, Player* member, Battleground const* bgTemplate, uint32 MinPlayerCount, bool isRated, uint32 arenaSlot)
+{
+    bool ret = true;
+
+    FOR_SCRIPTS_RET(GroupScript, itr, end, ret) // return true by default if not scripts
+        if (!itr->second->CanGroupJoinBattlegroundQueue(group, member, bgTemplate, MinPlayerCount, isRated, arenaSlot))
+            ret = false; // we change ret value only when scripts return true
+
+    return ret;
+}
+
 // Global
 void ScriptMgr::OnGlobalItemDelFromDB(SQLTransaction& trans, uint32 itemGuid)
 {
@@ -1833,15 +1846,36 @@ bool ScriptMgr::CanSendMessageQueue(BattlegroundQueue* queue, Player* leader, Ba
     return ret;
 }
 
+void ScriptMgr::OnBattlegroundDestructor(Battleground* bg)
+{
+    FOREACH_SCRIPT(BGScript)->OnBattlegroundDestructor(bg);
+}
+
+void ScriptMgr::OnQueueUpdate(BattlegroundQueue* queue, BattlegroundBracketId bracket_id, bool isRated, uint32 arenaRatedTeamId)
+{
+    FOREACH_SCRIPT(BGScript)->OnQueueUpdate(queue, bracket_id, isRated, arenaRatedTeamId);
+}
+
 // SpellSC
 void ScriptMgr::OnCalcMaxDuration(Aura const* aura, int32& maxDuration)
 {
     FOREACH_SCRIPT(SpellSC)->OnCalcMaxDuration(aura, maxDuration);
 }
 
+bool ScriptMgr::CanSelectSpecTalent(Spell* spell)
+{
+    bool ret = true;
+
+    FOR_SCRIPTS_RET(SpellSC, itr, end, ret) // return true by default if not scripts
+        if (!itr->second->CanSelectSpecTalent(spell))
+            ret = false; // we change ret value only when scripts return false
+
+    return ret;
+}
+
+// GameEventScript
 void ScriptMgr::OnGameEventStart(uint16 EventID)
 {
-
     FOREACH_SCRIPT(GameEventScript)->OnStart(EventID);
 }
 
@@ -1854,6 +1888,45 @@ void ScriptMgr::OnGameEventStop(uint16 EventID)
 void ScriptMgr::OnBeforeMailDraftSendMailTo(MailDraft* mailDraft, MailReceiver const& receiver, MailSender const& sender, MailCheckMask& checked, uint32& deliver_delay, uint32& custom_expiration, bool& deleteMailItemsFromDB, bool& sendMail)
 {
     FOREACH_SCRIPT(MailScript)->OnBeforeMailDraftSendMailTo(mailDraft, receiver, sender, checked, deliver_delay, custom_expiration, deleteMailItemsFromDB, sendMail);
+}
+
+// ArenaScript
+bool ScriptMgr::CanCreateArenaTeam(ArenaTeam* arenaTeam, uint64 captainGuid, uint8 type, std::string const& teamName)
+{
+    bool ret = true;
+
+    FOR_SCRIPTS_RET(ArenaScript, itr, end, ret) // return true by default if not scripts
+        if (!itr->second->CanCreateArenaTeam(arenaTeam, captainGuid, type, teamName))
+            ret = false; // we change ret value only when scripts return false
+
+    return ret;
+}
+
+void ScriptMgr::OnCreateArenaTeam(ArenaTeam* arenaTeam, uint64 captainGuid, uint8 type, std::string& teamName)
+{
+    FOREACH_SCRIPT(ArenaScript)->OnCreateArenaTeam(arenaTeam, captainGuid, type, teamName);
+}
+
+bool ScriptMgr::CanAddMember(ArenaTeam* arenaTeam, uint64 playerGuid)
+{
+    bool ret = true;
+
+    FOR_SCRIPTS_RET(ArenaScript, itr, end, ret) // return true by default if not scripts
+        if (!itr->second->CanAddMember(arenaTeam, playerGuid))
+            ret = false; // we change ret value only when scripts return false
+
+    return ret;
+}
+
+bool ScriptMgr::CanArenaTeamInvite(WorldSession* session, ArenaTeam* arenaTeam, Player* player)
+{
+    bool ret = true;
+
+    FOR_SCRIPTS_RET(ArenaScript, itr, end, ret) // return true by default if not scripts
+        if (!itr->second->CanArenaTeamInvite(session, arenaTeam, player))
+            ret = false; // we change ret value only when scripts return false
+
+    return ret;
 }
 
 AllMapScript::AllMapScript(const char* name)
@@ -2061,6 +2134,12 @@ GameEventScript::GameEventScript(const char* name)
     ScriptRegistry<GameEventScript>::AddScript(this);
 }
 
+ArenaScript::ArenaScript(const char* name)
+    : ScriptObject(name)
+{
+    ScriptRegistry<ArenaScript>::AddScript(this);
+}
+
 // Specialize for each script type class like so:
 template class ScriptRegistry<SpellScriptLoader>;
 template class ScriptRegistry<ServerScript>;
@@ -2095,4 +2174,4 @@ template class ScriptRegistry<BGScript>;
 template class ScriptRegistry<SpellSC>;
 template class ScriptRegistry<AccountScript>;
 template class ScriptRegistry<GameEventScript>;
-
+template class ScriptRegistry<ArenaScript>;

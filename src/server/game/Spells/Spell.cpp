@@ -6158,6 +6158,9 @@ SpellCastResult Spell::CheckCast(bool strict)
                 break;
             }
             case SPELL_EFFECT_TALENT_SPEC_SELECT:
+                if (!sScriptMgr->CanSelectSpecTalent(this))
+                    return SPELL_FAILED_DONT_REPORT;
+
                 // can't change during already started arena/battleground
                 if (m_caster->GetTypeId() == TYPEID_PLAYER)
                     if (Battleground const* bg = m_caster->ToPlayer()->GetBattleground())

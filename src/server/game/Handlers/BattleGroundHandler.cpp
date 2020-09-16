@@ -96,6 +96,13 @@ void WorldSession::HandleBattlemasterJoinOpcode(WorldPacket & recvData)
         return;
     }
 
+
+    if (_player->HasAura(26013))
+    {
+        ChatHandler(this).PSendSysMessage(ERR_GROUP_JOIN_BATTLEGROUND_DESERTERS);
+        return;
+    }
+
     // get queue typeid and random typeid to check if already queued for them
     BattlegroundTypeId bgTypeId = BattlegroundTypeId(bgTypeId_);
     BattlegroundQueueTypeId bgQueueTypeId = BattlegroundMgr::BGQueueTypeId(bgTypeId, 0);
@@ -141,6 +148,16 @@ void WorldSession::HandleBattlemasterJoinOpcode(WorldPacket & recvData)
         sBattlegroundMgr->BuildGroupJoinedBattlegroundPacket(&data, ERR_BATTLEGROUND_TOO_MANY_QUEUES);
         SendPacket(&data);
         return;
+    }
+
+    if (_player->InBattlegroundQueue())
+        return;
+
+    // not allow join queue battleground in combat
+    if (_player->IsInCombat())
+    {
+      ChatHandler(this).PSendSysMessage(LANG_YOU_IN_COMBAT);
+      return;
     }
 
     // queue result (default ok)
@@ -616,6 +633,14 @@ void WorldSession::HandleBattlemasterJoinArena(WorldPacket & recvData)
             return;
     }
 
+    //Solo Arena WoWka.Su
+    if (!isRated)
+    {
+        sScriptMgr->OnGossipSelect(_player, unit, 0, arenatype);
+        return;
+    }
+    // END
+
     // get template for all arenas
     Battleground* bgt = sBattlegroundMgr->GetBattlegroundTemplate(BATTLEGROUND_AA);
     if (!bgt)
@@ -681,6 +706,15 @@ void WorldSession::HandleBattlemasterJoinArena(WorldPacket & recvData)
             WorldPacket data;
             sBattlegroundMgr->BuildGroupJoinedBattlegroundPacket(&data, err);
             SendPacket(&data);
+            return;
+        }
+
+        // check Deserter debuff
+        if (_player->HasAura(26013))
+        {
+            WorldPacket data;
+            sBattlegroundMgr->BuildGroupJoinedBattlegroundPacket(&data, ERR_GROUP_JOIN_BATTLEGROUND_DESERTERS);
+            _player->GetSession()->SendPacket(&data);
             return;
         }
 

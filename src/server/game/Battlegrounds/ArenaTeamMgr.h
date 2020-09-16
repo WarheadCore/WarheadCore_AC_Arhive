@@ -20,6 +20,9 @@
 
 #include "ArenaTeam.h"
 
+constexpr uint32 MAX_ARENA_TEAM_ID = 0xFFF00000;
+constexpr uint32 MAX_TEMP_ARENA_TEAM_ID = 0xFFFFFFFE;
+
 class ArenaTeamMgr
 {
     ArenaTeamMgr();
@@ -40,10 +43,12 @@ public:
 
     ArenaTeamContainer::iterator GetArenaTeamMapBegin() { return ArenaTeamStore.begin(); }
     ArenaTeamContainer::iterator GetArenaTeamMapEnd()   { return ArenaTeamStore.end(); }
+    ArenaTeamContainer& GetArenaTeams() { return ArenaTeamStore; }
 
     void DistributeArenaPoints();
 
     uint32 GenerateArenaTeamId();
+    uint32 GenerateTempArenaTeamId();
     void SetNextArenaTeamId(uint32 Id) { NextArenaTeamId = Id; }
 
     uint32 GetNextArenaLogId() { return ++LastArenaLogId; }
@@ -51,6 +56,7 @@ public:
 
 protected:
     uint32 NextArenaTeamId;
+    uint32 NextTempArenaTeamId;
     ArenaTeamContainer ArenaTeamStore;
     uint32 LastArenaLogId;
 };

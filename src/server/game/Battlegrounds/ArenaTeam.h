@@ -79,9 +79,16 @@ ERR_ARENA_TEAM_LEVEL_TOO_LOW_I
 
 enum ArenaTeamTypes
 {
-    ARENA_TEAM_2v2      = 2,
-    ARENA_TEAM_3v3      = 3,
-    ARENA_TEAM_5v5      = 5
+    ARENA_TEAM_2v2 = 2,
+    ARENA_TEAM_3v3 = 3,
+    ARENA_TEAM_5v5 = 5
+};
+
+enum ArenaSlot
+{
+    ARENA_SLOT_2v2,
+    ARENA_SLOT_3v3,
+    ARENA_SLOT_5v5
 };
 
 struct ArenaTeamMember
@@ -129,9 +136,11 @@ class ArenaTeam
         uint32 GetType() const            { return Type; }
         uint8  GetSlot() const            { return GetSlotByType(GetType()); }
         static uint8 GetSlotByType(uint32 type);
+        static uint8 GetReqPlayersForType(uint32 type);
         uint64 GetCaptain() const  { return CaptainGuid; }
         std::string const& GetName() const       { return TeamName; }
         const ArenaTeamStats& GetStats() const { return Stats; }
+        void SetArenaTeamStats(ArenaTeamStats& stats) { Stats = stats; }
 
         uint32 GetRating() const          { return Stats.Rating; }
         uint32 GetAverageMMR(Group* group) const;
@@ -148,6 +157,7 @@ class ArenaTeam
         bool   Empty() const                  { return Members.empty(); }
         MemberList::iterator m_membersBegin() { return Members.begin(); }
         MemberList::iterator m_membersEnd()   { return Members.end(); }
+        MemberList& GetMembers() { return Members; }
         bool IsMember(uint64 guid) const;
 
         ArenaTeamMember* GetMember(uint64 guid);
@@ -159,6 +169,7 @@ class ArenaTeam
         bool LoadMembersFromDB(QueryResult arenaTeamMembersResult);
         void LoadStatsFromDB(uint32 ArenaTeamId);
         void SaveToDB();
+        void SaveToDBHelper();
 
         void BroadcastPacket(WorldPacket* packet);
         void BroadcastEvent(ArenaTeamEvents event, uint64 guid, uint8 strCount, std::string const& str1, std::string const& str2, std::string const& str3);
@@ -185,6 +196,12 @@ class ArenaTeam
         void FinishWeek();
         void FinishGame(int32 mod, const Map* bgMap);
 
+        void CreateTempArenaTeam(std::vector<Player*> playerList, uint8 arenaType, std::string const& teamName);
+
+        // Containers
+        static std::unordered_map<uint32, uint8> ArenaSlotByType; // Slot -> Type
+        static std::unordered_map<uint8, uint8> ArenaReqPlayersForType; // Type -> Players count
+
     protected:
 
         uint32      TeamId;
@@ -201,5 +218,5 @@ class ArenaTeam
         MemberList     Members;
         ArenaTeamStats Stats;
 };
-#endif
 
+#endif

@@ -22,6 +22,7 @@
 #include "DBCEnums.h"
 #include "Battleground.h"
 #include "EventProcessor.h"
+#include "ArenaTeam.h"
 
 #include <deque>
 
@@ -84,6 +85,8 @@ class BattlegroundQueue
         uint32 GetPlayersCountInGroupsQueue(BattlegroundBracketId bracketId, BattlegroundQueueGroupTypes bgqueue);
         bool IsAllQueuesEmpty(BattlegroundBracketId bracket_id);
         void SendMessageQueue(Player* leader, Battleground* bg, PvPDifficultyEntry const* bracketEntry);
+        bool CheckIPExistsInQueue(std::string const& remote_addr, PvPDifficultyEntry const* bracketEntry, uint8 arenaType, bool isRated, bool isPremade);
+        bool IPExistsInQueue(Player * leader, Group * group, PvPDifficultyEntry const* bracketEntry, uint8 arenaType, bool isRated, bool isPremade);
 
         void SetBgTypeIdAndArenaType(BattlegroundTypeId b, uint8 a) { m_bgTypeId = b; m_arenaType = ArenaType(a); } // pussywizard
         void AddEvent(BasicEvent* Event, uint64 e_time);
@@ -122,6 +125,9 @@ class BattlegroundQueue
 
         //one selection pool for horde, other one for alliance
         SelectionPool m_SelectionPools[BG_TEAMS_COUNT];
+        ArenaType GetArenaType() { return m_arenaType; }
+        BattlegroundTypeId GetBGTypeID() { return m_bgTypeId; }
+
     private:
 
         BattlegroundTypeId m_bgTypeId;

@@ -28,6 +28,7 @@
 #include "ArenaTeamMgr.h"
 #include "Opcodes.h"
 #include "GameConfig.h"
+#include "ScriptMgr.h"
 
 void WorldSession::HandleInspectArenaTeamsOpcode(WorldPacket& recvData)
 {
@@ -151,11 +152,14 @@ void WorldSession::HandleArenaTeamInviteOpcode(WorldPacket& recvData)
         return;
     }
 
-    if (arenaTeam->GetMembersSize() >= arenaTeam->GetType() * 2)
+    if (arenaTeam->GetMembersSize() >= ArenaTeam::GetReqPlayersForType(arenaTeam->GetType()))
     {
         SendArenaTeamCommandResult(ERR_ARENA_TEAM_CREATE_S, arenaTeam->GetName(), "", ERR_ARENA_TEAM_TOO_MANY_MEMBERS_S);
         return;
     }
+
+    if (!sScriptMgr->CanArenaTeamInvite(this, arenaTeam, player))
+        return;
 
     //check for fake packets and bad addons that cause client to crash
     std::string arenaTeamName = arenaTeam->GetName();
@@ -237,7 +241,7 @@ void WorldSession::HandleArenaTeamLeaveOpcode(WorldPacket& recvData)
         return;
 
     // Disallow leave team while in arena
-    if (arenaTeam->IsFighting())
+    if (_player->InBattlegroundQueue() || arenaTeam->IsFighting())
     {
         SendArenaTeamCommandResult(ERR_ARENA_TEAM_QUIT_S, "", "", ERR_ARENA_TEAM_INTERNAL);
         return;
@@ -335,6 +339,9 @@ void WorldSession::HandleArenaTeamRemoveOpcode(WorldPacket& recvData)
 
     // Player cannot be removed during fights
     if (arenaTeam->IsFighting())
+        return;
+
+    if (_player->InBattlegroundQueue())
         return;
 
     arenaTeam->DelMember(member->Guid, true);
