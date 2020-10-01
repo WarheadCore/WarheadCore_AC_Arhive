@@ -224,6 +224,7 @@ bool Weather::UpdateWeather()
     if (!sWorld->SendZoneMessage(m_zone, &data))
         return false;
 
+#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     ///- Log the event
     char const* wthstr;
     switch (state)

@@ -1290,6 +1290,7 @@ public:
 
                         break;
                     }
+                    [[fallthrough]];
                 }
                 case EVENT_MISS:
                 {

@@ -19,7 +19,6 @@
 #define DEF_ZULFARRACK_H
 
 #include "SpellScript.h"
-#include "GridNotifiers.h"
 #include "CellImpl.h"
 
 enum ZulFarrakData

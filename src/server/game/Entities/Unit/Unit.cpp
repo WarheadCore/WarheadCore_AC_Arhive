@@ -2921,16 +2921,18 @@ SpellMissInfo Unit::SpellHitResult(Unit* victim, SpellInfo const* spell, bool Ca
         case SPELL_DAMAGE_CLASS_MELEE:
             return MeleeSpellHitResult(victim, spell);
         case SPELL_DAMAGE_CLASS_NONE:
-            {
-                if (spell->SpellFamilyName)
-                    return SPELL_MISS_NONE;
-                // Xinef: apply DAMAGE_CLASS_MAGIC conditions to damaging DAMAGE_CLASS_NONE spells
-                for (uint8 i = EFFECT_0; i < MAX_SPELL_EFFECTS; ++i)
-                    if (spell->Effects[i].Effect && spell->Effects[i].Effect != SPELL_EFFECT_SCHOOL_DAMAGE)
-                        if (spell->Effects[i].ApplyAuraName != SPELL_AURA_PERIODIC_DAMAGE)
-                            return SPELL_MISS_NONE;
-                // no break intended
-            }
+        {
+            if (spell->SpellFamilyName)
+                return SPELL_MISS_NONE;
+
+            // Xinef: apply DAMAGE_CLASS_MAGIC conditions to damaging DAMAGE_CLASS_NONE spells
+            for (uint8 i = EFFECT_0; i < MAX_SPELL_EFFECTS; ++i)
+                if (spell->Effects[i].Effect && spell->Effects[i].Effect != SPELL_EFFECT_SCHOOL_DAMAGE)
+                    if (spell->Effects[i].ApplyAuraName != SPELL_AURA_PERIODIC_DAMAGE)
+                        return SPELL_MISS_NONE;
+            
+            [[fallthrough]]
+        }
         case SPELL_DAMAGE_CLASS_MAGIC:
             return MagicSpellHitResult(victim, spell);
     }
@@ -8726,9 +8728,10 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
                 if (!victim || !victim->IsAlive() || victim->HealthAbovePct(20))
                     return false;
 
-                target = this;
-                trigger_spell_id = 22588;
-            }
+            target = this;
+            trigger_spell_id = 22588;
+            [[fallthrough]]; // TODO: Not sure whether the fallthrough was a mistake (forgetting a break) or intended. This should be double-checked.
+        }
         // Bonus Healing (Crystal Spire of Karabor mace)
         case 40971:
             {
@@ -11235,21 +11238,11 @@ float Unit::SpellTakenCritChance(Unit const* caster, SpellInfo const* spellProto
                     AuraEffectList const& mOverrideClassScript = caster->GetAuraEffectsByType(SPELL_AURA_OVERRIDE_CLASS_SCRIPTS);
                     for (AuraEffectList::const_iterator i = mOverrideClassScript.begin(); i != mOverrideClassScript.end(); ++i)
                     {
-                        if (!((*i)->IsAffectedOnSpell(spellProto)))
-                            continue;
-                        int32 modChance = 0;
-                        switch ((*i)->GetMiscValue())
-                        {
-                            // Shatter
-                            case  911:
-                                modChance += 16;
-                            case  910:
-                                modChance += 17;
-                            case  849:
-                                modChance += 17;
-                                if (!HasAuraState(AURA_STATE_FROZEN, spellProto, caster))
-                                    break;
-                                crit_chance += modChance;
+                        // Shatter
+                        case 911: modChance+= 16; [[fallthrough]];
+                        case 910: modChance+= 17; [[fallthrough]];
+                        case 849: modChance+= 17;
+                            if (!HasAuraState(AURA_STATE_FROZEN, spellProto, caster))
                                 break;
                             case 7917: // Glyph of Shadowburn
                                 if (HasAuraState(AURA_STATE_HEALTHLESS_35_PERCENT, spellProto, caster))
@@ -11355,6 +11348,7 @@ float Unit::SpellTakenCritChance(Unit const* caster, SpellInfo const* spellProto
                         }
                         break;
                 }
+            [[fallthrough]]; // TODO: Not sure whether the fallthrough was a mistake (forgetting a break) or intended. This should be double-checked.
         case SPELL_DAMAGE_CLASS_RANGED:
             {
                 // flat aura mods

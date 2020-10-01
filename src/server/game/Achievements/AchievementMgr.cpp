@@ -373,7 +373,7 @@ bool AchievementCriteriaData::Meets(uint32 criteria_id, Player const* source, Un
                 return false;
             return target->getGender() == gender.gender;
         case ACHIEVEMENT_CRITERIA_DATA_TYPE_SCRIPT:
-            return sScriptMgr->OnCriteriaCheck(ScriptId, const_cast<Player*>(source), const_cast<Unit*>(target), criteria_id);
+            return sScriptMgr->OnCriteriaCheck(ScriptId, const_cast<Player*>(source), const_cast<Unit*>(target));
         case ACHIEVEMENT_CRITERIA_DATA_TYPE_MAP_DIFFICULTY:
         {
             if (source->GetMap()->IsRaid())
@@ -689,13 +689,19 @@ void AchievementMgr::SendAchievementEarned(AchievementEntry const* achievement) 
 
     if (achievement->flags & (ACHIEVEMENT_FLAG_REALM_FIRST_KILL | ACHIEVEMENT_FLAG_REALM_FIRST_REACH))
     {
+        TeamId teamId = GetPlayer()->GetTeamId();
+
         // broadcast realm first reached
         WorldPacket data(SMSG_SERVER_FIRST_ACHIEVEMENT, GetPlayer()->GetName().size() + 1 + 8 + 4 + 4);
         data << GetPlayer()->GetName();
         data << uint64(GetPlayer()->GetGUID());
         data << uint32(achievement->ID);
-        data << uint32(0);                                  // 1=link supplied string as player name, 0=display plain string
-        sWorld->SendGlobalMessage(&data);
+        std::size_t linkTypePos = data.wpos();
+        data << uint32(1);                                  // display name as clickable link in chat
+        sWorld->SendGlobalMessage(&data, nullptr, teamId);
+
+        data.put<uint32>(linkTypePos, 0);                   // display name as plain string in chat
+        sWorld->SendGlobalMessage(&data, nullptr, teamId == TEAM_ALLIANCE ? TEAM_HORDE : TEAM_ALLIANCE);
     }
     // if player is in world he can tell his friends about new achievement
     else if (GetPlayer()->IsInWorld())
@@ -2236,7 +2242,7 @@ void AchievementMgr::CompletedAchievement(AchievementEntry const* achievement)
         {
             std::string subject = reward->subject;
             std::string text = reward->text;
-            
+
             LocaleConstant localeConstant = GetPlayer()->GetSession()->GetSessionDbLocaleIndex();
 
             if (localeConstant != LOCALE_enUS)
@@ -2247,10 +2253,10 @@ void AchievementMgr::CompletedAchievement(AchievementEntry const* achievement)
                     sGameLocale->GetLocaleString(loc->Text, localeConstant, text);
                 }
             }
-          
+
             draft = MailDraft(subject, text);
         }
-		
+
         SQLTransaction trans = CharacterDatabase.BeginTransaction();
 
         Item* item = reward->itemId ? Item::CreateItem(reward->itemId, 1, GetPlayer()) : nullptr;
