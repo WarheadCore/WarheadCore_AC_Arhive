@@ -160,7 +160,7 @@ namespace VMAP
 
     bool VMapManager2::isInLineOfSight(unsigned int mapId, float x1, float y1, float z1, float x2, float y2, float z2)
     {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_VMAP_CHECKS)
+#if defined(ENABLE_VMAP_CHECKS)
         if (!isLineOfSightCalcEnabled() || IsVMAPDisabledForPtr(mapId, VMAP_DISABLE_LOS))
             return true;
 #endif
@@ -183,7 +183,7 @@ namespace VMAP
     */
     bool VMapManager2::getObjectHitPos(unsigned int mapId, float x1, float y1, float z1, float x2, float y2, float z2, float& rx, float& ry, float& rz, float modifyDist)
     {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_VMAP_CHECKS)
+#if defined(ENABLE_VMAP_CHECKS)
         if (isLineOfSightCalcEnabled() && !IsVMAPDisabledForPtr(mapId, VMAP_DISABLE_LOS))
 #endif
         {
@@ -215,7 +215,7 @@ namespace VMAP
 
     float VMapManager2::getHeight(unsigned int mapId, float x, float y, float z, float maxSearchDist)
     {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_VMAP_CHECKS)
+#if defined(ENABLE_VMAP_CHECKS)
         if (isHeightCalcEnabled() && !IsVMAPDisabledForPtr(mapId, VMAP_DISABLE_HEIGHT))
 #endif
         {
@@ -236,7 +236,7 @@ namespace VMAP
 
     bool VMapManager2::getAreaInfo(unsigned int mapId, float x, float y, float& z, uint32& flags, int32& adtId, int32& rootId, int32& groupId) const
     {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_VMAP_CHECKS)
+#if defined(ENABLE_VMAP_CHECKS)
         if (!IsVMAPDisabledForPtr(mapId, VMAP_DISABLE_AREAFLAG))
 #endif
         {
@@ -256,7 +256,7 @@ namespace VMAP
 
     bool VMapManager2::GetLiquidLevel(uint32 mapId, float x, float y, float z, uint8 reqLiquidType, float& level, float& floor, uint32& type) const
     {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_VMAP_CHECKS)
+#if defined(ENABLE_VMAP_CHECKS)
         if (!IsVMAPDisabledForPtr(mapId, VMAP_DISABLE_LIQUIDSTATUS))
 #endif
         {

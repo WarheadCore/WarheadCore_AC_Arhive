@@ -215,9 +215,8 @@ void ObjectGridLoader::LoadN(void)
             }
         }
     }
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
+    
     LOG_DEBUG("maps", "%u GameObjects, %u Creatures, and %u Corpses/Bones loaded for grid %u on map %u", i_gameObjects, i_creatures, i_corpses, i_grid.GetGridId(), i_map->GetId());
-#endif
 }
 
 template<class T>

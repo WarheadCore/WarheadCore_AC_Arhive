@@ -110,10 +110,11 @@ void Vehicle::Uninstall()
             "Check Uninstall/PassengerBoarded script hooks for errors.", _me->GetGUIDLow(), _me->GetEntry());
         return;
     }
+    
     _status = STATUS_UNINSTALLING;
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
+
     LOG_DEBUG("entities.vehicles", "Vehicle::Uninstall Entry: %u, GuidLow: %u", _creatureEntry, _me->GetGUIDLow());
-#endif
+
     RemoveAllPassengers();
 
     if (GetBase()->GetTypeId() == TYPEID_UNIT)
@@ -122,9 +123,8 @@ void Vehicle::Uninstall()
 
 void Vehicle::Reset(bool evading /*= false*/)
 {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("entities.vehicles", "Vehicle::Reset Entry: %u, GuidLow: %u", _creatureEntry, _me->GetGUIDLow());
-#endif
+
     if (_me->GetTypeId() == TYPEID_PLAYER)
     {
         if (_usableSeatNum)
@@ -208,9 +208,7 @@ void Vehicle::ApplyAllImmunities()
 
 void Vehicle::RemoveAllPassengers()
 {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("entities.vehicles", "Vehicle::RemoveAllPassengers. Entry: %u, GuidLow: %u", _creatureEntry, _me->GetGUIDLow());
-#endif
 
     // Passengers always cast an aura with SPELL_AURA_CONTROL_VEHICLE on the vehicle
     // We just remove the aura and the unapply handler will make the target leave the vehicle.
@@ -279,9 +277,8 @@ void Vehicle::InstallAccessory(uint32 entry, int8 seatId, bool minion, uint8 typ
         return;
     }
 
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("entities.vehicles", "Vehicle: Installing accessory entry %u on vehicle entry %u (seat:%i)", entry, GetCreatureEntry(), seatId);
-#endif
+
     if (Unit* passenger = GetPassenger(seatId))
     {
         // already installed
@@ -320,9 +317,7 @@ bool Vehicle::AddPassenger(Unit* unit, int8 seatId)
     /// @Prevent adding passengers when vehicle is uninstalling. (Bad script in OnUninstall/OnRemovePassenger/PassengerBoarded hook.)
     if (_status == STATUS_UNINSTALLING)
     {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
         LOG_DEBUG("entities.vehicles", "Passenger GuidLow: %u, Entry: %u, attempting to board vehicle GuidLow: %u, Entry: %u during uninstall! SeatId: %i", unit->GetGUIDLow(), unit->GetEntry(), _me->GetGUIDLow(), _me->GetEntry(), (int32)seatId);
-#endif
         return false;
     }
 
@@ -356,9 +351,7 @@ bool Vehicle::AddPassenger(Unit* unit, int8 seatId)
         ASSERT(seat->second.IsEmpty());
     }
 
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("entities.vehicles", "Unit %s enter vehicle entry %u id %u dbguid %u seat %d", unit->GetName().c_str(), _me->GetEntry(), _vehicleInfo->m_ID, _me->GetGUIDLow(), (int32)seat->first);
-#endif
 
     seat->second.Passenger.Guid = unit->GetGUID();
     seat->second.Passenger.IsUnselectable = unit->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
@@ -467,9 +460,7 @@ void Vehicle::RemovePassenger(Unit* unit)
     if (seat == Seats.end())
         return;
 
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("entities.vehicles", "Unit %s exit vehicle entry %u id %u dbguid %u seat %d", unit->GetName().c_str(), _me->GetEntry(), _vehicleInfo->m_ID, _me->GetGUIDLow(), (int32)seat->first);
-#endif
 
     if (seat->second.SeatInfo->CanEnterOrExit() && ++_usableSeatNum)
         _me->SetFlag(UNIT_NPC_FLAGS, (_me->GetTypeId() == TYPEID_PLAYER ? UNIT_NPC_FLAG_PLAYER_VEHICLE : UNIT_NPC_FLAG_SPELLCLICK));
@@ -535,9 +526,8 @@ void Vehicle::Dismiss()
     if (GetBase()->GetTypeId() != TYPEID_UNIT)
         return;
 
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("entities.vehicles", "Vehicle::Dismiss Entry: %u, GuidLow %u", _creatureEntry, _me->GetGUIDLow());
-#endif
+
     Uninstall();
     GetBase()->ToCreature()->DespawnOrUnsummon();
 }

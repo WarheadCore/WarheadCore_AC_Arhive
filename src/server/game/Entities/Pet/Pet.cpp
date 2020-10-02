@@ -693,9 +693,8 @@ bool Pet::CreateBaseAtCreatureInfo(CreatureTemplate const* cinfo, Unit* owner)
 
 bool Pet::CreateBaseAtTamed(CreatureTemplate const* cinfo, Map* map, uint32 phaseMask)
 { 
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("entities.pets", "Pet::CreateBaseForTamed");
-#endif
+
     uint32 guid=sObjectMgr->GenerateLowGuid(HIGHGUID_PET);
     uint32 pet_number = sObjectMgr->GeneratePetNumber();
     if (!Create(guid, map, phaseMask, cinfo->Entry, pet_number))
@@ -1166,9 +1165,7 @@ void Pet::_LoadSpellCooldowns(PreparedQueryResult result)
             cooldowns[spell_id] = cooldown;
             _AddCreatureSpellCooldown(spell_id, cooldown);
 
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
             LOG_DEBUG("entities.pets", "Pet (Number: %u) spell %u cooldown loaded (%u secs).", m_charmInfo->GetPetNumber(), spell_id, uint32(db_time-curTime));
-#endif
         }
         while (result->NextRow());
 
@@ -1275,9 +1272,7 @@ void Pet::_SaveSpells(SQLTransaction& trans)
 
 void Pet::_LoadAuras(PreparedQueryResult result, uint32 timediff)
 { 
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("entities.pets", "Loading auras for pet %u", GetGUIDLow());
-#endif
 
     if (result)
     {
@@ -1347,9 +1342,8 @@ void Pet::_LoadAuras(PreparedQueryResult result, uint32 timediff)
                 }
                 aura->SetLoadedState(maxduration, remaintime, remaincharges, stackcount, recalculatemask, &damage[0]);
                 aura->ApplyForTargets();
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                LOG_INFO("server", "Added aura spellid %u, effectmask %u", spellInfo->Id, effmask);
-#endif
+
+                LOG_DEBUG("server", "Added aura spellid %u, effectmask %u", spellInfo->Id, effmask);
             }
         }
         while (result->NextRow());

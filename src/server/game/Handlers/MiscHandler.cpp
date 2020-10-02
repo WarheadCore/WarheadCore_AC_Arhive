@@ -59,9 +59,7 @@
 
 void WorldSession::HandleRepopRequestOpcode(WorldPacket & recv_data)
 {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("network", "WORLD: Recvd CMSG_REPOP_REQUEST Message");
-#endif
 
     recv_data.read_skip<uint8>();
 
@@ -78,9 +76,7 @@ void WorldSession::HandleRepopRequestOpcode(WorldPacket & recv_data)
     // release spirit after he's killed but before he is updated
     if (GetPlayer()->getDeathState() == JUST_DIED)
     {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
         LOG_DEBUG("network", "HandleRepopRequestOpcode: got request after player %s(%d) was killed and before he was updated", GetPlayer()->GetName().c_str(), GetPlayer()->GetGUIDLow());
-#endif
         GetPlayer()->KillPlayer();
     }
 
@@ -92,9 +88,7 @@ void WorldSession::HandleRepopRequestOpcode(WorldPacket & recv_data)
 
 void WorldSession::HandleGossipSelectOptionOpcode(WorldPacket & recv_data)
 {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("network", "WORLD: CMSG_GOSSIP_SELECT_OPTION");
-#endif
 
     uint32 gossipListId;
     uint32 menuId;
@@ -114,9 +108,7 @@ void WorldSession::HandleGossipSelectOptionOpcode(WorldPacket & recv_data)
         unit = GetPlayer()->GetNPCIfCanInteractWith(guid, UNIT_NPC_FLAG_NONE);
         if (!unit)
         {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
             LOG_DEBUG("network", "WORLD: HandleGossipSelectOptionOpcode - Unit (GUID: %u) not found or you can't interact with him.", uint32(GUID_LOPART(guid)));
-#endif
             return;
         }
     }
@@ -125,9 +117,7 @@ void WorldSession::HandleGossipSelectOptionOpcode(WorldPacket & recv_data)
         go = _player->GetMap()->GetGameObject(guid);
         if (!go)
         {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
             LOG_DEBUG("network", "WORLD: HandleGossipSelectOptionOpcode - GameObject (GUID: %u) not found.", uint32(GUID_LOPART(guid)));
-#endif
             return;
         }
     }
@@ -150,9 +140,7 @@ void WorldSession::HandleGossipSelectOptionOpcode(WorldPacket & recv_data)
     }
     else
     {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
         LOG_DEBUG("network", "WORLD: HandleGossipSelectOptionOpcode - unsupported GUID type for highguid %u. lowpart %u.", uint32(GUID_HIPART(guid)), uint32(GUID_LOPART(guid)));
-#endif
         return;
     }
 
@@ -162,13 +150,14 @@ void WorldSession::HandleGossipSelectOptionOpcode(WorldPacket & recv_data)
 
     if ((unit && unit->GetCreatureTemplate()->ScriptID != unit->LastUsedScriptID) || (go && go->GetGOInfo()->ScriptId != go->LastUsedScriptID))
     {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
         LOG_DEBUG("network", "WORLD: HandleGossipSelectOptionOpcode - Script reloaded while in use, ignoring and set new scipt id");
-#endif
+        
         if (unit)
             unit->LastUsedScriptID = unit->GetCreatureTemplate()->ScriptID;
+        
         if (go)
             go->LastUsedScriptID = go->GetGOInfo()->ScriptId;
+        
         _player->PlayerTalkClass->SendCloseGossip();
         return;
     }
@@ -415,9 +404,7 @@ void WorldSession::HandleWhoOpcode(WorldPacket& recvData)
 
 void WorldSession::HandleLogoutRequestOpcode(WorldPacket & /*recv_data*/)
 {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("network", "WORLD: Recvd CMSG_LOGOUT_REQUEST Message, security - %u", GetSecurity());
-#endif
 
     if (uint64 lguid = GetPlayer()->GetLootGUID())
         DoLootRelease(lguid);
@@ -478,9 +465,7 @@ void WorldSession::HandleLogoutRequestOpcode(WorldPacket & /*recv_data*/)
 
 void WorldSession::HandlePlayerLogoutOpcode(WorldPacket & /*recv_data*/)
 {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("network", "WORLD: Recvd CMSG_PLAYER_LOGOUT Message");
-#endif
 }
 
 void WorldSession::HandleLogoutCancelOpcode(WorldPacket & /*recv_data*/)
@@ -529,9 +514,7 @@ void WorldSession::HandleZoneUpdateOpcode(WorldPacket & recv_data)
     uint32 newZone;
     recv_data >> newZone;
 
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("network", "WORLD: Recvd ZONE_UPDATE: %u", newZone);
-#endif
 
     // use server size data
     uint32 newzone, newarea;
@@ -571,17 +554,15 @@ void WorldSession::HandleContactListOpcode(WorldPacket & recv_data)
 {
     uint32 unk;
     recv_data >> unk;
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
+
     LOG_DEBUG("network", "WORLD: Received CMSG_CONTACT_LIST - Unk: %d", unk);
-#endif
+
     _player->GetSocial()->SendSocialList(_player);
 }
 
 void WorldSession::HandleAddFriendOpcode(WorldPacket & recv_data)
 {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("network", "WORLD: Received CMSG_ADD_FRIEND");
-#endif
 
     std::string friendName = GetAcoreString(LANG_FRIEND_IGNORE_UNKNOWN);
     std::string friendNote;
@@ -593,9 +574,7 @@ void WorldSession::HandleAddFriendOpcode(WorldPacket & recv_data)
     if (!normalizePlayerName(friendName))
         return;
 
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("network", "WORLD: %s asked to add friend : '%s'", GetPlayer()->GetName().c_str(), friendName.c_str());
-#endif
 
     // xinef: Get Data From global storage
     uint32 guidLow = sWorld->GetGlobalPlayerGUID(friendName);

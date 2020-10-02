@@ -1793,10 +1793,10 @@ void LFGMgr::RemoveProposal(LfgProposalContainer::iterator itProposal, LfgUpdate
         }
         else
         {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
             LOG_DEBUG("lfg", "LFGMgr::RemoveProposal: Readding [" UI64FMTD "] to queue.", guid);
-#endif
+            
             SetState(guid, LFG_STATE_QUEUED);
+            
             if (gguid != guid)
             {
                 SetState(gguid, LFG_STATE_QUEUED);
@@ -2171,9 +2171,8 @@ LfgState LFGMgr::GetState(uint64 guid)
     else
         state = PlayersStore[guid].GetState();
 
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("lfg", "LFGMgr::GetState: [" UI64FMTD "] = %u", guid, state);
-#endif
+
     return state;
 }
 
@@ -2185,18 +2184,17 @@ LfgState LFGMgr::GetOldState(uint64 guid)
     else
         state = PlayersStore[guid].GetOldState();
 
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("lfg", "LFGMgr::GetOldState: [" UI64FMTD "] = %u", guid, state);
-#endif
+
     return state;
 }
 
 uint32 LFGMgr::GetDungeon(uint64 guid, bool asId /*= true */)
 {
     uint32 dungeon = GroupsStore[guid].GetDungeon(asId);
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
+
     LOG_DEBUG("lfg", "LFGMgr::GetDungeon: [" UI64FMTD "] asId: %u = %u", guid, asId, dungeon);
-#endif
+
     return dungeon;
 }
 
@@ -2204,55 +2202,52 @@ uint32 LFGMgr::GetDungeonMapId(uint64 guid)
 {
     uint32 dungeonId = GroupsStore[guid].GetDungeon(true);
     uint32 mapId = 0;
+    
     if (dungeonId)
         if (LFGDungeonData const* dungeon = GetLFGDungeon(dungeonId))
             mapId = dungeon->map;
 
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("lfg", "LFGMgr::GetDungeonMapId: [" UI64FMTD "] = %u (DungeonId = %u)", guid, mapId, dungeonId);
-#endif
+
     return mapId;
 }
 
 uint8 LFGMgr::GetRoles(uint64 guid)
 {
     uint8 roles = PlayersStore[guid].GetRoles();
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
+
     LOG_DEBUG("lfg", "LFGMgr::GetRoles: [" UI64FMTD "] = %u", guid, roles);
-#endif
+
     return roles;
 }
 
 const std::string& LFGMgr::GetComment(uint64 guid)
 {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("lfg", "LFGMgr::GetComment: [" UI64FMTD "] = %s", guid, PlayersStore[guid].GetComment().c_str());
-#endif
+
     return PlayersStore[guid].GetComment();
 }
 
 LfgDungeonSet const& LFGMgr::GetSelectedDungeons(uint64 guid)
 {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("lfg", "LFGMgr::GetSelectedDungeons: [" UI64FMTD "]", guid);
-#endif
+
     return PlayersStore[guid].GetSelectedDungeons();
 }
 
 LfgLockMap const& LFGMgr::GetLockedDungeons(uint64 guid)
 {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("lfg", "LFGMgr::GetLockedDungeons: [" UI64FMTD "]", guid);
-#endif
+
     return PlayersStore[guid].GetLockedDungeons();
 }
 
 uint8 LFGMgr::GetKicksLeft(uint64 guid)
 {
     uint8 kicks = GroupsStore[guid].GetKicksLeft();
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
+    
     LOG_DEBUG("lfg", "LFGMgr::GetKicksLeft: [" UI64FMTD "] = %u", guid, kicks);
-#endif
+    
     return kicks;
 }
 
@@ -2314,25 +2309,22 @@ void LFGMgr::SetCanOverrideRBState(uint64 guid, bool val)
 
 void LFGMgr::SetDungeon(uint64 guid, uint32 dungeon)
 {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("lfg", "LFGMgr::SetDungeon: [" UI64FMTD "] dungeon %u", guid, dungeon);
-#endif
+
     GroupsStore[guid].SetDungeon(dungeon);
 }
 
 void LFGMgr::SetRoles(uint64 guid, uint8 roles)
 {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("lfg", "LFGMgr::SetRoles: [" UI64FMTD "] roles: %u", guid, roles);
-#endif
+
     PlayersStore[guid].SetRoles(roles);
 }
 
 void LFGMgr::SetComment(uint64 guid, std::string const& comment)
 {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("lfg", "LFGMgr::SetComment: [" UI64FMTD "] comment: %s", guid, comment.c_str());
-#endif
+
     PlayersStore[guid].SetComment(comment);
 }
 
@@ -2351,33 +2343,28 @@ void LFGMgr::LfrSetComment(Player* p, std::string comment)
 
 void LFGMgr::SetSelectedDungeons(uint64 guid, LfgDungeonSet const& dungeons)
 {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("lfg", "LFGMgr::SetLockedDungeons: [" UI64FMTD "]", guid);
-#endif
     PlayersStore[guid].SetSelectedDungeons(dungeons);
 }
 
 void LFGMgr::SetLockedDungeons(uint64 guid, LfgLockMap const& lock)
 {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("lfg", "LFGMgr::SetLockedDungeons: [" UI64FMTD "]", guid);
-#endif
+
     PlayersStore[guid].SetLockedDungeons(lock);
 }
 
 void LFGMgr::DecreaseKicksLeft(uint64 guid)
 {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("lfg", "LFGMgr::DecreaseKicksLeft: [" UI64FMTD "]", guid);
-#endif
+
     GroupsStore[guid].DecreaseKicksLeft();
 }
 
 void LFGMgr::RemoveGroupData(uint64 guid)
 {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("lfg", "LFGMgr::RemoveGroupData: [" UI64FMTD "]", guid);
-#endif
+
     LfgGroupDataContainer::iterator it = GroupsStore.find(guid);
     if (it == GroupsStore.end())
         return;
