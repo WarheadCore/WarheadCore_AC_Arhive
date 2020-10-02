@@ -290,7 +290,7 @@ int WorldSocket::handle_input(ACE_HANDLE)
 
     switch (handle_input_missing_data())
     {
-        case -1 :
+        case -1:
         {
             if ((errno == EWOULDBLOCK) ||
                 (errno == EAGAIN))
@@ -298,18 +298,14 @@ int WorldSocket::handle_input(ACE_HANDLE)
                 return Update();                           // interesting line, isn't it ?
             }
 
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-            LOG_DEBUG("server", "WorldSocket::handle_input: Peer error closing connection errno = %s", ACE_OS::strerror (errno));
-#endif
+            LOG_TRACE("network", "WorldSocket::handle_input: Peer error closing connection errno = %s", ACE_OS::strerror (errno));
 
             errno = ECONNRESET;
             return -1;
         }
         case 0:
         {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-            LOG_DEBUG("server", "WorldSocket::handle_input: Peer has closed connection");
-#endif
+            LOG_DEBUG("network", "WorldSocket::handle_input: Peer has closed connection");
 
             errno = ECONNRESET;
             return -1;
@@ -786,9 +782,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     recvPacket >> DosResponse;
     recvPacket.read(digest, 20);
 
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    sLog->outStaticDebug ("WorldSocket::HandleAuthSession: client %u, loginServerID %u, account %s, loginServerType %u, clientseed %u", BuiltNumberClient, loginServerID, account.c_str(), loginServerType, clientSeed);
-#endif
+    LOG_DEBUG("network", "WorldSocket::HandleAuthSession: client %u, loginServerID %u, account %s, loginServerType %u, clientseed %u", BuiltNumberClient, loginServerID, account.c_str(), loginServerType, clientSeed);
     // Get the account information from the realmd database
     //         0           1        2       3        4            5        6       7       8      9
     // SELECT id, sessionkey, last_ip, locked, lock_country, expansion, locale, recruiter, os, totaltime FROM account WHERE username = ?
@@ -913,9 +907,9 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
 
     // Check locked state for server
     AccountTypes allowedAccountType = sWorld->GetPlayerSecurityLimit();
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
+
     LOG_DEBUG("network", "Allowed Level: %u Player Level %u", allowedAccountType, AccountTypes(security));
-#endif
+    
     if (AccountTypes(security) < allowedAccountType)
     {
         WorldPacket Packet (SMSG_AUTH_RESPONSE, 1);
@@ -923,9 +917,8 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
 
         SendPacket(packet);
 
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-        LOG_INFO("server", "WorldSocket::HandleAuthSession: User tries to login but his security level is not enough");
-#endif
+        LOG_INFO("network", "WorldSocket::HandleAuthSession: User tries to login but his security level is not enough");
+        
         sScriptMgr->OnFailedAccountLogin(id);
         return -1;
     }
@@ -952,11 +945,8 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
         return -1;
     }
 
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    LOG_DEBUG("server", "WorldSocket::HandleAuthSession: Client '%s' authenticated successfully from %s.",
-                account.c_str(),
-                address.c_str());
-#endif
+    LOG_DEBUG("server", "WorldSocket::HandleAuthSession: Client '%s' authenticated successfully from %s.", account.c_str(), address.c_str());
+
     // Check if this user is by any chance a recruiter
     stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_RECRUITER);
 

@@ -85,12 +85,10 @@ uint32 AuctionHouseMgr::GetAuctionDeposit(AuctionHouseEntry const* entry, uint32
     uint32 timeHr = (((time / 60) / 60) / 12);
     uint32 deposit = uint32(((multiplier * MSV * count / 3) * timeHr * 3) * sGameConfig->GetFloatConfig("Rate.Auction.Deposit"));
 
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("auctionHouse", "MSV:        %u", MSV);
     LOG_DEBUG("auctionHouse", "Items:      %u", count);
     LOG_DEBUG("auctionHouse", "Multiplier: %f", multiplier);
     LOG_DEBUG("auctionHouse", "Deposit:    %u", deposit);
-#endif
 
     if (deposit < AH_MINIMUM_DEPOSIT * sGameConfig->GetFloatConfig("Rate.Auction.Deposit"))
         return AH_MINIMUM_DEPOSIT * sGameConfig->GetFloatConfig("Rate.Auction.Deposit");

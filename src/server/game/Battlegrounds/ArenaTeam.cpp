@@ -268,9 +268,8 @@ bool ArenaTeam::LoadMembersFromDB(QueryResult result)
     if (Empty() || !captainPresentInTeam)
     {
         // Arena team is empty or captain is not in team, delete from db
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
         LOG_DEBUG("bg", "ArenaTeam %u does not have any members or its captain is not in team, disbanding it...", TeamId);
-#endif
+
         return false;
     }
 
@@ -439,9 +438,8 @@ void ArenaTeam::Roster(WorldSession* session)
     }
 
     session->SendPacket(&data);
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
+
     LOG_DEBUG("network", "WORLD: Sent SMSG_ARENA_TEAM_ROSTER");
-#endif
 }
 
 void ArenaTeam::Query(WorldSession* session)
@@ -456,9 +454,8 @@ void ArenaTeam::Query(WorldSession* session)
     data << uint32(BorderStyle);                            // border style
     data << uint32(BorderColor);                            // border color
     session->SendPacket(&data);
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
+    
     LOG_DEBUG("network", "WORLD: Sent SMSG_ARENA_TEAM_QUERY_RESPONSE");
-#endif
 }
 
 void ArenaTeam::SendStats(WorldSession* session)
@@ -568,9 +565,7 @@ void ArenaTeam::BroadcastEvent(ArenaTeamEvents event, uint64 guid, uint8 strCoun
 
     BroadcastPacket(&data);
 
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("network", "WORLD: Sent SMSG_ARENA_TEAM_EVENT");
-#endif
 }
 
 void ArenaTeam::MassInviteToEvent(WorldSession* session)

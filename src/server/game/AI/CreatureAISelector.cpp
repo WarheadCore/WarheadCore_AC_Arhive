@@ -93,11 +93,10 @@ namespace FactorySelector
             }
         }
 
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
         // select NullCreatureAI if not another cases
         ainame = (ai_factory == nullptr) ? "NullCreatureAI" : ai_factory->key();
         LOG_DEBUG("tscr", "Creature %u used AI is %s.", creature->GetGUIDLow(), ainame.c_str());
-#endif
+
         return (ai_factory == NULL ? new NullCreatureAI(creature) : ai_factory->Create(creature));
     }
 
@@ -142,10 +141,8 @@ namespace FactorySelector
 
         //future goAI types go here
 
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
         std::string ainame = (ai_factory == NULL || go->GetScriptId()) ? "NullGameObjectAI" : ai_factory->key();
         LOG_DEBUG("tscr", "GameObject %u used AI is %s.", go->GetGUIDLow(), ainame.c_str());
-#endif
 
         return (ai_factory == NULL ? new NullGameObjectAI(go) : ai_factory->Create(go));
     }

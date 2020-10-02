@@ -162,9 +162,7 @@ void CreatureAI::EnterEvadeMode()
     if (!_EnterEvadeMode())
         return;
 
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("entities.units", "Creature %u enters evade mode.", me->GetEntry());
-#endif
 
     if (!me->GetVehicle()) // otherwise me will be in evade mode forever
     {

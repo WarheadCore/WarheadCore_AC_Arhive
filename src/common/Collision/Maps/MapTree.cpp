@@ -54,9 +54,7 @@ namespace VMAP
         AreaInfoCallback(ModelInstance* val): prims(val) {}
         void operator()(const Vector3& point, uint32 entry)
         {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS) && defined(VMAP_DEBUG)
             LOG_DEBUG("maps", "AreaInfoCallback: trying to intersect '%s'", prims[entry].name.c_str());
-#endif
             prims[entry].intersectPoint(point, aInfo);
         }
 
@@ -70,9 +68,8 @@ namespace VMAP
         LocationInfoCallback(ModelInstance* val, LocationInfo& info): prims(val), locInfo(info), result(false) {}
         void operator()(const Vector3& point, uint32 entry)
         {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS) && defined(VMAP_DEBUG)
             LOG_DEBUG("maps", "LocationInfoCallback: trying to intersect '%s'", prims[entry].name.c_str());
-#endif
+
             if (prims[entry].GetLocationInfo(point, locInfo))
                 result = true;
         }
@@ -373,25 +370,21 @@ namespace VMAP
                     {
                         if (!iLoadedSpawns.count(referencedVal))
                         {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS) && defined(VMAP_DEBUG)
                             if (referencedVal > iNTreeValues)
                             {
                                 LOG_DEBUG("maps", "StaticMapTree::LoadMapTile() : invalid tree element (%u/%u)", referencedVal, iNTreeValues);
                                 continue;
                             }
-#endif
                             iTreeValues[referencedVal] = ModelInstance(spawn, model);
                             iLoadedSpawns[referencedVal] = 1;
                         }
                         else
                         {
                             ++iLoadedSpawns[referencedVal];
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS) && defined(VMAP_DEBUG)
                             if (iTreeValues[referencedVal].ID != spawn.ID)
                                 LOG_DEBUG("maps", "StaticMapTree::LoadMapTile() : trying to load wrong spawn in node");
                             else if (iTreeValues[referencedVal].name != spawn.name)
                                 LOG_DEBUG("maps", "StaticMapTree::LoadMapTile() : name collision on GUID=%u", spawn.ID);
-#endif
                         }
                     }
                     else

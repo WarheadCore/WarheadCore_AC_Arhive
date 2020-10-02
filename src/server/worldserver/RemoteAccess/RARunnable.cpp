@@ -80,7 +80,5 @@ void RARunnable::run()
             break;
     }
 
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    LOG_DEBUG("server", "Trinity RA thread exiting");
-#endif
+    LOG_DEBUG("server", "Warhead RA thread exiting");
 }

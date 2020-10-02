@@ -676,9 +676,7 @@ void AchievementMgr::SendAchievementEarned(AchievementEntry const* achievement) 
     if (achievement->flags & ACHIEVEMENT_FLAG_HIDDEN)
         return;
 
-    #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS) && defined(ACORE_DEBUG) 
-        LOG_DEBUG("achievement", "AchievementMgr::SendAchievementEarned(%u)", achievement->ID);
-    #endif
+    LOG_TRACE("achievement", "AchievementMgr::SendAchievementEarned(%u)", achievement->ID);
 
     if (Guild* guild = sGuildMgr->GetGuildById(GetPlayer()->GetGuildId()))
     {
@@ -777,7 +775,6 @@ void AchievementMgr::UpdateAchievementCriteria(AchievementCriteriaTypes type, ui
     if (m_player->IsGameMaster())
         return;
 
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     if (type >= ACHIEVEMENT_CRITERIA_TYPE_TOTAL)
     {
         LOG_DEBUG("achievement", "UpdateAchievementCriteria: Wrong criteria type %u", type);
@@ -785,7 +782,6 @@ void AchievementMgr::UpdateAchievementCriteria(AchievementCriteriaTypes type, ui
     }
     
     LOG_DEBUG("achievement", "AchievementMgr::UpdateAchievementCriteria(%u, %u, %u)", type, miscValue1, miscValue2);
-#endif
 
     AchievementCriteriaEntryList const* achievementCriteriaList = nullptr;
 
@@ -2019,9 +2015,7 @@ void AchievementMgr::SetCriteriaProgress(AchievementCriteriaEntry const* entry, 
     if (entry->timeLimit && timedIter == m_timedAchievements.end())
         return;
 
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("achievement", "AchievementMgr::SetCriteriaProgress(%u, %u) for (GUID:%u)", entry->ID, changeValue, m_player->GetGUIDLow());
-#endif
 
     CriteriaProgress* progress = GetCriteriaProgress(entry);
     if (!progress)
@@ -2169,7 +2163,7 @@ void AchievementMgr::CompletedAchievement(AchievementEntry const* achievement)
     // disable for gamemasters with GM-mode enabled
     if (m_player->IsGameMaster())
     {
-        LOG_INFO("server", "Not available in GM mode.");
+        LOG_INFO("achievement", "Not available in GM mode.");
         ChatHandler(m_player->GetSession()).PSendSysMessage("Not available in GM mode");
         return;
     }
@@ -2177,9 +2171,7 @@ void AchievementMgr::CompletedAchievement(AchievementEntry const* achievement)
     if (achievement->flags & ACHIEVEMENT_FLAG_COUNTER || HasAchieved(achievement->ID))
         return;
 
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    LOG_INFO("server", "AchievementMgr::CompletedAchievement(%u)", achievement->ID);
-#endif
+    LOG_INFO("achievement", "AchievementMgr::CompletedAchievement(%u)", achievement->ID);
 
     SendAchievementEarned(achievement);
     CompletedAchievementData& ca = m_completedAchievements[achievement->ID];

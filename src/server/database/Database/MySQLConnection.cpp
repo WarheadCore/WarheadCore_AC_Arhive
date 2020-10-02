@@ -136,14 +136,13 @@ uint32 MySQLConnection::Open()
         {
             LOG_INFO("sql.driver", "> MySQL client library: %s", mysql_get_client_info());
             LOG_INFO("sql.driver", "> MySQL server ver: %s ", mysql_get_server_info(m_Mysql));
-            // MySQL version above 5.1 IS required in both client and server and there is no known issue with different versions above 5.1
-            // if (mysql_get_server_version(m_Mysql) != mysql_get_client_version())
-            //     sLog->outInfo(LOG_FILTER_SQL, "[WARNING] MySQL client/server version mismatch; may conflict with behaviour of prepared statements.");
+            
+            if (mysql_get_server_version(m_Mysql) != mysql_get_client_version())
+                LOG_WARN("sql.driver", "[WARNING] MySQL client/server version mismatch; may conflict with behaviour of prepared statements.");
         }
 
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-        LOG_INFO("server", "Connected to MySQL database at %s", m_connectionInfo.host.c_str());
-#endif
+        LOG_INFO("sql.driver", "Connected to MySQL database at %s", m_connectionInfo.host.c_str());
+
         mysql_autocommit(m_Mysql, 1);
 
         // set connection properties to UTF8 to properly handle locales for different

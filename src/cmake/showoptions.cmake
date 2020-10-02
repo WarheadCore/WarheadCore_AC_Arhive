@@ -113,13 +113,6 @@ else()
   message("* Enable vmap DisableMgr checks   : No")
 endif()
 
-if( ENABLE_EXTRA_LOGS )
-  message("* Enable extra logging functions  : Yes")
-  add_definitions(-DENABLE_EXTRA_LOGS)
-else()
-  message("* Enable extra logging functions  : No (default)")
-endif()
-
 if(WIN32 AND NOT CMAKE_VERSION VERSION_LESS 2.8.12)
   if(NOT WITH_SOURCE_TREE STREQUAL "no")
   message("* Show source tree                : Yes - \"${WITH_SOURCE_TREE}\"")

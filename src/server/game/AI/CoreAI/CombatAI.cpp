@@ -291,10 +291,9 @@ void VehicleAI::OnCharmed(bool apply)
 void VehicleAI::LoadConditions()
 {
     conditions = sConditionMgr->GetConditionsForNotGroupedEntry(CONDITION_SOURCE_TYPE_CREATURE_TEMPLATE_VEHICLE, me->GetEntry());
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
+
     if (!conditions.empty())
         LOG_DEBUG("condition", "VehicleAI::LoadConditions: loaded %u conditions", uint32(conditions.size()));
-#endif
 }
 
 void VehicleAI::CheckConditions(uint32 diff)

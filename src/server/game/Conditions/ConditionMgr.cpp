@@ -37,11 +37,10 @@ bool Condition::Meets(ConditionSourceInfo& sourceInfo)
     // object not present, return false
     if (!object)
     {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
         LOG_DEBUG("condition", "Condition object not found for condition (Entry: %u Type: %u Group: %u)", SourceEntry, SourceType, SourceGroup);
-#endif
         return false;
     }
+    
     bool condMeets = false;
     switch (ConditionType)
     {
@@ -669,9 +668,8 @@ bool ConditionMgr::IsObjectMeetToConditionList(ConditionSourceInfo& sourceInfo, 
     std::map<uint32, bool> ElseGroupStore;
     for (ConditionList::const_iterator i = conditions.begin(); i != conditions.end(); ++i)
     {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
         LOG_DEBUG("condition", "ConditionMgr::IsPlayerMeetToConditionList condType: %u val1: %u", (*i)->ConditionType, (*i)->ConditionValue1);
-#endif
+
         if ((*i)->isLoaded())
         {
             //! Find ElseGroup in ElseGroupStore
@@ -691,11 +689,7 @@ bool ConditionMgr::IsObjectMeetToConditionList(ConditionSourceInfo& sourceInfo, 
                         ElseGroupStore[(*i)->ElseGroup] = false;
                 }
                 else
-                {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
                     LOG_DEBUG("condition", "IsPlayerMeetToConditionList: Reference template -%u not found", (*i)->ReferenceId);
-#endif
-                }
 
             }
             else //handle normal condition
@@ -729,9 +723,8 @@ bool ConditionMgr::IsObjectMeetToConditions(ConditionSourceInfo& sourceInfo, Con
     if (conditions.empty())
         return true;
 
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("condition", "ConditionMgr::IsObjectMeetToConditions");
-#endif
+
     return IsObjectMeetToConditionList(sourceInfo, conditions);
 }
 
@@ -775,9 +768,8 @@ ConditionList ConditionMgr::GetConditionsForNotGroupedEntry(ConditionSourceType 
             if (i != (*itr).second.end())
             {
                 spellCond = (*i).second;
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
+
                 LOG_DEBUG("condition", "GetConditionsForNotGroupedEntry: found conditions for type %u and entry %u", uint32(sourceType), entry);
-#endif
             }
         }
     }
@@ -794,9 +786,7 @@ ConditionList ConditionMgr::GetConditionsForSpellClickEvent(uint32 creatureId, u
         if (i != (*itr).second.end())
         {
             cond = (*i).second;
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
             LOG_DEBUG("condition", "GetConditionsForSpellClickEvent: found conditions for Vehicle entry %u spell %u", creatureId, spellId);
-#endif
         }
     }
     return cond;
@@ -812,9 +802,8 @@ ConditionList ConditionMgr::GetConditionsForVehicleSpell(uint32 creatureId, uint
         if (i != (*itr).second.end())
         {
             cond = (*i).second;
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
+
             LOG_DEBUG("condition", "GetConditionsForVehicleSpell: found conditions for Vehicle entry %u spell %u", creatureId, spellId);
-#endif
         }
     }
     return cond;
@@ -830,9 +819,7 @@ ConditionList ConditionMgr::GetConditionsForSmartEvent(int32 entryOrGuid, uint32
         if (i != (*itr).second.end())
         {
             cond = (*i).second;
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
             LOG_DEBUG("condition", "GetConditionsForSmartEvent: found conditions for Smart Event entry or guid %d event_id %u", entryOrGuid, eventId);
-#endif
         }
     }
     return cond;

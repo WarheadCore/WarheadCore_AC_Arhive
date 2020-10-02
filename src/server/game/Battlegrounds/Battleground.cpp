@@ -314,9 +314,7 @@ inline void Battleground::_CheckSafePositions(uint32 diff)
             GetTeamStartLoc(itr->second->GetBgTeamId(), x, y, z, o);
             if (pos.GetExactDistSq(x, y, z) > maxDist)
             {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
                 LOG_DEBUG("bg", "BATTLEGROUND: Sending %s back to start location (map: %u) (possible exploit)", itr->second->GetName().c_str(), GetMapId());
-#endif
                 itr->second->TeleportTo(GetMapId(), x, y, z, o);
             }
         }
@@ -1267,9 +1265,7 @@ void Battleground::AddPlayer(Player* player)
     sScriptMgr->OnBattlegroundAddPlayer(this, player);
 
     // Log
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    LOG_INFO("server", "BATTLEGROUND: Player %s joined the battle.", player->GetName().c_str());
-#endif
+    LOG_INFO("bg", "BATTLEGROUND: Player %s joined the battle.", player->GetName().c_str());
 }
 
 // this method adds player to his team's bg group, or sets his correct group if player is already in bg group

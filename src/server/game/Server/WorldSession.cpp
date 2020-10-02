@@ -210,7 +210,7 @@ void WorldSession::SendPacket(WorldPacket const* packet)
     if (!m_Socket)
         return;
 
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS) && defined(ACORE_DEBUG)
+#if defined(ACORE_DEBUG)
     // Code for network use statistic
     static uint64 sendPacketCount = 0;
     static uint64 sendPacketBytes = 0;
@@ -608,9 +608,8 @@ void WorldSession::LogoutPlayer(bool save)
         //! Client will respond by sending 3x CMSG_CANCEL_TRADE, which we currently dont handle
         WorldPacket data(SMSG_LOGOUT_COMPLETE, 0);
         SendPacket(&data);
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
+
         LOG_DEBUG("network", "SESSION: Sent SMSG_LOGOUT_COMPLETE Message");
-#endif
 
         //! Since each account can only have one online character at any given time, ensure all characters for active account are marked as offline
         PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_ACCOUNT_ONLINE);
@@ -1045,34 +1044,28 @@ void WorldSession::ReadAddonsInfo(WorldPacket& data)
 
             addonInfo >> enabled >> crc >> unk1;
 
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-            LOG_INFO("server", "ADDON: Name: %s, Enabled: 0x%x, CRC: 0x%x, Unknown2: 0x%x", addonName.c_str(), enabled, crc, unk1);
-#endif
+            LOG_INFO("network", "ADDON: Name: %s, Enabled: 0x%x, CRC: 0x%x, Unknown2: 0x%x", addonName.c_str(), enabled, crc, unk1);
 
             AddonInfo addon(addonName, enabled, crc, 2, true);
 
             SavedAddon const* savedAddon = AddonMgr::GetAddonInfo(addonName);
             if (savedAddon)
             {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
                 bool match = true;
 
                 if (addon.CRC != savedAddon->CRC)
                     match = false;
 
                 if (!match)
-                    LOG_INFO("server", "ADDON: %s was known, but didn't match known CRC (0x%x)!", addon.Name.c_str(), savedAddon->CRC);
+                    LOG_INFO("network", "ADDON: %s was known, but didn't match known CRC (0x%x)!", addon.Name.c_str(), savedAddon->CRC);
                 else
-                    LOG_INFO("server", "ADDON: %s was known, CRC is correct (0x%x)", addon.Name.c_str(), savedAddon->CRC);
-#endif
+                    LOG_INFO("network", "ADDON: %s was known, CRC is correct (0x%x)", addon.Name.c_str(), savedAddon->CRC);
             }
             else
             {
                 AddonMgr::SaveAddon(addon);
 
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                LOG_INFO("server", "ADDON: %s (0x%x) was not known, saving...", addon.Name.c_str(), addon.CRC);
-#endif
+                LOG_INFO("network", "ADDON: %s (0x%x) was not known, saving...", addon.Name.c_str(), addon.CRC);
             }
 
             // TODO: Find out when to not use CRC/pubkey, and other possible states.
@@ -1081,14 +1074,12 @@ void WorldSession::ReadAddonsInfo(WorldPacket& data)
 
         uint32 currentTime;
         addonInfo >> currentTime;
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-        LOG_DEBUG("network", "ADDON: CurrentTime: %u", currentTime);
-#endif
 
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
+        LOG_DEBUG("network", "ADDON: CurrentTime: %u", currentTime);
+
         if (addonInfo.rpos() != addonInfo.size())
             LOG_DEBUG("network", "packet under-read!");
-#endif
+
     }
     else
         LOG_ERROR("server", "Addon packet uncompress error!");
@@ -1130,9 +1121,7 @@ void WorldSession::SendAddonsInfo()
             data << uint8(usepk);
             if (usepk)                                      // if CRC is wrong, add public key (client need it)
             {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                LOG_INFO("server", "ADDON: CRC (0x%x) for addon %s is wrong (does not match expected 0x%x), sending pubkey", itr->CRC, itr->Name.c_str(), STANDARD_ADDON_CRC);
-#endif
+                LOG_INFO("network", "ADDON: CRC (0x%x) for addon %s is wrong (does not match expected 0x%x), sending pubkey", itr->CRC, itr->Name.c_str(), STANDARD_ADDON_CRC);
                 data.append(addonPublicKey, sizeof(addonPublicKey));
             }
 
@@ -1141,6 +1130,7 @@ void WorldSession::SendAddonsInfo()
 
         uint8 unk3 = 0;                                     // 0 is sent here
         data << uint8(unk3);
+        
         if (unk3)
         {
             // String, length 256 (null terminated)
