@@ -18,8 +18,6 @@
 #include "ByteBuffer.h"
 #include "Common.h"
 #include "Log.h"
-
-#include <ace/Stack_Trace.h>
 #include <sstream>
 
 ByteBufferPositionException::ByteBufferPositionException(bool add, size_t pos,
@@ -46,9 +44,9 @@ ByteBufferSourceException::ByteBufferSourceException(size_t pos, size_t size,
     message().assign(ss.str());
 }
 
-void ByteBuffer::hexlike(bool outString) const
+void ByteBuffer::hexlike() const
 {
-    if (!outString)
+    if (!sLog->ShouldLog("network", LogLevel::LOG_LEVEL_TRACE)) // optimize disabled trace output
         return;
 
     uint32 j = 1, k = 1;
@@ -58,8 +56,8 @@ void ByteBuffer::hexlike(bool outString) const
 
     for (uint32 i = 0; i < size(); ++i)
     {
-        char buf[3];
-        snprintf(buf, 3, "%02X", read<uint8>(i));
+        char buf[4];
+        snprintf(buf, 4, "%02X", read<uint8>(i));
         if ((i == (j * 8)) && ((i != (k * 16))))
         {
             o << "| ";
@@ -74,7 +72,8 @@ void ByteBuffer::hexlike(bool outString) const
 
         o << buf << " ";
     }
+
     o << " ";
 
-    LOG_INFO("server", "%s", o.str().c_str());
+    LOG_TRACE("network", "%s", o.str().c_str());
 }

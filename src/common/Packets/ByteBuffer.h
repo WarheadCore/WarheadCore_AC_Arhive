@@ -107,6 +107,12 @@ public:
         put(pos, (uint8*)&value, sizeof(value));
     }
 
+    ByteBuffer& operator<<(bool value)
+    {
+        append<uint8>(value ? 1 : 0);
+        return *this;
+    }
+
     ByteBuffer& operator<<(uint8 value)
     {
         append<uint8>(value);
@@ -517,7 +523,7 @@ public:
         std::memcpy(&_storage[pos], src, cnt);
     }
 
-    void hexlike(bool outString = false) const;
+    void hexlike() const;
 
 protected:
     size_t _rpos, _wpos;
