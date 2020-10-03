@@ -41,9 +41,8 @@
 
 void WorldSession::HandleMoveWorldportAckOpcode(WorldPacket & /*recvData*/)
 {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("network", "WORLD: got MSG_MOVE_WORLDPORT_ACK.");
-#endif
+
     HandleMoveWorldportAckOpcode();
 }
 
@@ -235,21 +234,16 @@ void WorldSession::HandleMoveWorldportAckOpcode()
 
 void WorldSession::HandleMoveTeleportAck(WorldPacket& recvData)
 {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("network", "MSG_MOVE_TELEPORT_ACK");
-#endif
+
     uint64 guid;
 
     recvData.readPackGUID(guid);
 
     uint32 flags, time;
     recvData >> flags >> time; // unused
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    LOG_DEBUG("server", "Guid " UI64FMTD, guid);
-#endif
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-    LOG_DEBUG("server", "Flags %u, time %u", flags, time/IN_MILLISECONDS);
-#endif
+
+    LOG_TRACE("network", "Guid " UI64FMTD " Flags %u, time %u", guid, flags, time/IN_MILLISECONDS);
 
     Player* plMover = _player->m_mover->ToPlayer();
 
@@ -522,9 +516,8 @@ void WorldSession::HandleMovementOpcodes(WorldPacket & recvData)
 void WorldSession::HandleForceSpeedChangeAck(WorldPacket &recvData)
 {
     uint32 opcode = recvData.GetOpcode();
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
+
     LOG_DEBUG("network", "WORLD: Recvd %s (%u, 0x%X) opcode", LookupOpcodeName(opcode), opcode, opcode);
-#endif
 
     /* extract packet */
     uint64 guid;
@@ -602,9 +595,7 @@ void WorldSession::HandleForceSpeedChangeAck(WorldPacket &recvData)
 
 void WorldSession::HandleSetActiveMoverOpcode(WorldPacket &recvData)
 {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("network", "WORLD: Recvd CMSG_SET_ACTIVE_MOVER");
-#endif
 
     uint64 guid;
     recvData >> guid;
@@ -618,9 +609,7 @@ void WorldSession::HandleSetActiveMoverOpcode(WorldPacket &recvData)
 
 void WorldSession::HandleMoveNotActiveMover(WorldPacket &recvData)
 {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("network", "WORLD: Recvd CMSG_MOVE_NOT_ACTIVE_MOVER");
-#endif
 
     uint64 old_mover_guid;
     recvData.readPackGUID(old_mover_guid);
@@ -649,9 +638,7 @@ void WorldSession::HandleMountSpecialAnimOpcode(WorldPacket& /*recvData*/)
 
 void WorldSession::HandleMoveKnockBackAck(WorldPacket & recvData)
 {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("network", "CMSG_MOVE_KNOCK_BACK_ACK");
-#endif
 
     uint64 guid;
     recvData.readPackGUID(guid);
@@ -686,9 +673,7 @@ void WorldSession::HandleMoveKnockBackAck(WorldPacket & recvData)
 
 void WorldSession::HandleMoveHoverAck(WorldPacket& recvData)
 {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("network", "CMSG_MOVE_HOVER_ACK");
-#endif
 
     uint64 guid;                                            // guid - unused
     recvData.readPackGUID(guid);
@@ -704,9 +689,7 @@ void WorldSession::HandleMoveHoverAck(WorldPacket& recvData)
 
 void WorldSession::HandleMoveWaterWalkAck(WorldPacket& recvData)
 {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("network", "CMSG_MOVE_WATER_WALK_ACK");
-#endif
 
     uint64 guid;                                            // guid - unused
     recvData.readPackGUID(guid);
@@ -746,9 +729,7 @@ void WorldSession::HandleSummonResponseOpcode(WorldPacket& recvData)
 
 void WorldSession::HandleMoveTimeSkippedOpcode(WorldPacket& recvData)
 {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("network", "WORLD: Recvd CMSG_MOVE_TIME_SKIPPED");
-#endif
     
     uint64 guid;
     uint32 timeSkipped;

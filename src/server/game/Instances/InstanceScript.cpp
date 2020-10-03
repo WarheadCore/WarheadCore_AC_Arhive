@@ -52,13 +52,11 @@ void InstanceScript::HandleGameObject(uint64 GUID, bool open, GameObject* go)
 {
     if (!go)
         go = instance->GetGameObject(GUID);
+    
     if (go)
         go->SetGoState(open ? GO_STATE_ACTIVE : GO_STATE_READY);
-    else {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
+    else
         LOG_DEBUG("tscr", "TSCR: InstanceScript: HandleGameObject failed");
-#endif
-    }
 }
 
 bool InstanceScript::IsEncounterInProgress() const
@@ -79,9 +77,8 @@ void InstanceScript::LoadMinionData(const MinionData* data)
 
         ++data;
     }
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
+
     LOG_DEBUG("tscr", "InstanceScript::LoadMinionData: " UI64FMTD " minions loaded.", uint64(minions.size()));
-#endif
 }
 
 void InstanceScript::LoadDoorData(const DoorData* data)
@@ -93,9 +90,8 @@ void InstanceScript::LoadDoorData(const DoorData* data)
 
         ++data;
     }
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
+
     LOG_DEBUG("tscr", "InstanceScript::LoadDoorData: " UI64FMTD " doors loaded.", uint64(doors.size()));
-#endif
 }
 
 void InstanceScript::UpdateMinionState(Creature* minion, EncounterState state)
@@ -313,11 +309,8 @@ void InstanceScript::DoUpdateWorldState(uint32 uiStateId, uint32 uiStateData)
             if (Player* player = itr->GetSource())
                 player->SendUpdateWorldState(uiStateId, uiStateData);
     }
-    else {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
+    else
         LOG_DEBUG("tscr", "TSCR: DoUpdateWorldState attempt send data but no players in map.");
-#endif
-    }
 }
 
 // Send Notify to all players in instance
