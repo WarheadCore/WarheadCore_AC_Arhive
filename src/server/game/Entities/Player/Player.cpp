@@ -8492,7 +8492,7 @@ void Player::ApplyEquipSpell(SpellInfo const* spellInfo, Item* item, bool apply,
                     return;
         }
 
-        LOG_DEBUG("server", "WORLD: cast %s Equip spellId - %i", (item ? "item" : "itemset"), spellInfo->Id)
+        LOG_DEBUG("server", "WORLD: cast %s Equip spellId - %i", (item ? "item" : "itemset"), spellInfo->Id);
 
         CastSpell(this, spellInfo, true, item);
     }

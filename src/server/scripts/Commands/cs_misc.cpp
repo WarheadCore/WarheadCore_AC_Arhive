@@ -1479,9 +1479,7 @@ public:
         if (!playerTarget)
             playerTarget = player;
 
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
         LOG_INFO("server", handler->GetAcoreString(LANG_ADDITEM), itemId, count);
-#endif
 
         ItemTemplate const* itemTemplate = sObjectMgr->GetItemTemplate(itemId);
         if (!itemTemplate)
@@ -1583,9 +1581,7 @@ public:
         if (!playerTarget)
             playerTarget = player;
 
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
         LOG_INFO("server", handler->GetAcoreString(LANG_ADDITEMSET), itemSetId);
-#endif
 
         bool found = false;
         ItemTemplateContainer const* its = sObjectMgr->GetItemTemplateStore();

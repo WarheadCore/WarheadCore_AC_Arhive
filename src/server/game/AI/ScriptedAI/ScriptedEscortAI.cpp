@@ -303,7 +303,7 @@ void npc_escortAI::MovementInform(uint32 moveType, uint32 pointId)
         //Combat start position reached, continue waypoint movement
         if (pointId == POINT_LAST_POINT)
         {
-            LOG_DEBUG("tscr", "TSCR: EscortAI has returned to original position before combat")
+            LOG_DEBUG("tscr", "TSCR: EscortAI has returned to original position before combat");
 
             me->SetWalk(!m_bIsRunning);
             RemoveEscortState(STATE_ESCORT_RETURNING);

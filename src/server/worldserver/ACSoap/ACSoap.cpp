@@ -45,9 +45,8 @@ void ACSoapRunnable::run()
         if (!soap_valid_socket(soap_accept(&soap)))
             continue;   // ran into an accept timeout
 
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
         LOG_DEBUG("network", "ACSoap: accepted connection from IP=%d.%d.%d.%d", (int)(soap.ip >> 24) & 0xFF, (int)(soap.ip >> 16) & 0xFF, (int)(soap.ip >> 8) & 0xFF, (int)soap.ip & 0xFF);
-#endif
+        
         struct soap* thread_soap = soap_copy(&soap);// make a safe copy
 
         ACE_Message_Block* mb = new ACE_Message_Block(sizeof(struct soap*));
@@ -82,43 +81,34 @@ int ns1__executeCommand(soap* soap, char* command, char** result)
     // security check
     if (!soap->userid || !soap->passwd)
     {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
         LOG_DEBUG("network", "ACSoap: Client didn't provide login information");
-#endif
         return 401;
     }
 
     uint32 accountId = AccountMgr::GetId(soap->userid);
     if (!accountId)
     {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
         LOG_DEBUG("network", "ACSoap: Client used invalid username '%s'", soap->userid);
-#endif
         return 401;
     }
 
     if (!AccountMgr::CheckPassword(accountId, soap->passwd))
     {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
         LOG_DEBUG("network", "ACSoap: invalid password for account '%s'", soap->userid);
-#endif
         return 401;
     }
 
     if (AccountMgr::GetSecurity(accountId) < SEC_ADMINISTRATOR)
     {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
         LOG_DEBUG("network", "ACSoap: %s's gmlevel is too low", soap->userid);
-#endif
         return 403;
     }
 
     if (!command || !*command)
         return soap_sender_fault(soap, "Command can not be empty", "The supplied command was an empty string");
 
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("network", "ACSoap: got command '%s'", command);
-#endif
+
     SOAPCommand connection;
 
     // commands are executed in the world thread. We have to wait for them to be completed

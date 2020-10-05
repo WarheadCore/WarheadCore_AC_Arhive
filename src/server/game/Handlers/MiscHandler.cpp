@@ -398,9 +398,8 @@ void WorldSession::HandleWhoOpcode(WorldPacket& recvData)
     data.put(4, matchcount);                              // insert right count, count of matches
 
     SendPacket(&data);
-    ;// LOG_DEBUG("network", "WORLD: Send SMSG_WHO Message");
+    LOG_DEBUG("network", "WORLD: Send SMSG_WHO Message");
 }
-
 
 void WorldSession::HandleLogoutRequestOpcode(WorldPacket & /*recv_data*/)
 {
@@ -1380,7 +1379,6 @@ void WorldSession::HandleFarSightOpcode(WorldPacket& recvData)
             _player->SetSeer(target);
         else
             LOG_ERROR("server", "Player %s requests non-existing seer " UI64FMTD, _player->GetName().c_str(), _player->GetUInt64Value(PLAYER_FARSIGHT));
-        }
     }
     else
     {

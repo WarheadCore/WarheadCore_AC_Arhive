@@ -2377,9 +2377,7 @@ int32 SpellInfo::CalcPowerCost(Unit const* caster, SpellSchoolMask schoolMask, S
                 break;
             case POWER_RUNE:
             case POWER_RUNIC_POWER:
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
                 LOG_DEBUG("spells.aura", "CalculateManaCost: Not implemented yet!");
-#endif
                 break;
             default:
                 LOG_ERROR("server", "CalculateManaCost: Unknown power type '%d' in spell %d", PowerType, Id);
