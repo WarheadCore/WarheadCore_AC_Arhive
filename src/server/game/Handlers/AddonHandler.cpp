@@ -141,7 +141,7 @@ bool AddonHandler::BuildAddonPacket(WorldPacket* Source, WorldPacket* Target)
     }
     else
     {
-        LOG_ERROR("server", "Addon packet uncompress error :(");
+        LOG_ERROR("addon", "Addon packet uncompress error :(");
         return false;
     }
     return true;

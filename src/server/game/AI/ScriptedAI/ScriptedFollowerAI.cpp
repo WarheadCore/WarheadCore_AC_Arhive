@@ -276,7 +276,7 @@ void FollowerAI::StartFollow(Player* player, uint32 factionForFollower, const Qu
 
     if (HasFollowState(STATE_FOLLOW_INPROGRESS))
     {
-        LOG_ERROR("server", "TSCR: FollowerAI attempt to StartFollow while already following.");
+        LOG_ERROR("scripts.ai", "TSCR: FollowerAI attempt to StartFollow while already following.");
         return;
     }
 

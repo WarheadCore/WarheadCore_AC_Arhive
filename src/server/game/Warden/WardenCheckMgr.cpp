@@ -49,8 +49,8 @@ void WardenCheckMgr::LoadWardenChecks()
     // Check if Warden is enabled by config before loading anything
     if (!sGameConfig->GetBoolConfig("Warden.Enabled"))
     {
-        LOG_INFO("server", ">> Warden disabled, loading checks skipped.");
-        LOG_INFO("server", "");
+        LOG_INFO("warden", ">> Warden disabled, loading checks skipped.");
+        LOG_INFO("warden", "");
         return;
     }
 
@@ -58,8 +58,8 @@ void WardenCheckMgr::LoadWardenChecks()
 
     if (!result)
     {
-        LOG_INFO("server", ">> Loaded 0 Warden checks. DB table `warden_checks` is empty!");
-        LOG_INFO("server", "");
+        LOG_WARN("sql.sql", ">> Loaded 0 Warden checks. DB table `warden_checks` is empty!");
+        LOG_WARN("sql.sql", "");
         return;
     }
 
@@ -151,8 +151,8 @@ void WardenCheckMgr::LoadWardenChecks()
     }
     while (result->NextRow());
 
-    LOG_INFO("server", ">> Loaded %u warden checks.", count);
-    LOG_INFO("server", "");
+    LOG_INFO("server.loading", ">> Loaded %u warden checks.", count);
+    LOG_INFO("server.loading", "");
 }
 
 void WardenCheckMgr::LoadWardenOverrides()
@@ -160,8 +160,8 @@ void WardenCheckMgr::LoadWardenOverrides()
     // Check if Warden is enabled by config before loading anything
     if (!sGameConfig->GetBoolConfig("Warden.Enabled"))
     {
-        LOG_INFO("server", ">> Warden disabled, loading check overrides skipped.");
-        LOG_INFO("server", "");
+        LOG_INFO("warden", ">> Warden disabled, loading check overrides skipped.");
+        LOG_INFO("warden", "");
         return;
     }
 
@@ -170,8 +170,8 @@ void WardenCheckMgr::LoadWardenOverrides()
 
     if (!result)
     {
-        LOG_INFO("server", ">> Loaded 0 Warden action overrides. DB table `warden_action` is empty!");
-        LOG_INFO("server", "");
+        LOG_WARN("sql.sql", ">> Loaded 0 Warden action overrides. DB table `warden_action` is empty!");
+        LOG_WARN("sql.sql", "");
         return;
     }
 
@@ -200,8 +200,8 @@ void WardenCheckMgr::LoadWardenOverrides()
     }
     while (result->NextRow());
 
-    LOG_INFO("server", ">> Loaded %u warden action overrides.", count);
-    LOG_INFO("server", "");
+    LOG_INFO("server.loading", ">> Loaded %u warden action overrides.", count);
+    LOG_INFO("server.loading", "");
 }
 
 WardenCheck* WardenCheckMgr::GetWardenDataById(uint16 Id)

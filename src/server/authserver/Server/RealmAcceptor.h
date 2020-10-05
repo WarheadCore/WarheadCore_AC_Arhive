@@ -47,7 +47,7 @@ protected:
 
     virtual int handle_timeout(const ACE_Time_Value& /*current_time*/, const void* /*act = 0*/)
     {
-        LOG_INFO("server", "Resuming acceptor");
+        LOG_INFO("network", "Resuming acceptor");
         reactor()->cancel_timer(this, 1);
         return reactor()->register_handler(this, ACE_Event_Handler::ACCEPT_MASK);
     }

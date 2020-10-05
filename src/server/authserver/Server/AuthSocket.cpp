@@ -205,7 +205,7 @@ AuthSocket::~AuthSocket(void) { }
 // Accept the connection
 void AuthSocket::OnAccept(void)
 {
-    LOG_INFO("server", "'%s:%d' Accepting connection", socket().getRemoteAddress().c_str(), socket().getRemotePort());
+    LOG_INFO("network", "'%s:%d' Accepting connection", socket().getRemoteAddress().c_str(), socket().getRemotePort());
 }
 
 void AuthSocket::OnClose(void)
@@ -233,7 +233,7 @@ void AuthSocket::OnRead()
             ++challengesInARow;
             if (challengesInARow == MAX_AUTH_LOGON_CHALLENGES_IN_A_ROW)
             {
-                LOG_INFO("server", "Got %u AUTH_LOGON_CHALLENGE in a row from '%s', possible ongoing DoS", challengesInARow, socket().getRemoteAddress().c_str());
+                LOG_INFO("network", "Got %u AUTH_LOGON_CHALLENGE in a row from '%s', possible ongoing DoS", challengesInARow, socket().getRemoteAddress().c_str());
                 socket().shutdown();
                 return;
             }
@@ -243,7 +243,7 @@ void AuthSocket::OnRead()
             challengesInARowRealmList++;
             if (challengesInARowRealmList == MAX_AUTH_GET_REALM_LIST)
             {
-                LOG_INFO("server", "Got %u REALM_LIST in a row from '%s', possible ongoing DoS", challengesInARowRealmList, socket().getRemoteAddress().c_str());
+                LOG_INFO("network", "Got %u REALM_LIST in a row from '%s', possible ongoing DoS", challengesInARowRealmList, socket().getRemoteAddress().c_str());
                 socket().shutdown();
                 return;
             }

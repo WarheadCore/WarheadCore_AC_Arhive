@@ -56,7 +56,7 @@ void TransportMgr::LoadTransportTemplates()
 
     if (!result)
     {
-        LOG_INFO("server", ">> Loaded 0 transport templates. DB table `gameobject_template` has no transports!");
+        LOG_WARN("sql.sql", ">> Loaded 0 transport templates. DB table `gameobject_template` has no transports!");
         return;
     }
 
@@ -91,7 +91,7 @@ void TransportMgr::LoadTransportTemplates()
         ++count;
     } while (result->NextRow());
 
-    LOG_INFO("server", ">> Loaded %u transport templates in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+    LOG_INFO("server.loading", ">> Loaded %u transport templates in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
     LOG_INFO("server.loading", "");
 }
 
@@ -477,7 +477,7 @@ void TransportMgr::SpawnContinentTransports()
         }
     }
 
-    LOG_INFO("server", "");
+    LOG_INFO("server.loading", "");
 }
 
 void TransportMgr::CreateInstanceTransports(Map* map)

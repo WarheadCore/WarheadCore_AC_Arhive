@@ -73,9 +73,6 @@ void WorldSession::HandleNameQueryOpcode(WorldPacket& recvData)
     uint64 guid;
     recvData >> guid;
 
-    // This is disable by default to prevent lots of console spam
-    // LOG_INFO("server", "HandleNameQueryOpcode %u", guid);
-
     SendNameQueryOpcode(guid);
 }
 

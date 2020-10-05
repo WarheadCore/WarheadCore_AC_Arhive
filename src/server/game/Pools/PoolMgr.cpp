@@ -566,8 +566,8 @@ void PoolMgr::LoadFromDB()
         if (!result)
         {
             mPoolTemplate.clear();
-            LOG_INFO("server", ">> Loaded 0 object pools. DB table `pool_template` is empty.");
-            LOG_INFO("server", "");
+            LOG_WARN("sql.sql", ">> Loaded 0 object pools. DB table `pool_template` is empty.");
+            LOG_WARN("sql.sql", "");
             return;
         }
 
@@ -585,13 +585,13 @@ void PoolMgr::LoadFromDB()
         }
         while (result->NextRow());
 
-        LOG_INFO("server", ">> Loaded %u objects pools in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-        LOG_INFO("server", "");
+        LOG_INFO("server.loading", ">> Loaded %u objects pools in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+        LOG_INFO("server.loading", "");
     }
 
     // Creatures
 
-    LOG_INFO("server", "Loading Creatures Pooling Data...");
+    LOG_INFO("server.loading", "Loading Creatures Pooling Data...");
     {
         uint32 oldMSTime = getMSTime();
 
@@ -600,8 +600,8 @@ void PoolMgr::LoadFromDB()
 
         if (!result)
         {
-            LOG_INFO("server", ">> Loaded 0 creatures in  pools. DB table `pool_creature` is empty.");
-            LOG_INFO("server", "");
+            LOG_WARN("sql.sql", ">> Loaded 0 creatures in  pools. DB table `pool_creature` is empty.");
+            LOG_WARN("sql.sql", "");
         }
         else
         {
@@ -643,14 +643,14 @@ void PoolMgr::LoadFromDB()
             }
             while (result->NextRow());
 
-            LOG_INFO("server", ">> Loaded %u creatures in pools in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-            LOG_INFO("server", "");
+            LOG_INFO("server.loading", ">> Loaded %u creatures in pools in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+            LOG_INFO("server.loading", "");
         }
     }
 
     // Gameobjects
 
-    LOG_INFO("server", "Loading Gameobject Pooling Data...");
+    LOG_INFO("server.loading", "Loading Gameobject Pooling Data...");
     {
         uint32 oldMSTime = getMSTime();
 
@@ -659,8 +659,8 @@ void PoolMgr::LoadFromDB()
 
         if (!result)
         {
-            LOG_INFO("server", ">> Loaded 0 gameobjects in  pools. DB table `pool_gameobject` is empty.");
-            LOG_INFO("server", "");
+            LOG_WARN("sql.sql", ">> Loaded 0 gameobjects in  pools. DB table `pool_gameobject` is empty.");
+            LOG_WARN("sql.sql", "");
         }
         else
         {
@@ -714,8 +714,8 @@ void PoolMgr::LoadFromDB()
             }
             while (result->NextRow());
 
-            LOG_INFO("server", ">> Loaded %u gameobject in pools in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-            LOG_INFO("server", "");
+            LOG_INFO("server.loading", ">> Loaded %u gameobject in pools in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+            LOG_INFO("server.loading", "");
         }
     }
 
@@ -730,8 +730,8 @@ void PoolMgr::LoadFromDB()
 
         if (!result)
         {
-            LOG_INFO("server", ">> Loaded 0 pools in pools");
-            LOG_INFO("server", "");
+            LOG_WARN("sql.sql", ">> Loaded 0 pools in pools");
+            LOG_WARN("sql.sql", "");
         }
         else
         {
@@ -807,12 +807,12 @@ void PoolMgr::LoadFromDB()
                 }
             }
 
-            LOG_INFO("server", ">> Loaded %u pools in mother pools in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-            LOG_INFO("server", "");
+            LOG_INFO("server.loading", ">> Loaded %u pools in mother pools in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+            LOG_INFO("server.loading", "");
         }
     }
 
-    LOG_INFO("server", "Loading Quest Pooling Data...");
+    LOG_INFO("server.loading", "Loading Quest Pooling Data...");
     {
         uint32 oldMSTime = getMSTime();
 
@@ -821,8 +821,8 @@ void PoolMgr::LoadFromDB()
 
         if (!result)
         {
-            LOG_INFO("server", ">> Loaded 0 quests in pools");
-            LOG_INFO("server", "");
+            LOG_WARN("sql.sql", ">> Loaded 0 quests in pools");
+            LOG_WARN("sql.sql", "");
         }
         else
         {
@@ -898,8 +898,8 @@ void PoolMgr::LoadFromDB()
             }
             while (result->NextRow());
 
-            LOG_INFO("server", ">> Loaded %u quests in pools in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-            LOG_INFO("server", "");
+            LOG_INFO("server.loading", ">> Loaded %u quests in pools in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+            LOG_INFO("server.loading", "");
         }
     }
 
@@ -915,7 +915,7 @@ void PoolMgr::LoadFromDB()
         if (!result)
         {
             LOG_INFO("server", ">> Pool handling system initialized, 0 pools spawned.");
-            LOG_INFO("server", "");
+            LOG_WARN("sql.sql", "");
         }
         else
         {
@@ -946,8 +946,8 @@ void PoolMgr::LoadFromDB()
             }
             while (result->NextRow());
 
-            LOG_INFO("server", "Pool handling system initialized, %u pools spawned in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-            LOG_INFO("server", "");
+            LOG_INFO("server.loading", "Pool handling system initialized, %u pools spawned in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+            LOG_INFO("server.loading", "");
         }
     }
 }

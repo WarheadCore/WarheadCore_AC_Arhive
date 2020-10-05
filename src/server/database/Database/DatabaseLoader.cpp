@@ -68,7 +68,7 @@ DatabaseLoader& DatabaseLoader::AddDatabase(DatabaseWorkerPool<T>& pool, std::st
                 auto _log = [&]()
                 {
                     LOG_ERROR(_logger, "> Retrying after %u seconds", SECONDS);
-                    LOG_INFO(_logger, "");
+                    LOG_ERROR(_logger, "");
                     std::this_thread::sleep_for(std::chrono::seconds(SECONDS));
                 };
 

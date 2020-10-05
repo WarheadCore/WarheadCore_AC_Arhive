@@ -443,7 +443,7 @@ void WorldSession::HandleItemQuerySingleOpcode(WorldPacket & recvData)
     uint32 item;
     recvData >> item;
 
-    LOG_INFO("server", "STORAGE: Item Query = %u", item);
+    LOG_INFO("network.opcode", "STORAGE: Item Query = %u", item);
 
     ItemTemplate const* pProto = sObjectMgr->GetItemTemplate(item);
     if (pProto)
@@ -598,12 +598,9 @@ void WorldSession::HandleItemQuerySingleOpcode(WorldPacket & recvData)
 
 void WorldSession::HandleReadItem(WorldPacket & recvData)
 {
-    //sLog->outDebug(LOG_FILTER_PACKETIO, "WORLD: CMSG_READ_ITEM");
-
     uint8 bag, slot;
     recvData >> bag >> slot;
 
-    //LOG_INFO("server", "STORAGE: Read bag = %u, slot = %u", bag, slot);
     Item* pItem = _player->GetItemByPos(bag, slot);
 
     if (pItem && pItem->GetTemplate()->PageText)
@@ -613,13 +610,13 @@ void WorldSession::HandleReadItem(WorldPacket & recvData)
         InventoryResult msg = _player->CanUseItem(pItem);
         if (msg == EQUIP_ERR_OK)
         {
-            data.Initialize (SMSG_READ_ITEM_OK, 8);
-            LOG_INFO("server", "STORAGE: Item page sent");
+            data.Initialize(SMSG_READ_ITEM_OK, 8);
+            LOG_DEBUG("network.opcode", "STORAGE: Item page sent");
         }
         else
         {
             data.Initialize(SMSG_READ_ITEM_FAILED, 8);
-            LOG_INFO("server", "STORAGE: Unable to read item");
+            LOG_DEBUG("network.opcode", "STORAGE: Unable to read item");
             _player->SendEquipError(msg, pItem, nullptr);
         }
         
@@ -712,7 +709,7 @@ void WorldSession::HandleSellItemOpcode(WorldPacket & recvData)
                     Item* pNewItem = pItem->CloneItem(count, _player);
                     if (!pNewItem)
                     {
-                        LOG_ERROR("server", "WORLD: HandleSellItemOpcode - could not create clone of item %u; count = %u", pItem->GetEntry(), count);
+                        LOG_ERROR("network.opcode", "WORLD: HandleSellItemOpcode - could not create clone of item %u; count = %u", pItem->GetEntry(), count);
                         _player->SendSellError(SELL_ERR_CANT_SELL_ITEM, creature, itemguid, 0);
                         return;
                     }
@@ -1052,7 +1049,7 @@ void WorldSession::HandleBuyBankSlotOpcode(WorldPacket& recvPacket)
     // next slot
     ++slot;
 
-    LOG_INFO("server", "PLAYER: Buy bank bag slot, slot number = %u", slot);
+    LOG_INFO("network.opcode", "PLAYER: Buy bank bag slot, slot number = %u", slot);
 
     BankBagSlotPricesEntry const* slotEntry = sBankBagSlotPricesStore.LookupEntry(slot);
 

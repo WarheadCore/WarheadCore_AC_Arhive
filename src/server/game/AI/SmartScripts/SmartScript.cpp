@@ -1765,14 +1765,14 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                     if (SmartAI* ai = CAST_AI(SmartAI, (*itr)->ToCreature()->AI()))
                         ai->GetScript()->StoreCounter(e.action.setCounter.counterId, e.action.setCounter.value, e.action.setCounter.reset);
                     else
-                        LOG_ERROR("server", "SmartScript: Action target for SMART_ACTION_SET_COUNTER is not using SmartAI, skipping");
+                        LOG_ERROR("scripts.ai.sai", "SmartScript: Action target for SMART_ACTION_SET_COUNTER is not using SmartAI, skipping");
                 }
                 else if (IsGameObject(*itr))
                 {
                     if (SmartGameObjectAI* ai = CAST_AI(SmartGameObjectAI, (*itr)->ToGameObject()->AI()))
                         ai->GetScript()->StoreCounter(e.action.setCounter.counterId, e.action.setCounter.value, e.action.setCounter.reset);
                     else
-                        LOG_ERROR("server", "SmartScript: Action target for SMART_ACTION_SET_COUNTER is not using SmartGameObjectAI, skipping");
+                        LOG_ERROR("scripts.ai.sai", "SmartScript: Action target for SMART_ACTION_SET_COUNTER is not using SmartGameObjectAI, skipping");
                 }
             }
 
@@ -2039,7 +2039,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                     EquipmentInfo const* einfo = sObjectMgr->GetEquipmentInfo(npc->GetEntry(), equipId);
                     if (!einfo)
                     {
-                        LOG_ERROR("server", "SmartScript: SMART_ACTION_EQUIP uses non-existent equipment info id %u for creature %u", equipId, npc->GetEntry());
+                        LOG_ERROR("scripts.ai.sai", "SmartScript: SMART_ACTION_EQUIP uses non-existent equipment info id %u for creature %u", equipId, npc->GetEntry());
                         break;
                     }
                     npc->SetCurrentEquipmentId(equipId);
@@ -2782,7 +2782,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
         uint32 eventId = e.action.gameEventStop.id;
         if (!sGameEventMgr->IsActiveEvent(eventId))
         {
-            LOG_ERROR("server", "SmartScript::ProcessAction: At case SMART_ACTION_GAME_EVENT_STOP, inactive event (id: %u)", eventId);
+            LOG_ERROR("scripts.ai.sai", "SmartScript::ProcessAction: At case SMART_ACTION_GAME_EVENT_STOP, inactive event (id: %u)", eventId);
             break;
         }
         sGameEventMgr->StopEvent(eventId, true);
@@ -2793,7 +2793,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
         uint32 eventId = e.action.gameEventStart.id;
         if (sGameEventMgr->IsActiveEvent(eventId))
         {
-            LOG_ERROR("server", "SmartScript::ProcessAction: At case SMART_ACTION_GAME_EVENT_START, already activated event (id: %u)", eventId);
+            LOG_ERROR("scripts.ai.sai", "SmartScript::ProcessAction: At case SMART_ACTION_GAME_EVENT_START, already activated event (id: %u)", eventId);
             break;
         }
         sGameEventMgr->StartEvent(eventId, true);
@@ -3621,7 +3621,7 @@ ObjectList* SmartScript::GetTargets(SmartScriptHolder const& e, Unit* invoker /*
         Creature* target = nullptr;
         if (!scriptTrigger && !baseObject)
         {
-            LOG_ERROR("server", "SMART_TARGET_CREATURE_GUID can not be used without invoker");
+            LOG_ERROR("scripts.ai.sai", "SMART_TARGET_CREATURE_GUID can not be used without invoker");
             break;
         }
 
@@ -3644,7 +3644,7 @@ ObjectList* SmartScript::GetTargets(SmartScriptHolder const& e, Unit* invoker /*
         GameObject* target = nullptr;
         if (!scriptTrigger && !GetBaseObject())
         {
-            LOG_ERROR("server", "SMART_TARGET_GAMEOBJECT_GUID can not be used without invoker");
+            LOG_ERROR("scripts.ai.sai", "SMART_TARGET_GAMEOBJECT_GUID can not be used without invoker");
             break;
         }
 
@@ -4720,18 +4720,18 @@ void SmartScript::OnInitialize(WorldObject* obj, AreaTrigger const* at)
             mScriptType = SMART_SCRIPT_TYPE_CREATURE;
             me = obj->ToCreature();
 
-            LOG_DEBUG("scripts.ai", "SmartScript::OnInitialize: source is Creature %u", me->GetEntry());
+            LOG_DEBUG("scripts.ai.sai", "SmartScript::OnInitialize: source is Creature %u", me->GetEntry());
 
             break;
         case TYPEID_GAMEOBJECT:
             mScriptType = SMART_SCRIPT_TYPE_GAMEOBJECT;
             go = obj->ToGameObject();
 
-            LOG_DEBUG("scripts.ai", "SmartScript::OnInitialize: source is GameObject %u", go->GetEntry());
+            LOG_DEBUG("scripts.ai.sai", "SmartScript::OnInitialize: source is GameObject %u", go->GetEntry());
 
             break;
         default:
-            LOG_ERROR("server", "SmartScript::OnInitialize: Unhandled TypeID !WARNING!");
+            LOG_ERROR("scripts.ai.sai", "SmartScript::OnInitialize: Unhandled TypeID !WARNING!");
             return;
         }
     }
@@ -4740,12 +4740,12 @@ void SmartScript::OnInitialize(WorldObject* obj, AreaTrigger const* at)
         mScriptType = SMART_SCRIPT_TYPE_AREATRIGGER;
         trigger = at;
 
-        LOG_DEBUG("scripts.ai", "SmartScript::OnInitialize: source is AreaTrigger %u", trigger->entry);
+        LOG_DEBUG("scripts.ai.sai", "SmartScript::OnInitialize: source is AreaTrigger %u", trigger->entry);
 
     }
     else
     {
-        LOG_ERROR("server", "SmartScript::OnInitialize: !WARNING! Initialized objects are NULL.");
+        LOG_ERROR("scripts.ai.sai", "SmartScript::OnInitialize: !WARNING! Initialized objects are NULL.");
         return;
     }
 
@@ -4892,7 +4892,7 @@ void SmartScript::SetScript9(SmartScriptHolder& e, uint32 entry)
     // any SmartScriptHolder contained like the "e" parameter passed to this function
     if (isProcessingTimedActionList)
     {
-        LOG_ERROR("server", "Entry %d SourceType %u Event %u Action %u is trying to overwrite timed action list from a timed action, this is not allowed!.", e.entryOrGuid, e.GetScriptType(), e.GetEventType(), e.GetActionType());
+        LOG_ERROR("scripts.ai.sai", "Entry %d SourceType %u Event %u Action %u is trying to overwrite timed action list from a timed action, this is not allowed!.", e.entryOrGuid, e.GetScriptType(), e.GetEventType(), e.GetActionType());
         return;
     }
 

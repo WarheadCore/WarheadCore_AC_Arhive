@@ -92,8 +92,8 @@ void FormationMgr::LoadCreatureFormations()
 
     if (!result)
     {
-        LOG_ERROR("sql.sql", ">> Loaded 0 creatures in formations. DB table `creature_formations` is empty!");
-        LOG_INFO("server", "");
+        LOG_WARN("sql.sql", ">> Loaded 0 creatures in formations. DB table `creature_formations` is empty!");
+        LOG_WARN("sql.sql", "");
         return;
     }
 
@@ -146,8 +146,8 @@ void FormationMgr::LoadCreatureFormations()
     }
     while (result->NextRow());
 
-    LOG_INFO("server", ">> Loaded %u creatures in formations in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-    LOG_INFO("server", "");
+    LOG_INFO("server.loading", ">> Loaded %u creatures in formations in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+    LOG_INFO("server.loading", "");
 }
 
 void CreatureGroup::AddMember(Creature* member)

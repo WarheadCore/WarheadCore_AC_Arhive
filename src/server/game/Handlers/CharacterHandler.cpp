@@ -225,7 +225,7 @@ void WorldSession::HandleCharEnum(PreparedQueryResult result)
         {
             uint32 guidlow = (*result)[0].GetUInt32();
 
-            LOG_INFO("server", "Loading char guid %u from account %u.", guidlow, GetAccountId());
+            LOG_INFO("network.opcode", "Loading char guid %u from account %u.", guidlow, GetAccountId());
 
             if (Player::BuildEnumData(result, &data))
             {
@@ -296,7 +296,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket& recvData)
     {
         data << (uint8)CHAR_CREATE_FAILED;
         SendPacket(&data);
-        LOG_ERROR("server", "Class (%u) not found in DBC while creating new char for account (ID: %u): wrong DBC files or cheater?", class_, GetAccountId());
+        LOG_ERROR("network.opcode", "Class (%u) not found in DBC while creating new char for account (ID: %u): wrong DBC files or cheater?", class_, GetAccountId());
         return;
     }
 
@@ -305,7 +305,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket& recvData)
     {
         data << (uint8)CHAR_CREATE_FAILED;
         SendPacket(&data);
-        LOG_ERROR("server", "Race (%u) not found in DBC while creating new char for account (ID: %u): wrong DBC files or cheater?", race_, GetAccountId());
+        LOG_ERROR("network.opcode", "Race (%u) not found in DBC while creating new char for account (ID: %u): wrong DBC files or cheater?", race_, GetAccountId());
         return;
     }
 
@@ -313,7 +313,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket& recvData)
     if (raceEntry->expansion > Expansion())
     {
         data << (uint8)CHAR_CREATE_EXPANSION;
-        LOG_ERROR("server", "Expansion %u account:[%d] tried to Create character with expansion %u race (%u)", Expansion(), GetAccountId(), raceEntry->expansion, race_);
+        LOG_ERROR("network.opcode", "Expansion %u account:[%d] tried to Create character with expansion %u race (%u)", Expansion(), GetAccountId(), raceEntry->expansion, race_);
         SendPacket(&data);
         return;
     }
@@ -322,7 +322,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket& recvData)
     if (classEntry->expansion > Expansion())
     {
         data << (uint8)CHAR_CREATE_EXPANSION_CLASS;
-        LOG_ERROR("server", "Expansion %u account:[%d] tried to Create character with expansion %u class (%u)", Expansion(), GetAccountId(), classEntry->expansion, class_);
+        LOG_ERROR("network.opcode", "Expansion %u account:[%d] tried to Create character with expansion %u class (%u)", Expansion(), GetAccountId(), classEntry->expansion, class_);
         SendPacket(&data);
         return;
     }
@@ -351,7 +351,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket& recvData)
     {
         data << (uint8)CHAR_NAME_NO_NAME;
         SendPacket(&data);
-        LOG_ERROR("server", "Account:[%d] but tried to Create character with empty [name] ", GetAccountId());
+        LOG_ERROR("network.opcode", "Account:[%d] but tried to Create character with empty [name] ", GetAccountId());
         return;
     }
 
@@ -674,7 +674,7 @@ void WorldSession::HandleCharCreateCallback(PreparedQueryResult result, Characte
 
                 std::string IP_str = GetRemoteAddress();
 
-                LOG_INFO("server", "Account: %d (IP: %s) Create Character:[%s] (GUID: %u)", GetAccountId(), IP_str.c_str(), createInfo->Name.c_str(), newChar.GetGUIDLow());
+                LOG_INFO("network.opcode", "Account: %d (IP: %s) Create Character:[%s] (GUID: %u)", GetAccountId(), IP_str.c_str(), createInfo->Name.c_str(), newChar.GetGUIDLow());
 
                 LOG_INFO("entities.player.character", "Account: %d (IP: %s) Create Character:[%s] (GUID: %u)", GetAccountId(), IP_str.c_str(), createInfo->Name.c_str(), newChar.GetGUIDLow());
                 sScriptMgr->OnPlayerCreate(&newChar);
@@ -769,7 +769,7 @@ void WorldSession::HandlePlayerLoginOpcode(WorldPacket& recvData)
 {
     if (PlayerLoading() || GetPlayer() != nullptr)
     {
-        LOG_ERROR("server", "Player tries to login again, AccountId = %d", GetAccountId());
+        LOG_ERROR("network.opcode", "Player tries to login again, AccountId = %d", GetAccountId());
         KickPlayer("Player tries to login again");
         return;
     }
@@ -779,7 +779,7 @@ void WorldSession::HandlePlayerLoginOpcode(WorldPacket& recvData)
 
     if (!IsLegitCharacterForAccount(GUID_LOPART(playerGuid)))
     {
-        LOG_ERROR("server", "Account (%u) can't login with that character (%u).", GetAccountId(), GUID_LOPART(playerGuid));
+        LOG_ERROR("network.opcode", "Account (%u) can't login with that character (%u).", GetAccountId(), GUID_LOPART(playerGuid));
         KickPlayer("Account can't login with this character");
         return;
     }
@@ -1334,7 +1334,7 @@ void WorldSession::HandlePlayerLoginToCharOutOfWorld(Player*  /*pCurrChar*/)
 
 void WorldSession::HandleSetFactionAtWar(WorldPacket& recvData)
 {
-    LOG_DEBUG("server", "WORLD: Received CMSG_SET_FACTION_ATWAR");
+    LOG_DEBUG("network.opcode", "WORLD: Received CMSG_SET_FACTION_ATWAR");
 
     uint32 repListID;
     uint8  flag;
@@ -1348,7 +1348,7 @@ void WorldSession::HandleSetFactionAtWar(WorldPacket& recvData)
 //I think this function is never used :/ I dunno, but i guess this opcode not exists
 void WorldSession::HandleSetFactionCheat(WorldPacket& /*recvData*/)
 {
-    LOG_ERROR("server", "WORLD SESSION: HandleSetFactionCheat, not expected call, please report.");
+    LOG_ERROR("network.opcode", "WORLD SESSION: HandleSetFactionCheat, not expected call, please report.");
     GetPlayer()->GetReputationMgr().SendStates();
 }
 
@@ -1382,7 +1382,7 @@ void WorldSession::HandleTutorialReset(WorldPacket& /*recvData*/)
 
 void WorldSession::HandleSetWatchedFactionOpcode(WorldPacket& recvData)
 {
-    LOG_DEBUG("server", "WORLD: Received CMSG_SET_WATCHED_FACTION");
+    LOG_DEBUG("network.opcode", "WORLD: Received CMSG_SET_WATCHED_FACTION");
 
     uint32 fact;
     recvData >> fact;
@@ -1391,7 +1391,7 @@ void WorldSession::HandleSetWatchedFactionOpcode(WorldPacket& recvData)
 
 void WorldSession::HandleSetFactionInactiveOpcode(WorldPacket& recvData)
 {
-    LOG_DEBUG("server", "WORLD: Received CMSG_SET_FACTION_INACTIVE");
+    LOG_DEBUG("network.opcode", "WORLD: Received CMSG_SET_FACTION_INACTIVE");
 
     uint32 replistid;
     uint8 inactive;
@@ -1402,7 +1402,7 @@ void WorldSession::HandleSetFactionInactiveOpcode(WorldPacket& recvData)
 
 void WorldSession::HandleShowingHelmOpcode(WorldPacket& recvData)
 {
-    LOG_DEBUG("server", "CMSG_SHOWING_HELM for %s", _player->GetName().c_str());
+    LOG_DEBUG("network.opcode", "CMSG_SHOWING_HELM for %s", _player->GetName().c_str());
 
     recvData.read_skip<uint8>(); // unknown, bool?
     _player->ToggleFlag(PLAYER_FLAGS, PLAYER_FLAGS_HIDE_HELM);
@@ -1410,7 +1410,7 @@ void WorldSession::HandleShowingHelmOpcode(WorldPacket& recvData)
 
 void WorldSession::HandleShowingCloakOpcode(WorldPacket& recvData)
 {
-    LOG_DEBUG("server", "CMSG_SHOWING_CLOAK for %s", _player->GetName().c_str());
+    LOG_DEBUG("network.opcode", "CMSG_SHOWING_CLOAK for %s", _player->GetName().c_str());
 
     recvData.read_skip<uint8>(); // unknown, bool?
     _player->ToggleFlag(PLAYER_FLAGS, PLAYER_FLAGS_HIDE_CLOAK);
@@ -1727,10 +1727,12 @@ void WorldSession::HandleCharCustomize(WorldPacket& recvData)
     std::string newName;
 
     recvData >> guid;
+    
     if (!IsLegitCharacterForAccount(GUID_LOPART(guid)))
     {
-        LOG_ERROR("server", "Account %u, IP: %s tried to customise character %u, but it does not belong to their account!",
+        LOG_ERROR("network.opcode", "Account %u, IP: %s tried to customise character %u, but it does not belong to their account!",
                   GetAccountId(), GetRemoteAddress().c_str(), GUID_LOPART(guid));
+        
         recvData.rfinish();
         KickPlayer("HandleCharCustomize");
         return;
@@ -2022,12 +2024,14 @@ void WorldSession::HandleCharFactionOrRaceChange(WorldPacket& recvData)
     uint64 guid;
     std::string newname;
     uint8 gender, skin, face, hairStyle, hairColor, facialHair, race;
+    
     recvData >> guid;
 
     if (!IsLegitCharacterForAccount(GUID_LOPART(guid)))
     {
-        LOG_ERROR("server", "Account %u, IP: %s tried to factionchange character %u, but it does not belong to their account!",
+        LOG_ERROR("network.opcode", "Account %u, IP: %s tried to factionchange character %u, but it does not belong to their account!",
                   GetAccountId(), GetRemoteAddress().c_str(), GUID_LOPART(guid));
+        
         recvData.rfinish();
         KickPlayer("HandleCharFactionOrRaceChange");
         return;

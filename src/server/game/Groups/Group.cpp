@@ -77,11 +77,14 @@ Group::~Group()
 {
     if (m_bgGroup)
     {
-        LOG_DEBUG("bg", "Group::~Group: battleground group being deleted.");
+        LOG_DEBUG("bg.battleground", "Group::~Group: battleground group being deleted.");
 
-        if (m_bgGroup->GetBgRaid(TEAM_ALLIANCE) == this) m_bgGroup->SetBgRaid(TEAM_ALLIANCE, NULL);
-        else if (m_bgGroup->GetBgRaid(TEAM_HORDE) == this) m_bgGroup->SetBgRaid(TEAM_HORDE, NULL);
-        else LOG_ERROR("server", "Group::~Group: battleground group is not linked to the correct battleground.");
+        if (m_bgGroup->GetBgRaid(TEAM_ALLIANCE) == this) 
+            m_bgGroup->SetBgRaid(TEAM_ALLIANCE, NULL);
+        else if (m_bgGroup->GetBgRaid(TEAM_HORDE) == this) 
+            m_bgGroup->SetBgRaid(TEAM_HORDE, NULL);
+        else 
+            LOG_ERROR("bg.battleground", "Group::~Group: battleground group is not linked to the correct battleground.");
     }
     Rolls::iterator itr;
     while (!RollId.empty())
@@ -2038,7 +2041,7 @@ void Group::BroadcastGroupUpdate(void)
             pp->ForceValuesUpdateAtIndex(UNIT_FIELD_BYTES_2);
             pp->ForceValuesUpdateAtIndex(UNIT_FIELD_FACTIONTEMPLATE);
             
-            LOG_DEBUG("server", "-- Forced group value update for '%s'", pp->GetName().c_str());
+            LOG_DEBUG("group", "-- Forced group value update for '%s'", pp->GetName().c_str());
         }
     }
 }

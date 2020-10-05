@@ -96,7 +96,7 @@ void WorldSession::HandleGMTicketCreateOpcode(WorldPacket& recvData)
                 dest >> chatLog;
             else
             {
-                LOG_ERROR("server", "CMSG_GMTICKET_CREATE possibly corrupt. Uncompression failed.");
+                LOG_ERROR("network.opcode", "CMSG_GMTICKET_CREATE possibly corrupt. Uncompression failed.");
                 recvData.rfinish();
                 return;
             }

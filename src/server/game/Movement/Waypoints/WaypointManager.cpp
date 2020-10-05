@@ -54,7 +54,7 @@ void WaypointMgr::Load()
     if (!result)
     {
         LOG_ERROR("sql.sql", ">> Loaded 0 waypoints. DB table `waypoint_data` is empty!");
-        LOG_INFO("server", "");
+        LOG_WARN("sql.sql", "");
         return;
     }
 
@@ -99,8 +99,8 @@ void WaypointMgr::Load()
     }
     while (result->NextRow());
 
-    LOG_INFO("server", ">> Loaded %u waypoints in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-    LOG_INFO("server", "");
+    LOG_INFO("server.loading", ">> Loaded %u waypoints in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+    LOG_INFO("server.loading", "");
 }
 
 void WaypointMgr::ReloadPath(uint32 id)
