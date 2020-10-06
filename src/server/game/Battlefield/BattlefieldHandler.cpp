@@ -32,7 +32,7 @@
 //Param3:(time) Time in second that the player have for accept
 void WorldSession::SendBfInvitePlayerToWar(uint32 BattleId, uint32 ZoneId, uint32 p_time)
 {
-    //Send packet 
+    //Send packet
     WorldPacket data(SMSG_BATTLEFIELD_MGR_ENTRY_INVITE, 12);
     data << uint32(BattleId);
     data << uint32(ZoneId);
@@ -60,22 +60,22 @@ void WorldSession::SendBfInvitePlayerToQueue(uint32 BattleId)
 //Param2:(ZoneId) the zone where the battle is (4197 for wg)
 //Param3:(CanQueue) if able to queue
 //Param4:(Full) on log in is full
-void WorldSession::SendBfQueueInviteResponse(uint32 BattleId,uint32 ZoneId, bool CanQueue, bool Full)
+void WorldSession::SendBfQueueInviteResponse(uint32 BattleId, uint32 ZoneId, bool CanQueue, bool Full)
 {
     WorldPacket data(SMSG_BATTLEFIELD_MGR_QUEUE_REQUEST_RESPONSE, 11);
     data << uint32(BattleId);
     data << uint32(ZoneId);
-    data << uint8((CanQueue ? 1 : 0));  //Accepted          //0 you cannot queue wg     //1 you are queued     
+    data << uint8((CanQueue ? 1 : 0));  //Accepted          //0 you cannot queue wg     //1 you are queued
     data << uint8((Full ? 0 : 1));      //Logging In        //0 wg full                 //1 queue for upcoming
     data << uint8(1); //Warmup
     SendPacket(&data);
 }
 
-//This is call when player accept to join war 
+//This is call when player accept to join war
 //Param1:(BattleId) the BattleId of Bf
 void WorldSession::SendBfEntered(uint32 BattleId)
 {
-//    m_PlayerInWar[player->GetTeamId()].insert(player->GetGUID());
+    //    m_PlayerInWar[player->GetTeamId()].insert(player->GetGUID());
     WorldPacket data(SMSG_BATTLEFIELD_MGR_ENTERED, 7);
     data << uint32(BattleId);
     data << uint8(1);                                       //unk
@@ -95,15 +95,15 @@ void WorldSession::SendBfLeaveMessage(uint32 BattleId, BFLeaveReason reason)
 }
 
 //Send by client when he click on accept for queue
-void WorldSession::HandleBfQueueInviteResponse(WorldPacket & recvData)
+void WorldSession::HandleBfQueueInviteResponse(WorldPacket& recvData)
 {
     uint32 BattleId;
     uint8 Accepted;
 
     recvData >> BattleId >> Accepted;
-    
+
     LOG_DEBUG("bg.battlefield", "HandleQueueInviteResponse: BattleID:%u Accepted:%u", BattleId, Accepted);
-    
+
     Battlefield* Bf = sBattlefieldMgr->GetBattlefieldByBattleId(BattleId);
     if (!Bf)
         return;
@@ -113,24 +113,22 @@ void WorldSession::HandleBfQueueInviteResponse(WorldPacket & recvData)
 }
 
 //Send by client on clicking in accept or refuse of invitation windows for join game
-void WorldSession::HandleBfEntryInviteResponse(WorldPacket & recvData)
+void WorldSession::HandleBfEntryInviteResponse(WorldPacket& recvData)
 {
     uint32 BattleId;
     uint8 Accepted;
 
     recvData >> BattleId >> Accepted;
-    
+
     LOG_DEBUG("bg.battlefield", "HandleBattlefieldInviteResponse: BattleID:%u Accepted:%u", BattleId, Accepted);
-    
+
     Battlefield* Bf = sBattlefieldMgr->GetBattlefieldByBattleId(BattleId);
     if (!Bf)
         return;
 
     //If player accept invitation
     if (Accepted)
-    {
         Bf->PlayerAcceptInviteToWar(_player);
-    }
     else
     {
         if (_player->GetZoneId() == Bf->GetZoneId())
@@ -138,14 +136,14 @@ void WorldSession::HandleBfEntryInviteResponse(WorldPacket & recvData)
     }
 }
 
-void WorldSession::HandleBfExitRequest(WorldPacket & recvData)
+void WorldSession::HandleBfExitRequest(WorldPacket& recvData)
 {
     uint32 BattleId;
 
     recvData >> BattleId;
-    
+
     LOG_DEBUG("bg.battlefield", "HandleBfExitRequest: BattleID: %u ", BattleId);
-    
+
     Battlefield* Bf = sBattlefieldMgr->GetBattlefieldByBattleId(BattleId);
     if (!Bf)
         return;

@@ -36,11 +36,11 @@
 #include "GameTime.h"
 #include "GameConfig.h"
 
-void WorldSession::HandleBattlemasterHelloOpcode(WorldPacket & recvData)
+void WorldSession::HandleBattlemasterHelloOpcode(WorldPacket& recvData)
 {
     uint64 guid;
     recvData >> guid;
-    
+
     LOG_DEBUG("network", "WORLD: Recvd CMSG_BATTLEMASTER_HELLO Message from (GUID: %u TypeId:%u)", GUID_LOPART(guid), GuidHigh2TypeId(GUID_HIPART(guid)));
 
     Creature* unit = GetPlayer()->GetMap()->GetCreature(guid);
@@ -72,7 +72,7 @@ void WorldSession::SendBattleGroundList(uint64 guid, BattlegroundTypeId bgTypeId
     SendPacket(&data);
 }
 
-void WorldSession::HandleBattlemasterJoinOpcode(WorldPacket & recvData)
+void WorldSession::HandleBattlemasterJoinOpcode(WorldPacket& recvData)
 {
     uint64 guid;
     uint32 bgTypeId_;
@@ -194,7 +194,7 @@ void WorldSession::HandleBattlemasterJoinOpcode(WorldPacket & recvData)
         SendPacket(&data);
 
         sScriptMgr->OnPlayerJoinBG(_player);
-		
+
     }
     // check if group can queue:
     else
@@ -206,11 +206,11 @@ void WorldSession::HandleBattlemasterJoinOpcode(WorldPacket & recvData)
 
         // pussywizard: for party members - remove queues for which leader is not queued to!
         std::set<uint32> leaderQueueTypeIds;
-        for (uint32 i=0; i<PLAYER_MAX_BATTLEGROUND_QUEUES; ++i)
+        for (uint32 i = 0; i < PLAYER_MAX_BATTLEGROUND_QUEUES; ++i)
             leaderQueueTypeIds.insert((uint32)_player->GetBattlegroundQueueTypeId(i));
         for (GroupReference* itr = grp->GetFirstMember(); itr != nullptr; itr = itr->next())
             if (Player* member = itr->GetSource())
-                for (uint32 i=0; i<PLAYER_MAX_BATTLEGROUND_QUEUES; ++i)
+                for (uint32 i = 0; i < PLAYER_MAX_BATTLEGROUND_QUEUES; ++i)
                     if (BattlegroundQueueTypeId mqtid = member->GetBattlegroundQueueTypeId(i))
                         if (leaderQueueTypeIds.count((uint32)mqtid) == 0)
                         {
@@ -329,7 +329,7 @@ void WorldSession::HandleBattlegroundPlayerPositionsOpcode(WorldPacket& /*recvDa
     SendPacket(&data);
 }
 
-void WorldSession::HandlePVPLogDataOpcode(WorldPacket & /*recvData*/)
+void WorldSession::HandlePVPLogDataOpcode(WorldPacket& /*recvData*/)
 {
     LOG_DEBUG("network", "WORLD: Recvd MSG_PVP_LOG_DATA Message");
 
@@ -348,7 +348,7 @@ void WorldSession::HandlePVPLogDataOpcode(WorldPacket & /*recvData*/)
     LOG_DEBUG("network", "WORLD: Sent MSG_PVP_LOG_DATA Message");
 }
 
-void WorldSession::HandleBattlefieldListOpcode(WorldPacket &recvData)
+void WorldSession::HandleBattlefieldListOpcode(WorldPacket& recvData)
 {
     LOG_DEBUG("network", "WORLD: Recvd CMSG_BATTLEFIELD_LIST Message");
 
@@ -370,7 +370,7 @@ void WorldSession::HandleBattlefieldListOpcode(WorldPacket &recvData)
     SendPacket(&data);
 }
 
-void WorldSession::HandleBattleFieldPortOpcode(WorldPacket &recvData)
+void WorldSession::HandleBattleFieldPortOpcode(WorldPacket& recvData)
 {
     uint8 arenaType;                                        // arenatype if arena
     uint8 unk2;                                             // unk, can be 0x0 (may be if was invited?) and 0x1
@@ -388,7 +388,7 @@ void WorldSession::HandleBattleFieldPortOpcode(WorldPacket &recvData)
     if (!_player->InBattlegroundQueue())
         return;
 
-    // get BattlegroundQueue for received 
+    // get BattlegroundQueue for received
     BattlegroundTypeId bgTypeId = BattlegroundTypeId(bgTypeId_);
     BattlegroundQueueTypeId bgQueueTypeId = BattlegroundMgr::BGQueueTypeId(bgTypeId, arenaType);
     BattlegroundQueue& bgQueue = sBattlegroundMgr->GetBattlegroundQueue(bgQueueTypeId);
@@ -477,7 +477,7 @@ void WorldSession::HandleBattleFieldPortOpcode(WorldPacket &recvData)
                 _player->RemoveBattlegroundQueueId(bgQueueTypeId);
                 // track if player refuses to join the BG after being invited
                 if (bg->isBattleground() && sGameConfig->GetBoolConfig("Battleground.TrackDeserters.Enable") &&
-                    (bg->GetStatus() == STATUS_IN_PROGRESS || bg->GetStatus() == STATUS_WAIT_JOIN))
+                        (bg->GetStatus() == STATUS_IN_PROGRESS || bg->GetStatus() == STATUS_WAIT_JOIN))
                 {
                     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_DESERTER_TRACK);
                     stmt->setUInt32(0, _player->GetGUIDLow());
@@ -509,7 +509,7 @@ void WorldSession::HandleBattlefieldLeaveOpcode(WorldPacket& recvData)
     _player->LeaveBattleground();
 }
 
-void WorldSession::HandleBattlefieldStatusOpcode(WorldPacket & /*recvData*/)
+void WorldSession::HandleBattlefieldStatusOpcode(WorldPacket& /*recvData*/)
 {
     // requested at login and on map change
     // send status for current queues and current bg
@@ -570,7 +570,7 @@ void WorldSession::HandleBattlefieldStatusOpcode(WorldPacket & /*recvData*/)
     }
 }
 
-void WorldSession::HandleBattlemasterJoinArena(WorldPacket & recvData)
+void WorldSession::HandleBattlemasterJoinArena(WorldPacket& recvData)
 {
     uint64 guid;                                            // arena Battlemaster guid
     uint8 arenaslot;                                        // 2v2, 3v3 or 5v5
@@ -695,11 +695,11 @@ void WorldSession::HandleBattlemasterJoinArena(WorldPacket & recvData)
 
         // pussywizard: for party members - remove queues for which leader is not queued to!
         std::set<uint32> leaderQueueTypeIds;
-        for (uint32 i=0; i<PLAYER_MAX_BATTLEGROUND_QUEUES; ++i)
+        for (uint32 i = 0; i < PLAYER_MAX_BATTLEGROUND_QUEUES; ++i)
             leaderQueueTypeIds.insert((uint32)_player->GetBattlegroundQueueTypeId(i));
         for (GroupReference* itr = grp->GetFirstMember(); itr != nullptr; itr = itr->next())
             if (Player* member = itr->GetSource())
-                for (uint32 i=0; i<PLAYER_MAX_BATTLEGROUND_QUEUES; ++i)
+                for (uint32 i = 0; i < PLAYER_MAX_BATTLEGROUND_QUEUES; ++i)
                     if (BattlegroundQueueTypeId mqtid = member->GetBattlegroundQueueTypeId(i))
                         if (leaderQueueTypeIds.count((uint32)mqtid) == 0)
                         {
@@ -788,7 +788,7 @@ void WorldSession::HandleBattlemasterJoinArena(WorldPacket & recvData)
     }
 }
 
-void WorldSession::HandleReportPvPAFK(WorldPacket & recvData)
+void WorldSession::HandleReportPvPAFK(WorldPacket& recvData)
 {
     uint64 playerGuid;
     recvData >> playerGuid;

@@ -359,13 +359,9 @@ public:
                 data << val6;
             }
             else if (type == "appitsguid")
-            {
                 data.append(unit->GetPackGUID());
-            }
             else if (type == "appmyguid")
-            {
                 data.append(player->GetPackGUID());
-            }
             else if (type == "appgoguid")
             {
                 GameObject* obj = handler->GetNearbyGameObject();
@@ -391,13 +387,9 @@ public:
                 data << uint64(obj->GetGUID());
             }
             else if (type == "myguid")
-            {
                 data << uint64(player->GetGUID());
-            }
             else if (type == "itsguid")
-            {
                 data << uint64(unit->GetGUID());
-            }
             else if (type == "itspos")
             {
                 data << unit->GetPositionX();
@@ -462,7 +454,7 @@ public:
         char const* name = "test";
         uint8 code = atoi(args);
 
-        WorldPacket data(SMSG_CHANNEL_NOTIFY, (1+10));
+        WorldPacket data(SMSG_CHANNEL_NOTIFY, (1 + 10));
         data << code;                                           // notify type
         data << name;                                           // channel name
         data << uint32(0);
@@ -798,7 +790,7 @@ public:
         if (!target || target->IsTotem() || target->IsPet())
             return false;
 
-        ThreatContainer::StorageType const &threatList = target->getThreatManager().getThreatList();
+        ThreatContainer::StorageType const& threatList = target->getThreatManager().getThreatList();
         ThreatContainer::StorageType::const_iterator itr;
         uint32 count = 0;
         handler->PSendSysMessage("Threat list of %s (guid %u)", target->GetName().c_str(), target->GetGUIDLow());
@@ -812,7 +804,7 @@ public:
             }
             handler->PSendSysMessage("   %u.   %s   (guid %u)  - threat %f", ++count, unit->GetName().c_str(), unit->GetGUIDLow(), (*itr)->getThreat());
         }
-        ThreatContainer::StorageType const &threatList2 = target->getThreatManager().getOfflineThreatList();
+        ThreatContainer::StorageType const& threatList2 = target->getThreatManager().getOfflineThreatList();
         for (itr = threatList2.begin(); itr != threatList2.end(); ++itr)
         {
             Unit* unit = (*itr)->getTarget();
@@ -1139,13 +1131,13 @@ public:
         if (isInt32)
         {
             uint32 value = (uint32)atoi(y);
-            target->SetUInt32Value(opcode , value);
+            target->SetUInt32Value(opcode, value);
             handler->PSendSysMessage(LANG_SET_UINT_FIELD, GUID_LOPART(guid), opcode, value);
         }
         else
         {
             float value = (float)atof(y);
-            target->SetFloatValue(opcode , value);
+            target->SetFloatValue(opcode, value);
             handler->PSendSysMessage(LANG_SET_FLOAT_FIELD, GUID_LOPART(guid), opcode, value);
         }
 
@@ -1350,9 +1342,7 @@ public:
             target = handler->GetSession()->GetPlayer();
 
         if (!*args)
-        {
             handler->PSendSysMessage("Unit States: %u, React State: %u", target->GetUnitState(), target->ToCreature() ? target->ToCreature()->GetReactState() : 10);
-        }
         else
         {
             uint32 unitState = atoi((char*)args);

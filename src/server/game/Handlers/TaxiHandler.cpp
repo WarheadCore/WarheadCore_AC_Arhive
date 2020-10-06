@@ -26,7 +26,7 @@
 #include "UpdateMask.h"
 #include "WaypointMovementGenerator.h"
 
-void WorldSession::HandleTaxiNodeStatusQueryOpcode(WorldPacket & recvData)
+void WorldSession::HandleTaxiNodeStatusQueryOpcode(WorldPacket& recvData)
 {
     LOG_DEBUG("network", "WORLD: Received CMSG_TAXINODE_STATUS_QUERY");
 
@@ -62,7 +62,7 @@ void WorldSession::SendTaxiStatus(uint64 guid)
     LOG_DEBUG("network", "WORLD: Sent SMSG_TAXINODE_STATUS");
 }
 
-void WorldSession::HandleTaxiQueryAvailableNodes(WorldPacket & recvData)
+void WorldSession::HandleTaxiQueryAvailableNodes(WorldPacket& recvData)
 {
     LOG_DEBUG("network", "WORLD: Received CMSG_TAXIQUERYAVAILABLENODES");
 
@@ -162,7 +162,7 @@ void WorldSession::SendDiscoverNewTaxiNode(uint32 nodeid)
     }
 }
 
-void WorldSession::HandleActivateTaxiExpressOpcode (WorldPacket & recvData)
+void WorldSession::HandleActivateTaxiExpressOpcode (WorldPacket& recvData)
 {
     LOG_DEBUG("network", "WORLD: Received CMSG_ACTIVATETAXIEXPRESS");
 
@@ -177,7 +177,7 @@ void WorldSession::HandleActivateTaxiExpressOpcode (WorldPacket & recvData)
         LOG_DEBUG("network", "WORLD: HandleActivateTaxiExpressOpcode - Unit (GUID: %u) not found or you can't interact with it.", uint32(GUID_LOPART(guid)));
         return;
     }
-    
+
     std::vector<uint32> nodes;
 
     for (uint32 i = 0; i < node_count; ++i)
@@ -217,7 +217,7 @@ void WorldSession::HandleMoveSplineDoneOpcode(WorldPacket& recvData)
     recvData.read_skip<uint32>();                          // spline id
 }
 
-void WorldSession::HandleActivateTaxiOpcode(WorldPacket & recvData)
+void WorldSession::HandleActivateTaxiOpcode(WorldPacket& recvData)
 {
     LOG_DEBUG("network", "WORLD: Received CMSG_ACTIVATETAXI");
 

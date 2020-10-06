@@ -38,7 +38,7 @@ WardenMac::~WardenMac()
 {
 }
 
-void WardenMac::Init(WorldSession *pClient, BigNumber *K)
+void WardenMac::Init(WorldSession* pClient, BigNumber* K)
 {
     _session = pClient;
     // Generate Warden Key
@@ -75,7 +75,7 @@ void WardenMac::Init(WorldSession *pClient, BigNumber *K)
 
 ClientWardenModule* WardenMac::GetModuleForClient()
 {
-    ClientWardenModule *mod = new ClientWardenModule;
+    ClientWardenModule* mod = new ClientWardenModule;
 
     uint32 len = sizeof(Module_0DBBF209A27B1E279A9FEC5C168A15F7_Data);
 
@@ -116,7 +116,8 @@ void WardenMac::RequestHash()
     _session->SendPacket(&pkt);
 }
 
-struct keyData {
+struct keyData
+{
     union
     {
         struct
@@ -131,7 +132,7 @@ struct keyData {
     };
 };
 
-void WardenMac::HandleHashResult(ByteBuffer &buff)
+void WardenMac::HandleHashResult(ByteBuffer& buff)
 {
 
     // test
@@ -140,9 +141,7 @@ void WardenMac::HandleHashResult(ByteBuffer &buff)
     keyData mod_seed = { { { { 0x4D, 0x80, 0x8D, 0x2C, 0x77, 0xD9, 0x05, 0xC4, 0x1A, 0x63, 0x80, 0xEC, 0x08, 0x58, 0x6A, 0xFE } } } };
 
     for (int i = 0; i < 4; ++i)
-    {
         keyIn[i] = mod_seed.ints.ints[i];
-    }
 
     int keyOut[4];
     int keyIn1, keyIn2;
@@ -218,7 +217,7 @@ void WardenMac::RequestData()
     _dataSent = true;
 }
 
-void WardenMac::HandleData(ByteBuffer &buff)
+void WardenMac::HandleData(ByteBuffer& buff)
 {
     LOG_DEBUG("warden", "Handle data");
 

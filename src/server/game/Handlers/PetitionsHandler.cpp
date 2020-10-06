@@ -884,6 +884,6 @@ void WorldSession::SendPetitionShowList(uint64 guid)
     }
 
     SendPacket(&data);
-    
+
     LOG_DEBUG("network", "Sent SMSG_PETITION_SHOWLIST");
 }

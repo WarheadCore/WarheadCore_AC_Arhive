@@ -35,19 +35,19 @@ void UpdateData::AddOutOfRangeGUID(uint64 guid)
     m_outOfRangeGUIDs.push_back(guid);
 }
 
-void UpdateData::AddUpdateBlock(const ByteBuffer &block)
+void UpdateData::AddUpdateBlock(const ByteBuffer& block)
 {
     m_data.append(block);
     ++m_blockCount;
 }
 
-void UpdateData::AddUpdateBlock(const UpdateData &block)
+void UpdateData::AddUpdateBlock(const UpdateData& block)
 {
     m_data.append(block.m_data);
     m_blockCount += block.m_blockCount;
 }
 
-void UpdateData::Compress(void* dst, uint32 *dst_size, void* src, int src_size)
+void UpdateData::Compress(void* dst, uint32* dst_size, void* src, int src_size)
 {
     z_stream c_stream;
 
@@ -117,9 +117,7 @@ bool UpdateData::BuildPacket(WorldPacket* packet)
         buf << (uint32) m_outOfRangeGUIDs.size();
 
         for (std::vector<uint64>::const_iterator i = m_outOfRangeGUIDs.begin(); i != m_outOfRangeGUIDs.end(); ++i)
-        {
             buf.appendPackGUID(*i);
-        }
     }
 
     buf.append(m_data);

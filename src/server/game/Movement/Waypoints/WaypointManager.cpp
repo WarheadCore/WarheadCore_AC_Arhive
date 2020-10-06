@@ -96,8 +96,7 @@ void WaypointMgr::Load()
 
         path.push_back(wp);
         ++count;
-    }
-    while (result->NextRow());
+    } while (result->NextRow());
 
     LOG_INFO("server.loading", ">> Loaded %u waypoints in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
     LOG_INFO("server.loading", "");
@@ -144,20 +143,19 @@ void WaypointMgr::ReloadPath(uint32 id)
         wp->z = z;
         wp->orientation = o;
         wp->move_type = fields[5].GetUInt32();
-        
+
         if (wp->move_type >= WAYPOINT_MOVE_TYPE_MAX)
         {
             //TC_LOG_ERROR("sql.sql", "Waypoint %u in waypoint_data has invalid move_type, ignoring", wp->id);
             delete wp;
             continue;
         }
-        
+
         wp->delay = fields[6].GetUInt32();
         wp->event_id = fields[7].GetUInt32();
         wp->event_chance = fields[8].GetUInt8();
 
         path.push_back(wp);
 
-    }
-    while (result->NextRow());
+    } while (result->NextRow());
 }

@@ -227,7 +227,7 @@ void FollowerAI::UpdateAI(uint32 uiDiff)
             if (bIsMaxRangeExceeded)
             {
                 LOG_DEBUG("tscr", "TSCR: FollowerAI failed because player/group was to far away or not found");
-                
+
                 me->DespawnOrUnsummon();
                 return;
             }

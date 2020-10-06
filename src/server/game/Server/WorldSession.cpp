@@ -1130,7 +1130,7 @@ void WorldSession::SendAddonsInfo()
 
         uint8 unk3 = 0;                                     // 0 is sent here
         data << uint8(unk3);
-        
+
         if (unk3)
         {
             // String, length 256 (null terminated)

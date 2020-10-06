@@ -466,9 +466,9 @@ void GameLocale::LoadNpcTextLocales()
     _npcTextLocaleStore.clear();                              // need for reload case
 
     QueryResult result = WorldDatabase.Query("SELECT ID, Locale, "
-        //   2        3        4        5        6        7        8        9        10       11       12       13       14       15       16       17
-        "Text0_0, Text0_1, Text1_0, Text1_1, Text2_0, Text2_1, Text3_0, Text3_1, Text4_0, Text4_1, Text5_0, Text5_1, Text6_0, Text6_1, Text7_0, Text7_1 "
-        "FROM npc_text_locale");
+                         //   2        3        4        5        6        7        8        9        10       11       12       13       14       15       16       17
+                         "Text0_0, Text0_1, Text1_0, Text1_1, Text2_0, Text2_1, Text3_0, Text3_1, Text4_0, Text4_1, Text5_0, Text5_1, Text6_0, Text6_1, Text7_0, Text7_1 "
+                         "FROM npc_text_locale");
 
     if (!result)
         return;
@@ -650,7 +650,7 @@ void GameLocale::LoadQuestRequestItemsLocale()
         LocaleConstant locale = GetLocaleByName(localeName);
         if (locale == LOCALE_enUS)
             continue;
-        
+
         AddLocaleString(fields[2].GetString(), locale, data.CompletionText);
 
     } while (result->NextRow());
@@ -772,7 +772,7 @@ void GameLocale::LoadRaceStrings()
         std::string LocaleName = fields[1].GetString();
         std::string NameMale = fields[2].GetString();
         std::string NameFemale = fields[3].GetString();
-        
+
         LocaleConstant locale = GetLocaleByName(LocaleName);
 
         auto& data = _raceStringStore[ID];
@@ -881,7 +881,7 @@ void GameLocale::LoadModuleString()
     do
     {
         _localesModuleList.push_back(result->Fetch()->GetString());
-        
+
     } while (result->NextRow());
 
     for (auto const& itr : _localesModuleList)

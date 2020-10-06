@@ -34,7 +34,7 @@ const int32 ReputationMgr::Reputation_Bottom = -42000;
 ReputationRank ReputationMgr::ReputationToRank(int32 standing)
 {
     int32 limit = Reputation_Cap + 1;
-    for (int i = MAX_REPUTATION_RANK-1; i >= MIN_REPUTATION_RANK; --i)
+    for (int i = MAX_REPUTATION_RANK - 1; i >= MIN_REPUTATION_RANK; --i)
     {
         limit -= PointsInRank[i];
         if (standing >= limit)
@@ -86,13 +86,13 @@ int32 ReputationMgr::GetBaseReputation(FactionEntry const* factionEntry) const
 
     uint32 raceMask = _player->getRaceMask();
     uint32 classMask = _player->getClassMask();
-    for (int i=0; i < 4; i++)
+    for (int i = 0; i < 4; i++)
     {
         if ((factionEntry->BaseRepRaceMask[i] & raceMask  ||
-            (factionEntry->BaseRepRaceMask[i] == 0  &&
-             factionEntry->BaseRepClassMask[i] != 0)) &&
-            (factionEntry->BaseRepClassMask[i] & classMask ||
-             factionEntry->BaseRepClassMask[i] == 0))
+                (factionEntry->BaseRepRaceMask[i] == 0  &&
+                 factionEntry->BaseRepClassMask[i] != 0)) &&
+                (factionEntry->BaseRepClassMask[i] & classMask ||
+                 factionEntry->BaseRepClassMask[i] == 0))
 
             return factionEntry->BaseRepValue[i];
     }
@@ -140,13 +140,13 @@ uint32 ReputationMgr::GetDefaultStateFlags(FactionEntry const* factionEntry) con
 
     uint32 raceMask = _player->getRaceMask();
     uint32 classMask = _player->getClassMask();
-    for (int i=0; i < 4; i++)
+    for (int i = 0; i < 4; i++)
     {
         if ((factionEntry->BaseRepRaceMask[i] & raceMask  ||
-            (factionEntry->BaseRepRaceMask[i] == 0  &&
-             factionEntry->BaseRepClassMask[i] != 0)) &&
-            (factionEntry->BaseRepClassMask[i] & classMask ||
-             factionEntry->BaseRepClassMask[i] == 0))
+                (factionEntry->BaseRepRaceMask[i] == 0  &&
+                 factionEntry->BaseRepClassMask[i] != 0)) &&
+                (factionEntry->BaseRepClassMask[i] & classMask ||
+                 factionEntry->BaseRepClassMask[i] == 0))
 
             return factionEntry->ReputationFlags[i];
     }
@@ -156,7 +156,7 @@ uint32 ReputationMgr::GetDefaultStateFlags(FactionEntry const* factionEntry) con
 void ReputationMgr::SendForceReactions()
 {
     WorldPacket data;
-    data.Initialize(SMSG_SET_FORCED_REACTIONS, 4+_forcedReactions.size()*(4+4));
+    data.Initialize(SMSG_SET_FORCED_REACTIONS, 4 + _forcedReactions.size() * (4 + 4));
     data << uint32(_forcedReactions.size());
     for (ForcedReactions::const_iterator itr = _forcedReactions.begin(); itr != _forcedReactions.end(); ++itr)
     {
@@ -201,7 +201,7 @@ void ReputationMgr::SendState(FactionState const* faction)
 
 void ReputationMgr::SendInitialReputations()
 {
-    WorldPacket data(SMSG_INITIALIZE_FACTIONS, (4+128*5));
+    WorldPacket data(SMSG_INITIALIZE_FACTIONS, (4 + 128 * 5));
     data << uint32 (0x00000080);
 
     RepListID a = 0;
@@ -317,13 +317,9 @@ bool ReputationMgr::SetReputation(FactionEntry const* factionEntry, int32 standi
                 FactionStateList::iterator parentState = _factions.find(parent->reputationListID);
                 // some team factions have own reputation standing, in this case do not spill to other sub-factions
                 if (parentState != _factions.end() && (parentState->second.Flags & FACTION_FLAG_SPECIAL))
-                {
                     SetOneFactionReputation(parent, int32(spillOverRepOut), incremental);
-                }
                 else    // spill to "sister" factions
-                {
                     flist = GetFactionTeamList(factionEntry->team);
-                }
             }
         }
         if (flist)
@@ -409,7 +405,7 @@ bool ReputationMgr::SetOneFactionReputation(FactionEntry const* factionEntry, in
     return false;
 }
 
-void ReputationMgr::SetVisible(FactionTemplateEntry const*factionTemplateEntry)
+void ReputationMgr::SetVisible(FactionTemplateEntry const* factionTemplateEntry)
 {
     if (!factionTemplateEntry->faction)
         return;
@@ -436,7 +432,7 @@ void ReputationMgr::SetVisible(FactionState* faction)
 {
     // always invisible or hidden faction can't be make visible
     // except if faction has FACTION_FLAG_SPECIAL
-    if (faction->Flags & (FACTION_FLAG_INVISIBLE_FORCED|FACTION_FLAG_HIDDEN) && !(faction->Flags & FACTION_FLAG_SPECIAL))
+    if (faction->Flags & (FACTION_FLAG_INVISIBLE_FORCED | FACTION_FLAG_HIDDEN) && !(faction->Flags & FACTION_FLAG_SPECIAL))
         return;
 
     // already set
@@ -459,7 +455,7 @@ void ReputationMgr::SetAtWar(RepListID repListID, bool on)
         return;
 
     // always invisible or hidden faction can't change war state
-    if (itr->second.Flags & (FACTION_FLAG_INVISIBLE_FORCED|FACTION_FLAG_HIDDEN))
+    if (itr->second.Flags & (FACTION_FLAG_INVISIBLE_FORCED | FACTION_FLAG_HIDDEN))
         return;
 
     SetAtWar(&itr->second, on);
@@ -496,7 +492,7 @@ void ReputationMgr::SetInactive(RepListID repListID, bool on)
 void ReputationMgr::SetInactive(FactionState* faction, bool inactive) const
 {
     // always invisible or hidden faction can't be inactive
-    if (inactive && ((faction->Flags & (FACTION_FLAG_INVISIBLE_FORCED|FACTION_FLAG_HIDDEN)) || !(faction->Flags & FACTION_FLAG_VISIBLE)))
+    if (inactive && ((faction->Flags & (FACTION_FLAG_INVISIBLE_FORCED | FACTION_FLAG_HIDDEN)) || !(faction->Flags & FACTION_FLAG_VISIBLE)))
         return;
 
     // already set
@@ -570,8 +566,7 @@ void ReputationMgr::LoadFromDB(PreparedQueryResult result)
                     faction->needSave = false;
                 }
             }
-        }
-        while (result->NextRow());
+        } while (result->NextRow());
     }
 }
 

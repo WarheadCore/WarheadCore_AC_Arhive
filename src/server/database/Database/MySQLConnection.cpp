@@ -136,7 +136,7 @@ uint32 MySQLConnection::Open()
         {
             LOG_INFO("sql.driver", "> MySQL client library: %s", mysql_get_client_info());
             LOG_INFO("sql.driver", "> MySQL server ver: %s ", mysql_get_server_info(m_Mysql));
-            
+
             if (mysql_get_server_version(m_Mysql) != mysql_get_client_version())
                 LOG_WARN("sql.driver", "[WARNING] MySQL client/server version mismatch; may conflict with behaviour of prepared statements.");
         }

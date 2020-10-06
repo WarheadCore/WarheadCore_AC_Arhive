@@ -439,7 +439,7 @@ void World::LoadConfigSettings(bool reload)
     SetNewCharString(sGameConfig->GetStringConfig("PlayerStart.String"));
 
     ///- Read all rates from the config file
-    auto CheckRate = [](std::string const& optionName)
+    auto CheckRate = [](std::string const & optionName)
     {
         if (sGameConfig->GetFloatConfig(optionName) < 0.0f)
         {
@@ -493,7 +493,7 @@ void World::LoadConfigSettings(bool reload)
     // ???
     sGameConfig->SetFloat("DurabilityLoss.OnDeath", tempFloatOption / 100.0f);
 
-    auto CheckDurabilityLossChance = [&tempFloatOption](std::string const& optionName)
+    auto CheckDurabilityLossChance = [&tempFloatOption](std::string const & optionName)
     {
         tempFloatOption = sGameConfig->GetFloatConfig(optionName);
         if (tempFloatOption < 0.0f)
@@ -533,7 +533,7 @@ void World::LoadConfigSettings(bool reload)
     if (reload)
         sMapMgr->SetMapUpdateInterval(tempIntOption);
 
-    auto CheckMinName = [](std::string const& optionName, int32 const& maxNameSymols)
+    auto CheckMinName = [](std::string const & optionName, int32 const & maxNameSymols)
     {
         int32 confSymbols = sGameConfig->GetIntConfig(optionName);
         if (confSymbols < 1 || confSymbols > maxNameSymols)
@@ -570,7 +570,7 @@ void World::LoadConfigSettings(bool reload)
     }
 
     tempIntOption = sGameConfig->GetIntConfig("SkipCinematics");
-    if (tempIntOption < 0 ||tempIntOption > 2)
+    if (tempIntOption < 0 || tempIntOption > 2)
     {
         LOG_ERROR("config", "SkipCinematics (%i) must be in range 0..2. Set to 0.", tempIntOption);
         sGameConfig->SetInt("SkipCinematics", 0);
@@ -619,7 +619,7 @@ void World::LoadConfigSettings(bool reload)
         sGameConfig->SetInt("StartPlayerMoney", MAX_MONEY_AMOUNT);
     }
 
-    auto CheckPoints = [](std::string const& startPointsOptionName, std::string const& maxPointsOptionName)
+    auto CheckPoints = [](std::string const & startPointsOptionName, std::string const & maxPointsOptionName)
     {
         int32 maxPoints = sGameConfig->GetIntConfig(maxPointsOptionName);
         if (maxPoints < 0)
@@ -709,7 +709,7 @@ void World::LoadConfigSettings(bool reload)
         sGameConfig->SetInt("MaxOverspeedPings", 2);
     }
 
-    auto CheckResetTime = [](std::string const& optionName)
+    auto CheckResetTime = [](std::string const & optionName)
     {
         int32 hours = sGameConfig->GetIntConfig(optionName);
         if (hours > 23)
@@ -737,7 +737,7 @@ void World::LoadConfigSettings(bool reload)
             LOG_ERROR("config", "ClientCacheVersion can't be negative %d, ignored.", clientCacheId);
     }
 
-    auto CheckLogRecordsCount = [](std::string const& optionName, int32 const& maxRecords)
+    auto CheckLogRecordsCount = [](std::string const & optionName, int32 const & maxRecords)
     {
         int32 records = sGameConfig->GetIntConfig(optionName);
         if (records > maxRecords)
@@ -790,7 +790,7 @@ void World::LoadConfigSettings(bool reload)
 
     ///- Read the "Data" directory from the config file
     std::string dataPath = sGameConfig->GetStringConfig("DataDir");
-    if (dataPath.empty() || (dataPath.at(dataPath.length()-1) != '/' && dataPath.at(dataPath.length()-1) != '\\'))
+    if (dataPath.empty() || (dataPath.at(dataPath.length() - 1) != '/' && dataPath.at(dataPath.length() - 1) != '\\'))
         dataPath.push_back('/');
 
 #if WH_PLATFORM == WH_PLATFORM_UNIX || WH_PLATFORM == WH_PLATFORM_APPLE
@@ -914,9 +914,7 @@ void World::SetInitialWorldSettings()
                 || (sGameConfig->GetIntConfig("Expansion") && (
                         !MapManager::ExistMapAndVMap(530, 10349.6f, -6357.29f) ||
                         !MapManager::ExistMapAndVMap(530, -3961.64f, -13931.2f))))
-        {
             exit(1);
-        }
     }
 
     ///- Initialize pool manager
@@ -1241,26 +1239,26 @@ void World::SetInitialWorldSettings()
 
     LOG_INFO("server.loading", "Loading Achievements...");
     sAchievementMgr->LoadAchievementReferenceList();
-    
+
     LOG_INFO("server.loading", "Loading Achievement Criteria Lists...");
     sAchievementMgr->LoadAchievementCriteriaList();
-    
+
     LOG_INFO("server.loading", "Loading Achievement Criteria Data...");
     sAchievementMgr->LoadAchievementCriteriaData();
-    
+
     LOG_INFO("server.loading", "Loading Achievement Rewards...");
     sAchievementMgr->LoadRewards();
-    
+
     //LOG_INFO("server.loading", "Loading Achievement Reward Locales...");
     //sGameLocale->LoadRewardLocales();
-    
+
     LOG_INFO("server.loading", "Loading Completed Achievements...");
     sAchievementMgr->LoadCompletedAchievements();
 
     ///- Load dynamic data tables from the database
     LOG_INFO("server.loading", "Loading Item Auctions...");
     sAuctionMgr->LoadAuctionItems();
-    
+
     LOG_INFO("server.loading", "Loading Auctions...");
     sAuctionMgr->LoadAuctions();
 
@@ -1389,9 +1387,9 @@ void World::SetInitialWorldSettings()
     LoginDatabase.PExecute("INSERT INTO uptime (realmid, starttime, uptime, revision) VALUES(%u, %u, 0, '%s')",
                            realmID, uint32(GameTime::GetStartTime()), GitRevision::GetFullVersion());  // One-time query
 
-    m_timers[WUPDATE_WEATHERS].SetInterval(1*IN_MILLISECONDS);
-    m_timers[WUPDATE_AUCTIONS].SetInterval(MINUTE*IN_MILLISECONDS);
-    m_timers[WUPDATE_AUCTIONS].SetCurrent(MINUTE*IN_MILLISECONDS);
+    m_timers[WUPDATE_WEATHERS].SetInterval(1 * IN_MILLISECONDS);
+    m_timers[WUPDATE_AUCTIONS].SetInterval(MINUTE * IN_MILLISECONDS);
+    m_timers[WUPDATE_AUCTIONS].SetCurrent(MINUTE * IN_MILLISECONDS);
     m_timers[WUPDATE_UPTIME].SetInterval(sGameConfig->GetIntConfig("UpdateUptimeInterval") * MINUTE * IN_MILLISECONDS);
 
     //Update "uptime" table based on configuration entry in minutes.
@@ -1407,9 +1405,9 @@ void World::SetInitialWorldSettings()
     m_timers[WUPDATE_PINGDB].SetInterval(sGameConfig->GetIntConfig("MaxPingTime") * MINUTE * IN_MILLISECONDS);
 
     // our speed up
-    m_timers[WUPDATE_5_SECS].SetInterval(5*IN_MILLISECONDS);
+    m_timers[WUPDATE_5_SECS].SetInterval(5 * IN_MILLISECONDS);
 
-    mail_expire_check_timer = GameTime::GetGameTime() + 6*3600;
+    mail_expire_check_timer = GameTime::GetGameTime() + 6 * 3600;
 
     ///- Initilize static helper structures
     AIRegistry::Initialize();
@@ -1546,7 +1544,7 @@ void World::DetectDBCLang()
     std::string availableLocalsStr;
 
     uint8 default_locale = TOTAL_LOCALES;
-    for (uint8 i = default_locale -1; i < TOTAL_LOCALES; --i)  // -1 will be 255 due to uint8
+    for (uint8 i = default_locale - 1; i < TOTAL_LOCALES; --i) // -1 will be 255 due to uint8
     {
         if (race->name[i][0] != '\0')                     // check by race names
         {
@@ -1559,9 +1557,7 @@ void World::DetectDBCLang()
 
     if (default_locale != m_lang_confid && m_lang_confid < TOTAL_LOCALES &&
             (m_availableDbcLocaleMask & (1 << m_lang_confid)))
-    {
         default_locale = m_lang_confid;
-    }
 
     if (default_locale >= TOTAL_LOCALES)
     {
@@ -1707,7 +1703,7 @@ void World::Update(uint32 diff)
         if (currentGameTime > mail_expire_check_timer)
         {
             sObjectMgr->ReturnOrDeleteOldMails(true);
-            mail_expire_check_timer = currentGameTime + 6*3600;
+            mail_expire_check_timer = currentGameTime + 6 * 3600;
         }
 
         {
@@ -1888,9 +1884,7 @@ void World::SendGlobalMessage(WorldPacket* packet, WorldSession* self, TeamId te
                 itr->second->GetPlayer()->IsInWorld() &&
                 itr->second != self &&
                 (teamId == TEAM_NEUTRAL || itr->second->GetPlayer()->GetTeamId() == teamId))
-        {
             itr->second->SendPacket(packet);
-        }
     }
 }
 
@@ -1906,59 +1900,58 @@ void World::SendGlobalGMMessage(WorldPacket* packet, WorldSession* self, TeamId 
                 itr->second != self &&
                 !AccountMgr::IsPlayerAccount(itr->second->GetSecurity()) &&
                 (teamId == TEAM_NEUTRAL || itr->second->GetPlayer()->GetTeamId() == teamId))
-        {
             itr->second->SendPacket(packet);
-        }
     }
 }
 
 namespace warhead
 {
-class WorldWorldTextBuilder
-{
-public:
-    typedef std::vector<WorldPacket*> WorldPacketList;
-    explicit WorldWorldTextBuilder(uint32 textId, va_list* args = nullptr) : i_textId(textId), i_args(args) {}
-    void operator()(WorldPacketList& data_list, LocaleConstant loc_idx)
+    class WorldWorldTextBuilder
     {
-        char const* text = sGameLocale->GetAcoreString(i_textId, loc_idx);
-
-        if (i_args)
+    public:
+        typedef std::vector<WorldPacket*> WorldPacketList;
+        explicit WorldWorldTextBuilder(uint32 textId, va_list* args = nullptr) : i_textId(textId), i_args(args) {}
+        void operator()(WorldPacketList& data_list, LocaleConstant loc_idx)
         {
-            // we need copy va_list before use or original va_list will corrupted
-            va_list ap;
-            va_copy(ap, *i_args);
+            char const* text = sGameLocale->GetAcoreString(i_textId, loc_idx);
 
-            char str[2048];
-            vsnprintf(str, 2048, text, ap);
-            va_end(ap);
+            if (i_args)
+            {
+                // we need copy va_list before use or original va_list will corrupted
+                va_list ap;
+                va_copy(ap, *i_args);
 
-            do_helper(data_list, &str[0]);
+                char str[2048];
+                vsnprintf(str, 2048, text, ap);
+                va_end(ap);
+
+                do_helper(data_list, &str[0]);
+            }
+            else
+                do_helper(data_list, (char*)text);
         }
-        else
-            do_helper(data_list, (char*)text);
-    }
-private:
-    char* lineFromMessage(char*& pos) {
-        char* start = strtok(pos, "\n");
-        pos = nullptr;
-        return start;
-    }
-    void do_helper(WorldPacketList& data_list, char* text)
-    {
-        char* pos = text;
-        while (char* line = lineFromMessage(pos))
+    private:
+        char* lineFromMessage(char*& pos)
         {
-            WorldPacket* data = new WorldPacket();
-            ChatHandler::BuildChatPacket(*data, CHAT_MSG_SYSTEM, LANG_UNIVERSAL, nullptr, nullptr, line);
-            data_list.push_back(data);
+            char* start = strtok(pos, "\n");
+            pos = nullptr;
+            return start;
         }
-    }
+        void do_helper(WorldPacketList& data_list, char* text)
+        {
+            char* pos = text;
+            while (char* line = lineFromMessage(pos))
+            {
+                WorldPacket* data = new WorldPacket();
+                ChatHandler::BuildChatPacket(*data, CHAT_MSG_SYSTEM, LANG_UNIVERSAL, nullptr, nullptr, line);
+                data_list.push_back(data);
+            }
+        }
 
 
-    uint32 i_textId;
-    va_list* i_args;
-};
+        uint32 i_textId;
+        va_list* i_args;
+    };
 }                                                           // namespace warhead
 
 /// Send a System Message to all players (except self if mentioned)
@@ -2141,7 +2134,7 @@ void World::ShutdownMsg(bool show, Player* player)
 
     ///- Display a message every 12 hours, hours, 5 minutes, minute, 5 seconds and finally seconds
     if (show ||
-            (m_ShutdownTimer < 5* MINUTE && (m_ShutdownTimer % 15) == 0) || // < 5 min; every 15 sec
+            (m_ShutdownTimer < 5 * MINUTE && (m_ShutdownTimer % 15) == 0) || // < 5 min; every 15 sec
             (m_ShutdownTimer < 15 * MINUTE && (m_ShutdownTimer % MINUTE) == 0) || // < 15 min ; every 1 min
             (m_ShutdownTimer < 30 * MINUTE && (m_ShutdownTimer % (5 * MINUTE)) == 0) || // < 30 min ; every 5 min
             (m_ShutdownTimer < 12 * HOUR && (m_ShutdownTimer % HOUR) == 0) || // < 12 h ; every 1 h
@@ -2177,7 +2170,7 @@ void World::ShutdownCancel()
 }
 
 /// Send a server message to the user(s)
-void World::SendServerMessage(ServerMessageType type, const char *text, Player* player)
+void World::SendServerMessage(ServerMessageType type, const char* text, Player* player)
 {
     WorldPacket data(SMSG_SERVER_MESSAGE, 50);              // guess size
     data << uint32(type);
@@ -2247,7 +2240,7 @@ void World::UpdateSessions(uint32 diff)
         next = itr;
         ++next;
         WorldSession* pSession = itr->second;
-        if (!pSession->GetPlayer() || pSession->GetOfflineTime()+60 < currTime || pSession->IsKicked())
+        if (!pSession->GetPlayer() || pSession->GetOfflineTime() + 60 < currTime || pSession->IsKicked())
         {
             m_offlineSessions.erase(itr);
             if (m_sessions.find(pSession->GetAccountId()) != m_sessions.end())
@@ -2263,7 +2256,7 @@ void World::ProcessCliCommands()
     CliCommandHolder::Print* zprint = nullptr;
     void* callbackArg = nullptr;
     CliCommandHolder* command = nullptr;
-    
+
     while (cliCmdQueue.next(command))
     {
         LOG_INFO("server.loading", "CLI command under processing...");
@@ -2271,10 +2264,10 @@ void World::ProcessCliCommands()
         callbackArg = command->m_callbackArg;
         CliHandler handler(callbackArg, zprint);
         handler.ParseCommands(command->m_command);
-        
+
         if (command->m_commandFinished)
             command->m_commandFinished(callbackArg, !handler.HasSentErrorMessage());
-        
+
         delete command;
     }
 }
@@ -2322,7 +2315,7 @@ void World::SendAutoBroadcast()
 
     else if (abcenter == 1)
     {
-        WorldPacket data(SMSG_NOTIFICATION, (msg.size()+1));
+        WorldPacket data(SMSG_NOTIFICATION, (msg.size() + 1));
         data << msg;
         sWorld->SendGlobalMessage(&data);
     }
@@ -2331,7 +2324,7 @@ void World::SendAutoBroadcast()
     {
         sWorld->SendWorldText(LANG_AUTO_BROADCAST, msg.c_str());
 
-        WorldPacket data(SMSG_NOTIFICATION, (msg.size()+1));
+        WorldPacket data(SMSG_NOTIFICATION, (msg.size() + 1));
         data << msg;
         sWorld->SendGlobalMessage(&data);
     }
@@ -2386,7 +2379,7 @@ time_t World::GetNextTimeWithDayAndHour(int8 dayOfWeek, int8 hour)
     localTm.tm_sec  = 0;
     uint32 add;
     if (dayOfWeek < 0 || dayOfWeek > 6)
-        dayOfWeek = (localTm.tm_wday+1)%7;
+        dayOfWeek = (localTm.tm_wday + 1) % 7;
     if (localTm.tm_wday >= dayOfWeek)
         add = (7 - (localTm.tm_wday - dayOfWeek)) * DAY;
     else
@@ -2408,7 +2401,7 @@ time_t World::GetNextTimeWithMonthAndHour(int8 month, int8 hour)
     localTm.tm_sec  = 0;
     if (month < 0 || month > 11)
     {
-        month = (localTm.tm_mon+1)%12;
+        month = (localTm.tm_mon + 1) % 12;
         if (month == 0)
             localTm.tm_year += 1;
     }
@@ -2544,7 +2537,7 @@ void World::ResetMonthlyQuests()
 void World::ResetEventSeasonalQuests(uint16 event_id)
 {
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_QUEST_STATUS_SEASONAL);
-    stmt->setUInt16(0,event_id);
+    stmt->setUInt16(0, event_id);
     CharacterDatabase.Execute(stmt);
 
     for (SessionMap::const_iterator itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
@@ -2588,7 +2581,7 @@ void World::ResetGuildCap()
 
 void World::UpdateMaxSessionCounters()
 {
-    m_maxActiveSessionCount = std::max(m_maxActiveSessionCount, uint32(m_sessions.size()-m_QueuedPlayer.size()));
+    m_maxActiveSessionCount = std::max(m_maxActiveSessionCount, uint32(m_sessions.size() - m_QueuedPlayer.size()));
     m_maxQueuedSessionCount = std::max(m_maxQueuedSessionCount, uint32(m_QueuedPlayer.size()));
 }
 
@@ -2640,8 +2633,7 @@ void World::LoadWorldStates()
         Field* fields = result->Fetch();
         m_worldstates[fields[0].GetUInt32()] = fields[1].GetUInt32();
         ++count;
-    }
-    while (result->NextRow());
+    } while (result->NextRow());
 
     LOG_INFO("server.loading", ">> Loaded %u world states in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
     LOG_INFO("server.loading", "");
@@ -2722,8 +2714,7 @@ void World::LoadGlobalPlayerDataStore()
         {
             Field* fields = mailCountResult->Fetch();
             _mailCountMap[fields[0].GetUInt32()] = uint16(fields[1].GetUInt64());
-        }
-        while (mailCountResult->NextRow());
+        } while (mailCountResult->NextRow());
     }
 
     do
@@ -2749,8 +2740,7 @@ void World::LoadGlobalPlayerDataStore()
             0                      /*guild id*/);
 
         ++count;
-    }
-    while (result->NextRow());
+    } while (result->NextRow());
 
     LOG_INFO("server.loading", ">> Loaded %d Players data in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
     LOG_INFO("server.loading", "");

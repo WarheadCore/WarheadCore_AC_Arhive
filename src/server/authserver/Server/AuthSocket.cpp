@@ -263,7 +263,7 @@ void AuthSocket::OnRead()
                     LOG_DEBUG("network", "Command handler failed for cmd %u recv length %u", (uint32)_cmd, (uint32)socket().recv_len());
                     return;
                 }
-                
+
                 break;
             }
         }
