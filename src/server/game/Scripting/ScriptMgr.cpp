@@ -2096,4 +2096,3 @@ template class ScriptRegistry<BGScript>;
 template class ScriptRegistry<SpellSC>;
 template class ScriptRegistry<AccountScript>;
 template class ScriptRegistry<GameEventScript>;
-
