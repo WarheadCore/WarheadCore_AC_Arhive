@@ -1479,7 +1479,7 @@ public:
         if (!playerTarget)
             playerTarget = player;
 
-        LOG_INFO("server", handler->GetAcoreString(LANG_ADDITEM), itemId, count);
+        LOG_INFO("chat.log", handler->GetAcoreString(LANG_ADDITEM), itemId, count);
 
         ItemTemplate const* itemTemplate = sObjectMgr->GetItemTemplate(itemId);
         if (!itemTemplate)
@@ -1581,7 +1581,7 @@ public:
         if (!playerTarget)
             playerTarget = player;
 
-        LOG_INFO("server", handler->GetAcoreString(LANG_ADDITEMSET), itemSetId);
+        LOG_INFO("chat.log", handler->GetAcoreString(LANG_ADDITEMSET), itemSetId);
 
         bool found = false;
         ItemTemplateContainer const* its = sObjectMgr->GetItemTemplateStore();
@@ -2780,7 +2780,7 @@ public:
 
         if (!pet->InitStatsForLevel(creatureTarget->getLevel()))
         {
-            LOG_ERROR("server", "InitStatsForLevel() in EffectTameCreature failed! Pet deleted.");
+            LOG_ERROR("chat.log", "InitStatsForLevel() in EffectTameCreature failed! Pet deleted.");
             handler->PSendSysMessage("Error 2");
             delete pet;
             return false;

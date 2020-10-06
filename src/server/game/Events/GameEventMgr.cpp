@@ -287,11 +287,11 @@ void GameEventMgr::LoadFromDB()
         }
         while (result->NextRow());
 
-        LOG_INFO("gameevent", ">> Loaded %u game events in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-        LOG_INFO("gameevent", "");
+        LOG_INFO("game.event", ">> Loaded %u game events in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+        LOG_INFO("game.event", "");
     }
 
-    LOG_INFO("gameevent", "Loading Game Event Saves Data...");
+    LOG_INFO("game.event", "Loading Game Event Saves Data...");
     {
         uint32 oldMSTime = getMSTime();
 
@@ -301,7 +301,7 @@ void GameEventMgr::LoadFromDB()
         if (!result)
         {
             LOG_WARN("sql.sql", ">> Loaded 0 game event saves in game events. DB table `game_event_save` is empty.");
-            LOG_WARN("sql.sql" "");
+            LOG_WARN("sql.sql", "");
         }
         else
         {
@@ -333,12 +333,12 @@ void GameEventMgr::LoadFromDB()
             }
             while (result->NextRow());
 
-            LOG_INFO("gameevent", ">> Loaded %u game event saves in game events in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-            LOG_INFO("gameevent", "");
+            LOG_INFO("game.event", ">> Loaded %u game event saves in game events in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+            LOG_INFO("game.event", "");
         }
     }
 
-    LOG_INFO("gameevent", "Loading Game Event Prerequisite Data...");
+    LOG_INFO("game.event", "Loading Game Event Prerequisite Data...");
     {
         uint32 oldMSTime = getMSTime();
 
@@ -384,12 +384,12 @@ void GameEventMgr::LoadFromDB()
             }
             while (result->NextRow());
 
-            LOG_INFO("gameevent", ">> Loaded %u game event prerequisites in game events in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-            LOG_INFO("gameevent", "");
+            LOG_INFO("game.event", ">> Loaded %u game event prerequisites in game events in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+            LOG_INFO("game.event", "");
         }
     }
 
-    LOG_INFO("gameevent", "Loading Game Event Creature Data...");
+    LOG_INFO("game.event", "Loading Game Event Creature Data...");
     {
         uint32 oldMSTime = getMSTime();
 
@@ -427,12 +427,12 @@ void GameEventMgr::LoadFromDB()
             }
             while (result->NextRow());
 
-            LOG_INFO("gameevent", ">> Loaded %u creatures in game events in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-            LOG_INFO("gameevent", "");
+            LOG_INFO("game.event", ">> Loaded %u creatures in game events in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+            LOG_INFO("game.event", "");
         }
     }
 
-    LOG_INFO("gameevent", "Loading Game Event GO Data...");
+    LOG_INFO("game.event", "Loading Game Event GO Data...");
     {
         uint32 oldMSTime = getMSTime();
 
@@ -470,12 +470,12 @@ void GameEventMgr::LoadFromDB()
             }
             while (result->NextRow());
 
-            LOG_INFO("gameevent", ">> Loaded %u gameobjects in game events in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-            LOG_INFO("gameevent", "");
+            LOG_INFO("game.event", ">> Loaded %u gameobjects in game events in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+            LOG_INFO("game.event", "");
         }
     }
 
-    LOG_INFO("gameevent", "Loading Game Event Model/Equipment Change Data...");
+    LOG_INFO("game.event", "Loading Game Event Model/Equipment Change Data...");
     {
         uint32 oldMSTime = getMSTime();
 
@@ -529,12 +529,12 @@ void GameEventMgr::LoadFromDB()
             }
             while (result->NextRow());
 
-            LOG_INFO("gameevent", ">> Loaded %u model/equipment changes in game events in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-            LOG_INFO("gameevent", "");
+            LOG_INFO("game.event", ">> Loaded %u model/equipment changes in game events in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+            LOG_INFO("game.event", "");
         }
     }
 
-    LOG_INFO("gameevent", "Loading Game Event Quest Data...");
+    LOG_INFO("game.event", "Loading Game Event Quest Data...");
     {
         uint32 oldMSTime = getMSTime();
 
@@ -570,12 +570,12 @@ void GameEventMgr::LoadFromDB()
             }
             while (result->NextRow());
 
-            LOG_INFO("gameevent", ">> Loaded %u quests additions in game events in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-            LOG_INFO("gameevent", "");
+            LOG_INFO("game.event", ">> Loaded %u quests additions in game events in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+            LOG_INFO("game.event", "");
         }
     }
 
-    LOG_INFO("gameevent", "Loading Game Event GO Quest Data...");
+    LOG_INFO("game.event", "Loading Game Event GO Quest Data...");
     {
         uint32 oldMSTime = getMSTime();
 
@@ -611,12 +611,12 @@ void GameEventMgr::LoadFromDB()
             }
             while (result->NextRow());
 
-            LOG_INFO("gameevent", ">> Loaded %u quests additions in game events in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-            LOG_INFO("gameevent", "");
+            LOG_INFO("game.event", ">> Loaded %u quests additions in game events in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+            LOG_INFO("game.event", "");
         }
     }
 
-    LOG_INFO("gameevent", "Loading Game Event Quest Condition Data...");
+    LOG_INFO("game.event", "Loading Game Event Quest Condition Data...");
     {
         uint32 oldMSTime = getMSTime();
 
@@ -654,12 +654,12 @@ void GameEventMgr::LoadFromDB()
             }
             while (result->NextRow());
 
-            LOG_INFO("gameevent", ">> Loaded %u quest event conditions in game events in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-            LOG_INFO("gameevent", "");
+            LOG_INFO("game.event", ">> Loaded %u quest event conditions in game events in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+            LOG_INFO("game.event", "");
         }
     }
 
-    LOG_INFO("gameevent", "Loading Game Event Condition Data...");
+    LOG_INFO("game.event", "Loading Game Event Condition Data...");
     {
         uint32 oldMSTime = getMSTime();
 
@@ -696,12 +696,12 @@ void GameEventMgr::LoadFromDB()
             }
             while (result->NextRow());
 
-            LOG_INFO("gameevent", ">> Loaded %u conditions in game events in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-            LOG_INFO("gameevent", "");
+            LOG_INFO("game.event", ">> Loaded %u conditions in game events in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+            LOG_INFO("game.event", "");
         }
     }
 
-    LOG_INFO("gameevent", "Loading Game Event Condition Save Data...");
+    LOG_INFO("game.event", "Loading Game Event Condition Save Data...");
     {
         uint32 oldMSTime = getMSTime();
 
@@ -744,12 +744,12 @@ void GameEventMgr::LoadFromDB()
             }
             while (result->NextRow());
 
-            LOG_INFO("gameevent", ">> Loaded %u condition saves in game events in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-            LOG_INFO("gameevent", "");
+            LOG_INFO("game.event", ">> Loaded %u condition saves in game events in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+            LOG_INFO("game.event", "");
         }
     }
 
-    LOG_INFO("gameevent", "Loading Game Event NPCflag Data...");
+    LOG_INFO("game.event", "Loading Game Event NPCflag Data...");
     {
         uint32 oldMSTime = getMSTime();
 
@@ -784,12 +784,12 @@ void GameEventMgr::LoadFromDB()
             }
             while (result->NextRow());
 
-            LOG_INFO("gameevent", ">> Loaded %u npcflags in game events in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-            LOG_INFO("gameevent", "");
+            LOG_INFO("game.event", ">> Loaded %u npcflags in game events in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+            LOG_INFO("game.event", "");
         }
     }
 
-    LOG_INFO("gameevent", "Loading Game Event Seasonal Quest Relations...");
+    LOG_INFO("game.event", "Loading Game Event Seasonal Quest Relations...");
     {
         uint32 oldMSTime = getMSTime();
 
@@ -830,12 +830,12 @@ void GameEventMgr::LoadFromDB()
             }
             while (result->NextRow());
 
-            LOG_INFO("gameevent", ">> Loaded %u quests additions in game events in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-            LOG_INFO("gameevent", "");
+            LOG_INFO("game.event", ">> Loaded %u quests additions in game events in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+            LOG_INFO("game.event", "");
         }
     }
 
-    LOG_INFO("gameevent", "Loading Game Event Vendor Additions Data...");
+    LOG_INFO("game.event", "Loading Game Event Vendor Additions Data...");
     {
         uint32 oldMSTime = getMSTime();
 
@@ -896,12 +896,12 @@ void GameEventMgr::LoadFromDB()
             }
             while (result->NextRow());
 
-            LOG_INFO("gameevent", ">> Loaded %u vendor additions in game events in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-            LOG_INFO("gameevent", "");
+            LOG_INFO("game.event", ">> Loaded %u vendor additions in game events in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+            LOG_INFO("game.event", "");
         }
     }
 
-    LOG_INFO("gameevent", "Loading Game Event Battleground Data...");
+    LOG_INFO("game.event", "Loading Game Event Battleground Data...");
     {
         uint32 oldMSTime = getMSTime();
 
@@ -934,12 +934,12 @@ void GameEventMgr::LoadFromDB()
             }
             while (result->NextRow());
 
-            LOG_INFO("gameevent", ">> Loaded %u battleground holidays in game events in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-            LOG_INFO("gameevent", "");
+            LOG_INFO("game.event", ">> Loaded %u battleground holidays in game events in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+            LOG_INFO("game.event", "");
         }
     }
 
-    LOG_INFO("gameevent", "Loading Game Event Pool Data...");
+    LOG_INFO("game.event", "Loading Game Event Pool Data...");
     {
         uint32 oldMSTime = getMSTime();
 
@@ -983,8 +983,8 @@ void GameEventMgr::LoadFromDB()
             }
             while (result->NextRow());
 
-            LOG_INFO("gameevent", ">> Loaded %u pools for game events in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-            LOG_INFO("gameevent", "");
+            LOG_INFO("game.event", ">> Loaded %u pools for game events in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+            LOG_INFO("game.event", "");
         }
     }
 }
@@ -1039,7 +1039,7 @@ void GameEventMgr::LoadHolidayDates()
 
     } while (result->NextRow());
 
-    LOG_INFO("gameevent", ">> Loaded %u holiday dates in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+    LOG_INFO("game.event", ">> Loaded %u holiday dates in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
 }
 
 uint32 GameEventMgr::GetNPCFlag(Creature* cr)
@@ -1099,7 +1099,7 @@ void GameEventMgr::StartArenaSeason()
 
     if (!result)
     {
-        LOG_ERROR("gameevent", "ArenaSeason (%u) must be an existant Arena Season", season);
+        LOG_ERROR("game.event", "ArenaSeason (%u) must be an existant Arena Season", season);
         return;
     }
 
@@ -1108,13 +1108,13 @@ void GameEventMgr::StartArenaSeason()
 
     if (eventId >= mGameEvent.size())
     {
-        LOG_ERROR("gameevent", "EventEntry %u for ArenaSeason (%u) does not exists", eventId, season);
+        LOG_ERROR("game.event", "EventEntry %u for ArenaSeason (%u) does not exists", eventId, season);
         return;
     }
 
     StartEvent(eventId, true);
-    LOG_INFO("gameevent", "Arena Season %u started...", season);
-    LOG_INFO("gameevent", "");
+    LOG_INFO("game.event", "Arena Season %u started...", season);
+    LOG_INFO("game.event", "");
 }
 
 uint32 GameEventMgr::Update()                               // return the next event delay in ms
@@ -1188,14 +1188,14 @@ uint32 GameEventMgr::Update()                               // return the next e
     for (std::set<uint16>::iterator itr = deactivate.begin(); itr != deactivate.end(); ++itr)
         StopEvent(*itr);
 
-    LOG_INFO("gameevent", "Next game event check in %u seconds.", nextEventDelay + 1);
+    LOG_INFO("game.event", "Next game event check in %u seconds.", nextEventDelay + 1);
 
     return (nextEventDelay + 1) * IN_MILLISECONDS;           // Add 1 second to be sure event has started/stopped at next call
 }
 
 void GameEventMgr::UnApplyEvent(uint16 event_id)
 {
-    LOG_INFO("gameevent", "GameEvent %u \"%s\" removed.", event_id, mGameEvent[event_id].description.c_str());
+    LOG_INFO("game.event", "GameEvent %u \"%s\" removed.", event_id, mGameEvent[event_id].description.c_str());
 
     //! Run SAI scripts with SMART_EVENT_GAME_EVENT_END
     RunSmartAIScripts(event_id, false);
@@ -1295,7 +1295,7 @@ void GameEventMgr::GameEventSpawn(int16 event_id)
 
     if (internal_event_id < 0 || internal_event_id >= int32(mGameEventCreatureGuids.size()))
     {
-        LOG_ERROR("gameevent", "GameEventMgr::GameEventSpawn attempt access to out of range mGameEventCreatureGuids element %i (size: " SZFMTD ")",
+        LOG_ERROR("game.event", "GameEventMgr::GameEventSpawn attempt access to out of range mGameEventCreatureGuids element %i (size: " SZFMTD ")",
             internal_event_id, mGameEventCreatureGuids.size());
         return;
     }
@@ -1322,7 +1322,7 @@ void GameEventMgr::GameEventSpawn(int16 event_id)
 
     if (internal_event_id >= int32(mGameEventGameobjectGuids.size()))
     {
-        LOG_ERROR("gameevent", "GameEventMgr::GameEventSpawn attempt access to out of range mGameEventGameobjectGuids element %i (size: " SZFMTD ")",
+        LOG_ERROR("game.event", "GameEventMgr::GameEventSpawn attempt access to out of range mGameEventGameobjectGuids element %i (size: " SZFMTD ")",
             internal_event_id, mGameEventGameobjectGuids.size());
         return;
     }
@@ -1355,7 +1355,7 @@ void GameEventMgr::GameEventSpawn(int16 event_id)
 
     if (internal_event_id >= int32(mGameEventPoolIds.size()))
     {
-        LOG_ERROR("gameevent", "GameEventMgr::GameEventSpawn attempt access to out of range mGameEventPoolIds element %u (size: " SZFMTD ")",
+        LOG_ERROR("game.event", "GameEventMgr::GameEventSpawn attempt access to out of range mGameEventPoolIds element %u (size: " SZFMTD ")",
             internal_event_id, mGameEventPoolIds.size());
         return;
     }
@@ -1370,7 +1370,7 @@ void GameEventMgr::GameEventUnspawn(int16 event_id)
 
     if (internal_event_id < 0 || internal_event_id >= int32(mGameEventCreatureGuids.size()))
     {
-        LOG_ERROR("gameevent", "GameEventMgr::GameEventUnspawn attempt access to out of range mGameEventCreatureGuids element %i (size: " SZFMTD ")",
+        LOG_ERROR("game.event", "GameEventMgr::GameEventUnspawn attempt access to out of range mGameEventCreatureGuids element %i (size: " SZFMTD ")",
             internal_event_id, mGameEventCreatureGuids.size());
         return;
     }
@@ -1392,7 +1392,7 @@ void GameEventMgr::GameEventUnspawn(int16 event_id)
 
     if (internal_event_id >= int32(mGameEventGameobjectGuids.size()))
     {
-        LOG_ERROR("gameevent", "GameEventMgr::GameEventUnspawn attempt access to out of range mGameEventGameobjectGuids element %i (size: " SZFMTD ")",
+        LOG_ERROR("game.event", "GameEventMgr::GameEventUnspawn attempt access to out of range mGameEventGameobjectGuids element %i (size: " SZFMTD ")",
             internal_event_id, mGameEventGameobjectGuids.size());
         return;
     }
@@ -1413,7 +1413,7 @@ void GameEventMgr::GameEventUnspawn(int16 event_id)
     }
     if (internal_event_id >= int32(mGameEventPoolIds.size()))
     {
-        LOG_ERROR("gameevent", "GameEventMgr::GameEventUnspawn attempt access to out of range mGameEventPoolIds element %u (size: " SZFMTD ")", internal_event_id, mGameEventPoolIds.size());
+        LOG_ERROR("game.event", "GameEventMgr::GameEventUnspawn attempt access to out of range mGameEventPoolIds element %u (size: " SZFMTD ")", internal_event_id, mGameEventPoolIds.size());
         return;
     }
 

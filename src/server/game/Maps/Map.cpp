@@ -82,14 +82,14 @@ bool Map::ExistMap(uint32 mapid, int gx, int gy)
     FILE* pf = fopen(filename.c_str(), "rb");
 
     if (!pf)
-        LOG_ERROR("server", "Map file '%s': does not exist!", filename.c_str());
+        LOG_ERROR("maps", "Map file '%s': does not exist!", filename.c_str());
     else
     {
         map_fileheader header;
         if (fread(&header, sizeof(header), 1, pf) == 1)
         {
             if (header.mapMagic != MapMagic.asUInt || header.versionMagic != MapVersionMagic.asUInt)
-                LOG_ERROR("server", "Map file '%s' is from an incompatible clientversion. Please recreate using the mapextractor.", filename.c_str());
+                LOG_ERROR("maps", "Map file '%s' is from an incompatible clientversion. Please recreate using the mapextractor.", filename.c_str());
             else
                 ret = true;
         }
@@ -109,7 +109,7 @@ bool Map::ExistVMap(uint32 mapid, int gx, int gy)
             if (!exists)
             {
                 std::string name = vmgr->getDirFileName(mapid, gx, gy);
-                LOG_ERROR("server", "VMap file '%s' is missing or points to wrong version of vmap file. Redo vmaps with latest version of vmap_assembler.exe.", (sWorld->GetDataPath() + "vmaps/" + name).c_str());
+                LOG_ERROR("maps", "VMap file '%s' is missing or points to wrong version of vmap file. Redo vmaps with latest version of vmap_assembler.exe.", (sWorld->GetDataPath() + "vmaps/" + name).c_str());
                 return false;
             }
         }
@@ -193,7 +193,7 @@ void Map::LoadMap(int gx, int gy, bool reload)
     GridMaps[gx][gy] = new GridMap();
 
     if (!GridMaps[gx][gy]->loadData(filename))
-        LOG_ERROR("server", "Error loading map file: %s", filename.c_str());
+        LOG_ERROR("maps", "Error loading map file: %s", filename.c_str());
 
     sScriptMgr->OnLoadGridMap(this, GridMaps[gx][gy], gx, gy);
 }
@@ -350,7 +350,7 @@ void Map::SwitchGridContainers(GameObject* obj, bool on)
     CellCoord p = warhead::ComputeCellCoord(obj->GetPositionX(), obj->GetPositionY());
     if (!p.IsCoordValid())
     {
-        LOG_ERROR("server", "Map::SwitchGridContainers: Object " UI64FMTD " has invalid coordinates X:%f Y:%f grid cell [%u:%u]", obj->GetGUID(), obj->GetPositionX(), obj->GetPositionY(), p.x_coord, p.y_coord);
+        LOG_ERROR("maps", "Map::SwitchGridContainers: Object " UI64FMTD " has invalid coordinates X:%f Y:%f grid cell [%u:%u]", obj->GetGUID(), obj->GetPositionX(), obj->GetPositionY(), p.x_coord, p.y_coord);
         return;
     }
 
@@ -579,7 +579,7 @@ bool Map::AddToMap(MotionTransport* obj, bool /*checkTransport*/)
     CellCoord cellCoord = warhead::ComputeCellCoord(obj->GetPositionX(), obj->GetPositionY());
     if (!cellCoord.IsCoordValid())
     {
-        LOG_ERROR("server", "Map::Add: Object " UI64FMTD " has invalid coordinates X:%f Y:%f grid cell [%u:%u]", obj->GetGUID(), obj->GetPositionX(), obj->GetPositionY(), cellCoord.x_coord, cellCoord.y_coord);
+        LOG_ERROR("maps", "Map::Add: Object " UI64FMTD " has invalid coordinates X:%f Y:%f grid cell [%u:%u]", obj->GetGUID(), obj->GetPositionX(), obj->GetPositionY(), cellCoord.x_coord, cellCoord.y_coord);
         return false; //Should delete object
     }
 
@@ -2463,7 +2463,7 @@ void Map::RemoveAllObjectsInRemoveList()
                 {
                     Corpse* corpse = ObjectAccessor::GetCorpse(*obj, obj->GetGUID());
                     if (!corpse)
-                        LOG_ERROR("server", "Tried to delete corpse/bones %u that is not in map.", obj->GetGUIDLow());
+                        LOG_ERROR("maps", "Tried to delete corpse/bones %u that is not in map.", obj->GetGUIDLow());
                     else
                         RemoveFromMap(corpse, true);
                     break;
@@ -2484,7 +2484,7 @@ void Map::RemoveAllObjectsInRemoveList()
                 RemoveFromMap(obj->ToCreature(), true);
                 break;
             default:
-                LOG_ERROR("server", "Non-grid object (TypeId: %u) is in grid object remove list, ignored.", obj->GetTypeId());
+                LOG_ERROR("maps", "Non-grid object (TypeId: %u) is in grid object remove list, ignored.", obj->GetTypeId());
                 break;
         }
     }
@@ -2869,7 +2869,7 @@ void InstanceMap::PermBindAllPlayers()
     InstanceSave* save = sInstanceSaveMgr->GetInstanceSave(GetInstanceId());
     if (!save)
     {
-        LOG_ERROR("server", "Cannot bind players because no instance save is available for instance map (Name: %s, Entry: %u, InstanceId: %u)!", GetMapName(), GetId(), GetInstanceId());
+        LOG_ERROR("maps", "Cannot bind players because no instance save is available for instance map (Name: %s, Entry: %u, InstanceId: %u)!", GetMapName(), GetId(), GetInstanceId());
         return;
     }
 

@@ -280,13 +280,13 @@ bool DBUpdater<T>::Populate(DatabaseWorkerPool<T>& pool)
     Path const DirPath(DirPathStr);
     if (!boost::filesystem::is_directory(DirPath))
     {
-        LOG_ERROR("server", ">> Directory \"%s\" not exist", DirPath.generic_string().c_str());
+        LOG_ERROR("sql.updates", ">> Directory \"%s\" not exist", DirPath.generic_string().c_str());
         return false;
     }
 
     if (DirPath.empty())
     {
-        LOG_ERROR("server", ">> Directory \"%s\" is empty", DirPath.generic_string().c_str());
+        LOG_ERROR("sql.updates", ">> Directory \"%s\" is empty", DirPath.generic_string().c_str());
         return false;
     }
 
@@ -301,7 +301,7 @@ bool DBUpdater<T>::Populate(DatabaseWorkerPool<T>& pool)
 
     if (!FilesCount)
     {
-        LOG_ERROR("server", ">> In directory \"%s\" not exist '*.sql' files", DirPath.generic_string().c_str());
+        LOG_ERROR("sql.updates", ">> In directory \"%s\" not exist '*.sql' files", DirPath.generic_string().c_str());
         return false;
     }
 

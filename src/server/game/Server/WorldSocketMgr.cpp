@@ -242,7 +242,7 @@ WorldSocketMgr::StartReactiveIO (uint16 port, const char* address)
 
     if (num_threads <= 0)
     {
-        LOG_ERROR("server", "Network.Threads is wrong in your config file");
+        LOG_ERROR("network", "Network.Threads is wrong in your config file");
         return -1;
     }
 
@@ -259,7 +259,7 @@ WorldSocketMgr::StartReactiveIO (uint16 port, const char* address)
 
     if (m_SockOutUBuff <= 0)
     {
-        LOG_ERROR("server", "Network.OutUBuff is wrong in your config file");
+        LOG_ERROR("network", "Network.OutUBuff is wrong in your config file");
         return -1;
     }
 
@@ -269,7 +269,7 @@ WorldSocketMgr::StartReactiveIO (uint16 port, const char* address)
 
     if (m_Acceptor->open(listen_addr, m_NetThreads[0].GetReactor(), ACE_NONBLOCK) == -1)
     {
-        LOG_ERROR("server", "Failed to open acceptor, check if the port is free");
+        LOG_ERROR("network", "Failed to open acceptor, check if the port is free");
         return -1;
     }
 
@@ -333,7 +333,7 @@ WorldSocketMgr::OnSocketOpen (WorldSocket* sock)
             (void*) & m_SockOutKBuff,
             sizeof (int)) == -1 && errno != ENOTSUP)
         {
-            LOG_ERROR("server", "WorldSocketMgr::OnSocketOpen set_option SO_SNDBUF");
+            LOG_ERROR("network", "WorldSocketMgr::OnSocketOpen set_option SO_SNDBUF");
             return -1;
         }
     }
@@ -348,7 +348,7 @@ WorldSocketMgr::OnSocketOpen (WorldSocket* sock)
             (void*)&ndoption,
             sizeof (int)) == -1)
         {
-            LOG_ERROR("server", "WorldSocketMgr::OnSocketOpen: peer().set_option TCP_NODELAY errno = %s", ACE_OS::strerror (errno));
+            LOG_ERROR("network", "WorldSocketMgr::OnSocketOpen: peer().set_option TCP_NODELAY errno = %s", ACE_OS::strerror (errno));
             return -1;
         }
     }

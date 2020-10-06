@@ -492,9 +492,9 @@ void FlightPathMovementGenerator::PreloadEndGrid()
     // Load the grid
     if (endMap)
     {
-        LOG_INFO("server", "Preloading rid (%f, %f) for map %u at node index %u/%u", _endGridX, _endGridY, _endMapId, _preloadTargetNode, (uint32)(i_path.size()-1));
+        LOG_INFO("movement.wp", "Preloading rid (%f, %f) for map %u at node index %u/%u", _endGridX, _endGridY, _endMapId, _preloadTargetNode, (uint32)(i_path.size()-1));
         endMap->LoadGrid(_endGridX, _endGridY);
     }
     else
-        LOG_INFO("server", "Unable to determine map to preload flightmaster grid");
+        LOG_INFO("movement.wp", "Unable to determine map to preload flightmaster grid");
 }

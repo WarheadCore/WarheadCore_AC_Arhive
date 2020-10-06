@@ -721,7 +721,7 @@ void PoolMgr::LoadFromDB()
 
     // Pool of pools
 
-    LOG_INFO("server", "Loading Mother Pooling Data...");
+    LOG_INFO("pool", "Loading Mother Pooling Data...");
     {
         uint32 oldMSTime = getMSTime();
 
@@ -904,7 +904,7 @@ void PoolMgr::LoadFromDB()
     }
 
     // The initialize method will spawn all pools not in an event and not in another pool, this is why there is 2 left joins with 2 null checks
-    LOG_INFO("server", "Starting objects pooling system...");
+    LOG_INFO("pool", "Starting objects pooling system...");
     {
         uint32 oldMSTime = getMSTime();
 
@@ -914,7 +914,7 @@ void PoolMgr::LoadFromDB()
 
         if (!result)
         {
-            LOG_INFO("server", ">> Pool handling system initialized, 0 pools spawned.");
+            LOG_INFO("pool", ">> Pool handling system initialized, 0 pools spawned.");
             LOG_WARN("sql.sql", "");
         }
         else

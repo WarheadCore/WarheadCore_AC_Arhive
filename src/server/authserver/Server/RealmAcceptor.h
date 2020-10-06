@@ -57,7 +57,7 @@ protected:
 #if defined(ENFILE) && defined(EMFILE)
         if (errno == ENFILE || errno == EMFILE)
         {
-            LOG_ERROR("server", "Out of file descriptors, suspending incoming connections for 10 seconds");
+            LOG_ERROR("network", "Out of file descriptors, suspending incoming connections for 10 seconds");
             reactor()->remove_handler(this, ACE_Event_Handler::ACCEPT_MASK | ACE_Event_Handler::DONT_CALL);
             reactor()->schedule_timer(this, NULL, ACE_Time_Value(10));
         }

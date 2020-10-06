@@ -34,7 +34,7 @@ ArenaTeam::ArenaTeam()
     Stats.WeekGames   = 0;
     Stats.SeasonGames = 0;
     Stats.Rank        = 0;
-    Stats.Rating      = sGameConfig->GetIntConfig("Arena.StartRating");
+    Stats.Rating      = sGameConfig->GetIntConfig("Arena.ArenaStartRating");
     Stats.WeekWins    = 0;
     Stats.SeasonWins  = 0;
 }

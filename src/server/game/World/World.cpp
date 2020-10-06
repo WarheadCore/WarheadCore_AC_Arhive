@@ -519,7 +519,7 @@ void World::LoadConfigSettings(bool reload)
     tempIntOption = sGameConfig->GetIntConfig("PlayerSave.Stats.MinLevel");
     if (tempIntOption > MAX_LEVEL)
     {
-        LOG_ERROR("server", "PlayerSave.Stats.MinLevel (%i) must be in range 0..80. Using default, do not save character stats (0).", tempIntOption);
+        LOG_ERROR("game.config", "PlayerSave.Stats.MinLevel (%i) must be in range 0..80. Using default, do not save character stats (0).", tempIntOption);
         sGameConfig->SetInt("PlayerSave.Stats.MinLevel", 0);
     }
 
@@ -1258,7 +1258,7 @@ void World::SetInitialWorldSettings()
     sAchievementMgr->LoadCompletedAchievements();
 
     ///- Load dynamic data tables from the database
-    LOG_INFO("server", "Loading Item Auctions...");
+    LOG_INFO("server.loading", "Loading Item Auctions...");
     sAuctionMgr->LoadAuctionItems();
     
     LOG_INFO("server.loading", "Loading Auctions...");
@@ -1538,7 +1538,7 @@ void World::DetectDBCLang()
 
     if (m_lang_confid != 255 && m_lang_confid >= TOTAL_LOCALES)
     {
-        LOG_ERROR("server", "Incorrect DBC.Locale! Must be >= 0 and < %d (set to 0)", TOTAL_LOCALES);
+        LOG_ERROR("dbc", "Incorrect DBC.Locale! Must be >= 0 and < %d (set to 0)", TOTAL_LOCALES);
         m_lang_confid = LOCALE_enUS;
     }
 
@@ -1565,7 +1565,7 @@ void World::DetectDBCLang()
 
     if (default_locale >= TOTAL_LOCALES)
     {
-        LOG_ERROR("server", "Unable to determine your DBC Locale! (corrupt DBC?)");
+        LOG_ERROR("dbc", "Unable to determine your DBC Locale! (corrupt DBC?)");
         exit(1);
     }
 

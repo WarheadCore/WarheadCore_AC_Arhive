@@ -842,7 +842,7 @@ void GameLocale::AddModuleString(std::string const& moduleName, ModuleStringCont
 {
     if (data.empty())
     {
-        LOG_ERROR("server", "ModuleStringContainer& data for module (%s) is empty!", moduleName.c_str());
+        LOG_ERROR("game.locale", "ModuleStringContainer& data for module (%s) is empty!", moduleName.c_str());
         return;
     }
 

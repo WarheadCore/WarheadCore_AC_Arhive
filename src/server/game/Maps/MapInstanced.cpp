@@ -188,13 +188,13 @@ InstanceMap* MapInstanced::CreateInstance(uint32 InstanceId, InstanceSave* save,
     const MapEntry* entry = sMapStore.LookupEntry(GetId());
     if (!entry)
     {
-        LOG_ERROR("server", "CreateInstance: no entry for map %d", GetId());
+        LOG_ERROR("maps", "CreateInstance: no entry for map %d", GetId());
         ABORT();
     }
     const InstanceTemplate* iTemplate = sObjectMgr->GetInstanceTemplate(GetId());
     if (!iTemplate)
     {
-        LOG_ERROR("server", "CreateInstance: no instance template for map %d", GetId());
+        LOG_ERROR("maps", "CreateInstance: no instance template for map %d", GetId());
         ABORT();
     }
 

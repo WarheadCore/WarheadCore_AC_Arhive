@@ -34,11 +34,11 @@ void ACSoapRunnable::run()
     soap.send_timeout = 5;
     if (!soap_valid_socket(soap_bind(&soap, _host.c_str(), _port, 100)))
     {
-        LOG_ERROR("server", "ACSoap: couldn't bind to %s:%d", _host.c_str(), _port);
+        LOG_ERROR("network", "ACSoap: couldn't bind to %s:%d", _host.c_str(), _port);
         exit(-1);
     }
 
-    LOG_INFO("server", "ACSoap: bound to http://%s:%d", _host.c_str(), _port);
+    LOG_INFO("network", "ACSoap: bound to http://%s:%d", _host.c_str(), _port);
 
     while (!World::IsStopped())
     {
@@ -122,7 +122,7 @@ int ns1__executeCommand(soap* soap, char* command, char** result)
 
     int acc = connection.pendingCommands.acquire();
     if (acc)
-        LOG_ERROR("server", "ACSoap: Error while acquiring lock, acc = %i, errno = %u", acc, errno);
+        LOG_ERROR("network", "ACSoap: Error while acquiring lock, acc = %i, errno = %u", acc, errno);
 
     // alright, command finished
 

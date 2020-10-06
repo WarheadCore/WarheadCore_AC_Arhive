@@ -463,14 +463,14 @@ bool SpellMgr::CheckSpellValid(SpellInfo const* spellInfo, uint32 spellId, bool 
     if (!spellInfo)
     {
         DeleteSpellFromAllPlayers(spellId);
-        LOG_ERROR("server", "Player::%s: Non-existed in SpellStore spell #%u request.", (isTalent ? "AddTalent" : "addSpell"), spellId);
+        LOG_ERROR("spells", "Player::%s: Non-existed in SpellStore spell #%u request.", (isTalent ? "AddTalent" : "addSpell"), spellId);
         return false;
     }
 
     if (!IsSpellValid(spellInfo))
     {
         DeleteSpellFromAllPlayers(spellId);
-        LOG_ERROR("server", "Player::%s: Broken spell #%u learning not allowed.", (isTalent ? "AddTalent" : "addSpell"), spellId);
+        LOG_ERROR("spells", "Player::%s: Broken spell #%u learning not allowed.", (isTalent ? "AddTalent" : "addSpell"), spellId);
         return false;
     }
 
@@ -499,7 +499,7 @@ uint32 SpellMgr::GetSpellIdForDifficulty(uint32 spellId, Unit const* caster) con
     uint32 mode = uint32(caster->GetMap()->GetSpawnMode());
     if (mode >= MAX_DIFFICULTY)
     {
-        LOG_ERROR("server", "SpellMgr::GetSpellIdForDifficulty: Incorrect Difficulty for spell %u.", spellId);
+        LOG_ERROR("spells", "SpellMgr::GetSpellIdForDifficulty: Incorrect Difficulty for spell %u.", spellId);
         return spellId; //return source spell
     }
 
@@ -2009,7 +2009,7 @@ void SpellMgr::LoadSpellMixology()
     if (!result)
     {
         LOG_WARN("sql.sql", ">> Loaded 0 mixology bonuses. DB table `spell_mixology` is empty.");
-        LOG_WARN("sql.sql" "");
+        LOG_WARN("sql.sql", "");
         return;
     }
 
@@ -2096,7 +2096,7 @@ void SpellMgr::LoadSpellPetAuras()
                (spellInfo->Effects[eff].Effect != SPELL_EFFECT_APPLY_AURA ||
                 spellInfo->Effects[eff].ApplyAuraName != SPELL_AURA_DUMMY))
             {
-                LOG_ERROR("server", "Spell %u listed in `spell_pet_auras` does not have dummy aura or dummy effect", spell);
+                LOG_ERROR("spells", "Spell %u listed in `spell_pet_auras` does not have dummy aura or dummy effect", spell);
                 continue;
             }
 
@@ -2631,7 +2631,7 @@ void SpellMgr::LoadSpellAreas()
 
     if (sGameConfig->GetIntConfig("ICC.Buff.Horde"))
     {
-        LOG_INFO("server", ">> Using ICC buff Horde: %u", sGameConfig->GetIntConfig("ICC.Buff.Horde"));
+        LOG_INFO("spells", ">> Using ICC buff Horde: %u", sGameConfig->GetIntConfig("ICC.Buff.Horde"));
 
         SpellArea spellAreaICCBuffHorde = { static_cast<uint32>(sGameConfig->GetIntConfig("ICC.Buff.Horde")), ICC_AREA, 0, 0, 0, ICC_RACEMASK_HORDE, Gender(2), 64, 11, 1 };
         SpellArea const* saICCBuffHorde = &mSpellAreaMap.insert(SpellAreaMap::value_type(sGameConfig->GetIntConfig("ICC.Buff.Horde"), spellAreaICCBuffHorde))->second;
@@ -2640,11 +2640,11 @@ void SpellMgr::LoadSpellAreas()
         ++count;
     }
     else
-        LOG_INFO("server", ">> ICC buff Horde: disabled");
+        LOG_INFO("spells", ">> ICC buff Horde: disabled");
 
     if (sGameConfig->GetIntConfig("ICC.Buff.Alliance"))
     {
-        LOG_INFO("server", ">> Using ICC buff Alliance: %u", sGameConfig->GetIntConfig("ICC.Buff.Alliance"));
+        LOG_INFO("spells", ">> Using ICC buff Alliance: %u", sGameConfig->GetIntConfig("ICC.Buff.Alliance"));
 
         SpellArea spellAreaICCBuffAlliance = { static_cast<uint32>(sGameConfig->GetIntConfig("ICC.Buff.Alliance")), ICC_AREA, 0, 0, 0, ICC_RACEMASK_ALLIANCE, Gender(2), 64, 11, 1 };
         SpellArea const* saICCBuffAlliance = &mSpellAreaMap.insert(SpellAreaMap::value_type(sGameConfig->GetIntConfig("ICC.Buff.Alliance"), spellAreaICCBuffAlliance))->second;
@@ -2653,7 +2653,7 @@ void SpellMgr::LoadSpellAreas()
         ++count;
     }
     else
-        LOG_INFO("server", ">> ICC buff Alliance: disabled");
+        LOG_INFO("spells", ">> ICC buff Alliance: disabled");
 
     LOG_INFO("server.loading", ">> Loaded %u spell area requirements in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
     LOG_INFO("server.loading", "");
@@ -2735,7 +2735,7 @@ void SpellMgr::LoadSpellCustomAttr()
             SpellInfo * spellInfo = _GetSpellInfo(spellId);
             if (!spellInfo)
             {
-                LOG_INFO("server", "Table `spell_custom_attr` has wrong spell (spell_id: %u), ignored.", spellId);
+                LOG_INFO("spells", "Table `spell_custom_attr` has wrong spell (spell_id: %u), ignored.", spellId);
                 continue;
             }
 

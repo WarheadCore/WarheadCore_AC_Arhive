@@ -983,7 +983,7 @@ public:
 
         if (dontdel_str)
         {
-            //LOG_ERROR("server", "DEBUG: All 3 params are set");
+            //LOG_ERROR("chat.log", "DEBUG: All 3 params are set");
 
             // All 3 params are set
             // GUID
@@ -991,7 +991,7 @@ public:
             // doNotDEL
             if (stricmp(dontdel_str, "NODEL") == 0)
             {
-                //LOG_ERROR("server", "DEBUG: doNotDelete = true;");
+                //LOG_ERROR("chat.log", "DEBUG: doNotDelete = true;");
                 doNotDelete = true;
             }
         }
@@ -1000,10 +1000,10 @@ public:
             // Only 2 params - but maybe NODEL is set
             if (type_str)
             {
-                LOG_ERROR("server", "DEBUG: Only 2 params ");
+                LOG_ERROR("chat.log", "DEBUG: Only 2 params ");
                 if (stricmp(type_str, "NODEL") == 0)
                 {
-                    //LOG_ERROR("server", "DEBUG: type_str, NODEL ");
+                    //LOG_ERROR("chat.log", "DEBUG: type_str, NODEL ");
                     doNotDelete = true;
                     type_str = nullptr;
                 }

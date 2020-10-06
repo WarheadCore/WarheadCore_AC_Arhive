@@ -29,7 +29,7 @@ void CharacterDatabaseCleaner::CleanDatabase()
     if (!sGameConfig->GetBoolConfig("CleanCharacterDB"))
         return;
 
-    LOG_INFO("server", "Cleaning character database...");
+    LOG_INFO("tools", "Cleaning character database...");
 
     uint32 oldMSTime = getMSTime();
 
@@ -72,7 +72,7 @@ void CharacterDatabaseCleaner::CheckUnique(const char* column, const char* table
     QueryResult result = CharacterDatabase.PQuery("SELECT DISTINCT %s FROM %s", column, table);
     if (!result)
     {
-        LOG_INFO("server", "Table %s is empty.", table);
+        LOG_INFO("tools", "Table %s is empty.", table);
         return;
     }
 

@@ -874,7 +874,7 @@ bool AuthSocket::_HandleReconnectChallenge()
     // Stop if the account is not found
     if (!result)
     {
-        LOG_ERROR("server", "'%s:%d' [ERROR] user %s tried to login and we cannot find his session key in the database.", socket().getRemoteAddress().c_str(), socket().getRemotePort(), _login.c_str());
+        LOG_ERROR("network", "'%s:%d' [ERROR] user %s tried to login and we cannot find his session key in the database.", socket().getRemoteAddress().c_str(), socket().getRemotePort(), _login.c_str());
         socket().shutdown();
         return false;
     }
@@ -950,7 +950,7 @@ bool AuthSocket::_HandleReconnectProof()
     }
     else
     {
-        LOG_ERROR("server", "'%s:%d' [ERROR] user %s tried to login, but session is invalid.", socket().getRemoteAddress().c_str(), socket().getRemotePort(), _login.c_str());
+        LOG_ERROR("network", "'%s:%d' [ERROR] user %s tried to login, but session is invalid.", socket().getRemoteAddress().c_str(), socket().getRemotePort(), _login.c_str());
         socket().shutdown();
         return false;
     }
@@ -995,7 +995,7 @@ bool AuthSocket::_HandleRealmList()
     PreparedQueryResult result = LoginDatabase.Query(stmt);
     if (!result)
     {
-        LOG_ERROR("server", "'%s:%d' [ERROR] user %s tried to login but we cannot find him in the database.", socket().getRemoteAddress().c_str(), socket().getRemotePort(), _login.c_str());
+        LOG_ERROR("network", "'%s:%d' [ERROR] user %s tried to login but we cannot find him in the database.", socket().getRemoteAddress().c_str(), socket().getRemotePort(), _login.c_str());
         socket().shutdown();
         return false;
     }
@@ -1117,7 +1117,7 @@ bool AuthSocket::_HandleXferResume()
     // Check packet length and patch existence
     if (socket().recv_len() < 9 || !pPatch) // FIXME: pPatch is never used
     {
-        LOG_ERROR("server", "Error while resuming patch transfer (wrong packet)");
+        LOG_ERROR("network", "Error while resuming patch transfer (wrong packet)");
         return false;
     }
 
@@ -1151,7 +1151,7 @@ bool AuthSocket::_HandleXferAccept()
     // Check packet length and patch existence
     if (!pPatch)
     {
-        LOG_ERROR("server", "Error while accepting patch transfer (wrong packet)");
+        LOG_ERROR("network", "Error while accepting patch transfer (wrong packet)");
         return false;
     }
 

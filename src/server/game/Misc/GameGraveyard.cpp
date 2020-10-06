@@ -103,7 +103,7 @@ GraveyardStruct const* Graveyard::GetClosestGraveyard(float x, float y, float z,
     {
         if (z > -500)
         {
-            LOG_ERROR("server", "ZoneId not found for map %u coords (%f, %f, %f)", MapId, x, y, z);
+            LOG_ERROR("game.graveyard", "ZoneId not found for map %u coords (%f, %f, %f)", MapId, x, y, z);
             return GetDefaultGraveyard(teamId);
         }
     }
@@ -263,7 +263,7 @@ void Graveyard::RemoveGraveyardLink(uint32 id, uint32 zoneId, TeamId teamId, boo
     GraveyardMapBoundsNonConst range = GraveyardStore.equal_range(zoneId);
     if (range.first == range.second)
     {
-        LOG_ERROR("server", "Table `graveyard_zone` incomplete: Zone %u Team %u does not have a linked graveyard.", zoneId, teamId);
+        LOG_ERROR("game.graveyard", "Table `graveyard_zone` incomplete: Zone %u Team %u does not have a linked graveyard.", zoneId, teamId);
         return;
     }
 

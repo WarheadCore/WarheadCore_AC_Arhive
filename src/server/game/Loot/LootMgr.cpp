@@ -171,7 +171,7 @@ uint32 LootStore::LoadLootTable()
 
         if (lootmode == 0)
         {
-            LOG_ERROR("server", "Table '%s' Entry %d Item %d: LootMode is equal to 0, item will never drop - setting mode 1", GetName(), entry, item);
+            LOG_ERROR("loot", "Table '%s' Entry %d Item %d: LootMode is equal to 0, item will never drop - setting mode 1", GetName(), entry, item);
             lootmode = 1;
         }
 
@@ -1483,7 +1483,7 @@ bool LootTemplate::addConditionItem(Condition* cond)
 {
     if (!cond || !cond->isLoaded())//should never happen, checked at loading
     {
-        LOG_ERROR("server", "LootTemplate::addConditionItem: condition is null");
+        LOG_ERROR("loot", "LootTemplate::addConditionItem: condition is null");
         return false;
     }
 
@@ -1548,7 +1548,7 @@ bool LootTemplate::isReference(uint32 id) const
 
 void LoadLootTemplates_Creature()
 {
-    LOG_INFO("server", "Loading creature loot templates...");
+    LOG_INFO("loot", "Loading creature loot templates...");
 
     uint32 oldMSTime = getMSTime();
 
@@ -1584,7 +1584,7 @@ void LoadLootTemplates_Creature()
 
 void LoadLootTemplates_Disenchant()
 {
-    LOG_INFO("server", "Loading disenchanting loot templates...");
+    LOG_INFO("loot", "Loading disenchanting loot templates...");
 
     uint32 oldMSTime = getMSTime();
 
@@ -1619,7 +1619,7 @@ void LoadLootTemplates_Disenchant()
 
 void LoadLootTemplates_Fishing()
 {
-    LOG_INFO("server", "Loading fishing loot templates...");
+    LOG_INFO("loot", "Loading fishing loot templates...");
 
     uint32 oldMSTime = getMSTime();
 
@@ -1645,7 +1645,7 @@ void LoadLootTemplates_Fishing()
 
 void LoadLootTemplates_Gameobject()
 {
-    LOG_INFO("server", "Loading gameobject loot templates...");
+    LOG_INFO("loot", "Loading gameobject loot templates...");
 
     uint32 oldMSTime = getMSTime();
 
@@ -1681,7 +1681,7 @@ void LoadLootTemplates_Gameobject()
 
 void LoadLootTemplates_Item()
 {
-    LOG_INFO("server", "Loading item loot templates...");
+    LOG_INFO("loot", "Loading item loot templates...");
 
     uint32 oldMSTime = getMSTime();
 
@@ -1707,7 +1707,7 @@ void LoadLootTemplates_Item()
 
 void LoadLootTemplates_Milling()
 {
-    LOG_INFO("server", "Loading milling loot templates...");
+    LOG_INFO("loot", "Loading milling loot templates...");
 
     uint32 oldMSTime = getMSTime();
 
@@ -1738,7 +1738,7 @@ void LoadLootTemplates_Milling()
 
 void LoadLootTemplates_Pickpocketing()
 {
-    LOG_INFO("server", "Loading pickpocketing loot templates...");
+    LOG_INFO("loot", "Loading pickpocketing loot templates...");
 
     uint32 oldMSTime = getMSTime();
 

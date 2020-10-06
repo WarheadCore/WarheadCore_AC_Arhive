@@ -67,11 +67,11 @@ void RARunnable::run()
 
     if (acceptor.open(listenAddress, m_Reactor) == -1)
     {
-        LOG_ERROR("server", "Trinity RA can not bind to port %d on %s (possible error: port already in use)", raPort, stringIp.c_str());
+        LOG_ERROR("server.worldserver", "Warhead RA can not bind to port %d on %s (possible error: port already in use)", raPort, stringIp.c_str());
         return;
     }
 
-    LOG_INFO("server", "Starting Trinity RA on port %d on %s", raPort, stringIp.c_str());
+    LOG_INFO("server.worldserver", "Starting Warhead RA on port %d on %s", raPort, stringIp.c_str());
 
     while (!World::IsStopped())
     {
@@ -80,5 +80,5 @@ void RARunnable::run()
             break;
     }
 
-    LOG_DEBUG("server", "Warhead RA thread exiting");
+    LOG_DEBUG("server.worldserver", "Warhead RA thread exiting");
 }

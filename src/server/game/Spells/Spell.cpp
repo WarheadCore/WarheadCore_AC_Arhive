@@ -519,23 +519,23 @@ void SpellCastTargets::Update(Unit* caster)
 void SpellCastTargets::OutDebug() const
 {
     if (!m_targetMask)
-        LOG_INFO("server", "No targets");
+        LOG_INFO("spells", "No targets");
 
-    LOG_INFO("server", "target mask: %u", m_targetMask);
+    LOG_INFO("spells", "target mask: %u", m_targetMask);
     if (m_targetMask & (TARGET_FLAG_UNIT_MASK | TARGET_FLAG_CORPSE_MASK | TARGET_FLAG_GAMEOBJECT_MASK))
-        LOG_INFO("server", "Object target: " UI64FMTD, m_objectTargetGUID);
+        LOG_INFO("spells", "Object target: " UI64FMTD, m_objectTargetGUID);
     if (m_targetMask & TARGET_FLAG_ITEM)
-        LOG_INFO("server", "Item target: " UI64FMTD, m_itemTargetGUID);
+        LOG_INFO("spells", "Item target: " UI64FMTD, m_itemTargetGUID);
     if (m_targetMask & TARGET_FLAG_TRADE_ITEM)
-        LOG_INFO("server", "Trade item target: " UI64FMTD, m_itemTargetGUID);
+        LOG_INFO("spells", "Trade item target: " UI64FMTD, m_itemTargetGUID);
     if (m_targetMask & TARGET_FLAG_SOURCE_LOCATION)
-        LOG_INFO("server", "Source location: transport guid:" UI64FMTD " trans offset: %s position: %s", m_src._transportGUID, m_src._transportOffset.ToString().c_str(), m_src._position.ToString().c_str());
+        LOG_INFO("spells", "Source location: transport guid:" UI64FMTD " trans offset: %s position: %s", m_src._transportGUID, m_src._transportOffset.ToString().c_str(), m_src._position.ToString().c_str());
     if (m_targetMask & TARGET_FLAG_DEST_LOCATION)
-        LOG_INFO("server", "Destination location: transport guid:" UI64FMTD " trans offset: %s position: %s", m_dst._transportGUID, m_dst._transportOffset.ToString().c_str(), m_dst._position.ToString().c_str());
+        LOG_INFO("spells", "Destination location: transport guid:" UI64FMTD " trans offset: %s position: %s", m_dst._transportGUID, m_dst._transportOffset.ToString().c_str(), m_dst._position.ToString().c_str());
     if (m_targetMask & TARGET_FLAG_STRING)
-        LOG_INFO("server", "String: %s", m_strTarget.c_str());
-    LOG_INFO("server", "speed: %f", m_speed);
-    LOG_INFO("server", "elevation: %f", m_elevation);
+        LOG_INFO("spells", "String: %s", m_strTarget.c_str());
+    LOG_INFO("spells", "speed: %f", m_speed);
+    LOG_INFO("spells", "elevation: %f", m_elevation);
 }
 
 SpellValue::SpellValue(SpellInfo const* proto)
@@ -684,7 +684,7 @@ Spell::~Spell()
     {
         // Clean the reference to avoid later crash.
         // If this error is repeating, we may have to add an ASSERT to better track down how we get into this case.
-        LOG_ERROR("server", "SPELL: deleting spell for spell ID %u. However, spell still referenced.", m_spellInfo->Id);
+        LOG_ERROR("spells", "SPELL: deleting spell for spell ID %u. However, spell still referenced.", m_spellInfo->Id);
         *m_selfContainer = nullptr;
     }
 
@@ -1411,7 +1411,7 @@ void Spell::SelectImplicitCasterDestTargets(SpellEffIndex effIndex, SpellImplici
                                 beforewaterz = prevZ;
                             tstZ = beforewaterz;
                             srange = sqrt((tstY - prevY)*(tstY - prevY) + (tstX - prevX)*(tstX - prevX));
-                            //TC_LOG_ERROR("server", "(start was from land) step in water , number of cycle = %i , distance of step = %f, total path = %f, Z = %f", j, srange, totalpath, tstZ);
+                            //TC_LOG_ERROR("spells", "(start was from land) step in water , number of cycle = %i , distance of step = %f, total path = %f, Z = %f", j, srange, totalpath, tstZ);
                         }
                     }
                     else if (map->IsInWater(tstX, tstY, tstZ))
@@ -1424,13 +1424,13 @@ void Spell::SelectImplicitCasterDestTargets(SpellEffIndex effIndex, SpellImplici
                         if (inwater && (fabs(tstZ - ground) < 2.0f))
                         {
                             wcol = true;
-                            //TC_LOG_ERROR("server", "step in water with collide and use standart check (for continue way after possible collide), number of cycle = %i ", j);
+                            //TC_LOG_ERROR("spells", "step in water with collide and use standart check (for continue way after possible collide), number of cycle = %i ", j);
                         }
 
                         // if (j < 2)
-                        //    TC_LOG_ERROR("server", "(start in water) step in water, number of cycle = %i , distance of step = %f, total path = %f", j, srange, totalpath);
+                        //    TC_LOG_ERROR("spells", "(start in water) step in water, number of cycle = %i , distance of step = %f, total path = %f", j, srange, totalpath);
                         // else
-                        //    TC_LOG_ERROR("server", "step in water, number of cycle = %i , distance of step = %f, total path = %f", j, srange, totalpath);                   
+                        //    TC_LOG_ERROR("spells", "step in water, number of cycle = %i , distance of step = %f, total path = %f", j, srange, totalpath);                   
                     }
 
                     if ((!map->IsInWater(tstX, tstY, tstZ) && tstZ != beforewaterz) || wcol)  // second safety check z for blink way if on the ground
@@ -1447,11 +1447,11 @@ void Spell::SelectImplicitCasterDestTargets(SpellEffIndex effIndex, SpellImplici
 
                         //distance of rays, will select the shortest in 3D
                         srange1 = sqrt((tstY - prevY)*(tstY - prevY) + (tstX - prevX)*(tstX - prevX) + (tstZ1 - prevZ)*(tstZ1 - prevZ));
-                        //TC_LOG_ERROR("server", "step = %i, distance of ray1 = %f", j, srange1);
+                        //TC_LOG_ERROR("spells", "step = %i, distance of ray1 = %f", j, srange1);
                         srange2 = sqrt((tstY - prevY)*(tstY - prevY) + (tstX - prevX)*(tstX - prevX) + (tstZ2 - prevZ)*(tstZ2 - prevZ));
-                        //TC_LOG_ERROR("server", "step = %i, distance of ray2 = %f", j, srange2);
+                        //TC_LOG_ERROR("spells", "step = %i, distance of ray2 = %f", j, srange2);
                         srange3 = sqrt((tstY - prevY)*(tstY - prevY) + (tstX - prevX)*(tstX - prevX) + (tstZ3 - prevZ)*(tstZ3 - prevZ));
-                        //TC_LOG_ERROR("server", "step = %i, distance of ray3 = %f", j, srange3);
+                        //TC_LOG_ERROR("spells", "step = %i, distance of ray3 = %f", j, srange3);
 
                         if (srange1 < srange2)
                         {
@@ -1469,7 +1469,7 @@ void Spell::SelectImplicitCasterDestTargets(SpellEffIndex effIndex, SpellImplici
                             srange = srange2;
                         }
 
-                        //TC_LOG_ERROR("server", "step on ground, number of cycle = %i , distance of step = %f, total path = %f", j, srange, totalpath);
+                        //TC_LOG_ERROR("spells", "step on ground, number of cycle = %i , distance of step = %f, total path = %f", j, srange, totalpath);
                     }
 
                     destx = tstX;
@@ -1481,7 +1481,7 @@ void Spell::SelectImplicitCasterDestTargets(SpellEffIndex effIndex, SpellImplici
                     if (totalpath > distance)
                     {
                         overdistance = totalpath - distance;
-                        //TC_LOG_ERROR("server", "total path > than distance in 3D , need to move back a bit for save distance, total path = %f, overdistance = %f", totalpath, overdistance);
+                        //TC_LOG_ERROR("spells", "total path > than distance in 3D , need to move back a bit for save distance, total path = %f, overdistance = %f", totalpath, overdistance);
                     }
 
                     bool col = VMAP::VMapFactory::createOrGetVMapManager()->getObjectHitPos(mapid, prevX, prevY, prevZ + 0.5f, tstX, tstY, tstZ + 0.5f, tstX, tstY, tstZ, -0.5f);
@@ -1495,14 +1495,14 @@ void Spell::SelectImplicitCasterDestTargets(SpellEffIndex effIndex, SpellImplici
                         {
                             destx = prevX + overdistance * cos(pos.GetOrientation());
                             desty = prevY + overdistance * sin(pos.GetOrientation());
-                            //TC_LOG_ERROR("server", "(collision) collision occured 1");
+                            //TC_LOG_ERROR("spells", "(collision) collision occured 1");
                         }
                         else
                         {
                             // move back a bit
                             destx = tstX - (0.6 * cos(pos.GetOrientation()));
                             desty = tstY - (0.6 * sin(pos.GetOrientation()));
-                            //TC_LOG_ERROR("server", "(collision) collision occured 2");
+                            //TC_LOG_ERROR("spells", "(collision) collision occured 2");
                         }
 
                         // highest available point
@@ -1526,7 +1526,7 @@ void Spell::SelectImplicitCasterDestTargets(SpellEffIndex effIndex, SpellImplici
 
                         if (inwater && destz < prevZ && !wcol)
                             destz = prevZ;
-                        //TC_LOG_ERROR("server", "(collision) destZ rewrited in prevZ");                         
+                        //TC_LOG_ERROR("spells", "(collision) destZ rewrited in prevZ");                         
 
                         break;
                     }
@@ -1555,7 +1555,7 @@ void Spell::SelectImplicitCasterDestTargets(SpellEffIndex effIndex, SpellImplici
                 lastpos.Relocate(destx, desty, z, pos.GetOrientation());
                 dest = SpellDestination(lastpos);
                 //float range = sqrt((desty - pos.GetPositionY())*(desty - pos.GetPositionY()) + (destx - pos.GetPositionX())*(destx - pos.GetPositionX()));
-                //TC_LOG_ERROR("server", "Blink number 2, in falling but at a hight, distance of blink = %f", range);
+                //TC_LOG_ERROR("spells", "Blink number 2, in falling but at a hight, distance of blink = %f", range);
             }
 
             break;
@@ -1825,7 +1825,7 @@ void Spell::SelectImplicitTrajTargets(SpellEffIndex effIndex, SpellImplicitTarge
     float a = (srcToDestDelta - dist2d * b) / (dist2d * dist2d);
     if (a > -0.0001f)
         a = 0;
-    DEBUG_TRAJ(LOG_ERROR("server", "Spell::SelectTrajTargets: a %f b %f", a, b);)
+    DEBUG_TRAJ(LOG_ERROR("spells", "Spell::SelectTrajTargets: a %f b %f", a, b);)
 
     // Xinef: hack for distance, many trajectory spells have RangeEntry 1 (self)
     float bestDist = m_spellInfo->GetMaxRange(false)*2;
@@ -1844,11 +1844,11 @@ void Spell::SelectImplicitTrajTargets(SpellEffIndex effIndex, SpellImplicitTarge
         const float objDist2d = fabs(m_targets.GetSrcPos()->GetExactDist2d(*itr) * cos(m_targets.GetSrcPos()->GetRelativeAngle(*itr)));
         const float dz = fabs((*itr)->GetPositionZ() - m_targets.GetSrcPos()->m_positionZ);
 
-        DEBUG_TRAJ(LOG_ERROR("server", "Spell::SelectTrajTargets: check %u, dist between %f %f, height between %f %f.", (*itr)->GetEntry(), objDist2d - size, objDist2d + size, dz - size, dz + size);)
+        DEBUG_TRAJ(LOG_ERROR("spells", "Spell::SelectTrajTargets: check %u, dist between %f %f, height between %f %f.", (*itr)->GetEntry(), objDist2d - size, objDist2d + size, dz - size, dz + size);)
 
         float dist = objDist2d - size;
         float height = dist * (a * dist + b);
-        DEBUG_TRAJ(LOG_ERROR("server", "Spell::SelectTrajTargets: dist %f, height %f.", dist, height);)
+        DEBUG_TRAJ(LOG_ERROR("spells", "Spell::SelectTrajTargets: dist %f, height %f.", dist, height);)
         if (dist < bestDist && height < dz + size && height > dz - size)
         {
             bestDist = dist > 0 ? dist : 0;
@@ -1856,7 +1856,7 @@ void Spell::SelectImplicitTrajTargets(SpellEffIndex effIndex, SpellImplicitTarge
         }
 
 #define CHECK_DIST {\
-            DEBUG_TRAJ(LOG_ERROR("server", "Spell::SelectTrajTargets: dist %f, height %f.", dist, height);)\
+            DEBUG_TRAJ(LOG_ERROR("spells", "Spell::SelectTrajTargets: dist %f, height %f.", dist, height);)\
             if (dist > bestDist)\
                 continue;\
             if (dist < objDist2d + size && dist > objDist2d - size)\
@@ -1932,7 +1932,7 @@ void Spell::SelectImplicitTrajTargets(SpellEffIndex effIndex, SpellImplicitTarge
             float distSq = (*itr)->GetExactDistSq(x, y, z);
             float sizeSq = (*itr)->GetObjectSize();
             sizeSq *= sizeSq;
-            DEBUG_TRAJ(LOG_ERROR("server", "Initial %f %f %f %f %f", x, y, z, distSq, sizeSq);)
+            DEBUG_TRAJ(LOG_ERROR("spells", "Initial %f %f %f %f %f", x, y, z, distSq, sizeSq);)
             if (distSq > sizeSq)
             {
                 float factor = 1 - sqrt(sizeSq / distSq);
@@ -1941,7 +1941,7 @@ void Spell::SelectImplicitTrajTargets(SpellEffIndex effIndex, SpellImplicitTarge
                 z += factor * ((*itr)->GetPositionZ() - z);
 
                 distSq = (*itr)->GetExactDistSq(x, y, z);
-                DEBUG_TRAJ(LOG_ERROR("server", "Initial %f %f %f %f %f", x, y, z, distSq, sizeSq);)
+                DEBUG_TRAJ(LOG_ERROR("spells", "Initial %f %f %f %f %f", x, y, z, distSq, sizeSq);)
             }
         }
 
@@ -4908,7 +4908,7 @@ void Spell::TakeCastItem()
     {
         // This code is to avoid a crash
         // I'm not sure, if this is really an error, but I guess every item needs a prototype
-        LOG_ERROR("server", "Cast item has no item prototype highId=%d, lowId=%d", m_CastItem->GetGUIDHigh(), m_CastItem->GetGUIDLow());
+        LOG_ERROR("spells", "Cast item has no item prototype highId=%d, lowId=%d", m_CastItem->GetGUIDHigh(), m_CastItem->GetGUIDLow());
         return;
     }
 
@@ -5004,7 +5004,7 @@ void Spell::TakePower()
 
     if (powerType >= MAX_POWERS)
     {
-        LOG_ERROR("server", "Spell::TakePower: Unknown power type '%d'", powerType);
+        LOG_ERROR("spells", "Spell::TakePower: Unknown power type '%d'", powerType);
         return;
     }
 
@@ -6647,7 +6647,7 @@ SpellCastResult Spell::CheckPower()
     // Check valid power type
     if (m_spellInfo->PowerType >= MAX_POWERS)
     {
-        LOG_ERROR("server", "Spell::CheckPower: Unknown power type '%d'", m_spellInfo->PowerType);
+        LOG_ERROR("spells", "Spell::CheckPower: Unknown power type '%d'", m_spellInfo->PowerType);
         return SPELL_FAILED_UNKNOWN;
     }
 
@@ -7256,7 +7256,7 @@ void Spell::Delayed() // only called in DealDamage()
     else
         m_timer += delaytime;
 
-    LOG_INFO("server", "Spell %u partially interrupted for (%d) ms at damage", m_spellInfo->Id, delaytime);
+    LOG_INFO("spells", "Spell %u partially interrupted for (%d) ms at damage", m_spellInfo->Id, delaytime);
 
     WorldPacket data(SMSG_SPELL_DELAYED, 8+4);
     data.append(m_caster->GetPackGUID());
@@ -7555,7 +7555,7 @@ SpellEvent::~SpellEvent()
     }
     else
     {
-        LOG_ERROR("server", "~SpellEvent: %s %u tried to delete non-deletable spell %u. Was not deleted, causes memory leak.",
+        LOG_ERROR("spells", "~SpellEvent: %s %u tried to delete non-deletable spell %u. Was not deleted, causes memory leak.",
             (m_Spell->GetCaster()->GetTypeId() == TYPEID_PLAYER ? "Player" : "Creature"), m_Spell->GetCaster()->GetGUIDLow(), m_Spell->m_spellInfo->Id);
         ABORT();
     }
