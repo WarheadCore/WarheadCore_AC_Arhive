@@ -331,7 +331,7 @@ CalendarInvite* CalendarMgr::GetInvite(uint64 inviteId) const
             if ((*itr2)->GetInviteId() == inviteId)
                 return *itr2;
 
-    LOG_DEBUG("entities.unit", "CalendarMgr::GetInvite: [" UI64FMTD "] not found!", inviteId);
+    LOG_DEBUG("calendar", "CalendarMgr::GetInvite: [" UI64FMTD "] not found!", inviteId);
 
     return nullptr;
 }
