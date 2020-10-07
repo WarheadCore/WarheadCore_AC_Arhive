@@ -207,13 +207,13 @@ MapEntry const* InstanceSave::GetMapEntry()
 
 void InstanceSave::AddPlayer(uint32 guidLow)
 {
-    std::lock_guard<std::mutex> guard(_lock);
+    ACORE_GUARD(ACE_Thread_Mutex, _lock);
     m_playerList.push_back(guidLow);
 }
 
 bool InstanceSave::RemovePlayer(uint32 guidLow, InstanceSaveManager* ism)
 {
-    std::lock_guard<std::mutex> guard(_lock);
+    ACORE_GUARD(ACE_Thread_Mutex, _lock);
     m_playerList.remove(guidLow);
 
     // ism passed as an argument to avoid calling via singleton (might result in a deadlock)

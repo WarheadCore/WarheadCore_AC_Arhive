@@ -22,6 +22,7 @@
 #include "UpdateData.h"
 #include "GridDefines.h"
 #include "Object.h"
+#include <ace/Thread_Mutex.h>
 #include <unordered_map>
 #include <set>
 
@@ -44,23 +45,23 @@ class HashMapHolder
     public:
 
         typedef std::unordered_map<uint64, T*> MapType;
-        typedef std::mutex LockType;
+        typedef ACE_RW_Thread_Mutex LockType;
 
         static void Insert(T* o)
         {
-            std::lock_guard<std::mutex> guard(i_lock);
+            ACORE_WRITE_GUARD(LockType, i_lock);
             m_objectMap[o->GetGUID()] = o;
         }
 
         static void Remove(T* o)
         {
-            std::lock_guard<std::mutex> guard(i_lock);
+            ACORE_WRITE_GUARD(LockType, i_lock);
             m_objectMap.erase(o->GetGUID());
         }
 
         static T* Find(uint64 guid)
         {
-            std::lock_guard<std::mutex> guard(i_lock);
+            ACORE_READ_GUARD(LockType, i_lock);
             typename MapType::iterator itr = m_objectMap.find(guid);
             return (itr != m_objectMap.end()) ? itr->second : nullptr;
         }
@@ -238,7 +239,7 @@ class ObjectAccessor
         //non-static functions
         void AddUpdateObject(Object* obj)
         {
-            std::lock_guard<std::mutex> guard(i_objectLock);
+            ACORE_GUARD(ACE_Thread_Mutex, i_objectLock);
             if (obj->GetTypeId() < TYPEID_UNIT) // these are not in map: TYPEID_OBJECT, TYPEID_ITEM, TYPEID_CONTAINER
                 i_objects.insert(obj);
             else
@@ -247,7 +248,7 @@ class ObjectAccessor
 
         void RemoveUpdateObject(Object* obj)
         {
-            std::lock_guard<std::mutex> guard(i_objectLock);
+            ACORE_GUARD(ACE_Thread_Mutex, i_objectLock);
             if (obj->GetTypeId() < TYPEID_UNIT) // these are not in map: TYPEID_OBJECT, TYPEID_ITEM, TYPEID_CONTAINER
                 i_objects.erase(obj);
             else
@@ -282,10 +283,10 @@ class ObjectAccessor
         Player2CorpsesMapType i_player2corpse;
         std::list<uint64> i_playerBones;
 
-        std::mutex i_objectLock;
-        std::mutex i_corpseLock;
+        ACE_Thread_Mutex i_objectLock;
+        ACE_RW_Thread_Mutex i_corpseLock;
         std::list<DelayedCorpseAction> i_delayedCorpseActions;
-        mutable std::mutex DelayedCorpseLock;
+        mutable ACE_Thread_Mutex DelayedCorpseLock;
 };
 
 #define sObjectAccessor ObjectAccessor::instance()

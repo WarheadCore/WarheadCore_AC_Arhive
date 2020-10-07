@@ -102,7 +102,7 @@ private:
     bool _triggeredDepartureEvent;
 
     PassengerSet _staticPassengers;
-    mutable std::mutex _lock;
+    mutable ACE_Thread_Mutex Lock;
     bool _passengersLoaded;
     bool _delayedTeleport;
 };

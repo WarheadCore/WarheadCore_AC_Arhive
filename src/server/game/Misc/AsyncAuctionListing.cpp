@@ -27,8 +27,8 @@ uint32 AsyncAuctionListingMgr::auctionListingDiff = 0;
 bool AsyncAuctionListingMgr::auctionListingAllowed = false;
 std::list<AuctionListItemsDelayEvent> AsyncAuctionListingMgr::auctionListingList;
 std::list<AuctionListItemsDelayEvent> AsyncAuctionListingMgr::auctionListingListTemp;
-std::mutex AsyncAuctionListingMgr::auctionListingLock;
-std::mutex AsyncAuctionListingMgr::auctionListingTempLock;
+ACE_Thread_Mutex AsyncAuctionListingMgr::auctionListingLock;
+ACE_Thread_Mutex AsyncAuctionListingMgr::auctionListingTempLock;
 
 bool AuctionListOwnerItemsDelayEvent::Execute(uint64  /*e_time*/, uint32  /*p_time*/)
 {
