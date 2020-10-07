@@ -36,8 +36,8 @@ void Graveyard::LoadGraveyardFromDB()
     QueryResult result = WorldDatabase.Query("SELECT ID, Map, x, y, z, Comment FROM game_graveyard");
     if (!result)
     {
-        LOG_INFO("server", ">> Loaded 0 graveyard. Table `game_graveyard` is empty!");
-        LOG_INFO("server", "");
+        LOG_WARN("sql.sql", ">> Loaded 0 graveyard. Table `game_graveyard` is empty!");
+        LOG_WARN("sql.sql", "");
         return;
     }
 
@@ -70,8 +70,8 @@ void Graveyard::LoadGraveyardFromDB()
 
     } while (result->NextRow());
 
-    LOG_INFO("server", ">> Loaded %i graveyard in %u ms", Count, GetMSTimeDiffToNow(oldMSTime));
-    LOG_INFO("server", "");
+    LOG_INFO("server.loading", ">> Loaded %i graveyard in %u ms", Count, GetMSTimeDiffToNow(oldMSTime));
+    LOG_INFO("server.loading", "");
 }
 
 GraveyardStruct const* Graveyard::GetGraveyard(uint32 ID) const
@@ -103,7 +103,7 @@ GraveyardStruct const* Graveyard::GetClosestGraveyard(float x, float y, float z,
     {
         if (z > -500)
         {
-            LOG_ERROR("server", "ZoneId not found for map %u coords (%f, %f, %f)", MapId, x, y, z);
+            LOG_ERROR("game.graveyard", "ZoneId not found for map %u coords (%f, %f, %f)", MapId, x, y, z);
             return GetDefaultGraveyard(teamId);
         }
     }
@@ -263,7 +263,7 @@ void Graveyard::RemoveGraveyardLink(uint32 id, uint32 zoneId, TeamId teamId, boo
     GraveyardMapBoundsNonConst range = GraveyardStore.equal_range(zoneId);
     if (range.first == range.second)
     {
-        LOG_ERROR("server", "Table `graveyard_zone` incomplete: Zone %u Team %u does not have a linked graveyard.", zoneId, teamId);
+        LOG_ERROR("game.graveyard", "Table `graveyard_zone` incomplete: Zone %u Team %u does not have a linked graveyard.", zoneId, teamId);
         return;
     }
 
@@ -318,8 +318,8 @@ void Graveyard::LoadGraveyardZones()
 
     if (!result)
     {
-        LOG_INFO("server", ">> Loaded 0 graveyard-zone links. DB table `graveyard_zone` is empty.");
-        LOG_INFO("server", "");
+        LOG_WARN("sql.sql", ">> Loaded 0 graveyard-zone links. DB table `graveyard_zone` is empty.");
+        LOG_WARN("sql.sql", "");
         return;
     }
 
@@ -367,8 +367,8 @@ void Graveyard::LoadGraveyardZones()
 
     } while (result->NextRow());
 
-    LOG_INFO("server", ">> Loaded %u graveyard-zone links in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-    LOG_INFO("server", "");
+    LOG_INFO("server.loading", ">> Loaded %u graveyard-zone links in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+    LOG_INFO("server.loading", "");
 }
 
 GraveyardStruct const* Graveyard::GetGraveyard(const std::string& name) const

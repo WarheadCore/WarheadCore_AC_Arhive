@@ -333,7 +333,7 @@ template<class TMap> class MapScript : public UpdatableScript<TMap>
             _mapEntry = sMapStore.LookupEntry(_mapId);
 
             if (!_mapEntry)
-                LOG_ERROR("server", "Invalid MapScript for %u; no such map ID.", _mapId);
+                LOG_ERROR("scripts", "Invalid MapScript for %u; no such map ID.", _mapId);
         }
 
         // Gets the MapEntry structure associated with this script. Can return NULL.
@@ -375,7 +375,7 @@ class WorldMapScript : public ScriptObject, public MapScript<Map>
             checkMap();
 
             if (GetEntry() && !GetEntry()->IsWorldMap())
-                LOG_ERROR("server", "WorldMapScript for map %u is invalid.", GetEntry()->MapID);
+                LOG_ERROR("scripts", "WorldMapScript for map %u is invalid.", GetEntry()->MapID);
         }
 };
 
@@ -393,7 +393,7 @@ class InstanceMapScript : public ScriptObject, public MapScript<InstanceMap>
             checkMap();
 
             if (GetEntry() && !GetEntry()->IsDungeon())
-                LOG_ERROR("server", "InstanceMapScript for map %u is invalid.", GetEntry()->MapID);
+                LOG_ERROR("scripts", "InstanceMapScript for map %u is invalid.", GetEntry()->MapID);
         }
 
         // Gets an InstanceScript object for this instance.
@@ -414,7 +414,7 @@ class BattlegroundMapScript : public ScriptObject, public MapScript<Battleground
             checkMap();
 
             if (GetEntry() && !GetEntry()->IsBattleground())
-                LOG_ERROR("server", "BattlegroundMapScript for map %u is invalid.", GetEntry()->MapID);
+                LOG_ERROR("scripts", "BattlegroundMapScript for map %u is invalid.", GetEntry()->MapID);
         }
 };
 
@@ -1693,7 +1693,7 @@ public:
                     else
                     {
                         // If the script is already assigned -> delete it!
-                        LOG_ERROR("server", "Script '%s' already assigned with the same script name, so the script can't work.",
+                        LOG_ERROR("scripts", "Script '%s' already assigned with the same script name, so the script can't work.",
                             script->GetName().c_str());
 
                         ABORT(); // Error that should be fixed ASAP.
@@ -1737,7 +1737,7 @@ private:
         {
             if (itr.second == script)
             {
-                LOG_ERROR("server", "Script '%s' has same memory pointer as '%s'.",
+                LOG_ERROR("scripts", "Script '%s' has same memory pointer as '%s'.",
                     script->GetName().c_str(), itr.second->GetName().c_str());
 
                 return false;

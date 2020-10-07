@@ -130,7 +130,7 @@ namespace warhead
                     nBaseExp = 580;
                     break;
                 default:
-                    LOG_ERROR("server", "BaseGain: Unsupported content level %u", content);
+                    LOG_ERROR("misc", "BaseGain: Unsupported content level %u", content);
                     nBaseExp = 45;
                     break;
             }

@@ -81,7 +81,7 @@ uint32 MySQLConnection::Open()
     MYSQL* mysqlInit = mysql_init(nullptr);
     if (!mysqlInit)
     {
-        LOG_ERROR("server", "Could not initialize Mysql connection to database `%s`", m_connectionInfo.database.c_str());
+        LOG_ERROR("sql.dev", "Could not initialize Mysql connection to database `%s`", m_connectionInfo.database.c_str());
         return false;
     }
 
@@ -136,14 +136,13 @@ uint32 MySQLConnection::Open()
         {
             LOG_INFO("sql.driver", "> MySQL client library: %s", mysql_get_client_info());
             LOG_INFO("sql.driver", "> MySQL server ver: %s ", mysql_get_server_info(m_Mysql));
-            // MySQL version above 5.1 IS required in both client and server and there is no known issue with different versions above 5.1
-            // if (mysql_get_server_version(m_Mysql) != mysql_get_client_version())
-            //     sLog->outInfo(LOG_FILTER_SQL, "[WARNING] MySQL client/server version mismatch; may conflict with behaviour of prepared statements.");
+            
+            if (mysql_get_server_version(m_Mysql) != mysql_get_client_version())
+                LOG_WARN("sql.driver", "[WARNING] MySQL client/server version mismatch; may conflict with behaviour of prepared statements.");
         }
 
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-        LOG_INFO("server", "Connected to MySQL database at %s", m_connectionInfo.host.c_str());
-#endif
+        LOG_INFO("sql.driver", "Connected to MySQL database at %s", m_connectionInfo.host.c_str());
+
         mysql_autocommit(m_Mysql, 1);
 
         // set connection properties to UTF8 to properly handle locales for different
@@ -524,17 +523,17 @@ bool MySQLConnection::_HandleMySQLErrno(uint32 errNo)
         // Outdated table or database structure - terminate core
         case ER_BAD_FIELD_ERROR:
         case ER_NO_SUCH_TABLE:
-            LOG_ERROR("server", "Your database structure is not up to date. Please make sure you've executed all queries in the sql/updates folders.");
+            LOG_ERROR("sql.dev", "Your database structure is not up to date. Please make sure you've executed all queries in the sql/updates folders.");
             ACE_OS::sleep(10);
             std::abort();
             return false;
         case ER_PARSE_ERROR:
-            LOG_ERROR("server", "Error while parsing SQL. Core fix required.");
+            LOG_ERROR("sql.dev", "Error while parsing SQL. Core fix required.");
             ACE_OS::sleep(10);
             std::abort();
             return false;
         default:
-            LOG_ERROR("server", "Unhandled MySQL errno %u. Unexpected behaviour possible.", errNo);
+            LOG_ERROR("sql.dev", "Unhandled MySQL errno %u. Unexpected behaviour possible.", errNo);
             return false;
     }
 }

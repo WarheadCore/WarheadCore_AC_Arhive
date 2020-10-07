@@ -44,8 +44,8 @@ void LoadFromDB()
     QueryResult result = CharacterDatabase.Query("SELECT name, crc FROM addons");
     if (!result)
     {
-        LOG_INFO("server", ">> Loaded 0 known addons. DB table `addons` is empty!");
-        LOG_INFO("server", "");
+        LOG_WARN("sql.sql", ">> Loaded 0 known addons. DB table `addons` is empty!");
+        LOG_WARN("sql.sql", "");
         return;
     }
 
@@ -64,8 +64,8 @@ void LoadFromDB()
     }
     while (result->NextRow());
 
-    LOG_INFO("server", ">> Loaded %u known addons in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-    LOG_INFO("server", "");
+    LOG_INFO("server.loading", ">> Loaded %u known addons in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+    LOG_INFO("server.loading", "");
 
     oldMSTime = getMSTime();
     result = CharacterDatabase.Query("SELECT id, name, version, UNIX_TIMESTAMP(timestamp) FROM banned_addons");
@@ -93,8 +93,8 @@ void LoadFromDB()
             ++count;
         } while (result->NextRow());
 
-        LOG_INFO("server", ">> Loaded %u banned addons in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-        LOG_INFO("server", "");
+        LOG_INFO("server.loading", ">> Loaded %u banned addons in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+        LOG_INFO("server.loading", "");
     }
 }
 

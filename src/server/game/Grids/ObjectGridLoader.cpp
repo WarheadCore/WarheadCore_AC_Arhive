@@ -105,7 +105,7 @@ void LoadHelper(CellGuidSet const& guid_set, CellCoord &cell, GridRefManager<T> 
     {
         T* obj = new T;
         uint32 guid = *i_guid;
-        //LOG_INFO("server", "DEBUG: LoadHelper from table: %s for (guid: %u) Loading", table, guid);
+        
         if (!obj->LoadFromDB(guid, map))
         {
             delete obj;
@@ -124,7 +124,7 @@ void LoadHelper(CellGuidSet const& guid_set, CellCoord &cell, GridRefManager<Gam
         uint32 guid = *i_guid;
         GameObjectData const* data = sObjectMgr->GetGOData(guid);
         GameObject* obj = data && sObjectMgr->IsGameObjectStaticTransport(data->id) ? new StaticTransport() : new GameObject();
-        //LOG_INFO("server", "DEBUG: LoadHelper from table: %s for (guid: %u) Loading", table, guid);
+
         if (!obj->LoadFromDB(guid, map))
         {
             delete obj;
@@ -215,9 +215,8 @@ void ObjectGridLoader::LoadN(void)
             }
         }
     }
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
+    
     LOG_DEBUG("maps", "%u GameObjects, %u Creatures, and %u Corpses/Bones loaded for grid %u on map %u", i_gameObjects, i_creatures, i_corpses, i_grid.GetGridId(), i_map->GetId());
-#endif
 }
 
 template<class T>

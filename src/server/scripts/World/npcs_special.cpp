@@ -1230,7 +1230,7 @@ void npc_doctor::npc_doctorAI::UpdateAI(uint32 diff)
                     patientEntry = HordeSoldierId[rand() % 3];
                     break;
                 default:
-                    LOG_ERROR("server", "TSCR: Invalid entry for Triage doctor. Please check your database");
+                    LOG_ERROR("tscr", "TSCR: Invalid entry for Triage doctor. Please check your database");
                     return;
             }
 

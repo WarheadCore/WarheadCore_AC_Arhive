@@ -37,11 +37,10 @@ bool Condition::Meets(ConditionSourceInfo& sourceInfo)
     // object not present, return false
     if (!object)
     {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
         LOG_DEBUG("condition", "Condition object not found for condition (Entry: %u Type: %u Group: %u)", SourceEntry, SourceType, SourceGroup);
-#endif
         return false;
     }
+    
     bool condMeets = false;
     switch (ConditionType)
     {
@@ -669,9 +668,8 @@ bool ConditionMgr::IsObjectMeetToConditionList(ConditionSourceInfo& sourceInfo, 
     std::map<uint32, bool> ElseGroupStore;
     for (ConditionList::const_iterator i = conditions.begin(); i != conditions.end(); ++i)
     {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
         LOG_DEBUG("condition", "ConditionMgr::IsPlayerMeetToConditionList condType: %u val1: %u", (*i)->ConditionType, (*i)->ConditionValue1);
-#endif
+
         if ((*i)->isLoaded())
         {
             //! Find ElseGroup in ElseGroupStore
@@ -691,11 +689,7 @@ bool ConditionMgr::IsObjectMeetToConditionList(ConditionSourceInfo& sourceInfo, 
                         ElseGroupStore[(*i)->ElseGroup] = false;
                 }
                 else
-                {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
                     LOG_DEBUG("condition", "IsPlayerMeetToConditionList: Reference template -%u not found", (*i)->ReferenceId);
-#endif
-                }
 
             }
             else //handle normal condition
@@ -729,9 +723,8 @@ bool ConditionMgr::IsObjectMeetToConditions(ConditionSourceInfo& sourceInfo, Con
     if (conditions.empty())
         return true;
 
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
     LOG_DEBUG("condition", "ConditionMgr::IsObjectMeetToConditions");
-#endif
+
     return IsObjectMeetToConditionList(sourceInfo, conditions);
 }
 
@@ -775,9 +768,8 @@ ConditionList ConditionMgr::GetConditionsForNotGroupedEntry(ConditionSourceType 
             if (i != (*itr).second.end())
             {
                 spellCond = (*i).second;
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
+
                 LOG_DEBUG("condition", "GetConditionsForNotGroupedEntry: found conditions for type %u and entry %u", uint32(sourceType), entry);
-#endif
             }
         }
     }
@@ -794,9 +786,7 @@ ConditionList ConditionMgr::GetConditionsForSpellClickEvent(uint32 creatureId, u
         if (i != (*itr).second.end())
         {
             cond = (*i).second;
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
             LOG_DEBUG("condition", "GetConditionsForSpellClickEvent: found conditions for Vehicle entry %u spell %u", creatureId, spellId);
-#endif
         }
     }
     return cond;
@@ -812,9 +802,8 @@ ConditionList ConditionMgr::GetConditionsForVehicleSpell(uint32 creatureId, uint
         if (i != (*itr).second.end())
         {
             cond = (*i).second;
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
+
             LOG_DEBUG("condition", "GetConditionsForVehicleSpell: found conditions for Vehicle entry %u spell %u", creatureId, spellId);
-#endif
         }
     }
     return cond;
@@ -830,9 +819,7 @@ ConditionList ConditionMgr::GetConditionsForSmartEvent(int32 entryOrGuid, uint32
         if (i != (*itr).second.end())
         {
             cond = (*i).second;
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
             LOG_DEBUG("condition", "GetConditionsForSmartEvent: found conditions for Smart Event entry or guid %d event_id %u", entryOrGuid, eventId);
-#endif
         }
     }
     return cond;
@@ -863,7 +850,7 @@ void ConditionMgr::LoadConditions(bool isReload)
     //must clear all custom handled cases (groupped types) before reload
     if (isReload)
     {
-        LOG_INFO("server", "Reseting Loot Conditions...");
+        LOG_INFO("condition", "Reseting Loot Conditions...");
         LootTemplates_Creature.ResetConditions();
         LootTemplates_Fishing.ResetConditions();
         LootTemplates_Gameobject.ResetConditions();
@@ -877,10 +864,10 @@ void ConditionMgr::LoadConditions(bool isReload)
         LootTemplates_Prospecting.ResetConditions();
         LootTemplates_Spell.ResetConditions();
 
-        LOG_INFO("server", "Re-Loading `gossip_menu` Table for Conditions!");
+        LOG_INFO("condition", "Re-Loading `gossip_menu` Table for Conditions!");
         sObjectMgr->LoadGossipMenu();
 
-        LOG_INFO("server", "Re-Loading `gossip_menu_option` Table for Conditions!");
+        LOG_INFO("condition", "Re-Loading `gossip_menu_option` Table for Conditions!");
         sObjectMgr->LoadGossipMenuItems();
         sSpellMgr->UnloadSpellInfoImplicitTargetConditionLists();
     }
@@ -890,7 +877,7 @@ void ConditionMgr::LoadConditions(bool isReload)
 
     if (!result)
     {
-        LOG_ERROR("server", ">> Loaded 0 conditions. DB table `conditions` is empty!");
+        LOG_WARN("sql.sql", ">> Loaded 0 conditions. DB table `conditions` is empty!");
         return;
     }
 
@@ -994,13 +981,13 @@ void ConditionMgr::LoadConditions(bool isReload)
 
         if (cond->ErrorType && cond->SourceType != CONDITION_SOURCE_TYPE_SPELL)
         {
-            LOG_ERROR("server", "Condition type %u entry %i can't have ErrorType (%u), set to 0!", uint32(cond->SourceType), cond->SourceEntry, cond->ErrorType);
+            LOG_ERROR("condition", "Condition type %u entry %i can't have ErrorType (%u), set to 0!", uint32(cond->SourceType), cond->SourceEntry, cond->ErrorType);
             cond->ErrorType = 0;
         }
 
         if (cond->ErrorTextId && !cond->ErrorType)
         {
-            LOG_ERROR("server", "Condition type %u entry %i has any ErrorType, ErrorTextId (%u) is set, set to 0!", uint32(cond->SourceType), cond->SourceEntry, cond->ErrorTextId);
+            LOG_ERROR("condition", "Condition type %u entry %i has any ErrorType, ErrorTextId (%u) is set, set to 0!", uint32(cond->SourceType), cond->SourceEntry, cond->ErrorTextId);
             cond->ErrorTextId = 0;
         }
 
@@ -1123,8 +1110,8 @@ void ConditionMgr::LoadConditions(bool isReload)
     }
     while (result->NextRow());
 
-    LOG_INFO("server", ">> Loaded %u conditions in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-    LOG_INFO("server", "");
+    LOG_INFO("condition", ">> Loaded %u conditions in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+    LOG_INFO("condition", "");
 }
 
 bool ConditionMgr::addToLootTemplate(Condition* cond, LootTemplate* loot)
@@ -1591,13 +1578,13 @@ bool ConditionMgr::isSourceTypeValid(Condition* cond)
         {
             if (!sObjectMgr->GetCreatureTemplate(cond->SourceGroup))
             {
-                LOG_ERROR("server", "SourceEntry %u in `condition` table, does not exist in `creature_template`, ignoring.", cond->SourceGroup);
+                LOG_ERROR("condition", "SourceEntry %u in `condition` table, does not exist in `creature_template`, ignoring.", cond->SourceGroup);
                 return false;
             }
             ItemTemplate const* itemTemplate = sObjectMgr->GetItemTemplate(cond->SourceEntry);
             if (!itemTemplate)
             {
-                LOG_ERROR("server", "SourceEntry %u in `condition` table, does not exist in `item_template`, ignoring.", cond->SourceEntry);
+                LOG_ERROR("condition", "SourceEntry %u in `condition` table, does not exist in `item_template`, ignoring.", cond->SourceEntry);
                 return false;
             }
             break;
@@ -1843,14 +1830,14 @@ bool ConditionMgr::isConditionTypeValid(Condition* cond)
         {
             if (!Player::IsValidGender(uint8(cond->ConditionValue1)))
             {
-                LOG_ERROR("server", "Gender condition has invalid gender (%u), skipped", cond->ConditionValue1);
+                LOG_ERROR("condition", "Gender condition has invalid gender (%u), skipped", cond->ConditionValue1);
                 return false;
             }
 
             if (cond->ConditionValue2)
-                LOG_ERROR("server", "Gender condition has useless data in value2 (%u)!", cond->ConditionValue2);
+                LOG_ERROR("condition", "Gender condition has useless data in value2 (%u)!", cond->ConditionValue2);
             if (cond->ConditionValue3)
-                LOG_ERROR("server", "Gender condition has useless data in value3 (%u)!", cond->ConditionValue3);
+                LOG_ERROR("condition", "Gender condition has useless data in value3 (%u)!", cond->ConditionValue3);
             break;
         }
         case CONDITION_MAPID:
@@ -2137,7 +2124,7 @@ bool ConditionMgr::isConditionTypeValid(Condition* cond)
         {
             if (cond->ConditionValue1 > SPAWNMASK_RAID_ALL)
             {
-                LOG_ERROR("server", "SpawnMask condition has non existing SpawnMask in value1 (%u), skipped", cond->ConditionValue1);
+                LOG_ERROR("condition", "SpawnMask condition has non existing SpawnMask in value1 (%u), skipped", cond->ConditionValue1);
                 return false;
             }
             break;
@@ -2146,7 +2133,7 @@ bool ConditionMgr::isConditionTypeValid(Condition* cond)
         {
             if (!(cond->ConditionValue1 & UNIT_STATE_ALL_STATE_SUPPORTED))
             {
-                LOG_ERROR("server", "UnitState condition has non existing UnitState in value1 (%u), skipped", cond->ConditionValue1);
+                LOG_ERROR("condition", "UnitState condition has non existing UnitState in value1 (%u), skipped", cond->ConditionValue1);
                 return false;
             }
             break;
@@ -2155,7 +2142,7 @@ bool ConditionMgr::isConditionTypeValid(Condition* cond)
         {
             if (!cond->ConditionValue1 || cond->ConditionValue1 > CREATURE_TYPE_GAS_CLOUD)
             {
-                LOG_ERROR("server", "CreatureType condition has non existing CreatureType in value1 (%u), skipped", cond->ConditionValue1);
+                LOG_ERROR("condition", "CreatureType condition has non existing CreatureType in value1 (%u), skipped", cond->ConditionValue1);
                 return false;
             }
             break;
@@ -2165,7 +2152,7 @@ bool ConditionMgr::isConditionTypeValid(Condition* cond)
             AchievementEntry const* achievement = sAchievementStore.LookupEntry(cond->ConditionValue1);
             if (!achievement)
             {
-                LOG_ERROR("server", "CONDITION_REALM_ACHIEVEMENT has non existing realm first achivement id (%u), skipped.", cond->ConditionValue1);
+                LOG_ERROR("condition", "CONDITION_REALM_ACHIEVEMENT has non existing realm first achivement id (%u), skipped.", cond->ConditionValue1);
                 return false;
             }
             break;

@@ -160,7 +160,7 @@ namespace VMAP
 
     bool VMapManager2::isInLineOfSight(unsigned int mapId, float x1, float y1, float z1, float x2, float y2, float z2)
     {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_VMAP_CHECKS)
+#if defined(ENABLE_VMAP_CHECKS)
         if (!isLineOfSightCalcEnabled() || IsVMAPDisabledForPtr(mapId, VMAP_DISABLE_LOS))
             return true;
 #endif
@@ -183,7 +183,7 @@ namespace VMAP
     */
     bool VMapManager2::getObjectHitPos(unsigned int mapId, float x1, float y1, float z1, float x2, float y2, float z2, float& rx, float& ry, float& rz, float modifyDist)
     {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_VMAP_CHECKS)
+#if defined(ENABLE_VMAP_CHECKS)
         if (isLineOfSightCalcEnabled() && !IsVMAPDisabledForPtr(mapId, VMAP_DISABLE_LOS))
 #endif
         {
@@ -215,7 +215,7 @@ namespace VMAP
 
     float VMapManager2::getHeight(unsigned int mapId, float x, float y, float z, float maxSearchDist)
     {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_VMAP_CHECKS)
+#if defined(ENABLE_VMAP_CHECKS)
         if (isHeightCalcEnabled() && !IsVMAPDisabledForPtr(mapId, VMAP_DISABLE_HEIGHT))
 #endif
         {
@@ -236,7 +236,7 @@ namespace VMAP
 
     bool VMapManager2::getAreaInfo(unsigned int mapId, float x, float y, float& z, uint32& flags, int32& adtId, int32& rootId, int32& groupId) const
     {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_VMAP_CHECKS)
+#if defined(ENABLE_VMAP_CHECKS)
         if (!IsVMAPDisabledForPtr(mapId, VMAP_DISABLE_AREAFLAG))
 #endif
         {
@@ -256,7 +256,7 @@ namespace VMAP
 
     bool VMapManager2::GetLiquidLevel(uint32 mapId, float x, float y, float z, uint8 reqLiquidType, float& level, float& floor, uint32& type) const
     {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_VMAP_CHECKS)
+#if defined(ENABLE_VMAP_CHECKS)
         if (!IsVMAPDisabledForPtr(mapId, VMAP_DISABLE_LIQUIDSTATUS))
 #endif
         {
@@ -292,16 +292,17 @@ namespace VMAP
             WorldModel* worldmodel = new WorldModel();
             if (!worldmodel->readFile(basepath + filename + ".vmo"))
             {
-                LOG_ERROR("server", "VMapManager2: could not load '%s%s.vmo'", basepath.c_str(), filename.c_str());
+                LOG_ERROR("maps", "VMapManager2: could not load '%s%s.vmo'", basepath.c_str(), filename.c_str());
                 delete worldmodel;
-                return NULL;
+                return nullptr;
             }
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
+            
             LOG_DEBUG("maps", "VMapManager2: loading file '%s%s'", basepath.c_str(), filename.c_str());
-#endif
+
             model = iLoadedModelFiles.insert(std::pair<std::string, ManagedModel>(filename, ManagedModel())).first;
             model->second.setModel(worldmodel);
         }
+        
         //model->second.incRefCount();
         return model->second.getModel();
     }
@@ -317,11 +318,11 @@ namespace VMAP
             LOG_ERROR("server", "VMapManager2: trying to unload non-loaded file '%s'", filename.c_str());
             return;
         }
+        
         if (model->second.decRefCount() == 0)
         {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
             LOG_DEBUG("maps", "VMapManager2: unloading file '%s'", filename.c_str());
-#endif
+
             delete model->second.getModel();
             iLoadedModelFiles.erase(model);
         }

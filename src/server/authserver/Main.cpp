@@ -143,10 +143,10 @@ extern int main(int argc, char** argv)
     if (!pidFile.empty())
     {
         if (uint32 pid = CreatePIDFile(pidFile))
-            LOG_ERROR("server", "Daemon PID: %u\n", pid); // outError for red color in console
+            LOG_ERROR("server.authserver", "Daemon PID: %u\n", pid); // outError for red color in console
         else
         {
-            LOG_ERROR("server", "Cannot create PID file %s (possible error: permission)\n", pidFile.c_str());
+            LOG_ERROR("server.authserver", "Cannot create PID file %s (possible error: permission)\n", pidFile.c_str());
             return 1;
         }
     }
@@ -159,7 +159,7 @@ extern int main(int argc, char** argv)
     sRealmList->Initialize(sConfigMgr->GetIntDefault("RealmsStateUpdateDelay", 20));
     if (sRealmList->size() == 0)
     {
-        LOG_ERROR("server", "No valid realms specified.");
+        LOG_ERROR("server.authserver", "No valid realms specified.");
         return 1;
     }
 
@@ -169,7 +169,7 @@ extern int main(int argc, char** argv)
     int32 rmport = sConfigMgr->GetIntDefault("RealmServerPort", 3724);
     if (rmport < 0 || rmport > 0xFFFF)
     {
-        LOG_ERROR("server", "The specified RealmServerPort (%d) is out of the allowed range (1-65535)", rmport);
+        LOG_ERROR("server.authserver", "The specified RealmServerPort (%d) is out of the allowed range (1-65535)", rmport);
         return 1;
     }
 
@@ -179,7 +179,7 @@ extern int main(int argc, char** argv)
 
     if (acceptor.open(bind_addr, ACE_Reactor::instance(), ACE_NONBLOCK) == -1)
     {
-        LOG_ERROR("server", "Auth server can not bind to %s:%d (possible error: port already in use)", bind_ip.c_str(), rmport);
+        LOG_ERROR("server.authserver", "Auth server can not bind to %s:%d (possible error: port already in use)", bind_ip.c_str(), rmport);
         return 1;
     }
 
@@ -213,20 +213,20 @@ extern int main(int argc, char** argv)
             ULONG_PTR currentAffinity = affinity & appAff;
 
             if (!currentAffinity)
-                LOG_ERROR("server", "server.authserver", "Processors marked in UseProcessors bitmask (hex) %x are not accessible for the authserver. Accessible processors bitmask (hex): %x", affinity, appAff);
+                LOG_ERROR("server.authserver", "Processors marked in UseProcessors bitmask (hex) %x are not accessible for the authserver. Accessible processors bitmask (hex): %x", affinity, appAff);
             else if (SetProcessAffinityMask(hProcess, currentAffinity))
-                LOG_INFO("server.authserver", "server.authserver", "Using processors (bitmask, hex): %x", currentAffinity);
+                LOG_INFO("server.authserver", "Using processors (bitmask, hex): %x", currentAffinity);
             else
-                LOG_ERROR("server", "server.authserver", "Can't set used processors (hex): %x", currentAffinity);
+                LOG_ERROR("server.authserver", "Can't set used processors (hex): %x", currentAffinity);
         }
     }
 
     if (highPriority)
     {
         if (SetPriorityClass(hProcess, HIGH_PRIORITY_CLASS))
-            LOG_INFO("server.authserver", "server.authserver", "authserver process priority class set to HIGH");
+            LOG_INFO("server.authserver", "authserver process priority class set to HIGH");
         else
-            LOG_ERROR("server", "server.authserver", "Can't set authserver process priority class.");
+            LOG_ERROR("server.authserver", "Can't set authserver process priority class.");
     }
 
 #else // Linux
@@ -241,7 +241,7 @@ extern int main(int argc, char** argv)
                 CPU_SET(i, &mask);
 
         if (sched_setaffinity(0, sizeof(mask), &mask))
-            LOG_ERROR("server", "Can't set used processors (hex): %x, error: %s", affinity, strerror(errno));
+            LOG_ERROR("server.authserver", "Can't set used processors (hex): %x, error: %s", affinity, strerror(errno));
         else
         {
             CPU_ZERO(&mask);
@@ -253,7 +253,7 @@ extern int main(int argc, char** argv)
     if (highPriority)
     {
         if (setpriority(PRIO_PROCESS, 0, PROCESS_HIGH_PRIORITY))
-            LOG_ERROR("server", "Can't set authserver process priority class, error: %s", strerror(errno));
+            LOG_ERROR("server.authserver", "Can't set authserver process priority class, error: %s", strerror(errno));
         else
             LOG_INFO("server.authserver", "authserver process priority class set to %i", getpriority(PRIO_PROCESS, 0));
     }
@@ -277,7 +277,7 @@ extern int main(int argc, char** argv)
         if ((++loopCounter) == numLoops)
         {
             loopCounter = 0;
-            LOG_INFO("server", "Ping MySQL to keep connection alive");
+            LOG_INFO("server.authserver", "Ping MySQL to keep connection alive");
             LoginDatabase.KeepAlive();
         }
     }

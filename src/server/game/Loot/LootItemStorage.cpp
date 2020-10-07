@@ -44,8 +44,8 @@ void LootItemStorage::LoadStorageFromDB()
     PreparedQueryResult result = CharacterDatabase.Query(stmt);
     if (!result)
     {
-        LOG_INFO("server", ">> Loaded 0 stored items!");
-        LOG_INFO("server", "");
+        LOG_WARN("sql.sql", ">> Loaded 0 stored items!");
+        LOG_WARN("sql.sql", "");
         return;
     }
 
@@ -60,8 +60,8 @@ void LootItemStorage::LoadStorageFromDB()
         ++count;
     } while (result->NextRow());
 
-    LOG_INFO("server", ">> Loaded %d stored items in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-    LOG_INFO("server", "");
+    LOG_INFO("server.loading", ">> Loaded %d stored items in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+    LOG_INFO("server.loading", "");
 }
 
 void LootItemStorage::RemoveEntryFromDB(uint32 containerId, uint32 itemid, uint32 count)

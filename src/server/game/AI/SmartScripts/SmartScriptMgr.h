@@ -1811,10 +1811,9 @@ class SmartAIMgr
                 return mEventMap[uint32(type)][entry];
             else
             {
-#if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
-                if (entry > 0) //first search is for guid (negative), do not drop error if not found
+                if (entry) // first search is for guid (negative), do not drop error if not found
                     LOG_DEBUG("scripts.ai", "SmartAIMgr::GetScript: Could not load Script for Entry %d ScriptType %u.", entry, uint32(type));
-#endif
+
                 return temp;
             }
         }
