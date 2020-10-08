@@ -71,12 +71,8 @@ public:
         {
             pInstance = me->GetInstanceScript();
             sayGreet = false;
+            spellFrenzy = RAID_MODE(SPELL_FRENZY_10, SPELL_FRENZY_25, SPELL_FRENZY_10, SPELL_FRENZY_25);
         }
-
-        InstanceScript* pInstance;
-        EventMap events;
-        SummonList summons;
-        bool sayGreet;
 
         void SummonHelpers()
         {
@@ -157,20 +153,20 @@ public:
             {
                 case EVENT_SPELL_POISON_BOLT:
                     if (!me->HasAura(SPELL_WIDOWS_EMBRACE))
-                        me->CastCustomSpell(RAID_MODE(SPELL_POISON_BOLT_VOLLEY_10, SPELL_POISON_BOLT_VOLLEY_25), SPELLVALUE_MAX_TARGETS, 3, me, false);
+                        me->CastCustomSpell(RAID_MODE(SPELL_POISON_BOLT_VOLLEY_10, SPELL_POISON_BOLT_VOLLEY_25, SPELL_POISON_BOLT_VOLLEY_10, SPELL_POISON_BOLT_VOLLEY_25), SPELLVALUE_MAX_TARGETS, 3, me, false);
                     events.RepeatEvent(14000);
                     break;
                 case EVENT_SPELL_RAIN_OF_FIRE:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                        me->CastSpell(target, RAID_MODE(SPELL_RAIN_OF_FIRE_10, SPELL_RAIN_OF_FIRE_25), false);
+                        me->CastSpell(target, RAID_MODE(SPELL_RAIN_OF_FIRE_10, SPELL_RAIN_OF_FIRE_25, SPELL_RAIN_OF_FIRE_10, SPELL_RAIN_OF_FIRE_25), false);
                     events.RepeatEvent(12000);
                     break;
                 case EVENT_SPELL_FRENZY:
-                    if (!me->HasAura(RAID_MODE(SPELL_FRENZY_10, SPELL_FRENZY_25)))
+                    if (!me->HasAura(spellFrenzy))
                     {
                         Talk(SAY_FRENZY);
                         Talk(EMOTE_FRENZY);
-                        me->CastSpell(me, RAID_MODE(SPELL_FRENZY_10, SPELL_FRENZY_25), true);
+                        me->CastSpell(me, spellFrenzy, true);
                         events.RepeatEvent(60000);
                     }
                     else
@@ -181,20 +177,28 @@ public:
             DoMeleeAttackIfReady();
         }
         
-        void SpellHit(Unit*  /*caster*/, const SpellInfo *spell) override
+        void SpellHit(Unit* /*caster*/, const SpellInfo *spell) override
         {
             if (spell->Id == SPELL_WIDOWS_EMBRACE)
             {
                 Talk(EMOTE_WIDOWS_EMBRACE);
-                if (me->HasAura(RAID_MODE(SPELL_FRENZY_10, SPELL_FRENZY_25)))
+                if (me->HasAura(spellFrenzy))
                 {
-                    me->RemoveAurasDueToSpell(RAID_MODE(SPELL_FRENZY_10, SPELL_FRENZY_25));
+                    me->RemoveAurasDueToSpell(spellFrenzy);
                     events.RescheduleEvent(EVENT_SPELL_FRENZY, 60000);
                 }
 
                 pInstance->SetData(DATA_FRENZY_REMOVED, 0);
             }
         }
+
+        private:
+            InstanceScript* pInstance;
+            EventMap events;
+            SummonList summons;
+            bool sayGreet;
+            uint32 spellFrenzy = 0;
+
     };
 };
 

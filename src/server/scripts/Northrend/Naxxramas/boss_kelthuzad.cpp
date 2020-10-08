@@ -346,11 +346,11 @@ public:
                         events.ScheduleEvent(EVENT_SPELL_CHAINS, 50000);
                     break;
                 case EVENT_SPELL_FROST_BOLT_SINGLE:
-                    me->CastSpell(me->GetVictim(), RAID_MODE(SPELL_FROST_BOLT_SINGLE_10, SPELL_FROST_BOLT_SINGLE_25), false);
+                    me->CastSpell(me->GetVictim(), RAID_MODE(SPELL_FROST_BOLT_SINGLE_10, SPELL_FROST_BOLT_SINGLE_25, SPELL_FROST_BOLT_SINGLE_10, SPELL_FROST_BOLT_SINGLE_25), false);
                     events.RepeatEvent(urand(2000, 15000));
                     break;
                 case EVENT_SPELL_FROST_BOLT_MULTI:
-                    me->CastSpell(me, RAID_MODE(SPELL_FROST_BOLT_MULTI_10, SPELL_FROST_BOLT_MULTI_25), false);
+                    me->CastSpell(me, RAID_MODE(SPELL_FROST_BOLT_MULTI_10, SPELL_FROST_BOLT_MULTI_25, SPELL_FROST_BOLT_MULTI_10, SPELL_FROST_BOLT_MULTI_25), false);
                     events.RepeatEvent(24000);
                     break;
                 case EVENT_SPELL_SHADOW_FISSURE:
@@ -359,7 +359,7 @@ public:
                     events.RepeatEvent(25000);
                     break;
                 case EVENT_SPELL_FROST_BLAST:
-                    if (Unit *target = SelectTarget(SELECT_TARGET_RANDOM, RAID_MODE(1,0), 0, true))
+                    if (Unit *target = SelectTarget(SELECT_TARGET_RANDOM, RAID_MODE(1, 0, 1, 0), 0, true))
                         me->CastSpell(target, SPELL_FROST_BLAST, false);
                     
                     Talk(SAY_FROST_BLAST);
@@ -412,7 +412,7 @@ public:
                         if (Creature* cr = ObjectAccessor::GetCreature(*me, pInstance->GetData64(DATA_LICH_KING_BOSS)))
                             cr->AI()->Talk(SAY_ANSWER_REQUEST);
 
-                    for (uint8 i = 0 ; i < RAID_MODE(2,4); ++i)
+                    for (uint8 i = 0 ; i < RAID_MODE(2, 4, 2, 4); ++i)
                         events.ScheduleEvent(EVENT_SUMMON_GUARDIAN_OF_ICECROWN, 10000+(i*5000));
                     events.PopEvent();
                     break;

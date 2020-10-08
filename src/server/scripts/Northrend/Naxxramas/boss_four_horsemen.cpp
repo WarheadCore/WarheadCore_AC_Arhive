@@ -102,22 +102,23 @@ const uint32 TABLE_SPELL_PUNISH[4] = {SPELL_ZELIEK_CONDEMNATION, SPELL_BLAUMEUX_
 const uint32 TABLE_SPELL_SECONDARY_10[4] = {SPELL_ZELIEK_HOLY_WRATH_10, SPELL_BLAUMEUX_VOID_ZONE_10, 0, 0};
 const uint32 TABLE_SPELL_SECONDARY_25[4] = {SPELL_ZELIEK_HOLY_WRATH_25, SPELL_BLAUMEUX_VOID_ZONE_25, 0, 0};
 
-
-
 const Position WaypointPositions[12] =
 {
     // Thane waypoints
     {2542.3f, -2984.1f, 241.49f, 5.362f},
     {2547.6f, -2999.4f, 241.34f, 5.049f},
     {2542.9f, -3015.0f, 241.35f, 4.654f},
+
     // Lady waypoints
     {2498.3f, -2961.8f, 241.28f, 3.267f},
     {2487.7f, -2959.2f, 241.28f, 2.890f},
     {2469.4f, -2947.6f, 241.28f, 2.576f},
+
     // Baron waypoints
     {2553.8f, -2968.4f, 241.33f, 5.757f},
     {2564.3f, -2972.5f, 241.33f, 5.890f},
     {2583.9f, -2971.6f, 241.35f, 0.008f},
+
     // Sir waypoints
     {2534.5f, -2921.7f, 241.53f, 1.363f},
     {2523.5f, -2902.8f, 241.28f, 2.095f},
@@ -263,10 +264,11 @@ public:
             BossAI::JustDied(killer);
             if (pInstance)
             {
-                if (pInstance->GetBossState(BOSS_HORSEMAN) == DONE) {
+                if (pInstance->GetBossState(BOSS_HORSEMAN) == DONE)
+                {
                     if (!me->GetMap()->GetPlayers().isEmpty())
                         if (Player* player = me->GetMap()->GetPlayers().getFirst()->GetSource())
-                            player->SummonGameObject(RAID_MODE(GO_HORSEMEN_CHEST_10, GO_HORSEMEN_CHEST_25), 2514.8f, -2944.9f, 245.55f, 5.51f, 0, 0, 0, 0, 0);
+                            player->SummonGameObject(RAID_MODE(GO_HORSEMEN_CHEST_10, GO_HORSEMEN_CHEST_25, GO_HORSEMEN_CHEST_10, GO_HORSEMEN_CHEST_25), 2514.8f, -2944.9f, 245.55f, 5.51f, 0, 0, 0, 0, 0);
                 }
             }
 
@@ -318,8 +320,7 @@ public:
                     return;
                 case EVENT_SPELL_PRIMARY:
                     Talk(SAY_TAUNT);
-
-                    me->CastSpell(me->GetVictim(), RAID_MODE(TABLE_SPELL_PRIMARY_10[horsemanId], TABLE_SPELL_PRIMARY_25[horsemanId]), false);
+                    me->CastSpell(me->GetVictim(), RAID_MODE(TABLE_SPELL_PRIMARY_10[horsemanId], TABLE_SPELL_PRIMARY_25[horsemanId], TABLE_SPELL_PRIMARY_10[horsemanId], TABLE_SPELL_PRIMARY_25[horsemanId]), false);
                     events.RepeatEvent(15000);
                     return;
                 case EVENT_SPELL_PUNISH:
@@ -328,15 +329,15 @@ public:
                     events.RepeatEvent(3000);
                     return;
                 case EVENT_SPELL_SECONDARY:
-                    me->CastSpell(me->GetVictim(), RAID_MODE(TABLE_SPELL_SECONDARY_10[horsemanId], TABLE_SPELL_SECONDARY_25[horsemanId]), false);
+                    me->CastSpell(me->GetVictim(), RAID_MODE(TABLE_SPELL_SECONDARY_10[horsemanId], TABLE_SPELL_SECONDARY_25[horsemanId], TABLE_SPELL_SECONDARY_10[horsemanId], TABLE_SPELL_SECONDARY_25[horsemanId]), false);
                     events.RepeatEvent(15000);
                     return;
             }
 
-            if ((me->GetEntry() == NPC_LADY_BLAUMEUX || me->GetEntry() == NPC_SIR_ZELIEK))
+            if (me->GetEntry() == NPC_LADY_BLAUMEUX || me->GetEntry() == NPC_SIR_ZELIEK)
             {
                 if (Unit* target = SelectTarget(SELECT_TARGET_NEAREST, 0, 45.0f, true))
-                    me->CastSpell(target, RAID_MODE(TABLE_SPELL_PRIMARY_10[horsemanId], TABLE_SPELL_PRIMARY_25[horsemanId]), false);
+                    me->CastSpell(target, RAID_MODE(TABLE_SPELL_PRIMARY_10[horsemanId], TABLE_SPELL_PRIMARY_25[horsemanId], TABLE_SPELL_PRIMARY_10[horsemanId], TABLE_SPELL_PRIMARY_25[horsemanId]), false);
             }
             else
                 DoMeleeAttackIfReady();

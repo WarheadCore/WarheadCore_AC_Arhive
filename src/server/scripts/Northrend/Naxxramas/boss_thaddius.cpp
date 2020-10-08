@@ -293,7 +293,7 @@ public:
                     events.PopEvent();
                     break;
                 case EVENT_THADDIUS_SPELL_CHAIN_LIGHTNING:
-                    me->CastSpell(me->GetVictim(), RAID_MODE(SPELL_CHAIN_LIGHTNING_10, SPELL_CHAIN_LIGHTNING_25), false);
+                    me->CastSpell(me->GetVictim(), RAID_MODE(SPELL_CHAIN_LIGHTNING_10, SPELL_CHAIN_LIGHTNING_25, SPELL_CHAIN_LIGHTNING_10, SPELL_CHAIN_LIGHTNING_25), false);
                     events.RepeatEvent(15000);
                     break;
                 case EVENT_THADDIUS_POLARITY_SHIFT:
@@ -471,11 +471,11 @@ public:
             switch (events.GetEvent())
             {
                 case EVENT_MINION_SPELL_POWER_SURGE:
-                    me->CastSpell(me, RAID_MODE(SPELL_POWER_SURGE_10, SPELL_POWER_SURGE_25), false);
+                    me->CastSpell(me, RAID_MODE(SPELL_POWER_SURGE_10, SPELL_POWER_SURGE_25, SPELL_POWER_SURGE_10, SPELL_POWER_SURGE_25), false);
                     events.RepeatEvent(19000);
                     break;
                 case EVENT_MINION_SPELL_STATIC_FIELD:
-                    me->CastSpell(me, RAID_MODE(SPELL_STATIC_FIELD_10, SPELL_STATIC_FIELD_25), false);
+                    me->CastSpell(me, RAID_MODE(SPELL_STATIC_FIELD_10, SPELL_STATIC_FIELD_25, SPELL_STATIC_FIELD_10, SPELL_STATIC_FIELD_25), false);
                     events.RepeatEvent(3000);
                     break;
                 case EVENT_MINION_SPELL_MAGNETIC_PULL:

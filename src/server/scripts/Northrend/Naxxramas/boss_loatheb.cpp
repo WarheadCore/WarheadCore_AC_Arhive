@@ -144,11 +144,11 @@ public:
                     events.RepeatEvent(20000);
                     break;
                 case EVENT_SPELL_DEATHBLOOM:
-                    me->CastSpell(me, RAID_MODE(SPELL_DEATHBLOOM_10, SPELL_DEATHBLOOM_25), false);
+                    me->CastSpell(me, RAID_MODE(SPELL_DEATHBLOOM_10, SPELL_DEATHBLOOM_25, SPELL_DEATHBLOOM_10, SPELL_DEATHBLOOM_25), false);
                     events.RepeatEvent(30000);
                     break;
                 case EVENT_SPELL_INEVITABLE_DOOM:
-                    me->CastSpell(me, RAID_MODE(SPELL_INEVITABLE_DOOM_10, SPELL_INEVITABLE_DOOM_25), false);
+                    me->CastSpell(me, RAID_MODE(SPELL_INEVITABLE_DOOM_10, SPELL_INEVITABLE_DOOM_25, SPELL_INEVITABLE_DOOM_10, SPELL_INEVITABLE_DOOM_25), false);
                     events.RepeatEvent(events.GetTimer() < 5*MINUTE*IN_MILLISECONDS ? 30000 : 15000);
                     break;
                 case EVENT_SPELL_BERSERK:
