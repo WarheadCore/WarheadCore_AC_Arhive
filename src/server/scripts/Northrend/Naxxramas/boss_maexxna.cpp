@@ -249,4 +249,3 @@ void AddSC_boss_maexxna()
     new boss_maexxna();
     new boss_maexxna_webwrap();
 }
-
