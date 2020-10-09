@@ -17,12 +17,43 @@
 
 #include "SavingSystem.h"
 #include "World.h"
+#include "Error.h"
 
 uint32 SavingSystemMgr::m_savingCurrentValue = 0;
 uint32 SavingSystemMgr::m_savingMaxValueAssigned = 0;
 uint32 SavingSystemMgr::m_savingDiffSum = 0;
 std::list<uint32> SavingSystemMgr::m_savingSkipList;
 ACE_Thread_Mutex SavingSystemMgr::_savingLock;
+
+uint32 SavingSystemMgr::GetSavingCurrentValue()
+{
+    return m_savingCurrentValue;
+}
+
+uint32 SavingSystemMgr::GetSavingMaxValue()
+{
+    return m_savingMaxValueAssigned;
+}
+
+void SavingSystemMgr::IncreaseSavingCurrentValue(uint32 inc)
+{
+    m_savingCurrentValue += inc;
+}
+
+uint32 SavingSystemMgr::IncreaseSavingMaxValue(uint32 inc)
+{
+    ACORE_GUARD(ACE_Thread_Mutex, _savingLock);
+    return (m_savingMaxValueAssigned += inc);
+}
+
+void SavingSystemMgr::InsertToSavingSkipListIfNeeded(uint32 id)
+{
+    if (id > m_savingCurrentValue)
+    {
+        ACORE_GUARD(ACE_Thread_Mutex, _savingLock);
+        m_savingSkipList.push_back(id);
+    }
+}
 
 void SavingSystemMgr::Update(uint32 diff)
 {
