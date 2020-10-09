@@ -18,7 +18,7 @@
 #ifndef __GAME_CONFIG
 #define __GAME_CONFIG
 
-#include "Define.h"
+#include "Common.h"
 #include <unordered_map>
 
 enum GameIntConfigs
