@@ -65,7 +65,7 @@ public:
 
     struct boss_anubrekhanAI : public BossAI
     {
-        explicit boss_anubrekhanAI(Creature *c) : BossAI(c, BOSS_ANUB), summons(me)
+        explicit boss_anubrekhanAI(Creature* c) : BossAI(c, BOSS_ANUB), summons(me)
         {
             pInstance = c->GetInstanceScript();
             sayGreet = false;
@@ -126,9 +126,7 @@ public:
             BossAI::JustDied(killer);
             summons.DespawnAll();
             if (pInstance)
-            {
                 pInstance->DoStartTimedAchievement(ACHIEVEMENT_TIMED_TYPE_EVENT, ACHIEV_TIMED_START_EVENT);
-            }
         }
 
         void KilledUnit(Unit* victim) override
@@ -145,7 +143,7 @@ public:
                 pInstance->SetData(DATA_IMMORTAL_FAIL, 0);
         }
 
-        void EnterCombat(Unit * who) override
+        void EnterCombat(Unit* who) override
         {
             BossAI::EnterCombat(who);
             me->CallForHelp(30.0f); // catch helpers
@@ -157,14 +155,14 @@ public:
             }
 
             events.ScheduleEvent(EVENT_SPELL_IMPALE, 15000);
-            events.ScheduleEvent(EVENT_SPELL_LOCUST_SWARM, 70000+urand(0,50000));
+            events.ScheduleEvent(EVENT_SPELL_LOCUST_SWARM, 70000 + urand(0, 50000));
             events.ScheduleEvent(EVENT_SPELL_BERSERK, 600000);
-            
+
             if (!summons.HasEntry(NPC_CRYPT_GUARD))
                 SummonCryptGuards();
         }
 
-        void MoveInLineOfSight(Unit *who) override
+        void MoveInLineOfSight(Unit* who) override
         {
             if (!sayGreet && who->GetTypeId() == TYPEID_PLAYER)
             {
@@ -192,15 +190,15 @@ public:
                     events.RepeatEvent(20000);
                     break;
                 case EVENT_SPELL_LOCUST_SWARM:
-                {
-                    Talk(EMOTE_LOCUST);
-                    me->CastSpell(me, RAID_MODE(SPELL_LOCUST_SWARM_10, SPELL_LOCUST_SWARM_25, SPELL_LOCUST_SWARM_10, SPELL_LOCUST_SWARM_25), false);
-                    Position pos;
-                    me->GetNearPosition(pos, 10.0f, rand_norm() * 2 * M_PI);
-                    me->SummonCreature(NPC_CRYPT_GUARD, pos);
-                    events.RepeatEvent(90000);
-                    break;
-                }
+                    {
+                        Talk(EMOTE_LOCUST);
+                        me->CastSpell(me, RAID_MODE(SPELL_LOCUST_SWARM_10, SPELL_LOCUST_SWARM_25, SPELL_LOCUST_SWARM_10, SPELL_LOCUST_SWARM_25), false);
+                        Position pos;
+                        me->GetNearPosition(pos, 10.0f, rand_norm() * 2 * M_PI);
+                        me->SummonCreature(NPC_CRYPT_GUARD, pos);
+                        events.RepeatEvent(90000);
+                        break;
+                    }
                 case EVENT_SPELL_BERSERK:
                     me->CastSpell(me, SPELL_BERSERK, true);
                     events.PopEvent();

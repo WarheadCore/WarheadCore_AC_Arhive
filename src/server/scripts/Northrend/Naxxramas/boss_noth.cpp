@@ -86,7 +86,7 @@ public:
 
     struct boss_nothAI : public BossAI
     {
-        explicit boss_nothAI(Creature *c) : BossAI(c, BOSS_NOTH), summons(me)
+        explicit boss_nothAI(Creature* c) : BossAI(c, BOSS_NOTH), summons(me)
         {
             pInstance = me->GetInstanceScript();
         }
@@ -114,7 +114,7 @@ public:
         {
             me->SetReactState(REACT_PASSIVE);
             me->AttackStop();
-            me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE |UNIT_FLAG_DISABLE_MOVE);
+            me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_DISABLE_MOVE);
             me->SetControlled(true, UNIT_STATE_ROOT);
             events.SetPhase(1);
             events.Reset();
@@ -125,7 +125,7 @@ public:
         void SummonHelper(uint32 entry, uint32 count)
         {
             for (uint8 i = 0; i < count; ++i)
-                me->SummonCreature(entry, summoningPosition[urand(0,4)]);
+                me->SummonCreature(entry, summoningPosition[urand(0, 4)]);
         }
 
         bool IsInRoom()
@@ -155,14 +155,14 @@ public:
             ScriptedAI::EnterEvadeMode();
         }
 
-        void EnterCombat(Unit * who) override
+        void EnterCombat(Unit* who) override
         {
             BossAI::EnterCombat(who);
             Talk(SAY_AGGRO);
             StartGroundPhase();
         }
 
-        void JustSummoned(Creature *summon) override
+        void JustSummoned(Creature* summon) override
         {
             summons.Summon(summon);
             summon->SetInCombatWithZone();
@@ -170,7 +170,7 @@ public:
 
         void JustDied(Unit*  killer) override
         {
-			me->NearTeleportTo(nothPosition.GetPositionX(), nothPosition.GetPositionY(), nothPosition.GetPositionZ(), nothPosition.GetOrientation(), true);
+            me->NearTeleportTo(nothPosition.GetPositionX(), nothPosition.GetPositionY(), nothPosition.GetPositionZ(), nothPosition.GetOrientation(), true);
             BossAI::JustDied(killer);
             Talk(SAY_DEATH);
         }
@@ -203,9 +203,9 @@ public:
                 // GROUND
                 case EVENT_SPELL_CURSE:
                     if (events.GetPhaseMask() == 0)
-                    me->CastCustomSpell(
-                        RAID_MODE(SPELL_CURSE_OF_THE_PLAGUEBRINGER_10, SPELL_CURSE_OF_THE_PLAGUEBRINGER_25, SPELL_CURSE_OF_THE_PLAGUEBRINGER_10, SPELL_CURSE_OF_THE_PLAGUEBRINGER_25), 
-                        SPELLVALUE_MAX_TARGETS, RAID_MODE(3, 10, 3, 10), me, false);
+                        me->CastCustomSpell(
+                            RAID_MODE(SPELL_CURSE_OF_THE_PLAGUEBRINGER_10, SPELL_CURSE_OF_THE_PLAGUEBRINGER_25, SPELL_CURSE_OF_THE_PLAGUEBRINGER_10, SPELL_CURSE_OF_THE_PLAGUEBRINGER_25),
+                            SPELLVALUE_MAX_TARGETS, RAID_MODE(3, 10, 3, 10), me, false);
                     events.RepeatEvent(25000);
                     break;
                 case EVENT_SUMMON_PLAGUED_WARRIOR_ANNOUNCE:
@@ -261,7 +261,7 @@ public:
             if (me->HasReactState(REACT_AGGRESSIVE))
                 DoMeleeAttackIfReady();
         }
-    };  
+    };
 };
 
 void AddSC_boss_noth()

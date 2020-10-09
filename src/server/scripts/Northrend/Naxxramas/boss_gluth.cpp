@@ -76,7 +76,7 @@ public:
 
     struct boss_gluthAI : public BossAI
     {
-        explicit boss_gluthAI(Creature *c) : BossAI(c, BOSS_GLUTH), summons(me)
+        explicit boss_gluthAI(Creature* c) : BossAI(c, BOSS_GLUTH), summons(me)
         {
             pInstance = me->GetInstanceScript();
         }
@@ -84,7 +84,7 @@ public:
         EventMap events;
         SummonList summons;
         InstanceScript* pInstance;
-        
+
         void Reset() override
         {
             BossAI::Reset();
@@ -94,7 +94,7 @@ public:
             me->SetReactState(REACT_AGGRESSIVE);
         }
 
-        void MoveInLineOfSight(Unit *who) override
+        void MoveInLineOfSight(Unit* who) override
         {
             if (!me->GetVictim() || me->GetVictim()->GetEntry() != NPC_ZOMBIE_CHOW)
             {
@@ -108,19 +108,19 @@ public:
             }
         }
 
-        void EnterCombat(Unit * who) override
+        void EnterCombat(Unit* who) override
         {
             BossAI::EnterCombat(who);
             me->SetInCombatWithZone();
             events.ScheduleEvent(EVENT_SPELL_MORTAL_WOUND, 10000);
             events.ScheduleEvent(EVENT_SPELL_ENRAGE, 30000);
             events.ScheduleEvent(EVENT_SPELL_DECIMATE, 105000);
-            events.ScheduleEvent(EVENT_SPELL_BERSERK, 8*60000);
+            events.ScheduleEvent(EVENT_SPELL_BERSERK, 8 * 60000);
             events.ScheduleEvent(EVENT_SUMMON_ZOMBIE, 10000);
             events.ScheduleEvent(EVENT_CAN_EAT_ZOMBIE, 1000);
         }
 
-        void JustSummoned(Creature *summon) override
+        void JustSummoned(Creature* summon) override
         {
             if (summon->GetEntry() == NPC_ZOMBIE_CHOW)
                 summon->AI()->AttackStart(me);
@@ -133,7 +133,7 @@ public:
         void KilledUnit(Unit* who) override
         {
             if (me->IsAlive() && who->GetEntry() == NPC_ZOMBIE_CHOW)
-                me->ModifyHealth(int32(me->GetMaxHealth()*0.05f));
+                me->ModifyHealth(int32(me->GetMaxHealth() * 0.05f));
 
             if (who->GetTypeId() == TYPEID_PLAYER && pInstance)
                 pInstance->SetData(DATA_IMMORTAL_FAIL, 0);
@@ -197,7 +197,7 @@ public:
                     break;
                 case EVENT_SUMMON_ZOMBIE:
                     {
-                        uint8 rand = urand(0,2);
+                        uint8 rand = urand(0, 2);
                         for (int32 i = 0; i < RAID_MODE(1, 2, 1, 2); ++i)
                         {
                             // In 10 man raid, normal mode - should spawn only from mid gate
@@ -231,44 +231,44 @@ public:
 
 class spell_gluth_decimate : public SpellScriptLoader
 {
-    public:
-        spell_gluth_decimate() : SpellScriptLoader("spell_gluth_decimate") { }
+public:
+    spell_gluth_decimate() : SpellScriptLoader("spell_gluth_decimate") { }
 
-        class spell_gluth_decimate_SpellScript : public SpellScript
+    class spell_gluth_decimate_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_gluth_decimate_SpellScript);
+
+        void HandleScriptEffect(SpellEffIndex /*effIndex*/)
         {
-            PrepareSpellScript(spell_gluth_decimate_SpellScript);
-
-            void HandleScriptEffect(SpellEffIndex /*effIndex*/)
+            if (Unit* unitTarget = GetHitUnit())
             {
-                if (Unit* unitTarget = GetHitUnit())
+                int32 damage = int32(unitTarget->GetHealth()) - int32(unitTarget->CountPctFromMaxHealth(5));
+                if (damage <= 0)
+                    return;
+
+                if (Creature* cTarget = unitTarget->ToCreature())
                 {
-                    int32 damage = int32(unitTarget->GetHealth()) - int32(unitTarget->CountPctFromMaxHealth(5));
-                    if (damage <= 0)
-                        return;
-
-                    if (Creature* cTarget = unitTarget->ToCreature())
-                    {
-                        cTarget->SetWalk(true);
-                        cTarget->GetMotionMaster()->MoveFollow(GetCaster(), 0.0f, 0.0f, MOTION_SLOT_CONTROLLED);
-                        cTarget->SetReactState(REACT_PASSIVE);
-                        Unit::DealDamage(GetCaster(), cTarget, damage);
-                        return;
-                    }
-
-                    GetCaster()->CastCustomSpell(28375, SPELLVALUE_BASE_POINT0, damage, unitTarget);
+                    cTarget->SetWalk(true);
+                    cTarget->GetMotionMaster()->MoveFollow(GetCaster(), 0.0f, 0.0f, MOTION_SLOT_CONTROLLED);
+                    cTarget->SetReactState(REACT_PASSIVE);
+                    Unit::DealDamage(GetCaster(), cTarget, damage);
+                    return;
                 }
-            }
 
-            void Register() override
-            {
-                OnEffectHitTarget += SpellEffectFn(spell_gluth_decimate_SpellScript::HandleScriptEffect, EFFECT_0, SPELL_EFFECT_SCRIPT_EFFECT);
+                GetCaster()->CastCustomSpell(28375, SPELLVALUE_BASE_POINT0, damage, unitTarget);
             }
-        };
-
-        SpellScript* GetSpellScript() const override
-        {
-            return new spell_gluth_decimate_SpellScript();
         }
+
+        void Register() override
+        {
+            OnEffectHitTarget += SpellEffectFn(spell_gluth_decimate_SpellScript::HandleScriptEffect, EFFECT_0, SPELL_EFFECT_SCRIPT_EFFECT);
+        }
+    };
+
+    SpellScript* GetSpellScript() const override
+    {
+        return new spell_gluth_decimate_SpellScript();
+    }
 };
 
 void AddSC_boss_gluth()
