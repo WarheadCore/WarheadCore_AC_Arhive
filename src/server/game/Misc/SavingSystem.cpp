@@ -23,7 +23,7 @@ uint32 SavingSystemMgr::m_savingCurrentValue = 0;
 uint32 SavingSystemMgr::m_savingMaxValueAssigned = 0;
 uint32 SavingSystemMgr::m_savingDiffSum = 0;
 std::list<uint32> SavingSystemMgr::m_savingSkipList;
-ACE_Thread_Mutex SavingSystemMgr::_savingLock;
+std::mutex SavingSystemMgr::_savingLock;
 
 uint32 SavingSystemMgr::GetSavingCurrentValue()
 {
@@ -42,7 +42,7 @@ void SavingSystemMgr::IncreaseSavingCurrentValue(uint32 inc)
 
 uint32 SavingSystemMgr::IncreaseSavingMaxValue(uint32 inc)
 {
-    ACORE_GUARD(ACE_Thread_Mutex, _savingLock);
+    std::lock_guard<std::mutex> guard(_savingLock);
     return (m_savingMaxValueAssigned += inc);
 }
 
@@ -50,7 +50,7 @@ void SavingSystemMgr::InsertToSavingSkipListIfNeeded(uint32 id)
 {
     if (id > m_savingCurrentValue)
     {
-        ACORE_GUARD(ACE_Thread_Mutex, _savingLock);
+        std::lock_guard<std::mutex> guard(_savingLock);
         m_savingSkipList.push_back(id);
     }
 }

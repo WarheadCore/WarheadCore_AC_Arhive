@@ -38,7 +38,7 @@ protected:
     static uint32 m_savingMaxValueAssigned;
     static uint32 m_savingDiffSum;
     static std::list<uint32> m_savingSkipList;
-    static ACE_Thread_Mutex _savingLock;
+    static std::mutex _savingLock;
 };
 
 #endif
