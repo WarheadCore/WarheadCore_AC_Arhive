@@ -1221,13 +1221,6 @@ public:
                                 summon->SetReactState(REACT_PASSIVE);
                                 summon->AttackStop();
                             }
-                            else if (summon->GetEntry() == NPC_RAGING_SPIRIT)
-                            {
-                                summon->GetMotionMaster()->Clear(true);
-                                summon->StopMoving();
-                                summon->SetReactState(REACT_PASSIVE);
-                                summon->AttackStop();
-                            }
                         }
                     break;
                 case EVENT_FROSTMOURNE_HEROIC:

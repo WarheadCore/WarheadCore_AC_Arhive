@@ -595,7 +595,6 @@ public:
         void MoveInLineOfSight(Unit*  /*who*/) {}
     };
 };
-
 class npc_ulduar_icicle : public CreatureScript
 {
 public:

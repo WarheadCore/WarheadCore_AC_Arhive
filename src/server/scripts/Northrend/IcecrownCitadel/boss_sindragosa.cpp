@@ -1386,8 +1386,6 @@ public:
     }
 };
 
-
-
 class npc_spinestalker : public CreatureScript
 {
 public:
@@ -1494,22 +1492,21 @@ public:
 
             switch (_events.ExecuteEvent())
             {
-                case EVENT_BELLOWING_ROAR:
-                    me->CastSpell(me, SPELL_BELLOWING_ROAR, false);
-                    _events.ScheduleEvent(EVENT_BELLOWING_ROAR, urand(25000, 30000));
-                    break;
-                case EVENT_CLEAVE_SPINESTALKER:
-                    me->CastSpell(me->GetVictim(), SPELL_CLEAVE_SPINESTALKER, false);
-                    _events.ScheduleEvent(EVENT_CLEAVE_SPINESTALKER, urand(10000, 15000));
-                    break;
-                case EVENT_TAIL_SWEEP:
-                    me->CastSpell(me->GetVictim(), SPELL_TAIL_SWEEP, false);
-                    _events.ScheduleEvent(EVENT_TAIL_SWEEP, urand(22000, 25000));
-                    break;
-                default:
-                    break;
+            case EVENT_BELLOWING_ROAR:
+                me->CastSpell(me, SPELL_BELLOWING_ROAR, false);
+                _events.ScheduleEvent(EVENT_BELLOWING_ROAR, urand(25000, 30000));
+                break;
+            case EVENT_CLEAVE_SPINESTALKER:
+                me->CastSpell(me->GetVictim(), SPELL_CLEAVE_SPINESTALKER, false);
+                _events.ScheduleEvent(EVENT_CLEAVE_SPINESTALKER, urand(10000, 15000));
+                break;
+            case EVENT_TAIL_SWEEP:
+                me->CastSpell(me->GetVictim(), SPELL_TAIL_SWEEP, false);
+                _events.ScheduleEvent(EVENT_TAIL_SWEEP, urand(22000, 25000));
+                break;
+            default:
+                break;
             }
-        }
 
             DoMeleeAttackIfReady();
         }
