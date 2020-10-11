@@ -152,7 +152,7 @@ public:
         if (!*_args)
             return false;
 
-        char* args = (char *)_args;
+        char* args = (char*)_args;
 
         char const* oldArenaStr = handler->extractQuotedArg(args);
         if (!oldArenaStr)
@@ -322,7 +322,7 @@ public:
                     found = true;
                     continue;
                 }
-             }
+            }
         }
 
         if (!found)

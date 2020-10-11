@@ -307,7 +307,7 @@ public:
 
     struct boss_mimironAI : public ScriptedAI
     {
-        boss_mimironAI(Creature *pCreature) : ScriptedAI(pCreature), summons(me)
+        boss_mimironAI(Creature* pCreature) : ScriptedAI(pCreature), summons(me)
         {
             pInstance = me->GetInstanceScript();
             if (!me->IsAlive())
@@ -398,14 +398,14 @@ public:
             else
             {
                 events.ScheduleEvent(EVENT_MIMIRON_SAY_HARDMODE, 7000);
-                events.ScheduleEvent(EVENT_BERSERK, Is25ManRaid() ? 10*MINUTE*IN_MILLISECONDS : 8*MINUTE*IN_MILLISECONDS);
+                events.ScheduleEvent(EVENT_BERSERK, Is25ManRaid() ? 10 * MINUTE* IN_MILLISECONDS : 8 * MINUTE * IN_MILLISECONDS);
 
                 events.ScheduleEvent(EVENT_COMPUTER_SAY_INITIATED, 0);
                 events.ScheduleEvent(EVENT_COMPUTER_SAY_MINUTES, 3000);
                 minutesTalkNum = Is25ManRaid() ? TALK_COMPUTER_TEN : TALK_COMPUTER_EIGHT;
-                for (uint32 i=0; i<uint32(TALK_COMPUTER_ZERO-minutesTalkNum-1); ++i)
-                    events.ScheduleEvent(EVENT_COMPUTER_SAY_MINUTES, (i+1)*MINUTE*IN_MILLISECONDS);
-                events.ScheduleEvent(EVENT_COMPUTER_SAY_MINUTES, (TALK_COMPUTER_ZERO-minutesTalkNum)*MINUTE*IN_MILLISECONDS + 6000);
+                for (uint32 i = 0; i < uint32(TALK_COMPUTER_ZERO - minutesTalkNum - 1); ++i)
+                    events.ScheduleEvent(EVENT_COMPUTER_SAY_MINUTES, (i + 1)*MINUTE * IN_MILLISECONDS);
+                events.ScheduleEvent(EVENT_COMPUTER_SAY_MINUTES, (TALK_COMPUTER_ZERO - minutesTalkNum)*MINUTE * IN_MILLISECONDS + 6000);
             }
 
             // ensure LMK2 is at proper position
@@ -470,23 +470,23 @@ public:
                             allowedFlameSpreadTime = GameTime::GetGameTime();
 
                         std::vector<Player*> pg;
-                        Map::PlayerList const &pl = me->GetMap()->GetPlayers();
+                        Map::PlayerList const& pl = me->GetMap()->GetPlayers();
                         for( Map::PlayerList::const_iterator itr = pl.begin(); itr != pl.end(); ++itr )
                             if( Player* plr = itr->GetSource() )
                                 if( plr->IsAlive() && plr->GetExactDist2d(me) < 150.0f && !plr->IsGameMaster() )
                                     pg.push_back(plr);
 
-                        for( uint8 i=0; i<3; ++i )
+                        for( uint8 i = 0; i < 3; ++i )
                             if( !pg.empty() )
                             {
-                                uint8 index = urand(0, pg.size()-1);
+                                uint8 index = urand(0, pg.size() - 1);
                                 Player* p = pg[index];
-                                float angle = rand_norm()*2*M_PI;
+                                float angle = rand_norm() * 2 * M_PI;
                                 float z = 364.35f;
-                                if (!p->IsWithinLOS(p->GetPositionX()+cos(angle)*5.0f, p->GetPositionY()+sin(angle)*5.0f, z))
+                                if (!p->IsWithinLOS(p->GetPositionX() + cos(angle) * 5.0f, p->GetPositionY() + sin(angle) * 5.0f, z))
                                     angle = p->GetAngle(2744.65f, 2569.46f);
-                                me->CastSpell(p->GetPositionX()+cos(angle)*5.0f, p->GetPositionY()+sin(angle)*5.0f, z, SPELL_SUMMON_FLAMES_INITIAL, true);
-                                pg.erase(pg.begin()+index);
+                                me->CastSpell(p->GetPositionX() + cos(angle) * 5.0f, p->GetPositionY() + sin(angle) * 5.0f, z, SPELL_SUMMON_FLAMES_INITIAL, true);
+                                pg.erase(pg.begin() + index);
                             }
 
                         events.RepeatEvent(30000);
@@ -567,7 +567,7 @@ public:
                 case EVENT_ELEVATOR_INTERVAL_1:
                     if(me->SummonCreature(NPC_VX001, 2744.65f, 2569.46f, 364.40f, 3.14f, TEMPSUMMON_MANUAL_DESPAWN))
                     {
-                        if( GameObject *elevator = me->FindNearestGameObject(GO_MIMIRON_ELEVATOR, 100.0f) )
+                        if( GameObject* elevator = me->FindNearestGameObject(GO_MIMIRON_ELEVATOR, 100.0f) )
                         {
                             elevator->SetLootState(GO_READY);
                             elevator->UseDoorOrButton(0, true);
@@ -823,12 +823,12 @@ public:
                         summons.DespawnEntry(33576);
 
                         float angle = VX001->GetOrientation();
-                        float v_x = me->GetPositionX()+cos(angle)*10.0f;
-                        float v_y = me->GetPositionY()+sin(angle)*10.0f;
+                        float v_x = me->GetPositionX() + cos(angle) * 10.0f;
+                        float v_y = me->GetPositionY() + sin(angle) * 10.0f;
                         me->GetMotionMaster()->MoveJump(v_x, v_y, 364.32f, 7.0f, 7.0f);
 
                         if( pInstance )
-                            for( uint16 i=0; i<3; ++i )
+                            for( uint16 i = 0; i < 3; ++i )
                                 if( uint64 guid = pInstance->GetData64(DATA_GO_MIMIRON_DOOR_1 + i) )
                                     if( GameObject* door = ObjectAccessor::GetGameObject(*me, guid) )
                                         if( door->GetGoState() != GO_STATE_ACTIVE )
@@ -853,7 +853,7 @@ public:
                     me->PlayDirectSound(SOUND_VOLTRON_DEATH);
                     // spawn chest
                     if( uint32 chestId = (hardmode ? RAID_MODE(GO_MIMIRON_CHEST_HARD, GO_MIMIRON_CHEST_HERO_HARD) : RAID_MODE(GO_MIMIRON_CHEST, GO_MIMIRON_CHEST_HERO)) )
-                        if( GameObject *go = me->SummonGameObject(chestId, 2744.65f, 2569.46f, 364.397f, 0, 0, 0, 0, 0, 0) )
+                        if( GameObject* go = me->SummonGameObject(chestId, 2744.65f, 2569.46f, 364.397f, 0, 0, 0, 0, 0, 0) )
                             go->SetUInt32Value(GAMEOBJECT_FLAGS, 0);
                     events.PopEvent();
                     events.ScheduleEvent(EVENT_DISAPPEAR, 15000);
@@ -877,9 +877,7 @@ public:
             bIsEvading = true;
 
             if (Creature* c = GetLMK2())
-            {
                 c->AI()->EnterEvadeMode();
-            }
             if (Creature* c = GetVX001())
             {
                 c->AI()->EnterEvadeMode();
@@ -913,7 +911,7 @@ public:
         void ResetGameObjects()
         {
             if( pInstance )
-                for( uint16 i=0; i<3; ++i )
+                for( uint16 i = 0; i < 3; ++i )
                     if( uint64 guid = pInstance->GetData64(DATA_GO_MIMIRON_DOOR_1 + i) )
                         if( GameObject* door = ObjectAccessor::GetGameObject(*me, guid) )
                             if( door->GetGoState() != GO_STATE_ACTIVE )
@@ -922,7 +920,7 @@ public:
                                 door->UseDoorOrButton(0, false);
                             }
 
-            if( GameObject *elevator = me->FindNearestGameObject(GO_MIMIRON_ELEVATOR, 200.0f) )
+            if( GameObject* elevator = me->FindNearestGameObject(GO_MIMIRON_ELEVATOR, 200.0f) )
             {
                 if( elevator->GetGoState() != GO_STATE_ACTIVE )
                 {
@@ -932,7 +930,7 @@ public:
                 elevator->EnableCollision(false);
             }
 
-            if( GameObject *button = me->FindNearestGameObject(GO_BUTTON, 200.0f) )
+            if( GameObject* button = me->FindNearestGameObject(GO_BUTTON, 200.0f) )
                 if( button->GetGoState() != GO_STATE_READY )
                 {
                     button->SetLootState(GO_READY);
@@ -944,7 +942,7 @@ public:
         void CloseDoorAndButton()
         {
             if( pInstance )
-                for( uint16 i=0; i<3; ++i )
+                for( uint16 i = 0; i < 3; ++i )
                     if( uint64 guid = pInstance->GetData64(DATA_GO_MIMIRON_DOOR_1 + i) )
                         if( GameObject* door = ObjectAccessor::GetGameObject(*me, guid) )
                             if( door->GetGoState() != GO_STATE_READY )
@@ -953,7 +951,7 @@ public:
                                 door->UseDoorOrButton(0, false);
                             }
 
-            if( GameObject *button = me->FindNearestGameObject(GO_BUTTON, 200.0f) )
+            if( GameObject* button = me->FindNearestGameObject(GO_BUTTON, 200.0f) )
                 if( button->GetGoState() != GO_STATE_ACTIVE )
                 {
                     button->SetLootState(GO_READY);
@@ -1013,12 +1011,18 @@ public:
         {
             switch (id)
             {
-                case 1: return (hardmode ? 1 : 0);
-                case 2: return (berserk ? 1 : 0);
-                case 10: return allowedFlameSpreadTime;
-                case 11: return (bAchievProximityMine ? 1 : 0);
-                case 12: return (bAchievBombBot ? 1 : 0);
-                case 13: return (bAchievRocketStrike ? 1 : 0);
+                case 1:
+                    return (hardmode ? 1 : 0);
+                case 2:
+                    return (berserk ? 1 : 0);
+                case 10:
+                    return allowedFlameSpreadTime;
+                case 11:
+                    return (bAchievProximityMine ? 1 : 0);
+                case 12:
+                    return (bAchievBombBot ? 1 : 0);
+                case 13:
+                    return (bAchievRocketStrike ? 1 : 0);
             }
             return 0;
         }
@@ -1037,7 +1041,7 @@ public:
 
     struct npc_ulduar_leviathan_mkiiAI : public ScriptedAI
     {
-        npc_ulduar_leviathan_mkiiAI(Creature *pCreature) : ScriptedAI(pCreature)
+        npc_ulduar_leviathan_mkiiAI(Creature* pCreature) : ScriptedAI(pCreature)
         {
             pInstance = me->GetInstanceScript();
             bIsEvading = false;
@@ -1105,7 +1109,7 @@ public:
             }
         }
 
-        void DamageTaken(Unit*, uint32 &damage, DamageEffectType, SpellSchoolMask)
+        void DamageTaken(Unit*, uint32& damage, DamageEffectType, SpellSchoolMask)
         {
             if (damage >= me->GetHealth() || me->GetHealth() < 15000)
             {
@@ -1174,14 +1178,14 @@ public:
                     {
                         Player* pTarget = nullptr;
                         std::vector<Player*> pList;
-                        Map::PlayerList const &pl = me->GetMap()->GetPlayers();
+                        Map::PlayerList const& pl = me->GetMap()->GetPlayers();
                         for( Map::PlayerList::const_iterator itr = pl.begin(); itr != pl.end(); ++itr )
                             if (Player* plr = itr->GetSource())
                                 if( plr->IsAlive() && plr->GetDistance2d(me) > 15.0f )
                                     pList.push_back(plr);
 
                         if (!pList.empty())
-                            pTarget = pList[urand(0, pList.size()-1)];
+                            pTarget = pList[urand(0, pList.size() - 1)];
                         else
                             pTarget = (Player*)SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true);
 
@@ -1206,17 +1210,17 @@ public:
                     break;
                 case EVENT_PROXIMITY_MINES_1:
                     {
-                        float angle = rand_norm()*2*M_PI;
-                        float x,y,z;
-                        me->GetPosition(x,y,z);
-                        for( uint8 i=0; i<17; ++i )
+                        float angle = rand_norm() * 2 * M_PI;
+                        float x, y, z;
+                        me->GetPosition(x, y, z);
+                        for( uint8 i = 0; i < 17; ++i )
                         {
                             if( i == 7 )
                                 continue;
 
-                            float v_xmin = 0.1f * cos( angle + i*M_PI/9 );
-                            float v_ymin = 0.1f * sin( angle + i*M_PI/9 );
-                            if( Creature* pmNPC = me->SummonCreature(NPC_PROXIMITY_MINE, x+v_xmin, y+v_ymin, z, 0.0f, TEMPSUMMON_TIMED_DESPAWN, 40000) )
+                            float v_xmin = 0.1f * cos( angle + i * M_PI / 9 );
+                            float v_ymin = 0.1f * sin( angle + i * M_PI / 9 );
+                            if( Creature* pmNPC = me->SummonCreature(NPC_PROXIMITY_MINE, x + v_xmin, y + v_ymin, z, 0.0f, TEMPSUMMON_TIMED_DESPAWN, 40000) )
                                 pmNPC->KnockbackFrom(x, y, 6.0f, 25.0f);
                         }
 
@@ -1239,7 +1243,7 @@ public:
                 {
                     if( Phase == 1 )
                     {
-                        if( rand()%2 )
+                        if( rand() % 2 )
                         {
                             c->MonsterYell(TEXT_LMK2_SLAIN_1, LANG_UNIVERSAL, 0);
                             c->PlayDirectSound(SOUND_TANK_SLAY_1);
@@ -1252,7 +1256,7 @@ public:
                     }
                     else
                     {
-                        if( rand()%2 )
+                        if( rand() % 2 )
                         {
                             c->MonsterYell(TEXT_VOLTRON_SLAIN_1, LANG_UNIVERSAL, 0);
                             c->PlayDirectSound(SOUND_VOLTRON_SLAY_1);
@@ -1300,7 +1304,7 @@ public:
             return 0;
         }
 
-        void SpellHit(Unit*  /*caster*/, const SpellInfo *spell)
+        void SpellHit(Unit*  /*caster*/, const SpellInfo* spell)
         {
             if( spell->Id == SPELL_SELF_REPAIR )
             {
@@ -1323,7 +1327,7 @@ public:
 
     struct npc_ulduar_vx001AI : public ScriptedAI
     {
-        npc_ulduar_vx001AI(Creature *pCreature) : ScriptedAI(pCreature)
+        npc_ulduar_vx001AI(Creature* pCreature) : ScriptedAI(pCreature)
         {
             pInstance = me->GetInstanceScript();
             bIsEvading = false;
@@ -1406,13 +1410,13 @@ public:
         {
             if (action == 1337)
                 if( Vehicle* vk = me->GetVehicleKit() )
-                    for (uint8 i=0; i<2; ++i)
-                        if (Unit* r = vk->GetPassenger(5+i))
+                    for (uint8 i = 0; i < 2; ++i)
+                        if (Unit* r = vk->GetPassenger(5 + i))
                             if (r->GetTypeId() == TYPEID_UNIT)
                                 r->ToCreature()->DespawnOrUnsummon(1);
         }
 
-        void DamageTaken(Unit*, uint32 &damage, DamageEffectType, SpellSchoolMask)
+        void DamageTaken(Unit*, uint32& damage, DamageEffectType, SpellSchoolMask)
         {
             if (damage >= me->GetHealth() || me->GetHealth() < 15000)
             {
@@ -1467,7 +1471,7 @@ public:
             {
                 if (spinningUpTimer <= diff)
                 {
-                    float angle = (spinningUpOrientation*2*M_PI)/100.0f;
+                    float angle = (spinningUpOrientation * 2 * M_PI) / 100.0f;
                     me->SetOrientation(angle);
                     me->SetFacingTo(angle);
                     spinningUpTimer = 0;
@@ -1490,9 +1494,9 @@ public:
                 case EVENT_SPELL_ROCKET_STRIKE:
                     if( Vehicle* vk = me->GetVehicleKit() )
                     {
-                        for( int i=0; i<(Phase/2); ++i )
+                        for( int i = 0; i < (Phase / 2); ++i )
                         {
-                            uint8 index = (Phase == 2 ? rand()%2 : i);
+                            uint8 index = (Phase == 2 ? rand() % 2 : i);
                             if( Unit* r = vk->GetPassenger(5 + index) )
                                 if (Player* temp = SelectTargetFromPlayerList(100.0f))
                                 {
@@ -1500,9 +1504,9 @@ public:
                                         trigger->CastSpell(trigger, SPELL_ROCKET_STRIKE_AURA, true);
                                     Position exitPos;
                                     r->GetPosition(&exitPos);
-                                    exitPos.m_positionX += cos(me->GetOrientation())*2.35f;
-                                    exitPos.m_positionY += sin(me->GetOrientation())*2.35f;
-                                    exitPos.m_positionZ += 2.0f*Phase;
+                                    exitPos.m_positionX += cos(me->GetOrientation()) * 2.35f;
+                                    exitPos.m_positionY += sin(me->GetOrientation()) * 2.35f;
+                                    exitPos.m_positionZ += 2.0f * Phase;
                                     r->_ExitVehicle(&exitPos);
                                     me->RemoveAurasByType(SPELL_AURA_CONTROL_VEHICLE, r->GetGUID());
                                     if (r->GetTypeId() == TYPEID_UNIT)
@@ -1516,9 +1520,9 @@ public:
                 case EVENT_REINSTALL_ROCKETS:
                     if (Vehicle* vk = me->GetVehicleKit())
                     {
-                        for (uint8 i=5; i<=6; ++i)
+                        for (uint8 i = 5; i <= 6; ++i)
                             if (!vk->GetPassenger(i))
-                                if (TempSummon* accessory = me->SummonCreature(NPC_ROCKET_VISUAL, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ()+4.0f, me->GetOrientation(), TEMPSUMMON_MANUAL_DESPAWN))
+                                if (TempSummon* accessory = me->SummonCreature(NPC_ROCKET_VISUAL, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ() + 4.0f, me->GetOrientation(), TEMPSUMMON_MANUAL_DESPAWN))
                                     if (!me->HandleSpellClick(accessory, i))
                                         accessory->UnSummon();
                     }
@@ -1562,7 +1566,7 @@ public:
                     if (Player* p = SelectTargetFromPlayerList(80.0f))
                     {
                         float angle = me->GetAngle(p);
-                        spinningUpOrientation = (uint32)((angle*100.0f)/(2*M_PI));
+                        spinningUpOrientation = (uint32)((angle * 100.0f) / (2 * M_PI));
                         spinningUpTimer = 1500;
                         me->SetOrientation(angle);
                         me->SetFacingTo(angle);
@@ -1590,7 +1594,7 @@ public:
                 {
                     if( Phase == 2 )
                     {
-                        if( rand()%2 )
+                        if( rand() % 2 )
                         {
                             c->MonsterYell(TEXT_VX001_SLAIN_1, LANG_UNIVERSAL, 0);
                             c->PlayDirectSound(SOUND_TORSO_SLAY_1);
@@ -1603,7 +1607,7 @@ public:
                     }
                     else
                     {
-                        if( rand()%2 )
+                        if( rand() % 2 )
                         {
                             c->MonsterYell(TEXT_VOLTRON_SLAIN_1, LANG_UNIVERSAL, 0);
                             c->PlayDirectSound(SOUND_VOLTRON_SLAY_1);
@@ -1639,7 +1643,7 @@ public:
                 p->ToCreature()->DespawnOrUnsummon(8000);
         }
 
-        void SpellHit(Unit*  /*caster*/, const SpellInfo *spell)
+        void SpellHit(Unit*  /*caster*/, const SpellInfo* spell)
         {
             if( spell->Id == SPELL_SELF_REPAIR )
             {
@@ -1662,7 +1666,7 @@ public:
 
     struct npc_ulduar_aerial_command_unitAI : public ScriptedAI
     {
-        npc_ulduar_aerial_command_unitAI(Creature *pCreature) : ScriptedAI(pCreature), summons(me)
+        npc_ulduar_aerial_command_unitAI(Creature* pCreature) : ScriptedAI(pCreature), summons(me)
         {
             pInstance = me->GetInstanceScript();
             bIsEvading = false;
@@ -1742,7 +1746,7 @@ public:
                 summons.DespawnAll();
         }
 
-        void DamageTaken(Unit*, uint32 &damage, DamageEffectType, SpellSchoolMask)
+        void DamageTaken(Unit*, uint32& damage, DamageEffectType, SpellSchoolMask)
         {
             if (damage >= me->GetHealth() || me->GetHealth() < 15000)
             {
@@ -1803,8 +1807,8 @@ public:
                     {
                         float angle = victim->GetAngle(me->GetPositionX(), me->GetPositionY());
                         me->SetOrientation( me->GetAngle(victim->GetPositionX(), victim->GetPositionY()) );
-                        float x = victim->GetPositionX() + 15.0f*cos(angle);
-                        float y = victim->GetPositionY() + 15.0f*sin(angle);
+                        float x = victim->GetPositionX() + 15.0f * cos(angle);
+                        float y = victim->GetPositionY() + 15.0f * sin(angle);
 
                         // check if there's magnetic core in line of movement
                         Creature* mc = nullptr;
@@ -1879,7 +1883,7 @@ public:
                 case EVENT_SUMMON_EMERGENCY_FIRE_BOTS:
                     {
                         uint32 ids[3] = {194740, 194743, 194748};
-                        for( uint8 i=0; i<3; ++i )
+                        for( uint8 i = 0; i < 3; ++i )
                             if( GameObject* pad = me->FindNearestGameObject(ids[i], 200.0f) )
                                 if (Creature* trigger = me->SummonCreature(NPC_BOT_SUMMON_TRIGGER, *pad, TEMPSUMMON_MANUAL_DESPAWN))
                                     trigger->AI()->DoAction(3);
@@ -1917,7 +1921,7 @@ public:
                 {
                     if( Phase == 3 )
                     {
-                        if( rand()%2 )
+                        if( rand() % 2 )
                         {
                             c->MonsterYell(TEXT_ACU_SLAIN_1, LANG_UNIVERSAL, 0);
                             c->PlayDirectSound(SOUND_HEAD_SLAY_1);
@@ -1930,7 +1934,7 @@ public:
                     }
                     else
                     {
-                        if( rand()%2 )
+                        if( rand() % 2 )
                         {
                             c->MonsterYell(TEXT_VOLTRON_SLAIN_1, LANG_UNIVERSAL, 0);
                             c->PlayDirectSound(SOUND_VOLTRON_SLAY_1);
@@ -1972,7 +1976,7 @@ public:
             summons.Despawn(s);
         }
 
-        void SpellHit(Unit*  /*caster*/, const SpellInfo *spell)
+        void SpellHit(Unit*  /*caster*/, const SpellInfo* spell)
         {
             if( spell->Id == SPELL_SELF_REPAIR )
             {
@@ -1995,7 +1999,7 @@ public:
 
     struct npc_ulduar_proximity_mineAI : public ScriptedAI
     {
-        npc_ulduar_proximity_mineAI(Creature *pCreature) : ScriptedAI(pCreature)
+        npc_ulduar_proximity_mineAI(Creature* pCreature) : ScriptedAI(pCreature)
         {
             exploded = false;
             timer = 2500;
@@ -2060,7 +2064,7 @@ public:
 
     struct npc_ulduar_mimiron_rocketAI : public NullCreatureAI
     {
-        npc_ulduar_mimiron_rocketAI(Creature *pCreature) : NullCreatureAI(pCreature) {}
+        npc_ulduar_mimiron_rocketAI(Creature* pCreature) : NullCreatureAI(pCreature) {}
 
         void InitializeAI()
         {
@@ -2077,14 +2081,14 @@ public:
 
         void SetData(uint32  /*id*/, uint32  /*value*/)
         {
-            me->GetMotionMaster()->MovePoint(0, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ()+100.0f, false, true);
+            me->GetMotionMaster()->MovePoint(0, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ() + 100.0f, false, true);
         }
 
         void UpdateAI(uint32  /*diff*/)
         {
             if (!me->GetVehicle())
             {
-                me->SetSpeed(MOVE_RUN, me->GetSpeedRate(MOVE_RUN)+0.4f, false);
+                me->SetSpeed(MOVE_RUN, me->GetSpeedRate(MOVE_RUN) + 0.4f, false);
                 me->SetSpeed(MOVE_FLIGHT, me->GetSpeedRate(MOVE_RUN), false);
             }
         }
@@ -2103,7 +2107,7 @@ public:
 
     struct npc_ulduar_magnetic_coreAI : public NullCreatureAI
     {
-        npc_ulduar_magnetic_coreAI(Creature *pCreature) : NullCreatureAI(pCreature)
+        npc_ulduar_magnetic_coreAI(Creature* pCreature) : NullCreatureAI(pCreature)
         {
             pInstance = me->GetInstanceScript();
             if (Creature* c = GetACU())
@@ -2152,7 +2156,7 @@ public:
 
     struct npc_ulduar_bot_summon_triggerAI : public NullCreatureAI
     {
-        npc_ulduar_bot_summon_triggerAI(Creature *pCreature) : NullCreatureAI(pCreature) { }
+        npc_ulduar_bot_summon_triggerAI(Creature* pCreature) : NullCreatureAI(pCreature) { }
 
         uint32 timer;
         uint8 option;
@@ -2189,7 +2193,7 @@ public:
                 uint32 option_npcid[3] = {NPC_JUNK_BOT, NPC_ASSAULT_BOT, NPC_EMERGENCY_FIRE_BOT};
                 InstanceScript* pInstance = me->GetInstanceScript();
                 if (Creature* ACU = GetACU()) // ACU summons for easy removing
-                    if( Creature* bot = ACU->SummonCreature( option_npcid[option-1], *me, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 25000 ) )
+                    if( Creature* bot = ACU->SummonCreature( option_npcid[option - 1], *me, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 25000 ) )
                     {
                         if( option < 3 )
                             bot->SetInCombatWithZone();
@@ -2216,11 +2220,11 @@ public:
     {
         PrepareAuraScript(spell_mimiron_rapid_burst_AuraScript)
 
-        void HandleEffectPeriodic(AuraEffect const * aurEff)
+        void HandleEffectPeriodic(AuraEffect const* aurEff)
         {
             if (Unit* c = GetCaster())
             {
-                uint32 id = ( c->GetMap()->Is25ManRaid() ? ((aurEff->GetTickNumber()%2) ? SPELL_RAPID_BURST_DAMAGE_25_2 : SPELL_RAPID_BURST_DAMAGE_25_1) : ((aurEff->GetTickNumber()%2) ? SPELL_RAPID_BURST_DAMAGE_10_2 : SPELL_RAPID_BURST_DAMAGE_10_1) );
+                uint32 id = ( c->GetMap()->Is25ManRaid() ? ((aurEff->GetTickNumber() % 2) ? SPELL_RAPID_BURST_DAMAGE_25_2 : SPELL_RAPID_BURST_DAMAGE_25_1) : ((aurEff->GetTickNumber() % 2) ? SPELL_RAPID_BURST_DAMAGE_10_2 : SPELL_RAPID_BURST_DAMAGE_10_1) );
                 c->CastSpell((Unit*)NULL, id, true);
             }
         }
@@ -2231,7 +2235,7 @@ public:
         }
     };
 
-    AuraScript *GetAuraScript() const
+    AuraScript* GetAuraScript() const
     {
         return new spell_mimiron_rapid_burst_AuraScript();
     }
@@ -2256,7 +2260,7 @@ public:
             return true;
         }
 
-        void HandleEffectPeriodic(AuraEffect const *  /*aurEff*/)
+        void HandleEffectPeriodic(AuraEffect const*   /*aurEff*/)
         {
             if (Unit* c = GetCaster())
             {
@@ -2265,10 +2269,10 @@ public:
                 uint32 diff = getMSTimeDiff(lastMSTime, GameTime::GetGameTimeMS());
                 if (lastOrientation == -1.0f)
                 {
-                    lastOrientation = (c->ToCreature()->AI()->GetData(0)*2*M_PI)/100.0f;
+                    lastOrientation = (c->ToCreature()->AI()->GetData(0) * 2 * M_PI) / 100.0f;
                     diff = 0;
                 }
-                float new_o = Position::NormalizeOrientation(lastOrientation-(M_PI/60)*(diff/250.0f));
+                float new_o = Position::NormalizeOrientation(lastOrientation - (M_PI / 60) * (diff / 250.0f));
                 lastMSTime = GameTime::GetGameTimeMS();
                 lastOrientation = new_o;
                 c->SetOrientation(new_o);
@@ -2284,7 +2288,7 @@ public:
         }
     };
 
-    AuraScript *GetAuraScript() const
+    AuraScript* GetAuraScript() const
     {
         return new spell_mimiron_p3wx2_laser_barrage_AuraScript();
     }
@@ -2328,7 +2332,7 @@ public:
 
     struct npc_ulduar_flames_initialAI : public NullCreatureAI
     {
-        npc_ulduar_flames_initialAI(Creature *pCreature) : NullCreatureAI(pCreature)
+        npc_ulduar_flames_initialAI(Creature* pCreature) : NullCreatureAI(pCreature)
         {
             CreateTime = GameTime::GetGameTime();
             events.Reset();
@@ -2413,7 +2417,7 @@ public:
                             float prevdist = 100.0f;
                             Player* target = nullptr;
 
-                            Map::PlayerList const &pl = me->GetMap()->GetPlayers();
+                            Map::PlayerList const& pl = me->GetMap()->GetPlayers();
                             for( Map::PlayerList::const_iterator itr = pl.begin(); itr != pl.end(); ++itr )
                                 if( Player* plr = itr->GetSource() )
                                     if( plr->IsAlive() && plr->GetExactDist2d(last) < prevdist && !plr->IsGameMaster() )
@@ -2424,8 +2428,8 @@ public:
 
                             if (target && prevdist >= 4.0f) // no need to spread when player is standing in fire, check distance
                             {
-                                float angle = last->GetAngle(target->GetPositionX(), target->GetPositionY()) -M_PI/8 + rand_norm()*2*M_PI/8;
-                                SpreadFlame(last->GetPositionX() + 7.0f*cos(angle), last->GetPositionY() + 7.0f*sin(angle));
+                                float angle = last->GetAngle(target->GetPositionX(), target->GetPositionY()) - M_PI / 8 + rand_norm() * 2 * M_PI / 8;
+                                SpreadFlame(last->GetPositionX() + 7.0f * cos(angle), last->GetPositionY() + 7.0f * sin(angle));
                             }
                         }
 
@@ -2449,7 +2453,7 @@ public:
 
     struct npc_ulduar_flames_spreadAI : public NullCreatureAI
     {
-        npc_ulduar_flames_spreadAI(Creature *pCreature) : NullCreatureAI(pCreature) {}
+        npc_ulduar_flames_spreadAI(Creature* pCreature) : NullCreatureAI(pCreature) {}
 
         void SpellHit(Unit*  /*caster*/, const SpellInfo* spell)
         {
@@ -2491,7 +2495,7 @@ public:
 
     struct npc_ulduar_emergency_fire_botAI : public ScriptedAI
     {
-        npc_ulduar_emergency_fire_botAI(Creature *pCreature) : ScriptedAI(pCreature)
+        npc_ulduar_emergency_fire_botAI(Creature* pCreature) : ScriptedAI(pCreature)
         {
             events.Reset();
             events.ScheduleEvent(EVENT_EMERGENCY_BOT_CHECK, 1000);
@@ -2524,7 +2528,7 @@ public:
                         if (dist <= 5.0f)
                             events.ScheduleEvent(EVENT_EMERGENCY_BOT_ATTACK, 0);
                         else
-                            me->GetMotionMaster()->MovePoint(1, me->GetPositionX()+(dist-5.0f)*cos(me->GetOrientation()), me->GetPositionY()+(dist-5.0f)*sin(me->GetOrientation()), 364.32f);
+                            me->GetMotionMaster()->MovePoint(1, me->GetPositionX() + (dist - 5.0f)*cos(me->GetOrientation()), me->GetPositionY() + (dist - 5.0f)*sin(me->GetOrientation()), 364.32f);
                     }
                     break;
                 case EVENT_EMERGENCY_BOT_ATTACK:
@@ -2549,7 +2553,7 @@ public:
 
     struct npc_ulduar_rocket_strike_triggerAI : public NullCreatureAI
     {
-        npc_ulduar_rocket_strike_triggerAI(Creature *pCreature) : NullCreatureAI(pCreature) {}
+        npc_ulduar_rocket_strike_triggerAI(Creature* pCreature) : NullCreatureAI(pCreature) {}
 
         void SpellHitTarget(Unit* target, const SpellInfo* spell)
         {

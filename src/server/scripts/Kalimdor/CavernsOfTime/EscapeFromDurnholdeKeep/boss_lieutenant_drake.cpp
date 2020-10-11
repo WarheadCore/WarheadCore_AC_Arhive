@@ -159,9 +159,9 @@ public:
             DoMeleeAttackIfReady();
         }
 
-        private:
-            EventMap events;
-            Movement::PointsArray pathPoints;
+    private:
+        EventMap events;
+        Movement::PointsArray pathPoints;
     };
 
 };

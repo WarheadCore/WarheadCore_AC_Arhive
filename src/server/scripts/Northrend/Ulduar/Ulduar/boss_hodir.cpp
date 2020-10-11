@@ -41,7 +41,7 @@ enum HodirSpellData
     SPELL_FLASH_FREEZE_VISUAL           = 62148,
     SPELL_SAFE_AREA                     = 65705,
     SPELL_SAFE_AREA_TRIGGERED           = 62464,
-    
+
     SPELL_ICICLE_BOSS_AURA              = 62227,
     SPELL_ICICLE_TBBA                   = 63545,
 
@@ -166,35 +166,36 @@ enum HodirSounds
 struct HodirHelperData
 {
     uint32 id;
-    float x,y;
+    float x, y;
 };
-HodirHelperData hhd[4][4] = {
-// Alliance:
+HodirHelperData hhd[4][4] =
 {
-    {NPC_PAN_FIELD_MEDIC_PENNY, 2020.46f, -236.74f},
-    {NPC_DAN_ELLIE_NIGHTFEATHER, 2007.21f, -241.57f},
-    {NPC_SAN_ELEMENTALIST_AVUUN, 1999.14f, -230.69f},
-    {NPC_MAN_MISSY_FLAMECUFFS, 1984.38f, -242.57f}
-},
-{
-    {NPC_PAH_FIELD_MEDIC_JESSI, 2012.29f, -233.70f},
-    {NPC_DAH_EIVI_NIGHTFEATHER, 1995.75f, -241.32f},
-    {NPC_SAH_ELEMENTALIST_MAHFUUN, 1989.31f, -234.26f},
-    {NPC_MAH_SISSY_FLAMECUFFS, 1977.87f, -233.99f}
-},
-// Horde:
-{
-    {NPC_PHN_BATTLEPRIEST_ELIZA, 2020.46f, -236.74f},
-    {NPC_DHN_TOR_GREYCLOUD, 2007.21f, -241.57f},
-    {NPC_SHN_SPIRITWALKER_YONA, 1999.14f, -230.69f},
-    {NPC_MHN_VEESHA_BLAZEWEAVER, 1984.38f, -242.57f}
-},
-{
-    {NPC_PHH_BATTLEPRIEST_GINA, 2012.29f, -233.70f},
-    {NPC_DHH_KAR_GREYCLOUD, 1995.75f, -241.32f},
-    {NPC_SHH_SPIRITWALKER_TARA, 1989.31f, -234.6f},
-    {NPC_MHH_AMIRA_BLAZEWEAVER, 1977.87f, -233.99f}
-}
+    // Alliance:
+    {
+        {NPC_PAN_FIELD_MEDIC_PENNY, 2020.46f, -236.74f},
+        {NPC_DAN_ELLIE_NIGHTFEATHER, 2007.21f, -241.57f},
+        {NPC_SAN_ELEMENTALIST_AVUUN, 1999.14f, -230.69f},
+        {NPC_MAN_MISSY_FLAMECUFFS, 1984.38f, -242.57f}
+    },
+    {
+        {NPC_PAH_FIELD_MEDIC_JESSI, 2012.29f, -233.70f},
+        {NPC_DAH_EIVI_NIGHTFEATHER, 1995.75f, -241.32f},
+        {NPC_SAH_ELEMENTALIST_MAHFUUN, 1989.31f, -234.26f},
+        {NPC_MAH_SISSY_FLAMECUFFS, 1977.87f, -233.99f}
+    },
+    // Horde:
+    {
+        {NPC_PHN_BATTLEPRIEST_ELIZA, 2020.46f, -236.74f},
+        {NPC_DHN_TOR_GREYCLOUD, 2007.21f, -241.57f},
+        {NPC_SHN_SPIRITWALKER_YONA, 1999.14f, -230.69f},
+        {NPC_MHN_VEESHA_BLAZEWEAVER, 1984.38f, -242.57f}
+    },
+    {
+        {NPC_PHH_BATTLEPRIEST_GINA, 2012.29f, -233.70f},
+        {NPC_DHH_KAR_GREYCLOUD, 1995.75f, -241.32f},
+        {NPC_SHH_SPIRITWALKER_TARA, 1989.31f, -234.6f},
+        {NPC_MHH_AMIRA_BLAZEWEAVER, 1977.87f, -233.99f}
+    }
 };
 
 class boss_hodir : public CreatureScript
@@ -209,7 +210,7 @@ public:
 
     struct boss_hodirAI : public ScriptedAI
     {
-        boss_hodirAI(Creature *pCreature) : ScriptedAI(pCreature), summons(me)
+        boss_hodirAI(Creature* pCreature) : ScriptedAI(pCreature), summons(me)
         {
             pInstance = pCreature->GetInstanceScript();
             if (!me->IsAlive())
@@ -240,14 +241,10 @@ public:
             addSpawnTimer = 5000;
 
             if (pInstance && pInstance->GetData(TYPE_HODIR) != DONE)
-            {
                 pInstance->SetData(TYPE_HODIR, NOT_STARTED);
-            }
 
             if (GameObject* go = me->FindNearestGameObject(GO_HODIR_FRONTDOOR, 300.0f))
-            {
                 go->SetGoState(GO_STATE_ACTIVE);
-            }
         }
 
         void EnterCombat(Unit*  /*pWho*/)
@@ -270,14 +267,10 @@ public:
             me->PlayDirectSound(SOUND_HODIR_AGGRO, 0);
 
             if (pInstance && pInstance->GetData(TYPE_HODIR) != DONE)
-            {
                 pInstance->SetData(TYPE_HODIR, IN_PROGRESS);
-            }
 
             if (GameObject* go = me->FindNearestGameObject(GO_HODIR_FRONTDOOR, 300.0f))
-            {
                 go->SetGoState(GO_STATE_READY);
-            }
         }
 
         void JustReachedHome() { me->setActive(false); }
@@ -308,7 +301,7 @@ public:
             }
         }
 
-        void DamageTaken(Unit*, uint32 &damage, DamageEffectType, SpellSchoolMask)
+        void DamageTaken(Unit*, uint32& damage, DamageEffectType, SpellSchoolMask)
         {
             if (damage >= me->GetHealth() || me->GetHealth() < 150000)
             {
@@ -350,11 +343,9 @@ public:
                             d->UseDoorOrButton(0, false);
                         }
                     }
-                        
+
                     if (GameObject* go = me->FindNearestGameObject(GO_HODIR_FRONTDOOR, 300.0f))
-                    {
                         go->SetGoState(GO_STATE_ACTIVE);
-                    }
 
                     me->MonsterYell(TEXT_HODIR_DEFEATED, LANG_UNIVERSAL, 0);
                     me->PlayDirectSound(SOUND_HODIR_DEFEATED, 0);
@@ -362,13 +353,13 @@ public:
 
                     // spawn appropriate chests
                     uint32 chestId = me->GetMap()->Is25ManRaid() ? GO_HODIR_CHEST_NORMAL_HERO : GO_HODIR_CHEST_NORMAL;
-                    if( GameObject *go = me->SummonGameObject(chestId, 1969.115f, -212.94f, 432.687f, 3*M_PI/2, 0, 0, 0, 0, 0) )
+                    if( GameObject* go = me->SummonGameObject(chestId, 1969.115f, -212.94f, 432.687f, 3 * M_PI / 2, 0, 0, 0, 0, 0) )
                         go->SetUInt32Value(GAMEOBJECT_FLAGS, 0);
-                    
+
                     if( hardmode )
                     {
                         uint32 chestId2 = me->GetMap()->Is25ManRaid() ? GO_HODIR_CHEST_HARD_HERO : GO_HODIR_CHEST_HARD;
-                        if( GameObject *go = me->SummonGameObject(chestId2, 2031.207f, -213.236f, 432.687f, 3*M_PI/2, 0, 0, 0, 0, 0) )
+                        if( GameObject* go = me->SummonGameObject(chestId2, 2031.207f, -213.236f, 432.687f, 3 * M_PI / 2, 0, 0, 0, 0, 0) )
                             go->SetUInt32Value(GAMEOBJECT_FLAGS, 0);
                     }
                 }
@@ -407,7 +398,7 @@ public:
 
             if( me->HasUnitState(UNIT_STATE_CASTING) )
                 return;
-            
+
             switch( events.GetEvent() )
             {
                 case 0:
@@ -450,7 +441,7 @@ public:
                         me->MonsterYell(TEXT_HODIR_FLASH_FREEZE, LANG_UNIVERSAL, 0);
                         me->PlayDirectSound(SOUND_HODIR_FLASH_FREEZE, 0);
                         SmallIcicles(false);
-                        events.RepeatEvent(55000 + urand(0,10000));
+                        events.RepeatEvent(55000 + urand(0, 10000));
                         events.ScheduleEvent(EVENT_SMALL_ICICLES_ENABLE, Is25ManRaid() ? 12000 : 24000);
                         events.ScheduleEvent(EVENT_FROZEN_BLOWS, 15000);
                         events.RescheduleEvent(EVENT_FREEZE, 20000);
@@ -493,7 +484,7 @@ public:
             char faction = 'A';
             if( hhd[0][0].id )
             {
-                Map::PlayerList const &cl = me->GetMap()->GetPlayers();
+                Map::PlayerList const& cl = me->GetMap()->GetPlayers();
                 for (Map::PlayerList::const_iterator itr = cl.begin(); itr != cl.end(); ++itr)
                     if (!itr->GetSource()->IsGameMaster())
                     {
@@ -504,18 +495,18 @@ public:
 
             uint8 cnt = 0;
             if( faction )
-                for( uint8 k=0; k<4; ++k )
+                for( uint8 k = 0; k < 4; ++k )
                 {
-                    if( (faction == 'A' && ( k>1 || (k==1 && RAID_MODE(1,0)) )) ||
-                        (faction == 'H' && ( k<2 || (k==3 && RAID_MODE(1,0)) )) )
+                    if( (faction == 'A' && ( k > 1 || (k == 1 && RAID_MODE(1, 0)) )) ||
+                            (faction == 'H' && ( k < 2 || (k == 3 && RAID_MODE(1, 0)) )) )
                         continue;
 
-                    for( uint8 i=0; i<4; ++i )
+                    for( uint8 i = 0; i < 4; ++i )
                     {
                         if( !hhd[k][i].id )
                             continue;
 
-                        if( Creature* h_p = me->SummonCreature(hhd[k][i].id, hhd[k][i].x, hhd[k][i].y, 432.69f, M_PI/2) )
+                        if( Creature* h_p = me->SummonCreature(hhd[k][i].id, hhd[k][i].x, hhd[k][i].y, 432.69f, M_PI / 2) )
                         {
                             h_p->setFaction(1665);
                             if( cnt < 8 )
@@ -535,7 +526,7 @@ public:
         {
             if( who->GetTypeId() == TYPEID_PLAYER )
             {
-                if( urand(0,1) )
+                if( urand(0, 1) )
                 {
                     me->MonsterYell(TEXT_HODIR_SLAIN_1, LANG_UNIVERSAL, 0);
                     me->PlayDirectSound(SOUND_HODIR_SLAIN_1, 0);
@@ -573,9 +564,15 @@ public:
             if (value)
                 switch (id)
                 {
-                    case 1: bAchievCheese = false; break;
-                    case 2: bAchievGettingCold = false; break;
-                    case 4: bAchievCoolestFriends = false; break;
+                    case 1:
+                        bAchievCheese = false;
+                        break;
+                    case 2:
+                        bAchievGettingCold = false;
+                        break;
+                    case 4:
+                        bAchievCoolestFriends = false;
+                        break;
                 }
         }
 
@@ -583,10 +580,14 @@ public:
         {
             switch (id)
             {
-                case 1: return (bAchievCheese ? 1 : 0);
-                case 2: return (bAchievGettingCold ? 1 : 0);
-                case 3: return (hardmode ? 1 : 0);
-                case 4: return (bAchievCoolestFriends ? 1 : 0);
+                case 1:
+                    return (bAchievCheese ? 1 : 0);
+                case 2:
+                    return (bAchievGettingCold ? 1 : 0);
+                case 3:
+                    return (hardmode ? 1 : 0);
+                case 4:
+                    return (bAchievCoolestFriends ? 1 : 0);
             }
             return 0;
         }
@@ -607,7 +608,7 @@ public:
 
     struct npc_ulduar_icicleAI : public NullCreatureAI
     {
-        npc_ulduar_icicleAI(Creature *pCreature) : NullCreatureAI(pCreature)
+        npc_ulduar_icicleAI(Creature* pCreature) : NullCreatureAI(pCreature)
         {
             timer1 = 2000;
             timer2 = 5000;
@@ -620,7 +621,7 @@ public:
         {
             if( timer1 <= diff )
             {
-                me->CastSpell(me, (me->GetEntry()==33169 ? SPELL_ICICLE_FALL_EFFECT_UNPACKED : SPELL_ICICLE_FALL_EFFECT_PACKED), true);
+                me->CastSpell(me, (me->GetEntry() == 33169 ? SPELL_ICICLE_FALL_EFFECT_UNPACKED : SPELL_ICICLE_FALL_EFFECT_PACKED), true);
                 me->CastSpell(me, SPELL_ICICLE_VISUAL_FALLING, false);
                 timer1 = 60000;
             }
@@ -650,7 +651,7 @@ public:
 
     struct npc_ulduar_flash_freezeAI : public NullCreatureAI
     {
-        npc_ulduar_flash_freezeAI(Creature *pCreature) : NullCreatureAI(pCreature)
+        npc_ulduar_flash_freezeAI(Creature* pCreature) : NullCreatureAI(pCreature)
         {
             timer = 2500;
             pInstance = me->GetInstanceScript();
@@ -659,7 +660,7 @@ public:
         InstanceScript* pInstance;
         uint16 timer;
 
-        void DamageTaken(Unit* doneBy, uint32 & /*damage*/, DamageEffectType, SpellSchoolMask)
+        void DamageTaken(Unit* doneBy, uint32& /*damage*/, DamageEffectType, SpellSchoolMask)
         {
             if (pInstance && doneBy)
                 if (pInstance->GetData(TYPE_HODIR) == NOT_STARTED)
@@ -672,7 +673,8 @@ public:
             if (timer <= diff)
             {
                 timer = 2500;
-                if (me->IsSummon()) {
+                if (me->IsSummon())
+                {
                     if (Unit* s = me->ToTempSummon()->GetSummoner())
                     {
                         if ((s->GetTypeId() == TYPEID_PLAYER && !s->HasAura(SPELL_FLASH_FREEZE_TRAPPED_PLAYER)) || (s->GetTypeId() == TYPEID_UNIT && !s->HasAura(SPELL_FLASH_FREEZE_TRAPPED_NPC)))
@@ -686,9 +688,7 @@ public:
                                 }
                     }
                     else
-                    {
                         me->DespawnOrUnsummon(2000);
-                    }
                 }
             }
             else
@@ -709,7 +709,7 @@ public:
 
     struct npc_ulduar_toasty_fireAI : public NullCreatureAI
     {
-        npc_ulduar_toasty_fireAI(Creature *pCreature) : NullCreatureAI(pCreature)
+        npc_ulduar_toasty_fireAI(Creature* pCreature) : NullCreatureAI(pCreature)
         {
             me->CastSpell(me, SPELL_MAGE_TOASTY_FIRE_AURA, true);
         }
@@ -752,7 +752,7 @@ public:
 
     struct npc_ulduar_hodir_priestAI : public ScriptedAI
     {
-        npc_ulduar_hodir_priestAI(Creature *pCreature) : ScriptedAI(pCreature)
+        npc_ulduar_hodir_priestAI(Creature* pCreature) : ScriptedAI(pCreature)
         {
             pInstance = me->GetInstanceScript();
             events.Reset();
@@ -770,7 +770,7 @@ public:
         void ScheduleAbilities()
         {
             events.ScheduleEvent(EVENT_PRIEST_DISPELL_MAGIC, 7000);
-            events.ScheduleEvent(EVENT_PRIEST_GREAT_HEAL, urand(6000,7000));
+            events.ScheduleEvent(EVENT_PRIEST_GREAT_HEAL, urand(6000, 7000));
             events.ScheduleEvent(EVENT_PRIEST_SMITE, 2100);
         }
 
@@ -815,7 +815,7 @@ public:
                     break;
                 case EVENT_PRIEST_GREAT_HEAL:
                     me->CastSpell(me, SPELL_PRIEST_GREAT_HEAL, false);
-                    events.RepeatEvent(urand(6000,7000));
+                    events.RepeatEvent(urand(6000, 7000));
                     break;
                 case EVENT_PRIEST_SMITE:
                     if (Unit* victim = me->GetVictim())
@@ -850,7 +850,7 @@ public:
 
     struct npc_ulduar_hodir_druidAI : public ScriptedAI
     {
-        npc_ulduar_hodir_druidAI(Creature *pCreature) : ScriptedAI(pCreature)
+        npc_ulduar_hodir_druidAI(Creature* pCreature) : ScriptedAI(pCreature)
         {
             pInstance = me->GetInstanceScript();
             events.Reset();
@@ -948,7 +948,7 @@ public:
 
     struct npc_ulduar_hodir_shamanAI : public ScriptedAI
     {
-        npc_ulduar_hodir_shamanAI(Creature *pCreature) : ScriptedAI(pCreature)
+        npc_ulduar_hodir_shamanAI(Creature* pCreature) : ScriptedAI(pCreature)
         {
             pInstance = me->GetInstanceScript();
             events.Reset();
@@ -1049,7 +1049,7 @@ public:
 
     struct npc_ulduar_hodir_mageAI : public ScriptedAI
     {
-        npc_ulduar_hodir_mageAI(Creature *pCreature) : ScriptedAI(pCreature)
+        npc_ulduar_hodir_mageAI(Creature* pCreature) : ScriptedAI(pCreature)
         {
             pInstance = me->GetInstanceScript();
             events.Reset();
@@ -1162,9 +1162,9 @@ public:
     {
         PrepareAuraScript(spell_hodir_biting_cold_main_aura_AuraScript)
 
-        void HandleEffectPeriodic(AuraEffect const * aurEff)
+        void HandleEffectPeriodic(AuraEffect const* aurEff)
         {
-            if ((aurEff->GetTickNumber()%4) == 0)
+            if ((aurEff->GetTickNumber() % 4) == 0)
                 if (Unit* target = GetTarget())
                     if (target->GetTypeId() == TYPEID_PLAYER && !target->isMoving() && !target->HasAura(SPELL_BITING_COLD_PLAYER_AURA))
                         target->CastSpell(target, SPELL_BITING_COLD_PLAYER_AURA, true);
@@ -1176,7 +1176,7 @@ public:
         }
     };
 
-    AuraScript *GetAuraScript() const
+    AuraScript* GetAuraScript() const
     {
         return new spell_hodir_biting_cold_main_aura_AuraScript();
     }
@@ -1201,9 +1201,9 @@ public:
             return true;
         }
 
-        void HandleEffectPeriodic(AuraEffect const *  /*aurEff*/)
+        void HandleEffectPeriodic(AuraEffect const*   /*aurEff*/)
         {
-            
+
             if (Unit* target = GetTarget())
             {
                 if (target->GetMapId() == 603)
@@ -1220,7 +1220,7 @@ public:
                     else
                         prev = true;
 
-                    if (counter>=2)
+                    if (counter >= 2)
                         counter -= 2;
                     else if (counter)
                         --counter;
@@ -1240,7 +1240,7 @@ public:
                     }
                 }
 
-                const int32 dmg = 200*pow(2.0f, GetStackAmount());
+                const int32 dmg = 200 * pow(2.0f, GetStackAmount());
                 target->CastCustomSpell(target, SPELL_BITING_COLD_DAMAGE, &dmg, 0, 0, true);
             }
         }
@@ -1251,7 +1251,7 @@ public:
         }
     };
 
-    AuraScript *GetAuraScript() const
+    AuraScript* GetAuraScript() const
     {
         return new spell_hodir_biting_cold_player_aura_AuraScript();
     }
@@ -1323,9 +1323,9 @@ public:
     {
         PrepareAuraScript(spell_hodir_flash_freeze_AuraScript)
 
-        void HandleEffectPeriodic(AuraEffect const * aurEff)
+        void HandleEffectPeriodic(AuraEffect const* aurEff)
         {
-            if (aurEff->GetTotalTicks() > 0 && aurEff->GetTickNumber() == uint32(aurEff->GetTotalTicks())-1)
+            if (aurEff->GetTotalTicks() > 0 && aurEff->GetTickNumber() == uint32(aurEff->GetTotalTicks()) - 1)
             {
                 Unit* target = GetTarget();
                 Unit* caster = GetCaster();
@@ -1343,7 +1343,7 @@ public:
                 if (target->GetTypeId() == TYPEID_PLAYER)
                 {
                     caster->ToCreature()->AI()->SetData(1, 1);
-                    if( Creature* c = target->SummonCreature(NPC_FLASH_FREEZE_PLR, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5*60*1000) )
+                    if( Creature* c = target->SummonCreature(NPC_FLASH_FREEZE_PLR, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * 60 * 1000) )
                     {
                         c->CastSpell(target, SPELL_FLASH_FREEZE_TRAPPED_PLAYER, true);
                         caster->ToCreature()->AI()->JustSummoned(c);
@@ -1371,7 +1371,7 @@ public:
         return new spell_hodir_flash_freeze_SpellScript();
     }
 
-    AuraScript *GetAuraScript() const
+    AuraScript* GetAuraScript() const
     {
         return new spell_hodir_flash_freeze_AuraScript();
     }
@@ -1407,7 +1407,7 @@ public:
         }
     };
 
-    AuraScript *GetAuraScript() const
+    AuraScript* GetAuraScript() const
     {
         return new spell_hodir_storm_power_AuraScript();
     }
@@ -1422,7 +1422,7 @@ public:
     {
         PrepareAuraScript(spell_hodir_storm_cloud_AuraScript)
 
-        void HandleEffectPeriodic(AuraEffect const *  /*aurEff*/)
+        void HandleEffectPeriodic(AuraEffect const*   /*aurEff*/)
         {
             PreventDefaultAction();
             if (Unit* target = GetTarget())
@@ -1435,7 +1435,7 @@ public:
         }
     };
 
-    AuraScript *GetAuraScript() const
+    AuraScript* GetAuraScript() const
     {
         return new spell_hodir_storm_cloud_AuraScript();
     }

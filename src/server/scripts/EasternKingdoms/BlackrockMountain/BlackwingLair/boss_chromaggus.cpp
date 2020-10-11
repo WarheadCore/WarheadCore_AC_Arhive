@@ -96,7 +96,7 @@ public:
                     Breath2_Spell = SPELL_FROSTBURN;
                     break;
 
-                    // B1 - TL
+                // B1 - TL
                 case 4:
                     Breath1_Spell = SPELL_TIMELAPSE;
                     Breath2_Spell = SPELL_INCINERATE;
@@ -114,7 +114,7 @@ public:
                     Breath2_Spell = SPELL_FROSTBURN;
                     break;
 
-                    //B1 - Acid
+                //B1 - Acid
                 case 8:
                     Breath1_Spell = SPELL_CORROSIVEACID;
                     Breath2_Spell = SPELL_INCINERATE;
@@ -132,7 +132,7 @@ public:
                     Breath2_Spell = SPELL_FROSTBURN;
                     break;
 
-                    //B1 - Ignite
+                //B1 - Ignite
                 case 12:
                     Breath1_Spell = SPELL_IGNITEFLESH;
                     Breath2_Spell = SPELL_INCINERATE;
@@ -150,7 +150,7 @@ public:
                     Breath2_Spell = SPELL_FROSTBURN;
                     break;
 
-                    //B1 - Frost
+                //B1 - Frost
                 case 16:
                     Breath1_Spell = SPELL_FROSTBURN;
                     Breath2_Spell = SPELL_INCINERATE;
@@ -225,30 +225,28 @@ public:
                             break;
                         }
                     case EVENT_BREATH_1:
-                            DoCastVictim(Breath1_Spell);
-                            events.ScheduleEvent(EVENT_BREATH_1, 60000);
-                            break;
+                        DoCastVictim(Breath1_Spell);
+                        events.ScheduleEvent(EVENT_BREATH_1, 60000);
+                        break;
                     case EVENT_BREATH_2:
-                            DoCastVictim(Breath2_Spell);
-                            events.ScheduleEvent(EVENT_BREATH_2, 60000);
-                            break;
+                        DoCastVictim(Breath2_Spell);
+                        events.ScheduleEvent(EVENT_BREATH_2, 60000);
+                        break;
                     case EVENT_AFFLICTION:
                         {
-                            Map::PlayerList const &players = me->GetMap()->GetPlayers();
+                            Map::PlayerList const& players = me->GetMap()->GetPlayers();
                             for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
                             {
                                 if (Player* player = itr->GetSource()->ToPlayer())
                                 {
                                     DoCast(player, RAND(SPELL_BROODAF_BLUE, SPELL_BROODAF_BLACK, SPELL_BROODAF_RED, SPELL_BROODAF_BRONZE, SPELL_BROODAF_GREEN), true);
 
-                                        if (player->HasAura(SPELL_BROODAF_BLUE) &&
+                                    if (player->HasAura(SPELL_BROODAF_BLUE) &&
                                             player->HasAura(SPELL_BROODAF_BLACK) &&
                                             player->HasAura(SPELL_BROODAF_RED) &&
                                             player->HasAura(SPELL_BROODAF_BRONZE) &&
                                             player->HasAura(SPELL_BROODAF_GREEN))
-                                        {
-                                            DoCast(player, SPELL_CHROMATIC_MUT_1);
-                                        }
+                                        DoCast(player, SPELL_CHROMATIC_MUT_1);
 
                                 }
                             }

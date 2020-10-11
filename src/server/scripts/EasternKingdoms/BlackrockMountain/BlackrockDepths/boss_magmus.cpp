@@ -49,7 +49,7 @@ public:
         void Reset()
         {
             FieryBurst_Timer = 5000;
-            WarStomp_Timer =0;
+            WarStomp_Timer = 0;
         }
 
         void EnterCombat(Unit* /*who*/) { }
@@ -65,7 +65,8 @@ public:
             {
                 DoCastVictim(SPELL_FIERYBURST);
                 FieryBurst_Timer = 6000;
-            } else FieryBurst_Timer -= diff;
+            }
+            else FieryBurst_Timer -= diff;
 
             //WarStomp_Timer
             if (HealthBelowPct(51))
@@ -74,7 +75,8 @@ public:
                 {
                     DoCastVictim(SPELL_WARSTOMP);
                     WarStomp_Timer = 8000;
-                } else WarStomp_Timer -= diff;
+                }
+                else WarStomp_Timer -= diff;
             }
 
             DoMeleeAttackIfReady();

@@ -57,7 +57,7 @@ public:
     bool OnGossipSelect(Player* player, Creature* creature, uint32 /*sender*/, uint32 action) override
     {
         ClearGossipMenuFor(player);
-        if (action == GOSSIP_ACTION_INFO_DEF +1)
+        if (action == GOSSIP_ACTION_INFO_DEF + 1)
         {
             SendGossipMenuFor(player, 3558, creature->GetGUID());
             player->TalkedToCreature(creature->GetEntry(), creature->GetGUID());
@@ -68,7 +68,7 @@ public:
     bool OnGossipHello(Player* player, Creature* creature) override
     {
         if (player->GetQuestStatus(QUEST_LOST_IN_BATTLE) == QUEST_STATUS_INCOMPLETE || player->GetQuestStatus(QUEST_LOST_IN_BATTLE) == QUEST_STATUS_COMPLETE)
-            AddGossipItemFor(player, GOSSIP_ICON_CHAT, GOSSIP_CORPSE, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, GOSSIP_CORPSE, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
         SendGossipMenuFor(player, 3557, creature->GetGUID());
         return true;
@@ -160,7 +160,7 @@ public:
         void EnterCombat(Unit* who)
         {
             //not always use
-            if (rand()%4)
+            if (rand() % 4)
                 return;
 
             //only aggro text if not player and only in this area
@@ -249,7 +249,8 @@ public:
                 {
                     EnterEvadeMode();
                     return;
-                } else ResetTimer -= diff;
+                }
+                else ResetTimer -= diff;
             }
 
             if (!UpdateVictim())
@@ -438,7 +439,8 @@ public:
                             }
                         }
                         ChallengerChecker = 1000;
-                    } else ChallengerChecker -= diff;
+                    }
+                    else ChallengerChecker -= diff;
 
                     if (WaveTimer <= diff)
                     {
@@ -541,7 +543,7 @@ public:
             if (!HasEscortState(STATE_ESCORT_ESCORTING))
             {
                 if (me->getStandState() == UNIT_STAND_STATE_DEAD)
-                     me->SetStandState(UNIT_STAND_STATE_STAND);
+                    me->SetStandState(UNIT_STAND_STATE_STAND);
 
                 IsPostEvent = false;
                 PostEventTimer = 1000;

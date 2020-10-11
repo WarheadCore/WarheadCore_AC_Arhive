@@ -77,15 +77,33 @@ public:
         {
             switch (asel)
             {
-                case 0: ability = SPELL_MENDING_BUFF;break;
-                case 1: ability = SPELL_KNOCK_BUFF;break;
-                case 2: ability = SPELL_MANAB_BUFF;break;
-                case 3: ability = SPELL_REFLECTAF_BUFF;break;
-                case 4: ability = SPELL_REFLECTSFr_BUFF;break;
-                case 5: ability = SPELL_THORNS_BUFF;break;
-                case 6: ability = SPELL_THUNDER_BUFF;break;
-                case 7: ability = SPELL_MSTRIKE_BUFF;break;
-                case 8: ability = SPELL_STORM_BUFF;break;
+                case 0:
+                    ability = SPELL_MENDING_BUFF;
+                    break;
+                case 1:
+                    ability = SPELL_KNOCK_BUFF;
+                    break;
+                case 2:
+                    ability = SPELL_MANAB_BUFF;
+                    break;
+                case 3:
+                    ability = SPELL_REFLECTAF_BUFF;
+                    break;
+                case 4:
+                    ability = SPELL_REFLECTSFr_BUFF;
+                    break;
+                case 5:
+                    ability = SPELL_THORNS_BUFF;
+                    break;
+                case 6:
+                    ability = SPELL_THUNDER_BUFF;
+                    break;
+                case 7:
+                    ability = SPELL_MSTRIKE_BUFF;
+                    break;
+                case 8:
+                    ability = SPELL_STORM_BUFF;
+                    break;
             }
         }
 
@@ -107,7 +125,7 @@ public:
             if (CreatureGUID == me->GetGUID())
                 return;
 
-            for (int i=0; i<3; ++i)
+            for (int i = 0; i < 3; ++i)
             {
                 if (NearbyGUID[i] == CreatureGUID)
                     return;
@@ -122,7 +140,7 @@ public:
         void GiveBuddyMyList(Creature* c)
         {
             aqsentinelAI* cai = CAST_AI(aqsentinelAI, (c)->AI());
-            for (int i=0; i<3; ++i)
+            for (int i = 0; i < 3; ++i)
                 if (NearbyGUID[i] && NearbyGUID[i] != c->GetGUID())
                     cai->AddBuddyToList(NearbyGUID[i]);
             cai->AddBuddyToList(me->GetGUID());
@@ -130,14 +148,14 @@ public:
 
         void SendMyListToBuddies()
         {
-            for (int i=0; i<3; ++i)
+            for (int i = 0; i < 3; ++i)
                 if (Creature* pNearby = ObjectAccessor::GetCreature(*me, NearbyGUID[i]))
                     GiveBuddyMyList(pNearby);
         }
 
         void CallBuddiesToAttack(Unit* who)
         {
-            for (int i=0; i<3; ++i)
+            for (int i = 0; i < 3; ++i)
             {
                 Creature* c = ObjectAccessor::GetCreature(*me, NearbyGUID[i]);
                 if (c)
@@ -164,11 +182,11 @@ public:
                 AddBuddyToList((*iter)->GetGUID());
         }
 
-        int pickAbilityRandom(bool *chosenAbilities)
+        int pickAbilityRandom(bool* chosenAbilities)
         {
             for (int t = 0; t < 2; ++t)
             {
-                for (int i = !t ? (rand()%9) : 0; i < 9; ++i)
+                for (int i = !t ? (rand() % 9) : 0; i < 9; ++i)
                 {
                     if (!chosenAbilities[i])
                     {
@@ -182,8 +200,8 @@ public:
 
         void GetOtherSentinels(Unit* who)
         {
-            bool *chosenAbilities = new bool[9];
-            memset(chosenAbilities, 0, 9*sizeof(bool));
+            bool* chosenAbilities = new bool[9];
+            memset(chosenAbilities, 0, 9 * sizeof(bool));
             selectAbility(pickAbilityRandom(chosenAbilities));
 
             ClearBuddyList();
@@ -216,7 +234,7 @@ public:
         {
             if (!me->isDead())
             {
-                for (int i=0; i<3; ++i)
+                for (int i = 0; i < 3; ++i)
                 {
                     if (!NearbyGUID[i])
                         continue;
@@ -247,7 +265,7 @@ public:
 
         void JustDied(Unit* /*killer*/)
         {
-            for (int ni=0; ni<3; ++ni)
+            for (int ni = 0; ni < 3; ++ni)
             {
                 Creature* sent = ObjectAccessor::GetCreature(*me, NearbyGUID[ni]);
                 if (!sent)

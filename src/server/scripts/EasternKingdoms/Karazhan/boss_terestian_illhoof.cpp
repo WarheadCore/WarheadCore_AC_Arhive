@@ -119,7 +119,8 @@ public:
                 DoCastVictim(SPELL_AMPLIFY_FLAMES);
 
                 AmplifyTimer = urand(10000, 20000);
-            } else 
+            }
+            else
                 AmplifyTimer -= diff;
 
             DoMeleeAttackIfReady();
@@ -177,7 +178,7 @@ public:
 
     struct npc_fiendish_portalAI : public PassiveAI
     {
-        npc_fiendish_portalAI(Creature* creature) : PassiveAI(creature), summons(me){ }
+        npc_fiendish_portalAI(Creature* creature) : PassiveAI(creature), summons(me) { }
 
         SummonList summons;
 
@@ -234,7 +235,8 @@ public:
             {
                 DoCastVictim(SPELL_FIREBOLT);
                 FireboltTimer = 2200;
-            } else 
+            }
+            else
                 FireboltTimer -= diff;
 
             DoMeleeAttackIfReady();
@@ -313,7 +315,7 @@ public:
                     DoCast(me, SPELL_SUMMON_IMP, true);
                 }
             }
-            else 
+            else
                 DoCast(me, SPELL_SUMMON_IMP, true);
         }
 
@@ -373,16 +375,16 @@ public:
                     SummonKilrekTimer = 45000;
                 }
             }
-            
+
 
             if (SummonKilrekTimer <= diff)
-            { 
+            {
                 DoCast(me, SPELL_SUMMON_IMP, true);
                 me->RemoveAura(SPELL_BROKEN_PACT);
             }
-            else 
+            else
                 SummonKilrekTimer -= diff;
-         
+
             if (SacrificeTimer <= diff)
             {
                 Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 100, true);
@@ -400,14 +402,16 @@ public:
                         SacrificeTimer = 30000;
                     }
                 }
-            } else 
+            }
+            else
                 SacrificeTimer -= diff;
 
             if (ShadowboltTimer <= diff)
             {
                 DoCast(SelectTarget(SELECT_TARGET_TOPAGGRO, 0), SPELL_SHADOW_BOLT);
                 ShadowboltTimer = 10000;
-            } else 
+            }
+            else
                 ShadowboltTimer -= diff;
 
             if (SummonTimer <= diff)
@@ -424,7 +428,8 @@ public:
                         pPortal->CastSpell(me->GetVictim(), SPELL_SUMMON_FIENDISIMP, false);
                     SummonTimer = 5000;
                 }
-            } else 
+            }
+            else
                 SummonTimer -= diff;
 
             if (!Berserk)
@@ -433,7 +438,8 @@ public:
                 {
                     DoCast(me, SPELL_BERSERK);
                     Berserk = true;
-                } else 
+                }
+                else
                     BerserkTimer -= diff;
             }
 

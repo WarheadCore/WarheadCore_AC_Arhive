@@ -76,7 +76,8 @@ public:
                     playerGUID = 0;
                     exileTimer = 8500;
                     canTeleport = false;
-                } else exileTimer -= diff;
+                }
+                else exileTimer -= diff;
             }
             else if (banishTimer <= diff)
             {
@@ -89,7 +90,8 @@ public:
                     if (playerGUID)
                         canTeleport = true;
                 }
-            } else banishTimer -= diff;
+            }
+            else banishTimer -= diff;
 
             DoMeleeAttackIfReady();
         }
@@ -141,7 +143,8 @@ public:
                     playerGUID = 0;
                     exileTimer = 8500;
                     canTeleport = false;
-                } else exileTimer -= diff;
+                }
+                else exileTimer -= diff;
             }
             else if (banishTimer <= diff)
             {
@@ -154,7 +157,8 @@ public:
                     if (playerGUID)
                         canTeleport = true;
                 }
-            } else banishTimer -= diff;
+            }
+            else banishTimer -= diff;
 
             DoMeleeAttackIfReady();
         }
@@ -174,29 +178,29 @@ public:
 class Duel_Items : public PlayerScript
 {
 public:
-	Duel_Items() : PlayerScript("Duel_Items") {}
+    Duel_Items() : PlayerScript("Duel_Items") {}
 
-	void OnDuelEnd(Player *winner, Player *looser, DuelCompleteType type)
-	{
-		if (type == DUEL_WON)
-		{
-			if(winner->HasItemCount(58165, 1, false) && (looser->HasItemCount(58165, 1, false)))
+    void OnDuelEnd(Player* winner, Player* looser, DuelCompleteType type)
+    {
+        if (type == DUEL_WON)
+        {
+            if(winner->HasItemCount(58165, 1, false) && (looser->HasItemCount(58165, 1, false)))
             {
-				looser->GetSession()->SendNotification("[Система дуэлей] Вы проиграли");	
-				looser->DestroyItemCount(58165, 1, true);
-				
-				winner->GetSession()->SendNotification("[Система дуэлей] Вы выйграли");
-				winner->AddItem(58165, 1);		  
-            } 
-	        else
-            {	
-				looser->GetSession()->SendNotification("[Система дуэлей] У вас нет нужной валюты");
-				winner->GetSession()->SendNotification("[Система дуэлей] У вас нет нужной валюты");
-	        }
-		}
-		
-		winner->HandleEmoteCommand(EMOTE_ONESHOT_CHEER);
-	}
+                looser->GetSession()->SendNotification("[Система дуэлей] Вы проиграли");
+                looser->DestroyItemCount(58165, 1, true);
+
+                winner->GetSession()->SendNotification("[Система дуэлей] Вы выйграли");
+                winner->AddItem(58165, 1);
+            }
+            else
+            {
+                looser->GetSession()->SendNotification("[Система дуэлей] У вас нет нужной валюты");
+                winner->GetSession()->SendNotification("[Система дуэлей] У вас нет нужной валюты");
+            }
+        }
+
+        winner->HandleEmoteCommand(EMOTE_ONESHOT_CHEER);
+    }
 
 };
 
@@ -204,5 +208,5 @@ void AddSC_guards()
 {
     new guard_shattrath_aldor();
     new guard_shattrath_scryer();
-	new Duel_Items();
+    new Duel_Items();
 }

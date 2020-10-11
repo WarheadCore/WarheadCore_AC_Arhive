@@ -35,7 +35,7 @@ enum BjarngrimSpells
     SPELL_BERSERKER_AURA                = 41107,
     SPELL_MORTAL_STRIKE                 = 16856,
     SPELL_WHIRLWIND                     = 52027,
-    
+
     // BATTLE STANCE
     SPELL_BATTLE_STANCE                 = 53792,
     SPELL_BATTLE_AURA                   = 41106,
@@ -137,7 +137,7 @@ public:
             AddWaypoint(12, 1311.3f, -26.9f, 40.03f, 0);
             AddWaypoint(13, 1281.2f, -26.8f, 33.5f, 0);
             AddWaypoint(14, 1262, -26.9f, 33.5f, 0);
-            
+
             Start(true, false, 0, NULL, false, true);
         }
 
@@ -152,9 +152,9 @@ public:
             summons.DespawnAll();
 
             for (uint8 i = 0; i < 2; ++i)
-                if (Creature* dwarf = me->SummonCreature(NPC_STORMFORGED_LIEUTENANT, me->GetPositionX()+urand(4,12), me->GetPositionY()+urand(4,12), me->GetPositionZ()))
+                if (Creature* dwarf = me->SummonCreature(NPC_STORMFORGED_LIEUTENANT, me->GetPositionX() + urand(4, 12), me->GetPositionY() + urand(4, 12), me->GetPositionZ()))
                 {
-                    dwarf->GetMotionMaster()->MoveFollow(me, 3, rand_norm()*2*3.14f);
+                    dwarf->GetMotionMaster()->MoveFollow(me, 3, rand_norm() * 2 * 3.14f);
                     summons.Summon(dwarf);
                 }
 
@@ -180,13 +180,13 @@ public:
             events.ScheduleEvent(EVENT_BJARNGRIM_IRONFORM, 12000, STANCE_DEFENSIVE);
 
             // BERSERKER STANCE
-            events.ScheduleEvent(EVENT_BJARNGRIM_MORTAL_STRIKE, 20000+4000, STANCE_BERSERKER);
-            events.ScheduleEvent(EVENT_BJARNGRIM_WHIRLWIND, 20000+6000, STANCE_BERSERKER);
+            events.ScheduleEvent(EVENT_BJARNGRIM_MORTAL_STRIKE, 20000 + 4000, STANCE_BERSERKER);
+            events.ScheduleEvent(EVENT_BJARNGRIM_WHIRLWIND, 20000 + 6000, STANCE_BERSERKER);
 
             // BATTLE STANCE
-            events.ScheduleEvent(EVENT_BJARNGRIM_INTERCEPT, 20000+3000, STANCE_BATTLE);
-            events.ScheduleEvent(EVENT_BJARNGRIM_CLEAVE, 20000+5000, STANCE_BATTLE);
-            events.ScheduleEvent(EVENT_BJARNGRIM_SLAM, 20000+10000, STANCE_BATTLE);
+            events.ScheduleEvent(EVENT_BJARNGRIM_INTERCEPT, 20000 + 3000, STANCE_BATTLE);
+            events.ScheduleEvent(EVENT_BJARNGRIM_CLEAVE, 20000 + 5000, STANCE_BATTLE);
+            events.ScheduleEvent(EVENT_BJARNGRIM_SLAM, 20000 + 10000, STANCE_BATTLE);
 
             if (m_pInstance)
             {
@@ -232,14 +232,14 @@ public:
 
         void RollStance(uint8 stance, uint8 force = 0)
         {
-            if (urand(0,1))
+            if (urand(0, 1))
                 stance = (++stance == 4 ? 1 : stance);
             else
                 stance = (--stance == 0 ? 3 : stance);
 
             if (force)
                 stance = force;
-            
+
             switch (stance)
             {
                 case STANCE_DEFENSIVE:
@@ -319,19 +319,19 @@ public:
                 ///////////////////////////////////////////////////////
                 case EVENT_BJARNGRIM_REFLECTION:
                     me->CastSpell(me, SPELL_BJARNGRIM_REFLETION, true);
-                    events.RepeatEvent(8000 + rand()%1000);
+                    events.RepeatEvent(8000 + rand() % 1000);
                     break;
                 case EVENT_BJARNGRIM_PUMMEL:
                     me->CastSpell(me->GetVictim(), SPELL_PUMMEL, false);
-                    events.RepeatEvent(10000 + rand()%1000);
+                    events.RepeatEvent(10000 + rand() % 1000);
                     break;
                 case EVENT_BJARNGRIM_KNOCK:
                     me->CastSpell(me, SPELL_KNOCK_AWAY, false);
-                    events.RepeatEvent(20000 + rand()%1000);
+                    events.RepeatEvent(20000 + rand() % 1000);
                     break;
                 case EVENT_BJARNGRIM_IRONFORM:
                     me->CastSpell(me, SPELL_IRONFORM, true);
-                    events.RepeatEvent(18000 + rand()%5000);
+                    events.RepeatEvent(18000 + rand() % 5000);
                     break;
 
                 ///////////////////////////////////////////////////////
@@ -345,7 +345,7 @@ public:
                     me->CastSpell(me, SPELL_WHIRLWIND, true);
                     events.RepeatEvent(25000);
                     break;
-                    
+
                 ///////////////////////////////////////////////////////
                 ///// BATTLE STANCE
                 ///////////////////////////////////////////////////////
@@ -361,7 +361,7 @@ public:
                     break;
                 case EVENT_BJARNGRIM_SLAM:
                     me->CastSpell(me->GetVictim(), SPELL_SLAM, false);
-                    events.RepeatEvent(10000 + rand()%2000);
+                    events.RepeatEvent(10000 + rand() % 2000);
                     break;
             }
 
@@ -398,7 +398,7 @@ public:
         void EnterCombat(Unit*)
         {
             events.ScheduleEvent(EVENT_ARC_WELD, 2000);
-            events.ScheduleEvent(EVENT_RENEW_STEEL, 10000 + rand()%1000);
+            events.ScheduleEvent(EVENT_RENEW_STEEL, 10000 + rand() % 1000);
         }
 
         void UpdateAI(uint32 diff)
@@ -423,7 +423,7 @@ public:
                         if (bjarngrim->IsAlive())
                             me->CastSpell(bjarngrim, me->GetMap()->IsHeroic() ? SPELL_RENEW_STEEL_H : SPELL_RENEW_STEEL_N, true);
 
-                    events.RepeatEvent(10000 + rand()%4000);
+                    events.RepeatEvent(10000 + rand() % 4000);
                     break;
             }
 

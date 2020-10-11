@@ -70,7 +70,7 @@ public:
             if (!UpdateVictim())
                 return;
 
-             events.Update(diff);
+            events.Update(diff);
 
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;

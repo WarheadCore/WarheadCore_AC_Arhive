@@ -69,7 +69,7 @@ public:
 
     struct boss_cyanigosaAI : public ScriptedAI
     {
-        boss_cyanigosaAI(Creature *c) : ScriptedAI(c)
+        boss_cyanigosaAI(Creature* c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -88,9 +88,9 @@ public:
             Talk(SAY_AGGRO);
             events.Reset();
             events.RescheduleEvent(EVENT_SPELL_ARCANE_VACUUM, 30000);
-            events.RescheduleEvent(EVENT_SPELL_BLIZZARD, urand(5000,10000));
-            events.RescheduleEvent(EVENT_SPELL_TAIL_SWEEP, urand(15000,20000));
-            events.RescheduleEvent(EVENT_SPELL_UNCONTROLLABLE_ENERGY, urand(5000,8000));
+            events.RescheduleEvent(EVENT_SPELL_BLIZZARD, urand(5000, 10000));
+            events.RescheduleEvent(EVENT_SPELL_TAIL_SWEEP, urand(15000, 20000));
+            events.RescheduleEvent(EVENT_SPELL_UNCONTROLLABLE_ENERGY, urand(5000, 8000));
             if (IsHeroic())
                 events.RescheduleEvent(EVENT_SPELL_MANA_DESTRUCTION, 20000);
         }
@@ -102,7 +102,7 @@ public:
             switch(spell->Id)
             {
                 case SPELL_ARCANE_VACUUM:
-                    target->NearTeleportTo(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ()+10.0f, target->GetOrientation());
+                    target->NearTeleportTo(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ() + 10.0f, target->GetOrientation());
                     break;
             }
         }
@@ -146,11 +146,11 @@ public:
                     break;
                 case EVENT_SPELL_TAIL_SWEEP:
                     me->CastSpell(me->GetVictim(), SPELL_TAIL_SWEEP, false);
-                    events.RepeatEvent(urand(15000,20000));
+                    events.RepeatEvent(urand(15000, 20000));
                     break;
                 case EVENT_SPELL_UNCONTROLLABLE_ENERGY:
                     me->CastSpell(me->GetVictim(), SPELL_UNCONTROLLABLE_ENERGY, false);
-                    events.RepeatEvent(urand(20000,25000));
+                    events.RepeatEvent(urand(20000, 25000));
                     break;
             }
 
@@ -162,8 +162,8 @@ public:
             Talk(SAY_DEATH);
             if (pInstance)
                 pInstance->SetData(DATA_BOSS_DIED, 0);
-            float h = me->GetMap()->GetHeight(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ()+2.0f);
-            if (h != INVALID_HEIGHT && me->GetPositionZ()-h > 3.0f)
+            float h = me->GetMap()->GetHeight(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ() + 2.0f);
+            if (h != INVALID_HEIGHT && me->GetPositionZ() - h > 3.0f)
             {
                 me->UpdatePosition(me->GetPositionX(), me->GetPositionY(), h, me->GetOrientation(), true); // move to ground
                 me->StopMovingOnCurrentPos();

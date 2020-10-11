@@ -40,7 +40,7 @@ enum MekgineerSteamrigger
     EVENT_SPELL_SHRINK          = 4,
     EVENT_SPELL_SAW             = 5,
     EVENT_SPELL_NET             = 6
-    
+
 };
 
 class boss_mekgineer_steamrigger : public CreatureScript
@@ -101,11 +101,11 @@ public:
         {
             Talk(SAY_MECHANICS);
 
-            me->SummonCreature(NPC_STREAMRIGGER_MECHANIC, me->GetPositionX()+15.0f, me->GetPositionY()+15.0f, me->GetPositionZ(), 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
-            me->SummonCreature(NPC_STREAMRIGGER_MECHANIC, me->GetPositionX()-15.0f, me->GetPositionY()+15.0f, me->GetPositionZ(), 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
-            me->SummonCreature(NPC_STREAMRIGGER_MECHANIC, me->GetPositionX()-15.0f, me->GetPositionY()-15.0f, me->GetPositionZ(), 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
-            if (urand(0,1))
-                me->SummonCreature(NPC_STREAMRIGGER_MECHANIC, me->GetPositionX()+15.0f, me->GetPositionY()-15.0f, me->GetPositionZ(), 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
+            me->SummonCreature(NPC_STREAMRIGGER_MECHANIC, me->GetPositionX() + 15.0f, me->GetPositionY() + 15.0f, me->GetPositionZ(), 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
+            me->SummonCreature(NPC_STREAMRIGGER_MECHANIC, me->GetPositionX() - 15.0f, me->GetPositionY() + 15.0f, me->GetPositionZ(), 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
+            me->SummonCreature(NPC_STREAMRIGGER_MECHANIC, me->GetPositionX() - 15.0f, me->GetPositionY() - 15.0f, me->GetPositionZ(), 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
+            if (urand(0, 1))
+                me->SummonCreature(NPC_STREAMRIGGER_MECHANIC, me->GetPositionX() + 15.0f, me->GetPositionY() - 15.0f, me->GetPositionZ(), 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
         }
 
         void JustSummoned(Creature* cr)
@@ -140,7 +140,7 @@ public:
                 case EVENT_CHECK_HP25:
                 case EVENT_CHECK_HP50:
                 case EVENT_CHECK_HP75:
-                    if (me->HealthBelowPct(eventId*25))
+                    if (me->HealthBelowPct(eventId * 25))
                     {
                         SummonMechanics();
                         events.PopEvent();

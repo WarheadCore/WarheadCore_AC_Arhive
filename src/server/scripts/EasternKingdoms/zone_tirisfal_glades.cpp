@@ -95,7 +95,7 @@ public:
             AttackStart(pAttacker);
         }
 
-        void DamageTaken(Unit* pDoneBy, uint32 &uiDamage, DamageEffectType, SpellSchoolMask)
+        void DamageTaken(Unit* pDoneBy, uint32& uiDamage, DamageEffectType, SpellSchoolMask)
         {
             if (!pDoneBy)
                 return;

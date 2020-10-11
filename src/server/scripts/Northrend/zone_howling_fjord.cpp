@@ -72,7 +72,7 @@ public:
         }
     };
 
-    CreatureAI *GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
         return new npc_attracted_reef_bullAI(creature);
     }
@@ -141,7 +141,7 @@ public:
         }
     };
 
-    CreatureAI *GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
         return new npc_your_inner_turmoilAI(creature);
     }
@@ -180,7 +180,7 @@ public:
 
     struct npc_Apothecary_HanesAI : public npc_escortAI
     {
-        npc_Apothecary_HanesAI(Creature* creature) : npc_escortAI(creature){ }
+        npc_Apothecary_HanesAI(Creature* creature) : npc_escortAI(creature) { }
         uint32 PotTimer;
 
         void Reset()
@@ -203,7 +203,8 @@ public:
                 {
                     DoCast(me, SPELL_HEALING_POTION, true);
                     PotTimer = 10000;
-                } else PotTimer -= diff;
+                }
+                else PotTimer -= diff;
             }
             if (GetAttack() && UpdateVictim())
                 DoMeleeAttackIfReady();
@@ -352,7 +353,7 @@ public:
                         SendGossipMenuFor(player, GOSSIP_TEXTID_RAZAEL1, creature->GetGUID());
                         return true;
                     }
-                break;
+                    break;
                 case NPC_LYANA:
                     if (!player->GetReqKillOrCastCurrentCount(QUEST_REPORTS_FROM_THE_FIELD, NPC_LYANA))
                     {
@@ -360,7 +361,7 @@ public:
                         SendGossipMenuFor(player, GOSSIP_TEXTID_LYANA1, creature->GetGUID());
                         return true;
                     }
-                break;
+                    break;
             }
         SendGossipMenuFor(player, player->GetGossipTextId(creature), creature->GetGUID());
         return true;
@@ -394,4 +395,4 @@ void AddSC_howling_fjord()
     new npc_apothecary_hanes();
     new npc_plaguehound_tracker();
     new npc_razael_and_lyana();
- }
+}

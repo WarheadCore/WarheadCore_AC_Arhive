@@ -59,7 +59,7 @@ public:
     bool OnGossipSelect(Player* player, Creature* creature, uint32 /*sender*/, uint32 action) override
     {
         ClearGossipMenuFor(player);
-        if (action == GOSSIP_ACTION_INFO_DEF+1)
+        if (action == GOSSIP_ACTION_INFO_DEF + 1)
         {
             CloseGossipMenuFor(player);
             creature->setFaction(FACTION_HOSTILE_RD);
@@ -71,7 +71,7 @@ public:
     bool OnGossipHello(Player* player, Creature* creature) override
     {
         if (player->GetQuestStatus(QUEST_CRACK_SKULLS) == QUEST_STATUS_INCOMPLETE)
-            AddGossipItemFor(player, GOSSIP_ICON_VENDOR, GOSSIP_RALIQ, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+            AddGossipItemFor(player, GOSSIP_ICON_VENDOR, GOSSIP_RALIQ, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
         SendGossipMenuFor(player, 9440, creature->GetGUID());
         return true;
@@ -107,7 +107,8 @@ public:
             {
                 DoCastVictim(SPELL_UPPERCUT);
                 Uppercut_Timer = 15000;
-            } else Uppercut_Timer -= diff;
+            }
+            else Uppercut_Timer -= diff;
 
             DoMeleeAttackIfReady();
         }
@@ -170,7 +171,7 @@ public:
             me->RestoreFaction();
         }
 
-        void DamageTaken(Unit* done_by, uint32 &damage, DamageEffectType, SpellSchoolMask) override
+        void DamageTaken(Unit* done_by, uint32& damage, DamageEffectType, SpellSchoolMask) override
         {
             // xinef: some corrections
             if (done_by)
@@ -192,7 +193,8 @@ public:
             {
                 DoCastVictim(SPELL_MAGNETIC_PULL);
                 MagneticPull_Timer = 15000;
-            } else MagneticPull_Timer -= diff;
+            }
+            else MagneticPull_Timer -= diff;
 
             DoMeleeAttackIfReady();
         }
@@ -235,9 +237,7 @@ public:
                 SendGossipMenuFor(player, 11085, creature->GetGUID());
             }
             else
-            {
                 SendGossipMenuFor(player, 11083, creature->GetGUID());
-            }
         }
 
         if (creature->GetEntry() == 23483)
@@ -249,9 +249,7 @@ public:
                 SendGossipMenuFor(player, 11085, creature->GetGUID());
             }
             else
-            {
                 SendGossipMenuFor(player, 11084, creature->GetGUID());
-            }
         }
 
         return true;
@@ -272,7 +270,7 @@ public:
     bool OnGossipSelect(Player* player, Creature* /*creature*/, uint32 /*sender*/, uint32 action) override
     {
         ClearGossipMenuFor(player);
-        if (action == GOSSIP_ACTION_INFO_DEF+1)
+        if (action == GOSSIP_ACTION_INFO_DEF + 1)
             player->CastSpell(player, 37778, false);
 
         return true;
@@ -281,7 +279,7 @@ public:
     bool OnGossipHello(Player* player, Creature* creature) override
     {
         if (player->GetReputationRank(989) >= REP_REVERED)
-            AddGossipItemFor(player, GOSSIP_ICON_CHAT, GOSSIP_HZ, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, GOSSIP_HZ, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
         SendGossipMenuFor(player, player->GetGossipTextId(creature), creature->GetGUID());
 
@@ -455,9 +453,9 @@ public:
     bool OnGossipSelect(Player* player, Creature* creature, uint32 /*sender*/, uint32 action) override
     {
         ClearGossipMenuFor(player);
-        if (action == GOSSIP_ACTION_INFO_DEF+1)
+        if (action == GOSSIP_ACTION_INFO_DEF + 1)
             SendGossipMenuFor(player, 9458, creature->GetGUID());
-        else if (action == GOSSIP_ACTION_INFO_DEF+2)
+        else if (action == GOSSIP_ACTION_INFO_DEF + 2)
             SendGossipMenuFor(player, 9459, creature->GetGUID());
 
         return true;
@@ -468,8 +466,8 @@ public:
         if (creature->IsQuestGiver())
             player->PrepareQuestMenu(creature->GetGUID());
 
-        AddGossipItemFor(player, GOSSIP_ICON_CHAT, ISANAH_GOSSIP_1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
-        AddGossipItemFor(player, GOSSIP_ICON_CHAT, ISANAH_GOSSIP_2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
+        AddGossipItemFor(player, GOSSIP_ICON_CHAT, ISANAH_GOSSIP_1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        AddGossipItemFor(player, GOSSIP_ICON_CHAT, ISANAH_GOSSIP_2, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
 
         SendGossipMenuFor(player, player->GetGossipTextId(creature), creature->GetGUID());
 

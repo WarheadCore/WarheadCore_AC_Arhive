@@ -108,7 +108,7 @@ public:
                         }
                     }
                 }
-             }
+            }
 
             //Return since we have no target
             if (!UpdateVictim())

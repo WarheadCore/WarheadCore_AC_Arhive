@@ -102,7 +102,7 @@ public:
         std::string str = handler->GetAcoreString(LANG_GLOBAL_NOTIFY);
         str += args;
 
-        WorldPacket data(SMSG_NOTIFICATION, (str.size()+1));
+        WorldPacket data(SMSG_NOTIFICATION, (str.size() + 1));
         data << str;
         sWorld->SendGlobalMessage(&data);
 
@@ -117,7 +117,7 @@ public:
         std::string str = handler->GetAcoreString(LANG_GM_NOTIFY);
         str += args;
 
-        WorldPacket data(SMSG_NOTIFICATION, (str.size()+1));
+        WorldPacket data(SMSG_NOTIFICATION, (str.size() + 1));
         data << str;
         sWorld->SendGlobalGMMessage(&data);
 

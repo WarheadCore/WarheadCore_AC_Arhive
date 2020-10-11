@@ -1,19 +1,19 @@
- /*
- * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
- *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
- * option) any later version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- * more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program. If not, see <http://www.gnu.org/licenses/>.
- */
+/*
+* This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+*
+* This program is free software; you can redistribute it and/or modify it
+* under the terms of the GNU General Public License as published by the
+* Free Software Foundation; either version 2 of the License, or (at your
+* option) any later version.
+*
+* This program is distributed in the hope that it will be useful, but WITHOUT
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+* FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+* more details.
+*
+* You should have received a copy of the GNU General Public License along
+* with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
 
 /* ScriptData
 SDName: Azuremyst_Isle
@@ -137,7 +137,8 @@ public:
 
                     RunAwayTimer = 10000;
                     SayThanksTimer = 0;
-                } else SayThanksTimer -= diff;
+                }
+                else SayThanksTimer -= diff;
 
                 return;
             }
@@ -156,7 +157,8 @@ public:
             {
                 CanSayHelp = true;
                 SayHelpTimer = 20000;
-            } else SayHelpTimer -= diff;
+            }
+            else SayHelpTimer -= diff;
         }
     };
 
@@ -231,7 +233,8 @@ public:
                     Talk(SAY_TEXT);
                     Talk(SAY_EMOTE);
                     EmoteTimer = urand(120000, 150000);
-                } else EmoteTimer -= diff;
+                }
+                else EmoteTimer -= diff;
             }
             else if (IsTreeEvent)
                 return;
@@ -243,7 +246,8 @@ public:
             {
                 DoCastVictim(SPELL_DYNAMITE);
                 DynamiteTimer = 8000;
-            } else DynamiteTimer -= diff;
+            }
+            else DynamiteTimer -= diff;
 
             DoMeleeAttackIfReady();
         }
@@ -492,7 +496,8 @@ public:
                     DespawnNagaFlag(false);
                     me->DespawnOrUnsummon(1);
                     return 5000;
-                default: return 99999999;
+                default:
+                    return 99999999;
             }
         }
 
@@ -585,7 +590,7 @@ public:
 
     struct npc_death_ravagerAI : public ScriptedAI
     {
-        npc_death_ravagerAI(Creature* creature) : ScriptedAI(creature){ }
+        npc_death_ravagerAI(Creature* creature) : ScriptedAI(creature) { }
 
         uint32 RendTimer;
         uint32 EnragingBiteTimer;
@@ -646,70 +651,70 @@ enum BristlelimbCage
 
 class npc_stillpine_capitive : public CreatureScript
 {
-    public:
-        npc_stillpine_capitive() : CreatureScript("npc_stillpine_capitive") { }
+public:
+    npc_stillpine_capitive() : CreatureScript("npc_stillpine_capitive") { }
 
-        struct npc_stillpine_capitiveAI : public ScriptedAI
+    struct npc_stillpine_capitiveAI : public ScriptedAI
+    {
+        npc_stillpine_capitiveAI(Creature* creature) : ScriptedAI(creature) { }
+
+        void Reset()
         {
-            npc_stillpine_capitiveAI(Creature* creature) : ScriptedAI(creature) { }
-
-            void Reset()
+            if (GameObject* cage = me->FindNearestGameObject(GO_BRISTELIMB_CAGE, 5.0f))
             {
-                if (GameObject* cage = me->FindNearestGameObject(GO_BRISTELIMB_CAGE, 5.0f))
-                {
-                    cage->SetLootState(GO_JUST_DEACTIVATED);
-                    cage->SetGoState(GO_STATE_READY);
-                }
-                _events.Reset();
-                _playerGUID = 0;
-                _movementComplete = false;
+                cage->SetLootState(GO_JUST_DEACTIVATED);
+                cage->SetGoState(GO_STATE_READY);
             }
-
-            void StartMoving(Player* owner)
-            {
-                if (owner)
-                {
-                    Talk(CAPITIVE_SAY, owner);
-                    _playerGUID = owner->GetGUID();
-                }
-                Position pos;
-                me->GetNearPosition(pos, 3.0f, 0.0f);
-                me->GetMotionMaster()->MovePoint(POINT_INIT, pos);
-            }
-
-            void MovementInform(uint32 type, uint32 id)
-            {
-                if (type != POINT_MOTION_TYPE || id != POINT_INIT)
-                    return;
-
-                if (Player* player = ObjectAccessor::GetPlayer(*me, _playerGUID))
-                    player->KilledMonsterCredit(me->GetEntry(), me->GetGUID());
-
-                _movementComplete = true;
-                _events.ScheduleEvent(EVENT_DESPAWN, 3500);
-            }
-
-            void UpdateAI(uint32 diff)
-            {
-                if (!_movementComplete)
-                    return;
-
-                _events.Update(diff);
-
-                if (_events.ExecuteEvent() == EVENT_DESPAWN)
-                    me->DespawnOrUnsummon();
-            }
-
-        private:
-            uint64 _playerGUID;
-            EventMap _events;
-            bool _movementComplete;
-        };
-
-        CreatureAI* GetAI(Creature* creature) const
-        {
-            return new npc_stillpine_capitiveAI(creature);
+            _events.Reset();
+            _playerGUID = 0;
+            _movementComplete = false;
         }
+
+        void StartMoving(Player* owner)
+        {
+            if (owner)
+            {
+                Talk(CAPITIVE_SAY, owner);
+                _playerGUID = owner->GetGUID();
+            }
+            Position pos;
+            me->GetNearPosition(pos, 3.0f, 0.0f);
+            me->GetMotionMaster()->MovePoint(POINT_INIT, pos);
+        }
+
+        void MovementInform(uint32 type, uint32 id)
+        {
+            if (type != POINT_MOTION_TYPE || id != POINT_INIT)
+                return;
+
+            if (Player* player = ObjectAccessor::GetPlayer(*me, _playerGUID))
+                player->KilledMonsterCredit(me->GetEntry(), me->GetGUID());
+
+            _movementComplete = true;
+            _events.ScheduleEvent(EVENT_DESPAWN, 3500);
+        }
+
+        void UpdateAI(uint32 diff)
+        {
+            if (!_movementComplete)
+                return;
+
+            _events.Update(diff);
+
+            if (_events.ExecuteEvent() == EVENT_DESPAWN)
+                me->DespawnOrUnsummon();
+        }
+
+    private:
+        uint64 _playerGUID;
+        EventMap _events;
+        bool _movementComplete;
+    };
+
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new npc_stillpine_capitiveAI(creature);
+    }
 };
 
 class go_bristlelimb_cage : public GameObjectScript

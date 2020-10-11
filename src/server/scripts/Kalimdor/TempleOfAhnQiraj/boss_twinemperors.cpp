@@ -97,7 +97,7 @@ struct boss_twinemperorsAI : public ScriptedAI
         BugsTimer = 2000;
         me->ClearUnitState(UNIT_STATE_STUNNED);
         DontYellWhenDead = false;
-        EnrageTimer = 15*60000;
+        EnrageTimer = 15 * 60000;
     }
 
     Creature* GetOtherBoss()
@@ -105,14 +105,14 @@ struct boss_twinemperorsAI : public ScriptedAI
         return ObjectAccessor::GetCreature(*me, instance->GetData64(IAmVeklor() ? DATA_VEKNILASH : DATA_VEKLOR));
     }
 
-    void DamageTaken(Unit*, uint32 &damage, DamageEffectType, SpellSchoolMask)
+    void DamageTaken(Unit*, uint32& damage, DamageEffectType, SpellSchoolMask)
     {
         Unit* pOtherBoss = GetOtherBoss();
         if (pOtherBoss)
         {
             float dPercent = ((float)damage) / ((float)me->GetMaxHealth());
             int odmg = (int)(dPercent * ((float)pOtherBoss->GetMaxHealth()));
-            int ohealth = pOtherBoss->GetHealth()-odmg;
+            int ohealth = pOtherBoss->GetHealth() - odmg;
             pOtherBoss->SetHealth(ohealth > 0 ? ohealth : 0);
             if (ohealth <= 0)
             {
@@ -172,18 +172,18 @@ struct boss_twinemperorsAI : public ScriptedAI
         uint32 mytotal = me->GetMaxHealth(), histotal = pOtherBoss->GetMaxHealth();
         float mult = ((float)mytotal) / ((float)histotal);
         if (mult < 1)
-            mult = 1.0f/mult;
-        #define HEAL_BROTHER_AMOUNT 30000.0f
+            mult = 1.0f / mult;
+#define HEAL_BROTHER_AMOUNT 30000.0f
         uint32 largerAmount = (uint32)((HEAL_BROTHER_AMOUNT * mult) - HEAL_BROTHER_AMOUNT);
 
         if (mytotal > histotal)
         {
-            uint32 h = me->GetHealth()+largerAmount;
+            uint32 h = me->GetHealth() + largerAmount;
             me->SetHealth(std::min(mytotal, h));
         }
         else
         {
-            uint32 h = pOtherBoss->GetHealth()+largerAmount;
+            uint32 h = pOtherBoss->GetHealth() + largerAmount;
             pOtherBoss->SetHealth(std::min(histotal, h));
         }
     }
@@ -201,7 +201,8 @@ struct boss_twinemperorsAI : public ScriptedAI
                 DoCast(pOtherBoss, SPELL_HEAL_BROTHER);
                 Heal_Timer = 1000;
             }
-        } else Heal_Timer -= diff;
+        }
+        else Heal_Timer -= diff;
     }
 
     void TeleportToMyBrother()
@@ -280,9 +281,7 @@ struct boss_twinemperorsAI : public ScriptedAI
             }
         }
         else
-        {
             return true;
-        }
     }
 
     void MoveInLineOfSight(Unit* who)
@@ -325,7 +324,7 @@ struct boss_twinemperorsAI : public ScriptedAI
                 }
                 if (c->IsWithinDistInMap(me, ABUSE_BUG_RANGE))
                 {
-                    if (!nearb || (rand()%4) == 0)
+                    if (!nearb || (rand() % 4) == 0)
                         nearb = c;
                 }
             }
@@ -346,14 +345,10 @@ struct boss_twinemperorsAI : public ScriptedAI
                     Abuse_Bug_Timer = urand(10000, 17000);
                 }
                 else
-                {
                     Abuse_Bug_Timer = 1000;
-                }
             }
             else
-            {
                 Abuse_Bug_Timer -= diff;
-            }
             BugsTimer = 2000;
         }
         else
@@ -370,9 +365,11 @@ struct boss_twinemperorsAI : public ScriptedAI
             if (!me->IsNonMeleeSpellCast(true))
             {
                 DoCast(me, SPELL_BERSERK);
-                EnrageTimer = 60*60000;
-            } else EnrageTimer = 0;
-        } else EnrageTimer-=diff;
+                EnrageTimer = 60 * 60000;
+            }
+            else EnrageTimer = 0;
+        }
+        else EnrageTimer -= diff;
     }
 };
 
@@ -407,7 +404,7 @@ public:
             UnbalancingStrike_Timer = urand(8000, 18000);
             Scarabs_Timer = urand(7000, 14000);
 
-                                                                //Added. Can be removed if its included in DB.
+            //Added. Can be removed if its included in DB.
             me->ApplySpellImmune(0, IMMUNITY_DAMAGE, SPELL_SCHOOL_MASK_MAGIC, true);
         }
 
@@ -432,16 +429,18 @@ public:
             if (UnbalancingStrike_Timer <= diff)
             {
                 DoCastVictim(SPELL_UNBALANCING_STRIKE);
-                UnbalancingStrike_Timer = 8000+rand()%12000;
-            } else UnbalancingStrike_Timer -= diff;
+                UnbalancingStrike_Timer = 8000 + rand() % 12000;
+            }
+            else UnbalancingStrike_Timer -= diff;
 
             if (UpperCut_Timer <= diff)
             {
                 Unit* randomMelee = SelectTarget(SELECT_TARGET_RANDOM, 0, NOMINAL_MELEE_RANGE, true);
                 if (randomMelee)
                     DoCast(randomMelee, SPELL_UPPERCUT);
-                UpperCut_Timer = 15000+rand()%15000;
-            } else UpperCut_Timer -= diff;
+                UpperCut_Timer = 15000 + rand() % 15000;
+            }
+            else UpperCut_Timer -= diff;
 
             HandleBugs(diff);
 
@@ -450,9 +449,8 @@ public:
 
             //Teleporting to brother
             if (Teleport_Timer <= diff)
-            {
                 TeleportToMyBrother();
-            } else Teleport_Timer -= diff;
+            else Teleport_Timer -= diff;
 
             CheckEnrage(diff);
 
@@ -528,7 +526,8 @@ public:
                 else
                     DoCastVictim(SPELL_SHADOWBOLT);
                 ShadowBolt_Timer = 2000;
-            } else ShadowBolt_Timer -= diff;
+            }
+            else ShadowBolt_Timer -= diff;
 
             //Blizzard_Timer
             if (Blizzard_Timer <= diff)
@@ -537,18 +536,20 @@ public:
                 target = SelectTarget(SELECT_TARGET_RANDOM, 0, 45, true);
                 if (target)
                     DoCast(target, SPELL_BLIZZARD);
-                Blizzard_Timer = 15000+rand()%15000;
-            } else Blizzard_Timer -= diff;
+                Blizzard_Timer = 15000 + rand() % 15000;
+            }
+            else Blizzard_Timer -= diff;
 
             if (ArcaneBurst_Timer <= diff)
             {
                 Unit* mvic;
-                if ((mvic=SelectTarget(SELECT_TARGET_NEAREST, 0, NOMINAL_MELEE_RANGE, true)) != nullptr)
+                if ((mvic = SelectTarget(SELECT_TARGET_NEAREST, 0, NOMINAL_MELEE_RANGE, true)) != nullptr)
                 {
                     DoCast(mvic, SPELL_ARCANEBURST);
                     ArcaneBurst_Timer = 5000;
                 }
-            } else ArcaneBurst_Timer -= diff;
+            }
+            else ArcaneBurst_Timer -= diff;
 
             HandleBugs(diff);
 
@@ -557,9 +558,8 @@ public:
 
             //Teleporting to brother
             if (Teleport_Timer <= diff)
-            {
                 TeleportToMyBrother();
-            } else Teleport_Timer -= diff;
+            else Teleport_Timer -= diff;
 
             CheckEnrage(diff);
 

@@ -94,9 +94,8 @@ public:
                         c->SetVisible(true);
                     return;
                 }
-                else
-                    if(c->IsVisible())
-                        c->SetVisible(false);
+                else if(c->IsVisible())
+                    c->SetVisible(false);
             }
         }
 
@@ -104,14 +103,30 @@ public:
         {
             switch(creature->GetEntry())
             {
-                case NPC_KELESETH:          NPC_KelesethGUID = creature->GetGUID(); break;
-                case NPC_DALRONN:           NPC_DalronnGUID = creature->GetGUID(); break;
-                case NPC_SKARVALD:          NPC_SkarvaldGUID = creature->GetGUID(); break;
-                case NPC_DALRONN_GHOST:     NPC_DalronnGhostGUID = creature->GetGUID(); break;
-                case NPC_SKARVALD_GHOST:    NPC_SkarvaldGhostGUID = creature->GetGUID(); break;
-                case NPC_INGVAR:            NPC_IngvarGUID = creature->GetGUID(); break;
-                case NPC_DARK_RANGER_MARRAH:NPC_DarkRangerMarrahGUID = creature->GetGUID(); break;
-                case NPC_ENSLAVED_PROTO_DRAKE: if (creature->GetPositionX() < 250.0f) NPC_SpecialDrakeGUID = creature->GetGUID(); break;
+                case NPC_KELESETH:
+                    NPC_KelesethGUID = creature->GetGUID();
+                    break;
+                case NPC_DALRONN:
+                    NPC_DalronnGUID = creature->GetGUID();
+                    break;
+                case NPC_SKARVALD:
+                    NPC_SkarvaldGUID = creature->GetGUID();
+                    break;
+                case NPC_DALRONN_GHOST:
+                    NPC_DalronnGhostGUID = creature->GetGUID();
+                    break;
+                case NPC_SKARVALD_GHOST:
+                    NPC_SkarvaldGhostGUID = creature->GetGUID();
+                    break;
+                case NPC_INGVAR:
+                    NPC_IngvarGUID = creature->GetGUID();
+                    break;
+                case NPC_DARK_RANGER_MARRAH:
+                    NPC_DarkRangerMarrahGUID = creature->GetGUID();
+                    break;
+                case NPC_ENSLAVED_PROTO_DRAKE:
+                    if (creature->GetPositionX() < 250.0f) NPC_SpecialDrakeGUID = creature->GetGUID();
+                    break;
             }
         }
 
@@ -212,7 +227,7 @@ public:
                             c->DespawnOrUnsummon();
                         NPC_SkarvaldGhostGUID = 0;
                     }
-                    
+
                     m_auiEncounter[1] = data;
                     break;
                 case DATA_UNLOCK_SKARVALD_LOOT:
@@ -224,7 +239,7 @@ public:
                         if (uint32 lootid = c->GetCreatureTemplate()->lootid)
                             c->loot.FillLoot(lootid, LootTemplates_Creature, c->GetLootRecipient(), false, false, c->GetLootMode());
                         if (c->GetLootMode())
-                            c->loot.generateMoneyLoot(c->GetCreatureTemplate()->mingold,c->GetCreatureTemplate()->maxgold);
+                            c->loot.generateMoneyLoot(c->GetCreatureTemplate()->mingold, c->GetCreatureTemplate()->maxgold);
                         c->DestroyForNearbyPlayers();
                         c->SetVisible(true);
                     }
@@ -239,7 +254,7 @@ public:
                         if (uint32 lootid = c->GetCreatureTemplate()->lootid)
                             c->loot.FillLoot(lootid, LootTemplates_Creature, c->GetLootRecipient(), false, false, c->GetLootMode());
                         if (c->GetLootMode())
-                            c->loot.generateMoneyLoot(c->GetCreatureTemplate()->mingold,c->GetCreatureTemplate()->maxgold);
+                            c->loot.generateMoneyLoot(c->GetCreatureTemplate()->mingold, c->GetCreatureTemplate()->maxgold);
                         c->DestroyForNearbyPlayers();
                         c->SetVisible(true);
                     }
@@ -257,17 +272,17 @@ public:
                 case DATA_FORGE_3:
                     if (data == NOT_STARTED)
                     {
-                        HandleGameObject(GO_ForgeBellowGUID[type-100], false);
-                        HandleGameObject(GO_ForgeFireGUID[type-100], false);
-                        HandleGameObject(GO_ForgeAnvilGUID[type-100], false);
-                        ForgeEventMask &= ~((uint32)(1<<(type-100)));
+                        HandleGameObject(GO_ForgeBellowGUID[type - 100], false);
+                        HandleGameObject(GO_ForgeFireGUID[type - 100], false);
+                        HandleGameObject(GO_ForgeAnvilGUID[type - 100], false);
+                        ForgeEventMask &= ~((uint32)(1 << (type - 100)));
                     }
                     else
                     {
-                        HandleGameObject(GO_ForgeBellowGUID[type-100], true);
-                        HandleGameObject(GO_ForgeFireGUID[type-100], true);
-                        HandleGameObject(GO_ForgeAnvilGUID[type-100], true);
-                        ForgeEventMask |= (uint32)(1<<(type-100));
+                        HandleGameObject(GO_ForgeBellowGUID[type - 100], true);
+                        HandleGameObject(GO_ForgeFireGUID[type - 100], true);
+                        HandleGameObject(GO_ForgeAnvilGUID[type - 100], true);
+                        ForgeEventMask |= (uint32)(1 << (type - 100));
                     }
                     break;
                 case DATA_SPECIAL_DRAKE:
@@ -277,19 +292,21 @@ public:
             }
 
             if (data == DONE)
-            {
                 SaveToDB();
-            }
         }
 
         uint64 GetData64(uint32 id) const
         {
             switch(id)
             {
-                case DATA_KELESETH:     return NPC_KelesethGUID;
-                case DATA_DALRONN:      return NPC_DalronnGUID;
-                case DATA_SKARVALD:     return NPC_SkarvaldGUID;
-                case DATA_INGVAR:       return NPC_IngvarGUID;
+                case DATA_KELESETH:
+                    return NPC_KelesethGUID;
+                case DATA_DALRONN:
+                    return NPC_DalronnGUID;
+                case DATA_SKARVALD:
+                    return NPC_SkarvaldGUID;
+                case DATA_INGVAR:
+                    return NPC_IngvarGUID;
             }
             return 0;
         }
@@ -305,7 +322,7 @@ public:
                 case DATA_FORGE_1:
                 case DATA_FORGE_2:
                 case DATA_FORGE_3:
-                    return ForgeEventMask & (uint32)(1<<(id-100));
+                    return ForgeEventMask & (uint32)(1 << (id - 100));
             }
             return 0;
         }
@@ -349,7 +366,8 @@ public:
                 for (uint8 i = 0; i < MAX_ENCOUNTER; ++i)
                     if (m_auiEncounter[i] == IN_PROGRESS)
                         m_auiEncounter[i] = NOT_STARTED;
-            } else OUT_LOAD_INST_DATA_FAIL;
+            }
+            else OUT_LOAD_INST_DATA_FAIL;
 
             OUT_LOAD_INST_DATA_COMPLETE;
         }

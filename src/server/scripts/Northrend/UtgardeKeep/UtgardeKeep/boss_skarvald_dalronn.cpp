@@ -78,7 +78,7 @@ public:
 
     struct boss_skarvald_the_constructorAI : public ScriptedAI
     {
-        boss_skarvald_the_constructorAI(Creature *c) : ScriptedAI(c)
+        boss_skarvald_the_constructorAI(Creature* c) : ScriptedAI(c)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -113,7 +113,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit * who)
+        void EnterCombat(Unit* who)
         {
             events.Reset();
             events.RescheduleEvent(EVENT_SPELL_CHARGE, 5000);
@@ -134,7 +134,7 @@ public:
             }
         }
 
-        void KilledUnit(Unit * /*victim*/)
+        void KilledUnit(Unit* /*victim*/)
         {
             if (me->GetEntry() == NPC_SKARVALD)
                 Talk(YELL_SKARVALD_KILL);
@@ -144,8 +144,10 @@ public:
         {
             if( me->GetEntry() != NPC_SKARVALD )
                 return;
-            if( pInstance ) {
-                if( Creature* dalronn = pInstance->instance->GetCreature(pInstance->GetData64(DATA_DALRONN)) ) {
+            if( pInstance )
+            {
+                if( Creature* dalronn = pInstance->instance->GetCreature(pInstance->GetData64(DATA_DALRONN)) )
+                {
                     if( dalronn->isDead() )
                     {
                         Talk(YELL_SKARVALD_SKA_DIEDFIRST);
@@ -170,7 +172,7 @@ public:
                 return;
 
             events.Update(diff);
-            
+
             if( me->HasUnitState(UNIT_STATE_CASTING) )
                 return;
 
@@ -189,13 +191,13 @@ public:
                         me->AddThreat(target, 10000.0f);
                         me->CastSpell(target, SPELL_CHARGE, false);
                     }
-                    events.RepeatEvent(urand(5000,10000));
+                    events.RepeatEvent(urand(5000, 10000));
                     break;
                 case EVENT_SPELL_STONE_STRIKE:
                     if( me->GetVictim() && me->IsWithinMeleeRange(me->GetVictim()) )
                     {
                         me->CastSpell(me->GetVictim(), SPELL_STONE_STRIKE, false);
-                        events.RepeatEvent(urand(5000,10000));
+                        events.RepeatEvent(urand(5000, 10000));
                     }
                     else
                         events.RepeatEvent(3000);
@@ -219,7 +221,7 @@ public:
 
     struct boss_dalronn_the_controllerAI : public ScriptedAI
     {
-        boss_dalronn_the_controllerAI(Creature *c) : ScriptedAI(c), summons(me)
+        boss_dalronn_the_controllerAI(Creature* c) : ScriptedAI(c), summons(me)
         {
             pInstance = c->GetInstanceScript();
         }
@@ -259,7 +261,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit * who)
+        void EnterCombat(Unit* who)
         {
             events.Reset();
             events.RescheduleEvent(EVENT_SPELL_SHADOW_BOLT, 1000);
@@ -282,7 +284,7 @@ public:
             }
         }
 
-        void KilledUnit(Unit * /*victim*/)
+        void KilledUnit(Unit* /*victim*/)
         {
             if (me->GetEntry() == NPC_DALRONN)
                 Talk(YELL_DALRONN_KILL);
@@ -297,8 +299,10 @@ public:
         {
             if( me->GetEntry() != NPC_DALRONN )
                 return;
-            if( pInstance ) {
-                if( Creature* skarvald = pInstance->instance->GetCreature(pInstance->GetData64(DATA_SKARVALD)) ) {
+            if( pInstance )
+            {
+                if( Creature* skarvald = pInstance->instance->GetCreature(pInstance->GetData64(DATA_SKARVALD)) )
+                {
                     if( skarvald->isDead() )
                     {
                         Talk(YELL_DALRONN_DAL_DIEDFIRST);
@@ -322,7 +326,7 @@ public:
                 return;
 
             events.Update(diff);
-            
+
             if( me->HasUnitState(UNIT_STATE_CASTING) )
                 return;
 
@@ -341,20 +345,20 @@ public:
                 case EVENT_SPELL_SHADOW_BOLT:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 42.0f, true) )
                         me->CastSpell(target, SPELL_SHADOW_BOLT, false);
-                    events.RepeatEvent(2500);                   
+                    events.RepeatEvent(2500);
                     break;
                 case EVENT_SPELL_DEBILITATE:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 45.0f, true) )
                     {
                         me->CastSpell(target, SPELL_DEBILITATE, false);
-                        events.RepeatEvent(urand(5000,10000));
+                        events.RepeatEvent(urand(5000, 10000));
                     }
                     else
                         events.RepeatEvent(3000);
                     break;
                 case EVENT_SPELL_SUMMON_SKELETONS:
                     me->CastSpell((Unit*)NULL, SPELL_SUMMON_SKELETONS, false);
-                    events.RepeatEvent(urand(20000,30000));
+                    events.RepeatEvent(urand(20000, 30000));
                     break;
             }
 

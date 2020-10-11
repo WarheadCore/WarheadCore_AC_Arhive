@@ -1,19 +1,19 @@
- /*
- * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
- *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
- * option) any later version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- * more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program. If not, see <http://www.gnu.org/licenses/>.
- */
+/*
+* This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+*
+* This program is free software; you can redistribute it and/or modify it
+* under the terms of the GNU General Public License as published by the
+* Free Software Foundation; either version 2 of the License, or (at your
+* option) any later version.
+*
+* This program is distributed in the hope that it will be useful, but WITHOUT
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+* FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+* more details.
+*
+* You should have received a copy of the GNU General Public License along
+* with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
 
 /* ScriptData
 SDName: Instance_Mount_Hyjal
@@ -117,14 +117,30 @@ public:
         {
             switch (creature->GetEntry())
             {
-                case RAGE_WINTERCHILL: RageWinterchill = creature->GetGUID(); break;
-                case ANETHERON:        Anetheron = creature->GetGUID(); break;
-                case KAZROGAL:         Kazrogal = creature->GetGUID();  break;
-                case AZGALOR:          Azgalor = creature->GetGUID(); break;
-                case ARCHIMONDE:       Archimonde = creature->GetGUID(); break;
-                case JAINA:            JainaProudmoore = creature->GetGUID(); break;
-                case THRALL:           Thrall = creature->GetGUID(); break;
-                case TYRANDE:          TyrandeWhisperwind = creature->GetGUID(); break;
+                case RAGE_WINTERCHILL:
+                    RageWinterchill = creature->GetGUID();
+                    break;
+                case ANETHERON:
+                    Anetheron = creature->GetGUID();
+                    break;
+                case KAZROGAL:
+                    Kazrogal = creature->GetGUID();
+                    break;
+                case AZGALOR:
+                    Azgalor = creature->GetGUID();
+                    break;
+                case ARCHIMONDE:
+                    Archimonde = creature->GetGUID();
+                    break;
+                case JAINA:
+                    JainaProudmoore = creature->GetGUID();
+                    break;
+                case THRALL:
+                    Thrall = creature->GetGUID();
+                    break;
+                case TYRANDE:
+                    TyrandeWhisperwind = creature->GetGUID();
+                    break;
             }
         }
 
@@ -132,14 +148,22 @@ public:
         {
             switch (identifier)
             {
-                case DATA_RAGEWINTERCHILL:    return RageWinterchill;
-                case DATA_ANETHERON:          return Anetheron;
-                case DATA_KAZROGAL:           return Kazrogal;
-                case DATA_AZGALOR:            return Azgalor;
-                case DATA_ARCHIMONDE:         return Archimonde;
-                case DATA_JAINAPROUDMOORE:    return JainaProudmoore;
-                case DATA_THRALL:             return Thrall;
-                case DATA_TYRANDEWHISPERWIND: return TyrandeWhisperwind;
+                case DATA_RAGEWINTERCHILL:
+                    return RageWinterchill;
+                case DATA_ANETHERON:
+                    return Anetheron;
+                case DATA_KAZROGAL:
+                    return Kazrogal;
+                case DATA_AZGALOR:
+                    return Azgalor;
+                case DATA_ARCHIMONDE:
+                    return Archimonde;
+                case DATA_JAINAPROUDMOORE:
+                    return JainaProudmoore;
+                case DATA_THRALL:
+                    return Thrall;
+                case DATA_TYRANDEWHISPERWIND:
+                    return TyrandeWhisperwind;
             }
 
             return 0;
@@ -177,14 +201,14 @@ public:
                                 if (map->IsDungeon() && unit)
                                 {
                                     unit->SetVisible(false);
-                                    Map::PlayerList const &PlayerList = map->GetPlayers();
+                                    Map::PlayerList const& PlayerList = map->GetPlayers();
                                     if (PlayerList.isEmpty())
-                                         return;
+                                        return;
 
                                     for (Map::PlayerList::const_iterator i = PlayerList.begin(); i != PlayerList.end(); ++i)
                                     {
-                                         if (i->GetSource())
-                                         {
+                                        if (i->GetSource())
+                                        {
                                             WorldPacket packet;
                                             ChatHandler::BuildChatPacket(packet, CHAT_MSG_MONSTER_YELL, LANG_UNIVERSAL, unit, i->GetSource(), YELL_EFFORTS);
                                             i->GetSource()->GetSession()->SendPacket(&packet);
@@ -192,7 +216,7 @@ public:
                                             WorldPacket data2(SMSG_PLAY_SOUND, 4);
                                             data2 << 10986;
                                             i->GetSource()->GetSession()->SendPacket(&data2);
-                                         }
+                                        }
                                     }
                                 }
                             }
@@ -253,9 +277,9 @@ public:
 
                 std::ostringstream saveStream;
                 saveStream << m_auiEncounter[0] << ' ' << m_auiEncounter[1] << ' ' << m_auiEncounter[2] << ' '
-                    << m_auiEncounter[3] << ' ' << m_auiEncounter[4]
-                    << ' ' << allianceRetreat << ' ' << hordeRetreat
-                    << ' ' << RaidDamage;
+                           << m_auiEncounter[3] << ' ' << m_auiEncounter[4]
+                           << ' ' << allianceRetreat << ' ' << hordeRetreat
+                           << ' ' << RaidDamage;
 
                 str_data = saveStream.str();
 
@@ -269,15 +293,24 @@ public:
         {
             switch (type)
             {
-                case DATA_RAGEWINTERCHILLEVENT: return m_auiEncounter[0];
-                case DATA_ANETHERONEVENT:       return m_auiEncounter[1];
-                case DATA_KAZROGALEVENT:        return m_auiEncounter[2];
-                case DATA_AZGALOREVENT:         return m_auiEncounter[3];
-                case DATA_ARCHIMONDEEVENT:      return m_auiEncounter[4];
-                case DATA_TRASH:                return Trash;
-                case DATA_ALLIANCE_RETREAT:     return allianceRetreat;
-                case DATA_HORDE_RETREAT:        return hordeRetreat;
-                case DATA_RAIDDAMAGE:           return RaidDamage;
+                case DATA_RAGEWINTERCHILLEVENT:
+                    return m_auiEncounter[0];
+                case DATA_ANETHERONEVENT:
+                    return m_auiEncounter[1];
+                case DATA_KAZROGALEVENT:
+                    return m_auiEncounter[2];
+                case DATA_AZGALOREVENT:
+                    return m_auiEncounter[3];
+                case DATA_ARCHIMONDEEVENT:
+                    return m_auiEncounter[4];
+                case DATA_TRASH:
+                    return Trash;
+                case DATA_ALLIANCE_RETREAT:
+                    return allianceRetreat;
+                case DATA_HORDE_RETREAT:
+                    return hordeRetreat;
+                case DATA_RAIDDAMAGE:
+                    return RaidDamage;
             }
             return 0;
         }
@@ -304,25 +337,25 @@ public:
             OUT_LOAD_INST_DATA_COMPLETE;
         }
 
-        protected:
-            uint32 m_auiEncounter[EncounterCount];
-            std::string str_data;
-            std::list<uint64> m_uiAncientGemGUID;
-            uint64 RageWinterchill;
-            uint64 Anetheron;
-            uint64 Kazrogal;
-            uint64 Azgalor;
-            uint64 Archimonde;
-            uint64 JainaProudmoore;
-            uint64 Thrall;
-            uint64 TyrandeWhisperwind;
-            uint64 HordeGate;
-            uint64 ElfGate;
-            uint32 Trash;
-            uint32 hordeRetreat;
-            uint32 allianceRetreat;
-            uint32 RaidDamage;
-            bool ArchiYell;
+    protected:
+        uint32 m_auiEncounter[EncounterCount];
+        std::string str_data;
+        std::list<uint64> m_uiAncientGemGUID;
+        uint64 RageWinterchill;
+        uint64 Anetheron;
+        uint64 Kazrogal;
+        uint64 Azgalor;
+        uint64 Archimonde;
+        uint64 JainaProudmoore;
+        uint64 Thrall;
+        uint64 TyrandeWhisperwind;
+        uint64 HordeGate;
+        uint64 ElfGate;
+        uint32 Trash;
+        uint32 hordeRetreat;
+        uint32 allianceRetreat;
+        uint32 RaidDamage;
+        bool ArchiYell;
     };
 };
 

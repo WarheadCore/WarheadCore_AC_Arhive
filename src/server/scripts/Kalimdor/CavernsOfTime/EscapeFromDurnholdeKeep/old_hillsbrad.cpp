@@ -1,19 +1,19 @@
- /*
- * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
- *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 2 of the License, or (at your
- * option) any later version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- * more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program. If not, see <http://www.gnu.org/licenses/>.
- */
+/*
+* This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+*
+* This program is free software; you can redistribute it and/or modify it
+* under the terms of the GNU General Public License as published by the
+* Free Software Foundation; either version 2 of the License, or (at your
+* option) any later version.
+*
+* This program is distributed in the hope that it will be useful, but WITHOUT
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+* FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+* more details.
+*
+* You should have received a copy of the GNU General Public License along
+* with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #include "ScriptMgr.h"
 #include "ScriptedCreature.h"
@@ -230,7 +230,7 @@ public:
         CloseGossipMenuFor(player);
 
         creature->AI()->DoAction(instance->GetData(DATA_ESCORT_PROGRESS));
-        creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP|UNIT_NPC_FLAG_QUESTGIVER);
+        creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP | UNIT_NPC_FLAG_QUESTGIVER);
         return true;
     }
 
@@ -469,7 +469,7 @@ public:
             combatEvents.Reset();
             summons.DespawnAll();
 
-            me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP|UNIT_NPC_FLAG_QUESTGIVER);
+            me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP | UNIT_NPC_FLAG_QUESTGIVER);
             instance->SetData(DATA_THRALL_REPOSITION, 1);
 
             uint32 data = instance->GetData(DATA_ESCORT_PROGRESS);
@@ -554,7 +554,7 @@ public:
                     me->SetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_ID, THRALL_WEAPON_ITEM);
                     break;
                 case EVENT_DRESSING_SHIELD:
-                    me->SetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_ID+1, THRALL_SHIELD_ITEM);
+                    me->SetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_ID + 1, THRALL_SHIELD_ITEM);
                     break;
                 case EVENT_DRESSING_TALK:
                     instance->SetData(DATA_ESCORT_PROGRESS, ENCOUNTER_PROGRESS_THRALL_ARMORED);
@@ -621,7 +621,7 @@ public:
                 case EVENT_SUMMON_CHRONO:
                     if (Creature* epoch = me->SummonCreature(NPC_EPOCH_HUNTER, 2640.49f, 696.15f, 64.31f, 4.51f, TEMPSUMMON_MANUAL_DESPAWN))
                     {
-                        epoch->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC|UNIT_FLAG_IMMUNE_TO_NPC);
+                        epoch->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_IMMUNE_TO_NPC);
                         epoch->AI()->Talk(SAY_EPOCH_ENTER1);
                     }
                     break;
@@ -704,21 +704,21 @@ public:
                 case EVENT_CALL_EPOCH:
                     if (Creature* epoch = summons.GetCreatureWithEntry(NPC_EPOCH_HUNTER))
                     {
-                        epoch->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC|UNIT_FLAG_IMMUNE_TO_NPC);
+                        epoch->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_IMMUNE_TO_NPC);
                         epoch->GetMotionMaster()->MovePoint(0, *me, false, true);
                     }
                     break;
                 case EVENT_THRALL_FACE_TARETHA:
-                {
-                    Map::PlayerList const& players = me->GetMap()->GetPlayers();
-                    if (!players.isEmpty())
-                        for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-                            if (Player* player = itr->GetSource())
-                                player->KilledMonsterCredit(20156, 0);
+                    {
+                        Map::PlayerList const& players = me->GetMap()->GetPlayers();
+                        if (!players.isEmpty())
+                            for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
+                                if (Player* player = itr->GetSource())
+                                    player->KilledMonsterCredit(20156, 0);
 
-                    me->SetFacingTo(5.76f);
-                    break;
-                }
+                        me->SetFacingTo(5.76f);
+                        break;
+                    }
                 case EVENT_THRALL_TALK_4:
                     Talk(SAY_GREET_TARETHA);
                     break;
@@ -760,7 +760,7 @@ public:
                     Talk(SAY_EVENT_COMPLETE);
                     break;
                 case EVENT_THRALL_RUN_AWAY:
-                    me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC|UNIT_FLAG_IMMUNE_TO_NPC);
+                    me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_IMMUNE_TO_NPC);
                     me->SetReactState(REACT_PASSIVE);
                     SetEscortPaused(false);
                     break;
@@ -809,19 +809,19 @@ public:
             SetEscortPaused(true);
             SetDespawnAtEnd(false);
 
-            me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP|UNIT_NPC_FLAG_QUESTGIVER);
+            me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP | UNIT_NPC_FLAG_QUESTGIVER);
 
             if (data < ENCOUNTER_PROGRESS_THRALL_ARMORED)
             {
                 me->SetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_ID, 0);
-                me->SetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_ID+1, 0);
+                me->SetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_ID + 1, 0);
                 me->SetDisplayId(THRALL_MODEL_UNEQUIPPED);
             }
             else
             {
                 me->SetDisplayId(THRALL_MODEL_EQUIPPED);
                 me->SetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_ID, THRALL_WEAPON_ITEM);
-                me->SetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_ID+1, THRALL_SHIELD_ITEM);
+                me->SetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_ID + 1, THRALL_SHIELD_ITEM);
             }
 
             switch (data)
@@ -847,13 +847,13 @@ public:
             }
         }
 
-        private:
-            InstanceScript* instance;
-            EventMap events;
-            EventMap combatEvents;
-            SummonList summons;
+    private:
+        InstanceScript* instance;
+        EventMap events;
+        EventMap combatEvents;
+        SummonList summons;
 
-            bool _mounted;
+        bool _mounted;
     };
 };
 
@@ -908,7 +908,7 @@ public:
             me->CastSpell(me, SPELL_SHADOW_PRISON, true);
         }
 
-        void AttackStart(Unit*) override { } 
+        void AttackStart(Unit*) override { }
         void MoveInLineOfSight(Unit*) override { }
     };
 

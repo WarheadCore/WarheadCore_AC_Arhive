@@ -127,7 +127,7 @@ public:
         {
             AccountTypes itrSec = itr->second->GetSession()->GetSecurity();
             if ((itr->second->IsGameMaster() || (!AccountMgr::IsPlayerAccount(itrSec) && itrSec <= AccountTypes(sGameConfig->GetIntConfig("GM.InGMList.Level")))) &&
-                (!handler->GetSession() || itr->second->IsVisibleGloballyFor(handler->GetSession()->GetPlayer())))
+                    (!handler->GetSession() || itr->second->IsVisibleGloballyFor(handler->GetSession()->GetPlayer())))
             {
                 if (first)
                 {

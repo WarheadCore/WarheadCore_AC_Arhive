@@ -157,9 +157,7 @@ public:
                         events.ScheduleEvent(7, 12000);
                     }
                     else
-                    {
                         Talk(SAY_SYLVANAS_INTRO_6);
-                    }
                     break;
                 case 7:
                     events.PopEvent();
@@ -172,9 +170,7 @@ public:
                 case 8:
                     events.PopEvent();
                     if (me->GetEntry() == NPC_JAINA_PART1)
-                    {
                         Talk(SAY_JAINA_INTRO_8);
-                    }
                     break;
             }
 
@@ -250,7 +246,7 @@ public:
         }
     };
 
-    CreatureAI *GetAI(Creature* creature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
         return new npc_fos_leader_secondAI(creature);
     }
@@ -276,10 +272,10 @@ public:
             return true;
         }
 
-        void HandleAfterEffectAbsorb(AuraEffect* /*aurEff*/, DamageInfo & /*dmgInfo*/, uint32 & absorbAmount)
+        void HandleAfterEffectAbsorb(AuraEffect* /*aurEff*/, DamageInfo& /*dmgInfo*/, uint32& absorbAmount)
         {
             amount += absorbAmount;
-            if (!fired && amount >= GetSpellInfo()->Effects[EFFECT_0].BasePoints+1)
+            if (!fired && amount >= GetSpellInfo()->Effects[EFFECT_0].BasePoints + 1)
                 if (Unit* caster = GetCaster())
                 {
                     fired = true;

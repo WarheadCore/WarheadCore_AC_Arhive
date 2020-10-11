@@ -122,26 +122,26 @@ public:
 
         switch (sBan->BanCharacter(name, durationStr, reasonStr, handler->GetSession() ? handler->GetSession()->GetPlayerName() : ""))
         {
-        case BAN_SUCCESS:
-            if (atoi(durationStr) > 0)
-            {
-                if (!sGameConfig->GetBoolConfig("ShowBanInWorld"))
-                    handler->PSendSysMessage(LANG_BAN_YOUBANNED, name.c_str(), secsToTimeString(TimeStringToSecs(durationStr), true).c_str(), reasonStr);
-            }
-            else
-            {
-                if (!sGameConfig->GetBoolConfig("ShowBanInWorld"))
-                    handler->PSendSysMessage(LANG_BAN_YOUPERMBANNED, name.c_str(), reasonStr);
-            }
-            break;
-        case BAN_NOTFOUND:
-        {
-            handler->PSendSysMessage(LANG_BAN_NOTFOUND, "character", name.c_str());
-            handler->SetSentErrorMessage(true);
-            return false;
-        }
-        default:
-            break;
+            case BAN_SUCCESS:
+                if (atoi(durationStr) > 0)
+                {
+                    if (!sGameConfig->GetBoolConfig("ShowBanInWorld"))
+                        handler->PSendSysMessage(LANG_BAN_YOUBANNED, name.c_str(), secsToTimeString(TimeStringToSecs(durationStr), true).c_str(), reasonStr);
+                }
+                else
+                {
+                    if (!sGameConfig->GetBoolConfig("ShowBanInWorld"))
+                        handler->PSendSysMessage(LANG_BAN_YOUPERMBANNED, name.c_str(), reasonStr);
+                }
+                break;
+            case BAN_NOTFOUND:
+                {
+                    handler->PSendSysMessage(LANG_BAN_NOTFOUND, "character", name.c_str());
+                    handler->SetSentErrorMessage(true);
+                    return false;
+                }
+            default:
+                break;
         }
 
         return true;
@@ -204,16 +204,16 @@ public:
 
         switch (mode)
         {
-        case BAN_ACCOUNT:
-            banReturn = sBan->BanAccount(nameOrIP, durationStr, reasonStr, handler->GetSession() ? handler->GetSession()->GetPlayerName() : "");
-            break;
-        case BAN_CHARACTER:
-            banReturn = sBan->BanAccountByPlayerName(nameOrIP, durationStr, reasonStr, handler->GetSession() ? handler->GetSession()->GetPlayerName() : "");
-            break;
-        case BAN_IP:
-        default:
-            banReturn = sBan->BanIP(nameOrIP, durationStr, reasonStr, handler->GetSession() ? handler->GetSession()->GetPlayerName() : "");
-            break;
+            case BAN_ACCOUNT:
+                banReturn = sBan->BanAccount(nameOrIP, durationStr, reasonStr, handler->GetSession() ? handler->GetSession()->GetPlayerName() : "");
+                break;
+            case BAN_CHARACTER:
+                banReturn = sBan->BanAccountByPlayerName(nameOrIP, durationStr, reasonStr, handler->GetSession() ? handler->GetSession()->GetPlayerName() : "");
+                break;
+            case BAN_IP:
+            default:
+                banReturn = sBan->BanIP(nameOrIP, durationStr, reasonStr, handler->GetSession() ? handler->GetSession()->GetPlayerName() : "");
+                break;
         }
 
         switch (banReturn)
@@ -221,7 +221,7 @@ public:
             case BAN_SUCCESS:
                 if (atoi(durationStr) > 0)
                 {
-                    if (!sGameConfig->GetBoolConfig("ShowBanInWorld")) 
+                    if (!sGameConfig->GetBoolConfig("ShowBanInWorld"))
                         handler->PSendSysMessage(LANG_BAN_YOUBANNED, nameOrIP.c_str(), secsToTimeString(TimeStringToSecs(durationStr), true).c_str(), reasonStr);
                 }
                 else
@@ -305,9 +305,8 @@ public:
             bool permanent = (fields[1].GetUInt64() == uint64(0));
             std::string banTime = permanent ? handler->GetAcoreString(LANG_BANINFO_INFINITE) : secsToTimeString(fields[1].GetUInt64(), true);
             handler->PSendSysMessage(LANG_BANINFO_HISTORYENTRY,
-                fields[0].GetCString(), banTime.c_str(), active ? handler->GetAcoreString(LANG_YES) : handler->GetAcoreString(LANG_NO), fields[4].GetCString(), fields[5].GetCString());
-        }
-        while (result->NextRow());
+                                     fields[0].GetCString(), banTime.c_str(), active ? handler->GetAcoreString(LANG_YES) : handler->GetAcoreString(LANG_NO), fields[4].GetCString(), fields[5].GetCString());
+        } while (result->NextRow());
 
         return true;
     }
@@ -353,9 +352,8 @@ public:
             bool permanent = (fields[1].GetUInt32() == uint32(0));
             std::string banTime = permanent ? handler->GetAcoreString(LANG_BANINFO_INFINITE) : secsToTimeString(fields[1].GetUInt64(), true);
             handler->PSendSysMessage(LANG_BANINFO_HISTORYENTRY,
-                fields[0].GetCString(), banTime.c_str(), active ? handler->GetAcoreString(LANG_YES) : handler->GetAcoreString(LANG_NO), fields[4].GetCString(), fields[5].GetCString());
-        }
-        while (result->NextRow());
+                                     fields[0].GetCString(), banTime.c_str(), active ? handler->GetAcoreString(LANG_YES) : handler->GetAcoreString(LANG_NO), fields[4].GetCString(), fields[5].GetCString());
+        } while (result->NextRow());
 
         return true;
     }
@@ -385,8 +383,8 @@ public:
         Field* fields = result->Fetch();
         bool permanent = !fields[6].GetUInt64();
         handler->PSendSysMessage(LANG_BANINFO_IPENTRY,
-            fields[0].GetCString(), fields[1].GetCString(), permanent ? handler->GetAcoreString(LANG_BANINFO_NEVER) : fields[2].GetCString(),
-            permanent ? handler->GetAcoreString(LANG_BANINFO_INFINITE) : secsToTimeString(fields[3].GetUInt64(), true).c_str(), fields[4].GetCString(), fields[5].GetCString());
+                                 fields[0].GetCString(), fields[1].GetCString(), permanent ? handler->GetAcoreString(LANG_BANINFO_NEVER) : fields[2].GetCString(),
+                                 permanent ? handler->GetAcoreString(LANG_BANINFO_INFINITE) : secsToTimeString(fields[3].GetUInt64(), true).c_str(), fields[4].GetCString(), fields[5].GetCString());
 
 
         return true;
@@ -441,8 +439,7 @@ public:
                     Field* fields2 = banResult->Fetch();
                     handler->PSendSysMessage("%s", fields2[0].GetCString());
                 }
-            }
-            while (result->NextRow());
+            } while (result->NextRow());
         }
         // Console wide output
         else
@@ -479,8 +476,8 @@ public:
                         if (fields2[0].GetUInt32() == fields2[1].GetUInt32())
                         {
                             handler->PSendSysMessage("|%-15.15s|%02d-%02d-%02d %02d:%02d|   permanent  |%-15.15s|%-15.15s|",
-                                accountName.c_str(), tmBan.tm_year%100, tmBan.tm_mon+1, tmBan.tm_mday, tmBan.tm_hour, tmBan.tm_min,
-                                fields2[2].GetCString(), fields2[3].GetCString());
+                                                     accountName.c_str(), tmBan.tm_year % 100, tmBan.tm_mon + 1, tmBan.tm_mday, tmBan.tm_hour, tmBan.tm_min,
+                                                     fields2[2].GetCString(), fields2[3].GetCString());
                         }
                         else
                         {
@@ -488,15 +485,13 @@ public:
                             tm tmUnban;
                             localtime_r(&timeUnban, &tmUnban);
                             handler->PSendSysMessage("|%-15.15s|%02d-%02d-%02d %02d:%02d|%02d-%02d-%02d %02d:%02d|%-15.15s|%-15.15s|",
-                                accountName.c_str(), tmBan.tm_year%100, tmBan.tm_mon+1, tmBan.tm_mday, tmBan.tm_hour, tmBan.tm_min,
-                                tmUnban.tm_year%100, tmUnban.tm_mon+1, tmUnban.tm_mday, tmUnban.tm_hour, tmUnban.tm_min,
-                                fields2[2].GetCString(), fields2[3].GetCString());
+                                                     accountName.c_str(), tmBan.tm_year % 100, tmBan.tm_mon + 1, tmBan.tm_mday, tmBan.tm_hour, tmBan.tm_min,
+                                                     tmUnban.tm_year % 100, tmUnban.tm_mon + 1, tmUnban.tm_mday, tmUnban.tm_hour, tmUnban.tm_min,
+                                                     fields2[2].GetCString(), fields2[3].GetCString());
                         }
-                    }
-                    while (banInfo->NextRow());
+                    } while (banInfo->NextRow());
                 }
-            }
-            while (result->NextRow());
+            } while (result->NextRow());
 
             handler->SendSysMessage(" ===============================================================================");
         }
@@ -536,8 +531,7 @@ public:
                 PreparedQueryResult banResult = CharacterDatabase.Query(stmt2);
                 if (banResult)
                     handler->PSendSysMessage("%s", (*banResult)[0].GetCString());
-            }
-            while (result->NextRow());
+            } while (result->NextRow());
         }
         // Console wide output
         else
@@ -568,8 +562,8 @@ public:
                         if (banFields[0].GetUInt32() == banFields[1].GetUInt32())
                         {
                             handler->PSendSysMessage("|%-15.15s|%02d-%02d-%02d %02d:%02d|   permanent  |%-15.15s|%-15.15s|",
-                                char_name.c_str(), tmBan.tm_year%100, tmBan.tm_mon+1, tmBan.tm_mday, tmBan.tm_hour, tmBan.tm_min,
-                                banFields[2].GetCString(), banFields[3].GetCString());
+                                                     char_name.c_str(), tmBan.tm_year % 100, tmBan.tm_mon + 1, tmBan.tm_mday, tmBan.tm_hour, tmBan.tm_min,
+                                                     banFields[2].GetCString(), banFields[3].GetCString());
                         }
                         else
                         {
@@ -577,15 +571,13 @@ public:
                             tm tmUnban;
                             localtime_r(&timeUnban, &tmUnban);
                             handler->PSendSysMessage("|%-15.15s|%02d-%02d-%02d %02d:%02d|%02d-%02d-%02d %02d:%02d|%-15.15s|%-15.15s|",
-                                char_name.c_str(), tmBan.tm_year%100, tmBan.tm_mon+1, tmBan.tm_mday, tmBan.tm_hour, tmBan.tm_min,
-                                tmUnban.tm_year%100, tmUnban.tm_mon+1, tmUnban.tm_mday, tmUnban.tm_hour, tmUnban.tm_min,
-                                banFields[2].GetCString(), banFields[3].GetCString());
+                                                     char_name.c_str(), tmBan.tm_year % 100, tmBan.tm_mon + 1, tmBan.tm_mday, tmBan.tm_hour, tmBan.tm_min,
+                                                     tmUnban.tm_year % 100, tmUnban.tm_mon + 1, tmUnban.tm_mday, tmUnban.tm_hour, tmUnban.tm_min,
+                                                     banFields[2].GetCString(), banFields[3].GetCString());
                         }
-                    }
-                    while (banInfo->NextRow());
+                    } while (banInfo->NextRow());
                 }
-            }
-            while (result->NextRow());
+            } while (result->NextRow());
             handler->SendSysMessage(" =============================================================================== ");
         }
 
@@ -629,8 +621,7 @@ public:
             {
                 Field* fields = result->Fetch();
                 handler->PSendSysMessage("%s", fields[0].GetCString());
-            }
-            while (result->NextRow());
+            } while (result->NextRow());
         }
         // Console wide output
         else
@@ -648,8 +639,8 @@ public:
                 if (fields[1].GetUInt32() == fields[2].GetUInt32())
                 {
                     handler->PSendSysMessage("|%-15.15s|%02d-%02d-%02d %02d:%02d|   permanent  |%-15.15s|%-15.15s|",
-                        fields[0].GetCString(), tmBan.tm_year%100, tmBan.tm_mon+1, tmBan.tm_mday, tmBan.tm_hour, tmBan.tm_min,
-                        fields[3].GetCString(), fields[4].GetCString());
+                                             fields[0].GetCString(), tmBan.tm_year % 100, tmBan.tm_mon + 1, tmBan.tm_mday, tmBan.tm_hour, tmBan.tm_min,
+                                             fields[3].GetCString(), fields[4].GetCString());
                 }
                 else
                 {
@@ -657,12 +648,11 @@ public:
                     tm tmUnban;
                     localtime_r(&timeUnban, &tmUnban);
                     handler->PSendSysMessage("|%-15.15s|%02d-%02d-%02d %02d:%02d|%02d-%02d-%02d %02d:%02d|%-15.15s|%-15.15s|",
-                        fields[0].GetCString(), tmBan.tm_year%100, tmBan.tm_mon+1, tmBan.tm_mday, tmBan.tm_hour, tmBan.tm_min,
-                        tmUnban.tm_year%100, tmUnban.tm_mon+1, tmUnban.tm_mday, tmUnban.tm_hour, tmUnban.tm_min,
-                        fields[3].GetCString(), fields[4].GetCString());
+                                             fields[0].GetCString(), tmBan.tm_year % 100, tmBan.tm_mon + 1, tmBan.tm_mday, tmBan.tm_hour, tmBan.tm_min,
+                                             tmUnban.tm_year % 100, tmUnban.tm_mon + 1, tmUnban.tm_mday, tmUnban.tm_hour, tmUnban.tm_min,
+                                             fields[3].GetCString(), fields[4].GetCString());
                 }
-            }
-            while (result->NextRow());
+            } while (result->NextRow());
 
             handler->SendSysMessage(" ===============================================================================");
         }
@@ -750,26 +740,26 @@ public:
 
         switch (mode)
         {
-        case BAN_ACCOUNT:
-            if (sBan->RemoveBanAccount(nameOrIP))
-                handler->PSendSysMessage(LANG_UNBAN_UNBANNED, nameOrIP.c_str());
-            else
-                handler->PSendSysMessage(LANG_UNBAN_ERROR, nameOrIP.c_str());
-            break;
-        case BAN_CHARACTER:
-            if (sBan->RemoveBanAccountByPlayerName(nameOrIP))
-                handler->PSendSysMessage(LANG_UNBAN_UNBANNED, nameOrIP.c_str());
-            else
-                handler->PSendSysMessage(LANG_UNBAN_ERROR, nameOrIP.c_str());
-            break;
-        case BAN_IP:
-            if (sBan->RemoveBanIP(nameOrIP))
-                handler->PSendSysMessage(LANG_UNBAN_UNBANNED, nameOrIP.c_str());
-            else
-                handler->PSendSysMessage(LANG_UNBAN_ERROR, nameOrIP.c_str());
-            break;
-        default:
-            break;
+            case BAN_ACCOUNT:
+                if (sBan->RemoveBanAccount(nameOrIP))
+                    handler->PSendSysMessage(LANG_UNBAN_UNBANNED, nameOrIP.c_str());
+                else
+                    handler->PSendSysMessage(LANG_UNBAN_ERROR, nameOrIP.c_str());
+                break;
+            case BAN_CHARACTER:
+                if (sBan->RemoveBanAccountByPlayerName(nameOrIP))
+                    handler->PSendSysMessage(LANG_UNBAN_UNBANNED, nameOrIP.c_str());
+                else
+                    handler->PSendSysMessage(LANG_UNBAN_ERROR, nameOrIP.c_str());
+                break;
+            case BAN_IP:
+                if (sBan->RemoveBanIP(nameOrIP))
+                    handler->PSendSysMessage(LANG_UNBAN_UNBANNED, nameOrIP.c_str());
+                else
+                    handler->PSendSysMessage(LANG_UNBAN_ERROR, nameOrIP.c_str());
+                break;
+            default:
+                break;
         }
 
         return true;

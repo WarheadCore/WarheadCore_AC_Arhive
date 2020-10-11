@@ -44,25 +44,25 @@ public:
         static std::vector<ChatCommand> serverIdleRestartCommandTable =
         {
             { "cancel",         SEC_ADMINISTRATOR,  true,  &HandleServerShutDownCancelCommand,      "" },
-            { ""   ,            SEC_ADMINISTRATOR,  true,  &HandleServerIdleRestartCommand,         "" }
+            { "",            SEC_ADMINISTRATOR,  true,  &HandleServerIdleRestartCommand,         "" }
         };
 
         static std::vector<ChatCommand> serverIdleShutdownCommandTable =
         {
             { "cancel",         SEC_ADMINISTRATOR,  true,  &HandleServerShutDownCancelCommand,      "" },
-            { ""   ,            SEC_ADMINISTRATOR,  true,  &HandleServerIdleShutDownCommand,        "" }
+            { "",            SEC_ADMINISTRATOR,  true,  &HandleServerIdleShutDownCommand,        "" }
         };
 
         static std::vector<ChatCommand> serverRestartCommandTable =
         {
             { "cancel",         SEC_ADMINISTRATOR,  true,  &HandleServerShutDownCancelCommand,      "" },
-            { ""   ,            SEC_ADMINISTRATOR,  true,  &HandleServerRestartCommand,             "" }
+            { "",            SEC_ADMINISTRATOR,  true,  &HandleServerRestartCommand,             "" }
         };
 
         static std::vector<ChatCommand> serverShutdownCommandTable =
         {
             { "cancel",         SEC_ADMINISTRATOR,  true,  &HandleServerShutDownCancelCommand,      "" },
-            { ""   ,            SEC_ADMINISTRATOR,  true,  &HandleServerShutDownCommand,            "" }
+            { "",            SEC_ADMINISTRATOR,  true,  &HandleServerShutDownCommand,            "" }
         };
 
         static std::vector<ChatCommand> serverSetCommandTable =
@@ -84,7 +84,7 @@ public:
             { "set",            SEC_ADMINISTRATOR,  true,  nullptr,                                 "", serverSetCommandTable }
         };
 
-         static std::vector<ChatCommand> commandTable =
+        static std::vector<ChatCommand> commandTable =
         {
             { "server",         SEC_PLAYER,         true,  nullptr,                                 "", serverCommandTable }
         };
@@ -212,7 +212,7 @@ public:
         else
             sWorld->ShutdownServ(time, SHUTDOWN_MASK_RESTART, RESTART_EXIT_CODE);
 
-            return true;
+        return true;
     }
 
     static bool HandleServerIdleRestartCommand(ChatHandler* /*handler*/, char const* args)
@@ -282,7 +282,7 @@ public:
         }
         else
             sWorld->ShutdownServ(time, SHUTDOWN_MASK_IDLE, SHUTDOWN_EXIT_CODE);
-            return true;
+        return true;
     }
 
     // Exit the realm

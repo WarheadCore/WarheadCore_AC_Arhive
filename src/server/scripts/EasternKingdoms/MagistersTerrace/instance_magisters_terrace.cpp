@@ -43,7 +43,7 @@ public:
         void Initialize()
         {
             memset(&Encounter, 0, sizeof(Encounter));
-            
+
             VexallusDoorGUID = 0;
             SelinDoorGUID = 0;
             SelinEncounterDoorGUID = 0;
@@ -143,7 +143,7 @@ public:
                         HandleGameObject(0, true, go);
                     VexallusDoorGUID = go->GetGUID();
                     break;
-                
+
                 case GO_DELRISSA_DOOR:
                     if (GetData(DATA_DELRISSA_EVENT) == DONE)
                         HandleGameObject(0, true, go);

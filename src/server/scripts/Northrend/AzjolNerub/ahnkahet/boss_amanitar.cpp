@@ -53,7 +53,7 @@ public:
 
     struct boss_amanitarAI : public ScriptedAI
     {
-        boss_amanitarAI(Creature *c) : ScriptedAI(c), summons(me)
+        boss_amanitarAI(Creature* c) : ScriptedAI(c), summons(me)
         {
             pInstance = c->GetInstanceScript();
             me->ApplySpellImmune(0, IMMUNITY_SCHOOL, SPELL_SCHOOL_MASK_NATURE, true);
@@ -98,7 +98,7 @@ public:
             events.ScheduleEvent(EVENT_AMANITAR_SPAWN, 0);
         }
 
-        void JustSummoned(Creature *cr) { summons.Summon(cr); }
+        void JustSummoned(Creature* cr) { summons.Summon(cr); }
 
         void SpawnAdds()
         {
@@ -108,17 +108,17 @@ public:
 
             for (uint8 i = 0; i < 25; ++i)
             {
-                float orientation = 2*rand_norm()*M_PI;
-                float x = center.GetPositionX() + i*2*cos(orientation);
-                float y = center.GetPositionY() + i*2*sin(orientation);
+                float orientation = 2 * rand_norm() * M_PI;
+                float x = center.GetPositionX() + i * 2 * cos(orientation);
+                float y = center.GetPositionY() + i * 2 * sin(orientation);
                 me->SummonCreature(NPC_POISONOUS_MUSHROOM, x, y, me->GetMap()->GetHeight(x, y, MAX_HEIGHT));
             }
 
             for (uint8 i = 0; i < 25; ++i)
             {
-                float orientation = 2*rand_norm()*M_PI;
-                float x = center.GetPositionX() + i*2*cos(orientation);
-                float y = center.GetPositionY() + i*2*sin(orientation);
+                float orientation = 2 * rand_norm() * M_PI;
+                float x = center.GetPositionX() + i * 2 * cos(orientation);
+                float y = center.GetPositionY() + i * 2 * sin(orientation);
                 me->SummonCreature(NPC_HEALTHY_MUSHROOM, x, y, me->GetMap()->GetHeight(x, y, MAX_HEIGHT));
             }
         }
@@ -136,46 +136,46 @@ public:
             switch (events.GetEvent())
             {
                 case EVENT_AMANITAR_SPAWN:
-                {
-                    SpawnAdds();
-                    events.RepeatEvent(urand(35000, 40000));
-                    break;
-                }
+                    {
+                        SpawnAdds();
+                        events.RepeatEvent(urand(35000, 40000));
+                        break;
+                    }
                 case EVENT_AMANITAR_ROOTS:
-                {
-                    if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                        me->CastSpell(pTarget, SPELL_ENTANGLING_ROOTS, false);
+                    {
+                        if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                            me->CastSpell(pTarget, SPELL_ENTANGLING_ROOTS, false);
 
-                    events.RepeatEvent(urand(15000, 20000));
-                    break;
-                }
+                        events.RepeatEvent(urand(15000, 20000));
+                        break;
+                    }
                 case EVENT_AMANITAR_BASH:
-                {
-                    me->CastSpell(me->GetVictim(), SPELL_BASH, false);
-                    events.RepeatEvent(urand(15000, 20000));
-                    break;
-                }
+                    {
+                        me->CastSpell(me->GetVictim(), SPELL_BASH, false);
+                        events.RepeatEvent(urand(15000, 20000));
+                        break;
+                    }
                 case EVENT_AMANITAR_BOLT:
-                {
-                    if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                        me->CastSpell(pTarget, SPELL_VENOM_BOLT_VOLLEY, false);
-                    
-                    events.RepeatEvent(urand(15000, 20000));
-                    break;
-                }
+                    {
+                        if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                            me->CastSpell(pTarget, SPELL_VENOM_BOLT_VOLLEY, false);
+
+                        events.RepeatEvent(urand(15000, 20000));
+                        break;
+                    }
                 case EVENT_AMANITAR_MINI:
-                {
-                    me->CastSpell(me, SPELL_MINI, false);
-                    events.RepeatEvent(30000);
-                    break;
-                }
+                    {
+                        me->CastSpell(me, SPELL_MINI, false);
+                        events.RepeatEvent(30000);
+                        break;
+                    }
             }
 
             DoMeleeAttackIfReady();
         }
     };
 
-    CreatureAI *GetAI(Creature *creature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
         return new boss_amanitarAI(creature);
     }
@@ -218,13 +218,9 @@ public:
             if (me->GetEntry() == NPC_HEALTHY_MUSHROOM)
             {
                 if (killer->HasAura(SPELL_MINI))
-                {
                     killer->RemoveAurasDueToSpell(SPELL_MINI);
-                }
                 else
-                {
                     DoCast(killer, SPELL_HEALTHY_MUSHROOM_POTENT_FUNGUS);
-                }
             }
         }
 
@@ -245,7 +241,7 @@ public:
         }
     };
 
-    CreatureAI *GetAI(Creature *creature) const
+    CreatureAI* GetAI(Creature* creature) const
     {
         return new npc_amanitar_mushroomsAI(creature);
     }

@@ -130,16 +130,16 @@ public:
 
             if (validDedicatedInsanityItems.empty())
             {
-                for (uint32 i=0; i<dIIc; ++i)
+                for (uint32 i = 0; i < dIIc; ++i)
                     validDedicatedInsanityItems[dedicatedInsanityItems[i]] = true;
             }
 
-            Map::PlayerList const &pl = instance->GetPlayers();
+            Map::PlayerList const& pl = instance->GetPlayers();
             for (Map::PlayerList::const_iterator itr = pl.begin(); itr != pl.end(); ++itr)
                 if (Player* plr = itr->GetSource())
                     if (!plr->IsGameMaster() && plr->IsInCombat() /*performance*/)
                     {
-                        for (uint8 i=EQUIPMENT_SLOT_START; i<EQUIPMENT_SLOT_END; ++i) // loop through equipped items
+                        for (uint8 i = EQUIPMENT_SLOT_START; i < EQUIPMENT_SLOT_END; ++i) // loop through equipped items
                             if (Item* item = plr->GetItemByPos(INVENTORY_SLOT_BAG_0, i))
                                 if (!IsValidDedicatedInsanityItem(item->GetTemplate()))
                                 {
@@ -203,7 +203,7 @@ public:
 
         bool IsEncounterInProgress() const
         {
-            Map::PlayerList const &pl = instance->GetPlayers();
+            Map::PlayerList const& pl = instance->GetPlayers();
             for( Map::PlayerList::const_iterator itr = pl.begin(); itr != pl.end(); ++itr )
                 if( Player* plr = itr->GetSource() )
                     if( plr->IsAlive() && !plr->IsGameMaster() )
@@ -302,7 +302,7 @@ public:
                     {
                         if( AttemptsLeft > 0 )
                             --AttemptsLeft;
-                        Map::PlayerList const &pl = instance->GetPlayers();
+                        Map::PlayerList const& pl = instance->GetPlayers();
                         for( Map::PlayerList::const_iterator itr = pl.begin(); itr != pl.end(); ++itr )
                             if( Player* plr = itr->GetSource() )
                                 plr->SendUpdateWorldState(UPDATE_STATE_UI_COUNT, AttemptsLeft);
@@ -372,7 +372,7 @@ public:
                                 c->DespawnOrUnsummon(10000);
                             if( Creature* c = instance->GetCreature(NPC_DreadscaleGUID) )
                                 c->DespawnOrUnsummon(10000);
-                            if( AchievementTimer+10 >= GameTime::GetGameTime() )
+                            if( AchievementTimer + 10 >= GameTime::GetGameTime() )
                                 DoUpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_BE_SPELL_TARGET, SPELL_JORMUNGAR_ACHIEV);
                             AchievementTimer = 0;
 
@@ -388,9 +388,7 @@ public:
                             }
                         }
                         else // first one died, start timer for achievement
-                        {
                             AchievementTimer = GameTime::GetGameTime();
-                        }
                     }
                     else
                         AchievementTimer = 0;
@@ -464,7 +462,7 @@ public:
                                 }
                                 if (GameObject* go = c->SummonGameObject(cacheEntry, Locs[LOC_CENTER].GetPositionX(), Locs[LOC_CENTER].GetPositionY(), Locs[LOC_CENTER].GetPositionZ(), Locs[LOC_CENTER].GetOrientation(), 0.0f, 0.0f, 0.0f, 0.0f, 630000000))
                                 {
-                                    Map::PlayerList const &pl = instance->GetPlayers();
+                                    Map::PlayerList const& pl = instance->GetPlayers();
                                     for (Map::PlayerList::const_iterator itr = pl.begin(); itr != pl.end(); ++itr)
                                         if (Player* plr = itr->GetSource())
                                             if (Group* g = plr->GetGroup())
@@ -478,7 +476,7 @@ public:
 
                             HandleGameObject(GO_EnterGateGUID, true);
 
-                            if( AchievementTimer+60 >= GameTime::GetGameTime() )
+                            if( AchievementTimer + 60 >= GameTime::GetGameTime() )
                                 DoUpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_BE_SPELL_TARGET, SPELL_RESILIENCE_WILL_FIX_IT_CREDIT);
                             AchievementTimer = 0;
 
@@ -500,16 +498,15 @@ public:
                     }
                     break;
                 case TYPE_FACTION_CHAMPIONS_PLAYER_DIED:
-                    if( urand(0,2) == 0 )
+                    if( urand(0, 2) == 0 )
                     {
                         if( TeamIdInInstance == TEAM_HORDE )
                         {
                             if( Creature* pTemp = instance->GetCreature(NPC_VarianGUID) )
                                 pTemp->AI()->Talk(SAY_VARIAN_KILL_HORDE_PLAYER_1);
                         }
-                        else
-                            if( Creature* pTemp = instance->GetCreature(NPC_GarroshGUID) )
-                                pTemp->AI()->Talk(SAY_GARROSH_KILL_ALLIANCE_PLAYER_1);
+                        else if( Creature* pTemp = instance->GetCreature(NPC_GarroshGUID) )
+                            pTemp->AI()->Talk(SAY_GARROSH_KILL_ALLIANCE_PLAYER_1);
                     }
                     break;
                 case TYPE_VALKYR:
@@ -558,7 +555,8 @@ public:
         {
             switch( type )
             {
-                case TYPE_INSTANCE_PROGRESS:        return InstanceProgress;
+                case TYPE_INSTANCE_PROGRESS:
+                    return InstanceProgress;
             }
             return 0;
         }
@@ -567,12 +565,18 @@ public:
         {
             switch( type )
             {
-                case TYPE_GORMOK:                   return NPC_GormokGUID;
-                case TYPE_DREADSCALE:               return NPC_DreadscaleGUID;
-                case TYPE_ACIDMAW:                  return NPC_AcidmawGUID;
-                case NPC_DARKBANE:                  return NPC_DarkbaneGUID;
-                case NPC_LIGHTBANE:                 return NPC_LightbaneGUID;
-                case TYPE_ANUBARAK:                 return NPC_AnubarakGUID;
+                case TYPE_GORMOK:
+                    return NPC_GormokGUID;
+                case TYPE_DREADSCALE:
+                    return NPC_DreadscaleGUID;
+                case TYPE_ACIDMAW:
+                    return NPC_AcidmawGUID;
+                case NPC_DARKBANE:
+                    return NPC_DarkbaneGUID;
+                case NPC_LIGHTBANE:
+                    return NPC_LightbaneGUID;
+                case TYPE_ANUBARAK:
+                    return NPC_AnubarakGUID;
             }
             return 0;
         }
@@ -707,7 +711,7 @@ public:
                         if( Creature* c = instance->GetCreature(NPC_TirionGUID) )
                         {
                             if( Creature* dreadscale = c->SummonCreature(NPC_DREADSCALE, Locs[LOC_BEHIND_GATE].GetPositionX(), Locs[LOC_BEHIND_GATE].GetPositionY(), Locs[LOC_BEHIND_GATE].GetPositionZ(), Locs[LOC_BEHIND_GATE].GetOrientation(), TEMPSUMMON_MANUAL_DESPAWN) )
-                                dreadscale->GetMotionMaster()->MovePoint(0, Locs[LOC_BEHIND_GATE].GetPositionX(), Locs[LOC_BEHIND_GATE].GetPositionY()-25.0f, Locs[LOC_BEHIND_GATE].GetPositionZ());
+                                dreadscale->GetMotionMaster()->MovePoint(0, Locs[LOC_BEHIND_GATE].GetPositionX(), Locs[LOC_BEHIND_GATE].GetPositionY() - 25.0f, Locs[LOC_BEHIND_GATE].GetPositionZ());
                             if( Creature* acidmaw = c->SummonCreature(NPC_ACIDMAW, Locs[LOC_ACIDMAW].GetPositionX(), Locs[LOC_ACIDMAW].GetPositionY(), Locs[LOC_ACIDMAW].GetPositionZ(), Locs[LOC_ACIDMAW].GetOrientation(), TEMPSUMMON_MANUAL_DESPAWN) )
                                 acidmaw->AddAura(53421, acidmaw);
                         }
@@ -807,14 +811,14 @@ public:
                             if( Creature* fizzlebang = c->SummonCreature(NPC_FIZZLEBANG, Locs[LOC_BEHIND_GATE].GetPositionX(), Locs[LOC_BEHIND_GATE].GetPositionY(), Locs[LOC_BEHIND_GATE].GetPositionZ(), Locs[LOC_BEHIND_GATE].GetOrientation(), TEMPSUMMON_CORPSE_TIMED_DESPAWN, 300000) )
                             {
                                 fizzlebang->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
-                                fizzlebang->GetMotionMaster()->MovePoint(0, Locs[LOC_BEHIND_GATE].GetPositionX(), Locs[LOC_BEHIND_GATE].GetPositionY()-65.0f, Locs[LOC_BEHIND_GATE].GetPositionZ()-1.0f);
+                                fizzlebang->GetMotionMaster()->MovePoint(0, Locs[LOC_BEHIND_GATE].GetPositionX(), Locs[LOC_BEHIND_GATE].GetPositionY() - 65.0f, Locs[LOC_BEHIND_GATE].GetPositionZ() - 1.0f);
                             }
                             events.RescheduleEvent(EVENT_SCENE_102, 20000);
 
                             // move Icehowl to side, can't remove corpse because of loot!
                             if( Creature* icehowl = instance->GetCreature(NPC_IcehowlGUID) )
                             {
-                                icehowl->UpdatePosition(513.19f, 139.48f, 395.22f, 3*M_PI/2, true);
+                                icehowl->UpdatePosition(513.19f, 139.48f, 395.22f, 3 * M_PI / 2, true);
                                 icehowl->StopMovingOnCurrentPos();
                                 icehowl->DestroyForNearbyPlayers();
                             }
@@ -866,7 +870,7 @@ public:
                         if( Creature* c = instance->GetCreature(NPC_FizzlebangGUID) )
                         {
                             if( Creature* jaraxxus = c->SummonCreature(NPC_JARAXXUS, Locs[LOC_CENTER].GetPositionX(), Locs[LOC_CENTER].GetPositionY(), Locs[LOC_CENTER].GetPositionZ(), Locs[LOC_CENTER].GetOrientation(), TEMPSUMMON_CORPSE_TIMED_DESPAWN, 630000000) )
-                                jaraxxus->GetMotionMaster()->MovePoint(0, Locs[LOC_CENTER].GetPositionX(), Locs[LOC_CENTER].GetPositionY()-10.0f, Locs[LOC_CENTER].GetPositionZ());
+                                jaraxxus->GetMotionMaster()->MovePoint(0, Locs[LOC_CENTER].GetPositionX(), Locs[LOC_CENTER].GetPositionY() - 10.0f, Locs[LOC_CENTER].GetPositionZ());
                             c->HandleEmoteCommand(EMOTE_STATE_NONE);
                             c->AI()->Talk(SAY_STAGE_1_04);
                         }
@@ -877,7 +881,7 @@ public:
                 case EVENT_SCENE_105:
                     {
                         if( Creature* c = instance->GetCreature(NPC_JaraxxusGUID) )
-                            c->SetFacingTo(M_PI/2);
+                            c->SetFacingTo(M_PI / 2);
                         if( Creature* c = instance->GetCreature(NPC_PurpleGroundGUID) )
                             c->DespawnOrUnsummon();
                         NPC_PurpleGroundGUID = 0;
@@ -923,7 +927,7 @@ public:
                 case EVENT_SCENE_109:
                     {
                         if( Creature* c = instance->GetCreature(NPC_JaraxxusGUID) )
-                            c->SetFacingTo(3*M_PI/2);
+                            c->SetFacingTo(3 * M_PI / 2);
                         if( Creature* c = instance->GetCreature(NPC_TirionGUID) )
                             c->AI()->Talk(SAY_STAGE_1_07);
                         events.PopEvent();
@@ -985,7 +989,7 @@ public:
                         // move Jaraxxus to side, can't remove corpse because of loot!
                         if( Creature* jaraxxus = instance->GetCreature(NPC_JaraxxusGUID) )
                         {
-                            jaraxxus->UpdatePosition(613.83f, 139.5f, 395.22f, 3*M_PI/2, true);
+                            jaraxxus->UpdatePosition(613.83f, 139.5f, 395.22f, 3 * M_PI / 2, true);
                             jaraxxus->StopMovingOnCurrentPos();
                             jaraxxus->DestroyForNearbyPlayers();
                         }
@@ -998,7 +1002,7 @@ public:
                     break;
                 case EVENT_SCENE_202:
                     {
-                        Map::PlayerList const &pl = instance->GetPlayers();
+                        Map::PlayerList const& pl = instance->GetPlayers();
                         for( Map::PlayerList::const_iterator itr = pl.begin(); itr != pl.end(); ++itr )
                             if( Player* plr = itr->GetSource() )
                                 if( !plr->IsGameMaster() )
@@ -1076,7 +1080,7 @@ public:
                             healersSubtracted = 1;
                         for( uint8 i = 0; i < healersSubtracted; ++i )
                         {
-                            uint8 pos = urand(0, vHealerEntries.size()-1);
+                            uint8 pos = urand(0, vHealerEntries.size() - 1);
                             switch( vHealerEntries[pos] )
                             {
                                 case NPC_ALLIANCE_DRUID_RESTORATION:
@@ -1104,12 +1108,12 @@ public:
                                     vOtherEntries.push_back(NPC_HORDE_SHAMAN_ENHANCEMENT);
                                     break;
                             }
-                            vHealerEntries.erase(vHealerEntries.begin()+pos);
+                            vHealerEntries.erase(vHealerEntries.begin() + pos);
                         }
 
                         if( instance->GetSpawnMode() == RAID_DIFFICULTY_10MAN_NORMAL || instance->GetSpawnMode() == RAID_DIFFICULTY_10MAN_HEROIC )
-                            for( uint8 i=0; i<4; ++i )
-                                vOtherEntries.erase(vOtherEntries.begin()+urand(0, vOtherEntries.size()-1));
+                            for( uint8 i = 0; i < 4; ++i )
+                                vOtherEntries.erase(vOtherEntries.begin() + urand(0, vOtherEntries.size() - 1));
 
                         for( std::vector<uint32>::iterator itr = vHealerEntries.begin(); itr != vHealerEntries.end(); ++itr )
                             vOtherEntries.push_back(*itr);
@@ -1117,11 +1121,11 @@ public:
                         uint8 pos2 = 10;
                         for( std::vector<uint32>::iterator itr = vOtherEntries.begin(); itr != vOtherEntries.end(); ++itr )
                         {
-                            if( Creature* pTemp = instance->SummonCreature(*itr, FactionChampionLoc[urand(0, 4)+(TeamIdInInstance == TEAM_ALLIANCE ? 0 : 5)]) )
+                            if( Creature* pTemp = instance->SummonCreature(*itr, FactionChampionLoc[urand(0, 4) + (TeamIdInInstance == TEAM_ALLIANCE ? 0 : 5)]) )
                             {
                                 NPC_ChampionGUIDs.push_back(pTemp->GetGUID());
-                                pTemp->SetHomePosition((TeamIdInInstance == TEAM_ALLIANCE ? FactionChampionLoc[pos2].GetPositionX() : (Locs[LOC_CENTER].GetPositionX()*2-FactionChampionLoc[pos2].GetPositionX())), FactionChampionLoc[pos2].GetPositionY(), FactionChampionLoc[pos2].GetPositionZ(), 0.0f);
-                                pTemp->GetMotionMaster()->MoveJump((TeamIdInInstance == TEAM_ALLIANCE ? FactionChampionLoc[pos2].GetPositionX() : (Locs[LOC_CENTER].GetPositionX()*2-FactionChampionLoc[pos2].GetPositionX())), FactionChampionLoc[pos2].GetPositionY(), FactionChampionLoc[pos2].GetPositionZ(), 20.0f, 20.0f);
+                                pTemp->SetHomePosition((TeamIdInInstance == TEAM_ALLIANCE ? FactionChampionLoc[pos2].GetPositionX() : (Locs[LOC_CENTER].GetPositionX() * 2 - FactionChampionLoc[pos2].GetPositionX())), FactionChampionLoc[pos2].GetPositionY(), FactionChampionLoc[pos2].GetPositionZ(), 0.0f);
+                                pTemp->GetMotionMaster()->MoveJump((TeamIdInInstance == TEAM_ALLIANCE ? FactionChampionLoc[pos2].GetPositionX() : (Locs[LOC_CENTER].GetPositionX() * 2 - FactionChampionLoc[pos2].GetPositionX())), FactionChampionLoc[pos2].GetPositionY(), FactionChampionLoc[pos2].GetPositionZ(), 20.0f, 20.0f);
                             }
                             ++pos2;
                         }
@@ -1230,7 +1234,7 @@ public:
                     {
                         if (TeamIdInInstance == TEAM_NEUTRAL)
                         {
-                            Map::PlayerList const &pl = instance->GetPlayers();
+                            Map::PlayerList const& pl = instance->GetPlayers();
                             for( Map::PlayerList::const_iterator itr = pl.begin(); itr != pl.end(); ++itr )
                                 if( Player* plr = itr->GetSource() )
                                     if( !plr->IsGameMaster() )
@@ -1332,9 +1336,7 @@ public:
                 case EVENT_SCENE_408:
                     {
                         if( Creature* c = instance->GetCreature(NPC_LichKingGUID) )
-                        {
                             c->HandleEmoteCommand(EMOTE_ONESHOT_KNEEL);
-                        }
                         events.PopEvent();
                         events.RescheduleEvent(EVENT_SCENE_409, 1500);
                     }
@@ -1416,7 +1418,7 @@ public:
                                     {
                                         chest->SetRespawnTime(chest->GetRespawnDelay());
 
-                                        Map::PlayerList const &pl = instance->GetPlayers();
+                                        Map::PlayerList const& pl = instance->GetPlayers();
                                         for (Map::PlayerList::const_iterator itr = pl.begin(); itr != pl.end(); ++itr)
                                             if (Player* plr = itr->GetSource())
                                                 if (Group* g = plr->GetGroup())
@@ -1457,13 +1459,13 @@ public:
         bool DoNeedCleanup(bool /*enter*/)
         {
             uint8 aliveCount = 0;
-            Map::PlayerList const &pl = instance->GetPlayers();
+            Map::PlayerList const& pl = instance->GetPlayers();
             for( Map::PlayerList::const_iterator itr = pl.begin(); itr != pl.end(); ++itr )
                 if( Player* plr = itr->GetSource() )
                     if( plr->IsAlive() && !plr->IsGameMaster() )
                         ++aliveCount;
 
-            bool need = aliveCount==0;
+            bool need = aliveCount == 0;
             if( !need && CLEANED )
                 CLEANED = false;
             return need;
@@ -1602,7 +1604,7 @@ public:
             if (instance->IsHeroic() && AttemptsLeft > 0 && !fromFailed && EncounterStatus == IN_PROGRESS)
             {
                 --AttemptsLeft;
-                Map::PlayerList const &pl = instance->GetPlayers();
+                Map::PlayerList const& pl = instance->GetPlayers();
                 for( Map::PlayerList::const_iterator itr = pl.begin(); itr != pl.end(); ++itr )
                     if( Player* plr = itr->GetSource() )
                         plr->SendUpdateWorldState(UPDATE_STATE_UI_COUNT, AttemptsLeft);

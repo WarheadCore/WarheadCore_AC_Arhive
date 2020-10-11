@@ -121,7 +121,7 @@ public:
 
         void KilledUnit(Unit* victim)
         {
-            if (victim->GetTypeId() == TYPEID_PLAYER && urand(0,1))
+            if (victim->GetTypeId() == TYPEID_PLAYER && urand(0, 1))
                 Talk(SAY_SLAY);
         }
 
@@ -161,7 +161,7 @@ public:
                     events.PopEvent();
                     break;
             }
-            
+
             DoMeleeAttackIfReady();
         }
     };

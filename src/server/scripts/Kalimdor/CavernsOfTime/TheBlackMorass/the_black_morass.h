@@ -76,7 +76,7 @@ enum CreatureIds
 };
 
 enum Misc
-{   
+{
     SPELL_RIFT_CHANNEL                  = 31387,
 
     EVENT_NEXT_PORTAL                   = 1,

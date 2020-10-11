@@ -259,7 +259,7 @@ public:
             // search highest talent rank
             uint32 spellId = 0;
 
-            for (int8 rank = MAX_TALENT_RANK-1; rank >= 0; --rank)
+            for (int8 rank = MAX_TALENT_RANK - 1; rank >= 0; --rank)
             {
                 if (talentInfo->RankID[rank] != 0)
                 {
@@ -317,10 +317,8 @@ public:
                 continue;
 
             if ((skillInfo->categoryId == SKILL_CATEGORY_PROFESSION || skillInfo->categoryId == SKILL_CATEGORY_SECONDARY) &&
-                skillInfo->canLink)                             // only prof. with recipes have
-            {
+                    skillInfo->canLink)                             // only prof. with recipes have
                 HandleLearnSkillRecipesHelper(handler->GetSession()->GetPlayer(), skillInfo->id);
-            }
         }
 
         handler->SendSysMessage(LANG_COMMAND_LEARN_ALL_CRAFT);
@@ -360,8 +358,8 @@ public:
                 continue;
 
             if ((skillInfo->categoryId != SKILL_CATEGORY_PROFESSION &&
-                skillInfo->categoryId != SKILL_CATEGORY_SECONDARY) ||
-                !skillInfo->canLink)                            // only prof with recipes have set
+                    skillInfo->categoryId != SKILL_CATEGORY_SECONDARY) ||
+                    !skillInfo->canLink)                            // only prof with recipes have set
                 continue;
 
             int locale = handler->GetSessionDbcLocale();

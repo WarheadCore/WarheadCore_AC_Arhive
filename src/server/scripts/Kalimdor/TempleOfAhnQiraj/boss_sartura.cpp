@@ -35,7 +35,7 @@ enum Sartura
     SPELL_ENRAGE        = 28747,            //Not sure if right ID.
     SPELL_ENRAGEHARD    = 28798,
 
-//Guard Spell
+    //Guard Spell
     SPELL_WHIRLWINDADD  = 26038,
     SPELL_KNOCKBACK     = 26027
 };
@@ -73,7 +73,7 @@ public:
             WhirlWindEnd_Timer = 15000;
             AggroReset_Timer = urand(45000, 55000);
             AggroResetEnd_Timer = 5000;
-            EnrageHard_Timer = 10*60000;
+            EnrageHard_Timer = 10 * 60000;
 
             WhirlWind = false;
             AggroReset = false;
@@ -87,15 +87,15 @@ public:
             Talk(SAY_AGGRO);
         }
 
-         void JustDied(Unit* /*killer*/)
-         {
-             Talk(SAY_DEATH);
-         }
+        void JustDied(Unit* /*killer*/)
+        {
+            Talk(SAY_DEATH);
+        }
 
-         void KilledUnit(Unit* /*victim*/)
-         {
-             Talk(SAY_SLAY);
-         }
+        void KilledUnit(Unit* /*victim*/)
+        {
+            Talk(SAY_SLAY);
+        }
 
         void UpdateAI(uint32 diff)
         {
@@ -115,13 +115,15 @@ public:
                         AttackStart(target);
                     }
                     WhirlWindRandom_Timer = urand(3000, 7000);
-                } else WhirlWindRandom_Timer -= diff;
+                }
+                else WhirlWindRandom_Timer -= diff;
 
                 if (WhirlWindEnd_Timer <= diff)
                 {
                     WhirlWind = false;
                     WhirlWind_Timer = urand(25000, 40000);
-                } else WhirlWindEnd_Timer -= diff;
+                }
+                else WhirlWindEnd_Timer -= diff;
             }
 
             if (!WhirlWind)
@@ -131,7 +133,8 @@ public:
                     DoCast(me, SPELL_WHIRLWIND);
                     WhirlWind = true;
                     WhirlWindEnd_Timer = 15000;
-                } else WhirlWind_Timer -= diff;
+                }
+                else WhirlWind_Timer -= diff;
 
                 if (AggroReset_Timer <= diff)
                 {
@@ -144,7 +147,8 @@ public:
                     }
                     AggroReset = true;
                     AggroReset_Timer = urand(2000, 5000);
-                } else AggroReset_Timer -= diff;
+                }
+                else AggroReset_Timer -= diff;
 
                 if (AggroReset)
                 {
@@ -153,7 +157,8 @@ public:
                         AggroReset = false;
                         AggroResetEnd_Timer = 5000;
                         AggroReset_Timer = urand(35000, 45000);
-                    } else AggroResetEnd_Timer -= diff;
+                    }
+                    else AggroResetEnd_Timer -= diff;
                 }
 
                 //If she is 20% enrage
@@ -173,7 +178,8 @@ public:
                     {
                         DoCast(me, SPELL_ENRAGEHARD);
                         EnragedHard = true;
-                    } else EnrageHard_Timer -= diff;
+                    }
+                    else EnrageHard_Timer -= diff;
                 }
 
                 DoMeleeAttackIfReady();
@@ -236,7 +242,8 @@ public:
                 WhirlWind = true;
                 WhirlWind_Timer = urand(25000, 40000);
                 WhirlWindEnd_Timer = 15000;
-            } else WhirlWind_Timer -= diff;
+            }
+            else WhirlWind_Timer -= diff;
 
             if (WhirlWind)
             {
@@ -251,12 +258,12 @@ public:
                     }
 
                     WhirlWindRandom_Timer = urand(3000, 7000);
-                } else WhirlWindRandom_Timer -= diff;
+                }
+                else WhirlWindRandom_Timer -= diff;
 
                 if (WhirlWindEnd_Timer <= diff)
-                {
                     WhirlWind = false;
-                } else WhirlWindEnd_Timer -= diff;
+                else WhirlWindEnd_Timer -= diff;
             }
 
             if (!WhirlWind)
@@ -273,13 +280,15 @@ public:
 
                     AggroReset = true;
                     AggroReset_Timer = urand(2000, 5000);
-                } else AggroReset_Timer -= diff;
+                }
+                else AggroReset_Timer -= diff;
 
                 if (KnockBack_Timer <= diff)
                 {
                     DoCast(me, SPELL_WHIRLWINDADD);
                     KnockBack_Timer = urand(10000, 20000);
-                } else KnockBack_Timer -= diff;
+                }
+                else KnockBack_Timer -= diff;
             }
 
             if (AggroReset)
@@ -289,7 +298,8 @@ public:
                     AggroReset = false;
                     AggroResetEnd_Timer = 5000;
                     AggroReset_Timer = urand(30000, 40000);
-                } else AggroResetEnd_Timer -= diff;
+                }
+                else AggroResetEnd_Timer -= diff;
             }
 
             DoMeleeAttackIfReady();

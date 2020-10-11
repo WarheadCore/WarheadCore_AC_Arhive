@@ -206,7 +206,7 @@ public:
             instance->SetData(DATA_CTHUN_PHASE, PHASE_NOT_STARTED);
 
             //to avoid having a following void zone
-            Creature* pPortal= me->FindNearestCreature(NPC_CTHUN_PORTAL, 10);
+            Creature* pPortal = me->FindNearestCreature(NPC_CTHUN_PORTAL, 10);
             if (pPortal)
                 pPortal->SetReactState(REACT_PASSIVE);
         }
@@ -249,7 +249,8 @@ public:
                     SpawnEyeTentacle(-10, 10);              // south east
 
                     EyeTentacleTimer = 45000;
-                } else EyeTentacleTimer -= diff;
+                }
+                else EyeTentacleTimer -= diff;
             }
 
             switch (currentPhase)
@@ -270,7 +271,8 @@ public:
 
                         //Beam every 3 seconds
                         BeamTimer = 3000;
-                    } else BeamTimer -= diff;
+                    }
+                    else BeamTimer -= diff;
 
                     //ClawTentacleTimer
                     if (ClawTentacleTimer <= diff)
@@ -288,7 +290,8 @@ public:
 
                         //One claw tentacle every 12.5 seconds
                         ClawTentacleTimer = 12500;
-                    } else ClawTentacleTimer -= diff;
+                    }
+                    else ClawTentacleTimer -= diff;
 
                     //PhaseTimer
                     if (PhaseTimer <= diff)
@@ -323,7 +326,8 @@ public:
 
                         //Darkbeam for 35 seconds
                         PhaseTimer = 35000;
-                    } else PhaseTimer -= diff;
+                    }
+                    else PhaseTimer -= diff;
 
                     break;
 
@@ -354,7 +358,8 @@ public:
 
                             //1 second per tick
                             DarkGlareTickTimer = 1000;
-                        } else DarkGlareTickTimer -= diff;
+                        }
+                        else DarkGlareTickTimer -= diff;
                     }
 
                     //PhaseTimer
@@ -377,7 +382,8 @@ public:
 
                         //Eye Beam for 50 seconds
                         PhaseTimer = 50000;
-                    } else PhaseTimer -= diff;
+                    }
+                    else PhaseTimer -= diff;
 
                     break;
 
@@ -391,7 +397,7 @@ public:
 
                 //Dead phase
                 case PHASE_CTHUN_DONE:
-                    Creature* pPortal= me->FindNearestCreature(NPC_CTHUN_PORTAL, 10);
+                    Creature* pPortal = me->FindNearestCreature(NPC_CTHUN_PORTAL, 10);
                     if (pPortal)
                         pPortal->DespawnOrUnsummon();
 
@@ -400,7 +406,7 @@ public:
             }
         }
 
-        void DamageTaken(Unit*, uint32 &damage, DamageEffectType, SpellSchoolMask)
+        void DamageTaken(Unit*, uint32& damage, DamageEffectType, SpellSchoolMask)
         {
             switch (instance->GetData(DATA_CTHUN_PHASE))
             {
@@ -586,7 +592,7 @@ public:
                         return;
 
                     //Play random sound to the zone
-                    Map::PlayerList const &PlayerList = map->GetPlayers();
+                    Map::PlayerList const& PlayerList = map->GetPlayers();
 
                     if (!PlayerList.isEmpty())
                     {
@@ -599,7 +605,8 @@ public:
 
                     //One random wisper every 90 - 300 seconds
                     WisperTimer = urand(90000, 300000);
-                } else WisperTimer -= diff;
+                }
+                else WisperTimer -= diff;
 
                 return;
             }
@@ -624,7 +631,8 @@ public:
                     SpawnEyeTentacle(-10, 10);              // south east
 
                     EyeTentacleTimer = 30000; // every 30sec in phase 2
-                } else EyeTentacleTimer -= diff;
+                }
+                else EyeTentacleTimer -= diff;
             }
 
             switch (currentPhase)
@@ -667,7 +675,8 @@ public:
                         }
 
                         PhaseTimer = 0;
-                    } else PhaseTimer -= diff;
+                    }
+                    else PhaseTimer -= diff;
 
                     break;
 
@@ -698,7 +707,7 @@ public:
                             if (unit && i->second == true)
                             {
                                 //Teleport each player out
-                                DoTeleportPlayer(unit, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ()+10, float(rand()%6));
+                                DoTeleportPlayer(unit, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ() + 10, float(rand() % 6));
 
                                 //Cast knockback on them
                                 DoCast(unit, SPELL_EXIT_STOMACH_KNOCKBACK, true);
@@ -735,7 +744,7 @@ public:
                                 if (unit->IsWithinDist3d(&KickPos, 15.0f))
                                 {
                                     //Teleport each player out
-                                    DoTeleportPlayer(unit, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ()+10, float(rand()%6));
+                                    DoTeleportPlayer(unit, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ() + 10, float(rand() % 6));
 
                                     //Cast knockback on them
                                     DoCast(unit, SPELL_EXIT_STOMACH_KNOCKBACK, true);
@@ -750,7 +759,8 @@ public:
                         }
 
                         StomachAcidTimer = 4000;
-                    } else StomachAcidTimer -= diff;
+                    }
+                    else StomachAcidTimer -= diff;
 
                     //Stomach Enter Timer
                     if (StomachEnterTimer <= diff)
@@ -766,7 +776,8 @@ public:
                         }
 
                         StomachEnterTimer = 13800;
-                    } else StomachEnterTimer -= diff;
+                    }
+                    else StomachEnterTimer -= diff;
 
                     if (StomachEnterVisTimer && StomachEnterTarget)
                     {
@@ -776,13 +787,12 @@ public:
                             Unit* unit = ObjectAccessor::GetUnit(*me, StomachEnterTarget);
 
                             if (unit)
-                            {
                                 DoTeleportPlayer(unit, STOMACH_X, STOMACH_Y, STOMACH_Z, STOMACH_O);
-                            }
 
                             StomachEnterTarget = 0;
                             StomachEnterVisTimer = 0;
-                        } else StomachEnterVisTimer -= diff;
+                        }
+                        else StomachEnterVisTimer -= diff;
                     }
 
                     //GientClawTentacleTimer
@@ -798,7 +808,8 @@ public:
 
                         //One giant claw tentacle every minute
                         GiantClawTentacleTimer = 60000;
-                    } else GiantClawTentacleTimer -= diff;
+                    }
+                    else GiantClawTentacleTimer -= diff;
 
                     //GiantEyeTentacleTimer
                     if (GiantEyeTentacleTimer <= diff)
@@ -813,7 +824,8 @@ public:
 
                         //One giant eye tentacle every minute
                         GiantEyeTentacleTimer = 60000;
-                    } else GiantEyeTentacleTimer -= diff;
+                    }
+                    else GiantEyeTentacleTimer -= diff;
 
                     break;
 
@@ -840,7 +852,8 @@ public:
                         }
 
                         PhaseTimer = 0;
-                    } else PhaseTimer -= diff;
+                    }
+                    else PhaseTimer -= diff;
 
                     break;
             }
@@ -851,7 +864,7 @@ public:
             instance->SetData(DATA_CTHUN_PHASE, PHASE_CTHUN_DONE);
         }
 
-        void DamageTaken(Unit*, uint32 &damage, DamageEffectType, SpellSchoolMask)
+        void DamageTaken(Unit*, uint32& damage, DamageEffectType, SpellSchoolMask)
         {
             switch (instance->GetData(DATA_CTHUN_PHASE))
             {
@@ -949,7 +962,8 @@ public:
             {
                 Unit::Kill(me, me);
                 return;
-            } else KillSelfTimer -= diff;
+            }
+            else KillSelfTimer -= diff;
 
             //MindflayTimer
             if (MindflayTimer <= diff)
@@ -960,7 +974,8 @@ public:
 
                 //Mindflay every 10 seconds
                 MindflayTimer = 10000;
-            } else MindflayTimer -= diff;
+            }
+            else MindflayTimer -= diff;
         }
     };
 
@@ -1054,7 +1069,8 @@ public:
                     }
 
                     me->SetVisible(true);
-                } else EvadeTimer -= diff;
+                }
+                else EvadeTimer -= diff;
             }
 
             //GroundRuptureTimer
@@ -1062,14 +1078,16 @@ public:
             {
                 DoCastVictim(SPELL_GROUND_RUPTURE);
                 GroundRuptureTimer = 30000;
-            } else GroundRuptureTimer -= diff;
+            }
+            else GroundRuptureTimer -= diff;
 
             //HamstringTimer
             if (HamstringTimer <= diff)
             {
                 DoCastVictim(SPELL_HAMSTRING);
                 HamstringTimer = 5000;
-            } else HamstringTimer -= diff;
+            }
+            else HamstringTimer -= diff;
 
             DoMeleeAttackIfReady();
         }
@@ -1167,7 +1185,8 @@ public:
                         AttackStart(target);
                     }
                     me->SetVisible(true);
-                } else EvadeTimer -= diff;
+                }
+                else EvadeTimer -= diff;
             }
 
             //GroundRuptureTimer
@@ -1175,21 +1194,24 @@ public:
             {
                 DoCastVictim(SPELL_GROUND_RUPTURE);
                 GroundRuptureTimer = 30000;
-            } else GroundRuptureTimer -= diff;
+            }
+            else GroundRuptureTimer -= diff;
 
             //ThrashTimer
             if (ThrashTimer <= diff)
             {
                 DoCastVictim(SPELL_THRASH);
                 ThrashTimer = 10000;
-            } else ThrashTimer -= diff;
+            }
+            else ThrashTimer -= diff;
 
             //HamstringTimer
             if (HamstringTimer <= diff)
             {
                 DoCastVictim(SPELL_HAMSTRING);
                 HamstringTimer = 10000;
-            } else HamstringTimer -= diff;
+            }
+            else HamstringTimer -= diff;
 
             DoMeleeAttackIfReady();
         }
@@ -1256,7 +1278,8 @@ public:
 
                 //Beam every 2 seconds
                 BeamTimer = 2100;
-            } else BeamTimer -= diff;
+            }
+            else BeamTimer -= diff;
         }
     };
 
