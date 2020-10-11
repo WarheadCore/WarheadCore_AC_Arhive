@@ -209,7 +209,7 @@ bool InstanceScript::SetBossState(uint32 id, EncounterState state)
         if (bossInfo->state == TO_BE_DECIDED) // loading
         {
             bossInfo->state = state;
-            LOG_ERROR("instance", "Inialize boss %u state as %u.", id, (uint32)state);
+            LOG_DEBUG("instance", "Inialize boss %u state as %u.", id, (uint32)state);
             return false;
         }
         else
