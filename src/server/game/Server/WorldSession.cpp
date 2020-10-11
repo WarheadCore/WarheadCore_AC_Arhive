@@ -634,7 +634,7 @@ void WorldSession::KickPlayer(std::string const& reason, bool setKicked)
 
 bool WorldSession::ValidateHyperlinksAndMaybeKick(std::string const& str)
 {
-    if (acore::Hyperlinks::CheckAllLinks(str.c_str()))
+    if (warhead::Hyperlinks::CheckAllLinks(str.c_str()))
         return true;
 
     LOG_ERROR("network", "Player %s (GUID: %u) sent a message with an invalid link:\n%s", GetPlayer()->GetName().c_str(),

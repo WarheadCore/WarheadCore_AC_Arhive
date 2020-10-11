@@ -43,7 +43,7 @@ public:
         else
             _empty = true;
 
-        return acore::Hyperlinks::LinkTags::base_tag::StoreTo(val, firstPos, thisLen);
+        return warhead::Hyperlinks::LinkTags::base_tag::StoreTo(val, firstPos, thisLen);
     }
 
     bool IsEmpty() { return _empty; }
@@ -54,7 +54,7 @@ private:
     bool _empty;
 };
 
-bool acore::Hyperlinks::LinkTags::achievement::StoreTo(AchievementLinkData& val, char const* pos, size_t len)
+bool warhead::Hyperlinks::LinkTags::achievement::StoreTo(AchievementLinkData& val, char const* pos, size_t len)
 {
     HyperlinkDataTokenizer t(pos, len);
     uint32 achievementId;
@@ -66,7 +66,7 @@ bool acore::Hyperlinks::LinkTags::achievement::StoreTo(AchievementLinkData& val,
            t.TryConsumeTo(val.Criteria[1]) && t.TryConsumeTo(val.Criteria[2]) && t.TryConsumeTo(val.Criteria[3]) && t.IsEmpty();
 }
 
-bool acore::Hyperlinks::LinkTags::enchant::StoreTo(SpellInfo const*& val, char const* pos, size_t len)
+bool warhead::Hyperlinks::LinkTags::enchant::StoreTo(SpellInfo const*& val, char const* pos, size_t len)
 {
     HyperlinkDataTokenizer t(pos, len);
     uint32 spellId;
@@ -75,7 +75,7 @@ bool acore::Hyperlinks::LinkTags::enchant::StoreTo(SpellInfo const*& val, char c
     return (val = sSpellMgr->GetSpellInfo(spellId)) && val->HasAttribute(SPELL_ATTR0_TRADESPELL);
 }
 
-bool acore::Hyperlinks::LinkTags::glyph::StoreTo(GlyphLinkData& val, char const* pos, size_t len)
+bool warhead::Hyperlinks::LinkTags::glyph::StoreTo(GlyphLinkData& val, char const* pos, size_t len)
 {
     HyperlinkDataTokenizer t(pos, len);
     uint32 slot, prop;
@@ -88,7 +88,7 @@ bool acore::Hyperlinks::LinkTags::glyph::StoreTo(GlyphLinkData& val, char const*
     return true;
 }
 
-bool acore::Hyperlinks::LinkTags::item::StoreTo(ItemLinkData& val, char const* pos, size_t len)
+bool warhead::Hyperlinks::LinkTags::item::StoreTo(ItemLinkData& val, char const* pos, size_t len)
 {
     HyperlinkDataTokenizer t(pos, len);
     uint32 itemId, dummy;
@@ -100,7 +100,7 @@ bool acore::Hyperlinks::LinkTags::item::StoreTo(ItemLinkData& val, char const* p
            t.TryConsumeTo(val.RenderLevel) && t.IsEmpty() && !dummy;
 }
 
-bool acore::Hyperlinks::LinkTags::quest::StoreTo(QuestLinkData& val, char const* pos, size_t len)
+bool warhead::Hyperlinks::LinkTags::quest::StoreTo(QuestLinkData& val, char const* pos, size_t len)
 {
     HyperlinkDataTokenizer t(pos, len);
     uint32 questId;
@@ -109,7 +109,7 @@ bool acore::Hyperlinks::LinkTags::quest::StoreTo(QuestLinkData& val, char const*
     return (val.Quest = sObjectMgr->GetQuestTemplate(questId)) && t.TryConsumeTo(val.QuestLevel) && t.IsEmpty();
 }
 
-bool acore::Hyperlinks::LinkTags::spell::StoreTo(SpellInfo const*& val, char const* pos, size_t len)
+bool warhead::Hyperlinks::LinkTags::spell::StoreTo(SpellInfo const*& val, char const* pos, size_t len)
 {
     HyperlinkDataTokenizer t(pos, len);
     uint32 spellId;
@@ -118,7 +118,7 @@ bool acore::Hyperlinks::LinkTags::spell::StoreTo(SpellInfo const*& val, char con
     return !!(val = sSpellMgr->GetSpellInfo(spellId));
 }
 
-bool acore::Hyperlinks::LinkTags::talent::StoreTo(TalentLinkData& val, char const* pos, size_t len)
+bool warhead::Hyperlinks::LinkTags::talent::StoreTo(TalentLinkData& val, char const* pos, size_t len)
 {
     HyperlinkDataTokenizer t(pos, len);
     uint32 talentId;
@@ -135,7 +135,7 @@ bool acore::Hyperlinks::LinkTags::talent::StoreTo(TalentLinkData& val, char cons
     return true;
 }
 
-bool acore::Hyperlinks::LinkTags::trade::StoreTo(TradeskillLinkData& val, char const* pos, size_t len)
+bool warhead::Hyperlinks::LinkTags::trade::StoreTo(TradeskillLinkData& val, char const* pos, size_t len)
 {
     HyperlinkDataTokenizer t(pos, len);
     uint32 spellId;

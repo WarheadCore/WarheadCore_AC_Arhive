@@ -248,6 +248,6 @@ namespace acore
 }
 
 // pull in link tags for user convenience
-using namespace ::acore::Hyperlinks::LinkTags;
+using namespace ::warhead::Hyperlinks::LinkTags;
 
 #endif
