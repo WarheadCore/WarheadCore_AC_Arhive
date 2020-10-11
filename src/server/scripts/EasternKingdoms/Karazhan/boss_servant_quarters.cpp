@@ -116,6 +116,7 @@ public:
                         _events2.ScheduleEvent(EVENT_CHECK_VISIBILITY, 5000);
                     break;
             }
+        }
 
             if (!UpdateVictim())
                 return;

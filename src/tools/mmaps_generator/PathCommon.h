@@ -23,12 +23,12 @@
 #include <vector>
 
 #ifndef _WIN32
-    #include <stddef.h>
-    #include <dirent.h>
+#include <stddef.h>
+#include <dirent.h>
 #endif
 
 #ifdef __linux__
-    #include <errno.h>
+#include <errno.h>
 #endif
 
 enum NavTerrain
@@ -42,7 +42,7 @@ enum NavTerrain
     NAV_UNUSED2 = 0x20,
     NAV_UNUSED3 = 0x40,
     NAV_UNUSED4 = 0x80
-    // we only have 8 bits
+                  // we only have 8 bits
 };
 
 namespace MMAP
@@ -85,9 +85,9 @@ namespace MMAP
         LISTFILE_OK = 1
     };
 
-    inline ListFilesResult getDirContents(std::vector<std::string> &fileList, std::string dirpath = ".", std::string filter = "*")
+    inline ListFilesResult getDirContents(std::vector<std::string>& fileList, std::string dirpath = ".", std::string filter = "*")
     {
-    #ifdef WIN32
+#ifdef WIN32
         HANDLE hFind;
         WIN32_FIND_DATA findFileInfo;
         std::string directory;
@@ -102,15 +102,14 @@ namespace MMAP
         {
             if ((findFileInfo.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0)
                 fileList.push_back(std::string(findFileInfo.cFileName));
-        }
-        while (FindNextFile(hFind, &findFileInfo));
+        } while (FindNextFile(hFind, &findFileInfo));
 
         FindClose(hFind);
 
-    #else
-        const char *p = dirpath.c_str();
-        DIR * dirp = opendir(p);
-        struct dirent * dp;
+#else
+        const char* p = dirpath.c_str();
+        DIR* dirp = opendir(p);
+        struct dirent* dp;
 
         while (dirp)
         {
@@ -128,7 +127,7 @@ namespace MMAP
             closedir(dirp);
         else
             return LISTFILE_DIRECTORY_NOT_FOUND;
-    #endif
+#endif
 
         return LISTFILE_OK;
     }

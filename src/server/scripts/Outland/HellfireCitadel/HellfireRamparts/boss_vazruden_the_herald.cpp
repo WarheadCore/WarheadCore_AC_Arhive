@@ -236,6 +236,7 @@ public:
                     events.ScheduleEvent(EVENT_SPELL_BELLOWING_ROAR, 30000);
                     break;
             }
+        }
 
             if (!me->IsLevitating())
                 DoMeleeAttackIfReady();

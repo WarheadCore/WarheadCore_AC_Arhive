@@ -25,10 +25,11 @@
 enum Spells
 {
     // Toravon
-    SPELL_FREEZING_GROUND               = 72090,
-    SPELL_FROZEN_ORB                    = 72091,
-    SPELL_WHITEOUT                      = 72034,
-    SPELL_FROZEN_MALLET                 = 71993,
+    SPELL_FREEZING_GROUND              = 72090,
+    SPELL_FROZEN_ORB                   = 72091,
+    SPELL_WHITEOUT                     = 72034,
+    SPELL_WHITEOUT_VISUAL              = 72036,
+    SPELL_FROZEN_MALLET                = 71993,
 
     // Frozen Orb
     SPELL_FROZEN_ORB_DMG                = 72081,    // priodic dmg aura
@@ -36,13 +37,19 @@ enum Spells
 
     // Frozen Orb Stalker
     SPELL_FROZEN_ORB_STALKER_VISUAL     = 72094,
+
+    // Whiteout GroundEffect NPC
+    NPC_WHITEOUT_GROUND_EFFECT          = 38440,
 };
 
 enum Events
 {
     EVENT_FREEZING_GROUND               = 1,
     EVENT_FROZEN_ORB_STALKER            = 2,
-    EVENT_CHECK_SUMMONS                 = 3,
+    EVENT_CAST_WHITEOUT                 = 3,
+    EVENT_CAST_WHITEOUT_GROUND_EFFECT   = 4,
+
+
 };
 
 enum Misc
@@ -246,7 +253,6 @@ public:
         return new npc_frozen_orb_stalkerAI(creature);
     }
 };
-
 
 void AddSC_boss_toravon()
 {

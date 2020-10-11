@@ -20,9 +20,9 @@
 #include "adtfile.h"
 #include <cstdio>
 
-char * wdtGetPlainName(char * FileName)
+char* wdtGetPlainName(char* FileName)
 {
-    char * szTemp;
+    char* szTemp;
 
     if((szTemp = strrchr(FileName, '\\')) != nullptr)
         FileName = szTemp + 1;
@@ -31,7 +31,7 @@ char * wdtGetPlainName(char * FileName)
 
 WDTFile::WDTFile(char* file_name, char* file_name1) : WDT(file_name), gWmoInstansName(nullptr), gnWMO(0)
 {
-    filename.append(file_name1,strlen(file_name1));
+    filename.append(file_name1, strlen(file_name1));
 }
 
 bool WDTFile::init(char* /*map_id*/, unsigned int mapID)
@@ -46,7 +46,7 @@ bool WDTFile::init(char* /*map_id*/, unsigned int mapID)
     uint32 size;
 
     std::string dirname = std::string(szWorkDirWmo) + "/dir_bin";
-    FILE *dirfile;
+    FILE* dirfile;
     dirfile = fopen(dirname.c_str(), "ab");
     if(!dirfile)
     {
@@ -56,7 +56,7 @@ bool WDTFile::init(char* /*map_id*/, unsigned int mapID)
 
     while (!WDT.isEof())
     {
-        WDT.read(fourcc,4);
+        WDT.read(fourcc, 4);
         WDT.read(&size, 4);
 
         flipcc(fourcc);
@@ -64,24 +64,24 @@ bool WDTFile::init(char* /*map_id*/, unsigned int mapID)
 
         size_t nextpos = WDT.getPos() + size;
 
-        if (!strcmp(fourcc,"MAIN"))
+        if (!strcmp(fourcc, "MAIN"))
         {
         }
-        if (!strcmp(fourcc,"MWMO"))
+        if (!strcmp(fourcc, "MWMO"))
         {
             // global map objects
             if (size)
             {
-                char *buf = new char[size];
+                char* buf = new char[size];
                 WDT.read(buf, size);
-                char *p=buf;
+                char* p = buf;
                 int q = 0;
                 gWmoInstansName = new string[size];
                 while (p < buf + size)
                 {
-                    char* s=wdtGetPlainName(p);
-                    fixnamen(s,strlen(s));
-                    p=p+strlen(p)+1;
+                    char* s = wdtGetPlainName(p);
+                    fixnamen(s, strlen(s));
+                    p = p + strlen(p) + 1;
                     gWmoInstansName[q++] = s;
                 }
                 delete[] buf;
@@ -98,7 +98,7 @@ bool WDTFile::init(char* /*map_id*/, unsigned int mapID)
                 {
                     int id;
                     WDT.read(&id, 4);
-                    WMOInstance inst(WDT,gWmoInstansName[id].c_str(), mapID, 65, 65, dirfile);
+                    WMOInstance inst(WDT, gWmoInstansName[id].c_str(), mapID, 65, 65, dirfile);
                 }
 
                 delete[] gWmoInstansName;
@@ -119,11 +119,11 @@ WDTFile::~WDTFile(void)
 
 ADTFile* WDTFile::GetMap(int x, int z)
 {
-    if(!(x>=0 && z >= 0 && x<64 && z<64))
+    if(!(x >= 0 && z >= 0 && x < 64 && z < 64))
         return nullptr;
 
     char name[512];
 
-    sprintf(name,"World\\Maps\\%s\\%s_%d_%d.adt", filename.c_str(), filename.c_str(), x, z);
+    sprintf(name, "World\\Maps\\%s\\%s_%d_%d.adt", filename.c_str(), filename.c_str(), x, z);
     return new ADTFile(name);
 }

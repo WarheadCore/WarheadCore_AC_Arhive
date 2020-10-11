@@ -1509,6 +1509,7 @@ public:
                 default:
                     break;
             }
+        }
 
             DoMeleeAttackIfReady();
         }
