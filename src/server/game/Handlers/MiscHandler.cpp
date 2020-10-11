@@ -1020,7 +1020,7 @@ void WorldSession::HandleRequestAccountData(WorldPacket& recv_data)
 
 void WorldSession::HandleSetActionButtonOpcode(WorldPacket& recv_data)
 {
-    LOG_DEBUG("network", "WORLD: Received CMSG_SET_ACTION_BUTTON");
+    LOG_TRACE("network", "WORLD: Received CMSG_SET_ACTION_BUTTON");
 
     uint8 button;
     uint32 packetData;
@@ -1033,7 +1033,7 @@ void WorldSession::HandleSetActionButtonOpcode(WorldPacket& recv_data)
     
     if (!packetData)
     {
-        LOG_ERROR("network.opcode", "MISC: Remove action from button %u", button);
+        LOG_DEBUG("network.opcode", "MISC: Remove action from button %u", button);
         GetPlayer()->removeActionButton(button);
     }
     else
@@ -1042,16 +1042,16 @@ void WorldSession::HandleSetActionButtonOpcode(WorldPacket& recv_data)
         {
             case ACTION_BUTTON_MACRO:
             case ACTION_BUTTON_CMACRO:
-                LOG_INFO("network.opcode", "MISC: Added Macro %u into button %u", action, button);
+                LOG_DEBUG("network.opcode", "MISC: Added Macro %u into button %u", action, button);
                 break;
             case ACTION_BUTTON_EQSET:
-                LOG_INFO("network.opcode", "MISC: Added EquipmentSet %u into button %u", action, button);
+                LOG_DEBUG("network.opcode", "MISC: Added EquipmentSet %u into button %u", action, button);
                 break;
             case ACTION_BUTTON_SPELL:
-                LOG_INFO("network.opcode", "MISC: Added Spell %u into button %u", action, button);
+                LOG_DEBUG("network.opcode", "MISC: Added Spell %u into button %u", action, button);
                 break;
             case ACTION_BUTTON_ITEM:
-                LOG_INFO("network.opcode", "MISC: Added Item %u into button %u", action, button);
+                LOG_DEBUG("network.opcode", "MISC: Added Item %u into button %u", action, button);
                 break;
             default:
                 LOG_ERROR("network.opcode", "MISC: Unknown action button type %u for action %u into button %u for player %s (GUID: %u)", type, action, button, _player->GetName().c_str(), _player->GetGUIDLow());
