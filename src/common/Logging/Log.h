@@ -90,7 +90,7 @@ public:
     template<typename Format, typename... Args>
     inline void outMessage(std::string_view filter, LogLevel const level, Format&& fmt, Args&& ... args)
     {
-        outMessage(filter, level, warhead::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
+        outMessage(filter, level, Warhead::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
     }
 
     template<typename Format, typename... Args>
@@ -99,7 +99,7 @@ public:
         if (!ShouldLog("commands.gm", LogLevel::LOG_LEVEL_INFO))
             return;
 
-        outCommand(std::to_string(account), warhead::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
+        outCommand(std::to_string(account), Warhead::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
     }
 
 private:

@@ -126,7 +126,7 @@ UpdateFetcher::DirectoryStorage UpdateFetcher::ReceiveIncludedDirectories() cons
 
     std::vector<std::string> moduleList;
 
-    auto const& _modulesTokens = warhead::Tokenize(WH_MODULES_LIST, ',', true);
+    auto const& _modulesTokens = Warhead::Tokenize(WH_MODULES_LIST, ',', true);
     for (auto const& itr : _modulesTokens)
         moduleList.push_back(std::string(itr));
 

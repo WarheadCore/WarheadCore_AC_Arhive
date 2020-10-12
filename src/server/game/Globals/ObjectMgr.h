@@ -444,13 +444,13 @@ typedef std::unordered_map<uint32/*cell_id*/, CellObjectGuids> CellObjectGuidsMa
 typedef std::unordered_map<uint32/*(mapid, spawnMode) pair*/, CellObjectGuidsMap> MapObjectGuids;
 
 // Acore string ranges
-#define MIN_ACORE_STRING_ID           1                    // 'acore_string'
-#define MAX_ACORE_STRING_ID           2000000000
+#define MIN_WARHEAD_STRING_ID           1                    // 'acore_string'
+#define MAX_WARHEAD_STRING_ID           2000000000
 #define MIN_CREATURE_AI_TEXT_STRING_ID (-1)                 // 'creature_ai_texts'
 #define MAX_CREATURE_AI_TEXT_STRING_ID (-1000000)
 
 // Acore Trainer Reference start range
-#define ACORE_TRAINER_START_REF      200000
+#define WARHEAD_TRAINER_START_REF      200000
 
 typedef std::map<uint64, uint64> LinkedRespawnContainer;
 typedef std::unordered_map<uint32, CreatureData> CreatureDataContainer;

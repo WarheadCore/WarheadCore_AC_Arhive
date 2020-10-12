@@ -60,7 +60,7 @@ endif()
 
 if( WITH_COREDEBUG )
   message("* Use coreside debug              : Yes")
-  add_definitions(-DACORE_DEBUG)
+  add_definitions(-DWARHEAD_DEBUG)
 else()
   message("* Use coreside debug              : No  (default)")
 endif()
@@ -129,7 +129,7 @@ if (BUILD_SHARED_LIBS)
   message(" *** Will link against shared libraries!")
   message(" *** Please note that this is an experimental feature!")
   
-  add_definitions(-DACORE_API_USE_DYNAMIC_LINKING)
+  add_definitions(-DWARHEAD_API_USE_DYNAMIC_LINKING)
 endif()
 
 message("")

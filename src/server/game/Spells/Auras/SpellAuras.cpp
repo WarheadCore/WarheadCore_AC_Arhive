@@ -2647,23 +2647,23 @@ void UnitAura::FillTargetMap(std::map<Unit*, uint8>& targets, Unit* caster)
                     case SPELL_EFFECT_APPLY_AREA_AURA_RAID:
                         {
                             targetList.push_back(GetUnitOwner());
-                            warhead::AnyGroupedUnitInObjectRangeCheck u_check(GetUnitOwner(), GetUnitOwner(), radius, GetSpellInfo()->Effects[effIndex].Effect == SPELL_EFFECT_APPLY_AREA_AURA_RAID);
-                            warhead::UnitListSearcher<warhead::AnyGroupedUnitInObjectRangeCheck> searcher(GetUnitOwner(), targetList, u_check);
+                            Warhead::AnyGroupedUnitInObjectRangeCheck u_check(GetUnitOwner(), GetUnitOwner(), radius, GetSpellInfo()->Effects[effIndex].Effect == SPELL_EFFECT_APPLY_AREA_AURA_RAID);
+                            Warhead::UnitListSearcher<Warhead::AnyGroupedUnitInObjectRangeCheck> searcher(GetUnitOwner(), targetList, u_check);
                             GetUnitOwner()->VisitNearbyObject(radius, searcher);
                             break;
                         }
                     case SPELL_EFFECT_APPLY_AREA_AURA_FRIEND:
                         {
                             targetList.push_back(GetUnitOwner());
-                            warhead::AnyFriendlyUnitInObjectRangeCheck u_check(GetUnitOwner(), GetUnitOwner(), radius);
-                            warhead::UnitListSearcher<warhead::AnyFriendlyUnitInObjectRangeCheck> searcher(GetUnitOwner(), targetList, u_check);
+                            Warhead::AnyFriendlyUnitInObjectRangeCheck u_check(GetUnitOwner(), GetUnitOwner(), radius);
+                            Warhead::UnitListSearcher<Warhead::AnyFriendlyUnitInObjectRangeCheck> searcher(GetUnitOwner(), targetList, u_check);
                             GetUnitOwner()->VisitNearbyObject(radius, searcher);
                             break;
                         }
                     case SPELL_EFFECT_APPLY_AREA_AURA_ENEMY:
                         {
-                            warhead::AnyAoETargetUnitInObjectRangeCheck u_check(GetUnitOwner(), GetUnitOwner(), radius); // No GetCharmer in searcher
-                            warhead::UnitListSearcher<warhead::AnyAoETargetUnitInObjectRangeCheck> searcher(GetUnitOwner(), targetList, u_check);
+                            Warhead::AnyAoETargetUnitInObjectRangeCheck u_check(GetUnitOwner(), GetUnitOwner(), radius); // No GetCharmer in searcher
+                            Warhead::UnitListSearcher<Warhead::AnyAoETargetUnitInObjectRangeCheck> searcher(GetUnitOwner(), targetList, u_check);
                             GetUnitOwner()->VisitNearbyObject(radius, searcher);
                             break;
                         }
@@ -2723,22 +2723,22 @@ void DynObjAura::FillTargetMap(std::map<Unit*, uint8>& targets, Unit* /*caster*/
         if (GetSpellInfo()->Effects[effIndex].TargetB.GetTarget() == TARGET_DEST_DYNOBJ_ALLY
                 || GetSpellInfo()->Effects[effIndex].TargetB.GetTarget() == TARGET_UNIT_DEST_AREA_ALLY)
         {
-            warhead::AnyFriendlyUnitInObjectRangeCheck u_check(GetDynobjOwner(), dynObjOwnerCaster, radius);
-            warhead::UnitListSearcher<warhead::AnyFriendlyUnitInObjectRangeCheck> searcher(GetDynobjOwner(), targetList, u_check);
+            Warhead::AnyFriendlyUnitInObjectRangeCheck u_check(GetDynobjOwner(), dynObjOwnerCaster, radius);
+            Warhead::UnitListSearcher<Warhead::AnyFriendlyUnitInObjectRangeCheck> searcher(GetDynobjOwner(), targetList, u_check);
             GetDynobjOwner()->VisitNearbyObject(radius, searcher);
         }
         // pussywizard: TARGET_DEST_DYNOBJ_NONE is supposed to search for both friendly and unfriendly targets, so for any unit
         // what about EffectImplicitTargetA?
         else if (GetSpellInfo()->Effects[effIndex].TargetB.GetTarget() == TARGET_DEST_DYNOBJ_NONE)
         {
-            warhead::AnyAttackableUnitExceptForOriginalCasterInObjectRangeCheck u_check(GetDynobjOwner(), dynObjOwnerCaster, radius);
-            warhead::UnitListSearcher<warhead::AnyAttackableUnitExceptForOriginalCasterInObjectRangeCheck> searcher(GetDynobjOwner(), targetList, u_check);
+            Warhead::AnyAttackableUnitExceptForOriginalCasterInObjectRangeCheck u_check(GetDynobjOwner(), dynObjOwnerCaster, radius);
+            Warhead::UnitListSearcher<Warhead::AnyAttackableUnitExceptForOriginalCasterInObjectRangeCheck> searcher(GetDynobjOwner(), targetList, u_check);
             GetDynobjOwner()->VisitNearbyObject(radius, searcher);
         }
         else
         {
-            warhead::AnyAoETargetUnitInObjectRangeCheck u_check(GetDynobjOwner(), dynObjOwnerCaster, radius);
-            warhead::UnitListSearcher<warhead::AnyAoETargetUnitInObjectRangeCheck> searcher(GetDynobjOwner(), targetList, u_check);
+            Warhead::AnyAoETargetUnitInObjectRangeCheck u_check(GetDynobjOwner(), dynObjOwnerCaster, radius);
+            Warhead::UnitListSearcher<Warhead::AnyAoETargetUnitInObjectRangeCheck> searcher(GetDynobjOwner(), targetList, u_check);
             GetDynobjOwner()->VisitNearbyObject(radius, searcher);
         }
 

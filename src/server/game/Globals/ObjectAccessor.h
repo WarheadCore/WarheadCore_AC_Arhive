@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_OBJECTACCESSOR_H
-#define ACORE_OBJECTACCESSOR_H
+#ifndef WARHEAD_OBJECTACCESSOR_H
+#define WARHEAD_OBJECTACCESSOR_H
 
 #include "Define.h"
 #include "UpdateData.h"
@@ -49,19 +49,19 @@ public:
 
     static void Insert(T* o)
     {
-        ACORE_WRITE_GUARD(LockType, i_lock);
+        WARHEAD_WRITE_GUARD(LockType, i_lock);
         m_objectMap[o->GetGUID()] = o;
     }
 
     static void Remove(T* o)
     {
-        ACORE_WRITE_GUARD(LockType, i_lock);
+        WARHEAD_WRITE_GUARD(LockType, i_lock);
         m_objectMap.erase(o->GetGUID());
     }
 
     static T* Find(uint64 guid)
     {
-        ACORE_READ_GUARD(LockType, i_lock);
+        WARHEAD_READ_GUARD(LockType, i_lock);
         typename MapType::iterator itr = m_objectMap.find(guid);
         return (itr != m_objectMap.end()) ? itr->second : nullptr;
     }
@@ -159,14 +159,14 @@ public:
         if (!obj || obj->GetMapId() != mapid)
             return nullptr;
 
-        CellCoord p = warhead::ComputeCellCoord(x, y);
+        CellCoord p = Warhead::ComputeCellCoord(x, y);
         if (!p.IsCoordValid())
         {
             LOG_ERROR("globals", "ObjectAccessor::GetObjectInWorld: invalid coordinates supplied X:%f Y:%f grid cell [%u:%u]", x, y, p.x_coord, p.y_coord);
             return NULL;
         }
 
-        CellCoord q = warhead::ComputeCellCoord(obj->GetPositionX(), obj->GetPositionY());
+        CellCoord q = Warhead::ComputeCellCoord(obj->GetPositionX(), obj->GetPositionY());
         if (!q.IsCoordValid())
         {
             LOG_ERROR("globals", "ObjectAccessor::GetObjecInWorld: object (GUID: %u TypeId: %u) has invalid coordinates X:%f Y:%f grid cell [%u:%u]", obj->GetGUIDLow(), obj->GetTypeId(), obj->GetPositionX(), obj->GetPositionY(), q.x_coord, q.y_coord);
@@ -239,7 +239,7 @@ public:
     //non-static functions
     void AddUpdateObject(Object* obj)
     {
-        ACORE_GUARD(ACE_Thread_Mutex, i_objectLock);
+        WARHEAD_GUARD(ACE_Thread_Mutex, i_objectLock);
         if (obj->GetTypeId() < TYPEID_UNIT) // these are not in map: TYPEID_OBJECT, TYPEID_ITEM, TYPEID_CONTAINER
             i_objects.insert(obj);
         else
@@ -248,7 +248,7 @@ public:
 
     void RemoveUpdateObject(Object* obj)
     {
-        ACORE_GUARD(ACE_Thread_Mutex, i_objectLock);
+        WARHEAD_GUARD(ACE_Thread_Mutex, i_objectLock);
         if (obj->GetTypeId() < TYPEID_UNIT) // these are not in map: TYPEID_OBJECT, TYPEID_ITEM, TYPEID_CONTAINER
             i_objects.erase(obj);
         else

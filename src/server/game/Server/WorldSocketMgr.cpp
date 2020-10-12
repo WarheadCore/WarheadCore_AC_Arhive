@@ -109,7 +109,7 @@ public:
 
     int AddSocket (WorldSocket* sock)
     {
-        ACORE_GUARD(ACE_Thread_Mutex, m_NewSockets_Lock);
+        WARHEAD_GUARD(ACE_Thread_Mutex, m_NewSockets_Lock);
 
         ++m_Connections;
         sock->AddReference();
@@ -130,7 +130,7 @@ protected:
 
     void AddNewSockets()
     {
-        ACORE_GUARD(ACE_Thread_Mutex, m_NewSockets_Lock);
+        WARHEAD_GUARD(ACE_Thread_Mutex, m_NewSockets_Lock);
 
         if (m_NewSockets.empty())
             return;

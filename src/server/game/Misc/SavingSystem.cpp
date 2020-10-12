@@ -42,7 +42,7 @@ void SavingSystemMgr::IncreaseSavingCurrentValue(uint32 inc)
 
 uint32 SavingSystemMgr::IncreaseSavingMaxValue(uint32 inc)
 {
-    ACORE_GUARD(ACE_Thread_Mutex, _savingLock);
+    WARHEAD_GUARD(ACE_Thread_Mutex, _savingLock);
     return (m_savingMaxValueAssigned += inc);
 }
 
@@ -50,7 +50,7 @@ void SavingSystemMgr::InsertToSavingSkipListIfNeeded(uint32 id)
 {
     if (id > m_savingCurrentValue)
     {
-        ACORE_GUARD(ACE_Thread_Mutex, _savingLock);
+        WARHEAD_GUARD(ACE_Thread_Mutex, _savingLock);
         m_savingSkipList.push_back(id);
     }
 }

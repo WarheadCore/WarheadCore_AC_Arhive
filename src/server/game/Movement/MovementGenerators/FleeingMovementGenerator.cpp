@@ -162,8 +162,8 @@ bool FleeingMovementGenerator<T>::_getPoint(T* owner, float& x, float& y, float&
 
         temp_x = x + distance * cos(angle);
         temp_y = y + distance * sin(angle);
-        warhead::NormalizeMapCoord(temp_x);
-        warhead::NormalizeMapCoord(temp_y);
+        Warhead::NormalizeMapCoord(temp_x);
+        Warhead::NormalizeMapCoord(temp_y);
         if (owner->IsWithinLOS(temp_x, temp_y, z))
         {
             bool is_water_now = _map->IsInWater(x, y, z);

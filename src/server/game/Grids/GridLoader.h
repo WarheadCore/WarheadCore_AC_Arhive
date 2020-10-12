@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_GRIDLOADER_H
-#define ACORE_GRIDLOADER_H
+#ifndef WARHEAD_GRIDLOADER_H
+#define WARHEAD_GRIDLOADER_H
 
 /**
   @class GridLoader

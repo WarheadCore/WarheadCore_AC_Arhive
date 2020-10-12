@@ -68,8 +68,8 @@ int m_ServiceStatus = -1;
 #define PROCESS_HIGH_PRIORITY -15 // [-20, 19], default is 0
 #endif
 
-#ifndef _ACORE_CORE_CONFIG
-#define _ACORE_CORE_CONFIG  "worldserver.conf"
+#ifndef _WARHEAD_CORE_CONFIG
+#define _WARHEAD_CORE_CONFIG  "worldserver.conf"
 #endif
 
 #define WORLD_SLEEP_CONST 50
@@ -89,7 +89,7 @@ void usage(const char* prog)
 }
 
 /// Handle worldservers's termination signals
-class WorldServerSignalHandler : public warhead::SignalHandler
+class WorldServerSignalHandler : public Warhead::SignalHandler
 {
 public:
     virtual void HandleSignal(int sigNum)
@@ -114,7 +114,7 @@ public:
     }
 };
 
-class FreezeDetectorRunnable : public warhead::Runnable
+class FreezeDetectorRunnable : public Warhead::Runnable
 {
 private:
     uint32 _loops;
@@ -145,7 +145,7 @@ public:
                 ABORT();
             }
 
-            warhead::Thread::Sleep(1000);
+            Warhead::Thread::Sleep(1000);
         }
 
         LOG_INFO("server.worldserver", "Anti-freeze thread exiting without problems.");
@@ -157,7 +157,7 @@ void _StopDB();
 void ClearOnlineAccounts();
 
 /// Heartbeat thread for the World
-class WorldRunnable : public warhead::Runnable
+class WorldRunnable : public Warhead::Runnable
 {
 public:
     /// Heartbeat for the World
@@ -182,7 +182,7 @@ public:
             avgDiffTracker.Update(executionTimeDiff > WORLD_SLEEP_CONST ? executionTimeDiff : WORLD_SLEEP_CONST);
 
             if (executionTimeDiff < WORLD_SLEEP_CONST)
-                warhead::Thread::Sleep(WORLD_SLEEP_CONST - executionTimeDiff);
+                Warhead::Thread::Sleep(WORLD_SLEEP_CONST - executionTimeDiff);
 
 #if WH_PLATFORM == WH_PLATFORM_WINDOWS
             if (m_ServiceStatus == 0)
@@ -208,7 +208,7 @@ public:
     }
 };
 
-class AuctionListRunnable : public warhead::Runnable
+class AuctionListRunnable : public Warhead::Runnable
 {
 public:
     void run()
@@ -224,10 +224,10 @@ public:
 
                 if (AsyncAuctionListingMgr::GetTempList().size() || AsyncAuctionListingMgr::GetList().size())
                 {
-                    ACORE_GUARD(ACE_Thread_Mutex, AsyncAuctionListingMgr::GetLock());
+                    WARHEAD_GUARD(ACE_Thread_Mutex, AsyncAuctionListingMgr::GetLock());
 
                     {
-                        ACORE_GUARD(ACE_Thread_Mutex, AsyncAuctionListingMgr::GetTempLock());
+                        WARHEAD_GUARD(ACE_Thread_Mutex, AsyncAuctionListingMgr::GetTempLock());
 
                         for (auto itr : AsyncAuctionListingMgr::GetTempList())
                             AsyncAuctionListingMgr::GetList().push_back(itr);
@@ -254,7 +254,7 @@ public:
                 }
             }
 
-            warhead::Thread::Sleep(1);
+            Warhead::Thread::Sleep(1);
         }
 
         LOG_INFO("auctionHouse", "Auction House Listing thread exiting without problems.");
@@ -265,7 +265,7 @@ public:
 extern int main(int argc, char** argv)
 {
     ///- Command line parsing to get the configuration file name
-    std::string configFile = sConfigMgr->GetConfigPath() + std::string(_ACORE_CORE_CONFIG);
+    std::string configFile = sConfigMgr->GetConfigPath() + std::string(_WARHEAD_CORE_CONFIG);
     int c = 1;
     bool isImportDBOnly = false;
 
@@ -333,7 +333,7 @@ extern int main(int argc, char** argv)
     // Init all logs
     sLog->Initialize();
 
-    warhead::Logo::Show("worldserver", configFile.c_str(), [](char const * text)
+    Warhead::Logo::Show("worldserver", configFile.c_str(), [](char const * text)
     {
         LOG_INFO("server.worldserver", "%s", text);
     });
@@ -398,16 +398,16 @@ extern int main(int argc, char** argv)
     //handle.register_handler(SIGSEGV, &signalSEGV);
 
     ///- Launch Runnable's thread
-    warhead::Thread worldThread(new WorldRunnable);
-    warhead::Thread rarThread(new RARunnable);
-    warhead::Thread auctionLising_thread(new AuctionListRunnable);
-    warhead::Thread* cliThread = nullptr;
-    warhead::Thread* soapThread = nullptr;
-    warhead::Thread* freezeThread = nullptr;
+    Warhead::Thread worldThread(new WorldRunnable);
+    Warhead::Thread rarThread(new RARunnable);
+    Warhead::Thread auctionLising_thread(new AuctionListRunnable);
+    Warhead::Thread* cliThread = nullptr;
+    Warhead::Thread* soapThread = nullptr;
+    Warhead::Thread* freezeThread = nullptr;
 
     // Set thread priority
-    worldThread.setPriority(warhead::Priority_Highest);
-    auctionLising_thread.setPriority(warhead::Priority_High);
+    worldThread.setPriority(Warhead::Priority_Highest);
+    auctionLising_thread.setPriority(Warhead::Priority_High);
 
 #if WH_PLATFORM == WH_PLATFORM_WINDOWS
     if (sConfigMgr->GetBoolDefault("Console.Enable", true) && (m_ServiceStatus == -1)/* need disable console in service mode*/)
@@ -416,7 +416,7 @@ extern int main(int argc, char** argv)
 #endif
     {
         ///- Launch CliRunnable thread
-        cliThread = new warhead::Thread(new CliRunnable);
+        cliThread = new Warhead::Thread(new CliRunnable);
     }
 
 #if defined(WH_PLATFORM_WINDOWS) || defined(WH_PLATFORM_UNIX)
@@ -491,15 +491,15 @@ extern int main(int argc, char** argv)
     {
         ACSoapRunnable* runnable = new ACSoapRunnable();
         runnable->SetListenArguments(sConfigMgr->GetStringDefault("SOAP.IP", "127.0.0.1"), uint16(sConfigMgr->GetIntDefault("SOAP.Port", 7878)));
-        soapThread = new warhead::Thread(runnable);
+        soapThread = new Warhead::Thread(runnable);
     }
 
     // Start up freeze catcher thread
     if (uint32 freezeDelay = sConfigMgr->GetIntDefault("MaxCoreStuckTime", 0))
     {
         FreezeDetectorRunnable* runnable = new FreezeDetectorRunnable(freezeDelay * 1000);
-        freezeThread = new warhead::Thread(runnable);
-        freezeThread->setPriority(warhead::Priority_Highest);
+        freezeThread = new Warhead::Thread(runnable);
+        freezeThread->setPriority(Warhead::Priority_Highest);
     }
 
     ///- Launch the world listener socket

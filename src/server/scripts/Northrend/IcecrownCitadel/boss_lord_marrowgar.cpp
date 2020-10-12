@@ -72,7 +72,7 @@ enum Events
 
 uint32 const boneSpikeSummonId[3] = {69062, 72669, 72670};
 
-struct BoneStormMoveTargetSelector : public warhead::unary_function<Unit*, bool>
+struct BoneStormMoveTargetSelector : public Warhead::unary_function<Unit*, bool>
 {
 public:
     BoneStormMoveTargetSelector(Creature* source) : _source(source) { }

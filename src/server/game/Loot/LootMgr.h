@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_LOOTMGR_H
-#define ACORE_LOOTMGR_H
+#ifndef WARHEAD_LOOTMGR_H
+#define WARHEAD_LOOTMGR_H
 
 #include "ItemEnchantmentMgr.h"
 #include "ByteBuffer.h"

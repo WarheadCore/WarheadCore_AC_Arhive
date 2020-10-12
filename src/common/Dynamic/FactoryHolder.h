@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_FACTORY_HOLDER
-#define ACORE_FACTORY_HOLDER
+#ifndef WARHEAD_FACTORY_HOLDER
+#define WARHEAD_FACTORY_HOLDER
 
 #include "Define.h"
 #include "Dynamic/TypeList.h"

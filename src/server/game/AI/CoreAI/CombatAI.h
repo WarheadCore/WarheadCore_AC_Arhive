@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_COMBATAI_H
-#define ACORE_COMBATAI_H
+#ifndef WARHEAD_COMBATAI_H
+#define WARHEAD_COMBATAI_H
 
 #include "CreatureAI.h"
 #include "CreatureAIImpl.h"

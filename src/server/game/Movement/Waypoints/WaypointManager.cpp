@@ -73,8 +73,8 @@ void WaypointMgr::Load()
         float z = fields[4].GetFloat();
         float o = fields[5].GetFloat();
 
-        warhead::NormalizeMapCoord(x);
-        warhead::NormalizeMapCoord(y);
+        Warhead::NormalizeMapCoord(x);
+        Warhead::NormalizeMapCoord(y);
 
         wp->id = fields[1].GetUInt32();
         wp->x = x;
@@ -134,8 +134,8 @@ void WaypointMgr::ReloadPath(uint32 id)
         float z = fields[3].GetFloat();
         float o = fields[4].GetFloat();
 
-        warhead::NormalizeMapCoord(x);
-        warhead::NormalizeMapCoord(y);
+        Warhead::NormalizeMapCoord(x);
+        Warhead::NormalizeMapCoord(y);
 
         wp->id = fields[0].GetUInt32();
         wp->x = x;

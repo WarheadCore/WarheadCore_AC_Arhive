@@ -262,7 +262,7 @@ void MotionTransport::UpdatePosition(float x, float y, float z, float o)
 
 void MotionTransport::AddPassenger(WorldObject* passenger, bool withAll)
 {
-    ACORE_GUARD(ACE_Thread_Mutex, Lock);
+    WARHEAD_GUARD(ACE_Thread_Mutex, Lock);
     if (_passengers.insert(passenger).second)
     {
         if (Player* plr = passenger->ToPlayer())
@@ -287,7 +287,7 @@ void MotionTransport::AddPassenger(WorldObject* passenger, bool withAll)
 
 void MotionTransport::RemovePassenger(WorldObject* passenger, bool withAll)
 {
-    ACORE_GUARD(ACE_Thread_Mutex, Lock);
+    WARHEAD_GUARD(ACE_Thread_Mutex, Lock);
     if (_passengers.erase(passenger) || _staticPassengers.erase(passenger))
     {
         if (Player* plr = passenger->ToPlayer())
@@ -611,7 +611,7 @@ void MotionTransport::UpdatePassengerPositions(PassengerSet& passengers)
         CalculatePassengerPosition(x, y, z, &o);
 
         // check if position is valid
-        if (!warhead::IsValidMapCoord(x, y, z))
+        if (!Warhead::IsValidMapCoord(x, y, z))
             continue;
 
         switch (passenger->GetTypeId())
@@ -877,7 +877,7 @@ void StaticTransport::RelocateToProgress(uint32 progress)
         float oriRotAngle = oriRotAngleCurr + percRot * (oriRotAngleNext - oriRotAngleCurr);
 
         // check if position is valid
-        if (!warhead::IsValidMapCoord(pos.x, pos.y, pos.z))
+        if (!Warhead::IsValidMapCoord(pos.x, pos.y, pos.z))
             return;
 
         // update position to new one
@@ -912,7 +912,7 @@ void StaticTransport::UpdatePassengerPositions()
         CalculatePassengerPosition(x, y, z, &o);
 
         // check if position is valid
-        if (!warhead::IsValidMapCoord(x, y, z))
+        if (!Warhead::IsValidMapCoord(x, y, z))
             continue;
 
         switch (passenger->GetTypeId())

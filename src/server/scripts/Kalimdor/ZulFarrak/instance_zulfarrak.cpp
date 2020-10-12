@@ -152,8 +152,8 @@ public:
         {
             GameObject* cage = GetHitGObj();
             std::list<WorldObject*> cagesList;
-            warhead::AllWorldObjectsInRange objects(GetCaster(), 15.0f);
-            warhead::WorldObjectListSearcher<warhead::AllWorldObjectsInRange> searcher(GetCaster(), cagesList, objects);
+            Warhead::AllWorldObjectsInRange objects(GetCaster(), 15.0f);
+            Warhead::WorldObjectListSearcher<Warhead::AllWorldObjectsInRange> searcher(GetCaster(), cagesList, objects);
             GetCaster()->VisitNearbyObject(15.0f, searcher);
             for (std::list<WorldObject*>::const_iterator itr = cagesList.begin(); itr != cagesList.end(); ++itr)
             {

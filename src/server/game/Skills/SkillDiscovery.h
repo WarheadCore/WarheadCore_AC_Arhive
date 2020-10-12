@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_SKILLDISCOVERY_H
-#define ACORE_SKILLDISCOVERY_H
+#ifndef WARHEAD_SKILLDISCOVERY_H
+#define WARHEAD_SKILLDISCOVERY_H
 
 #include "Common.h"
 

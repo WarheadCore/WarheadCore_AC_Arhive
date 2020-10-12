@@ -1996,7 +1996,7 @@ public:
             else
             {
                 //! In the end, only one target should be selected
-                WorldObject* _target = warhead::Containers::SelectRandomContainerElement(targets);
+                WorldObject* _target = Warhead::Containers::SelectRandomContainerElement(targets);
                 targets.clear();
                 if (_target)
                     targets.push_back(_target);
@@ -2046,8 +2046,8 @@ public:
                 {
                     // use 99 because it is 3d search
                     std::list<WorldObject*> targetList;
-                    warhead::WorldObjectSpellAreaTargetCheck check(99, GetExplTargetDest(), GetCaster(), GetCaster(), GetSpellInfo(), TARGET_CHECK_DEFAULT, nullptr);
-                    warhead::WorldObjectListSearcher<warhead::WorldObjectSpellAreaTargetCheck> searcher(GetCaster(), targetList, check);
+                    Warhead::WorldObjectSpellAreaTargetCheck check(99, GetExplTargetDest(), GetCaster(), GetCaster(), GetSpellInfo(), TARGET_CHECK_DEFAULT, nullptr);
+                    Warhead::WorldObjectListSearcher<Warhead::WorldObjectSpellAreaTargetCheck> searcher(GetCaster(), targetList, check);
                     GetCaster()->GetMap()->VisitAll(GetCaster()->m_positionX, GetCaster()->m_positionY, 99, searcher);
                     float minDist = 99 * 99;
                     Unit* target = nullptr;

@@ -2217,7 +2217,7 @@ public:
         void SelectTarget(std::list<WorldObject*>& targets)
         {
             targets.remove_if(IgbExplosionCheck(GetCaster()));
-            warhead::Containers::RandomResizeList(targets, 1);
+            Warhead::Containers::RandomResizeList(targets, 1);
         }
 
         void Register()
@@ -2486,7 +2486,7 @@ public:
             targets.remove_if(BurningPitchFilterCheck(teamId == TEAM_HORDE ? GO_ORGRIMS_HAMMER_H : GO_THE_SKYBREAKER_A));
             if (!targets.empty())
             {
-                WorldObject* target = warhead::Containers::SelectRandomContainerElement(targets);
+                WorldObject* target = Warhead::Containers::SelectRandomContainerElement(targets);
                 targets.clear();
                 targets.push_back(target);
             }
@@ -2571,7 +2571,7 @@ public:
 
             if (!targets.empty())
             {
-                WorldObject* target = warhead::Containers::SelectRandomContainerElement(targets);
+                WorldObject* target = Warhead::Containers::SelectRandomContainerElement(targets);
                 targets.clear();
                 targets.push_back(target);
             }

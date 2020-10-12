@@ -134,7 +134,7 @@ public:
 
     static bool HandleSkirmishCommand(ChatHandler* handler, char const* args)
     {
-        auto const& tokens = warhead::Tokenize(args, ' ', false);
+        auto const& tokens = Warhead::Tokenize(args, ' ', false);
 
         if (!*args || !tokens.size())
         {
@@ -151,7 +151,7 @@ public:
         std::string arenasStr = std::string(*iter++);
         std::string tmpStr;
 
-        auto const& arenaTokens = warhead::Tokenize(arenasStr, ',', true);
+        auto const& arenaTokens = Warhead::Tokenize(arenasStr, ',', true);
 
         for (auto const& _arena : arenaTokens)
         {
@@ -191,7 +191,7 @@ public:
         }
 
         ASSERT(!allowedArenas.empty());
-        BattlegroundTypeId randomizedArenaBgTypeId = warhead::Containers::SelectRandomContainerElement(allowedArenas);
+        BattlegroundTypeId randomizedArenaBgTypeId = Warhead::Containers::SelectRandomContainerElement(allowedArenas);
 
         uint8 count = 0;
         if (iter != tokens.end())
@@ -412,7 +412,7 @@ public:
             }
         }
 
-        CellCoord cellCoord = warhead::ComputeCellCoord(object->GetPositionX(), object->GetPositionY());
+        CellCoord cellCoord = Warhead::ComputeCellCoord(object->GetPositionX(), object->GetPositionY());
         Cell cell(cellCoord);
 
         uint32 zoneId, areaId;
@@ -431,7 +431,7 @@ public:
         float groundZ = map->GetHeight(object->GetPhaseMask(), object->GetPositionX(), object->GetPositionY(), MAX_HEIGHT);
         float floorZ = map->GetHeight(object->GetPhaseMask(), object->GetPositionX(), object->GetPositionY(), object->GetPositionZ());
 
-        GridCoord gridCoord = warhead::ComputeGridCoord(object->GetPositionX(), object->GetPositionY());
+        GridCoord gridCoord = Warhead::ComputeGridCoord(object->GetPositionX(), object->GetPositionY());
 
         // 63? WHY?
         int gridX = 63 - gridCoord.x_coord;
@@ -1888,7 +1888,7 @@ public:
                 } **/
 
                 uint32 ip = inet_addr(lastIp.c_str());
-#if ACORE_ENDIAN == BIGENDIAN
+#if WARHEAD_ENDIAN == WARHEAD_BIGENDIAN
                 EndianConvertReverse(ip);
 #endif
                 stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_IP2NATION_COUNTRY);
@@ -2127,14 +2127,14 @@ public:
             return true;
         }
 
-        CellCoord p(warhead::ComputeCellCoord(player->GetPositionX(), player->GetPositionY()));
+        CellCoord p(Warhead::ComputeCellCoord(player->GetPositionX(), player->GetPositionY()));
         Cell cell(p);
         cell.SetNoCreate();
 
-        warhead::RespawnDo u_do;
-        warhead::WorldObjectWorker<warhead::RespawnDo> worker(player, u_do);
+        Warhead::RespawnDo u_do;
+        Warhead::WorldObjectWorker<Warhead::RespawnDo> worker(player, u_do);
 
-        TypeContainerVisitor<warhead::WorldObjectWorker<warhead::RespawnDo>, GridTypeMapContainer > obj_worker(worker);
+        TypeContainerVisitor<Warhead::WorldObjectWorker<Warhead::RespawnDo>, GridTypeMapContainer > obj_worker(worker);
         cell.Visit(p, obj_worker, *player->GetMap(), *player, player->GetGridActivationRange());
 
         return true;
@@ -2272,7 +2272,7 @@ public:
             //       HH     hour (2 digits 00-23)
             //       MM     minutes (2 digits 00-59)
             //       SS     seconds (2 digits 00-59)
-            std::string const muteDate = warhead::StringFormat("%04d-%02d-%02d %02d:%02d:%02d", aTm.tm_year + 1900, aTm.tm_mon + 1, aTm.tm_mday, aTm.tm_hour, aTm.tm_min, aTm.tm_sec);
+            std::string const muteDate = Warhead::StringFormat("%04d-%02d-%02d %02d:%02d:%02d", aTm.tm_year + 1900, aTm.tm_mon + 1, aTm.tm_mday, aTm.tm_hour, aTm.tm_min, aTm.tm_sec);
 
             handler->PSendSysMessage(LANG_COMMAND_MUTEHISTORY_OUTPUT, muteDate.c_str(), secsToTimeString(fields[1].GetUInt32(), true).c_str(), fields[3].GetCString(), fields[2].GetCString());
         } while (result->NextRow());

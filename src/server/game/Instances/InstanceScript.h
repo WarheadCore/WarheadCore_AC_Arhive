@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_INSTANCE_DATA_H
-#define ACORE_INSTANCE_DATA_H
+#ifndef WARHEAD_INSTANCE_DATA_H
+#define WARHEAD_INSTANCE_DATA_H
 
 #include "ZoneScript.h"
 #include "ObjectMgr.h"

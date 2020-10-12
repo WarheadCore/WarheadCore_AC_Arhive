@@ -260,15 +260,15 @@ public:
         float radius = 40.0f;
         WorldObject* object = handler->GetSession()->GetPlayer();
 
-        CellCoord pair(warhead::ComputeCellCoord(object->GetPositionX(), object->GetPositionY()));
+        CellCoord pair(Warhead::ComputeCellCoord(object->GetPositionX(), object->GetPositionY()));
         Cell cell(pair);
         cell.SetNoCreate();
 
         std::list<Creature*> creatureList;
 
-        warhead::AnyUnitInObjectRangeCheck go_check(object, radius);
-        warhead::CreatureListSearcher<warhead::AnyUnitInObjectRangeCheck> go_search(object, creatureList, go_check);
-        TypeContainerVisitor<warhead::CreatureListSearcher<warhead::AnyUnitInObjectRangeCheck>, GridTypeMapContainer> go_visit(go_search);
+        Warhead::AnyUnitInObjectRangeCheck go_check(object, radius);
+        Warhead::CreatureListSearcher<Warhead::AnyUnitInObjectRangeCheck> go_search(object, creatureList, go_check);
+        TypeContainerVisitor<Warhead::CreatureListSearcher<Warhead::AnyUnitInObjectRangeCheck>, GridTypeMapContainer> go_visit(go_search);
 
         // Get Creatures
         cell.Visit(pair, go_visit, *(object->GetMap()), *object, radius);

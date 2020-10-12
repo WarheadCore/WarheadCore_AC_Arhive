@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_OBJECTDEFINES_H
-#define ACORE_OBJECTDEFINES_H
+#ifndef WARHEAD_OBJECTDEFINES_H
+#define WARHEAD_OBJECTDEFINES_H
 
 #include "Define.h"
 

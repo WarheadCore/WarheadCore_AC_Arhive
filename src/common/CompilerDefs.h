@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_COMPILERDEFS_H
-#define ACORE_COMPILERDEFS_H
+#ifndef WARHEAD_COMPILERDEFS_H
+#define WARHEAD_COMPILERDEFS_H
 
 #define WH_PLATFORM_WINDOWS 0
 #define WH_PLATFORM_UNIX    1

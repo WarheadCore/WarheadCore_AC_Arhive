@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_OBJECTGRIDLOADER_H
-#define ACORE_OBJECTGRIDLOADER_H
+#ifndef WARHEAD_OBJECTGRIDLOADER_H
+#define WARHEAD_OBJECTGRIDLOADER_H
 
 #include "TypeList.h"
 #include "Define.h"

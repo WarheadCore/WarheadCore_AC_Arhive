@@ -656,7 +656,7 @@ public:
 
 
 // predicate function to select non main tank target
-class StoneGripTargetSelector : public warhead::unary_function<Unit*, bool>
+class StoneGripTargetSelector : public Warhead::unary_function<Unit*, bool>
 {
 public:
     StoneGripTargetSelector(Creature* me, Unit const* victim) : _me(me), _victim(victim) {}

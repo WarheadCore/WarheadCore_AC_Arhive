@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_TYPECONTAINERVISITOR_H
-#define ACORE_TYPECONTAINERVISITOR_H
+#ifndef WARHEAD_TYPECONTAINERVISITOR_H
+#define WARHEAD_TYPECONTAINERVISITOR_H
 
 /*
  * @class TypeContainerVisitor is implemented as a visitor pattern.  It is

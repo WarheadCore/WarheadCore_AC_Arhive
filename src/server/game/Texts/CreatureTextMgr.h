@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_CREATURE_TEXT_MGR_H
-#define ACORE_CREATURE_TEXT_MGR_H
+#ifndef WARHEAD_CREATURE_TEXT_MGR_H
+#define WARHEAD_CREATURE_TEXT_MGR_H
 
 #include "Creature.h"
 #include "GridNotifiers.h"
@@ -250,7 +250,7 @@ void CreatureTextMgr::SendChatPacket(WorldObject* source, Builder const& builder
     if (msgType == CHAT_MSG_RAID_BOSS_EMOTE && source->GetMap()->IsDungeon())
         dist = 250.0f;
 
-    warhead::PlayerDistWorker<CreatureTextLocalizer<Builder> > worker(source, dist, localizer);
+    Warhead::PlayerDistWorker<CreatureTextLocalizer<Builder> > worker(source, dist, localizer);
     source->VisitNearbyWorldObject(dist, worker);
 }
 

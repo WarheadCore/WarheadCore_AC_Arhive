@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_SPELLAURAEFFECTS_H
-#define ACORE_SPELLAURAEFFECTS_H
+#ifndef WARHEAD_SPELLAURAEFFECTS_H
+#define WARHEAD_SPELLAURAEFFECTS_H
 
 class Unit;
 class AuraEffect;

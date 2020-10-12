@@ -490,12 +490,12 @@ public:
         void FilterTargets(std::list<WorldObject*>& targets)
         {
             // get a list of players with mana
-            targets.remove_if(warhead::ObjectTypeIdCheck(TYPEID_PLAYER, false));
-            targets.remove_if(warhead::PowerCheck(POWER_MANA, false));
+            targets.remove_if(Warhead::ObjectTypeIdCheck(TYPEID_PLAYER, false));
+            targets.remove_if(Warhead::PowerCheck(POWER_MANA, false));
             if (targets.empty())
                 return;
 
-            WorldObject* target = warhead::Containers::SelectRandomContainerElement(targets);
+            WorldObject* target = Warhead::Containers::SelectRandomContainerElement(targets);
             targets.clear();
             targets.push_back(target);
         }

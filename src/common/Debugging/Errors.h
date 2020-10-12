@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _ACORE_ERRORS_H_
-#define _ACORE_ERRORS_H_
+#ifndef _WARHEAD_ERRORS_H_
+#define _WARHEAD_ERRORS_H_
 
 #include "Define.h"
 #include <string>
@@ -54,13 +54,13 @@ WH_COMMON_API std::string GetDebugInfo();
 #define EXCEPTION_ASSERTION_FAILURE 0xC0000420L
 #endif
 
-#define WPAssert(cond, ...) ASSERT_BEGIN do { if (!(cond)) warhead::Assert(__FILE__, __LINE__, __FUNCTION__, GetDebugInfo(), #cond, ##__VA_ARGS__); } while(0) ASSERT_END
-#define WPAssert_NODEBUGINFO(cond, ...) ASSERT_BEGIN do { if (!(cond)) warhead::Assert(__FILE__, __LINE__, __FUNCTION__, "", #cond, ##__VA_ARGS__); } while(0) ASSERT_END
-#define WPFatal(cond, ...) ASSERT_BEGIN do { if (!(cond)) warhead::Fatal(__FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__); } while(0) ASSERT_END
-#define WPError(cond, msg) ASSERT_BEGIN do { if (!(cond)) warhead::Error(__FILE__, __LINE__, __FUNCTION__, (msg)); } while(0) ASSERT_END
-#define WPWarning(cond, msg) ASSERT_BEGIN do { if (!(cond)) warhead::Warning(__FILE__, __LINE__, __FUNCTION__, (msg)); } while(0) ASSERT_END
-#define WPAbort() ASSERT_BEGIN do { warhead::Abort(__FILE__, __LINE__, __FUNCTION__); } while(0) ASSERT_END
-#define WPAbort_MSG(msg, ...) ASSERT_BEGIN do { warhead::Abort(__FILE__, __LINE__, __FUNCTION__, (msg), ##__VA_ARGS__); } while(0) ASSERT_END
+#define WPAssert(cond, ...) ASSERT_BEGIN do { if (!(cond)) Warhead::Assert(__FILE__, __LINE__, __FUNCTION__, GetDebugInfo(), #cond, ##__VA_ARGS__); } while(0) ASSERT_END
+#define WPAssert_NODEBUGINFO(cond, ...) ASSERT_BEGIN do { if (!(cond)) Warhead::Assert(__FILE__, __LINE__, __FUNCTION__, "", #cond, ##__VA_ARGS__); } while(0) ASSERT_END
+#define WPFatal(cond, ...) ASSERT_BEGIN do { if (!(cond)) Warhead::Fatal(__FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__); } while(0) ASSERT_END
+#define WPError(cond, msg) ASSERT_BEGIN do { if (!(cond)) Warhead::Error(__FILE__, __LINE__, __FUNCTION__, (msg)); } while(0) ASSERT_END
+#define WPWarning(cond, msg) ASSERT_BEGIN do { if (!(cond)) Warhead::Warning(__FILE__, __LINE__, __FUNCTION__, (msg)); } while(0) ASSERT_END
+#define WPAbort() ASSERT_BEGIN do { Warhead::Abort(__FILE__, __LINE__, __FUNCTION__); } while(0) ASSERT_END
+#define WPAbort_MSG(msg, ...) ASSERT_BEGIN do { Warhead::Abort(__FILE__, __LINE__, __FUNCTION__, (msg), ##__VA_ARGS__); } while(0) ASSERT_END
 
 #ifdef PERFORMANCE_PROFILING
 #define ASSERT(cond, ...) ((void)0)

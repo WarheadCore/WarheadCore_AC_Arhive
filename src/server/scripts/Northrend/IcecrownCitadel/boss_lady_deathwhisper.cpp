@@ -637,7 +637,7 @@ public:
                 return;
 
             // select random cultist
-            Creature* cultist = warhead::Containers::SelectRandomContainerElement(temp);
+            Creature* cultist = Warhead::Containers::SelectRandomContainerElement(temp);
             if (!cultist)
                 return;
 

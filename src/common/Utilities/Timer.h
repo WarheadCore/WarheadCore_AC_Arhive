@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_TIMER_H
-#define ACORE_TIMER_H
+#ifndef WARHEAD_TIMER_H
+#define WARHEAD_TIMER_H
 
 #include "Common.h"
 #include "Duration.h"

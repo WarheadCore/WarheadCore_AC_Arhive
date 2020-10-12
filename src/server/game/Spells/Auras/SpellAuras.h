@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_SPELLAURAS_H
-#define ACORE_SPELLAURAS_H
+#ifndef WARHEAD_SPELLAURAS_H
+#define WARHEAD_SPELLAURAS_H
 
 #include "SpellAuraDefines.h"
 #include "Unit.h"

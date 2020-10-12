@@ -204,21 +204,21 @@ typedef std::vector<std::string> StringVector;
 
 #define MAX_QUERY_LEN 32*1024
 
-#define ACORE_GUARD(MUTEX, LOCK) \
-  ACE_Guard< MUTEX > ACORE_GUARD_OBJECT (LOCK); \
-    if (ACORE_GUARD_OBJECT.locked() == 0) ABORT();
+#define WARHEAD_GUARD(MUTEX, LOCK) \
+  ACE_Guard< MUTEX > WARHEAD_GUARD_OBJECT (LOCK); \
+    if (WARHEAD_GUARD_OBJECT.locked() == 0) ABORT();
 
 //! For proper implementation of multiple-read, single-write pattern, use
 //! ACE_RW_Mutex as underlying @MUTEX
-# define ACORE_WRITE_GUARD(MUTEX, LOCK) \
-  ACE_Write_Guard< MUTEX > ACORE_GUARD_OBJECT (LOCK); \
-    if (ACORE_GUARD_OBJECT.locked() == 0) ABORT();
+# define WARHEAD_WRITE_GUARD(MUTEX, LOCK) \
+  ACE_Write_Guard< MUTEX > WARHEAD_GUARD_OBJECT (LOCK); \
+    if (WARHEAD_GUARD_OBJECT.locked() == 0) ABORT();
 
 //! For proper implementation of multiple-read, single-write pattern, use
 //! ACE_RW_Mutex as underlying @MUTEX
-# define ACORE_READ_GUARD(MUTEX, LOCK) \
-  ACE_Read_Guard< MUTEX > ACORE_GUARD_OBJECT (LOCK); \
-    if (ACORE_GUARD_OBJECT.locked() == 0) ABORT();
+# define WARHEAD_READ_GUARD(MUTEX, LOCK) \
+  ACE_Read_Guard< MUTEX > WARHEAD_GUARD_OBJECT (LOCK); \
+    if (WARHEAD_GUARD_OBJECT.locked() == 0) ABORT();
 
 namespace warhead
 {

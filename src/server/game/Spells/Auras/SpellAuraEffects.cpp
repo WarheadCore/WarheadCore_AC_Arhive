@@ -2371,8 +2371,8 @@ void AuraEffect::HandleFeignDeath(AuraApplication const* aurApp, uint8 mode, boo
         */
 
         UnitList targets;
-        warhead::AnyUnfriendlyUnitInObjectRangeCheck u_check(target, target, target->GetVisibilityRange()); // no VISIBILITY_COMPENSATION, distance is enough
-        warhead::UnitListSearcher<warhead::AnyUnfriendlyUnitInObjectRangeCheck> searcher(target, targets, u_check);
+        Warhead::AnyUnfriendlyUnitInObjectRangeCheck u_check(target, target, target->GetVisibilityRange()); // no VISIBILITY_COMPENSATION, distance is enough
+        Warhead::UnitListSearcher<Warhead::AnyUnfriendlyUnitInObjectRangeCheck> searcher(target, targets, u_check);
         target->VisitNearbyObject(target->GetVisibilityRange(), searcher); // no VISIBILITY_COMPENSATION, distance is enough
         for (UnitList::iterator iter = targets.begin(); iter != targets.end(); ++iter)
         {
@@ -5127,8 +5127,8 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                                     return;
 
                                 Player* player = NULL;
-                                warhead::AnyPlayerInObjectRangeCheck checker(target, 10.0f);
-                                warhead::PlayerSearcher<warhead::AnyPlayerInObjectRangeCheck> searcher(target, player, checker);
+                                Warhead::AnyPlayerInObjectRangeCheck checker(target, 10.0f);
+                                Warhead::PlayerSearcher<Warhead::AnyPlayerInObjectRangeCheck> searcher(target, player, checker);
                                 target->VisitNearbyWorldObject(10.0f, searcher);
 
                                 if( player && player->GetGUID() != target->GetGUID() )

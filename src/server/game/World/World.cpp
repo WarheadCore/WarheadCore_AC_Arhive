@@ -925,7 +925,7 @@ void World::SetInitialWorldSettings()
 
     ///- Loading strings. Getting no records means core load has to be canceled because no error message can be output.
     LOG_INFO("server.loading", "");
-    LOG_INFO("server.loading", "Loading acore strings...");
+    LOG_INFO("server.loading", "Loading warhead strings...");
     if (!sGameLocale->LoadAcoreStrings())
         exit(1);                                            // Error message displayed in function already
 
@@ -1686,7 +1686,7 @@ void World::Update(uint32 diff)
     // so we don't have to do it in every packet that modifies auctions
     AsyncAuctionListingMgr::SetAuctionListingAllowed(false);
     {
-        ACORE_GUARD(ACE_Thread_Mutex, AsyncAuctionListingMgr::GetLock());
+        WARHEAD_GUARD(ACE_Thread_Mutex, AsyncAuctionListingMgr::GetLock());
 
         // pussywizard: handle auctions when the timer has passed
         if (m_timers[WUPDATE_AUCTIONS].Passed())
@@ -1960,8 +1960,8 @@ void World::SendWorldText(uint32 string_id, ...)
     va_list ap;
     va_start(ap, string_id);
 
-    warhead::WorldWorldTextBuilder wt_builder(string_id, &ap);
-    warhead::LocalizedPacketListDo<warhead::WorldWorldTextBuilder> wt_do(wt_builder);
+    Warhead::WorldWorldTextBuilder wt_builder(string_id, &ap);
+    Warhead::LocalizedPacketListDo<Warhead::WorldWorldTextBuilder> wt_do(wt_builder);
     for (SessionMap::const_iterator itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
     {
         if (!itr->second || !itr->second->GetPlayer() || !itr->second->GetPlayer()->IsInWorld())
@@ -1979,8 +1979,8 @@ void World::SendGMText(uint32 string_id, ...)
     va_list ap;
     va_start(ap, string_id);
 
-    warhead::WorldWorldTextBuilder wt_builder(string_id, &ap);
-    warhead::LocalizedPacketListDo<warhead::WorldWorldTextBuilder> wt_do(wt_builder);
+    Warhead::WorldWorldTextBuilder wt_builder(string_id, &ap);
+    Warhead::LocalizedPacketListDo<Warhead::WorldWorldTextBuilder> wt_do(wt_builder);
     for (SessionMap::iterator itr = m_sessions.begin(); itr != m_sessions.end(); ++itr)
     {
         if (!itr->second || !itr->second->GetPlayer() || !itr->second->GetPlayer()->IsInWorld())

@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_DEFINE_H
-#define ACORE_DEFINE_H
+#ifndef WARHEAD_DEFINE_H
+#define WARHEAD_DEFINE_H
 
 #include <cstddef>
 #include <cstdint>
@@ -30,19 +30,19 @@
 #define OS_WIN
 #endif
 
-#define ACORE_LITTLEENDIAN 0
-#define ACORE_BIGENDIAN    1
+#define WARHEAD_LITTLEENDIAN 0
+#define WARHEAD_BIGENDIAN    1
 
-#if !defined(ACORE_ENDIAN)
+#if !defined(WARHEAD_ENDIAN)
 #  if defined (ACE_BIG_ENDIAN)
-#    define ACORE_ENDIAN ACORE_BIGENDIAN
+#    define WARHEAD_ENDIAN WARHEAD_BIGENDIAN
 #  else //ACE_BYTE_ORDER != ACE_BIG_ENDIAN
-#    define ACORE_ENDIAN ACORE_LITTLEENDIAN
+#    define WARHEAD_ENDIAN WARHEAD_LITTLEENDIAN
 #  endif //ACE_BYTE_ORDER
-#endif //ACORE_ENDIAN
+#endif //WARHEAD_ENDIAN
 
 #if WH_PLATFORM == WH_PLATFORM_WINDOWS
-#  define ACORE_PATH_MAX MAX_PATH
+#  define WARHEAD_PATH_MAX MAX_PATH
 #  ifndef DECLSPEC_NORETURN
 #    define DECLSPEC_NORETURN __declspec(noreturn)
 #  endif //DECLSPEC_NORETURN
@@ -50,18 +50,18 @@
 #    define DECLSPEC_DEPRECATED __declspec(deprecated)
 #  endif //DECLSPEC_DEPRECATED
 #else //WH_PLATFORM != WH_PLATFORM_WINDOWS
-#  define ACORE_PATH_MAX PATH_MAX
+#  define WARHEAD_PATH_MAX PATH_MAX
 #  define DECLSPEC_NORETURN
 #  define DECLSPEC_DEPRECATED
 #endif //WH_PLATFORM
 
 #if !defined(COREDEBUG)
-#  define ACORE_INLINE inline
+#  define WARHEAD_INLINE inline
 #else //COREDEBUG
-#  if !defined(ACORE_DEBUG)
-#    define ACORE_DEBUG
-#  endif //ACORE_DEBUG
-#  define ACORE_INLINE
+#  if !defined(WARHEAD_DEBUG)
+#    define WARHEAD_DEBUG
+#  endif //WARHEAD_DEBUG
+#  define WARHEAD_INLINE
 #endif //!COREDEBUG
 
 #if WH_COMPILER == WH_COMPILER_GNU
@@ -74,7 +74,7 @@
 #  define ATTR_DEPRECATED
 #endif //WH_COMPILER == WH_COMPILER_GNU
 
-#ifdef ACORE_API_USE_DYNAMIC_LINKING
+#ifdef WARHEAD_API_USE_DYNAMIC_LINKING
 #  if WH_COMPILER == WH_COMPILER_MICROSOFT
 #    define WH_API_EXPORT __declspec(dllexport)
 #    define WH_API_IMPORT __declspec(dllimport)
@@ -89,25 +89,25 @@
 #  define WH_API_IMPORT
 #endif
 
-#ifdef ACORE_API_EXPORT_COMMON
+#ifdef WARHEAD_API_EXPORT_COMMON
 #  define WH_COMMON_API WH_API_EXPORT
 #else
 #  define WH_COMMON_API WH_API_IMPORT
 #endif
 
-#ifdef ACORE_API_EXPORT_DATABASE
+#ifdef WARHEAD_API_EXPORT_DATABASE
 #  define WH_DATABASE_API WH_API_EXPORT
 #else
 #  define WH_DATABASE_API WH_API_IMPORT
 #endif
 
-#ifdef ACORE_API_EXPORT_SHARED
+#ifdef WARHEAD_API_EXPORT_SHARED
 #  define WH_SHARED_API WH_API_EXPORT
 #else
 #  define WH_SHARED_API WH_API_IMPORT
 #endif
 
-#ifdef ACORE_API_EXPORT_GAME
+#ifdef WARHEAD_API_EXPORT_GAME
 #  define WH_GAME_API WH_API_EXPORT
 #else
 #  define WH_GAME_API WH_API_IMPORT
@@ -132,4 +132,4 @@ typedef std::uint32_t uint32;
 typedef std::uint16_t uint16;
 typedef std::uint8_t uint8;
 
-#endif //ACORE_DEFINE_H
+#endif //WARHEAD_DEFINE_H

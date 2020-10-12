@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_TYPECONTAINER_H
-#define ACORE_TYPECONTAINER_H
+#ifndef WARHEAD_TYPECONTAINER_H
+#define WARHEAD_TYPECONTAINER_H
 
 /*
  * Here, you'll find a series of containers that allow you to hold multiple
@@ -97,19 +97,19 @@ template<class OBJECT_TYPES>
 class TypeMapContainer
 {
 public:
-    template<class SPECIFIC_TYPE> size_t Count() const { return warhead::Count(i_elements, (SPECIFIC_TYPE*)NULL); }
+    template<class SPECIFIC_TYPE> size_t Count() const { return Warhead::Count(i_elements, (SPECIFIC_TYPE*)NULL); }
 
     /// inserts a specific object into the container
     template<class SPECIFIC_TYPE> bool insert(SPECIFIC_TYPE* obj)
     {
-        SPECIFIC_TYPE* t = warhead::Insert(i_elements, obj);
+        SPECIFIC_TYPE* t = Warhead::Insert(i_elements, obj);
         return (t != NULL);
     }
 
     ///  Removes the object from the container, and returns the removed object
     //template<class SPECIFIC_TYPE> bool remove(SPECIFIC_TYPE* obj)
     //{
-    //    SPECIFIC_TYPE* t = warhead::Remove(i_elements, obj);
+    //    SPECIFIC_TYPE* t = Warhead::Remove(i_elements, obj);
     //    return (t != NULL);
     //}
 

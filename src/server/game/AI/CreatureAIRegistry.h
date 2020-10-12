@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_CREATUREAIREGISTRY_H
-#define ACORE_CREATUREAIREGISTRY_H
+#ifndef WARHEAD_CREATUREAIREGISTRY_H
+#define WARHEAD_CREATUREAIREGISTRY_H
 
 namespace AIRegistry
 {

@@ -640,7 +640,7 @@ public:
         void FilterTargets(std::list<WorldObject*>& targets)
         {
             targets.remove_if(SpectralBlastCheck(GetCaster()->GetVictim()));
-            warhead::Containers::RandomResizeList(targets, 1);
+            Warhead::Containers::RandomResizeList(targets, 1);
         }
 
         void HandleDummy(SpellEffIndex effIndex)

@@ -1117,7 +1117,7 @@ void Spell::EffectJumpDest(SpellEffIndex effIndex)
     float x, y, z;
     destTarget->GetPosition(x, y, z);
     // xinef: this can happen if MovePositionToFirstCollision detects that X, Y cords are invalid and returns prematurely
-    if (!warhead::IsValidMapCoord(x, y, z) || z <= INVALID_HEIGHT)
+    if (!Warhead::IsValidMapCoord(x, y, z) || z <= INVALID_HEIGHT)
         return;
 
     float speedXY, speedZ;
@@ -1967,7 +1967,7 @@ void Spell::EffectEnergize(SpellEffIndex effIndex)
         if (!availableElixirs.empty())
         {
             // cast random elixir on target
-            m_caster->CastSpell(unitTarget, warhead::Containers::SelectRandomContainerElement(availableElixirs), true, m_CastItem);
+            m_caster->CastSpell(unitTarget, Warhead::Containers::SelectRandomContainerElement(availableElixirs), true, m_CastItem);
         }
     }
 }
@@ -2785,7 +2785,7 @@ void Spell::EffectAddHonor(SpellEffIndex /*effIndex*/)
     // do not allow to add too many honor for player (50 * 21) = 1040 at level 70, or (50 * 31) = 1550 at level 80
     if (damage <= 50)
     {
-        uint32 honor_reward = warhead::Honor::hk_honor_at_level(unitTarget->getLevel(), float(damage));
+        uint32 honor_reward = Warhead::Honor::hk_honor_at_level(unitTarget->getLevel(), float(damage));
         unitTarget->ToPlayer()->RewardHonor(NULL, 1, honor_reward, false);
         LOG_DEBUG("spells.aura", "SpellEffect::AddHonor (spell_id %u) rewards %u honor points (scale) to player: %u", m_spellInfo->Id, honor_reward, unitTarget->ToPlayer()->GetGUIDLow());
     }
@@ -4236,8 +4236,8 @@ void Spell::EffectSanctuary(SpellEffIndex /*effIndex*/)
     }
 
     UnitList targets;
-    warhead::AnyUnfriendlyUnitInObjectRangeCheck u_check(unitTarget, unitTarget, unitTarget->GetVisibilityRange()); // no VISIBILITY_COMPENSATION, distance is enough
-    warhead::UnitListSearcher<warhead::AnyUnfriendlyUnitInObjectRangeCheck> searcher(unitTarget, targets, u_check);
+    Warhead::AnyUnfriendlyUnitInObjectRangeCheck u_check(unitTarget, unitTarget, unitTarget->GetVisibilityRange()); // no VISIBILITY_COMPENSATION, distance is enough
+    Warhead::UnitListSearcher<Warhead::AnyUnfriendlyUnitInObjectRangeCheck> searcher(unitTarget, targets, u_check);
     unitTarget->VisitNearbyObject(unitTarget->GetVisibilityRange(), searcher); // no VISIBILITY_COMPENSATION, distance is enough
     for (UnitList::iterator iter = targets.begin(); iter != targets.end(); ++iter)
     {
@@ -4883,7 +4883,7 @@ void Spell::EffectForceDeselect(SpellEffIndex /*effIndex*/)
     data << uint64(m_caster->GetGUID());
 
     float dist = m_caster->GetVisibilityRange() + VISIBILITY_COMPENSATION;
-    warhead::MessageDistDelivererToHostile notifier(m_caster, &data, dist);
+    Warhead::MessageDistDelivererToHostile notifier(m_caster, &data, dist);
     m_caster->VisitNearbyWorldObject(dist, notifier);
 
     // xinef: we should also force pets to remove us from current target
@@ -4907,8 +4907,8 @@ void Spell::EffectForceDeselect(SpellEffIndex /*effIndex*/)
             return;
 
         UnitList targets;
-        warhead::AnyUnfriendlyUnitInObjectRangeCheck u_check(m_caster, m_caster, m_caster->GetVisibilityRange()); // no VISIBILITY_COMPENSATION, distance is enough
-        warhead::UnitListSearcher<warhead::AnyUnfriendlyUnitInObjectRangeCheck> searcher(m_caster, targets, u_check);
+        Warhead::AnyUnfriendlyUnitInObjectRangeCheck u_check(m_caster, m_caster, m_caster->GetVisibilityRange()); // no VISIBILITY_COMPENSATION, distance is enough
+        Warhead::UnitListSearcher<Warhead::AnyUnfriendlyUnitInObjectRangeCheck> searcher(m_caster, targets, u_check);
         m_caster->VisitNearbyObject(m_caster->GetVisibilityRange(), searcher); // no VISIBILITY_COMPENSATION, distance is enough
         for (UnitList::iterator iter = targets.begin(); iter != targets.end(); ++iter)
         {

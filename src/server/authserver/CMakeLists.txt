@@ -42,7 +42,7 @@ add_dependencies(authserver revision.h)
 
 target_link_libraries(authserver
   PRIVATE
-    acore-core-interface
+    warhead-core-interface
   PUBLIC
     shared)
 

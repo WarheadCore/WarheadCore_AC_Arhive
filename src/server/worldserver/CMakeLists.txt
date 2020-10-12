@@ -58,7 +58,7 @@ target_include_directories(worldserver
 
 target_link_libraries(worldserver
   PRIVATE
-    acore-core-interface
+    warhead-core-interface
   PUBLIC
     scripts
     game

@@ -1379,7 +1379,7 @@ public:
                     FinishCast(SPELL_FAILED_CANT_DO_THAT_RIGHT_NOW);
                     return;
                 }
-                target = warhead::Containers::SelectRandomContainerElement(targets);
+                target = Warhead::Containers::SelectRandomContainerElement(targets);
                 targets.clear();
                 targets.push_back(target);
             }
@@ -2264,7 +2264,7 @@ public:
                 return;
             }
 
-            WorldObject* target = warhead::Containers::SelectRandomContainerElement(targets);
+            WorldObject* target = Warhead::Containers::SelectRandomContainerElement(targets);
             targets.clear();
             targets.push_back(target);
             _corpse = true;

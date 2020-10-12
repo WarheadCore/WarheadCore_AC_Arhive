@@ -263,8 +263,8 @@ void CreatureGroup::LeaderMoveTo(float x, float y, float z, bool run)
         float dy = y + sin(followAngle + pathAngle) * followDist;
         float dz = z;
 
-        warhead::NormalizeMapCoord(dx);
-        warhead::NormalizeMapCoord(dy);
+        Warhead::NormalizeMapCoord(dx);
+        Warhead::NormalizeMapCoord(dy);
 
         member->UpdateGroundPositionZ(dx, dy, dz);
 

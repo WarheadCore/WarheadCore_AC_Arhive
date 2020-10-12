@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_TYPELIST_H
-#define ACORE_TYPELIST_H
+#ifndef WARHEAD_TYPELIST_H
+#define WARHEAD_TYPELIST_H
 
 /*
   @struct TypeList

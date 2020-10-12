@@ -35,7 +35,7 @@ target_include_directories(mpq
 
 target_link_libraries(mpq
   PRIVATE
-    acore-dependency-interface
+    warhead-dependency-interface
   PUBLIC
     zlib
     bzip2)

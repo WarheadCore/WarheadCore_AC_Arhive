@@ -38,7 +38,7 @@ namespace advstd
     using remove_cvref_t = std::remove_cv_t<std::remove_reference_t<T>>;
 }
 
-namespace acore
+namespace warhead
 {
     namespace Hyperlinks
     {
@@ -248,6 +248,6 @@ namespace acore
 }
 
 // pull in link tags for user convenience
-using namespace ::warhead::Hyperlinks::LinkTags;
+using namespace ::Warhead::Hyperlinks::LinkTags;
 
 #endif

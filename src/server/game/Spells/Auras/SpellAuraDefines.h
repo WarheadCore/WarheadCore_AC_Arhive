@@ -14,8 +14,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef ACORE_SPELLAURADEFINES_H
-#define ACORE_SPELLAURADEFINES_H
+#ifndef WARHEAD_SPELLAURADEFINES_H
+#define WARHEAD_SPELLAURADEFINES_H
 
 #define MAX_AURAS 255                                        // Client Limit
 #define MAX_AURAS_GROUP_UPDATE 64                            // Limit of SMSG_PARY_MEMBER_STATS_FULL and SMSG_PARTY_MEMBER_STATS

@@ -325,8 +325,8 @@ public:
         void IsSummonedBy(Unit* /*summoner*/)
         {
             std::list<Player*> playerOnQuestList;
-            warhead::AnyPlayerInObjectRangeCheck checker(me, 5.0f);
-            warhead::PlayerListSearcher<warhead::AnyPlayerInObjectRangeCheck> searcher(me, playerOnQuestList, checker);
+            Warhead::AnyPlayerInObjectRangeCheck checker(me, 5.0f);
+            Warhead::PlayerListSearcher<Warhead::AnyPlayerInObjectRangeCheck> searcher(me, playerOnQuestList, checker);
             me->VisitNearbyWorldObject(5.0f, searcher);
             for (std::list<Player*>::const_iterator itr = playerOnQuestList.begin(); itr != playerOnQuestList.end(); ++itr)
             {

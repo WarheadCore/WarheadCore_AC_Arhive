@@ -271,7 +271,7 @@ public:
 
         void FilterTargets(std::list<WorldObject*>& targets)
         {
-            targets.remove_if(warhead::UnitAuraCheck(true, SPELL_SABER_LASH_IMMUNITY));
+            targets.remove_if(Warhead::UnitAuraCheck(true, SPELL_SABER_LASH_IMMUNITY));
             if (targets.size() <= 1)
                 FinishCast(SPELL_FAILED_DONT_REPORT);
         }

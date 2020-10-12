@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_CONFUSEDGENERATOR_H
-#define ACORE_CONFUSEDGENERATOR_H
+#ifndef WARHEAD_CONFUSEDGENERATOR_H
+#define WARHEAD_CONFUSEDGENERATOR_H
 
 #include "MovementGenerator.h"
 #include "Timer.h"

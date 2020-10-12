@@ -2158,7 +2158,7 @@ void WorldSession::HandleCharFactionOrRaceChange(WorldPacket& recvData)
 
     // pussywizard: check titles here to prevent return while building queries
     const uint32 ktcount = KNOWN_TITLES_SIZE * 2;
-    std::vector<std::string_view> tokens = warhead::Tokenize(knownTitlesStr, ' ', false);
+    std::vector<std::string_view> tokens = Warhead::Tokenize(knownTitlesStr, ' ', false);
 
     if (recvData.GetOpcode() == CMSG_CHAR_FACTION_CHANGE && tokens.size() != ktcount)
     {
@@ -2591,7 +2591,7 @@ void WorldSession::HandleCharFactionOrRaceChange(WorldPacket& recvData)
                 {
                     std::optional<uint32> thisMask;
                     if (index < tokens.size())
-                        thisMask = warhead::StringTo<uint32>(tokens[index]);
+                        thisMask = Warhead::StringTo<uint32>(tokens[index]);
 
                     if (thisMask)
                         knownTitles[index] = *thisMask;

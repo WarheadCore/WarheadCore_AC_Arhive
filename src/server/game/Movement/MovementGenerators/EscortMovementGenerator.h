@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_ESCORTMOVEMENTGENERATOR_H
-#define ACORE_ESCORTMOVEMENTGENERATOR_H
+#ifndef WARHEAD_ESCORTMOVEMENTGENERATOR_H
+#define WARHEAD_ESCORTMOVEMENTGENERATOR_H
 
 #include "MovementGenerator.h"
 

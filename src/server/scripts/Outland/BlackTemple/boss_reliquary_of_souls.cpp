@@ -628,7 +628,7 @@ public:
             if (targets.empty())
                 return;
 
-            targets.sort(warhead::ObjectDistanceOrderPred(GetCaster()));
+            targets.sort(Warhead::ObjectDistanceOrderPred(GetCaster()));
             WorldObject* target = targets.front();
             targets.clear();
             targets.push_back(target);

@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_UNITAI_H
-#define ACORE_UNITAI_H
+#ifndef WARHEAD_UNITAI_H
+#define WARHEAD_UNITAI_H
 
 #include "Define.h"
 #include "Unit.h"
@@ -40,7 +40,7 @@ enum SelectAggroTarget
 };
 
 // default predicate function to select target based on distance, player and/or aura criteria
-struct DefaultTargetSelector : public warhead::unary_function<Unit*, bool>
+struct DefaultTargetSelector : public Warhead::unary_function<Unit*, bool>
 {
     const Unit* me;
     float m_dist;
@@ -90,7 +90,7 @@ struct DefaultTargetSelector : public warhead::unary_function<Unit*, bool>
 
 // Target selector for spell casts checking range, auras and attributes
 // TODO: Add more checks from Spell::CheckCast
-struct SpellTargetSelector : public warhead::unary_function<Unit*, bool>
+struct SpellTargetSelector : public Warhead::unary_function<Unit*, bool>
 {
 public:
     SpellTargetSelector(Unit* caster, uint32 spellId);
@@ -104,7 +104,7 @@ private:
 // Very simple target selector, will just skip main target
 // NOTE: When passing to UnitAI::SelectTarget remember to use 0 as position for random selection
 //       because tank will not be in the temporary list
-struct NonTankTargetSelector : public warhead::unary_function<Unit*, bool>
+struct NonTankTargetSelector : public Warhead::unary_function<Unit*, bool>
 {
 public:
     NonTankTargetSelector(Creature* source, bool playerOnly = true) : _source(source), _playerOnly(playerOnly) { }
@@ -116,7 +116,7 @@ private:
 };
 
 // Simple selector for units using mana
-struct PowerUsersSelector : public warhead::unary_function<Unit*, bool>
+struct PowerUsersSelector : public Warhead::unary_function<Unit*, bool>
 {
     Unit const* _me;
     Powers const _power;
@@ -147,7 +147,7 @@ struct PowerUsersSelector : public warhead::unary_function<Unit*, bool>
     }
 };
 
-struct FarthestTargetSelector : public warhead::unary_function<Unit*, bool>
+struct FarthestTargetSelector : public Warhead::unary_function<Unit*, bool>
 {
     FarthestTargetSelector(Unit const* unit, float dist, bool playerOnly, bool inLos) : _me(unit), _dist(dist), _playerOnly(playerOnly), _inLos(inLos) {}
 
@@ -203,7 +203,7 @@ public:
 
     Unit* SelectTarget(SelectAggroTarget targetType, uint32 position = 0, float dist = 0.0f, bool playerOnly = false, int32 aura = 0);
     // Select the targets satifying the predicate.
-    // predicate shall extend warhead::unary_function<Unit*, bool>
+    // predicate shall extend Warhead::unary_function<Unit*, bool>
     template <class PREDICATE> Unit* SelectTarget(SelectAggroTarget targetType, uint32 position, PREDICATE const& predicate)
     {
         ThreatContainer::StorageType const& threatlist = me->getThreatManager().getThreatList();
@@ -219,7 +219,7 @@ public:
             return nullptr;
 
         if (targetType == SELECT_TARGET_NEAREST || targetType == SELECT_TARGET_FARTHEST)
-            targetList.sort(warhead::ObjectDistanceOrderPred(me));
+            targetList.sort(Warhead::ObjectDistanceOrderPred(me));
 
         switch (targetType)
         {
@@ -253,7 +253,7 @@ public:
     void SelectTargetList(std::list<Unit*>& targetList, uint32 num, SelectAggroTarget targetType, float dist = 0.0f, bool playerOnly = false, int32 aura = 0);
 
     // Select the targets satifying the predicate.
-    // predicate shall extend warhead::unary_function<Unit*, bool>
+    // predicate shall extend Warhead::unary_function<Unit*, bool>
     template <class PREDICATE> void SelectTargetList(std::list<Unit*>& targetList, PREDICATE const& predicate, uint32 maxTargets, SelectAggroTarget targetType)
     {
         ThreatContainer::StorageType const& threatlist = me->getThreatManager().getThreatList();
@@ -268,13 +268,13 @@ public:
             return;
 
         if (targetType == SELECT_TARGET_NEAREST || targetType == SELECT_TARGET_FARTHEST)
-            targetList.sort(warhead::ObjectDistanceOrderPred(me));
+            targetList.sort(Warhead::ObjectDistanceOrderPred(me));
 
         if (targetType == SELECT_TARGET_FARTHEST || targetType == SELECT_TARGET_BOTTOMAGGRO)
             targetList.reverse();
 
         if (targetType == SELECT_TARGET_RANDOM)
-            warhead::Containers::RandomResizeList(targetList, maxTargets);
+            Warhead::Containers::RandomResizeList(targetList, maxTargets);
         else
             targetList.resize(maxTargets);
     }

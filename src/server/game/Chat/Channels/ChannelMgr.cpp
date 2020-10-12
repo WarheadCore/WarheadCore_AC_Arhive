@@ -162,9 +162,9 @@ void ChannelMgr::LoadChannelRights()
         const char* moderatorList = fields[4].GetCString();
         if (moderatorList)
         {
-            for (auto const& accountID : warhead::Tokenize(moderatorList, ' ', false))
+            for (auto const& accountID : Warhead::Tokenize(moderatorList, ' ', false))
             {
-                uint64 moderator_acc = warhead::StringTo<uint64>(accountID).value_or(0);
+                uint64 moderator_acc = Warhead::StringTo<uint64>(accountID).value_or(0);
                 if (moderator_acc && ((uint32)moderator_acc) == moderator_acc)
                     moderators.insert((uint32)moderator_acc);
             }

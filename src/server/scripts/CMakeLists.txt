@@ -96,7 +96,7 @@ target_include_directories(scripts
 
 target_link_libraries(scripts
   PRIVATE
-    acore-core-interface
+    warhead-core-interface
   PUBLIC
     game-interface)
 

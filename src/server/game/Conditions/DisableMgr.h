@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_DISABLEMGR_H
-#define ACORE_DISABLEMGR_H
+#ifndef WARHEAD_DISABLEMGR_H
+#define WARHEAD_DISABLEMGR_H
 
 #include "Define.h"
 #include "Map.h"
@@ -60,4 +60,4 @@ namespace DisableMgr
     bool IsPathfindingEnabled(const Map* map);
 }
 
-#endif //ACORE_DISABLEMGR_H
+#endif //WARHEAD_DISABLEMGR_H

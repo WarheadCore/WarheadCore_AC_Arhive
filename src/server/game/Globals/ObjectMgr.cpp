@@ -537,10 +537,10 @@ void ObjectMgr::LoadCreatureTemplateAddons()
         creatureAddon.emote   = fields[5].GetUInt32();
         creatureAddon.isLarge = fields[6].GetBool();
 
-        for (std::string_view aura : warhead::Tokenize(fields[7].GetStringView(), ' ', false))
+        for (std::string_view aura : Warhead::Tokenize(fields[7].GetStringView(), ' ', false))
         {
             SpellInfo const* spellInfo = nullptr;
-            if (std::optional<uint32> spellId = warhead::StringTo<uint32>(aura))
+            if (std::optional<uint32> spellId = Warhead::StringTo<uint32>(aura))
                 spellInfo = sSpellMgr->GetSpellInfo(*spellId);
 
             if (!spellInfo)
@@ -955,10 +955,10 @@ void ObjectMgr::LoadCreatureAddons()
         creatureAddon.emote   = fields[5].GetUInt32();
         creatureAddon.isLarge = fields[6].GetBool();
 
-        for (std::string_view aura : warhead::Tokenize(fields[7].GetStringView(), ' ', false))
+        for (std::string_view aura : Warhead::Tokenize(fields[7].GetStringView(), ' ', false))
         {
             SpellInfo const* spellInfo = nullptr;
-            if (std::optional<uint32> spellId = warhead::StringTo<uint32>(aura))
+            if (std::optional<uint32> spellId = Warhead::StringTo<uint32>(aura))
                 spellInfo = sSpellMgr->GetSpellInfo(*spellId);
 
             if (!spellInfo)
@@ -1782,7 +1782,7 @@ void ObjectMgr::AddCreatureToGrid(uint32 guid, CreatureData const* data)
     {
         if (mask & 1)
         {
-            CellCoord cellCoord = warhead::ComputeCellCoord(data->posX, data->posY);
+            CellCoord cellCoord = Warhead::ComputeCellCoord(data->posX, data->posY);
             CellObjectGuids& cell_guids = _mapObjectGuidsStore[MAKE_PAIR32(data->mapid, i)][cellCoord.GetId()];
             cell_guids.creatures.insert(guid);
         }
@@ -1796,7 +1796,7 @@ void ObjectMgr::RemoveCreatureFromGrid(uint32 guid, CreatureData const* data)
     {
         if (mask & 1)
         {
-            CellCoord cellCoord = warhead::ComputeCellCoord(data->posX, data->posY);
+            CellCoord cellCoord = Warhead::ComputeCellCoord(data->posX, data->posY);
             CellObjectGuids& cell_guids = _mapObjectGuidsStore[MAKE_PAIR32(data->mapid, i)][cellCoord.GetId()];
             cell_guids.creatures.erase(guid);
         }
@@ -2111,7 +2111,7 @@ void ObjectMgr::AddGameobjectToGrid(uint32 guid, GameObjectData const* data)
     {
         if (mask & 1)
         {
-            CellCoord cellCoord = warhead::ComputeCellCoord(data->posX, data->posY);
+            CellCoord cellCoord = Warhead::ComputeCellCoord(data->posX, data->posY);
             CellObjectGuids& cell_guids = _mapObjectGuidsStore[MAKE_PAIR32(data->mapid, i)][cellCoord.GetId()];
             cell_guids.gameobjects.insert(guid);
         }
@@ -2125,7 +2125,7 @@ void ObjectMgr::RemoveGameobjectFromGrid(uint32 guid, GameObjectData const* data
     {
         if (mask & 1)
         {
-            CellCoord cellCoord = warhead::ComputeCellCoord(data->posX, data->posY);
+            CellCoord cellCoord = Warhead::ComputeCellCoord(data->posX, data->posY);
             CellObjectGuids& cell_guids = _mapObjectGuidsStore[MAKE_PAIR32(data->mapid, i)][cellCoord.GetId()];
             cell_guids.gameobjects.erase(guid);
         }
@@ -4577,7 +4577,7 @@ void ObjectMgr::LoadScripts(ScriptsType type)
                         continue;
                     }
 
-                    if (!warhead::IsValidMapCoord(tmp.TeleportTo.DestX, tmp.TeleportTo.DestY, tmp.TeleportTo.DestZ, tmp.TeleportTo.Orientation))
+                    if (!Warhead::IsValidMapCoord(tmp.TeleportTo.DestX, tmp.TeleportTo.DestY, tmp.TeleportTo.DestZ, tmp.TeleportTo.Orientation))
                     {
                         LOG_ERROR("sql.sql", "Table `%s` has invalid coordinates (X: %f Y: %f Z: %f O: %f) in SCRIPT_COMMAND_TELEPORT_TO for script id %u",
                                   tableName.c_str(), tmp.TeleportTo.DestX, tmp.TeleportTo.DestY, tmp.TeleportTo.DestZ, tmp.TeleportTo.Orientation, tmp.id);
@@ -4675,7 +4675,7 @@ void ObjectMgr::LoadScripts(ScriptsType type)
 
             case SCRIPT_COMMAND_TEMP_SUMMON_CREATURE:
                 {
-                    if (!warhead::IsValidMapCoord(tmp.TempSummonCreature.PosX, tmp.TempSummonCreature.PosY, tmp.TempSummonCreature.PosZ, tmp.TempSummonCreature.Orientation))
+                    if (!Warhead::IsValidMapCoord(tmp.TempSummonCreature.PosX, tmp.TempSummonCreature.PosY, tmp.TempSummonCreature.PosZ, tmp.TempSummonCreature.Orientation))
                     {
                         LOG_ERROR("sql.sql", "Table `%s` has invalid coordinates (X: %f Y: %f Z: %f O: %f) in SCRIPT_COMMAND_TEMP_SUMMON_CREATURE for script id %u",
                                   tableName.c_str(), tmp.TempSummonCreature.PosX, tmp.TempSummonCreature.PosY, tmp.TempSummonCreature.PosZ, tmp.TempSummonCreature.Orientation, tmp.id);
@@ -6020,7 +6020,7 @@ uint32 ObjectMgr::GenerateMailID()
         LOG_ERROR("sql.sql", "Mail ids overflow!! Can't continue, shutting down server. ");
         World::StopNow(ERROR_EXIT_CODE);
     }
-    ACORE_GUARD(ACE_Thread_Mutex, _mailIdMutex);
+    WARHEAD_GUARD(ACE_Thread_Mutex, _mailIdMutex);
     return _mailId++;
 }
 
@@ -6031,25 +6031,25 @@ uint32 ObjectMgr::GenerateLowGuid(HighGuid guidhigh)
         case HIGHGUID_ITEM:
             {
                 ASSERT(_hiItemGuid < 0xFFFFFFFE && "Item guid overflow!");
-                ACORE_GUARD(ACE_Thread_Mutex, _hiItemGuidMutex);
+                WARHEAD_GUARD(ACE_Thread_Mutex, _hiItemGuidMutex);
                 return _hiItemGuid++;
             }
         case HIGHGUID_UNIT:
             {
                 ASSERT(_hiCreatureGuid < 0x00FFFFFE && "Creature guid overflow!");
-                ACORE_GUARD(ACE_Thread_Mutex, _hiCreatureGuidMutex);
+                WARHEAD_GUARD(ACE_Thread_Mutex, _hiCreatureGuidMutex);
                 return _hiCreatureGuid++;
             }
         case HIGHGUID_PET:
             {
                 ASSERT(_hiPetGuid < 0x00FFFFFE && "Pet guid overflow!");
-                ACORE_GUARD(ACE_Thread_Mutex, _hiPetGuidMutex);
+                WARHEAD_GUARD(ACE_Thread_Mutex, _hiPetGuidMutex);
                 return _hiPetGuid++;
             }
         case HIGHGUID_VEHICLE:
             {
                 ASSERT(_hiVehicleGuid < 0x00FFFFFF && "Vehicle guid overflow!");
-                ACORE_GUARD(ACE_Thread_Mutex, _hiVehicleGuidMutex);
+                WARHEAD_GUARD(ACE_Thread_Mutex, _hiVehicleGuidMutex);
                 return _hiVehicleGuid++;
             }
         case HIGHGUID_PLAYER:
@@ -6060,25 +6060,25 @@ uint32 ObjectMgr::GenerateLowGuid(HighGuid guidhigh)
         case HIGHGUID_GAMEOBJECT:
             {
                 ASSERT(_hiGoGuid < 0x00FFFFFE && "Gameobject guid overflow!");
-                ACORE_GUARD(ACE_Thread_Mutex, _hiGoGuidMutex);
+                WARHEAD_GUARD(ACE_Thread_Mutex, _hiGoGuidMutex);
                 return _hiGoGuid++;
             }
         case HIGHGUID_CORPSE:
             {
                 ASSERT(_hiCorpseGuid < 0xFFFFFFFE && "Corpse guid overflow!");
-                ACORE_GUARD(ACE_Thread_Mutex, _hiCorpseGuidMutex);
+                WARHEAD_GUARD(ACE_Thread_Mutex, _hiCorpseGuidMutex);
                 return _hiCorpseGuid++;
             }
         case HIGHGUID_DYNAMICOBJECT:
             {
                 ASSERT(_hiDoGuid < 0xFFFFFFFE && "DynamicObject guid overflow!");
-                ACORE_GUARD(ACE_Thread_Mutex, _hiDoGuidMutex);
+                WARHEAD_GUARD(ACE_Thread_Mutex, _hiDoGuidMutex);
                 return _hiDoGuid++;
             }
         case HIGHGUID_MO_TRANSPORT:
             {
                 ASSERT(_hiMoTransGuid < 0xFFFFFFFE && "MO Transport guid overflow!");
-                ACORE_GUARD(ACE_Thread_Mutex, _hiMoTransGuidMutex);
+                WARHEAD_GUARD(ACE_Thread_Mutex, _hiMoTransGuidMutex);
                 return _hiMoTransGuid++;
             }
         default:
@@ -6527,7 +6527,7 @@ std::string ObjectMgr::GeneratePetName(uint32 entry)
 
 uint32 ObjectMgr::GeneratePetNumber()
 {
-    ACORE_GUARD(ACE_Thread_Mutex, _hiPetNumberMutex);
+    WARHEAD_GUARD(ACE_Thread_Mutex, _hiPetNumberMutex);
     return ++_hiPetNumber;
 }
 
@@ -6876,7 +6876,7 @@ void ObjectMgr::LoadPointsOfInterest()
         POI.Importance  = fields[5].GetUInt32();
         POI.Name        = fields[6].GetString();
 
-        if (!warhead::IsValidMapCoord(POI.PositionX, POI.PositionY))
+        if (!Warhead::IsValidMapCoord(POI.PositionX, POI.PositionY))
         {
             LOG_ERROR("sql.sql", "Table `points_of_interest` (ID: %u) have invalid coordinates (X: %f Y: %f), ignored.", point_id, POI.PositionX, POI.PositionY);
             continue;
@@ -7792,7 +7792,7 @@ void ObjectMgr::LoadMailLevelRewards()
 
 void ObjectMgr::AddSpellToTrainer(uint32 entry, uint32 spell, uint32 spellCost, uint32 reqSkill, uint32 reqSkillValue, uint32 reqLevel)
 {
-    if (entry >= ACORE_TRAINER_START_REF)
+    if (entry >= WARHEAD_TRAINER_START_REF)
         return;
 
     CreatureTemplate const* cInfo = GetCreatureTemplate(entry);

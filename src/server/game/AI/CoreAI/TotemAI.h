@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_TOTEMAI_H
-#define ACORE_TOTEMAI_H
+#ifndef WARHEAD_TOTEMAI_H
+#define WARHEAD_TOTEMAI_H
 
 #include "CreatureAI.h"
 #include "Timer.h"

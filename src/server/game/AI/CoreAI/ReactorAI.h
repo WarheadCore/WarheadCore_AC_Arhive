@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_REACTORAI_H
-#define ACORE_REACTORAI_H
+#ifndef WARHEAD_REACTORAI_H
+#define WARHEAD_REACTORAI_H
 
 #include "CreatureAI.h"
 

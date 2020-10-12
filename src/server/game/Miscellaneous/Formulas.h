@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_FORMULAS_H
-#define ACORE_FORMULAS_H
+#ifndef WARHEAD_FORMULAS_H
+#define WARHEAD_FORMULAS_H
 
 #include "World.h"
 #include "SharedDefines.h"

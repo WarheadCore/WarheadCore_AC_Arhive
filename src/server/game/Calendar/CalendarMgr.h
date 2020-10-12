@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_CALENDARMGR_H
-#define ACORE_CALENDARMGR_H
+#ifndef WARHEAD_CALENDARMGR_H
+#define WARHEAD_CALENDARMGR_H
 
 #include "Common.h"
 #include "DatabaseEnv.h"

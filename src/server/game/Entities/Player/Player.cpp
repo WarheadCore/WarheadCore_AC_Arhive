@@ -235,10 +235,10 @@ bool PlayerTaxi::LoadTaxiMask(std::string const& data)
 {
     bool warn = false;
 
-    std::vector<std::string_view> tokens = warhead::Tokenize(data, ' ', false);
+    std::vector<std::string_view> tokens = Warhead::Tokenize(data, ' ', false);
     for (uint8 index = 0; (index < TaxiMaskSize) && (index < tokens.size()); ++index)
     {
-        if (std::optional<uint32> mask = warhead::StringTo<uint32>(tokens[index]))
+        if (std::optional<uint32> mask = Warhead::StringTo<uint32>(tokens[index]))
         {
             // load and set bits only for existing taxi nodes
             m_taximask[index] = sTaxiNodesMask[index] & *mask;
@@ -273,9 +273,9 @@ bool PlayerTaxi::LoadTaxiDestinationsFromString(const std::string& values, TeamI
 {
     ClearTaxiDestinations();
 
-    for (auto const& itr : warhead::Tokenize(values, ' ', false))
+    for (auto const& itr : Warhead::Tokenize(values, ' ', false))
     {
-        if (std::optional<uint32> node = warhead::StringTo<uint32>(itr))
+        if (std::optional<uint32> node = Warhead::StringTo<uint32>(itr))
             AddTaxiDestination(*node);
         else
             return false;
@@ -528,7 +528,7 @@ inline void KillRewarder::_InitGroupData()
                         _maxLevel = lvl;
                     // 2.4. _maxNotGrayMember - maximum level of alive group member within reward distance,
                     //      for whom victim is not gray;
-                    uint32 grayLevel = warhead::XP::GetGrayLevel(lvl);
+                    uint32 grayLevel = Warhead::XP::GetGrayLevel(lvl);
                     if (_victim->getLevel() > grayLevel && (!_maxNotGrayMember || _maxNotGrayMember->getLevel() < lvl))
                         _maxNotGrayMember = member;
                 }
@@ -548,7 +548,7 @@ inline void KillRewarder::_InitXP(Player* player)
     // * otherwise, not in PvP;
     // * not if killer is on vehicle.
     if (_victim && (_isBattleGround || (!_isPvP && !_killer->GetVehicle())))
-        _xp = warhead::XP::Gain(player, _victim, _isBattleGround);
+        _xp = Warhead::XP::Gain(player, _victim, _isBattleGround);
 
     if (_xp && !_isBattleGround && _victim) // pussywizard: npcs with relatively low hp give lower exp
         if (_victim->GetTypeId() == TYPEID_UNIT)
@@ -661,7 +661,7 @@ void KillRewarder::_RewardGroup()
             {
                 // 3.1.2. Alter group rate if group is in raid (not for battlegrounds).
                 const bool isRaid = !_isPvP && sMapStore.LookupEntry(_killer->GetMapId())->IsRaid() && _group->isRaidGroup();
-                _groupRate = warhead::XP::xp_in_group_rate(_count, isRaid);
+                _groupRate = Warhead::XP::xp_in_group_rate(_count, isRaid);
             }
 
             // 3.1.3. Reward each group member (even dead or corpse) within reward distance.
@@ -2128,13 +2128,13 @@ bool Player::BuildEnumData(PreparedQueryResult result, WorldPacket* data)
     *data << uint32(petLevel);
     *data << uint32(petFamily);
 
-    std::vector<std::string_view> equipment = warhead::Tokenize(fields[22].GetStringView(), ' ', false);
+    std::vector<std::string_view> equipment = Warhead::Tokenize(fields[22].GetStringView(), ' ', false);
     for (uint8 slot = 0; slot < INVENTORY_SLOT_BAG_END; ++slot)
     {
         uint32 const visualBase = slot * 2;
         std::optional<uint32> itemId;
         if (visualBase < equipment.size())
-            itemId = warhead::StringTo<uint32>(equipment[visualBase]);
+            itemId = Warhead::StringTo<uint32>(equipment[visualBase]);
 
         ItemTemplate const* proto = nullptr;
         if (itemId)
@@ -2159,7 +2159,7 @@ bool Player::BuildEnumData(PreparedQueryResult result, WorldPacket* data)
 
         std::optional<uint32> enchants;
         if ((visualBase + 1) < equipment.size())
-            enchants = warhead::StringTo<uint32>(equipment[visualBase + 1]);
+            enchants = Warhead::StringTo<uint32>(equipment[visualBase + 1]);
 
         if (!enchants)
         {
@@ -5769,7 +5769,7 @@ void Player::UpdateLocalChannels(uint32 newZone)
 {
     // pussywizard: mutex needed (tc changed opcode to THREAD UNSAFE)
     static ACE_Thread_Mutex channelsLock;
-    ACORE_GUARD(ACE_Thread_Mutex, channelsLock);
+    WARHEAD_GUARD(ACE_Thread_Mutex, channelsLock);
 
     if (GetSession()->PlayerLoading() && !IsBeingTeleportedFar())
         return;                                              // The client handles it automatically after loading, but not after teleporting
@@ -6459,7 +6459,7 @@ void Player::UpdateWeaponSkill(WeaponAttackType attType)
 void Player::UpdateCombatSkills(Unit* victim, WeaponAttackType attType, bool defence)
 {
     uint8 plevel = getLevel();                              // if defense than victim == attacker
-    uint8 greylevel = warhead::XP::GetGrayLevel(plevel);
+    uint8 greylevel = Warhead::XP::GetGrayLevel(plevel);
     uint8 moblevel = victim->getLevelForTarget(this);
     /*if (moblevel < greylevel)
         return;*/ // Patch 3.0.8 (2009-01-20): You can no longer skill up weapons on mobs that are immune to damage.
@@ -6947,7 +6947,7 @@ void Player::SendMessageToSetInRange(WorldPacket* data, float dist, bool self, b
     dist += GetObjectSize();
     if (includeMargin)
         dist += VISIBILITY_COMPENSATION; // pussywizard: to ensure everyone receives all important packets
-    warhead::MessageDistDeliverer notifier(this, data, dist, false, skipped_rcvr);
+    Warhead::MessageDistDeliverer notifier(this, data, dist, false, skipped_rcvr);
     VisitNearbyWorldObject(dist, notifier);
 }
 
@@ -6957,7 +6957,7 @@ void Player::SendMessageToSetInRange_OwnTeam(WorldPacket* data, float dist, bool
     if (self)
         GetSession()->SendPacket(data);
 
-    warhead::MessageDistDeliverer notifier(this, data, dist, true);
+    Warhead::MessageDistDeliverer notifier(this, data, dist, true);
     VisitNearbyWorldObject(dist, notifier);
 }
 
@@ -7124,7 +7124,7 @@ int32 Player::CalculateReputationGain(ReputationSource source, uint32 creatureOr
             break;
     }
 
-    if (rate != 1.0f && creatureOrQuestLevel <= warhead::XP::GetGrayLevel(getLevel()))
+    if (rate != 1.0f && creatureOrQuestLevel <= Warhead::XP::GetGrayLevel(getLevel()))
         percent *= rate;
 
     if (percent <= 0.0f)
@@ -7356,7 +7356,7 @@ bool Player::RewardHonor(Unit* uVictim, uint32 groupsize, int32 honor, bool awar
                 return false;
 
             uint8 k_level = getLevel();
-            uint8 k_grey = warhead::XP::GetGrayLevel(k_level);
+            uint8 k_grey = Warhead::XP::GetGrayLevel(k_level);
             uint8 v_level = victim->getLevel();
 
             if (v_level <= k_grey)
@@ -7383,7 +7383,7 @@ bool Player::RewardHonor(Unit* uVictim, uint32 groupsize, int32 honor, bool awar
             else
                 victim_guid = 0;                        // Don't show HK: <rank> message, only log.
 
-            honor_f = ceil(warhead::Honor::hk_honor_at_level_f(k_level) * (v_level - k_grey) / (k_level - k_grey));
+            honor_f = ceil(Warhead::Honor::hk_honor_at_level_f(k_level) * (v_level - k_grey) / (k_level - k_grey));
 
             // count the number of playerkills in one day
             ApplyModUInt32Value(PLAYER_FIELD_KILLS, 1, true);
@@ -14122,7 +14122,7 @@ void Player::TradeCancel(bool sendback)
 
 void Player::UpdateSoulboundTradeItems()
 {
-    ACORE_GUARD(ACE_Thread_Mutex, m_soulboundTradableLock);
+    WARHEAD_GUARD(ACE_Thread_Mutex, m_soulboundTradableLock);
     if (m_itemSoulboundTradeable.empty())
         return;
 
@@ -14146,14 +14146,14 @@ void Player::UpdateSoulboundTradeItems()
 
 void Player::AddTradeableItem(Item* item)
 {
-    ACORE_GUARD(ACE_Thread_Mutex, m_soulboundTradableLock);
+    WARHEAD_GUARD(ACE_Thread_Mutex, m_soulboundTradableLock);
     m_itemSoulboundTradeable.push_back(item);
 }
 
 //TODO: should never allow an item to be added to m_itemSoulboundTradeable twice
 void Player::RemoveTradeableItem(Item* item)
 {
-    ACORE_GUARD(ACE_Thread_Mutex, m_soulboundTradableLock);
+    WARHEAD_GUARD(ACE_Thread_Mutex, m_soulboundTradableLock);
     m_itemSoulboundTradeable.remove(item);
 }
 
@@ -17585,9 +17585,9 @@ void Player::_LoadEntryPointData(PreparedQueryResult result)
     std::string taxi = fields[5].GetString();
     if (!taxi.empty())
     {
-        for (auto const& taxiToken : warhead::Tokenize(taxi, ' ', false))
+        for (auto const& taxiToken : Warhead::Tokenize(taxi, ' ', false))
         {
-            if (std::optional<uint32> node = warhead::StringTo<uint32>(taxiToken))
+            if (std::optional<uint32> node = Warhead::StringTo<uint32>(taxiToken))
                 m_entryPointData.taxiPath.push_back(*node);
         }
 
@@ -17902,7 +17902,7 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder* holder)
             m_movementInfo.transport.pos.Relocate(x, y, z, o);
             m_transport->CalculatePassengerPosition(x, y, z, &o);
 
-            if (!warhead::IsValidMapCoord(x, y, z, o) || std::fabs(m_movementInfo.transport.pos.GetPositionX()) > 75.0f || std::fabs(m_movementInfo.transport.pos.GetPositionY()) > 75.0f || std::fabs(m_movementInfo.transport.pos.GetPositionZ()) > 75.0f)
+            if (!Warhead::IsValidMapCoord(x, y, z, o) || std::fabs(m_movementInfo.transport.pos.GetPositionX()) > 75.0f || std::fabs(m_movementInfo.transport.pos.GetPositionY()) > 75.0f || std::fabs(m_movementInfo.transport.pos.GetPositionZ()) > 75.0f)
             {
                 m_transport = nullptr;
                 m_movementInfo.transport.Reset();
@@ -18722,9 +18722,9 @@ Item* Player::_LoadItem(SQLTransaction& trans, uint32 zoneId, uint32 timeDiff, F
                 {
                     AllowedLooterSet looters;
 
-                    for (std::string_view guidStr : warhead::Tokenize((*result)[0].GetStringView(), ' ', false))
+                    for (std::string_view guidStr : Warhead::Tokenize((*result)[0].GetStringView(), ' ', false))
                     {
-                        if (std::optional<uint32> guid = warhead::StringTo<uint32>(guidStr))
+                        if (std::optional<uint32> guid = Warhead::StringTo<uint32>(guidStr))
                             looters.insert(*guid);
                         else
                             LOG_WARN("entities.player.loading", "Player::_LoadInventory: invalid item_soulbound_trade_data GUID '%s' for item (%u). Skipped.", std::string(guidStr).c_str(), item->GetGUIDLow());
@@ -20775,8 +20775,8 @@ void Player::TextEmote(const std::string& text)
 
     WorldPacket data;
     std::list<Player*> players;
-    warhead::AnyPlayerInObjectRangeCheck checker(this, sGameConfig->GetFloatConfig("ListenRange.TextEmote"));
-    warhead::PlayerListSearcher<warhead::AnyPlayerInObjectRangeCheck> searcher(this, players, checker);
+    Warhead::AnyPlayerInObjectRangeCheck checker(this, sGameConfig->GetFloatConfig("ListenRange.TextEmote"));
+    Warhead::PlayerListSearcher<Warhead::AnyPlayerInObjectRangeCheck> searcher(this, players, checker);
     this->VisitNearbyWorldObject(sGameConfig->GetFloatConfig("ListenRange.TextEmote"), searcher);
 
     for (auto const& itr : players)
@@ -22847,10 +22847,10 @@ void Player::UpdateObjectVisibility(bool forced, bool fromUpdate)
 
 void Player::UpdateVisibilityForPlayer(bool mapChange)
 {
-    warhead::VisibleNotifier notifierNoLarge(*this, mapChange, false); // visit only objects which are not large; default distance
+    Warhead::VisibleNotifier notifierNoLarge(*this, mapChange, false); // visit only objects which are not large; default distance
     m_seer->VisitNearbyObject(GetSightRange() + VISIBILITY_INC_FOR_GOBJECTS, notifierNoLarge);
     notifierNoLarge.SendToSelf();
-    warhead::VisibleNotifier notifierLarge(*this, mapChange, true);    // visit only large objects; maximum distance
+    Warhead::VisibleNotifier notifierLarge(*this, mapChange, true);    // visit only large objects; maximum distance
     m_seer->VisitNearbyObject(MAX_VISIBILITY_DISTANCE, notifierLarge);
     notifierLarge.SendToSelf();
 
@@ -23901,7 +23901,7 @@ uint32 Player::GetResurrectionSpellId()
 bool Player::isHonorOrXPTarget(Unit* victim) const
 {
     uint8 v_level = victim->getLevel();
-    uint8 k_grey  = warhead::XP::GetGrayLevel(getLevel());
+    uint8 k_grey  = Warhead::XP::GetGrayLevel(getLevel());
 
     // Victim level less gray level
     if (v_level <= k_grey)

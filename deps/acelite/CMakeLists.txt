@@ -358,7 +358,7 @@ else()
 
   target_link_libraries(ace
     PRIVATE
-      acore-dependency-interface)
+      warhead-dependency-interface)
       
   set_target_properties(ace
     PROPERTIES

@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_SMARTAI_H
-#define ACORE_SMARTAI_H
+#ifndef WARHEAD_SMARTAI_H
+#define WARHEAD_SMARTAI_H
 
 #include "Common.h"
 #include "Creature.h"

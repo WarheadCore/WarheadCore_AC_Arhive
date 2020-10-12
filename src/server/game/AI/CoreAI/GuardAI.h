@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_GUARDAI_H
-#define ACORE_GUARDAI_H
+#ifndef WARHEAD_GUARDAI_H
+#define WARHEAD_GUARDAI_H
 
 #include "ScriptedCreature.h"
 

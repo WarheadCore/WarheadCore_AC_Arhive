@@ -41,7 +41,7 @@ struct WH_DATABASE_API MySQLConnectionInfo
     MySQLConnectionInfo() { }
     MySQLConnectionInfo(const std::string& infoString)
     {
-        std::vector<std::string_view> tokens = warhead::Tokenize(infoString, ';', true);
+        std::vector<std::string_view> tokens = Warhead::Tokenize(infoString, ';', true);
 
         if (tokens.size() != 5)
             return;

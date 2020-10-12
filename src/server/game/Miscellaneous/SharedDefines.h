@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_SHAREDDEFINES_H
-#define ACORE_SHAREDDEFINES_H
+#ifndef WARHEAD_SHAREDDEFINES_H
+#define WARHEAD_SHAREDDEFINES_H
 
 #include "Define.h"
 #include "DetourNavMesh.h"

@@ -157,7 +157,7 @@ public:
     }
 };
 
-struct ManaVoidSelector : public warhead::unary_function<Unit*, bool>
+struct ManaVoidSelector : public Warhead::unary_function<Unit*, bool>
 {
     explicit ManaVoidSelector(WorldObject const* source) : _source(source) { }
 
@@ -218,7 +218,7 @@ public:
 
     bool Execute(uint64 /*currTime*/, uint32 /*diff*/)
     {
-        warhead::CreatureWorker<ValithriaDespawner> worker(_creature, *this);
+        Warhead::CreatureWorker<ValithriaDespawner> worker(_creature, *this);
         _creature->VisitNearbyGridObject(333.0f, worker);
         _creature->AI()->Reset();
         _creature->setActive(false);
@@ -538,7 +538,7 @@ public:
 
             std::list<Creature*> archmages;
             RisenArchmageCheck check;
-            warhead::CreatureListSearcher<RisenArchmageCheck> searcher(me, archmages, check);
+            Warhead::CreatureListSearcher<RisenArchmageCheck> searcher(me, archmages, check);
             me->VisitNearbyGridObject(100.0f, searcher);
             for (std::list<Creature*>::iterator itr = archmages.begin(); itr != archmages.end(); ++itr)
                 (*itr)->AI()->DoAction(ACTION_ENTER_COMBAT);
@@ -1318,9 +1318,9 @@ public:
 
         void FilterTargets(std::list<WorldObject*>& targets)
         {
-            targets.remove_if(warhead::AllWorldObjectsInExactRange(GetCaster(), 250.0f, true));
+            targets.remove_if(Warhead::AllWorldObjectsInExactRange(GetCaster(), 250.0f, true));
             std::list<WorldObject*> list_copy = targets;
-            targets.remove_if(warhead::UnitAuraCheck(true, SPELL_RECENTLY_SPAWNED));
+            targets.remove_if(Warhead::UnitAuraCheck(true, SPELL_RECENTLY_SPAWNED));
             if (targets.empty())
             {
                 if (list_copy.empty())
@@ -1328,7 +1328,7 @@ public:
                 targets = list_copy;
             }
 
-            WorldObject* target = warhead::Containers::SelectRandomContainerElement(targets);
+            WorldObject* target = Warhead::Containers::SelectRandomContainerElement(targets);
             targets.clear();
             targets.push_back(target);
         }
@@ -1374,14 +1374,14 @@ public:
             std::list<Creature*> summoners;
             caster->GetCreaturesWithEntryInRange(summoners, 200.0f, NPC_WORLD_TRIGGER);
             std::list<Creature*> list_copy = summoners;
-            summoners.remove_if(warhead::UnitAuraCheck(true, SPELL_RECENTLY_SPAWNED));
+            summoners.remove_if(Warhead::UnitAuraCheck(true, SPELL_RECENTLY_SPAWNED));
             if (summoners.empty())
             {
                 if (list_copy.empty())
                     return;
                 summoners = list_copy;
             }
-            warhead::Containers::RandomResizeList(summoners, 2);
+            Warhead::Containers::RandomResizeList(summoners, 2);
 
             for (uint32 i = 0; i < 3; ++i)
                 caster->CastSpell(summoners.front(), SPELL_SUMMON_SUPPRESSER, true);

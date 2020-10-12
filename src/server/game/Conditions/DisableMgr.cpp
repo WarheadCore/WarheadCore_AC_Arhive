@@ -112,9 +112,9 @@ namespace DisableMgr
 
                     if (flags & SPELL_DISABLE_MAP)
                     {
-                        for (std::string_view mapStr : warhead::Tokenize(params_0, ',', true))
+                        for (std::string_view mapStr : Warhead::Tokenize(params_0, ',', true))
                         {
-                            if (std::optional<uint32> mapId = warhead::StringTo<uint32>(mapStr))
+                            if (std::optional<uint32> mapId = Warhead::StringTo<uint32>(mapStr))
                                 data.params[0].insert(*mapId);
                             else
                                 LOG_ERROR("sql.sql", "Disable map '%s' for spell %u is invalid, skipped.", std::string(mapStr).c_str(), entry);
@@ -123,9 +123,9 @@ namespace DisableMgr
 
                     if (flags & SPELL_DISABLE_AREA)
                     {
-                        for (std::string_view areaStr : warhead::Tokenize(params_1, ',', true))
+                        for (std::string_view areaStr : Warhead::Tokenize(params_1, ',', true))
                         {
-                            if (std::optional<uint32> areaId = warhead::StringTo<uint32>(areaStr))
+                            if (std::optional<uint32> areaId = Warhead::StringTo<uint32>(areaStr))
                                 data.params[1].insert(*areaId);
                             else
                                 LOG_ERROR("sql.sql", "Disable area '%s' for spell %u is invalid, skipped.", std::string(areaStr).c_str(), entry);

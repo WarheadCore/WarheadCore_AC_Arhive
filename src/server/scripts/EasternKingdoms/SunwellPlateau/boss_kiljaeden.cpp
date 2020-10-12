@@ -1066,7 +1066,7 @@ public:
 
         void FilterTargets(std::list<WorldObject*>& targets)
         {
-            targets.remove_if(warhead::UnitAuraCheck(true, SPELL_VENGEANCE_OF_THE_BLUE_FLIGHT));
+            targets.remove_if(Warhead::UnitAuraCheck(true, SPELL_VENGEANCE_OF_THE_BLUE_FLIGHT));
         }
 
         void HandleScriptEffect(SpellEffIndex effIndex)
@@ -1103,7 +1103,7 @@ public:
 
         void FilterTargets(std::list<WorldObject*>& targets)
         {
-            targets.sort(warhead::ObjectDistanceOrderPred(GetCaster()));
+            targets.sort(Warhead::ObjectDistanceOrderPred(GetCaster()));
             WorldObject* target = targets.front();
 
             targets.clear();
@@ -1313,7 +1313,7 @@ public:
 
         void FilterTargets(std::list<WorldObject*>& targets)
         {
-            targets.remove_if(warhead::UnitAuraCheck(true, SPELL_VENGEANCE_OF_THE_BLUE_FLIGHT));
+            targets.remove_if(Warhead::UnitAuraCheck(true, SPELL_VENGEANCE_OF_THE_BLUE_FLIGHT));
         }
 
         void Register()

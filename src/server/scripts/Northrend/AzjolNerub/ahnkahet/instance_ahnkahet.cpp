@@ -295,7 +295,7 @@ public:
                             PlayerList.push_back(player);
 
                 if (!PlayerList.empty())
-                    caster->CastSpell(warhead::Containers::SelectRandomContainerElement(PlayerList), caster->GetMap()->IsHeroic() ? SPELL_SHADOW_SICKLE_H : SPELL_SHADOW_SICKLE, true);
+                    caster->CastSpell(Warhead::Containers::SelectRandomContainerElement(PlayerList), caster->GetMap()->IsHeroic() ? SPELL_SHADOW_SICKLE_H : SPELL_SHADOW_SICKLE, true);
 
             }
         }

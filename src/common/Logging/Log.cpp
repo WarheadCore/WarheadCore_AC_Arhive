@@ -172,7 +172,7 @@ void Log::ReadChannelsFromConfig()
 
 std::string_view Log::GetPositionOptions(std::string_view options, uint8 position, std::string_view _default /*= ""*/)
 {
-    auto const& tokens = warhead::Tokenize(options, ',', true);
+    auto const& tokens = Warhead::Tokenize(options, ',', true);
     if (static_cast<uint8>(tokens.size()) < position + 1u)
         return _default;
 
@@ -197,7 +197,7 @@ std::string const Log::GetChannelsFromLogger(std::string const& loggerName)
 {
     std::string const& loggerOptions = sConfigMgr->GetStringDefault(PREFIX_LOGGER + loggerName, "6, Console Server");
 
-    auto const& tokensOptions = warhead::Tokenize(loggerOptions, ',', true);
+    auto const& tokensOptions = Warhead::Tokenize(loggerOptions, ',', true);
     if (tokensOptions.empty())
         return "";
 
@@ -224,14 +224,14 @@ void Log::CreateLoggerFromConfig(std::string const& configLoggerName)
         return;
     }
 
-    auto const& tokens = warhead::Tokenize(options, ',', true);
+    auto const& tokens = Warhead::Tokenize(options, ',', true);
     if (!tokens.size() || tokens.size() < LOGGER_OPTIONS_CHANNELS_NAME + 1)
     {
         SYS_LOG_ERROR("Log::CreateLoggerFromConfig: Bad config options for Logger (%s)", loggerName.c_str());
         return;
     }
 
-    LogLevel level = static_cast<LogLevel>(warhead::StringTo<uint8>(GetPositionOptions(options, LOGGER_OPTIONS_LOG_LEVEL)).value_or(static_cast<uint8>(LogLevel::LOG_LEVEL_MAX)));
+    LogLevel level = static_cast<LogLevel>(Warhead::StringTo<uint8>(GetPositionOptions(options, LOGGER_OPTIONS_LOG_LEVEL)).value_or(static_cast<uint8>(LogLevel::LOG_LEVEL_MAX)));
     if (level >= LogLevel::LOG_LEVEL_MAX)
     {
         SYS_LOG_ERROR("Log::CreateLoggerFromConfig: Wrong Log Level for logger %s", loggerName.c_str());
@@ -244,7 +244,7 @@ void Log::CreateLoggerFromConfig(std::string const& configLoggerName)
     AutoPtr<SplitterChannel> splitterChannel(new SplitterChannel);
     auto const& channelsName = GetPositionOptions(options, LOGGER_OPTIONS_CHANNELS_NAME);
 
-    for (auto const& tokensFmtChannels : warhead::Tokenize(channelsName, ' ', false))
+    for (auto const& tokensFmtChannels : Warhead::Tokenize(channelsName, ' ', false))
     {
         std::string channelName = std::string(tokensFmtChannels);
 
@@ -282,7 +282,7 @@ void Log::CreateChannelsFromConfig(std::string const& logChannelName)
         return;
     }
 
-    auto const& tokens = warhead::Tokenize(options, ',', true);
+    auto const& tokens = Warhead::Tokenize(options, ',', true);
     if (tokens.size() < CHANNEL_OPTIONS_PATTERN + 1)
     {
         SYS_LOG_ERROR("Log::CreateLoggerFromConfig: Wrong config option (< CHANNEL_OPTIONS_PATTERN) LogChannel.%s=%s\n", channelName.c_str(), options.c_str());
@@ -295,7 +295,7 @@ void Log::CreateChannelsFromConfig(std::string const& logChannelName)
         return;
     }
 
-    auto channelType = warhead::StringTo<uint8>(GetPositionOptions(options, CHANNEL_OPTIONS_TYPE));
+    auto channelType = Warhead::StringTo<uint8>(GetPositionOptions(options, CHANNEL_OPTIONS_TYPE));
     if (!channelType || (channelType && channelType > (uint8)FormattingChannelType::FORMATTING_CHANNEL_TYPE_FILE))
     {
         SYS_LOG_ERROR("Log::CreateLoggerFromConfig: Wrong channel type for LogChannel.%s\n", channelName.c_str());
@@ -339,7 +339,7 @@ void Log::CreateChannelsFromConfig(std::string const& logChannelName)
 
         if (!colorOptions.empty())
         {
-            auto const& tokensColor = warhead::Tokenize(colorOptions, ' ', false);
+            auto const& tokensColor = Warhead::Tokenize(colorOptions, ' ', false);
             if (tokensColor.size() == 8)
             {
                 try
@@ -482,5 +482,5 @@ void Log::outCharDump(std::string const& str, uint32 accountId, uint64 guid, std
     if (str.empty())
         return;
 
-    _Write(LOGGER_PLAYER_DUMP, LogLevel::LOG_LEVEL_INFO, warhead::StringFormat("== START DUMP ==\n(Account: %u. Guid: %u. Name: %s)\n%s\n== END DUMP ==\n", accountId, guid, name.c_str(), str.c_str()));
+    _Write(LOGGER_PLAYER_DUMP, LogLevel::LOG_LEVEL_INFO, Warhead::StringFormat("== START DUMP ==\n(Account: %u. Guid: %u. Name: %s)\n%s\n== END DUMP ==\n", accountId, guid, name.c_str(), str.c_str()));
 }

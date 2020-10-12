@@ -40,7 +40,7 @@ GroupSources(${CMAKE_CURRENT_SOURCE_DIR})
 
 target_link_libraries(Detour
   PRIVATE
-    acore-dependency-interface
+    warhead-dependency-interface
   PUBLIC
     zlib)
 

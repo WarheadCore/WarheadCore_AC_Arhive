@@ -138,7 +138,7 @@ public:
             if (targets.empty())
                 return;
 
-            WorldObject* target = warhead::Containers::SelectRandomContainerElement(targets);
+            WorldObject* target = Warhead::Containers::SelectRandomContainerElement(targets);
             targets.clear();
             targets.push_back(target);
         }

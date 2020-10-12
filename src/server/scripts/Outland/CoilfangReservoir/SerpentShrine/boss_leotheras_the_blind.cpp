@@ -415,7 +415,7 @@ public:
         void FilterTargets(std::list<WorldObject*>& unitList)
         {
             if (Unit* victim = GetCaster()->GetVictim())
-                unitList.remove_if(warhead::ObjectGUIDCheck(victim->GetGUID(), true));
+                unitList.remove_if(Warhead::ObjectGUIDCheck(victim->GetGUID(), true));
         }
 
         void Register()

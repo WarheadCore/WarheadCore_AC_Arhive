@@ -66,7 +66,7 @@ target_include_directories(fmt
 
 target_link_libraries(fmt
   PRIVATE
-    acore-dependency-interface)
+    warhead-dependency-interface)
 
 set_target_properties(fmt
   PROPERTIES

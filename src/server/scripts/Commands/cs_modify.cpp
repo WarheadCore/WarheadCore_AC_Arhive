@@ -1016,7 +1016,7 @@ public:
         if (strchr(args, 'g') || strchr(args, 's') || strchr(args, 'c'))
             moneyToAddO = MoneyStringToMoney(std::string(args));
         else
-            moneyToAddO = warhead::StringTo<int32>(args);
+            moneyToAddO = Warhead::StringTo<int32>(args);
 
         uint32 targetMoney = target->GetMoney();
 

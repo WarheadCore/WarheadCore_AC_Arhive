@@ -552,7 +552,7 @@ public:
                         if (_guardList.empty())
                         {
                             GetCreatureListWithEntryInGrid(_guardList, me, NPC_SE_KOR_KRON_REAVER, 20.0f);
-                            _guardList.sort(warhead::ObjectDistanceOrderPred(me));
+                            _guardList.sort(Warhead::ObjectDistanceOrderPred(me));
                         }
                         uint32 x = 1;
                         for (std::list<Creature*>::iterator itr = _guardList.begin(); itr != _guardList.end(); ++itr)
@@ -814,7 +814,7 @@ public:
                         if (_guardList.empty())
                         {
                             GetCreatureListWithEntryInGrid(_guardList, me, NPC_SE_SKYBREAKER_MARINE, 20.0f);
-                            _guardList.sort(warhead::ObjectDistanceOrderPred(me));
+                            _guardList.sort(Warhead::ObjectDistanceOrderPred(me));
                         }
                         uint32 x = 1;
                         for (std::list<Creature*>::iterator itr = _guardList.begin(); itr != _guardList.end(); ++itr)
@@ -1254,7 +1254,7 @@ public:
             // select one random target, with preference of ranged targets
             uint32 targetsAtRange = 0;
             uint32 const minTargets = uint32(GetCaster()->GetMap()->GetSpawnMode() & 1 ? 10 : 4);
-            targets.sort(warhead::ObjectDistanceOrderPred(GetCaster(), false));
+            targets.sort(Warhead::ObjectDistanceOrderPred(GetCaster(), false));
 
             // get target count at range
             for (std::list<WorldObject*>::iterator itr = targets.begin(); itr != targets.end(); ++itr, ++targetsAtRange)
@@ -1322,12 +1322,12 @@ public:
 
             if (GetSpellInfo()->Id == 72385 || GetSpellInfo()->Id == 72442) // 10n, 10h
             {
-                WorldObject* target = warhead::Containers::SelectRandomContainerElement(targets);
+                WorldObject* target = Warhead::Containers::SelectRandomContainerElement(targets);
                 targets.clear();
                 targets.push_back(target);
             }
             else
-                warhead::Containers::RandomResizeList(targets, 3);
+                Warhead::Containers::RandomResizeList(targets, 3);
         }
 
         void Register()

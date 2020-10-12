@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_GAMEOBJECTAI_H
-#define ACORE_GAMEOBJECTAI_H
+#ifndef WARHEAD_GAMEOBJECTAI_H
+#define WARHEAD_GAMEOBJECTAI_H
 
 #include "Define.h"
 #include <list>

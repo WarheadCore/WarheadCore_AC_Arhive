@@ -48,8 +48,8 @@
 #define PROCESS_HIGH_PRIORITY -15 // [-20, 19], default is 0
 #endif
 
-#ifndef _ACORE_REALM_CONFIG
-#define _ACORE_REALM_CONFIG  "authserver.conf"
+#ifndef _WARHEAD_REALM_CONFIG
+#define _WARHEAD_REALM_CONFIG  "authserver.conf"
 #endif
 
 #if WH_PLATFORM == WH_PLATFORM_WINDOWS
@@ -71,7 +71,7 @@ void StopDB();
 bool stopEvent = false;                                     // Setting it to true stops the server
 
 /// Handle authserver's termination signals
-class AuthServerSignalHandler : public warhead::SignalHandler
+class AuthServerSignalHandler : public Warhead::SignalHandler
 {
 public:
     virtual void HandleSignal(int sigNum)
@@ -98,7 +98,7 @@ void usage(const char* prog)
 extern int main(int argc, char** argv)
 {
     // Command line parsing to get the configuration file name
-    std::string configFile = sConfigMgr->GetConfigPath() + std::string(_ACORE_REALM_CONFIG);
+    std::string configFile = sConfigMgr->GetConfigPath() + std::string(_WARHEAD_REALM_CONFIG);
     int count = 1;
 
     while (count < argc)
@@ -125,7 +125,7 @@ extern int main(int argc, char** argv)
     // Init all logs
     sLog->Initialize();
 
-    warhead::Logo::Show("authserver", configFile.c_str(), [](char const * text)
+    Warhead::Logo::Show("authserver", configFile.c_str(), [](char const * text)
     {
         LOG_INFO("server.authserver", "%s", text);
     });

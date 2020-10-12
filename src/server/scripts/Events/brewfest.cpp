@@ -1130,8 +1130,8 @@ public:
             {
                 timer = 0;
                 Player* player = NULL;
-                warhead::AnyPlayerInObjectRangeCheck checker(me, 2.0f);
-                warhead::PlayerSearcher<warhead::AnyPlayerInObjectRangeCheck> searcher(me, player, checker);
+                Warhead::AnyPlayerInObjectRangeCheck checker(me, 2.0f);
+                Warhead::PlayerSearcher<Warhead::AnyPlayerInObjectRangeCheck> searcher(me, player, checker);
                 me->VisitNearbyWorldObject(2.0f, searcher);
                 if (player)
                 {

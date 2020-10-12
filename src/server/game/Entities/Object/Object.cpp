@@ -576,14 +576,14 @@ bool Object::_LoadIntoDataField(std::string const& data, uint32 startOffset, uin
     if (data.empty())
         return false;
 
-    std::vector<std::string_view> tokens = warhead::Tokenize(data, ' ', false);
+    std::vector<std::string_view> tokens = Warhead::Tokenize(data, ' ', false);
 
     if (tokens.size() != count)
         return false;
 
     for (uint32 index = 0; index < count; ++index)
     {
-        std::optional<uint32> val = warhead::StringTo<uint32>(tokens[index]);
+        std::optional<uint32> val = Warhead::StringTo<uint32>(tokens[index]);
         if (!val)
             return false;
 
@@ -1262,8 +1262,8 @@ void WorldObject::GetRandomPoint(const Position& pos, float distance, float& ran
     rand_y = pos.m_positionY + new_dist * sin(angle);
     rand_z = pos.m_positionZ;
 
-    warhead::NormalizeMapCoord(rand_x);
-    warhead::NormalizeMapCoord(rand_y);
+    Warhead::NormalizeMapCoord(rand_x);
+    Warhead::NormalizeMapCoord(rand_y);
     UpdateGroundPositionZ(rand_x, rand_y, rand_z);            // update to LOS height if available
 }
 
@@ -1755,57 +1755,57 @@ namespace warhead
 
 void WorldObject::MonsterSay(const char* text, uint32 language, WorldObject const* target)
 {
-    CellCoord p = warhead::ComputeCellCoord(GetPositionX(), GetPositionY());
+    CellCoord p = Warhead::ComputeCellCoord(GetPositionX(), GetPositionY());
 
     Cell cell(p);
     cell.SetNoCreate();
 
-    warhead::MonsterCustomChatBuilder say_build(this, CHAT_MSG_MONSTER_SAY, text, language, target);
-    warhead::LocalizedPacketDo<warhead::MonsterCustomChatBuilder> say_do(say_build);
-    warhead::PlayerDistWorker<warhead::LocalizedPacketDo<warhead::MonsterCustomChatBuilder> > say_worker(this, sGameConfig->GetFloatConfig("ListenRange.Say"), say_do);
-    TypeContainerVisitor<warhead::PlayerDistWorker<warhead::LocalizedPacketDo<warhead::MonsterCustomChatBuilder> >, WorldTypeMapContainer > message(say_worker);
+    Warhead::MonsterCustomChatBuilder say_build(this, CHAT_MSG_MONSTER_SAY, text, language, target);
+    Warhead::LocalizedPacketDo<Warhead::MonsterCustomChatBuilder> say_do(say_build);
+    Warhead::PlayerDistWorker<Warhead::LocalizedPacketDo<Warhead::MonsterCustomChatBuilder> > say_worker(this, sGameConfig->GetFloatConfig("ListenRange.Say"), say_do);
+    TypeContainerVisitor<Warhead::PlayerDistWorker<Warhead::LocalizedPacketDo<Warhead::MonsterCustomChatBuilder> >, WorldTypeMapContainer > message(say_worker);
     cell.Visit(p, message, *GetMap(), *this, sGameConfig->GetFloatConfig("ListenRange.Say"));
 }
 
 void WorldObject::MonsterSay(int32 textId, uint32 language, WorldObject const* target)
 {
-    CellCoord p = warhead::ComputeCellCoord(GetPositionX(), GetPositionY());
+    CellCoord p = Warhead::ComputeCellCoord(GetPositionX(), GetPositionY());
 
     Cell cell(p);
     cell.SetNoCreate();
 
-    warhead::MonsterChatBuilder say_build(this, CHAT_MSG_MONSTER_SAY, textId, language, target);
-    warhead::LocalizedPacketDo<warhead::MonsterChatBuilder> say_do(say_build);
-    warhead::PlayerDistWorker<warhead::LocalizedPacketDo<warhead::MonsterChatBuilder> > say_worker(this, sGameConfig->GetFloatConfig("ListenRange.Say"), say_do);
-    TypeContainerVisitor<warhead::PlayerDistWorker<warhead::LocalizedPacketDo<warhead::MonsterChatBuilder> >, WorldTypeMapContainer > message(say_worker);
+    Warhead::MonsterChatBuilder say_build(this, CHAT_MSG_MONSTER_SAY, textId, language, target);
+    Warhead::LocalizedPacketDo<Warhead::MonsterChatBuilder> say_do(say_build);
+    Warhead::PlayerDistWorker<Warhead::LocalizedPacketDo<Warhead::MonsterChatBuilder> > say_worker(this, sGameConfig->GetFloatConfig("ListenRange.Say"), say_do);
+    TypeContainerVisitor<Warhead::PlayerDistWorker<Warhead::LocalizedPacketDo<Warhead::MonsterChatBuilder> >, WorldTypeMapContainer > message(say_worker);
     cell.Visit(p, message, *GetMap(), *this, sGameConfig->GetFloatConfig("ListenRange.Say"));
 }
 
 void WorldObject::MonsterYell(const char* text, uint32 language, WorldObject const* target)
 {
-    CellCoord p = warhead::ComputeCellCoord(GetPositionX(), GetPositionY());
+    CellCoord p = Warhead::ComputeCellCoord(GetPositionX(), GetPositionY());
 
     Cell cell(p);
     cell.SetNoCreate();
 
-    warhead::MonsterCustomChatBuilder say_build(this, CHAT_MSG_MONSTER_YELL, text, language, target);
-    warhead::LocalizedPacketDo<warhead::MonsterCustomChatBuilder> say_do(say_build);
-    warhead::PlayerDistWorker<warhead::LocalizedPacketDo<warhead::MonsterCustomChatBuilder> > say_worker(this, sGameConfig->GetFloatConfig("ListenRange.Yell"), say_do);
-    TypeContainerVisitor<warhead::PlayerDistWorker<warhead::LocalizedPacketDo<warhead::MonsterCustomChatBuilder> >, WorldTypeMapContainer > message(say_worker);
+    Warhead::MonsterCustomChatBuilder say_build(this, CHAT_MSG_MONSTER_YELL, text, language, target);
+    Warhead::LocalizedPacketDo<Warhead::MonsterCustomChatBuilder> say_do(say_build);
+    Warhead::PlayerDistWorker<Warhead::LocalizedPacketDo<Warhead::MonsterCustomChatBuilder> > say_worker(this, sGameConfig->GetFloatConfig("ListenRange.Yell"), say_do);
+    TypeContainerVisitor<Warhead::PlayerDistWorker<Warhead::LocalizedPacketDo<Warhead::MonsterCustomChatBuilder> >, WorldTypeMapContainer > message(say_worker);
     cell.Visit(p, message, *GetMap(), *this, sGameConfig->GetFloatConfig("ListenRange.Yell"));
 }
 
 void WorldObject::MonsterYell(int32 textId, uint32 language, WorldObject const* target)
 {
-    CellCoord p = warhead::ComputeCellCoord(GetPositionX(), GetPositionY());
+    CellCoord p = Warhead::ComputeCellCoord(GetPositionX(), GetPositionY());
 
     Cell cell(p);
     cell.SetNoCreate();
 
-    warhead::MonsterChatBuilder say_build(this, CHAT_MSG_MONSTER_YELL, textId, language, target);
-    warhead::LocalizedPacketDo<warhead::MonsterChatBuilder> say_do(say_build);
-    warhead::PlayerDistWorker<warhead::LocalizedPacketDo<warhead::MonsterChatBuilder> > say_worker(this, sGameConfig->GetFloatConfig("ListenRange.Yell"), say_do);
-    TypeContainerVisitor<warhead::PlayerDistWorker<warhead::LocalizedPacketDo<warhead::MonsterChatBuilder> >, WorldTypeMapContainer > message(say_worker);
+    Warhead::MonsterChatBuilder say_build(this, CHAT_MSG_MONSTER_YELL, textId, language, target);
+    Warhead::LocalizedPacketDo<Warhead::MonsterChatBuilder> say_do(say_build);
+    Warhead::PlayerDistWorker<Warhead::LocalizedPacketDo<Warhead::MonsterChatBuilder> > say_worker(this, sGameConfig->GetFloatConfig("ListenRange.Yell"), say_do);
+    TypeContainerVisitor<Warhead::PlayerDistWorker<Warhead::LocalizedPacketDo<Warhead::MonsterChatBuilder> >, WorldTypeMapContainer > message(say_worker);
     cell.Visit(p, message, *GetMap(), *this, sGameConfig->GetFloatConfig("ListenRange.Yell"));
 }
 
@@ -1819,15 +1819,15 @@ void WorldObject::MonsterTextEmote(const char* text, WorldObject const* target, 
 
 void WorldObject::MonsterTextEmote(int32 textId, WorldObject const* target, bool IsBossEmote)
 {
-    CellCoord p = warhead::ComputeCellCoord(GetPositionX(), GetPositionY());
+    CellCoord p = Warhead::ComputeCellCoord(GetPositionX(), GetPositionY());
 
     Cell cell(p);
     cell.SetNoCreate();
 
-    warhead::MonsterChatBuilder say_build(this, IsBossEmote ? CHAT_MSG_RAID_BOSS_EMOTE : CHAT_MSG_MONSTER_EMOTE, textId, LANG_UNIVERSAL, target);
-    warhead::LocalizedPacketDo<warhead::MonsterChatBuilder> say_do(say_build);
-    warhead::PlayerDistWorker<warhead::LocalizedPacketDo<warhead::MonsterChatBuilder> > say_worker(this, (IsBossEmote ? 200.0f : sGameConfig->GetFloatConfig("ListenRange.TextEmote")), say_do);
-    TypeContainerVisitor<warhead::PlayerDistWorker<warhead::LocalizedPacketDo<warhead::MonsterChatBuilder> >, WorldTypeMapContainer > message(say_worker);
+    Warhead::MonsterChatBuilder say_build(this, IsBossEmote ? CHAT_MSG_RAID_BOSS_EMOTE : CHAT_MSG_MONSTER_EMOTE, textId, LANG_UNIVERSAL, target);
+    Warhead::LocalizedPacketDo<Warhead::MonsterChatBuilder> say_do(say_build);
+    Warhead::PlayerDistWorker<Warhead::LocalizedPacketDo<Warhead::MonsterChatBuilder> > say_worker(this, (IsBossEmote ? 200.0f : sGameConfig->GetFloatConfig("ListenRange.TextEmote")), say_do);
+    TypeContainerVisitor<Warhead::PlayerDistWorker<Warhead::LocalizedPacketDo<Warhead::MonsterChatBuilder> >, WorldTypeMapContainer > message(say_worker);
     cell.Visit(p, message, *GetMap(), *this, (IsBossEmote ? 200.0f : sGameConfig->GetFloatConfig("ListenRange.TextEmote")));
 }
 
@@ -1875,7 +1875,7 @@ void WorldObject::SendMessageToSetInRange(WorldPacket* data, float dist, bool /*
     dist += GetObjectSize();
     if (includeMargin)
         dist += VISIBILITY_COMPENSATION; // pussywizard: to ensure everyone receives all important packets
-    warhead::MessageDistDeliverer notifier(this, data, dist, false, skipped_rcvr);
+    Warhead::MessageDistDeliverer notifier(this, data, dist, false, skipped_rcvr);
     VisitNearbyWorldObject(dist, notifier);
 }
 
@@ -2191,8 +2191,8 @@ void WorldObject::SummonCreatureGroup(uint8 group, std::list<TempSummon*>* list 
 Creature* WorldObject::FindNearestCreature(uint32 entry, float range, bool alive) const
 {
     Creature* creature = NULL;
-    warhead::NearestCreatureEntryWithLiveStateInObjectRangeCheck checker(*this, entry, alive, range);
-    warhead::CreatureLastSearcher<warhead::NearestCreatureEntryWithLiveStateInObjectRangeCheck> searcher(this, creature, checker);
+    Warhead::NearestCreatureEntryWithLiveStateInObjectRangeCheck checker(*this, entry, alive, range);
+    Warhead::CreatureLastSearcher<Warhead::NearestCreatureEntryWithLiveStateInObjectRangeCheck> searcher(this, creature, checker);
     VisitNearbyObject(range, searcher);
     return creature;
 }
@@ -2200,8 +2200,8 @@ Creature* WorldObject::FindNearestCreature(uint32 entry, float range, bool alive
 GameObject* WorldObject::FindNearestGameObject(uint32 entry, float range) const
 {
     GameObject* go = NULL;
-    warhead::NearestGameObjectEntryInObjectRangeCheck checker(*this, entry, range);
-    warhead::GameObjectLastSearcher<warhead::NearestGameObjectEntryInObjectRangeCheck> searcher(this, go, checker);
+    Warhead::NearestGameObjectEntryInObjectRangeCheck checker(*this, entry, range);
+    Warhead::GameObjectLastSearcher<Warhead::NearestGameObjectEntryInObjectRangeCheck> searcher(this, go, checker);
     VisitNearbyGridObject(range, searcher);
     return go;
 }
@@ -2209,8 +2209,8 @@ GameObject* WorldObject::FindNearestGameObject(uint32 entry, float range) const
 GameObject* WorldObject::FindNearestGameObjectOfType(GameobjectTypes type, float range) const
 {
     GameObject* go = NULL;
-    warhead::NearestGameObjectTypeInObjectRangeCheck checker(*this, type, range);
-    warhead::GameObjectLastSearcher<warhead::NearestGameObjectTypeInObjectRangeCheck> searcher(this, go, checker);
+    Warhead::NearestGameObjectTypeInObjectRangeCheck checker(*this, type, range);
+    Warhead::GameObjectLastSearcher<Warhead::NearestGameObjectTypeInObjectRangeCheck> searcher(this, go, checker);
     VisitNearbyGridObject(range, searcher);
     return go;
 }
@@ -2219,8 +2219,8 @@ Player* WorldObject::SelectNearestPlayer(float distance) const
 {
     Player* target = nullptr;
 
-    warhead::NearestPlayerInObjectRangeCheck checker(this, distance);
-    warhead::PlayerLastSearcher<warhead::NearestPlayerInObjectRangeCheck> searcher(this, target, checker);
+    Warhead::NearestPlayerInObjectRangeCheck checker(this, distance);
+    Warhead::PlayerLastSearcher<Warhead::NearestPlayerInObjectRangeCheck> searcher(this, target, checker);
     VisitNearbyObject(distance, searcher);
 
     return target;
@@ -2228,26 +2228,26 @@ Player* WorldObject::SelectNearestPlayer(float distance) const
 
 void WorldObject::GetGameObjectListWithEntryInGrid(std::list<GameObject*>& gameobjectList, uint32 entry, float maxSearchRange) const
 {
-    CellCoord pair(warhead::ComputeCellCoord(this->GetPositionX(), this->GetPositionY()));
+    CellCoord pair(Warhead::ComputeCellCoord(this->GetPositionX(), this->GetPositionY()));
     Cell cell(pair);
     cell.SetNoCreate();
 
-    warhead::AllGameObjectsWithEntryInRange check(this, entry, maxSearchRange);
-    warhead::GameObjectListSearcher<warhead::AllGameObjectsWithEntryInRange> searcher(this, gameobjectList, check);
-    TypeContainerVisitor<warhead::GameObjectListSearcher<warhead::AllGameObjectsWithEntryInRange>, GridTypeMapContainer> visitor(searcher);
+    Warhead::AllGameObjectsWithEntryInRange check(this, entry, maxSearchRange);
+    Warhead::GameObjectListSearcher<Warhead::AllGameObjectsWithEntryInRange> searcher(this, gameobjectList, check);
+    TypeContainerVisitor<Warhead::GameObjectListSearcher<Warhead::AllGameObjectsWithEntryInRange>, GridTypeMapContainer> visitor(searcher);
 
     cell.Visit(pair, visitor, *(this->GetMap()), *this, maxSearchRange);
 }
 
 void WorldObject::GetCreatureListWithEntryInGrid(std::list<Creature*>& creatureList, uint32 entry, float maxSearchRange) const
 {
-    CellCoord pair(warhead::ComputeCellCoord(this->GetPositionX(), this->GetPositionY()));
+    CellCoord pair(Warhead::ComputeCellCoord(this->GetPositionX(), this->GetPositionY()));
     Cell cell(pair);
     cell.SetNoCreate();
 
-    warhead::AllCreaturesOfEntryInRange check(this, entry, maxSearchRange);
-    warhead::CreatureListSearcher<warhead::AllCreaturesOfEntryInRange> searcher(this, creatureList, check);
-    TypeContainerVisitor<warhead::CreatureListSearcher<warhead::AllCreaturesOfEntryInRange>, GridTypeMapContainer> visitor(searcher);
+    Warhead::AllCreaturesOfEntryInRange check(this, entry, maxSearchRange);
+    Warhead::CreatureListSearcher<Warhead::AllCreaturesOfEntryInRange> searcher(this, creatureList, check);
+    TypeContainerVisitor<Warhead::CreatureListSearcher<Warhead::AllCreaturesOfEntryInRange>, GridTypeMapContainer> visitor(searcher);
 
     cell.Visit(pair, visitor, *(this->GetMap()), *this, maxSearchRange);
 }
@@ -2332,8 +2332,8 @@ void WorldObject::GetNearPoint2D(float& x, float& y, float distance2d, float abs
     x = GetPositionX() + (GetObjectSize() + distance2d) * cos(absAngle);
     y = GetPositionY() + (GetObjectSize() + distance2d) * sin(absAngle);
 
-    warhead::NormalizeMapCoord(x);
-    warhead::NormalizeMapCoord(y);
+    Warhead::NormalizeMapCoord(x);
+    Warhead::NormalizeMapCoord(y);
 }
 
 void WorldObject::GetNearPoint(WorldObject const* searcher, float& x, float& y, float& z, float searcher_size, float distance2d, float absAngle, float controlZ) const
@@ -2449,7 +2449,7 @@ void WorldObject::MovePosition(Position& pos, float dist, float angle)
     desty = pos.m_positionY + dist * sin(angle);
 
     // Prevent invalid coordinates here, position is unchanged
-    if (!warhead::IsValidMapCoord(destx, desty))
+    if (!Warhead::IsValidMapCoord(destx, desty))
     {
         LOG_FATAL("entities.object", "WorldObject::MovePosition invalid coordinates X: %f and Y: %f were passed!", destx, desty);
         return;
@@ -2479,8 +2479,8 @@ void WorldObject::MovePosition(Position& pos, float dist, float angle)
 
     pos.Relocate(destx, desty, destz);
 
-    warhead::NormalizeMapCoord(pos.m_positionX);
-    warhead::NormalizeMapCoord(pos.m_positionY);
+    Warhead::NormalizeMapCoord(pos.m_positionX);
+    Warhead::NormalizeMapCoord(pos.m_positionY);
     UpdateGroundPositionZ(pos.m_positionX, pos.m_positionY, pos.m_positionZ);
     pos.m_orientation = m_orientation;
 }
@@ -2496,7 +2496,7 @@ void WorldObject::MovePositionToFirstCollision(Position& pos, float dist, float 
         destz += 2.0f;
 
     // Prevent invalid coordinates here, position is unchanged
-    if (!warhead::IsValidMapCoord(destx, desty))
+    if (!Warhead::IsValidMapCoord(destx, desty))
     {
         LOG_FATAL("entities.object", "WorldObject::MovePositionToFirstCollision invalid coordinates X: %f and Y: %f were passed!", destx, desty);
         return;
@@ -2561,8 +2561,8 @@ void WorldObject::MovePositionToFirstCollision(Position& pos, float dist, float 
             break;
     }
 
-    warhead::NormalizeMapCoord(destx);
-    warhead::NormalizeMapCoord(desty);
+    Warhead::NormalizeMapCoord(destx);
+    Warhead::NormalizeMapCoord(desty);
     UpdateAllowedPositionZ(destx, desty, destz);
 
     float ground = GetMap()->GetHeight(GetPhaseMask(), destx, desty, MAX_HEIGHT, true);
@@ -2596,7 +2596,7 @@ void WorldObject::MovePositionToFirstCollisionForTotem(Position& pos, float dist
     destz = pos.GetPositionZ();
 
     // Prevent invalid coordinates here, position is unchanged
-    if (!warhead::IsValidMapCoord(destx, desty))
+    if (!Warhead::IsValidMapCoord(destx, desty))
     {
         LOG_FATAL("entities.object", "WorldObject::MovePositionToFirstCollision invalid coordinates X: %f and Y: %f were passed!", destx, desty);
         return;
@@ -2672,8 +2672,8 @@ void WorldObject::MovePositionToFirstCollisionForTotem(Position& pos, float dist
         destz = prevdz;
     }
 
-    warhead::NormalizeMapCoord(destx);
-    warhead::NormalizeMapCoord(desty);
+    Warhead::NormalizeMapCoord(destx);
+    Warhead::NormalizeMapCoord(desty);
 
     pos.Relocate(destx, desty, destz);
     pos.m_orientation = m_orientation;
@@ -2726,8 +2726,8 @@ void WorldObject::DestroyForNearbyPlayers()
         return;
 
     std::list<Player*> targets;
-    warhead::AnyPlayerInObjectRangeCheck check(this, GetVisibilityRange() + VISIBILITY_COMPENSATION, false);
-    warhead::PlayerListSearcherWithSharedVision<warhead::AnyPlayerInObjectRangeCheck> searcher(this, targets, check);
+    Warhead::AnyPlayerInObjectRangeCheck check(this, GetVisibilityRange() + VISIBILITY_COMPENSATION, false);
+    Warhead::PlayerListSearcherWithSharedVision<Warhead::AnyPlayerInObjectRangeCheck> searcher(this, targets, check);
     VisitNearbyWorldObject(GetVisibilityRange() + VISIBILITY_COMPENSATION, searcher);
     for (std::list<Player*>::const_iterator iter = targets.begin(); iter != targets.end(); ++iter)
     {
@@ -2750,7 +2750,7 @@ void WorldObject::DestroyForNearbyPlayers()
 void WorldObject::UpdateObjectVisibility(bool /*forced*/, bool /*fromUpdate*/)
 {
     //updates object's visibility for nearby players
-    warhead::VisibleChangesNotifier notifier(*this);
+    Warhead::VisibleChangesNotifier notifier(*this);
     VisitNearbyWorldObject(GetVisibilityRange() + VISIBILITY_COMPENSATION, notifier);
 }
 
@@ -2853,7 +2853,7 @@ struct WorldObjectChangeAccumulator
 
 void WorldObject::BuildUpdate(UpdateDataMapType& data_map, UpdatePlayerSet& player_set)
 {
-    CellCoord p = warhead::ComputeCellCoord(GetPositionX(), GetPositionY());
+    CellCoord p = Warhead::ComputeCellCoord(GetPositionX(), GetPositionY());
     Cell cell(p);
     cell.SetNoCreate();
     WorldObjectChangeAccumulator notifier(*this, data_map, player_set);
@@ -2867,17 +2867,17 @@ void WorldObject::BuildUpdate(UpdateDataMapType& data_map, UpdatePlayerSet& play
 
 void WorldObject::GetCreaturesWithEntryInRange(std::list<Creature*>& creatureList, float radius, uint32 entry)
 {
-    CellCoord pair(warhead::ComputeCellCoord(this->GetPositionX(), this->GetPositionY()));
+    CellCoord pair(Warhead::ComputeCellCoord(this->GetPositionX(), this->GetPositionY()));
     Cell cell(pair);
     cell.SetNoCreate();
 
-    warhead::AllCreaturesOfEntryInRange check(this, entry, radius);
-    warhead::CreatureListSearcher<warhead::AllCreaturesOfEntryInRange> searcher(this, creatureList, check);
+    Warhead::AllCreaturesOfEntryInRange check(this, entry, radius);
+    Warhead::CreatureListSearcher<Warhead::AllCreaturesOfEntryInRange> searcher(this, creatureList, check);
 
-    TypeContainerVisitor<warhead::CreatureListSearcher<warhead::AllCreaturesOfEntryInRange>, WorldTypeMapContainer> world_visitor(searcher);
+    TypeContainerVisitor<Warhead::CreatureListSearcher<Warhead::AllCreaturesOfEntryInRange>, WorldTypeMapContainer> world_visitor(searcher);
     cell.Visit(pair, world_visitor, *(this->GetMap()), *this, radius);
 
-    TypeContainerVisitor<warhead::CreatureListSearcher<warhead::AllCreaturesOfEntryInRange>, GridTypeMapContainer> grid_visitor(searcher);
+    TypeContainerVisitor<Warhead::CreatureListSearcher<Warhead::AllCreaturesOfEntryInRange>, GridTypeMapContainer> grid_visitor(searcher);
     cell.Visit(pair, grid_visitor, *(this->GetMap()), *this, radius);
 }
 

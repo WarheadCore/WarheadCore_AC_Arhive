@@ -710,8 +710,8 @@ public:
             me->SetObjectScale(large ? 2.0f : 1.0f);
 
             std::list<WorldObject*> ClusterList;
-            warhead::AllWorldObjectsInRange objects(me, searchDistance);
-            warhead::WorldObjectListSearcher<warhead::AllWorldObjectsInRange> searcher(me, ClusterList, objects);
+            Warhead::AllWorldObjectsInRange objects(me, searchDistance);
+            Warhead::WorldObjectListSearcher<Warhead::AllWorldObjectsInRange> searcher(me, ClusterList, objects);
             me->VisitNearbyObject(searchDistance, searcher);
 
             for (std::list<WorldObject*>::const_iterator i = ClusterList.begin(); i != ClusterList.end(); ++i)

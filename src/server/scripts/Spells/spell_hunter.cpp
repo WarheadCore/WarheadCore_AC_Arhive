@@ -984,8 +984,8 @@ public:
             float max_range = GetSpellInfo()->GetMaxRange(false);
             WorldObject* result = nullptr;
             // search for nearby enemy corpse in range
-            warhead::AnyDeadUnitSpellTargetInRangeCheck check(caster, max_range, GetSpellInfo(), TARGET_CHECK_ENEMY);
-            warhead::WorldObjectSearcher<warhead::AnyDeadUnitSpellTargetInRangeCheck> searcher(caster, result, check);
+            Warhead::AnyDeadUnitSpellTargetInRangeCheck check(caster, max_range, GetSpellInfo(), TARGET_CHECK_ENEMY);
+            Warhead::WorldObjectSearcher<Warhead::AnyDeadUnitSpellTargetInRangeCheck> searcher(caster, result, check);
             caster->GetMap()->VisitFirstFound(caster->m_positionX, caster->m_positionY, max_range, searcher);
             if (!result)
                 return SPELL_FAILED_NO_EDIBLE_CORPSES;

@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_POINTMOVEMENTGENERATOR_H
-#define ACORE_POINTMOVEMENTGENERATOR_H
+#ifndef WARHEAD_POINTMOVEMENTGENERATOR_H
+#define WARHEAD_POINTMOVEMENTGENERATOR_H
 
 #include "MovementGenerator.h"
 #include "FollowerReference.h"

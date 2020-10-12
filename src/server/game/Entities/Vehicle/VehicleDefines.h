@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __ACORE_VEHICLEDEFINES_H
-#define __ACORE_VEHICLEDEFINES_H
+#ifndef __WARHEAD_VEHICLEDEFINES_H
+#define __WARHEAD_VEHICLEDEFINES_H
 
 #include "Define.h"
 #include "Map.h"

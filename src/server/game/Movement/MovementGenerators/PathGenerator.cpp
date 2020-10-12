@@ -62,7 +62,7 @@ bool PathGenerator::CalculatePath(float destX, float destY, float destZ, bool fo
     else
         _sourceUnit->GetPosition(x, y, z);
 
-    if (!warhead::IsValidMapCoord(destX, destY, destZ) || !warhead::IsValidMapCoord(x, y, z))
+    if (!Warhead::IsValidMapCoord(destX, destY, destZ) || !Warhead::IsValidMapCoord(x, y, z))
         return false;
 
     WH_METRIC_EVENT("mmap_events", "CalculatePath", "");

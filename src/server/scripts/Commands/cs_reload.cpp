@@ -423,9 +423,9 @@ public:
         if (!*args)
             return false;
 
-        for (auto const& entryStr : warhead::Tokenize(args, ' ', false))
+        for (auto const& entryStr : Warhead::Tokenize(args, ' ', false))
         {
-            uint32 entry = warhead::StringTo<uint32>(entryStr).value_or(0);
+            uint32 entry = Warhead::StringTo<uint32>(entryStr).value_or(0);
 
             PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_SEL_CREATURE_TEMPLATE);
             stmt->setUInt32(0, entry);

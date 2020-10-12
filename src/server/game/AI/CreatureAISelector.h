@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_CREATUREAISELECTOR_H
-#define ACORE_CREATUREAISELECTOR_H
+#ifndef WARHEAD_CREATUREAISELECTOR_H
+#define WARHEAD_CREATUREAISELECTOR_H
 
 class CreatureAI;
 class Creature;

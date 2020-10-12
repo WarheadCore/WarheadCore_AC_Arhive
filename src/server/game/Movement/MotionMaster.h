@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_MOTIONMASTER_H
-#define ACORE_MOTIONMASTER_H
+#ifndef WARHEAD_MOTIONMASTER_H
+#define WARHEAD_MOTIONMASTER_H
 
 #include "Common.h"
 #include <vector>

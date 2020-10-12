@@ -164,6 +164,6 @@ namespace warhead
 }
 
 template<typename T, std::atomic<T*> T::* IntrusiveLink = nullptr>
-using MPSCQueue = std::conditional_t < IntrusiveLink != nullptr, warhead::Impl::MPSCQueueIntrusive<T, IntrusiveLink>, warhead::Impl::MPSCQueueNonIntrusive<T >>;
+using MPSCQueue = std::conditional_t < IntrusiveLink != nullptr, Warhead::Impl::MPSCQueueIntrusive<T, IntrusiveLink>, Warhead::Impl::MPSCQueueNonIntrusive<T >>;
 
 #endif // MPSCQueue_h__

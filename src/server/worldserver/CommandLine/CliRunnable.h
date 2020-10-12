@@ -23,7 +23,7 @@
 #define __CLIRUNNABLE_H
 
 /// Command Line Interface handling thread
-class CliRunnable : public warhead::Runnable
+class CliRunnable : public Warhead::Runnable
 {
 public:
     void run();

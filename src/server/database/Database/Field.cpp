@@ -46,7 +46,7 @@ uint8 Field::GetUInt8() const
     if (!data.value)
         return 0;
 
-#ifdef ACORE_DEBUG
+#ifdef WARHEAD_DEBUG
     if (!IsType(MYSQL_TYPE_TINY))
     {
         LOG_INFO("sql.driver", "Warning: GetUInt8() on non-tinyint field. Using type: %s.", FieldTypeToString(data.type));
@@ -65,7 +65,7 @@ int8 Field::GetInt8() const
     if (!data.value)
         return 0;
 
-#ifdef ACORE_DEBUG
+#ifdef WARHEAD_DEBUG
     if (!IsType(MYSQL_TYPE_TINY))
     {
         LOG_INFO("sql.driver", "Warning: GetInt8() on non-tinyint field. Using type: %s.", FieldTypeToString(data.type));
@@ -84,7 +84,7 @@ uint16 Field::GetUInt16() const
     if (!data.value)
         return 0;
 
-#ifdef ACORE_DEBUG
+#ifdef WARHEAD_DEBUG
     if (!IsType(MYSQL_TYPE_SHORT) && !IsType(MYSQL_TYPE_YEAR))
     {
         LOG_INFO("sql.driver", "Warning: GetUInt16() on non-smallint field. Using type: %s.", FieldTypeToString(data.type));
@@ -103,7 +103,7 @@ int16 Field::GetInt16() const
     if (!data.value)
         return 0;
 
-#ifdef ACORE_DEBUG
+#ifdef WARHEAD_DEBUG
     if (!IsType(MYSQL_TYPE_SHORT) && !IsType(MYSQL_TYPE_YEAR))
     {
         LOG_INFO("sql.driver", "Warning: GetInt16() on non-smallint field. Using type: %s.", FieldTypeToString(data.type));
@@ -122,7 +122,7 @@ uint32 Field::GetUInt32() const
     if (!data.value)
         return 0;
 
-#ifdef ACORE_DEBUG
+#ifdef WARHEAD_DEBUG
     if (!IsType(MYSQL_TYPE_INT24) && !IsType(MYSQL_TYPE_LONG))
     {
         LOG_INFO("sql.driver", "Warning: GetUInt32() on non-(medium)int field. Using type: %s.", FieldTypeToString(data.type));
@@ -141,7 +141,7 @@ int32 Field::GetInt32() const
     if (!data.value)
         return 0;
 
-#ifdef ACORE_DEBUG
+#ifdef WARHEAD_DEBUG
     if (!IsType(MYSQL_TYPE_INT24) && !IsType(MYSQL_TYPE_LONG))
     {
         LOG_INFO("sql.driver", "Warning: GetInt32() on non-(medium)int field. Using type: %s.", FieldTypeToString(data.type));
@@ -160,7 +160,7 @@ uint64 Field::GetUInt64() const
     if (!data.value)
         return 0;
 
-#ifdef ACORE_DEBUG
+#ifdef WARHEAD_DEBUG
     if (!IsType(MYSQL_TYPE_LONGLONG) && !IsType(MYSQL_TYPE_BIT))
     {
         LOG_INFO("sql.driver", "Warning: GetUInt64() on non-bigint field. Using type: %s.", FieldTypeToString(data.type));
@@ -179,7 +179,7 @@ int64 Field::GetInt64() const
     if (!data.value)
         return 0;
 
-#ifdef ACORE_DEBUG
+#ifdef WARHEAD_DEBUG
     if (!IsType(MYSQL_TYPE_LONGLONG) && !IsType(MYSQL_TYPE_BIT))
     {
         LOG_INFO("sql.driver", "Warning: GetInt64() on non-bigint field. Using type: %s.", FieldTypeToString(data.type));
@@ -198,7 +198,7 @@ float Field::GetFloat() const
     if (!data.value)
         return 0.0f;
 
-#ifdef ACORE_DEBUG
+#ifdef WARHEAD_DEBUG
     if (!IsType(MYSQL_TYPE_FLOAT))
     {
         LOG_INFO("sql.driver", "Warning: GetFloat() on non-float field. Using type: %s.", FieldTypeToString(data.type));
@@ -216,7 +216,7 @@ double Field::GetDouble() const
     if (!data.value)
         return 0.0f;
 
-#ifdef ACORE_DEBUG
+#ifdef WARHEAD_DEBUG
     if (!IsType(MYSQL_TYPE_DOUBLE))
     {
         LOG_INFO("sql.driver", "Warning: GetDouble() on non-double field. Using type: %s.", FieldTypeToString(data.type));
@@ -234,7 +234,7 @@ char const* Field::GetCString() const
     if (!data.value)
         return nullptr;
 
-#ifdef ACORE_DEBUG
+#ifdef WARHEAD_DEBUG
     if (IsNumeric())
     {
         LOG_INFO("sql.driver", "Error: GetCString() on numeric field. Using type: %s.", FieldTypeToString(data.type));
@@ -380,7 +380,7 @@ bool Field::IsNumeric() const
             data.type == MYSQL_TYPE_LONGLONG);
 }
 
-#ifdef ACORE_DEBUG
+#ifdef WARHEAD_DEBUG
 /*static*/ char const* Field::FieldTypeToString(enum_field_types type)
 {
     switch (type)

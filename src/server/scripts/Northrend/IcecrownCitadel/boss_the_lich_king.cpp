@@ -372,7 +372,7 @@ void SendPacketToPlayers(WorldPacket const* data, Unit* source)
                     player->GetSession()->SendPacket(data);
 }
 
-struct ShadowTrapLKTargetSelector : public warhead::unary_function<Unit*, bool>
+struct ShadowTrapLKTargetSelector : public Warhead::unary_function<Unit*, bool>
 {
 public:
     ShadowTrapLKTargetSelector(Creature* source, bool playerOnly = true, bool reqLOS = false, float maxDist = 0.0f) :
@@ -402,7 +402,7 @@ private:
     float _maxDist;
 };
 
-struct NonTankLKTargetSelector : public warhead::unary_function<Unit*, bool>
+struct NonTankLKTargetSelector : public Warhead::unary_function<Unit*, bool>
 {
 public:
     NonTankLKTargetSelector(Creature* source, bool playerOnly = true, bool reqLOS = false, float maxDist = 0.0f, uint32 exclude1 = 0, uint32 exclude2 = 0) :
@@ -442,7 +442,7 @@ private:
     uint32 _exclude2;
 };
 
-struct DefileTargetSelector : public warhead::unary_function<Unit*, bool>
+struct DefileTargetSelector : public Warhead::unary_function<Unit*, bool>
 {
 public:
     DefileTargetSelector(Creature* source, bool playerOnly = true, bool reqLOS = false, float maxDist = 0.0f) :
@@ -610,7 +610,7 @@ private:
     Creature& _owner;
 };
 
-class NecroticPlagueTargetCheck : public warhead::unary_function<Unit*, bool>
+class NecroticPlagueTargetCheck : public Warhead::unary_function<Unit*, bool>
 {
 public:
     NecroticPlagueTargetCheck(Unit const* obj, uint32 notAura1, uint32 notAura2) : _sourceObj(obj), _notAura1(notAura1), _notAura2(notAura2) {}
@@ -723,7 +723,7 @@ public:
 
             // Reset The Frozen Throne gameobjects
             FrozenThroneResetWorker reset;
-            warhead::GameObjectWorker<FrozenThroneResetWorker> worker(me, reset);
+            Warhead::GameObjectWorker<FrozenThroneResetWorker> worker(me, reset);
             me->VisitNearbyGridObject(333.0f, worker);
 
             me->AddAura(SPELL_EMOTE_SIT_NO_SHEATH, me);
@@ -2009,7 +2009,7 @@ public:
 
         void FilterTargets(std::list<WorldObject*>& targets)
         {
-            targets.sort(warhead::ObjectDistanceOrderPred(GetCaster()));
+            targets.sort(Warhead::ObjectDistanceOrderPred(GetCaster()));
             if (targets.size() <= 1)
                 return;
 
@@ -2477,9 +2477,9 @@ public:
         void CorrectRange(std::list<WorldObject*>& targets)
         {
             targets.remove_if(VehicleCheck());
-            targets.remove_if(warhead::AllWorldObjectsInExactRange(GetCaster(), 10.0f * GetCaster()->GetObjectScale(), true));
+            targets.remove_if(Warhead::AllWorldObjectsInExactRange(GetCaster(), 10.0f * GetCaster()->GetObjectScale(), true));
             uint32 strangulatedAura[4] = {68980, 74325, 74296, 74297};
-            targets.remove_if(warhead::UnitAuraCheck(true, strangulatedAura[GetCaster()->GetMap()->GetDifficulty()]));
+            targets.remove_if(Warhead::UnitAuraCheck(true, strangulatedAura[GetCaster()->GetMap()->GetDifficulty()]));
         }
 
         void ChangeDamageAndGrow()
@@ -2621,7 +2621,7 @@ public:
                                     if (!triggers.empty())
                                     {
                                         valid = true;
-                                        triggers.sort(warhead::ObjectDistanceOrderPred(me));
+                                        triggers.sort(Warhead::ObjectDistanceOrderPred(me));
 
                                         target->GetMotionMaster()->Clear();
                                         target->UpdatePosition(*me, true);
@@ -2850,9 +2850,9 @@ public:
                 targets.clear();
                 return;
             }
-            targets.remove_if(warhead::UnitAuraCheck(true, GetSpellInfo()->Id));
-            targets.remove_if(warhead::UnitAuraCheck(true, SPELL_BOSS_HITTIN_YA_AURA)); // done in dbc, but just to be sure xd
-            targets.remove_if(warhead::UnitAuraCheck(true, SPELL_HARVEST_SOUL_VALKYR));
+            targets.remove_if(Warhead::UnitAuraCheck(true, GetSpellInfo()->Id));
+            targets.remove_if(Warhead::UnitAuraCheck(true, SPELL_BOSS_HITTIN_YA_AURA)); // done in dbc, but just to be sure xd
+            targets.remove_if(Warhead::UnitAuraCheck(true, SPELL_HARVEST_SOUL_VALKYR));
             if (InstanceScript* _instance = caster->GetInstanceScript())
                 if (Creature* lichKing = ObjectAccessor::GetCreature(*caster, _instance->GetData64(DATA_THE_LICH_KING)))
                     if (Spell* s = lichKing->GetCurrentSpell(CURRENT_GENERIC_SPELL))
@@ -2862,7 +2862,7 @@ public:
             if (targets.empty())
                 return;
 
-            _target = warhead::Containers::SelectRandomContainerElement(targets);
+            _target = Warhead::Containers::SelectRandomContainerElement(targets);
             targets.clear();
             targets.push_back(_target);
             if (Creature* caster = GetCaster()->ToCreature())
@@ -3041,7 +3041,7 @@ public:
             if (targets.empty())
                 return;
 
-            _target = warhead::Containers::SelectRandomContainerElement(targets);
+            _target = Warhead::Containers::SelectRandomContainerElement(targets);
         }
 
         void HandleScript(SpellEffIndex effIndex)

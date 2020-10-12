@@ -300,7 +300,7 @@ public:
                             playerList.push_back(player);
 
                 if (!playerList.empty())
-                    target = warhead::Containers::SelectRandomContainerElement(playerList);
+                    target = Warhead::Containers::SelectRandomContainerElement(playerList);
             }
         }
 

@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_IDLEMOVEMENTGENERATOR_H
-#define ACORE_IDLEMOVEMENTGENERATOR_H
+#ifndef WARHEAD_IDLEMOVEMENTGENERATOR_H
+#define WARHEAD_IDLEMOVEMENTGENERATOR_H
 
 #include "MovementGenerator.h"
 

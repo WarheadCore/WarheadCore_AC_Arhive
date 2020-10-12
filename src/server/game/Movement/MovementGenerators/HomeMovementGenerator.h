@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_HOMEMOVEMENTGENERATOR_H
-#define ACORE_HOMEMOVEMENTGENERATOR_H
+#ifndef WARHEAD_HOMEMOVEMENTGENERATOR_H
+#define WARHEAD_HOMEMOVEMENTGENERATOR_H
 
 #include "MovementGenerator.h"
 

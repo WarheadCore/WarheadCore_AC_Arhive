@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_TARGETEDMOVEMENTGENERATOR_H
-#define ACORE_TARGETEDMOVEMENTGENERATOR_H
+#ifndef WARHEAD_TARGETEDMOVEMENTGENERATOR_H
+#define WARHEAD_TARGETEDMOVEMENTGENERATOR_H
 
 #include "MovementGenerator.h"
 #include "FollowerReference.h"

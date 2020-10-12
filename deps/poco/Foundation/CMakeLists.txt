@@ -90,7 +90,7 @@ set_target_properties(Foundation PROPERTIES LINKER_LANGUAGE CXX)
 
 target_link_libraries(Foundation
   PRIVATE
-    acore-dependency-interface)
+    warhead-dependency-interface)
 
 target_compile_definitions(Foundation
   PUBLIC

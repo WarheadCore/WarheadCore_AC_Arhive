@@ -177,7 +177,7 @@ public:
 
         void FilterTargets(std::list<WorldObject*>& targets)
         {
-            targets.remove_if(warhead::PowerCheck(POWER_MANA, false));
+            targets.remove_if(Warhead::PowerCheck(POWER_MANA, false));
         }
 
         void Register()

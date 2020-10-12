@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_SMARTSCRIPTMGR_H
-#define ACORE_SMARTSCRIPTMGR_H
+#ifndef WARHEAD_SMARTSCRIPTMGR_H
+#define WARHEAD_SMARTSCRIPTMGR_H
 
 #include "Common.h"
 #include "Creature.h"

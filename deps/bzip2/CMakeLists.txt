@@ -40,7 +40,7 @@ else()
 
   target_link_libraries(bzip2
     PRIVATE
-      acore-dependency-interface)
+      warhead-dependency-interface)
 
   set_target_properties(bzip2
     PROPERTIES

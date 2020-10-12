@@ -45,7 +45,7 @@ void Motd::SetMotd(std::string motd)
 
     WorldPacket data(SMSG_MOTD);                     // new in 2.0.1
 
-    std::vector<std::string_view> motdTokens = warhead::Tokenize(motd, '@', true);
+    std::vector<std::string_view> motdTokens = Warhead::Tokenize(motd, '@', true);
     data << uint32(motdTokens.size()); // line count
 
     for (std::string_view token : motdTokens)

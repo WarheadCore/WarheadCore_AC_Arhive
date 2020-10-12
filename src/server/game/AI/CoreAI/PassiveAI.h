@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_PASSIVEAI_H
-#define ACORE_PASSIVEAI_H
+#ifndef WARHEAD_PASSIVEAI_H
+#define WARHEAD_PASSIVEAI_H
 
 #include "CreatureAI.h"
 //#include "CreatureAIImpl.h"

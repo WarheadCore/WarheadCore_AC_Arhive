@@ -1928,7 +1928,7 @@ public:
             if (targets.size() < 2)
                 return;
 
-            targets.sort(warhead::HealthPctOrderPred());
+            targets.sort(Warhead::HealthPctOrderPred());
 
             WorldObject* target = targets.front();
             targets.clear();

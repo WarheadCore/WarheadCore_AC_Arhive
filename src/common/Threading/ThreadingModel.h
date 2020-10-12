@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_THREADINGMODEL_H
-#define ACORE_THREADINGMODEL_H
+#ifndef WARHEAD_THREADINGMODEL_H
+#define WARHEAD_THREADINGMODEL_H
 
 /**
  * @class ThreadingModel<T>
@@ -25,7 +25,7 @@
 
 #include "Define.h"
 
-namespace acore
+namespace warhead
 {
     template<typename MUTEX>
     class GeneralLock
@@ -147,9 +147,9 @@ namespace acore
     };
 }
 
-template<class T, class MUTEX> MUTEX acore::ClassLevelLockable<T, MUTEX>::si_mtx;
+template<class T, class MUTEX> MUTEX Warhead::ClassLevelLockable<T, MUTEX>::si_mtx;
 
 #define INSTANTIATE_CLASS_MUTEX(CTYPE, MUTEX) \
-    template class acore::ClassLevelLockable<CTYPE, MUTEX>
+    template class Warhead::ClassLevelLockable<CTYPE, MUTEX>
 
 #endif

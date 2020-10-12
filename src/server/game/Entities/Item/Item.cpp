@@ -431,12 +431,12 @@ bool Item::LoadFromDB(uint32 guid, uint64 owner_guid, Field* fields, uint32 entr
         need_save = true;
     }
 
-    std::vector<std::string_view> tokens = warhead::Tokenize(fields[4].GetStringView(), ' ', false);
+    std::vector<std::string_view> tokens = Warhead::Tokenize(fields[4].GetStringView(), ' ', false);
     if (tokens.size() == MAX_ITEM_PROTO_SPELLS)
     {
         for (uint8 i = 0; i < MAX_ITEM_PROTO_SPELLS; ++i)
         {
-            if (std::optional<int32> charges = warhead::StringTo<int32>(tokens[i]))
+            if (std::optional<int32> charges = Warhead::StringTo<int32>(tokens[i]))
                 SetSpellCharges(i, *charges);
             else
                 LOG_ERROR("entities.item", "Invalid charge info '%s' for item %u, charge data not loaded.", std::string(tokens[i]).c_str(), GetGUIDLow());

@@ -21,7 +21,7 @@ add_executable(mmaps_generator ${PRIVATE_SOURCES})
 
 target_link_libraries(mmaps_generator
   PRIVATE
-    acore-core-interface
+    warhead-core-interface
   PUBLIC
     common
     Recast

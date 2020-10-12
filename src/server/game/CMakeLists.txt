@@ -55,7 +55,7 @@ target_include_directories(game
 
 target_link_libraries(game
   PRIVATE
-    acore-core-interface
+    warhead-core-interface
   PUBLIC
     game-interface)
 

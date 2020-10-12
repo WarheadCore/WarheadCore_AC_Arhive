@@ -719,15 +719,15 @@ void WorldSession::HandleTextEmoteOpcode(WorldPacket& recvData)
 
     Unit* unit = ObjectAccessor::GetUnit(*_player, guid);
 
-    CellCoord p = warhead::ComputeCellCoord(GetPlayer()->GetPositionX(), GetPlayer()->GetPositionY());
+    CellCoord p = Warhead::ComputeCellCoord(GetPlayer()->GetPositionX(), GetPlayer()->GetPositionY());
 
     Cell cell(p);
     cell.SetNoCreate();
 
-    warhead::EmoteChatBuilder emote_builder(*GetPlayer(), text_emote, emoteNum, unit);
-    warhead::LocalizedPacketDo<warhead::EmoteChatBuilder > emote_do(emote_builder);
-    warhead::PlayerDistWorker<warhead::LocalizedPacketDo<warhead::EmoteChatBuilder > > emote_worker(GetPlayer(), sGameConfig->GetFloatConfig("ListenRange.TextEmote"), emote_do);
-    TypeContainerVisitor<warhead::PlayerDistWorker<warhead::LocalizedPacketDo<warhead::EmoteChatBuilder> >, WorldTypeMapContainer> message(emote_worker);
+    Warhead::EmoteChatBuilder emote_builder(*GetPlayer(), text_emote, emoteNum, unit);
+    Warhead::LocalizedPacketDo<Warhead::EmoteChatBuilder > emote_do(emote_builder);
+    Warhead::PlayerDistWorker<Warhead::LocalizedPacketDo<Warhead::EmoteChatBuilder > > emote_worker(GetPlayer(), sGameConfig->GetFloatConfig("ListenRange.TextEmote"), emote_do);
+    TypeContainerVisitor<Warhead::PlayerDistWorker<Warhead::LocalizedPacketDo<Warhead::EmoteChatBuilder> >, WorldTypeMapContainer> message(emote_worker);
     cell.Visit(p, message, *GetPlayer()->GetMap(), *GetPlayer(), sGameConfig->GetFloatConfig("ListenRange.TextEmote"));
 
     GetPlayer()->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_DO_EMOTE, text_emote, 0, unit);

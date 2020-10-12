@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_GRIDNOTIFIERS_H
-#define ACORE_GRIDNOTIFIERS_H
+#ifndef WARHEAD_GRIDNOTIFIERS_H
+#define WARHEAD_GRIDNOTIFIERS_H
 
 #include "ObjectGridLoader.h"
 #include "UpdateData.h"

@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_WAYPOINTMANAGER_H
-#define ACORE_WAYPOINTMANAGER_H
+#ifndef WARHEAD_WAYPOINTMANAGER_H
+#define WARHEAD_WAYPOINTMANAGER_H
 
 #include "Common.h"
 #include <vector>

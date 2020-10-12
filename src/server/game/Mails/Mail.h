@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_MAIL_H
-#define ACORE_MAIL_H
+#ifndef WARHEAD_MAIL_H
+#define WARHEAD_MAIL_H
 
 #include "Common.h"
 #include <map>

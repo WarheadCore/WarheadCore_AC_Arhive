@@ -182,7 +182,7 @@ Position const introFinalPos = {4660.490f, 2769.200f, 430.0000f, 0.000000f};
 Position const triggerPos    = {4680.231f, 2769.134f, 379.9256f, 3.121708f};
 Position const triggerEndPos = {4680.180f, 2769.150f, 365.5000f, 3.121708f};
 
-struct NonTankBOFTargetSelector : public warhead::unary_function<Unit*, bool>
+struct NonTankBOFTargetSelector : public Warhead::unary_function<Unit*, bool>
 {
 public:
     NonTankBOFTargetSelector(Creature* source, bool playerOnly = true, bool reqLOS = false, float maxDist = 0.0f) :

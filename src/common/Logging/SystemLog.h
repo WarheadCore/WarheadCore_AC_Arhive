@@ -39,7 +39,7 @@ public:
     template<typename Format, typename... Args>
     void outSys(uint8 logLevel, Format&& fmt, Args&& ... args)
     {
-        outSys(logLevel, warhead::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
+        outSys(logLevel, Warhead::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
     }
 
 private:

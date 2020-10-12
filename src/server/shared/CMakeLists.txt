@@ -20,7 +20,7 @@ CollectSourceFiles(
 # Group sources
 GroupSources(${CMAKE_CURRENT_SOURCE_DIR})
 
-add_definitions(-DACORE_API_EXPORT_SHARED)
+add_definitions(-DWARHEAD_API_EXPORT_SHARED)
 
 add_library(shared
   ${PRIVATE_SOURCES})
@@ -37,7 +37,7 @@ target_include_directories(shared
 
 target_link_libraries(shared
   PRIVATE
-    acore-core-interface
+    warhead-core-interface
   PUBLIC
     database)
 

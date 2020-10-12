@@ -781,7 +781,7 @@ public:
         void FilterTargets(std::list<WorldObject*>& targets)
         {
             targets.remove(GetCaster());
-            warhead::Containers::RandomResizeList(targets, _count);
+            Warhead::Containers::RandomResizeList(targets, _count);
         }
 
         void Register()
@@ -1735,8 +1735,8 @@ public:
             float max_range = GetSpellInfo()->GetMaxRange(false);
             WorldObject* result = nullptr;
             // search for nearby enemy corpse in range
-            warhead::AnyDeadUnitSpellTargetInRangeCheck check(caster, max_range, GetSpellInfo(), TARGET_CHECK_CORPSE);
-            warhead::WorldObjectSearcher<warhead::AnyDeadUnitSpellTargetInRangeCheck> searcher(caster, result, check);
+            Warhead::AnyDeadUnitSpellTargetInRangeCheck check(caster, max_range, GetSpellInfo(), TARGET_CHECK_CORPSE);
+            Warhead::WorldObjectSearcher<Warhead::AnyDeadUnitSpellTargetInRangeCheck> searcher(caster, result, check);
             caster->GetMap()->VisitFirstFound(caster->m_positionX, caster->m_positionY, max_range, searcher);
             if (!result)
                 return SPELL_FAILED_NO_EDIBLE_CORPSES;
@@ -4780,13 +4780,13 @@ public:
                 }
             }
 
-            targets.remove_if(warhead::PowerCheck(POWER_MANA, false));
+            targets.remove_if(Warhead::PowerCheck(POWER_MANA, false));
 
             uint8 const maxTargets = 10;
 
             if (targets.size() > maxTargets)
             {
-                targets.sort(warhead::PowerPctOrderPred(POWER_MANA));
+                targets.sort(Warhead::PowerPctOrderPred(POWER_MANA));
                 targets.resize(maxTargets);
             }
         }

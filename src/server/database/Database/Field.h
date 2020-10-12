@@ -79,7 +79,7 @@ protected:
 
 private:
 
-#ifdef ACORE_DEBUG
+#ifdef WARHEAD_DEBUG
     static char const* FieldTypeToString(enum_field_types type);
 #endif
 };

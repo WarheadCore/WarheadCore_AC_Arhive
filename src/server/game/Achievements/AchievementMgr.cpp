@@ -680,8 +680,8 @@ void AchievementMgr::SendAchievementEarned(AchievementEntry const* achievement) 
 
     if (Guild* guild = sGuildMgr->GetGuildById(GetPlayer()->GetGuildId()))
     {
-        warhead::AchievementChatBuilder say_builder(*GetPlayer(), CHAT_MSG_GUILD_ACHIEVEMENT, LANG_ACHIEVEMENT_EARNED, achievement->ID);
-        warhead::LocalizedPacketDo<warhead::AchievementChatBuilder> say_do(say_builder);
+        Warhead::AchievementChatBuilder say_builder(*GetPlayer(), CHAT_MSG_GUILD_ACHIEVEMENT, LANG_ACHIEVEMENT_EARNED, achievement->ID);
+        Warhead::LocalizedPacketDo<Warhead::AchievementChatBuilder> say_do(say_builder);
         guild->BroadcastWorker(say_do, GetPlayer());
     }
 
@@ -704,15 +704,15 @@ void AchievementMgr::SendAchievementEarned(AchievementEntry const* achievement) 
     // if player is in world he can tell his friends about new achievement
     else if (GetPlayer()->IsInWorld())
     {
-        CellCoord p = warhead::ComputeCellCoord(GetPlayer()->GetPositionX(), GetPlayer()->GetPositionY());
+        CellCoord p = Warhead::ComputeCellCoord(GetPlayer()->GetPositionX(), GetPlayer()->GetPositionY());
 
         Cell cell(p);
         cell.SetNoCreate();
 
-        warhead::AchievementChatBuilder say_builder(*GetPlayer(), CHAT_MSG_ACHIEVEMENT, LANG_ACHIEVEMENT_EARNED, achievement->ID);
-        warhead::LocalizedPacketDo<warhead::AchievementChatBuilder> say_do(say_builder);
-        warhead::PlayerDistWorker<warhead::LocalizedPacketDo<warhead::AchievementChatBuilder> > say_worker(GetPlayer(), sGameConfig->GetFloatConfig("ListenRange.Say"), say_do);
-        TypeContainerVisitor<warhead::PlayerDistWorker<warhead::LocalizedPacketDo<warhead::AchievementChatBuilder> >, WorldTypeMapContainer > message(say_worker);
+        Warhead::AchievementChatBuilder say_builder(*GetPlayer(), CHAT_MSG_ACHIEVEMENT, LANG_ACHIEVEMENT_EARNED, achievement->ID);
+        Warhead::LocalizedPacketDo<Warhead::AchievementChatBuilder> say_do(say_builder);
+        Warhead::PlayerDistWorker<Warhead::LocalizedPacketDo<Warhead::AchievementChatBuilder> > say_worker(GetPlayer(), sGameConfig->GetFloatConfig("ListenRange.Say"), say_do);
+        TypeContainerVisitor<Warhead::PlayerDistWorker<Warhead::LocalizedPacketDo<Warhead::AchievementChatBuilder> >, WorldTypeMapContainer > message(say_worker);
         cell.Visit(p, message, *GetPlayer()->GetMap(), *GetPlayer(), sGameConfig->GetFloatConfig("ListenRange.Say"));
     }
 

@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_LOOTITEMSTORAGE_H
-#define ACORE_LOOTITEMSTORAGE_H
+#ifndef WARHEAD_LOOTITEMSTORAGE_H
+#define WARHEAD_LOOTITEMSTORAGE_H
 
 #include "Common.h"
 #include "LootMgr.h"

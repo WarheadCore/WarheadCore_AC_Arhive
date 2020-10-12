@@ -160,7 +160,7 @@ std::optional<int32> MoneyStringToMoney(const std::string& moneyString)
     bool hadS = false;
     bool hadC = false;
 
-    for (std::string_view token : warhead::Tokenize(moneyString, ' ', false))
+    for (std::string_view token : Warhead::Tokenize(moneyString, ' ', false))
     {
         uint32 unit;
         switch (token[token.length() - 1])
@@ -184,7 +184,7 @@ std::optional<int32> MoneyStringToMoney(const std::string& moneyString)
                 return std::nullopt;
         }
 
-        std::optional<uint32> amount = warhead::StringTo<uint32>(token.substr(0, token.length() - 1));
+        std::optional<uint32> amount = Warhead::StringTo<uint32>(token.substr(0, token.length() - 1));
         if (amount)
             money += (unit * *amount);
         else
@@ -353,7 +353,7 @@ bool Utf8toWStr(char const* utf8str, size_t csize, wchar_t* wstr, size_t& wsize)
 {
     try
     {
-        warhead::CheckedBufferOutputIterator<wchar_t> out(wstr, wsize);
+        Warhead::CheckedBufferOutputIterator<wchar_t> out(wstr, wsize);
         out = utf8::utf8to16(utf8str, utf8str + csize, out);
         wsize -= out.remaining(); // remaining unused space
         wstr[wsize] = L'\0';

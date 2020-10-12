@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_GRIDNOTIFIERSIMPL_H
-#define ACORE_GRIDNOTIFIERSIMPL_H
+#ifndef WARHEAD_GRIDNOTIFIERSIMPL_H
+#define WARHEAD_GRIDNOTIFIERSIMPL_H
 
 #include "GridNotifiers.h"
 #include "WorldPacket.h"
@@ -28,7 +28,7 @@
 #include "Opcodes.h"
 
 template<class T>
-inline void warhead::VisibleNotifier::Visit(GridRefManager<T>& m)
+inline void Warhead::VisibleNotifier::Visit(GridRefManager<T>& m)
 {
     // Xinef: Update gameobjects only
     if (i_gobjOnly)
@@ -48,7 +48,7 @@ inline void warhead::VisibleNotifier::Visit(GridRefManager<T>& m)
 // WorldObject searchers & workers
 
 template<class Check>
-void warhead::WorldObjectSearcher<Check>::Visit(GameObjectMapType& m)
+void Warhead::WorldObjectSearcher<Check>::Visit(GameObjectMapType& m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_GAMEOBJECT))
         return;
@@ -71,7 +71,7 @@ void warhead::WorldObjectSearcher<Check>::Visit(GameObjectMapType& m)
 }
 
 template<class Check>
-void warhead::WorldObjectSearcher<Check>::Visit(PlayerMapType& m)
+void Warhead::WorldObjectSearcher<Check>::Visit(PlayerMapType& m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_PLAYER))
         return;
@@ -94,7 +94,7 @@ void warhead::WorldObjectSearcher<Check>::Visit(PlayerMapType& m)
 }
 
 template<class Check>
-void warhead::WorldObjectSearcher<Check>::Visit(CreatureMapType& m)
+void Warhead::WorldObjectSearcher<Check>::Visit(CreatureMapType& m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_CREATURE))
         return;
@@ -117,7 +117,7 @@ void warhead::WorldObjectSearcher<Check>::Visit(CreatureMapType& m)
 }
 
 template<class Check>
-void warhead::WorldObjectSearcher<Check>::Visit(CorpseMapType& m)
+void Warhead::WorldObjectSearcher<Check>::Visit(CorpseMapType& m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_CORPSE))
         return;
@@ -140,7 +140,7 @@ void warhead::WorldObjectSearcher<Check>::Visit(CorpseMapType& m)
 }
 
 template<class Check>
-void warhead::WorldObjectSearcher<Check>::Visit(DynamicObjectMapType& m)
+void Warhead::WorldObjectSearcher<Check>::Visit(DynamicObjectMapType& m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_DYNAMICOBJECT))
         return;
@@ -164,7 +164,7 @@ void warhead::WorldObjectSearcher<Check>::Visit(DynamicObjectMapType& m)
 
 
 template<class Check>
-void warhead::WorldObjectLastSearcher<Check>::Visit(GameObjectMapType& m)
+void Warhead::WorldObjectLastSearcher<Check>::Visit(GameObjectMapType& m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_GAMEOBJECT))
         return;
@@ -180,7 +180,7 @@ void warhead::WorldObjectLastSearcher<Check>::Visit(GameObjectMapType& m)
 }
 
 template<class Check>
-void warhead::WorldObjectLastSearcher<Check>::Visit(PlayerMapType& m)
+void Warhead::WorldObjectLastSearcher<Check>::Visit(PlayerMapType& m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_PLAYER))
         return;
@@ -196,7 +196,7 @@ void warhead::WorldObjectLastSearcher<Check>::Visit(PlayerMapType& m)
 }
 
 template<class Check>
-void warhead::WorldObjectLastSearcher<Check>::Visit(CreatureMapType& m)
+void Warhead::WorldObjectLastSearcher<Check>::Visit(CreatureMapType& m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_CREATURE))
         return;
@@ -212,7 +212,7 @@ void warhead::WorldObjectLastSearcher<Check>::Visit(CreatureMapType& m)
 }
 
 template<class Check>
-void warhead::WorldObjectLastSearcher<Check>::Visit(CorpseMapType& m)
+void Warhead::WorldObjectLastSearcher<Check>::Visit(CorpseMapType& m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_CORPSE))
         return;
@@ -228,7 +228,7 @@ void warhead::WorldObjectLastSearcher<Check>::Visit(CorpseMapType& m)
 }
 
 template<class Check>
-void warhead::WorldObjectLastSearcher<Check>::Visit(DynamicObjectMapType& m)
+void Warhead::WorldObjectLastSearcher<Check>::Visit(DynamicObjectMapType& m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_DYNAMICOBJECT))
         return;
@@ -244,7 +244,7 @@ void warhead::WorldObjectLastSearcher<Check>::Visit(DynamicObjectMapType& m)
 }
 
 template<class Check>
-void warhead::WorldObjectListSearcher<Check>::Visit(PlayerMapType& m)
+void Warhead::WorldObjectListSearcher<Check>::Visit(PlayerMapType& m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_PLAYER))
         return;
@@ -255,7 +255,7 @@ void warhead::WorldObjectListSearcher<Check>::Visit(PlayerMapType& m)
 }
 
 template<class Check>
-void warhead::WorldObjectListSearcher<Check>::Visit(CreatureMapType& m)
+void Warhead::WorldObjectListSearcher<Check>::Visit(CreatureMapType& m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_CREATURE))
         return;
@@ -266,7 +266,7 @@ void warhead::WorldObjectListSearcher<Check>::Visit(CreatureMapType& m)
 }
 
 template<class Check>
-void warhead::WorldObjectListSearcher<Check>::Visit(CorpseMapType& m)
+void Warhead::WorldObjectListSearcher<Check>::Visit(CorpseMapType& m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_CORPSE))
         return;
@@ -277,7 +277,7 @@ void warhead::WorldObjectListSearcher<Check>::Visit(CorpseMapType& m)
 }
 
 template<class Check>
-void warhead::WorldObjectListSearcher<Check>::Visit(GameObjectMapType& m)
+void Warhead::WorldObjectListSearcher<Check>::Visit(GameObjectMapType& m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_GAMEOBJECT))
         return;
@@ -288,7 +288,7 @@ void warhead::WorldObjectListSearcher<Check>::Visit(GameObjectMapType& m)
 }
 
 template<class Check>
-void warhead::WorldObjectListSearcher<Check>::Visit(DynamicObjectMapType& m)
+void Warhead::WorldObjectListSearcher<Check>::Visit(DynamicObjectMapType& m)
 {
     if (!(i_mapTypeMask & GRID_MAP_TYPE_MASK_DYNAMICOBJECT))
         return;
@@ -301,7 +301,7 @@ void warhead::WorldObjectListSearcher<Check>::Visit(DynamicObjectMapType& m)
 // Gameobject searchers
 
 template<class Check>
-void warhead::GameObjectSearcher<Check>::Visit(GameObjectMapType& m)
+void Warhead::GameObjectSearcher<Check>::Visit(GameObjectMapType& m)
 {
     // already found
     if (i_object)
@@ -321,7 +321,7 @@ void warhead::GameObjectSearcher<Check>::Visit(GameObjectMapType& m)
 }
 
 template<class Check>
-void warhead::GameObjectLastSearcher<Check>::Visit(GameObjectMapType& m)
+void Warhead::GameObjectLastSearcher<Check>::Visit(GameObjectMapType& m)
 {
     for (GameObjectMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
     {
@@ -334,7 +334,7 @@ void warhead::GameObjectLastSearcher<Check>::Visit(GameObjectMapType& m)
 }
 
 template<class Check>
-void warhead::GameObjectListSearcher<Check>::Visit(GameObjectMapType& m)
+void Warhead::GameObjectListSearcher<Check>::Visit(GameObjectMapType& m)
 {
     for (GameObjectMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
         if (itr->GetSource()->InSamePhase(i_phaseMask))
@@ -345,7 +345,7 @@ void warhead::GameObjectListSearcher<Check>::Visit(GameObjectMapType& m)
 // Unit searchers
 
 template<class Check>
-void warhead::UnitSearcher<Check>::Visit(CreatureMapType& m)
+void Warhead::UnitSearcher<Check>::Visit(CreatureMapType& m)
 {
     // already found
     if (i_object)
@@ -365,7 +365,7 @@ void warhead::UnitSearcher<Check>::Visit(CreatureMapType& m)
 }
 
 template<class Check>
-void warhead::UnitSearcher<Check>::Visit(PlayerMapType& m)
+void Warhead::UnitSearcher<Check>::Visit(PlayerMapType& m)
 {
     // already found
     if (i_object)
@@ -385,7 +385,7 @@ void warhead::UnitSearcher<Check>::Visit(PlayerMapType& m)
 }
 
 template<class Check>
-void warhead::UnitLastSearcher<Check>::Visit(CreatureMapType& m)
+void Warhead::UnitLastSearcher<Check>::Visit(CreatureMapType& m)
 {
     for (CreatureMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
     {
@@ -398,7 +398,7 @@ void warhead::UnitLastSearcher<Check>::Visit(CreatureMapType& m)
 }
 
 template<class Check>
-void warhead::UnitLastSearcher<Check>::Visit(PlayerMapType& m)
+void Warhead::UnitLastSearcher<Check>::Visit(PlayerMapType& m)
 {
     for (PlayerMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
     {
@@ -411,7 +411,7 @@ void warhead::UnitLastSearcher<Check>::Visit(PlayerMapType& m)
 }
 
 template<class Check>
-void warhead::UnitListSearcher<Check>::Visit(PlayerMapType& m)
+void Warhead::UnitListSearcher<Check>::Visit(PlayerMapType& m)
 {
     for (PlayerMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
         if (itr->GetSource()->InSamePhase(i_phaseMask))
@@ -420,7 +420,7 @@ void warhead::UnitListSearcher<Check>::Visit(PlayerMapType& m)
 }
 
 template<class Check>
-void warhead::UnitListSearcher<Check>::Visit(CreatureMapType& m)
+void Warhead::UnitListSearcher<Check>::Visit(CreatureMapType& m)
 {
     for (CreatureMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
         if (itr->GetSource()->InSamePhase(i_phaseMask))
@@ -431,7 +431,7 @@ void warhead::UnitListSearcher<Check>::Visit(CreatureMapType& m)
 // Creature searchers
 
 template<class Check>
-void warhead::CreatureSearcher<Check>::Visit(CreatureMapType& m)
+void Warhead::CreatureSearcher<Check>::Visit(CreatureMapType& m)
 {
     // already found
     if (i_object)
@@ -451,7 +451,7 @@ void warhead::CreatureSearcher<Check>::Visit(CreatureMapType& m)
 }
 
 template<class Check>
-void warhead::CreatureLastSearcher<Check>::Visit(CreatureMapType& m)
+void Warhead::CreatureLastSearcher<Check>::Visit(CreatureMapType& m)
 {
     for (CreatureMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
     {
@@ -464,7 +464,7 @@ void warhead::CreatureLastSearcher<Check>::Visit(CreatureMapType& m)
 }
 
 template<class Check>
-void warhead::CreatureListSearcher<Check>::Visit(CreatureMapType& m)
+void Warhead::CreatureListSearcher<Check>::Visit(CreatureMapType& m)
 {
     for (CreatureMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
         if (itr->GetSource()->InSamePhase(i_phaseMask))
@@ -473,7 +473,7 @@ void warhead::CreatureListSearcher<Check>::Visit(CreatureMapType& m)
 }
 
 template<class Check>
-void warhead::PlayerListSearcher<Check>::Visit(PlayerMapType& m)
+void Warhead::PlayerListSearcher<Check>::Visit(PlayerMapType& m)
 {
     for (PlayerMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
         if (itr->GetSource()->InSamePhase(i_phaseMask))
@@ -482,7 +482,7 @@ void warhead::PlayerListSearcher<Check>::Visit(PlayerMapType& m)
 }
 
 template<class Check>
-void warhead::PlayerListSearcherWithSharedVision<Check>::Visit(PlayerMapType& m)
+void Warhead::PlayerListSearcherWithSharedVision<Check>::Visit(PlayerMapType& m)
 {
     for (PlayerMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
         if (itr->GetSource()->InSamePhase(i_phaseMask))
@@ -491,7 +491,7 @@ void warhead::PlayerListSearcherWithSharedVision<Check>::Visit(PlayerMapType& m)
 }
 
 template<class Check>
-void warhead::PlayerListSearcherWithSharedVision<Check>::Visit(CreatureMapType& m)
+void Warhead::PlayerListSearcherWithSharedVision<Check>::Visit(CreatureMapType& m)
 {
     for (CreatureMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
         if (itr->GetSource()->InSamePhase(i_phaseMask) && itr->GetSource()->HasSharedVision())
@@ -501,7 +501,7 @@ void warhead::PlayerListSearcherWithSharedVision<Check>::Visit(CreatureMapType& 
 }
 
 template<class Check>
-void warhead::PlayerSearcher<Check>::Visit(PlayerMapType& m)
+void Warhead::PlayerSearcher<Check>::Visit(PlayerMapType& m)
 {
     // already found
     if (i_object)
@@ -521,7 +521,7 @@ void warhead::PlayerSearcher<Check>::Visit(PlayerMapType& m)
 }
 
 template<class Check>
-void warhead::PlayerLastSearcher<Check>::Visit(PlayerMapType& m)
+void Warhead::PlayerLastSearcher<Check>::Visit(PlayerMapType& m)
 {
     for (PlayerMapType::iterator itr = m.begin(); itr != m.end(); ++itr)
     {
@@ -534,7 +534,7 @@ void warhead::PlayerLastSearcher<Check>::Visit(PlayerMapType& m)
 }
 
 template<class Builder>
-void warhead::LocalizedPacketDo<Builder>::operator()(Player* p)
+void Warhead::LocalizedPacketDo<Builder>::operator()(Player* p)
 {
     LocaleConstant loc_idx = p->GetSession()->GetSessionDbLocaleIndex();
     uint32 cache_idx = loc_idx + 1;
@@ -561,7 +561,7 @@ void warhead::LocalizedPacketDo<Builder>::operator()(Player* p)
 }
 
 template<class Builder>
-void warhead::LocalizedPacketListDo<Builder>::operator()(Player* p)
+void Warhead::LocalizedPacketListDo<Builder>::operator()(Player* p)
 {
     LocaleConstant loc_idx = p->GetSession()->GetSessionDbLocaleIndex();
     uint32 cache_idx = loc_idx + 1;
@@ -584,4 +584,4 @@ void warhead::LocalizedPacketListDo<Builder>::operator()(Player* p)
         p->SendDirectMessage((*data_list)[i]);
 }
 
-#endif                                                      // ACORE_GRIDNOTIFIERSIMPL_H
+#endif                                                      // WARHEAD_GRIDNOTIFIERSIMPL_H

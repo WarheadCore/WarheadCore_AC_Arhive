@@ -700,8 +700,8 @@ public:
             // For nearby players, check if they have the same aura. If so, cast Romantic Picnic (45123)
             // required by achievement and "hearts" visual
             std::list<Player*> playerList;
-            warhead::AnyPlayerInObjectRangeCheck checker(target, INTERACTION_DISTANCE * 2);
-            warhead::PlayerListSearcher<warhead::AnyPlayerInObjectRangeCheck> searcher(target, playerList, checker);
+            Warhead::AnyPlayerInObjectRangeCheck checker(target, INTERACTION_DISTANCE * 2);
+            Warhead::PlayerListSearcher<Warhead::AnyPlayerInObjectRangeCheck> searcher(target, playerList, checker);
             target->VisitNearbyWorldObject(INTERACTION_DISTANCE * 2, searcher);
             for (std::list<Player*>::const_iterator itr = playerList.begin(); itr != playerList.end(); ++itr)
             {

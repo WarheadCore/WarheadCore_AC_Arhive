@@ -75,7 +75,7 @@ bool GameLocale::LoadAcoreStrings()
     QueryResult result = WorldDatabase.PQuery("SELECT entry, content_default, locale_koKR, locale_frFR, locale_deDE, locale_zhCN, locale_zhTW, locale_esES, locale_esMX, locale_ruRU FROM acore_string");
     if (!result)
     {
-        LOG_WARN("sql.sql", ">> Loaded 0 acore strings. DB table `acore_strings` is empty.");
+        LOG_WARN("sql.sql", ">> Loaded 0 warhead strings. DB table `acore_strings` is empty.");
         LOG_WARN("sql.sql", "");
         return false;
     }
@@ -95,7 +95,7 @@ bool GameLocale::LoadAcoreStrings()
 
     } while (result->NextRow());
 
-    LOG_INFO("server.loading", ">> Loaded %u acore strings in %u ms", static_cast<uint32>(_acoreStringStore.size()), GetMSTimeDiffToNow(oldMSTime));
+    LOG_INFO("server.loading", ">> Loaded %u warhead strings in %u ms", static_cast<uint32>(_acoreStringStore.size()), GetMSTimeDiffToNow(oldMSTime));
     LOG_INFO("server.loading", "");
 
     return true;

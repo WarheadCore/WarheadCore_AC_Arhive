@@ -3,7 +3,7 @@
 #
 
 # An interface library to make the target com available to other targets
-add_library(acore-compile-option-interface INTERFACE)
+add_library(warhead-compile-option-interface INTERFACE)
 
 # Use -std=c++11 instead of -std=gnu++11
 set(CXX_EXTENSIONS OFF)
@@ -13,9 +13,9 @@ set(CMAKE_CXX_STANDARD 17)
 message(STATUS "Enabled С++17 support")
 
 # An interface library to make the target features available to other targets
-add_library(acore-feature-interface INTERFACE)
+add_library(warhead-feature-interface INTERFACE)
 
-target_compile_features(acore-feature-interface
+target_compile_features(warhead-feature-interface
   INTERFACE
     cxx_alias_templates
     cxx_auto_type
@@ -33,45 +33,45 @@ target_compile_features(acore-feature-interface
 
 # An interface library to make the warnings level available to other targets
 # This interface taget is set-up through the platform specific script
-add_library(acore-warning-interface INTERFACE)
+add_library(warhead-warning-interface INTERFACE)
 
 # An interface used for all other interfaces
-add_library(acore-default-interface INTERFACE)
-target_link_libraries(acore-default-interface
+add_library(warhead-default-interface INTERFACE)
+target_link_libraries(warhead-default-interface
   INTERFACE
-    acore-compile-option-interface
-    acore-feature-interface)
+    warhead-compile-option-interface
+    warhead-feature-interface)
 
 # An interface used for silencing all warnings
-add_library(acore-no-warning-interface INTERFACE)
+add_library(warhead-no-warning-interface INTERFACE)
 
 if (MSVC)
-  target_compile_options(acore-no-warning-interface
+  target_compile_options(warhead-no-warning-interface
     INTERFACE
       /W0)
 else()
-  target_compile_options(acore-no-warning-interface
+  target_compile_options(warhead-no-warning-interface
     INTERFACE
       -w)
 endif()
 
 # An interface library to change the default behaviour
 # to hide symbols automatically.
-add_library(acore-hidden-symbols-interface INTERFACE)
+add_library(warhead-hidden-symbols-interface INTERFACE)
 
 # An interface amalgamation which provides the flags and definitions
 # used by the dependency targets.
-add_library(acore-dependency-interface INTERFACE)
-target_link_libraries(acore-dependency-interface
+add_library(warhead-dependency-interface INTERFACE)
+target_link_libraries(warhead-dependency-interface
   INTERFACE
-    acore-default-interface
-    acore-no-warning-interface
-    acore-hidden-symbols-interface)
+    warhead-default-interface
+    warhead-no-warning-interface
+    warhead-hidden-symbols-interface)
 
 # An interface amalgamation which provides the flags and definitions
 # used by the core targets.
-add_library(acore-core-interface INTERFACE)
-target_link_libraries(acore-core-interface
+add_library(warhead-core-interface INTERFACE)
+target_link_libraries(warhead-core-interface
   INTERFACE
-    acore-default-interface
-    acore-warning-interface)
+    warhead-default-interface
+    warhead-warning-interface)

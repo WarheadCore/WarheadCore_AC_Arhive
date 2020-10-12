@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_CONTAINERS_H
-#define ACORE_CONTAINERS_H
+#ifndef WARHEAD_CONTAINERS_H
+#define WARHEAD_CONTAINERS_H
 
 #include "Define.h"
 #include <algorithm>
@@ -123,4 +123,4 @@ namespace warhead
 }
 //! namespace warhead
 
-#endif //! #ifdef ACORE_CONTAINERS_H
+#endif //! #ifdef WARHEAD_CONTAINERS_H

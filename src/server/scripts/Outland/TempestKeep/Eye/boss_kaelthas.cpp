@@ -848,7 +848,7 @@ public:
         void SelectTarget(std::list<WorldObject*>& targets)
         {
             if (Unit* victim = GetCaster()->GetVictim())
-                targets.remove_if(warhead::ObjectGUIDCheck(victim->GetGUID(), true));
+                targets.remove_if(Warhead::ObjectGUIDCheck(victim->GetGUID(), true));
         }
 
         void Register()
@@ -1008,7 +1008,7 @@ public:
                     targetList.push_back(target);
             }
 
-            warhead::Containers::RandomResizeList(targetList, 5);
+            Warhead::Containers::RandomResizeList(targetList, 5);
             for (std::list<Unit*>::const_iterator itr = targetList.begin(); itr != targetList.end(); ++itr)
                 GetCaster()->CastSpell(*itr, SPELL_NETHER_BEAM_DAMAGE, true);
         }

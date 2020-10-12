@@ -28,11 +28,11 @@
 #include <string_view>
 #include <type_traits>
 
-namespace warhead::Impl::StringConvertImpl
+namespace Warhead::Impl::StringConvertImpl
 {
     template <typename T, typename = void> struct For
     {
-        static_assert(warhead::dependant_false_v<T>, "Unsupported type used for ToString or StringTo");
+        static_assert(Warhead::dependant_false_v<T>, "Unsupported type used for ToString or StringTo");
         /*
         static Optional<T> FromString(std::string_view str, ...);
         static std::string ToString(T&& val, ...);
@@ -264,13 +264,13 @@ namespace warhead
     template <typename Result, typename... Params>
     std::optional<Result> StringTo(std::string_view str, Params&& ... params)
     {
-        return warhead::Impl::StringConvertImpl::For<Result>::FromString(str, std::forward<Params>(params)...);
+        return Warhead::Impl::StringConvertImpl::For<Result>::FromString(str, std::forward<Params>(params)...);
     }
 
     template <typename Type, typename... Params>
     std::string ToString(Type&& val, Params&& ... params)
     {
-        return warhead::Impl::StringConvertImpl::For<std::decay_t<Type>>::ToString(std::forward<Type>(val), std::forward<Params>(params)...);
+        return Warhead::Impl::StringConvertImpl::For<std::decay_t<Type>>::ToString(std::forward<Type>(val), std::forward<Params>(params)...);
     }
 }
 

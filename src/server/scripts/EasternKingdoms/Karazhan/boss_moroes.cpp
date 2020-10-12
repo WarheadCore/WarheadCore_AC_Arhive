@@ -178,7 +178,7 @@ public:
                 if (Creature* summon = ObjectAccessor::GetCreature(*me, *i))
                     guestList.push_back(summon);
 
-            return warhead::Containers::SelectRandomContainerElement(guestList);
+            return Warhead::Containers::SelectRandomContainerElement(guestList);
         }
 
         void UpdateAI(uint32 diff)

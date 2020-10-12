@@ -851,7 +851,7 @@ public:
                 // get all nearby vrykul
                 std::list<Creature*> temp;
                 FrostwingVrykulSearcher check(me, 150.0f);
-                warhead::CreatureListSearcher<FrostwingVrykulSearcher> searcher(me, temp, check);
+                Warhead::CreatureListSearcher<FrostwingVrykulSearcher> searcher(me, temp, check);
                 me->VisitNearbyGridObject(150.0f, searcher);
 
                 _aliveTrash.clear();
@@ -895,15 +895,15 @@ public:
                 _wipeCheckTimer = 3000;
 
                 Player* player = NULL;
-                warhead::AnyPlayerInObjectRangeCheck check(me, 140.0f);
-                warhead::PlayerSearcher<warhead::AnyPlayerInObjectRangeCheck> searcher(me, player, check);
+                Warhead::AnyPlayerInObjectRangeCheck check(me, 140.0f);
+                Warhead::PlayerSearcher<Warhead::AnyPlayerInObjectRangeCheck> searcher(me, player, check);
                 me->VisitNearbyWorldObject(140.0f, searcher);
                 // wipe
                 if (!player || me->GetExactDist(4357.0f, 2606.0f, 350.0f) > 125.0f)
                 {
                     //Talk(SAY_CROK_DEATH);
                     FrostwingGauntletRespawner respawner;
-                    warhead::CreatureWorker<FrostwingGauntletRespawner> worker(me, respawner);
+                    Warhead::CreatureWorker<FrostwingGauntletRespawner> worker(me, respawner);
                     me->VisitNearbyGridObject(333.0f, worker);
                     return;
                 }
@@ -1350,7 +1350,7 @@ public:
                     {
                         std::list<Creature*> targets = DoFindFriendlyMissingBuff(40.0f, SPELL_POWER_WORD_SHIELD);
                         if (!targets.empty())
-                            DoCast(warhead::Containers::SelectRandomContainerElement(targets), SPELL_POWER_WORD_SHIELD);
+                            DoCast(Warhead::Containers::SelectRandomContainerElement(targets), SPELL_POWER_WORD_SHIELD);
                         Events.ScheduleEvent(EVENT_ARNATH_PW_SHIELD, urand(15000, 20000));
                         break;
                     }
@@ -1374,8 +1374,8 @@ public:
         Creature* FindFriendlyCreature() const
         {
             Creature* target = NULL;
-            warhead::MostHPMissingInRange u_check(me, 60.0f, 0);
-            warhead::CreatureLastSearcher<warhead::MostHPMissingInRange> searcher(me, target, u_check);
+            Warhead::MostHPMissingInRange u_check(me, 60.0f, 0);
+            Warhead::CreatureLastSearcher<Warhead::MostHPMissingInRange> searcher(me, target, u_check);
             me->VisitNearbyGridObject(60.0f, searcher);
             return target;
         }
@@ -1977,7 +1977,7 @@ public:
 
             std::list<Creature*> wards;
             GetCaster()->GetCreatureListWithEntryInGrid(wards, NPC_DEATHBOUND_WARD, range);
-            wards.sort(warhead::ObjectDistanceOrderPred(GetCaster()));
+            wards.sort(Warhead::ObjectDistanceOrderPred(GetCaster()));
 
             for (auto const& itr : wards)
             {
@@ -2077,8 +2077,8 @@ public:
         // First effect
         void CountTargets(std::list<WorldObject*>& targets)
         {
-            targets.remove_if(warhead::ObjectTypeIdCheck(TYPEID_PLAYER, false));
-            targets.remove_if(warhead::ObjectGUIDCheck(GetCaster()->GetGUID(), true));
+            targets.remove_if(Warhead::ObjectTypeIdCheck(TYPEID_PLAYER, false));
+            targets.remove_if(Warhead::ObjectGUIDCheck(GetCaster()->GetGUID(), true));
 
             bool kill = true;
             for (std::list<WorldObject*>::const_iterator itr = targets.begin(); itr != targets.end(); ++itr)
@@ -2171,7 +2171,7 @@ public:
         void RemoveAliveTarget(std::list<WorldObject*>& targets)
         {
             targets.remove_if(AliveCheck());
-            warhead::Containers::RandomResizeList(targets, 2);
+            Warhead::Containers::RandomResizeList(targets, 2);
         }
 
         void Land(SpellEffIndex /*effIndex*/)
@@ -2286,7 +2286,7 @@ public:
             instance->SetData(DATA_COLDFLAME_JETS, IN_PROGRESS);
             std::list<Creature*> traps;
             GetCreatureListWithEntryInGrid(traps, player, NPC_FROST_FREEZE_TRAP, 120.0f);
-            traps.sort(warhead::ObjectDistanceOrderPred(player));
+            traps.sort(Warhead::ObjectDistanceOrderPred(player));
             bool instant = false;
             for (std::list<Creature*>::iterator itr = traps.begin(); itr != traps.end(); ++itr)
             {
@@ -2344,7 +2344,7 @@ public:
                     if (!crok->IsAlive())
                     {
                         FrostwingGauntletRespawner respawner;
-                        warhead::CreatureWorker<FrostwingGauntletRespawner> worker(crok, respawner);
+                        Warhead::CreatureWorker<FrostwingGauntletRespawner> worker(crok, respawner);
                         crok->VisitNearbyGridObject(333.0f, worker);
                         return true;
                     }

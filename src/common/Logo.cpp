@@ -12,9 +12,9 @@
 #include <openssl/crypto.h>
 #include <boost/version.hpp>
 
-void warhead::Logo::Show(char const* applicationName, char const* configName, void(*log)(char const* text))
+void Warhead::Logo::Show(char const* applicationName, char const* configName, void(*log)(char const* text))
 {
-    log(warhead::StringFormat("%s (%s)", GitRevision::GetFullVersion(), applicationName).c_str());
+    log(Warhead::StringFormat("%s (%s)", GitRevision::GetFullVersion(), applicationName).c_str());
     log("<Ctrl-C> to stop");
     log("");
     log("  ██╗     ██╗  █████╗  ██████╗  ██╗  ██╗ ███████╗  █████╗  ██████╗");
@@ -30,9 +30,9 @@ void warhead::Logo::Show(char const* applicationName, char const* configName, vo
     log("                                ╚██████╗ ╚██████╔╝ ██║  ██║ ███████╗");
     log("                                 ╚═════╝  ╚═════╝  ╚═╝  ╚═╝ ╚══════╝");
     log("");
-    log(warhead::StringFormat("> Using configuration file:       %s", configName).c_str());
-    log(warhead::StringFormat("> Using SSL version:              %s (library: %s)", OPENSSL_VERSION_TEXT, SSLeay_version(SSLEAY_VERSION)).c_str());
-    log(warhead::StringFormat("> Using ACE version:              %s", ACE_VERSION).c_str());
-    log(warhead::StringFormat("> Using Boost version:            %i.%i.%i", BOOST_VERSION / 100000, BOOST_VERSION / 100 % 1000, BOOST_VERSION % 100).c_str());
+    log(Warhead::StringFormat("> Using configuration file:       %s", configName).c_str());
+    log(Warhead::StringFormat("> Using SSL version:              %s (library: %s)", OPENSSL_VERSION_TEXT, SSLeay_version(SSLEAY_VERSION)).c_str());
+    log(Warhead::StringFormat("> Using ACE version:              %s", ACE_VERSION).c_str());
+    log(Warhead::StringFormat("> Using Boost version:            %i.%i.%i", BOOST_VERSION / 100000, BOOST_VERSION / 100 % 1000, BOOST_VERSION % 100).c_str());
     log("");
 }

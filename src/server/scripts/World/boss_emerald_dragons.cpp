@@ -682,7 +682,7 @@ public:
 
         void FilterTargets(std::list<WorldObject*>& targets)
         {
-            targets.remove_if(warhead::UnitAuraCheck(true, SPELL_SLEEP));
+            targets.remove_if(Warhead::UnitAuraCheck(true, SPELL_SLEEP));
         }
 
         void Register()

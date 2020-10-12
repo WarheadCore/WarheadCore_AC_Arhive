@@ -742,7 +742,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                     caster = unit->SummonTrigger(unit->GetPositionX(), unit->GetPositionY(), unit->GetPositionZ(), unit->GetOrientation(), 5000);
 
                 if (e.action.cast.targetsLimit > 0 && targets->size() > e.action.cast.targetsLimit)
-                    warhead::Containers::RandomResizeList(*targets, e.action.cast.targetsLimit);
+                    Warhead::Containers::RandomResizeList(*targets, e.action.cast.targetsLimit);
 
                 for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
                 {
@@ -799,7 +799,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                     break;
 
                 if (e.action.cast.targetsLimit > 0 && targets->size() > e.action.cast.targetsLimit)
-                    warhead::Containers::RandomResizeList(*targets, e.action.cast.targetsLimit);
+                    Warhead::Containers::RandomResizeList(*targets, e.action.cast.targetsLimit);
 
                 for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
                 {
@@ -1525,7 +1525,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                     break;
 
                 // xinef: attack random target
-                if (Unit* target = warhead::Containers::SelectRandomContainerElement(*targets)->ToUnit())
+                if (Unit* target = Warhead::Containers::SelectRandomContainerElement(*targets)->ToUnit())
                     me->AI()->AttackStart(target);
 
                 delete targets;
@@ -1942,7 +1942,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                     if (ObjectList* targets = GetTargets(e, unit))
                     {
                         // xinef: we want to move to random element
-                        target = warhead::Containers::SelectRandomContainerElement(*targets);
+                        target = Warhead::Containers::SelectRandomContainerElement(*targets);
                         delete targets;
                     }
                 }
@@ -2512,7 +2512,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 // xinef: my implementation
                 if (e.action.jump.selfJump)
                 {
-                    if (WorldObject* target = warhead::Containers::SelectRandomContainerElement(*targets))
+                    if (WorldObject* target = Warhead::Containers::SelectRandomContainerElement(*targets))
                         if (me)
                             me->GetMotionMaster()->MoveJump(target->GetPositionX() + e.target.x, target->GetPositionY() + e.target.y, target->GetPositionZ() + e.target.z, (float)e.action.jump.speedxy, (float)e.action.jump.speedz);
                 }
@@ -3677,7 +3677,7 @@ ObjectList* SmartScript::GetTargets(SmartScriptHolder const& e, Unit* invoker /*
                                 l->push_back(*itr);
 
                     if (e.target.playerRange.maxCount > 0)
-                        warhead::Containers::RandomResizeList(*l, e.target.playerRange.maxCount);
+                        Warhead::Containers::RandomResizeList(*l, e.target.playerRange.maxCount);
                 }
 
                 delete units;
@@ -3797,7 +3797,7 @@ ObjectList* SmartScript::GetTargets(SmartScriptHolder const& e, Unit* invoker /*
                                 l->push_back(*itr);
 
                 if (e.target.o > 0)
-                    warhead::Containers::RandomResizeList(*l, e.target.o);
+                    Warhead::Containers::RandomResizeList(*l, e.target.o);
 
                 delete units;
                 break;
@@ -3839,7 +3839,7 @@ ObjectList* SmartScript::GetTargets(SmartScriptHolder const& e, Unit* invoker /*
                         }
 
                 if (e.target.roleSelection.resize > 0)
-                    warhead::Containers::RandomResizeList(*l, e.target.roleSelection.resize);
+                    Warhead::Containers::RandomResizeList(*l, e.target.roleSelection.resize);
 
                 delete units;
                 break;
@@ -3865,8 +3865,8 @@ ObjectList* SmartScript::GetWorldObjectsInDist(float dist)
     WorldObject* obj = GetBaseObject();
     if (obj)
     {
-        warhead::AllWorldObjectsInRange u_check(obj, dist);
-        warhead::WorldObjectListSearcher<warhead::AllWorldObjectsInRange> searcher(obj, *targets, u_check);
+        Warhead::AllWorldObjectsInRange u_check(obj, dist);
+        Warhead::WorldObjectListSearcher<Warhead::AllWorldObjectsInRange> searcher(obj, *targets, u_check);
         obj->VisitNearbyObject(dist, searcher);
     }
     return targets;
@@ -3996,7 +3996,7 @@ void SmartScript::ProcessEvent(SmartScriptHolder& e, Unit* unit, uint32 var0, ui
                     RecalcTimer(e, 1000, 3000);
                     return;
                 }
-                ProcessTimedAction(e, e.event.friendlyCC.repeatMin, e.event.friendlyCC.repeatMax, warhead::Containers::SelectRandomContainerElement(pList));
+                ProcessTimedAction(e, e.event.friendlyCC.repeatMin, e.event.friendlyCC.repeatMax, Warhead::Containers::SelectRandomContainerElement(pList));
                 break;
             }
         case SMART_EVENT_FRIENDLY_MISSING_BUFF:
@@ -4007,7 +4007,7 @@ void SmartScript::ProcessEvent(SmartScriptHolder& e, Unit* unit, uint32 var0, ui
                 if (pList.empty())
                     return;
 
-                ProcessTimedAction(e, e.event.missingBuff.repeatMin, e.event.missingBuff.repeatMax, warhead::Containers::SelectRandomContainerElement(pList));
+                ProcessTimedAction(e, e.event.missingBuff.repeatMin, e.event.missingBuff.repeatMax, Warhead::Containers::SelectRandomContainerElement(pList));
                 break;
             }
         case SMART_EVENT_HAS_AURA:
@@ -4663,7 +4663,7 @@ void SmartScript::FillScript(SmartAIEventList e, WorldObject* obj, AreaTrigger c
 
     for (SmartAIEventList::iterator i = e.begin(); i != e.end(); ++i)
     {
-#ifndef ACORE_DEBUG
+#ifndef WARHEAD_DEBUG
         if ((*i).event.event_flags & SMART_EVENT_FLAG_DEBUG_ONLY)
             continue;
 #endif
@@ -4844,8 +4844,8 @@ Unit* SmartScript::DoSelectLowestHpFriendly(float range, uint32 MinHPDiff)
 
     Unit* unit = nullptr;
 
-    warhead::MostHPMissingInRange u_check(me, range, MinHPDiff);
-    warhead::UnitLastSearcher<warhead::MostHPMissingInRange> searcher(me, unit, u_check);
+    Warhead::MostHPMissingInRange u_check(me, range, MinHPDiff);
+    Warhead::UnitLastSearcher<Warhead::MostHPMissingInRange> searcher(me, unit, u_check);
     me->VisitNearbyObject(range, searcher);
     return unit;
 }
@@ -4855,8 +4855,8 @@ void SmartScript::DoFindFriendlyCC(std::list<Creature*>& _list, float range)
     if (!me)
         return;
 
-    warhead::FriendlyCCedInRange u_check(me, range);
-    warhead::CreatureListSearcher<warhead::FriendlyCCedInRange> searcher(me, _list, u_check);
+    Warhead::FriendlyCCedInRange u_check(me, range);
+    Warhead::CreatureListSearcher<Warhead::FriendlyCCedInRange> searcher(me, _list, u_check);
     me->VisitNearbyObject(range, searcher);
 }
 
@@ -4865,8 +4865,8 @@ void SmartScript::DoFindFriendlyMissingBuff(std::list<Creature*>& list, float ra
     if (!me)
         return;
 
-    warhead::FriendlyMissingBuffInRange u_check(me, range, spellid);
-    warhead::CreatureListSearcher<warhead::FriendlyMissingBuffInRange> searcher(me, list, u_check);
+    Warhead::FriendlyMissingBuffInRange u_check(me, range, spellid);
+    Warhead::CreatureListSearcher<Warhead::FriendlyMissingBuffInRange> searcher(me, list, u_check);
     me->VisitNearbyObject(range, searcher);
 }
 
@@ -4876,8 +4876,8 @@ Unit* SmartScript::DoFindClosestFriendlyInRange(float range, bool playerOnly)
         return nullptr;
 
     Unit* unit = nullptr;
-    warhead::AnyFriendlyNotSelfUnitInObjectRangeCheck u_check(me, me, range, playerOnly);
-    warhead::UnitLastSearcher<warhead::AnyFriendlyNotSelfUnitInObjectRangeCheck> searcher(me, unit, u_check);
+    Warhead::AnyFriendlyNotSelfUnitInObjectRangeCheck u_check(me, me, range, playerOnly);
+    Warhead::UnitLastSearcher<Warhead::AnyFriendlyNotSelfUnitInObjectRangeCheck> searcher(me, unit, u_check);
     me->VisitNearbyObject(range, searcher);
     return unit;
 }

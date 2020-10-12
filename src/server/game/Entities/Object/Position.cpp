@@ -211,5 +211,5 @@ bool Position::HasInArc(float arc, const Position* obj, float targetRadius) cons
 
 bool Position::IsPositionValid() const
 {
-    return warhead::IsValidMapCoord(m_positionX, m_positionY, m_positionZ, m_orientation);
+    return Warhead::IsValidMapCoord(m_positionX, m_positionY, m_positionZ, m_orientation);
 }

@@ -241,7 +241,7 @@ private:
     uint64 _sindragosaGUID;
 };
 
-struct LastPhaseIceTombTargetSelector : public warhead::unary_function<Unit*, bool>
+struct LastPhaseIceTombTargetSelector : public Warhead::unary_function<Unit*, bool>
 {
 public:
     LastPhaseIceTombTargetSelector(Creature* source) : _source(source) { }
@@ -928,10 +928,10 @@ public:
             uint32 maxSize = uint32(GetCaster()->GetMap()->GetSpawnMode() & 1 ? 3 : 1);
             healList.remove_if(UnchainedMagicTargetSelector(false));
             if (healList.size() > maxSize)
-                warhead::Containers::RandomResizeList(healList, maxSize);
+                Warhead::Containers::RandomResizeList(healList, maxSize);
             dpsList.remove_if(UnchainedMagicTargetSelector(true));
             if (dpsList.size() > maxSize)
-                warhead::Containers::RandomResizeList(dpsList, maxSize);
+                Warhead::Containers::RandomResizeList(dpsList, maxSize);
             unitList.splice(unitList.begin(), healList);
             unitList.splice(unitList.begin(), dpsList);
         }
@@ -1228,7 +1228,7 @@ public:
 
         void FilterTargets(std::list<WorldObject*>& unitList)
         {
-            unitList.remove_if(warhead::UnitAuraCheck(true, GetSpellInfo()->Id));
+            unitList.remove_if(Warhead::UnitAuraCheck(true, GetSpellInfo()->Id));
             targetList.clear();
             targetList = unitList;
         }
@@ -1945,11 +1945,11 @@ public:
 
         void FilterTargets(std::list<WorldObject*>& targets)
         {
-            targets.remove_if(warhead::ObjectTypeIdCheck(TYPEID_PLAYER, false));
+            targets.remove_if(Warhead::ObjectTypeIdCheck(TYPEID_PLAYER, false));
             if (targets.empty())
                 return;
 
-            WorldObject* target = warhead::Containers::SelectRandomContainerElement(targets);
+            WorldObject* target = Warhead::Containers::SelectRandomContainerElement(targets);
             targets.clear();
             targets.push_back(target);
         }
@@ -1966,7 +1966,7 @@ public:
             if (unitList.empty())
                 return;
 
-            warhead::Containers::SelectRandomContainerElement(unitList)->CastSpell(GetHitUnit(), uint32(GetEffectValue()), true);
+            Warhead::Containers::SelectRandomContainerElement(unitList)->CastSpell(GetHitUnit(), uint32(GetEffectValue()), true);
         }
 
         void Register()

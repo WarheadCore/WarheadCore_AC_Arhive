@@ -29,7 +29,7 @@ target_include_directories(mapextractor
 
 target_link_libraries(mapextractor
   PRIVATE
-    acore-core-interface
+    warhead-core-interface
   PUBLIC
     common
     mpq)

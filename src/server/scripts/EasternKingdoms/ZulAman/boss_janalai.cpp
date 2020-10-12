@@ -236,14 +236,14 @@ public:
             me->GetPosition(x, y, z);
 
             {
-                CellCoord pair(warhead::ComputeCellCoord(x, y));
+                CellCoord pair(Warhead::ComputeCellCoord(x, y));
                 Cell cell(pair);
                 cell.SetNoCreate();
 
-                warhead::AllCreaturesOfEntryInRange check(me, NPC_EGG, 100);
-                warhead::CreatureListSearcher<warhead::AllCreaturesOfEntryInRange> searcher(me, templist, check);
+                Warhead::AllCreaturesOfEntryInRange check(me, NPC_EGG, 100);
+                Warhead::CreatureListSearcher<Warhead::AllCreaturesOfEntryInRange> searcher(me, templist, check);
 
-                TypeContainerVisitor<warhead::CreatureListSearcher<warhead::AllCreaturesOfEntryInRange>, GridTypeMapContainer> cSearcher(searcher);
+                TypeContainerVisitor<Warhead::CreatureListSearcher<Warhead::AllCreaturesOfEntryInRange>, GridTypeMapContainer> cSearcher(searcher);
 
                 cell.Visit(pair, cSearcher, *me->GetMap(), *me, me->GetGridActivationRange());
             }
@@ -271,14 +271,14 @@ public:
             me->GetPosition(x, y, z);
 
             {
-                CellCoord pair(warhead::ComputeCellCoord(x, y));
+                CellCoord pair(Warhead::ComputeCellCoord(x, y));
                 Cell cell(pair);
                 cell.SetNoCreate();
 
-                warhead::AllCreaturesOfEntryInRange check(me, NPC_FIRE_BOMB, 100);
-                warhead::CreatureListSearcher<warhead::AllCreaturesOfEntryInRange> searcher(me, templist, check);
+                Warhead::AllCreaturesOfEntryInRange check(me, NPC_FIRE_BOMB, 100);
+                Warhead::CreatureListSearcher<Warhead::AllCreaturesOfEntryInRange> searcher(me, templist, check);
 
-                TypeContainerVisitor<warhead::CreatureListSearcher<warhead::AllCreaturesOfEntryInRange>, GridTypeMapContainer> cSearcher(searcher);
+                TypeContainerVisitor<Warhead::CreatureListSearcher<Warhead::AllCreaturesOfEntryInRange>, GridTypeMapContainer> cSearcher(searcher);
 
                 cell.Visit(pair, cSearcher, *me->GetMap(), *me, me->GetGridActivationRange());
             }
@@ -533,14 +533,14 @@ public:
             me->GetPosition(x, y, z);
 
             {
-                CellCoord pair(warhead::ComputeCellCoord(x, y));
+                CellCoord pair(Warhead::ComputeCellCoord(x, y));
                 Cell cell(pair);
                 cell.SetNoCreate();
 
-                warhead::AllCreaturesOfEntryInRange check(me, 23817, 50);
-                warhead::CreatureListSearcher<warhead::AllCreaturesOfEntryInRange> searcher(me, templist, check);
+                Warhead::AllCreaturesOfEntryInRange check(me, 23817, 50);
+                Warhead::CreatureListSearcher<Warhead::AllCreaturesOfEntryInRange> searcher(me, templist, check);
 
-                TypeContainerVisitor<warhead::CreatureListSearcher<warhead::AllCreaturesOfEntryInRange>, GridTypeMapContainer> cSearcher(searcher);
+                TypeContainerVisitor<Warhead::CreatureListSearcher<Warhead::AllCreaturesOfEntryInRange>, GridTypeMapContainer> cSearcher(searcher);
 
                 cell.Visit(pair, cSearcher, *(me->GetMap()), *me, me->GetGridActivationRange());
             }

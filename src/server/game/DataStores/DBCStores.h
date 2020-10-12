@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_DBCSTORES_H
-#define ACORE_DBCSTORES_H
+#ifndef WARHEAD_DBCSTORES_H
+#define WARHEAD_DBCSTORES_H
 
 #include "Common.h"
 #include "DBCStore.h"

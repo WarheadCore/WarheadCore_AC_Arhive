@@ -102,7 +102,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Linux" AND NOT NOJEM)
 
   target_link_libraries(jemalloc
     PRIVATE
-      acore-dependency-interface
+      warhead-dependency-interface
     PUBLIC
       threads
     ${CMAKE_DL_LIBS})

@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ACORE_BYTECONVERTER_H
-#define ACORE_BYTECONVERTER_H
+#ifndef WARHEAD_BYTECONVERTER_H
+#define WARHEAD_BYTECONVERTER_H
 
 /** ByteConverter reverse your byte order.  This is use
     for cross platform where they have different endians.
@@ -43,7 +43,7 @@ namespace ByteConverter
     }
 }
 
-#if ACORE_ENDIAN == ACORE_BIGENDIAN
+#if WARHEAD_ENDIAN == WARHEAD_BIGENDIAN
 template<typename T> inline void EndianConvert(T& val) { ByteConverter::apply<T>(&val); }
 template<typename T> inline void EndianConvertReverse(T&) { }
 template<typename T> inline void EndianConvertPtr(void* val) { ByteConverter::apply<T>(val); }

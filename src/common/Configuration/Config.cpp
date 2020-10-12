@@ -142,7 +142,7 @@ bool ConfigMgr::GetBoolDefault(std::string const& name, bool def, bool logUnused
         return def;
     }
 
-    std::optional<bool> boolVal = warhead::StringTo<bool>(val.c_str());
+    std::optional<bool> boolVal = Warhead::StringTo<bool>(val.c_str());
     if (boolVal)
         return *boolVal;
     else
@@ -236,7 +236,7 @@ void ConfigMgr::SetConfigList(std::string const& fileName, std::string const& mo
     // Clean config list before load
     _modulesConfigFiles.clear();
 
-    std::vector<std::string_view> tokens = warhead::Tokenize(modulesConfigList, ',', false);
+    std::vector<std::string_view> tokens = Warhead::Tokenize(modulesConfigList, ',', false);
     for (auto const& itr : tokens)
         _modulesConfigFiles.push_back(std::string(itr));
 }
