@@ -150,7 +150,7 @@ void Channel::CleanOldChannelsInDB()
 
         stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_OLD_CHANNELS_BANS);
         trans->Append(stmt);
-        
+
         CharacterDatabase.CommitTransaction(trans);
     }
 }
@@ -187,9 +187,9 @@ void Channel::JoinChannel(Player* player, std::string const& pass)
     }
 
     if (HasFlag(CHANNEL_FLAG_LFG) &&
-        sGameConfig->GetBoolConfig("Channel.RestrictedLfg") &&
-        AccountMgr::IsPlayerAccount(player->GetSession()->GetSecurity()) &&
-        player->GetGroup())
+            sGameConfig->GetBoolConfig("Channel.RestrictedLfg") &&
+            AccountMgr::IsPlayerAccount(player->GetSession()->GetSecurity()) &&
+            player->GetGroup())
     {
         WorldPacket data;
         MakeNotInLfg(&data);
@@ -200,7 +200,7 @@ void Channel::JoinChannel(Player* player, std::string const& pass)
     player->JoinedChannel(this);
 
     if (_announce && (!AccountMgr::IsGMAccount(player->GetSession()->GetSecurity()) ||
-                       !sGameConfig->GetBoolConfig("Channel.SilentlyGMJoin")))
+                      !sGameConfig->GetBoolConfig("Channel.SilentlyGMJoin")))
     {
         WorldPacket data;
         MakeJoined(&data, guid);
@@ -278,7 +278,7 @@ void Channel::LeaveChannel(Player* player, bool send)
 
     playersStore.erase(guid);
     if (_announce && (!AccountMgr::IsGMAccount(player->GetSession()->GetSecurity()) ||
-                       !sGameConfig->GetBoolConfig("Channel.SilentlyGMJoin")))
+                      !sGameConfig->GetBoolConfig("Channel.SilentlyGMJoin")))
     {
         WorldPacket data;
         MakeLeft(&data, guid);
@@ -603,10 +603,10 @@ void Channel::SetMode(Player const* player, std::string const& p2n, bool mod, bo
     uint64 victim = newp ? newp->GetGUID() : 0;
 
     if (!victim || !IsOn(victim) ||
-        // allow make moderator from another team only if both is GMs
-        // at this moment this only way to show channel post for GM from another team
-        ((!AccountMgr::IsGMAccount(sec) || !AccountMgr::IsGMAccount(newp->GetSession()->GetSecurity())) && player->GetTeamId() != newp->GetTeamId() && 
-        !sGameConfig->GetBoolConfig("AllowTwoSide.Interaction.Channel")))
+            // allow make moderator from another team only if both is GMs
+            // at this moment this only way to show channel post for GM from another team
+            ((!AccountMgr::IsGMAccount(sec) || !AccountMgr::IsGMAccount(newp->GetSession()->GetSecurity())) && player->GetTeamId() != newp->GetTeamId() &&
+             !sGameConfig->GetBoolConfig("AllowTwoSide.Interaction.Channel")))
     {
         WorldPacket data;
         MakePlayerNotFound(&data, p2n);
@@ -672,7 +672,7 @@ void Channel::SetOwner(Player const* player, std::string const& newname)
     uint64 victim = newp ? newp->GetGUID() : 0;
 
     if (!victim || !IsOn(victim) || (newp->GetTeamId() != player->GetTeamId() &&
-        !sGameConfig->GetBoolConfig("AllowTwoSide.Interaction.Channel")))
+                                     !sGameConfig->GetBoolConfig("AllowTwoSide.Interaction.Channel")))
     {
         WorldPacket data;
         MakePlayerNotFound(&data, newname);
@@ -707,7 +707,7 @@ void Channel::List(Player const* player)
 
     LOG_DEBUG("chat.system", "SMSG_CHANNEL_LIST %s Channel: %s", player->GetSession()->GetPlayerInfo().c_str(), GetName().c_str());
 
-    WorldPacket data(SMSG_CHANNEL_LIST, 1+(GetName().size()+1)+1+4+playersStore.size()*(8+1));
+    WorldPacket data(SMSG_CHANNEL_LIST, 1 + (GetName().size() + 1) + 1 + 4 + playersStore.size() * (8 + 1));
     data << uint8(1);                                   // channel type?
     data << GetName();                                  // channel name
     data << uint8(GetFlags());                          // channel flags?
@@ -751,7 +751,7 @@ void Channel::Announce(Player const* player)
         return;
     }
 
-    if (_channelRights.flags & (CHANNEL_RIGHT_FORCE_NO_ANNOUNCEMENTS|CHANNEL_RIGHT_FORCE_ANNOUNCEMENTS))
+    if (_channelRights.flags & (CHANNEL_RIGHT_FORCE_NO_ANNOUNCEMENTS | CHANNEL_RIGHT_FORCE_ANNOUNCEMENTS))
     {
         WorldPacket data;
         MakeNotModerator(&data);
@@ -808,14 +808,14 @@ void Channel::Say(uint64 guid, std::string const& what, uint32 lang)
     SendToAll(&data, pinfo.IsModerator() ? 0 : guid);
 }
 
-void Channel::EveryoneSayToSelf(const char *what)
+void Channel::EveryoneSayToSelf(const char* what)
 {
     if (!what)
         return;
 
     uint32 messageLength = strlen(what) + 1;
 
-    WorldPacket data(SMSG_MESSAGECHAT, 1+4+8+4+_name.size()+1+8+4+messageLength+1);
+    WorldPacket data(SMSG_MESSAGECHAT, 1 + 4 + 8 + 4 + _name.size() + 1 + 8 + 4 + messageLength + 1);
     data << (uint8)CHAT_MSG_CHANNEL;
     data << (uint32)LANG_UNIVERSAL;
     data << uint64(0); // put player guid here
@@ -829,7 +829,7 @@ void Channel::EveryoneSayToSelf(const char *what)
     for (PlayerContainer::const_iterator i = playersStore.begin(); i != playersStore.end(); ++i)
     {
         data.put(5, i->first);
-        data.put(17+_name.size()+1, i->first);
+        data.put(17 + _name.size() + 1, i->first);
         i->second.plrPtr->GetSession()->SendPacket(&data);
     }
 }
@@ -1111,7 +1111,7 @@ void Channel::MakePlayerUnbanned(WorldPacket* data, uint64 bad, uint64 good)
     *data << uint64(good);
 }
 
-void Channel::MakePlayerNotBanned(WorldPacket* data, const std::string &name)
+void Channel::MakePlayerNotBanned(WorldPacket* data, const std::string& name)
 {
     MakeNotifyPacket(data, CHAT_PLAYER_NOT_BANNED_NOTICE);
     *data << name;

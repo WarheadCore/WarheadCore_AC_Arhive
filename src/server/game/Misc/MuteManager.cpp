@@ -50,7 +50,7 @@ void MuteManager::MutePlayer(std::string const targetName, uint32 notSpeakTime, 
 
     if (targetSession)
         AddMuteTime(accountId, muteDate);
-    
+
     stmt->setUInt32(1, static_cast<uint32>(GameTime::GetGameTime()));
     stmt->setInt64(2, muteTime);
     stmt->setString(3, muteBy);
@@ -76,7 +76,7 @@ void MuteManager::UnMutePlayer(std::string const targetName)
     DeleteMuteTime(accID);
 
     if (auto targetSession = sWorld->FindSession(accID))
-        ChatHandler(targetSession).PSendSysMessage(LANG_YOUR_CHAT_ENABLED);   
+        ChatHandler(targetSession).PSendSysMessage(LANG_YOUR_CHAT_ENABLED);
 }
 
 void MuteManager::AddMuteTime(uint32 accountID, uint32 muteTime)
@@ -167,7 +167,7 @@ void MuteManager::LoginAccount(uint32 accountID)
     // SELECT `mutedate`, `mutetime` FROM `account_muted` WHERE `accountid` = ? AND `active` = 1 AND UNIX_TIMESTAMP() <= `mutedate` + ABS(`mutetime`) ORDER BY `mutedate` + ABS(`mutetime`) DESC LIMIT 1
     stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_MUTE);
     stmt->setUInt32(0, accountID);
-    
+
     PreparedQueryResult result = LoginDatabase.Query(stmt);
     if (!result)
         return; // If no info - no mute time :)

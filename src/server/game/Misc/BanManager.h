@@ -20,7 +20,7 @@
 
 #include "Common.h"
 
- /// Ban function return codes
+/// Ban function return codes
 enum BanReturn
 {
     BAN_SUCCESS,

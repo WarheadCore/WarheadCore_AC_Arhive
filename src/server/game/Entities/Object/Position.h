@@ -70,27 +70,39 @@ struct Position
 
     void Relocate(float x, float y)
     {
-        m_positionX = x; m_positionY = y;
+        m_positionX = x;
+        m_positionY = y;
     }
 
     void Relocate(float x, float y, float z)
     {
-        m_positionX = x; m_positionY = y; m_positionZ = z;
+        m_positionX = x;
+        m_positionY = y;
+        m_positionZ = z;
     }
 
     void Relocate(float x, float y, float z, float orientation)
     {
-        m_positionX = x; m_positionY = y; m_positionZ = z; m_orientation = orientation;
+        m_positionX = x;
+        m_positionY = y;
+        m_positionZ = z;
+        m_orientation = orientation;
     }
 
     void Relocate(const Position& pos)
     {
-        m_positionX = pos.m_positionX; m_positionY = pos.m_positionY; m_positionZ = pos.m_positionZ; m_orientation = pos.m_orientation;
+        m_positionX = pos.m_positionX;
+        m_positionY = pos.m_positionY;
+        m_positionZ = pos.m_positionZ;
+        m_orientation = pos.m_orientation;
     }
 
     void Relocate(const Position* pos)
     {
-        m_positionX = pos->m_positionX; m_positionY = pos->m_positionY; m_positionZ = pos->m_positionZ; m_orientation = pos->m_orientation;
+        m_positionX = pos->m_positionX;
+        m_positionY = pos->m_positionY;
+        m_positionZ = pos->m_positionZ;
+        m_orientation = pos->m_orientation;
     }
 
     void RelocatePolarOffset(float angle, float dist, float z = 0.0f);
@@ -109,17 +121,23 @@ struct Position
 
     void GetPosition(float& x, float& y) const
     {
-        x = m_positionX; y = m_positionY;
+        x = m_positionX;
+        y = m_positionY;
     }
 
     void GetPosition(float& x, float& y, float& z) const
     {
-        x = m_positionX; y = m_positionY; z = m_positionZ;
+        x = m_positionX;
+        y = m_positionY;
+        z = m_positionZ;
     }
 
     void GetPosition(float& x, float& y, float& z, float& o) const
     {
-        x = m_positionX; y = m_positionY; z = m_positionZ; o = m_orientation;
+        x = m_positionX;
+        y = m_positionY;
+        z = m_positionZ;
+        o = m_orientation;
     }
 
     void GetPosition(Position* pos) const
@@ -144,7 +162,9 @@ struct Position
 
     float GetExactDist2dSq(float x, float y) const
     {
-        float dx = m_positionX - x; float dy = m_positionY - y; return dx * dx + dy * dy;
+        float dx = m_positionX - x;
+        float dy = m_positionY - y;
+        return dx * dx + dy * dy;
     }
 
     float GetExactDist2d(const float x, const float y) const
@@ -154,7 +174,9 @@ struct Position
 
     float GetExactDist2dSq(const Position* pos) const
     {
-        float dx = m_positionX - pos->m_positionX; float dy = m_positionY - pos->m_positionY; return dx * dx + dy * dy;
+        float dx = m_positionX - pos->m_positionX;
+        float dy = m_positionY - pos->m_positionY;
+        return dx * dx + dy * dy;
     }
 
     float GetExactDist2d(const Position* pos) const
@@ -164,7 +186,8 @@ struct Position
 
     float GetExactDistSq(float x, float y, float z) const
     {
-        float dz = m_positionZ - z; return GetExactDist2dSq(x, y) + dz * dz;
+        float dz = m_positionZ - z;
+        return GetExactDist2dSq(x, y) + dz * dz;
     }
 
     float GetExactDist(float x, float y, float z) const
@@ -174,7 +197,10 @@ struct Position
 
     float GetExactDistSq(const Position* pos) const
     {
-        float dx = m_positionX - pos->m_positionX; float dy = m_positionY - pos->m_positionY; float dz = m_positionZ - pos->m_positionZ; return dx * dx + dy * dy + dz * dz;
+        float dx = m_positionX - pos->m_positionX;
+        float dy = m_positionY - pos->m_positionY;
+        float dz = m_positionZ - pos->m_positionZ;
+        return dx * dx + dy * dy + dz * dz;
     }
 
     float GetExactDist(const Position* pos) const

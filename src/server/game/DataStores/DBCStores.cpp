@@ -365,7 +365,7 @@ void LoadDBCStores(const std::string& dataPath)
 
     for (CharStartOutfitEntry const* outfit : sCharStartOutfitStore)
         sCharStartOutfitMap[outfit->Race | (outfit->Class << 8) | (outfit->Gender << 16)] = outfit;
-    
+
     for (FactionEntry const* faction : sFactionStore)
     {
         if (faction->team)
@@ -374,7 +374,7 @@ void LoadDBCStores(const std::string& dataPath)
             flist.push_back(faction->ID);
         }
     }
-    
+
     for (GameObjectDisplayInfoEntry const* info : sGameObjectDisplayInfoStore)
     {
         if (info->maxX < info->minX)
@@ -386,7 +386,7 @@ void LoadDBCStores(const std::string& dataPath)
         if (info->maxZ < info->minZ)
             std::swap(*(float*)(&info->maxZ), *(float*)(&info->minZ));
     }
-    
+
     // fill data
     for (MapDifficultyEntry const* entry : sMapDifficultyStore)
         sMapDifficultyMap[MAKE_PAIR32(entry->MapId, entry->Difficulty)] = MapDifficulty(entry->resetTime, entry->maxPlayers, entry->areaTriggerText[0] != '\0');
@@ -394,7 +394,7 @@ void LoadDBCStores(const std::string& dataPath)
     for (PvPDifficultyEntry const* entry : sPvPDifficultyStore)
         if (entry->bracketId > MAX_BATTLEGROUND_BRACKETS)
             ASSERT(false && "Need update MAX_BATTLEGROUND_BRACKETS by DBC data");
-    
+
     for (auto i : sSpellStore)
         if (i->Category)
             sSpellsByCategoryStore[i->Category].insert(i->Id);
@@ -473,7 +473,7 @@ void LoadDBCStores(const std::string& dataPath)
                     sTalentTabPages[cls][talentTabInfo->tabpage] = talentTabId;
         }
     }
-    
+
     for (uint32 i = 1; i < sTaxiPathStore.GetNumRows(); ++i)
         if (TaxiPathEntry const* entry = sTaxiPathStore.LookupEntry(i))
             sTaxiPathSetBySource[entry->from][entry->to] = TaxiPathBySourceAndDestination(entry->ID, entry->price);
@@ -511,7 +511,7 @@ void LoadDBCStores(const std::string& dataPath)
         memset(sHordeTaxiNodesMask, 0, sizeof(sHordeTaxiNodesMask));
         memset(sAllianceTaxiNodesMask, 0, sizeof(sAllianceTaxiNodesMask));
         memset(sDeathKnightTaxiNodesMask, 0, sizeof(sDeathKnightTaxiNodesMask));
-        
+
         for (uint32 i = 1; i < sTaxiNodesStore.GetNumRows(); ++i)
         {
             TaxiNodesEntry const* node = sTaxiNodesStore.LookupEntry(i);
@@ -538,7 +538,7 @@ void LoadDBCStores(const std::string& dataPath)
 
             // valid taxi network node
             uint8  field   = (uint8)((i - 1) / 32);
-            uint32 submask = 1<<((i-1)%32);
+            uint32 submask = 1 << ((i - 1) % 32);
             sTaxiNodesMask[field] |= submask;
 
             if (node->MountCreatureID[0] && node->MountCreatureID[0] != 32981)
@@ -562,7 +562,7 @@ void LoadDBCStores(const std::string& dataPath)
 
     for (TransportAnimationEntry const* anim : sTransportAnimationStore)
         sTransportMgr->AddPathNodeToTransport(anim->TransportEntry, anim->TimeSeg, anim);
-    
+
     for (TransportRotationEntry const* rot : sTransportRotationStore)
         sTransportMgr->AddPathRotationToTransport(rot->TransportEntry, rot->TimeSeg, rot);
 
@@ -587,11 +587,11 @@ void LoadDBCStores(const std::string& dataPath)
 
     // Check loaded DBC files proper version
     if (!sAreaTableStore.LookupEntry(4987)         ||       // last area added in 3.3.5a
-        !sCharTitlesStore.LookupEntry(177)         ||       // last char title added in 3.3.5a
-        !sGemPropertiesStore.LookupEntry(1629)     ||       // last added spell in 3.3.5a
-        !sItemExtendedCostStore.LookupEntry(2997)  ||       // last item extended cost added in 3.3.5a
-        !sMapStore.LookupEntry(724)                ||       // last map added in 3.3.5a
-        !sSpellStore.LookupEntry(80864)            )        // last client known item added in 3.3.5a
+            !sCharTitlesStore.LookupEntry(177)         ||       // last char title added in 3.3.5a
+            !sGemPropertiesStore.LookupEntry(1629)     ||       // last added spell in 3.3.5a
+            !sItemExtendedCostStore.LookupEntry(2997)  ||       // last item extended cost added in 3.3.5a
+            !sMapStore.LookupEntry(724)                ||       // last map added in 3.3.5a
+            !sSpellStore.LookupEntry(80864)            )        // last client known item added in 3.3.5a
     {
         LOG_ERROR("dbc", "You have _outdated_ DBC data. Please extract correct versions from current using client.");
         exit(1);
@@ -634,7 +634,7 @@ TalentSpellPos const* GetTalentSpellPos(uint32 spellId)
 uint32 GetTalentSpellCost(uint32 spellId)
 {
     if (TalentSpellPos const* pos = GetTalentSpellPos(spellId))
-        return pos->rank+1;
+        return pos->rank + 1;
 
     return 0;
 }
@@ -671,9 +671,12 @@ ContentLevels GetContentLevelsForMapAndZone(uint32 mapid, uint32 zoneId)
 
     switch (mapEntry->Expansion())
     {
-        default: return CONTENT_1_60;
-        case 1:  return CONTENT_61_70;
-        case 2:  return CONTENT_71_80;
+        default:
+            return CONTENT_1_60;
+        case 1:
+            return CONTENT_61_70;
+        case 2:
+            return CONTENT_71_80;
     }
 }
 
@@ -686,8 +689,8 @@ void Zone2MapCoordinates(float& x, float& y, uint32 zone)
         return;
 
     std::swap(x, y);                                         // at client map coords swapped
-    x = x*((maEntry->x2-maEntry->x1)/100)+maEntry->x1;
-    y = y*((maEntry->y2-maEntry->y1)/100)+maEntry->y1;      // client y coord from top to down
+    x = x * ((maEntry->x2 - maEntry->x1) / 100) + maEntry->x1;
+    y = y * ((maEntry->y2 - maEntry->y1) / 100) + maEntry->y1; // client y coord from top to down
 }
 
 void Map2ZoneCoordinates(float& x, float& y, uint32 zone)
@@ -698,8 +701,8 @@ void Map2ZoneCoordinates(float& x, float& y, uint32 zone)
     if (!maEntry)
         return;
 
-    x = (x-maEntry->x1)/((maEntry->x2-maEntry->x1)/100);
-    y = (y-maEntry->y1)/((maEntry->y2-maEntry->y1)/100);    // client y coord from top to down
+    x = (x - maEntry->x1) / ((maEntry->x2 - maEntry->x1) / 100);
+    y = (y - maEntry->y1) / ((maEntry->y2 - maEntry->y1) / 100); // client y coord from top to down
     std::swap(x, y);                                         // client have map coords swapped
 }
 
@@ -709,7 +712,7 @@ MapDifficulty const* GetMapDifficultyData(uint32 mapId, Difficulty difficulty)
     return itr != sMapDifficultyMap.end() ? &itr->second : nullptr;
 }
 
-MapDifficulty const* GetDownscaledMapDifficultyData(uint32 mapId, Difficulty &difficulty)
+MapDifficulty const* GetDownscaledMapDifficultyData(uint32 mapId, Difficulty& difficulty)
 {
     uint32 tmpDiff = difficulty;
 
@@ -772,8 +775,8 @@ uint32 const* GetTalentTabPages(uint8 cls)
 }
 
 bool IsSharedDifficultyMap(uint32 mapid)
-{ 
-    return sGameConfig->GetBoolConfig("Instance.SharedNormalHeroicId") && (mapid == 631 || mapid == 724); 
+{
+    return sGameConfig->GetBoolConfig("Instance.SharedNormalHeroicId") && (mapid == 631 || mapid == 724);
 }
 
 uint32 GetLiquidFlags(uint32 liquidType)

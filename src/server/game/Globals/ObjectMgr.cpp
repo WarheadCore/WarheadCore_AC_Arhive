@@ -6029,58 +6029,58 @@ uint32 ObjectMgr::GenerateLowGuid(HighGuid guidhigh)
     switch (guidhigh)
     {
         case HIGHGUID_ITEM:
-        {
-            ASSERT(_hiItemGuid < 0xFFFFFFFE && "Item guid overflow!");
-            ACORE_GUARD(ACE_Thread_Mutex, _hiItemGuidMutex);
-            return _hiItemGuid++;
-        }
+            {
+                ASSERT(_hiItemGuid < 0xFFFFFFFE && "Item guid overflow!");
+                ACORE_GUARD(ACE_Thread_Mutex, _hiItemGuidMutex);
+                return _hiItemGuid++;
+            }
         case HIGHGUID_UNIT:
-        {
-            ASSERT(_hiCreatureGuid < 0x00FFFFFE && "Creature guid overflow!");
-            ACORE_GUARD(ACE_Thread_Mutex, _hiCreatureGuidMutex);
-            return _hiCreatureGuid++;
-        }
+            {
+                ASSERT(_hiCreatureGuid < 0x00FFFFFE && "Creature guid overflow!");
+                ACORE_GUARD(ACE_Thread_Mutex, _hiCreatureGuidMutex);
+                return _hiCreatureGuid++;
+            }
         case HIGHGUID_PET:
-        {
-            ASSERT(_hiPetGuid < 0x00FFFFFE && "Pet guid overflow!");
-            ACORE_GUARD(ACE_Thread_Mutex, _hiPetGuidMutex);
-            return _hiPetGuid++;
-        }
+            {
+                ASSERT(_hiPetGuid < 0x00FFFFFE && "Pet guid overflow!");
+                ACORE_GUARD(ACE_Thread_Mutex, _hiPetGuidMutex);
+                return _hiPetGuid++;
+            }
         case HIGHGUID_VEHICLE:
-        {
-            ASSERT(_hiVehicleGuid < 0x00FFFFFF && "Vehicle guid overflow!");
-            ACORE_GUARD(ACE_Thread_Mutex, _hiVehicleGuidMutex);
-            return _hiVehicleGuid++;
-        }
+            {
+                ASSERT(_hiVehicleGuid < 0x00FFFFFF && "Vehicle guid overflow!");
+                ACORE_GUARD(ACE_Thread_Mutex, _hiVehicleGuidMutex);
+                return _hiVehicleGuid++;
+            }
         case HIGHGUID_PLAYER:
             {
                 ASSERT(_hiCharGuid < 0xFFFFFFFE && "Player guid overflow!");
                 return _hiCharGuid++;
             }
         case HIGHGUID_GAMEOBJECT:
-        {
-            ASSERT(_hiGoGuid < 0x00FFFFFE && "Gameobject guid overflow!");
-            ACORE_GUARD(ACE_Thread_Mutex, _hiGoGuidMutex);
-            return _hiGoGuid++;
-        }
+            {
+                ASSERT(_hiGoGuid < 0x00FFFFFE && "Gameobject guid overflow!");
+                ACORE_GUARD(ACE_Thread_Mutex, _hiGoGuidMutex);
+                return _hiGoGuid++;
+            }
         case HIGHGUID_CORPSE:
-        {
-            ASSERT(_hiCorpseGuid < 0xFFFFFFFE && "Corpse guid overflow!");
-            ACORE_GUARD(ACE_Thread_Mutex, _hiCorpseGuidMutex);
-            return _hiCorpseGuid++;
-        }
+            {
+                ASSERT(_hiCorpseGuid < 0xFFFFFFFE && "Corpse guid overflow!");
+                ACORE_GUARD(ACE_Thread_Mutex, _hiCorpseGuidMutex);
+                return _hiCorpseGuid++;
+            }
         case HIGHGUID_DYNAMICOBJECT:
-        {
-            ASSERT(_hiDoGuid < 0xFFFFFFFE && "DynamicObject guid overflow!");
-            ACORE_GUARD(ACE_Thread_Mutex, _hiDoGuidMutex);
-            return _hiDoGuid++;
-        }
+            {
+                ASSERT(_hiDoGuid < 0xFFFFFFFE && "DynamicObject guid overflow!");
+                ACORE_GUARD(ACE_Thread_Mutex, _hiDoGuidMutex);
+                return _hiDoGuid++;
+            }
         case HIGHGUID_MO_TRANSPORT:
-        {
-            ASSERT(_hiMoTransGuid < 0xFFFFFFFE && "MO Transport guid overflow!");
-            ACORE_GUARD(ACE_Thread_Mutex, _hiMoTransGuidMutex);
-            return _hiMoTransGuid++;
-        }
+            {
+                ASSERT(_hiMoTransGuid < 0xFFFFFFFE && "MO Transport guid overflow!");
+                ACORE_GUARD(ACE_Thread_Mutex, _hiMoTransGuidMutex);
+                return _hiMoTransGuid++;
+            }
         default:
             ASSERT(false && "ObjectMgr::GenerateLowGuid - Unknown HIGHGUID type");
             return 0;
@@ -8276,7 +8276,7 @@ void ObjectMgr::LoadScriptNames()
     } while (result->NextRow());
 
     std::sort(_scriptNamesStore.begin(), _scriptNamesStore.end());
-    
+
     LOG_INFO("server.loading", ">> Loaded %d Script Names in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
     LOG_INFO("server.loading", "");
 }

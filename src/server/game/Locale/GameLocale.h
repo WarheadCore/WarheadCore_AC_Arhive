@@ -290,7 +290,7 @@ public:
     void LoadClassStrings();
 
     RaceString const* GetRaseString(uint32 id) const;
-    ClassString const* GetClassString(uint32 id) const;    
+    ClassString const* GetClassString(uint32 id) const;
 
     // Module strings
     void LoadModuleString();
@@ -335,9 +335,9 @@ private:
     GameObjectLocaleContainer _gameObjectLocaleStore;
     GossipMenuItemsLocaleContainer _gossipMenuItemsLocaleStore;
     ItemLocaleContainer _itemLocaleStore;
-    ItemSetNameLocaleContainer _itemSetNameLocaleStore;    
+    ItemSetNameLocaleContainer _itemSetNameLocaleStore;
     NpcTextLocaleContainer _npcTextLocaleStore;
-    PageTextLocaleContainer _pageTextLocaleStore;    
+    PageTextLocaleContainer _pageTextLocaleStore;
     PointOfInterestLocaleContainer _pointOfInterestLocaleStore;
     QuestLocaleContainer _questLocaleStore;
     QuestOfferRewardLocaleContainer _questOfferRewardLocaleStore;

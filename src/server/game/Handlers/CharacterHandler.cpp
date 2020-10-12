@@ -1727,12 +1727,12 @@ void WorldSession::HandleCharCustomize(WorldPacket& recvData)
     std::string newName;
 
     recvData >> guid;
-    
+
     if (!IsLegitCharacterForAccount(GUID_LOPART(guid)))
     {
         LOG_ERROR("network.opcode", "Account %u, IP: %s tried to customise character %u, but it does not belong to their account!",
                   GetAccountId(), GetRemoteAddress().c_str(), GUID_LOPART(guid));
-        
+
         recvData.rfinish();
         KickPlayer("HandleCharCustomize");
         return;
@@ -2024,14 +2024,14 @@ void WorldSession::HandleCharFactionOrRaceChange(WorldPacket& recvData)
     uint64 guid;
     std::string newname;
     uint8 gender, skin, face, hairStyle, hairColor, facialHair, race;
-    
+
     recvData >> guid;
 
     if (!IsLegitCharacterForAccount(GUID_LOPART(guid)))
     {
         LOG_ERROR("network.opcode", "Account %u, IP: %s tried to factionchange character %u, but it does not belong to their account!",
                   GetAccountId(), GetRemoteAddress().c_str(), GUID_LOPART(guid));
-        
+
         recvData.rfinish();
         KickPlayer("HandleCharFactionOrRaceChange");
         return;

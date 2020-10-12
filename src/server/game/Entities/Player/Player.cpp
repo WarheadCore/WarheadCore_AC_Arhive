@@ -11706,7 +11706,7 @@ InventoryResult Player::CanStoreItems(Item** pItems, int count) const
             continue;
 
         LOG_DEBUG("entities.player.items", "STORAGE: CanStoreItems %i. item = %u, count = %u", k + 1, pItem->GetEntry(), pItem->GetCount());
-        
+
         ItemTemplate const* pProto = pItem->GetTemplate();
 
         // strange item
@@ -13993,7 +13993,7 @@ Item* Player::GetItemFromBuyBackSlot(uint32 slot)
 
     if (slot >= BUYBACK_SLOT_START && slot < BUYBACK_SLOT_END)
         return m_items[slot];
-    
+
     return nullptr;
 }
 
@@ -14075,12 +14075,12 @@ void Player::SendBuyError(BuyResult msg, Creature* creature, uint32 item, uint32
     WorldPacket data(SMSG_BUY_FAILED, (8 + 4 + 4 + 1));
     data << uint64(creature ? creature->GetGUID() : 0);
     data << uint32(item);
-    
+
     if (param > 0)
         data << uint32(param);
-    
+
     data << uint8(msg);
-    
+
     GetSession()->SendPacket(&data);
 }
 
@@ -14091,12 +14091,12 @@ void Player::SendSellError(SellResult msg, Creature* creature, uint64 guid, uint
     WorldPacket data(SMSG_SELL_ITEM, (8 + 8 + (param ? 4 : 0) + 1)); // last check 2.0.10
     data << uint64(creature ? creature->GetGUID() : 0);
     data << uint64(guid);
-    
+
     if (param > 0)
         data << uint32(param);
-    
+
     data << uint8(msg);
-    
+
     GetSession()->SendPacket(&data);
 }
 
@@ -14444,7 +14444,7 @@ void Player::ApplyEnchantment(Item* item, EnchantmentSlot slot, bool apply, bool
                         }
 
                         LOG_DEBUG("entities.player.items", "Adding %u to stat nb %u", enchant_amount, enchant_spell_id);
-                        
+
                         switch (enchant_spell_id)
                         {
                             case ITEM_MOD_MANA:
@@ -14597,9 +14597,9 @@ void Player::ApplyEnchantment(Item* item, EnchantmentSlot slot, bool apply, bool
                                 HandleStatModifier(UNIT_MOD_ATTACK_POWER_RANGED, TOTAL_VALUE, float(enchant_amount), apply);
                                 LOG_DEBUG("entities.player.items", "+ %u RANGED_ATTACK_POWER", enchant_amount);
                                 break;
-                                //                        case ITEM_MOD_FERAL_ATTACK_POWER:
-                                //                            ApplyFeralAPBonus(enchant_amount, apply);
-                                //                            LOG_DEBUG("entities.player.items", "+ %u FERAL_ATTACK_POWER", enchant_amount);
+                            //                        case ITEM_MOD_FERAL_ATTACK_POWER:
+                            //                            ApplyFeralAPBonus(enchant_amount, apply);
+                            //                            LOG_DEBUG("entities.player.items", "+ %u FERAL_ATTACK_POWER", enchant_amount);
                             //                            break;
                             case ITEM_MOD_MANA_REGENERATION:
                                 ApplyManaRegenBonus(enchant_amount, apply);
@@ -18879,7 +18879,7 @@ void Player::_LoadMailAsynch(PreparedQueryResult result)
                 m->receiver       = fields[17].GetUInt32();
                 m->subject        = fields[18].GetString();
                 m->body           = fields[19].GetString();
-//                has_items         = fields[20].GetBool();
+                //                has_items         = fields[20].GetBool();
                 m->expire_time    = time_t(fields[21].GetUInt32());
                 m->deliver_time   = time_t(fields[22].GetUInt32());
                 m->money          = fields[23].GetUInt32();

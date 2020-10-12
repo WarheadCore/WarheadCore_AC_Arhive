@@ -46,7 +46,7 @@ void GroupMgr::InitGroupIds()
     if (result)
     {
         uint32 maxId = (*result)[0].GetUInt32();
-        _groupIds.resize(maxId+1);
+        _groupIds.resize(maxId + 1);
     }
 }
 
@@ -106,7 +106,7 @@ void GroupMgr::LoadGroups()
 
         // Delete all groups with less than 2 members
         CharacterDatabase.DirectExecute("DELETE FROM `groups` WHERE guid NOT IN (SELECT guid FROM group_member GROUP BY guid HAVING COUNT(guid) > 1)");
-        
+
         // Delete invalid lfg_data
         CharacterDatabase.DirectExecute("DELETE lfg_data FROM lfg_data LEFT JOIN `groups` ON lfg_data.guid = groups.guid WHERE groups.guid IS NULL OR groups.groupType <> 12");
         // CharacterDatabase.DirectExecute("DELETE `groups` FROM `groups` LEFT JOIN lfg_data ON groups.guid = lfg_data.guid WHERE groups.groupType=12 AND lfg_data.guid IS NULL"); // group should be left so binds are cleared when disbanded
@@ -115,8 +115,8 @@ void GroupMgr::LoadGroups()
 
         //                                                        0              1           2             3                 4      5          6      7         8       9
         QueryResult result = CharacterDatabase.Query("SELECT g.leaderGuid, g.lootMethod, g.looterGuid, g.lootThreshold, g.icon1, g.icon2, g.icon3, g.icon4, g.icon5, g.icon6"
-            //  10         11          12         13              14                  15            16        17          18
-            ", g.icon7, g.icon8, g.groupType, g.difficulty, g.raidDifficulty, g.masterLooterGuid, g.guid, lfg.dungeon, lfg.state FROM `groups` g LEFT JOIN lfg_data lfg ON lfg.guid = g.guid ORDER BY g.guid ASC");
+                             //  10         11          12         13              14                  15            16        17          18
+                             ", g.icon7, g.icon8, g.groupType, g.difficulty, g.raidDifficulty, g.masterLooterGuid, g.guid, lfg.dungeon, lfg.state FROM `groups` g LEFT JOIN lfg_data lfg ON lfg.guid = g.guid ORDER BY g.guid ASC");
 
         if (!result)
         {
@@ -140,8 +140,7 @@ void GroupMgr::LoadGroups()
                 RegisterGroupId(group->GetLowGUID());
 
                 ++count;
-            }
-            while (result->NextRow());
+            } while (result->NextRow());
 
             LOG_INFO("server.loading", ">> Loaded %u group definitions in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
             LOG_INFO("server.loading", "");
@@ -176,8 +175,7 @@ void GroupMgr::LoadGroups()
                     group->LoadMemberFromDB(fields[1].GetUInt32(), fields[2].GetUInt8(), fields[3].GetUInt8(), fields[4].GetUInt8());
 
                 ++count;
-            }
-            while (result->NextRow());
+            } while (result->NextRow());
 
             LOG_INFO("server.loading", ">> Loaded %u group members in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
             LOG_INFO("server.loading", "");

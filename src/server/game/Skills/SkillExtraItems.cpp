@@ -192,14 +192,13 @@ void LoadSkillExtraItemTable()
         skillExtraItemEntry.newMaxOrEntry          = newMaxOrEntry;
 
         ++count;
-    }
-    while (result->NextRow());
+    } while (result->NextRow());
 
     LOG_INFO("server.loading", ">> Loaded %u spell specialization definitions in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
     LOG_INFO("server.loading", "");
 }
 
-bool CanCreatePerfectItem(Player* player, uint32 spellId, float &perfectCreateChance, uint32 &perfectItemType)
+bool CanCreatePerfectItem(Player* player, uint32 spellId, float& perfectCreateChance, uint32& perfectItemType)
 {
     SkillPerfectItemMap::const_iterator ret = SkillPerfectItemStore.find(spellId);
     // no entry in DB means no perfection proc possible
@@ -223,7 +222,7 @@ bool CanCreatePerfectItem(Player* player, uint32 spellId, float &perfectCreateCh
     return true;
 }
 
-bool canCreateExtraItems(Player* player, uint32 spellId, float &additionalChance, int32 &newMaxOrEntry)
+bool canCreateExtraItems(Player* player, uint32 spellId, float& additionalChance, int32& newMaxOrEntry)
 {
     // get the info for the specified spell
     SkillExtraItemMap::const_iterator ret = SkillExtraItemStore.find(spellId);

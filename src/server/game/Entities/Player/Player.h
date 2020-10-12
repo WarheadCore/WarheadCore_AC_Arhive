@@ -2841,10 +2841,10 @@ protected:
     //uint32 m_pad;
     //        Spell* m_spellModTakingSpell;  // Spell for which charges are dropped in spell::finish
 
-        EnchantDurationList m_enchantDuration;
-        ItemDurationList m_itemDuration;
-        ItemDurationList m_itemSoulboundTradeable;
-        ACE_Thread_Mutex m_soulboundTradableLock;
+    EnchantDurationList m_enchantDuration;
+    ItemDurationList m_itemDuration;
+    ItemDurationList m_itemSoulboundTradeable;
+    ACE_Thread_Mutex m_soulboundTradableLock;
 
     void ResetTimeSync();
     void SendTimeSync();

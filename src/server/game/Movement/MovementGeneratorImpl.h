@@ -22,7 +22,7 @@
 
 template<class MOVEMENT_GEN>
 inline MovementGenerator*
-MovementGeneratorFactory<MOVEMENT_GEN>::Create(void * /*data*/) const
+MovementGeneratorFactory<MOVEMENT_GEN>::Create(void* /*data*/) const
 {
     return (new MOVEMENT_GEN());
 }

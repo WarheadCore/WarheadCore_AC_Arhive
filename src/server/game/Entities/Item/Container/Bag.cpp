@@ -42,8 +42,8 @@ Bag::~Bag()
             if (item->IsInWorld())
             {
                 LOG_FATAL("entities.item", "Item %u (slot %u, bag slot %u) in bag %u (slot %u, bag slot %u, m_bagslot %u) is to be deleted but is still in world.",
-                    item->GetEntry(), (uint32)item->GetSlot(), (uint32)item->GetBagSlot(),
-                    GetEntry(), (uint32)GetSlot(), (uint32)GetBagSlot(), (uint32)i);
+                          item->GetEntry(), (uint32)item->GetSlot(), (uint32)item->GetBagSlot(),
+                          GetEntry(), (uint32)GetSlot(), (uint32)GetBagSlot(), (uint32)i);
                 item->RemoveFromWorld();
             }
             delete m_bagslot[i];
@@ -93,7 +93,7 @@ bool Bag::Create(uint32 guidlow, uint32 itemid, Player const* owner)
     // Cleaning 20 slots
     for (uint8 i = 0; i < MAX_BAG_SIZE; ++i)
     {
-        SetUInt64Value(CONTAINER_FIELD_SLOT_1 + (i*2), 0);
+        SetUInt64Value(CONTAINER_FIELD_SLOT_1 + (i * 2), 0);
         m_bagslot[i] = nullptr;
     }
 
@@ -115,7 +115,7 @@ bool Bag::LoadFromDB(uint32 guid, uint64 owner_guid, Field* fields, uint32 entry
     // cleanup bag content related item value fields (its will be filled correctly from `character_inventory`)
     for (uint8 i = 0; i < MAX_BAG_SIZE; ++i)
     {
-        SetUInt64Value(CONTAINER_FIELD_SLOT_1 + (i*2), 0);
+        SetUInt64Value(CONTAINER_FIELD_SLOT_1 + (i * 2), 0);
         delete m_bagslot[i];
         m_bagslot[i] = nullptr;
     }
@@ -135,7 +135,7 @@ void Bag::DeleteFromDB(SQLTransaction& trans)
 uint32 Bag::GetFreeSlots() const
 {
     uint32 slots = 0;
-    for (uint32 i=0; i < GetBagSize(); ++i)
+    for (uint32 i = 0; i < GetBagSize(); ++i)
         if (!m_bagslot[i])
             ++slots;
 
@@ -191,7 +191,7 @@ uint32 Bag::GetItemCount(uint32 item, Item* eItem) const
 {
     Item* pItem;
     uint32 count = 0;
-    for (uint32 i=0; i < GetBagSize(); ++i)
+    for (uint32 i = 0; i < GetBagSize(); ++i)
     {
         pItem = m_bagslot[i];
         if (pItem && pItem != eItem && pItem->GetEntry() == item)
@@ -200,7 +200,7 @@ uint32 Bag::GetItemCount(uint32 item, Item* eItem) const
 
     if (eItem && eItem->GetTemplate()->GemProperties)
     {
-        for (uint32 i=0; i < GetBagSize(); ++i)
+        for (uint32 i = 0; i < GetBagSize(); ++i)
         {
             pItem = m_bagslot[i];
             if (pItem && pItem != eItem && pItem->GetTemplate()->Socket[0].Color)

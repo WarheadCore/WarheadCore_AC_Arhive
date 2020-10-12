@@ -24,22 +24,22 @@
 
 class UpdateTime
 {
-    public:
-        uint32 GetLastUpdateTime() const;
+public:
+    uint32 GetLastUpdateTime() const;
 
-        void UpdateWithDiff(uint32 diff);
+    void UpdateWithDiff(uint32 diff);
 
-    protected:
-        UpdateTime();
+protected:
+    UpdateTime();
 
-    private:
-        uint32 _lastUpdateTime;
+private:
+    uint32 _lastUpdateTime;
 };
 
 class WorldUpdateTime : public UpdateTime
 {
-    public:
-        WorldUpdateTime() : UpdateTime() { }
+public:
+    WorldUpdateTime() : UpdateTime() { }
 };
 
 extern WorldUpdateTime sWorldUpdateTime;

@@ -25,9 +25,9 @@
 bool Position::operator==(Position const& a)
 {
     return (G3D::fuzzyEq(a.m_positionX, m_positionX) &&
-        G3D::fuzzyEq(a.m_positionY, m_positionY) &&
-        G3D::fuzzyEq(a.m_positionZ, m_positionZ) &&
-        G3D::fuzzyEq(a.m_orientation, m_orientation));
+            G3D::fuzzyEq(a.m_positionY, m_positionY) &&
+            G3D::fuzzyEq(a.m_positionZ, m_positionZ) &&
+            G3D::fuzzyEq(a.m_orientation, m_orientation));
 }
 
 void Position::RelocatePolarOffset(float angle, float dist, float z /*= 0.0f*/)
@@ -165,8 +165,8 @@ bool Position::IsWithinBox(const Position& center, float xradius, float yradius,
     float dx = rotX - center.GetPositionX();
     float dy = rotY - center.GetPositionY();
     if ((std::fabs(dx) > xradius) ||
-        (std::fabs(dy) > yradius) ||
-        (std::fabs(dz) > zradius))
+            (std::fabs(dy) > yradius) ||
+            (std::fabs(dz) > zradius))
         return false;
 
     return true;
@@ -192,12 +192,12 @@ bool Position::HasInArc(float arc, const Position* obj, float targetRadius) cons
     float lborder = -1 * (arc / 2.0f);                        // in range -pi..0
     float rborder = (arc / 2.0f);                             // in range 0..pi
 
-    // pussywizard: take into consideration target size 
+    // pussywizard: take into consideration target size
     if (targetRadius > 0.0f)
     {
         float distSq = GetExactDist2dSq(obj);
 
-        // pussywizard: at least a part of target's model is in every direction 
+        // pussywizard: at least a part of target's model is in every direction
         if (distSq < targetRadius * targetRadius)
             return true;
 

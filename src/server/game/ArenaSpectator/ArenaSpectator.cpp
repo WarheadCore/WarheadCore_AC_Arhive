@@ -114,22 +114,22 @@ namespace ArenaSpectator
         if (!player->m_Controlled.empty())
             errors.push_back("Can't be controlling creatures.");
 
-        const Unit::VisibleAuraMap* va = player->GetVisibleAuras();        
+        const Unit::VisibleAuraMap* va = player->GetVisibleAuras();
         for (auto itr = va->begin(); itr != va->end(); ++itr)
             if (Aura* aura = itr->second->GetBase())
                 if (!itr->second->IsPositive() && !aura->IsPermanent() && aura->GetDuration() < HOUR * IN_MILLISECONDS)
                 {
                     switch (aura->GetSpellInfo()->Id)
                     {
-                    case lfg::LFG_SPELL_DUNGEON_DESERTER:
-                    case lfg::LFG_SPELL_DUNGEON_COOLDOWN:
-                    case 26013: // bg deserter
-                    case 57724: // sated
-                    case 57723: // exhaustion
-                    case 25771: // forbearance
-                    case 15007: // resurrection sickness
-                    case 24755: // Tricked or Treated (z eventu)
-                        continue;
+                        case lfg::LFG_SPELL_DUNGEON_DESERTER:
+                        case lfg::LFG_SPELL_DUNGEON_COOLDOWN:
+                        case 26013: // bg deserter
+                        case 57724: // sated
+                        case 57723: // exhaustion
+                        case 25771: // forbearance
+                        case 15007: // resurrection sickness
+                        case 24755: // Tricked or Treated (z eventu)
+                            continue;
                     }
 
                     errors.push_back("Can't have negative auras.");
@@ -145,7 +145,7 @@ namespace ArenaSpectator
 
         bool bgPreparation = false;
         if ((!handler->GetSession()->GetSecurity() && bgmap->GetBG()->GetStatus() != STATUS_IN_PROGRESS) ||
-            (handler->GetSession()->GetSecurity() && bgmap->GetBG()->GetStatus() != STATUS_WAIT_JOIN && bgmap->GetBG()->GetStatus() != STATUS_IN_PROGRESS))
+                (handler->GetSession()->GetSecurity() && bgmap->GetBG()->GetStatus() != STATUS_WAIT_JOIN && bgmap->GetBG()->GetStatus() != STATUS_IN_PROGRESS))
         {
             bgPreparation = true;
             handler->SendSysMessage("Arena is not in progress yet. You will be invited as soon as it starts.");
@@ -169,7 +169,7 @@ namespace ArenaSpectator
 
         player->SetPendingSpectatorForBG(spectate->GetBattlegroundId());
         player->SetBattlegroundId(spectate->GetBattlegroundId(), spectate->GetBattlegroundTypeId(), PLAYER_MAX_BATTLEGROUND_QUEUES, false, false, TEAM_NEUTRAL);
-        player->SetEntryPoint();        
+        player->SetEntryPoint();
         player->TeleportTo(spectate->GetMapId(), spectate->GetPositionX(), spectate->GetPositionY(), z, spectate->GetOrientation(), TELE_TO_GM_MODE);
 
         return true;

@@ -222,7 +222,7 @@ void ScriptedAI::DoPlayMusic(uint32 soundId, bool zone)
 
     if (me && me->FindMap())
     {
-        Map::PlayerList const &players = me->GetMap()->GetPlayers();
+        Map::PlayerList const& players = me->GetMap()->GetPlayers();
         targets = new ObjectList();
 
         if (!players.isEmpty())
@@ -289,11 +289,11 @@ SpellInfo const* ScriptedAI::SelectSpell(Unit* target, uint32 school, uint32 mec
 
         // Targets and Effects checked first as most used restrictions
         //Check the spell targets if specified
-        if (targets && !(SpellSummary[me->m_spells[i]].Targets & (1 << (targets-1))))
+        if (targets && !(SpellSummary[me->m_spells[i]].Targets & (1 << (targets - 1))))
             continue;
 
         //Check the type of spell if we are looking for a specific spell type
-        if (effects && !(SpellSummary[me->m_spells[i]].Effects & (1 << (effects-1))))
+        if (effects && !(SpellSummary[me->m_spells[i]].Effects & (1 << (effects - 1))))
             continue;
 
         //Check for school if specified
@@ -493,7 +493,7 @@ Player* ScriptedAI::SelectTargetFromPlayerList(float maxdist, uint32 excludeAura
         tList.push_back(itr->GetSource());
     }
     if (!tList.empty())
-        return tList[urand(0,tList.size()-1)];
+        return tList[urand(0, tList.size() - 1)];
     else
         return nullptr;
 }

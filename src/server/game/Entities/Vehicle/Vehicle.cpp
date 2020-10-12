@@ -33,7 +33,7 @@
 #include "BattlefieldWG.h"
 
 Vehicle::Vehicle(Unit* unit, VehicleEntry const* vehInfo, uint32 creatureEntry) :
-_me(unit), _vehicleInfo(vehInfo), _usableSeatNum(0), _creatureEntry(creatureEntry), _status(STATUS_NONE)
+    _me(unit), _vehicleInfo(vehInfo), _usableSeatNum(0), _creatureEntry(creatureEntry), _status(STATUS_NONE)
 {
     for (uint32 i = 0; i < MAX_VEHICLE_SEATS; ++i)
     {
@@ -69,7 +69,7 @@ Vehicle::~Vehicle()
             else
                 LOG_INFO("entities.vehicle", "ZOMG! ~Vehicle(), unknown guid!");
         }
-        //ASSERT(!itr->second.IsEmpty());
+    //ASSERT(!itr->second.IsEmpty());
 }
 
 void Vehicle::Install()
@@ -107,10 +107,10 @@ void Vehicle::Uninstall()
     if (_status == STATUS_UNINSTALLING && !GetBase()->HasUnitTypeMask(UNIT_MASK_MINION))
     {
         LOG_ERROR("entities.vehicle", "Vehicle GuidLow: %u, Entry: %u attempts to uninstall, but already has STATUS_UNINSTALLING! "
-            "Check Uninstall/PassengerBoarded script hooks for errors.", _me->GetGUIDLow(), _me->GetEntry());
+                  "Check Uninstall/PassengerBoarded script hooks for errors.", _me->GetGUIDLow(), _me->GetEntry());
         return;
     }
-    
+
     _status = STATUS_UNINSTALLING;
 
     LOG_DEBUG("entities.vehicles", "Vehicle::Uninstall Entry: %u, GuidLow: %u", _creatureEntry, _me->GetGUIDLow());
@@ -273,7 +273,7 @@ void Vehicle::InstallAccessory(uint32 entry, int8 seatId, bool minion, uint8 typ
     if (_status == STATUS_UNINSTALLING)
     {
         LOG_ERROR("entities.vehicle", "Vehicle GuidLow: %u, Entry: %u attempts to install accessory Entry: %u on seat %d with STATUS_UNINSTALLING! "
-            "Check Uninstall/PassengerBoarded script hooks for errors.", _me->GetGUIDLow(), _me->GetEntry(), entry, (int32)seatId);
+                  "Check Uninstall/PassengerBoarded script hooks for errors.", _me->GetGUIDLow(), _me->GetEntry(), entry, (int32)seatId);
         return;
     }
 
@@ -355,7 +355,7 @@ bool Vehicle::AddPassenger(Unit* unit, int8 seatId)
 
     seat->second.Passenger.Guid = unit->GetGUID();
     seat->second.Passenger.IsUnselectable = unit->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-    
+
     if (seat->second.SeatInfo->CanEnterOrExit())
     {
         ASSERT(_usableSeatNum);
@@ -388,13 +388,13 @@ bool Vehicle::AddPassenger(Unit* unit, int8 seatId)
 
     // xinef: removed retarded seat->first == 0 check...
     if (_me->GetTypeId() == TYPEID_UNIT
-        && unit->GetTypeId() == TYPEID_PLAYER
-        && seat->second.SeatInfo->m_flags & VEHICLE_SEAT_FLAG_CAN_CONTROL)
+            && unit->GetTypeId() == TYPEID_PLAYER
+            && seat->second.SeatInfo->m_flags & VEHICLE_SEAT_FLAG_CAN_CONTROL)
     {
         try
         {
-        if (!_me->SetCharmedBy(unit, CHARM_TYPE_VEHICLE))
-            ABORT();
+            if (!_me->SetCharmedBy(unit, CHARM_TYPE_VEHICLE))
+                ABORT();
         }
         catch (...)
         {
@@ -415,7 +415,7 @@ bool Vehicle::AddPassenger(Unit* unit, int8 seatId)
     {
         unit->SendClearTarget();                                // SMSG_BREAK_TARGET
         unit->SetControlled(true, UNIT_STATE_ROOT);              // SMSG_FORCE_ROOT - In some cases we send SMSG_SPLINE_MOVE_ROOT here (for creatures)
-                                                                // also adds MOVEMENTFLAG_ROOT
+        // also adds MOVEMENTFLAG_ROOT
         Movement::MoveSplineInit init(unit);
         init.DisableTransportPathTransformations();
         init.MoveTo(veSeat->m_attachmentOffsetX, veSeat->m_attachmentOffsetY, veSeat->m_attachmentOffsetZ);
@@ -550,7 +550,7 @@ void Vehicle::TeleportVehicle(float x, float y, float z, float ang)
 {
     _me->GetMap()->LoadGrid(x, y);
     _me->NearTeleportTo(x, y, z, ang, true);
-    
+
     for (SeatMap::const_iterator itr = Seats.begin(); itr != Seats.end(); ++itr)
         if (Unit* passenger = ObjectAccessor::GetUnit(*GetBase(), itr->second.Passenger.Guid))
         {

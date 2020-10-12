@@ -29,7 +29,7 @@ public:
     ~AddonHandler();
 
     static AddonHandler* instance();
-    
+
     //build addon packet
     bool BuildAddonPacket(WorldPacket* Source, WorldPacket* Target);
 };

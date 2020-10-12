@@ -47,7 +47,7 @@ DynamicObject::~DynamicObject()
     ASSERT(!_isViewpoint);
     delete _removedAura;
 }
-  
+
 void DynamicObject::CleanupsBeforeDelete(bool finalCleanup /* = true */)
 {
     if (Transport* transport = GetTransport())
@@ -62,7 +62,7 @@ void DynamicObject::CleanupsBeforeDelete(bool finalCleanup /* = true */)
 }
 
 void DynamicObject::AddToWorld()
-{ 
+{
     ///- Register the dynamicObject for guid lookup and for caster
     if (!IsInWorld())
     {
@@ -73,7 +73,7 @@ void DynamicObject::AddToWorld()
 }
 
 void DynamicObject::RemoveFromWorld()
-{ 
+{
     ///- Remove the dynamicObject from the accessor and from all lists of objects in world
     if (IsInWorld())
     {
@@ -96,7 +96,7 @@ void DynamicObject::RemoveFromWorld()
 }
 
 bool DynamicObject::CreateDynamicObject(uint32 guidlow, Unit* caster, uint32 spellId, Position const& pos, float radius, DynamicObjectType type)
-{ 
+{
     SetMap(caster->GetMap());
     Relocate(pos);
     if (!IsPositionValid())
@@ -134,7 +134,7 @@ bool DynamicObject::CreateDynamicObject(uint32 guidlow, Unit* caster, uint32 spe
 }
 
 void DynamicObject::Update(uint32 p_time)
-{ 
+{
     // caster has to be always available and in the same map
     ASSERT(_caster);
     ASSERT(_caster->GetMap() == GetMap());
@@ -165,7 +165,7 @@ void DynamicObject::Update(uint32 p_time)
 }
 
 void DynamicObject::Remove()
-{ 
+{
     if (IsInWorld())
     {
         SendObjectDeSpawnAnim(GetGUID());
@@ -175,7 +175,7 @@ void DynamicObject::Remove()
 }
 
 int32 DynamicObject::GetDuration() const
-{ 
+{
     if (!_aura)
         return _duration;
     else
@@ -183,7 +183,7 @@ int32 DynamicObject::GetDuration() const
 }
 
 void DynamicObject::SetDuration(int32 newDuration)
-{ 
+{
     if (!_aura)
         _duration = newDuration;
     else
@@ -191,18 +191,18 @@ void DynamicObject::SetDuration(int32 newDuration)
 }
 
 void DynamicObject::Delay(int32 delaytime)
-{ 
+{
     SetDuration(GetDuration() - delaytime);
 }
 
 void DynamicObject::SetAura(Aura* aura)
-{ 
+{
     ASSERT(!_aura && aura);
     _aura = aura;
 }
 
 void DynamicObject::RemoveAura()
-{ 
+{
     ASSERT(_aura && !_removedAura);
     _removedAura = _aura;
     _aura = nullptr;
@@ -211,7 +211,7 @@ void DynamicObject::RemoveAura()
 }
 
 void DynamicObject::SetCasterViewpoint()
-{ 
+{
     if (Player* caster = _caster->ToPlayer())
     {
         caster->SetViewpoint(this, true);
@@ -220,7 +220,7 @@ void DynamicObject::SetCasterViewpoint()
 }
 
 void DynamicObject::RemoveCasterViewpoint()
-{ 
+{
     if (Player* caster = _caster->ToPlayer())
     {
         caster->SetViewpoint(this, false);
@@ -229,7 +229,7 @@ void DynamicObject::RemoveCasterViewpoint()
 }
 
 void DynamicObject::BindToCaster()
-{ 
+{
     ASSERT(!_caster);
     _caster = ObjectAccessor::GetUnit(*this, GetCasterGUID());
     ASSERT(_caster);
@@ -238,7 +238,7 @@ void DynamicObject::BindToCaster()
 }
 
 void DynamicObject::UnbindFromCaster()
-{ 
+{
     ASSERT(_caster);
     _caster->_UnregisterDynObject(this);
     _caster = nullptr;
