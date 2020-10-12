@@ -2062,9 +2062,7 @@ void AuraEffect::HandleAuraModShapeshift(AuraApplication const* aurApp, uint8 mo
         if (!target->CanUseAttackType(BASE_ATTACK))
         {
             if (Item* pItem = target->ToPlayer()->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND))
-            {
                 target->ToPlayer()->_ApplyWeaponDamage(EQUIPMENT_SLOT_MAINHAND, pItem->GetTemplate(), NULL, apply);
-            }
         }
     }
 
@@ -3116,9 +3114,7 @@ void AuraEffect::HandleModPossessPet(AuraApplication const* aurApp, uint8 mode, 
             // This may be confusing because pet bar shows "stay" when under the spell but it retains
             //  the "follow" flag. Player MUST click "stay" while under the spell.
             if (!pet->GetVictim() && !pet->GetCharmInfo()->HasCommandState(COMMAND_STAY))
-            {
                 pet->GetMotionMaster()->MoveFollow(caster, PET_FOLLOW_DIST, pet->GetFollowAngle());
-            }
         }
     }
 }
@@ -3516,9 +3512,7 @@ void AuraEffect::HandleModStateImmunityMask(AuraApplication const* aurApp, uint8
         }
         // Taunt, OK
         if (GetMiscValue() & (1 << 1))
-        {
             aura_immunity_list.push_back(SPELL_AURA_MOD_TAUNT);
-        }
         // Crowd-Control auras?
         if (GetMiscValue() & (1 << 2))
         {
@@ -3537,9 +3531,7 @@ void AuraEffect::HandleModStateImmunityMask(AuraApplication const* aurApp, uint8
         }
         // Transform?
         if (GetMiscValue() & (1 << 4))
-        {
             aura_immunity_list.push_back(SPELL_AURA_TRANSFORM);
-        }
         // Stun auras breakable by damage (Incapacitate effects), OK
         if (GetMiscValue() & (1 << 5))
         {
@@ -3764,9 +3756,7 @@ void AuraEffect::HandleAuraModSchoolImmunity(AuraApplication const* aurApp, uint
                     && GetSpellInfo()->CanDispelAura(spell)
                     && !iter->second->IsPositive()          //Don't remove positive spells
                     && spell->Id != GetId())               //Don't remove self
-            {
                 target->RemoveAura(iter);
-            }
             else
                 ++iter;
         }
@@ -6234,9 +6224,7 @@ void AuraEffect::HandlePeriodicDamageAurasTick(Unit* target, Unit* caster) const
 
     // Auras reducing damage from AOE spells
     if (GetSpellInfo()->Effects[GetEffIndex()].IsAreaAuraEffect() || GetSpellInfo()->Effects[GetEffIndex()].IsTargetingArea() || GetSpellInfo()->Effects[GetEffIndex()].Effect == SPELL_EFFECT_PERSISTENT_AREA_AURA) // some persistent area auras have targets like A=53 B=28
-    {
         damage = target->CalculateAOEDamageReduction(damage, GetSpellInfo()->SchoolMask, caster);
-    }
 
     // Set trigger flag
     uint32 procAttacker = PROC_FLAG_DONE_PERIODIC;

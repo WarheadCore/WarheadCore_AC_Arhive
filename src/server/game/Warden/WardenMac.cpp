@@ -141,9 +141,7 @@ void WardenMac::HandleHashResult(ByteBuffer& buff)
     keyData mod_seed = { { { { 0x4D, 0x80, 0x8D, 0x2C, 0x77, 0xD9, 0x05, 0xC4, 0x1A, 0x63, 0x80, 0xEC, 0x08, 0x58, 0x6A, 0xFE } } } };
 
     for (int i = 0; i < 4; ++i)
-    {
         keyIn[i] = mod_seed.ints.ints[i];
-    }
 
     int keyOut[4];
     int keyIn1, keyIn2;

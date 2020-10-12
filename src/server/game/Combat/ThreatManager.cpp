@@ -528,9 +528,7 @@ void ThreatManager::tauntFadeOut(Unit* taunter)
 void ThreatManager::setCurrentVictim(HostileReference* pHostileReference)
 {
     if (pHostileReference && pHostileReference != iCurrentVictim)
-    {
         iOwner->SendChangeCurrentVictimOpcode(pHostileReference);
-    }
     iCurrentVictim = pHostileReference;
 }
 

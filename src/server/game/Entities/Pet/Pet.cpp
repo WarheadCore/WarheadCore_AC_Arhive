@@ -751,9 +751,7 @@ bool Guardian::InitStatsForLevel(uint8 petlevel)
                         owner->getClass() == CLASS_MAGE)              // Water Elemental with glyph
                     petType = SUMMON_PET;
                 else if (owner->getClass() == CLASS_HUNTER)
-                {
                     petType = HUNTER_PET;
-                }
             }
 
             if (petType == HUNTER_PET)
@@ -2172,9 +2170,7 @@ void Pet::HandleAsynchLoadSucceed()
 void Pet::HandleAsynchLoadFailed(AsynchPetSummon* info, Player* player, uint8 asynchLoadType, uint8 loadResult)
 {
     if (loadResult == PET_LOAD_ERROR && asynchLoadType == PET_LOAD_HANDLE_UNSTABLE_CALLBACK)
-    {
         player->GetSession()->SendStableResult(0x06 /*STABLE_ERR_STABLE*/);
-    }
     else if (loadResult == PET_LOAD_NO_RESULT && info && (asynchLoadType == PET_LOAD_SUMMON_PET || asynchLoadType == PET_LOAD_SUMMON_DEAD_PET))
     {
         // xinef: petentry == 0 for hunter "call pet" (current pet summoned if any)

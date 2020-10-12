@@ -175,13 +175,9 @@ void WorldSession::HandleGossipSelectOptionOpcode(WorldPacket& recv_data)
             sScriptMgr->OnGossipSelectCode(_player, go, _player->PlayerTalkClass->GetGossipOptionSender(gossipListId), _player->PlayerTalkClass->GetGossipOptionAction(gossipListId), code.c_str());
         }
         else if (item)
-        {
             sScriptMgr->OnGossipSelectCode(_player, item, _player->PlayerTalkClass->GetGossipOptionSender(gossipListId), _player->PlayerTalkClass->GetGossipOptionAction(gossipListId), code.c_str());
-        }
         else
-        {
             sScriptMgr->OnGossipSelectCode(_player, menuId, _player->PlayerTalkClass->GetGossipOptionSender(gossipListId), _player->PlayerTalkClass->GetGossipOptionAction(gossipListId), code.c_str());
-        }
     }
     else
     {
@@ -198,13 +194,9 @@ void WorldSession::HandleGossipSelectOptionOpcode(WorldPacket& recv_data)
                 _player->OnGossipSelect(go, gossipListId, menuId);
         }
         else if (item)
-        {
             sScriptMgr->OnGossipSelect(_player, item, _player->PlayerTalkClass->GetGossipOptionSender(gossipListId), _player->PlayerTalkClass->GetGossipOptionAction(gossipListId));
-        }
         else
-        {
             sScriptMgr->OnGossipSelect(_player, menuId, _player->PlayerTalkClass->GetGossipOptionSender(gossipListId), _player->PlayerTalkClass->GetGossipOptionAction(gossipListId));
-        }
     }
 }
 
@@ -1176,9 +1168,7 @@ void WorldSession::HandleInspectOpcode(WorldPacket& recv_data)
     data.append(player->GetPackGUID());
 
     if (sGameConfig->GetBoolConfig("TalentsInspecting") || _player->IsGameMaster())
-    {
         player->BuildPlayerTalentsInfoData(&data);
-    }
     else
     {
         data << uint32(0);                                  // unspentTalentPoints

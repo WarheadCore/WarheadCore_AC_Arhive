@@ -449,9 +449,7 @@ bool Group::AddMember(Player* player)
             }
         }
         else if (IsLeader(player->GetGUID()) && isLFGGroup()) // pussywizard
-        {
             Player::ResetInstances(player->GetGUIDLow(), INSTANCE_RESET_GROUP_JOIN, false);
-        }
 
         player->SetGroupUpdateFlag(GROUP_UPDATE_FULL);
         UpdatePlayerOutOfRange(player);
@@ -759,9 +757,7 @@ void Group::Disband(bool hideDestroy /* = false */)
 
         //we already removed player from group and in player->GetGroup() is his original group, send update
         if (Group* group = player->GetGroup())
-        {
             group->SendUpdate();
-        }
         else
         {
             data.Initialize(SMSG_GROUP_LIST, 1 + 1 + 1 + 1 + 8 + 4 + 4 + 8);

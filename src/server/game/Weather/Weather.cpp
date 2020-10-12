@@ -171,13 +171,9 @@ bool Weather::ReGenerate()
     /// If fine 100% sun (no fog)
 
     if (m_type == WEATHER_TYPE_FINE)
-    {
         m_grade = 0.0f;
-    }
     else if (u < 90)
-    {
         m_grade = (float)rand_norm() * 0.3333f;
-    }
     else
     {
         // Severe change, but how severe?

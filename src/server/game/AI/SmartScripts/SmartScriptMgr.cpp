@@ -483,9 +483,7 @@ bool SmartAIMgr::IsEventValid(SmartScriptHolder& e)
             case SMART_EVENT_OOC_LOS:
             case SMART_EVENT_IC_LOS:
                 if (!IsMinMaxValid(e, e.event.los.cooldownMin, e.event.los.cooldownMax))
-                {
                     return false;
-                }
 
                 break;
             case SMART_EVENT_RESPAWN:

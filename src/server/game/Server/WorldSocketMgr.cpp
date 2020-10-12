@@ -297,9 +297,7 @@ void
 WorldSocketMgr::StopNetwork()
 {
     if (m_Acceptor)
-    {
         m_Acceptor->close();
-    }
 
     if (m_NetThreadsCount != 0)
     {

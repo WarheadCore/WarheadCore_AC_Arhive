@@ -1790,9 +1790,7 @@ void GameObject::Use(Unit* user)
                     if (info)
                     {
                         if (GameObject::gameObjectToEventFlag.find(info->entry) != GameObject::gameObjectToEventFlag.end())
-                        {
                             GameObject::gameObjectToEventFlag[info->entry](player, this, bg);
-                        }
                         else
                         {
                             switch (info->entry)

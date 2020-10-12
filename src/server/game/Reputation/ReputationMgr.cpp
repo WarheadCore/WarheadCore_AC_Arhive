@@ -317,13 +317,9 @@ bool ReputationMgr::SetReputation(FactionEntry const* factionEntry, int32 standi
                 FactionStateList::iterator parentState = _factions.find(parent->reputationListID);
                 // some team factions have own reputation standing, in this case do not spill to other sub-factions
                 if (parentState != _factions.end() && (parentState->second.Flags & FACTION_FLAG_SPECIAL))
-                {
                     SetOneFactionReputation(parent, int32(spillOverRepOut), incremental);
-                }
                 else    // spill to "sister" factions
-                {
                     flist = GetFactionTeamList(factionEntry->team);
-                }
             }
         }
         if (flist)

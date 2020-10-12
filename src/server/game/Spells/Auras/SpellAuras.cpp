@@ -730,9 +730,7 @@ void Aura::_ApplyEffectForTargets(uint8 effIndex)
 void Aura::UpdateOwner(uint32 diff, WorldObject* owner)
 {
     if (owner != m_owner)
-    {
         ABORT();
-    }
 
     Unit* caster = GetCaster();
     // Apply spellmods for channeled auras
@@ -2636,9 +2634,7 @@ void UnitAura::FillTargetMap(std::map<Unit*, uint8>& targets, Unit* caster)
         UnitList targetList;
         // non-area aura
         if (GetSpellInfo()->Effects[effIndex].Effect == SPELL_EFFECT_APPLY_AURA)
-        {
             targetList.push_back(GetUnitOwner());
-        }
         else
         {
             float radius = GetSpellInfo()->Effects[effIndex].CalcRadius(caster);

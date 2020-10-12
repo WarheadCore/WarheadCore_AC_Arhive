@@ -15721,9 +15721,7 @@ void Player::CompleteQuest(uint32 quest_id)
 
         Quest const* qInfo = sObjectMgr->GetQuestTemplate(quest_id);
         if (qInfo && qInfo->HasFlag(QUEST_FLAGS_TRACKING))
-        {
             RewardQuest(qInfo, 0, this, false);
-        }
 
         // Xinef: area auras may change on quest completion!
         UpdateZoneDependentAuras(GetZoneId());

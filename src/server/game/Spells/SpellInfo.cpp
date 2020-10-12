@@ -2035,9 +2035,7 @@ AuraStateType SpellInfo::LoadAuraState() const
     for (uint32 i = 0; i < sizeof(StealthPreventionSpellList) / sizeof(uint32); i++)
     {
         if (Id == StealthPreventionSpellList[i])
-        {
             return AURA_STATE_FAERIE_FIRE;
-        }
     }
 
     // Sting (hunter's pet ability)

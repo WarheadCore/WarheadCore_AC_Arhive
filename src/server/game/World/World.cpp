@@ -914,9 +914,7 @@ void World::SetInitialWorldSettings()
                 || (sGameConfig->GetIntConfig("Expansion") && (
                         !MapManager::ExistMapAndVMap(530, 10349.6f, -6357.29f) ||
                         !MapManager::ExistMapAndVMap(530, -3961.64f, -13931.2f))))
-        {
             exit(1);
-        }
     }
 
     ///- Initialize pool manager
@@ -1559,9 +1557,7 @@ void World::DetectDBCLang()
 
     if (default_locale != m_lang_confid && m_lang_confid < TOTAL_LOCALES &&
             (m_availableDbcLocaleMask & (1 << m_lang_confid)))
-    {
         default_locale = m_lang_confid;
-    }
 
     if (default_locale >= TOTAL_LOCALES)
     {
@@ -1888,9 +1884,7 @@ void World::SendGlobalMessage(WorldPacket* packet, WorldSession* self, TeamId te
                 itr->second->GetPlayer()->IsInWorld() &&
                 itr->second != self &&
                 (teamId == TEAM_NEUTRAL || itr->second->GetPlayer()->GetTeamId() == teamId))
-        {
             itr->second->SendPacket(packet);
-        }
     }
 }
 
@@ -1906,9 +1900,7 @@ void World::SendGlobalGMMessage(WorldPacket* packet, WorldSession* self, TeamId 
                 itr->second != self &&
                 !AccountMgr::IsPlayerAccount(itr->second->GetSecurity()) &&
                 (teamId == TEAM_NEUTRAL || itr->second->GetPlayer()->GetTeamId() == teamId))
-        {
             itr->second->SendPacket(packet);
-        }
     }
 }
 

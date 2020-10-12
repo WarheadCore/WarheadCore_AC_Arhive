@@ -721,9 +721,7 @@ void GameEventMgr::LoadFromDB()
 
                 GameEventConditionMap::iterator itr = mGameEvent[event_id].conditions.find(condition);
                 if (itr != mGameEvent[event_id].conditions.end())
-                {
                     itr->second.done = fields[2].GetFloat();
-                }
                 else
                 {
                     LOG_ERROR("sql.sql", "game_event_condition_save contains not present condition evt id %u cond id %u", event_id, condition);
@@ -1015,9 +1013,7 @@ void GameEventMgr::LoadHolidayDates()
 
         auto itr = std::lower_bound(modifiedHolidays.begin(), modifiedHolidays.end(), entry->Id);
         if (itr == modifiedHolidays.end() || *itr != entry->Id)
-        {
             modifiedHolidays.insert(itr, entry->Id);
-        }
 
         ++count;
 
@@ -1402,9 +1398,7 @@ void GameEventMgr::GameEventUnspawn(int16 event_id)
     }
 
     for (IdList::iterator itr = mGameEventPoolIds[internal_event_id].begin(); itr != mGameEventPoolIds[internal_event_id].end(); ++itr)
-    {
         sPoolMgr->DespawnPool(*itr);
-    }
 }
 
 void GameEventMgr::ChangeEquipOrModel(int16 event_id, bool activate)
@@ -1751,9 +1745,7 @@ void GameEventMgr::SetHolidayEventTime(GameEventData& event)
 
     time_t stageOffset = 0;
     for (uint8 i = 0; i < stageIndex; ++i)
-    {
         stageOffset += holiday->Duration[i] * HOUR;
-    }
 
     switch (holiday->CalendarFilterType)
     {
@@ -1773,9 +1765,7 @@ void GameEventMgr::SetHolidayEventTime(GameEventData& event)
     {
         event.occurence = 0;
         for (uint8 i = 0; i < MAX_HOLIDAY_DURATIONS && holiday->Duration[i]; ++i)
-        {
             event.occurence += holiday->Duration[i] * HOUR / MINUTE;
-        }
     }
 
     bool singleDate = ((holiday->Date[0] >> 24) & 0x1F) == 31; // Events with fixed date within year have - 1
@@ -1792,9 +1782,7 @@ void GameEventMgr::SetHolidayEventTime(GameEventData& event)
             timeInfo.tm_year -= 1; // First try last year (event active through New Year)
         }
         else
-        {
             timeInfo.tm_year = ((date >> 24) & 0x1F) + 100;
-        }
 
         timeInfo.tm_mon = (date >> 20) & 0xF;
         timeInfo.tm_mday = ((date >> 14) & 0x3F) + 1;

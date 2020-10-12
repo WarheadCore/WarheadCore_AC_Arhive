@@ -61,9 +61,7 @@ void MotionMaster::InitDefault()
         Mutate(movement == NULL ? &si_idleMovement : movement, MOTION_SLOT_IDLE);
     }
     else
-    {
         Mutate(&si_idleMovement, MOTION_SLOT_IDLE);
-    }
 }
 
 MotionMaster::~MotionMaster()
@@ -267,9 +265,7 @@ void MotionMaster::MoveTargetedHome()
         }
     }
     else
-    {
         LOG_ERROR("movement.motionmaster", "Player (GUID: %u) attempt targeted home", _owner->GetGUIDLow());
-    }
 }
 
 void MotionMaster::MoveConfused()
@@ -367,13 +363,9 @@ void MotionMaster::MoveSplinePath(Movement::PointsArray* path)
         return;
 
     if (_owner->GetTypeId() == TYPEID_PLAYER)
-    {
         Mutate(new EscortMovementGenerator<Player>(path), MOTION_SLOT_ACTIVE);
-    }
     else
-    {
         Mutate(new EscortMovementGenerator<Creature>(path), MOTION_SLOT_ACTIVE);
-    }
 }
 
 void MotionMaster::MoveLand(uint32 id, Position const& pos, float speed)
@@ -562,9 +554,7 @@ void MotionMaster::MoveSeekAssistance(float x, float y, float z)
         return;
 
     if (_owner->GetTypeId() == TYPEID_PLAYER)
-    {
         LOG_ERROR("movement.motionmaster", "Player (GUID: %u) attempt to seek assistance", _owner->GetGUIDLow());
-    }
     else
     {
         LOG_DEBUG("movement.motionmaster", "Creature (Entry: %u GUID: %u) seek assistance (X: %f Y: %f Z: %f)",
@@ -583,9 +573,7 @@ void MotionMaster::MoveSeekAssistanceDistract(uint32 time)
         return;
 
     if (_owner->GetTypeId() == TYPEID_PLAYER)
-    {
         LOG_ERROR("movement.motionmaster", "Player (GUID: %u) attempt to call distract after assistance", _owner->GetGUIDLow());
-    }
     else
     {
         LOG_DEBUG("movement.motionmaster", "Creature (Entry: %u GUID: %u) is distracted after assistance call (Time: %u)",

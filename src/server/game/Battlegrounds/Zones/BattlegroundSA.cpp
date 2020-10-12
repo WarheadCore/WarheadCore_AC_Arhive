@@ -562,9 +562,7 @@ void BattlegroundSA::TeleportPlayers()
 void BattlegroundSA::TeleportToEntrancePosition(Player* player)
 {
     if (player->GetTeamId() != Attackers)
-    {
         player->TeleportTo(607, 1209.7f, -65.16f, 70.1f, 0.0f, 0);
-    }
     else
     {
         if (!ShipsStarted)
@@ -825,22 +823,16 @@ bool BattlegroundSA::CanInteractWithObject(uint32 objectId)
     {
         case BG_SA_TITAN_RELIC:
             if (GateStatus[BG_SA_ANCIENT_GATE] != BG_SA_GATE_DESTROYED || GateStatus[BG_SA_YELLOW_GATE] != BG_SA_GATE_DESTROYED)
-            {
                 return false;
-            }
             [[fallthrough]];
         case BG_SA_CENTRAL_FLAG:
             if (GateStatus[BG_SA_RED_GATE] != BG_SA_GATE_DESTROYED && GateStatus[BG_SA_PURPLE_GATE] != BG_SA_GATE_DESTROYED)
-            {
                 return false;
-            }
             [[fallthrough]];
         case BG_SA_LEFT_FLAG:
         case BG_SA_RIGHT_FLAG:
             if (GateStatus[BG_SA_GREEN_GATE] != BG_SA_GATE_DESTROYED && GateStatus[BG_SA_BLUE_GATE] != BG_SA_GATE_DESTROYED)
-            {
                 return false;
-            }
             break;
         default:
             ABORT();
@@ -1022,9 +1014,7 @@ void BattlegroundSA::EventPlayerUsedGO(Player* Source, GameObject* object)
             else SendMessageToAll(LANG_BG_SA_HORDE_CAPTURED_RELIC, CHAT_MSG_BG_SYSTEM_NEUTRAL);
 
             if (Status == BG_SA_ROUND_ONE)
-            {
                 _relicClicked = true;
-            }
             else if (Status == BG_SA_ROUND_TWO)
             {
                 RoundScores[1].winner = Attackers;
@@ -1076,9 +1066,7 @@ void BattlegroundSA::UpdateDemolisherSpawns()
                 {
                     // Demolisher is not in list
                     if (DemoliserRespawnList.find(i) == DemoliserRespawnList.end())
-                    {
                         DemoliserRespawnList[i] = GameTime::GetGameTimeMS() + 30000;
-                    }
                     else
                     {
                         if (DemoliserRespawnList[i] < GameTime::GetGameTimeMS())

@@ -196,9 +196,7 @@ void WorldSession::HandleGroupInviteOpcode(WorldPacket& recvData)
     {
         // already existed group: if can't add then just leave
         if (!group->AddInvite(player))
-        {
             return;
-        }
     }
 
     // ok, we do it
@@ -570,9 +568,7 @@ void WorldSession::HandleRaidTargetUpdateOpcode(WorldPacket& recvData)
 
     // everything's fine, do it
     if (x == 0xFF)                                           // target icon request
-    {
         group->SendTargetIconList(this);
-    }
     else                                                    // target icon update
     {
         if (group->isRaidGroup() && !group->IsLeader(GetPlayer()->GetGUID()) && !group->IsAssistant(GetPlayer()->GetGUID()))
@@ -641,9 +637,7 @@ void WorldSession::HandleGroupChangeSubGroupOpcode(WorldPacket& recvData)
     Player* movedPlayer = ObjectAccessor::FindPlayerByName(name, false);
     uint64 guid;
     if (movedPlayer)
-    {
         guid = movedPlayer->GetGUID();
-    }
     else
     {
         CharacterDatabase.EscapeString(name);

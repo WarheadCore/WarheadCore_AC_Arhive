@@ -756,9 +756,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                         continue;
 
                     if (caster && caster != me) // Areatrigger cast
-                    {
                         caster->CastSpell((*itr)->ToUnit(), e.action.cast.spell, (e.action.cast.flags & SMARTCAST_TRIGGERED));
-                    }
                     else if (me && (!(e.action.cast.flags & SMARTCAST_AURA_NOT_PRESENT) || !(*itr)->ToUnit()->HasAura(e.action.cast.spell)))
                     {
                         if (e.action.cast.flags & SMARTCAST_INTERRUPT_PREVIOUS)
@@ -4675,9 +4673,7 @@ void SmartScript::FillScript(SmartAIEventList e, WorldObject* obj, AreaTrigger c
             if (obj && obj->GetMap()->IsDungeon())
             {
                 if ((1 << (obj->GetMap()->GetSpawnMode() + 1)) & (*i).event.event_flags)
-                {
                     mEvents.push_back((*i));
-                }
             }
             continue;
         }

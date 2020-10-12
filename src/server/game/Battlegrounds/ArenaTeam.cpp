@@ -355,9 +355,7 @@ void ArenaTeam::Disband(WorldSession* session)
 
     // Broadcast update
     if (session)
-    {
         BroadcastEvent(ERR_ARENA_TEAM_DISBANDED_S, 0, 2, session->GetPlayerName(), GetName(), "");
-    }
 
     // Update database
     SQLTransaction trans = CharacterDatabase.BeginTransaction();

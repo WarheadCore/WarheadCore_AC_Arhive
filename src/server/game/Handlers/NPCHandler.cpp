@@ -777,9 +777,7 @@ void WorldSession::HandleUnstablePetCallback(PreparedQueryResult result, uint32 
 
     // delete dead pet
     if (pet)
-    {
         _player->RemovePet(pet, PET_SAVE_AS_DELETED);
-    }
     else if (_player->IsPetDismissed() || _player->GetTemporaryUnsummonedPetNumber())
     {
         // try to find if pet is actually temporary unsummoned and alive
@@ -953,9 +951,7 @@ void WorldSession::HandleStableSwapPetCallback(PreparedQueryResult result, uint3
 
     // summon unstabled pet
     if (!Pet::LoadPetFromDB(_player, PET_LOAD_HANDLE_UNSTABLE_CALLBACK, petEntry, petId))
-    {
         SendStableResult(STABLE_ERR_STABLE);
-    }
     else
         SendStableResult(STABLE_SUCCESS_UNSTABLE);
 }

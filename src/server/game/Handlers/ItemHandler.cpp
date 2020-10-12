@@ -683,9 +683,7 @@ void WorldSession::HandleSellItemOpcode(WorldPacket& recvData)
 
         // special case at auto sell (sell all)
         if (count == 0)
-        {
             count = pItem->GetCount();
-        }
         else
         {
             // prevent sell more items that exist in stack (possible only not from client)

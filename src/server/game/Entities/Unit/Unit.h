@@ -1660,13 +1660,9 @@ public:
     {
         uint32 value = GetShieldBlockValue();
         if (value >= hard_cap)
-        {
             value = (soft_cap + hard_cap) / 2;
-        }
         else if (value > soft_cap)
-        {
             value = soft_cap + ((value - soft_cap) / 2);
-        }
 
         return value;
     }

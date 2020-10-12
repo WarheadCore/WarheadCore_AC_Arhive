@@ -72,9 +72,7 @@ void PointMovementGenerator<T>::DoInitialize(T* unit)
         init.SetVelocity(speed);
 
     if (i_orientation > 0.0f)
-    {
         init.SetFacing(i_orientation);
-    }
 
     init.Launch();
 }
@@ -120,9 +118,7 @@ bool PointMovementGenerator<T>::DoUpdate(T* unit, uint32 /*diff*/)
             init.SetVelocity(speed);
 
         if (i_orientation > 0.0f)
-        {
             init.SetFacing(i_orientation);
-        }
 
         init.Launch();
     }

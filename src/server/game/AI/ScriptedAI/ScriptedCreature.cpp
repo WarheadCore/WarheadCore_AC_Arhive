@@ -41,9 +41,7 @@ void SummonList::DoZoneInCombat(uint32 entry)
         ++i;
         if (summon && summon->IsAIEnabled
                 && (!entry || summon->GetEntry() == entry))
-        {
             summon->AI()->DoZoneInCombat();
-        }
     }
 }
 
@@ -247,9 +245,7 @@ void ScriptedAI::DoPlayMusic(uint32 soundId, bool zone)
     if (targets)
     {
         for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
-        {
             (*itr)->SendPlayMusic(soundId, true);
-        }
 
         delete targets;
     }

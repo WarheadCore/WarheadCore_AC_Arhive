@@ -898,9 +898,7 @@ void Spell::EffectTriggerSpell(SpellEffIndex effIndex)
                                 !iter->second->IsPositive() && !iter->second->GetBase()->IsPassive() &&
                                 // Xinef: Ignore NPC spells having INVULNERABILITY attribute
                                 (!spell->HasAttribute(SPELL_ATTR0_UNAFFECTED_BY_INVULNERABILITY) || spell->SpellFamilyName != SPELLFAMILY_GENERIC))
-                        {
                             m_caster->RemoveAura(iter);
-                        }
                         else
                             ++iter;
                     }
@@ -3427,9 +3425,7 @@ void Spell::EffectWeaponDmg(SpellEffIndex effIndex)
             {
                 // Kill Shot
                 if( m_spellInfo->SpellFamilyFlags[1] & 0x800000 )
-                {
                     spell_bonus += int32(m_caster->GetTotalAttackPowerValue(RANGED_ATTACK) * 0.4f);
-                }
                 break;
             }
         case SPELLFAMILY_DEATHKNIGHT:
@@ -3506,9 +3502,7 @@ void Spell::EffectWeaponDmg(SpellEffIndex effIndex)
                 }
                 // Rune Strike
                 if (m_spellInfo->SpellFamilyFlags[1] & 0x20000000)
-                {
                     spell_bonus += int32(0.15f * m_caster->GetTotalAttackPowerValue(BASE_ATTACK));
-                }
 
                 break;
             }
@@ -4146,9 +4140,7 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
 
                                 Creature* totem = unitTarget->GetMap()->GetCreature(unitTarget->m_SummonSlot[slot]);
                                 if (totem && totem->IsTotem())
-                                {
                                     m_caster->CastCustomSpell(totem, 55277, &basepoints0, nullptr, nullptr, true);
-                                }
                             }
                             // Glyph of Stoneclaw Totem
                             if (AuraEffect* aur = unitTarget->GetAuraEffect(63298, 0))
@@ -5031,9 +5023,7 @@ void Spell::EffectCharge(SpellEffIndex /*effIndex*/)
             m_caster->ToPlayer()->SetFallInformation(GameTime::GetGameTime(), m_caster->GetPositionZ());
 
         if (m_pathFinder)
-        {
             m_caster->GetMotionMaster()->MoveCharge(m_pathFinder->GetEndPosition().x, m_pathFinder->GetEndPosition().y, m_pathFinder->GetEndPosition().z, 42.0f, EVENT_CHARGE, &m_pathFinder->GetPath());
-        }
         else
         {
             Position pos;
@@ -5127,9 +5117,7 @@ void Spell::EffectKnockBack(SpellEffIndex effIndex)
             return;
     }
     else //if (m_spellInfo->Effects[i].Effect == SPELL_EFFECT_KNOCK_BACK)
-    {
         m_caster->GetPosition(x, y);
-    }
 
     unitTarget->KnockbackFrom(x, y, speedxy, speedz);
 }
@@ -5258,9 +5246,7 @@ void Spell::EffectDispelMechanic(SpellEffIndex effIndex)
     }
 
     for (; dispel_list.size(); dispel_list.pop())
-    {
         unitTarget->RemoveAura(dispel_list.front().first, dispel_list.front().second, 0, AURA_REMOVE_BY_ENEMY_SPELL);
-    }
 
     // put in combat
     if (unitTarget->IsFriendlyTo(m_caster))

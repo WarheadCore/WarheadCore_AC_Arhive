@@ -1731,9 +1731,7 @@ public:
         m_guidList = new GuidList();
 
         for (ObjectList::iterator itr = objectList->begin(); itr != objectList->end(); ++itr)
-        {
             m_guidList->push_back((*itr)->GetGUID());
-        }
     }
 
     ObjectList* GetObjectList()

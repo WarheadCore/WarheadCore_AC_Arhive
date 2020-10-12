@@ -82,9 +82,7 @@ MapUpdater::~MapUpdater()
 void MapUpdater::activate(size_t num_threads)
 {
     for (size_t i = 0; i < num_threads; ++i)
-    {
         _workerThreads.push_back(std::thread(&MapUpdater::WorkerThread, this));
-    }
 }
 
 void MapUpdater::deactivate()
@@ -96,9 +94,7 @@ void MapUpdater::deactivate()
     _queue.Cancel();
 
     for (auto& thread : _workerThreads)
-    {
         thread.join();
-    }
 }
 
 void MapUpdater::wait()

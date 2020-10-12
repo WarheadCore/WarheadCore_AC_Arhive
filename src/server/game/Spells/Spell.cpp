@@ -908,9 +908,7 @@ void Spell::SelectEffectImplicitTargets(SpellEffIndex effIndex, SpellImplicitTar
                         effects[effIndex].ImplicitTargetConditions == effects[j].ImplicitTargetConditions &&
                         effects[effIndex].CalcRadius(m_caster) == effects[j].CalcRadius(m_caster) &&
                         CheckScriptEffectImplicitTargets(effIndex, j))
-                {
                     effectMask |= 1 << j;
-                }
             }
             processedEffectMask |= effectMask;
             break;
@@ -1392,13 +1390,9 @@ void Spell::SelectImplicitCasterDestTargets(SpellEffIndex effIndex, SpellImplici
                         tstY = pos.GetPositionY() + (float(j) * DELTA_Y);
 
                         if (j < 2)
-                        {
                             prevZ = pos.GetPositionZ();
-                        }
                         else
-                        {
                             prevZ = tstZ;
-                        }
 
                         tstZ = map->GetHeight(phasemask, tstX, tstY, prevZ + maxtravelDistZ, true);
                         ground = tstZ;
@@ -2276,9 +2270,7 @@ void Spell::prepareDataForTriggerSystem(AuraEffect const* /*triggeredByAura*/)
             (m_spellInfo->SpellFamilyFlags[0] & 0x18 ||              // Freezing and Frost Trap, Freezing Arrow
              m_spellInfo->Id == 57879 || m_spellInfo->Id == 45145 ||  // Snake Trap - done this way to avoid double proc
              m_spellInfo->SpellFamilyFlags[2] & 0x00064000))          // Explosive and Immolation Trap
-    {
         m_procAttacker |= PROC_FLAG_DONE_TRAP_ACTIVATION;
-    }
 
     /* Effects which are result of aura proc from triggered spell cannot proc
         to prevent chain proc of these spells */
@@ -2760,9 +2752,7 @@ void Spell::DoAllEffectOnTarget(TargetInfo* target)
 
         // Xinef: override with forced crit, only visual result
         if (GetSpellValue()->ForcedCritResult)
-        {
             damageInfo.HitInfo |= SPELL_HIT_TYPE_CRIT;
-        }
 
         Unit::DealDamageMods(damageInfo.target, damageInfo.damage, &damageInfo.absorb);
 
@@ -2948,9 +2938,7 @@ SpellMissInfo Spell::DoSpellHitOnUnit(Unit* unit, uint32 effectMask, bool scaleA
         }
 
         if (m_caster->_IsValidAttackTarget(unit, m_spellInfo) && /*Intervene Trigger*/ m_spellInfo->Id != 59667)
-        {
             unit->RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_HITBYSPELL);
-        }
         else if (m_caster->IsFriendlyTo(unit))
         {
             // for delayed spells ignore negative spells (after duel end) for friendly targets
@@ -3191,13 +3179,9 @@ void Spell::DoTriggersOnSpellHit(Unit* unit, uint8 effMask)
     {
         for (std::vector<int32>::const_iterator i = spellTriggered->begin(); i != spellTriggered->end(); ++i)
             if (*i < 0)
-            {
                 unit->RemoveAurasDueToSpell(-(*i));
-            }
             else
-            {
                 unit->CastSpell(unit, *i, true, 0, 0, m_caster->GetGUID());
-            }
     }
 }
 
@@ -3458,9 +3442,7 @@ void Spell::prepare(SpellCastTargets const* targets, AuraEffect const* triggered
             }
 
             if (m_spellInfo->Effects[i].TargetA.GetObjectType() == TARGET_OBJECT_TYPE_DEST)
-            {
                 nearbyDest = true;
-            }
 
             // xinef: by default set it to false, and to true if any valid target is found
             selectTargets = true;
@@ -3484,9 +3466,7 @@ void Spell::prepare(SpellCastTargets const* targets, AuraEffect const* triggered
                     }
                 }
                 else
-                {
                     spellFailed = true;
-                }
             }
 
             if (spellFailed)
@@ -4578,9 +4558,7 @@ void Spell::SendSpellGo()
     }
 
     if (m_targets.GetTargetMask() & TARGET_FLAG_DEST_LOCATION)
-    {
         data << uint8(0);
-    }
 
     m_caster->SendMessageToSet(&data, true);
 }
@@ -5285,9 +5263,7 @@ void Spell::HandleEffects(Unit* pUnitTarget, Item* pItemTarget, GameObject* pGOT
     bool preventDefault = CallScriptEffectHandlers((SpellEffIndex)i, mode);
 
     if (!preventDefault && eff < TOTAL_SPELL_EFFECTS)
-    {
         (this->*SpellEffects[eff])((SpellEffIndex)i);
-    }
 }
 
 SpellCastResult Spell::CheckCast(bool strict)
@@ -7557,9 +7533,7 @@ SpellEvent::~SpellEvent()
         m_Spell->cancel();
 
     if (m_Spell->IsDeletable())
-    {
         delete m_Spell;
-    }
     else
     {
         LOG_ERROR("spells", "~SpellEvent: %s %u tried to delete non-deletable spell %u. Was not deleted, causes memory leak.",

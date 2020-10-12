@@ -128,9 +128,7 @@ void WorldSession::HandleBfEntryInviteResponse(WorldPacket& recvData)
 
     //If player accept invitation
     if (Accepted)
-    {
         Bf->PlayerAcceptInviteToWar(_player);
-    }
     else
     {
         if (_player->GetZoneId() == Bf->GetZoneId())

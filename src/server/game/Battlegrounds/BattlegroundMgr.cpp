@@ -455,9 +455,7 @@ Battleground* BattlegroundMgr::CreateNewBattleground(BattlegroundTypeId original
     Battleground* bg = nullptr;
     // create a copy of the BG template
     if (BattlegroundMgr::bgTypeToTemplate.find(bgTypeId) == BattlegroundMgr::bgTypeToTemplate.end())
-    {
         return nullptr;
-    }
 
     bg = BattlegroundMgr::bgTypeToTemplate[bgTypeId](bg_template);
 
@@ -777,9 +775,7 @@ BattlegroundQueueTypeId BattlegroundMgr::BGQueueTypeId(BattlegroundTypeId bgType
     }
 
     if (BattlegroundMgr::bgToQueue.find(bgTypeId) == BattlegroundMgr::bgToQueue.end())
-    {
         return BATTLEGROUND_QUEUE_NONE;
-    }
 
     return BattlegroundMgr::bgToQueue[bgTypeId];
 }
@@ -787,9 +783,7 @@ BattlegroundQueueTypeId BattlegroundMgr::BGQueueTypeId(BattlegroundTypeId bgType
 BattlegroundTypeId BattlegroundMgr::BGTemplateId(BattlegroundQueueTypeId bgQueueTypeId)
 {
     if (BattlegroundMgr::queueToBg.find(bgQueueTypeId) == BattlegroundMgr::queueToBg.end())
-    {
         return BattlegroundTypeId(0);
-    }
 
     return BattlegroundMgr::queueToBg[bgQueueTypeId];
 }
@@ -1140,13 +1134,9 @@ std::unordered_map<int, bgTypeRef> BattlegroundMgr::getBgFromTypeID =
         [](WorldPacket * data, Battleground::BattlegroundScoreMap::const_iterator itr2, Battleground * bg)
         {
             if (BattlegroundMgr::getBgFromMap.find(bg->GetMapId()) == BattlegroundMgr::getBgFromMap.end()) // this should not happen
-            {
                 *data << uint32(0);
-            }
             else
-            {
                 BattlegroundMgr::getBgFromMap[bg->GetMapId()](data, itr2);
-            }
         }
     }
 };

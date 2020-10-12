@@ -151,24 +151,16 @@ namespace lfg
             if (guid[2])
             {
                 if (guid[4])
-                {
                     return 5;
-                }
                 else if (guid[3])
-                {
                     return 4;
-                }
 
                 return 3;
             }
             else if (guid[1])
-            {
                 return 2;
-            }
             else if (guid[0])
-            {
                 return 1;
-            }
 
             return 0;
         }
@@ -185,19 +177,13 @@ namespace lfg
             if (g <= guid[0])
             {
                 if (guid[3])
-                {
                     guid[4] = guid[3];
-                }
 
                 if (guid[2])
-                {
                     guid[3] = guid[2];
-                }
 
                 if (guid[1])
-                {
                     guid[2] = guid[1];
-                }
 
 
                 guid[1] = guid[0];
@@ -215,14 +201,10 @@ namespace lfg
             if (g <= guid[1])
             {
                 if (guid[3])
-                {
                     guid[4] = guid[3];
-                }
 
                 if (guid[2])
-                {
                     guid[3] = guid[2];
-                }
 
                 guid[2] = guid[1];
                 guid[1] = g;
@@ -239,9 +221,7 @@ namespace lfg
             if (g <= guid[2])
             {
                 if (guid[3])
-                {
                     guid[4] = guid[3];
-                }
 
                 guid[3] = guid[2];
                 guid[2] = g;
@@ -268,19 +248,13 @@ namespace lfg
         void force_insert_front(const uint64& g)
         {
             if (guid[3])
-            {
                 guid[4] = guid[3];
-            }
 
             if (guid[2])
-            {
                 guid[3] = guid[2];
-            }
 
             if (guid[1])
-            {
                 guid[2] = guid[1];
-            }
 
             guid[1] = guid[0];
             guid[0] = g;
@@ -292,9 +266,7 @@ namespace lfg
             if (guid[0] == g)
             {
                 if (guid[1])
-                {
                     guid[0] = guid[1];
-                }
                 else
                 {
                     guid[0] = 0;
@@ -302,9 +274,7 @@ namespace lfg
                 }
 
                 if (guid[2])
-                {
                     guid[1] = guid[2];
-                }
                 else
                 {
                     guid[1] = 0;
@@ -312,9 +282,7 @@ namespace lfg
                 }
 
                 if (guid[3])
-                {
                     guid[2] = guid[3];
-                }
                 else
                 {
                     guid[2] = 0;
@@ -322,9 +290,7 @@ namespace lfg
                 }
 
                 if (guid[4])
-                {
                     guid[3] = guid[4];
-                }
                 else
                 {
                     guid[3] = 0;
@@ -338,9 +304,7 @@ namespace lfg
             if (guid[1] == g)
             {
                 if (guid[2])
-                {
                     guid[1] = guid[2];
-                }
                 else
                 {
                     guid[1] = 0;
@@ -348,9 +312,7 @@ namespace lfg
                 }
 
                 if (guid[3])
-                {
                     guid[2] = guid[3];
-                }
                 else
                 {
                     guid[2] = 0;
@@ -358,9 +320,7 @@ namespace lfg
                 }
 
                 if (guid[4])
-                {
                     guid[3] = guid[4];
-                }
                 else
                 {
                     guid[3] = 0;
@@ -374,9 +334,7 @@ namespace lfg
             if (guid[2] == g)
             {
                 if (guid[3])
-                {
                     guid[2] = guid[3];
-                }
                 else
                 {
                     guid[2] = 0;
@@ -384,9 +342,7 @@ namespace lfg
                 }
 
                 if (guid[4])
-                {
                     guid[3] = guid[4];
-                }
                 else
                 {
                     guid[3] = 0;
@@ -400,9 +356,7 @@ namespace lfg
             if (guid[3] == g)
             {
                 if (guid[4])
-                {
                     guid[3] = guid[4];
-                }
                 else
                 {
                     guid[3] = 0;
@@ -414,9 +368,7 @@ namespace lfg
             }
 
             if (guid[4] == g)
-            {
                 guid[4] = 0;
-            }
         }
 
         bool hasGuid(const uint64& g) const
@@ -429,35 +381,25 @@ namespace lfg
             if (guid[0] <= x.guid[0])
             {
                 if (guid[0] != x.guid[0])
-                {
                     return true;
-                }
 
                 if (guid[1] <= x.guid[1])
                 {
                     if (guid[1] != x.guid[1])
-                    {
                         return true;
-                    }
 
                     if (guid[2] <= x.guid[2])
                     {
                         if (guid[2] != x.guid[2])
-                        {
                             return true;
-                        }
 
                         if (guid[3] <= x.guid[3])
                         {
                             if (guid[3] != x.guid[3])
-                            {
                                 return true;
-                            }
 
                             if (guid[4] <= x.guid[4])
-                            {
                                 return !(guid[4] == x.guid[4]);
-                            }
                         }
                     }
                 }

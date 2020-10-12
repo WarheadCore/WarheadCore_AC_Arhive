@@ -1643,9 +1643,7 @@ public:
             return;
 
         if (script->isAfterLoadScript())
-        {
             ALScripts.push_back(script);
-        }
         else
         {
             script->checkValidity();

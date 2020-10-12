@@ -226,9 +226,7 @@ namespace lfg
             // xinef: fixed dungeon deserter
             if (method != GROUP_REMOVEMETHOD_KICK_LFG && state != LFG_STATE_FINISHED_DUNGEON &&
                     player->HasAura(LFG_SPELL_DUNGEON_COOLDOWN) && players >= LFG_GROUP_KICK_VOTES_NEEDED)
-            {
                 player->AddAura(LFG_SPELL_DUNGEON_DESERTER, player);
-            }
             //else if (state == LFG_STATE_BOOT)
             // Update internal kick cooldown of kicked
 

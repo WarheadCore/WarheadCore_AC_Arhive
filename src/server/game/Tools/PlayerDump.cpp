@@ -655,9 +655,7 @@ DumpReturn PlayerDumpReader::LoadDump(const std::string& file, uint32 account, s
                     std::map<uint32, uint32> :: const_iterator petids_iter = petids.find(atoi(currpetid));
 
                     if (petids_iter == petids.end())
-                    {
                         petids.insert(PetIdsPair(atoi(currpetid), atoi(newpetid)));
-                    }
 
                     if (!changenth(line, 1, newpetid))          // character_pet.id update
                         ROLLBACK(DUMP_FILE_BROKEN);

@@ -771,9 +771,7 @@ namespace warhead
         {
             if (u->IsAlive() && u->IsInCombat() && !i_obj->IsHostileTo(u) && i_obj->IsWithinDistInMap(u, i_range) &&
                     (u->isFeared() || u->IsCharmed() || u->isFrozen() || u->HasUnitState(UNIT_STATE_STUNNED) || u->HasUnitState(UNIT_STATE_CONFUSED)))
-            {
                 return true;
-            }
             return false;
         }
     private:
@@ -795,9 +793,7 @@ namespace warhead
         {
             if (u->IsAlive() && u->IsInCombat() && !i_obj->IsHostileTo(u) && i_obj->IsWithinDistInMap(u, i_range) &&
                     !(u->HasAura(i_spell)))
-            {
                 return true;
-            }
             return false;
         }
     private:

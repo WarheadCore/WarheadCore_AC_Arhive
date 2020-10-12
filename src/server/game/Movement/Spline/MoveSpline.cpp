@@ -129,9 +129,7 @@ namespace Movement
             spline.init_cyclic_spline(&args.path[0], args.path.size(), modes[args.flags.isSmooth()], cyclic_point);
         }
         else
-        {
             spline.init_spline(&args.path[0], args.path.size(), modes[args.flags.isSmooth()]);
-        }
 
         // init spline timestamps
         if (splineflags.falling)
@@ -263,9 +261,7 @@ namespace Movement
         {
             ++point_Idx;
             if (point_Idx < spline.last())
-            {
                 result = Result_NextSegment;
-            }
             else
             {
                 if (spline.isCyclic())

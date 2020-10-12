@@ -167,17 +167,11 @@ namespace Movement
             data << splineFlags.raw();
 
             if (splineFlags.final_angle)
-            {
                 data << move_spline.facing.angle;
-            }
             else if (splineFlags.final_target)
-            {
                 data << move_spline.facing.target;
-            }
             else if (splineFlags.final_point)
-            {
                 data << move_spline.facing.f.x << move_spline.facing.f.y << move_spline.facing.f.z;
-            }
 
             data << move_spline.timePassed();
             data << move_spline.Duration();

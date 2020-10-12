@@ -503,9 +503,7 @@ int WorldSocket::handle_input_header(void)
         m_RecvPct.base ((char*) m_RecvWPct->contents(), m_RecvWPct->size());
     }
     else
-    {
         ACE_ASSERT(m_RecvPct.space() == 0);
-    }
 
     return 0;
 }

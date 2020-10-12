@@ -329,9 +329,7 @@ private:
             for (SmartAIEventList::iterator i = mEvents.begin(); i != mEvents.end(); ++i)
             {
                 if (i->event_id == link)
-                {
                     return (*i);
-                }
 
             }
         }

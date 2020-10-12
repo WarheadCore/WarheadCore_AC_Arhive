@@ -441,9 +441,7 @@ void WorldSession::HandlePetAction(WorldPacket& recvData)
                 controlled.push_back(*itr);
             // xinef: mirror image blizzard crappness
             else if ((*itr)->GetEntry() == NPC_MIRROR_IMAGE && flag == ACT_COMMAND && spellid == COMMAND_FOLLOW)
-            {
                 (*itr)->InterruptNonMeleeSpells(false);
-            }
         }
 
         for (std::vector<Unit*>::iterator itr = controlled.begin(); itr != controlled.end(); ++itr)
@@ -636,9 +634,7 @@ void WorldSession::HandlePetActionHelper(Unit* pet, uint64 guid1, uint16 spellid
                                 pet->setDeathState(CORPSE);
                         }
                         else if (pet->HasUnitTypeMask(UNIT_MASK_MINION | UNIT_MASK_SUMMON | UNIT_MASK_GUARDIAN | UNIT_MASK_CONTROLABLE_GUARDIAN))
-                        {
                             pet->ToTempSummon()->UnSummon();
-                        }
                     }
                     break;
                 default:
@@ -738,9 +734,7 @@ void WorldSession::HandlePetActionHelper(Unit* pet, uint64 guid1, uint16 spellid
                     if (pet->IsPet() && (((Pet*)pet)->getPetType() == SUMMON_PET) && (pet != unit_target) && (urand(0, 100) < 10))
                         pet->SendPetTalk((uint32)PET_TALK_SPECIAL_SPELL);
                     else
-                    {
                         pet->SendPetAIReaction(guid1);
-                    }
 
                     if (unit_target && !GetPlayer()->IsFriendlyTo(unit_target) && !pet->isPossessed() && !pet->IsVehicle())
                     {
@@ -852,9 +846,7 @@ void WorldSession::HandlePetActionHelper(Unit* pet, uint64 guid1, uint16 spellid
                         // This is true if pet has no target or has target but targets differs.
                         Unit* victim = pet->GetVictim();
                         if (victim)
-                        {
                             pet->AttackStop();
-                        }
                         else
                             victim = nullptr;
 
@@ -874,9 +866,7 @@ void WorldSession::HandlePetActionHelper(Unit* pet, uint64 guid1, uint16 spellid
                             if (pet->IsPet() && ((Pet*)pet)->getPetType() == SUMMON_PET && pet != unit_target && urand(0, 100) < 10)
                                 pet->SendPetTalk((uint32)PET_TALK_SPECIAL_SPELL);
                             else
-                            {
                                 pet->SendPetAIReaction(guid1);
-                            }
 
                             pet->ToPet()->CastWhenWillAvailable(spellid, unit_target, victim, tempspellIsPositive);
                         }
@@ -1161,9 +1151,7 @@ void WorldSession::HandlePetRename(WorldPacket& recvData)
     if (isdeclined)
     {
         for (uint8 i = 0; i < MAX_DECLINED_NAME_CASES; ++i)
-        {
             recvData >> declinedname.name[i];
-        }
 
         std::wstring wname;
         Utf8toWStr(name, wname);

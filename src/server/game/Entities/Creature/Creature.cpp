@@ -583,9 +583,7 @@ void Creature::Update(uint32 diff)
 
                 Unit* owner = GetCharmerOrOwner();
                 if (IsCharmed() && !IsWithinDistInMap(owner, GetMap()->GetVisibilityRange()))
-                {
                     RemoveCharmAuras();
-                }
 
                 if (!IsInEvadeMode() && IsAIEnabled)
                 {
@@ -680,9 +678,7 @@ void Creature::Regenerate(Powers power)
                 if (IsInCombat() || GetCharmerOrOwnerGUID())
                 {
                     if (GetEntry() == NPC_IMP || GetEntry() == NPC_WATER_ELEMENTAL_TEMP || GetEntry() == NPC_WATER_ELEMENTAL_PERM)
-                    {
                         addvalue = uint32((GetStat(STAT_SPIRIT) / (IsUnderLastManaUseEffect() ? 8.0f : 5.0f) + 17.0f));
-                    }
                     else if (!IsUnderLastManaUseEffect())
                     {
                         float ManaIncreaseRate = sGameConfig->GetFloatConfig("Rate.Mana");
@@ -1368,9 +1364,7 @@ bool Creature::LoadCreatureFromDB(uint32 guid, Map* map, bool addToMap, bool gri
         {
             float tz = map->GetHeight(GetPhaseMask(), data->posX, data->posY, data->posZ, true, MAX_FALL_DISTANCE);
             if (data->posZ - tz > 0.1f && acore::IsValidMapCoord(tz))
-            {
                 Relocate(data->posX, data->posY, tz);
-            }
         }
     }
 

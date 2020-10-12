@@ -422,9 +422,7 @@ void BattlegroundAV::PostUpdateImpl(uint32 diff)
                 if (m_Mine_Reclaim_Timer[mine] > diff)
                     m_Mine_Reclaim_Timer[mine] -= diff;
                 else  //we don't need to set this timer to 0 cause this codepart wont get called when this thing is 0
-                {
                     ChangeMineOwner(mine, TEAM_NEUTRAL);
-                }
             }
         }
         if (m_Mine_Timer <= 0)
