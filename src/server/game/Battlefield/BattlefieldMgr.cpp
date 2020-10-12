@@ -54,6 +54,24 @@ void BattlefieldMgr::InitBattlefield()
         LOG_INFO("server.loading", ">> Battlefield: Wintergrasp successfully initiated.");
         LOG_INFO("server.loading", "");
     }
+
+    /* For Cataclysm: Tol Barad
+       pBf = new BattlefieldTB;
+       // respawn, init variables
+       if(!pBf->SetupBattlefield())
+       {
+    #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
+       sLog->outDebug(LOG_FILTER_BATTLEFIELD, "Battlefield : Tol Barad init failed.");
+    #endif
+       delete pBf;
+       }
+       else
+       {
+       m_BattlefieldSet.push_back(pBf);
+    #if defined(ENABLE_EXTRAS) && defined(ENABLE_EXTRA_LOGS)
+       sLog->outDebug(LOG_FILTER_BATTLEFIELD, "Battlefield : Tol Barad successfully initiated.");
+    #endif
+       } */
 }
 
 void BattlefieldMgr::AddZone(uint32 zoneid, Battlefield* handle)
