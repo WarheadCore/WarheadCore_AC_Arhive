@@ -21,7 +21,7 @@
 #include <chrono>
 #include <system_error>
 
-using namespace warhead;
+using namespace Warhead;
 
 Thread::Thread() : m_task(nullptr), m_iThreadId(), m_ThreadImp()
 {

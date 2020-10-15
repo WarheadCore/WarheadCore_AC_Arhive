@@ -35,7 +35,7 @@
 class Player;
 //class Map;
 
-namespace warhead
+namespace Warhead
 {
     struct VisibleNotifier
     {

@@ -46,7 +46,7 @@
 #include "GameGraveyard.h"
 #include "GameLocale.h"
 
-namespace warhead
+namespace Warhead
 {
     class BattlegroundChatBuilder
     {
@@ -110,7 +110,7 @@ namespace warhead
         uint32 _arg1;
         uint32 _arg2;
     };
-}                                                           // namespace warhead
+}                                                           // namespace Warhead
 
 template<class Do>
 void Battleground::BroadcastWorker(Do& _do)

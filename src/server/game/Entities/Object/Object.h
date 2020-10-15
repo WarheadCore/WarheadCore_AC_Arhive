@@ -884,7 +884,7 @@ private:
     bool CanDetectStealthOf(WorldObject const* obj, bool checkAlert = false) const;
 };
 
-namespace warhead
+namespace Warhead
 {
     // Binary predicate to sort WorldObjects based on the distance to a reference WorldObject
     class ObjectDistanceOrderPred

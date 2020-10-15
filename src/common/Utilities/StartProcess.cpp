@@ -27,7 +27,7 @@ using namespace boost::process;
 using namespace boost::process::initializers;
 using namespace boost::iostreams;
 
-namespace warhead
+namespace Warhead
 {
 
     template<typename T>
@@ -254,4 +254,4 @@ namespace warhead
         }
     }
 
-} // namespace warhead
+} // namespace Warhead

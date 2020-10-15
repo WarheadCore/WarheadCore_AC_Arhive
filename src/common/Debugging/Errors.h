@@ -21,7 +21,7 @@
 #include "Define.h"
 #include <string>
 
-namespace warhead
+namespace Warhead
 {
     DECLSPEC_NORETURN WH_COMMON_API void Assert(char const* file, int line, char const* function, std::string const& debugInfo, char const* message) ATTR_NORETURN;
     DECLSPEC_NORETURN WH_COMMON_API void Assert(char const* file, int line, char const* function, std::string const& debugInfo, char const* message, char const* format, ...) ATTR_NORETURN ATTR_PRINTF(6, 7);
@@ -38,7 +38,7 @@ namespace warhead
 
     DECLSPEC_NORETURN WH_COMMON_API void AbortHandler(int sigval) ATTR_NORETURN;
 
-} // namespace warhead
+} // namespace Warhead
 
 WH_COMMON_API std::string GetDebugInfo();
 

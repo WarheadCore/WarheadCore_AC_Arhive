@@ -1904,7 +1904,7 @@ void World::SendGlobalGMMessage(WorldPacket* packet, WorldSession* self, TeamId 
     }
 }
 
-namespace warhead
+namespace Warhead
 {
     class WorldWorldTextBuilder
     {
@@ -1952,7 +1952,7 @@ namespace warhead
         uint32 i_textId;
         va_list* i_args;
     };
-}                                                           // namespace warhead
+}                                                           // namespace Warhead
 
 /// Send a System Message to all players (except self if mentioned)
 void World::SendWorldText(uint32 string_id, ...)

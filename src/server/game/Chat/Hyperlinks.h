@@ -38,7 +38,7 @@ namespace advstd
     using remove_cvref_t = std::remove_cv_t<std::remove_reference_t<T>>;
 }
 
-namespace warhead
+namespace Warhead
 {
     namespace Hyperlinks
     {

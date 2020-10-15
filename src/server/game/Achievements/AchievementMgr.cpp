@@ -46,7 +46,7 @@
 #include "GameConfig.h"
 #include "GameLocale.h"
 
-namespace warhead
+namespace Warhead
 {
     class AchievementChatBuilder
     {
@@ -66,7 +66,7 @@ namespace warhead
         int32 i_textId;
         uint32 i_achievementId;
     };
-}                                                           // namespace warhead
+}                                                           // namespace Warhead
 
 bool AchievementCriteriaData::IsValid(AchievementCriteriaEntry const* criteria)
 {

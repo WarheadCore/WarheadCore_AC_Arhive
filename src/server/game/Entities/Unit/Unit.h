@@ -2584,7 +2584,7 @@ private:
     bool m_petCatchUp;
 };
 
-namespace warhead
+namespace Warhead
 {
     // Binary predicate for sorting Units based on percent value of a power
     class PowerPctOrderPred

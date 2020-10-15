@@ -259,7 +259,7 @@ namespace Warhead::Impl::StringConvertImpl
 #endif
 }
 
-namespace warhead
+namespace Warhead
 {
     template <typename Result, typename... Params>
     std::optional<Result> StringTo(std::string_view str, Params&& ... params)

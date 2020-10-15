@@ -639,7 +639,7 @@ void WorldSession::HandleEmoteOpcode(WorldPacket& recvData)
     GetPlayer()->HandleEmoteCommand(emote);
 }
 
-namespace warhead
+namespace Warhead
 {
     class EmoteChatBuilder
     {
@@ -669,7 +669,7 @@ namespace warhead
         uint32        i_emote_num;
         Unit const*   i_target;
     };
-}                                                           // namespace warhead
+}                                                           // namespace Warhead
 
 void WorldSession::HandleTextEmoteOpcode(WorldPacket& recvData)
 {

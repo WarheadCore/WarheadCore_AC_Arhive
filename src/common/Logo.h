@@ -7,7 +7,7 @@
 
 #include "Define.h"
 
-namespace warhead
+namespace Warhead
 {
     namespace Logo
     {

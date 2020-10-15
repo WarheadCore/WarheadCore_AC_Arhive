@@ -220,7 +220,7 @@ typedef std::vector<std::string> StringVector;
   ACE_Read_Guard< MUTEX > WARHEAD_GUARD_OBJECT (LOCK); \
     if (WARHEAD_GUARD_OBJECT.locked() == 0) ABORT();
 
-namespace warhead
+namespace Warhead
 {
     template<class ArgumentType, class ResultType>
     struct unary_function

@@ -8343,7 +8343,7 @@ void Spell::OnSpellLaunch()
     }
 }
 
-namespace warhead
+namespace Warhead
 {
 
     WorldObjectSpellTargetCheck::WorldObjectSpellTargetCheck(Unit* caster, Unit* referer, SpellInfo const* spellInfo,
@@ -8502,5 +8502,5 @@ namespace warhead
         return WorldObjectSpellAreaTargetCheck::operator ()(target);
     }
 
-} //namespace warhead
+} //namespace Warhead
 

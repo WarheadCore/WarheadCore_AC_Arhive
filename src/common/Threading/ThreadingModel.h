@@ -25,7 +25,7 @@
 
 #include "Define.h"
 
-namespace warhead
+namespace Warhead
 {
     template<typename MUTEX>
     class GeneralLock

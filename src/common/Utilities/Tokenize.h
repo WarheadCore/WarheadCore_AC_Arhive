@@ -21,7 +21,7 @@
 #include "Common.h"
 #include <string_view>
 
-namespace warhead
+namespace Warhead
 {
     WH_COMMON_API std::vector<std::string_view> Tokenize(std::string_view str, char sep, bool keepEmpty);
 

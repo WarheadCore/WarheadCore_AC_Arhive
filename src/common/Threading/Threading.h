@@ -24,7 +24,7 @@
 #include <thread>
 #include <atomic>
 
-namespace warhead
+namespace Warhead
 {
     class WH_COMMON_API Runnable
     {

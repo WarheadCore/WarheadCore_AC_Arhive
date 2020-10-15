@@ -743,7 +743,7 @@ protected:
 #endif
 };
 
-namespace warhead
+namespace Warhead
 {
     struct WorldObjectSpellTargetCheck
     {

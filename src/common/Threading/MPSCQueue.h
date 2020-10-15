@@ -21,7 +21,7 @@
 #include <atomic>
 #include <utility>
 
-namespace warhead
+namespace Warhead
 {
     namespace Impl
     {

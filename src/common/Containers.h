@@ -30,7 +30,7 @@
 WH_COMMON_API extern uint32 urand(uint32 min, uint32 max);
 WH_COMMON_API extern uint32 urandweighted(size_t count, double const* chances);
 
-namespace warhead
+namespace Warhead
 {
     template<class T>
     constexpr inline T* AddressOrSelf(T* ptr)
@@ -121,6 +121,6 @@ namespace warhead
     }
     //! namespace Containers
 }
-//! namespace warhead
+//! namespace Warhead
 
 #endif //! #ifdef WARHEAD_CONTAINERS_H

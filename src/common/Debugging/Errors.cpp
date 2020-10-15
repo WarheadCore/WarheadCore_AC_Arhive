@@ -65,7 +65,7 @@ namespace
     }
 }
 
-namespace warhead
+namespace Warhead
 {
 
     void Assert(char const* file, int line, char const* function, std::string const& debugInfo, char const* message)
@@ -150,7 +150,7 @@ namespace warhead
         Crash(formattedMessage.c_str());
     }
 
-} // namespace warhead
+} // namespace Warhead
 
 std::string GetDebugInfo()
 {

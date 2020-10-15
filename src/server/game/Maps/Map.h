@@ -57,7 +57,7 @@ class BattlegroundMap;
 class Transport;
 class StaticTransport;
 class MotionTransport;
-namespace warhead
+namespace Warhead
 {
     struct ObjectUpdater;
     struct LargeObjectUpdater;

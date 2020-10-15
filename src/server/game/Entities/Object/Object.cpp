@@ -1703,7 +1703,7 @@ void Object::ForceValuesUpdateAtIndex(uint32 i)
     }
 }
 
-namespace warhead
+namespace Warhead
 {
     class MonsterChatBuilder
     {
@@ -1751,7 +1751,7 @@ namespace warhead
         Language i_language;
         WorldObject const* i_target;
     };
-}                                                           // namespace warhead
+}                                                           // namespace Warhead
 
 void WorldObject::MonsterSay(const char* text, uint32 language, WorldObject const* target)
 {
@@ -2253,7 +2253,7 @@ void WorldObject::GetCreatureListWithEntryInGrid(std::list<Creature*>& creatureL
 }
 
 /*
-namespace warhead
+namespace Warhead
 {
     class NearUsedPosDo
     {
@@ -2322,7 +2322,7 @@ namespace warhead
             float              i_angle;
             ObjectPosSelector& i_selector;
     };
-}                                                           // namespace warhead
+}                                                           // namespace Warhead
 */
 
 //===================================================================================================
