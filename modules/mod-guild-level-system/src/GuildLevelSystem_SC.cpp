@@ -128,7 +128,7 @@ public:
         switch (action)
         {
             case 1:
-                AddGossipItemFor(player, 10, warhead::StringFormat("> Количество участников %u", player->GetGuild()->GetMemberCount()), GOSSIP_SENDER_MAIN, 1);
+                AddGossipItemFor(player, 10, Warhead::StringFormat("> Количество участников %u", player->GetGuild()->GetMemberCount()), GOSSIP_SENDER_MAIN, 1);
                 AddGossipItemFor(player, 10, ">> В главное меню", GOSSIP_SENDER_MAIN, 99);
                 SendGossipMenuFor(player, 1, creature->GetGUID());
                 break;

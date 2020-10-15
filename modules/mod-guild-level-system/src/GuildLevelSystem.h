@@ -141,7 +141,7 @@ public:
     template<typename Format, typename... Args>
     inline void SendGuildFormat(uint32 guildID, Format&& fmt, Args&& ... args)
     {
-        SendGuildMessage(guildID, warhead::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
+        SendGuildMessage(guildID, Warhead::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
     }
 
     std::string const GetItemLocale(uint32 ItemID, int8 index_loc = 8);

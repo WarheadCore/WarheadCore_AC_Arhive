@@ -382,7 +382,7 @@ std::string const GuildLevelSystem::GetItemLink(uint32 itemID, int8 index_loc)
             break;
     }
 
-    return warhead::StringFormat("|%s|Hitem:%u:0:0:0:0:0:0:0:0|h[%s]|h|r", color.c_str(), itemID, name.c_str());
+    return Warhead::StringFormat("|%s|Hitem:%u:0:0:0:0:0:0:0:0|h[%s]|h|r", color.c_str(), itemID, name.c_str());
 }
 
 std::string const GuildLevelSystem::GetSpellLink(uint32 spellID, int8 index_loc)
@@ -391,7 +391,7 @@ std::string const GuildLevelSystem::GetSpellLink(uint32 spellID, int8 index_loc)
     if (!spell)
         return "";
 
-    return warhead::StringFormat("|cffffffff|Hspell:%u|h[%s]|h|r", spell->Id, spell->SpellName[index_loc]);
+    return Warhead::StringFormat("|cffffffff|Hspell:%u|h[%s]|h|r", spell->Id, spell->SpellName[index_loc]);
 }
 
 std::string const GuildLevelSystem::GetSpelllocale(uint32 spellID, int8 index_loc)
@@ -476,8 +476,8 @@ void GuildLevelSystem::LoadBaseCriteria()
         ::EraseWhitespace(listItemCount);
         ::EraseWhitespace(listRewardSpells);
 
-        auto const& listItemIDTokens = warhead::Tokenize(listItemID, ',', true);
-        auto const& listItemCountTokens = warhead::Tokenize(listItemCount, ',', true);
+        auto const& listItemIDTokens = Warhead::Tokenize(listItemID, ',', true);
+        auto const& listItemCountTokens = Warhead::Tokenize(listItemCount, ',', true);
 
         if (static_cast<uint32>(listItemIDTokens.size()) > GLS_ITEMS_COUNT)
         {
@@ -499,7 +499,7 @@ void GuildLevelSystem::LoadBaseCriteria()
 
         GLS_IRERATOR(static_cast<uint32>(listItemIDTokens.size()))
         {
-            uint32 itemID = warhead::StringTo<uint32>(listItemIDTokens[i]).value_or(0);
+            uint32 itemID = Warhead::StringTo<uint32>(listItemIDTokens[i]).value_or(0);
 
             if (!CheckItemIDs(itemID))
                 itemID = 0;
@@ -508,7 +508,7 @@ void GuildLevelSystem::LoadBaseCriteria()
         }
 
         for (uint32 i = 0; i < static_cast<uint32>(listItemCountTokens.size()); ++i)
-            _data.ItemCount[i] = warhead::StringTo<uint32>(listItemCountTokens[i]).value_or(0);
+            _data.ItemCount[i] = Warhead::StringTo<uint32>(listItemCountTokens[i]).value_or(0);
 
         // Reward spells
         if (listRewardSpells.empty())
@@ -517,7 +517,7 @@ void GuildLevelSystem::LoadBaseCriteria()
             continue;
         }
 
-        auto const& listRewardSpellsTokens = warhead::Tokenize(listRewardSpells, ',', true);
+        auto const& listRewardSpellsTokens = Warhead::Tokenize(listRewardSpells, ',', true);
 
         if (static_cast<uint32>(listRewardSpellsTokens.size()) > GLS_SPELLS_REWARD_COUNT)
         {
@@ -527,7 +527,7 @@ void GuildLevelSystem::LoadBaseCriteria()
 
         GLS_IRERATOR(static_cast<uint32>(listRewardSpellsTokens.size()))
         {
-            uint32 spellID = warhead::StringTo<uint32>(listRewardSpellsTokens[i]).value_or(0);
+            uint32 spellID = Warhead::StringTo<uint32>(listRewardSpellsTokens[i]).value_or(0);
 
             if (!sSpellMgr->GetSpellInfo(spellID))
             {
@@ -606,7 +606,7 @@ void GuildLevelSystem::LoadCriteriaProgress()
         // Delete whilespace
         ::EraseWhitespace(listItemCount);
 
-        auto const& listItemCountTokens = warhead::Tokenize(listItemCount, ',', true);
+        auto const& listItemCountTokens = Warhead::Tokenize(listItemCount, ',', true);
 
         if (static_cast<uint32>(listItemCountTokens.size()) > GLS_ITEMS_COUNT)
         {
@@ -629,7 +629,7 @@ void GuildLevelSystem::LoadCriteriaProgress()
         }
 
         for (uint32 i = 0; i < static_cast<uint32>(listItemCountTokens.size()); ++i)
-            _data.ItemCount[i] = warhead::StringTo<uint32>(listItemCountTokens[i]).value_or(0);
+            _data.ItemCount[i] = Warhead::StringTo<uint32>(listItemCountTokens[i]).value_or(0);
 
         auto criteria = GetCriteriaProgress(guildID);
         if (!criteria)
@@ -859,7 +859,7 @@ void GuildLevelSystem::ShowAllCriteriaInfo(Player* player, Creature* creature)
 
     uint32 stageID = criteriaProgress->GetStageID();
 
-    AddGossipItemFor(player, 10, warhead::StringFormat("# Текущая стадия: %u", stageID), GOSSIP_SENDER_MAIN, 2);
+    AddGossipItemFor(player, 10, Warhead::StringFormat("# Текущая стадия: %u", stageID), GOSSIP_SENDER_MAIN, 2);
 
     uint32 countDone = criteriaProgress->GetCountCriteriaProgressDone();
 
@@ -883,7 +883,7 @@ void GuildLevelSystem::ShowAllCriteriaInfo(Player* player, Creature* creature)
             if (criteriaProgress->IsProgressDone(criteriaID))
                 continue;
 
-            AddGossipItemFor(player, 10, warhead::StringFormat("--- Критерий #%u. Прогресс (%u/%u)", criteriaID, countNow, countMax), GLS_GOSSIP_SHOW_CRITERIA_SENDER, gossipAction);
+            AddGossipItemFor(player, 10, Warhead::StringFormat("--- Критерий #%u. Прогресс (%u/%u)", criteriaID, countNow, countMax), GLS_GOSSIP_SHOW_CRITERIA_SENDER, gossipAction);
 
             if (CONF_GET_BOOL("GLS.Criteria.ShowItems.Enable"))
             {
@@ -899,7 +899,7 @@ void GuildLevelSystem::ShowAllCriteriaInfo(Player* player, Creature* creature)
                     float persents = float(currentItems) / float(maxItems) * 100.0f;
 
                     if (!itemLink.empty())
-                        AddGossipItemFor(player, 10, warhead::StringFormat("- %u. %s - %u/%u", i + 1, itemLink.c_str(), currentItems, maxItems), i, gossipAction);
+                        AddGossipItemFor(player, 10, Warhead::StringFormat("- %u. %s - %u/%u", i + 1, itemLink.c_str(), currentItems, maxItems), i, gossipAction);
                 }
             }
         }
@@ -909,7 +909,7 @@ void GuildLevelSystem::ShowAllCriteriaInfo(Player* player, Creature* creature)
         AddGossipItemFor(player, 10, "# Вы выполнили все возможные критерии", GOSSIP_SENDER_MAIN, 2);
 
         if (player->GetRank() == 0 && GetNextStage(stageID) != stageID)
-            AddGossipItemFor(player, 10, warhead::StringFormat("# >> Завершить стадию - %u", countDone), GOSSIP_SENDER_MAIN, 4);
+            AddGossipItemFor(player, 10, Warhead::StringFormat("# >> Завершить стадию - %u", countDone), GOSSIP_SENDER_MAIN, 4);
     }
 
     AddGossipItemFor(player, 10, ">> В главное меню", GOSSIP_SENDER_MAIN, 99);
@@ -925,7 +925,7 @@ void GuildLevelSystem::ShowCriteriaInfo(Player* player, Creature* creature, uint
     uint32 criteriaID = action - GLS_GOSSIP_CRITERIA_ID;
 
     AddGossipItemFor(player, 10, "#", sender, action);
-    AddGossipItemFor(player, 10, warhead::StringFormat("# Детальная информация о критерии %u", criteriaID), sender, action);
+    AddGossipItemFor(player, 10, Warhead::StringFormat("# Детальная информация о критерии %u", criteriaID), sender, action);
     AddGossipItemFor(player, 10, "#", sender, action);
     AddGossipItemFor(player, 10, "# Требования:", sender, action);
 
@@ -941,7 +941,7 @@ void GuildLevelSystem::ShowCriteriaInfo(Player* player, Creature* creature, uint
         float persents = float(currentItems) / float(maxItems) * 100.0f;
 
         if (!itemLink.empty())
-            AddGossipItemFor(player, 10, warhead::StringFormat("- %u. %s - %u/%u", i + 1, itemLink.c_str(), currentItems, maxItems), i, action);
+            AddGossipItemFor(player, 10, Warhead::StringFormat("- %u. %s - %u/%u", i + 1, itemLink.c_str(), currentItems, maxItems), i, action);
     }
 
     AddGossipItemFor(player, 10, "#", sender, action);
@@ -953,7 +953,7 @@ void GuildLevelSystem::ShowCriteriaInfo(Player* player, Creature* creature, uint
         if (!spellID)
             continue;
 
-        AddGossipItemFor(player, 10, warhead::StringFormat("# %u. %s", i + 1, GetSpelllocale(spellID).c_str()), sender, action);
+        AddGossipItemFor(player, 10, Warhead::StringFormat("# %u. %s", i + 1, GetSpelllocale(spellID).c_str()), sender, action);
     }
 
     AddGossipItemFor(player, 10, "#", sender, action);
@@ -986,7 +986,7 @@ void GuildLevelSystem::ShowRewardInfo(Player* player, Creature* creature, uint32
     uint32 criteriaID = action - GLS_GOSSIP_CRITERIA_ID;
 
     AddGossipItemFor(player, 10, "#", sender, action);
-    AddGossipItemFor(player, 10, warhead::StringFormat("# Получение награды за критерий %u", criteriaID), sender, action);
+    AddGossipItemFor(player, 10, Warhead::StringFormat("# Получение награды за критерий %u", criteriaID), sender, action);
     AddGossipItemFor(player, 10, "#", sender, action);
 
     auto criteria = GetCriteriaBase(criteriaID);
@@ -1019,8 +1019,8 @@ void GuildLevelSystem::ShowRewardInfo(Player* player, Creature* creature, uint32
 
         auto spellLink = GetSpelllocale(spellID);
 
-        AddGossipItemFor(player, 10, warhead::StringFormat("# %u. %s%s", i + 1, stringSelect(selectShoose, i).c_str(), spellLink.c_str()), GLS_GOSSIP_GET_REWARDS_SENDER + i, action,
-                         warhead::StringFormat("Вы уверены, что хотите выбрать %s?", spellLink.c_str()), 0, false);
+        AddGossipItemFor(player, 10, Warhead::StringFormat("# %u. %s%s", i + 1, stringSelect(selectShoose, i).c_str(), spellLink.c_str()), GLS_GOSSIP_GET_REWARDS_SENDER + i, action,
+                         Warhead::StringFormat("Вы уверены, что хотите выбрать %s?", spellLink.c_str()), 0, false);
     }
 
     AddGossipItemFor(player, 10, "#", sender, action);
@@ -1191,18 +1191,18 @@ void GuildLevelSystem::ShowInvestedMenu(Player* player, Creature* creature, uint
         itemCount = itemsNeed;
 
     AddGossipItemFor(player, 10, "#", sender, action);
-    AddGossipItemFor(player, 10, warhead::StringFormat("# %s", itemLink.c_str()), sender, action);
-    AddGossipItemFor(player, 10, warhead::StringFormat("# Вложений - %u/%u", currentItems, maxItems), sender, action);
-    AddGossipItemFor(player, 10, warhead::StringFormat("# Осталось вложить - %u", itemsNeed), sender, action);
-    AddGossipItemFor(player, 10, warhead::StringFormat("# Прогресс выполнения - %0.2f%%", persents), sender, action);
+    AddGossipItemFor(player, 10, Warhead::StringFormat("# %s", itemLink.c_str()), sender, action);
+    AddGossipItemFor(player, 10, Warhead::StringFormat("# Вложений - %u/%u", currentItems, maxItems), sender, action);
+    AddGossipItemFor(player, 10, Warhead::StringFormat("# Осталось вложить - %u", itemsNeed), sender, action);
+    AddGossipItemFor(player, 10, Warhead::StringFormat("# Прогресс выполнения - %0.2f%%", persents), sender, action);
     AddGossipItemFor(player, 10, "#", sender, action);
-    AddGossipItemFor(player, 10, warhead::StringFormat("- В инвентаре - %u", playerItemCount), sender, action);
+    AddGossipItemFor(player, 10, Warhead::StringFormat("- В инвентаре - %u", playerItemCount), sender, action);
 
     if (itemsNeed)
     {
         AddGossipItemFor(player, 10, "- Вложить выборочно", sender, action, "Введите количество", 0, true);
-        AddGossipItemFor(player, 10, warhead::StringFormat("- Вложить %s (%u)", itemCount == itemsNeed ? "до конца" : "всё что есть", itemCount), sender, criteriaID + GLS_GOSSIP_CRITERIA_ID_FULL,
-                         warhead::StringFormat("Вы уверены, что хотите вложить %s %u?", itemLink.c_str(), playerItemCount), 0, false);
+        AddGossipItemFor(player, 10, Warhead::StringFormat("- Вложить %s (%u)", itemCount == itemsNeed ? "до конца" : "всё что есть", itemCount), sender, criteriaID + GLS_GOSSIP_CRITERIA_ID_FULL,
+                         Warhead::StringFormat("Вы уверены, что хотите вложить %s %u?", itemLink.c_str(), playerItemCount), 0, false);
     }
 
     AddGossipItemFor(player, 10, ">> К списку критериев", GOSSIP_SENDER_MAIN, 2);

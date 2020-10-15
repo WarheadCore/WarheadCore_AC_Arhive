@@ -105,8 +105,8 @@ void OnlineReward::AddRewardHistory(uint32 lowGuid)
 
     RewardTimeHistory _data;
 
-    for (auto const& itr : warhead::Tokenize(fields[0].GetStringView(), ',', true))
-        _data.PerOnline.insert(warhead::StringTo<uint32>(itr).value_or(0));
+    for (auto const& itr : Warhead::Tokenize(fields[0].GetStringView(), ',', true))
+        _data.PerOnline.insert(Warhead::StringTo<uint32>(itr).value_or(0));
 
     _data.PerTime = fields[1].GetUInt32();
 
@@ -277,9 +277,9 @@ void OnlineReward::SendRewardForPlayer(Player* player, uint32 itemID, uint32 ite
     std::string playedTimeSecStr = secsToTimeString(secondsOnine);
 
     // @TODO locale this
-    subject = warhead::StringFormat(sGameLocale->GetModuleString("mod-online-reward", 1, player->GetSession()->GetSessionDbLocaleIndex()), playedTimeSecStr.c_str());
-    text = warhead::StringFormat(sGameLocale->GetModuleString("mod-online-reward", 2, player->GetSession()->GetSessionDbLocaleIndex()), player->GetName().c_str(), playedTimeSecStr.c_str());
-    selfMessage = warhead::StringFormat(sGameLocale->GetModuleString("mod-online-reward", 3, player->GetSession()->GetSessionDbLocaleIndex()), playedTimeSecStr.c_str());
+    subject = Warhead::StringFormat(sGameLocale->GetModuleString("mod-online-reward", 1, player->GetSession()->GetSessionDbLocaleIndex()), playedTimeSecStr.c_str());
+    text = Warhead::StringFormat(sGameLocale->GetModuleString("mod-online-reward", 2, player->GetSession()->GetSessionDbLocaleIndex()), player->GetName().c_str(), playedTimeSecStr.c_str());
+    selfMessage = Warhead::StringFormat(sGameLocale->GetModuleString("mod-online-reward", 3, player->GetSession()->GetSessionDbLocaleIndex()), playedTimeSecStr.c_str());
 
     // Send External mail
     sEM->AddMail(player->GetName(), subject, text, itemID, itemCount, 37688);
