@@ -203,7 +203,7 @@ public:
                 // GROUND
                 case EVENT_SPELL_CURSE:
                     if (events.GetPhaseMask() == 0)
-                        me->CastCustomSpell(RAID_MODE(SPELL_CURSE_OF_THE_PLAGUEBRINGER_10, SPELL_CURSE_OF_THE_PLAGUEBRINGER_25), SPELLVALUE_MAX_TARGETS, RAID_MODE(3, 10), me, false);
+                        me->CastCustomSpell(RAID_MODE(SPELL_CURSE_OF_THE_PLAGUEBRINGER_10, SPELL_CURSE_OF_THE_PLAGUEBRINGER_25, SPELL_CURSE_OF_THE_PLAGUEBRINGER_10, SPELL_CURSE_OF_THE_PLAGUEBRINGER_25), SPELLVALUE_MAX_TARGETS, RAID_MODE(3, 10, 3, 10), me, false);
                     events.RepeatEvent(25000);
                     break;
                 case EVENT_SUMMON_PLAGUED_WARRIOR_ANNOUNCE:
@@ -214,7 +214,7 @@ public:
                     break;
                 case EVENT_SUMMON_PLAGUED_WARRIOR_REAL:
                     me->CastSpell(me, SPELL_SUMMON_PLAGUED_WARRIORS, true);
-                    SummonHelper(NPC_PLAGUED_WARRIOR, RAID_MODE(2, 3));
+                    SummonHelper(NPC_PLAGUED_WARRIOR, RAID_MODE(2, 3, 3, 4));
                     events.PopEvent();
                     break;
                 case EVENT_MOVE_TO_BALCONY:
@@ -225,7 +225,7 @@ public:
                     break;
                 case EVENT_SPELL_BLINK:
                     DoResetThreat();
-                    me->CastSpell(me, RAID_MODE(SPELL_CRIPPLE_10, SPELL_CRIPPLE_25), false);
+                    me->CastSpell(me, RAID_MODE(SPELL_CRIPPLE_10, SPELL_CRIPPLE_25, SPELL_CRIPPLE_10, SPELL_CRIPPLE_25), false);
                     me->CastSpell(me, SPELL_BLINK, true);
                     Talk(EMOTE_BLINK);
                     events.RepeatEvent(30000);
@@ -239,14 +239,14 @@ public:
                 case EVENT_BALCONY_SUMMON_REAL:
                     me->CastSpell(me, SPELL_SUMMON_PLAGUED_WARRIORS, true); // visual only
                     if (events.GetPhaseMask() == 0)
-                        SummonHelper(NPC_PLAGUED_CHAMPION, RAID_MODE(2, 4));
+                        SummonHelper(NPC_PLAGUED_CHAMPION, RAID_MODE(2, 4, 3, 5));
                     else if (events.GetPhaseMask() == 1)
                     {
-                        SummonHelper(NPC_PLAGUED_CHAMPION, RAID_MODE(1, 2));
-                        SummonHelper(NPC_PLAGUED_GUARDIAN, RAID_MODE(1, 2));
+                        SummonHelper(NPC_PLAGUED_CHAMPION, RAID_MODE(1, 2, 2, 3));
+                        SummonHelper(NPC_PLAGUED_GUARDIAN, RAID_MODE(1, 2, 2, 3));
                     }
                     else
-                        SummonHelper(NPC_PLAGUED_GUARDIAN, RAID_MODE(2, 4));
+                        SummonHelper(NPC_PLAGUED_GUARDIAN, RAID_MODE(2, 4, 3, 5));
                     events.PopEvent();
                     break;
                 case EVENT_MOVE_TO_GROUND:

@@ -183,7 +183,7 @@ public:
                     break;
                 case EVENT_SPELL_ENRAGE:
                     Talk(EMOTE_ENRAGE);
-                    me->CastSpell(me, RAID_MODE(SPELL_ENRAGE_10, SPELL_ENRAGE_25), true);
+                    me->CastSpell(me, RAID_MODE(SPELL_ENRAGE_10, SPELL_ENRAGE_25, SPELL_ENRAGE_10, SPELL_ENRAGE_25), true);
                     events.RepeatEvent(30000);
                     break;
                 case EVENT_SPELL_MORTAL_WOUND:
@@ -192,13 +192,13 @@ public:
                     break;
                 case EVENT_SPELL_DECIMATE:
                     Talk(EMOTE_DECIMATE);
-                    me->CastSpell(me, RAID_MODE(SPELL_DECIMATE_10, SPELL_DECIMATE_25), false);
+                    me->CastSpell(me, RAID_MODE(SPELL_DECIMATE_10, SPELL_DECIMATE_25, SPELL_DECIMATE_10, SPELL_DECIMATE_25), false);
                     events.RepeatEvent(105000);
                     break;
                 case EVENT_SUMMON_ZOMBIE:
                     {
                         uint8 rand = urand(0, 2);
-                        for (int32 i = 0; i < RAID_MODE(1, 2); ++i)
+                        for (int32 i = 0; i < RAID_MODE(1, 2, 2, 3); ++i)
                         {
                             // In 10 man raid, normal mode - should spawn only from mid gate
                             // \1 |0 /2 pos

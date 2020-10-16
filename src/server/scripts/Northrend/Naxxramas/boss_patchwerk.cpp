@@ -136,7 +136,7 @@ public:
                                 meleeRangeTargets.push_back(target);
 
                             // and add threat to most hated
-                            if (counter < RAID_MODE(2, 3))
+                            if (counter < RAID_MODE(2, 3, 2, 3))
                                 me->AddThreat(target, 500.0f);
                         }
 
@@ -159,7 +159,7 @@ public:
                         }
 
                         if (finalTarget)
-                            me->CastSpell(finalTarget, RAID_MODE(SPELL_HATEFUL_STRIKE_10, SPELL_HATEFUL_STRIKE_25), false);
+                            me->CastSpell(finalTarget, RAID_MODE(SPELL_HATEFUL_STRIKE_10, SPELL_HATEFUL_STRIKE_25, SPELL_HATEFUL_STRIKE_10, SPELL_HATEFUL_STRIKE_25), false);
 
                         events.RepeatEvent(1000);
                         break;
