@@ -186,13 +186,13 @@ public:
             {
                 case EVENT_SPELL_IMPALE:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                        me->CastSpell(target, RAID_MODE(SPELL_IMPALE_10, SPELL_IMPALE_25), false);
+                        me->CastSpell(target, RAID_MODE(SPELL_IMPALE_10, SPELL_IMPALE_25, SPELL_IMPALE_10, SPELL_IMPALE_25), false);
                     events.RepeatEvent(20000);
                     break;
                 case EVENT_SPELL_LOCUST_SWARM:
                     {
                         Talk(EMOTE_LOCUST);
-                        me->CastSpell(me, RAID_MODE(SPELL_LOCUST_SWARM_10, SPELL_LOCUST_SWARM_25), false);
+                        me->CastSpell(me, RAID_MODE(SPELL_LOCUST_SWARM_10, SPELL_LOCUST_SWARM_25, SPELL_LOCUST_SWARM_10, SPELL_LOCUST_SWARM_25), false);
                         Position pos;
                         me->GetNearPosition(pos, 10.0f, rand_norm() * 2 * M_PI);
                         me->SummonCreature(NPC_CRYPT_GUARD, pos);
