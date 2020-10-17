@@ -326,10 +326,10 @@ public:
 private:
     EventMap _events;
 
-CreatureAI* GetAI(Creature* creature) const
-{
-    return GetInstanceAI<npc_baltharus_the_warborn_cloneAI>(creature);
-}
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return GetInstanceAI<npc_baltharus_the_warborn_cloneAI>(creature);
+    }
 };
 
 class spell_baltharus_enervating_brand_trigger : public SpellScriptLoader
