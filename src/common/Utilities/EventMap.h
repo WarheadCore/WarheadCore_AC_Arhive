@@ -66,7 +66,7 @@ public:
     }
 
     /**
-    * @name SetTimer\
+    * @name SetTimer
     */
     void SetTimer(uint32 time)
     {
@@ -205,7 +205,7 @@ public:
     */
     void RepeatEvent(Milliseconds minTime, Milliseconds maxTime)
     {
-        RepeatEvent(uint32(minTime.count()), uint32(maxTime.count()));
+        RepeatEvent(randtime(minTime, maxTime));
     }
 
     /**
@@ -217,24 +217,11 @@ public:
     void RepeatEvent(uint32 minTime, uint32 maxTime);
 
     /**
-    * @name PopEvent
-    * @brief Remove the first event in the map.
-    */
-    void PopEvent();
-
-    /**
     * @name ExecuteEvent
     * @brief Returns the next event to execute and removes it from map.
     * @return Id of the event to execute.
     */
     uint32 ExecuteEvent();
-
-    /**
-    * @name GetEvent
-    * @brief Returns the next event to execute.
-    * @return Id of the event to execute.
-    */
-    uint32 GetEvent();
 
     /**
     * @name DelayEvents
