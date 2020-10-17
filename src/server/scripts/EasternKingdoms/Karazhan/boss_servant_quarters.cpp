@@ -64,7 +64,7 @@ public:
             me->SetReactState(REACT_PASSIVE);
             me->setFaction(35);
             _events2.Reset();
-            _events2.ScheduleEvent(EVENT_CHECK_VISIBILITY, 5000);
+            _events2.ScheduleEvent(EVENT_CHECK_VISIBILITY, 5s);
             if (me->GetEntry() == NPC_HYAKISS_THE_LURKER)
                 me->CastSpell(me, SPELL_SNEAK, true);
 
@@ -77,17 +77,17 @@ public:
             me->setActive(true);
             if (me->GetEntry() == NPC_HYAKISS_THE_LURKER)
             {
-                events.ScheduleEvent(EVENT_SPELL_ACIDIC_FANG, 5000);
-                events.ScheduleEvent(EVENT_SPELL_HYAKISS_WEB, 9000);
+                events.ScheduleEvent(EVENT_SPELL_ACIDIC_FANG, 5s);
+                events.ScheduleEvent(EVENT_SPELL_HYAKISS_WEB, 9s);
             }
             else if (me->GetEntry() == NPC_SHADIKITH_THE_GLIDER)
             {
-                events.ScheduleEvent(EVENT_SPELL_SONIC_BURST, 4000);
-                events.ScheduleEvent(EVENT_SPELL_WING_BUFFET, 7000);
-                events.ScheduleEvent(EVENT_SPELL_DIVE, 10000);
+                events.ScheduleEvent(EVENT_SPELL_SONIC_BURST, 4s);
+                events.ScheduleEvent(EVENT_SPELL_WING_BUFFET, 7s);
+                events.ScheduleEvent(EVENT_SPELL_DIVE, 10s);
             }
             else // if (me->GetEntry() == NPC_ROKAD_THE_RAVAGER)
-                events.ScheduleEvent(EVENT_SPELL_RAVAGE, 3000);
+                events.ScheduleEvent(EVENT_SPELL_RAVAGE, 3s);
         }
 
         void JustDied(Unit* /*who*/)
@@ -97,7 +97,7 @@ public:
         void MovementInform(uint32 type, uint32 point)
         {
             if (type == POINT_MOTION_TYPE && point == EVENT_CHARGE)
-                events.ScheduleEvent(EVENT_SPELL_FEAR, 0);
+                events.ScheduleEvent(EVENT_SPELL_FEAR, 0s);
         }
 
         void UpdateAI(uint32 diff)
@@ -113,7 +113,7 @@ public:
                         me->RestoreFaction();
                     }
                     else
-                        _events2.ScheduleEvent(EVENT_CHECK_VISIBILITY, 5000);
+                        _events2.ScheduleEvent(EVENT_CHECK_VISIBILITY, 5s);
                     break;
             }
 
@@ -128,32 +128,32 @@ public:
             {
                 case EVENT_SPELL_ACIDIC_FANG:
                     me->CastSpell(me->GetVictim(), SPELL_ACIDIC_FANG, false);
-                    events.ScheduleEvent(EVENT_SPELL_ACIDIC_FANG, urand(12000, 18000));
+                    events.ScheduleEvent(EVENT_SPELL_ACIDIC_FANG, 12s, 18s);
                     break;
                 case EVENT_SPELL_HYAKISS_WEB:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 30.0f))
                         me->CastSpell(target, SPELL_HYAKISS_WEB, false);
-                    events.ScheduleEvent(EVENT_SPELL_HYAKISS_WEB, 15000);
+                    events.ScheduleEvent(EVENT_SPELL_HYAKISS_WEB, 15s);
                     break;
                 case EVENT_SPELL_SONIC_BURST:
                     me->CastSpell(me, SPELL_SONIC_BURST, false);
-                    events.ScheduleEvent(EVENT_SPELL_SONIC_BURST, urand(12000, 18000));
+                    events.ScheduleEvent(EVENT_SPELL_SONIC_BURST, 12s, 18s);
                     break;
                 case EVENT_SPELL_WING_BUFFET:
                     me->CastSpell(me, SPELL_WING_BUFFET, false);
-                    events.ScheduleEvent(EVENT_SPELL_WING_BUFFET, urand(12000, 18000));
+                    events.ScheduleEvent(EVENT_SPELL_WING_BUFFET, 12s, 18s);
                     break;
                 case EVENT_SPELL_DIVE:
                     if (Unit* target = SelectTarget(SELECT_TARGET_FARTHEST, 0, FarthestTargetSelector(me, 40.0f, false, true)))
                         me->CastSpell(target, SPELL_DIVE, false);
-                    events.ScheduleEvent(EVENT_SPELL_DIVE, 20000);
+                    events.ScheduleEvent(EVENT_SPELL_DIVE, 20s);
                     break;
                 case EVENT_SPELL_FEAR:
                     me->CastSpell(me->GetVictim(), SPELL_FEAR, false);
                     break;
                 case EVENT_SPELL_RAVAGE:
                     me->CastSpell(me->GetVictim(), SPELL_RAVAGE, false);
-                    events.ScheduleEvent(EVENT_SPELL_RAVAGE, 10500);
+                    events.ScheduleEvent(EVENT_SPELL_RAVAGE, 10500ms);
                     break;
             }
 

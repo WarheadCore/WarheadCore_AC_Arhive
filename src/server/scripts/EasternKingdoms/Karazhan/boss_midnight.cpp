@@ -98,8 +98,8 @@ public:
         void EnterCombat(Unit* who)
         {
             BossAI::EnterCombat(who);
-            events.ScheduleEvent(EVENT_CHECK_HEALTH_95, 0);
-            events.ScheduleEvent(EVENT_SPELL_KNOCKDOWN, 6000);
+            events.ScheduleEvent(EVENT_CHECK_HEALTH_95, 0s);
+            events.ScheduleEvent(EVENT_SPELL_KNOCKDOWN, 6s);
             DoZoneInCombat();
         }
 
@@ -126,7 +126,7 @@ public:
         void SetData(uint32 type, uint32 /*data*/)
         {
             if (type == DATA_ATTUMEN_READY)
-                events.ScheduleEvent(EVENT_SUMMON_ATTUMEN_MOUNTED, 0);
+                events.ScheduleEvent(EVENT_SUMMON_ATTUMEN_MOUNTED, 0s);
         }
 
         void SummonedCreatureDies(Creature* summon, Unit* /*killer*/)
@@ -153,10 +153,10 @@ public:
                     if (me->HealthBelowPct(96))
                     {
                         me->CastSpell(me, SPELL_SUMMON_ATTUMEN, true);
-                        events.ScheduleEvent(EVENT_CHECK_HEALTH_25, 0);
+                        events.ScheduleEvent(EVENT_CHECK_HEALTH_25, 0s);
                         break;
                     }
-                    events.ScheduleEvent(EVENT_CHECK_HEALTH_95, 500);
+                    events.ScheduleEvent(EVENT_CHECK_HEALTH_95, 500ms);
                     break;
                 case EVENT_CHECK_HEALTH_25:
                     if (me->HealthBelowPct(25))
@@ -165,11 +165,11 @@ public:
                         me->CastSpell(me, SPELL_MOUNT_TARGET_ATTUMEN, true);
                         break;
                     }
-                    events.ScheduleEvent(EVENT_CHECK_HEALTH_25, 500);
+                    events.ScheduleEvent(EVENT_CHECK_HEALTH_25, 500ms);
                     break;
                 case EVENT_SPELL_KNOCKDOWN:
                     me->CastSpell(me->GetVictim(), SPELL_KNOCKDOWN, false);
-                    events.ScheduleEvent(EVENT_SPELL_KNOCKDOWN, 20000);
+                    events.ScheduleEvent(EVENT_SPELL_KNOCKDOWN, 20s);
                     break;
                 case EVENT_SUMMON_ATTUMEN_MOUNTED:
                     if (Creature* attumen = summons.GetCreatureWithEntry(NPC_ATTUMEN_THE_HUNTSMAN))
@@ -222,17 +222,17 @@ public:
         void EnterCombat(Unit* /*who*/)
         {
             Talk(SAY_ATTUMEN1_APPEAR);
-            _events.ScheduleEvent(EVENT_CHECK_HEALTH_25, 0);
-            _events.ScheduleEvent(EVENT_SPELL_SHADOW_CLEAVE, 6000);
-            _events.ScheduleEvent(EVENT_SPELL_INTANGIBLE_PRESENCE, 15000);
-            _events.ScheduleEvent(EVENT_RANDOM_YELL, urand(25000, 45000));
+            _events.ScheduleEvent(EVENT_CHECK_HEALTH_25, 0s);
+            _events.ScheduleEvent(EVENT_SPELL_SHADOW_CLEAVE, 6s);
+            _events.ScheduleEvent(EVENT_SPELL_INTANGIBLE_PRESENCE, 15s);
+            _events.ScheduleEvent(EVENT_RANDOM_YELL, 25s, 45s);
         }
 
         void KilledUnit(Unit* /*victim*/)
         {
             if (_events.GetNextEventTime(EVENT_KILL_TALK) == 0)
             {
-                _events.ScheduleEvent(EVENT_KILL_TALK, 5000);
+                _events.ScheduleEvent(EVENT_KILL_TALK, 5s);
                 Talk(SAY_ATTUMEN_KILL);
             }
         }
@@ -241,7 +241,7 @@ public:
         {
             if (spellInfo->Mechanic == MECHANIC_DISARM && _events.GetNextEventTime(EVENT_KILL_TALK) == 0)
             {
-                _events.ScheduleEvent(EVENT_KILL_TALK, 5000);
+                _events.ScheduleEvent(EVENT_KILL_TALK, 5s);
                 Talk(SAY_ATTUMEN_DISARM);
             }
             else if (spellInfo->Id == SPELL_MOUNT_TARGET_ATTUMEN)
@@ -281,15 +281,15 @@ public:
             {
                 case EVENT_SPELL_SHADOW_CLEAVE:
                     me->CastSpell(me->GetVictim(), SPELL_SHADOW_CLEAVE, false);
-                    _events.ScheduleEvent(EVENT_SPELL_SHADOW_CLEAVE, urand(9000, 14000));
+                    _events.ScheduleEvent(EVENT_SPELL_SHADOW_CLEAVE, 9s, 14s);
                     break;
                 case EVENT_SPELL_INTANGIBLE_PRESENCE:
                     me->CastSpell(me->GetVictim(), SPELL_INTANGIBLE_PRESENCE, false);
-                    _events.ScheduleEvent(EVENT_SPELL_INTANGIBLE_PRESENCE, 30000);
+                    _events.ScheduleEvent(EVENT_SPELL_INTANGIBLE_PRESENCE, 30s);
                     break;
                 case EVENT_RANDOM_YELL:
                     Talk(SAY_ATTUMEN_RANDOM);
-                    _events.ScheduleEvent(EVENT_RANDOM_YELL, urand(30000, 70000));
+                    _events.ScheduleEvent(EVENT_RANDOM_YELL, 30s, 70s);
                     break;
                 case EVENT_CHECK_HEALTH_25:
                     if (me->HealthBelowPct(25))
@@ -297,7 +297,7 @@ public:
                         me->CastSpell(me, SPELL_MOUNT_TARGET_MIDNIGHT, true);
                         break;
                     }
-                    _events.ScheduleEvent(EVENT_CHECK_HEALTH_25, 500);
+                    _events.ScheduleEvent(EVENT_CHECK_HEALTH_25, 500ms);
                     break;
             }
 
@@ -332,18 +332,18 @@ public:
 
         void EnterCombat(Unit* /*who*/)
         {
-            _events.ScheduleEvent(EVENT_SPELL_SHADOW_CLEAVE, 6000);
-            _events.ScheduleEvent(EVENT_SPELL_INTANGIBLE_PRESENCE, 15000);
-            _events.ScheduleEvent(EVENT_RANDOM_YELL, urand(25000, 45000));
-            _events.ScheduleEvent(EVENT_SPELL_CHARGE, 20000);
-            _events.ScheduleEvent(EVENT_SPELL_KNOCKDOWN, 11000);
+            _events.ScheduleEvent(EVENT_SPELL_SHADOW_CLEAVE, 6s);
+            _events.ScheduleEvent(EVENT_SPELL_INTANGIBLE_PRESENCE, 15s);
+            _events.ScheduleEvent(EVENT_RANDOM_YELL, 25s, 45s);
+            _events.ScheduleEvent(EVENT_SPELL_CHARGE, 20s);
+            _events.ScheduleEvent(EVENT_SPELL_KNOCKDOWN, 11s);
         }
 
         void KilledUnit(Unit* /*victim*/)
         {
             if (_events.GetNextEventTime(EVENT_KILL_TALK) == 0)
             {
-                _events.ScheduleEvent(EVENT_KILL_TALK, 5000);
+                _events.ScheduleEvent(EVENT_KILL_TALK, 5s);
                 Talk(SAY_ATTUMEN_KILL);
             }
         }
@@ -357,7 +357,7 @@ public:
         {
             if (spellInfo->Mechanic == MECHANIC_DISARM && _events.GetNextEventTime(EVENT_KILL_TALK) == 0)
             {
-                _events.ScheduleEvent(EVENT_KILL_TALK, 5000);
+                _events.ScheduleEvent(EVENT_KILL_TALK, 5s);
                 Talk(SAY_ATTUMEN_DISARM);
             }
         }
@@ -385,24 +385,24 @@ public:
             {
                 case EVENT_SPELL_SHADOW_CLEAVE:
                     me->CastSpell(me->GetVictim(), SPELL_SHADOW_CLEAVE, false);
-                    _events.ScheduleEvent(EVENT_SPELL_SHADOW_CLEAVE, urand(9000, 14000));
+                    _events.ScheduleEvent(EVENT_SPELL_SHADOW_CLEAVE, 9s, 14s);
                     break;
                 case EVENT_SPELL_INTANGIBLE_PRESENCE:
                     me->CastSpell(me->GetVictim(), SPELL_INTANGIBLE_PRESENCE, false);
-                    _events.ScheduleEvent(EVENT_SPELL_INTANGIBLE_PRESENCE, 30000);
+                    _events.ScheduleEvent(EVENT_SPELL_INTANGIBLE_PRESENCE, 30s);
                     break;
                 case EVENT_RANDOM_YELL:
                     Talk(SAY_ATTUMEN_RANDOM);
-                    _events.ScheduleEvent(EVENT_RANDOM_YELL, urand(30000, 70000));
+                    _events.ScheduleEvent(EVENT_RANDOM_YELL, 30s, 70s);
                     break;
                 case EVENT_SPELL_CHARGE:
                     if (Unit* target = SelectTarget(SELECT_TARGET_FARTHEST, 0, 24.0f, true))
                         me->CastSpell(target, SPELL_CHARGE_MIDNIGHT, false);
-                    _events.ScheduleEvent(EVENT_SPELL_CHARGE, 20000);
+                    _events.ScheduleEvent(EVENT_SPELL_CHARGE, 20s);
                     break;
                 case EVENT_SPELL_KNOCKDOWN:
                     me->CastSpell(me->GetVictim(), SPELL_KNOCKDOWN, false);
-                    _events.ScheduleEvent(EVENT_SPELL_KNOCKDOWN, 20000);
+                    _events.ScheduleEvent(EVENT_SPELL_KNOCKDOWN, 20s);
                     break;
             }
 
