@@ -227,24 +227,23 @@ public:
                         break;
                 }
             }
+            
+            if (!channeling)
+                DoMeleeAttackIfReady();
         }
-        if (!channeling)
-            DoMeleeAttackIfReady();
+
+    private:
+        InstanceScript* instance;
+        EventMap events;
+        bool eventInProgress;
+        bool channeling;
+        uint8 eventProgress;
+        uint8 spawnerCount;
+
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return GetInstanceAI<npc_belnistraszAI>(creature);
     }
-
-private:
-    InstanceScript* instance;
-    EventMap events;
-    bool eventInProgress;
-    bool channeling;
-    uint8 eventProgress;
-    uint8 spawnerCount;
-};
-
-CreatureAI* GetAI(Creature* creature) const
-{
-    return GetInstanceAI<npc_belnistraszAI>(creature);
-}
 };
 
 class npc_idol_room_spawner : public CreatureScript
