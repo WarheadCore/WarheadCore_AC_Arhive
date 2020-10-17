@@ -134,20 +134,20 @@ public:
             switch (changeEntry)
             {
                 case NPC_SIMONE_EVIL:
-                    events.ScheduleEvent(EVENT_SPELL_CHAIN_LIGHTNING, 3000);
-                    events.ScheduleEvent(EVENT_SPELL_TEMPTRESS_KISS, 1000);
+                    events.ScheduleEvent(EVENT_SPELL_CHAIN_LIGHTNING, 3s);
+                    events.ScheduleEvent(EVENT_SPELL_TEMPTRESS_KISS, 1s);
                     break;
                 case NPC_FRANKLIN_EVIL:
-                    events.ScheduleEvent(EVENT_SPELL_DEMONIC_ENRAGE, 3000);
-                    events.ScheduleEvent(EVENT_SPELL_ENTROPIC_STING, 5000);
+                    events.ScheduleEvent(EVENT_SPELL_DEMONIC_ENRAGE, 3s);
+                    events.ScheduleEvent(EVENT_SPELL_ENTROPIC_STING, 5s);
                     break;
                 case NPC_ARTORIUS_EVIL:
-                    events.ScheduleEvent(EVENT_SPELL_DEMONIC_DOOM, 3000);
-                    events.ScheduleEvent(EVENT_SPELL_STINGING_TRAUMA, 5000);
+                    events.ScheduleEvent(EVENT_SPELL_DEMONIC_DOOM, 3s);
+                    events.ScheduleEvent(EVENT_SPELL_STINGING_TRAUMA, 5s);
                     break;
                 case NPC_NELSON_EVIL:
                     me->CastSpell(me, SPELL_SOUL_FLAME, true);
-                    events.ScheduleEvent(EVENT_SPELL_DREADFUL_FRIGHT, 5000);
+                    events.ScheduleEvent(EVENT_SPELL_DREADFUL_FRIGHT, 5s);
                     break;
             }
         }
@@ -158,7 +158,7 @@ public:
             {
                 playerGUID = who->GetGUID();
                 me->UpdateEntry(changeEntry);
-                events.ScheduleEvent(EVENT_CHECK_PLAYER, 5000);
+                events.ScheduleEvent(EVENT_CHECK_PLAYER, 5s);
                 return;
             }
             ScriptedAI::MoveInLineOfSight(who);
@@ -622,7 +622,7 @@ public:
                     SetEscortPaused(true);
                     DoSummonPriestess();
                     Talk(SAY_RANSHALLA_ALTAR_2);
-                    events.ScheduleEvent(EVENT_RESUME, 2000);
+                    events.ScheduleEvent(EVENT_RESUME, 2s);
                     break;
                 case 44:
                     // Stop the escort and turn towards the altar

@@ -56,17 +56,16 @@ enum Caravan
 
     MAX_CARAVAN_SUMMONS                 = 3,
 
-    TIME_SHOP_STOP                      = 10 * MINUTE * IN_MILLISECONDS,
-    TIME_HIRE_STOP                      = 4 * MINUTE * IN_MILLISECONDS,
-
     // Ambush
     NPC_KOLKAR_WAYLAYER                 = 12976,
     NPC_KOLKAR_AMBUSHER                 = 12977,
     NPC_LESSER_INFERNAL                 = 4676,
     NPC_DOOMWARDER                      = 4677,
-    NPC_NETHER                          = 4684,
-
+    NPC_NETHER                          = 4684
 };
+
+constexpr Minutes TIME_SHOP_STOP = 10min;
+constexpr Minutes TIME_HIRE_STOP = 4min;
 
 class npc_cork_gizelton : public CreatureScript
 {
@@ -106,7 +105,7 @@ public:
             _faction = 35;
             headNorth = true;
             me->setActive(true);
-            events.ScheduleEvent(EVENT_RESTART_ESCORT, 0);
+            events.ScheduleEvent(EVENT_RESTART_ESCORT, 0s);
         }
 
         void JustRespawned()
@@ -278,14 +277,14 @@ public:
             {
                 // Finished north path
                 case 52:
-                    me->SummonCreature(NPC_VENDOR_TRON, -694.61f, 1460.7f, 90.794f, 2.4f, TEMPSUMMON_TIMED_DESPAWN, TIME_SHOP_STOP + 15 * IN_MILLISECONDS);
+                    me->SummonCreature(NPC_VENDOR_TRON, -694.61f, 1460.7f, 90.794f, 2.4f, TEMPSUMMON_TIMED_DESPAWN, Milliseconds(TIME_SHOP_STOP + 15s).count());
                     SetEscortPaused(true);
                     events.ScheduleEvent(EVENT_RESUME_PATH, TIME_SHOP_STOP);
                     CheckCaravan();
                     break;
                 // Finished south path
                 case 193:
-                    me->SummonCreature(NPC_SUPER_SELLER, -1905.5f, 2463.3f, 61.52f, 5.87f, TEMPSUMMON_TIMED_DESPAWN, TIME_SHOP_STOP + 15 * IN_MILLISECONDS);
+                    me->SummonCreature(NPC_SUPER_SELLER, -1905.5f, 2463.3f, 61.52f, 5.87f, TEMPSUMMON_TIMED_DESPAWN, Milliseconds(TIME_SHOP_STOP + 15s).count());
                     SetEscortPaused(true);
                     events.ScheduleEvent(EVENT_RESUME_PATH, TIME_SHOP_STOP);
                     CheckCaravan();
@@ -385,9 +384,8 @@ public:
                         break;
                     }
                 case 282:
-                    events.ScheduleEvent(EVENT_RESTART_ESCORT, 1000);
+                    events.ScheduleEvent(EVENT_RESTART_ESCORT, 1s);
                     break;
-
             }
         }
 

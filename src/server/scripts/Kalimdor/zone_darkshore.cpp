@@ -79,8 +79,8 @@ public:
         void EnterCombat(Unit*)
         {
             events.Reset();
-            events.ScheduleEvent(EVENT_SPELL_SUNDER_ARMOR, 5000);
-            events.ScheduleEvent(EVENT_SPELL_NET, 10000);
+            events.ScheduleEvent(EVENT_SPELL_SUNDER_ARMOR, 5s);
+            events.ScheduleEvent(EVENT_SPELL_NET, 10s);
         }
 
         void UpdateAI(uint32 diff)
@@ -147,11 +147,11 @@ public:
             {
                 case EVENT_SPELL_SUNDER_ARMOR:
                     me->CastSpell(me->GetVictim(), SPELL_SUNDER_ARMOR, false);
-                    events.ScheduleEvent(EVENT_SPELL_SUNDER_ARMOR, 15000);
+                    events.ScheduleEvent(EVENT_SPELL_SUNDER_ARMOR, 15s);
                     break;
                 case EVENT_SPELL_NET:
                     me->CastSpell(me->GetVictim(), SPELL_NET, false);
-                    events.ScheduleEvent(EVENT_SPELL_NET, 25000);
+                    events.ScheduleEvent(EVENT_SPELL_NET, 25s);
                     break;
             }
 
