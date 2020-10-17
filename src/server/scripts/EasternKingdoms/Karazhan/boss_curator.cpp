@@ -130,12 +130,14 @@ public:
                     me->CastSpell(me, SPELL_ASTRAL_DECONSTRUCTION, true);
                     break;
                 case EVENT_SPELL_HATEFUL_BOLT:
-                    if (Unit* target = SelectTarget(SELECT_TARGET_TOPAGGRO, urand(1, 2), 40.0f))
+                    {
+                        if (Unit* target = SelectTarget(SELECT_TARGET_TOPAGGRO, urand(1, 2), 40.0f))
                         me->CastSpell(target, SPELL_HATEFUL_BOLT, false);
                     
-                    Milliseconds nextEventTime = Milliseconds(urand(5000, 7500) * events.GetNextEventTime(EVENT_SPELL_BERSERK) == 0 ? 1 : 2);
-                    events.ScheduleEvent(EVENT_SPELL_HATEFUL_BOLT, nextEventTime);
-                    break;
+                        Milliseconds nextEventTime = Milliseconds(urand(5000, 7500) * events.GetNextEventTime(EVENT_SPELL_BERSERK) == 0 ? 1 : 2);
+                        events.ScheduleEvent(EVENT_SPELL_HATEFUL_BOLT, nextEventTime);
+                        break;
+                    }
                 case EVENT_SPELL_ASTRAL_FLARE:
                     {
                         me->CastSpell(me, RAND(SPELL_SUMMON_ASTRAL_FLARE1, SPELL_SUMMON_ASTRAL_FLARE2, SPELL_SUMMON_ASTRAL_FLARE3, SPELL_SUMMON_ASTRAL_FLARE4), false);
