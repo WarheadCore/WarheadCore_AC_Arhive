@@ -880,105 +880,106 @@ public:
             }
         }
 
-    void UpdateEscortAI(uint32  /*diff*/) {}
+        void UpdateEscortAI(uint32  /*diff*/) {}
 
-    void UpdateAI(uint32 diff)
-    {
-        npc_escortAI::UpdateAI(diff);
-
-        //Position pos = me->GetHomePosition();
-        if (!me->isActiveObject()/* && me->GetExactDist(&pos) < 5.0f*/) // during event
-            return;
-
-        if (_wipeCheckTimer <= diff)
+        void UpdateAI(uint32 diff)
         {
-            _wipeCheckTimer = 3000;
+            npc_escortAI::UpdateAI(diff);
 
-            Player* player = NULL;
-            Warhead::AnyPlayerInObjectRangeCheck check(me, 140.0f);
-            Warhead::PlayerSearcher<Warhead::AnyPlayerInObjectRangeCheck> searcher(me, player, check);
-            me->VisitNearbyWorldObject(140.0f, searcher);
-            // wipe
-            if (!player || me->GetExactDist(4357.0f, 2606.0f, 350.0f) > 125.0f)
-            {
-                //Talk(SAY_CROK_DEATH);
-                FrostwingGauntletRespawner respawner;
-                Warhead::CreatureWorker<FrostwingGauntletRespawner> worker(me, respawner);
-                me->VisitNearbyGridObject(333.0f, worker);
+            //Position pos = me->GetHomePosition();
+            if (!me->isActiveObject()/* && me->GetExactDist(&pos) < 5.0f*/) // during event
                 return;
+
+            if (_wipeCheckTimer <= diff)
+            {
+                _wipeCheckTimer = 3000;
+
+                Player* player = NULL;
+                Warhead::AnyPlayerInObjectRangeCheck check(me, 140.0f);
+                Warhead::PlayerSearcher<Warhead::AnyPlayerInObjectRangeCheck> searcher(me, player, check);
+                me->VisitNearbyWorldObject(140.0f, searcher);
+                // wipe
+                if (!player || me->GetExactDist(4357.0f, 2606.0f, 350.0f) > 125.0f)
+                {
+                    //Talk(SAY_CROK_DEATH);
+                    FrostwingGauntletRespawner respawner;
+                    Warhead::CreatureWorker<FrostwingGauntletRespawner> worker(me, respawner);
+                    me->VisitNearbyGridObject(333.0f, worker);
+                    return;
+                }
             }
+            else
+                _wipeCheckTimer -= diff;
+
+            UpdateVictim();
+
+            _events.Update(diff);
+
+            if (me->HasUnitState(UNIT_STATE_CASTING))
+                return;
+
+            switch (_events.ExecuteEvent())
+            {
+                case EVENT_ARNATH_INTRO_2:
+                    if (Creature* arnath = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_CAPTAIN_ARNATH)))
+                        arnath->AI()->Talk(SAY_ARNATH_INTRO_2);
+                    break;
+                case EVENT_CROK_INTRO_3:
+                    Talk(SAY_CROK_INTRO_3);
+                    break;
+                case EVENT_START_PATHING:
+                    me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC | UNIT_FLAG_IMMUNE_TO_PC);
+                    Start(true, true);
+                    break;
+                case EVENT_SCOURGE_STRIKE:
+                    DoCastVictim(SPELL_SCOURGE_STRIKE);
+                    _events.ScheduleEvent(EVENT_SCOURGE_STRIKE, urand(10000, 14000));
+                    break;
+                case EVENT_DEATH_STRIKE:
+                    if (HealthBelowPct(20))
+                        DoCastVictim(SPELL_DEATH_STRIKE);
+                    _events.ScheduleEvent(EVENT_DEATH_STRIKE, urand(5000, 10000));
+                    break;
+                case EVENT_HEALTH_CHECK:
+                    if (HealthAbovePct(25))
+                    {
+                        me->RemoveAurasDueToSpell(SPELL_ICEBOUND_ARMOR);
+                        _didUnderTenPercentText = false;
+                    }
+                    else
+                    {
+                        Unit::DealHeal(me, me, me->CountPctFromMaxHealth(3));
+                        _events.ScheduleEvent(EVENT_HEALTH_CHECK, 1000);
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            DoMeleeAttackIfReady();
         }
-        else
-            _wipeCheckTimer -= diff;
 
-        UpdateVictim();
-
-        _events.Update(diff);
-
-        if (me->HasUnitState(UNIT_STATE_CASTING))
-            return;
-
-        switch (_events.ExecuteEvent())
+        bool CanAIAttack(Unit const* target) const
         {
-            case EVENT_ARNATH_INTRO_2:
-                if (Creature* arnath = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_CAPTAIN_ARNATH)))
-                    arnath->AI()->Talk(SAY_ARNATH_INTRO_2);
-                break;
-            case EVENT_CROK_INTRO_3:
-                Talk(SAY_CROK_INTRO_3);
-                break;
-            case EVENT_START_PATHING:
-                me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC | UNIT_FLAG_IMMUNE_TO_PC);
-                Start(true, true);
-                break;
-            case EVENT_SCOURGE_STRIKE:
-                DoCastVictim(SPELL_SCOURGE_STRIKE);
-                _events.ScheduleEvent(EVENT_SCOURGE_STRIKE, urand(10000, 14000));
-                break;
-            case EVENT_DEATH_STRIKE:
-                if (HealthBelowPct(20))
-                    DoCastVictim(SPELL_DEATH_STRIKE);
-                _events.ScheduleEvent(EVENT_DEATH_STRIKE, urand(5000, 10000));
-                break;
-            case EVENT_HEALTH_CHECK:
-                if (HealthAbovePct(25))
-                {
-                    me->RemoveAurasDueToSpell(SPELL_ICEBOUND_ARMOR);
-                    _didUnderTenPercentText = false;
-                }
-                else
-                {
-                    Unit::DealHeal(me, me, me->CountPctFromMaxHealth(3));
-                    _events.ScheduleEvent(EVENT_HEALTH_CHECK, 1000);
-                }
-                break;
-            default:
-                break;
+            // do not see targets inside Frostwing Halls when we are not there
+            return target->GetTypeId() != TYPEID_PLAYER && (me->GetPositionY() > 2660.0f) == (target->GetPositionY() > 2660.0f) && target->GetEntry() != NPC_SINDRAGOSA;
         }
 
-        DoMeleeAttackIfReady();
-    }
+    private:
+        EventMap _events;
+        std::set<uint64> _aliveTrash;
+        InstanceScript* _instance;
+        uint32 _currentWPid;
+        uint32 _wipeCheckTimer;
+        bool _handledWP4;
+        bool _isEventDone;
+        bool _didUnderTenPercentText;
+    };
 
-    bool CanAIAttack(Unit const* target) const
+    CreatureAI* GetAI(Creature* creature) const
     {
-        // do not see targets inside Frostwing Halls when we are not there
-        return target->GetTypeId() != TYPEID_PLAYER && (me->GetPositionY() > 2660.0f) == (target->GetPositionY() > 2660.0f) && target->GetEntry() != NPC_SINDRAGOSA;
+        return GetIcecrownCitadelAI<npc_crok_scourgebaneAI>(creature);
     }
-
-private:
-    EventMap _events;
-    std::set<uint64> _aliveTrash;
-    InstanceScript* _instance;
-    uint32 _currentWPid;
-    uint32 _wipeCheckTimer;
-    bool _handledWP4;
-    bool _isEventDone;
-    bool _didUnderTenPercentText;
-
-CreatureAI* GetAI(Creature* creature) const
-{
-    return GetIcecrownCitadelAI<npc_crok_scourgebaneAI>(creature);
-}
 };
 
 class boss_sister_svalna : public CreatureScript
