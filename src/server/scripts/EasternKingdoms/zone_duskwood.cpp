@@ -92,8 +92,8 @@ public:
         {
             Talk(YELL_TWILIGHTCORRUPTOR_AGGRO);
             _events.Reset();
-            _events.ScheduleEvent(EVENT_SOUL_CORRUPTION, 15000);
-            _events.ScheduleEvent(EVENT_CREATURE_OF_NIGHTMARE, 30000);
+            _events.ScheduleEvent(EVENT_SOUL_CORRUPTION, 15s);
+            _events.ScheduleEvent(EVENT_CREATURE_OF_NIGHTMARE, 30s);
         }
 
         void KilledUnit(Unit* victim)
@@ -124,12 +124,12 @@ public:
                 {
                     case EVENT_SOUL_CORRUPTION:
                         DoCastVictim(SPELL_SOUL_CORRUPTION);
-                        _events.ScheduleEvent(EVENT_SOUL_CORRUPTION, rand() % 4000 + 15000);
+                        _events.ScheduleEvent(EVENT_SOUL_CORRUPTION, 15s, 19s);
                         break;
                     case EVENT_CREATURE_OF_NIGHTMARE:
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 100, true))
                             DoCast(target, SPELL_CREATURE_OF_NIGHTMARE);
-                        _events.ScheduleEvent(EVENT_CREATURE_OF_NIGHTMARE, 45000);
+                        _events.ScheduleEvent(EVENT_CREATURE_OF_NIGHTMARE, 45s);
                         break;
                     default:
                         break;
