@@ -135,13 +135,16 @@ public:
             if (_slaughterProgress == 2)
             {
                 for (uint32 i = 0; i < 33; ++i)
-                    events.ScheduleEvent(EVENT_SPAWN_MINDLESS, 5000 + i * 210);
+                    events.ScheduleEvent(EVENT_SPAWN_MINDLESS, Milliseconds(5000 + i * 210));
+                
                 if (Creature* baron = instance->GetCreature(_baronRivendareGUID))
                     if (GameObject* gate = baron->FindNearestGameObject(GO_SLAUGHTER_GATE_SIDE, 200.0f))
                         gate->SetGoState(GO_STATE_ACTIVE);
             }
+            
             if (_slaughterProgress == 3)
-                events.ScheduleEvent(EVENT_SPAWN_BLACK_GUARD, 20000);
+                events.ScheduleEvent(EVENT_SPAWN_BLACK_GUARD, 20s);
+            
             if (_slaughterProgress == 4)
             {
                 if (Creature* baron = instance->GetCreature(_baronRivendareGUID))
@@ -272,7 +275,7 @@ public:
                             _baronRunProgress = DATA_BARON_RUN_GATE;
                             _baronRunTime = 45;
                             DoCastSpellOnPlayers(SPELL_BARON_ULTIMATUM);
-                            events.ScheduleEvent(EVENT_BARON_TIME, 60000);
+                            events.ScheduleEvent(EVENT_BARON_TIME, 1min);
 
                             instance->LoadGrid(4035.83f, -3336.31f);
                             if (Creature* baron = instance->GetCreature(_baronRivendareGUID))
@@ -357,10 +360,10 @@ public:
             }
 
             if (_baronRunTime > 0)
-                events.ScheduleEvent(EVENT_BARON_TIME, 60000);
+                events.ScheduleEvent(EVENT_BARON_TIME, 1min);
 
             if (_slaughterProgress > 0 && _slaughterProgress < 4)
-                events.ScheduleEvent(EVENT_FORCE_SLAUGHTER_EVENT, 5000);
+                events.ScheduleEvent(EVENT_FORCE_SLAUGHTER_EVENT, 5s);
         }
 
         uint32 GetData(uint32 type) const
@@ -417,20 +420,20 @@ public:
                             if (i == 0)
                             {
                                 // set timer to reset the trap
-                                events.ScheduleEvent(EVENT_GATE1_TRAP, 30 * MINUTE * IN_MILLISECONDS);
+                                events.ScheduleEvent(EVENT_GATE1_TRAP, 30min);
                                 // set timer to reopen gates
-                                events.ScheduleEvent(EVENT_GATE1_DELAY, 20 * IN_MILLISECONDS);
+                                events.ScheduleEvent(EVENT_GATE1_DELAY, 20s);
                                 // set timer to spawn the plagued critters
-                                events.ScheduleEvent(EVENT_GATE1_CRITTER_DELAY, 2 * IN_MILLISECONDS);
+                                events.ScheduleEvent(EVENT_GATE1_CRITTER_DELAY, 2s);
                             }
                             else if (i == 1)
                             {
                                 // set timer to reset the trap
-                                events.ScheduleEvent(EVENT_GATE2_TRAP, 30 * MINUTE * IN_MILLISECONDS);
+                                events.ScheduleEvent(EVENT_GATE2_TRAP, 30min);
                                 // set timer to reopen gates
-                                events.ScheduleEvent(EVENT_GATE2_DELAY, 20 * IN_MILLISECONDS);
+                                events.ScheduleEvent(EVENT_GATE2_DELAY, 20s);
                                 // set timer to spawn the plagued critters
-                                events.ScheduleEvent(EVENT_GATE2_CRITTER_DELAY, 2 * IN_MILLISECONDS);
+                                events.ScheduleEvent(EVENT_GATE2_CRITTER_DELAY, 2s);
                             }
                         }
                     }
@@ -485,9 +488,9 @@ public:
                         }
 
                         if (_baronRunTime > 0)
-                            events.ScheduleEvent(EVENT_BARON_TIME, 60000);
+                            events.ScheduleEvent(EVENT_BARON_TIME, 1min);
                         else
-                            events.ScheduleEvent(EVENT_EXECUTE_PRISONER, 0);
+                            events.ScheduleEvent(EVENT_EXECUTE_PRISONER, 0s);
 
                         SaveToDB();
                         break;
@@ -505,7 +508,7 @@ public:
                                     Unit::Kill(baron, ysida);
                             }
                             else
-                                events.ScheduleEvent(EVENT_EXECUTE_PRISONER, 1000);
+                                events.ScheduleEvent(EVENT_EXECUTE_PRISONER, 1s);
                         }
                         break;
                     }
@@ -527,7 +530,7 @@ public:
                                         return;
                                     }
 
-                        events.ScheduleEvent(EVENT_FORCE_SLAUGHTER_EVENT, 3000);
+                        events.ScheduleEvent(EVENT_FORCE_SLAUGHTER_EVENT, 3s);
                         break;
                     }
                 case EVENT_SPAWN_BLACK_GUARD:
