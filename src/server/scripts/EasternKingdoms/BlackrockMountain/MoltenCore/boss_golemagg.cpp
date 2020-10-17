@@ -71,7 +71,7 @@ public:
         void EnterCombat(Unit* victim)
         {
             BossAI::EnterCombat(victim);
-            events.ScheduleEvent(EVENT_PYROBLAST, 7000);
+            events.ScheduleEvent(EVENT_PYROBLAST, 7s);
 
             // The two ragers should join the fight alongside me against my foes.
             std::list<Creature*> ragers;
@@ -89,7 +89,7 @@ public:
                 return;
 
             DoCast(me, SPELL_ENRAGE, true);
-            events.ScheduleEvent(EVENT_EARTHQUAKE, 3000);
+            events.ScheduleEvent(EVENT_EARTHQUAKE, 3s);
         }
 
         void UpdateAI(uint32 diff)
@@ -106,17 +106,20 @@ public:
             {
                 switch (eventId)
                 {
-                    case EVENT_PYROBLAST:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                            DoCast(target, SPELL_PYROBLAST);
-                        events.ScheduleEvent(EVENT_PYROBLAST, 7000);
-                        break;
-                    case EVENT_EARTHQUAKE:
-                        DoCastVictim(SPELL_EARTHQUAKE);
-                        events.ScheduleEvent(EVENT_EARTHQUAKE, 3000);
-                        break;
-                    default:
-                        break;
+                        switch (eventId)
+                        {
+                            case EVENT_PYROBLAST:
+                                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                                    DoCast(target, SPELL_PYROBLAST);
+                                events.ScheduleEvent(EVENT_PYROBLAST, 7s);
+                                break;
+                            case EVENT_EARTHQUAKE:
+                                DoCastVictim(SPELL_EARTHQUAKE);
+                                events.ScheduleEvent(EVENT_EARTHQUAKE, 3s);
+                                break;
+                            default:
+                                break;
+                        }
                 }
             }
 

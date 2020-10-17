@@ -163,8 +163,8 @@ public:
                             DoCastVictim(SPELL_ENVOLWINGWEB);
                             if (DoGetThreat(me->GetVictim()))
                                 DoModifyThreatPercent(me->GetVictim(), -100);
-                            events.ScheduleEvent(EVENT_CHARGE_PLAYER, 1500, 0, PHASE_THREE);
-                            events.ScheduleEvent(EVENT_TRANSFORM_BACK, 25000, 0, PHASE_THREE);
+                            events.ScheduleEvent(EVENT_CHARGE_PLAYER, 1500ms, 0, PHASE_THREE);
+                            events.ScheduleEvent(EVENT_TRANSFORM_BACK, 25s, 0, PHASE_THREE);
                             events.SetPhase(PHASE_THREE);
                             break;
                         }
@@ -183,7 +183,7 @@ public:
                                 DoCast(target, SPELL_CHARGE);
                                 AttackStart(target);
                             }
-                            events.ScheduleEvent(EVENT_CHARGE_PLAYER, 8000, 0, PHASE_THREE);
+                            events.ScheduleEvent(EVENT_CHARGE_PLAYER, 8s, 0, PHASE_THREE);
                             break;
                         }
                     case EVENT_TRANSFORM_BACK:
@@ -196,11 +196,11 @@ public:
                             me->UpdateDamagePhysical(BASE_ATTACK);
                             */
                             me->HandleStatModifier(UNIT_MOD_DAMAGE_MAINHAND, TOTAL_PCT, 35.0f, false); // hack
-                            events.ScheduleEvent(EVENT_ASPECT_OF_MARLI, 12000, 0, PHASE_TWO);
-                            events.ScheduleEvent(EVENT_TRANSFORM, 45000, 0, PHASE_TWO);
-                            events.ScheduleEvent(EVENT_POISON_VOLLEY, 15000);
-                            events.ScheduleEvent(EVENT_SPAWN_SPIDER, 30000);
-                            events.ScheduleEvent(EVENT_TRANSFORM, urand(35000, 60000), 0, PHASE_TWO);
+                            events.ScheduleEvent(EVENT_ASPECT_OF_MARLI, 12s, 0, PHASE_TWO);
+                            events.ScheduleEvent(EVENT_TRANSFORM, 45s, 0, PHASE_TWO);
+                            events.ScheduleEvent(EVENT_POISON_VOLLEY, 15s);
+                            events.ScheduleEvent(EVENT_SPAWN_SPIDER, 30s);
+                            events.ScheduleEvent(EVENT_TRANSFORM, 35s, 60s, 0, PHASE_TWO);
                             events.SetPhase(PHASE_TWO);
                             break;
                         }

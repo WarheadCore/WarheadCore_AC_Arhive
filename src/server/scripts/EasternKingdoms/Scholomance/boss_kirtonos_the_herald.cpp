@@ -86,6 +86,14 @@ public:
         void EnterCombat(Unit* /*who*/)
         {
             events.Reset();
+            events.ScheduleEvent(EVENT_SHADOW_BOLT_VOLLEY, 2s);
+            events.ScheduleEvent(EVENT_CURSE_OF_TONGUES, 6s);
+            events.ScheduleEvent(EVENT_DOMINATE_MIND, 20s);
+            events.ScheduleEvent(EVENT_KIRTONOS_TRANSFORM, 5s);
+        }
+        void EnterCombat(Unit* /*who*/)
+        {
+            events.Reset();
             events.ScheduleEvent(EVENT_SHADOW_BOLT_VOLLEY, 2000);
             events.ScheduleEvent(EVENT_CURSE_OF_TONGUES, 6000);
             events.ScheduleEvent(EVENT_DOMINATE_MIND, 20000);

@@ -109,12 +109,12 @@ public:
 
         void EnterCombat(Unit* /*who*/)
         {
-            events.ScheduleEvent(EVENT_STATIC_DISRUPTION, urand(10000, 20000)); // 10 to 20 seconds (bosskillers)
-            events.ScheduleEvent(EVENT_GUST_OF_WIND, urand(20000, 30000));      // 20 to 30 seconds(bosskillers)
-            events.ScheduleEvent(EVENT_CALL_LIGHTNING, urand(10000, 20000));    // totaly random timer. can't find any info on this
-            events.ScheduleEvent(EVENT_ELECTRICAL_STORM, 60000);                // 60 seconds(bosskillers)
-            events.ScheduleEvent(EVENT_RAIN, urand(47000, 52000));
-            events.ScheduleEvent(EVENT_ENRAGE, 10 * MINUTE * IN_MILLISECONDS);  // 10 minutes till enrage(bosskillers)
+            events.ScheduleEvent(EVENT_STATIC_DISRUPTION, 10s, 20s); // 10 to 20 seconds (bosskillers)
+            events.ScheduleEvent(EVENT_GUST_OF_WIND, 20s, 30s);      // 20 to 30 seconds(bosskillers)
+            events.ScheduleEvent(EVENT_CALL_LIGHTNING, 10s, 20s);    // totaly random timer. can't find any info on this
+            events.ScheduleEvent(EVENT_ELECTRICAL_STORM, 1min);                // 60 seconds(bosskillers)
+            events.ScheduleEvent(EVENT_RAIN, 47s, 52s);
+            events.ScheduleEvent(EVENT_ENRAGE, 10min);      // 10 minutes till enrage(bosskillers)
 
             Talk(SAY_AGGRO);
             //DoZoneInCombat();
@@ -209,7 +209,7 @@ public:
             if (StormCount > 10)
             {
                 StormCount = 0; // finish
-                events.ScheduleEvent(EVENT_SUMMON_EAGLES, 5000);
+                events.ScheduleEvent(EVENT_SUMMON_EAGLES, 5s);
                 me->InterruptNonMeleeSpells(false);
                 CloudGUID = 0;
                 if (Cloud)
@@ -217,165 +217,167 @@ public:
                 SetWeather(WEATHER_STATE_FINE, 0.0f);
                 isRaining = false;
             }
-            events.ScheduleEvent(EVENT_STORM_SEQUENCE, 1000);
+            events.ScheduleEvent(EVENT_STORM_SEQUENCE, 1s);
         }
-
-        void UpdateAI(uint32 diff)
-        {
-            if (!UpdateVictim())
-                return;
-
-            events.Update(diff);
-
-            while (uint32 eventId = events.ExecuteEvent())
-            {
-                switch (eventId)
-                {
-                    case EVENT_STATIC_DISRUPTION:
-                        {
-                            Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1);
-                            if (!target)
-                                target = me->GetVictim();
-                            if (target)
-                            {
-                                TargetGUID = target->GetGUID();
-                                DoCast(target, SPELL_STATIC_DISRUPTION, false);
-                                me->SetInFront(me->GetVictim());
-                            }
-                            /*if (float dist = me->IsWithinDist3d(target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 5.0f) dist = 5.0f;
-                            SDisruptAOEVisual_Timer = 1000 + floor(dist / 30 * 1000.0f);*/
-                            events.ScheduleEvent(EVENT_STATIC_DISRUPTION, urand(10000, 18000));
-                            break;
-                        }
-                    case EVENT_GUST_OF_WIND:
-                        {
-                            Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1);
-                            if (!target)
-                                target = me->GetVictim();
-                            if (target)
-                                DoCast(target, SPELL_GUST_OF_WIND);
-                            events.ScheduleEvent(EVENT_GUST_OF_WIND, urand(20000, 30000));
-                            break;
-                        }
-                    case EVENT_CALL_LIGHTNING:
-                        DoCastVictim(SPELL_CALL_LIGHTNING);
-                        events.ScheduleEvent(EVENT_CALL_LIGHTNING, urand(12000, 17000)); // totaly random timer. can't find any info on this
-                        break;
-                    case EVENT_ELECTRICAL_STORM:
-                        {
-                            Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50, true);
-                            if (!target)
-                            {
-                                EnterEvadeMode();
-                                return;
-                            }
-                            target->CastSpell(target, 44007, true); // cloud visual
-                            DoCast(target, SPELL_ELECTRICAL_STORM, false); // storm cyclon + visual
-                            float x, y, z;
-                            target->GetPosition(x, y, z);
-                            /// @todo: fix it in correct way, that causes player to can fly until logout
-                            /*
-                            if (target)
-                            {
-                                target->SetDisableGravity(true);
-                                target->MonsterMoveWithSpeed(x, y, me->GetPositionZ()+15, 0);
-                            }
-                            */
-
-                            Unit* Cloud = me->SummonTrigger(x, y, me->GetPositionZ() + 16, 0, 15000);
-                            if (Cloud)
-                            {
-                                CloudGUID = Cloud->GetGUID();
-                                Cloud->SetDisableGravity(true);
-                                Cloud->StopMoving();
-                                Cloud->SetObjectScale(1.0f);
-                                Cloud->setFaction(35);
-                                Cloud->SetMaxHealth(9999999);
-                                Cloud->SetHealth(9999999);
-                                Cloud->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                            }
-                            StormCount = 1;
-                            events.ScheduleEvent(EVENT_ELECTRICAL_STORM, 60000); // 60 seconds(bosskillers)
-                            events.ScheduleEvent(EVENT_RAIN, urand(47000, 52000));
-                            break;
-                        }
-                    case EVENT_RAIN:
-                        if (!isRaining)
-                        {
-                            SetWeather(WEATHER_STATE_HEAVY_RAIN, 0.9999f);
-                            isRaining = true;
-                        }
-                        else
-                            events.ScheduleEvent(EVENT_RAIN, 1000);
-                        break;
-                    case EVENT_STORM_SEQUENCE:
-                        {
-                            Unit* target = ObjectAccessor::GetUnit(*me, CloudGUID);
-                            if (!target || !target->IsAlive())
-                            {
-                                EnterEvadeMode();
-                                return;
-                            }
-                            else if (Unit* Cyclone = ObjectAccessor::GetUnit(*me, CycloneGUID))
-                                Cyclone->CastSpell(target, SPELL_SAND_STORM, true); // keep casting or...
-                            HandleStormSequence(target);
-                            break;
-                        }
-                    case EVENT_SUMMON_EAGLES:
-                        Talk(SAY_SUMMON);
-
-                        float x, y, z;
-                        me->GetPosition(x, y, z);
-
-                        for (uint8 i = 0; i < 8; ++i)
-                        {
-                            Unit* bird = ObjectAccessor::GetUnit(*me, BirdGUIDs[i]);
-                            if (!bird) //they despawned on die
-                            {
-                                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                                {
-                                    x = target->GetPositionX() + irand(-10, 10);
-                                    y = target->GetPositionY() + irand(-10, 10);
-                                    z = target->GetPositionZ() + urand(16, 20);
-                                    if (z > 95)
-                                        z = 95.0f - urand(0, 5);
-                                }
-                                Creature* creature = me->SummonCreature(NPC_SOARING_EAGLE, x, y, z, 0, TEMPSUMMON_CORPSE_DESPAWN, 0);
-                                if (creature)
-                                {
-                                    creature->AddThreat(me->GetVictim(), 1.0f);
-                                    creature->AI()->AttackStart(me->GetVictim());
-                                    BirdGUIDs[i] = creature->GetGUID();
-                                }
-                            }
-                        }
-                        break;
-                    case EVENT_ENRAGE:
-                        Talk(SAY_ENRAGE);
-                        DoCast(me, SPELL_BERSERK, true);
-                        events.ScheduleEvent(EVENT_ENRAGE, 600000);
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            DoMeleeAttackIfReady();
-        }
-
-    private:
-        uint64 BirdGUIDs[8];
-        uint64 TargetGUID;
-        uint64 CycloneGUID;
-        uint64 CloudGUID;
-        uint8  StormCount;
-        bool   isRaining;
-    };
-
-    CreatureAI* GetAI(Creature* creature) const
-    {
-        return GetInstanceAI<boss_akilzonAI>(creature);
+        events.ScheduleEvent(EVENT_STORM_SEQUENCE, 1000);
     }
+
+    void UpdateAI(uint32 diff)
+    {
+        if (!UpdateVictim())
+            return;
+
+        events.Update(diff);
+
+        while (uint32 eventId = events.ExecuteEvent())
+        {
+            switch (eventId)
+            {
+                case EVENT_STATIC_DISRUPTION:
+                    {
+                        Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1);
+                        if (!target)
+                            target = me->GetVictim();
+                        if (target)
+                        {
+                            TargetGUID = target->GetGUID();
+                            DoCast(target, SPELL_STATIC_DISRUPTION, false);
+                            me->SetInFront(me->GetVictim());
+                        }
+                        /*if (float dist = me->IsWithinDist3d(target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 5.0f) dist = 5.0f;
+                        SDisruptAOEVisual_Timer = 1000 + floor(dist / 30 * 1000.0f);*/
+                        events.ScheduleEvent(EVENT_STATIC_DISRUPTION, 10s, 18s);
+                        break;
+                    }
+                case EVENT_GUST_OF_WIND:
+                    {
+                        Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1);
+                        if (!target)
+                            target = me->GetVictim();
+                        if (target)
+                            DoCast(target, SPELL_GUST_OF_WIND);
+                        events.ScheduleEvent(EVENT_GUST_OF_WIND, urand(20000, 30000));
+                        break;
+                    }
+                case EVENT_CALL_LIGHTNING:
+                    DoCastVictim(SPELL_CALL_LIGHTNING);
+                    events.ScheduleEvent(EVENT_CALL_LIGHTNING, urand(12000, 17000)); // totaly random timer. can't find any info on this
+                    break;
+                case EVENT_ELECTRICAL_STORM:
+                    {
+                        Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50, true);
+                        if (!target)
+                        {
+                            EnterEvadeMode();
+                            return;
+                        }
+                        target->CastSpell(target, 44007, true); // cloud visual
+                        DoCast(target, SPELL_ELECTRICAL_STORM, false); // storm cyclon + visual
+                        float x, y, z;
+                        target->GetPosition(x, y, z);
+                        /// @todo: fix it in correct way, that causes player to can fly until logout
+                        /*
+                        if (target)
+                        {
+                            target->SetDisableGravity(true);
+                            target->MonsterMoveWithSpeed(x, y, me->GetPositionZ()+15, 0);
+                        }
+                        */
+
+                        Unit* Cloud = me->SummonTrigger(x, y, me->GetPositionZ() + 16, 0, 15000);
+                        if (Cloud)
+                        {
+                            CloudGUID = Cloud->GetGUID();
+                            Cloud->SetDisableGravity(true);
+                            Cloud->StopMoving();
+                            Cloud->SetObjectScale(1.0f);
+                            Cloud->setFaction(35);
+                            Cloud->SetMaxHealth(9999999);
+                            Cloud->SetHealth(9999999);
+                            Cloud->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                        }
+                        StormCount = 1;
+                        events.ScheduleEvent(EVENT_ELECTRICAL_STORM, 60000); // 60 seconds(bosskillers)
+                        events.ScheduleEvent(EVENT_RAIN, urand(47000, 52000));
+                        break;
+                    }
+                case EVENT_RAIN:
+                    if (!isRaining)
+                    {
+                        SetWeather(WEATHER_STATE_HEAVY_RAIN, 0.9999f);
+                        isRaining = true;
+                    }
+                    else
+                        events.ScheduleEvent(EVENT_RAIN, 1000);
+                    break;
+                case EVENT_STORM_SEQUENCE:
+                    {
+                        Unit* target = ObjectAccessor::GetUnit(*me, CloudGUID);
+                        if (!target || !target->IsAlive())
+                        {
+                            EnterEvadeMode();
+                            return;
+                        }
+                        else if (Unit* Cyclone = ObjectAccessor::GetUnit(*me, CycloneGUID))
+                            Cyclone->CastSpell(target, SPELL_SAND_STORM, true); // keep casting or...
+                        HandleStormSequence(target);
+                        break;
+                    }
+                case EVENT_SUMMON_EAGLES:
+                    Talk(SAY_SUMMON);
+
+                    float x, y, z;
+                    me->GetPosition(x, y, z);
+
+                    for (uint8 i = 0; i < 8; ++i)
+                    {
+                        Unit* bird = ObjectAccessor::GetUnit(*me, BirdGUIDs[i]);
+                        if (!bird) //they despawned on die
+                        {
+                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                            {
+                                x = target->GetPositionX() + irand(-10, 10);
+                                y = target->GetPositionY() + irand(-10, 10);
+                                z = target->GetPositionZ() + urand(16, 20);
+                                if (z > 95)
+                                    z = 95.0f - urand(0, 5);
+                            }
+                            Creature* creature = me->SummonCreature(NPC_SOARING_EAGLE, x, y, z, 0, TEMPSUMMON_CORPSE_DESPAWN, 0);
+                            if (creature)
+                            {
+                                creature->AddThreat(me->GetVictim(), 1.0f);
+                                creature->AI()->AttackStart(me->GetVictim());
+                                BirdGUIDs[i] = creature->GetGUID();
+                            }
+                        }
+                    }
+                    break;
+                case EVENT_ENRAGE:
+                    Talk(SAY_ENRAGE);
+                    DoCast(me, SPELL_BERSERK, true);
+                    events.ScheduleEvent(EVENT_ENRAGE, 600000);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        DoMeleeAttackIfReady();
+    }
+
+private:
+    uint64 BirdGUIDs[8];
+    uint64 TargetGUID;
+    uint64 CycloneGUID;
+    uint64 CloudGUID;
+    uint8  StormCount;
+    bool   isRaining;
+};
+
+CreatureAI* GetAI(Creature* creature) const
+{
+    return GetInstanceAI<boss_akilzonAI>(creature);
+}
 };
 
 class npc_akilzon_eagle : public CreatureScript
@@ -465,4 +467,3 @@ void AddSC_boss_akilzon()
     new boss_akilzon();
     new npc_akilzon_eagle();
 }
-

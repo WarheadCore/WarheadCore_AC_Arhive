@@ -51,9 +51,9 @@ public:
             }
             _EnterCombat();
 
-            events.ScheduleEvent(EVENT_SHADOWFLAME, urand(10000, 20000));
-            events.ScheduleEvent(EVENT_WINGBUFFET, 30000);
-            events.ScheduleEvent(EVENT_SHADOWOFEBONROC, urand(8000, 10000));
+            events.ScheduleEvent(EVENT_SHADOWFLAME, 10s, 20s);
+            events.ScheduleEvent(EVENT_WINGBUFFET, 30s);
+            events.ScheduleEvent(EVENT_SHADOWOFEBONROC, 8s, 10s);
         }
 
         void UpdateAI(uint32 diff)
@@ -72,15 +72,15 @@ public:
                 {
                     case EVENT_SHADOWFLAME:
                         DoCastVictim(SPELL_SHADOWFLAME);
-                        events.ScheduleEvent(EVENT_SHADOWFLAME, urand(10000, 20000));
+                        events.ScheduleEvent(EVENT_SHADOWFLAME, 10s, 20s);
                         break;
                     case EVENT_WINGBUFFET:
                         DoCastVictim(SPELL_WINGBUFFET);
-                        events.ScheduleEvent(EVENT_WINGBUFFET, 30000);
+                        events.ScheduleEvent(EVENT_WINGBUFFET, 30s);
                         break;
                     case EVENT_SHADOWOFEBONROC:
                         DoCastVictim(SPELL_SHADOWOFEBONROC);
-                        events.ScheduleEvent(EVENT_SHADOWOFEBONROC, urand(8000, 10000));
+                        events.ScheduleEvent(EVENT_SHADOWOFEBONROC, 8s, 10s);
                         break;
                 }
             }

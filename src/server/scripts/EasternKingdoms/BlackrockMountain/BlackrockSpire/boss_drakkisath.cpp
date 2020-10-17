@@ -70,10 +70,10 @@ public:
         {
             _EnterCombat();
             CallForHelp();
-            events.ScheduleEvent(EVENT_FIRE_NOVA, 6000);
-            events.ScheduleEvent(EVENT_CLEAVE,    8000);
-            events.ScheduleEvent(EVENT_CONFLIGURATION, 15000);
-            events.ScheduleEvent(EVENT_THUNDERCLAP,    17000);
+            events.ScheduleEvent(EVENT_FIRE_NOVA, 6s);
+            events.ScheduleEvent(EVENT_CLEAVE, 8s);
+            events.ScheduleEvent(EVENT_CONFLIGURATION, 15s);
+            events.ScheduleEvent(EVENT_THUNDERCLAP, 17s);
         }
 
         // Will make his two adds engage combat
@@ -109,19 +109,19 @@ public:
                 {
                     case EVENT_FIRE_NOVA:
                         DoCastVictim(SPELL_FIRENOVA);
-                        events.ScheduleEvent(EVENT_FIRE_NOVA, 10000);
+                        events.ScheduleEvent(EVENT_FIRE_NOVA, 10s);
                         break;
                     case EVENT_CLEAVE:
                         DoCastVictim(SPELL_CLEAVE);
-                        events.ScheduleEvent(EVENT_CLEAVE, 8000);
+                        events.ScheduleEvent(EVENT_CLEAVE, 8s);
                         break;
                     case EVENT_CONFLIGURATION:
                         DoCastVictim(SPELL_CONFLIGURATION);
-                        events.ScheduleEvent(EVENT_CONFLIGURATION, 18000);
+                        events.ScheduleEvent(EVENT_CONFLIGURATION, 18s);
                         break;
                     case EVENT_THUNDERCLAP:
                         DoCastVictim(SPELL_THUNDERCLAP);
-                        events.ScheduleEvent(EVENT_THUNDERCLAP, 20000);
+                        events.ScheduleEvent(EVENT_THUNDERCLAP, 20s);
                         break;
                 }
             }
@@ -148,9 +148,9 @@ public:
 
         void EnterCombat(Unit* who)
         {
-            _events.ScheduleEvent(EVENT_MORTAL_STRIKE, urand(5000, 12800));
-            _events.ScheduleEvent(EVENT_KNOCKDOWN, urand(5600, 15400));
-            _events.ScheduleEvent(EVENT_STRIKE, urand(12000, 20800));
+            _events.ScheduleEvent(EVENT_MORTAL_STRIKE, 5s, 12800ms);
+            _events.ScheduleEvent(EVENT_KNOCKDOWN, 5600ms, 15400ms);
+            _events.ScheduleEvent(EVENT_STRIKE, 12s, 20800ms);
 
             std::list<Creature*> GeneralDrakkisath;
             me->GetCreaturesWithEntryInRange(GeneralDrakkisath, 15.0f, GeneralDrakkisathEntry);
@@ -180,15 +180,15 @@ public:
             {
                 case EVENT_MORTAL_STRIKE:
                     DoCastVictim(SPELL_MORTAL_STRIKE);
-                    _events.ScheduleEvent(EVENT_MORTAL_STRIKE, 13000);
+                    _events.ScheduleEvent(EVENT_MORTAL_STRIKE, 13s);
                     break;
                 case EVENT_KNOCKDOWN:
                     DoCastVictim(SPELL_KNOCKDOWN);
-                    _events.ScheduleEvent(EVENT_MORTAL_STRIKE, urand(11200, 25700));
+                    _events.ScheduleEvent(EVENT_MORTAL_STRIKE, 11200ms, 25700ms);
                     break;
                 case EVENT_STRIKE:
                     DoCastVictim(SPELL_STRIKE);
-                    _events.ScheduleEvent(EVENT_MORTAL_STRIKE, 9000);
+                    _events.ScheduleEvent(EVENT_MORTAL_STRIKE, 9s);
                     break;
             }
 
