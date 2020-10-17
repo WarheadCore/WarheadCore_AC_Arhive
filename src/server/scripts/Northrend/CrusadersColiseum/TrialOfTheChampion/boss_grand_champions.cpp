@@ -566,7 +566,7 @@ public:
                         {
                             NewMountGUID = mount->GetGUID();
                             me->GetMotionMaster()->MovePoint(7, *mount);
-                            events.RescheduleEvent(EVENT_FIND_NEW_MOUNT, 1000);
+                            events.RescheduleEvent(EVENT_FIND_NEW_MOUNT, 1s);
                         }
                     }
                 }

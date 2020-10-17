@@ -131,7 +131,7 @@ public:
 
             events.RescheduleEvent(EVENT_SPELL_ARCANE_BARRAGE, 0s);
             events.RescheduleEvent(EVENT_SPELL_ARCANE_VOLLEY, 5s);
-            events.RescheduleEvent(EVENT_SPELL_ENRAGED_ASSAULT, 35);
+            events.RescheduleEvent(EVENT_SPELL_ENRAGED_ASSAULT, 35s);
             events.RescheduleEvent(EVENT_SUMMON_WHELPS, 40s);
         }
 

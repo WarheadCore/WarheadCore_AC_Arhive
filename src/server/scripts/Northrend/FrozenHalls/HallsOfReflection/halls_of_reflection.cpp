@@ -1951,10 +1951,10 @@ public:
                     if (me->IsWithinMeleeRange(me->GetVictim()))
                     {
                         me->CastSpell(me->GetVictim(), 70176, false);
-                        events.ScheduleEvent(1, 18000);
+                        events.ScheduleEvent(1, 18s);
                     }
                     else
-                        events.ScheduleEvent(1, 3000);
+                        events.ScheduleEvent(1, 3s);
                     break;
             }
 

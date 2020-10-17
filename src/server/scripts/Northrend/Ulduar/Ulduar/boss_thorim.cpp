@@ -774,7 +774,7 @@ public:
                     {
                         me->MonsterYell("You! Fiend! You are not my beloved! Be gone!", LANG_UNIVERSAL, 0);
                         me->PlayDirectSound(SOUND_HARD1);
-                        events.ScheduleEvent(EVENT_THORIM_OUTRO2, 5000, 0, 3);
+                        events.ScheduleEvent(EVENT_THORIM_OUTRO2, 5s, 0, 3);
                         EntryCheckPredicate pred(NPC_SIF);
                         summons.DoAction(ACTION_SIF_TRANSFORM, pred);
                     }
