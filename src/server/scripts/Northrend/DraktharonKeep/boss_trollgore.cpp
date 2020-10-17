@@ -65,20 +65,20 @@ public:
         {
         }
 
-            void Reset()
-            {
-                BossAI::Reset();
-                events2.Reset();
-                events2.ScheduleEvent(EVENT_SPAWN_INVADERS, 30s);
-            }
+        void Reset()
+        {
+            BossAI::Reset();
+            events2.Reset();
+            events2.ScheduleEvent(EVENT_SPAWN_INVADERS, 30s);
+        }
 
         void EnterCombat(Unit* who)
         {
-                events.ScheduleEvent(EVENT_SPELL_INFECTED_WOUND, 6s, 10s);
-                events.ScheduleEvent(EVENT_SPELL_CRUSH, 3s, 5s);
-                events.ScheduleEvent(EVENT_SPELL_CONSUME, 15s);
-                events.ScheduleEvent(EVENT_SPELL_CORPSE_EXPLODE, 35s);
-                events.ScheduleEvent(EVENT_SPAWN_INVADERS, 20s, 30s);
+            events.ScheduleEvent(EVENT_SPELL_INFECTED_WOUND, 6s, 10s);
+            events.ScheduleEvent(EVENT_SPELL_CRUSH, 3s, 5s);
+            events.ScheduleEvent(EVENT_SPELL_CONSUME, 15s);
+            events.ScheduleEvent(EVENT_SPELL_CORPSE_EXPLODE, 35s);
+            events.ScheduleEvent(EVENT_SPAWN_INVADERS, 20s, 30s);
 
             me->setActive(true);
             instance->SetBossState(DATA_TROLLGORE, IN_PROGRESS);
@@ -99,8 +99,8 @@ public:
         {
             if (events.GetNextEventTime(EVENT_KILL_TALK) == 0)
             {
-                    Talk(SAY_KILL);
-                    events.ScheduleEvent(EVENT_KILL_TALK, 6s);
+                Talk(SAY_KILL);
+                events.ScheduleEvent(EVENT_KILL_TALK, 6s);
             }
         }
 

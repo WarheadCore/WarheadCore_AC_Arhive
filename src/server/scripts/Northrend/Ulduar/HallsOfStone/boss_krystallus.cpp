@@ -87,7 +87,7 @@ public:
             events.RescheduleEvent(EVENT_BOULDER, 8s);
             events.RescheduleEvent(EVENT_STOMP, 5s);
             events.RescheduleEvent(EVENT_GROUND_SLAM, 15s);
-            
+
             if (me->GetMap()->IsHeroic())
                 events.RescheduleEvent(EVENT_GROUND_SPIKE, 10s);
 
@@ -142,20 +142,20 @@ public:
                         break;
                     }
                 case EVENT_GROUND_SLAM:
-                {
-                    events.RepeatEvent(10000 + rand()%3000);
-                    me->CastSpell(me->GetVictim(), GROUND_SLAM, true);
-                    events.DelayEvents(10000);
-                    events.RescheduleEvent(EVENT_SHATTER, 8s);
-                    break;
-                }
+                    {
+                        events.RepeatEvent(10000 + rand() % 3000);
+                        me->CastSpell(me->GetVictim(), GROUND_SLAM, true);
+                        events.DelayEvents(10000);
+                        events.RescheduleEvent(EVENT_SHATTER, 8s);
+                        break;
+                    }
                 case EVENT_SHATTER:
-                {
-                    me->CastSpell((Unit*)NULL, DUNGEON_MODE(SHATTER, SHATTER_H), false);
-                    Talk(SAY_SHATTER);
-                    events.RescheduleEvent(EVENT_REMOVE_STONED, 1500ms);
-                    break;
-                }
+                    {
+                        me->CastSpell((Unit*)NULL, DUNGEON_MODE(SHATTER, SHATTER_H), false);
+                        Talk(SAY_SHATTER);
+                        events.RescheduleEvent(EVENT_REMOVE_STONED, 1500ms);
+                        break;
+                    }
                 case EVENT_REMOVE_STONED:
                     {
                         RemoveStonedEffect();

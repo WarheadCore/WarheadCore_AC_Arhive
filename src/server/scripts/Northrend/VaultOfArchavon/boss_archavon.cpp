@@ -88,16 +88,16 @@ public:
             ScriptedAI::AttackStart(who);
         }
 
-            void EnterCombat(Unit* /*who*/)
-            {
-                events.ScheduleEvent(EVENT_ROCK_SHARDS, 15s);
-                events.ScheduleEvent(EVENT_CHOKING_CLOUD, 30s);
-                events.ScheduleEvent(EVENT_STOMP, 45s);
-                events.ScheduleEvent(EVENT_BERSERK, 5min);
-                
-                if (pInstance)
-                    pInstance->SetData(EVENT_ARCHAVON, IN_PROGRESS);
-            }
+        void EnterCombat(Unit* /*who*/)
+        {
+            events.ScheduleEvent(EVENT_ROCK_SHARDS, 15s);
+            events.ScheduleEvent(EVENT_CHOKING_CLOUD, 30s);
+            events.ScheduleEvent(EVENT_STOMP, 45s);
+            events.ScheduleEvent(EVENT_BERSERK, 5min);
+
+            if (pInstance)
+                pInstance->SetData(EVENT_ARCHAVON, IN_PROGRESS);
+        }
 
         void JustDied(Unit* )
         {

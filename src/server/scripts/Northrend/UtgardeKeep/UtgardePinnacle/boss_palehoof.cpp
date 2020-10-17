@@ -287,12 +287,12 @@ public:
                         me->SetControlled(false, UNIT_STATE_STUNNED);
                         // SETINCOMBATWITHZONE
 
-                    // schedule combat events
-                    events.ScheduleEvent(EVENT_PALEHOOF_WITHERING_ROAR, 10s);
-                    events.ScheduleEvent(EVENT_PALEHOOF_IMPALE, 12s);
-                    events.ScheduleEvent(EVENT_PALEHOOF_ARCING_SMASH, 15s);
-                    break;
-                }
+                        // schedule combat events
+                        events.ScheduleEvent(EVENT_PALEHOOF_WITHERING_ROAR, 10s);
+                        events.ScheduleEvent(EVENT_PALEHOOF_IMPALE, 12s);
+                        events.ScheduleEvent(EVENT_PALEHOOF_ARCING_SMASH, 15s);
+                        break;
+                    }
                 case EVENT_PALEHOOF_WITHERING_ROAR:
                     {
                         me->CastSpell(me, IsHeroic() ? SPELL_WITHERING_ROAR_H : SPELL_WITHERING_ROAR_N, false);

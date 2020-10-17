@@ -265,7 +265,7 @@ public:
             events.Reset();
             events.RescheduleEvent(EVENT_SPELL_SHADOW_BOLT, 1s);
             events.RescheduleEvent(EVENT_SPELL_DEBILITATE, 5s);
-            
+
             if( IsHeroic() )
                 events.RescheduleEvent(EVENT_SPELL_SUMMON_SKELETONS, 10s);
 

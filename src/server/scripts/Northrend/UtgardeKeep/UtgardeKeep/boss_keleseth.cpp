@@ -267,7 +267,7 @@ public:
         {
             events.Reset();
             events.RescheduleEvent(EVENT_SPELL_DECREPIFY, 10s, 20s);
-            
+
             if(IsHeroic())
                 events.RescheduleEvent(EVENT_SPELL_BONE_ARMOR, 25s, 2min);
         }

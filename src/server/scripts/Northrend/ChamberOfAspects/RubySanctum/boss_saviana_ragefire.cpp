@@ -79,9 +79,9 @@ public:
             BossAI::EnterCombat(who);
             Talk(SAY_AGGRO);
 
-                events.ScheduleEvent(EVENT_ENRAGE, 15s);
-                events.ScheduleEvent(EVENT_FLAME_BREATH, 10s);
-                events.ScheduleEvent(EVENT_FLIGHT, 30s);
+            events.ScheduleEvent(EVENT_ENRAGE, 15s);
+            events.ScheduleEvent(EVENT_FLAME_BREATH, 10s);
+            events.ScheduleEvent(EVENT_FLIGHT, 30s);
         }
 
         void JustDied(Unit* killer)
@@ -121,8 +121,8 @@ public:
         {
             if (events.GetNextEventTime(EVENT_KILL_TALK) == 0)
             {
-                    Talk(SAY_KILL);
-                    events.ScheduleEvent(EVENT_KILL_TALK, 6s);
+                Talk(SAY_KILL);
+                events.ScheduleEvent(EVENT_KILL_TALK, 6s);
             }
         }
 

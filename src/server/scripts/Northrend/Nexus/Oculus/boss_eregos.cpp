@@ -206,7 +206,7 @@ public:
                     events.RepeatEvent(35000);
                     break;
                 case EVENT_SUMMON_WHELPS:
-                    for( uint8 i=0; i<5; ++i )
+                    for( uint8 i = 0; i < 5; ++i )
                         events.ScheduleEvent(EVENT_SUMMON_SINGLE_WHELP, 0s, 8s);
                     events.RepeatEvent(40000);
                     break;

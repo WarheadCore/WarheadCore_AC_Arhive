@@ -81,7 +81,7 @@ public:
             if (events.GetNextEventTime(EVENT_KILL_TALK) == 0)
             {
                 Talk(SAY_KILL);
-                    events.ScheduleEvent(EVENT_KILL_TALK, 6s);
+                events.ScheduleEvent(EVENT_KILL_TALK, 6s);
             }
         }
 

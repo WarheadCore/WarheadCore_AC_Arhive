@@ -149,7 +149,7 @@ public:
         {
             events.RescheduleEvent(EVENT_GRAVITY_BOMB, 1s, 1);
             events.RescheduleEvent(EVENT_TYMPANIC_TANTARUM, 1min, 1);
-            
+
             if (!_hardMode)
                 events.RescheduleEvent(EVENT_HEALTH_CHECK, 2s, 1);
         }
@@ -322,9 +322,7 @@ public:
                 // Control events
                 case EVENT_HEALTH_CHECK:
                     if (_hardMode)
-                    {
                         return;
-                    }
 
                     if (me->HealthBelowPct(_healthCheck))
                     {
@@ -376,15 +374,13 @@ public:
                     me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
                     if (Unit* heart = me->GetVehicleKit() ? me->GetVehicleKit()->GetPassenger(HEART_VEHICLE_SEAT) : nullptr)
                         heart->GetAI()->DoAction(ACTION_AWAKEN_HEART);
-                    
+
                     events.ScheduleEvent(EVENT_RESTORE, 30s);
                     return;
                 // Restore from heartbreak
                 case EVENT_RESTORE:
                     if (_hardMode)
-                    {
                         return;
-                    }
 
                     me->MonsterYell("I'm ready to play!", LANG_UNIVERSAL, 0);
                     me->PlayDirectSound(XT_SOUND_HEART_CLOSED);

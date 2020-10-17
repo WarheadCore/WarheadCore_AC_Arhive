@@ -210,7 +210,7 @@ public:
             events.RescheduleEvent(EVENT_SPELL_PENETRATING_COLD, 15s, 20s);
             events.RescheduleEvent(EVENT_SUMMON_NERUBIAN, 5s, 8s);
             events.RescheduleEvent(EVENT_SUBMERGE, SUBMERGE_INTERVAL);
-            
+
             if(!IsHeroic())
                 events.RescheduleEvent(EVENT_RESPAWN_SPHERE, 4s);
 
@@ -647,13 +647,13 @@ public:
             me->SetCorpseDelay(10 * 60);
             me->CastSpell(me, SPELL_EXPOSE_WEAKNESS, true);
             me->CastSpell(me, SPELL_SPIDER_FRENZY, true);
-            
+
             events.Reset();
             events.RescheduleEvent(EVENT_SUBMERGE, 30s);
-            
+
             if(IsHeroic())
                 events.RescheduleEvent(EVENT_SPELL_SHADOW_STRIKE, 30s, 45s);
-            
+
             if(Unit* target = me->SelectNearestTarget(250.0f))
             {
                 AttackStart(target);
@@ -708,7 +708,7 @@ public:
                         me->CastSpell(me, SPELL_EXPOSE_WEAKNESS, true);
                         me->CastSpell(me, SPELL_SPIDER_FRENZY, true);
                         me->CastSpell(me, SPELL_SUBMERGE, false);
-                        
+
                         events.DelayEvents(15000);
                         events.RescheduleEvent(EVENT_EMERGE, 10s);
                     }
@@ -833,7 +833,7 @@ public:
                     break;
                 case 2:
                     me->CastSpell(me, SPELL_SPIKE_SPEED3, true);
-                    
+
                     break;
                 case 3:
                     Reset();

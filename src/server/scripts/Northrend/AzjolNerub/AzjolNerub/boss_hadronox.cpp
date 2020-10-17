@@ -96,12 +96,12 @@ public:
         {
             if (param == ACTION_START_EVENT)
             {
-                    instance->SetBossState(DATA_HADRONOX_EVENT, IN_PROGRESS);
-                    me->setActive(true);
-                    events.ScheduleEvent(EVENT_HADRONOX_MOVE1, 20s);
-                    events.ScheduleEvent(EVENT_HADRONOX_MOVE2, 40s);
-                    events.ScheduleEvent(EVENT_HADRONOX_MOVE3, 1min);
-                    events.ScheduleEvent(EVENT_HADRONOX_MOVE4, 80s);
+                instance->SetBossState(DATA_HADRONOX_EVENT, IN_PROGRESS);
+                me->setActive(true);
+                events.ScheduleEvent(EVENT_HADRONOX_MOVE1, 20s);
+                events.ScheduleEvent(EVENT_HADRONOX_MOVE2, 40s);
+                events.ScheduleEvent(EVENT_HADRONOX_MOVE3, 1min);
+                events.ScheduleEvent(EVENT_HADRONOX_MOVE4, 80s);
             }
         }
 
@@ -138,13 +138,13 @@ public:
             BossAI::JustDied(killer);
         }
 
-            void EnterCombat(Unit*)
-            {
-                events.RescheduleEvent(EVENT_HADRONOX_ACID, 10s);
-                events.RescheduleEvent(EVENT_HADRONOX_LEECH, 4s);
-                events.RescheduleEvent(EVENT_HADRONOX_PIERCE, 1s);
-                events.RescheduleEvent(EVENT_HADRONOX_GRAB, 15s);
-            }
+        void EnterCombat(Unit*)
+        {
+            events.RescheduleEvent(EVENT_HADRONOX_ACID, 10s);
+            events.RescheduleEvent(EVENT_HADRONOX_LEECH, 4s);
+            events.RescheduleEvent(EVENT_HADRONOX_PIERCE, 1s);
+            events.RescheduleEvent(EVENT_HADRONOX_GRAB, 15s);
+        }
 
         bool AnyPlayerValid() const
         {
@@ -165,34 +165,34 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-                switch (uint32 eventId = events.ExecuteEvent())
-                {
-                    case EVENT_HADRONOX_PIERCE:
-                        me->CastSpell(me->GetVictim(), SPELL_PIERCE_ARMOR, false);
-                        events.ScheduleEvent(EVENT_HADRONOX_PIERCE, 8s);
-                        break;
-                    case EVENT_HADRONOX_ACID:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, false))
-                            me->CastSpell(target, SPELL_ACID_CLOUD, false);
-                        events.ScheduleEvent(EVENT_HADRONOX_ACID, 25s);
-                        break;
-                    case EVENT_HADRONOX_LEECH:
-                        me->CastSpell(me, SPELL_LEECH_POISON, false);
-                        events.ScheduleEvent(EVENT_HADRONOX_LEECH, 12s);
-                        break;
-                    case EVENT_HADRONOX_GRAB:
-                        me->CastSpell(me, SPELL_WEB_GRAB, false);
-                        events.ScheduleEvent(EVENT_HADRONOX_GRAB, 25s);
-                        break;
-                    case EVENT_HADRONOX_MOVE4:
-                        me->CastSpell(me, SPELL_WEB_FRONT_DOORS, true);
+            switch (uint32 eventId = events.ExecuteEvent())
+            {
+                case EVENT_HADRONOX_PIERCE:
+                    me->CastSpell(me->GetVictim(), SPELL_PIERCE_ARMOR, false);
+                    events.ScheduleEvent(EVENT_HADRONOX_PIERCE, 8s);
+                    break;
+                case EVENT_HADRONOX_ACID:
+                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, false))
+                        me->CastSpell(target, SPELL_ACID_CLOUD, false);
+                    events.ScheduleEvent(EVENT_HADRONOX_ACID, 25s);
+                    break;
+                case EVENT_HADRONOX_LEECH:
+                    me->CastSpell(me, SPELL_LEECH_POISON, false);
+                    events.ScheduleEvent(EVENT_HADRONOX_LEECH, 12s);
+                    break;
+                case EVENT_HADRONOX_GRAB:
+                    me->CastSpell(me, SPELL_WEB_GRAB, false);
+                    events.ScheduleEvent(EVENT_HADRONOX_GRAB, 25s);
+                    break;
+                case EVENT_HADRONOX_MOVE4:
+                    me->CastSpell(me, SPELL_WEB_FRONT_DOORS, true);
                     [[fallthrough]]; // TODO: Not sure whether the fallthrough was a mistake (forgetting a break) or intended. This should be double-checked.
-                    case EVENT_HADRONOX_MOVE1:
-                    case EVENT_HADRONOX_MOVE2:
-                    case EVENT_HADRONOX_MOVE3:
-                        Talk(SAY_HADRONOX_EMOTE);
-                        me->GetMotionMaster()->MoveCharge(hadronoxSteps[eventId-1].GetPositionX(), hadronoxSteps[eventId-1].GetPositionY(), hadronoxSteps[eventId-1].GetPositionZ(), 10.0f, 0, NULL, true);
-                        break;
+                case EVENT_HADRONOX_MOVE1:
+                case EVENT_HADRONOX_MOVE2:
+                case EVENT_HADRONOX_MOVE3:
+                    Talk(SAY_HADRONOX_EMOTE);
+                    me->GetMotionMaster()->MoveCharge(hadronoxSteps[eventId - 1].GetPositionX(), hadronoxSteps[eventId - 1].GetPositionY(), hadronoxSteps[eventId - 1].GetPositionZ(), 10.0f, 0, NULL, true);
+                    break;
 
             }
 
@@ -269,9 +269,9 @@ public:
                         Talk(SAY_CRUSHER_AGGRO);
                     }
 
-                events.ScheduleEvent(EVENT_CRUSHER_SMASH, 8s);
-                events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
-            }
+            events.ScheduleEvent(EVENT_CRUSHER_SMASH, 8s);
+            events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
+        }
 
         void UpdateAI(uint32 diff)
         {

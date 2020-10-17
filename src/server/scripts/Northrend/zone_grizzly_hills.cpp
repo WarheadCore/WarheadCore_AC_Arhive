@@ -679,13 +679,13 @@ public:
                         if (Player* player = ObjectAccessor::GetPlayer(*me, _playerGUID))
                             DoCast(player, SPELL_VENTURE_STRAGGLER_CREDIT);
                         me->GetMotionMaster()->MovePoint(0, me->GetPositionX() - 7, me->GetPositionY() + 7, me->GetPositionZ());
-                         _events.ScheduleEvent(EVENT_STRAGGLER_2, 2500ms);
-                         break;
+                        _events.ScheduleEvent(EVENT_STRAGGLER_2, 2500ms);
+                        break;
                     case EVENT_STRAGGLER_2:
                         Talk(SAY_SEO);
                         me->GetMotionMaster()->MovePoint(0, me->GetPositionX() - 7, me->GetPositionY() - 5, me->GetPositionZ());
-                         _events.ScheduleEvent(EVENT_STRAGGLER_3, 2500ms);
-                         break;
+                        _events.ScheduleEvent(EVENT_STRAGGLER_3, 2500ms);
+                        break;
                     case EVENT_STRAGGLER_3:
                         me->GetMotionMaster()->MovePoint(0, me->GetPositionX() - 5, me->GetPositionY() - 5, me->GetPositionZ());
                         _events.ScheduleEvent(EVENT_STRAGGLER_4, 2500ms);
@@ -794,29 +794,29 @@ public:
             {
                 switch (eventId)
                 {
-                        case EVENT_LAKEFROG_1:
-                            DoCast(me, SPELL_MAIDEN_OF_ASHWOOD_LAKE_TRANSFORM);
-                            me->SetEntry(NPC_MAIDEN_OF_ASHWOOD_LAKE);
-                            _events.ScheduleEvent(EVENT_LAKEFROG_2, 2s);
-                            break;
-                        case EVENT_LAKEFROG_2:
-                            Talk(SAY_MAIDEN_0);
-                            _events.ScheduleEvent(EVENT_LAKEFROG_3, 3s);
-                            break;
-                        case EVENT_LAKEFROG_3:
-                            me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
-                            _events.ScheduleEvent(EVENT_LAKEFROG_4, 25s);
-                            break;
-                        case EVENT_LAKEFROG_4:
-                            me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
-                            _events.ScheduleEvent(EVENT_LAKEFROG_5, 2s);
-                            break;
-                        case EVENT_LAKEFROG_5:
-                            Talk(SAY_MAIDEN_1);
-                            me->DespawnOrUnsummon(4000);
-                            break;
-                        default:
-                            break;
+                    case EVENT_LAKEFROG_1:
+                        DoCast(me, SPELL_MAIDEN_OF_ASHWOOD_LAKE_TRANSFORM);
+                        me->SetEntry(NPC_MAIDEN_OF_ASHWOOD_LAKE);
+                        _events.ScheduleEvent(EVENT_LAKEFROG_2, 2s);
+                        break;
+                    case EVENT_LAKEFROG_2:
+                        Talk(SAY_MAIDEN_0);
+                        _events.ScheduleEvent(EVENT_LAKEFROG_3, 3s);
+                        break;
+                    case EVENT_LAKEFROG_3:
+                        me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+                        _events.ScheduleEvent(EVENT_LAKEFROG_4, 25s);
+                        break;
+                    case EVENT_LAKEFROG_4:
+                        me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+                        _events.ScheduleEvent(EVENT_LAKEFROG_5, 2s);
+                        break;
+                    case EVENT_LAKEFROG_5:
+                        Talk(SAY_MAIDEN_1);
+                        me->DespawnOrUnsummon(4000);
+                        break;
+                    default:
+                        break;
                 }
             }
         }

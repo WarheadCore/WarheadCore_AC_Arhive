@@ -85,7 +85,7 @@ public:
                 case 0:
                     break;
                 case 1:
-                    
+
                     if (me->GetEntry() == NPC_JAINA_PART1)
                     {
                         Talk(SAY_JAINA_INTRO_1);
@@ -98,7 +98,7 @@ public:
                     }
                     break;
                 case 2:
-                    
+
                     if (me->GetEntry() == NPC_JAINA_PART1)
                     {
                         Talk(SAY_JAINA_INTRO_2);
@@ -111,7 +111,7 @@ public:
                     }
                     break;
                 case 3:
-                    
+
                     if (me->GetEntry() == NPC_JAINA_PART1)
                     {
                         Talk(SAY_JAINA_INTRO_3);
@@ -124,7 +124,7 @@ public:
                     }
                     break;
                 case 4:
-                    
+
                     if (me->GetEntry() == NPC_JAINA_PART1)
                     {
                         Talk(SAY_JAINA_INTRO_4);
@@ -137,7 +137,7 @@ public:
                     }
                     break;
                 case 5:
-                    
+
                     if (me->GetEntry() == NPC_JAINA_PART1)
                     {
                         Talk(SAY_JAINA_INTRO_5);
@@ -150,7 +150,7 @@ public:
                     }
                     break;
                 case 6:
-                    
+
                     if (me->GetEntry() == NPC_JAINA_PART1)
                     {
                         Talk(SAY_JAINA_INTRO_6);
@@ -160,7 +160,7 @@ public:
                         Talk(SAY_SYLVANAS_INTRO_6);
                     break;
                 case 7:
-                    
+
                     if (me->GetEntry() == NPC_JAINA_PART1)
                     {
                         Talk(SAY_JAINA_INTRO_7);
@@ -168,7 +168,7 @@ public:
                     }
                     break;
                 case 8:
-                    
+
                     if (me->GetEntry() == NPC_JAINA_PART1)
                         Talk(SAY_JAINA_INTRO_8);
                     break;

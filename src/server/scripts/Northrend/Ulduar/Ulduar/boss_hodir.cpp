@@ -439,7 +439,7 @@ public:
                         me->MonsterYell(TEXT_HODIR_FLASH_FREEZE, LANG_UNIVERSAL, 0);
                         me->PlayDirectSound(SOUND_HODIR_FLASH_FREEZE, 0);
                         SmallIcicles(false);
-                        events.RepeatEvent(55000 + urand(0,10000));
+                        events.RepeatEvent(55000 + urand(0, 10000));
                         events.ScheduleEvent(EVENT_SMALL_ICICLES_ENABLE, Is25ManRaid() ? 12s : 24s);
                         events.ScheduleEvent(EVENT_FROZEN_BLOWS, 15s);
                         events.RescheduleEvent(EVENT_FREEZE, 20s);

@@ -233,9 +233,9 @@ public:
                         me->SetFacingTo(ZapAngle);
                         me->SetControlled(true, UNIT_STATE_ROOT);
                         me->CastSpell((Unit*)NULL, SPELL_ENERGIZE_CORES, false);
-                        ZapAngle += M_PI/2;
-                        if( ZapAngle >= 2*M_PI )
-                            ZapAngle -= 2*M_PI;
+                        ZapAngle += M_PI / 2;
+                        if( ZapAngle >= 2 * M_PI )
+                            ZapAngle -= 2 * M_PI;
                         events.ScheduleEvent(EVENT_ENERGIZE_CORES_THIN, 2s);
                     }
                     break;

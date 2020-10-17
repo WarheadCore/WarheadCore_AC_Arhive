@@ -100,9 +100,7 @@ public:
                             events.RepeatEvent(150);
                         }
                         else
-                        {
                             events.RescheduleEvent(2, 2500ms);
-                        }
                     }
                     break;
                 case 2:
@@ -112,14 +110,14 @@ public:
                             c->setActive(true);
                             c->AI()->Talk(SAY_TYRANNUS_INTRO_1);
                         }
-                    
+
                     events.RescheduleEvent(3, 7s);
                     break;
                 case 3:
                     if (pInstance)
                         if (Creature* c = pInstance->instance->GetCreature(pInstance->GetData64(DATA_TYRANNUS_EVENT_GUID)))
                             c->AI()->Talk(SAY_TYRANNUS_INTRO_2);
-                    
+
                     events.RescheduleEvent(4, 14s);
                     break;
                 case 4:
@@ -160,7 +158,7 @@ public:
                                 }
                         }
                     }
-                    
+
                     events.RescheduleEvent(5, 10ms);
                     break;
                 case 5:
@@ -171,7 +169,7 @@ public:
                     if (pInstance)
                         if (Creature* c = pInstance->instance->GetCreature(pInstance->GetData64(DATA_TYRANNUS_EVENT_GUID)))
                             c->AI()->Talk(SAY_TYRANNUS_INTRO_3);
-                    
+
                     events.RescheduleEvent(7, 5s);
                     break;
                 case 7:
@@ -201,14 +199,14 @@ public:
                                 c->GetMotionMaster()->MoveTakeoff(0, c->GetPositionX() + dist * cos(angle), c->GetPositionY() + dist * sin(angle), c->GetPositionZ() + 6.0f + (float)urand(0, 4), 1.5f + frand(0.0f, 1.5f));
                             }
                     }
-                    
+
                     events.RescheduleEvent(8, 7s);
                     break;
                 case 8:
                     if (pInstance)
                         if (Creature* c = pInstance->instance->GetCreature(pInstance->GetData64(DATA_TYRANNUS_EVENT_GUID)))
                             c->CastSpell(c, 69753, false);
-                    
+
                     events.RescheduleEvent(9, 400ms);
                     break;
                 case 9:
@@ -222,7 +220,7 @@ public:
                                 c->RemoveAllAuras();
                                 c->GetMotionMaster()->MoveFall(0, true);
                             }
-                    
+
                     events.RescheduleEvent(10, 1s);
                     break;
                 case 10:
@@ -242,7 +240,7 @@ public:
                                 c->SendMovementFlagUpdate();
                                 c->CastSpell(c, 69350, true);
                             }
-                    
+
                     events.RescheduleEvent(12, 2s);
                     break;
                 case 12:
@@ -263,7 +261,7 @@ public:
                                 c->SetReactState(REACT_PASSIVE);
                             }
                     }
-                    
+
                     events.RescheduleEvent(13, 3s);
                     break;
                 case 13:
@@ -283,7 +281,7 @@ public:
                                 c->SetHomePosition(me->GetPositionX() + dist * cos(angle), me->GetPositionY() + dist * sin(angle), me->GetPositionZ(), 0.0f);
                             }
                     }
-                    
+
                     events.RescheduleEvent(14, 2s);
                     break;
                 case 14:
@@ -302,7 +300,7 @@ public:
                                     c->CastSpell(c, 70513, false);
                         }
                     }
-                    
+
                     events.RescheduleEvent(15, 2s);
                     break;
                 case 15:
@@ -318,7 +316,7 @@ public:
                                     c->CastSpell(c, 70464, false);
                         }
                     }
-                    
+
                     events.RescheduleEvent(16, 3s);
                     break;
                 case 16:
@@ -343,13 +341,13 @@ public:
                             }
                         pInstance->SetData(DATA_INSTANCE_PROGRESS, INSTANCE_PROGRESS_FINISHED_INTRO);
                     }
-                    
+
                     events.RescheduleEvent(17, 5s);
                     break;
                 case 17:
                     me->setActive(false);
                     Talk(me->GetEntry() == NPC_JAINA_PART1 ? SAY_JAINA_INTRO_5 : SAY_SYLVANAS_INTRO_4);
-                    
+
                     break;
             }
 
@@ -553,12 +551,12 @@ public:
                 case 2:
                     if (Creature* c = me->SummonCreature(NPC_TYRANNUS_VOICE, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ() - 10.0f, me->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 1))
                         c->AI()->Talk(SAY_TYRANNUS_GARFROST);
-                    
+
                     events.RescheduleEvent(3, 4s);
                     break;
                 case 3:
                     Talk(SAY_GENERAL_GARFROST);
-                    
+
                     break;
             }
         }
@@ -1222,26 +1220,26 @@ public:
                             c->SetHover(true);
                             c->GetMotionMaster()->MovePoint(0, TSSindragosaPos2);
                         }
-                    
+
                     break;
                 case 2:
                     if (pInstance)
                         if (Creature* c = pInstance->instance->GetCreature(pInstance->GetData64(DATA_MARTIN_OR_GORKUN_GUID)))
                             c->AI()->Talk(SAY_GENERAL_OUTRO_2);
-                    
+
                     events.RescheduleEvent(3, me->GetEntry() == NPC_JAINA_PART2 ? 7s : 8s);
                     break;
                 case 3:
                     Talk(me->GetEntry() == NPC_JAINA_PART2 ? SAY_JAINA_OUTRO_1 : SAY_SYLVANAS_OUTRO_1);
                     me->CastSpell(me, me->GetEntry() == NPC_JAINA_PART2 ? SPELL_TELEPORT_JAINA_VISUAL : SPELL_TELEPORT_SYLVANAS_VISUAL, true);
-                    
+
                     events.RescheduleEvent(4, 2s);
                     break;
                 case 4:
                     me->CastSpell(me, me->GetEntry() == NPC_JAINA_PART2 ? SPELL_TELEPORT_JAINA : SPELL_TELEPORT_SYLVANAS, true);
                     if (GameObject* barrier = me->SummonGameObject(203005, 1055.49f, 115.03f, 628.15f, 2.08f, 0.0f, 0.0f, 0.0f, 0.0f, 86400, false))
                         barrierGUID = barrier->GetGUID();
-                    
+
                     events.RescheduleEvent(5, 1500ms);
                     break;
                 case 5:
@@ -1251,7 +1249,7 @@ public:
                             if (Creature* c = pInstance->instance->GetCreature(pInstance->GetData64(DATA_SINDRAGOSA_GUID)))
                                 c->CastSpell(x->GetPositionX(), x->GetPositionY(), x->GetPositionZ(), SPELL_SINDRAGOSA_FROST_BOMB_POS, true);
                         }
-                    
+
                     events.RescheduleEvent(6, 5s);
                     events.RescheduleEvent(10, 2s);
                     break;
@@ -1259,7 +1257,7 @@ public:
                     if (pInstance)
                         if (Creature* c = pInstance->instance->GetCreature(pInstance->GetData64(DATA_SINDRAGOSA_GUID)))
                             c->GetMotionMaster()->MovePoint(0, TSSindragosaPos1);
-                    
+
                     events.RescheduleEvent(7, 4500ms);
                     break;
                 case 7:
@@ -1269,7 +1267,7 @@ public:
                     if (GameObject* barrier = pInstance->instance->GetGameObject(barrierGUID))
                         barrier->Delete();
                     barrierGUID = 0;
-                    
+
                     events.RescheduleEvent(8, 2s);
                     break;
                 case 8:
@@ -1278,7 +1276,7 @@ public:
                 case 10:
                     if (Creature* x = pInstance->instance->GetCreature(pInstance->GetData64(DATA_MARTIN_OR_GORKUN_GUID)))
                         x->AI()->DoAction(3);
-                    
+
                     break;
             }
         }

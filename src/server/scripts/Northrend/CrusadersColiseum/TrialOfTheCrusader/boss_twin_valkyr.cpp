@@ -123,9 +123,9 @@ struct boss_twin_valkyrAI : public ScriptedAI
             events.RescheduleEvent(EVENT_SUMMON_BALLS_1, 10s, 15s);
             events.RescheduleEvent(EVENT_SPECIAL, 45s);
         }
-        
+
         events.RescheduleEvent(EVENT_SPELL_SPIKE, 5s, 8s);
-        
+
         if(IsHeroic())
             events.RescheduleEvent(EVENT_SPELL_TOUCH, 10s, 25s, 1);
 
@@ -302,7 +302,7 @@ struct boss_twin_valkyrAI : public ScriptedAI
                     twin->CastSpell(twin, SPELL_BERSERK, true);
                     twin->AI()->Talk(SAY_BERSERK);
                 }
-                
+
                 break;
             case EVENT_SUMMON_BALLS_1:
             case EVENT_SUMMON_BALLS_2:
@@ -320,7 +320,7 @@ struct boss_twin_valkyrAI : public ScriptedAI
                         if( Creature* ball = me->SummonCreature((i % 2) ? NPC_CONCENTRATED_DARK : NPC_CONCENTRATED_LIGHT, Locs[LOC_CENTER].GetPositionX() + cos(angle) * 47.0f, Locs[LOC_CENTER].GetPositionY() + sin(angle) * 47.0f, Locs[LOC_CENTER].GetPositionZ() + 1.5f, 0.0f, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 1500) )
                             boss_twin_valkyrAI::JustSummoned(ball);
                     }
-                    
+
                     switch( eventId )
                     {
                         case EVENT_SUMMON_BALLS_1:
@@ -462,7 +462,7 @@ struct boss_twin_valkyrAI : public ScriptedAI
                 break;
             case EVENT_REMOVE_DUAL_WIELD:
                 me->SetCanDualWield(false);
-                
+
                 break;
         }
 

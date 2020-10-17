@@ -1013,9 +1013,7 @@ public:
             {
                 case EVENT_UPDATE_ALGALON_TIMER:
                     if (m_algalonTimer == TIMER_ALGALON_DEFEATED)
-                    {
                         return;
-                    }
 
                     SaveToDB();
                     DoUpdateWorldState(WORLD_STATE_ALGALON_DESPAWN_TIMER, --m_algalonTimer);

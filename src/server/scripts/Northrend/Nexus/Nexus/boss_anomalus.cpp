@@ -125,12 +125,12 @@ public:
             Talk(SAY_AGGRO);
             BossAI::EnterCombat(who);
 
-                events.SetTimer(45000);
-                events.ScheduleEvent(EVENT_ANOMALUS_SPARK, 5s);
-                events.ScheduleEvent(EVENT_ANOMALUS_HEALTH, 1s);
-                if (IsHeroic())
-                    events.ScheduleEvent(EVENT_ANOMALUS_ARCANE_ATTRACTION, 8s);
-            }
+            events.SetTimer(45000);
+            events.ScheduleEvent(EVENT_ANOMALUS_SPARK, 5s);
+            events.ScheduleEvent(EVENT_ANOMALUS_HEALTH, 1s);
+            if (IsHeroic())
+                events.ScheduleEvent(EVENT_ANOMALUS_ARCANE_ATTRACTION, 8s);
+        }
 
         void JustDied(Unit* killer)
         {

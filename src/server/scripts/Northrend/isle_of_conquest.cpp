@@ -163,7 +163,7 @@ public:
             if (action == ACTION_GUNSHIP_READY)
             {
                 DoCast(me, SPELL_SIMPLE_TELEPORT);
-                    _events.ScheduleEvent(EVENT_TALK, 3s);
+                _events.ScheduleEvent(EVENT_TALK, 3s);
             }
         }
 
@@ -174,18 +174,18 @@ public:
             {
                 switch (eventId)
                 {
-                        case EVENT_TALK:
-                            _events.ScheduleEvent(EVENT_DESPAWN, 1s);
-                            Talk(SAY_ONBOARD);
-                            DoCast(me, SPELL_TELEPORT_VISUAL_ONLY);
-                            break;
-                        case EVENT_DESPAWN:
-                            if (me->GetMap()->ToBattlegroundMap())
-                                if (Battleground* bgIoC = me->GetMap()->ToBattlegroundMap()->GetBG())
-                                    bgIoC->DelCreature(BG_IC_NPC_GUNSHIP_CAPTAIN_1);
-                            break;
-                        default:
-                            break;
+                    case EVENT_TALK:
+                        _events.ScheduleEvent(EVENT_DESPAWN, 1s);
+                        Talk(SAY_ONBOARD);
+                        DoCast(me, SPELL_TELEPORT_VISUAL_ONLY);
+                        break;
+                    case EVENT_DESPAWN:
+                        if (me->GetMap()->ToBattlegroundMap())
+                            if (Battleground* bgIoC = me->GetMap()->ToBattlegroundMap()->GetBG())
+                                bgIoC->DelCreature(BG_IC_NPC_GUNSHIP_CAPTAIN_1);
+                        break;
+                    default:
+                        break;
                 }
             }
         }

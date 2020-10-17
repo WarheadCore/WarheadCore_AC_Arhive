@@ -980,7 +980,7 @@ public:
                     break;
                 case EVENT_SPELL_SUMMON_FELHUNTER:
                     DoSummon(35465, *me);
-                    
+
                     break;
                 case EVENT_SPELL_HELLFIRE:
                     if( EnemiesInRange(9.0f) >= 3 )
@@ -1271,7 +1271,7 @@ public:
                     break;
                 case EVENT_SPELL_CALL_PET:
                     DoSummon(35610, *me);
-                    
+
                     break;
                 case EVENT_SPELL_AIMED_SHOT:
                     if( me->GetVictim() )

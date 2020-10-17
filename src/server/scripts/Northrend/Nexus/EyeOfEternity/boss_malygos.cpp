@@ -389,7 +389,7 @@ public:
                 case EVENT_BERSERK:
                     me->CastSpell(me, SPELL_BERSERK, true);
                     Talk(EMOTE_BERSERK);
-                    
+
                     break;
                 case EVENT_INTRO_MOVE_CENTER:
                     {
@@ -548,7 +548,7 @@ public:
                     }
                 case EVENT_VORTEX_LAND_0:
                     me->GetMotionMaster()->MoveLand(MI_POINT_VORTEX_LAND, CenterPos, 7.0f);
-                    
+
                     break;
                 case EVENT_VORTEX_LAND_1:
                     {
@@ -585,7 +585,7 @@ public:
                         //me->SetHover(true);
                         me->SendMovementFlagUpdate();
                         me->GetMotionMaster()->MoveTakeoff(MI_POINT_CENTER_AIR_PH_2, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ() + 32.0f, 7.0f);
-                    events.RescheduleEvent(EVENT_START_PHASE_2_MOVE_TO_SIDE, 22500ms, 1);
+                        events.RescheduleEvent(EVENT_START_PHASE_2_MOVE_TO_SIDE, 22500ms, 1);
                         break;
                     }
                 case EVENT_START_PHASE_2_MOVE_TO_SIDE:
@@ -1298,17 +1298,16 @@ public:
                     events.RescheduleEvent(EVENT_DISK_MOVE_NEXT_POINT, 0s);
                     break;
                 case MI_POINT_NEXUS_LORD:
-                    if (me->GetPositionZ() > CenterPos.GetPositionZ()+2.0f)
+                    if (me->GetPositionZ() > CenterPos.GetPositionZ() + 2.0f)
                         events.RescheduleEvent(EVENT_DISK_MOVE_NEXT_POINT, 0s);
-                    else
-                        if (Vehicle* v = me->GetVehicleKit())
-                            if (Unit* pass = v->GetPassenger(0))
-                                if (Creature* c = pass->ToCreature())
-                                {
-                                    c->SetReactState(REACT_AGGRESSIVE);
-                                    if (Player* plr = c->SelectNearestPlayer(100.0f))
-                                        c->AI()->AttackStart(plr);
-                                }
+                    else if (Vehicle* v = me->GetVehicleKit())
+                        if (Unit* pass = v->GetPassenger(0))
+                            if (Creature* c = pass->ToCreature())
+                            {
+                                c->SetReactState(REACT_AGGRESSIVE);
+                                if (Player* plr = c->SelectNearestPlayer(100.0f))
+                                    c->AI()->AttackStart(plr);
+                            }
                     break;
             }
         }

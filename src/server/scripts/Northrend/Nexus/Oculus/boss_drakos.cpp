@@ -146,7 +146,7 @@ public:
                         //me->MonsterTextEmote(TEXT_MAGIC_PULL, 0, true);
 
                         me->CastSpell(me, SPELL_MAGIC_PULL, false);
-                        events.RepeatEvent(urand(15000,25000));
+                        events.RepeatEvent(urand(15000, 25000));
                         events.ScheduleEvent(EVENT_SUMMON_x4, 1500ms);
                     }
                     break;
@@ -174,7 +174,7 @@ public:
                         float angle = rand_norm() * 2 * M_PI;
                         me->SummonCreature(NPC_UNSTABLE_SPHERE, me->GetPositionX() + 5.0f * cos(angle), me->GetPositionY() + 5.0f * sin(angle), me->GetPositionZ(), 0.0f, TEMPSUMMON_TIMED_DESPAWN, 18000);
                     }
-                    
+
                     break;
             }
         }

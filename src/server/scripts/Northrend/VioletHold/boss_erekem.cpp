@@ -96,7 +96,7 @@ public:
             events.RescheduleEvent(EVENT_SPELL_EARTH_SHIELD, 20s);
             events.RescheduleEvent(EVENT_SPELL_EARTH_SHOCK, 2s, 8s);
             events.RescheduleEvent(EVENT_SPELL_LIGHTNING_BOLT, 5s, 10s);
-            
+
             if (IsHeroic())
                 events.RescheduleEvent(EVENT_SPELL_STORMSTRIKE, 3s);
 
