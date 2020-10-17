@@ -150,81 +150,64 @@ public:
             }
             else
             {
-                switch (eventId)
+                events.Update(diff);
+
+                while (uint32 eventId = events.ExecuteEvent())
                 {
-                    case EVENT_MAGIC_REFLECTION:
-                        DoCast(me, SPELL_MAGIC_REFLECTION);
-                        events.ScheduleEvent(EVENT_MAGIC_REFLECTION, 30000);
-                        break;
-                    case EVENT_DAMAGE_REFLECTION:
-                        DoCast(me, SPELL_DAMAGE_REFLECTION);
-                        events.ScheduleEvent(EVENT_DAMAGE_REFLECTION, 30000);
-                        break;
-                    case EVENT_BLAST_WAVE:
-                        DoCastVictim(SPELL_BLAST_WAVE);
-                        events.ScheduleEvent(EVENT_BLAST_WAVE, 10000);
-                        break;
-                    case EVENT_TELEPORT:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
-                            DoCast(target, SPELL_TELEPORT);
-                        events.ScheduleEvent(EVENT_TELEPORT, 20000);
-                        break;
-                    default:
-                        break;
+                    switch (eventId)
+                    {
+                        case EVENT_OUTRO_1:
+                            me->NearTeleportTo(RagnarosTelePos.GetPositionX(), RagnarosTelePos.GetPositionY(), RagnarosTelePos.GetPositionZ(), RagnarosTelePos.GetOrientation());
+                            me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+                            break;
+                        case EVENT_OUTRO_2:
+                            instance->instance->SummonCreature(NPC_RAGNAROS, RagnarosSummonPos);
+                            break;
+                        case EVENT_OUTRO_3:
+                            Talk(SAY_ARRIVAL2_MAJ);
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
-
-            DoMeleeAttackIfReady();
         }
-        else
-        {
-            events.Update(diff);
 
-            while (uint32 eventId = events.ExecuteEvent())
+        void DoAction(int32 action) override
+        {
+            if (action == ACTION_START_RAGNAROS && events.GetNextEventTime(EVENT_OUTRO_2) == 0)
             {
                 me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
                 Talk(SAY_SUMMON_MAJ);
                 events.ScheduleEvent(EVENT_OUTRO_2, 8s);
                 events.ScheduleEvent(EVENT_OUTRO_3, 24s);
             }
+            else if (action == ACTION_START_RAGNAROS_ALT)
+            {
+                me->setFaction(35);
+                me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+            }
         }
-    }
+    };
 
-    void DoAction(int32 action) override
+    bool OnGossipHello(Player* player, Creature* creature) override
     {
-        if (action == ACTION_START_RAGNAROS && events.GetNextEventTime(EVENT_OUTRO_2) == 0)
-        {
-            me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
-            Talk(SAY_SUMMON_MAJ);
-            events.ScheduleEvent(EVENT_OUTRO_2, 8000);
-            events.ScheduleEvent(EVENT_OUTRO_3, 24000);
-        }
-        else if (action == ACTION_START_RAGNAROS_ALT)
-        {
-            me->setFaction(35);
-            me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
-        }
+        AddGossipItemFor(player, 4093, 0, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        SendGossipMenuFor(player, GOSSIP_HELLO, creature->GetGUID());
+        return true;
     }
-};
 
-bool OnGossipHello(Player* player, Creature* creature) override
-{
-    AddGossipItemFor(player, 4093, 0, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-    SendGossipMenuFor(player, GOSSIP_HELLO, creature->GetGUID());
-    return true;
-}
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*sender*/, uint32 /*action*/) override
+    {
+        CloseGossipMenuFor(player);
+        creature->AI()->DoAction(ACTION_START_RAGNAROS);
+        return true;
+    }
 
-bool OnGossipSelect(Player* player, Creature* creature, uint32 /*sender*/, uint32 /*action*/) override
-{
-    CloseGossipMenuFor(player);
-    creature->AI()->DoAction(ACTION_START_RAGNAROS);
-    return true;
-}
-
-CreatureAI* GetAI(Creature* creature) const override
-{
-    return GetInstanceAI<boss_majordomoAI>(creature);
-}
+    CreatureAI* GetAI(Creature* creature) const override
+    {
+        return GetInstanceAI<boss_majordomoAI>(creature);
+    }
 };
 
 void AddSC_boss_majordomo()
