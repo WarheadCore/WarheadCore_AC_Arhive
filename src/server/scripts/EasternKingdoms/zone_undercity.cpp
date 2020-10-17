@@ -199,33 +199,33 @@ public:
                         _events.ScheduleEvent(EVENT_SHOOT, 8s, 10s));
                         break;
                     case EVENT_MULTI_SHOT:
-                        if (Unit* victim = me->GetVictim())
-                            DoCast(victim, SPELL_MULTI_SHOT);
-                        _events.ScheduleEvent(EVENT_MULTI_SHOT, urand(10000, 13000));
-                        break;
-                    case EVENT_LAMENT_OF_THE_HIGHBORN:
-                        if (!me->HasAura(SPELL_SYLVANAS_CAST))
-                        {
-                            Talk(SAY_LAMENT_END);
-                            Talk(EMOTE_LAMENT_END);
-                            LamentEvent = false;
-                            me->HandleEmoteCommand(EMOTE_ONESHOT_KNEEL);
-                            Reset();
-                        }
-                        else
-                        {
-                            DoSummon(NPC_HIGHBORNE_BUNNY, me, 10.0f, 3000, TEMPSUMMON_TIMED_DESPAWN);
-                            _events.ScheduleEvent(EVENT_LAMENT_OF_THE_HIGHBORN, 2000);
-                        }
+                            if (Unit* victim = me->GetVictim())
+                                DoCast(victim, SPELL_MULTI_SHOT);
+                                _events.ScheduleEvent(EVENT_MULTI_SHOT, urand(10000, 13000));
+                                break;
+                            case EVENT_LAMENT_OF_THE_HIGHBORN:
+                                    if (!me->HasAura(SPELL_SYLVANAS_CAST))
+                                    {
+                                        Talk(SAY_LAMENT_END);
+                                        Talk(EMOTE_LAMENT_END);
+                                        LamentEvent = false;
+                                        me->HandleEmoteCommand(EMOTE_ONESHOT_KNEEL);
+                                        Reset();
+                                    }
+                                    else
+                                    {
+                                        DoSummon(NPC_HIGHBORNE_BUNNY, me, 10.0f, 3000, TEMPSUMMON_TIMED_DESPAWN);
+                                        _events.ScheduleEvent(EVENT_LAMENT_OF_THE_HIGHBORN, 2000);
+                                    }
                         break;
                     case EVENT_SUNSORROW_WHISPER:
-                        if (Creature* ambassador = me->FindNearestCreature(NPC_AMBASSADOR_SUNSORROW, 20.0f))
-                            if (Player* player = ObjectAccessor::GetPlayer(*me, playerGUID))
-                                ambassador->AI()->Talk(SAY_SUNSORROW_WHISPER, player);
-                        break;
-                    default:
-                        break;
-                }
+                            if (Creature* ambassador = me->FindNearestCreature(NPC_AMBASSADOR_SUNSORROW, 20.0f))
+                                if (Player* player = ObjectAccessor::GetPlayer(*me, playerGUID))
+                                    ambassador->AI()->Talk(SAY_SUNSORROW_WHISPER, player);
+                                    break;
+                                default:
+                                        break;
+                                    }
             }
 
             DoMeleeAttackIfReady();
@@ -2067,9 +2067,7 @@ public:
                         if (me->GetVictim())
                         {
                             if (Creature* jaina = ObjectAccessor::GetCreature(*me, jainaGUID))
-                            {
                                 jaina->AI()->AttackStart(me->GetVictim());
-                            }
                         }
                         DoCast(me, SPELL_THUNDER);
                         _events.ScheduleEvent(EVENT_AGGRO_JAINA, 2 * IN_MILLISECONDS);
