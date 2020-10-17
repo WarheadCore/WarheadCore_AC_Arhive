@@ -106,20 +106,17 @@ public:
             {
                 switch (eventId)
                 {
-                        switch (eventId)
-                        {
-                            case EVENT_PYROBLAST:
-                                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                                    DoCast(target, SPELL_PYROBLAST);
-                                events.ScheduleEvent(EVENT_PYROBLAST, 7s);
-                                break;
-                            case EVENT_EARTHQUAKE:
-                                DoCastVictim(SPELL_EARTHQUAKE);
-                                events.ScheduleEvent(EVENT_EARTHQUAKE, 3s);
-                                break;
-                            default:
-                                break;
-                        }
+                    case EVENT_PYROBLAST:
+                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                            DoCast(target, SPELL_PYROBLAST);
+                        events.ScheduleEvent(EVENT_PYROBLAST, 7s);
+                        break;
+                    case EVENT_EARTHQUAKE:
+                        DoCastVictim(SPELL_EARTHQUAKE);
+                        events.ScheduleEvent(EVENT_EARTHQUAKE, 3s);
+                        break;
+                    default:
+                        break;
                 }
             }
 

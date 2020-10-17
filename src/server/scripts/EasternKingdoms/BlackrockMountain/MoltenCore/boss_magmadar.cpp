@@ -213,56 +213,49 @@ public:
                         {
                             if (i && i->IsAlive() && i->IsInCombat() && !i->HasUnitState(UNIT_STATE_DIED))
                             {
-                                DoCast(me->GetVictim(), SPELL_SERRATED_BITE);
-                                events.ScheduleEvent(EVENT_SERRATED_BITE, 10000); // again, timer may be wrong
+                                Talk(EMOTE_IGNITE);
+                                me->SetFullHealth();
+                                me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_UNK_29);
+                                me->RemoveFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_FEIGN_DEATH);
+                                me->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_DEAD);
+                                me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE);
+                                me->RemoveUnitMovementFlag(MOVEMENTFLAG_ROOT);
+                                me->ClearUnitState(UNIT_STATE_DIED);
+                                me->ClearUnitState(UNIT_STATE_CANNOT_AUTOATTACK);
+                                me->DisableRotate(false);
+                                me->AI()->AttackStart(i->GetVictim());
+                                return;
                             }
-                            break;
-                        case EVENT_IGNITE:
-                            smoldering = false;
-                            me->GetCreaturesWithEntryInRange(hounds, 80, NPC_CORE_HOUND);
-                            for (Creature* i : hounds)
-                            {
-                                if (i && i->IsAlive() && i->IsInCombat() && !i->HasUnitState(UNIT_STATE_DIED))
-                                {
-                                    Talk(EMOTE_IGNITE);
-                                    me->SetFullHealth();
-                                    me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_UNK_29);
-                                    me->RemoveFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_FEIGN_DEATH);
-                                    me->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_DEAD);
-                                    me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE);
-                                    me->RemoveUnitMovementFlag(MOVEMENTFLAG_ROOT);
-                                    me->ClearUnitState(UNIT_STATE_DIED);
-                                    me->ClearUnitState(UNIT_STATE_CANNOT_AUTOATTACK);
-                                    me->DisableRotate(false);
-                                    me->AI()->AttackStart(i->GetVictim());
-                                    return;
-                                }
-                            }
-                            if (me->HasUnitState(UNIT_STATE_DIED))
-                            {
-                                if (killer)
-                                    me->Kill(killer, me);
-                                else
-                                    me->Kill(me, me);
-                            }
-                            break;
-                        default:
-                            break;
                         }
+                        if (me->HasUnitState(UNIT_STATE_DIED))
+                        {
+                            if (killer)
+                            {
+                                me->Kill(killer, me);
+                            }
+                            else
+                            {
+                                me->Kill(me, me);
+                            }
+                        }
+                        break;
+                    default:
+                        break;
                 }
-
-                DoMeleeAttackIfReady();
             }
-        };
 
-        CreatureAI* GetAI(Creature* creature) const
-        {
-            return new npc_magmadar_core_houndAI(creature);
+            DoMeleeAttackIfReady();
         }
     };
 
-    void AddSC_boss_magmadar()
+    CreatureAI* GetAI(Creature* creature) const
     {
-        new boss_magmadar();
-        new npc_magmadar_core_hound();
+        return new npc_magmadar_core_houndAI(creature);
     }
+};
+
+void AddSC_boss_magmadar()
+{
+    new boss_magmadar();
+    new npc_magmadar_core_hound();
+}
