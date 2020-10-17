@@ -87,7 +87,7 @@ public:
             events.ScheduleEvent(EVENT_SPELL_STEAL_FLESH, 11s);
             events.ScheduleEvent(EVENT_SPELL_SUMMON_GHOULS, 16s);
             events.ScheduleEvent(EVENT_EXPLODE_GHOUL, 22s);
-            
+
             if (IsHeroic())
                 events.ScheduleEvent(EVENT_SPELL_CURSE, 25s);
         }

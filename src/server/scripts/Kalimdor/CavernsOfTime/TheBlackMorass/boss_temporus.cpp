@@ -75,7 +75,7 @@ public:
             events.ScheduleEvent(EVENT_HASTEN, 12s);
             events.ScheduleEvent(EVENT_MORTAL_WOUND, 5s);
             events.ScheduleEvent(EVENT_WING_BUFFET, 20s);
-            
+
             if (IsHeroic())
                 events.ScheduleEvent(EVENT_SPELL_REFLECTION, 28s);
 

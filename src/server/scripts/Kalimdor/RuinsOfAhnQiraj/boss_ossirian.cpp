@@ -125,13 +125,13 @@ public:
                         Trigger->CastSpell(Trigger, SpellWeakness[urand(0, 4)], false);
         }
 
-            void EnterCombat(Unit* /*who*/)
-            {
-                _EnterCombat();
-                events.Reset();
-                events.ScheduleEvent(EVENT_SILENCE, 30s);
-                events.ScheduleEvent(EVENT_CYCLONE, 20s);
-                events.ScheduleEvent(EVENT_STOMP, 30s);
+        void EnterCombat(Unit* /*who*/)
+        {
+            _EnterCombat();
+            events.Reset();
+            events.ScheduleEvent(EVENT_SILENCE, 30s);
+            events.ScheduleEvent(EVENT_CYCLONE, 20s);
+            events.ScheduleEvent(EVENT_STOMP, 30s);
 
             DoCast(me, SPELL_SUPREME);
             Talk(SAY_AGGRO);

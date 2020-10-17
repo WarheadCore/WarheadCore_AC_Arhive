@@ -76,7 +76,7 @@ public:
             events.ScheduleEvent(EVENT_ARCANE_BLAST, 10s);
             events.ScheduleEvent(EVENT_TIME_LAPSE, 15s);
             events.ScheduleEvent(EVENT_ARCANE_DISCHARGE, 25s);
-            
+
             if (IsHeroic())
                 events.ScheduleEvent(EVENT_ATTRACTION, 20s);
 

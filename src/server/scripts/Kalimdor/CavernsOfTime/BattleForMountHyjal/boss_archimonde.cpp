@@ -610,8 +610,8 @@ public:
 
                             if (me->IsWithinDistInMap(Check, 75))
                             {
-                            events.ScheduleEvent(EVENT_TOO_CLOSE_TO_WORLD_TREE, 0s);
-                            break;
+                                events.ScheduleEvent(EVENT_TOO_CLOSE_TO_WORLD_TREE, 0s);
+                                break;
                             }
                         }
                         events.RepeatEvent(5000);
