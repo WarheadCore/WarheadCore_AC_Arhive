@@ -100,13 +100,13 @@ public:
         void EnterCombat(Unit* victim) override
         {
             BossAI::EnterCombat(victim);
-            events.ScheduleEvent(EVENT_ERUPTION, 15000);
-            events.ScheduleEvent(EVENT_WRATH_OF_RAGNAROS, 30000);
-            events.ScheduleEvent(EVENT_HAND_OF_RAGNAROS, 25000);
-            events.ScheduleEvent(EVENT_LAVA_BURST, 10000);
-            events.ScheduleEvent(EVENT_ELEMENTAL_FIRE, 3000);
-            events.ScheduleEvent(EVENT_MAGMA_BLAST, 2000);
-            events.ScheduleEvent(EVENT_SUBMERGE, 180000);
+            events.ScheduleEvent(EVENT_ERUPTION, 15s);
+            events.ScheduleEvent(EVENT_WRATH_OF_RAGNAROS, 30s);
+            events.ScheduleEvent(EVENT_HAND_OF_RAGNAROS, 25s);
+            events.ScheduleEvent(EVENT_LAVA_BURST, 10s);
+            events.ScheduleEvent(EVENT_ELEMENTAL_FIRE, 3s);
+            events.ScheduleEvent(EVENT_MAGMA_BLAST, 2s);
+            events.ScheduleEvent(EVENT_SUBMERGE, 3min);
         }
 
         void JustDied(Unit* killer) override

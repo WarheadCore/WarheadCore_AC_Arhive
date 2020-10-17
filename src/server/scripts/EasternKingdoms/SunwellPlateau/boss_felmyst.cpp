@@ -147,7 +147,7 @@ public:
             {
                 me->SetVisible(true);
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-                events2.ScheduleEvent(EVENT_INTRO_1, 3000);
+                events2.ScheduleEvent(EVENT_INTRO_1, 3s);
             }
         }
 
@@ -166,7 +166,7 @@ public:
             BossAI::EnterCombat(who);
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
             if (events.Empty() && events2.Empty())
-                events2.ScheduleEvent(EVENT_INTRO_2, 3000);
+                events2.ScheduleEvent(EVENT_INTRO_2, 3s);
         }
 
 
@@ -197,36 +197,36 @@ public:
                 me->SetDisableGravity(false);
                 me->SendMovementFlagUpdate();
 
-                events.ScheduleEvent(EVENT_RESTORE_COMBAT, 0);
-                events.ScheduleEvent(EVENT_RESTORE_COMBAT2, 1);
-                events.ScheduleEvent(EVENT_SPELL_CLEAVE, 7500, 1);
-                events.ScheduleEvent(EVENT_SPELL_CORROSION, 12000, 1);
-                events.ScheduleEvent(EVENT_SPELL_GAS_NOVA, 18000, 1);
-                events.ScheduleEvent(EVENT_SPELL_ENCAPSULATE, 25000, 1);
-                events.ScheduleEvent(EVENT_FLIGHT, 60000, 1);
+                events.ScheduleEvent(EVENT_RESTORE_COMBAT, 0s);
+                events.ScheduleEvent(EVENT_RESTORE_COMBAT2, 10ms);
+                events.ScheduleEvent(EVENT_SPELL_CLEAVE, 7500ms, 1);
+                events.ScheduleEvent(EVENT_SPELL_CORROSION, 12s, 1);
+                events.ScheduleEvent(EVENT_SPELL_GAS_NOVA, 18s, 1);
+                events.ScheduleEvent(EVENT_SPELL_ENCAPSULATE, 25s, 1);
+                events.ScheduleEvent(EVENT_FLIGHT, 1min, 1);
             }
             else if (point == POINT_AIR_BREATH_START1)
             {
                 me->SetTarget(0);
                 me->SetFacingTo(4.71f);
-                events.ScheduleEvent(EVENT_FLIGHT_EMOTE, 2000);
-                events.ScheduleEvent(EVENT_CORRUPT_TRIGGERS, 5000);
-                events.ScheduleEvent(EVENT_FLIGHT_FLYOVER1, 5000);
+                events.ScheduleEvent(EVENT_FLIGHT_EMOTE, 2s);
+                events.ScheduleEvent(EVENT_CORRUPT_TRIGGERS, 5s);
+                events.ScheduleEvent(EVENT_FLIGHT_FLYOVER1, 5s);
             }
             else if (point == POINT_AIR_BREATH_END1)
             {
                 me->RemoveAurasDueToSpell(SPELL_FELMYST_SPEED_BURST);
                 me->SetFacingTo(1.57f);
                 if (events.GetNextEventTime(EVENT_FLIGHT_BREATH1) != 0)
-                    events.ScheduleEvent(EVENT_FLIGHT_BREATH2, 2000);
+                    events.ScheduleEvent(EVENT_FLIGHT_BREATH2, 2s);
             }
             else if (point == POINT_AIR_BREATH_START2)
             {
                 me->SetTarget(0);
                 me->SetFacingTo(1.57f);
-                events.ScheduleEvent(EVENT_FLIGHT_EMOTE, 2000);
-                events.ScheduleEvent(EVENT_CORRUPT_TRIGGERS, 5000);
-                events.ScheduleEvent(EVENT_FLIGHT_FLYOVER2, 5000);
+                events.ScheduleEvent(EVENT_FLIGHT_EMOTE, 2s);
+                events.ScheduleEvent(EVENT_CORRUPT_TRIGGERS, 5s);
+                events.ScheduleEvent(EVENT_FLIGHT_FLYOVER2, 5s);
             }
             else if (point == POINT_AIR_BREATH_END2)
             {
@@ -247,22 +247,22 @@ public:
             {
                 case EVENT_INTRO_1:
                     me->SetStandState(UNIT_STAND_STATE_STAND);
-                    events2.ScheduleEvent(EVENT_INTRO_2, 4000);
+                    events2.ScheduleEvent(EVENT_INTRO_2, 4s);
                     break;
                 case EVENT_INTRO_2:
                     Talk(YELL_BIRTH);
                     me->SetDisableGravity(true);
                     me->HandleEmoteCommand(EMOTE_ONESHOT_LIFTOFF);
                     me->SendMovementFlagUpdate();
-                    events2.ScheduleEvent(EVENT_INTRO_3, 1500);
+                    events2.ScheduleEvent(EVENT_INTRO_3, 1500ms);
                     break;
                 case EVENT_INTRO_3:
                     me->GetMotionMaster()->MovePoint(POINT_AIR, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ() + 10.0f, false, true);
-                    events2.ScheduleEvent(EVENT_INTRO_4, 2000);
+                    events2.ScheduleEvent(EVENT_INTRO_4, 2s);
                     break;
                 case EVENT_INTRO_4:
-                    events.ScheduleEvent(EVENT_LAND, 3000, 1);
-                    events.ScheduleEvent(EVENT_SPELL_BERSERK, 600000);
+                    events.ScheduleEvent(EVENT_LAND, 3s, 1);
+                    events.ScheduleEvent(EVENT_SPELL_BERSERK, 10min);
                     me->SetInCombatWithZone();
                     me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                     me->CastSpell(me, SPELL_NOXIOUS_FUMES, true);
@@ -298,24 +298,24 @@ public:
                     break;
                 case EVENT_SPELL_CLEAVE:
                     me->CastSpell(me->GetVictim(), SPELL_CLEAVE, false);
-                    events.ScheduleEvent(EVENT_SPELL_CLEAVE, 7500, 1);
+                    events.ScheduleEvent(EVENT_SPELL_CLEAVE, 7500ms, 1);
                     break;
                 case EVENT_SPELL_CORROSION:
                     me->CastSpell(me->GetVictim(), SPELL_CORROSION, false);
-                    events.ScheduleEvent(EVENT_SPELL_CORROSION, 20000, 1);
+                    events.ScheduleEvent(EVENT_SPELL_CORROSION, 20s, 1);
                     break;
                 case EVENT_SPELL_GAS_NOVA:
                     DoCast(me, SPELL_GAS_NOVA, false);
-                    events.ScheduleEvent(EVENT_SPELL_GAS_NOVA, 20000, 1);
+                    events.ScheduleEvent(EVENT_SPELL_GAS_NOVA, 20s, 1);
                     break;
                 case EVENT_SPELL_ENCAPSULATE:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true))
                         me->CastSpell(target, SPELL_ENCAPSULATE_CHANNEL, false);
-                    events.ScheduleEvent(EVENT_SPELL_ENCAPSULATE, 25000, 1);
+                    events.ScheduleEvent(EVENT_SPELL_ENCAPSULATE, 25s, 1);
                     break;
                 case EVENT_FLIGHT:
                     events.CancelEventGroup(1);
-                    events.ScheduleEvent(EVENT_FLIGHT_SEQ, 1000);
+                    events.ScheduleEvent(EVENT_FLIGHT_SEQ, 1s);
                     me->SetReactState(REACT_PASSIVE);
                     me->StopMoving();
                     me->GetMotionMaster()->Clear();
@@ -327,12 +327,12 @@ public:
                     me->SetDisableGravity(true);
                     me->SendMovementFlagUpdate();
 
-                    events.ScheduleEvent(EVENT_FLIGHT_MOVE_UP, 2000);
-                    events.ScheduleEvent(EVENT_FLIGHT_VAPOR, 8000);
-                    events.ScheduleEvent(EVENT_FLIGHT_VAPOR, 21000);
-                    events.ScheduleEvent(EVENT_FLIGHT_BREATH1, 35000);
-                    events.ScheduleEvent(EVENT_FLIGHT_BREATH1, 72000);
-                    events.ScheduleEvent(EVENT_LAND_FIGHT, 86000);
+                    events.ScheduleEvent(EVENT_FLIGHT_MOVE_UP, 2s);
+                    events.ScheduleEvent(EVENT_FLIGHT_VAPOR, 8s);
+                    events.ScheduleEvent(EVENT_FLIGHT_VAPOR, 21s);
+                    events.ScheduleEvent(EVENT_FLIGHT_BREATH1, 35s);
+                    events.ScheduleEvent(EVENT_FLIGHT_BREATH1, 72s);
+                    events.ScheduleEvent(EVENT_LAND_FIGHT, 86s);
                     break;
                 case EVENT_FLIGHT_MOVE_UP:
                     me->GetMotionMaster()->MovePoint(POINT_AIR, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ() + 15.0f, false, true);

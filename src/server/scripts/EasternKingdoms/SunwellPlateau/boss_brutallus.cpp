@@ -131,17 +131,17 @@ public:
             {
                 case EVENT_SPELL_SLASH:
                     me->CastSpell(me->GetVictim(), SPELL_METEOR_SLASH, false);
-                    events.ScheduleEvent(EVENT_SPELL_SLASH, 10000);
+                    events.ScheduleEvent(EVENT_SPELL_SLASH, 10s);
                     break;
                 case EVENT_SPELL_STOMP:
                     me->CastSpell(me->GetVictim(), SPELL_STOMP, false);
                     Talk(YELL_LOVE);
-                    events.ScheduleEvent(EVENT_SPELL_STOMP, 30000);
+                    events.ScheduleEvent(EVENT_SPELL_STOMP, 30s);
                     break;
                 case EVENT_SPELL_BURN:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true, -SPELL_BURN_DAMAGE))
                         me->CastSpell(target, SPELL_BURN, false);
-                    events.ScheduleEvent(EVENT_SPELL_BURN, 60000);
+                    events.ScheduleEvent(EVENT_SPELL_BURN, 1min);
                     break;
                 case EVENT_SPELL_BERSERK:
                     me->CastSpell(me, SPELL_BERSERK, true);
@@ -230,10 +230,10 @@ public:
                 me->SetStandState(UNIT_STAND_STATE_STAND);
                 me->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_DEAD);
                 me->NearTeleportTo(1570.97f, 725.51f, 79.77f, 3.82f);
-                events.ScheduleEvent(EVENT_MAD_1, 2000);
+                events.ScheduleEvent(EVENT_MAD_1, 2s);
             }
             else if (param == ACTION_SPAWN_FELMYST)
-                events.ScheduleEvent(EVENT_SPAWN_FELMYST, 60000);
+                events.ScheduleEvent(EVENT_SPAWN_FELMYST, 1min);
         }
 
         void UpdateAI(uint32 diff)
@@ -251,27 +251,27 @@ public:
                     }
                     me->GetMotionMaster()->MovePoint(1, 1477.94f, 643.22f, 21.21f);
                     me->AddUnitState(UNIT_STATE_NO_ENVIRONMENT_UPD);
-                    events.ScheduleEvent(EVENT_MAD_2, 6000);
+                    events.ScheduleEvent(EVENT_MAD_2, 6s);
                     break;
                 case EVENT_MAD_2:
                     Talk(SAY_MAD_1);
                     me->CastSpell(me, SPELL_MADRIGOSA_FREEZE, false);
-                    events.ScheduleEvent(EVENT_MAD_2_1, 1000);
+                    events.ScheduleEvent(EVENT_MAD_2_1, 1s);
                     break;
                 case EVENT_MAD_2_1:
                     me->HandleEmoteCommand(EMOTE_ONESHOT_LAND);
                     me->SetDisableGravity(false);
                     me->CastSpell(me, SPELL_MADRIGOSA_FROST_BREATH, false);
-                    events.ScheduleEvent(EVENT_MAD_3, 7000);
+                    events.ScheduleEvent(EVENT_MAD_3, 7s);
                     break;
                 case EVENT_MAD_3:
                     Talk(SAY_MAD_2);
-                    events.ScheduleEvent(EVENT_MAD_4, 7000);
+                    events.ScheduleEvent(EVENT_MAD_4, 7s);
                     break;
                 case EVENT_MAD_4:
                     if (Creature* brutallus = ObjectAccessor::GetCreature(*me, instance->GetData64(NPC_BRUTALLUS)))
                         brutallus->AI()->Talk(YELL_INTRO);
-                    events.ScheduleEvent(EVENT_MAD_5, 5000);
+                    events.ScheduleEvent(EVENT_MAD_5, 5s);
                     break;
                 case EVENT_MAD_5:
                     if (Creature* brutallus = ObjectAccessor::GetCreature(*me, instance->GetData64(NPC_BRUTALLUS)))
@@ -279,7 +279,7 @@ public:
                         brutallus->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_ONESHOT_ATTACK1H);
                         me->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_ONESHOT_ATTACK1H);
                     }
-                    events.ScheduleEvent(EVENT_MAD_6, 10000);
+                    events.ScheduleEvent(EVENT_MAD_6, 10s);
                     break;
                 case EVENT_MAD_6:
                     if (Creature* brutallus = ObjectAccessor::GetCreature(*me, instance->GetData64(NPC_BRUTALLUS)))
@@ -289,20 +289,20 @@ public:
                     }
                     me->HandleEmoteCommand(EMOTE_ONESHOT_LIFTOFF);
                     me->SetDisableGravity(true);
-                    events.ScheduleEvent(EVENT_MAD_7, 4000);
+                    events.ScheduleEvent(EVENT_MAD_7, 4s);
                     break;
                 case EVENT_MAD_7:
                     Talk(SAY_MAD_3);
                     me->CastSpell(me, SPELL_MADRIGOSA_FROST_BLAST, false);
-                    events.ScheduleEvent(EVENT_MAD_8, 3000);
-                    events.ScheduleEvent(EVENT_MAD_8, 5000);
-                    events.ScheduleEvent(EVENT_MAD_8, 6500);
-                    events.ScheduleEvent(EVENT_MAD_8, 7500);
-                    events.ScheduleEvent(EVENT_MAD_8, 8500);
-                    events.ScheduleEvent(EVENT_MAD_8, 9500);
-                    events.ScheduleEvent(EVENT_MAD_9, 11000);
-                    events.ScheduleEvent(EVENT_MAD_8, 12000);
-                    events.ScheduleEvent(EVENT_MAD_8, 14000);
+                    events.ScheduleEvent(EVENT_MAD_8, 3s);
+                    events.ScheduleEvent(EVENT_MAD_8, 5s);
+                    events.ScheduleEvent(EVENT_MAD_8, 6500ms);
+                    events.ScheduleEvent(EVENT_MAD_8, 7500ms);
+                    events.ScheduleEvent(EVENT_MAD_8, 8500ms);
+                    events.ScheduleEvent(EVENT_MAD_8, 9500ms);
+                    events.ScheduleEvent(EVENT_MAD_9, 11s);
+                    events.ScheduleEvent(EVENT_MAD_8, 12s);
+                    events.ScheduleEvent(EVENT_MAD_8, 14s);
                     break;
                 case EVENT_MAD_8:
                     if (Creature* brutallus = ObjectAccessor::GetCreature(*me, instance->GetData64(NPC_BRUTALLUS)))
@@ -316,19 +316,19 @@ public:
                         brutallus->CastSpell(brutallus, SPELL_BRUTALLUS_FEL_FIREBALL, false);
                         brutallus->AI()->Talk(YELL_INTRO_BREAK_ICE);
                     }
-                    events.ScheduleEvent(EVENT_MAD_11, 6000);
+                    events.ScheduleEvent(EVENT_MAD_11, 6s);
                     break;
                 //case EVENT_MAD_10:
                 case EVENT_MAD_11:
                     me->SetDisableGravity(false);
                     me->HandleEmoteCommand(EMOTE_ONESHOT_LAND);
-                    events.ScheduleEvent(EVENT_MAD_13, 2500);
+                    events.ScheduleEvent(EVENT_MAD_13, 2500ms);
                     break;
                 case EVENT_MAD_13:
                     Talk(SAY_MAD_4);
                     me->RemoveAllAuras();
                     me->CastSpell(me, SPELL_MADRIGOSA_ENCAPSULATE, false);
-                    events.ScheduleEvent(EVENT_MAD_14, 2000);
+                    events.ScheduleEvent(EVENT_MAD_14, 2s);
                     break;
                 case EVENT_MAD_14:
                     if (Creature* brutallus = ObjectAccessor::GetCreature(*me, instance->GetData64(NPC_BRUTALLUS)))
@@ -336,7 +336,7 @@ public:
                         brutallus->SetDisableGravity(true);
                         brutallus->GetMotionMaster()->MovePoint(0, brutallus->GetPositionX(), brutallus->GetPositionY() - 30.0f, brutallus->GetPositionZ() + 15.0f, false, true);
                     }
-                    events.ScheduleEvent(EVENT_MAD_15, 10000);
+                    events.ScheduleEvent(EVENT_MAD_15, 10s);
                     break;
                 case EVENT_MAD_15:
                     if (Creature* brutallus = ObjectAccessor::GetCreature(*me, instance->GetData64(NPC_BRUTALLUS)))
@@ -346,28 +346,28 @@ public:
                         brutallus->GetMotionMaster()->MoveFall();
                         brutallus->AI()->Talk(YELL_INTRO_CHARGE);
                     }
-                    events.ScheduleEvent(EVENT_MAD_16, 1400);
+                    events.ScheduleEvent(EVENT_MAD_16, 1400ms);
                     break;
                 case EVENT_MAD_16:
                     if (Creature* brutallus = ObjectAccessor::GetCreature(*me, instance->GetData64(NPC_BRUTALLUS)))
                         brutallus->CastSpell(me, SPELL_BRUTALLUS_CHARGE, true);
-                    events.ScheduleEvent(EVENT_MAD_17, 1200);
+                    events.ScheduleEvent(EVENT_MAD_17, 1200ms);
                     break;
                 case EVENT_MAD_17:
                     if (Creature* brutallus = ObjectAccessor::GetCreature(*me, instance->GetData64(NPC_BRUTALLUS)))
                         brutallus->HandleEmoteCommand(EMOTE_ONESHOT_ATTACK1H);
-                    events.ScheduleEvent(EVENT_MAD_18, 500);
+                    events.ScheduleEvent(EVENT_MAD_18, 500ms);
                     break;
                 case EVENT_MAD_18:
                     Talk(SAY_MAD_5);
                     me->SetFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_DEAD);
                     me->SetStandState(UNIT_STAND_STATE_DEAD);
-                    events.ScheduleEvent(EVENT_MAD_19, 6000);
+                    events.ScheduleEvent(EVENT_MAD_19, 6s);
                     break;
                 case EVENT_MAD_19:
                     if (Creature* brutallus = ObjectAccessor::GetCreature(*me, instance->GetData64(NPC_BRUTALLUS)))
                         brutallus->AI()->Talk(YELL_INTRO_KILL_MADRIGOSA);
-                    events.ScheduleEvent(EVENT_MAD_20, 7000);
+                    events.ScheduleEvent(EVENT_MAD_20, 7s);
                     break;
                 case EVENT_MAD_20:
                     me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
@@ -377,7 +377,7 @@ public:
                         brutallus->AI()->Talk(YELL_INTRO_TAUNT);
                         brutallus->CastSpell(brutallus, SPELL_BRUTALLUS_BREAK_ICE, false);
                     }
-                    events.ScheduleEvent(EVENT_MAD_21, 4000);
+                    events.ScheduleEvent(EVENT_MAD_21, 4s);
                     break;
                 case EVENT_MAD_21:
                     if (Creature* brutallus = ObjectAccessor::GetCreature(*me, instance->GetData64(NPC_BRUTALLUS)))

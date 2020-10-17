@@ -1,4 +1,4 @@
-﻿/*
+/*
  * This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -109,12 +109,12 @@ public:
 
         void EnterCombat(Unit* /*who*/)
         {
-            events.ScheduleEvent(EVENT_STATIC_DISRUPTION, urand(10000, 20000)); // 10 to 20 seconds (bosskillers)
-            events.ScheduleEvent(EVENT_GUST_OF_WIND, urand(20000, 30000));      // 20 to 30 seconds(bosskillers)
-            events.ScheduleEvent(EVENT_CALL_LIGHTNING, urand(10000, 20000));    // totaly random timer. can't find any info on this
-            events.ScheduleEvent(EVENT_ELECTRICAL_STORM, 60000);                // 60 seconds(bosskillers)
-            events.ScheduleEvent(EVENT_RAIN, urand(47000, 52000));
-            events.ScheduleEvent(EVENT_ENRAGE, 10 * MINUTE * IN_MILLISECONDS);  // 10 minutes till enrage(bosskillers)
+            events.ScheduleEvent(EVENT_STATIC_DISRUPTION, 10s, 20s); // 10 to 20 seconds (bosskillers)
+            events.ScheduleEvent(EVENT_GUST_OF_WIND, 20s, 30s);      // 20 to 30 seconds(bosskillers)
+            events.ScheduleEvent(EVENT_CALL_LIGHTNING, 10s, 20s);    // totaly random timer. can't find any info on this
+            events.ScheduleEvent(EVENT_ELECTRICAL_STORM, 1min);                // 60 seconds(bosskillers)
+            events.ScheduleEvent(EVENT_RAIN, 47s, 52s);
+            events.ScheduleEvent(EVENT_ENRAGE, 10min);      // 10 minutes till enrage(bosskillers)
 
             Talk(SAY_AGGRO);
             //DoZoneInCombat();
@@ -465,4 +465,3 @@ void AddSC_boss_akilzon()
     new boss_akilzon();
     new npc_akilzon_eagle();
 }
-

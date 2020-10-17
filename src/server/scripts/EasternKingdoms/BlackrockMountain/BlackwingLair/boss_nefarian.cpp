@@ -213,10 +213,10 @@ public:
             DoCast(me, SPELL_NEFARIANS_BARRIER);
             me->SetStandState(UNIT_STAND_STATE_STAND);
             AttackStart(target);
-            events.ScheduleEvent(EVENT_SHADOW_BOLT, urand(3000, 10000));
-            events.ScheduleEvent(EVENT_FEAR, urand(10000, 20000));
-            //events.ScheduleEvent(EVENT_MIND_CONTROL, urand(30000, 35000));
-            events.ScheduleEvent(EVENT_SPAWN_ADD, 10000);
+            events.ScheduleEvent(EVENT_SHADOW_BOLT, 3s, 10s);
+            events.ScheduleEvent(EVENT_FEAR, 10s, 20s);
+            //events.ScheduleEvent(EVENT_MIND_CONTROL, 30s, 35s);
+            events.ScheduleEvent(EVENT_SPAWN_ADD, 10s);
         }
 
         void SummonedCreatureDies(Creature* summon, Unit*)
@@ -237,11 +237,11 @@ public:
             if ( type == 1 && data == 1)
             {
                 me->StopMoving();
-                events.ScheduleEvent(EVENT_PATH_2, 9000);
+                events.ScheduleEvent(EVENT_PATH_2, 9s);
             }
 
             if (type == 1 && data == 2)
-                events.ScheduleEvent(EVENT_SUCCESS_1, 5000);
+                events.ScheduleEvent(EVENT_SUCCESS_1, 5s);
         }
 
         void UpdateAI(uint32 diff)
@@ -256,7 +256,7 @@ public:
                     {
                         case EVENT_PATH_2:
                             me->GetMotionMaster()->MovePath(NEFARIUS_PATH_2, false);
-                            events.ScheduleEvent(EVENT_CHAOS_1, 7000);
+                            events.ScheduleEvent(EVENT_CHAOS_1, 7s);
                             break;
                         case EVENT_CHAOS_1:
                             if (Creature* gyth = me->FindNearestCreature(NPC_GYTH, 75.0f, true))
@@ -264,7 +264,7 @@ public:
                                 me->SetFacingToObject(gyth);
                                 Talk(SAY_CHAOS_SPELL);
                             }
-                            events.ScheduleEvent(EVENT_CHAOS_2, 2000);
+                            events.ScheduleEvent(EVENT_CHAOS_2, 2s);
                             break;
                         case EVENT_CHAOS_2:
                             DoCast(SPELL_CHROMATIC_CHAOS);
@@ -280,7 +280,7 @@ public:
                                 if (GameObject* portcullis2 = me->FindNearestGameObject(GO_PORTCULLIS_TOBOSSROOMS, 80.0f))
                                     portcullis2->SetGoState(GO_STATE_ACTIVE);
                             }
-                            events.ScheduleEvent(EVENT_SUCCESS_2, 4000);
+                            events.ScheduleEvent(EVENT_SUCCESS_2, 4s);
                             break;
                         case EVENT_SUCCESS_2:
                             DoCast(me, SPELL_VAELASTRASZZ_SPAWN);
@@ -320,17 +320,17 @@ public:
                                     break;
                             }
                             DoResetThreat();
-                            events.ScheduleEvent(EVENT_SHADOW_BOLT, urand(3000, 10000));
+                            events.ScheduleEvent(EVENT_SHADOW_BOLT, 3s, 10s);
                             break;
                         case EVENT_FEAR:
                             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40, true))
                                 DoCast(target, SPELL_FEAR);
-                            events.ScheduleEvent(EVENT_FEAR, urand(10000, 20000));
+                            events.ScheduleEvent(EVENT_FEAR, 10s, 20s);
                             break;
                         case EVENT_MIND_CONTROL:
                             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40, true))
                                 DoCast(target, SPELL_SHADOW_COMMAND);
-                            events.ScheduleEvent(EVENT_MIND_CONTROL, urand(30000, 35000));
+                            events.ScheduleEvent(EVENT_MIND_CONTROL, 30s, 35s);
                             break;
                         case EVENT_SPAWN_ADD:
                             for (uint8 i = 0; i < 2; ++i)
@@ -367,7 +367,7 @@ public:
                                     return;
                                 }
                             }
-                            events.ScheduleEvent(EVENT_SPAWN_ADD, 4000);
+                            events.ScheduleEvent(EVENT_SPAWN_ADD, 4s);
                             break;
                     }
                 }
@@ -422,12 +422,12 @@ public:
 
         void EnterCombat(Unit* /*who*/)
         {
-            events.ScheduleEvent(EVENT_SHADOWFLAME, 12000);
-            events.ScheduleEvent(EVENT_FEAR, urand(25000, 35000));
-            events.ScheduleEvent(EVENT_VEILOFSHADOW, urand(25000, 35000));
-            events.ScheduleEvent(EVENT_CLEAVE, 7000);
-            //events.ScheduleEvent(EVENT_TAILLASH, 10000);
-            events.ScheduleEvent(EVENT_CLASSCALL, urand(30000, 35000));
+            events.ScheduleEvent(EVENT_SHADOWFLAME, 12s);
+            events.ScheduleEvent(EVENT_FEAR, 25s, 35s);
+            events.ScheduleEvent(EVENT_VEILOFSHADOW, 25s, 35s);
+            events.ScheduleEvent(EVENT_CLEAVE, 7s);
+            //events.ScheduleEvent(EVENT_TAILLASH, 10s);
+            events.ScheduleEvent(EVENT_CLASSCALL, 30s, 35s);
             Talk(SAY_RANDOM);
         }
 
@@ -489,24 +489,24 @@ public:
                 {
                     case EVENT_SHADOWFLAME:
                         DoCastVictim(SPELL_SHADOWFLAME);
-                        events.ScheduleEvent(EVENT_SHADOWFLAME, 12000);
+                        events.ScheduleEvent(EVENT_SHADOWFLAME, 12s);
                         break;
                     case EVENT_FEAR:
                         DoCastVictim(SPELL_BELLOWINGROAR);
-                        events.ScheduleEvent(EVENT_FEAR, urand(25000, 35000));
+                        events.ScheduleEvent(EVENT_FEAR, 25s, 35s);
                         break;
                     case EVENT_VEILOFSHADOW:
                         DoCastVictim(SPELL_VEILOFSHADOW);
-                        events.ScheduleEvent(EVENT_VEILOFSHADOW, urand(25000, 35000));
+                        events.ScheduleEvent(EVENT_VEILOFSHADOW, 25s, 35s);
                         break;
                     case EVENT_CLEAVE:
                         DoCastVictim(SPELL_CLEAVE);
-                        events.ScheduleEvent(EVENT_CLEAVE, 7000);
+                        events.ScheduleEvent(EVENT_CLEAVE, 7s);
                         break;
                     case EVENT_TAILLASH:
                         // Cast NYI since we need a better check for behind target
                         DoCastVictim(SPELL_TAILLASH);
-                        events.ScheduleEvent(EVENT_TAILLASH, 10000);
+                        events.ScheduleEvent(EVENT_TAILLASH, 10s);
                         break;
                     case EVENT_CLASSCALL:
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
@@ -555,7 +555,7 @@ public:
                                 default:
                                     break;
                             }
-                        events.ScheduleEvent(EVENT_CLASSCALL, urand(30000, 35000));
+                        events.ScheduleEvent(EVENT_CLASSCALL, 30s, 35s);
                         break;
                 }
             }

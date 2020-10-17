@@ -69,11 +69,11 @@ public:
         void EnterCombat(Unit* victim)
         {
             BossAI::EnterCombat(victim);
-            events.ScheduleEvent(EVENT_DARK_STRIKE, 10000);
-            events.ScheduleEvent(EVENT_DEMORALIZING_SHOUT, 15000);
-            events.ScheduleEvent(EVENT_INSPIRE, 13000);
-            events.ScheduleEvent(EVENT_KNOCKDOWN, 6000);
-            events.ScheduleEvent(EVENT_FLAMESPEAR, 2000);
+            events.ScheduleEvent(EVENT_DARK_STRIKE, 10s);
+            events.ScheduleEvent(EVENT_DEMORALIZING_SHOUT, 15s);
+            events.ScheduleEvent(EVENT_INSPIRE, 13s);
+            events.ScheduleEvent(EVENT_KNOCKDOWN, 6s);
+            events.ScheduleEvent(EVENT_FLAMESPEAR, 2s);
         }
 
         void UpdateAI(uint32 diff)
@@ -156,9 +156,9 @@ public:
         void EnterCombat(Unit* victim)
         {
             ScriptedAI::EnterCombat(victim);
-            events.ScheduleEvent(EVENT_HEAL, urand(15000, 30000));
-            events.ScheduleEvent(EVENT_SHADOW_WORD_PAIN, 2000);
-            events.ScheduleEvent(EVENT_IMMOLATE, 8000);
+            events.ScheduleEvent(EVENT_HEAL, 15s, 30s);
+            events.ScheduleEvent(EVENT_SHADOW_WORD_PAIN, 2s);
+            events.ScheduleEvent(EVENT_IMMOLATE, 8s);
         }
 
         void UpdateAI(uint32 diff)
