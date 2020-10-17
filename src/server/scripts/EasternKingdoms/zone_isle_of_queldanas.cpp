@@ -282,9 +282,7 @@ public:
                                     return;
                                 }
                                 else
-                                {
                                     return;
-                                }
                             }
                         }
                     }
