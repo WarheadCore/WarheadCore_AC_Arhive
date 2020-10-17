@@ -87,12 +87,13 @@ public:
             DoZoneInCombat();
             Talk(SAY_AGGRO);
             events.Reset();
-            events.RescheduleEvent(EVENT_SPELL_ARCANE_VACUUM, 30000);
-            events.RescheduleEvent(EVENT_SPELL_BLIZZARD, urand(5000, 10000));
-            events.RescheduleEvent(EVENT_SPELL_TAIL_SWEEP, urand(15000, 20000));
-            events.RescheduleEvent(EVENT_SPELL_UNCONTROLLABLE_ENERGY, urand(5000, 8000));
+            events.RescheduleEvent(EVENT_SPELL_ARCANE_VACUUM, 30s);
+            events.RescheduleEvent(EVENT_SPELL_BLIZZARD, 5s, 10s);
+            events.RescheduleEvent(EVENT_SPELL_TAIL_SWEEP, 15s, 20s);
+            events.RescheduleEvent(EVENT_SPELL_UNCONTROLLABLE_ENERGY, 5s, 8s);
+            
             if (IsHeroic())
-                events.RescheduleEvent(EVENT_SPELL_MANA_DESTRUCTION, 20000);
+                events.RescheduleEvent(EVENT_SPELL_MANA_DESTRUCTION, 20s);
         }
 
         void SpellHitTarget(Unit* target, const SpellInfo* spell)
@@ -128,7 +129,7 @@ public:
                     me->SetControlled(true, UNIT_STATE_ROOT);
                     me->setAttackTimer(BASE_ATTACK, 3000);
                     events.RepeatEvent(30000);
-                    events.ScheduleEvent(EVENT_UNROOT, 3000);
+                    events.ScheduleEvent(EVENT_UNROOT, 3s);
                     break;
                 case EVENT_UNROOT:
                     me->SetControlled(false, UNIT_STATE_ROOT);

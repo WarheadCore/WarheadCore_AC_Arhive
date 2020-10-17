@@ -110,7 +110,7 @@ public:
             if (events.GetNextEventTime(EVENT_KILL_TALK) == 0)
             {
                 Talk(SAY_SLAY);
-                events.ScheduleEvent(EVENT_KILL_TALK, 6000);
+                    events.ScheduleEvent(EVENT_KILL_TALK, 6s);
             }
         }
 
@@ -133,14 +133,14 @@ public:
             Talk(SAY_AGGRO);
             instance->DoStartTimedAchievement(ACHIEVEMENT_TIMED_TYPE_EVENT, ACHIEV_TIMED_START_EVENT);
 
-            events.ScheduleEvent(EVENT_CARRION_BEETELS, 6500);
-            events.ScheduleEvent(EVENT_LEECHING_SWARM, 20000);
-            events.ScheduleEvent(EVENT_POUND, 15000);
-            events.ScheduleEvent(EVENT_CHECK_HEALTH_75, 1000);
-            events.ScheduleEvent(EVENT_CHECK_HEALTH_50, 1000);
-            events.ScheduleEvent(EVENT_CHECK_HEALTH_25, 1000);
-            events.ScheduleEvent(EVENT_CLOSE_DOORS, 5000);
-        }
+                events.ScheduleEvent(EVENT_CARRION_BEETELS, 6500ms);
+                events.ScheduleEvent(EVENT_LEECHING_SWARM, 20s);
+                events.ScheduleEvent(EVENT_POUND, 15s);
+                events.ScheduleEvent(EVENT_CHECK_HEALTH_75, 1s);
+                events.ScheduleEvent(EVENT_CHECK_HEALTH_50, 1s);
+                events.ScheduleEvent(EVENT_CHECK_HEALTH_25, 1s);
+                events.ScheduleEvent(EVENT_CLOSE_DOORS, 5s);
+            }
 
         void SummonHelpers(float x, float y, float z, uint32 spellId)
         {
@@ -157,53 +157,53 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (uint32 eventId = events.ExecuteEvent())
-            {
-                case EVENT_CLOSE_DOORS:
-                    _EnterCombat();
-                    break;
-                case EVENT_CARRION_BEETELS:
-                    me->CastSpell(me, SPELL_CARRION_BEETLES, false);
-                    events.ScheduleEvent(EVENT_CARRION_BEETELS, 25000);
-                    break;
-                case EVENT_LEECHING_SWARM:
-                    Talk(SAY_LOCUST);
-                    me->CastSpell(me, SPELL_LEECHING_SWARM, false);
-                    events.ScheduleEvent(EVENT_LEECHING_SWARM, 20000);
-                    break;
-                case EVENT_POUND:
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 10.0f))
-                    {
-                        me->CastSpell(me, SPELL_SELF_ROOT, true);
-                        me->DisableRotate(true);
-                        me->SendMovementFlagUpdate();
-                        events.ScheduleEvent(EVENT_ENABLE_ROTATE, 3300);
-                        me->CastSpell(target, SPELL_POUND, false);
-                    }
-                    events.ScheduleEvent(EVENT_POUND, 18000);
-                    break;
-                case EVENT_ENABLE_ROTATE:
-                    me->RemoveAurasDueToSpell(SPELL_SELF_ROOT);
-                    me->DisableRotate(false);
-                    break;
-                case EVENT_CHECK_HEALTH_25:
-                case EVENT_CHECK_HEALTH_50:
-                case EVENT_CHECK_HEALTH_75:
-                    if (me->HealthBelowPct(eventId * 25))
-                    {
-                        Talk(SAY_SUBMERGE);
-                        me->CastSpell(me, SPELL_IMPALE_PERIODIC, true);
-                        me->CastSpell(me, SPELL_SUBMERGE, false);
-                        me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
+                switch (uint32 eventId = events.ExecuteEvent())
+                {
+                    case EVENT_CLOSE_DOORS:
+                        _EnterCombat();
+                        break;
+                    case EVENT_CARRION_BEETELS:
+                        me->CastSpell(me, SPELL_CARRION_BEETLES, false);
+                        events.ScheduleEvent(EVENT_CARRION_BEETELS, 25s);
+                        break;
+                    case EVENT_LEECHING_SWARM:
+                        Talk(SAY_LOCUST);
+                        me->CastSpell(me, SPELL_LEECHING_SWARM, false);
+                        events.ScheduleEvent(EVENT_LEECHING_SWARM, 20s);
+                        break;
+                    case EVENT_POUND:
+                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 10.0f))
+                        {                   
+                            me->CastSpell(me, SPELL_SELF_ROOT, true);
+                            me->DisableRotate(true);
+                            me->SendMovementFlagUpdate();
+                            events.ScheduleEvent(EVENT_ENABLE_ROTATE, 3300ms);
+                            me->CastSpell(target, SPELL_POUND, false);
+                        }
+                        events.ScheduleEvent(EVENT_POUND, 18s);
+                        break;
+                    case EVENT_ENABLE_ROTATE:
+                        me->RemoveAurasDueToSpell(SPELL_SELF_ROOT);
+                        me->DisableRotate(false);
+                        break;
+                    case EVENT_CHECK_HEALTH_25:
+                    case EVENT_CHECK_HEALTH_50:
+                    case EVENT_CHECK_HEALTH_75:
+                        if (me->HealthBelowPct(eventId*25))
+                        {
+                            Talk(SAY_SUBMERGE);
+                            me->CastSpell(me, SPELL_IMPALE_PERIODIC, true);
+                            me->CastSpell(me, SPELL_SUBMERGE, false);
+                            me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE|UNIT_FLAG_NOT_SELECTABLE);
 
-                        events.DelayEvents(46000, 0);
-                        events.ScheduleEvent(EVENT_EMERGE, 45000);
-                        events.ScheduleEvent(EVENT_SUMMON_ASSASSINS, 2000);
-                        events.ScheduleEvent(EVENT_SUMMON_GUARDIAN, 4000);
-                        events.ScheduleEvent(EVENT_SUMMON_ASSASSINS, 15000);
-                        events.ScheduleEvent(EVENT_SUMMON_VENOMANCER, 20000);
-                        events.ScheduleEvent(EVENT_SUMMON_DARTER, 30000);
-                        events.ScheduleEvent(EVENT_SUMMON_ASSASSINS, 35000);
+                            events.DelayEvents(46000, 0);
+                            events.ScheduleEvent(EVENT_EMERGE, 45s);
+                            events.ScheduleEvent(EVENT_SUMMON_ASSASSINS, 2s);
+                            events.ScheduleEvent(EVENT_SUMMON_GUARDIAN, 4s);
+                            events.ScheduleEvent(EVENT_SUMMON_ASSASSINS, 15s);
+                            events.ScheduleEvent(EVENT_SUMMON_VENOMANCER, 20s);
+                            events.ScheduleEvent(EVENT_SUMMON_DARTER, 30s);
+                            events.ScheduleEvent(EVENT_SUMMON_ASSASSINS, 35s);
                         break;
                     }
                     events.ScheduleEvent(eventId, 500);

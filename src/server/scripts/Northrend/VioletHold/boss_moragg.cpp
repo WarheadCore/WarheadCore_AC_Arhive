@@ -76,8 +76,8 @@ public:
             me->CastSpell(me, SPELL_RAY_OF_SUFFERING, true);
             me->CastSpell(me, SPELL_RAY_OF_PAIN, true);
             events.Reset();
-            events.RescheduleEvent(EVENT_SPELL_CORROSIVE_SALIVA, urand(4000, 6000));
-            events.RescheduleEvent(EVENT_SPELL_OPTIC_LINK, urand(10000, 11000));
+            events.RescheduleEvent(EVENT_SPELL_CORROSIVE_SALIVA, 4s, 6s);
+            events.RescheduleEvent(EVENT_SPELL_OPTIC_LINK, 10s, 11s);
         }
 
         void UpdateAI(uint32 diff)

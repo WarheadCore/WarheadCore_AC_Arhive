@@ -203,15 +203,15 @@ public:
             events.Reset();
 
             // Schedule Events
-            events.RescheduleEvent(EVENT_SPELL_MARK_CAST, 24000);
-            events.RescheduleEvent(EVENT_BERSERK, 100 * 15000);
+            events.RescheduleEvent(EVENT_SPELL_MARK_CAST, 24s);
+            events.RescheduleEvent(EVENT_BERSERK, 25min);
 
             if ((me->GetEntry() != NPC_LADY_BLAUMEUX && me->GetEntry() != NPC_SIR_ZELIEK))
-                events.RescheduleEvent(EVENT_SPELL_PRIMARY, 10000 + rand() % 5000);
+                events.RescheduleEvent(EVENT_SPELL_PRIMARY, 10s, 15s);
             else
             {
-                events.RescheduleEvent(EVENT_SPELL_PUNISH, 5000);
-                events.RescheduleEvent(EVENT_SPELL_SECONDARY, 15000);
+                events.RescheduleEvent(EVENT_SPELL_PUNISH, 5s);
+                events.RescheduleEvent(EVENT_SPELL_SECONDARY, 15s);
             }
         }
 

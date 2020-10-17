@@ -93,8 +93,8 @@ public:
             events.ScheduleEvent(EVENT_SPELL_PIERCING_SLASH, 17000);
             if (IsHeroic())
             {
-                events.ScheduleEvent(EVENT_MENACING_CLAW, 21000);
-                events.ScheduleEvent(EVENT_SPELL_RAPTOR_CALL, urand(20000, 25000));
+                    events.ScheduleEvent(EVENT_MENACING_CLAW, 21s);
+                    events.ScheduleEvent(EVENT_SPELL_RAPTOR_CALL, 20s, 25s);
             }
         }
 
@@ -107,41 +107,39 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.ExecuteEvent())
-            {
-                case EVENT_SPELL_BELLOWING_ROAR:
-                    me->CastSpell(me, SPELL_BELLOWING_ROAR, false);
-                    events.ScheduleEvent(EVENT_SPELL_BELLOWING_ROAR, 40000);
-                    break;
-                case EVENT_SPELL_GRIEVOUS_BITE:
-                    me->CastSpell(me->GetVictim(), SPELL_GRIEVOUS_BITE, false);
-                    events.ScheduleEvent(EVENT_SPELL_GRIEVOUS_BITE, 20000);
-                    break;
-                case EVENT_SPELL_MANGLING_SLASH:
-                    me->CastSpell(me->GetVictim(), SPELL_MANGLING_SLASH, false);
-                    events.ScheduleEvent(EVENT_SPELL_MANGLING_SLASH, 20000);
-                    break;
-                case EVENT_SPELL_FEARSOME_ROAR:
-                    me->CastSpell(me, SPELL_FEARSOME_ROAR, false);
-                    events.ScheduleEvent(EVENT_SPELL_FEARSOME_ROAR, 17000);
-                    break;
-                case EVENT_SPELL_PIERCING_SLASH:
-                    me->CastSpell(me->GetVictim(), SPELL_PIERCING_SLASH, false);
-                    events.ScheduleEvent(EVENT_SPELL_PIERCING_SLASH, 20000);
-                    break;
-                case EVENT_SPELL_RAPTOR_CALL:
-                    me->CastSpell(me, SPELL_RAPTOR_CALL, false);
-                    events.ScheduleEvent(EVENT_SPELL_RAPTOR_CALL, 20000);
-                    break;
-                case EVENT_MENACING_CLAW:
-                    Talk(SAY_CLAW_EMOTE);
-                    me->setAttackTimer(BASE_ATTACK, 2000);
-                    me->AttackerStateUpdate(me->GetVictim());
-                    if (me->GetVictim())
+                switch (events.ExecuteEvent())
+                {
+                    case EVENT_SPELL_BELLOWING_ROAR:
+                        me->CastSpell(me, SPELL_BELLOWING_ROAR, false);
+                        events.ScheduleEvent(EVENT_SPELL_BELLOWING_ROAR, 40s);
+                        break;
+                    case EVENT_SPELL_GRIEVOUS_BITE:
+                        me->CastSpell(me->GetVictim(), SPELL_GRIEVOUS_BITE, false);
+                        events.ScheduleEvent(EVENT_SPELL_GRIEVOUS_BITE, 20s);
+                        break;
+                    case EVENT_SPELL_MANGLING_SLASH:
+                        me->CastSpell(me->GetVictim(), SPELL_MANGLING_SLASH, false);
+                        events.ScheduleEvent(EVENT_SPELL_MANGLING_SLASH, 20s);
+                        break;
+                    case EVENT_SPELL_FEARSOME_ROAR:
+                        me->CastSpell(me, SPELL_FEARSOME_ROAR, false);
+                        events.ScheduleEvent(EVENT_SPELL_FEARSOME_ROAR, 17s);
+                        break;
+                    case EVENT_SPELL_PIERCING_SLASH:
+                        me->CastSpell(me->GetVictim(), SPELL_PIERCING_SLASH, false);
+                        events.ScheduleEvent(EVENT_SPELL_PIERCING_SLASH, 20s);
+                        break;
+                    case EVENT_SPELL_RAPTOR_CALL:
+                        me->CastSpell(me, SPELL_RAPTOR_CALL, false);
+                        events.ScheduleEvent(EVENT_SPELL_RAPTOR_CALL, 20s);
+                        break;
+                    case EVENT_MENACING_CLAW:
+                        Talk(SAY_CLAW_EMOTE);
+                        me->setAttackTimer(BASE_ATTACK, 2000);
                         me->AttackerStateUpdate(me->GetVictim());
                     if (me->GetVictim())
                         me->AttackerStateUpdate(me->GetVictim());
-                    events.ScheduleEvent(EVENT_MENACING_CLAW, 20000);
+                        events.ScheduleEvent(EVENT_MENACING_CLAW, 20s);
                     break;
             }
 

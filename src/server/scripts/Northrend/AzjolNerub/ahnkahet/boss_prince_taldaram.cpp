@@ -137,8 +137,8 @@ public:
         void ScheduleEvents()
         {
             events.Reset();
-            events.ScheduleEvent(EVENT_PRINCE_FLAME_SPHERES, 10000);
-            events.ScheduleEvent(EVENT_PRINCE_BLOODTHIRST, 10000);
+            events.ScheduleEvent(EVENT_PRINCE_FLAME_SPHERES, 10s);
+            events.ScheduleEvent(EVENT_PRINCE_BLOODTHIRST, 10s);
             vanishTarget = 0;
             vanishDamage = 0;
         }
@@ -203,11 +203,11 @@ public:
                             Talk(SAY_VANISH);
                             me->CastSpell(me, SPELL_VANISH, false);
 
-                            events.CancelEvent(EVENT_PRINCE_FLAME_SPHERES);
-                            events.CancelEvent(EVENT_PRINCE_BLOODTHIRST);
-                            events.ScheduleEvent(EVENT_PRINCE_VANISH_RUN, 2499);
-                            if (Unit* pEmbraceTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-                                vanishTarget = pEmbraceTarget->GetGUID();
+                        events.CancelEvent(EVENT_PRINCE_FLAME_SPHERES);
+                        events.CancelEvent(EVENT_PRINCE_BLOODTHIRST);
+                        events.ScheduleEvent(EVENT_PRINCE_VANISH_RUN, 2499ms);
+                        if (Unit* pEmbraceTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                            vanishTarget = pEmbraceTarget->GetGUID();
                         }
                         break;
                     }
@@ -220,8 +220,8 @@ public:
                             me->RemoveAura(SPELL_VANISH);
                         }
 
-                        events.ScheduleEvent(EVENT_PRINCE_RESCHEDULE, 20000);
-                        break;
+                    events.ScheduleEvent(EVENT_PRINCE_RESCHEDULE, 20s);
+                    break;
                     }
                 case EVENT_PRINCE_RESCHEDULE:
                     {

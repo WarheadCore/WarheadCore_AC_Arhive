@@ -147,10 +147,11 @@ public:
 
         void RescheduleEvents()
         {
-            events.RescheduleEvent(EVENT_GRAVITY_BOMB, 1000, 1);
-            events.RescheduleEvent(EVENT_TYMPANIC_TANTARUM, 60000, 1);
+            events.RescheduleEvent(EVENT_GRAVITY_BOMB, 1s, 1);
+            events.RescheduleEvent(EVENT_TYMPANIC_TANTARUM, 1min, 1);
+            
             if (!_hardMode)
-                events.RescheduleEvent(EVENT_HEALTH_CHECK, 2000, 1);
+                events.RescheduleEvent(EVENT_HEALTH_CHECK, 2s, 1);
         }
 
         void Reset()
@@ -200,8 +201,8 @@ public:
         void EnterCombat(Unit*)
         {
             me->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_ONESHOT_NONE);
-            events.ScheduleEvent(EVENT_ENRAGE, 600000, 0, 0);
-            events.ScheduleEvent(EVENT_CHECK_ROOM, 5000, 0, 0);
+            events.ScheduleEvent(EVENT_ENRAGE, 10min, 0, 0);
+            events.ScheduleEvent(EVENT_CHECK_ROOM, 5s, 0, 0);
             RescheduleEvents(); // Other events are scheduled here
 
             me->setActive(true);
@@ -282,7 +283,7 @@ public:
                 me->CastSpell(me, SPELL_HEARTBREAK, true);
 
                 me->MonsterTextEmote("XT-002 Deconstructor's heart is severed from his body.", 0, true);
-                events.ScheduleEvent(EVENT_REMOVE_EMOTE, 4000);
+                events.ScheduleEvent(EVENT_REMOVE_EMOTE, 4s);
                 return;
             }
 
@@ -335,7 +336,7 @@ public:
                         me->PlayDirectSound(XT_SOUND_HEART_OPEN);
 
                         events.CancelEventGroup(1);
-                        events.ScheduleEvent(EVENT_START_SECOND_PHASE, 5000);
+                        events.ScheduleEvent(EVENT_START_SECOND_PHASE, 5s);
                         return;
                     }
                     events.RepeatEvent(1000);
@@ -350,11 +351,11 @@ public:
                 // Abilities events
                 case EVENT_GRAVITY_BOMB:
                     me->CastCustomSpell(SPELL_GRAVITY_BOMB, SPELLVALUE_MAX_TARGETS, 1, me, true);
-                    events.ScheduleEvent(EVENT_SEARING_LIGHT, 10000, 1);
+                    events.ScheduleEvent(EVENT_SEARING_LIGHT, 10s, 1);
                     break;
                 case EVENT_SEARING_LIGHT:
                     me->CastCustomSpell(SPELL_SEARING_LIGHT, SPELLVALUE_MAX_TARGETS, 1, me, true);
-                    events.ScheduleEvent(EVENT_GRAVITY_BOMB, 10000, 1);
+                    events.ScheduleEvent(EVENT_GRAVITY_BOMB, 10s, 1);
                     break;
                 case EVENT_TYMPANIC_TANTARUM:
                     me->MonsterTextEmote("XT-002 Deconstructor begins to cause the earth to quake.", 0, true);
@@ -375,8 +376,8 @@ public:
                     me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
                     if (Unit* heart = me->GetVehicleKit() ? me->GetVehicleKit()->GetPassenger(HEART_VEHICLE_SEAT) : nullptr)
                         heart->GetAI()->DoAction(ACTION_AWAKEN_HEART);
-
-                    events.ScheduleEvent(EVENT_RESTORE, 30000);
+                    
+                    events.ScheduleEvent(EVENT_RESTORE, 30s);
                     return;
                 // Restore from heartbreak
                 case EVENT_RESTORE:
@@ -393,7 +394,7 @@ public:
                     if (Unit* heart = me->GetVehicleKit() ? me->GetVehicleKit()->GetPassenger(HEART_VEHICLE_SEAT) : nullptr)
                         heart->GetAI()->DoAction(ACTION_HIDE_HEART);
 
-                    events.ScheduleEvent(EVENT_REMOVE_EMOTE, 4000);
+                    events.ScheduleEvent(EVENT_REMOVE_EMOTE, 4s);
                     return;
                 case EVENT_REMOVE_EMOTE:
                     me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);

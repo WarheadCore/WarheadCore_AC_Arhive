@@ -174,7 +174,7 @@ public:
 
                 me->SetControlled(true, UNIT_STATE_ROOT);
                 me->SetInCombatWithZone();
-                events.RescheduleEvent(EVENT_SKADI_START, 2000);
+                events.RescheduleEvent(EVENT_SKADI_START, 2s);
             }
         }
 
@@ -184,9 +184,9 @@ public:
             if (param == ACTION_PHASE2)
             {
                 SecondPhase = true;
-                events.ScheduleEvent(EVENT_SKADI_CRUSH, 8000);
-                events.ScheduleEvent(EVENT_SKADI_SPEAR, 10000);
-                events.ScheduleEvent(EVENT_SKADI_WHIRLWIND, 15000);
+                events.ScheduleEvent(EVENT_SKADI_CRUSH, 8s);
+                events.ScheduleEvent(EVENT_SKADI_SPEAR, 10s);
+                events.ScheduleEvent(EVENT_SKADI_WHIRLWIND, 15s);
 
                 if (me->GetVictim())
                     me->GetMotionMaster()->MoveChase(me->GetVictim());
@@ -303,8 +303,8 @@ public:
         {
             if (param == ACTION_START_EVENT)
             {
-                events.RescheduleEvent(EVENT_GRAUF_CHECK, 5000);
-                events.RescheduleEvent(EVENT_GRAUF_START, 2000);
+                events.RescheduleEvent(EVENT_GRAUF_CHECK, 5s);
+                events.RescheduleEvent(EVENT_GRAUF_START, 2s);
             }
             else if (param == ACTION_REMOVE_SKADI)
             {
@@ -312,7 +312,7 @@ public:
                     if (Creature* skadi = passenger->ToCreature())
                         skadi->AI()->Talk(SAY_DRAKE_DEATH);
                 me->GetMotionMaster()->MovePoint(10, 480.0f, -513.0f, 108.0f);
-                events.ScheduleEvent(EVENT_GRAUF_REMOVE_SKADI, 2000);
+                events.ScheduleEvent(EVENT_GRAUF_REMOVE_SKADI, 2s);
             }
             else if (param == ACTION_MYGIRL_ACHIEVEMENT)
             {
@@ -455,12 +455,12 @@ public:
                         me->GetMotionMaster()->Clear(true);
                         me->GetMotionMaster()->MoveTakeoff(10, SkadiPosition[0].GetPositionX(), SkadiPosition[0].GetPositionY(), SkadiPosition[0].GetPositionZ(), 3.0f);
 
-                        SpawnHelpers(0);
-                        SpawnHelpers(0);
-                        events.ScheduleEvent(EVENT_GRAUF_MOVE, 15000);
-                        events.ScheduleEvent(EVENT_GRAUF_SUMMON_HELPERS, 20000);
-                        break;
-                    }
+                    SpawnHelpers(0);
+                    SpawnHelpers(0);
+                    events.ScheduleEvent(EVENT_GRAUF_MOVE, 15s);
+                    events.ScheduleEvent(EVENT_GRAUF_SUMMON_HELPERS, 20s);
+                    break;
+                }
                 case EVENT_GRAUF_MOVE:
                     {
                         AchievementHitCount = 0;

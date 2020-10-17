@@ -77,12 +77,12 @@ public:
             }
         }
 
-        void EnterCombat(Unit*  /*who*/)
+        void EnterCombat(Unit* /*who*/)
         {
-            events.ScheduleEvent(EVENT_STORM, 5000);
-            events.ScheduleEvent(EVENT_SHOCK, 26000 + rand() % 6000);
-            events.ScheduleEvent(EVENT_PILLAR, 12000 + rand() % 8000);
-            events.ScheduleEvent(EVENT_PARTING, 8000);
+            events.ScheduleEvent(EVENT_STORM, 5s);
+            events.ScheduleEvent(EVENT_SHOCK, 26s, 32s);
+            events.ScheduleEvent(EVENT_PILLAR, 12s, 20s);
+            events.ScheduleEvent(EVENT_PARTING, 8s);
 
             Talk(SAY_AGGRO);
             if (pInstance)

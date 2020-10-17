@@ -343,7 +343,7 @@ public:
 
             phase = 0;
             events.Reset();
-            events.ScheduleEvent(EVENT_START_EVENT, 4000);
+            events.ScheduleEvent(EVENT_START_EVENT, 4s);
         }
 
         Player* getSummoner() { return ObjectAccessor::GetPlayer(*me, summonerGUID); }
@@ -363,12 +363,12 @@ public:
                 case EVENT_START_EVENT:
                     if (Creature* cr = getFuture())
                         cr->MonsterWhisper(IsFuture() ? "Hey there, $N, don't be alarmed. It's me... you... from the future. I'm here to help." : "Whoa! You're me, but from the future! Hey, my equipment got an upgrade! Cool!", getSummoner());
-                    events.ScheduleEvent(EVENT_FIGHT_1, 7000);
+                    events.ScheduleEvent(EVENT_FIGHT_1, 7s);
                     break;
                 case EVENT_FIGHT_1:
                     if (Creature* cr = getFuture())
                         cr->MonsterWhisper(IsFuture() ? "Heads up... here they come. I'll help as much as I can. Let's just keep them off the hourglass!" : "Here come the Infinites! I've got to keep the hourglass safe. Can you help?", getSummoner());
-                    events.ScheduleEvent(EVENT_FIGHT_2, 6000);
+                    events.ScheduleEvent(EVENT_FIGHT_2, 6s);
                     break;
                 case EVENT_FIGHT_2:
                     {
@@ -793,9 +793,9 @@ public:
         void Reset()
         {
             events.Reset();
-            events.ScheduleEvent(998, 10000);
-            events.ScheduleEvent(999, 0);
-            events.ScheduleEvent(1, 3000);
+            events.ScheduleEvent(998, 10s);
+            events.ScheduleEvent(999, 0s);
+            events.ScheduleEvent(1, 3s);
             summons.DespawnAll();
             playerGUID = 0;
 
@@ -819,16 +819,17 @@ public:
                 return;
             me->setActive(true);
             playerGUID = guid;
-            events.ScheduleEvent(2, 900000);
-            events.ScheduleEvent(3, 0);
+            events.ScheduleEvent(2, 15min);
+            events.ScheduleEvent(3, 0s);
         }
 
         void SetData(uint32 type, uint32 data)
         {
             if (!playerGUID || type != data)
                 return;
+            
             if (data == 1)
-                events.ScheduleEvent(15, 0);
+                events.ScheduleEvent(15, 0s);
             else if (data == 2)
             {
                 if (GameObject* go = me->FindNearestGameObject(GO_SAC_LIGHTS_VENGEANCE_2, 150.0f))
@@ -840,7 +841,7 @@ public:
                     if (Player* p = ObjectAccessor::GetPlayer(*me, playerGUID))
                         p->KnockbackFrom(c->GetPositionX(), c->GetPositionY(), 5.0f, 3.0f);
                 }
-                events.ScheduleEvent(18, 3000);
+                events.ScheduleEvent(18, 3s);
             }
             else if (data == 3)
             {
@@ -851,7 +852,7 @@ public:
                     if (GameObject* go = me->FindNearestGameObject(GO_SAC_LIGHTS_VENGEANCE_3, 150.0f))
                         go->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
                     playerGUID = 0;
-                    events.RescheduleEvent(2, 60000);
+                    events.RescheduleEvent(2, 1min);
                 }
             }
         }
@@ -887,7 +888,7 @@ public:
                             return;
                         }
                     }
-                    events.ScheduleEvent(1, 3000);
+                    events.ScheduleEvent(1, 3s);
                     break;
                 case 2: // reset timer
                     Reset();
@@ -902,24 +903,24 @@ public:
                         path.push_back(G3D::Vector3(4825.35f, -582.99f, 164.83f));
                         path.push_back(G3D::Vector3(4813.38f, -580.94f, 162.62f));
                         me->GetMotionMaster()->MoveSplinePath(&path);
-                        events.ScheduleEvent(4, 10000);
+                        events.ScheduleEvent(4, 10s);
                     }
                     break;
                 case 4: // talk 0
                     Talk(0);
-                    events.ScheduleEvent(5, 6000);
+                    events.ScheduleEvent(5, 6s);
                     break;
                 case 5: // talk 1
                     Talk(1);
-                    events.ScheduleEvent(6, 4000);
-                    events.ScheduleEvent(7, 11000);
+                    events.ScheduleEvent(6, 4s);
+                    events.ScheduleEvent(7, 11s);
                     break;
                 case 6: // repel hammer
                     me->CastSpell((Unit*)NULL, SPELL_SAC_REPEL_HAMMER, false);
                     if (Creature* c = me->FindNearestCreature(NPC_SAC_LIGHTS_VENGEANCE_VEH_1, 150.0f, true))
                         c->CastSpell(c, SPELL_SAC_BLUE_EXPLOSION, true);
 
-                    events.ScheduleEvent(65, 3500);
+                    events.ScheduleEvent(65, 3500ms);
                     break;
                 case 65: // spawn hammer go
                     if (Creature* c = me->FindNearestCreature(NPC_SAC_LIGHTS_VENGEANCE_BUNNY, 150.0f, true))
@@ -930,20 +931,20 @@ public:
                     break;
                 case 7: // talk 2
                     Talk(2);
-                    events.ScheduleEvent(8, 8000);
-                    events.ScheduleEvent(9, 11500);
+                    events.ScheduleEvent(8, 8s);
+                    events.ScheduleEvent(9, 11500ms);
                     break;
                 case 8: // summon ghouls
                     me->CastSpell((Unit*)NULL, SPELL_SAC_SUMMON_GHOULS_AURA, false);
                     break;
                 case 9: // talk 3
                     Talk(3);
-                    events.ScheduleEvent(10, 10000);
+                    events.ScheduleEvent(10, 10s);
                     break;
                 case 10: // summon vegard
                     me->SummonCreature(NPC_SAC_VEGARD_1, 4812.12f, -586.08f, 162.49f, 3.14f, TEMPSUMMON_MANUAL_DESPAWN);
-                    events.ScheduleEvent(11, 4000);
-                    events.ScheduleEvent(12, 5000);
+                    events.ScheduleEvent(11, 4s);
+                    events.ScheduleEvent(12, 5s);
                     break;
                 case 11: // vagard shield
                     if (Creature* c = me->FindNearestCreature(NPC_SAC_VEGARD_1, 50.0f, true))
@@ -953,8 +954,8 @@ public:
                     Talk(4);
                     if (Player* p = ObjectAccessor::GetPlayer(*me, playerGUID))
                         me->CastSpell(p, SPELL_SAC_ZAP_PLAYER, false);
-                    events.ScheduleEvent(13, 3500);
-                    events.ScheduleEvent(14, 6000);
+                    events.ScheduleEvent(13, 3500ms);
+                    events.ScheduleEvent(14, 6s);
                     break;
                 case 13: // despawn
                     me->CastSpell(me, SPELL_SAC_LK_DESPAWN_ANIM, false);
@@ -985,7 +986,7 @@ public:
                                 //l->ClearUnitState(UNIT_STATE_ONVEHICLE);
                                 l->CastSpell(l, SPELL_SAC_HOLY_BOMB_VISUAL, false);
                                 l->AddAura(SPELL_SAC_HOLY_BOMB_VISUAL, l);
-                                events.ScheduleEvent(16, 5000);
+                                events.ScheduleEvent(16, 5s);
                             }
                         }
                     break;
@@ -994,7 +995,7 @@ public:
                         c->CastSpell(c, SPELL_SAC_ZAP_GHOULS_AURA, true);
                     if (Creature* c = me->FindNearestCreature(NPC_SAC_VEGARD_1, 50.0f, true))
                         c->RemoveAurasDueToSpell(SPELL_SAC_VEGARD_SUMMON_GHOULS_AURA);
-                    events.ScheduleEvent(17, 12000);
+                    events.ScheduleEvent(17, 12s);
                     break;
                 case 17: // kill vegard
                     {
@@ -1278,12 +1279,12 @@ public:
             me->SetReactState(REACT_PASSIVE);
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
             events.Reset();
-            events.ScheduleEvent(1, 7000);
-            events.ScheduleEvent(2, urand(7000, 20000));
-            events.ScheduleEvent(3, urand(7000, 20000));
-            events.ScheduleEvent(4, urand(7000, 20000));
-            events.ScheduleEvent(5, urand(7000, 20000));
-            events.ScheduleEvent(6, 1);
+            events.ScheduleEvent(1, 7s);
+            events.ScheduleEvent(2, 7s, 20s);
+            events.ScheduleEvent(3, 7s, 20s);
+            events.ScheduleEvent(4, 7s, 20s);
+            events.ScheduleEvent(5, 7s, 20s);
+            events.ScheduleEvent(6, 10ms);
         }
 
         EventMap events;
@@ -1518,14 +1519,14 @@ public:
             talkWing = 0;
         }
 
-        void Reset()
-        {
-            talkWing = 0;
-            memset(audienceList, 0, sizeof(audienceList));
-            memset(imageList, 0, sizeof(imageList));
-            _events.ScheduleEvent(EVENT_GET_TARGETS, 5000);
-            _events.ScheduleEvent(EVENT_START_RANDOM, 20000);
-        }
+            void Reset()
+            {
+                talkWing = 0;
+                memset(audienceList, 0, sizeof(audienceList));
+                memset(imageList, 0, sizeof(imageList));
+                _events.ScheduleEvent(EVENT_GET_TARGETS, 5s);
+                _events.ScheduleEvent(EVENT_START_RANDOM, 20s);
+            }
 
         void MovementInform(uint32 type, uint32 id)
         {
@@ -1608,21 +1609,12 @@ public:
                             {
                                 switch (urand (0, 2))
                                 {
-                                    case 0:
-                                        ChangeImage(NPC_IMAGE_OF_NOTH, MODEL_IMAGE_OF_NOTH, SAY_NOTH);
-                                        break;
-                                    case 1:
-                                        ChangeImage(NPC_IMAGE_OF_HEIGAN, MODEL_IMAGE_OF_HEIGAN, SAY_HEIGAN_1);
                                         _events.ScheduleEvent(EVENT_HEIGAN_2, 8000);
-                                        break;
-                                    case 2:
-                                        ChangeImage(NPC_IMAGE_OF_LOATHEB, MODEL_IMAGE_OF_LOATHEB, SAY_LOATHEB);
-                                        break;
                                 }
                             }
                             break;
                         case 5: // Home
-                            _events.ScheduleEvent(EVENT_START_RANDOM, 30000);
+                            _events.ScheduleEvent(EVENT_START_RANDOM, 30s);
                             break;
                     }
                 }
@@ -1665,11 +1657,11 @@ public:
         {
             if (Creature* creature = ObjectAccessor::GetCreature(*me, imageList[talkWing]))
             {
-                Talk(text);
-                creature->SetEntry(entry);
-                creature->SetDisplayId(model);
-                creature->CastSpell(creature, SPELL_HEROIC_IMAGE_CHANNEL);
-                _events.ScheduleEvent(EVENT_TALK_COMPLETE, 40000);
+                    Talk(text);
+                    creature->SetEntry(entry);
+                    creature->SetDisplayId(model);
+                    creature->CastSpell(creature, SPELL_HEROIC_IMAGE_CHANNEL);
+                    _events.ScheduleEvent(EVENT_TALK_COMPLETE, 40s);
             }
         }
 
@@ -1690,57 +1682,57 @@ public:
             {
                 switch (eventId)
                 {
-                    case EVENT_START_RANDOM:
-                        talkWing = urand (0, 4);
-                        Talk(talkWing);
-                        _events.ScheduleEvent(EVENT_MOVE_TO_POINT, 8000);
-                        break;
-                    case EVENT_MOVE_TO_POINT:
-                        me->SetWalk(true);
-                        me->GetMotionMaster()->Clear();
-                        me->GetMotionMaster()->MovePoint(1, PosTalkLocations[talkWing].m_positionX, PosTalkLocations[talkWing].m_positionY, PosTalkLocations[talkWing].m_positionZ);
-                        break;
-                    case EVENT_TALK_COMPLETE:
-                        talkWing = 5;
-                        Talk(talkWing);
-                        _events.ScheduleEvent(EVENT_MOVE_TO_POINT, 5000);
-                        break;
-                    case EVENT_GET_TARGETS:
-                        StoreTargets();
-                        break;
-                    case EVENT_KELTHUZAD_2:
-                        Talk(SAY_KELTHUZAD_2);
-                        _events.ScheduleEvent(EVENT_KELTHUZAD_3, 8000);
-                        break;
-                    case EVENT_KELTHUZAD_3:
-                        Talk(SAY_KELTHUZAD_3);
-                        break;
-                    case EVENT_DEATH_KNIGHTS_2:
-                        Talk(SAY_DEATH_KNIGHTS_2);
-                        if (Creature* creature = ObjectAccessor::GetCreature(*me, imageList[talkWing]))
-                        {
-                            creature->SetEntry(NPC_IMAGE_OF_BLAUMEUX);
-                            creature->SetDisplayId(MODEL_IMAGE_OF_BLAUMEUX);
-                        }
-                        _events.ScheduleEvent(EVENT_DEATH_KNIGHTS_3, 10000);
-                        break;
-                    case EVENT_DEATH_KNIGHTS_3:
-                        Talk(SAY_DEATH_KNIGHTS_3);
-                        if (Creature* creature = ObjectAccessor::GetCreature(*me, imageList[talkWing]))
-                        {
-                            creature->SetEntry(NPC_IMAGE_OF_ZELIEK);
-                            creature->SetDisplayId(MODEL_IMAGE_OF_ZELIEK);
-                        }
-                        _events.ScheduleEvent(EVENT_DEATH_KNIGHTS_4, 10000);
-                        break;
-                    case EVENT_DEATH_KNIGHTS_4:
-                        Talk(SAY_DEATH_KNIGHTS_4);
-                        break;
-                    case EVENT_HEIGAN_2:
-                        Talk(SAY_HEIGAN_2);
-                        break;
-                    default:
-                        break;
+                        case EVENT_START_RANDOM:
+                            talkWing = urand (0, 4);
+                            Talk(talkWing);
+                            _events.ScheduleEvent(EVENT_MOVE_TO_POINT, 8s);
+                            break;
+                        case EVENT_MOVE_TO_POINT:
+                            me->SetWalk(true);
+                            me->GetMotionMaster()->Clear();
+                            me->GetMotionMaster()->MovePoint(1, PosTalkLocations[talkWing].m_positionX, PosTalkLocations[talkWing].m_positionY, PosTalkLocations[talkWing].m_positionZ);
+                            break;
+                        case EVENT_TALK_COMPLETE:
+                            talkWing = 5;
+                            Talk(talkWing);
+                            _events.ScheduleEvent(EVENT_MOVE_TO_POINT, 5s);
+                            break;
+                        case EVENT_GET_TARGETS:
+                            StoreTargets();
+                            break;
+                        case EVENT_KELTHUZAD_2:
+                            Talk(SAY_KELTHUZAD_2);
+                            _events.ScheduleEvent(EVENT_KELTHUZAD_3, 8s);
+                            break;
+                        case EVENT_KELTHUZAD_3:
+                            Talk(SAY_KELTHUZAD_3);
+                            break;
+                        case EVENT_DEATH_KNIGHTS_2:
+                            Talk(SAY_DEATH_KNIGHTS_2);
+                            if (Creature* creature = ObjectAccessor::GetCreature(*me, imageList[talkWing]))
+                            {
+                                creature->SetEntry(NPC_IMAGE_OF_BLAUMEUX);
+                                creature->SetDisplayId(MODEL_IMAGE_OF_BLAUMEUX);
+                            }
+                            _events.ScheduleEvent(EVENT_DEATH_KNIGHTS_3, 10s);
+                            break;
+                        case EVENT_DEATH_KNIGHTS_3:
+                            Talk(SAY_DEATH_KNIGHTS_3);
+                            if (Creature* creature = ObjectAccessor::GetCreature(*me, imageList[talkWing]))
+                            {
+                                creature->SetEntry(NPC_IMAGE_OF_ZELIEK);
+                                creature->SetDisplayId(MODEL_IMAGE_OF_ZELIEK);
+                            }
+                            _events.ScheduleEvent(EVENT_DEATH_KNIGHTS_4, 10s);
+                            break;
+                        case EVENT_DEATH_KNIGHTS_4:
+                            Talk(SAY_DEATH_KNIGHTS_4);
+                            break;
+                        case EVENT_HEIGAN_2:
+                            Talk(SAY_HEIGAN_2);
+                            break;
+                        default:
+                            break;
                 }
             }
             DoMeleeAttackIfReady();
@@ -1888,10 +1880,10 @@ public:
             _playerGUID  = 0;
         }
 
-        void EnterCombat(Unit* who)
-        {
-            _events.ScheduleEvent(EVENT_HEMORRHAGE, urand(5000, 8000));
-            _events.ScheduleEvent(EVENT_KIDNEY_SHOT, urand(12000, 15000));
+            void EnterCombat(Unit* who)
+            {
+                _events.ScheduleEvent(EVENT_HEMORRHAGE, 5s, 8s);
+                _events.ScheduleEvent(EVENT_KIDNEY_SHOT, 12s, 15s);
 
             if (Player* player = who->ToPlayer())
                 Talk (SAY_AGGRO, player);
@@ -1933,16 +1925,16 @@ public:
             {
                 switch (eventId)
                 {
-                    case EVENT_HEMORRHAGE:
-                        DoCastVictim(SPELL_HEMORRHAGE);
-                        _events.ScheduleEvent(EVENT_HEMORRHAGE, urand(12000, 168000));
-                        break;
-                    case EVENT_KIDNEY_SHOT:
-                        DoCastVictim(SPELL_KIDNEY_SHOT);
-                        _events.ScheduleEvent(EVENT_KIDNEY_SHOT, urand(20000, 26000));
-                        break;
-                    default:
-                        break;
+                        case EVENT_HEMORRHAGE:
+                            DoCastVictim(SPELL_HEMORRHAGE);
+                            _events.ScheduleEvent(EVENT_HEMORRHAGE, 12s, 168s);
+                            break;
+                        case EVENT_KIDNEY_SHOT:
+                            DoCastVictim(SPELL_KIDNEY_SHOT);
+                            _events.ScheduleEvent(EVENT_KIDNEY_SHOT, 20s, 26s);
+                            break;
+                        default:
+                            break;
                 }
             }
             DoMeleeAttackIfReady();

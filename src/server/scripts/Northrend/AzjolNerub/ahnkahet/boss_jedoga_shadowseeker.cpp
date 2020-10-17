@@ -177,10 +177,10 @@ public:
 
         void ScheduleEvents()
         {
-            events.RescheduleEvent(EVENT_JEDOGA_CYCLONE, 3000);
-            events.RescheduleEvent(EVENT_JEDOGA_LIGHTNING_BOLT, 7000);
-            events.RescheduleEvent(EVENT_JEDOGA_THUNDERSHOCK, 12000);
-            events.RescheduleEvent(EVENT_JEDOGA_MOVE_UP, urand(20000, 25000));
+            events.RescheduleEvent(EVENT_JEDOGA_CYCLONE, 3s);
+            events.RescheduleEvent(EVENT_JEDOGA_LIGHTNING_BOLT, 7s);
+            events.RescheduleEvent(EVENT_JEDOGA_THUNDERSHOCK, 12s);
+            events.RescheduleEvent(EVENT_JEDOGA_MOVE_UP, 20s, 25s);
         }
 
         void DoAction(int32 param)
@@ -199,13 +199,13 @@ public:
             {
                 me->CastSpell(me, SPELL_GIFT_OF_THE_HERALD, true);
                 events.DelayEvents(1001);
-                events.ScheduleEvent(EVENT_JEDOGA_MOVE_DOWN, 1000);
+                events.ScheduleEvent(EVENT_JEDOGA_MOVE_DOWN, 1s);
                 isFlying = false;
             }
             else if (param == ACTION_SACRIFICE_FAILED)
             {
                 events.DelayEvents(1001);
-                events.ScheduleEvent(EVENT_JEDOGA_MOVE_DOWN, 1000);
+                events.ScheduleEvent(EVENT_JEDOGA_MOVE_DOWN, 1s);
                 isFlying = false;
                 if (pInstance)
                     pInstance->SetData(DATA_JEDOGA_ACHIEVEMENT, false);

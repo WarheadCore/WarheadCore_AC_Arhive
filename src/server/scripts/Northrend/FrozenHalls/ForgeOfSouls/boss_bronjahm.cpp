@@ -96,9 +96,9 @@ public:
 
             DoZoneInCombat();
             events.Reset();
-            events.RescheduleEvent(EVENT_SPELL_SHADOW_BOLT, 2000);
-            events.RescheduleEvent(EVENT_SPELL_MAGICS_BANE, urand(5000, 10000));
-            events.RescheduleEvent(EVENT_SPELL_CORRUPT_SOUL, urand(14000, 20000));
+            events.RescheduleEvent(EVENT_SPELL_SHADOW_BOLT, 2s);
+            events.RescheduleEvent(EVENT_SPELL_MAGICS_BANE, 5s, 10s);
+            events.RescheduleEvent(EVENT_SPELL_CORRUPT_SOUL, 14s, 20s);
 
             if (pInstance)
                 pInstance->SetData(DATA_BRONJAHM, IN_PROGRESS);
@@ -114,7 +114,7 @@ public:
                 me->CastSpell(me, SPELL_TELEPORT, false);
                 events.CancelEvent(EVENT_SPELL_CORRUPT_SOUL);
                 events.DelayEvents(6000);
-                events.RescheduleEvent(EVENT_SPELL_FEAR, urand(8000, 14000));
+                events.RescheduleEvent(EVENT_SPELL_FEAR, 8s, 14s);
             }
         }
 
@@ -123,7 +123,7 @@ public:
             if (spell->Id == SPELL_TELEPORT)
             {
                 me->CastSpell(me, SPELL_TELEPORT_VISUAL, true);
-                events.RescheduleEvent(EVENT_START_SOULSTORM, 1);
+                events.RescheduleEvent(EVENT_START_SOULSTORM, 10ms);
             }
         }
 

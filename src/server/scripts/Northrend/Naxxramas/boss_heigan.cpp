@@ -130,10 +130,10 @@ public:
             events.Reset();
             if (phase == PHASE_SLOW_DANCE)
             {
-                events.ScheduleEvent(EVENT_SPELL_SPELL_DISRUPTION, 0);
-                events.ScheduleEvent(EVENT_SPELL_DECEPIT_FEVER, 12000);
-                events.ScheduleEvent(EVENT_ERUPT_SECTION, 10000);
-                events.ScheduleEvent(EVENT_SWITCH_PHASE, 90000);
+                events.ScheduleEvent(EVENT_SPELL_SPELL_DISRUPTION, 0s);
+                events.ScheduleEvent(EVENT_SPELL_DECEPIT_FEVER, 12s);
+                events.ScheduleEvent(EVENT_ERUPT_SECTION, 10s);
+                events.ScheduleEvent(EVENT_SWITCH_PHASE, 90s);
             }
             else // if (phase == PHASE_FAST_DANCE)
             {
@@ -145,10 +145,10 @@ public:
                 me->NearTeleportTo(x, y, z, o);
 
                 me->CastSpell(me, SPELL_PLAGUE_CLOUD, false);
-                events.ScheduleEvent(EVENT_ERUPT_SECTION, 4000);
-                events.ScheduleEvent(EVENT_SWITCH_PHASE, 45000);
+                events.ScheduleEvent(EVENT_ERUPT_SECTION, 4s);
+                events.ScheduleEvent(EVENT_SWITCH_PHASE, 45s);
             }
-            events.ScheduleEvent(EVENT_SAFETY_DANCE, 5000);
+            events.ScheduleEvent(EVENT_SAFETY_DANCE, 5s);
         }
 
         bool IsInRoom(Unit* who)

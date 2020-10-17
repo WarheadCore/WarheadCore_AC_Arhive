@@ -708,7 +708,7 @@ public:
                             go->SetPhaseMask(1, true);
                         if (GameObject* go = instance->GetGameObject(_plagueEyePortalGUID))
                             go->SetGoState(GO_STATE_ACTIVE);
-                        events.ScheduleEvent(EVENT_KELTHUZAD_WING_TAUNT, 6000);
+                        events.ScheduleEvent(EVENT_KELTHUZAD_WING_TAUNT, 6s);
                         break;
                     case BOSS_ANUB:
                         if (GameObject* go = instance->GetGameObject(_anubGateGUID))
@@ -729,7 +729,7 @@ public:
                             go->SetPhaseMask(1, true);
                         if (GameObject* go = instance->GetGameObject(_spiderEyePortalGUID))
                             go->SetGoState(GO_STATE_ACTIVE);
-                        events.ScheduleEvent(EVENT_KELTHUZAD_WING_TAUNT, 6000);
+                        events.ScheduleEvent(EVENT_KELTHUZAD_WING_TAUNT, 6s);
                         break;
                     case BOSS_GOTHIK:
                         if (GameObject* go = instance->GetGameObject(_gothikEnterGateGUID))
@@ -748,14 +748,14 @@ public:
                             go->SetPhaseMask(1, true);
                         if (GameObject* go = instance->GetGameObject(_abomEyePortalGUID))
                             go->SetGoState(GO_STATE_ACTIVE);
-                        events.ScheduleEvent(EVENT_KELTHUZAD_WING_TAUNT, 6000);
+                        events.ScheduleEvent(EVENT_KELTHUZAD_WING_TAUNT, 6s);
                         break;
                     case BOSS_HORSEMAN:
                         if (GameObject* go = instance->GetGameObject(_horsemanPortalGUID))
                             go->SetPhaseMask(1, true);
                         if (GameObject* go = instance->GetGameObject(_deathknightEyePortalGUID))
                             go->SetGoState(GO_STATE_ACTIVE);
-                        events.ScheduleEvent(EVENT_KELTHUZAD_WING_TAUNT, 6000);
+                        events.ScheduleEvent(EVENT_KELTHUZAD_WING_TAUNT, 6s);
                         break;
                     default:
                         break;

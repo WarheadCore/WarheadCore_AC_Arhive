@@ -129,10 +129,10 @@ public:
 
             shiftNumber = 0;
 
-            events.RescheduleEvent(EVENT_SPELL_ARCANE_BARRAGE, 0);
-            events.RescheduleEvent(EVENT_SPELL_ARCANE_VOLLEY, 5000);
-            events.RescheduleEvent(EVENT_SPELL_ENRAGED_ASSAULT, 35000);
-            events.RescheduleEvent(EVENT_SUMMON_WHELPS, 40000);
+            events.RescheduleEvent(EVENT_SPELL_ARCANE_BARRAGE, 0s);
+            events.RescheduleEvent(EVENT_SPELL_ARCANE_VOLLEY, 5s);
+            events.RescheduleEvent(EVENT_SPELL_ENRAGED_ASSAULT, 35);
+            events.RescheduleEvent(EVENT_SUMMON_WHELPS, 40s);
         }
 
         void JustDied(Unit*  /*killer*/)
@@ -153,7 +153,7 @@ public:
             if( shiftNumber <= uint32(1) && uint32(me->GetHealth() * 100 / me->GetMaxHealth()) <= uint32(60 - shiftNumber * 40) )
             {
                 ++shiftNumber;
-                events.RescheduleEvent(EVENT_SPELL_PLANAR_SHIFT, 0);
+                events.RescheduleEvent(EVENT_SPELL_PLANAR_SHIFT, 0s);
             }
         }
 
@@ -206,8 +206,8 @@ public:
                     events.RepeatEvent(35000);
                     break;
                 case EVENT_SUMMON_WHELPS:
-                    for( uint8 i = 0; i < 5; ++i )
-                        events.ScheduleEvent(EVENT_SUMMON_SINGLE_WHELP, urand(0, 8000));
+                    for( uint8 i=0; i<5; ++i )
+                        events.ScheduleEvent(EVENT_SUMMON_SINGLE_WHELP, 0s, 8s);
                     events.RepeatEvent(40000);
                     break;
                 case EVENT_SUMMON_SINGLE_WHELP:

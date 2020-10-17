@@ -414,27 +414,27 @@ public:
                     if (!_bolvarFordragon || !_theLichKing || !_factionNPC)
                         return;
 
-                    Talk(SAY_TIRION_INTRO_1);
-                    _events.ScheduleEvent(EVENT_TIRION_INTRO_2, 4000);
-                    _events.ScheduleEvent(EVENT_TIRION_INTRO_3, 14000);
-                    _events.ScheduleEvent(EVENT_TIRION_INTRO_4, 18000);
-                    _events.ScheduleEvent(EVENT_TIRION_INTRO_5, 31000);
-                    _events.ScheduleEvent(EVENT_LK_INTRO_1, 35000);
-                    _events.ScheduleEvent(EVENT_TIRION_INTRO_6, 51000);
-                    _events.ScheduleEvent(EVENT_LK_INTRO_2, 58000);
-                    _events.ScheduleEvent(EVENT_LK_INTRO_3, 74000);
-                    _events.ScheduleEvent(EVENT_LK_INTRO_4, 86000); // sound last 21 seconds (five more)
-                    _events.ScheduleEvent(EVENT_BOLVAR_INTRO_1, 105000);
-                    _events.ScheduleEvent(EVENT_LK_INTRO_5, 113000);
+                        Talk(SAY_TIRION_INTRO_1);
+                        _events.ScheduleEvent(EVENT_TIRION_INTRO_2, 4s);
+                        _events.ScheduleEvent(EVENT_TIRION_INTRO_3, 14s);
+                        _events.ScheduleEvent(EVENT_TIRION_INTRO_4, 18s);
+                        _events.ScheduleEvent(EVENT_TIRION_INTRO_5, 31s);
+                        _events.ScheduleEvent(EVENT_LK_INTRO_1, 35s);
+                        _events.ScheduleEvent(EVENT_TIRION_INTRO_6, 51s);
+                        _events.ScheduleEvent(EVENT_LK_INTRO_2, 58s);
+                        _events.ScheduleEvent(EVENT_LK_INTRO_3, 74s);
+                        _events.ScheduleEvent(EVENT_LK_INTRO_4, 86s); // sound last 21 seconds (five more)
+                        _events.ScheduleEvent(EVENT_BOLVAR_INTRO_1, 105s);
+                        _events.ScheduleEvent(EVENT_LK_INTRO_5, 113s);
 
-                    if (_instance->GetData(DATA_TEAMID_IN_INSTANCE) == TEAM_HORDE)
-                    {
-                        _events.ScheduleEvent(EVENT_SAURFANG_INTRO_1, 125000);
-                        _events.ScheduleEvent(EVENT_TIRION_INTRO_H_7, 134000);
-                        _events.ScheduleEvent(EVENT_SAURFANG_INTRO_2, 144000);
-                        _events.ScheduleEvent(EVENT_SAURFANG_INTRO_3, 155000);
-                        _events.ScheduleEvent(EVENT_SAURFANG_INTRO_4, 167000);
-                        _events.ScheduleEvent(EVENT_SAURFANG_RUN, 175000);
+                        if (_instance->GetData(DATA_TEAMID_IN_INSTANCE) == TEAM_HORDE)
+                        {
+                            _events.ScheduleEvent(EVENT_SAURFANG_INTRO_1, 125s);
+                            _events.ScheduleEvent(EVENT_TIRION_INTRO_H_7, 134s);
+                            _events.ScheduleEvent(EVENT_SAURFANG_INTRO_2, 144s);
+                            _events.ScheduleEvent(EVENT_SAURFANG_INTRO_3, 155s);
+                            _events.ScheduleEvent(EVENT_SAURFANG_INTRO_4, 167s);
+                            _events.ScheduleEvent(EVENT_SAURFANG_RUN, 175s);
                     }
                     else
                     {
@@ -595,13 +595,13 @@ public:
         {
         }
 
-        void Reset()
-        {
-            _events.Reset();
-            _events.ScheduleEvent(EVENT_DEATH_PLAGUE, 15000);
-            _events.ScheduleEvent(EVENT_STOMP, urand(5000, 8000));
-            _events.ScheduleEvent(EVENT_ARCTIC_BREATH, urand(10000, 15000));
-        }
+            void Reset()
+            {
+                _events.Reset();
+                _events.ScheduleEvent(EVENT_DEATH_PLAGUE, 15s);
+                _events.ScheduleEvent(EVENT_STOMP, 5s, 8s);
+                _events.ScheduleEvent(EVENT_ARCTIC_BREATH, 10s, 15s);
+            }
 
         void JustDied(Unit* /*killer*/)
         {
@@ -622,24 +622,24 @@ public:
             {
                 switch (eventId)
                 {
-                    case EVENT_DEATH_PLAGUE:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true, -SPELL_RECENTLY_INFECTED))
-                        {
-                            Talk(EMOTE_DEATH_PLAGUE_WARNING, target);
-                            DoCast(target, SPELL_DEATH_PLAGUE);
-                        }
-                        _events.ScheduleEvent(EVENT_DEATH_PLAGUE, 15000);
-                        break;
-                    case EVENT_STOMP:
-                        DoCastVictim(SPELL_STOMP);
-                        _events.ScheduleEvent(EVENT_STOMP, urand(15000, 18000));
-                        break;
-                    case EVENT_ARCTIC_BREATH:
-                        DoCastVictim(SPELL_ARCTIC_BREATH);
-                        _events.ScheduleEvent(EVENT_ARCTIC_BREATH, urand(26000, 33000));
-                        break;
-                    default:
-                        break;
+                        case EVENT_DEATH_PLAGUE:
+                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true, -SPELL_RECENTLY_INFECTED))
+                            {
+                                Talk(EMOTE_DEATH_PLAGUE_WARNING, target);
+                                DoCast(target, SPELL_DEATH_PLAGUE);
+                            }
+                            _events.ScheduleEvent(EVENT_DEATH_PLAGUE, 15s);
+                            break;
+                        case EVENT_STOMP:
+                            DoCastVictim(SPELL_STOMP);
+                            _events.ScheduleEvent(EVENT_STOMP, 15s, 18s);
+                            break;
+                        case EVENT_ARCTIC_BREATH:
+                            DoCastVictim(SPELL_ARCTIC_BREATH);
+                            _events.ScheduleEvent(EVENT_ARCTIC_BREATH, 26s, 33s);
+                            break;
+                        default:
+                            break;
                 }
             }
 
@@ -672,12 +672,15 @@ public:
         {
             switch (action)
             {
-                case 1000:
-                case 11000:
-                    _events.ScheduleEvent(EVENT_ACTIVATE_TRAP, uint32(action));
-                    break;
-                default:
-                    break;
+                switch (action)
+                {
+                    case 1000:
+                    case 11000:
+                        _events.ScheduleEvent(EVENT_ACTIVATE_TRAP, Milliseconds(action));
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
@@ -688,14 +691,14 @@ public:
 
             _events.Update(diff);
 
-            if (_events.ExecuteEvent() == EVENT_ACTIVATE_TRAP)
-                if (InstanceScript* instance = me->GetInstanceScript())
-                    if (instance->GetData(DATA_COLDFLAME_JETS) == IN_PROGRESS)
-                    {
-                        DoCast(me, SPELL_COLDFLAME_JETS);
-                        _events.ScheduleEvent(EVENT_ACTIVATE_TRAP, 22000);
-                    }
-        }
+                if (_events.ExecuteEvent() == EVENT_ACTIVATE_TRAP)
+                    if (InstanceScript* instance = me->GetInstanceScript())
+                        if (instance->GetData(DATA_COLDFLAME_JETS) == IN_PROGRESS)
+                        {
+                            DoCast(me, SPELL_COLDFLAME_JETS);
+                            _events.ScheduleEvent(EVENT_ACTIVATE_TRAP, 22s);
+                        }
+            }
 
     private:
         EventMap _events;
@@ -874,9 +877,10 @@ public:
                         Talk(SAY_CROK_WEAKENING_GAUNTLET);
                 }
 
-                damage = 0;
-                me->CastSpell(me, SPELL_ICEBOUND_ARMOR, true);
-                _events.ScheduleEvent(EVENT_HEALTH_CHECK, 1000);
+                    damage = 0;
+                    me->CastSpell(me, SPELL_ICEBOUND_ARMOR, true);
+                    _events.ScheduleEvent(EVENT_HEALTH_CHECK, 1s);
+                }
             }
         }
 
@@ -1160,29 +1164,29 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.ExecuteEvent())
-            {
-                case EVENT_SVALNA_START:
-                    Talk(SAY_SVALNA_EVENT_START);
-                    break;
-                case EVENT_SVALNA_RESURRECT:
-                    Talk(SAY_SVALNA_RESURRECT_CAPTAINS);
-                    me->CastSpell(me, SPELL_REVIVE_CHAMPION, false);
-                    break;
-                case EVENT_SVALNA_COMBAT:
-                    Talk(SAY_SVALNA_AGGRO);
-                    break;
-                case EVENT_IMPALING_SPEAR:
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true, -SPELL_IMPALING_SPEAR))
-                    {
-                        DoCast(me, SPELL_AETHER_SHIELD);
-                        me->AddAura(70203, me);
-                        DoCast(target, SPELL_IMPALING_SPEAR);
-                    }
-                    events.ScheduleEvent(EVENT_IMPALING_SPEAR, urand(20000, 25000));
-                    break;
-                default:
-                    break;
+                switch (events.ExecuteEvent())
+                {
+                    case EVENT_SVALNA_START:
+                        Talk(SAY_SVALNA_EVENT_START);
+                        break;
+                    case EVENT_SVALNA_RESURRECT:
+                        Talk(SAY_SVALNA_RESURRECT_CAPTAINS);
+                        me->CastSpell(me, SPELL_REVIVE_CHAMPION, false);
+                        break;
+                    case EVENT_SVALNA_COMBAT:
+                        Talk(SAY_SVALNA_AGGRO);
+                        break;
+                    case EVENT_IMPALING_SPEAR:
+                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true, -SPELL_IMPALING_SPEAR))
+                        {
+                            DoCast(me, SPELL_AETHER_SHIELD);
+                            me->AddAura(70203, me);
+                            DoCast(target, SPELL_IMPALING_SPEAR);
+                        }
+                        events.ScheduleEvent(EVENT_IMPALING_SPEAR, 20s, 25s);
+                        break;
+                    default:
+                        break;
             }
 
             DoMeleeAttackIfReady();
@@ -1318,16 +1322,18 @@ public:
         {
         }
 
-        void Reset()
-        {
-            npc_argent_captainAI::Reset();
-            Events.Reset();
-            Events.ScheduleEvent(EVENT_ARNATH_FLASH_HEAL, urand(4000, 7000));
-            Events.ScheduleEvent(EVENT_ARNATH_PW_SHIELD, urand(8000, 14000));
-            Events.ScheduleEvent(EVENT_ARNATH_SMITE, urand(3000, 6000));
-            if (Is25ManRaid() && IsUndead)
-                Events.ScheduleEvent(EVENT_ARNATH_DOMINATE_MIND, urand(22000, 27000));
-        }
+            void Reset()
+            {
+                npc_argent_captainAI::Reset();
+                
+                Events.Reset();
+                Events.ScheduleEvent(EVENT_ARNATH_FLASH_HEAL, 4s, 7s);
+                Events.ScheduleEvent(EVENT_ARNATH_PW_SHIELD, 8s, 14s);
+                Events.ScheduleEvent(EVENT_ARNATH_SMITE, 3s, 6s);
+                
+                if (Is25ManRaid() && IsUndead)
+                    Events.ScheduleEvent(EVENT_ARNATH_DOMINATE_MIND, 22s, 27s);
+            }
 
         void UpdateAI(uint32 diff)
         {
@@ -1339,32 +1345,32 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (Events.ExecuteEvent())
-            {
-                case EVENT_ARNATH_FLASH_HEAL:
-                    if (Creature* target = FindFriendlyCreature())
-                        DoCast(target, SPELL_FLASH_HEAL);
-                    Events.ScheduleEvent(EVENT_ARNATH_FLASH_HEAL, urand(6000, 9000));
-                    break;
-                case EVENT_ARNATH_PW_SHIELD:
+                switch (Events.ExecuteEvent())
+                {
+                    case EVENT_ARNATH_FLASH_HEAL:
+                        if (Creature* target = FindFriendlyCreature())
+                            DoCast(target, SPELL_FLASH_HEAL);
+                        Events.ScheduleEvent(EVENT_ARNATH_FLASH_HEAL, 6s, 9s);
+                        break;
+                    case EVENT_ARNATH_PW_SHIELD:
                     {
                         std::list<Creature*> targets = DoFindFriendlyMissingBuff(40.0f, SPELL_POWER_WORD_SHIELD);
                         if (!targets.empty())
                             DoCast(Warhead::Containers::SelectRandomContainerElement(targets), SPELL_POWER_WORD_SHIELD);
-                        Events.ScheduleEvent(EVENT_ARNATH_PW_SHIELD, urand(15000, 20000));
+                        Events.ScheduleEvent(EVENT_ARNATH_PW_SHIELD, 15s, 20s);
                         break;
                     }
-                case EVENT_ARNATH_SMITE:
-                    DoCastVictim(SPELL_SMITE);
-                    Events.ScheduleEvent(EVENT_ARNATH_SMITE, urand(4000, 7000));
-                    break;
-                case EVENT_ARNATH_DOMINATE_MIND:
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true, -SPELL_DOMINATE_MIND))
-                        DoCast(target, SPELL_DOMINATE_MIND);
-                    Events.ScheduleEvent(EVENT_ARNATH_DOMINATE_MIND, urand(28000, 37000));
-                    break;
-                default:
-                    break;
+                    case EVENT_ARNATH_SMITE:
+                        DoCastVictim(SPELL_SMITE);
+                        Events.ScheduleEvent(EVENT_ARNATH_SMITE, 4s, 7s);
+                        break;
+                    case EVENT_ARNATH_DOMINATE_MIND:
+                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true, -SPELL_DOMINATE_MIND))
+                            DoCast(target, SPELL_DOMINATE_MIND);
+                        Events.ScheduleEvent(EVENT_ARNATH_DOMINATE_MIND, 28s, 37s);
+                        break;
+                    default:
+                        break;
             }
 
             DoMeleeAttackIfReady();
@@ -1398,16 +1404,17 @@ public:
         {
         }
 
-        void Reset()
-        {
-            npc_argent_captainAI::Reset();
-            Events.Reset();
-            Events.ScheduleEvent(EVENT_BRANDON_CRUSADER_STRIKE, urand(6000, 10000));
-            Events.ScheduleEvent(EVENT_BRANDON_DIVINE_SHIELD, 500);
-            Events.ScheduleEvent(EVENT_BRANDON_JUDGEMENT_OF_COMMAND, urand(8000, 13000));
-            if (IsUndead)
-                Events.ScheduleEvent(EVENT_BRANDON_HAMMER_OF_BETRAYAL, urand(25000, 30000));
-        }
+            void Reset()
+            {
+                npc_argent_captainAI::Reset();
+                Events.Reset();
+                Events.ScheduleEvent(EVENT_BRANDON_CRUSADER_STRIKE, 6s, 10s);
+                Events.ScheduleEvent(EVENT_BRANDON_DIVINE_SHIELD, 500ms);
+                Events.ScheduleEvent(EVENT_BRANDON_JUDGEMENT_OF_COMMAND, 8s, 13s);
+                
+                if (IsUndead)
+                    Events.ScheduleEvent(EVENT_BRANDON_HAMMER_OF_BETRAYAL, 25s, 30s);
+            }
 
         void UpdateAI(uint32 diff)
         {
@@ -1423,26 +1430,26 @@ public:
             {
                 switch (eventId)
                 {
-                    case EVENT_BRANDON_CRUSADER_STRIKE:
-                        DoCastVictim(SPELL_CRUSADER_STRIKE);
-                        Events.ScheduleEvent(EVENT_BRANDON_CRUSADER_STRIKE, urand(6000, 12000));
-                        break;
-                    case EVENT_BRANDON_DIVINE_SHIELD:
-                        if (HealthBelowPct(20))
-                            DoCast(me, SPELL_DIVINE_SHIELD);
-                        Events.ScheduleEvent(EVENT_BRANDON_DIVINE_SHIELD, 500);
-                        break;
-                    case EVENT_BRANDON_JUDGEMENT_OF_COMMAND:
-                        DoCastVictim(SPELL_JUDGEMENT_OF_COMMAND);
-                        Events.ScheduleEvent(EVENT_BRANDON_JUDGEMENT_OF_COMMAND, urand(8000, 13000));
-                        break;
-                    case EVENT_BRANDON_HAMMER_OF_BETRAYAL:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true))
-                            DoCast(target, SPELL_HAMMER_OF_BETRAYAL);
-                        Events.ScheduleEvent(EVENT_BRANDON_HAMMER_OF_BETRAYAL, urand(45000, 60000));
-                        break;
-                    default:
-                        break;
+                        case EVENT_BRANDON_CRUSADER_STRIKE:
+                            DoCastVictim(SPELL_CRUSADER_STRIKE);
+                            Events.ScheduleEvent(EVENT_BRANDON_CRUSADER_STRIKE, 6s, 12s);
+                            break;
+                        case EVENT_BRANDON_DIVINE_SHIELD:
+                            if (HealthBelowPct(20))
+                                DoCast(me, SPELL_DIVINE_SHIELD);
+                            Events.ScheduleEvent(EVENT_BRANDON_DIVINE_SHIELD, 500ms);
+                            break;
+                        case EVENT_BRANDON_JUDGEMENT_OF_COMMAND:
+                            DoCastVictim(SPELL_JUDGEMENT_OF_COMMAND);
+                            Events.ScheduleEvent(EVENT_BRANDON_JUDGEMENT_OF_COMMAND, 8s, 13s);
+                            break;
+                        case EVENT_BRANDON_HAMMER_OF_BETRAYAL:
+                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true))
+                                DoCast(target, SPELL_HAMMER_OF_BETRAYAL);
+                            Events.ScheduleEvent(EVENT_BRANDON_HAMMER_OF_BETRAYAL, 45s, 1min);
+                            break;
+                        default:
+                            break;
                 }
             }
 
@@ -1467,16 +1474,17 @@ public:
         {
         }
 
-        void Reset()
-        {
-            npc_argent_captainAI::Reset();
-            Events.Reset();
-            Events.ScheduleEvent(EVENT_GRONDEL_CHARGE_CHECK, 500);
-            Events.ScheduleEvent(EVENT_GRONDEL_MORTAL_STRIKE, urand(8000, 14000));
-            Events.ScheduleEvent(EVENT_GRONDEL_SUNDER_ARMOR, urand(3000, 12000));
-            if (IsUndead)
-                Events.ScheduleEvent(EVENT_GRONDEL_CONFLAGRATION, urand(12000, 17000));
-        }
+            void Reset()
+            {
+                npc_argent_captainAI::Reset();
+                Events.Reset();
+                Events.ScheduleEvent(EVENT_GRONDEL_CHARGE_CHECK, 500ms);
+                Events.ScheduleEvent(EVENT_GRONDEL_MORTAL_STRIKE, 8s, 14s);
+                Events.ScheduleEvent(EVENT_GRONDEL_SUNDER_ARMOR, 3s, 12s);
+                
+                if (IsUndead)
+                    Events.ScheduleEvent(EVENT_GRONDEL_CONFLAGRATION, 12s, 17s);
+            }
 
         void UpdateAI(uint32 diff)
         {
@@ -1492,25 +1500,25 @@ public:
             {
                 switch (eventId)
                 {
-                    case EVENT_GRONDEL_CHARGE_CHECK:
-                        DoCastVictim(SPELL_CHARGE);
-                        Events.ScheduleEvent(EVENT_GRONDEL_CHARGE_CHECK, 500);
-                        break;
-                    case EVENT_GRONDEL_MORTAL_STRIKE:
-                        DoCastVictim(SPELL_MORTAL_STRIKE);
-                        Events.ScheduleEvent(EVENT_GRONDEL_MORTAL_STRIKE, urand(10000, 15000));
-                        break;
-                    case EVENT_GRONDEL_SUNDER_ARMOR:
-                        DoCastVictim(SPELL_SUNDER_ARMOR);
-                        Events.ScheduleEvent(EVENT_GRONDEL_SUNDER_ARMOR, urand(5000, 17000));
-                        break;
-                    case EVENT_GRONDEL_CONFLAGRATION:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
-                            DoCast(target, SPELL_CONFLAGRATION);
-                        Events.ScheduleEvent(EVENT_GRONDEL_CONFLAGRATION, urand(10000, 15000));
-                        break;
-                    default:
-                        break;
+                        case EVENT_GRONDEL_CHARGE_CHECK:
+                            DoCastVictim(SPELL_CHARGE);
+                            Events.ScheduleEvent(EVENT_GRONDEL_CHARGE_CHECK, 500ms);
+                            break;
+                        case EVENT_GRONDEL_MORTAL_STRIKE:
+                            DoCastVictim(SPELL_MORTAL_STRIKE);
+                            Events.ScheduleEvent(EVENT_GRONDEL_MORTAL_STRIKE, 10s, 15s);
+                            break;
+                        case EVENT_GRONDEL_SUNDER_ARMOR:
+                            DoCastVictim(SPELL_SUNDER_ARMOR);
+                            Events.ScheduleEvent(EVENT_GRONDEL_SUNDER_ARMOR, 5s, 17s);
+                            break;
+                        case EVENT_GRONDEL_CONFLAGRATION:
+                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
+                                DoCast(target, SPELL_CONFLAGRATION);
+                            Events.ScheduleEvent(EVENT_GRONDEL_CONFLAGRATION, 10s, 15s);
+                            break;
+                        default:
+                            break;
                 }
             }
 
@@ -1535,14 +1543,14 @@ public:
         {
         }
 
-        void Reset()
-        {
-            npc_argent_captainAI::Reset();
-            Events.Reset();
-            Events.ScheduleEvent(EVENT_RUPERT_FEL_IRON_BOMB, urand(15000, 20000));
-            Events.ScheduleEvent(EVENT_RUPERT_MACHINE_GUN, urand(25000, 30000));
-            Events.ScheduleEvent(EVENT_RUPERT_ROCKET_LAUNCH, urand(10000, 15000));
-        }
+            void Reset()
+            {
+                npc_argent_captainAI::Reset();
+                Events.Reset();
+                Events.ScheduleEvent(EVENT_RUPERT_FEL_IRON_BOMB, 15s, 20s);
+                Events.ScheduleEvent(EVENT_RUPERT_MACHINE_GUN, 25s, 30s);
+                Events.ScheduleEvent(EVENT_RUPERT_ROCKET_LAUNCH, 10s, 15s);
+            }
 
         void UpdateAI(uint32 diff)
         {
@@ -1558,23 +1566,23 @@ public:
             {
                 switch (eventId)
                 {
-                    case EVENT_RUPERT_FEL_IRON_BOMB:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                            DoCast(target, SPELL_FEL_IRON_BOMB);
-                        Events.ScheduleEvent(EVENT_RUPERT_FEL_IRON_BOMB, urand(15000, 20000));
-                        break;
-                    case EVENT_RUPERT_MACHINE_GUN:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
-                            DoCast(target, SPELL_MACHINE_GUN);
-                        Events.ScheduleEvent(EVENT_RUPERT_MACHINE_GUN, urand(25000, 30000));
-                        break;
-                    case EVENT_RUPERT_ROCKET_LAUNCH:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
-                            DoCast(target, SPELL_ROCKET_LAUNCH);
-                        Events.ScheduleEvent(EVENT_RUPERT_ROCKET_LAUNCH, urand(10000, 15000));
-                        break;
-                    default:
-                        break;
+                        case EVENT_RUPERT_FEL_IRON_BOMB:
+                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                                DoCast(target, SPELL_FEL_IRON_BOMB);
+                            Events.ScheduleEvent(EVENT_RUPERT_FEL_IRON_BOMB, 15s, 20s);
+                            break;
+                        case EVENT_RUPERT_MACHINE_GUN:
+                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
+                                DoCast(target, SPELL_MACHINE_GUN);
+                            Events.ScheduleEvent(EVENT_RUPERT_MACHINE_GUN, 25s, 30s);
+                            break;
+                        case EVENT_RUPERT_ROCKET_LAUNCH:
+                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
+                                DoCast(target, SPELL_ROCKET_LAUNCH);
+                            Events.ScheduleEvent(EVENT_RUPERT_ROCKET_LAUNCH, 10s, 15s);
+                            break;
+                        default:
+                            break;
                 }
             }
 
@@ -1870,8 +1878,8 @@ public:
             if (_instance->GetBossState(DATA_PROFESSOR_PUTRICIDE) == DONE &&
                     _instance->GetBossState(DATA_BLOOD_QUEEN_LANA_THEL) == DONE &&
                     _instance->GetBossState(DATA_SINDRAGOSA) == DONE)
-                _events.ScheduleEvent(EVENT_SOUL_MISSILE, urand(1000, 6000));
-        }
+                    _events.ScheduleEvent(EVENT_SOUL_MISSILE, 1s, 6s);
+            }
 
         void UpdateAI(uint32 diff)
         {
@@ -1883,7 +1891,7 @@ public:
             if (_events.ExecuteEvent() == EVENT_SOUL_MISSILE)
             {
                 DoCastAOE(SPELL_SOUL_MISSILE);
-                _events.ScheduleEvent(EVENT_SOUL_MISSILE, urand(5000, 7000));
+                    _events.ScheduleEvent(EVENT_SOUL_MISSILE, 5s, 7s);
             }
         }
 
@@ -2575,10 +2583,10 @@ public:
         void EnterCombat(Unit*  /*who*/)
         {
             events.Reset();
-            events.ScheduleEvent(1, urand(5000, 15000));
-            events.ScheduleEvent(2, urand(5000, 15000));
-            events.ScheduleEvent(3, urand(5000, 15000));
-            events.ScheduleEvent(4, urand(1000, 3000));
+            events.ScheduleEvent(1, 5s, 15s);
+            events.ScheduleEvent(2, 5s, 15s);
+            events.ScheduleEvent(3, 5s, 15s);
+            events.ScheduleEvent(4, 1s, 3s);
         }
 
         void UpdateAI(uint32 diff)
@@ -2642,8 +2650,8 @@ public:
         void EnterCombat(Unit*  /*who*/)
         {
             events.Reset();
-            events.ScheduleEvent(1, urand(5000, 10000));
-            events.ScheduleEvent(2, urand(5000, 15000));
+            events.ScheduleEvent(1, 5s, 10s);
+            events.ScheduleEvent(2, 5s, 15s);
         }
 
         void UpdateAI(uint32 diff)
@@ -2662,7 +2670,7 @@ public:
                     break;
                 case 1:
                     me->CastSpell(me->GetVictim(), 69989, false);
-                    events.RepeatEvent(urand(5000, 10000));
+                    events.RepeatEvent(5s, 10s);
                     break;
                 case 2:
                     me->CastSpell(me->GetVictim(), 69975, false);
@@ -2696,9 +2704,9 @@ public:
         void EnterCombat(Unit*  /*who*/)
         {
             events.Reset();
-            events.ScheduleEvent(1, urand(5000, 15000));
-            events.ScheduleEvent(2, urand(5000, 15000));
-            events.ScheduleEvent(3, urand(1000, 3000));
+            events.ScheduleEvent(1, 5s, 15s);
+            events.ScheduleEvent(2, 5s, 15s);
+            events.ScheduleEvent(3, 1s, 3s);
         }
 
         void UpdateAI(uint32 diff)
@@ -2757,10 +2765,10 @@ public:
         void EnterCombat(Unit*  /*who*/)
         {
             events.Reset();
-            events.ScheduleEvent(1, urand(5000, 15000));
-            events.ScheduleEvent(2, urand(5000, 15000));
-            events.ScheduleEvent(3, urand(5000, 15000));
-            events.ScheduleEvent(4, urand(1000, 3000));
+            events.ScheduleEvent(1, 5s, 15s);
+            events.ScheduleEvent(2, 5s, 15s);
+            events.ScheduleEvent(3, 5s, 15s);
+            events.ScheduleEvent(4, 1s, 3s);
         }
 
         void UpdateAI(uint32 diff)
@@ -2826,7 +2834,7 @@ public:
             events.Reset();
             summons.DespawnAll();
             me->setActive(true);
-            events.ScheduleEvent(1, 10000);
+            events.ScheduleEvent(1, 10s);
             me->SetInCombatWithZone();
         }
 
@@ -2926,37 +2934,37 @@ class SeveredEssenceSpellInfo
 public:
     uint8 Class;
     uint32 id;
-    uint32 cooldown_ms;
+    Seconds cooldown;
     uint8 targetType;
     float range;
 };
 
 SeveredEssenceSpellInfo sesi_spells[] =
 {
-    {CLASS_SHAMAN, 71938, 5000, 1, 0.0f},
-    {CLASS_PALADIN, 57767, 8000, 2, 30.0f},
-    {CLASS_WARLOCK, 71937, 10000, 1, 0.0f},
-    {CLASS_DEATH_KNIGHT, 49576, 15000, 1, 30.0f},
-    {CLASS_ROGUE, 71933, 8000, 1, 0.0f},
-    {CLASS_MAGE, 71928, 4000, 1, 40.0f},
-    {CLASS_PALADIN, 71930, 5000, 2, 40.0f},
-    {CLASS_ROGUE, 71955, 40000, 1, 30.0f},
-    {CLASS_PRIEST, 71931, 5000, 2, 40.0f},
-    {CLASS_SHAMAN, 71934, 7000, 1, 0.0f},
-    {CLASS_DRUID, 71925, 5000, 1, 0.0f},
-    {CLASS_DEATH_KNIGHT, 71951, 8000, 1, 0.0f},
-    {CLASS_DEATH_KNIGHT, 71924, 8000, 1, 0.0f},
-    {CLASS_WARLOCK, 71965, 20000, 0, 0.0f},
-    {CLASS_PRIEST, 71932, 8000, 2, 40.0f},
-    {CLASS_DRUID, 71926, 10000, 1, 0.0f},
-    {CLASS_WARLOCK, 71936, 9000, 1, 0.0f},
-    {CLASS_ROGUE, 57640, 3000, 1, 0.0f},
-    {CLASS_WARRIOR, 71961, 5000, 1, 0.0f},
-    {CLASS_MAGE, 71929, 10000, 1, 0.0f},
-    {CLASS_WARRIOR, 53395, 5000, 1, 0.0f},
-    {CLASS_WARRIOR, 71552, 5000, 1, 0.0f},
-    {CLASS_HUNTER, 36984, 7000, 1, 0.0f},
-    {CLASS_HUNTER, 29576, 5000, 1, 0.0f},
+    {CLASS_SHAMAN, 71938, 5s, 1, 0.0f},
+    {CLASS_PALADIN, 57767, 8s, 2, 30.0f},
+    {CLASS_WARLOCK, 71937, 10s, 1, 0.0f},
+    {CLASS_DEATH_KNIGHT, 49576, 15s, 1, 30.0f},
+    {CLASS_ROGUE, 71933, 8s, 1, 0.0f},
+    {CLASS_MAGE, 71928, 4s, 1, 40.0f},
+    {CLASS_PALADIN, 71930, 5s, 2, 40.0f},
+    {CLASS_ROGUE, 71955, 40s, 1, 30.0f},
+    {CLASS_PRIEST, 71931, 5s, 2, 40.0f},
+    {CLASS_SHAMAN, 71934, 7s, 1, 0.0f},
+    {CLASS_DRUID, 71925, 5s, 1, 0.0f},
+    {CLASS_DEATH_KNIGHT, 71951, 8s, 1, 0.0f},
+    {CLASS_DEATH_KNIGHT, 71924, 8s, 1, 0.0f},
+    {CLASS_WARLOCK, 71965, 20s, 0, 0.0f},
+    {CLASS_PRIEST, 71932, 8s, 2, 40.0f},
+    {CLASS_DRUID, 71926, 10s, 1, 0.0f},
+    {CLASS_WARLOCK, 71936, 9s, 1, 0.0f},
+    {CLASS_ROGUE, 57640, 3s, 1, 0.0f},
+    {CLASS_WARRIOR, 71961, 5s, 1, 0.0f},
+    {CLASS_MAGE, 71929, 10s, 1, 0.0f},
+    {CLASS_WARRIOR, 53395, 5s, 1, 0.0f},
+    {CLASS_WARRIOR, 71552, 5s, 1, 0.0f},
+    {CLASS_HUNTER, 36984, 7s, 1, 0.0f},
+    {CLASS_HUNTER, 29576, 5s, 1, 0.0f},
     {0, 0, 0, 0, 0.0f},
 };
 
@@ -2992,7 +3000,7 @@ public:
                 if (sesi_spells[i].id)
                 {
                     if (Class == sesi_spells[i].Class)
-                        events.ScheduleEvent(i + 1, sesi_spells[i].cooldown_ms / 4);
+                        events.ScheduleEvent(i + 1, sesi_spells[i].cooldown / 4);
                 }
                 else
                     break;
@@ -3026,7 +3034,7 @@ public:
                 if (target)
                     me->CastSpell(target, sesi_spells[e - 1].id, TRIGGERED_IGNORE_SHAPESHIFT);
 
-                events.RepeatEvent(sesi_spells[e - 1].cooldown_ms);
+                events.RepeatEvent(sesi_spells[e-1].cooldown);
             }
 
             if (Class == CLASS_HUNTER)
@@ -3067,9 +3075,9 @@ public:
         void Reset()
         {
             events.Reset();
-            events.ScheduleEvent(1, urand(15000, 25000)); // blizzard
-            events.ScheduleEvent(2, 5000); // cleave
-            events.ScheduleEvent(3, urand(10000, 15000)); // frost breath
+            events.ScheduleEvent(1, 15s, 25s); // blizzard
+            events.ScheduleEvent(2, 5s); // cleave
+            events.ScheduleEvent(3, 10s, 15s); // frost breath
         }
 
         void DoAction(int32 a)
@@ -3127,7 +3135,7 @@ public:
                     break;
                 case 3:
                     me->CastSpell(me->GetVictim(), 70116, false);
-                    events.RepeatEvent(urand(10000, 15000));
+                    events.RepeatEvent(10s, 15s);
                     break;
             }
 
@@ -3181,7 +3189,7 @@ public:
         {
             me->SetWalk(false);
             events.Reset();
-            events.ScheduleEvent(1, urand(3000, 6000)); // leaping face maul
+            events.ScheduleEvent(1, 3s, 6s); // leaping face maul
         }
 
         void JustReachedHome()
@@ -3270,7 +3278,7 @@ public:
                     if (me->GetVictim() && !me->GetVictim()->HasAura(71163) && me->GetVictim()->GetDistance(me) > 5.0f && me->GetVictim()->GetDistance(me) < 30.0f)
                     {
                         me->CastSpell(me->GetVictim(), 71164, false);
-                        events.RepeatEvent(urand(15000, 20000));
+                        events.RepeatEvent(15s, 20s);
                     }
                     else
                         events.RepeatEvent(3000);
@@ -3337,9 +3345,9 @@ public:
         void Reset()
         {
             events.Reset();
-            events.ScheduleEvent(1, urand(3000, 10000)); // Crypt Scarabs
-            events.ScheduleEvent(2, urand(15000, 25000)); // Dark Mending
-            events.ScheduleEvent(3, urand(8000, 15000)); // Web Wrap
+            events.ScheduleEvent(1, 3s, 10s); // Crypt Scarabs
+            events.ScheduleEvent(2, 15s, 25s); // Dark Mending
+            events.ScheduleEvent(3, 8s, 15s); // Web Wrap
         }
 
         void MoveInLineOfSight(Unit* who)
@@ -3462,11 +3470,11 @@ public:
         InstanceScript* instance;
         EventMap events;
 
-        void ScheduleBroodlings()
-        {
-            for (uint8 i = 0; i < 30; ++i)
-                events.ScheduleEvent(EVENT_SUMMON_BROODLING, 10000 + i * 350);
-        }
+            void ScheduleBroodlings()
+            {
+                for (uint8 i = 0; i < 30; ++i)
+                    events.ScheduleEvent(EVENT_SUMMON_BROODLING, 10s + Milliseconds(i * 350));
+            }
 
 
         void SummonBroodling()
@@ -3571,7 +3579,7 @@ public:
                 else if (events.GetPhaseMask() == 1)
                 {
                     events.SetPhase(2);
-                    events.ScheduleEvent(EVENT_GAUNTLET_PHASE3, 0);
+                        events.ScheduleEvent(EVENT_GAUNTLET_PHASE3, 0s);
                 }
                 else
                     Unit::Kill(me, me);
@@ -3591,7 +3599,7 @@ public:
                             if (me->GetDistance(itr->GetSource()) > 100.0f || !itr->GetSource()->IsAlive() || itr->GetSource()->IsGameMaster())
                                 continue;
 
-                            events.ScheduleEvent(EVENT_CHECK_FIGHT, 1000);
+                            events.ScheduleEvent(EVENT_CHECK_FIGHT, 1s);
                             return;
                         }
 
@@ -3693,7 +3701,7 @@ public:
                             if (me->GetDistance(itr->GetSource()) > 100.0f || !itr->GetSource()->IsAlive() || itr->GetSource()->IsGameMaster())
                                 continue;
 
-                            events.ScheduleEvent(EVENT_CHECK_FIGHT, 1000);
+                            events.ScheduleEvent(EVENT_CHECK_FIGHT, 1s);
                             return;
                         }
 

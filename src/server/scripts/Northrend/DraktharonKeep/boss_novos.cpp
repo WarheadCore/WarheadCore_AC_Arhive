@@ -119,11 +119,11 @@ public:
             Talk(SAY_AGGRO);
             BossAI::EnterCombat(who);
 
-            events.ScheduleEvent(EVENT_SUMMON_FETID_TROLL, 3000);
-            events.ScheduleEvent(EVENT_SUMMON_SHADOWCASTER, 9000);
-            events.ScheduleEvent(EVENT_SUMMON_HULKING_CORPSE, 30000);
-            events.ScheduleEvent(EVENT_SUMMON_CRYSTAL_HANDLER, 20000);
-            events.ScheduleEvent(EVENT_CHECK_PHASE, 80000);
+                events.ScheduleEvent(EVENT_SUMMON_FETID_TROLL, 3s);
+                events.ScheduleEvent(EVENT_SUMMON_SHADOWCASTER, 9s);
+                events.ScheduleEvent(EVENT_SUMMON_HULKING_CORPSE, 30s);
+                events.ScheduleEvent(EVENT_SUMMON_CRYSTAL_HANDLER, 20s);
+                events.ScheduleEvent(EVENT_CHECK_PHASE, 80s);
 
             me->CastSpell(me, SPELL_ARCANE_BLAST, true);
             me->CastSpell(me, SPELL_ARCANE_FIELD, true);

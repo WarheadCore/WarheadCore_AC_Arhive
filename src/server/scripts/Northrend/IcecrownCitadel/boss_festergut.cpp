@@ -117,13 +117,14 @@ public:
                 return;
             }
 
-            events.ScheduleEvent(EVENT_BERSERK, 300000);
-            events.ScheduleEvent(EVENT_INHALE_BLIGHT, urand(25000, 30000));
-            events.ScheduleEvent(EVENT_GAS_SPORE, urand(20000, 25000));
-            events.ScheduleEvent(EVENT_VILE_GAS, urand(30000, 40000), 1);
-            events.ScheduleEvent(EVENT_GASTRIC_BLOAT, urand(12500, 15000));
-            if (IsHeroic())
-                events.ScheduleEvent(EVENT_FESTERGUT_GOO, urand(15000, 20000));
+                events.ScheduleEvent(EVENT_BERSERK, 5min);
+                events.ScheduleEvent(EVENT_INHALE_BLIGHT, 25s, 30s);
+                events.ScheduleEvent(EVENT_GAS_SPORE, 20s, 25s);
+                events.ScheduleEvent(EVENT_VILE_GAS, 30s, 40s, 1);
+                events.ScheduleEvent(EVENT_GASTRIC_BLOAT, 12500ms, 15s);
+                
+                if (IsHeroic())
+                    events.ScheduleEvent(EVENT_FESTERGUT_GOO, 15s, 20s);
 
             me->setActive(true);
             Talk(SAY_AGGRO);
@@ -242,20 +243,20 @@ public:
 
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, minDist, true))
                             me->CastSpell(target, SPELL_VILE_GAS, false);
-                        events.ScheduleEvent(EVENT_VILE_GAS, urand(28000, 35000), 1);
+                        events.ScheduleEvent(EVENT_VILE_GAS, 28s, 35s, 1);
                         break;
                     }
-                case EVENT_GASTRIC_BLOAT:
-                    me->CastSpell(me->GetVictim(), SPELL_GASTRIC_BLOAT, false);
-                    events.ScheduleEvent(EVENT_GASTRIC_BLOAT, urand(15000, 17500));
-                    break;
-                case EVENT_FESTERGUT_GOO:
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, NonTankTargetSelector(me)))
-                        if (Creature* professor = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_PROFESSOR_PUTRICIDE)))
-                            professor->CastSpell(target, SPELL_MALLABLE_GOO_H, true);
-                    events.ScheduleEvent(EVENT_FESTERGUT_GOO, urand(15000, 20000));
-                default:
-                    break;
+                    case EVENT_GASTRIC_BLOAT:
+                        me->CastSpell(me->GetVictim(), SPELL_GASTRIC_BLOAT, false);
+                        events.ScheduleEvent(EVENT_GASTRIC_BLOAT, 15s, 17500ms);
+                        break;
+                    case EVENT_FESTERGUT_GOO:
+                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, NonTankTargetSelector(me)))
+                            if (Creature* professor = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_PROFESSOR_PUTRICIDE)))
+                                professor->CastSpell(target, SPELL_MALLABLE_GOO_H, true);
+                        events.ScheduleEvent(EVENT_FESTERGUT_GOO, 15s, 20s);
+                    default:
+                        break;
             }
 
             DoMeleeAttackIfReady();
@@ -461,16 +462,16 @@ public:
             {
                 switch (eventId)
                 {
-                    case EVENT_DECIMATE:
-                        me->CastSpell(me->GetVictim(), SPELL_DECIMATE, false);
-                        events.ScheduleEvent(EVENT_DECIMATE, urand(20000, 25000));
-                        break;
-                    case EVENT_MORTAL_WOUND:
-                        me->CastSpell(me->GetVictim(), SPELL_MORTAL_WOUND, false);
-                        events.ScheduleEvent(EVENT_MORTAL_WOUND, urand(1500, 2500));
-                        break;
-                    default:
-                        break;
+                        case EVENT_DECIMATE:
+                            me->CastSpell(me->GetVictim(), SPELL_DECIMATE, false);
+                            events.ScheduleEvent(EVENT_DECIMATE, 20s, 25s);
+                            break;
+                        case EVENT_MORTAL_WOUND:
+                            me->CastSpell(me->GetVictim(), SPELL_MORTAL_WOUND, false);
+                            events.ScheduleEvent(EVENT_MORTAL_WOUND, 1500ms, 2500ms);
+                            break;
+                        default:
+                            break;
                 }
             }
 

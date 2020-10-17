@@ -437,7 +437,7 @@ public:
                     case EVENT_BLOOD_NOVA:
                         {
                             me->CastSpell((Unit*)NULL, SPELL_BLOOD_NOVA_TRIGGER, false);
-                            events.ScheduleEvent(EVENT_BLOOD_NOVA, urand(20000, 25000));
+                            events.ScheduleEvent(EVENT_BLOOD_NOVA, 20s, 25s);
                             break;
                         }
                     case EVENT_RUNE_OF_BLOOD:
@@ -558,12 +558,12 @@ public:
                         for (std::list<Creature*>::iterator itr = _guardList.begin(); itr != _guardList.end(); ++itr)
                             (*itr)->AI()->SetData(0, x++);
 
-                        me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
-                        Talk(SAY_INTRO_HORDE_1);
-                        _events.SetPhase(PHASE_INTRO_H);
-                        _events.ScheduleEvent(EVENT_INTRO_HORDE_2, 5000, 0, PHASE_INTRO_H);
-                        _events.ScheduleEvent(EVENT_INTRO_HORDE_3, 18500, 0, PHASE_INTRO_H);
-                        _instance->HandleGameObject(_instance->GetData64(GO_SAURFANG_S_DOOR), true);
+                            me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+                            Talk(SAY_INTRO_HORDE_1);
+                            _events.SetPhase(PHASE_INTRO_H);
+                            _events.ScheduleEvent(EVENT_INTRO_HORDE_2, 5s, 0, PHASE_INTRO_H);
+                            _events.ScheduleEvent(EVENT_INTRO_HORDE_3, 18500ms, 0, PHASE_INTRO_H);
+                            _instance->HandleGameObject(_instance->GetData64(GO_SAURFANG_S_DOOR), true);
 
                         if (GameObject* teleporter = ObjectAccessor::GetGameObject(*me, _instance->GetData64(GO_SCOURGE_TRANSPORTER_SAURFANG)))
                         {
@@ -820,13 +820,13 @@ public:
                         for (std::list<Creature*>::iterator itr = _guardList.begin(); itr != _guardList.end(); ++itr)
                             (*itr)->AI()->SetData(0, x++);
 
-                        me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
-                        Talk(SAY_INTRO_ALLIANCE_1);
-                        _events.SetPhase(PHASE_INTRO_A);
-                        _events.ScheduleEvent(EVENT_INTRO_ALLIANCE_2, 2500, 0, PHASE_INTRO_A);
-                        _events.ScheduleEvent(EVENT_INTRO_ALLIANCE_3, 20000, 0, PHASE_INTRO_A);
-                        _events.ScheduleEvent(EVENT_INTRO_ALLIANCE_4, 2500 + 17500 + 9500, 0, PHASE_INTRO_A);
-                        _instance->HandleGameObject(_instance->GetData64(GO_SAURFANG_S_DOOR), true);
+                            me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+                            Talk(SAY_INTRO_ALLIANCE_1);
+                            _events.SetPhase(PHASE_INTRO_A);
+                            _events.ScheduleEvent(EVENT_INTRO_ALLIANCE_2, 2500ms, 0, PHASE_INTRO_A);
+                            _events.ScheduleEvent(EVENT_INTRO_ALLIANCE_3, 20s, 0, PHASE_INTRO_A);
+                            _events.ScheduleEvent(EVENT_INTRO_ALLIANCE_4, 29500ms, 0, PHASE_INTRO_A);
+                            _instance->HandleGameObject(_instance->GetData64(GO_SAURFANG_S_DOOR), true);
 
                         if (GameObject* teleporter = ObjectAccessor::GetGameObject(*me, _instance->GetData64(GO_SCOURGE_TRANSPORTER_SAURFANG)))
                         {

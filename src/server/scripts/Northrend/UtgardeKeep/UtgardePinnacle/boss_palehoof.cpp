@@ -197,7 +197,7 @@ public:
                     summons.Summon(cr);
                     cr->SetDisableGravity(true);
                     cr->GetMotionMaster()->MovePoint(0, 275.4f, -453, 110); // ROOM CENTER
-                    events.RescheduleEvent(EVENT_UNFREEZE_MONSTER, 10000);
+                    events.RescheduleEvent(EVENT_UNFREEZE_MONSTER, 10s);
                     me->SetInCombatWithZone();
                     me->SetControlled(true, UNIT_STATE_STUNNED);
                 }
@@ -205,9 +205,9 @@ public:
             else if (param == ACTION_MINIBOSS_DIED)
             {
                 if (Counter > (IsHeroic() ? 3 : 1))
-                    events.RescheduleEvent(EVENT_PALEHOOF_START, 3000);
+                    events.RescheduleEvent(EVENT_PALEHOOF_START, 3s);
                 else
-                    events.RescheduleEvent(EVENT_UNFREEZE_MONSTER, 3000);
+                    events.RescheduleEvent(EVENT_UNFREEZE_MONSTER, 3s);
             }
         }
         void EnterCombat(Unit*  /*pWho*/)
@@ -287,12 +287,12 @@ public:
                         me->SetControlled(false, UNIT_STATE_STUNNED);
                         // SETINCOMBATWITHZONE
 
-                        // schedule combat events
-                        events.ScheduleEvent(EVENT_PALEHOOF_WITHERING_ROAR, 10000);
-                        events.ScheduleEvent(EVENT_PALEHOOF_IMPALE, 12000);
-                        events.ScheduleEvent(EVENT_PALEHOOF_ARCING_SMASH, 15000);
-                        break;
-                    }
+                    // schedule combat events
+                    events.ScheduleEvent(EVENT_PALEHOOF_WITHERING_ROAR, 10s);
+                    events.ScheduleEvent(EVENT_PALEHOOF_IMPALE, 12s);
+                    events.ScheduleEvent(EVENT_PALEHOOF_ARCING_SMASH, 15s);
+                    break;
+                }
                 case EVENT_PALEHOOF_WITHERING_ROAR:
                     {
                         me->CastSpell(me, IsHeroic() ? SPELL_WITHERING_ROAR_H : SPELL_WITHERING_ROAR_N, false);
@@ -379,9 +379,9 @@ public:
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                 me->SetInCombatWithZone();
 
-                events.ScheduleEvent(EVENT_JORMUNGAR_ACID_SPIT, 3000);
-                events.ScheduleEvent(EVENT_JORMUNGAR_ACID_SPLATTER, 12000);
-                events.ScheduleEvent(EVENT_JORMUNGAR_POISON_BREATH, 10000);
+                events.ScheduleEvent(EVENT_JORMUNGAR_ACID_SPIT, 3s);
+                events.ScheduleEvent(EVENT_JORMUNGAR_ACID_SPLATTER, 12s);
+                events.ScheduleEvent(EVENT_JORMUNGAR_POISON_BREATH, 10s);
             }
             else if (param == ACTION_DESPAWN_ADDS)
                 summons.DespawnAll();
@@ -503,9 +503,9 @@ public:
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                 me->SetInCombatWithZone();
 
-                events.ScheduleEvent(EVENT_RHINO_STOMP, 3000);
-                events.ScheduleEvent(EVENT_RHINO_GORE, 12000);
-                events.ScheduleEvent(EVENT_RHINO_WOUND, 10000);
+                events.ScheduleEvent(EVENT_RHINO_STOMP, 3s);
+                events.ScheduleEvent(EVENT_RHINO_GORE, 12s);
+                events.ScheduleEvent(EVENT_RHINO_WOUND, 10s);
             }
         }
 
@@ -611,9 +611,9 @@ public:
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                 me->SetInCombatWithZone();
 
-                events.ScheduleEvent(EVENT_FURBOLG_CHAIN, 3000);
-                events.ScheduleEvent(EVENT_FURBOLG_CRAZED, 12000);
-                events.ScheduleEvent(EVENT_FURBOLG_ROAR, 10000);
+                events.ScheduleEvent(EVENT_FURBOLG_CHAIN, 3s);
+                events.ScheduleEvent(EVENT_FURBOLG_CRAZED, 12s);
+                events.ScheduleEvent(EVENT_FURBOLG_ROAR, 10s);
             }
         }
 
@@ -717,9 +717,9 @@ public:
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                 me->SetInCombatWithZone();
 
-                events.ScheduleEvent(EVENT_WORGEN_MORTAL, 3000);
-                events.ScheduleEvent(EVENT_WORGEN_ENRAGE1, 12000);
-                events.ScheduleEvent(EVENT_WORGEN_ENRAGE2, 10000);
+                events.ScheduleEvent(EVENT_WORGEN_MORTAL, 3s);
+                events.ScheduleEvent(EVENT_WORGEN_ENRAGE1, 12s);
+                events.ScheduleEvent(EVENT_WORGEN_ENRAGE2, 10s);
             }
         }
 

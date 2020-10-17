@@ -90,14 +90,15 @@ public:
             Talk(SAY_AGGRO);
             DoCast(me, SPELL_EARTH_SHIELD);
             events.Reset();
-            events.RescheduleEvent(EVENT_SPELL_BLOODLUST, 15000);
-            events.RescheduleEvent(EVENT_SPELL_BREAK_BONDS, urand(9000, 14000));
-            events.RescheduleEvent(EVENT_SPELL_CHAIN_HEAL, 0);
-            events.RescheduleEvent(EVENT_SPELL_EARTH_SHIELD, 20000);
-            events.RescheduleEvent(EVENT_SPELL_EARTH_SHOCK, urand(2000, 8000));
-            events.RescheduleEvent(EVENT_SPELL_LIGHTNING_BOLT, urand(5000, 10000));
+            events.RescheduleEvent(EVENT_SPELL_BLOODLUST, 15s);
+            events.RescheduleEvent(EVENT_SPELL_BREAK_BONDS, 9s, 14s);
+            events.RescheduleEvent(EVENT_SPELL_CHAIN_HEAL, 0s);
+            events.RescheduleEvent(EVENT_SPELL_EARTH_SHIELD, 20s);
+            events.RescheduleEvent(EVENT_SPELL_EARTH_SHOCK, 2s, 8s);
+            events.RescheduleEvent(EVENT_SPELL_LIGHTNING_BOLT, 5s, 10s);
+            
             if (IsHeroic())
-                events.RescheduleEvent(EVENT_SPELL_STORMSTRIKE, 3000);
+                events.RescheduleEvent(EVENT_SPELL_STORMSTRIKE, 3s);
 
             if (Creature* c = pInstance->instance->GetCreature(pInstance->GetData64(DATA_EREKEM_GUARD_1_GUID)))
                 if (!c->IsInCombat())
@@ -263,9 +264,9 @@ public:
         {
             DoZoneInCombat();
             events.Reset();
-            events.RescheduleEvent(EVENT_SPELL_GUSHING_WOUND, urand(1000, 3000));
-            events.RescheduleEvent(EVENT_SPELL_HOWLING_SCREECH, urand(8000, 13000));
-            events.RescheduleEvent(EVENT_SPELL_STRIKE, urand(4000, 8000));
+            events.RescheduleEvent(EVENT_SPELL_GUSHING_WOUND, 1s, 3s);
+            events.RescheduleEvent(EVENT_SPELL_HOWLING_SCREECH, 8s, 13s);
+            events.RescheduleEvent(EVENT_SPELL_STRIKE, 4s, 8s);
 
             if (Creature* c = pInstance->instance->GetCreature(pInstance->GetData64(DATA_EREKEM_GUID)))
                 if (!c->IsInCombat())

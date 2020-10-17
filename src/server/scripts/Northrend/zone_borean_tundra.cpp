@@ -1342,7 +1342,7 @@ public:
             if (Player* player = ObjectAccessor::GetPlayer(*me, _playerGUID))
                 me->SetFacingToObject(player);
 
-            _events.ScheduleEvent(EVENT_TALK, 1000);
+            _events.ScheduleEvent(EVENT_TALK, 1s);
         }
 
         void UpdateAI(uint32 diff) override
@@ -1363,7 +1363,7 @@ public:
                         if (Player* player = ObjectAccessor::GetPlayer(*me, _playerGUID))
                             Talk(SAY_BLOODMAGE_LAURITH, player);
                         _playerGUID = 0;
-                        _events.ScheduleEvent(EVENT_RESET_ORIENTATION, 5000);
+                        _events.ScheduleEvent(EVENT_RESET_ORIENTATION, 5s);
                         break;
                     case EVENT_RESET_ORIENTATION:
                         me->SetFacingTo(me->GetHomePosition().GetOrientation());

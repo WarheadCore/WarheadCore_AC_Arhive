@@ -102,9 +102,11 @@ public:
         {
             me->CastSpell(me, SPELL_FROZEN_MALLET, true);
 
-            events.ScheduleEvent(EVENT_FROZEN_ORB_STALKER, 12000);
-            events.ScheduleEvent(EVENT_FREEZING_GROUND, 7000);
-            events.ScheduleEvent(EVENT_CAST_WHITEOUT, 25000); // schedule FIRST whiteout event in 25 seconds -1 for compesate updateai 2seconds check delay
+                events.ScheduleEvent(EVENT_FROZEN_ORB_STALKER, 12s);
+                events.ScheduleEvent(EVENT_FREEZING_GROUND, 7s);
+                if (pInstance)
+                    pInstance->SetData(EVENT_TORAVON, IN_PROGRESS);
+            }
 
             if (pInstance)
                 pInstance->SetData(EVENT_TORAVON, IN_PROGRESS);

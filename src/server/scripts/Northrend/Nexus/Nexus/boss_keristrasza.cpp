@@ -166,7 +166,7 @@ public:
                             if (Aura* aur = itr->GetSource()->GetAura(SPELL_INTENSE_COLD_TRIGGER))
                                 if (aur->GetStackAmount() > 2)
                                     aGuids.insert(itr->GetSource()->GetGUIDLow());
-                        events.ScheduleEvent(EVENT_ACHIEVEMENT_CHECK, 500);
+                        events.ScheduleEvent(EVENT_ACHIEVEMENT_CHECK, 500ms);
                         break;
                     }
                 case EVENT_CRYSTALFIRE_BREATH:

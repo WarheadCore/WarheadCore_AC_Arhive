@@ -109,9 +109,9 @@ public:
             me->CallForHelp(VISIBLE_RANGE);
             summons.DoZoneInCombat();
             Talk(SAY_AGGRO);
-            events.ScheduleEvent(EVENT_SPELL_POISON_BOLT, urand(12000, 15000));
-            events.ScheduleEvent(EVENT_SPELL_RAIN_OF_FIRE, urand(6000, 18000));
-            events.ScheduleEvent(EVENT_SPELL_FRENZY, urand(60000, 80000), 1);
+            events.ScheduleEvent(EVENT_SPELL_POISON_BOLT, 12s, 15s);
+            events.ScheduleEvent(EVENT_SPELL_RAIN_OF_FIRE, 6s, 18s);
+            events.ScheduleEvent(EVENT_SPELL_FRENZY, 1min, 80s, 1);
             events.SetPhase(1);
         }
 
@@ -189,7 +189,7 @@ public:
                 if (me->HasAura(RAID_MODE(SPELL_FRENZY_10, SPELL_FRENZY_25, SPELL_FRENZY_10, SPELL_FRENZY_25)))
                 {
                     me->RemoveAurasDueToSpell(RAID_MODE(SPELL_FRENZY_10, SPELL_FRENZY_25, SPELL_FRENZY_10, SPELL_FRENZY_25));
-                    events.RescheduleEvent(EVENT_SPELL_FRENZY, 60000);
+                    events.RescheduleEvent(EVENT_SPELL_FRENZY, 1min);
                 }
 
                 pInstance->SetData(DATA_FRENZY_REMOVED, 0);
