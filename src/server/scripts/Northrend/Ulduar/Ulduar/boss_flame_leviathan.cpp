@@ -383,7 +383,7 @@ public:
                     if (!me->GetVictim())
                     {
                         me->CastSpell(me, SPELL_PURSUED, false);
-                        events.RescheduleEvent(EVENT_PURSUE, 31000);
+                        events.RescheduleEvent(EVENT_PURSUE, 31s);
                     }
                     _speakTimer = 0;
                 }
@@ -410,7 +410,7 @@ public:
                 case EVENT_PURSUE:
                     Talk(FLAME_LEVIATHAN_SAY_PURSUE);
                     me->CastSpell(me, SPELL_PURSUED, false);
-                    events.RescheduleEvent(EVENT_PURSUE, 31000);
+                    events.RescheduleEvent(EVENT_PURSUE, 31s);
                     return;
                 case EVENT_SPEED:
                     me->CastSpell(me, SPELL_GATHERING_SPEED, false);
@@ -524,19 +524,19 @@ void boss_flame_leviathan::boss_flame_leviathanAI::ActivateTowers()
             {
                 case EVENT_TOWER_OF_LIFE_DESTROYED:
                     me->AddAura(SPELL_TOWER_OF_LIFE, me);
-                    events.RescheduleEvent(EVENT_FREYA, 30000);
+                    events.RescheduleEvent(EVENT_FREYA, 30s);
                     break;
                 case EVENT_TOWER_OF_STORM_DESTROYED:
                     me->AddAura(SPELL_TOWER_OF_STORMS, me);
-                    events.RescheduleEvent(EVENT_THORIMS_HAMMER, 60000);
+                    events.RescheduleEvent(EVENT_THORIMS_HAMMER, 10min);
                     break;
                 case EVENT_TOWER_OF_FROST_DESTROYED:
                     me->AddAura(SPELL_TOWER_OF_FROST, me);
-                    events.RescheduleEvent(EVENT_HODIRS_FURY, 20000);
+                    events.RescheduleEvent(EVENT_HODIRS_FURY, 20s);
                     break;
                 case EVENT_TOWER_OF_FLAMES_DESTROYED:
                     me->AddAura(SPELL_TOWER_OF_FLAMES, me);
-                    events.RescheduleEvent(EVENT_MIMIRONS_INFERNO, 42000);
+                    events.RescheduleEvent(EVENT_MIMIRONS_INFERNO, 42s);
                     break;
             }
         }
@@ -603,14 +603,14 @@ void boss_flame_leviathan::boss_flame_leviathanAI::TurnHealStations(bool _apply)
 
 void boss_flame_leviathan::boss_flame_leviathanAI::ScheduleEvents()
 {
-    events.RescheduleEvent(EVENT_MISSILE, 5000);
-    events.RescheduleEvent(EVENT_VENT, 20000);
-    events.RescheduleEvent(EVENT_SPEED, 15000);
-    events.RescheduleEvent(EVENT_SUMMON, 10000);
-    events.RescheduleEvent(EVENT_SOUND_BEGINNING, 10000);
-    events.RescheduleEvent(EVENT_POSITION_CHECK, 5000);
+    events.RescheduleEvent(EVENT_MISSILE, 5s);
+    events.RescheduleEvent(EVENT_VENT, 20s);
+    events.RescheduleEvent(EVENT_SPEED, 15s);
+    events.RescheduleEvent(EVENT_SUMMON, 10s);
+    events.RescheduleEvent(EVENT_SOUND_BEGINNING, 10s);
+    events.RescheduleEvent(EVENT_POSITION_CHECK, 5s);
 
-    events.RescheduleEvent(EVENT_PURSUE, 0);
+    events.RescheduleEvent(EVENT_PURSUE, 0s);
 }
 
 void boss_flame_leviathan::boss_flame_leviathanAI::SpellHit(Unit*  /*caster*/, const SpellInfo* spellInfo)
@@ -624,7 +624,7 @@ void boss_flame_leviathan::boss_flame_leviathanAI::SpellHit(Unit*  /*caster*/, c
         Talk(FLAME_LEVIATHAN_SAY_OVERLOAD);
 
         events.DelayEvents(20 * IN_MILLISECONDS + 1);
-        events.ScheduleEvent(EVENT_REINSTALL, 20 * IN_MILLISECONDS);
+        events.ScheduleEvent(EVENT_REINSTALL, 20s);
     }
     else if (spellInfo->Id == 62522 /*SPELL_ELECTROSHOCK*/)
         me->InterruptNonMeleeSpells(false);
@@ -651,7 +651,7 @@ void boss_flame_leviathan::boss_flame_leviathanAI::JustDied(Unit*)
 void boss_flame_leviathan::boss_flame_leviathanAI::KilledUnit(Unit* who)
 {
     if (who == me->GetVictim())
-        events.RescheduleEvent(EVENT_PURSUE, 0);
+        events.RescheduleEvent(EVENT_PURSUE, 0s);
 
     if (who->GetTypeId() == TYPEID_PLAYER)
         Talk(FLAME_LEVIATHAN_SAY_SLAY);

@@ -112,12 +112,12 @@ public:
         {
             BossAI::EnterCombat(who);
             me->SetInCombatWithZone();
-            events.ScheduleEvent(EVENT_SPELL_MORTAL_WOUND, 10000);
-            events.ScheduleEvent(EVENT_SPELL_ENRAGE, 30000);
-            events.ScheduleEvent(EVENT_SPELL_DECIMATE, 105000);
-            events.ScheduleEvent(EVENT_SPELL_BERSERK, 8 * 60000);
-            events.ScheduleEvent(EVENT_SUMMON_ZOMBIE, 10000);
-            events.ScheduleEvent(EVENT_CAN_EAT_ZOMBIE, 1000);
+            events.ScheduleEvent(EVENT_SPELL_MORTAL_WOUND, 10s);
+            events.ScheduleEvent(EVENT_SPELL_ENRAGE, 30s);
+            events.ScheduleEvent(EVENT_SPELL_DECIMATE, 105s);
+            events.ScheduleEvent(EVENT_SPELL_BERSERK, 8min);
+            events.ScheduleEvent(EVENT_SUMMON_ZOMBIE, 10s);
+            events.ScheduleEvent(EVENT_CAN_EAT_ZOMBIE, 1s);
         }
 
         void JustSummoned(Creature* summon) override
@@ -179,7 +179,7 @@ public:
             {
                 case EVENT_SPELL_BERSERK:
                     me->CastSpell(me, SPELL_BERSERK, true);
-                    
+
                     break;
                 case EVENT_SPELL_ENRAGE:
                     Talk(EMOTE_ENRAGE);
@@ -276,4 +276,3 @@ void AddSC_boss_gluth()
     new boss_gluth();
     new spell_gluth_decimate();
 }
-

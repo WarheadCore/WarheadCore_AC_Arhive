@@ -118,11 +118,11 @@ public:
         {
             me->SetReactState(REACT_AGGRESSIVE);
             _Reset();
-            events.ScheduleEvent(EVENT_ENABLE_BONE_SLICE, 10000);
-            events.ScheduleEvent(EVENT_SPELL_BONE_SPIKE_GRAVEYARD, urand(10000, 15000));
-            events.ScheduleEvent(EVENT_SPELL_COLDFLAME, 5000);
-            events.ScheduleEvent(EVENT_WARN_BONE_STORM, urand(45000, 50000));
-            events.ScheduleEvent(EVENT_ENRAGE, 600000);
+            events.ScheduleEvent(EVENT_ENABLE_BONE_SLICE, 10s);
+            events.ScheduleEvent(EVENT_SPELL_BONE_SPIKE_GRAVEYARD, 10s, 15s);
+            events.ScheduleEvent(EVENT_SPELL_COLDFLAME, 5s);
+            events.ScheduleEvent(EVENT_WARN_BONE_STORM, 45s, 50s);
+            events.ScheduleEvent(EVENT_ENRAGE, 10min);
 
             _boneSlice = false;
             memset(_lastBoneSliceTargets, 0, 3 * sizeof(uint64));
@@ -267,7 +267,7 @@ public:
             if (type != POINT_MOTION_TYPE || id != 1337)
                 return;
 
-            events.ScheduleEvent(EVENT_SPELL_COLDFLAME_BONE_STORM, 0);
+            events.ScheduleEvent(EVENT_SPELL_COLDFLAME_BONE_STORM, 0s);
         }
 
         void JustDied(Unit* /*killer*/)
@@ -326,8 +326,8 @@ public:
 
         void IsSummonedBy(Unit* /*summoner*/)
         {
-            events.ScheduleEvent(1, 450);
-            events.ScheduleEvent(2, 12000);
+            events.ScheduleEvent(1, 450ms);
+            events.ScheduleEvent(2, 12s);
             me->m_positionZ = 42.5f;
         }
 
@@ -347,9 +347,7 @@ public:
                         float nx = me->GetPositionX() + 5.0f * cos(me->GetOrientation());
                         float ny = me->GetPositionY() + 5.0f * sin(me->GetOrientation());
                         if (!me->IsWithinLOS(nx, ny, 42.5f))
-                        {
                             break;
-                        }
                         me->NearTeleportTo(nx, ny, 42.5f, me->GetOrientation());
                         events.RepeatEvent(450);
                     }
@@ -428,7 +426,7 @@ public:
             summoner->SetPetGUID(petGUID);
             summoner->GetMotionMaster()->Clear();
             summoner->StopMoving();
-            events.ScheduleEvent(1, 8000);
+            events.ScheduleEvent(1, 8s);
             hasTrappedUnit = true;
         }
 

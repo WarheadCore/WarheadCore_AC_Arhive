@@ -252,14 +252,14 @@ public:
             BossAI::EnterCombat(who);
             me->SetInCombatWithZone();
             Talk(SAY_INTRO_1);
-            events.ScheduleEvent(EVENT_INTRO_2, 4000);
-            events.ScheduleEvent(EVENT_INTRO_3, 9000);
-            events.ScheduleEvent(EVENT_INTRO_4, 14000);
+            events.ScheduleEvent(EVENT_INTRO_2, 4s);
+            events.ScheduleEvent(EVENT_INTRO_3, 9s);
+            events.ScheduleEvent(EVENT_INTRO_4, 14s);
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_DISABLE_MOVE);
             me->NearTeleportTo(PosPlatform.GetPositionX(), PosPlatform.GetPositionY(), PosPlatform.GetPositionZ(), PosPlatform.GetOrientation());
 
-            events.ScheduleEvent(EVENT_SUMMON_ADDS, 30000);
-            events.ScheduleEvent(EVENT_CHECK_PLAYERS, 120000);
+            events.ScheduleEvent(EVENT_SUMMON_ADDS, 30s);
+            events.ScheduleEvent(EVENT_CHECK_PLAYERS, 2min);
 
             if (pInstance)
             {
@@ -402,15 +402,15 @@ public:
             {
                 case EVENT_INTRO_2:
                     Talk(SAY_INTRO_2);
-                    
+
                     break;
                 case EVENT_INTRO_3:
                     Talk(SAY_INTRO_3);
-                    
+
                     break;
                 case EVENT_INTRO_4:
                     Talk(SAY_INTRO_4);
-                    
+
                     break;
                 case EVENT_SPELL_SHADOW_BOLT:
                     me->CastSpell(me->GetVictim(), RAID_MODE(SPELL_SHADOW_BOLT_10, SPELL_SHADOW_BOLT_25, SPELL_SHADOW_BOLT_10, SPELL_SHADOW_BOLT_25), false);
@@ -442,7 +442,7 @@ public:
                             go->SetGoState(GO_STATE_ACTIVE);
 
                         events.CancelEvent(EVENT_TELEPORT);
-                        
+
                         break;
                     }
                     events.RepeatEvent(1000);
@@ -464,11 +464,10 @@ public:
 
                         summons.DoAction(ACTION_GATE_OPEN);
                         summons.DoZoneInCombat();
-                        events.ScheduleEvent(EVENT_SPELL_SHADOW_BOLT, 1000);
-                        events.ScheduleEvent(EVENT_SPELL_HARVEST_SOUL, urand(5000, 15000));
-                        events.ScheduleEvent(EVENT_TELEPORT, 20000);
-                        events.ScheduleEvent(EVENT_CHECK_HEALTH, 1000);
-                        
+                        events.ScheduleEvent(EVENT_SPELL_SHADOW_BOLT, 1s);
+                        events.ScheduleEvent(EVENT_SPELL_HARVEST_SOUL, 5s, 15s);
+                        events.ScheduleEvent(EVENT_TELEPORT, 20s);
+                        events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
                     }
 
                     waveCount++;
@@ -484,7 +483,7 @@ public:
                         gateOpened = true;
                         Talk(EMOTE_GATE_OPENED);
                     }
-                    
+
                     break;
             }
 
@@ -526,32 +525,32 @@ public:
             switch (me->GetEntry())
             {
                 case NPC_LIVING_TRAINEE:
-                    events.ScheduleEvent(EVENT_SPELL_DEATH_PLAGUE, 2000);
+                    events.ScheduleEvent(EVENT_SPELL_DEATH_PLAGUE, 2s);
                     break;
                 case NPC_DEAD_TRAINEE:
-                    events.ScheduleEvent(EVENT_SPELL_ARCANE_EXPLOSION, 2000);
+                    events.ScheduleEvent(EVENT_SPELL_ARCANE_EXPLOSION, 2s);
                     break;
                 case NPC_LIVING_KNIGHT:
-                    events.ScheduleEvent(EVENT_SPELL_SHADOW_MARK, 2000);
+                    events.ScheduleEvent(EVENT_SPELL_SHADOW_MARK, 2s);
                     break;
                 case NPC_DEAD_KNIGHT:
-                    events.ScheduleEvent(EVENT_SPELL_WHIRLWIND, 2000);
+                    events.ScheduleEvent(EVENT_SPELL_WHIRLWIND, 2s);
                     break;
                 case NPC_LIVING_RIDER:
-                    events.ScheduleEvent(EVENT_SPELL_BLOOD_PRESENCE, 1);
-                    events.ScheduleEvent(EVENT_SPELL_DEATH_COIL, 3000);
-                    events.ScheduleEvent(EVENT_SPELL_HYSTERIA, 10000);
-                    events.ScheduleEvent(EVENT_SPELL_HASTE_AURA, 1000);
-                    events.ScheduleEvent(EVENT_SPELL_INTIMIDATING_SHOUT, urand(4000, 9000));
-                    events.ScheduleEvent(EVENT_SPELL_VEIL_OF_DARKNESS, urand(5000, 7000));
+                    events.ScheduleEvent(EVENT_SPELL_BLOOD_PRESENCE, 10ms);
+                    events.ScheduleEvent(EVENT_SPELL_DEATH_COIL, 3s);
+                    events.ScheduleEvent(EVENT_SPELL_HYSTERIA, 10s);
+                    events.ScheduleEvent(EVENT_SPELL_HASTE_AURA, 1s);
+                    events.ScheduleEvent(EVENT_SPELL_INTIMIDATING_SHOUT, 4s, 9s);
+                    events.ScheduleEvent(EVENT_SPELL_VEIL_OF_DARKNESS, 5s, 7s);
                     break;
                 case NPC_DEAD_RIDER:
-                    events.ScheduleEvent(EVENT_SPELL_DRAIN_LIFE, urand(2000, 3500));
-                    events.ScheduleEvent(EVENT_SPELL_UNHOLY_AURA, 1);
-                    events.ScheduleEvent(EVENT_SPELL_UNHOLY_FRENZY, urand(5000, 9000));
+                    events.ScheduleEvent(EVENT_SPELL_DRAIN_LIFE, 2s, 3500ms);
+                    events.ScheduleEvent(EVENT_SPELL_UNHOLY_AURA, 10ms);
+                    events.ScheduleEvent(EVENT_SPELL_UNHOLY_FRENZY, 5s, 9s);
                     break;
                 case NPC_DEAD_HORSE:
-                    events.ScheduleEvent(EVENT_SPELL_STOMP, urand(2000, 5000));
+                    events.ScheduleEvent(EVENT_SPELL_STOMP, 2s, 5s);
                     break;
             }
         }

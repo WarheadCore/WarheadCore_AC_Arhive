@@ -159,9 +159,9 @@ public:
                 if( me->FindCurrentSpellBySpellId(SPELL_EVOCATION) )
                     me->InterruptNonMeleeSpells(false);
 
-                events.RescheduleEvent(EVENT_FROSTBOMB, urand(7000, 11000));
-                events.RescheduleEvent(EVENT_TELEPORT_TO_CENTER, urand(30000, 35000));
-                events.RescheduleEvent(EVENT_TIME_BOMB, urand(20000, 25000));
+                events.RescheduleEvent(EVENT_FROSTBOMB, 7s, 11s);
+                events.RescheduleEvent(EVENT_TELEPORT_TO_CENTER, 30s, 35s);
+                events.RescheduleEvent(EVENT_TIME_BOMB, 20s, 25s);
             }
             else
             {
@@ -285,7 +285,7 @@ public:
                     me->ClearUnitState(UNIT_STATE_CASTING);
                     DoCastAOE(DUNGEON_MODE(SPELL_EMPOWERED_ARCANE_EXPLOSION_N, SPELL_EMPOWERED_ARCANE_EXPLOSION_H));
                     me->AddUnitState(UNIT_STATE_CASTING);
-                    events.RescheduleEvent(EVENT_TELE_BACK, DUNGEON_MODE(9000, 7000));
+                    events.RescheduleEvent(EVENT_TELE_BACK, DUNGEON_MODE(9s, 7s));
                 default:
                     break;
             }
@@ -352,7 +352,7 @@ public:
                     me->SetControlled(false, UNIT_STATE_ROOT);
                     me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                     me->GetMotionMaster()->MoveChase(me->GetVictim());
-                    
+
                     break;
             }
         }

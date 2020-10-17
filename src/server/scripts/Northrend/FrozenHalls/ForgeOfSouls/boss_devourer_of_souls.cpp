@@ -121,11 +121,11 @@ public:
             Talk(SAY_FACE_AGGRO);
             DoZoneInCombat();
             events.Reset();
-            events.RescheduleEvent(EVENT_SPELL_PHANTOM_BLAST, 5000);
-            events.RescheduleEvent(EVENT_SPELL_MIRRORED_SOUL, 9000);
-            events.RescheduleEvent(EVENT_SPELL_WELL_OF_SOULS, urand(6000, 8000));
-            events.RescheduleEvent(EVENT_SPELL_UNLEASHED_SOULS, urand(18000, 20000));
-            events.RescheduleEvent(EVENT_SPELL_WAILING_SOULS, 65000);
+            events.RescheduleEvent(EVENT_SPELL_PHANTOM_BLAST, 5s);
+            events.RescheduleEvent(EVENT_SPELL_MIRRORED_SOUL, 9s);
+            events.RescheduleEvent(EVENT_SPELL_WELL_OF_SOULS, 6s, 8s);
+            events.RescheduleEvent(EVENT_SPELL_UNLEASHED_SOULS, 18s, 20s);
+            events.RescheduleEvent(EVENT_SPELL_WAILING_SOULS, 65s);
 
             if (pInstance)
                 pInstance->SetData(DATA_DEVOURER, IN_PROGRESS);

@@ -106,10 +106,10 @@ public:
         {
             events.SetPhase(1);
             if (!spark)
-                events.RescheduleEvent(EVENT_CHECK_HEALTH, 1000, 0, 1);
+                events.RescheduleEvent(EVENT_CHECK_HEALTH, 1s, 0, 1);
 
-            events.RescheduleEvent(EVENT_BALL_LIGHTNING, 10000, 0, 1);
-            events.RescheduleEvent(EVENT_STATIC_OVERLOAD, 5000, 0, 1);
+            events.RescheduleEvent(EVENT_BALL_LIGHTNING, 10s, 0, 1);
+            events.RescheduleEvent(EVENT_STATIC_OVERLOAD, 5s, 0, 1);
         }
 
         void EnterCombat(Unit*)
@@ -171,7 +171,7 @@ public:
             me->SetControlled(true, UNIT_STATE_STUNNED);
 
             events.SetPhase(2);
-            events.ScheduleEvent(EVENT_CALL_SPARKS, 15000, 0, 2);
+            events.ScheduleEvent(EVENT_CALL_SPARKS, 15s, 0, 2);
         }
 
         void UpdateAI(uint32 diff)
@@ -208,7 +208,7 @@ public:
                     {
                         EntryCheckPredicate pred(NPC_SPARK_OF_IONAR);
                         summons.DoAction(ACTION_CALLBACK, pred);
-                        events.ScheduleEvent(EVENT_RESTORE, 2000, 0, 2);
+                        events.ScheduleEvent(EVENT_RESTORE, 2s, 0, 2);
                         return;
                     }
                 case EVENT_RESTORE:

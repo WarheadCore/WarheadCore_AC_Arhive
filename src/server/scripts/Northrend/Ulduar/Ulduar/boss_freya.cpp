@@ -436,7 +436,7 @@ public:
                 if (!_respawningTrio)
                 {
                     _respawningTrio = true;
-                    events.ScheduleEvent(EVENT_FREYA_RESPAWN_TRIO, 10000);
+                    events.ScheduleEvent(EVENT_FREYA_RESPAWN_TRIO, 10s);
                 }
 
                 ++_trioKilled;
@@ -462,7 +462,7 @@ public:
                     aur->SetStackAmount(aur->GetStackAmount() - param);
                 else // Aura out of stack
                 {
-                    events.ScheduleEvent(EVENT_FREYA_NATURE_BOMB, 5000);
+                    events.ScheduleEvent(EVENT_FREYA_NATURE_BOMB, 5s);
                     events.SetPhase(EVENT_PHASE_FINAL);
                     aur->Remove();
                     return;
@@ -497,10 +497,10 @@ public:
             if (Aura* aur = me->AddAura(SPELL_ATTUNED_TO_NATURE, me))
                 aur->SetStackAmount(150);
 
-            events.ScheduleEvent(EVENT_FREYA_ADDS_SPAM, 10000, 0, EVENT_PHASE_ADDS);
-            events.ScheduleEvent(EVENT_FREYA_LIFEBINDER, 30000);
-            events.ScheduleEvent(EVENT_FREYA_SUNBEAM, 17000);
-            events.ScheduleEvent(EVENT_FREYA_BERSERK, 600000);
+            events.ScheduleEvent(EVENT_FREYA_ADDS_SPAM, 10s, 0, EVENT_PHASE_ADDS);
+            events.ScheduleEvent(EVENT_FREYA_LIFEBINDER, 30s);
+            events.ScheduleEvent(EVENT_FREYA_SUNBEAM, 17s);
+            events.ScheduleEvent(EVENT_FREYA_BERSERK, 10min);
             events.SetPhase(EVENT_PHASE_ADDS);
 
             if( !m_pInstance )
@@ -518,7 +518,7 @@ public:
                 elder->CastSpell(elder, SPELL_STONEBARK_ESSENCE, true);
                 elder->SetInCombatWithZone();
 
-                events.ScheduleEvent(EVENT_FREYA_GROUND_TREMOR, 35000);
+                events.ScheduleEvent(EVENT_FREYA_GROUND_TREMOR, 35s);
                 _elderGUID[0] = elder->GetGUID();
             }
 
@@ -529,7 +529,7 @@ public:
                 elder->CastSpell(elder, SPELL_IRONBRANCH_ESSENCE, true);
                 elder->SetInCombatWithZone();
 
-                events.ScheduleEvent(EVENT_FREYA_IRON_ROOT, 20000);
+                events.ScheduleEvent(EVENT_FREYA_IRON_ROOT, 20s);
                 _elderGUID[1] = elder->GetGUID();
             }
 
@@ -540,7 +540,7 @@ public:
                 elder->CastSpell(elder, SPELL_BRIGHTLEAF_ESSENCE, true);
                 elder->SetInCombatWithZone();
 
-                events.ScheduleEvent(EVENT_FREYA_UNSTABLE_SUN_BEAM, 60000);
+                events.ScheduleEvent(EVENT_FREYA_UNSTABLE_SUN_BEAM, 1min);
                 _elderGUID[2] = elder->GetGUID();
             }
 
@@ -726,9 +726,9 @@ public:
 
         void EnterCombat(Unit*)
         {
-            events.ScheduleEvent(EVENT_STONEBARK_FISTS_OF_STONE, 40000);
-            events.ScheduleEvent(EVENT_STONEBARK_GROUND_TREMOR, 5000);
-            events.ScheduleEvent(EVENT_STONEBARK_PETRIFIED_BARK, 20000);
+            events.ScheduleEvent(EVENT_STONEBARK_FISTS_OF_STONE, 40s);
+            events.ScheduleEvent(EVENT_STONEBARK_GROUND_TREMOR, 5s);
+            events.ScheduleEvent(EVENT_STONEBARK_PETRIFIED_BARK, 20s);
 
             me->MonsterYell("This place will serve as your graveyard.", LANG_UNIVERSAL, 0);
             me->PlayDirectSound(SOUND_STONEBARK_AGGRO);
@@ -832,9 +832,9 @@ public:
 
         void EnterCombat(Unit*)
         {
-            events.ScheduleEvent(EVENT_BRIGHTLEAF_FLUX, 10000);
-            events.ScheduleEvent(EVENT_BRIGHTLEAF_SOLAR_FLARE, 5000);
-            events.ScheduleEvent(EVENT_BRIGHTLEAF_UNSTABLE_SUN_BEAM, 8000);
+            events.ScheduleEvent(EVENT_BRIGHTLEAF_FLUX, 10s);
+            events.ScheduleEvent(EVENT_BRIGHTLEAF_SOLAR_FLARE, 5s);
+            events.ScheduleEvent(EVENT_BRIGHTLEAF_UNSTABLE_SUN_BEAM, 8s);
 
             me->MonsterYell("Matron, the Conservatory has been breached!", LANG_UNIVERSAL, 0);
             me->PlayDirectSound(SOUND_BRIGHTLEAF_AGGRO);
@@ -865,7 +865,7 @@ public:
                     events.RepeatEvent(15000);
                     break;
                 case EVENT_BRIGHTLEAF_UNSTABLE_SUN_BEAM:
-                    events.ScheduleEvent(EVENT_BRIGHTLEAF_DESPAWN_SUN_BEAM, 15000);
+                    events.ScheduleEvent(EVENT_BRIGHTLEAF_DESPAWN_SUN_BEAM, 15s);
                     if (Creature* beam = me->SummonCreature(NPC_UNSTABLE_SUN_BRIGHTLEAF, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ()))
                     {
                         beam->CastSpell(beam, SPELL_UNSTABLE_SUN_BEAM_AURA, true);
@@ -953,9 +953,9 @@ public:
 
         void EnterCombat(Unit*)
         {
-            events.ScheduleEvent(EVENT_IRONBRANCH_IMPALE, 10000);
-            events.ScheduleEvent(EVENT_IRONBRANCH_IRON_ROOT, 15000);
-            events.ScheduleEvent(EVENT_IRONBRANCH_THORN_SWARM, 3000);
+            events.ScheduleEvent(EVENT_IRONBRANCH_IMPALE, 10s);
+            events.ScheduleEvent(EVENT_IRONBRANCH_IRON_ROOT, 15s);
+            events.ScheduleEvent(EVENT_IRONBRANCH_THORN_SWARM, 3s);
 
             me->MonsterYell("Mortals have no place here!", LANG_UNIVERSAL, 0);
             me->PlayDirectSound(SOUND_IRONBRANCH_AGGRO);
@@ -1167,23 +1167,23 @@ public:
             {
                 me->CastSpell(me, SPELL_HEALTHY_SPORE_SUMMON, true);
                 me->CastSpell(me, SPELL_CONSERVATOR_GRIP, true);
-                events.ScheduleEvent(EVENT_ANCIENT_CONSERVATOR_NATURE_FURY, 14000);
+                events.ScheduleEvent(EVENT_ANCIENT_CONSERVATOR_NATURE_FURY, 14s);
                 _stackCount = ACTION_REMOVE_25_STACK;
             }
             else if (me->GetEntry() == NPC_ANCIENT_WATER_SPIRIT)
             {
-                events.ScheduleEvent(EVENT_WATER_SPIRIT_CHARGE, 12000);
+                events.ScheduleEvent(EVENT_WATER_SPIRIT_CHARGE, 12s);
                 _stackCount = ACTION_REMOVE_10_STACK;
             }
             else if (me->GetEntry() == NPC_STORM_LASHER)
             {
-                events.ScheduleEvent(EVENT_STORM_LASHER_LIGHTNING_LASH, 10000);
-                events.ScheduleEvent(EVENT_STORM_LASHER_STORMBOLT, 6000);
+                events.ScheduleEvent(EVENT_STORM_LASHER_LIGHTNING_LASH, 10s);
+                events.ScheduleEvent(EVENT_STORM_LASHER_STORMBOLT, 6s);
                 _stackCount = ACTION_REMOVE_10_STACK;
             }
             else if (me->GetEntry() == NPC_DETONATING_LASHER)
             {
-                events.ScheduleEvent(EVENT_DETONATING_LASHER_FLAME_LASH, 10000);
+                events.ScheduleEvent(EVENT_DETONATING_LASHER_FLAME_LASH, 10s);
                 _stackCount = ACTION_REMOVE_2_STACK;
             }
             else if (me->GetEntry() == NPC_SNAPLASHER)
@@ -1212,7 +1212,7 @@ public:
                     me->CastSpell(me, SPELL_TIDAL_WAVE_AURA, true);
                     me->CastSpell(me->GetVictim(), SPELL_TIDAL_WAVE, false);
                     events.RepeatEvent(12000);
-                    events.ScheduleEvent(EVENT_WATER_SPIRIT_DAMAGE, 3000);
+                    events.ScheduleEvent(EVENT_WATER_SPIRIT_DAMAGE, 3s);
                     break;
                 case EVENT_WATER_SPIRIT_DAMAGE:
                     me->CastSpell(me, SPELL_TIDAL_WAVE_DAMAGE, false);

@@ -131,10 +131,10 @@ public:
             BossAI::EnterCombat(who);
             Talk(SAY_AGGRO);
 
-            events.ScheduleEvent(EVENT_SPELL_UNBALANCING_STRIKE, 30000);
-            events.ScheduleEvent(EVENT_SPELL_DISRUPTING_SHOUT, 25000);
-            events.ScheduleEvent(EVENT_SPELL_JAGGED_KNIFE, 15000);
-            events.ScheduleEvent(EVENT_PLAY_COMMAND, 40000);
+            events.ScheduleEvent(EVENT_SPELL_UNBALANCING_STRIKE, 30s);
+            events.ScheduleEvent(EVENT_SPELL_DISRUPTING_SHOUT, 25s);
+            events.ScheduleEvent(EVENT_SPELL_JAGGED_KNIFE, 15s);
+            events.ScheduleEvent(EVENT_PLAY_COMMAND, 40s);
 
             summons.DoZoneInCombat();
         }
@@ -214,8 +214,8 @@ public:
                 cr->AI()->AttackStart(who);
             }
 
-            events.ScheduleEvent(EVENT_MINION_BLOOD_STRIKE, 4000);
-            events.ScheduleEvent(EVENT_MINION_BONE_BARRIER, 9000);
+            events.ScheduleEvent(EVENT_MINION_BLOOD_STRIKE, 4s);
+            events.ScheduleEvent(EVENT_MINION_BONE_BARRIER, 9s);
         }
 
         void UpdateAI(uint32 diff) override

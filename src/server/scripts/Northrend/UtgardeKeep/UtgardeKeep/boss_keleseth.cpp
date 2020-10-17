@@ -160,9 +160,9 @@ public:
         void EnterCombat(Unit* /*who*/)
         {
             events.Reset();
-            events.RescheduleEvent(EVENT_SPELL_SHADOWBOLT, 0);
-            events.RescheduleEvent(EVENT_FROST_TOMB, 28000);
-            events.RescheduleEvent(EVENT_SUMMON_SKELETONS, 4000);
+            events.RescheduleEvent(EVENT_SPELL_SHADOWBOLT, 0s);
+            events.RescheduleEvent(EVENT_FROST_TOMB, 28s);
+            events.RescheduleEvent(EVENT_SUMMON_SKELETONS, 4s);
 
             Talk(SAY_START_COMBAT);
             DoZoneInCombat();
@@ -266,9 +266,10 @@ public:
         void Reset()
         {
             events.Reset();
-            events.RescheduleEvent(EVENT_SPELL_DECREPIFY, urand(10000, 20000));
-            if( IsHeroic() )
-                events.RescheduleEvent(EVENT_SPELL_BONE_ARMOR, urand(25000, 120000));
+            events.RescheduleEvent(EVENT_SPELL_DECREPIFY, 10s, 20s);
+
+            if(IsHeroic())
+                events.RescheduleEvent(EVENT_SPELL_BONE_ARMOR, 25s, 2min);
         }
 
         void DamageTaken(Unit*, uint32& damage, DamageEffectType, SpellSchoolMask)
@@ -287,7 +288,7 @@ public:
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_UNK_29);
                 me->SetFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_FEIGN_DEATH);
                 me->SetFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_DEAD);
-                events.RescheduleEvent(EVENT_RESURRECT, 12000);
+                events.RescheduleEvent(EVENT_RESURRECT, 12s);
             }
         }
 
@@ -329,7 +330,7 @@ public:
                     me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_UNK_29);
                     me->RemoveFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_FEIGN_DEATH);
                     me->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_DEAD);
-                    events.RescheduleEvent(EVENT_RESURRECT_2, 3000);
+                    events.RescheduleEvent(EVENT_RESURRECT_2, 3s);
                     break;
                 case EVENT_RESURRECT_2:
                     me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);

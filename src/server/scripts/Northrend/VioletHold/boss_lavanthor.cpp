@@ -71,11 +71,12 @@ public:
         {
             DoZoneInCombat();
             events.Reset();
-            events.RescheduleEvent(EVENT_SPELL_FIREBOLT, 1000);
-            events.RescheduleEvent(EVENT_SPELL_FLAME_BREATH, 5000);
-            events.RescheduleEvent(EVENT_SPELL_LAVA_BURN, 10000);
+            events.RescheduleEvent(EVENT_SPELL_FIREBOLT, 1s);
+            events.RescheduleEvent(EVENT_SPELL_FLAME_BREATH, 5s);
+            events.RescheduleEvent(EVENT_SPELL_LAVA_BURN, 10s);
+
             if (IsHeroic())
-                events.RescheduleEvent(EVENT_SPELL_CAUTERIZING_FLAMES, 3000);
+                events.RescheduleEvent(EVENT_SPELL_CAUTERIZING_FLAMES, 3s);
         }
 
         void UpdateAI(uint32 diff)

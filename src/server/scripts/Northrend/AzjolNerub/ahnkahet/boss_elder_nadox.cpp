@@ -117,11 +117,11 @@ public:
         {
             Talk(SAY_AGGRO);
 
-            events.ScheduleEvent(EVENT_CHECK_HEALTH, 1000);
-            events.ScheduleEvent(EVENT_SWARMER, 10000);
-            events.ScheduleEvent(EVENT_CHECK_HOME, 2000);
-            events.ScheduleEvent(EVENT_PLAGUE, 5000 + rand() % 3000);
-            events.ScheduleEvent(EVENT_BROOD_RAGE, 5000);
+            events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
+            events.ScheduleEvent(EVENT_SWARMER, 10s);
+            events.ScheduleEvent(EVENT_CHECK_HOME, 2s);
+            events.ScheduleEvent(EVENT_PLAGUE, 5s, 8s);
+            events.ScheduleEvent(EVENT_BROOD_RAGE, 5s);
 
             if (pInstance)
                 pInstance->SetData(DATA_ELDER_NADOX_EVENT, IN_PROGRESS);
@@ -182,7 +182,7 @@ public:
                         if (HealthBelowPct(50))
                         {
                             events.CancelEvent(EVENT_CHECK_HEALTH);
-                            events.ScheduleEvent(EVENT_SUMMON_GUARD, 100);
+                            events.ScheduleEvent(EVENT_SUMMON_GUARD, 100ms);
                         }
                         break;
                     }

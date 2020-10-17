@@ -122,7 +122,7 @@ public:
         void SummonedCreatureDies(Creature* cr, Unit*)
         {
             summons.Despawn(cr);
-            events.ScheduleEvent(EVENT_SUMMON_NEXT_MINION, 4000);
+            events.ScheduleEvent(EVENT_SUMMON_NEXT_MINION, 4s);
         }
 
         void SpellHitTarget(Unit* target, const SpellInfo* spellInfo)
@@ -140,10 +140,10 @@ public:
 
             summons.DoZoneInCombat();
 
-            events.ScheduleEvent(EVENT_CHAIN_LIGHTNING, 5000);
-            events.ScheduleEvent(EVENT_LIGHTNING_NOVA, 40000);
-            events.ScheduleEvent(EVENT_BERSERK, 360000);
-            events.ScheduleEvent(EVENT_OVERCHARGE, 47000);
+            events.ScheduleEvent(EVENT_CHAIN_LIGHTNING, 5s);
+            events.ScheduleEvent(EVENT_LIGHTNING_NOVA, 40s);
+            events.ScheduleEvent(EVENT_BERSERK, 6min);
+            events.ScheduleEvent(EVENT_OVERCHARGE, 47s);
 
             if (pInstance)
                 pInstance->SetData(EVENT_EMALON, IN_PROGRESS);

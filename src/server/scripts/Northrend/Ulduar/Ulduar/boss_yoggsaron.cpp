@@ -456,8 +456,8 @@ public:
 
             SaveKeepers();
 
-            events.ScheduleEvent(EVENT_SARA_P1_DOORS_CLOSE, 15000, 0, EVENT_PHASE_ONE);
-            events.ScheduleEvent(EVENT_SARA_P1_BERSERK, 900000, 0, 0);
+            events.ScheduleEvent(EVENT_SARA_P1_DOORS_CLOSE, 15s, 0, EVENT_PHASE_ONE);
+            events.ScheduleEvent(EVENT_SARA_P1_BERSERK, 15min, 0, 0);
             events.ScheduleEvent(EVENT_SARA_P1_SUMMON, 0, 0, EVENT_PHASE_ONE);
             events.SetPhase(EVENT_PHASE_ONE);
 
@@ -660,8 +660,8 @@ public:
             uint32 timer = events.GetNextEventTime(EVENT_SARA_P2_OPEN_PORTALS);
             uint32 portalTime = (timer > events.GetTimer() ? timer - events.GetTimer() : 0);
             events.DelayEvents(param + 100);
-            events.RescheduleEvent(EVENT_SARA_P2_OPEN_PORTALS, portalTime, 0, EVENT_PHASE_TWO);
-            events.ScheduleEvent(EVENT_SARA_P2_REMOVE_STUN, param, 0, EVENT_PHASE_TWO);
+            events.RescheduleEvent(EVENT_SARA_P2_OPEN_PORTALS, Milliseconds(portalTime), 0, EVENT_PHASE_TWO);
+            events.ScheduleEvent(EVENT_SARA_P2_REMOVE_STUN, Milliseconds(param), 0, EVENT_PHASE_TWO);
             me->CastSpell(me, SPELL_SHATTERED_ILLUSION, true);
         }
 
@@ -744,7 +744,7 @@ public:
                     EntryCheckPredicate pred(NPC_YOGG_SARON);
                     summons.DoAction(ACTION_YOGG_SARON_START_YELL, pred);
                     _p2TalkTimer = 0;
-                    events.ScheduleEvent(EVENT_SARA_P2_START, 500, 0, EVENT_PHASE_TWO);
+                    events.ScheduleEvent(EVENT_SARA_P2_START, 500ms, 0, EVENT_PHASE_TWO);
                 }
                 return;
             }
@@ -763,7 +763,7 @@ public:
                         if (GameObject* go = ObjectAccessor::GetGameObject(*me, m_pInstance->GetData64(GO_YOGG_SARON_DOORS)))
                             go->SetGoState(GO_STATE_READY);
 
-                    events.ScheduleEvent(EVENT_SARA_P1_SPELLS, 0, 1, EVENT_PHASE_ONE);
+                    events.ScheduleEvent(EVENT_SARA_P1_SPELLS, 0s, 1, EVENT_PHASE_ONE);
                     break;
                 case EVENT_SARA_P1_SUMMON:
                     events.RepeatEvent(20000 - (std::min(_summonedGuardiansCount, (uint8)5) * 2000));
@@ -782,7 +782,7 @@ public:
                     {
                         EntryCheckPredicate pred(NPC_YOGG_SARON);
                         summons.DoAction(ACTION_YOGG_SARON_APPEAR, pred);
-                        events.RescheduleEvent(EVENT_SARA_P2_SPAWN_START_TENTACLES, 500, 0, EVENT_PHASE_TWO);
+                        events.RescheduleEvent(EVENT_SARA_P2_SPAWN_START_TENTACLES, 500ms, 0, EVENT_PHASE_TWO);
 
                         // Spawn Brain!
                         me->SummonCreature(NPC_BRAIN_OF_YOGG_SARON, 1981.3f, -25.43f, 265);
@@ -843,14 +843,14 @@ public:
                     SpawnTentacle(NPC_CORRUPTOR_TENTACLE);
                     SpawnTentacle(NPC_CORRUPTOR_TENTACLE);
 
-                    events.ScheduleEvent(EVENT_SARA_P2_MALADY, 7000, 0, EVENT_PHASE_TWO);
-                    events.ScheduleEvent(EVENT_SARA_P2_PSYCHOSIS, 3000, 0, EVENT_PHASE_TWO);
-                    events.ScheduleEvent(EVENT_SARA_P2_DEATH_RAY, 15000, 0, EVENT_PHASE_TWO);
-                    events.ScheduleEvent(EVENT_SARA_P2_SUMMON_T1, 50000 + urand(0, 10000), 0, EVENT_PHASE_TWO);
-                    events.ScheduleEvent(EVENT_SARA_P2_SUMMON_T2, 15000 + urand(0, 5000), 0, EVENT_PHASE_TWO);
-                    events.ScheduleEvent(EVENT_SARA_P2_SUMMON_T3, 30000 + urand(0, 10000), 0, EVENT_PHASE_TWO);
-                    events.ScheduleEvent(EVENT_SARA_P2_BRAIN_LINK, 0, 0, EVENT_PHASE_TWO);
-                    events.ScheduleEvent(EVENT_SARA_P2_OPEN_PORTALS, 60000, 0, EVENT_PHASE_TWO);
+                    events.ScheduleEvent(EVENT_SARA_P2_MALADY, 7s, 0, EVENT_PHASE_TWO);
+                    events.ScheduleEvent(EVENT_SARA_P2_PSYCHOSIS, 3s, 0, EVENT_PHASE_TWO);
+                    events.ScheduleEvent(EVENT_SARA_P2_DEATH_RAY, 15s, 0, EVENT_PHASE_TWO);
+                    events.ScheduleEvent(EVENT_SARA_P2_SUMMON_T1, 50s, 1min, 0, EVENT_PHASE_TWO);
+                    events.ScheduleEvent(EVENT_SARA_P2_SUMMON_T2, 15s, 20s, 0, EVENT_PHASE_TWO);
+                    events.ScheduleEvent(EVENT_SARA_P2_SUMMON_T3, 30s, 40s, 0, EVENT_PHASE_TWO);
+                    events.ScheduleEvent(EVENT_SARA_P2_BRAIN_LINK, 0s, 0, EVENT_PHASE_TWO);
+                    events.ScheduleEvent(EVENT_SARA_P2_OPEN_PORTALS, 1min, 0, EVENT_PHASE_TWO);
                     break;
                 case EVENT_SARA_P1_BERSERK:
                     me->CastSpell(me, SPELL_EXTINGUISH_ALL_LIFE, true);
@@ -1104,18 +1104,18 @@ public:
 
                 me->RemoveAura(SPELL_SHADOW_BARRIER);
 
-                events.ScheduleEvent(EVENT_YS_LUNATIC_GAZE, 7000);
-                events.ScheduleEvent(EVENT_YS_SHADOW_BEACON, 20000);
-                events.ScheduleEvent(EVENT_YS_SUMMON_GUARDIAN, 0);
+                events.ScheduleEvent(EVENT_YS_LUNATIC_GAZE, 7s);
+                events.ScheduleEvent(EVENT_YS_SHADOW_BEACON, 20s);
+                events.ScheduleEvent(EVENT_YS_SUMMON_GUARDIAN, 0s);
                 _thirdPhase = true;
 
                 me->MonsterYell("Look upon the true face of death and know that your end comes soon!", LANG_UNIVERSAL, 0);
                 me->PlayDirectSound(YS_P3_START);
             }
             else if (param == ACTION_YOGG_SARON_HARD_MODE)
-                events.ScheduleEvent(EVENT_YS_DEAFENING_ROAR, 50000);
+                events.ScheduleEvent(EVENT_YS_DEAFENING_ROAR, 50s);
             else if (param == ACTION_YOGG_SARON_SHADOW_BEACON)
-                events.RescheduleEvent(EVENT_YS_SHADOW_BEACON, 40000);
+                events.RescheduleEvent(EVENT_YS_SHADOW_BEACON, 40s);
             else if (param == ACTION_REMOVE_STUN)
             {
                 me->RemoveAura(SPELL_SHATTERED_ILLUSION);
@@ -2227,7 +2227,7 @@ public:
                     if (Creature* yogg = ObjectAccessor::GetCreature(*me, me->GetInstanceScript()->GetData64(TYPE_YOGGSARON)))
                         yogg->AI()->DoAction(ACTION_FAILED_DRIVE_ME_CRAZY);
 
-                events.ScheduleEvent(40, 8000);
+                events.ScheduleEvent(40, 8s);
                 _targets.push_back(target->GetGUID());
             }
         }

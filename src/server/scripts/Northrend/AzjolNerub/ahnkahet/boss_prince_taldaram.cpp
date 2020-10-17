@@ -137,8 +137,8 @@ public:
         void ScheduleEvents()
         {
             events.Reset();
-            events.ScheduleEvent(EVENT_PRINCE_FLAME_SPHERES, 10000);
-            events.ScheduleEvent(EVENT_PRINCE_BLOODTHIRST, 10000);
+            events.ScheduleEvent(EVENT_PRINCE_FLAME_SPHERES, 10s);
+            events.ScheduleEvent(EVENT_PRINCE_BLOODTHIRST, 10s);
             vanishTarget = 0;
             vanishDamage = 0;
         }
@@ -205,7 +205,7 @@ public:
 
                             events.CancelEvent(EVENT_PRINCE_FLAME_SPHERES);
                             events.CancelEvent(EVENT_PRINCE_BLOODTHIRST);
-                            events.ScheduleEvent(EVENT_PRINCE_VANISH_RUN, 2499);
+                            events.ScheduleEvent(EVENT_PRINCE_VANISH_RUN, 2499ms);
                             if (Unit* pEmbraceTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                                 vanishTarget = pEmbraceTarget->GetGUID();
                         }
@@ -220,7 +220,7 @@ public:
                             me->RemoveAura(SPELL_VANISH);
                         }
 
-                        events.ScheduleEvent(EVENT_PRINCE_RESCHEDULE, 20000);
+                        events.ScheduleEvent(EVENT_PRINCE_RESCHEDULE, 20s);
                         break;
                     }
                 case EVENT_PRINCE_RESCHEDULE:

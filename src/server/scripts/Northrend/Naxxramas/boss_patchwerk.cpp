@@ -100,9 +100,9 @@ public:
             Talk(SAY_AGGRO);
 
             me->SetInCombatWithZone();
-            events.ScheduleEvent(EVENT_SPELL_HATEFUL_STRIKE, 1200);
-            events.ScheduleEvent(EVENT_SPELL_BERSERK, 360000);
-            events.ScheduleEvent(EVENT_HEALTH_CHECK, 1000);
+            events.ScheduleEvent(EVENT_SPELL_HATEFUL_STRIKE, 1200ms);
+            events.ScheduleEvent(EVENT_SPELL_BERSERK, 6min);
+            events.ScheduleEvent(EVENT_HEALTH_CHECK, 1s);
 
             if (pInstance)
                 pInstance->DoStartTimedAchievement(ACHIEVEMENT_TIMED_TYPE_EVENT, ACHIEV_TIMED_START_EVENT);
@@ -167,8 +167,7 @@ public:
                 case EVENT_SPELL_BERSERK:
                     Talk(EMOTE_BERSERK);
                     me->CastSpell(me, SPELL_BERSERK, true);
-                    events.ScheduleEvent(EVENT_SPELL_SLIME_BOLT, 2000);
-                    
+                    events.ScheduleEvent(EVENT_SPELL_SLIME_BOLT, 2s);
                     break;
                 case EVENT_SPELL_SLIME_BOLT:
                     me->CastSpell(me, SPELL_SLIME_BOLT, false);
@@ -179,7 +178,7 @@ public:
                     {
                         Talk(EMOTE_ENRAGE);
                         me->CastSpell(me, SPELL_FRENZY, true);
-                        
+
                         break;
                     }
                     events.RepeatEvent(1000);

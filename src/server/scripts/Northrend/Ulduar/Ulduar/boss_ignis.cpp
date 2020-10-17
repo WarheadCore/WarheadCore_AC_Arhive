@@ -253,10 +253,10 @@ public:
             bShattered = false;
             lastShatterMSTime = 0;
             events.Reset();
-            events.ScheduleEvent(EVENT_ACTIVATE_CONSTRUCT, RAID_MODE(40000, 30000));
-            events.ScheduleEvent(EVENT_SPELL_SCORCH, 10000);
-            events.ScheduleEvent(EVENT_SPELL_FLAME_JETS, 32000);
-            events.ScheduleEvent(EVENT_GRAB, 25000);
+            events.ScheduleEvent(EVENT_ACTIVATE_CONSTRUCT, RAID_MODE(40s, 30s));
+            events.ScheduleEvent(EVENT_SPELL_SCORCH, 10s);
+            events.ScheduleEvent(EVENT_SPELL_FLAME_JETS, 32s);
+            events.ScheduleEvent(EVENT_GRAB, 25s);
 
             me->MonsterYell(TEXT_AGGRO, LANG_UNIVERSAL, 0);
             me->PlayDirectSound(SOUND_AGGRO);
@@ -381,7 +381,7 @@ public:
                     me->SendMovementFlagUpdate();
                     me->CastSpell(me->GetVictim(), S_SCORCH, false);
                     events.RepeatEvent(20000);
-                    events.RescheduleEvent(EVENT_ENABLE_ROTATE, 3001);
+                    events.RescheduleEvent(EVENT_ENABLE_ROTATE, 3001ms);
                     break;
                 case EVENT_ENABLE_ROTATE:
                     me->SetControlled(false, UNIT_STATE_ROOT);

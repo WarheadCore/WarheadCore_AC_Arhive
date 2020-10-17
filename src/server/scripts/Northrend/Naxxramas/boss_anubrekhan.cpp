@@ -154,9 +154,9 @@ public:
                     go->SetGoState(GO_STATE_READY);
             }
 
-            events.ScheduleEvent(EVENT_SPELL_IMPALE, 15000);
-            events.ScheduleEvent(EVENT_SPELL_LOCUST_SWARM, 70000 + urand(0, 50000));
-            events.ScheduleEvent(EVENT_SPELL_BERSERK, 600000);
+            events.ScheduleEvent(EVENT_SPELL_IMPALE, 15s);
+            events.ScheduleEvent(EVENT_SPELL_LOCUST_SWARM, 70s, 2min);
+            events.ScheduleEvent(EVENT_SPELL_BERSERK, 10min);
 
             if (!summons.HasEntry(NPC_CRYPT_GUARD))
                 SummonCryptGuards();
@@ -201,7 +201,7 @@ public:
                     }
                 case EVENT_SPELL_BERSERK:
                     me->CastSpell(me, SPELL_BERSERK, true);
-                    
+
                     break;
             }
 
@@ -214,4 +214,3 @@ void AddSC_boss_anubrekhan()
 {
     new boss_anubrekhan();
 }
-

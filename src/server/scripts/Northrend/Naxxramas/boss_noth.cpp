@@ -103,11 +103,12 @@ public:
             events.SetPhase(0);
 
             events.Reset();
-            events.ScheduleEvent(EVENT_MOVE_TO_BALCONY, 110000);
-            events.ScheduleEvent(EVENT_SPELL_CURSE, 15000);
-            events.ScheduleEvent(EVENT_SUMMON_PLAGUED_WARRIOR_ANNOUNCE, 25000);
+            events.ScheduleEvent(EVENT_MOVE_TO_BALCONY, 110s);
+            events.ScheduleEvent(EVENT_SPELL_CURSE, 15s);
+            events.ScheduleEvent(EVENT_SUMMON_PLAGUED_WARRIOR_ANNOUNCE, 25s);
+
             if (Is25ManRaid())
-                events.ScheduleEvent(EVENT_SPELL_BLINK, 26000);
+                events.ScheduleEvent(EVENT_SPELL_BLINK, 26s);
         }
 
         void StartBalconyPhase()
@@ -118,8 +119,8 @@ public:
             me->SetControlled(true, UNIT_STATE_ROOT);
             events.SetPhase(1);
             events.Reset();
-            events.ScheduleEvent(EVENT_BALCONY_SUMMON_ANNOUNCE, 4000);
-            events.ScheduleEvent(EVENT_MOVE_TO_GROUND, 70000);
+            events.ScheduleEvent(EVENT_BALCONY_SUMMON_ANNOUNCE, 4s);
+            events.ScheduleEvent(EVENT_MOVE_TO_GROUND, 70s);
         }
 
         void SummonHelper(uint32 entry, uint32 count)
@@ -210,7 +211,7 @@ public:
                     Talk(SAY_SUMMON);
                     Talk(EMOTE_SUMMON);
                     events.RepeatEvent(25000);
-                    events.ScheduleEvent(EVENT_SUMMON_PLAGUED_WARRIOR_REAL, 4000);
+                    events.ScheduleEvent(EVENT_SUMMON_PLAGUED_WARRIOR_REAL, 4s);
                     break;
                 case EVENT_SUMMON_PLAGUED_WARRIOR_REAL:
                     me->CastSpell(me, SPELL_SUMMON_PLAGUED_WARRIORS, true);
@@ -233,7 +234,7 @@ public:
                 case EVENT_BALCONY_SUMMON_ANNOUNCE:
                     Talk(EMOTE_SUMMON_WAVE);
                     events.RepeatEvent(25000);
-                    events.ScheduleEvent(EVENT_BALCONY_SUMMON_REAL, 4000);
+                    events.ScheduleEvent(EVENT_BALCONY_SUMMON_REAL, 4s);
                     break;
                 case EVENT_BALCONY_SUMMON_REAL:
                     me->CastSpell(me, SPELL_SUMMON_PLAGUED_WARRIORS, true); // visual only

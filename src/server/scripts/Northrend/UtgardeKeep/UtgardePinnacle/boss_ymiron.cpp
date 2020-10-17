@@ -175,10 +175,10 @@ public:
                     me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             }
 
-            events.RescheduleEvent(EVENT_YMIRON_BANE, 18000);
-            events.RescheduleEvent(EVENT_YMIRON_FETID_ROT, 8000);
-            events.RescheduleEvent(EVENT_YMIRON_DARK_SLASH, 28000);
-            events.RescheduleEvent(EVENT_YMIRON_HEALTH_CHECK, 1000);
+            events.RescheduleEvent(EVENT_YMIRON_BANE, 18s);
+            events.RescheduleEvent(EVENT_YMIRON_FETID_ROT, 8s);
+            events.RescheduleEvent(EVENT_YMIRON_DARK_SLASH, 28s);
+            events.RescheduleEvent(EVENT_YMIRON_HEALTH_CHECK, 1s);
         }
 
         void MovementInform(uint32 uiType, uint32 point)
@@ -192,7 +192,7 @@ public:
                 if (Creature* cr = me->FindNearestCreature(BoatStructure[BoatOrder[BoatNum - 1]].trigger, 50.0f))
                     me->CastSpell(cr, SPELL_CHANNEL_YMIRON_TO_SPIRIT, true);
 
-                events.ScheduleEvent(EVENT_YMIRON_ACTIVATE_BOAT, 6000);
+                events.ScheduleEvent(EVENT_YMIRON_ACTIVATE_BOAT, 6s);
             }
         }
 

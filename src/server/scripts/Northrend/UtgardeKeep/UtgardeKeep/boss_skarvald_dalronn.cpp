@@ -108,7 +108,7 @@ public:
             switch(param)
             {
                 case 1:
-                    events.RescheduleEvent(EVENT_MATE_DIED, 3500);
+                    events.RescheduleEvent(EVENT_MATE_DIED, 3500ms);
                     break;
             }
         }
@@ -116,8 +116,8 @@ public:
         void EnterCombat(Unit* who)
         {
             events.Reset();
-            events.RescheduleEvent(EVENT_SPELL_CHARGE, 5000);
-            events.RescheduleEvent(EVENT_SPELL_STONE_STRIKE, 10000);
+            events.RescheduleEvent(EVENT_SPELL_CHARGE, 5s);
+            events.RescheduleEvent(EVENT_SPELL_STONE_STRIKE, 10s);
 
             if (me->GetEntry() == NPC_SKARVALD)
                 Talk(YELL_SKARVALD_AGGRO);
@@ -255,7 +255,7 @@ public:
                     summons.DespawnAll();
                     break;
                 case 1:
-                    events.RescheduleEvent(EVENT_MATE_DIED, 3500);
+                    events.RescheduleEvent(EVENT_MATE_DIED, 3500ms);
                     break;
             }
         }
@@ -263,13 +263,14 @@ public:
         void EnterCombat(Unit* who)
         {
             events.Reset();
-            events.RescheduleEvent(EVENT_SPELL_SHADOW_BOLT, 1000);
-            events.RescheduleEvent(EVENT_SPELL_DEBILITATE, 5000);
+            events.RescheduleEvent(EVENT_SPELL_SHADOW_BOLT, 1s);
+            events.RescheduleEvent(EVENT_SPELL_DEBILITATE, 5s);
+
             if( IsHeroic() )
-                events.RescheduleEvent(EVENT_SPELL_SUMMON_SKELETONS, 10000);
+                events.RescheduleEvent(EVENT_SPELL_SUMMON_SKELETONS, 10s);
 
             if (me->GetEntry() == NPC_DALRONN)
-                events.RescheduleEvent(EVENT_YELL_DALRONN_AGGRO, 4999);
+                events.RescheduleEvent(EVENT_YELL_DALRONN_AGGRO, 4999ms);
 
             if (pInstance)
             {

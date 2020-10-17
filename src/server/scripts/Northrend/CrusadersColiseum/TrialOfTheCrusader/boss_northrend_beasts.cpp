@@ -100,15 +100,15 @@ public:
         void Reset()
         {
             events.Reset();
-            events.ScheduleEvent(EVENT_SPELL_FIRE_BOMB, urand(10000, 30000));
+            events.ScheduleEvent(EVENT_SPELL_FIRE_BOMB, 10s, 30s);
         }
 
         void EnterCombat(Unit*  /*who*/)
         {
             events.Reset();
-            events.ScheduleEvent(EVENT_SPELL_SNOBOLLED, 1500);
-            events.ScheduleEvent(EVENT_SPELL_BATTER, 5000);
-            events.ScheduleEvent(EVENT_SPELL_HEAD_CRACK, 25000);
+            events.ScheduleEvent(EVENT_SPELL_SNOBOLLED, 1500ms);
+            events.ScheduleEvent(EVENT_SPELL_BATTER, 5s);
+            events.ScheduleEvent(EVENT_SPELL_HEAD_CRACK, 25s);
         }
 
         void AttackStart(Unit* who)
@@ -163,7 +163,7 @@ public:
                 case EVENT_SPELL_SNOBOLLED:
                     if( t->GetTypeId() == TYPEID_PLAYER )
                         me->CastSpell((Unit*)NULL, SPELL_SNOBOLLED, true);
-                    
+
                     break;
                 case EVENT_SPELL_BATTER:
                     if( t->GetTypeId() == TYPEID_PLAYER )
@@ -260,9 +260,9 @@ public:
         {
             me->setActive(true);
             events.Reset();
-            events.RescheduleEvent(EVENT_SPELL_IMPALE, urand(9000, 10000));
-            events.RescheduleEvent(EVENT_SPELL_STAGGERING_STOMP, 15000);
-            events.RescheduleEvent(EVENT_PICK_SNOBOLD_TARGET, urand(16000, 24000));
+            events.RescheduleEvent(EVENT_SPELL_IMPALE, 9s, 10s);
+            events.RescheduleEvent(EVENT_SPELL_STAGGERING_STOMP, 15s);
+            events.RescheduleEvent(EVENT_PICK_SNOBOLD_TARGET, 16s, 24s);
 
             // refresh snobold position
             if( Vehicle* vk = me->GetVehicleKit() )
@@ -326,7 +326,7 @@ public:
                                         snobold->ChangeSeat(4); // switch to hand
                                         me->setAttackTimer(BASE_ATTACK, 3000);
                                         PlayerGUID = p->GetGUID();
-                                        events.RescheduleEvent(EVENT_RELEASE_SNOBOLD, 2500);
+                                        events.RescheduleEvent(EVENT_RELEASE_SNOBOLD, 2500ms);
                                     }
 
                                 break;
@@ -355,7 +355,7 @@ public:
                         }
                         else if( Vehicle* vk = me->GetVehicleKit() )
                         {
-                            events.RescheduleEvent(EVENT_PICK_SNOBOLD_TARGET, 5000); // player not found (died? left instance?), pick new one faster!
+                            events.RescheduleEvent(EVENT_PICK_SNOBOLD_TARGET, 5s); // player not found (died? left instance?), pick new one faster!
                             if( Unit* snobold = vk->GetPassenger(4) )
                                 if( snobold->GetTypeId() == TYPEID_UNIT )
                                 {
@@ -493,13 +493,13 @@ struct boss_jormungarAI : public ScriptedAI
         {
             case -1:
                 if( !me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE) )
-                    events.RescheduleEvent(EVENT_SUBMERGE, 1500);
+                    events.RescheduleEvent(EVENT_SUBMERGE, 1500ms);
                 break;
             case -2:
                 if( me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE) )
                     bIsStationary = true; // it will come out mobile soon
                 else if( me->GetDisplayId() == _MODEL_STATIONARY )
-                    events.RescheduleEvent(EVENT_SUBMERGE, 1000);
+                    events.RescheduleEvent(EVENT_SUBMERGE, 1s);
                 else
                     events.CancelEvent(EVENT_SUBMERGE);
                 me->CastSpell(me, SPELL_ENRAGE, true);
@@ -514,18 +514,18 @@ struct boss_jormungarAI : public ScriptedAI
         if( me->GetDisplayId() == _MODEL_STATIONARY )
         {
             me->SetAttackTime(BASE_ATTACK, 1500);
-            events.RescheduleEvent(EVENT_SPELL_SPRAY, (me->GetEntry() == NPC_ACIDMAW ? 20000 : 15000));
-            events.RescheduleEvent(EVENT_SPELL_SWEEP, urand(15000, 30000));
+            events.RescheduleEvent(EVENT_SPELL_SPRAY, (me->GetEntry() == NPC_ACIDMAW ? 20s : 15s));
+            events.RescheduleEvent(EVENT_SPELL_SWEEP, 15s, 30s);
         }
         else
         {
             me->SetAttackTime(BASE_ATTACK, 2000);
-            events.RescheduleEvent(EVENT_SPELL_BITE, (me->GetEntry() == NPC_ACIDMAW ? 20000 : 15000));
-            events.RescheduleEvent(EVENT_SPELL_SPEW, urand(15000, 30000));
-            events.RescheduleEvent(EVENT_SPELL_SLIME_POOL, 15000);
+            events.RescheduleEvent(EVENT_SPELL_BITE, (me->GetEntry() == NPC_ACIDMAW ? 20s : 15s));
+            events.RescheduleEvent(EVENT_SPELL_SPEW, 15s, 30s);
+            events.RescheduleEvent(EVENT_SPELL_SLIME_POOL, 15s);
         }
         if( !me->HasAura(SPELL_ENRAGE) )
-            events.RescheduleEvent(EVENT_SUBMERGE, urand(45000, 50000));
+            events.RescheduleEvent(EVENT_SUBMERGE, 45s, 50s);
     }
 
     void EnterCombat(Unit* /*who*/)
@@ -579,7 +579,7 @@ struct boss_jormungarAI : public ScriptedAI
                             c->AI()->DoAction(-1);
 
                     events.Reset();
-                    events.RescheduleEvent(EVENT_MOVE_UNDERGROUND, 2500);
+                    events.RescheduleEvent(EVENT_MOVE_UNDERGROUND, 2500ms);
                 }
                 break;
             case EVENT_MOVE_UNDERGROUND:
@@ -595,8 +595,7 @@ struct boss_jormungarAI : public ScriptedAI
                     me->UpdatePosition(Locs[LOC_CENTER].GetPositionX() + cos(angle)*dist, Locs[LOC_CENTER].GetPositionY() + sin(angle)*dist, me->GetPositionZ(), me->GetOrientation(), true);
                     me->StopMovingOnCurrentPos();
                     DoResetThreat();
-                    
-                    events.RescheduleEvent(EVENT_EMERGE, 6000);
+                    events.RescheduleEvent(EVENT_EMERGE, 6s);
                 }
                 break;
             case EVENT_EMERGE:
@@ -805,10 +804,10 @@ public:
         {
             me->setActive(true);
             events.Reset();
-            events.ScheduleEvent(EVENT_SPELL_FEROCIOUS_BUTT, urand(15000, 30000));
-            events.RescheduleEvent(EVENT_SPELL_WHIRL, urand(10000, 12000));
-            events.RescheduleEvent(EVENT_SPELL_ARCTIC_BREATH, 14000);
-            events.RescheduleEvent(EVENT_JUMP_MIDDLE, 30000);
+            events.ScheduleEvent(EVENT_SPELL_FEROCIOUS_BUTT, 15s, 30s);
+            events.RescheduleEvent(EVENT_SPELL_WHIRL, 10s, 12s);
+            events.RescheduleEvent(EVENT_SPELL_ARCTIC_BREATH, 14s);
+            events.RescheduleEvent(EVENT_JUMP_MIDDLE, 30s);
         }
 
         void JustReachedHome()
@@ -835,10 +834,10 @@ public:
             if( id == EVENT_CHARGE )
             {
                 events.Reset();
-                events.RescheduleEvent(EVENT_SPELL_FEROCIOUS_BUTT, urand(5000, 15000));
-                events.RescheduleEvent(EVENT_SPELL_WHIRL, urand(2000, 5000));
-                events.RescheduleEvent(EVENT_SPELL_ARCTIC_BREATH, urand(5000, 8000));
-                events.RescheduleEvent(EVENT_JUMP_MIDDLE, urand(30000, 50000));
+                events.RescheduleEvent(EVENT_SPELL_FEROCIOUS_BUTT, 5s, 15s);
+                events.RescheduleEvent(EVENT_SPELL_WHIRL, 2s, 5s);
+                events.RescheduleEvent(EVENT_SPELL_ARCTIC_BREATH, 5s, 8s);
+                events.RescheduleEvent(EVENT_JUMP_MIDDLE, 30s, 50s);
 
                 float angle = me->GetAngle(&Locs[LOC_CENTER]);
                 angle = angle >= M_PI ? angle - M_PI : angle + M_PI;
@@ -900,13 +899,12 @@ public:
                     me->GetMotionMaster()->MoveJump(Locs[LOC_CENTER].GetPositionX(), Locs[LOC_CENTER].GetPositionY(), Locs[LOC_CENTER].GetPositionZ(), 40.0f, 12.0f);
                     me->SetUInt64Value(UNIT_FIELD_TARGET, 0);
                     events.Reset();
-                    events.RescheduleEvent(EVENT_SPELL_MASSIVE_CRASH, 2000);
+                    events.RescheduleEvent(EVENT_SPELL_MASSIVE_CRASH, 2s);
                     break;
                 case EVENT_SPELL_MASSIVE_CRASH:
                     me->GetMotionMaster()->Clear();
                     me->CastSpell((Unit*)NULL, SPELL_MASSIVE_CRASH, false);
-                    
-                    events.RescheduleEvent(EVENT_GAZE, 2000);
+                    events.RescheduleEvent(EVENT_GAZE, 2s);
                     break;
                 case EVENT_GAZE:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 500.0f, true) )
@@ -916,18 +914,18 @@ public:
                         me->SetFacingToObject(target);
                         Talk(EMOTE_TRAMPLE_STARE, target);
                         me->HandleEmoteCommand(EMOTE_ONESHOT_ROAR);
-                        events.RescheduleEvent(EVENT_JUMP_BACK, 2000);
+                        events.RescheduleEvent(EVENT_JUMP_BACK, 2s);
                     }
                     else // in case something went wrong
                     {
-                        events.RescheduleEvent(EVENT_SPELL_FEROCIOUS_BUTT, urand(5000, 15000));
-                        events.RescheduleEvent(EVENT_SPELL_WHIRL, urand(2000, 5000));
-                        events.RescheduleEvent(EVENT_SPELL_ARCTIC_BREATH, urand(5000, 8000));
-                        events.RescheduleEvent(EVENT_JUMP_MIDDLE, urand(30000, 50000));
+                        events.RescheduleEvent(EVENT_SPELL_FEROCIOUS_BUTT, 5s, 15s);
+                        events.RescheduleEvent(EVENT_SPELL_WHIRL, 2s, 5s);
+                        events.RescheduleEvent(EVENT_SPELL_ARCTIC_BREATH, 5s, 8s);
+                        events.RescheduleEvent(EVENT_JUMP_MIDDLE, 30s, 50s);
                         me->GetMotionMaster()->MovementExpired();
                         me->SetReactState(REACT_AGGRESSIVE);
                     }
-                    
+
                     break;
                 case EVENT_JUMP_BACK:
                     {
@@ -947,7 +945,7 @@ public:
                         me->StopMoving();
                         me->GetMotionMaster()->MoveJump(Locs[LOC_CENTER].GetPositionX() + cos(jumpangle) * 35.0f, Locs[LOC_CENTER].GetPositionY() + sin(jumpangle) * 35.0f, Locs[LOC_CENTER].GetPositionZ() + 1.0f, 40.0f, 12.0f);
 
-                        events.RescheduleEvent(EVENT_TRAMPLE, 1500);
+                        events.RescheduleEvent(EVENT_TRAMPLE, 1500ms);
 
                         if( pInstance )
                             switch( GetDifficulty() )
@@ -975,17 +973,16 @@ public:
                     me->GetMotionMaster()->Clear();
                     me->GetMotionMaster()->MoveCharge(destX, destY, destZ + 1.0f, 65.0f);
                     me->SetUInt64Value(UNIT_FIELD_TARGET, 0);
-                    events.RescheduleEvent(EVENT_CHECK_TRAMPLE_PLAYERS, 100);
-                    
+                    events.RescheduleEvent(EVENT_CHECK_TRAMPLE_PLAYERS, 100ms);
                     break;
                 case EVENT_CHECK_TRAMPLE_PLAYERS:
                     if( DoTrampleIfValid() )
                     {
                         events.Reset();
-                        events.RescheduleEvent(EVENT_SPELL_FEROCIOUS_BUTT, urand(5000, 15000));
-                        events.RescheduleEvent(EVENT_SPELL_WHIRL, urand(2000, 5000));
-                        events.RescheduleEvent(EVENT_SPELL_ARCTIC_BREATH, urand(5000, 8000));
-                        events.RescheduleEvent(EVENT_JUMP_MIDDLE, urand(30000, 50000));
+                        events.RescheduleEvent(EVENT_SPELL_FEROCIOUS_BUTT, 5s, 15s);
+                        events.RescheduleEvent(EVENT_SPELL_WHIRL, 2s, 5s);
+                        events.RescheduleEvent(EVENT_SPELL_ARCTIC_BREATH, 5s, 8s);
+                        events.RescheduleEvent(EVENT_JUMP_MIDDLE, 30s, 50s);
                         Talk(EMOTE_TRAMPLE_FAIL);
                         me->CastSpell(me, SPELL_FROTHING_RAGE, true);
                         me->GetMotionMaster()->MovementExpired();
@@ -994,7 +991,7 @@ public:
                     break;
                 case EVENT_REFRESH_POSITION:
                     //me->SetFacingTo(me->GetOrientation());
-                    
+
                     break;
             }
 

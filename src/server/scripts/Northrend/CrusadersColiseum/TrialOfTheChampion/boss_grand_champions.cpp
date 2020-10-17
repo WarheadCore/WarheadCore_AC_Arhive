@@ -246,9 +246,9 @@ public:
         void EnterCombat(Unit* /*who*/)
         {
             events.Reset();
-            events.ScheduleEvent(EVENT_MOUNT_CHARGE, urand(2500, 4000));
-            events.ScheduleEvent(EVENT_SHIELD_BREAKER, urand(5000, 8000));
-            events.ScheduleEvent(EVENT_THRUST, urand(3000, 5000));
+            events.ScheduleEvent(EVENT_MOUNT_CHARGE, 2500ms, 4s);
+            events.ScheduleEvent(EVENT_SHIELD_BREAKER, 5s, 8s);
+            events.ScheduleEvent(EVENT_THRUST, 3s, 5s);
             me->CastSpell(me, SPELL_TRAMPLE_AURA, true);
         }
 
@@ -364,9 +364,9 @@ public:
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PACIFIED);
 
             events.Reset();
-            events.ScheduleEvent(EVENT_MOUNT_CHARGE, urand(2500, 4000));
-            events.ScheduleEvent(EVENT_SHIELD_BREAKER, urand(5000, 8000));
-            events.ScheduleEvent(EVENT_THRUST, urand(3000, 5000));
+            events.ScheduleEvent(EVENT_MOUNT_CHARGE, 2500ms, 4s);
+            events.ScheduleEvent(EVENT_SHIELD_BREAKER, 5s, 8s);
+            events.ScheduleEvent(EVENT_THRUST, 3s, 5s);
 
             me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_CHARM, true);
             me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_DISORIENTED, true);
@@ -421,35 +421,35 @@ public:
             {
                 case NPC_AMBROSE: // Ambrose Boltspark
                 case NPC_ERESSEA: // Eressea Dawnsinger
-                    events.RescheduleEvent(EVEMT_MAGE_SPELL_FIREBALL, 5000);
-                    events.RescheduleEvent(EVEMT_MAGE_SPELL_BLAST_WAVE, 12000);
-                    events.RescheduleEvent(EVEMT_MAGE_SPELL_HASTE, 22000);
-                    events.RescheduleEvent(EVEMT_MAGE_SPELL_POLYMORPH, 8000);
+                    events.RescheduleEvent(EVEMT_MAGE_SPELL_FIREBALL, 5s);
+                    events.RescheduleEvent(EVEMT_MAGE_SPELL_BLAST_WAVE, 12s);
+                    events.RescheduleEvent(EVEMT_MAGE_SPELL_HASTE, 22s);
+                    events.RescheduleEvent(EVEMT_MAGE_SPELL_POLYMORPH, 8s);
                     break;
                 case NPC_COLOSOS: // Colosos
                 case NPC_RUNOK: // Runok Wildmane
-                    events.RescheduleEvent(EVENT_SHAMAN_SPELL_CHAIN_LIGHTNING, 16000);
-                    events.RescheduleEvent(EVENT_SHAMAN_SPELL_EARTH_SHIELD, urand(30000, 35000));
-                    events.RescheduleEvent(EVENT_SHAMAN_SPELL_HEALING_WAVE, 12000);
-                    events.RescheduleEvent(EVENT_SHAMAN_SPELL_HEX_OF_MENDING, urand(20000, 25000));
+                    events.RescheduleEvent(EVENT_SHAMAN_SPELL_CHAIN_LIGHTNING, 16s);
+                    events.RescheduleEvent(EVENT_SHAMAN_SPELL_EARTH_SHIELD, 30s, 35s);
+                    events.RescheduleEvent(EVENT_SHAMAN_SPELL_HEALING_WAVE, 12s);
+                    events.RescheduleEvent(EVENT_SHAMAN_SPELL_HEX_OF_MENDING, 20s, 25s);
                     break;
                 case NPC_JAELYNE: // Jaelyne Evensong
                 case NPC_ZULTORE: // Zul'tore
                     //events.RescheduleEvent(EVENT_HUNTER_SPELL_DISENGAGE, x);
-                    events.RescheduleEvent(EVENT_HUNTER_SPELL_LIGHTNING_ARROWS, 7000);
-                    events.RescheduleEvent(EVENT_HUNTER_SPELL_MULTI_SHOT, 12000);
+                    events.RescheduleEvent(EVENT_HUNTER_SPELL_LIGHTNING_ARROWS, 7s);
+                    events.RescheduleEvent(EVENT_HUNTER_SPELL_MULTI_SHOT, 12s);
                     break;
                 case NPC_LANA: // Lana Stouthammer
                 case NPC_VISCERI: // Deathstalker Visceri
-                    events.RescheduleEvent(EVENT_ROGUE_SPELL_EVISCERATE, 8000);
-                    events.RescheduleEvent(EVENT_ROGUE_SPELL_FAN_OF_KNIVES, 14000);
-                    events.RescheduleEvent(EVENT_ROGUE_SPELL_POISON_BOTTLE, 19000);
+                    events.RescheduleEvent(EVENT_ROGUE_SPELL_EVISCERATE, 8s);
+                    events.RescheduleEvent(EVENT_ROGUE_SPELL_FAN_OF_KNIVES, 14s);
+                    events.RescheduleEvent(EVENT_ROGUE_SPELL_POISON_BOTTLE, 19s);
                     break;
                 case NPC_JACOB: // Marshal Jacob Alerius
                 case NPC_MOKRA: // Mokra the Skullcrusher
-                    events.RescheduleEvent(EVENT_WARRIOR_SPELL_MORTAL_STRIKE, urand(8000, 12000));
-                    events.RescheduleEvent(EVENT_WARRIOR_SPELL_BLADESTORM, urand(15000, 20000));
-                    events.RescheduleEvent(EVENT_WARRIOR_SPELL_INTERCEPT, 7000);
+                    events.RescheduleEvent(EVENT_WARRIOR_SPELL_MORTAL_STRIKE, 8s, 12s);
+                    events.RescheduleEvent(EVENT_WARRIOR_SPELL_BLADESTORM, 15s, 20s);
+                    events.RescheduleEvent(EVENT_WARRIOR_SPELL_INTERCEPT, 7s);
                     //events.RescheduleEvent(EVENT_WARRIOR_SPELL_ROLLING_THROW, x);
                     break;
                 default:
@@ -623,9 +623,9 @@ public:
                             me->CastSpell(me, SPELL_BOSS_DEFEND_PERIODIC, true);
                             me->SetRegeneratingHealth(true);
                             events.Reset();
-                            events.ScheduleEvent(EVENT_MOUNT_CHARGE, urand(2500, 4000));
-                            events.ScheduleEvent(EVENT_SHIELD_BREAKER, urand(5000, 8000));
-                            events.ScheduleEvent(EVENT_THRUST, urand(3000, 5000));
+                            events.ScheduleEvent(EVENT_MOUNT_CHARGE, 2500ms, 4s);
+                            events.ScheduleEvent(EVENT_SHIELD_BREAKER, 5s, 8s);
+                            events.ScheduleEvent(EVENT_THRUST, 3s, 5s);
                             me->SetReactState(REACT_AGGRESSIVE);
                             me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                             if( Unit* target = me->SelectNearestTarget(200.0f) )
@@ -724,7 +724,7 @@ public:
                             me->GetMotionMaster()->MovePoint(7, *mount);
                             events.RepeatEvent(200);
                             break;
-                        }                      
+                        }
                     }
                     break;
                 case EVENT_MOUNT_CHARGE:
@@ -842,7 +842,7 @@ public:
 
                 /****************** HUNTER ******************/
                 case EVENT_HUNTER_SPELL_DISENGAGE:
-                    
+
                     break;
                 case EVENT_HUNTER_SPELL_LIGHTNING_ARROWS:
                     me->CastSpell((Unit*)NULL, SPELL_LIGHTNING_ARROWS, false);
@@ -931,7 +931,7 @@ public:
                     }
                     break;
                 case EVENT_WARRIOR_SPELL_ROLLING_THROW:
-                    
+
                     break;
                     /*************** WARRIOR END ****************/
             }
