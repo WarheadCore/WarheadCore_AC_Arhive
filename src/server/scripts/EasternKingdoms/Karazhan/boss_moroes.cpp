@@ -123,7 +123,7 @@ public:
                     me->SummonCreature(GuestEntries[i], GuestsPosition[summons.size()], TEMPSUMMON_MANUAL_DESPAWN);
 
             _events2.Reset();
-            _events2.ScheduleEvent(EVENT_GUEST_TALK, 10000);
+            _events2.ScheduleEvent(EVENT_GUEST_TALK, 10s);
         }
 
         void Reset()
@@ -137,11 +137,11 @@ public:
             BossAI::EnterCombat(who);
             Talk(SAY_AGGRO);
 
-            events.ScheduleEvent(EVENT_SPELL_VANISH, 30000);
-            events.ScheduleEvent(EVENT_SPELL_BLIND, 20000);
-            events.ScheduleEvent(EVENT_SPELL_GOUGE, 13000);
-            events.ScheduleEvent(EVENT_CHECK_HEALTH, 5000);
-            events.ScheduleEvent(EVENT_SPELL_ENRAGE, 600000);
+            events.ScheduleEvent(EVENT_SPELL_VANISH, 30s);
+            events.ScheduleEvent(EVENT_SPELL_BLIND, 20s);
+            events.ScheduleEvent(EVENT_SPELL_GOUGE, 13s);
+            events.ScheduleEvent(EVENT_CHECK_HEALTH, 5s);
+            events.ScheduleEvent(EVENT_SPELL_ENRAGE, 10min);
 
             _events2.Reset();
             me->CallForHelp(20.0f);
@@ -153,7 +153,7 @@ public:
             if (events.GetNextEventTime(EVENT_KILL_TALK) == 0)
             {
                 Talk(SAY_KILL);
-                events.ScheduleEvent(EVENT_KILL_TALK, 5000);
+                events.ScheduleEvent(EVENT_KILL_TALK, 5s);
             }
         }
 
@@ -189,11 +189,11 @@ public:
                 case EVENT_GUEST_TALK:
                     if (Creature* guest = GetRandomGuest())
                         guest->AI()->Talk(SAY_GUEST);
-                    _events2.ScheduleEvent(EVENT_GUEST_TALK2, 5000);
+                    _events2.ScheduleEvent(EVENT_GUEST_TALK2, 5s);
                     break;
                 case EVENT_GUEST_TALK2:
                     Talk(SAY_OUT_OF_COMBAT);
-                    _events2.ScheduleEvent(EVENT_GUEST_TALK, urand(60000, 120000));
+                    _events2.ScheduleEvent(EVENT_GUEST_TALK, 1min, 2min);
                     break;
             }
 
@@ -212,7 +212,7 @@ public:
                         me->CastSpell(me, SPELL_FRENZY, true);
                         break;
                     }
-                    events.ScheduleEvent(EVENT_CHECK_HEALTH, 1000);
+                    events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
                     break;
                 case EVENT_SPELL_ENRAGE:
                     me->CastSpell(me, SPELL_BERSERK, true);
@@ -220,18 +220,18 @@ public:
                 case EVENT_SPELL_BLIND:
                     if (Unit* target = SelectTarget(SELECT_TARGET_TOPAGGRO, 1, 10.0f, true))
                         me->CastSpell(target, SPELL_BLIND, false);
-                    events.ScheduleEvent(EVENT_SPELL_BLIND, urand(25000, 40000));
+                    events.ScheduleEvent(EVENT_SPELL_BLIND, 25s, 40s);
                     break;
                 case EVENT_SPELL_GOUGE:
                     me->CastSpell(me->GetVictim(), SPELL_GOUGE, false);
-                    events.ScheduleEvent(EVENT_SPELL_GOUGE, urand(25000, 40000));
+                    events.ScheduleEvent(EVENT_SPELL_GOUGE, 25s, 40s);
                     return;
                 case EVENT_SPELL_VANISH:
                     events.DelayEvents(9000);
                     events.SetPhase(1);
                     me->CastSpell(me, SPELL_VANISH, false);
-                    events.ScheduleEvent(EVENT_SPELL_VANISH, 30000);
-                    events.ScheduleEvent(EVENT_SPELL_GARROTE, urand(5000, 7000));
+                    events.ScheduleEvent(EVENT_SPELL_VANISH, 30s);
+                    events.ScheduleEvent(EVENT_SPELL_GARROTE, 5s, 7s);
                     return;
                 case EVENT_SPELL_GARROTE:
                     Talk(SAY_SPECIAL);
