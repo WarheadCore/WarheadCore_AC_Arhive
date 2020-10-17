@@ -145,14 +145,14 @@ public:
                             me->CastSpell(me, SPELL_EVOCATION, false);
 
                             events.DelayEvents(20000);
-                            events.ScheduleEvent(EVENT_SPELL_ASTRAL_FLARE, 20000);
+                            events.ScheduleEvent(EVENT_SPELL_ASTRAL_FLARE, 20s);
                         }
                         else
                         {
                             if (roll_chance_i(50))
                                 Talk(SAY_SUMMON);
 
-                            events.ScheduleEvent(EVENT_SPELL_ASTRAL_FLARE, 10000);
+                            events.ScheduleEvent(EVENT_SPELL_ASTRAL_FLARE, 10s);
                         }
 
                         break;

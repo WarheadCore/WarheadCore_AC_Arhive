@@ -82,17 +82,17 @@ public:
                 Talk(SAY_SLAY);
         }
 
-        void EnterCombat(Unit* who) override
-        {
-            BossAI::EnterCombat(who);
-            Talk(SAY_AGGRO);
-            events.ScheduleEvent(EVENT_MAGIC_REFLECTION, 30000);
-            events.ScheduleEvent(EVENT_DAMAGE_REFLECTION, 15000);
-            events.ScheduleEvent(EVENT_BLAST_WAVE, 10000);
-            events.ScheduleEvent(EVENT_TELEPORT, 20000);
-            // Call every flamewaker around him
-            me->CallForHelp(30);
-        }
+            void EnterCombat(Unit* who) override
+            {
+                BossAI::EnterCombat(who);
+                Talk(SAY_AGGRO);
+                events.ScheduleEvent(EVENT_MAGIC_REFLECTION, 30s);
+                events.ScheduleEvent(EVENT_DAMAGE_REFLECTION, 15s);
+                events.ScheduleEvent(EVENT_BLAST_WAVE, 10s);
+                events.ScheduleEvent(EVENT_TELEPORT, 20s);
+                // Call every flamewaker around him
+                me->CallForHelp(30);
+            }
 
         void UpdateAI(uint32 diff) override
         {
@@ -103,16 +103,16 @@ public:
 
                 events.Update(diff);
 
-                if (!me->FindNearestCreature(NPC_FLAMEWAKER_HEALER, 100.0f) && !me->FindNearestCreature(NPC_FLAMEWAKER_ELITE, 100.0f))
-                {
-                    me->GetMap()->UpdateEncounterState(ENCOUNTER_CREDIT_KILL_CREATURE, me->GetEntry(), me);
-                    me->setFaction(35);
-                    EnterEvadeMode();
-                    Talk(SAY_DEFEAT);
-                    _JustDied();
-                    events.ScheduleEvent(EVENT_OUTRO_1, 32000);
-                    return;
-                }
+                    if (!me->FindNearestCreature(NPC_FLAMEWAKER_HEALER, 100.0f) && !me->FindNearestCreature(NPC_FLAMEWAKER_ELITE, 100.0f))
+                    {
+                        me->GetMap()->UpdateEncounterState(ENCOUNTER_CREDIT_KILL_CREATURE, me->GetEntry(), me);
+                        me->setFaction(35);
+                        EnterEvadeMode();
+                        Talk(SAY_DEFEAT);
+                        _JustDied();
+                        events.ScheduleEvent(EVENT_OUTRO_1, 32s);
+                        return;
+                    }
 
                 if (me->HasUnitState(UNIT_STATE_CASTING))
                     return;
@@ -120,7 +120,35 @@ public:
                 if (HealthBelowPct(50))
                     DoCast(me, SPELL_AEGIS_OF_RAGNAROS, true);
 
-                while (uint32 eventId = events.ExecuteEvent())
+                    while (uint32 eventId = events.ExecuteEvent())
+                    {
+                        switch (eventId)
+                        {
+                            case EVENT_MAGIC_REFLECTION:
+                                DoCast(me, SPELL_MAGIC_REFLECTION);
+                                events.ScheduleEvent(EVENT_MAGIC_REFLECTION, 30s);
+                                break;
+                            case EVENT_DAMAGE_REFLECTION:
+                                DoCast(me, SPELL_DAMAGE_REFLECTION);
+                                events.ScheduleEvent(EVENT_DAMAGE_REFLECTION, 30s);
+                                break;
+                            case EVENT_BLAST_WAVE:
+                                DoCastVictim(SPELL_BLAST_WAVE);
+                                events.ScheduleEvent(EVENT_BLAST_WAVE, 10s);
+                                break;
+                            case EVENT_TELEPORT:
+                                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
+                                    DoCast(target, SPELL_TELEPORT);
+                                events.ScheduleEvent(EVENT_TELEPORT, 20s);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+
+                    DoMeleeAttackIfReady();
+                }
+                else
                 {
                     switch (eventId)
                     {
@@ -154,21 +182,10 @@ public:
 
                 while (uint32 eventId = events.ExecuteEvent())
                 {
-                    switch (eventId)
-                    {
-                        case EVENT_OUTRO_1:
-                            me->NearTeleportTo(RagnarosTelePos.GetPositionX(), RagnarosTelePos.GetPositionY(), RagnarosTelePos.GetPositionZ(), RagnarosTelePos.GetOrientation());
-                            me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
-                            break;
-                        case EVENT_OUTRO_2:
-                            instance->instance->SummonCreature(NPC_RAGNAROS, RagnarosSummonPos);
-                            break;
-                        case EVENT_OUTRO_3:
-                            Talk(SAY_ARRIVAL2_MAJ);
-                            break;
-                        default:
-                            break;
-                    }
+                    me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+                    Talk(SAY_SUMMON_MAJ);
+                    events.ScheduleEvent(EVENT_OUTRO_2, 8s);
+                    events.ScheduleEvent(EVENT_OUTRO_3, 24s);
                 }
             }
         }

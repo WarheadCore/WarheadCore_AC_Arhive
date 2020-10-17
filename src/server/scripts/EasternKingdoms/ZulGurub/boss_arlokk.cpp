@@ -216,7 +216,7 @@ public:
                                 DoCast(target, SPELL_MARK_OF_ARLOKK, true);
                                 Talk(SAY_FEAST_PROWLER, target);
                             }
-                            events.ScheduleEvent(EVENT_MARK_OF_ARLOKK, urand(120000, 130000));
+                            events.ScheduleEvent(EVENT_MARK_OF_ARLOKK, 2min, 130s);
                             break;
                         }
                     case EVENT_TRANSFORM:
@@ -236,7 +236,7 @@ public:
                             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
                             DoCast(me, SPELL_VANISH_VISUAL);
                             DoCast(me, SPELL_VANISH);
-                            events.ScheduleEvent(EVENT_VANISH, 1000, 0, PHASE_ONE);
+                            events.ScheduleEvent(EVENT_VANISH, 1s, 0, PHASE_ONE);
                             break;
                         }
                     case EVENT_VANISH:
@@ -279,9 +279,9 @@ public:
                             me->UpdateDamagePhysical(BASE_ATTACK);
                             */
                             me->HandleStatModifier(UNIT_MOD_DAMAGE_MAINHAND, TOTAL_PCT, 35.0f, false); // hack
-                            events.ScheduleEvent(EVENT_SHADOW_WORD_PAIN, urand(4000, 7000), 0, PHASE_ONE);
-                            events.ScheduleEvent(EVENT_GOUGE, urand(12000, 15000), 0, PHASE_ONE);
-                            events.ScheduleEvent(EVENT_TRANSFORM, urand(16000, 20000), 0, PHASE_ONE);
+                            events.ScheduleEvent(EVENT_SHADOW_WORD_PAIN, 4s, 7s, 0, PHASE_ONE);
+                            events.ScheduleEvent(EVENT_GOUGE, 12s, 15s, 0, PHASE_ONE);
+                            events.ScheduleEvent(EVENT_TRANSFORM, 15s, 20s, 0, PHASE_ONE);
                             events.SetPhase(PHASE_ONE);
                             break;
                         }

@@ -107,7 +107,7 @@ public:
 
                 uint32 timer = events.GetNextEventTime(EVENT_SPELL_SHADOW_NOVA);
                 events.CancelEvent(EVENT_SPELL_SHADOW_NOVA);
-                events.ScheduleEvent(EVENT_SPELL_CONFLAGRATION, timer - events.GetTimer());
+                events.ScheduleEvent(EVENT_SPELL_CONFLAGRATION, Milliseconds(timer - events.GetTimer()));
             }
         }
 
@@ -130,11 +130,11 @@ public:
                 if (alythess->IsAlive() && !alythess->IsInCombat())
                     alythess->AI()->AttackStart(who);
 
-            events.ScheduleEvent(EVENT_SPELL_SHADOW_BLADES, 10000);
-            events.ScheduleEvent(EVENT_SPELL_SHADOW_NOVA, 36000);
-            events.ScheduleEvent(EVENT_SPELL_CONFOUNDING_BLOW, 25000);
-            events.ScheduleEvent(EVENT_SHADOW_IMAGE, 20000);
-            events.ScheduleEvent(EVENT_SPELL_ENRAGE, 360000);
+            events.ScheduleEvent(EVENT_SPELL_SHADOW_BLADES, 10s);
+            events.ScheduleEvent(EVENT_SPELL_SHADOW_NOVA, 36s);
+            events.ScheduleEvent(EVENT_SPELL_CONFOUNDING_BLOW, 25s);
+            events.ScheduleEvent(EVENT_SHADOW_IMAGE, 20s);
+            events.ScheduleEvent(EVENT_SPELL_ENRAGE, 6min);
         }
 
         void KilledUnit(Unit* victim)
@@ -184,36 +184,36 @@ public:
                     break;
                 case EVENT_SPELL_CONFOUNDING_BLOW:
                     me->CastSpell(me->GetVictim(), SPELL_CONFOUNDING_BLOW, false);
-                    events.ScheduleEvent(EVENT_SPELL_CONFOUNDING_BLOW, urand(20000, 25000));
+                    events.ScheduleEvent(EVENT_SPELL_CONFOUNDING_BLOW, 20s, 25s);
                     break;
                 case EVENT_SPELL_SHADOW_BLADES:
                     me->CastSpell(me, SPELL_SHADOW_BLADES, false);
-                    events.ScheduleEvent(EVENT_SPELL_SHADOW_BLADES, 10000);
+                    events.ScheduleEvent(EVENT_SPELL_SHADOW_BLADES, 10s);
                     break;
                 case EVENT_SPELL_SHADOW_NOVA:
-                    {
-                        Unit* target = SelectTarget(SELECT_TARGET_TOPAGGRO, 1, 100.0f);
-                        if (!target)
-                            target = me->GetVictim();
-                        Talk(EMOTE_SHADOW_NOVA, target);
-                        Talk(YELL_SHADOW_NOVA);
-                        me->CastSpell(target, SPELL_SHADOW_NOVA, false);
-                        events.ScheduleEvent(EVENT_SPELL_SHADOW_NOVA, urand(30000, 35000));
-                        break;
-                    }
+                {
+                    Unit* target = SelectTarget(SELECT_TARGET_TOPAGGRO, 1, 100.0f);
+                    if (!target)
+                        target = me->GetVictim();
+                    Talk(EMOTE_SHADOW_NOVA, target);
+                    Talk(YELL_SHADOW_NOVA);
+                    me->CastSpell(target, SPELL_SHADOW_NOVA, false);
+                    events.ScheduleEvent(EVENT_SPELL_SHADOW_NOVA, 30s, 35s);
+                    break;
+                }
                 case EVENT_SHADOW_IMAGE:
                     me->SummonCreature(NPC_SHADOW_IMAGE, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 12000);
-                    events.ScheduleEvent(EVENT_SHADOW_IMAGE, 6000);
+                    events.ScheduleEvent(EVENT_SHADOW_IMAGE, 6s);
                     break;
                 case EVENT_SPELL_CONFLAGRATION:
-                    {
-                        Unit* target = SelectTarget(SELECT_TARGET_TOPAGGRO, 1, 100.0f);
-                        if (!target)
-                            target = me->GetVictim();
-                        me->CastSpell(target, SPELL_CONFLAGRATION, false);
-                        events.ScheduleEvent(EVENT_SPELL_CONFLAGRATION, urand(30000, 35000));
-                        break;
-                    }
+                {
+                    Unit* target = SelectTarget(SELECT_TARGET_TOPAGGRO, 1, 100.0f);
+                    if (!target)
+                        target = me->GetVictim();
+                    me->CastSpell(target, SPELL_CONFLAGRATION, false);
+                    events.ScheduleEvent(EVENT_SPELL_CONFLAGRATION, 30s, 35s);
+                    break;
+                }   
             }
 
             DoMeleeAttackIfReady();
@@ -255,7 +255,7 @@ public:
 
                 uint32 timer = events.GetNextEventTime(EVENT_SPELL_CONFLAGRATION);
                 events.CancelEvent(EVENT_SPELL_CONFLAGRATION);
-                events.ScheduleEvent(EVENT_SPELL_SHADOW_NOVA, timer - events.GetTimer());
+                events.ScheduleEvent(EVENT_SPELL_SHADOW_NOVA, Milliseconds(timer - events.GetTimer()));
             }
         }
 
@@ -278,11 +278,11 @@ public:
                 if (scorlash->IsAlive() && !scorlash->IsInCombat())
                     scorlash->AI()->AttackStart(who);
 
-            events.ScheduleEvent(EVENT_SPELL_BLAZE, 100);
-            events.ScheduleEvent(EVENT_SPELL_PYROGENICS, 15000);
-            events.ScheduleEvent(EVENT_SPELL_FLAME_SEAR, 20000);
-            events.ScheduleEvent(EVENT_SPELL_CONFLAGRATION, 30000);
-            events.ScheduleEvent(EVENT_SPELL_ENRAGE, 360000);
+            events.ScheduleEvent(EVENT_SPELL_BLAZE, 100ms);
+            events.ScheduleEvent(EVENT_SPELL_PYROGENICS, 15s);
+            events.ScheduleEvent(EVENT_SPELL_FLAME_SEAR, 20s);
+            events.ScheduleEvent(EVENT_SPELL_CONFLAGRATION, 30s);
+            events.ScheduleEvent(EVENT_SPELL_ENRAGE, 6min);
         }
 
         void KilledUnit(Unit* victim)
@@ -322,36 +322,36 @@ public:
                     break;
                 case EVENT_SPELL_PYROGENICS:
                     me->CastSpell(me, SPELL_PYROGENICS, false);
-                    events.ScheduleEvent(EVENT_SPELL_PYROGENICS, 15000);
+                    events.ScheduleEvent(EVENT_SPELL_PYROGENICS, 15s);
                     break;
                 case EVENT_SPELL_FLAME_SEAR:
                     me->CastCustomSpell(SPELL_FLAME_SEAR, SPELLVALUE_MAX_TARGETS, 5, me, TRIGGERED_NONE);
-                    events.ScheduleEvent(EVENT_SPELL_FLAME_SEAR, 15000);
+                    events.ScheduleEvent(EVENT_SPELL_FLAME_SEAR, 15s);
                     break;
                 case EVENT_SPELL_BLAZE:
                     me->CastSpell(me->GetVictim(), SPELL_BLAZE, false);
-                    events.ScheduleEvent(EVENT_SPELL_BLAZE, 3800);
+                    events.ScheduleEvent(EVENT_SPELL_BLAZE, 3800ms);
                     break;
                 case EVENT_SPELL_SHADOW_NOVA:
-                    {
-                        Unit* target = SelectTarget(SELECT_TARGET_TOPAGGRO, 1, 100.0f);
-                        if (!target)
-                            target = me->GetVictim();
-                        me->CastSpell(target, SPELL_SHADOW_NOVA, false);
-                        events.ScheduleEvent(EVENT_SPELL_SHADOW_NOVA, urand(30000, 35000));
-                        break;
-                    }
+                {
+                    Unit* target = SelectTarget(SELECT_TARGET_TOPAGGRO, 1, 100.0f);
+                    if (!target)
+                        target = me->GetVictim();
+                    me->CastSpell(target, SPELL_SHADOW_NOVA, false);
+                    events.ScheduleEvent(EVENT_SPELL_SHADOW_NOVA, 30s, 35s);
+                    break;
+                }
                 case EVENT_SPELL_CONFLAGRATION:
-                    {
-                        Unit* target = SelectTarget(SELECT_TARGET_TOPAGGRO, 1, 100.0f);
-                        if (!target)
-                            target = me->GetVictim();
-                        Talk(EMOTE_CONFLAGRATION, target);
-                        Talk(YELL_CANFLAGRATION);
-                        me->CastSpell(target, SPELL_CONFLAGRATION, false);
-                        events.ScheduleEvent(EVENT_SPELL_CONFLAGRATION, urand(30000, 35000));
-                        break;
-                    }
+                {
+                    Unit* target = SelectTarget(SELECT_TARGET_TOPAGGRO, 1, 100.0f);
+                    if (!target)
+                        target = me->GetVictim();
+                    Talk(EMOTE_CONFLAGRATION, target);
+                    Talk(YELL_CANFLAGRATION);
+                    me->CastSpell(target, SPELL_CONFLAGRATION, false);
+                    events.ScheduleEvent(EVENT_SPELL_CONFLAGRATION, 30s, 35s);
+                    break;
+                }   
             }
 
             DoMeleeAttackIfReady();

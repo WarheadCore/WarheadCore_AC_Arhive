@@ -98,7 +98,7 @@ public:
         {
             summons.Despawn(summon);
             if (events.GetPhaseMask() & 0x01)
-                events.ScheduleEvent(EVENT_RESTORE_COMBAT, 0);
+                events.ScheduleEvent(EVENT_RESTORE_COMBAT, 0s);
         }
 
         void Reset()
@@ -116,12 +116,12 @@ public:
             Talk(SAY_AGGRO);
             instance->SetData(DATA_SELIN_EVENT, IN_PROGRESS);
 
-            events.ScheduleEvent(EVENT_SPELL_DRAIN_LIFE, 2500, 1);
-            events.ScheduleEvent(EVENT_SPELL_FEL_EXPLOSION, 2000);
-            events.ScheduleEvent(EVENT_DRAIN_CRYSTAL, 14000);
-
+            events.ScheduleEvent(EVENT_SPELL_DRAIN_LIFE, 2500ms, 1);
+            events.ScheduleEvent(EVENT_SPELL_FEL_EXPLOSION, 2s);
+            events.ScheduleEvent(EVENT_DRAIN_CRYSTAL, 14s);
+            
             if (IsHeroic())
-                events.ScheduleEvent(EVENT_SPELL_DRAIN_MANA, 7500, 1);
+                events.ScheduleEvent(EVENT_SPELL_DRAIN_MANA, 7500ms, 1);
         }
 
         void KilledUnit(Unit* victim)
@@ -171,10 +171,10 @@ public:
                     crystal->CastSpell(me, SPELL_MANA_RAGE, true);
                     me->CastSpell(crystal, SPELL_FEL_CRYSTAL_COSMETIC, true);
                     events.SetPhase(1);
-                    events.ScheduleEvent(EVENT_EMPOWER, 0, 0, 1);
+                    events.ScheduleEvent(EVENT_EMPOWER, 0s, 0, 1);
                 }
                 else
-                    events.ScheduleEvent(EVENT_RESTORE_COMBAT, 0);
+                    events.ScheduleEvent(EVENT_RESTORE_COMBAT, 0s);
             }
         }
 
@@ -192,22 +192,22 @@ public:
                 case EVENT_SPELL_DRAIN_LIFE:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         me->CastSpell(target, DUNGEON_MODE(SPELL_DRAIN_LIFE_N, SPELL_DRAIN_LIFE_H), false);
-                    events.ScheduleEvent(EVENT_SPELL_DRAIN_LIFE, 10000, 1);
+                    events.ScheduleEvent(EVENT_SPELL_DRAIN_LIFE, 10s, 1);
                     return;
                 case EVENT_SPELL_DRAIN_MANA:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, PowerUsersSelector(me, POWER_MANA, 40.0f, false)))
                         me->CastSpell(target, SPELL_DRAIN_MANA, false);
-                    events.ScheduleEvent(EVENT_SPELL_DRAIN_MANA, 10000, 1);
+                    events.ScheduleEvent(EVENT_SPELL_DRAIN_MANA, 10s, 1);
                     return;
                 case EVENT_SPELL_FEL_EXPLOSION:
                     me->RemoveAuraFromStack(SPELL_MANA_RAGE_TRIGGER);
                     me->CastSpell(me, SPELL_FEL_EXPLOSION, false);
-                    events.ScheduleEvent(EVENT_SPELL_FEL_EXPLOSION, 2000);
+                    events.ScheduleEvent(EVENT_SPELL_FEL_EXPLOSION, 2s);
                     break;
                 case EVENT_DRAIN_CRYSTAL:
                     events.DelayEvents(10001);
-                    events.ScheduleEvent(EVENT_EMPOWER, 10000);
-                    events.ScheduleEvent(EVENT_DRAIN_CRYSTAL, 30000);
+                    events.ScheduleEvent(EVENT_EMPOWER, 10s);
+                    events.ScheduleEvent(EVENT_DRAIN_CRYSTAL, 30s);
                     SelectNearestCrystal();
                     break;
                 case EVENT_EMPOWER:
@@ -217,10 +217,10 @@ public:
                         if (Unit* crystal = ObjectAccessor::GetUnit(*me, CrystalGUID))
                             Unit::Kill(crystal, crystal);
                         events.DelayEvents(10000, 1);
-                        events.ScheduleEvent(EVENT_RESTORE_COMBAT, 0);
+                        events.ScheduleEvent(EVENT_RESTORE_COMBAT, 0s);
                     }
                     else
-                        events.ScheduleEvent(EVENT_EMPOWER, 0, 0, 1);
+                        events.ScheduleEvent(EVENT_EMPOWER, 0s, 0, 1);
                     break;
                 case EVENT_RESTORE_COMBAT:
                     events.SetPhase(0);

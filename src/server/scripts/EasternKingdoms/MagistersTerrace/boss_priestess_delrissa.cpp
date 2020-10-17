@@ -153,14 +153,14 @@ public:
             summons.DoZoneInCombat();
             instance->SetData(DATA_DELRISSA_EVENT, IN_PROGRESS);
 
-            events.ScheduleEvent(EVENT_SPELL_FLASH_HEAL, 15000);
-            events.ScheduleEvent(EVENT_SPELL_RENEW, 10000);
-            events.ScheduleEvent(EVENT_SPELL_PW_SHIELD, 2000);
-            events.ScheduleEvent(EVENT_SPELL_SW_PAIN, 5000);
-            events.ScheduleEvent(EVENT_SPELL_DISPEL, 7500);
-            events.ScheduleEvent(EVENT_CHECK_DIST, 5000);
+            events.ScheduleEvent(EVENT_SPELL_FLASH_HEAL, 15s);
+            events.ScheduleEvent(EVENT_SPELL_RENEW, 10s);
+            events.ScheduleEvent(EVENT_SPELL_PW_SHIELD, 2s);
+            events.ScheduleEvent(EVENT_SPELL_SW_PAIN, 5s);
+            events.ScheduleEvent(EVENT_SPELL_DISPEL, 7500ms);
+            events.ScheduleEvent(EVENT_CHECK_DIST, 5s);
             if (IsHeroic())
-                events.ScheduleEvent(EVENT_SPELL_IMMUNITY, 4000);
+                events.ScheduleEvent(EVENT_SPELL_IMMUNITY, 4s);
         }
 
         void KilledUnit(Unit* victim)
@@ -197,17 +197,17 @@ public:
                         EnterEvadeMode();
                         return;
                     }
-                    events.ScheduleEvent(EVENT_CHECK_DIST, 5000);
+                    events.ScheduleEvent(EVENT_CHECK_DIST, 5s);
                     break;
                 case EVENT_SPELL_FLASH_HEAL:
                     if (Unit* target = DoSelectLowestHpFriendly(40.0f, 1000))
                         me->CastSpell(target, SPELL_FLASH_HEAL, false);
-                    events.ScheduleEvent(EVENT_SPELL_FLASH_HEAL, 15000);
+                    events.ScheduleEvent(EVENT_SPELL_FLASH_HEAL, 15s);
                     break;
                 case EVENT_SPELL_RENEW:
                     if (Unit* target = DoSelectLowestHpFriendly(40.0f, 1000))
                         me->CastSpell(target, DUNGEON_MODE(SPELL_RENEW_N, SPELL_RENEW_H), false);
-                    events.ScheduleEvent(EVENT_SPELL_RENEW, 7000);
+                    events.ScheduleEvent(EVENT_SPELL_RENEW, 7s);
                     break;
                 case EVENT_SPELL_PW_SHIELD:
                     {
@@ -242,15 +242,15 @@ public:
                     if (me->HasUnitState(UNIT_STATE_LOST_CONTROL))
                     {
                         me->CastSpell(me, SPELL_MEDALION_OF_IMMUNITY, false);
-                        events.ScheduleEvent(EVENT_SPELL_IMMUNITY, 60000);
+                        events.ScheduleEvent(EVENT_SPELL_IMMUNITY, 1min);
                     }
                     else
-                        events.ScheduleEvent(EVENT_SPELL_IMMUNITY, 1000);
+                        events.ScheduleEvent(EVENT_SPELL_IMMUNITY, 1s);
                     break;
                 case EVENT_SPELL_SW_PAIN:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 30.0f))
                         me->CastSpell(target, DUNGEON_MODE(SPELL_SHADOW_WORD_PAIN_N, SPELL_SHADOW_WORD_PAIN_H), false);
-                    events.ScheduleEvent(EVENT_SPELL_SW_PAIN, 10000);
+                    events.ScheduleEvent(EVENT_SPELL_SW_PAIN, 10s);
                     break;
             }
 
@@ -342,10 +342,10 @@ struct boss_priestess_lackey_commonAI : public ScriptedAI
             if (delrissa->IsAlive() && !delrissa->IsInCombat())
                 delrissa->AI()->AttackStart(who);
 
-        events.ScheduleEvent(EVENT_SPELL_HELPER_HEALING_POTION, 1000);
-        events.ScheduleEvent(EVENT_HELPER_RESET_THREAT, urand(8000, 10000));
+        events.ScheduleEvent(EVENT_SPELL_HELPER_HEALING_POTION, 1s);
+        events.ScheduleEvent(EVENT_HELPER_RESET_THREAT, 8s, 10s);
         if (IsHeroic())
-            events.ScheduleEvent(EVENT_SPELL_HELPER_IMMUNITY, 2000, 1);
+            events.ScheduleEvent(EVENT_SPELL_HELPER_IMMUNITY, 2s, 1);
 
         RecalculateThreat();
     }
@@ -381,10 +381,10 @@ struct boss_priestess_lackey_commonAI : public ScriptedAI
                 if (me->HasUnitState(UNIT_STATE_LOST_CONTROL))
                 {
                     me->CastSpell(me, SPELL_MEDALION_OF_IMMUNITY, false);
-                    events.ScheduleEvent(EVENT_SPELL_HELPER_IMMUNITY, 60000);
+                    events.ScheduleEvent(EVENT_SPELL_HELPER_IMMUNITY, 1min);
                 }
                 else
-                    events.ScheduleEvent(EVENT_SPELL_HELPER_IMMUNITY, 1000);
+                    events.ScheduleEvent(EVENT_SPELL_HELPER_IMMUNITY, 1s);
                 break;
             case EVENT_SPELL_HELPER_HEALING_POTION:
                 if (me->HealthBelowPct(25))
@@ -392,11 +392,11 @@ struct boss_priestess_lackey_commonAI : public ScriptedAI
                     me->CastSpell(me, SPELL_HEALING_POTION, false);
                     break;
                 }
-                events.ScheduleEvent(EVENT_SPELL_HELPER_HEALING_POTION, 1000);
+                events.ScheduleEvent(EVENT_SPELL_HELPER_HEALING_POTION, 1s);
                 break;
             case EVENT_HELPER_RESET_THREAT:
                 RecalculateThreat();
-                events.ScheduleEvent(EVENT_HELPER_RESET_THREAT, urand(8000, 10000));
+                events.ScheduleEvent(EVENT_HELPER_RESET_THREAT, 8s, 10s);
                 break;
 
         }
@@ -439,11 +439,11 @@ public:
         {
             boss_priestess_lackey_commonAI::EnterCombat(who);
 
-            events.ScheduleEvent(EVENT_SPELL_GOUGE, 5500);
-            events.ScheduleEvent(EVENT_SPELL_KICK, 9000);
-            events.ScheduleEvent(EVENT_SPELL_VANISH, 200);
-            events.ScheduleEvent(EVENT_SPELL_EVISCERATE, 6000);
-            events.ScheduleEvent(EVENT_SPELL_BACKSTAB, 4000);
+            events.ScheduleEvent(EVENT_SPELL_GOUGE, 5500ms);
+            events.ScheduleEvent(EVENT_SPELL_KICK, 9s);
+            events.ScheduleEvent(EVENT_SPELL_VANISH, 200ms);
+            events.ScheduleEvent(EVENT_SPELL_EVISCERATE, 6s);
+            events.ScheduleEvent(EVENT_SPELL_BACKSTAB, 4s);
         }
 
         void MovementInform(uint32 type, uint32  /*point*/)
@@ -467,33 +467,33 @@ public:
                     if (Unit* unit = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         me->AddThreat(unit, 1000.0f);
 
-                    events.ScheduleEvent(EVENT_SPELL_VANISH, 30000);
+                    events.ScheduleEvent(EVENT_SPELL_VANISH, 30s);
                     break;
                 case EVENT_SPELL_GOUGE:
                     me->CastSpell(me->GetVictim(), SPELL_GOUGE, false);
-                    events.ScheduleEvent(EVENT_SPELL_GOUGE, 15000);
+                    events.ScheduleEvent(EVENT_SPELL_GOUGE, 15s);
                     break;
                 case EVENT_SPELL_KICK:
                     if (me->GetVictim()->HasUnitState(UNIT_STATE_CASTING))
                     {
                         me->CastSpell(me->GetVictim(), SPELL_KICK, false);
-                        events.ScheduleEvent(EVENT_SPELL_KICK, 15000);
+                        events.ScheduleEvent(EVENT_SPELL_KICK, 15s);
                     }
                     else
-                        events.ScheduleEvent(EVENT_SPELL_KICK, 1000);
+                        events.ScheduleEvent(EVENT_SPELL_KICK, 1s);
                     break;
                 case EVENT_SPELL_EVISCERATE:
                     me->CastSpell(me->GetVictim(), DUNGEON_MODE(SPELL_EVISCERATE_N, SPELL_EVISCERATE_H), false);
-                    events.ScheduleEvent(EVENT_SPELL_EVISCERATE, 10000);
+                    events.ScheduleEvent(EVENT_SPELL_EVISCERATE, 10s);
                     break;
                 case EVENT_SPELL_BACKSTAB:
                     if (!me->GetVictim()->HasInArc(static_cast<float>(M_PI), me))
                     {
                         me->CastSpell(me->GetVictim(), DUNGEON_MODE(SPELL_BACKSTAB_N, SPELL_BACKSTAB_H), false);
-                        events.ScheduleEvent(EVENT_SPELL_BACKSTAB, 5000);
+                        events.ScheduleEvent(EVENT_SPELL_BACKSTAB, 5s);
                     }
                     else
-                        events.ScheduleEvent(EVENT_SPELL_BACKSTAB, 1000);
+                        events.ScheduleEvent(EVENT_SPELL_BACKSTAB, 1s);
                     break;
             }
 
@@ -541,11 +541,11 @@ public:
             me->CastSpell(me, SPELL_SUMMON_IMP, false);
             boss_priestess_lackey_commonAI::EnterCombat(who);
 
-            events.ScheduleEvent(EVENT_SPELL_IMMOLATE, 3000);
-            events.ScheduleEvent(EVENT_SPELL_SHADOW_BOLT, 1000);
-            events.ScheduleEvent(EVENT_SPELL_SEED_OF_CORRUPTION, 10000);
-            events.ScheduleEvent(EVENT_SPELL_CURSE_OF_AGONY, 6000);
-            events.ScheduleEvent(EVENT_SPELL_FEAR, 15000);
+            events.ScheduleEvent(EVENT_SPELL_IMMOLATE, 3s);
+            events.ScheduleEvent(EVENT_SPELL_SHADOW_BOLT, 1s);
+            events.ScheduleEvent(EVENT_SPELL_SEED_OF_CORRUPTION, 10s);
+            events.ScheduleEvent(EVENT_SPELL_CURSE_OF_AGONY, 6s);
+            events.ScheduleEvent(EVENT_SPELL_FEAR, 15s);
         }
 
         void UpdateAI(uint32 diff)
@@ -560,26 +560,26 @@ public:
                 case EVENT_SPELL_IMMOLATE:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 30.0f))
                         me->CastSpell(target, DUNGEON_MODE(SPELL_IMMOLATE_N, SPELL_IMMOLATE_H), false);
-                    events.ScheduleEvent(EVENT_SPELL_IMMOLATE, 12000);
+                    events.ScheduleEvent(EVENT_SPELL_IMMOLATE, 12s);
                     break;
                 case EVENT_SPELL_SHADOW_BOLT:
                     me->CastSpell(me->GetVictim(), DUNGEON_MODE(SPELL_SHADOW_BOLT_N, SPELL_SHADOW_BOLT_H), false);
-                    events.ScheduleEvent(EVENT_SPELL_SHADOW_BOLT, 5000);
+                    events.ScheduleEvent(EVENT_SPELL_SHADOW_BOLT, 5s);
                     break;
                 case EVENT_SPELL_SEED_OF_CORRUPTION:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 30.0f))
                         me->CastSpell(target, SPELL_SEED_OF_CORRUPTION, false);
-                    events.ScheduleEvent(EVENT_SPELL_SEED_OF_CORRUPTION, 18000);
+                    events.ScheduleEvent(EVENT_SPELL_SEED_OF_CORRUPTION, 18s);
                     break;
                 case EVENT_SPELL_CURSE_OF_AGONY:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 30.0f))
                         me->CastSpell(target, DUNGEON_MODE(SPELL_CURSE_OF_AGONY_N, SPELL_CURSE_OF_AGONY_H), false);
-                    events.ScheduleEvent(EVENT_SPELL_CURSE_OF_AGONY, 13000);
+                    events.ScheduleEvent(EVENT_SPELL_CURSE_OF_AGONY, 13s);
                     break;
                 case EVENT_SPELL_FEAR:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 20.0f))
                         me->CastSpell(target, SPELL_FEAR, false);
-                    events.ScheduleEvent(EVENT_SPELL_FEAR, 15000);
+                    events.ScheduleEvent(EVENT_SPELL_FEAR, 15s);
                     break;
             }
 
@@ -618,9 +618,9 @@ public:
         {
             boss_priestess_lackey_commonAI::EnterCombat(who);
 
-            events.ScheduleEvent(EVENT_SPELL_KNOCKDOWN, 6000);
-            events.ScheduleEvent(EVENT_SPELL_SNAP_KICK, 3000);
-            events.ScheduleEvent(EVENT_SPELL_FISTS, 0);
+            events.ScheduleEvent(EVENT_SPELL_KNOCKDOWN, 6s);
+            events.ScheduleEvent(EVENT_SPELL_SNAP_KICK, 3s);
+            events.ScheduleEvent(EVENT_SPELL_FISTS, 0s);
         }
 
         void UpdateAI(uint32 diff)
@@ -634,15 +634,15 @@ public:
             {
                 case EVENT_SPELL_KNOCKDOWN:
                     me->CastSpell(me->GetVictim(), DUNGEON_MODE(SPELL_KNOCKDOWN_N, SPELL_KNOCKDOWN_H), false);
-                    events.ScheduleEvent(EVENT_SPELL_KNOCKDOWN, 10000);
+                    events.ScheduleEvent(EVENT_SPELL_KNOCKDOWN, 10s);
                     break;
                 case EVENT_SPELL_SNAP_KICK:
                     me->CastSpell(me->GetVictim(), SPELL_SNAP_KICK, false);
-                    events.ScheduleEvent(EVENT_SPELL_SNAP_KICK, 10000);
+                    events.ScheduleEvent(EVENT_SPELL_SNAP_KICK, 10s);
                     break;
                 case EVENT_SPELL_FISTS:
                     me->CastSpell(me->GetVictim(), SPELL_FISTS_OF_ARCANE, false);
-                    events.ScheduleEvent(EVENT_SPELL_FISTS, 10000);
+                    events.ScheduleEvent(EVENT_SPELL_FISTS, 10s);
                     break;
             }
 
@@ -692,13 +692,13 @@ public:
         {
             boss_priestess_lackey_commonAI::EnterCombat(who);
 
-            events.ScheduleEvent(EVENT_SPELL_POLYMORPH, 1000);
-            events.ScheduleEvent(EVENT_SPELL_ICE_BLOCK, 1000);
-            events.ScheduleEvent(EVENT_SPELL_BLIZZARD, 8000);
-            events.ScheduleEvent(EVENT_SPELL_ICE_LANCE, 12000);
-            events.ScheduleEvent(EVENT_SPELL_COC, 10000);
-            events.ScheduleEvent(EVENT_SPELL_FROSTBOLT, 3000);
-            events.ScheduleEvent(EVENT_SPELL_BLINK, 5000);
+            events.ScheduleEvent(EVENT_SPELL_POLYMORPH, 1s);
+            events.ScheduleEvent(EVENT_SPELL_ICE_BLOCK, 1s);
+            events.ScheduleEvent(EVENT_SPELL_BLIZZARD, 8s);
+            events.ScheduleEvent(EVENT_SPELL_ICE_LANCE, 12s);
+            events.ScheduleEvent(EVENT_SPELL_COC, 10s);
+            events.ScheduleEvent(EVENT_SPELL_FROSTBOLT, 3s);
+            events.ScheduleEvent(EVENT_SPELL_BLINK, 5s);
         }
 
         void UpdateAI(uint32 diff)
@@ -713,7 +713,7 @@ public:
                 case EVENT_SPELL_POLYMORPH:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         me->CastSpell(target, SPELL_POLYMORPH, false);
-                    events.ScheduleEvent(EVENT_SPELL_POLYMORPH, 20000);
+                    events.ScheduleEvent(EVENT_SPELL_POLYMORPH, 20s);
                     break;
                 case EVENT_SPELL_ICE_BLOCK:
                     if (HealthBelowPct(35))
@@ -721,24 +721,24 @@ public:
                         me->CastSpell(me, SPELL_ICE_BLOCK, false);
                         return;
                     }
-                    events.ScheduleEvent(EVENT_SPELL_ICE_BLOCK, 1000);
+                    events.ScheduleEvent(EVENT_SPELL_ICE_BLOCK, 1s);
                     break;
                 case EVENT_SPELL_BLIZZARD:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         me->CastSpell(target, DUNGEON_MODE(SPELL_BLIZZARD_N, SPELL_BLIZZARD_H), false);
-                    events.ScheduleEvent(EVENT_SPELL_BLIZZARD, 20000);
+                    events.ScheduleEvent(EVENT_SPELL_BLIZZARD, 20s);
                     break;
                 case EVENT_SPELL_ICE_LANCE:
                     me->CastSpell(me->GetVictim(), DUNGEON_MODE(SPELL_ICE_LANCE_N, SPELL_ICE_LANCE_H), false);
-                    events.ScheduleEvent(EVENT_SPELL_ICE_LANCE, 12000);
+                    events.ScheduleEvent(EVENT_SPELL_ICE_LANCE, 12s);
                     break;
                 case EVENT_SPELL_COC:
                     me->CastSpell(me->GetVictim(), DUNGEON_MODE(SPELL_CONE_OF_COLD_N, SPELL_CONE_OF_COLD_H), false);
-                    events.ScheduleEvent(EVENT_SPELL_COC, 10000);
+                    events.ScheduleEvent(EVENT_SPELL_COC, 10s);
                     break;
                 case EVENT_SPELL_FROSTBOLT:
                     me->CastSpell(me->GetVictim(), DUNGEON_MODE(SPELL_FROSTBOLT_N, SPELL_FROSTBOLT_H), false);
-                    events.ScheduleEvent(EVENT_SPELL_FROSTBOLT, 8000);
+                    events.ScheduleEvent(EVENT_SPELL_FROSTBOLT, 8s);
                     break;
                 case EVENT_SPELL_BLINK:
                     {
@@ -801,12 +801,12 @@ public:
             boss_priestess_lackey_commonAI::EnterCombat(who);
             me->CastSpell(me, SPELL_BATTLE_SHOUT, false);
 
-            events.ScheduleEvent(EVENT_SPELL_DISARM, 6000);
-            events.ScheduleEvent(EVENT_SPELL_PIERCING_HOWL, 10000);
-            events.ScheduleEvent(EVENT_SPELL_SHOUT, 18000);
-            events.ScheduleEvent(EVENT_SPELL_HAMSTRING, 4000);
-            events.ScheduleEvent(EVENT_SPELL_MORTAL_STRIKE, 8000);
-            events.ScheduleEvent(EVENT_SPELL_INTERCEPT, 1000);
+            events.ScheduleEvent(EVENT_SPELL_DISARM, 6s);
+            events.ScheduleEvent(EVENT_SPELL_PIERCING_HOWL, 10s);
+            events.ScheduleEvent(EVENT_SPELL_SHOUT, 18s);
+            events.ScheduleEvent(EVENT_SPELL_HAMSTRING, 4s);
+            events.ScheduleEvent(EVENT_SPELL_MORTAL_STRIKE, 8s);
+            events.ScheduleEvent(EVENT_SPELL_INTERCEPT, 1s);
         }
 
         void UpdateAI(uint32 diff)
@@ -820,27 +820,27 @@ public:
             {
                 case EVENT_SPELL_INTERCEPT:
                     me->CastSpell(me->GetVictim(), SPELL_INTERCEPT, false);
-                    events.ScheduleEvent(EVENT_SPELL_INTERCEPT, 10000);
+                    events.ScheduleEvent(EVENT_SPELL_INTERCEPT, 10s);
                     break;
                 case EVENT_SPELL_DISARM:
                     me->CastSpell(me->GetVictim(), SPELL_DISARM, false);
-                    events.ScheduleEvent(EVENT_SPELL_DISARM, 16000);
+                    events.ScheduleEvent(EVENT_SPELL_DISARM, 16s);
                     break;
                 case EVENT_SPELL_HAMSTRING:
                     me->CastSpell(me->GetVictim(), SPELL_HAMSTRING, false);
-                    events.ScheduleEvent(EVENT_SPELL_HAMSTRING, 15000);
+                    events.ScheduleEvent(EVENT_SPELL_HAMSTRING, 15s);
                     break;
                 case EVENT_SPELL_MORTAL_STRIKE:
                     me->CastSpell(me->GetVictim(), SPELL_MORTAL_STRIKE, false);
-                    events.ScheduleEvent(EVENT_SPELL_MORTAL_STRIKE, 10000);
+                    events.ScheduleEvent(EVENT_SPELL_MORTAL_STRIKE, 10s);
                     break;
                 case EVENT_SPELL_PIERCING_HOWL:
                     me->CastSpell(me, SPELL_PIERCING_HOWL, false);
-                    events.ScheduleEvent(EVENT_SPELL_PIERCING_HOWL, 15000);
+                    events.ScheduleEvent(EVENT_SPELL_PIERCING_HOWL, 15s);
                     break;
                 case EVENT_SPELL_SHOUT:
                     me->CastSpell(me, SPELL_FRIGHTENING_SHOUT, false);
-                    events.ScheduleEvent(EVENT_SPELL_SHOUT, 18000);
+                    events.ScheduleEvent(EVENT_SPELL_SHOUT, 18s);
                     break;
             }
 
@@ -893,11 +893,11 @@ public:
             boss_priestess_lackey_commonAI::EnterCombat(who);
             me->CastSpell(me, SPELL_FREEZING_TRAP, true);
 
-            events.ScheduleEvent(EVENT_SPELL_AIMED_SHOT, 8000);
-            events.ScheduleEvent(EVENT_SPELL_SHOOT, 0);
-            events.ScheduleEvent(EVENT_SPELL_CONCUSSIVE_SHOT, 6000);
-            events.ScheduleEvent(EVENT_SPELL_MULTI_SHOT, 10000);
-            events.ScheduleEvent(EVENT_SPELL_WING_CLIP, 4000);
+            events.ScheduleEvent(EVENT_SPELL_AIMED_SHOT, 8s);
+            events.ScheduleEvent(EVENT_SPELL_SHOOT, 0s);
+            events.ScheduleEvent(EVENT_SPELL_CONCUSSIVE_SHOT, 6s);
+            events.ScheduleEvent(EVENT_SPELL_MULTI_SHOT, 10s);
+            events.ScheduleEvent(EVENT_SPELL_WING_CLIP, 4s);
         }
 
         void UpdateAI(uint32 diff)
@@ -911,23 +911,23 @@ public:
             {
                 case EVENT_SPELL_WING_CLIP:
                     me->CastSpell(me->GetVictim(), SPELL_WING_CLIP, false);
-                    events.ScheduleEvent(EVENT_SPELL_WING_CLIP, 4000);
+                    events.ScheduleEvent(EVENT_SPELL_WING_CLIP, 4s);
                     break;
                 case EVENT_SPELL_AIMED_SHOT:
                     me->CastSpell(me->GetVictim(), SPELL_AIMED_SHOT, false);
-                    events.ScheduleEvent(EVENT_SPELL_AIMED_SHOT, 15000);
+                    events.ScheduleEvent(EVENT_SPELL_AIMED_SHOT, 15s);
                     break;
                 case EVENT_SPELL_CONCUSSIVE_SHOT:
                     me->CastSpell(me->GetVictim(), SPELL_CONCUSSIVE_SHOT, false);
-                    events.ScheduleEvent(EVENT_SPELL_CONCUSSIVE_SHOT, 15000);
+                    events.ScheduleEvent(EVENT_SPELL_CONCUSSIVE_SHOT, 15s);
                     break;
                 case EVENT_SPELL_MULTI_SHOT:
                     me->CastSpell(me->GetVictim(), SPELL_MULTI_SHOT, false);
-                    events.ScheduleEvent(EVENT_SPELL_MULTI_SHOT, 10000);
+                    events.ScheduleEvent(EVENT_SPELL_MULTI_SHOT, 10s);
                     break;
                 case EVENT_SPELL_SHOOT:
                     me->CastSpell(me->GetVictim(), DUNGEON_MODE(SPELL_SHOOT_N, SPELL_SHOOT_H), false);
-                    events.ScheduleEvent(EVENT_SPELL_SHOOT, 2500);
+                    events.ScheduleEvent(EVENT_SPELL_SHOOT, 2500ms);
                     break;
             }
 
@@ -982,13 +982,13 @@ public:
         {
             boss_priestess_lackey_commonAI::EnterCombat(who);
 
-            events.ScheduleEvent(EVENT_SPELL_TOTEM1, 2000);
-            events.ScheduleEvent(EVENT_SPELL_TOTEM2, 4000);
-            events.ScheduleEvent(EVENT_SPELL_TOTEM3, 6000);
-            events.ScheduleEvent(EVENT_SPELL_WAR_STOMP, 10000);
-            events.ScheduleEvent(EVENT_SPELL_PURGE, 14000);
-            events.ScheduleEvent(EVENT_SPELL_HEALING_WAVE, 12000);
-            events.ScheduleEvent(EVENT_SPELL_FROST_SHOCK, 8000);
+            events.ScheduleEvent(EVENT_SPELL_TOTEM1, 2s);
+            events.ScheduleEvent(EVENT_SPELL_TOTEM2, 4s);
+            events.ScheduleEvent(EVENT_SPELL_TOTEM3, 6s);
+            events.ScheduleEvent(EVENT_SPELL_WAR_STOMP, 10s);
+            events.ScheduleEvent(EVENT_SPELL_PURGE, 14s);
+            events.ScheduleEvent(EVENT_SPELL_HEALING_WAVE, 12s);
+            events.ScheduleEvent(EVENT_SPELL_FROST_SHOCK, 8s);
         }
 
         void UpdateAI(uint32 diff)
@@ -1002,33 +1002,33 @@ public:
             {
                 case EVENT_SPELL_TOTEM1:
                     me->CastSpell(me, SPELL_WINDFURY_TOTEM, false);
-                    events.ScheduleEvent(EVENT_SPELL_TOTEM1, 20000);
+                    events.ScheduleEvent(EVENT_SPELL_TOTEM1, 20s);
                     break;
                 case EVENT_SPELL_TOTEM2:
                     me->CastSpell(me, SPELL_FIRE_NOVA_TOTEM, false);
-                    events.ScheduleEvent(EVENT_SPELL_TOTEM2, 20000);
+                    events.ScheduleEvent(EVENT_SPELL_TOTEM2, 20s);
                     break;
                 case EVENT_SPELL_TOTEM3:
                     me->CastSpell(me, SPELL_EARTHBIND_TOTEM, false);
-                    events.ScheduleEvent(EVENT_SPELL_TOTEM3, 20000);
+                    events.ScheduleEvent(EVENT_SPELL_TOTEM3, 20s);
                     break;
                 case EVENT_SPELL_WAR_STOMP:
                     me->CastSpell(me, SPELL_WAR_STOMP, false);
-                    events.ScheduleEvent(EVENT_SPELL_WAR_STOMP, 120000);
+                    events.ScheduleEvent(EVENT_SPELL_WAR_STOMP, 2min);
                     break;
                 case EVENT_SPELL_PURGE:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 30.0f))
                         me->CastSpell(target, SPELL_PURGE, false);
-                    events.ScheduleEvent(EVENT_SPELL_PURGE, 15000);
+                    events.ScheduleEvent(EVENT_SPELL_PURGE, 15s);
                     break;
                 case EVENT_SPELL_FROST_SHOCK:
                     me->CastSpell(me, DUNGEON_MODE(SPELL_FROST_SHOCK_N, SPELL_FROST_SHOCK_H), false);
-                    events.ScheduleEvent(EVENT_SPELL_FROST_SHOCK, 12000);
+                    events.ScheduleEvent(EVENT_SPELL_FROST_SHOCK, 12s);
                     break;
                 case EVENT_SPELL_HEALING_WAVE:
                     if (Unit* target = DoSelectLowestHpFriendly(40.0f, 1000))
                         me->CastSpell(target, DUNGEON_MODE(SPELL_LESSER_HEALING_WAVE_N, SPELL_LESSER_HEALING_WAVE_H), false);
-                    events.ScheduleEvent(EVENT_SPELL_HEALING_WAVE, 12000);
+                    events.ScheduleEvent(EVENT_SPELL_HEALING_WAVE, 12s);
                     break;
             }
 
@@ -1073,11 +1073,11 @@ public:
         {
             boss_priestess_lackey_commonAI::EnterCombat(who);
 
-            events.ScheduleEvent(EVENT_SPELL_DRAGON_GUN, 20000);
-            events.ScheduleEvent(EVENT_SPELL_ROCKET_LAUNCH, 7000);
-            events.ScheduleEvent(EVENT_SPELL_RECOMBOBULATE, 14000);
-            events.ScheduleEvent(EVENT_SPELL_EXPLOSIVE_SHEEP, 10000);
-            events.ScheduleEvent(EVENT_SPELL_IRON_BOMB, 5000);
+            events.ScheduleEvent(EVENT_SPELL_DRAGON_GUN, 20s);
+            events.ScheduleEvent(EVENT_SPELL_ROCKET_LAUNCH, 7s);
+            events.ScheduleEvent(EVENT_SPELL_RECOMBOBULATE, 14s);
+            events.ScheduleEvent(EVENT_SPELL_EXPLOSIVE_SHEEP, 10s);
+            events.ScheduleEvent(EVENT_SPELL_IRON_BOMB, 5s);
         }
 
         void UpdateAI(uint32 diff)
@@ -1091,16 +1091,16 @@ public:
             {
                 case EVENT_SPELL_DRAGON_GUN:
                     me->CastSpell(me->GetVictim(), DUNGEON_MODE(SPELL_GOBLIN_DRAGON_GUN_N, SPELL_GOBLIN_DRAGON_GUN_H), false);
-                    events.ScheduleEvent(EVENT_SPELL_DRAGON_GUN, 20000);
+                    events.ScheduleEvent(EVENT_SPELL_DRAGON_GUN, 20s);
                     break;
                 case EVENT_SPELL_ROCKET_LAUNCH:
                     me->CastSpell(me->GetVictim(), DUNGEON_MODE(SPELL_ROCKET_LAUNCH_N, SPELL_ROCKET_LAUNCH_H), false);
-                    events.ScheduleEvent(EVENT_SPELL_ROCKET_LAUNCH, 20000);
+                    events.ScheduleEvent(EVENT_SPELL_ROCKET_LAUNCH, 20s);
                     break;
                 case EVENT_SPELL_IRON_BOMB:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 15.0f))
                         me->CastSpell(target, DUNGEON_MODE(SPELL_FEL_IRON_BOMB_N, SPELL_FEL_IRON_BOMB_H), false);
-                    events.ScheduleEvent(EVENT_SPELL_IRON_BOMB, 20000);
+                    events.ScheduleEvent(EVENT_SPELL_IRON_BOMB, 20s);
                     break;
                 case EVENT_SPELL_RECOMBOBULATE:
                     {
@@ -1116,7 +1116,7 @@ public:
                     }
                 case EVENT_SPELL_EXPLOSIVE_SHEEP:
                     me->CastSpell(me, SPELL_HIGH_EXPLOSIVE_SHEEP, false);
-                    events.ScheduleEvent(EVENT_SPELL_EXPLOSIVE_SHEEP, 60000);
+                    events.ScheduleEvent(EVENT_SPELL_EXPLOSIVE_SHEEP, 1min);
                     break;
             }
 
