@@ -176,99 +176,99 @@ public:
             }
         }
 
-    void JustDied(Unit* killer)
-    {
-        Talk(SAY_DEATH);
-        BossAI::JustDied(killer);
-
-        if (Creature* xerestrasza = ObjectAccessor::GetCreature(*me, instance->GetData64(NPC_XERESTRASZA)))
-            xerestrasza->AI()->DoAction(ACTION_BALTHARUS_DEATH);
-    }
-
-    void KilledUnit(Unit*  /*victim*/)
-    {
-        if (events.GetNextEventTime(EVENT_KILL_TALK) == 0)
+        void JustDied(Unit* killer)
         {
-            Talk(SAY_KILL);
-            events.ScheduleEvent(EVENT_KILL_TALK, 6s);
-        }
-    }
+            Talk(SAY_DEATH);
+            BossAI::JustDied(killer);
 
-    void JustSummoned(Creature* summon)
-    {
-        summons.Summon(summon);
-        summon->SetHealth(me->GetHealth());
-        summon->CastSpell(summon, SPELL_SPAWN_EFFECT, true);
-        summon->SetReactState(REACT_PASSIVE);
-        summon->m_Events.AddEvent(new RestoreFight(summon), summon->m_Events.CalculateTime(2000));
-    }
-
-    void UpdateAI(uint32 diff)
-    {
-        if (!UpdateVictim())
-            return;
-
-        events.Update(diff);
-        if (me->HasUnitState(UNIT_STATE_CASTING))
-            return;
-
-        switch (events.ExecuteEvent())
-        {
-            case EVENT_CLEAVE:
-                me->CastSpell(me->GetVictim(), SPELL_CLEAVE, false);
-                events.ScheduleEvent(EVENT_CLEAVE, 24000);
-                break;
-            case EVENT_BLADE_TEMPEST:
-                me->CastSpell(me, SPELL_BLADE_TEMPEST, false);
-                events.ScheduleEvent(EVENT_BLADE_TEMPEST, 24000);
-                break;
-            case EVENT_ENERVATING_BRAND:
-                for (uint8 i = 0; i < RAID_MODE<uint8>(2, 4, 2, 4); i++)
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 45.0f, true, -SPELL_ENERVATING_BRAND))
-                        me->CastSpell(target, SPELL_ENERVATING_BRAND, true);
-                events.ScheduleEvent(EVENT_ENERVATING_BRAND, 26000);
-                break;
-            case EVENT_CHECK_HEALTH1:
-                if (me->HealthBelowPct(50))
-                {
-                    DoAction(ACTION_CLONE);
-                    break;
-                }
-                events.ScheduleEvent(EVENT_CHECK_HEALTH1, 1000);
-                break;
-            case EVENT_CHECK_HEALTH2:
-                if (me->HealthBelowPct(66))
-                {
-                    DoAction(ACTION_CLONE);
-                    break;
-                }
-                events.ScheduleEvent(EVENT_CHECK_HEALTH2, 1000);
-                break;
-            case EVENT_CHECK_HEALTH3:
-                if (me->HealthBelowPct(33))
-                {
-                    DoAction(ACTION_CLONE);
-                    break;
-                }
-                events.ScheduleEvent(EVENT_CHECK_HEALTH3, 1000);
-                break;
-            case EVENT_SUMMON_CLONE:
-                me->CastSpell(me, SPELL_CLONE, false);
-                Talk(SAY_CLONE);
-                break;
+            if (Creature* xerestrasza = ObjectAccessor::GetCreature(*me, instance->GetData64(NPC_XERESTRASZA)))
+                xerestrasza->AI()->DoAction(ACTION_BALTHARUS_DEATH);
         }
 
-        DoMeleeAttackIfReady();
+        void KilledUnit(Unit*  /*victim*/)
+        {
+            if (events.GetNextEventTime(EVENT_KILL_TALK) == 0)
+            {
+                Talk(SAY_KILL);
+                events.ScheduleEvent(EVENT_KILL_TALK, 6s);
+            }
+        }
+
+        void JustSummoned(Creature* summon)
+        {
+            summons.Summon(summon);
+            summon->SetHealth(me->GetHealth());
+            summon->CastSpell(summon, SPELL_SPAWN_EFFECT, true);
+            summon->SetReactState(REACT_PASSIVE);
+            summon->m_Events.AddEvent(new RestoreFight(summon), summon->m_Events.CalculateTime(2000));
+        }
+
+        void UpdateAI(uint32 diff)
+        {
+            if (!UpdateVictim())
+                return;
+
+            events.Update(diff);
+            if (me->HasUnitState(UNIT_STATE_CASTING))
+                return;
+
+            switch (events.ExecuteEvent())
+            {
+                case EVENT_CLEAVE:
+                    me->CastSpell(me->GetVictim(), SPELL_CLEAVE, false);
+                    events.ScheduleEvent(EVENT_CLEAVE, 24000);
+                    break;
+                case EVENT_BLADE_TEMPEST:
+                    me->CastSpell(me, SPELL_BLADE_TEMPEST, false);
+                    events.ScheduleEvent(EVENT_BLADE_TEMPEST, 24000);
+                    break;
+                case EVENT_ENERVATING_BRAND:
+                    for (uint8 i = 0; i < RAID_MODE<uint8>(2, 4, 2, 4); i++)
+                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 45.0f, true, -SPELL_ENERVATING_BRAND))
+                            me->CastSpell(target, SPELL_ENERVATING_BRAND, true);
+                    events.ScheduleEvent(EVENT_ENERVATING_BRAND, 26000);
+                    break;
+                case EVENT_CHECK_HEALTH1:
+                    if (me->HealthBelowPct(50))
+                    {
+                        DoAction(ACTION_CLONE);
+                        break;
+                    }
+                    events.ScheduleEvent(EVENT_CHECK_HEALTH1, 1000);
+                    break;
+                case EVENT_CHECK_HEALTH2:
+                    if (me->HealthBelowPct(66))
+                    {
+                        DoAction(ACTION_CLONE);
+                        break;
+                    }
+                    events.ScheduleEvent(EVENT_CHECK_HEALTH2, 1000);
+                    break;
+                case EVENT_CHECK_HEALTH3:
+                    if (me->HealthBelowPct(33))
+                    {
+                        DoAction(ACTION_CLONE);
+                        break;
+                    }
+                    events.ScheduleEvent(EVENT_CHECK_HEALTH3, 1000);
+                    break;
+                case EVENT_SUMMON_CLONE:
+                    me->CastSpell(me, SPELL_CLONE, false);
+                    Talk(SAY_CLONE);
+                    break;
+            }
+
+            DoMeleeAttackIfReady();
+        }
+
+    private:
+        bool _introDone;
+    };
+
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return GetInstanceAI<boss_baltharus_the_warbornAI>(creature);
     }
-
-private:
-    bool _introDone;
-};
-
-CreatureAI* GetAI(Creature* creature) const
-{
-    return GetInstanceAI<boss_baltharus_the_warbornAI>(creature);
-}
 };
 
 class npc_baltharus_the_warborn_clone : public CreatureScript
