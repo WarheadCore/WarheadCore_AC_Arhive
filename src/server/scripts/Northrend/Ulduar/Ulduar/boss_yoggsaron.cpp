@@ -659,7 +659,7 @@ public:
 
             uint32 timer = events.GetNextEventTime(EVENT_SARA_P2_OPEN_PORTALS);
             uint32 portalTime = (timer > events.GetTimer() ? timer - events.GetTimer() : 0);
-            events.DelayEvents(param+100);
+            events.DelayEvents(param + 100);
             events.RescheduleEvent(EVENT_SARA_P2_OPEN_PORTALS, Milliseconds(portalTime), 0, EVENT_PHASE_TWO);
             events.ScheduleEvent(EVENT_SARA_P2_REMOVE_STUN, Milliseconds(param), 0, EVENT_PHASE_TWO);
             me->CastSpell(me, SPELL_SHATTERED_ILLUSION, true);
@@ -779,10 +779,10 @@ public:
                         break;
                     }
                 case EVENT_SARA_P2_START:
-                {
-                    EntryCheckPredicate pred(NPC_YOGG_SARON);
-                    summons.DoAction(ACTION_YOGG_SARON_APPEAR, pred);
-                    events.RescheduleEvent(EVENT_SARA_P2_SPAWN_START_TENTACLES, 500ms, 0, EVENT_PHASE_TWO);
+                    {
+                        EntryCheckPredicate pred(NPC_YOGG_SARON);
+                        summons.DoAction(ACTION_YOGG_SARON_APPEAR, pred);
+                        events.RescheduleEvent(EVENT_SARA_P2_SPAWN_START_TENTACLES, 500ms, 0, EVENT_PHASE_TWO);
 
                         // Spawn Brain!
                         me->SummonCreature(NPC_BRAIN_OF_YOGG_SARON, 1981.3f, -25.43f, 265);

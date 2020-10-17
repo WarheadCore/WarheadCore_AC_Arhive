@@ -225,7 +225,7 @@ public:
             me->SetVisible(false);
             me->SetReactState(REACT_PASSIVE);
             _events2.Reset();
-                _events2.RescheduleEvent(EVENT_HALION_VISIBILITY, 30s);
+            _events2.RescheduleEvent(EVENT_HALION_VISIBILITY, 30s);
         }
 
         void JustSummoned(Creature* summon)
@@ -298,22 +298,22 @@ public:
             Talk(SAY_AGGRO);
             instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me, 1);
 
-                events.ScheduleEvent(EVENT_CLEAVE, 8s, 10s);
-                events.ScheduleEvent(EVENT_TAIL_LASH, 10s);
-                events.ScheduleEvent(EVENT_BREATH, 10s, 15s);
-                events.ScheduleEvent(EVENT_ACTIVATE_FIREWALL, 5s);
-                events.ScheduleEvent(EVENT_METEOR_STRIKE, 20s, 25s);
-                events.ScheduleEvent(EVENT_FIERY_COMBUSTION, 15s, 18s);
-                events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
-                _events2.ScheduleEvent(EVENT_TRIGGER_BERSERK, 8min);
-            }
+            events.ScheduleEvent(EVENT_CLEAVE, 8s, 10s);
+            events.ScheduleEvent(EVENT_TAIL_LASH, 10s);
+            events.ScheduleEvent(EVENT_BREATH, 10s, 15s);
+            events.ScheduleEvent(EVENT_ACTIVATE_FIREWALL, 5s);
+            events.ScheduleEvent(EVENT_METEOR_STRIKE, 20s, 25s);
+            events.ScheduleEvent(EVENT_FIERY_COMBUSTION, 15s, 18s);
+            events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
+            _events2.ScheduleEvent(EVENT_TRIGGER_BERSERK, 8min);
+        }
 
         void KilledUnit(Unit* victim)
         {
             if (victim->GetTypeId() == TYPEID_PLAYER && events.GetNextEventTime(EVENT_KILL_TALK) == 0)
             {
-                    Talk(SAY_KILL);
-                    events.ScheduleEvent(EVENT_KILL_TALK, 6s);
+                Talk(SAY_KILL);
+                events.ScheduleEvent(EVENT_KILL_TALK, 6s);
             }
         }
 
@@ -457,16 +457,16 @@ public:
             me->SetReactState(REACT_DEFENSIVE);
         }
 
-            void EnterCombat(Unit* /*who*/)
-            {
-                _events.Reset();
-                _events.ScheduleEvent(EVENT_CLEAVE, 8s, 10s);
-                _events.ScheduleEvent(EVENT_TAIL_LASH, 10s);
-                _events.ScheduleEvent(EVENT_BREATH, 10s, 15s);
-                _events.ScheduleEvent(EVENT_SOUL_CONSUMPTION, 20s);
-                _events.ScheduleEvent(EVENT_SHADOW_PULSARS, 16s);
-                _events.ScheduleEvent(EVENT_SEND_ENCOUNTER_UNIT, 2s);
-                _events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
+        void EnterCombat(Unit* /*who*/)
+        {
+            _events.Reset();
+            _events.ScheduleEvent(EVENT_CLEAVE, 8s, 10s);
+            _events.ScheduleEvent(EVENT_TAIL_LASH, 10s);
+            _events.ScheduleEvent(EVENT_BREATH, 10s, 15s);
+            _events.ScheduleEvent(EVENT_SOUL_CONSUMPTION, 20s);
+            _events.ScheduleEvent(EVENT_SHADOW_PULSARS, 16s);
+            _events.ScheduleEvent(EVENT_SEND_ENCOUNTER_UNIT, 2s);
+            _events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
 
             me->SetInCombatWithZone();
         }

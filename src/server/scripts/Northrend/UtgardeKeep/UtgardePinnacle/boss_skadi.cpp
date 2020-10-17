@@ -455,12 +455,12 @@ public:
                         me->GetMotionMaster()->Clear(true);
                         me->GetMotionMaster()->MoveTakeoff(10, SkadiPosition[0].GetPositionX(), SkadiPosition[0].GetPositionY(), SkadiPosition[0].GetPositionZ(), 3.0f);
 
-                    SpawnHelpers(0);
-                    SpawnHelpers(0);
-                    events.ScheduleEvent(EVENT_GRAUF_MOVE, 15s);
-                    events.ScheduleEvent(EVENT_GRAUF_SUMMON_HELPERS, 20s);
-                    break;
-                }
+                        SpawnHelpers(0);
+                        SpawnHelpers(0);
+                        events.ScheduleEvent(EVENT_GRAUF_MOVE, 15s);
+                        events.ScheduleEvent(EVENT_GRAUF_SUMMON_HELPERS, 20s);
+                        break;
+                    }
                 case EVENT_GRAUF_MOVE:
                     {
                         AchievementHitCount = 0;

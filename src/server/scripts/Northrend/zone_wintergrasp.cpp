@@ -336,10 +336,10 @@ public:
             if (creature->GetEntry() == NPC_ARCANIST_BRAEDIN)
                 events.ScheduleEvent(EVENT_ARCANIST_BRAEDIN_YELL, 0);
             else if (creature->GetEntry() == NPC_MAGISTER_SURDIEL)
-                    events.ScheduleEvent(EVENT_MAGISTER_SURDIEL_YELL, 0s);
+                events.ScheduleEvent(EVENT_MAGISTER_SURDIEL_YELL, 0s);
 
-                events.ScheduleEvent(EVENT_SPELL_FROST_ARMOR, 0s);
-            }
+            events.ScheduleEvent(EVENT_SPELL_FROST_ARMOR, 0s);
+        }
 
         EventMap events;
 

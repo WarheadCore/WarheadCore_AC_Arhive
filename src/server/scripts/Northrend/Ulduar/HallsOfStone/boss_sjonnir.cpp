@@ -164,7 +164,7 @@ public:
         void EnterCombat(Unit*  /*who*/)
         {
             Talk(SAY_AGGRO);
-            
+
             events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
             events.ScheduleEvent(EVENT_SHIELD, 14s, 19s);
             events.ScheduleEvent(EVENT_CHAIN_LIGHTNING, 6s, 12s);
@@ -214,8 +214,8 @@ public:
                         {
                             SummonPhase = PHASE_SUMMON_OOZE;
                             events.CancelEvent(EVENT_SUMMON);
-                        events.ScheduleEvent(EVENT_SUMMON, 0s);
-                        events.ScheduleEvent(EVENT_SUMMON, 1500ms);
+                            events.ScheduleEvent(EVENT_SUMMON, 0s);
+                            events.ScheduleEvent(EVENT_SUMMON, 1500ms);
 
                             if (pInstance)
                                 if (Creature* brann = ObjectAccessor::GetCreature(*me, pInstance->GetData64(NPC_BRANN)))

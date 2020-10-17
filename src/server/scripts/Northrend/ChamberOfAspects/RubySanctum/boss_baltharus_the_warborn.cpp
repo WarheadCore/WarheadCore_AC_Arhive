@@ -154,7 +154,7 @@ public:
             {
                 me->CastSpell(me, SPELL_REPELLING_WAVE, false);
                 me->CastSpell(me, SPELL_CLEAR_DEBUFFS, false);
-                    events.ScheduleEvent(EVENT_SUMMON_CLONE, 1s);
+                events.ScheduleEvent(EVENT_SUMMON_CLONE, 1s);
             }
         }
 
@@ -164,112 +164,112 @@ public:
             BossAI::EnterCombat(who);
             me->InterruptNonMeleeSpells(false);
 
-                events.ScheduleEvent(EVENT_CLEAVE, 11s);
-                events.ScheduleEvent(EVENT_ENERVATING_BRAND, 13s);
-                events.ScheduleEvent(EVENT_BLADE_TEMPEST, 15s);
-                if (!Is25ManRaid())
-                    events.ScheduleEvent(EVENT_CHECK_HEALTH1, 1s);
-                else
-                {
-                    events.ScheduleEvent(EVENT_CHECK_HEALTH2, 1s);
-                    events.ScheduleEvent(EVENT_CHECK_HEALTH3, 1s);
-                }
-            }
-        }
-
-        void JustDied(Unit* killer)
-        {
-            Talk(SAY_DEATH);
-            BossAI::JustDied(killer);
-
-            if (Creature* xerestrasza = ObjectAccessor::GetCreature(*me, instance->GetData64(NPC_XERESTRASZA)))
-                xerestrasza->AI()->DoAction(ACTION_BALTHARUS_DEATH);
-        }
-
-        void KilledUnit(Unit*  /*victim*/)
-        {
-            if (events.GetNextEventTime(EVENT_KILL_TALK) == 0)
+            events.ScheduleEvent(EVENT_CLEAVE, 11s);
+            events.ScheduleEvent(EVENT_ENERVATING_BRAND, 13s);
+            events.ScheduleEvent(EVENT_BLADE_TEMPEST, 15s);
+            if (!Is25ManRaid())
+                events.ScheduleEvent(EVENT_CHECK_HEALTH1, 1s);
+            else
             {
-                    Talk(SAY_KILL);
-                    events.ScheduleEvent(EVENT_KILL_TALK, 6s);
+                events.ScheduleEvent(EVENT_CHECK_HEALTH2, 1s);
+                events.ScheduleEvent(EVENT_CHECK_HEALTH3, 1s);
             }
         }
-
-        void JustSummoned(Creature* summon)
-        {
-            summons.Summon(summon);
-            summon->SetHealth(me->GetHealth());
-            summon->CastSpell(summon, SPELL_SPAWN_EFFECT, true);
-            summon->SetReactState(REACT_PASSIVE);
-            summon->m_Events.AddEvent(new RestoreFight(summon), summon->m_Events.CalculateTime(2000));
-        }
-
-        void UpdateAI(uint32 diff)
-        {
-            if (!UpdateVictim())
-                return;
-
-            events.Update(diff);
-            if (me->HasUnitState(UNIT_STATE_CASTING))
-                return;
-
-            switch (events.ExecuteEvent())
-            {
-                case EVENT_CLEAVE:
-                    me->CastSpell(me->GetVictim(), SPELL_CLEAVE, false);
-                    events.ScheduleEvent(EVENT_CLEAVE, 24000);
-                    break;
-                case EVENT_BLADE_TEMPEST:
-                    me->CastSpell(me, SPELL_BLADE_TEMPEST, false);
-                    events.ScheduleEvent(EVENT_BLADE_TEMPEST, 24000);
-                    break;
-                case EVENT_ENERVATING_BRAND:
-                    for (uint8 i = 0; i < RAID_MODE<uint8>(2, 4, 2, 4); i++)
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 45.0f, true, -SPELL_ENERVATING_BRAND))
-                            me->CastSpell(target, SPELL_ENERVATING_BRAND, true);
-                    events.ScheduleEvent(EVENT_ENERVATING_BRAND, 26000);
-                    break;
-                case EVENT_CHECK_HEALTH1:
-                    if (me->HealthBelowPct(50))
-                    {
-                        DoAction(ACTION_CLONE);
-                        break;
-                    }
-                    events.ScheduleEvent(EVENT_CHECK_HEALTH1, 1000);
-                    break;
-                case EVENT_CHECK_HEALTH2:
-                    if (me->HealthBelowPct(66))
-                    {
-                        DoAction(ACTION_CLONE);
-                        break;
-                    }
-                    events.ScheduleEvent(EVENT_CHECK_HEALTH2, 1000);
-                    break;
-                case EVENT_CHECK_HEALTH3:
-                    if (me->HealthBelowPct(33))
-                    {
-                        DoAction(ACTION_CLONE);
-                        break;
-                    }
-                    events.ScheduleEvent(EVENT_CHECK_HEALTH3, 1000);
-                    break;
-                case EVENT_SUMMON_CLONE:
-                    me->CastSpell(me, SPELL_CLONE, false);
-                    Talk(SAY_CLONE);
-                    break;
-            }
-
-            DoMeleeAttackIfReady();
-        }
-
-    private:
-        bool _introDone;
-    };
-
-    CreatureAI* GetAI(Creature* creature) const
-    {
-        return GetInstanceAI<boss_baltharus_the_warbornAI>(creature);
     }
+
+    void JustDied(Unit* killer)
+    {
+        Talk(SAY_DEATH);
+        BossAI::JustDied(killer);
+
+        if (Creature* xerestrasza = ObjectAccessor::GetCreature(*me, instance->GetData64(NPC_XERESTRASZA)))
+            xerestrasza->AI()->DoAction(ACTION_BALTHARUS_DEATH);
+    }
+
+    void KilledUnit(Unit*  /*victim*/)
+    {
+        if (events.GetNextEventTime(EVENT_KILL_TALK) == 0)
+        {
+            Talk(SAY_KILL);
+            events.ScheduleEvent(EVENT_KILL_TALK, 6s);
+        }
+    }
+
+    void JustSummoned(Creature* summon)
+    {
+        summons.Summon(summon);
+        summon->SetHealth(me->GetHealth());
+        summon->CastSpell(summon, SPELL_SPAWN_EFFECT, true);
+        summon->SetReactState(REACT_PASSIVE);
+        summon->m_Events.AddEvent(new RestoreFight(summon), summon->m_Events.CalculateTime(2000));
+    }
+
+    void UpdateAI(uint32 diff)
+    {
+        if (!UpdateVictim())
+            return;
+
+        events.Update(diff);
+        if (me->HasUnitState(UNIT_STATE_CASTING))
+            return;
+
+        switch (events.ExecuteEvent())
+        {
+            case EVENT_CLEAVE:
+                me->CastSpell(me->GetVictim(), SPELL_CLEAVE, false);
+                events.ScheduleEvent(EVENT_CLEAVE, 24000);
+                break;
+            case EVENT_BLADE_TEMPEST:
+                me->CastSpell(me, SPELL_BLADE_TEMPEST, false);
+                events.ScheduleEvent(EVENT_BLADE_TEMPEST, 24000);
+                break;
+            case EVENT_ENERVATING_BRAND:
+                for (uint8 i = 0; i < RAID_MODE<uint8>(2, 4, 2, 4); i++)
+                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 45.0f, true, -SPELL_ENERVATING_BRAND))
+                        me->CastSpell(target, SPELL_ENERVATING_BRAND, true);
+                events.ScheduleEvent(EVENT_ENERVATING_BRAND, 26000);
+                break;
+            case EVENT_CHECK_HEALTH1:
+                if (me->HealthBelowPct(50))
+                {
+                    DoAction(ACTION_CLONE);
+                    break;
+                }
+                events.ScheduleEvent(EVENT_CHECK_HEALTH1, 1000);
+                break;
+            case EVENT_CHECK_HEALTH2:
+                if (me->HealthBelowPct(66))
+                {
+                    DoAction(ACTION_CLONE);
+                    break;
+                }
+                events.ScheduleEvent(EVENT_CHECK_HEALTH2, 1000);
+                break;
+            case EVENT_CHECK_HEALTH3:
+                if (me->HealthBelowPct(33))
+                {
+                    DoAction(ACTION_CLONE);
+                    break;
+                }
+                events.ScheduleEvent(EVENT_CHECK_HEALTH3, 1000);
+                break;
+            case EVENT_SUMMON_CLONE:
+                me->CastSpell(me, SPELL_CLONE, false);
+                Talk(SAY_CLONE);
+                break;
+        }
+
+        DoMeleeAttackIfReady();
+    }
+
+private:
+    bool _introDone;
+};
+
+CreatureAI* GetAI(Creature* creature) const
+{
+    return GetInstanceAI<boss_baltharus_the_warbornAI>(creature);
+}
 };
 
 class npc_baltharus_the_warborn_clone : public CreatureScript
@@ -283,13 +283,13 @@ public:
         {
         }
 
-            void EnterCombat(Unit* /*who*/)
-            {
-                _events.Reset();
-                _events.ScheduleEvent(EVENT_CLEAVE, 5s, 10s);
-                _events.ScheduleEvent(EVENT_BLADE_TEMPEST, 18s, 25s);
-                _events.ScheduleEvent(EVENT_ENERVATING_BRAND, 10s, 15s);
-            }
+        void EnterCombat(Unit* /*who*/)
+        {
+            _events.Reset();
+            _events.ScheduleEvent(EVENT_CLEAVE, 5s, 10s);
+            _events.ScheduleEvent(EVENT_BLADE_TEMPEST, 18s, 25s);
+            _events.ScheduleEvent(EVENT_ENERVATING_BRAND, 10s, 15s);
+        }
 
         void UpdateAI(uint32 diff)
         {
@@ -300,38 +300,38 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-                switch (_events.ExecuteEvent())
-                {
-                    case EVENT_CLEAVE:
-                        me->CastSpell(me->GetVictim(), SPELL_CLEAVE, false);
-                        _events.ScheduleEvent(EVENT_CLEAVE, 24s);
-                        break;
-                    case EVENT_BLADE_TEMPEST:
-                        me->CastSpell(me, SPELL_BLADE_TEMPEST, false);
-                        _events.ScheduleEvent(EVENT_BLADE_TEMPEST, 24s);
-                       break;
-                    case EVENT_ENERVATING_BRAND:
-                        for (uint8 i = 0; i < RAID_MODE<uint8>(4, 10, 4, 10); i++)
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 45.0f, true, -SPELL_ENERVATING_BRAND))
-                                me->CastSpell(target, SPELL_ENERVATING_BRAND, true);
-                        _events.ScheduleEvent(EVENT_ENERVATING_BRAND, 26s);
-                        break;
-                }
-
-                DoMeleeAttackIfReady();
+            switch (_events.ExecuteEvent())
+            {
+                case EVENT_CLEAVE:
+                    me->CastSpell(me->GetVictim(), SPELL_CLEAVE, false);
+                    _events.ScheduleEvent(EVENT_CLEAVE, 24s);
+                    break;
+                case EVENT_BLADE_TEMPEST:
+                    me->CastSpell(me, SPELL_BLADE_TEMPEST, false);
+                    _events.ScheduleEvent(EVENT_BLADE_TEMPEST, 24s);
+                    break;
+                case EVENT_ENERVATING_BRAND:
+                    for (uint8 i = 0; i < RAID_MODE<uint8>(4, 10, 4, 10); i++)
+                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 45.0f, true, -SPELL_ENERVATING_BRAND))
+                            me->CastSpell(target, SPELL_ENERVATING_BRAND, true);
+                    _events.ScheduleEvent(EVENT_ENERVATING_BRAND, 26s);
+                    break;
             }
 
             DoMeleeAttackIfReady();
         }
 
-    private:
-        EventMap _events;
-    };
-
-    CreatureAI* GetAI(Creature* creature) const
-    {
-        return GetInstanceAI<npc_baltharus_the_warborn_cloneAI>(creature);
+        DoMeleeAttackIfReady();
     }
+
+private:
+    EventMap _events;
+};
+
+CreatureAI* GetAI(Creature* creature) const
+{
+    return GetInstanceAI<npc_baltharus_the_warborn_cloneAI>(creature);
+}
 };
 
 class spell_baltharus_enervating_brand_trigger : public SpellScriptLoader
@@ -395,14 +395,14 @@ public:
                 me->setActive(true);
                 _isIntro = false;
 
-                    _events.ScheduleEvent(EVENT_XERESTRASZA_EVENT_0, 6s);
-                    _events.ScheduleEvent(EVENT_XERESTRASZA_EVENT_1, 22s);
-                    _events.ScheduleEvent(EVENT_XERESTRASZA_EVENT_2, 31s);
-                    _events.ScheduleEvent(EVENT_XERESTRASZA_EVENT_3, 38s);
-                    _events.ScheduleEvent(EVENT_XERESTRASZA_EVENT_4, 48s);
-                    _events.ScheduleEvent(EVENT_XERESTRASZA_EVENT_5, 57s);
-                    _events.ScheduleEvent(EVENT_XERESTRASZA_EVENT_6, 67s);
-                    _events.ScheduleEvent(EVENT_XERESTRASZA_EVENT_7, 75s);
+                _events.ScheduleEvent(EVENT_XERESTRASZA_EVENT_0, 6s);
+                _events.ScheduleEvent(EVENT_XERESTRASZA_EVENT_1, 22s);
+                _events.ScheduleEvent(EVENT_XERESTRASZA_EVENT_2, 31s);
+                _events.ScheduleEvent(EVENT_XERESTRASZA_EVENT_3, 38s);
+                _events.ScheduleEvent(EVENT_XERESTRASZA_EVENT_4, 48s);
+                _events.ScheduleEvent(EVENT_XERESTRASZA_EVENT_5, 57s);
+                _events.ScheduleEvent(EVENT_XERESTRASZA_EVENT_6, 67s);
+                _events.ScheduleEvent(EVENT_XERESTRASZA_EVENT_7, 75s);
             }
             else if (action == ACTION_INTRO_BALTHARUS && !_introDone && me->IsAlive())
             {

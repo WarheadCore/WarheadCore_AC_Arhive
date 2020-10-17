@@ -181,8 +181,8 @@ public:
                         events.RepeatEvent(1000);
                         if (HealthBelowPct(50))
                         {
-                        events.CancelEvent(EVENT_CHECK_HEALTH);
-                        events.ScheduleEvent(EVENT_SUMMON_GUARD, 100ms);
+                            events.CancelEvent(EVENT_CHECK_HEALTH);
+                            events.ScheduleEvent(EVENT_SUMMON_GUARD, 100ms);
                         }
                         break;
                     }

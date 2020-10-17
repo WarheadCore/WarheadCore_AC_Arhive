@@ -256,7 +256,7 @@ public:
                             Arthas->InterruptNonMeleeSpells(false);
                         me->RemoveAllAuras();
                         me->SetWalk(false);
-                    events2.ScheduleEvent(EVENT_SVALA_TALK5, 2s);
+                        events2.ScheduleEvent(EVENT_SVALA_TALK5, 2s);
 
                         std::list<Creature*> creatureList;
                         me->GetCreaturesWithEntryInRange(creatureList, 100.0f, NPC_DRAGONFLAYER_SPECTATOR);

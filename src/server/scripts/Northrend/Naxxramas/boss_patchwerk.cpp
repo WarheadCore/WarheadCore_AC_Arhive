@@ -178,7 +178,7 @@ public:
                     {
                         Talk(EMOTE_ENRAGE);
                         me->CastSpell(me, SPELL_FRENZY, true);
-                        
+
                         break;
                     }
                     events.RepeatEvent(1000);

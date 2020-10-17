@@ -157,7 +157,7 @@ public:
             events.ScheduleEvent(EVENT_SPELL_IMPALE, 15s);
             events.ScheduleEvent(EVENT_SPELL_LOCUST_SWARM, 70s, 2min);
             events.ScheduleEvent(EVENT_SPELL_BERSERK, 10min);
-            
+
             if (!summons.HasEntry(NPC_CRYPT_GUARD))
                 SummonCryptGuards();
         }
@@ -201,7 +201,7 @@ public:
                     }
                 case EVENT_SPELL_BERSERK:
                     me->CastSpell(me, SPELL_BERSERK, true);
-                    
+
                     break;
             }
 

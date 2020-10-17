@@ -250,7 +250,7 @@ public:
                     if( pInstance && !summons.empty() )
                         if( Creature* ghoul = pInstance->instance->GetCreature(*summons.begin()) )
                             ghoul->MonsterYell("[Zombie] .... . Brains ....", LANG_UNIVERSAL, 0);
-                    
+
                     break;
                 case EVENT_SPELL_PLAGUE_STRIKE:
                     if( me->GetVictim() )
@@ -406,10 +406,10 @@ public:
         void EnterCombat(Unit*  /*who*/)
         {
             events.Reset();
-            
+
             if (me->GetEntry() == NPC_RISEN_JAEREN || me->GetEntry() == NPC_RISEN_ARELAS)
                 events.RescheduleEvent(1, 1s); // leap
-            
+
             events.RescheduleEvent(2, 3s, 4s); // claw
         }
 
@@ -462,7 +462,7 @@ public:
                         if (me->GetDistance(target) > 5.0f && me->GetDistance(target) < 30.0f)
                         {
                             me->CastSpell(target, SPELL_LEAP, false);
-                            
+
                             break;
                         }
                     events.RepeatEvent(1000);

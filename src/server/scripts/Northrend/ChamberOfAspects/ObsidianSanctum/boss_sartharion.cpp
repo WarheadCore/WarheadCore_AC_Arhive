@@ -454,11 +454,11 @@ public:
                     return;
                 case EVENT_SARTHARION_START_LAVA:
                     SendLavaWaves(true);
-                    
+
                     return;
                 case EVENT_SARTHARION_FINISH_LAVA:
                     SendLavaWaves(false);
-                    
+
                     return;
             }
 
@@ -536,14 +536,14 @@ void boss_sartharion::boss_sartharionAI::HandleSartharionAbilities()
                             cr->CastSpell(cr, SPELL_CYCLONE_AURA_PERIODIC, true);
                 }
                 Talk(SAY_SARTHARION_BERSERK);
-                
+
                 break;
             }
             events.RepeatEvent(2000);
             break;
         case EVENT_SARTHARION_BERSERK:
             summons.DespawnEntry(NPC_SAFE_AREA_TRIGGER);
-            
+
             break;
     }
 }
@@ -558,19 +558,19 @@ void boss_sartharion::boss_sartharionAI::HandleDrakeAbilities()
             Talk(SAY_SARTHARION_CALL_TENEBRON);
             if (Creature* tenebron = ObjectAccessor::GetCreature(*me, dragons[DRAGON_TENEBRON]))
                 tenebron->AI()->DoAction(ACTION_CALL_DRAGON);
-            
+
             break;
         case EVENT_SARTHARION_CALL_SHADRON:
             Talk(SAY_SARTHARION_CALL_SHADRON);
             if (Creature* shadron = ObjectAccessor::GetCreature(*me, dragons[DRAGON_SHADRON]))
                 shadron->AI()->DoAction(ACTION_CALL_DRAGON);
-            
+
             break;
         case EVENT_SARTHARION_CALL_VESPERON:
             Talk(SAY_SARTHARION_CALL_VESPERON);
             if (Creature* vesperon = ObjectAccessor::GetCreature(*me, dragons[DRAGON_VESPERON]))
                 vesperon->AI()->DoAction(ACTION_CALL_DRAGON);
-            
+
             break;
     }
 }
@@ -771,7 +771,7 @@ public:
                     else if (pInstance)
                         pInstance->SetData(DATA_ADD_PORTAL, 0);
 
-                        
+
                     events.ScheduleEvent(EVENT_MINIBOSS_SPAWN_HELPERS, 2s);
                     events.RepeatEvent(60000);
                     break;
@@ -788,9 +788,9 @@ public:
                             }
                         }
 
-                    events.ScheduleEvent(EVENT_MINIBOSS_HATCH_EGGS, 25s);
-                    break;
-                }
+                        events.ScheduleEvent(EVENT_MINIBOSS_HATCH_EGGS, 25s);
+                        break;
+                    }
                 case EVENT_MINIBOSS_HATCH_EGGS:
                     {
                         Creature* cr = nullptr;
@@ -929,7 +929,7 @@ public:
             events.ScheduleEvent(EVENT_MINIBOSS_SHADOW_FISSURE, 20s);
             events.ScheduleEvent(EVENT_MINIBOSS_SHADOW_BREATH, 10s);
             events.ScheduleEvent(EVENT_MINIBOSS_OPEN_PORTAL, 15s);
-            
+
             if (pInstance && !isSartharion)
                 pInstance->SetData(BOSS_SHADRON_EVENT, IN_PROGRESS);
 
@@ -1039,7 +1039,7 @@ public:
                     }
                     else if (pInstance)
                         pInstance->SetData(DATA_ADD_PORTAL, 0);
-                        
+
                     events.ScheduleEvent(EVENT_MINIBOSS_SPAWN_HELPERS, 2s);
                     break;
                 case EVENT_MINIBOSS_SPAWN_HELPERS:
@@ -1051,7 +1051,7 @@ public:
                         cr->SetPhaseMask(16, true);
                     }
 
-                    
+
                     break;
             }
 
@@ -1268,7 +1268,7 @@ public:
                     }
                     else if (pInstance)
                         pInstance->SetData(DATA_ADD_PORTAL, 0);
-                        
+
                     events.ScheduleEvent(EVENT_MINIBOSS_SPAWN_HELPERS, 2s);
                     break;
                 case EVENT_MINIBOSS_SPAWN_HELPERS:
@@ -1280,7 +1280,7 @@ public:
                         cr->SetPhaseMask(16, true);
                     }
 
-                    
+
                     break;
             }
 

@@ -352,7 +352,7 @@ public:
                         me->CastSpell((Unit*)NULL, SPELL_SMASH, false);
                     else
                         me->CastSpell((Unit*)NULL, SPELL_DARK_SMASH, false);
-                    events.RepeatEvent(urand(9000,11000));
+                    events.RepeatEvent(urand(9000, 11000));
                     events.RescheduleEvent(EVENT_UNROOT, 3750ms);
                     break;
                 case EVENT_SPELL_ENRAGE_OR_SHADOW_AXE:

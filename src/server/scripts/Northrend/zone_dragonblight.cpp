@@ -827,7 +827,7 @@ public:
         {
             if (!playerGUID || type != data)
                 return;
-            
+
             if (data == 1)
                 events.ScheduleEvent(15, 0s);
             else if (data == 2)
@@ -1519,14 +1519,14 @@ public:
             talkWing = 0;
         }
 
-            void Reset()
-            {
-                talkWing = 0;
-                memset(audienceList, 0, sizeof(audienceList));
-                memset(imageList, 0, sizeof(imageList));
-                _events.ScheduleEvent(EVENT_GET_TARGETS, 5s);
-                _events.ScheduleEvent(EVENT_START_RANDOM, 20s);
-            }
+        void Reset()
+        {
+            talkWing = 0;
+            memset(audienceList, 0, sizeof(audienceList));
+            memset(imageList, 0, sizeof(imageList));
+            _events.ScheduleEvent(EVENT_GET_TARGETS, 5s);
+            _events.ScheduleEvent(EVENT_START_RANDOM, 20s);
+        }
 
         void MovementInform(uint32 type, uint32 id)
         {
@@ -1657,11 +1657,11 @@ public:
         {
             if (Creature* creature = ObjectAccessor::GetCreature(*me, imageList[talkWing]))
             {
-                    Talk(text);
-                    creature->SetEntry(entry);
-                    creature->SetDisplayId(model);
-                    creature->CastSpell(creature, SPELL_HEROIC_IMAGE_CHANNEL);
-                    _events.ScheduleEvent(EVENT_TALK_COMPLETE, 40s);
+                Talk(text);
+                creature->SetEntry(entry);
+                creature->SetDisplayId(model);
+                creature->CastSpell(creature, SPELL_HEROIC_IMAGE_CHANNEL);
+                _events.ScheduleEvent(EVENT_TALK_COMPLETE, 40s);
             }
         }
 
@@ -1682,57 +1682,57 @@ public:
             {
                 switch (eventId)
                 {
-                        case EVENT_START_RANDOM:
-                            talkWing = urand (0, 4);
-                            Talk(talkWing);
-                            _events.ScheduleEvent(EVENT_MOVE_TO_POINT, 8s);
-                            break;
-                        case EVENT_MOVE_TO_POINT:
-                            me->SetWalk(true);
-                            me->GetMotionMaster()->Clear();
-                            me->GetMotionMaster()->MovePoint(1, PosTalkLocations[talkWing].m_positionX, PosTalkLocations[talkWing].m_positionY, PosTalkLocations[talkWing].m_positionZ);
-                            break;
-                        case EVENT_TALK_COMPLETE:
-                            talkWing = 5;
-                            Talk(talkWing);
-                            _events.ScheduleEvent(EVENT_MOVE_TO_POINT, 5s);
-                            break;
-                        case EVENT_GET_TARGETS:
-                            StoreTargets();
-                            break;
-                        case EVENT_KELTHUZAD_2:
-                            Talk(SAY_KELTHUZAD_2);
-                            _events.ScheduleEvent(EVENT_KELTHUZAD_3, 8s);
-                            break;
-                        case EVENT_KELTHUZAD_3:
-                            Talk(SAY_KELTHUZAD_3);
-                            break;
-                        case EVENT_DEATH_KNIGHTS_2:
-                            Talk(SAY_DEATH_KNIGHTS_2);
-                            if (Creature* creature = ObjectAccessor::GetCreature(*me, imageList[talkWing]))
-                            {
-                                creature->SetEntry(NPC_IMAGE_OF_BLAUMEUX);
-                                creature->SetDisplayId(MODEL_IMAGE_OF_BLAUMEUX);
-                            }
-                            _events.ScheduleEvent(EVENT_DEATH_KNIGHTS_3, 10s);
-                            break;
-                        case EVENT_DEATH_KNIGHTS_3:
-                            Talk(SAY_DEATH_KNIGHTS_3);
-                            if (Creature* creature = ObjectAccessor::GetCreature(*me, imageList[talkWing]))
-                            {
-                                creature->SetEntry(NPC_IMAGE_OF_ZELIEK);
-                                creature->SetDisplayId(MODEL_IMAGE_OF_ZELIEK);
-                            }
-                            _events.ScheduleEvent(EVENT_DEATH_KNIGHTS_4, 10s);
-                            break;
-                        case EVENT_DEATH_KNIGHTS_4:
-                            Talk(SAY_DEATH_KNIGHTS_4);
-                            break;
-                        case EVENT_HEIGAN_2:
-                            Talk(SAY_HEIGAN_2);
-                            break;
-                        default:
-                            break;
+                    case EVENT_START_RANDOM:
+                        talkWing = urand (0, 4);
+                        Talk(talkWing);
+                        _events.ScheduleEvent(EVENT_MOVE_TO_POINT, 8s);
+                        break;
+                    case EVENT_MOVE_TO_POINT:
+                        me->SetWalk(true);
+                        me->GetMotionMaster()->Clear();
+                        me->GetMotionMaster()->MovePoint(1, PosTalkLocations[talkWing].m_positionX, PosTalkLocations[talkWing].m_positionY, PosTalkLocations[talkWing].m_positionZ);
+                        break;
+                    case EVENT_TALK_COMPLETE:
+                        talkWing = 5;
+                        Talk(talkWing);
+                        _events.ScheduleEvent(EVENT_MOVE_TO_POINT, 5s);
+                        break;
+                    case EVENT_GET_TARGETS:
+                        StoreTargets();
+                        break;
+                    case EVENT_KELTHUZAD_2:
+                        Talk(SAY_KELTHUZAD_2);
+                        _events.ScheduleEvent(EVENT_KELTHUZAD_3, 8s);
+                        break;
+                    case EVENT_KELTHUZAD_3:
+                        Talk(SAY_KELTHUZAD_3);
+                        break;
+                    case EVENT_DEATH_KNIGHTS_2:
+                        Talk(SAY_DEATH_KNIGHTS_2);
+                        if (Creature* creature = ObjectAccessor::GetCreature(*me, imageList[talkWing]))
+                        {
+                            creature->SetEntry(NPC_IMAGE_OF_BLAUMEUX);
+                            creature->SetDisplayId(MODEL_IMAGE_OF_BLAUMEUX);
+                        }
+                        _events.ScheduleEvent(EVENT_DEATH_KNIGHTS_3, 10s);
+                        break;
+                    case EVENT_DEATH_KNIGHTS_3:
+                        Talk(SAY_DEATH_KNIGHTS_3);
+                        if (Creature* creature = ObjectAccessor::GetCreature(*me, imageList[talkWing]))
+                        {
+                            creature->SetEntry(NPC_IMAGE_OF_ZELIEK);
+                            creature->SetDisplayId(MODEL_IMAGE_OF_ZELIEK);
+                        }
+                        _events.ScheduleEvent(EVENT_DEATH_KNIGHTS_4, 10s);
+                        break;
+                    case EVENT_DEATH_KNIGHTS_4:
+                        Talk(SAY_DEATH_KNIGHTS_4);
+                        break;
+                    case EVENT_HEIGAN_2:
+                        Talk(SAY_HEIGAN_2);
+                        break;
+                    default:
+                        break;
                 }
             }
             DoMeleeAttackIfReady();
@@ -1880,10 +1880,10 @@ public:
             _playerGUID  = 0;
         }
 
-            void EnterCombat(Unit* who)
-            {
-                _events.ScheduleEvent(EVENT_HEMORRHAGE, 5s, 8s);
-                _events.ScheduleEvent(EVENT_KIDNEY_SHOT, 12s, 15s);
+        void EnterCombat(Unit* who)
+        {
+            _events.ScheduleEvent(EVENT_HEMORRHAGE, 5s, 8s);
+            _events.ScheduleEvent(EVENT_KIDNEY_SHOT, 12s, 15s);
 
             if (Player* player = who->ToPlayer())
                 Talk (SAY_AGGRO, player);
@@ -1925,16 +1925,16 @@ public:
             {
                 switch (eventId)
                 {
-                        case EVENT_HEMORRHAGE:
-                            DoCastVictim(SPELL_HEMORRHAGE);
-                            _events.ScheduleEvent(EVENT_HEMORRHAGE, 12s, 168s);
-                            break;
-                        case EVENT_KIDNEY_SHOT:
-                            DoCastVictim(SPELL_KIDNEY_SHOT);
-                            _events.ScheduleEvent(EVENT_KIDNEY_SHOT, 20s, 26s);
-                            break;
-                        default:
-                            break;
+                    case EVENT_HEMORRHAGE:
+                        DoCastVictim(SPELL_HEMORRHAGE);
+                        _events.ScheduleEvent(EVENT_HEMORRHAGE, 12s, 168s);
+                        break;
+                    case EVENT_KIDNEY_SHOT:
+                        DoCastVictim(SPELL_KIDNEY_SHOT);
+                        _events.ScheduleEvent(EVENT_KIDNEY_SHOT, 20s, 26s);
+                        break;
+                    default:
+                        break;
                 }
             }
             DoMeleeAttackIfReady();

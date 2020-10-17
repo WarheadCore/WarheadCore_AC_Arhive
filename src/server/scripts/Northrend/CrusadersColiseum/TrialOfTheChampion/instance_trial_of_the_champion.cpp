@@ -819,9 +819,7 @@ public:
                 case EVENT_YELL_WELCOME_2:
                     {
                         if (Creature* tirion = instance->GetCreature(NPC_TirionGUID))
-                        {
                             tirion->AI()->Talk(TEXT_WELCOME_2);
-                        }
 
                         events.RescheduleEvent(EVENT_SUMMON_GRAND_CHAMPION_1, 8s);
                         break;
@@ -976,7 +974,7 @@ public:
                     {
                         if( Creature* tirion = instance->GetCreature(NPC_TirionGUID) )
                             tirion->AI()->Talk(TEXT_GRATZ_SLAIN_CHAMPIONS);
-                        
+
                         HandleGameObject(GO_EnterGateGUID, true);
                     }
                     break;

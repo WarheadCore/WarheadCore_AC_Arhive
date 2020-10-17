@@ -91,7 +91,7 @@ public:
             events.RescheduleEvent(EVENT_SPELL_BLIZZARD, 5s, 10s);
             events.RescheduleEvent(EVENT_SPELL_TAIL_SWEEP, 15s, 20s);
             events.RescheduleEvent(EVENT_SPELL_UNCONTROLLABLE_ENERGY, 5s, 8s);
-            
+
             if (IsHeroic())
                 events.RescheduleEvent(EVENT_SPELL_MANA_DESTRUCTION, 20s);
         }
@@ -133,7 +133,7 @@ public:
                     break;
                 case EVENT_UNROOT:
                     me->SetControlled(false, UNIT_STATE_ROOT);
-                    
+
                     break;
                 case EVENT_SPELL_BLIZZARD:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 45.0f, true))

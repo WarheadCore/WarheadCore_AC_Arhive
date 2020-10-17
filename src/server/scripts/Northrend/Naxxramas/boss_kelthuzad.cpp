@@ -288,7 +288,7 @@ public:
                             go->SetPhaseMask(2, true);
                         }
                     }
-                    
+
                     break;
                 case EVENT_SUMMON_SOLDIER:
                     if (Creature* cr = me->SummonCreature(NPC_SOLDIER_OF_THE_FROZEN_WASTES, SummonPositions[urand(0, 5)], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 20000))
@@ -340,7 +340,7 @@ public:
                     events.ScheduleEvent(EVENT_SECOND_PHASE_HEALTH_CHECK, 1s);
                     events.ScheduleEvent(EVENT_SPELL_SHADOW_FISSURE, 25s);
                     events.ScheduleEvent(EVENT_SPELL_FROST_BLAST, 45s);
-                    
+
                     if (Is25ManRaid())
                         events.ScheduleEvent(EVENT_SPELL_CHAINS, 50s);
                     break;
@@ -410,7 +410,7 @@ public:
                         if (Creature* cr = ObjectAccessor::GetCreature(*me, pInstance->GetData64(DATA_LICH_KING_BOSS)))
                             cr->AI()->Talk(SAY_ANSWER_REQUEST);
 
-                    for (uint8 i = 0 ; i < RAID_MODE(2,4); ++i)
+                    for (uint8 i = 0 ; i < RAID_MODE(2, 4); ++i)
                         events.ScheduleEvent(EVENT_SUMMON_GUARDIAN_OF_ICECROWN, 10s + (i * 5s));
                     break;
                 case EVENT_SUMMON_GUARDIAN_OF_ICECROWN:
@@ -538,7 +538,7 @@ public:
                     if (me->HealthBelowPct(35))
                     {
                         me->CastSpell(me, SPELL_FRENZY, true);
-                        
+
                         break;
                     }
                     events.RepeatEvent(1000);

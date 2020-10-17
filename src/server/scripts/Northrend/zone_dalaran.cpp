@@ -532,11 +532,11 @@ public:
             me->setActive(true);
         }
 
-            void Reset()
-            {
-                me->SetVisible(false);
-                events.ScheduleEvent(EVENT_SELECT_TARGET, 1s);
-            }
+        void Reset()
+        {
+            me->SetVisible(false);
+            events.ScheduleEvent(EVENT_SELECT_TARGET, 1s);
+        }
 
         Player* SelectTargetInDalaran()
         {

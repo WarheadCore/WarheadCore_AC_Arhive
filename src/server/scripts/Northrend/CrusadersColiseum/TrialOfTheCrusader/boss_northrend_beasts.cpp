@@ -163,7 +163,7 @@ public:
                 case EVENT_SPELL_SNOBOLLED:
                     if( t->GetTypeId() == TYPEID_PLAYER )
                         me->CastSpell((Unit*)NULL, SPELL_SNOBOLLED, true);
-                    
+
                     break;
                 case EVENT_SPELL_BATTER:
                     if( t->GetTypeId() == TYPEID_PLAYER )
@@ -926,7 +926,7 @@ public:
                         me->GetMotionMaster()->MovementExpired();
                         me->SetReactState(REACT_AGGRESSIVE);
                     }
-                    
+
                     break;
                 case EVENT_JUMP_BACK:
                     {
@@ -944,8 +944,8 @@ public:
                         destY = Locs[LOC_CENTER].GetPositionY() + sin(angle) * dist;
                         destZ = Locs[LOC_CENTER].GetPositionZ() + 1.0f;
                         me->StopMoving();
-                        me->GetMotionMaster()->MoveJump(Locs[LOC_CENTER].GetPositionX()+cos(jumpangle)*35.0f, Locs[LOC_CENTER].GetPositionY()+sin(jumpangle)*35.0f, Locs[LOC_CENTER].GetPositionZ()+1.0f, 40.0f, 12.0f);
-                        
+                        me->GetMotionMaster()->MoveJump(Locs[LOC_CENTER].GetPositionX() + cos(jumpangle) * 35.0f, Locs[LOC_CENTER].GetPositionY() + sin(jumpangle) * 35.0f, Locs[LOC_CENTER].GetPositionZ() + 1.0f, 40.0f, 12.0f);
+
                         events.RescheduleEvent(EVENT_TRAMPLE, 1500ms);
 
                         if( pInstance )
@@ -992,7 +992,7 @@ public:
                     break;
                 case EVENT_REFRESH_POSITION:
                     //me->SetFacingTo(me->GetOrientation());
-                    
+
                     break;
             }
 

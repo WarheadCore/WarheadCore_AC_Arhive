@@ -138,29 +138,29 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-                switch (events.ExecuteEvent())
-                {
-                    case EVENT_GROUND_TREMOR:
-                        if (roll_chance_i(50))
-                            Talk(SAY_QUAKE);
-                        me->CastSpell(me, me->GetDisplayId() != me->GetNativeDisplayId() ? SPELL_QUAKE : SPELL_GROUND_TREMOR, false);
-                        events.ScheduleEvent(EVENT_GROUND_TREMOR, 10s);
-                        break;
-                    case EVENT_NUMBLING_SHOUT:
-                        me->CastSpell(me, me->GetDisplayId() != me->GetNativeDisplayId() ? SPELL_NUMBING_ROAR : SPELL_NUMBING_SHOUT, false);
-                        events.ScheduleEvent(EVENT_NUMBLING_SHOUT, 10s);
-                        break;
-                    case EVENT_DETERMINED_STAB:
-                        me->CastSpell(me->GetVictim(), me->GetDisplayId() != me->GetNativeDisplayId() ? SPELL_DETERMINED_GORE : SPELL_DETERMINED_STAB, false);
-                        events.ScheduleEvent(EVENT_DETERMINED_STAB, 8s);
-                        break;
-                    case EVENT_TRANSFORMATION:
-                        Talk(EMOTE_TRANSFORM);
-                        Talk(SAY_TRANSFORM);
-                        me->CastSpell(me, SPELL_TRANSFORMATION, false);
-                        me->CastSpell(me,SPELL_SUMMON_PHANTOM_TRANSFORM, true);
-                        events.ScheduleEvent(EVENT_TRANSFORMATION, 10s);
-                        break;
+            switch (events.ExecuteEvent())
+            {
+                case EVENT_GROUND_TREMOR:
+                    if (roll_chance_i(50))
+                        Talk(SAY_QUAKE);
+                    me->CastSpell(me, me->GetDisplayId() != me->GetNativeDisplayId() ? SPELL_QUAKE : SPELL_GROUND_TREMOR, false);
+                    events.ScheduleEvent(EVENT_GROUND_TREMOR, 10s);
+                    break;
+                case EVENT_NUMBLING_SHOUT:
+                    me->CastSpell(me, me->GetDisplayId() != me->GetNativeDisplayId() ? SPELL_NUMBING_ROAR : SPELL_NUMBING_SHOUT, false);
+                    events.ScheduleEvent(EVENT_NUMBLING_SHOUT, 10s);
+                    break;
+                case EVENT_DETERMINED_STAB:
+                    me->CastSpell(me->GetVictim(), me->GetDisplayId() != me->GetNativeDisplayId() ? SPELL_DETERMINED_GORE : SPELL_DETERMINED_STAB, false);
+                    events.ScheduleEvent(EVENT_DETERMINED_STAB, 8s);
+                    break;
+                case EVENT_TRANSFORMATION:
+                    Talk(EMOTE_TRANSFORM);
+                    Talk(SAY_TRANSFORM);
+                    me->CastSpell(me, SPELL_TRANSFORMATION, false);
+                    me->CastSpell(me, SPELL_SUMMON_PHANTOM_TRANSFORM, true);
+                    events.ScheduleEvent(EVENT_TRANSFORMATION, 10s);
+                    break;
             }
 
             DoMeleeAttackIfReady();

@@ -106,7 +106,7 @@ public:
             events.ScheduleEvent(EVENT_MOVE_TO_BALCONY, 110s);
             events.ScheduleEvent(EVENT_SPELL_CURSE, 15s);
             events.ScheduleEvent(EVENT_SUMMON_PLAGUED_WARRIOR_ANNOUNCE, 25s);
-            
+
             if (Is25ManRaid())
                 events.ScheduleEvent(EVENT_SPELL_BLINK, 26s);
         }

@@ -1387,7 +1387,7 @@ public:
         void Reset()
         {
             _events.Reset();
-                _events.RescheduleEvent(EVENT_BOMB_DESPAWN, 1min);
+            _events.RescheduleEvent(EVENT_BOMB_DESPAWN, 1min);
             me->SetWalk(true);
             exploded = false;
 
@@ -1404,7 +1404,7 @@ public:
             if (action == SPELL_KINETIC_BOMB_EXPLOSION)
             {
                 exploded = true;
-                    _events.RescheduleEvent(EVENT_BOMB_DESPAWN, 1s);
+                _events.RescheduleEvent(EVENT_BOMB_DESPAWN, 1s);
             }
             else if (action == ACTION_KINETIC_BOMB_JUMP)
             {

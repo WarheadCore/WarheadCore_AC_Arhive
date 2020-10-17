@@ -271,7 +271,7 @@ public:
         {
             if (me->GetPositionZ() > 440.0f) // protection, razorscale is attackable (so harpoons can hit him, etc.), but should not receive dmg while in air
                 damage = 0;
-            else if (!bGroundPhase && ((me->GetHealth()*100)/me->GetMaxHealth() < 50) && me->HasAura(62794)) // already below 50%, but still in chains and stunned
+            else if (!bGroundPhase && ((me->GetHealth() * 100) / me->GetMaxHealth() < 50) && me->HasAura(62794)) // already below 50%, but still in chains and stunned
                 events.RescheduleEvent(EVENT_WARN_DEEP_BREATH, 0s);
         }
 

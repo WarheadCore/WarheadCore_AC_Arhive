@@ -403,9 +403,7 @@ public:
                     break;
                 case EVENT_STONE_SHOUT:
                     if (_left || _right)
-                    {
                         return;
-                    }
 
                     me->CastSpell(me->GetVictim(), SPELL_STONE_SHOUT, false);
                     events.ScheduleEvent(EVENT_STONE_SHOUT, 2s);

@@ -369,9 +369,7 @@ public:
                     break;
                 case EVENT_SPELL_RENEW:
                     if( !MemoryGUID )
-                    {
                         break;
-                    }
                     if( urand(0, 1) )
                         me->CastSpell(me, SPELL_RENEW, false);
                     else if( Creature* memory = ObjectAccessor::GetCreature(*me, MemoryGUID) )

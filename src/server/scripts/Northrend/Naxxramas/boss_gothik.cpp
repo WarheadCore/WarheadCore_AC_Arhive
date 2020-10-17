@@ -257,10 +257,10 @@ public:
             events.ScheduleEvent(EVENT_INTRO_4, 14s);
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_DISABLE_MOVE);
             me->NearTeleportTo(PosPlatform.GetPositionX(), PosPlatform.GetPositionY(), PosPlatform.GetPositionZ(), PosPlatform.GetOrientation());
-            
+
             events.ScheduleEvent(EVENT_SUMMON_ADDS, 30s);
             events.ScheduleEvent(EVENT_CHECK_PLAYERS, 2min);
-            
+
             if (pInstance)
             {
                 if (GameObject* go = me->GetMap()->GetGameObject(pInstance->GetData64(DATA_GOTHIK_ENTER_GATE)))
@@ -402,15 +402,15 @@ public:
             {
                 case EVENT_INTRO_2:
                     Talk(SAY_INTRO_2);
-                    
+
                     break;
                 case EVENT_INTRO_3:
                     Talk(SAY_INTRO_3);
-                    
+
                     break;
                 case EVENT_INTRO_4:
                     Talk(SAY_INTRO_4);
-                    
+
                     break;
                 case EVENT_SPELL_SHADOW_BOLT:
                     me->CastSpell(me->GetVictim(), RAID_MODE(SPELL_SHADOW_BOLT_10, SPELL_SHADOW_BOLT_25, SPELL_SHADOW_BOLT_10, SPELL_SHADOW_BOLT_25), false);
@@ -442,7 +442,7 @@ public:
                             go->SetGoState(GO_STATE_ACTIVE);
 
                         events.CancelEvent(EVENT_TELEPORT);
-                        
+
                         break;
                     }
                     events.RepeatEvent(1000);
@@ -483,7 +483,7 @@ public:
                         gateOpened = true;
                         Talk(EMOTE_GATE_OPENED);
                     }
-                    
+
                     break;
             }
 

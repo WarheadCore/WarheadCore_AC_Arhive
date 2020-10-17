@@ -275,13 +275,13 @@ public:
                     StartEvent();
                     break;
                 case EVENT_THADDIUS_START_2:
-                    
+
                     Talk(SAY_AGGRO);
                     me->SetReactState(REACT_AGGRESSIVE);
                     me->SetControlled(false, UNIT_STATE_STUNNED);
                     me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                     me->setAttackTimer(BASE_ATTACK, 4000);
-                    
+
                     events.ScheduleEvent(EVENT_THADDIUS_SPELL_CHAIN_LIGHTNING, 14s);
                     events.ScheduleEvent(EVENT_THADDIUS_SPELL_BERSERK, 6min);
                     events.ScheduleEvent(EVENT_THADDIUS_POLARITY_SHIFT, 30s);
@@ -289,7 +289,7 @@ public:
                     return;
                 case EVENT_THADDIUS_SPELL_BERSERK:
                     me->CastSpell(me, SPELL_BERSERK, true);
-                    
+
                     break;
                 case EVENT_THADDIUS_SPELL_CHAIN_LIGHTNING:
                     me->CastSpell(me->GetVictim(), RAID_MODE(SPELL_CHAIN_LIGHTNING_10, SPELL_CHAIN_LIGHTNING_25, SPELL_CHAIN_LIGHTNING_10, SPELL_CHAIN_LIGHTNING_25), false);
@@ -301,7 +301,7 @@ public:
                     break;
                 case EVENT_ACTIVATE_BALL_LIGHTNING:
                     ballLightningEnabled = true;
-                    
+
                     break;
             }
 
@@ -378,7 +378,7 @@ public:
                 events.ScheduleEvent(EVENT_MINION_SPELL_STATIC_FIELD, 5s);
                 Talk(SAY_FEUG_AGGRO);
             }
-            
+
             events.ScheduleEvent(EVENT_MINION_CHECK_DISTANCE, 5s);
 
             // This event needs synchronisation, called for stalagg only
