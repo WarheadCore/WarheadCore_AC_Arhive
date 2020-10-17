@@ -85,10 +85,10 @@ public:
 
         void EnterCombat(Unit* /*who*/)
         {
-            events.ScheduleEvent(EVENT_CLEAVE, 5000);
-            events.ScheduleEvent(EVENT_SANDBREATH, 20000);
-            events.ScheduleEvent(EVENT_TIMESTOP, 15000);
-            events.ScheduleEvent(EVENT_FRENZY, 30000);
+            events.ScheduleEvent(EVENT_CLEAVE, 5s);
+            events.ScheduleEvent(EVENT_SANDBREATH, 20s);
+            events.ScheduleEvent(EVENT_TIMESTOP, 15s);
+            events.ScheduleEvent(EVENT_FRENZY, 30s);
 
             Talk(SAY_AGGRO);
         }
@@ -133,20 +133,20 @@ public:
             {
                 case EVENT_CLEAVE:
                     me->CastSpell(me->GetVictim(), SPELL_CLEAVE, false);
-                    events.ScheduleEvent(EVENT_CLEAVE, 10000);
+                    events.ScheduleEvent(EVENT_CLEAVE, 10s);
                     break;
                 case EVENT_SANDBREATH:
                     me->CastSpell(me->GetVictim(), SPELL_SAND_BREATH, false);
-                    events.ScheduleEvent(EVENT_SANDBREATH, 20000);
+                    events.ScheduleEvent(EVENT_SANDBREATH, 20s);
                     break;
                 case EVENT_TIMESTOP:
                     me->CastSpell(me, SPELL_TIME_STOP, false);
-                    events.ScheduleEvent(EVENT_TIMESTOP, 25000);
+                    events.ScheduleEvent(EVENT_TIMESTOP, 25s);
                     break;
                 case EVENT_FRENZY:
                     Talk(EMOTE_FRENZY);
                     me->CastSpell(me, SPELL_ENRAGE, false);
-                    events.ScheduleEvent(EVENT_FRENZY, 30000);
+                    events.ScheduleEvent(EVENT_FRENZY, 30s);
                     break;
             }
 

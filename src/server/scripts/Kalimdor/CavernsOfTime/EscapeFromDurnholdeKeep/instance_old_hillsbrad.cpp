@@ -83,11 +83,11 @@ public:
             if (_encounterProgress == ENCOUNTER_PROGRESS_NONE)
                 return;
 
-            _events.ScheduleEvent(EVENT_INITIAL_BARRELS_FLAME, 0);
-            _events.ScheduleEvent(EVENT_FINAL_BARRELS_FLAME, 0);
+            _events.ScheduleEvent(EVENT_INITIAL_BARRELS_FLAME, 0s);
+            _events.ScheduleEvent(EVENT_FINAL_BARRELS_FLAME, 0s);
 
             if (_encounterProgress == ENCOUNTER_PROGRESS_BARRELS)
-                _events.ScheduleEvent(EVENT_SUMMON_LIEUTENANT, 0);
+                _events.ScheduleEvent(EVENT_SUMMON_LIEUTENANT, 0s);
             else
                 SetData(DATA_THRALL_REPOSITION, 2);
         }
@@ -142,7 +142,7 @@ public:
             {
                 case DATA_THRALL_REPOSITION:
                     if (data > 1)
-                        _events.ScheduleEvent(EVENT_THRALL_REPOSITION, data == 2 ? 0 : 10000);
+                        _events.ScheduleEvent(EVENT_THRALL_REPOSITION, data == 2 ? 0s : 10s);
                     else if (Creature* thrall = instance->GetCreature(_thrallGUID))
                         Reposition(thrall);
                     return;
@@ -158,9 +158,9 @@ public:
                         DoUpdateWorldState(WORLD_STATE_BARRELS_PLANTED, ++_barrelCount);
                         if (_barrelCount == 5)
                         {
-                            _events.ScheduleEvent(EVENT_INITIAL_BARRELS_FLAME, 4000);
-                            _events.ScheduleEvent(EVENT_FINAL_BARRELS_FLAME, 12000);
-                            _events.ScheduleEvent(EVENT_SUMMON_LIEUTENANT, 18000);
+                            _events.ScheduleEvent(EVENT_INITIAL_BARRELS_FLAME, 4s);
+                            _events.ScheduleEvent(EVENT_FINAL_BARRELS_FLAME, 12s);
+                            _events.ScheduleEvent(EVENT_SUMMON_LIEUTENANT, 18s);
                         }
                         break;
                     }

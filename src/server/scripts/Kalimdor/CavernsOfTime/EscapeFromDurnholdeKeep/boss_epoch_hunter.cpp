@@ -62,10 +62,10 @@ public:
         {
             Talk(SAY_AGGRO);
 
-            events.ScheduleEvent(EVENT_SPELL_SAND_BREATH, 8000);
-            events.ScheduleEvent(EVENT_SPELL_IMPENDING_DEATH, 2000);
-            events.ScheduleEvent(EVENT_SPELL_DISRUPTION, 20000);
-            events.ScheduleEvent(EVENT_SPELL_WING_BUFFET, 14000);
+            events.ScheduleEvent(EVENT_SPELL_SAND_BREATH, 8s);
+            events.ScheduleEvent(EVENT_SPELL_IMPENDING_DEATH, 2s);
+            events.ScheduleEvent(EVENT_SPELL_DISRUPTION, 20s);
+            events.ScheduleEvent(EVENT_SPELL_WING_BUFFET, 14s);
         }
 
         void KilledUnit(Unit* victim)
@@ -99,19 +99,19 @@ public:
                     if (roll_chance_i(50))
                         Talk(SAY_BREATH);
                     me->CastSpell(me->GetVictim(), SPELL_SAND_BREATH, false);
-                    events.ScheduleEvent(EVENT_SPELL_SAND_BREATH, 20000);
+                    events.ScheduleEvent(EVENT_SPELL_SAND_BREATH, 20s);
                     break;
                 case EVENT_SPELL_IMPENDING_DEATH:
                     me->CastSpell(me->GetVictim(), SPELL_IMPENDING_DEATH, false);
-                    events.ScheduleEvent(EVENT_SPELL_IMPENDING_DEATH, 30000);
+                    events.ScheduleEvent(EVENT_SPELL_IMPENDING_DEATH, 30s);
                     break;
                 case EVENT_SPELL_WING_BUFFET:
                     me->CastSpell(me, SPELL_WING_BUFFET, false);
-                    events.ScheduleEvent(EVENT_SPELL_WING_BUFFET, 30000);
+                    events.ScheduleEvent(EVENT_SPELL_WING_BUFFET, 30s);
                     break;
                 case EVENT_SPELL_DISRUPTION:
                     me->CastSpell(me, SPELL_MAGIC_DISRUPTION_AURA, false);
-                    events.ScheduleEvent(EVENT_SPELL_DISRUPTION, 30000);
+                    events.ScheduleEvent(EVENT_SPELL_DISRUPTION, 30s);
                     break;
             }
 

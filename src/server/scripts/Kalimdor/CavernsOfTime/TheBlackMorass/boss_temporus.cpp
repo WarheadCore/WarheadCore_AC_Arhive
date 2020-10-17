@@ -72,11 +72,12 @@ public:
 
         void EnterCombat(Unit* /*who*/)
         {
-            events.ScheduleEvent(EVENT_HASTEN, 12000);
-            events.ScheduleEvent(EVENT_MORTAL_WOUND, 5000);
-            events.ScheduleEvent(EVENT_WING_BUFFET, 20000);
+            events.ScheduleEvent(EVENT_HASTEN, 12s);
+            events.ScheduleEvent(EVENT_MORTAL_WOUND, 5s);
+            events.ScheduleEvent(EVENT_WING_BUFFET, 20s);
+
             if (IsHeroic())
-                events.ScheduleEvent(EVENT_SPELL_REFLECTION, 28000);
+                events.ScheduleEvent(EVENT_SPELL_REFLECTION, 28s);
 
             OwnTalk(SAY_AGGRO);
         }
@@ -122,19 +123,19 @@ public:
             {
                 case EVENT_HASTEN:
                     me->CastSpell(me, SPELL_HASTEN, false);
-                    events.ScheduleEvent(EVENT_HASTEN, 20000);
+                    events.ScheduleEvent(EVENT_HASTEN, 20s);
                     break;
                 case EVENT_MORTAL_WOUND:
                     me->CastSpell(me->GetVictim(), SPELL_MORTAL_WOUND, false);
-                    events.ScheduleEvent(EVENT_MORTAL_WOUND, 10000);
+                    events.ScheduleEvent(EVENT_MORTAL_WOUND, 10s);
                     break;
                 case EVENT_WING_BUFFET:
                     me->CastSpell(me, SPELL_WING_BUFFET, false);
-                    events.ScheduleEvent(EVENT_WING_BUFFET, 20000);
+                    events.ScheduleEvent(EVENT_WING_BUFFET, 20s);
                     break;
                 case EVENT_SPELL_REFLECTION:
                     me->CastSpell(me, SPELL_REFLECT, false);
-                    events.ScheduleEvent(EVENT_SPELL_REFLECTION, 30000);
+                    events.ScheduleEvent(EVENT_SPELL_REFLECTION, 30s);
                     break;
             }
 

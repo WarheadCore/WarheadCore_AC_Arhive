@@ -130,8 +130,8 @@ public:
 
             if (me->movespline->Finalized())
             {
-                events2.ScheduleEvent(EVENT_INITIAL_TALK, 500);
-                events2.ScheduleEvent(EVENT_START_FIGHT, 8000);
+                events2.ScheduleEvent(EVENT_INITIAL_TALK, 500ms);
+                events2.ScheduleEvent(EVENT_START_FIGHT, 8s);
             }
         }
 
@@ -139,12 +139,13 @@ public:
         {
             me->CastSpell(me, SPELL_DEVOTION_AURA, true);
 
-            events.ScheduleEvent(EVENT_SPELL_HOLY_LIGHT, 15000);
-            events.ScheduleEvent(EVENT_SPELL_CLEANSE, 6000);
-            events.ScheduleEvent(EVENT_SPELL_HAMMER, 20000);
-            events.ScheduleEvent(EVENT_SPELL_HOLY_SHIELD, 10000);
+            events.ScheduleEvent(EVENT_SPELL_HOLY_LIGHT, 15s);
+            events.ScheduleEvent(EVENT_SPELL_CLEANSE, 6s);
+            events.ScheduleEvent(EVENT_SPELL_HAMMER, 20s);
+            events.ScheduleEvent(EVENT_SPELL_HOLY_SHIELD, 10s);
+
             if (IsHeroic())
-                events.ScheduleEvent(EVENT_SPELL_CONSECRATION, 1000);
+                events.ScheduleEvent(EVENT_SPELL_CONSECRATION, 1s);
         }
 
         void KilledUnit(Unit*  /*victim*/)
@@ -191,25 +192,25 @@ public:
             {
                 case EVENT_SPELL_HOLY_LIGHT:
                     me->CastSpell(me, SPELL_HOLY_LIGHT, false);
-                    events.ScheduleEvent(EVENT_SPELL_HOLY_LIGHT, 20000);
+                    events.ScheduleEvent(EVENT_SPELL_HOLY_LIGHT, 20s);
                     break;
                 case EVENT_SPELL_CLEANSE:
                     if (roll_chance_i(33))
                         Talk(SAY_TAUNT);
                     me->CastSpell(me, SPELL_CLEANSE, false);
-                    events.ScheduleEvent(EVENT_SPELL_CLEANSE, 10000);
+                    events.ScheduleEvent(EVENT_SPELL_CLEANSE, 10s);
                     break;
                 case EVENT_SPELL_HAMMER:
                     me->CastSpell(me->GetVictim(), SPELL_HAMMER_OF_JUSTICE, false);
-                    events.ScheduleEvent(EVENT_SPELL_HAMMER, 30000);
+                    events.ScheduleEvent(EVENT_SPELL_HAMMER, 30s);
                     break;
                 case EVENT_SPELL_HOLY_SHIELD:
                     me->CastSpell(me, SPELL_CLEANSE, false);
-                    events.ScheduleEvent(SPELL_HOLY_SHIELD, 30000);
+                    events.ScheduleEvent(SPELL_HOLY_SHIELD, 30s);
                     break;
                 case EVENT_SPELL_CONSECRATION:
                     me->CastSpell(me, SPELL_CONSECRATION, false);
-                    events.ScheduleEvent(EVENT_SPELL_CONSECRATION, 20000);
+                    events.ScheduleEvent(EVENT_SPELL_CONSECRATION, 20s);
                     break;
 
             }
