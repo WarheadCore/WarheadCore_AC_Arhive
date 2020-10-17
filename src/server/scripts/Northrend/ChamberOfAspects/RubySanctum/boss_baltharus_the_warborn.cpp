@@ -320,8 +320,8 @@ public:
             DoMeleeAttackIfReady();
         }
 
-        private:
-            EventMap _events;
+    private:
+        EventMap _events;
     };
 
     CreatureAI* GetAI(Creature* creature) const
