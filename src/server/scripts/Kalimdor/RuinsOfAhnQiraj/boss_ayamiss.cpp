@@ -223,17 +223,16 @@ public:
                 }
             }
         }
-    }
-private:
-    std::list<uint64> _swarmers;
-    uint8 _phase;
-    bool _enraged;
-};
+    private:
+        std::list<uint64> _swarmers;
+        uint8 _phase;
+        bool _enraged;
+    };
 
-CreatureAI* GetAI(Creature* creature) const
-{
-    return GetInstanceAI<boss_ayamissAI>(creature);
-}
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return GetInstanceAI<boss_ayamissAI>(creature);
+    }
 };
 
 class npc_hive_zara_larva : public CreatureScript

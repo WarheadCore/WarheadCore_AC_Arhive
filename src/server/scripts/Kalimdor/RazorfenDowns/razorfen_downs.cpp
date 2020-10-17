@@ -239,6 +239,7 @@ public:
         bool channeling;
         uint8 eventProgress;
         uint8 spawnerCount;
+    };
 
     CreatureAI* GetAI(Creature* creature) const
     {
