@@ -1051,7 +1051,6 @@ public:
                         cr->SetPhaseMask(16, true);
                     }
 
-
                     break;
             }
 
@@ -1279,7 +1278,6 @@ public:
                         summons.Summon(cr);
                         cr->SetPhaseMask(16, true);
                     }
-
 
                     break;
             }
