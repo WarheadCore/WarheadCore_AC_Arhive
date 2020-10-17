@@ -248,8 +248,6 @@ public:
                 cell.Visit(pair, cSearcher, *me->GetMap(), *me, me->GetGridActivationRange());
             }
 
-            BombCount = 0;
-
             //TC_LOG_ERROR("scripts", "Eggs %d at middle", templist.size());
             if (templist.empty())
                 return false;
