@@ -60,8 +60,8 @@ public:
         void EnterCombat(Unit* /*who*/)
         {
             _EnterCombat();
-            events.ScheduleEvent(EVENT_LIGHTNINGCLOUD, urand(5000, 10000));
-            events.ScheduleEvent(EVENT_LIGHTNINGWAVE, urand(8000, 16000));
+            events.ScheduleEvent(EVENT_LIGHTNINGCLOUD, 5s, 10s);
+            events.ScheduleEvent(EVENT_LIGHTNINGWAVE, 8s, 16s);
         }
 
         void UpdateAI(uint32 diff)
@@ -80,11 +80,11 @@ public:
                 {
                     case EVENT_LIGHTNINGCLOUD:
                         DoCastVictim(SPELL_LIGHTNINGCLOUD, true);
-                        events.ScheduleEvent(EVENT_LIGHTNINGCLOUD, urand(15000, 20000));
+                        events.ScheduleEvent(EVENT_LIGHTNINGCLOUD, 15s, 20s);
                         break;
                     case EVENT_LIGHTNINGWAVE:
                         DoCast(SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true), SPELL_LIGHTNINGWAVE);
-                        events.ScheduleEvent(EVENT_LIGHTNINGWAVE, urand(12000, 16000));
+                        events.ScheduleEvent(EVENT_LIGHTNINGWAVE, 12s, 16s);
                         break;
                     default:
                         break;

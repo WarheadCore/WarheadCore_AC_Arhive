@@ -105,10 +105,10 @@ public:
         void EnterCombat(Unit* /*who*/)
         {
             _EnterCombat();
-            events.ScheduleEvent(EVENT_MORTALCLEAVE, 4000, 0, PHASE_ONE);     // Phase 1
-            events.ScheduleEvent(EVENT_SILENCE, 9000, 0, PHASE_ONE);          // Phase 1
-            events.ScheduleEvent(EVENT_CHECK_TIMER, 10000, 0, PHASE_ONE);     // Phase 1
-            events.ScheduleEvent(EVENT_RESURRECT_TIMER, 10000, 0, PHASE_ONE); // Phase 1
+            events.ScheduleEvent(EVENT_MORTALCLEAVE, 4s, 0, PHASE_ONE);     // Phase 1
+            events.ScheduleEvent(EVENT_SILENCE, 9s, 0, PHASE_ONE);          // Phase 1
+            events.ScheduleEvent(EVENT_CHECK_TIMER, 10s, 0, PHASE_ONE);     // Phase 1
+            events.ScheduleEvent(EVENT_RESURRECT_TIMER, 10s, 0, PHASE_ONE); // Phase 1
             Talk(SAY_AGGRO);
         }
 
@@ -133,11 +133,11 @@ public:
                 {
                     case EVENT_MORTALCLEAVE:
                         DoCastVictim(SPELL_MORTALCLEAVE, true);
-                        events.ScheduleEvent(EVENT_MORTALCLEAVE, urand(15000, 20000), 0, PHASE_ONE);
+                        events.ScheduleEvent(EVENT_MORTALCLEAVE, 15s, 20s, 0, PHASE_ONE);
                         break;
                     case EVENT_SILENCE:
                         DoCastVictim(SPELL_SILENCE, true);
-                        events.ScheduleEvent(EVENT_SILENCE, urand(20000, 25000), 0, PHASE_ONE);
+                        events.ScheduleEvent(EVENT_SILENCE, 20s, 25s, 0, PHASE_ONE);
                         break;
                     case EVENT_RESURRECT_TIMER:
                         //Thekal will transform to Tiger if he died and was not resurrected after 10 seconds.
@@ -155,14 +155,14 @@ public:
                             */
                             me->HandleStatModifier(UNIT_MOD_DAMAGE_MAINHAND, TOTAL_PCT, 40.0f, true); // hack
                             DoResetThreat();
-                            events.ScheduleEvent(EVENT_FRENZY, 30000, 0, PHASE_TWO);          // Phase 2
-                            events.ScheduleEvent(EVENT_FORCEPUNCH, 4000, 0, PHASE_TWO);       // Phase 2
-                            events.ScheduleEvent(EVENT_SPELL_CHARGE, 12000, 0, PHASE_TWO);    // Phase 2
-                            events.ScheduleEvent(EVENT_ENRAGE, 32000, 0, PHASE_TWO);          // Phase 2
-                            events.ScheduleEvent(EVENT_SUMMONTIGERS, 25000, 0, PHASE_TWO);    // Phase 2
+                            events.ScheduleEvent(EVENT_FRENZY, 30s, 0, PHASE_TWO);          // Phase 2
+                            events.ScheduleEvent(EVENT_FORCEPUNCH, 4s, 0, PHASE_TWO);       // Phase 2
+                            events.ScheduleEvent(EVENT_SPELL_CHARGE, 12s, 0, PHASE_TWO);    // Phase 2
+                            events.ScheduleEvent(EVENT_ENRAGE, 32s, 0, PHASE_TWO);          // Phase 2
+                            events.ScheduleEvent(EVENT_SUMMONTIGERS, 25s, 0, PHASE_TWO);    // Phase 2
                             events.SetPhase(PHASE_TWO);
                         }
-                        events.ScheduleEvent(EVENT_RESURRECT_TIMER, 10000, 0, PHASE_ONE);
+                        events.ScheduleEvent(EVENT_RESURRECT_TIMER, 10s, 0, PHASE_ONE);
                         break;
                     case EVENT_CHECK_TIMER:
                         //Check_Timer for the death of LorKhan and Zath.
@@ -194,15 +194,15 @@ public:
                                 }
                             }
                         }
-                        events.ScheduleEvent(EVENT_CHECK_TIMER, 5000, 0, PHASE_ONE);
+                        events.ScheduleEvent(EVENT_CHECK_TIMER, 5s, 0, PHASE_ONE);
                         break;
                     case EVENT_FRENZY:
                         DoCast(me, SPELL_FRENZY);
-                        events.ScheduleEvent(EVENT_FRENZY, 30000, 0, PHASE_TWO);
+                        events.ScheduleEvent(EVENT_FRENZY, 30s, 0, PHASE_TWO);
                         break;
                     case EVENT_FORCEPUNCH:
                         DoCastVictim(SPELL_FORCEPUNCH, true);
-                        events.ScheduleEvent(EVENT_FORCEPUNCH, urand(16000, 21000), 0, PHASE_TWO);
+                        events.ScheduleEvent(EVENT_FORCEPUNCH, 16s, 21s, 0, PHASE_TWO);
                         break;
                     case EVENT_CHARGE:
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
@@ -211,7 +211,7 @@ public:
                             DoResetThreat();
                             AttackStart(target);
                         }
-                        events.ScheduleEvent(EVENT_CHARGE, urand(15000, 22000), 0, PHASE_TWO);
+                        events.ScheduleEvent(EVENT_CHARGE, 15s, 22s, 0, PHASE_TWO);
                         break;
                     case EVENT_ENRAGE:
                         if (HealthBelowPct(11) && !Enraged)
@@ -219,11 +219,11 @@ public:
                             DoCast(me, SPELL_ENRAGE);
                             Enraged = true;
                         }
-                        events.ScheduleEvent(EVENT_ENRAGE, 30000);
+                        events.ScheduleEvent(EVENT_ENRAGE, 30s);
                         break;
                     case EVENT_SUMMONTIGERS:
                         DoCastVictim(SPELL_SUMMONTIGERS, true);
-                        events.ScheduleEvent(EVENT_SUMMONTIGERS, urand(10000, 14000), 0, PHASE_TWO);
+                        events.ScheduleEvent(EVENT_SUMMONTIGERS, 10s, 14s, 0, PHASE_TWO);
                         break;
                     default:
                         break;
