@@ -1098,7 +1098,7 @@ public:
                             boss->GetMotionMaster()->MovePoint(0, 746.881f, 635.263f, 411.7f);
 
                         events.ScheduleEvent(EVENT_ARGENT_CHALLENGE_ATTACK, 3000);
-                    }                    
+                    }
                     break;
                 case EVENT_ARGENT_CHALLENGE_ATTACK:
                     {
