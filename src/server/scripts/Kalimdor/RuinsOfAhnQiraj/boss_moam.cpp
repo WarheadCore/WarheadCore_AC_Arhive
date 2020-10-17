@@ -67,8 +67,7 @@ public:
             _Reset();
             me->SetPower(POWER_MANA, 0);
             _isStonePhase = false;
-            events.ScheduleEvent(EVENT_STONE_PHASE, 90000);
-            //events.ScheduleEvent(EVENT_WIDE_SLASH, 11000);
+            events.ScheduleEvent(EVENT_STONE_PHASE, 90s);
         }
 
         void DamageTaken(Unit*, uint32& /*damage*/, DamageEffectType, SpellSchoolMask)
@@ -87,7 +86,7 @@ public:
                 case ACTION_STONE_PHASE_END:
                     {
                         me->RemoveAurasDueToSpell(SPELL_ENERGIZE);
-                        events.ScheduleEvent(EVENT_STONE_PHASE, 90000);
+                        events.ScheduleEvent(EVENT_STONE_PHASE, 90s);
                         _isStonePhase = false;
                         break;
                     }
@@ -97,7 +96,7 @@ public:
                         DoCast(me, SPELL_SUMMON_MANA_FIEND_2);
                         DoCast(me, SPELL_SUMMON_MANA_FIEND_3);
                         DoCast(me, SPELL_ENERGIZE);
-                        events.ScheduleEvent(EVENT_STONE_PHASE_END, 90000);
+                        events.ScheduleEvent(EVENT_STONE_PHASE_END, 90s);
                         break;
                     }
                 default:
@@ -153,17 +152,9 @@ public:
                             for (std::list<Unit*>::iterator itr = targetList.begin(); itr != targetList.end(); ++itr)
                                 DoCast(*itr, SPELL_DRAIN_MANA);
 
-                            events.ScheduleEvent(EVENT_DRAIN_MANA, urand(5000, 15000));
+                            events.ScheduleEvent(EVENT_DRAIN_MANA, 5s, 15s);
                             break;
-                        }/*
-                        case EVENT_WIDE_SLASH:
-                            DoCast(me, SPELL_WIDE_SLASH);
-                            events.ScheduleEvent(EVENT_WIDE_SLASH, 11000);
-                            break;
-                        case EVENT_TRASH:
-                            DoCast(me, SPELL_TRASH);
-                            events.ScheduleEvent(EVENT_WIDE_SLASH, 16000);
-                            break;*/
+                        }
                     default:
                         break;
                 }
