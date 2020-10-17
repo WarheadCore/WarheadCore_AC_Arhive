@@ -93,19 +93,19 @@ public:
             // now drop damage requirement to be able to take loot
             me->ResetPlayerDamageReq();
 
-            events.ScheduleEvent(EVENT_CLEAVE, 10000);
-            events.ScheduleEvent(EVENT_FLAMEBREATH, 15000);
-            events.ScheduleEvent(EVENT_FIRENOVA, 20000);
-            events.ScheduleEvent(EVENT_TAILSWIPE, 11000);
-            events.ScheduleEvent(EVENT_BURNINGADRENALINE_CASTER, 15000);
-            events.ScheduleEvent(EVENT_BURNINGADRENALINE_TANK, 45000);
+            events.ScheduleEvent(EVENT_CLEAVE, 10s);
+            events.ScheduleEvent(EVENT_FLAMEBREATH, 15s);
+            events.ScheduleEvent(EVENT_FIRENOVA, 20s);
+            events.ScheduleEvent(EVENT_TAILSWIPE, 11s);
+            events.ScheduleEvent(EVENT_BURNINGADRENALINE_CASTER, 15s);
+            events.ScheduleEvent(EVENT_BURNINGADRENALINE_TANK, 45s);
         }
 
         void BeginSpeech(Unit* target)
         {
             PlayerGUID = target->GetGUID();
             me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
-            events.ScheduleEvent(EVENT_SPEECH_1, 1000);
+            events.ScheduleEvent(EVENT_SPEECH_1, 1s);
         }
 
         void KilledUnit(Unit* victim)
@@ -131,17 +131,17 @@ public:
                             Talk(SAY_LINE1);
                             me->SetStandState(UNIT_STAND_STATE_STAND);
                             me->HandleEmoteCommand(EMOTE_ONESHOT_TALK);
-                            events.ScheduleEvent(EVENT_SPEECH_2, 12000);
+                            events.ScheduleEvent(EVENT_SPEECH_2, 12s);
                             break;
                         case EVENT_SPEECH_2:
                             Talk(SAY_LINE2);
                             me->HandleEmoteCommand(EMOTE_ONESHOT_TALK);
-                            events.ScheduleEvent(EVENT_SPEECH_3, 12000);
+                            events.ScheduleEvent(EVENT_SPEECH_3, 12s);
                             break;
                         case EVENT_SPEECH_3:
                             Talk(SAY_LINE3);
                             me->HandleEmoteCommand(EMOTE_ONESHOT_TALK);
-                            events.ScheduleEvent(EVENT_SPEECH_4, 16000);
+                            events.ScheduleEvent(EVENT_SPEECH_4, 16s);
                             break;
                         case EVENT_SPEECH_4:
                             me->setFaction(103);
@@ -161,16 +161,16 @@ public:
                 switch (eventId)
                 {
                     case EVENT_CLEAVE:
-                        events.ScheduleEvent(EVENT_CLEAVE, 15000);
+                        events.ScheduleEvent(EVENT_CLEAVE, 15s);
                         DoCastVictim(SPELL_CLEAVE);
                         break;
                     case EVENT_FLAMEBREATH:
                         DoCastVictim(SPELL_FLAMEBREATH);
-                        events.ScheduleEvent(EVENT_FLAMEBREATH, urand(8000, 14000));
+                        events.ScheduleEvent(EVENT_FLAMEBREATH, 8s, 14s);
                         break;
                     case EVENT_FIRENOVA:
                         DoCastVictim(SPELL_FIRENOVA);
-                        events.ScheduleEvent(EVENT_FIRENOVA, 15000);
+                        events.ScheduleEvent(EVENT_FIRENOVA, 15s);
                         break;
                     case EVENT_TAILSWIPE:
                         //Only cast if we are behind
@@ -178,7 +178,7 @@ public:
                         {
                         DoCast(me->GetVictim(), SPELL_TAILSWIPE);
                         }*/
-                        events.ScheduleEvent(EVENT_TAILSWIPE, 15000);
+                        events.ScheduleEvent(EVENT_TAILSWIPE, 15s);
                         break;
                     case EVENT_BURNINGADRENALINE_CASTER:
                         {
@@ -195,12 +195,12 @@ public:
                             if (target)                                     // cast on self (see below)
                                 target->CastSpell(target, SPELL_BURNINGADRENALINE, true);
                         }
-                        events.ScheduleEvent(EVENT_BURNINGADRENALINE_CASTER, 15000);
+                        events.ScheduleEvent(EVENT_BURNINGADRENALINE_CASTER, 15s);
                         break;
                     case EVENT_BURNINGADRENALINE_TANK:
                         // have the victim cast the spell on himself otherwise the third effect aura will be applied to Vael instead of the player
                         me->GetVictim()->CastSpell(me->GetVictim(), SPELL_BURNINGADRENALINE, true);
-                        events.ScheduleEvent(EVENT_BURNINGADRENALINE_TANK, 45000);
+                        events.ScheduleEvent(EVENT_BURNINGADRENALINE_TANK, 45s);
                         break;
                 }
             }

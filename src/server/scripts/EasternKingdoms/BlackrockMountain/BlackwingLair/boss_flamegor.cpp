@@ -56,9 +56,9 @@ public:
             }
             _EnterCombat();
 
-            events.ScheduleEvent(EVENT_SHADOWFLAME, urand(10000, 20000));
-            events.ScheduleEvent(EVENT_WINGBUFFET, 30000);
-            events.ScheduleEvent(EVENT_FRENZY, 10000);
+            events.ScheduleEvent(EVENT_SHADOWFLAME, 10s, 20s);
+            events.ScheduleEvent(EVENT_WINGBUFFET, 30s);
+            events.ScheduleEvent(EVENT_FRENZY, 10s);
         }
 
         void UpdateAI(uint32 diff)
@@ -77,18 +77,18 @@ public:
                 {
                     case EVENT_SHADOWFLAME:
                         DoCastVictim(SPELL_SHADOWFLAME);
-                        events.ScheduleEvent(EVENT_SHADOWFLAME, urand(10000, 20000));
+                        events.ScheduleEvent(EVENT_SHADOWFLAME, 10s, 20s);
                         break;
                     case EVENT_WINGBUFFET:
                         DoCastVictim(SPELL_WINGBUFFET);
                         if (DoGetThreat(me->GetVictim()))
                             DoModifyThreatPercent(me->GetVictim(), -75);
-                        events.ScheduleEvent(EVENT_WINGBUFFET, 30000);
+                        events.ScheduleEvent(EVENT_WINGBUFFET, 30s);
                         break;
                     case EVENT_FRENZY:
                         Talk(EMOTE_FRENZY);
                         DoCast(me, SPELL_FRENZY);
-                        events.ScheduleEvent(EVENT_FRENZY, urand(8000, 10000));
+                        events.ScheduleEvent(EVENT_FRENZY, 8s, 10s);
                         break;
                 }
             }

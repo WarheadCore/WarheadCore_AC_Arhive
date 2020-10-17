@@ -72,9 +72,9 @@ public:
         void EnterCombat(Unit* victim)
         {
             BossAI::EnterCombat(victim);
-            events.ScheduleEvent(EVENT_FRENZY, 30000);
-            events.ScheduleEvent(EVENT_PANIC, 20000);
-            events.ScheduleEvent(EVENT_LAVA_BOMB, 12000);
+            events.ScheduleEvent(EVENT_FRENZY, 30s);
+            events.ScheduleEvent(EVENT_PANIC, 20s);
+            events.ScheduleEvent(EVENT_LAVA_BOMB, 12s);
         }
 
         void UpdateAI(uint32 diff)
@@ -94,16 +94,16 @@ public:
                     case EVENT_FRENZY:
                         Talk(EMOTE_FRENZY);
                         DoCast(me, SPELL_FRENZY);
-                        events.ScheduleEvent(EVENT_FRENZY, 15000);
+                        events.ScheduleEvent(EVENT_FRENZY, 15s);
                         break;
                     case EVENT_PANIC:
                         DoCastVictim(SPELL_PANIC);
-                        events.ScheduleEvent(EVENT_PANIC, 35000);
+                        events.ScheduleEvent(EVENT_PANIC, 35s);
                         break;
                     case EVENT_LAVA_BOMB:
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true, -SPELL_LAVA_BOMB))
                             DoCast(target, SPELL_LAVA_BOMB);
-                        events.ScheduleEvent(EVENT_LAVA_BOMB, 12000);
+                        events.ScheduleEvent(EVENT_LAVA_BOMB, 12s);
                         break;
                     default:
                         break;
@@ -156,7 +156,7 @@ public:
                 if (!smoldering)
                 {
                     killer = attacker;
-                    events.ScheduleEvent(EVENT_IGNITE, 10000);
+                    events.ScheduleEvent(EVENT_IGNITE, 10s);
                     me->SetHealth(1);
                     me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_UNK_29);
                     me->SetFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_FEIGN_DEATH);
@@ -185,7 +185,7 @@ public:
 
         void EnterCombat(Unit* /*victim*/)
         {
-            events.ScheduleEvent(EVENT_SERRATED_BITE, 10000); // timer may be wrong
+            events.ScheduleEvent(EVENT_SERRATED_BITE, 10s); // timer may be wrong
         }
 
         void UpdateAI(uint32 diff)
@@ -203,7 +203,7 @@ public:
                         if (UpdateVictim() && !smoldering)
                         {
                             DoCast(me->GetVictim(), SPELL_SERRATED_BITE);
-                            events.ScheduleEvent(EVENT_SERRATED_BITE, 10000); // again, timer may be wrong
+                            events.ScheduleEvent(EVENT_SERRATED_BITE, 10s); // again, timer may be wrong
                         }
                         break;
                     case EVENT_IGNITE:
