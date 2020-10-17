@@ -166,7 +166,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_CHAIN_LIGHTNING:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
@@ -189,7 +189,6 @@ public:
                     break;
                 case EVENT_SUMMON_NEXT_MINION:
                     me->SummonCreature(NPC_TEMPEST_MINION, TempestMinions[urand(0, 3)], TEMPSUMMON_CORPSE_DESPAWN, 0);
-                    events.PopEvent();
                     break;
                 default:
                     break;

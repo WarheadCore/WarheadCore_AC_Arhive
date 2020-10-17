@@ -189,7 +189,7 @@ public:
             if( me->HasUnitState(UNIT_STATE_CASTING) )
                 return;
 
-            switch( events.GetEvent() )
+            switch( events.ExecuteEvent() )
             {
                 case 0:
                     break;
@@ -222,7 +222,6 @@ public:
                                 DoZoneInCombat(c);
                             }
                     }
-                    events.PopEvent();
                     break;
             }
 
@@ -309,7 +308,7 @@ public:
             if( me->HasUnitState(UNIT_STATE_CASTING) )
                 return;
 
-            switch( events.GetEvent() )
+            switch( events.ExecuteEvent() )
             {
                 case 0:
                     break;
@@ -324,7 +323,6 @@ public:
                     events.RepeatEvent(urand(40000, 120000));
                     break;
                 case EVENT_RESURRECT:
-                    events.PopEvent();
                     events.DelayEvents(3500);
                     DoCast(me, SPELL_SCOURGE_RESURRECTION, true);
                     me->SetStandState(UNIT_STAND_STATE_STAND);
@@ -337,7 +335,6 @@ public:
                     me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                     me->SetControlled(false, UNIT_STATE_ROOT);
                     me->GetMotionMaster()->MoveChase(me->GetVictim());
-                    events.PopEvent();
                     break;
             }
 

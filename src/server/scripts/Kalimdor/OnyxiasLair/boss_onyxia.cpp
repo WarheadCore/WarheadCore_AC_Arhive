@@ -336,7 +336,7 @@ public:
 
             DoMeleeAttackIfReady();
 
-            switch( events.GetEvent() )
+            switch( events.ExecuteEvent() )
             {
                 case 0:
                     break;
@@ -371,7 +371,6 @@ public:
                         me->StopMoving();
                         DoResetThreat();
                         me->GetMotionMaster()->MovePoint(10, OnyxiaMoveData[0].x, OnyxiaMoveData[0].y, OnyxiaMoveData[0].z);
-                        events.PopEvent();
                     }
                     break;
                 case EVENT_LIFTOFF:
@@ -387,19 +386,18 @@ public:
                         me->SendMovementFlagUpdate();
                         me->GetMotionMaster()->MoveTakeoff(11, OnyxiaMoveData[1].x + 1.0f, OnyxiaMoveData[1].y, OnyxiaMoveData[1].z, 12.0f);
                         bManyWhelpsAvailable = true;
-                        events.PopEvent();
+                        
                         events.RescheduleEvent(EVENT_END_MANY_WHELPS_TIME, 10000);
                     }
                     break;
                 case EVENT_END_MANY_WHELPS_TIME:
                     bManyWhelpsAvailable = false;
-                    events.PopEvent();
                     break;
                 case EVENT_FLY_S_TO_N:
                     {
                         me->SetSpeed(MOVE_RUN, 2.95f, false);
                         me->GetMotionMaster()->MovePoint(5, OnyxiaMoveData[5].x, OnyxiaMoveData[5].y, OnyxiaMoveData[5].z);
-                        events.PopEvent();
+                        
                         whelpSpam = true;
                         events.ScheduleEvent(EVENT_WHELP_SPAM, 90000);
                         events.ScheduleEvent(EVENT_SUMMON_LAIR_GUARD, 30000);
@@ -422,7 +420,6 @@ public:
                         Talk(SAY_PHASE_3_TRANS);
                         me->SendMeleeAttackStop(me->GetVictim());
                         me->GetMotionMaster()->MoveLand(13, OnyxiaMoveData[0].x + 1.0f, OnyxiaMoveData[0].y, OnyxiaMoveData[0].z, 12.0f);
-                        events.PopEvent();
                         DoResetThreat();
                     }
                     break;
@@ -433,7 +430,7 @@ public:
                             me->SetFacingToObject(v);
                             me->CastSpell(v, SPELL_FIREBALL, false);
                         }
-                        events.PopEvent();
+                        
                         events.ScheduleEvent(EVENT_SPELL_FIREBALL_SECOND, 4000);
                     }
                     break;
@@ -444,7 +441,6 @@ public:
                             me->SetFacingToObject(v);
                             me->CastSpell(v, SPELL_FIREBALL, false);
                         }
-                        events.PopEvent();
 
                         uint8 rand = urand(0, 99);
                         if( rand < 33 )
@@ -461,7 +457,6 @@ public:
                         if( newWP > 8 )
                             newWP = 1;
                         me->GetMotionMaster()->MovePoint(newWP, OnyxiaMoveData[newWP].x, OnyxiaMoveData[newWP].y, OnyxiaMoveData[newWP].z);
-                        events.PopEvent();
                     }
                     break;
                 case EVENT_PHASE_2_STEP_ACW:
@@ -470,7 +465,6 @@ public:
                         if( newWP < 1 )
                             newWP = 8;
                         me->GetMotionMaster()->MovePoint(newWP, OnyxiaMoveData[newWP].x, OnyxiaMoveData[newWP].y, OnyxiaMoveData[newWP].z);
-                        events.PopEvent();
                     }
                     break;
                 case EVENT_PHASE_2_STEP_ACROSS:
@@ -478,7 +472,7 @@ public:
                         me->SetFacingTo(OnyxiaMoveData[CurrentWP].o);
                         me->MonsterTextEmote("Onyxia takes in a deep breath...", 0, true);
                         me->CastSpell(me, OnyxiaMoveData[CurrentWP].spellId, false);
-                        events.PopEvent();
+                        
                         events.ScheduleEvent(EVENT_SPELL_BREATH, 8250);
                     }
                     break;
@@ -487,20 +481,16 @@ public:
                         uint8 newWP = OnyxiaMoveData[CurrentWP].DestId;
                         me->SetSpeed(MOVE_RUN, 2.95f, false);
                         me->GetMotionMaster()->MovePoint(newWP, OnyxiaMoveData[newWP].x, OnyxiaMoveData[newWP].y, OnyxiaMoveData[newWP].z);
-                        events.PopEvent();
                     }
                     break;
                 case EVENT_START_PHASE_3:
                     {
                         me->SetSpeed(MOVE_RUN, 2.95f, false);
                         me->GetMotionMaster()->MovePoint(12, OnyxiaMoveData[1].x, OnyxiaMoveData[1].y, OnyxiaMoveData[1].z);
-                        events.PopEvent();
                     }
                     break;
                 case EVENT_PHASE_3_ATTACK:
                     {
-                        events.PopEvent();
-
                         me->SetReactState(REACT_AGGRESSIVE);
                         AttackStart(SelectTarget(SELECT_TARGET_TOPAGGRO, 0, 0, false));
                         me->CastSpell(me, SPELL_BELLOWINGROAR, false);
@@ -525,8 +515,6 @@ public:
                     {
                         if( Creature* trigger = me->SummonCreature(12758, *me, TEMPSUMMON_TIMED_DESPAWN, 1000) )
                             trigger->CastSpell(trigger, 17731, false);
-
-                        events.PopEvent();
                     }
                     break;
                 case EVENT_SUMMON_WHELP:
@@ -590,7 +578,7 @@ public:
             if( me->HasUnitState(UNIT_STATE_CASTING) )
                 return;
 
-            switch( events.GetEvent() )
+            switch( events.ExecuteEvent() )
             {
                 case 0:
                     break;

@@ -156,14 +156,14 @@ public:
             if( me->HasUnitState(UNIT_STATE_CASTING) )
                 return;
 
-            switch( events.GetEvent() )
+            switch( events.ExecuteEvent() )
             {
                 case 0:
                     break;
                 case EVENT_SPELL_SNOBOLLED:
                     if( t->GetTypeId() == TYPEID_PLAYER )
                         me->CastSpell((Unit*)NULL, SPELL_SNOBOLLED, true);
-                    events.PopEvent();
+                    
                     break;
                 case EVENT_SPELL_BATTER:
                     if( t->GetTypeId() == TYPEID_PLAYER )
@@ -288,7 +288,7 @@ public:
             if( me->HasUnitState(UNIT_STATE_CASTING) )
                 return;
 
-            switch( events.GetEvent() )
+            switch( events.ExecuteEvent() )
             {
                 case 0:
                     break;
@@ -372,7 +372,6 @@ public:
                                 }
                         }
                         PlayerGUID = 0;
-                        events.PopEvent();
                     }
                     break;
             }
@@ -563,7 +562,7 @@ struct boss_jormungarAI : public ScriptedAI
         if( me->HasUnitState(UNIT_STATE_CASTING) )
             return;
 
-        switch( events.GetEvent() )
+        switch( events.ExecuteEvent() )
         {
             case 0:
                 break;
@@ -596,7 +595,7 @@ struct boss_jormungarAI : public ScriptedAI
                     me->UpdatePosition(Locs[LOC_CENTER].GetPositionX() + cos(angle)*dist, Locs[LOC_CENTER].GetPositionY() + sin(angle)*dist, me->GetPositionZ(), me->GetOrientation(), true);
                     me->StopMovingOnCurrentPos();
                     DoResetThreat();
-                    events.PopEvent();
+                    
                     events.RescheduleEvent(EVENT_EMERGE, 6000);
                 }
                 break;
@@ -874,7 +873,7 @@ public:
             if( me->HasUnitState(UNIT_STATE_CASTING) )
                 return;
 
-            switch( events.GetEvent() )
+            switch( events.ExecuteEvent() )
             {
                 case 0:
                     break;
@@ -906,7 +905,7 @@ public:
                 case EVENT_SPELL_MASSIVE_CRASH:
                     me->GetMotionMaster()->Clear();
                     me->CastSpell((Unit*)NULL, SPELL_MASSIVE_CRASH, false);
-                    events.PopEvent();
+                    
                     events.RescheduleEvent(EVENT_GAZE, 2000);
                     break;
                 case EVENT_GAZE:
@@ -928,7 +927,7 @@ public:
                         me->GetMotionMaster()->MovementExpired();
                         me->SetReactState(REACT_AGGRESSIVE);
                     }
-                    events.PopEvent();
+                    
                     break;
                 case EVENT_JUMP_BACK:
                     {
@@ -948,7 +947,6 @@ public:
                         me->StopMoving();
                         me->GetMotionMaster()->MoveJump(Locs[LOC_CENTER].GetPositionX() + cos(jumpangle) * 35.0f, Locs[LOC_CENTER].GetPositionY() + sin(jumpangle) * 35.0f, Locs[LOC_CENTER].GetPositionZ() + 1.0f, 40.0f, 12.0f);
 
-                        events.PopEvent();
                         events.RescheduleEvent(EVENT_TRAMPLE, 1500);
 
                         if( pInstance )
@@ -978,7 +976,7 @@ public:
                     me->GetMotionMaster()->MoveCharge(destX, destY, destZ + 1.0f, 65.0f);
                     me->SetUInt64Value(UNIT_FIELD_TARGET, 0);
                     events.RescheduleEvent(EVENT_CHECK_TRAMPLE_PLAYERS, 100);
-                    events.PopEvent();
+                    
                     break;
                 case EVENT_CHECK_TRAMPLE_PLAYERS:
                     if( DoTrampleIfValid() )
@@ -996,7 +994,7 @@ public:
                     break;
                 case EVENT_REFRESH_POSITION:
                     //me->SetFacingTo(me->GetOrientation());
-                    events.PopEvent();
+                    
                     break;
             }
 

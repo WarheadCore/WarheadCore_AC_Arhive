@@ -118,7 +118,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_SPELL_ARCANE_VOLLEY:
                     me->CastSpell(me, SPELL_ARCANE_VOLLEY_N, false);
@@ -137,7 +137,6 @@ public:
                     if (me->HealthBelowPct(20))
                     {
                         me->CastSpell(me, SPELL_MANA_SHIELD, false);
-                        events.PopEvent();
                         return;
                     }
                     events.RepeatEvent(1000);
@@ -158,7 +157,6 @@ public:
                 case EVENT_SPELL_BLINK_2:
                     me->CastSpell(me, SPELL_ARCANE_EXPLOSION_N, false);
                     me->CastSpell(me, SPELL_ARCANE_BUBBLE, true);
-                    events.PopEvent();
                     break;
             }
 
@@ -284,7 +282,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING | UNIT_STATE_STUNNED))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_SPELL_SCREECH:
                     me->CastSpell(me, SPELL_PARALYZING_SCREECH, false);
@@ -307,7 +305,6 @@ public:
                     if (me->HealthBelowPct(66))
                     {
                         SummonBroods();
-                        events.PopEvent();
                         events.DelayEvents(10000);
                         return;
                     }
@@ -317,7 +314,6 @@ public:
                     if (me->HealthBelowPct(33))
                     {
                         SummonBroods();
-                        events.PopEvent();
                         events.DelayEvents(10000);
                         return;
                     }

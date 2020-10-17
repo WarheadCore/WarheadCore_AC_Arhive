@@ -497,17 +497,15 @@ public:
         void UpdateAI(uint32 diff) override
         {
             events.Update(diff);
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_GHOUL_MOVE_TO_PIT:
                     me->GetMotionMaster()->MovePoint(1, 2364.77f, -5776.14f, 151.36f);
                     if (Creature* gothik = ObjectAccessor::GetCreature(*me, gothikGUID))
                         gothik->AI()->DoAction(SAY_GOTHIK_PIT);
-                    events.PopEvent();
                     break;
                 case EVENT_GHOUL_EMOTE:
                     me->CastSpell(me, SPELL_GHOUL_EMERGE, true);
-                    events.PopEvent();
                     break;
                 case EVENT_GHOUL_RESTORE_STATE:
                     me->SetReactState(REACT_DEFENSIVE);

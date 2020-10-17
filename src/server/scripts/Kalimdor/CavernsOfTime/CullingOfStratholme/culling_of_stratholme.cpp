@@ -672,7 +672,7 @@ public:
             if (eventInRun)
             {
                 actionEvents.Update(diff);
-                switch (uint32 currentEvent = actionEvents.GetEvent())
+                switch (uint32 currentEvent = actionEvents.ExecuteEvent())
                 {
                     case EVENT_ACTION_PHASE1:
                         SetRun(false);
@@ -828,7 +828,7 @@ public:
                         SetEscortPaused(false);
                         eventInRun = false;
                         me->SetTarget(0);
-                        actionEvents.PopEvent(); // dont schedule next, do it in gossip select!
+                        // dont schedule next, do it in gossip select!
                         break;
                     //After Gossip 1 (waypoint 8)
                     case EVENT_ACTION_PHASE2:
@@ -923,7 +923,6 @@ public:
                             pInstance->SetData(DATA_START_WAVES, 1);
 
                         SummonNextWave();
-                        actionEvents.PopEvent();
                         break;
                     case EVENT_ACTION_PHASE2+9:
                         if (pInstance)
@@ -932,7 +931,6 @@ public:
                         Talk(SAY_PHASE210);
                         eventInRun = false;
                         SetEscortPaused(false);
-                        actionEvents.PopEvent();
                         break;
                     // After waypoint 22
                     case EVENT_ACTION_PHASE3:
@@ -1123,7 +1121,6 @@ public:
                             pInstance->SetData(DATA_ARTHAS_EVENT, COS_PROGRESS_KILLED_EPOCH);
 
                         me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
-                        actionEvents.PopEvent();
                         eventInRun = false;
                         break;
                     case EVENT_ACTION_PHASE5:
@@ -1135,7 +1132,6 @@ public:
                             cr->AddThreat(me, 0.0f);
                             AttackStart(cr);
                         }
-                        actionEvents.PopEvent();
                         eventInRun = false;
                         SetEscortPaused(true);
                         break;
@@ -1163,7 +1159,6 @@ public:
                     case EVENT_ACTION_PHASE5+3:
                         eventInRun = false;
                         me->SetVisible(false);
-                        actionEvents.PopEvent();
                         break;
                 }
             }
@@ -1176,7 +1171,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (combatEvents.GetEvent())
+            switch (combatEvents.ExecuteEvent())
             {
                 case EVENT_COMBAT_EXORCISM:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
@@ -1215,7 +1210,6 @@ Creature* npc_arthas::npc_arthasAI::GetEventNpc(uint32 entry)
 
 void npc_arthas::npc_arthasAI::ScheduleNextEvent(uint32 currentEvent, uint32 time)
 {
-    actionEvents.PopEvent();
     actionEvents.ScheduleEvent(currentEvent + 1, time);
 }
 

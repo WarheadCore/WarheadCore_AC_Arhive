@@ -141,7 +141,7 @@ public:
                 if (me->isAttackReady())
                     me->SetFacingToObject(me->GetVictim());
 
-            switch(events.GetEvent())
+            switch(events.ExecuteEvent())
             {
                 case 0:
                     break;
@@ -172,7 +172,7 @@ public:
                     me->CastSpell(me, SPELL_SOULSTORM, false);
                     me->CastSpell(me, SPELL_TELEPORT_VISUAL, true);
                     me->CastSpell(me, SPELL_SOULSTORM_VISUAL, true);
-                    events.PopEvent();
+                    
                     break;
             }
 

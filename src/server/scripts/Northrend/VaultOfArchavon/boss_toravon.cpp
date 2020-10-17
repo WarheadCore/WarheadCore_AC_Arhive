@@ -133,7 +133,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_FREEZING_GROUND:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
@@ -152,7 +152,6 @@ public:
                 case EVENT_CAST_WHITEOUT_GROUND_EFFECT: // Whiteout Ground effect trigger
                     if (Unit* whiteOutGround = me->SummonCreature(NPC_WHITEOUT_GROUND_EFFECT, -43.3316, -288.708, 92.2511, 1.58825, TEMPSUMMON_TIMED_DESPAWN, 4000))
                         whiteOutGround->CastSpell(whiteOutGround, SPELL_WHITEOUT_VISUAL, false); // Cast the spell
-                    events.PopEvent();
                     break;
             }
 

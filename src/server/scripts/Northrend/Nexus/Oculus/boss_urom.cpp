@@ -321,7 +321,7 @@ public:
 
             DoMeleeAttackIfReady();
 
-            switch( events.GetEvent() )
+            switch( events.ExecuteEvent() )
             {
                 case 0:
                     break;
@@ -352,7 +352,7 @@ public:
                     me->SetControlled(false, UNIT_STATE_ROOT);
                     me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                     me->GetMotionMaster()->MoveChase(me->GetVictim());
-                    events.PopEvent();
+                    
                     break;
             }
         }

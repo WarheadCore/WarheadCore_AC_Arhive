@@ -398,19 +398,19 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_INTRO_2:
                     Talk(SAY_INTRO_2);
-                    events.PopEvent();
+                    
                     break;
                 case EVENT_INTRO_3:
                     Talk(SAY_INTRO_3);
-                    events.PopEvent();
+                    
                     break;
                 case EVENT_INTRO_4:
                     Talk(SAY_INTRO_4);
-                    events.PopEvent();
+                    
                     break;
                 case EVENT_SPELL_SHADOW_BOLT:
                     me->CastSpell(me->GetVictim(), RAID_MODE(SPELL_SHADOW_BOLT_10, SPELL_SHADOW_BOLT_25, SPELL_SHADOW_BOLT_10, SPELL_SHADOW_BOLT_25), false);
@@ -442,7 +442,7 @@ public:
                             go->SetGoState(GO_STATE_ACTIVE);
 
                         events.CancelEvent(EVENT_TELEPORT);
-                        events.PopEvent();
+                        
                         break;
                     }
                     events.RepeatEvent(1000);
@@ -468,7 +468,7 @@ public:
                         events.ScheduleEvent(EVENT_SPELL_HARVEST_SOUL, urand(5000, 15000));
                         events.ScheduleEvent(EVENT_TELEPORT, 20000);
                         events.ScheduleEvent(EVENT_CHECK_HEALTH, 1000);
-                        events.PopEvent();
+                        
                     }
 
                     waveCount++;
@@ -484,7 +484,7 @@ public:
                         gateOpened = true;
                         Talk(EMOTE_GATE_OPENED);
                     }
-                    events.PopEvent();
+                    
                     break;
             }
 
@@ -596,7 +596,7 @@ public:
             if (me->GetUnitState() == UNIT_STATE_CASTING)
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_SPELL_DEATH_PLAGUE:
                     me->CastSpell(me->GetVictim(), SPELL_DEATH_PLAGUE, false);
@@ -672,7 +672,6 @@ public:
             DoMeleeAttackIfReady();
         }
     };
-
 };
 
 class spell_gothik_shadow_bolt_volley : public SpellScriptLoader
