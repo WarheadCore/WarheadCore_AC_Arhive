@@ -175,13 +175,14 @@ public:
                 me->CastSpell(me, SPELL_PURPLE_VISUAL, true);
                 me->setFaction(FACTION_HOSTILE);
                 me->SetInCombatWithZone();
-                events.ScheduleEvent(EVENT_DIREBREW_DISARM, 10000);
-                events.ScheduleEvent(EVENT_DIREBREW_HEALTH, 1000);
+                
+                events.ScheduleEvent(EVENT_DIREBREW_DISARM, 10s);
+                events.ScheduleEvent(EVENT_DIREBREW_HEALTH, 1s);
             }
             else if (param == NPC_ILSA_DIREBREW)
-                events.ScheduleEvent(EVENT_DIREBREW_RESPAWN1, 10000);
+                events.ScheduleEvent(EVENT_DIREBREW_RESPAWN1, 10s);
             else if (param == NPC_URSULA_DIREBREW)
-                events.ScheduleEvent(EVENT_DIREBREW_RESPAWN2, 10000);
+                events.ScheduleEvent(EVENT_DIREBREW_RESPAWN2, 10s);
         }
 
         void JustDied(Unit* /*killer*/) override
@@ -317,9 +318,9 @@ public:
         void EnterCombat(Unit*  /*who*/)
         {
             if (me->GetEntry() == NPC_URSULA_DIREBREW)
-                events.ScheduleEvent(EVENT_SISTERS_BARREL, 18000);
+                events.ScheduleEvent(EVENT_SISTERS_BARREL, 18s);
 
-            events.ScheduleEvent(EVENT_SISTERS_CHUCK_MUG, 12000);
+            events.ScheduleEvent(EVENT_SISTERS_CHUCK_MUG, 12s);
         }
 
         void SpellHitTarget(Unit* target, const SpellInfo* spellInfo)
@@ -688,7 +689,7 @@ public:
         {
             summons.DespawnAll();
             events.Reset();
-            events.ScheduleEvent(EVENT_CHECK_HOUR, 2000);
+            events.ScheduleEvent(EVENT_CHECK_HOUR, 2s);
             kegCounter = 0;
             guzzlerCounter = 0;
             thrown = 0;
@@ -756,13 +757,13 @@ public:
                 case EVENT_PRE_FINISH_ATTACK:
                     {
                         events.CancelEvent(EVENT_SPAWN_MOLE_MACHINE);
-                        events.ScheduleEvent(EVENT_FINISH_ATTACK, 20000);
+                        events.ScheduleEvent(EVENT_FINISH_ATTACK, 20s);
                         break;
                     }
                 case EVENT_FINISH_ATTACK:
                     {
                         FinishAttackDueToWin();
-                        events.RescheduleEvent(EVENT_CHECK_HOUR, 60000);
+                        events.RescheduleEvent(EVENT_CHECK_HOUR, 1min);
                         break;
                     }
                 case EVENT_BARTENDER_SAY:
@@ -804,7 +805,7 @@ public:
             }
 
             Reset();
-            events.RescheduleEvent(EVENT_CHECK_HOUR, 60000);
+            events.RescheduleEvent(EVENT_CHECK_HOUR, 1min);
         }
 
         void FinishAttackDueToWin()
@@ -849,9 +850,9 @@ public:
             guzzlerCounter = 0;
             thrown = 0;
 
-            events.ScheduleEvent(EVENT_SPAWN_MOLE_MACHINE, 1500);
-            events.ScheduleEvent(EVENT_PRE_FINISH_ATTACK, 280000);
-            events.ScheduleEvent(EVENT_BARTENDER_SAY, 5000);
+            events.ScheduleEvent(EVENT_SPAWN_MOLE_MACHINE, 1500ms);
+            events.ScheduleEvent(EVENT_PRE_FINISH_ATTACK, 280s);
+            events.ScheduleEvent(EVENT_BARTENDER_SAY, 5s);
         }
 
         bool AllowStart()
