@@ -94,7 +94,7 @@ public:
             me->CastSpell(me, SPELL_OPEN_PORTAL_PERIODIC, true);
             me->CastSpell(me, SPELL_DARKNESS_PERIODIC, true);
 
-            events.ScheduleEvent(EVENT_SPELL_ENRAGE, 600000);
+            events.ScheduleEvent(EVENT_SPELL_ENRAGE, 10min);
         }
 
         void DamageTaken(Unit*, uint32& damage, DamageEffectType, SpellSchoolMask)
@@ -107,7 +107,7 @@ public:
                     me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                     me->RemoveAllAuras();
                     me->CastSpell(me, SPELL_OPEN_ALL_PORTALS, true);
-                    events.ScheduleEvent(EVENT_SUMMON_ENTROPIUS, 7000);
+                    events.ScheduleEvent(EVENT_SUMMON_ENTROPIUS, 7s);
                 }
             }
         }
@@ -140,7 +140,7 @@ public:
                     break;
                 case EVENT_SUMMON_ENTROPIUS:
                     me->CastSpell(me, SPELL_SUMMON_ENTROPIUS, false);
-                    events.ScheduleEvent(EVENT_SET_INVISIBLE, 1000);
+                    events.ScheduleEvent(EVENT_SET_INVISIBLE, 1s);
                     break;
                 case EVENT_SET_INVISIBLE:
                     me->SetVisible(false);
@@ -171,8 +171,8 @@ public:
         {
             events.Reset();
             events2.Reset();
-            events2.ScheduleEvent(EVENT_ENTROPIUS_AURAS, 0);
-            events2.ScheduleEvent(EVENT_ENTROPIUS_COMBAT, 3000);
+            events2.ScheduleEvent(EVENT_ENTROPIUS_AURAS, 0s);
+            events2.ScheduleEvent(EVENT_ENTROPIUS_COMBAT, 3s);
             me->SetReactState(REACT_PASSIVE);
         }
 
@@ -188,14 +188,14 @@ public:
 
         void EnterCombat(Unit* /*who*/)
         {
-            events.ScheduleEvent(EVENT_SPAWN_BLACK_HOLE, 15000);
-            events.ScheduleEvent(EVENT_SPAWN_DARKNESS, 10000);
+            events.ScheduleEvent(EVENT_SPAWN_BLACK_HOLE, 15s);
+            events.ScheduleEvent(EVENT_SPAWN_DARKNESS, 10s);
         }
 
         void SetData(uint32 type, uint32 data)
         {
             if (type == DATA_ENRAGE_TIMER)
-                events.ScheduleEvent(EVENT_SPELL_ENRAGE, data);
+                events.ScheduleEvent(EVENT_SPELL_ENRAGE, Milliseconds(data));
         }
 
         uint32 GetData(uint32 type) const
@@ -246,12 +246,12 @@ public:
                 case EVENT_SPAWN_DARKNESS:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true))
                         me->CastSpell(target, SPELL_DARKNESS, true);
-                    events.ScheduleEvent(EVENT_SPAWN_DARKNESS, 15000);
+                    events.ScheduleEvent(EVENT_SPAWN_DARKNESS, 15s);
                     break;
                 case EVENT_SPAWN_BLACK_HOLE:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true))
                         me->CastSpell(target, SPELL_BLACK_HOLE, true);
-                    events.ScheduleEvent(EVENT_SPAWN_BLACK_HOLE, 15000);
+                    events.ScheduleEvent(EVENT_SPAWN_BLACK_HOLE, 15s);
                     break;
             }
 
@@ -288,9 +288,9 @@ public:
             me->DespawnOrUnsummon(18000);
             me->CastSpell(me, SPELL_BLACK_HOLE_SUMMON_VISUAL, true);
             me->CastSpell(me, SPELL_BLACK_HOLE_SUMMON_VISUAL2, true);
-            events.ScheduleEvent(EVENT_START_BLACK_HOLE, 3500);
-            events.ScheduleEvent(EVENT_SWITCH_BLACK_HOLE_TARGET, 5000);
-            events.ScheduleEvent(EVENT_SINGULARITY_DEATH, 17000);
+            events.ScheduleEvent(EVENT_START_BLACK_HOLE, 3500ms);
+            events.ScheduleEvent(EVENT_SWITCH_BLACK_HOLE_TARGET, 5s);
+            events.ScheduleEvent(EVENT_SINGULARITY_DEATH, 17s);
         }
 
         void UpdateAI(uint32 diff)
@@ -314,10 +314,10 @@ public:
                                 if (me->GetDistance2d(player) < 15.0f && player->GetPositionZ() < 72.0f && player->IsAlive() && !player->HasAura(SPELL_BLACK_HOLE_EFFECT))
                                 {
                                     me->GetMotionMaster()->MovePoint(0, player->GetPositionX(), player->GetPositionY(), player->GetPositionZ(), false, true);
-                                    events.ScheduleEvent(EVENT_SWITCH_BLACK_HOLE_TARGET, 5000);
+                                    events.ScheduleEvent(EVENT_SWITCH_BLACK_HOLE_TARGET, 5s);
                                     return;
                                 }
-                        events.ScheduleEvent(EVENT_SWITCH_BLACK_HOLE_TARGET, 500);
+                        events.ScheduleEvent(EVENT_SWITCH_BLACK_HOLE_TARGET, 500ms);
                         break;
                     }
             }
