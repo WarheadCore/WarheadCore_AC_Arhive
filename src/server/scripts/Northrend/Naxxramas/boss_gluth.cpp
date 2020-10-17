@@ -276,4 +276,3 @@ void AddSC_boss_gluth()
     new boss_gluth();
     new spell_gluth_decimate();
 }
-

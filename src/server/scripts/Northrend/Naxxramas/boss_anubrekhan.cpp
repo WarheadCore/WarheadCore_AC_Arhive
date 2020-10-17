@@ -214,4 +214,3 @@ void AddSC_boss_anubrekhan()
 {
     new boss_anubrekhan();
 }
-
