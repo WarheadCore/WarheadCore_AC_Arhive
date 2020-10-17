@@ -175,7 +175,6 @@ public:
                 events.ScheduleEvent(EVENT_CHECK_HEALTH3, 1s);
             }
         }
-    }
 
     void JustDied(Unit* killer)
     {
