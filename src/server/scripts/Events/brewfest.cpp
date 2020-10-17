@@ -175,7 +175,7 @@ public:
                 me->CastSpell(me, SPELL_PURPLE_VISUAL, true);
                 me->setFaction(FACTION_HOSTILE);
                 me->SetInCombatWithZone();
-                
+
                 events.ScheduleEvent(EVENT_DIREBREW_DISARM, 10s);
                 events.ScheduleEvent(EVENT_DIREBREW_HEALTH, 1s);
             }
