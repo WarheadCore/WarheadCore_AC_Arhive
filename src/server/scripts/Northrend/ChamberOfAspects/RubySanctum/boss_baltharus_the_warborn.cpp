@@ -325,7 +325,6 @@ public:
 
 private:
     EventMap _events;
-};
 
 CreatureAI* GetAI(Creature* creature) const
 {
