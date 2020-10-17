@@ -150,15 +150,15 @@ public:
                     case EVENT_CHANNEL:
                         Talk(SAY_EVENT_START);
                         DoCast(me, SPELL_IDOL_SHUTDOWN_VISUAL);
-                        events.ScheduleEvent(EVENT_IDOL_ROOM_SPAWNER, 100);
-                        events.ScheduleEvent(EVENT_PROGRESS, 120000);
+                        events.ScheduleEvent(EVENT_IDOL_ROOM_SPAWNER, 100ms);
+                        events.ScheduleEvent(EVENT_PROGRESS, 2min);
                         me->SetReactState(REACT_PASSIVE);
                         break;
                     case EVENT_IDOL_ROOM_SPAWNER:
                         if (Creature* creature = me->SummonCreature(NPC_IDOL_ROOM_SPAWNER, PosSummonSpawner[urand(0, 2)], TEMPSUMMON_TIMED_DESPAWN, 4000))
                             creature->AI()->SetData(0, spawnerCount);
                         if (++spawnerCount < 8)
-                            events.ScheduleEvent(EVENT_IDOL_ROOM_SPAWNER, 35000);
+                            events.ScheduleEvent(EVENT_IDOL_ROOM_SPAWNER, 35s);
                         break;
                     case EVENT_PROGRESS:
                         {

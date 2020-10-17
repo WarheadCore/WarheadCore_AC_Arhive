@@ -158,8 +158,8 @@ public:
         void EnterCombat(Unit* /*target*/)
         {
             _events.Reset();
-            _events.ScheduleEvent(EVENT_POUNCE, 100);
-            _events.ScheduleEvent(EVENT_NOSUMMON, 50000);
+            _events.ScheduleEvent(EVENT_POUNCE, 100ms);
+            _events.ScheduleEvent(EVENT_NOSUMMON, 50s);
         }
 
         void IsSummonedBy(Unit* summoner)

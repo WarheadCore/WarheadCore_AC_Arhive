@@ -129,7 +129,7 @@ public:
         {
             ChaseNewVictim();
             Eggs.push_back(EggGUID);
-            events.ScheduleEvent(EVENT_RESPAWN_EGG, 100000);
+            events.ScheduleEvent(EVENT_RESPAWN_EGG, 100s);
         }
 
         void UpdateAI(uint32 diff)
@@ -145,18 +145,18 @@ public:
                 {
                     case EVENT_DISMEMBER:
                         DoCastVictim(SPELL_DISMEMBER);
-                        events.ScheduleEvent(EVENT_DISMEMBER, 5000);
+                        events.ScheduleEvent(EVENT_DISMEMBER, 5s);
                         break;
                     case EVENT_GATHERING_SPEED:
                         DoCast(me, SPELL_GATHERING_SPEED);
-                        events.ScheduleEvent(EVENT_GATHERING_SPEED, 9000);
+                        events.ScheduleEvent(EVENT_GATHERING_SPEED, 9s);
                         break;
                     case EVENT_FULL_SPEED:
                         DoCast(me, SPELL_FULL_SPEED);
                         break;
                     case EVENT_CREEPING_PLAGUE:
                         DoCast(me, SPELL_CREEPING_PLAGUE);
-                        events.ScheduleEvent(EVENT_CREEPING_PLAGUE, 6000);
+                        events.ScheduleEvent(EVENT_CREEPING_PLAGUE, 6s);
                         break;
                     case EVENT_RESPAWN_EGG:
                         if (Creature* egg = me->GetMap()->GetCreature(*Eggs.begin()))

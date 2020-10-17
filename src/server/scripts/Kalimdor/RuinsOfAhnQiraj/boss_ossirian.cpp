@@ -250,15 +250,15 @@ public:
                 {
                     case EVENT_SILENCE:
                         DoCast(me, SPELL_SILENCE);
-                        events.ScheduleEvent(EVENT_SILENCE, urand(20000, 30000));
+                        events.ScheduleEvent(EVENT_SILENCE, 20s, 30s);
                         break;
                     case EVENT_CYCLONE:
                         DoCastVictim(SPELL_CYCLONE);
-                        events.ScheduleEvent(EVENT_CYCLONE, 20000);
+                        events.ScheduleEvent(EVENT_CYCLONE, 20s);
                         break;
                     case EVENT_STOMP:
                         DoCast(me, SPELL_STOMP);
-                        events.ScheduleEvent(EVENT_STOMP, 30000);
+                        events.ScheduleEvent(EVENT_STOMP, 30s);
                         break;
                     default:
                         break;

@@ -105,7 +105,7 @@ public:
             _faction = 35;
             headNorth = true;
             me->setActive(true);
-            events.ScheduleEvent(EVENT_RESTART_ESCORT, 0);
+            events.ScheduleEvent(EVENT_RESTART_ESCORT, 0s);
         }
 
         void JustRespawned()
@@ -386,7 +386,6 @@ public:
                 case 282:
                     events.ScheduleEvent(EVENT_RESTART_ESCORT, 1s);
                     break;
-
             }
         }
 
