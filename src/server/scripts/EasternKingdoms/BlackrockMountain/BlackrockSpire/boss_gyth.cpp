@@ -73,7 +73,7 @@ public:
             _EnterCombat();
 
             events.ScheduleEvent(EVENT_CORROSIVE_ACID, 8s, 16s);
-            events.ScheduleEvent(EVENT_FREEZE, 8s, 16s));
+            events.ScheduleEvent(EVENT_FREEZE, 8s, 16s);
             events.ScheduleEvent(EVENT_FLAME_BREATH, 8s, 16s);
             events.ScheduleEvent(EVENT_KNOCK_AWAY, 12s, 18s);
         }
