@@ -260,7 +260,7 @@ public:
                             if (Player* player = itr->GetSource())
                                 if (!player->IsGameMaster() && me->GetDistance2d(player) < 60.0f && player->IsAlive())
                                 {
-                                events.ScheduleEvent(EVENT_CHECK_PLAYERS, 1s);
+                                    events.ScheduleEvent(EVENT_CHECK_PLAYERS, 1s);
                                     return;
                                 }
 
@@ -511,7 +511,7 @@ public:
                         events2.ScheduleEvent(EVENT_TEXT_SPEACH22, 22s, EVENT_GROUP_SPEACH);
                         events2.ScheduleEvent(EVENT_TEXT_SPEACH23, 28s, EVENT_GROUP_SPEACH);
                         events2.RescheduleEvent(EVENT_EMPOWER_ORBS1, 35s);
-                        
+
                         events.DelayEvents(2000);
                         events.ScheduleEvent(EVENT_SPELL_SINISTER_REFLECTION, 500ms);
                         events.ScheduleEvent(EVENT_SPELL_SHADOW_SPIKE, 1200ms);
@@ -531,7 +531,7 @@ public:
                         events2.ScheduleEvent(EVENT_TEXT_SPEACH32, 22s, EVENT_GROUP_SPEACH);
                         events2.ScheduleEvent(EVENT_TEXT_SPEACH33, 28s, EVENT_GROUP_SPEACH);
                         events2.RescheduleEvent(EVENT_EMPOWER_ORBS2, 350s);
-                        
+
                         events.DelayEvents(2000);
                         events.ScheduleEvent(EVENT_SPELL_SINISTER_REFLECTION, 500ms);
                         events.ScheduleEvent(EVENT_SPELL_SHADOW_SPIKE, 1200ms);
@@ -859,21 +859,21 @@ public:
             {
                 case EVENT_SCENE_01:
                     Talk(SAY_KALECGOS_GOODBYE);
-                    events.ScheduleEvent(eventId+1, 15s);
+                    events.ScheduleEvent(eventId + 1, 15s);
                     break;
                 case EVENT_SCENE_02:
                     me->SummonCreature(NPC_SHATTERED_SUN_RIFTWAKER, 1688.42f, 641.82f, 27.60f, 0.67f);
                     me->SummonCreature(NPC_SHATTERED_SUN_RIFTWAKER, 1712.58f, 616.29f, 27.78f, 0.76f);
-                    events.ScheduleEvent(eventId+1, 6s);
+                    events.ScheduleEvent(eventId + 1, 6s);
                     break;
                 case EVENT_SCENE_03:
-                    me->SummonCreature(NPC_SHATTRATH_PORTAL_DUMMY, 1727.08f+cos(5.14f), 656.82f+sin(5.14f), 28.37f+2.0f, 0.0f, TEMPSUMMON_TIMED_DESPAWN, 10000);
-                    me->SummonCreature(NPC_SHATTRATH_PORTAL_DUMMY, 1738.84f+cos(2.0f), 627.32f+sin(2.0f), 28.26f+2.0f, 0.0f, TEMPSUMMON_TIMED_DESPAWN, 10000);
-                    events.ScheduleEvent(eventId+1, 11s);
+                    me->SummonCreature(NPC_SHATTRATH_PORTAL_DUMMY, 1727.08f + cos(5.14f), 656.82f + sin(5.14f), 28.37f + 2.0f, 0.0f, TEMPSUMMON_TIMED_DESPAWN, 10000);
+                    me->SummonCreature(NPC_SHATTRATH_PORTAL_DUMMY, 1738.84f + cos(2.0f), 627.32f + sin(2.0f), 28.26f + 2.0f, 0.0f, TEMPSUMMON_TIMED_DESPAWN, 10000);
+                    events.ScheduleEvent(eventId + 1, 11s);
                     break;
                 case EVENT_SCENE_04:
                     me->SummonCreature(NPC_INERT_PORTAL, 1734.96f, 642.43f, 28.06f, 3.49f);
-                    events.ScheduleEvent(eventId+1, 4s);
+                    events.ScheduleEvent(eventId + 1, 4s);
                     break;
                 case EVENT_SCENE_05:
                     if (Creature* first = me->SummonCreature(NPC_SHATTERED_SUN_SOLDIER, 1729.48f, 640.49f, 28.06f, 3.49f))
@@ -884,7 +884,7 @@ public:
                             if (Creature* follower = me->SummonCreature(NPC_SHATTERED_SUN_SOLDIER, 1729.48f + 5 * cos(i * 2.0f * M_PI / 9), 640.49f + 5 * sin(i * 2.0f * M_PI / 9), 28.06f, 3.49f))
                                 follower->GetMotionMaster()->MoveFollow(first, 3.0f, follower->GetAngle(first));
                     }
-                    events.ScheduleEvent(eventId+1, 10s);
+                    events.ScheduleEvent(eventId + 1, 10s);
                     break;
                 case EVENT_SCENE_06:
                     if (Creature* first = me->SummonCreature(NPC_SHATTERED_SUN_SOLDIER, 1729.48f, 640.49f, 28.06f, 3.49f))
@@ -895,33 +895,33 @@ public:
                             if (Creature* follower = me->SummonCreature(NPC_SHATTERED_SUN_SOLDIER, 1729.48f + 5 * cos(i * 2.0f * M_PI / 9), 640.49f + 5 * sin(i * 2.0f * M_PI / 9), 28.06f, 3.49f))
                                 follower->GetMotionMaster()->MoveFollow(first, 3.0f, follower->GetAngle(first));
                     }
-                    events.ScheduleEvent(eventId+1, 12s);
+                    events.ScheduleEvent(eventId + 1, 12s);
                     break;
                 case EVENT_SCENE_07:
                     me->SummonCreature(NPC_LADY_LIADRIN, 1719.87f, 644.265f, 28.06f, 3.83f);
                     me->SummonCreature(NPC_PROPHET_VELEN, 1717.97f, 646.44f, 28.06f, 3.94f);
-                    events.ScheduleEvent(eventId+1, 7s);
+                    events.ScheduleEvent(eventId + 1, 7s);
                     break;
                 case EVENT_SCENE_08:
                     if (Creature* velen = summons.GetCreatureWithEntry(NPC_PROPHET_VELEN))
                         velen->AI()->Talk(SAY_VELEN_01);
-                    events.ScheduleEvent(eventId+1, 25s);
+                    events.ScheduleEvent(eventId + 1, 25s);
                     break;
                 case EVENT_SCENE_09:
                     if (Creature* velen = summons.GetCreatureWithEntry(NPC_PROPHET_VELEN))
                         velen->AI()->Talk(SAY_VELEN_02);
-                    events.ScheduleEvent(eventId+1, 14500ms);
+                    events.ScheduleEvent(eventId + 1, 14500ms);
                     break;
                 case EVENT_SCENE_10:
                     if (Creature* velen = summons.GetCreatureWithEntry(NPC_PROPHET_VELEN))
                         velen->AI()->Talk(SAY_VELEN_03);
-                    events.ScheduleEvent(eventId+1, 12500ms);
+                    events.ScheduleEvent(eventId + 1, 12500ms);
                     break;
                 case EVENT_SCENE_11:
                     me->SummonCreature(NPC_THE_CORE_OF_ENTROPIUS, 1698.86f, 628.73f, 92.83f, 0.0f);
                     if (Creature* velen = summons.GetCreatureWithEntry(NPC_PROPHET_VELEN))
                         velen->CastSpell(velen, SPELL_CALL_ENTROPIUS, false);
-                    events.ScheduleEvent(eventId+1, 8s);
+                    events.ScheduleEvent(eventId + 1, 8s);
                     break;
                 case EVENT_SCENE_12:
                     if (Creature* velen = summons.GetCreatureWithEntry(NPC_PROPHET_VELEN))
@@ -929,32 +929,32 @@ public:
                         velen->InterruptNonMeleeSpells(false);
                         velen->AI()->Talk(SAY_VELEN_04);
                     }
-                    events.ScheduleEvent(eventId+1, 20s);
+                    events.ScheduleEvent(eventId + 1, 20s);
                     break;
                 case EVENT_SCENE_13:
                     if (Creature* liadrin = summons.GetCreatureWithEntry(NPC_LADY_LIADRIN))
                         liadrin->GetMotionMaster()->MovePoint(0, 1711.28f, 637.29f, 27.29f);
-                    events.ScheduleEvent(eventId+1, 6s);
+                    events.ScheduleEvent(eventId + 1, 6s);
                     break;
                 case EVENT_SCENE_14:
                     if (Creature* liadrin = summons.GetCreatureWithEntry(NPC_LADY_LIADRIN))
                         liadrin->AI()->Talk(SAY_LIADRIN_01);
-                    events.ScheduleEvent(eventId+1, 10s);
+                    events.ScheduleEvent(eventId + 1, 10s);
                     break;
                 case EVENT_SCENE_15:
                     if (Creature* velen = summons.GetCreatureWithEntry(NPC_PROPHET_VELEN))
                         velen->AI()->Talk(SAY_VELEN_05);
-                    events.ScheduleEvent(eventId+1, 14s);
+                    events.ScheduleEvent(eventId + 1, 14s);
                     break;
                 case EVENT_SCENE_16:
                     if (Creature* liadrin = summons.GetCreatureWithEntry(NPC_LADY_LIADRIN))
                         liadrin->AI()->Talk(SAY_LIADRIN_02);
-                    events.ScheduleEvent(eventId+1, 2s);
+                    events.ScheduleEvent(eventId + 1, 2s);
                     break;
                 case EVENT_SCENE_17:
                     if (Creature* velen = summons.GetCreatureWithEntry(NPC_PROPHET_VELEN))
                         velen->AI()->Talk(SAY_VELEN_06);
-                    events.ScheduleEvent(eventId+1, 3s);
+                    events.ScheduleEvent(eventId + 1, 3s);
                     break;
                 case EVENT_SCENE_18:
                     if (Creature* core = summons.GetCreatureWithEntry(NPC_THE_CORE_OF_ENTROPIUS))
@@ -962,7 +962,7 @@ public:
                         core->RemoveAllAuras();
                         core->CastSpell(core, SPELL_BLAZE_TO_LIGHT, true);
                     }
-                    events.ScheduleEvent(eventId+1, 8s);
+                    events.ScheduleEvent(eventId + 1, 8s);
                     break;
                 case EVENT_SCENE_19:
                     if (Creature* core = summons.GetCreatureWithEntry(NPC_THE_CORE_OF_ENTROPIUS))
@@ -970,34 +970,34 @@ public:
                         core->SetObjectScale(0.75f);
                         core->GetMotionMaster()->MovePoint(0, core->GetPositionX(), core->GetPositionY(), 28.0f);
                     }
-                    events.ScheduleEvent(eventId+1, 2s);
+                    events.ScheduleEvent(eventId + 1, 2s);
                     break;
                 case EVENT_SCENE_20:
                     if (Creature* core = summons.GetCreatureWithEntry(NPC_THE_CORE_OF_ENTROPIUS))
                         core->CastSpell(core, SPELL_SUNWELL_IGNITION, true);
-                    events.ScheduleEvent(eventId+1, 3s);
+                    events.ScheduleEvent(eventId + 1, 3s);
                     break;
                 case EVENT_SCENE_21:
                     if (Creature* velen = summons.GetCreatureWithEntry(NPC_PROPHET_VELEN))
                         velen->AI()->Talk(SAY_VELEN_07);
-                    events.ScheduleEvent(eventId+1, 15s);
+                    events.ScheduleEvent(eventId + 1, 15s);
                     break;
                 case EVENT_SCENE_22:
                     if (Creature* liadrin = summons.GetCreatureWithEntry(NPC_LADY_LIADRIN))
                         liadrin->AI()->Talk(SAY_LIADRIN_03);
-                    events.ScheduleEvent(eventId+1, 20s);
+                    events.ScheduleEvent(eventId + 1, 20s);
                     break;
                 case EVENT_SCENE_23:
                     if (Creature* velen = summons.GetCreatureWithEntry(NPC_PROPHET_VELEN))
                         velen->AI()->Talk(SAY_VELEN_08);
                     if (Creature* liadrin = summons.GetCreatureWithEntry(NPC_LADY_LIADRIN))
                         liadrin->SetStandState(UNIT_STAND_STATE_KNEEL);
-                    events.ScheduleEvent(eventId+1, 8s);
+                    events.ScheduleEvent(eventId + 1, 8s);
                     break;
                 case EVENT_SCENE_24:
                     if (Creature* velen = summons.GetCreatureWithEntry(NPC_PROPHET_VELEN))
                         velen->AI()->Talk(SAY_VELEN_09);
-                    events.ScheduleEvent(eventId+1, 5s);
+                    events.ScheduleEvent(eventId + 1, 5s);
                     break;
                 case EVENT_SCENE_25:
                     if (Creature* velen = summons.GetCreatureWithEntry(NPC_PROPHET_VELEN))
@@ -1005,7 +1005,7 @@ public:
                         velen->GetMotionMaster()->MovePoint(0, 1739.38f, 643.79f, 28.06f);
                         velen->DespawnOrUnsummon(5000);
                     }
-                    events.ScheduleEvent(eventId+1, 3s);
+                    events.ScheduleEvent(eventId + 1, 3s);
                     break;
                 case EVENT_SCENE_26:
                     for (SummonList::const_iterator itr = summons.begin(); itr != summons.end(); ++itr)
@@ -1015,7 +1015,7 @@ public:
                                 summon->GetMotionMaster()->MovePoint(0, 1739.38f, 643.79f, 28.06f);
                                 summon->DespawnOrUnsummon(summon->GetExactDist2d(1734.96f, 642.43f) * 100);
                             }
-                    events.ScheduleEvent(eventId+1, 7s);
+                    events.ScheduleEvent(eventId + 1, 7s);
                     break;
                 case EVENT_SCENE_27:
                     me->setActive(false);

@@ -59,25 +59,25 @@ public:
             events.ScheduleEvent(EVENT_SHAZZRAH_GATE, 45000);
         }
 
-            void EnterCombat(Unit* target)
+        void EnterCombat(Unit* target)
+        {
+            BossAI::EnterCombat(target);
+            events.ScheduleEvent(EVENT_ARCANE_EXPLOSION, 6s);
+            events.ScheduleEvent(EVENT_SHAZZRAH_CURSE, 10s);
+            events.ScheduleEvent(EVENT_MAGIC_GROUNDING, 24s);
+            events.ScheduleEvent(EVENT_COUNTERSPELL, 15s);
+            events.ScheduleEvent(EVENT_SHAZZRAH_GATE, 45s);
+        }
+
+        events.Update(diff);
+
+        if (me->HasUnitState(UNIT_STATE_CASTING))
+            return;
+
+        while (uint32 eventId = events.ExecuteEvent())
+        {
+            switch (eventId)
             {
-                BossAI::EnterCombat(target);
-                events.ScheduleEvent(EVENT_ARCANE_EXPLOSION, 6s);
-                events.ScheduleEvent(EVENT_SHAZZRAH_CURSE, 10s);
-                events.ScheduleEvent(EVENT_MAGIC_GROUNDING, 24s);
-                events.ScheduleEvent(EVENT_COUNTERSPELL, 15s);
-                events.ScheduleEvent(EVENT_SHAZZRAH_GATE, 45s);
-            }
-
-            events.Update(diff);
-
-            if (me->HasUnitState(UNIT_STATE_CASTING))
-                return;
-
-            while (uint32 eventId = events.ExecuteEvent())
-            {
-                switch (eventId)
-                {
                     switch (eventId)
                     {
                         case EVENT_ARCANE_EXPLOSION:
@@ -111,17 +111,17 @@ public:
                         default:
                             break;
                     }
-                }
             }
-
-            DoMeleeAttackIfReady();
         }
-    };
 
-    CreatureAI* GetAI(Creature* creature) const
-    {
-        return new boss_shazzrahAI(creature);
+        DoMeleeAttackIfReady();
     }
+};
+
+CreatureAI* GetAI(Creature* creature) const
+{
+    return new boss_shazzrahAI(creature);
+}
 };
 
 // 23138 - Gate of Shazzrah

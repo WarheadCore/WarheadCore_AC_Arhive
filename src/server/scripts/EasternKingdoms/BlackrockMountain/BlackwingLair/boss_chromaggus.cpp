@@ -225,13 +225,13 @@ public:
                             break;
                         }
                     case EVENT_BREATH_1:
-                            DoCastVictim(Breath1_Spell);
-                            events.ScheduleEvent(EVENT_BREATH_1, 1min);
-                            break;
+                        DoCastVictim(Breath1_Spell);
+                        events.ScheduleEvent(EVENT_BREATH_1, 1min);
+                        break;
                     case EVENT_BREATH_2:
-                            DoCastVictim(Breath2_Spell);
-                            events.ScheduleEvent(EVENT_BREATH_2, 1min);
-                            break;
+                        DoCastVictim(Breath2_Spell);
+                        events.ScheduleEvent(EVENT_BREATH_2, 1min);
+                        break;
                     case EVENT_AFFLICTION:
                         {
                             Map::PlayerList const& players = me->GetMap()->GetPlayers();

@@ -102,15 +102,15 @@ public:
             Talk(SAY_DEATH);
         }
 
-            void EnterCombat(Unit* /*who*/)
-            {
-                _EnterCombat();
-                events.ScheduleEvent(EVENT_MORTALCLEAVE, 4s, 0, PHASE_ONE);     // Phase 1
-                events.ScheduleEvent(EVENT_SILENCE, 9s, 0, PHASE_ONE);          // Phase 1
-                events.ScheduleEvent(EVENT_CHECK_TIMER, 10s, 0, PHASE_ONE);     // Phase 1
-                events.ScheduleEvent(EVENT_RESURRECT_TIMER, 10s, 0, PHASE_ONE); // Phase 1
-                Talk(SAY_AGGRO);
-            }
+        void EnterCombat(Unit* /*who*/)
+        {
+            _EnterCombat();
+            events.ScheduleEvent(EVENT_MORTALCLEAVE, 4s, 0, PHASE_ONE);     // Phase 1
+            events.ScheduleEvent(EVENT_SILENCE, 9s, 0, PHASE_ONE);          // Phase 1
+            events.ScheduleEvent(EVENT_CHECK_TIMER, 10s, 0, PHASE_ONE);     // Phase 1
+            events.ScheduleEvent(EVENT_RESURRECT_TIMER, 10s, 0, PHASE_ONE); // Phase 1
+            Talk(SAY_AGGRO);
+        }
 
         void JustReachedHome()
         {

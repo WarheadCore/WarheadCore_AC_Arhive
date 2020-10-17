@@ -210,8 +210,8 @@ public:
                 case EVENT_SPELL_IMMOLATE:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     {
-                       DoCast(target, SPELL_IMMOLATE);
-                       _events.ScheduleEvent(EVENT_SPELL_IMMOLATE, 25s);
+                        DoCast(target, SPELL_IMMOLATE);
+                        _events.ScheduleEvent(EVENT_SPELL_IMMOLATE, 25s);
                     }
                     // Didn't get a target, try again in 1s
                     _events.ScheduleEvent(EVENT_SPELL_IMMOLATE, 1s);

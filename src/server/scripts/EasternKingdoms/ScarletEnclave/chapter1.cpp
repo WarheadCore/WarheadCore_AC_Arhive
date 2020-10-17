@@ -269,11 +269,11 @@ public:
                 me->GetMotionMaster()->MoveFollow(caster, 2.0f, 0.0f);
 
                 events.ScheduleEvent(EVENT_SPEAK, 3s);
-                events.ScheduleEvent(EVENT_SPEAK+1, 7s);
-                events.ScheduleEvent(EVENT_SPEAK+2, 8s);
-                events.ScheduleEvent(EVENT_SPEAK+3, 9s);
-                events.ScheduleEvent(EVENT_SPEAK+4, 10s);
-                events.ScheduleEvent(EVENT_SPEAK+5, 11s);
+                events.ScheduleEvent(EVENT_SPEAK + 1, 7s);
+                events.ScheduleEvent(EVENT_SPEAK + 2, 8s);
+                events.ScheduleEvent(EVENT_SPEAK + 3, 9s);
+                events.ScheduleEvent(EVENT_SPEAK + 4, 10s);
+                events.ScheduleEvent(EVENT_SPEAK + 5, 11s);
             }
         }
 
@@ -287,7 +287,7 @@ public:
                 {
                     damage = 0;
                     events.ScheduleEvent(EVENT_DUEL_LOST, 2s);
-                    events.ScheduleEvent(EVENT_DUEL_LOST+1, 6s);
+                    events.ScheduleEvent(EVENT_DUEL_LOST + 1, 6s);
                     _duelGUID = 0;
                     _duelInProgress = 0;
 

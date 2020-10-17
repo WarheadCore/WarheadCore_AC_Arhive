@@ -91,22 +91,22 @@ public:
             {
                 switch (eventId)
                 {
-                case EVENT_FRENZY:
-                    Talk(EMOTE_FRENZY);
-                    DoCast(me, SPELL_FRENZY);
-                    events.ScheduleEvent(EVENT_FRENZY, 15s);
-                    break;
-                case EVENT_PANIC:
-                    DoCastVictim(SPELL_PANIC);
-                    events.ScheduleEvent(EVENT_PANIC, 35s);
-                    break;
-                case EVENT_LAVA_BOMB:
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true, -SPELL_LAVA_BOMB))
-                        DoCast(target, SPELL_LAVA_BOMB);
-                    events.ScheduleEvent(EVENT_LAVA_BOMB, 12s);
-                    break;
-                default:
-                    break;
+                    case EVENT_FRENZY:
+                        Talk(EMOTE_FRENZY);
+                        DoCast(me, SPELL_FRENZY);
+                        events.ScheduleEvent(EVENT_FRENZY, 15s);
+                        break;
+                    case EVENT_PANIC:
+                        DoCastVictim(SPELL_PANIC);
+                        events.ScheduleEvent(EVENT_PANIC, 35s);
+                        break;
+                    case EVENT_LAVA_BOMB:
+                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true, -SPELL_LAVA_BOMB))
+                            DoCast(target, SPELL_LAVA_BOMB);
+                        events.ScheduleEvent(EVENT_LAVA_BOMB, 12s);
+                        break;
+                    default:
+                        break;
                 }
             }
 
@@ -199,21 +199,11 @@ public:
             {
                 switch (eventId)
                 {
-                case EVENT_SERRATED_BITE:
-                    if (UpdateVictim() && !smoldering) {
-                        DoCast(me->GetVictim(), SPELL_SERRATED_BITE);
-                        events.ScheduleEvent(EVENT_SERRATED_BITE, 10s); // again, timer may be wrong
-                    }
-                    break;
-                case EVENT_IGNITE:
-                    smoldering = false;
-                    me->GetCreaturesWithEntryInRange(hounds, 80, NPC_CORE_HOUND);
-                    for (Creature * i : hounds)
-                    {
-                        if (i && i->IsAlive() && i->IsInCombat() && !i->HasUnitState(UNIT_STATE_DIED))
+                    case EVENT_SERRATED_BITE:
+                        if (UpdateVictim() && !smoldering)
                         {
                             DoCast(me->GetVictim(), SPELL_SERRATED_BITE);
-                            events.ScheduleEvent(EVENT_SERRATED_BITE, 10000); // again, timer may be wrong
+                            events.ScheduleEvent(EVENT_SERRATED_BITE, 10s); // again, timer may be wrong
                         }
                         break;
                     case EVENT_IGNITE:
@@ -223,45 +213,56 @@ public:
                         {
                             if (i && i->IsAlive() && i->IsInCombat() && !i->HasUnitState(UNIT_STATE_DIED))
                             {
-                                Talk(EMOTE_IGNITE);
-                                me->SetFullHealth();
-                                me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_UNK_29);
-                                me->RemoveFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_FEIGN_DEATH);
-                                me->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_DEAD);
-                                me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE);
-                                me->RemoveUnitMovementFlag(MOVEMENTFLAG_ROOT);
-                                me->ClearUnitState(UNIT_STATE_DIED);
-                                me->ClearUnitState(UNIT_STATE_CANNOT_AUTOATTACK);
-                                me->DisableRotate(false);
-                                me->AI()->AttackStart(i->GetVictim());
-                                return;
+                                DoCast(me->GetVictim(), SPELL_SERRATED_BITE);
+                                events.ScheduleEvent(EVENT_SERRATED_BITE, 10000); // again, timer may be wrong
                             }
+                            break;
+                        case EVENT_IGNITE:
+                            smoldering = false;
+                            me->GetCreaturesWithEntryInRange(hounds, 80, NPC_CORE_HOUND);
+                            for (Creature* i : hounds)
+                            {
+                                if (i && i->IsAlive() && i->IsInCombat() && !i->HasUnitState(UNIT_STATE_DIED))
+                                {
+                                    Talk(EMOTE_IGNITE);
+                                    me->SetFullHealth();
+                                    me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_UNK_29);
+                                    me->RemoveFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_FEIGN_DEATH);
+                                    me->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_DEAD);
+                                    me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE);
+                                    me->RemoveUnitMovementFlag(MOVEMENTFLAG_ROOT);
+                                    me->ClearUnitState(UNIT_STATE_DIED);
+                                    me->ClearUnitState(UNIT_STATE_CANNOT_AUTOATTACK);
+                                    me->DisableRotate(false);
+                                    me->AI()->AttackStart(i->GetVictim());
+                                    return;
+                                }
+                            }
+                            if (me->HasUnitState(UNIT_STATE_DIED))
+                            {
+                                if (killer)
+                                    me->Kill(killer, me);
+                                else
+                                    me->Kill(me, me);
+                            }
+                            break;
+                        default:
+                            break;
                         }
-                        if (me->HasUnitState(UNIT_STATE_DIED))
-                        {
-                            if (killer)
-                                me->Kill(killer, me);
-                            else
-                                me->Kill(me, me);
-                        }
-                        break;
-                    default:
-                        break;
                 }
-            }
 
-            DoMeleeAttackIfReady();
+                DoMeleeAttackIfReady();
+            }
+        };
+
+        CreatureAI* GetAI(Creature* creature) const
+        {
+            return new npc_magmadar_core_houndAI(creature);
         }
     };
 
-    CreatureAI* GetAI(Creature* creature) const
+    void AddSC_boss_magmadar()
     {
-        return new npc_magmadar_core_houndAI(creature);
+        new boss_magmadar();
+        new npc_magmadar_core_hound();
     }
-};
-
-void AddSC_boss_magmadar()
-{
-    new boss_magmadar();
-    new npc_magmadar_core_hound();
-}

@@ -526,7 +526,7 @@ public:
                                         ProcessSlaughterEvent();
                                         return;
                                     }
-                            
+
                         events.ScheduleEvent(EVENT_FORCE_SLAUGHTER_EVENT, 3s);
                         break;
                     }

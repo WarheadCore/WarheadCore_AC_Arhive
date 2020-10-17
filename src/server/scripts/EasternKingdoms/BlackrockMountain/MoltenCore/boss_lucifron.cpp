@@ -52,13 +52,13 @@ public:
         {
         }
 
-            void EnterCombat(Unit* victim)
-            {
-                BossAI::EnterCombat(victim);
-                events.ScheduleEvent(EVENT_IMPENDING_DOOM, 10s);
-                events.ScheduleEvent(EVENT_LUCIFRON_CURSE, 20s);
-                events.ScheduleEvent(EVENT_SHADOW_SHOCK, 6s);
-            }
+        void EnterCombat(Unit* victim)
+        {
+            BossAI::EnterCombat(victim);
+            events.ScheduleEvent(EVENT_IMPENDING_DOOM, 10s);
+            events.ScheduleEvent(EVENT_LUCIFRON_CURSE, 20s);
+            events.ScheduleEvent(EVENT_SHADOW_SHOCK, 6s);
+        }
 
         void UpdateAI(uint32 diff)
         {
@@ -74,23 +74,23 @@ public:
             {
                 switch (eventId)
                 {
-                    switch (eventId)
-                    {
-                        case EVENT_IMPENDING_DOOM:
-                            DoCastVictim(SPELL_IMPENDING_DOOM);
-                            events.ScheduleEvent(EVENT_IMPENDING_DOOM, 20s);
-                            break;
-                        case EVENT_LUCIFRON_CURSE:
-                            DoCastVictim(SPELL_LUCIFRON_CURSE);
-                            events.ScheduleEvent(EVENT_LUCIFRON_CURSE, 15s);
-                            break;
-                        case EVENT_SHADOW_SHOCK:
-                            DoCastVictim(SPELL_SHADOW_SHOCK);
-                            events.ScheduleEvent(EVENT_SHADOW_SHOCK, 6s);
-                            break;
-                        default:
-                            break;
-                    }
+                        switch (eventId)
+                        {
+                            case EVENT_IMPENDING_DOOM:
+                                DoCastVictim(SPELL_IMPENDING_DOOM);
+                                events.ScheduleEvent(EVENT_IMPENDING_DOOM, 20s);
+                                break;
+                            case EVENT_LUCIFRON_CURSE:
+                                DoCastVictim(SPELL_LUCIFRON_CURSE);
+                                events.ScheduleEvent(EVENT_LUCIFRON_CURSE, 15s);
+                                break;
+                            case EVENT_SHADOW_SHOCK:
+                                DoCastVictim(SPELL_SHADOW_SHOCK);
+                                events.ScheduleEvent(EVENT_SHADOW_SHOCK, 6s);
+                                break;
+                            default:
+                                break;
+                        }
                 }
             }
 

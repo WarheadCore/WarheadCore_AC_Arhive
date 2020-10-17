@@ -52,13 +52,13 @@ public:
         {
         }
 
-            void EnterCombat(Unit* victim)
-            {
-                BossAI::EnterCombat(victim);
-                events.ScheduleEvent(EVENT_GEHENNAS_CURSE, 12s);
-                events.ScheduleEvent(EVENT_RAIN_OF_FIRE, 10s);
-                events.ScheduleEvent(EVENT_SHADOW_BOLT, 6s);
-            }
+        void EnterCombat(Unit* victim)
+        {
+            BossAI::EnterCombat(victim);
+            events.ScheduleEvent(EVENT_GEHENNAS_CURSE, 12s);
+            events.ScheduleEvent(EVENT_RAIN_OF_FIRE, 10s);
+            events.ScheduleEvent(EVENT_SHADOW_BOLT, 6s);
+        }
 
         void UpdateAI(uint32 diff)
         {
@@ -74,25 +74,25 @@ public:
             {
                 switch (eventId)
                 {
-                    switch (eventId)
-                    {
-                        case EVENT_GEHENNAS_CURSE:
-                            DoCastVictim(SPELL_GEHENNAS_CURSE);
-                            events.ScheduleEvent(EVENT_GEHENNAS_CURSE, 22s, 30s);
-                            break;
-                        case EVENT_RAIN_OF_FIRE:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                                DoCast(target, SPELL_RAIN_OF_FIRE);
-                            events.ScheduleEvent(EVENT_RAIN_OF_FIRE, 4s, 12s);
-                            break;
-                        case EVENT_SHADOW_BOLT:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
-                                DoCast(target, SPELL_SHADOW_BOLT);
-                            events.ScheduleEvent(EVENT_SHADOW_BOLT, 7s);
-                            break;
-                        default:
-                            break;
-                    }
+                        switch (eventId)
+                        {
+                            case EVENT_GEHENNAS_CURSE:
+                                DoCastVictim(SPELL_GEHENNAS_CURSE);
+                                events.ScheduleEvent(EVENT_GEHENNAS_CURSE, 22s, 30s);
+                                break;
+                            case EVENT_RAIN_OF_FIRE:
+                                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                                    DoCast(target, SPELL_RAIN_OF_FIRE);
+                                events.ScheduleEvent(EVENT_RAIN_OF_FIRE, 4s, 12s);
+                                break;
+                            case EVENT_SHADOW_BOLT:
+                                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
+                                    DoCast(target, SPELL_SHADOW_BOLT);
+                                events.ScheduleEvent(EVENT_SHADOW_BOLT, 7s);
+                                break;
+                            default:
+                                break;
+                        }
                 }
             }
 

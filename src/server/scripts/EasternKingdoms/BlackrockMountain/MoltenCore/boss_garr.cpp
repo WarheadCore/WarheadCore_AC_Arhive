@@ -56,12 +56,12 @@ public:
         {
         }
 
-            void EnterCombat(Unit* victim)
-            {
-                BossAI::EnterCombat(victim);
-                events.ScheduleEvent(EVENT_ANTIMAGIC_PULSE, 25s);
-                events.ScheduleEvent(EVENT_MAGMA_SHACKLES, 15s);
-            }
+        void EnterCombat(Unit* victim)
+        {
+            BossAI::EnterCombat(victim);
+            events.ScheduleEvent(EVENT_ANTIMAGIC_PULSE, 25s);
+            events.ScheduleEvent(EVENT_MAGMA_SHACKLES, 15s);
+        }
 
         void UpdateAI(uint32 diff)
         {
@@ -77,19 +77,19 @@ public:
             {
                 switch (eventId)
                 {
-                    switch (eventId)
-                    {
-                        case EVENT_ANTIMAGIC_PULSE:
-                            DoCast(me, SPELL_ANTIMAGIC_PULSE);
-                            events.ScheduleEvent(EVENT_ANTIMAGIC_PULSE, 10s, 15s);
-                            break;
-                        case EVENT_MAGMA_SHACKLES:
-                            DoCast(me, SPELL_MAGMA_SHACKLES);
-                            events.ScheduleEvent(EVENT_MAGMA_SHACKLES, 8s, 12s);
-                            break;
-                        default:
-                            break;
-                    }
+                        switch (eventId)
+                        {
+                            case EVENT_ANTIMAGIC_PULSE:
+                                DoCast(me, SPELL_ANTIMAGIC_PULSE);
+                                events.ScheduleEvent(EVENT_ANTIMAGIC_PULSE, 10s, 15s);
+                                break;
+                            case EVENT_MAGMA_SHACKLES:
+                                DoCast(me, SPELL_MAGMA_SHACKLES);
+                                events.ScheduleEvent(EVENT_MAGMA_SHACKLES, 8s, 12s);
+                                break;
+                            default:
+                                break;
+                        }
                 }
             }
 

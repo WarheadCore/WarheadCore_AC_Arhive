@@ -128,27 +128,27 @@ public:
             {
                 switch (eventId)
                 {
-                        case EVENT_CHARGE_TARGET:
-                            DoCastVictim(SPELL_CHARGE);
-                            events.ScheduleEvent(EVENT_CHARGE, 10s, 25s);
-                            break;
-                        case EVENT_CLEAVE:
-                            DoCastVictim(SPELL_CLEAVE);
-                            events.ScheduleEvent(EVENT_CLEAVE, 10s, 16s);
-                            break;
-                        case EVENT_DEMORALIZING_SHOUT:
-                            DoCast(me, SPELL_DEMORALIZING_SHOUT);
-                            events.ScheduleEvent(EVENT_DEMORALIZING_SHOUT, 10s, 15s);
-                            break;
-                        case EVENT_WHIRLWIND:
-                            DoCast(me, SPELL_WHIRLWIND);
-                            events.ScheduleEvent(EVENT_WHIRLWIND, 10s, 25s);
-                            break;
-                        case EVENT_ENRAGE:
-                            DoCast(me, SPELL_ENRAGE);
-                            events.ScheduleEvent(EVENT_ENRAGE, 10s, 30s);
-                            break;
-                        case EVENT_CHECK_RESET:
+                    case EVENT_CHARGE_TARGET:
+                        DoCastVictim(SPELL_CHARGE);
+                        events.ScheduleEvent(EVENT_CHARGE, 10s, 25s);
+                        break;
+                    case EVENT_CLEAVE:
+                        DoCastVictim(SPELL_CLEAVE);
+                        events.ScheduleEvent(EVENT_CLEAVE, 10s, 16s);
+                        break;
+                    case EVENT_DEMORALIZING_SHOUT:
+                        DoCast(me, SPELL_DEMORALIZING_SHOUT);
+                        events.ScheduleEvent(EVENT_DEMORALIZING_SHOUT, 10s, 15s);
+                        break;
+                    case EVENT_WHIRLWIND:
+                        DoCast(me, SPELL_WHIRLWIND);
+                        events.ScheduleEvent(EVENT_WHIRLWIND, 10s, 25s);
+                        break;
+                    case EVENT_ENRAGE:
+                        DoCast(me, SPELL_ENRAGE);
+                        events.ScheduleEvent(EVENT_ENRAGE, 10s, 30s);
+                        break;
+                    case EVENT_CHECK_RESET:
                         {
                             Position const& _homePosition = me->GetHomePosition();
                             if (me->GetDistance2d(_homePosition.GetPositionX(), _homePosition.GetPositionY()) > 50.0f)

@@ -119,7 +119,7 @@ public:
             events.ScheduleEvent(EVENT_SPELL_DRAIN_LIFE, 2500ms, 1);
             events.ScheduleEvent(EVENT_SPELL_FEL_EXPLOSION, 2s);
             events.ScheduleEvent(EVENT_DRAIN_CRYSTAL, 14s);
-            
+
             if (IsHeroic())
                 events.ScheduleEvent(EVENT_SPELL_DRAIN_MANA, 7500ms, 1);
         }

@@ -106,7 +106,7 @@ public:
         }
 
         void EnterCombat(Unit* /*who*/) override
-        { 
+        {
             _events.ScheduleEvent(EVENT_SPELL_FIREBLAST, 2s);
 
             // Spawn 7 Embers initially
