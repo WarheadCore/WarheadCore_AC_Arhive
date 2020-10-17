@@ -647,7 +647,7 @@ public:
                 case EVENT_SPELL_FINGER_OF_DEATH:
                     if (CanUseFingerOfDeath())
                     {
-                        Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0s);
+                        Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0);
                         DoCast(target, SPELL_FINGER_OF_DEATH);
                         DoCastVictim(SPELL_RED_SKY_EFFECT);
                     }
