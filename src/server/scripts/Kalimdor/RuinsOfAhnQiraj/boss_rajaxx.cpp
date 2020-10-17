@@ -67,13 +67,13 @@ public:
         {
         }
 
-        void Reset()
-        {
-            _Reset();
-            enraged = false;
-            events.ScheduleEvent(EVENT_DISARM, 10000);
-            events.ScheduleEvent(EVENT_THUNDERCRASH, 12000);
-        }
+            void Reset()
+            {
+                _Reset();
+                enraged = false;
+                events.ScheduleEvent(EVENT_DISARM, 10s);
+                events.ScheduleEvent(EVENT_THUNDERCRASH, 12s);
+            }
 
         void JustDied(Unit* /*killer*/)
         {
@@ -100,16 +100,16 @@ public:
             {
                 switch (eventId)
                 {
-                    case EVENT_DISARM:
-                        DoCastVictim(SPELL_DISARM);
-                        events.ScheduleEvent(EVENT_DISARM, 22000);
-                        break;
-                    case EVENT_THUNDERCRASH:
-                        DoCast(me, SPELL_THUNDERCRASH);
-                        events.ScheduleEvent(EVENT_THUNDERCRASH, 21000);
-                        break;
-                    default:
-                        break;
+                        case EVENT_DISARM:
+                            DoCastVictim(SPELL_DISARM);
+                            events.ScheduleEvent(EVENT_DISARM, 22s);
+                            break;
+                        case EVENT_THUNDERCRASH:
+                            DoCast(me, SPELL_THUNDERCRASH);
+                            events.ScheduleEvent(EVENT_THUNDERCRASH, 21s);
+                            break;
+                        default:
+                            break;
                 }
             }
 

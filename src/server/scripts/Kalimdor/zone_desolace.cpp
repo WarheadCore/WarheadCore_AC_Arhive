@@ -56,17 +56,16 @@ enum Caravan
 
     MAX_CARAVAN_SUMMONS                 = 3,
 
-    TIME_SHOP_STOP                      = 10 * MINUTE * IN_MILLISECONDS,
-    TIME_HIRE_STOP                      = 4 * MINUTE * IN_MILLISECONDS,
-
     // Ambush
     NPC_KOLKAR_WAYLAYER                 = 12976,
     NPC_KOLKAR_AMBUSHER                 = 12977,
     NPC_LESSER_INFERNAL                 = 4676,
     NPC_DOOMWARDER                      = 4677,
-    NPC_NETHER                          = 4684,
-
+    NPC_NETHER                          = 4684
 };
+
+constexpr Minutes TIME_SHOP_STOP = 10min;
+constexpr Minutes TIME_HIRE_STOP = 4min;
 
 class npc_cork_gizelton : public CreatureScript
 {
@@ -384,9 +383,9 @@ public:
                         }
                         break;
                     }
-                case 282:
-                    events.ScheduleEvent(EVENT_RESTART_ESCORT, 1000);
-                    break;
+                    case 282:
+                        events.ScheduleEvent(EVENT_RESTART_ESCORT, 1s);
+                        break;
 
             }
         }

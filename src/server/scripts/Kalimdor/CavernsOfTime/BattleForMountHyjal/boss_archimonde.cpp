@@ -315,7 +315,7 @@ public:
             spellEffectTargets.clear();
             fingerOfDeathTargets.clear();
             summons.DespawnAll();
-            events.ScheduleEvent(EVENT_DRAIN_WORLD_TREE, 0);
+            events.ScheduleEvent(EVENT_DRAIN_WORLD_TREE, 0s);
         }
 
         void DoCastProtection()
@@ -356,11 +356,11 @@ public:
             DoZoneInCombat();
 
             instance->SetData(DATA_ARCHIMONDEEVENT, IN_PROGRESS);
-            events.ScheduleEvent(EVENT_SPELL_AIR_BURST, urand(25000, 35000));
-            events.ScheduleEvent(EVENT_SPELL_DOOMFIRE, urand(10000, 20000));
-            events.ScheduleEvent(EVENT_SPELL_FEAR, 42000);
-            events.ScheduleEvent(EVENT_SPELL_GRIP_OF_THE_LEGION, 2000);
-            events.ScheduleEvent(EVENT_SPELL_FINGER_OF_DEATH, 1000);
+            events.ScheduleEvent(EVENT_SPELL_AIR_BURST, 25s, 35s);
+            events.ScheduleEvent(EVENT_SPELL_DOOMFIRE, 10s, 20s);
+            events.ScheduleEvent(EVENT_SPELL_FEAR, 42s);
+            events.ScheduleEvent(EVENT_SPELL_GRIP_OF_THE_LEGION, 2s);
+            events.ScheduleEvent(EVENT_SPELL_FINGER_OF_DEATH, 1s);
         }
 
         void KilledUnit(Unit* victim) override
@@ -392,7 +392,7 @@ public:
                     break;
             }
 
-            events.ScheduleEvent(EVENT_SPELL_UNLEASH_SOUL_CHARGES, urand(2000, 10000));
+            events.ScheduleEvent(EVENT_SPELL_UNLEASH_SOUL_CHARGES, 2s, 10s);
             ++SoulChargeCount;
         }
 
@@ -596,7 +596,7 @@ public:
                 return;
 
             if (me->HealthBelowPct(10) && !BelowTenPercent)
-                events.ScheduleEvent(EVENT_BELOW_10_PERCENT_HP, 0);
+                events.ScheduleEvent(EVENT_BELOW_10_PERCENT_HP, 0s);
 
             switch (events.ExecuteEvent())
             {
@@ -610,8 +610,8 @@ public:
 
                             if (me->IsWithinDistInMap(Check, 75))
                             {
-                                events.ScheduleEvent(EVENT_TOO_CLOSE_TO_WORLD_TREE, 0);
-                                break;
+                            events.ScheduleEvent(EVENT_TOO_CLOSE_TO_WORLD_TREE, 0s);
+                            break;
                             }
                         }
                         events.RepeatEvent(5000);
@@ -622,11 +622,11 @@ public:
                     BelowTenPercent = true;
                     me->GetMotionMaster()->Clear(false);
                     me->GetMotionMaster()->MoveIdle();
-                    events.ScheduleEvent(EVENT_ENRAGE, 0);
-                    events.ScheduleEvent(EVENT_ENRAGE_ROOT, 0);
-                    events.ScheduleEvent(EVENT_SUMMON_WISPS, 1000);
-                    events.ScheduleEvent(EVENT_SPELL_HAND_OF_DEATH, 1500);
-                    events.ScheduleEvent(EVENT_SPELL_FINGER_OF_DEATH, 2500);
+                    events.ScheduleEvent(EVENT_ENRAGE, 0s);
+                    events.ScheduleEvent(EVENT_ENRAGE_ROOT, 0s);
+                    events.ScheduleEvent(EVENT_SUMMON_WISPS, 1s);
+                    events.ScheduleEvent(EVENT_SPELL_HAND_OF_DEATH, 1500ms);
+                    events.ScheduleEvent(EVENT_SPELL_FINGER_OF_DEATH, 2500ms);
                     break;
                 case EVENT_SUMMON_WISPS:
                     // If there are more than 30 Wisps then kill Archimonde
@@ -637,38 +637,38 @@ public:
                     }
                     DoSpawnCreature(CREATURE_ANCIENT_WISP, float(rand() % 40), float(rand() % 40), 0, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15000);
                     ++WispCount;
-                    events.ScheduleEvent(EVENT_SUMMON_WISPS, 1500);
+                    events.ScheduleEvent(EVENT_SUMMON_WISPS, 1500ms);
                     break;
                 case EVENT_SPELL_HAND_OF_DEATH:
                     DoCastVictim(SPELL_RED_SKY_EFFECT);
                     DoCastVictim(SPELL_HAND_OF_DEATH);
-                    events.ScheduleEvent(EVENT_SPELL_HAND_OF_DEATH, 3000);
+                    events.ScheduleEvent(EVENT_SPELL_HAND_OF_DEATH, 3s);
                     break;
                 case EVENT_SPELL_FINGER_OF_DEATH:
                     if (CanUseFingerOfDeath())
                     {
-                        Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0);
+                        Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0s);
                         DoCast(target, SPELL_FINGER_OF_DEATH);
                         DoCastVictim(SPELL_RED_SKY_EFFECT);
                     }
-                    events.ScheduleEvent(EVENT_SPELL_FINGER_OF_DEATH, 3500);
+                    events.ScheduleEvent(EVENT_SPELL_FINGER_OF_DEATH, 3500ms);
                     break;
                 case EVENT_SPELL_GRIP_OF_THE_LEGION:
                     DoCast(SelectTarget(SELECT_TARGET_RANDOM, 0), SPELL_GRIP_OF_THE_LEGION);
-                    events.ScheduleEvent(EVENT_SPELL_GRIP_OF_THE_LEGION, urand(5000, 25000));
+                    events.ScheduleEvent(EVENT_SPELL_GRIP_OF_THE_LEGION, 5s, 25s);
                     break;
                 case EVENT_SPELL_AIR_BURST:
                     Talk(SAY_AIR_BURST);
                     DoCast(SelectTarget(SELECT_TARGET_RANDOM, 0), SPELL_AIR_BURST);
-                    events.ScheduleEvent(EVENT_SPELL_AIR_BURST, urand(25000, 40000));
+                    events.ScheduleEvent(EVENT_SPELL_AIR_BURST, 25s, 40s);
                     break;
                 case EVENT_SPELL_FEAR:
                     DoCastVictim(SPELL_FEAR);
-                    events.ScheduleEvent(EVENT_SPELL_FEAR, 42000);
+                    events.ScheduleEvent(EVENT_SPELL_FEAR, 42s);
                     break;
                 case EVENT_SPELL_DOOMFIRE:
                     DoCastDoomfire();
-                    events.ScheduleEvent(EVENT_SPELL_DOOMFIRE, 20000);
+                    events.ScheduleEvent(EVENT_SPELL_DOOMFIRE, 20s);
                     break;
                 case EVENT_SPELL_UNLEASH_SOUL_CHARGES:
                     UnleashSoulCharge();
@@ -678,8 +678,8 @@ public:
                     break;
                 case EVENT_TOO_CLOSE_TO_WORLD_TREE:
                     // People dragged the boss near the check and now wipe
-                    events.ScheduleEvent(EVENT_ENRAGE, 0);
-                    events.ScheduleEvent(EVENT_SPELL_HAND_OF_DEATH, 1000);
+                    events.ScheduleEvent(EVENT_ENRAGE, 0s);
+                    events.ScheduleEvent(EVENT_SPELL_HAND_OF_DEATH, 1s);
                     break;
                 case EVENT_ENRAGE_ROOT:
                     me->GetMotionMaster()->Clear(false);

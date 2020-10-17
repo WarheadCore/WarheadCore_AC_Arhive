@@ -87,9 +87,9 @@ public:
             Talk(EMOTE_TARGET, who);
             DoCast(me, SPELL_THORNS);
 
-            events.ScheduleEvent(EVENT_DISMEMBER, 5000);
-            events.ScheduleEvent(EVENT_GATHERING_SPEED, 9000);
-            events.ScheduleEvent(EVENT_FULL_SPEED, 60000);
+                events.ScheduleEvent(EVENT_DISMEMBER, 5s);
+                events.ScheduleEvent(EVENT_GATHERING_SPEED, 9s);
+                events.ScheduleEvent(EVENT_FULL_SPEED, 1min);
 
             _phase = PHASE_EGG;
         }
@@ -112,10 +112,10 @@ public:
             if (_phase != PHASE_EGG)
                 return;
 
-            me->RemoveAurasDueToSpell(SPELL_FULL_SPEED);
-            me->RemoveAurasDueToSpell(SPELL_GATHERING_SPEED);
-            events.ScheduleEvent(EVENT_GATHERING_SPEED, 9000);
-            events.ScheduleEvent(EVENT_FULL_SPEED, 60000);
+                me->RemoveAurasDueToSpell(SPELL_FULL_SPEED);
+                me->RemoveAurasDueToSpell(SPELL_GATHERING_SPEED);
+                events.ScheduleEvent(EVENT_GATHERING_SPEED, 9s);
+                events.ScheduleEvent(EVENT_FULL_SPEED, 1min);
 
             if (Unit* victim = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
             {

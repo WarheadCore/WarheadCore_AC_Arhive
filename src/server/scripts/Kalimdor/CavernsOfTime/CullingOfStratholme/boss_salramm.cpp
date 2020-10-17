@@ -83,12 +83,13 @@ public:
         void EnterCombat(Unit* /*who*/)
         {
             Talk(SAY_AGGRO);
-            events.ScheduleEvent(EVENT_SPELL_SHADOW_BOLT, 7000);
-            events.ScheduleEvent(EVENT_SPELL_STEAL_FLESH, 11000);
-            events.ScheduleEvent(EVENT_SPELL_SUMMON_GHOULS, 16000);
-            events.ScheduleEvent(EVENT_EXPLODE_GHOUL, 22000);
+            events.ScheduleEvent(EVENT_SPELL_SHADOW_BOLT, 7s);
+            events.ScheduleEvent(EVENT_SPELL_STEAL_FLESH, 11s);
+            events.ScheduleEvent(EVENT_SPELL_SUMMON_GHOULS, 16s);
+            events.ScheduleEvent(EVENT_EXPLODE_GHOUL, 22s);
+            
             if (IsHeroic())
-                events.ScheduleEvent(EVENT_SPELL_CURSE, 25000);
+                events.ScheduleEvent(EVENT_SPELL_CURSE, 25s);
         }
 
         void JustDied(Unit* /*killer*/)

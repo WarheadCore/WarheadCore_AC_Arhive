@@ -175,12 +175,12 @@ public:
             InitSpells();
         }
 
-        void InitSpells()
-        {
-            DoCast(me, SPELL_TOXIN);
-            events.ScheduleEvent(EVENT_POISONBOLT_VOLLEY, urand(10000, 15000));
-            events.ScheduleEvent(EVENT_POISON_SHOCK, urand(7000, 12000));
-        }
+            void InitSpells()
+            {
+                DoCast(me, SPELL_TOXIN);
+                events.ScheduleEvent(EVENT_POISONBOLT_VOLLEY, 10s, 15s);
+                events.ScheduleEvent(EVENT_POISON_SHOCK, 7s, 12s);
+            }
 
         void EnterEvadeMode()
         {
@@ -219,20 +219,20 @@ public:
             {
                 switch (eventId)
                 {
-                    case EVENT_POISONBOLT_VOLLEY:
-                        DoCast(me, SPELL_POISONBOLT_VOLLEY);
-                        events.ScheduleEvent(EVENT_POISONBOLT_VOLLEY, urand(10000, 15000));
-                        break;
-                    case EVENT_POISON_SHOCK:
-                        DoCast(me, SPELL_POISON_SHOCK);
-                        events.ScheduleEvent(EVENT_POISON_SHOCK, urand(7000, 12000));
-                        break;
-                    case EVENT_RESET_PHASE:
-                        _hitcounter = 0;
-                        _phase = PHASE_FROST;
-                        break;
-                    default:
-                        break;
+                        case EVENT_POISONBOLT_VOLLEY:
+                            DoCast(me, SPELL_POISONBOLT_VOLLEY);
+                            events.ScheduleEvent(EVENT_POISONBOLT_VOLLEY, 10s, 15s);
+                            break;
+                        case EVENT_POISON_SHOCK:
+                            DoCast(me, SPELL_POISON_SHOCK);
+                            events.ScheduleEvent(EVENT_POISON_SHOCK, 7s, 12s);
+                            break;
+                        case EVENT_RESET_PHASE:
+                            _hitcounter = 0;
+                            _phase = PHASE_FROST;
+                            break;
+                        default:
+                            break;
                 }
             }
 

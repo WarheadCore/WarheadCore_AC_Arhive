@@ -55,15 +55,15 @@ public:
         {
         }
 
-        void Reset()
-        {
-            _Reset();
-            _enraged = false;
-            events.ScheduleEvent(EVENT_MORTAL_WOUND, 8000);
-            events.ScheduleEvent(EVENT_SANDTRAP, urand(5000, 15000));
-            events.ScheduleEvent(EVENT_TRASH, 1000);
-            events.ScheduleEvent(EVENT_WIDE_SLASH, 11000);
-        }
+            void Reset()
+            {
+                _Reset();
+                _enraged = false;
+                events.ScheduleEvent(EVENT_MORTAL_WOUND, 8s);
+                events.ScheduleEvent(EVENT_SANDTRAP, 5s, 15s);
+                events.ScheduleEvent(EVENT_TRASH, 1s);
+                events.ScheduleEvent(EVENT_WIDE_SLASH, 11s);
+            }
 
         void DamageTaken(Unit*, uint32& /*damage*/, DamageEffectType, SpellSchoolMask)
         {

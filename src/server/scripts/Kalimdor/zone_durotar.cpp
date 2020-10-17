@@ -99,7 +99,7 @@ public:
         npc_tiger_matriarch_creditAI(Creature* creature) : ScriptedAI(creature)
         {
             SetCombatMovement(false);
-            events.ScheduleEvent(EVENT_CHECK_SUMMON_AURA, 2000);
+               events.ScheduleEvent(EVENT_CHECK_SUMMON_AURA, 2s);
         }
 
         void UpdateAI(uint32 diff)
@@ -129,7 +129,7 @@ public:
                     }
                 }
 
-                events.ScheduleEvent(EVENT_CHECK_SUMMON_AURA, 5000);
+                    events.ScheduleEvent(EVENT_CHECK_SUMMON_AURA, 5s);
             }
         }
 
@@ -228,21 +228,21 @@ public:
             {
                 switch (eventId)
                 {
-                    case EVENT_POUNCE:
-                        DoCastVictim(SPELL_POUNCE);
-                        _events.ScheduleEvent(EVENT_POUNCE, 30000);
-                        break;
-                    case EVENT_NOSUMMON: // Reapply SPELL_NO_SUMMON_AURA
-                        if (Unit* tiger = ObjectAccessor::GetUnit(*me, _tigerGuid))
-                        {
-                            if (tiger->IsSummon())
-                                if (Unit* vehSummoner = tiger->ToTempSummon()->GetSummoner())
-                                    me->AddAura(SPELL_NO_SUMMON_AURA, vehSummoner);
-                        }
-                        _events.ScheduleEvent(EVENT_NOSUMMON, 50000);
-                        break;
-                    default:
-                        break;
+                        case EVENT_POUNCE:
+                            DoCastVictim(SPELL_POUNCE);
+                            _events.ScheduleEvent(EVENT_POUNCE, 30s);
+                            break;
+                        case EVENT_NOSUMMON: // Reapply SPELL_NO_SUMMON_AURA
+                            if (Unit* tiger = ObjectAccessor::GetUnit(*me, _tigerGuid))
+                            {
+                                if (tiger->IsSummon())
+                                    if (Unit* vehSummoner = tiger->ToTempSummon()->GetSummoner())
+                                        me->AddAura(SPELL_NO_SUMMON_AURA, vehSummoner);
+                            }
+                            _events.ScheduleEvent(EVENT_NOSUMMON, 50s);
+                            break;
+                        default:
+                            break;
                 }
             }
 

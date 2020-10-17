@@ -145,16 +145,16 @@ public:
                 case 0:
                     break;
                 case 1:
-                    events.ScheduleEvent(EVENT_SPELL_WINGBUFFET, urand(10000, 20000));
-                    events.ScheduleEvent(EVENT_SPELL_FLAMEBREATH, urand(10000, 20000));
-                    events.ScheduleEvent(EVENT_SPELL_TAILSWEEP, urand(15000, 20000));
-                    events.ScheduleEvent(EVENT_SPELL_CLEAVE, urand(2000, 5000));
+                    events.ScheduleEvent(EVENT_SPELL_WINGBUFFET, 10s, 20s);
+                    events.ScheduleEvent(EVENT_SPELL_FLAMEBREATH, 10s, 20s);
+                    events.ScheduleEvent(EVENT_SPELL_TAILSWEEP, 15s, 20s);
+                    events.ScheduleEvent(EVENT_SPELL_CLEAVE, 2s, 5s);
                     break;
                 case 2:
-                    events.ScheduleEvent(EVENT_START_PHASE_2, 0);
+                    events.ScheduleEvent(EVENT_START_PHASE_2, 0s);
                     break;
                 case 3:
-                    events.ScheduleEvent(EVENT_START_PHASE_3, 5000);
+                    events.ScheduleEvent(EVENT_START_PHASE_3, 5s);
                     break;
             }
         }
@@ -270,31 +270,31 @@ public:
                     me->SetFacingTo(OnyxiaMoveData[id].o);
                     me->SetSpeed(MOVE_RUN, 1.6f, false);
                     CurrentWP = id;
-                    events.ScheduleEvent(EVENT_SPELL_FIREBALL_FIRST, 1000);
+                    events.ScheduleEvent(EVENT_SPELL_FIREBALL_FIRST, 1s);
                 }
             }
             else switch( id )
-                {
-                    case 10:
-                        me->SetFacingTo(OnyxiaMoveData[0].o);
-                        events.ScheduleEvent(EVENT_LIFTOFF, 0);
-                        break;
-                    case 11:
-                        me->SetFacingTo(OnyxiaMoveData[1].o);
-                        events.ScheduleEvent(EVENT_FLY_S_TO_N, 0);
-                        break;
-                    case 12:
-                        me->SetFacingTo(OnyxiaMoveData[1].o);
-                        events.ScheduleEvent(EVENT_LAND, 0);
-                        break;
-                    case 13:
-                        me->SetCanFly(false);
-                        me->SetDisableGravity(false);
-                        me->SetHover(false);
-                        me->SetSpeed(MOVE_RUN, me->GetCreatureTemplate()->speed_run, false);
-                        events.ScheduleEvent(EVENT_PHASE_3_ATTACK, 0);
-                        break;
-                }
+            {
+                case 10:
+                    me->SetFacingTo(OnyxiaMoveData[0].o);
+                    events.ScheduleEvent(EVENT_LIFTOFF, 0s);
+                    break;
+                case 11:
+                    me->SetFacingTo(OnyxiaMoveData[1].o);
+                    events.ScheduleEvent(EVENT_FLY_S_TO_N, 0s);
+                    break;
+                case 12:
+                    me->SetFacingTo(OnyxiaMoveData[1].o);
+                    events.ScheduleEvent(EVENT_LAND, 0s);
+                    break;
+                case 13:
+                    me->SetCanFly(false);
+                    me->SetDisableGravity(false);
+                    me->SetHover(false);
+                    me->SetSpeed(MOVE_RUN, me->GetCreatureTemplate()->speed_run, false);
+                    events.ScheduleEvent(EVENT_PHASE_3_ATTACK, 0s);
+                    break;
+            }
         }
 
         void HandleWhelpSpam(const uint32 diff)
@@ -386,8 +386,7 @@ public:
                         me->SendMovementFlagUpdate();
                         me->GetMotionMaster()->MoveTakeoff(11, OnyxiaMoveData[1].x + 1.0f, OnyxiaMoveData[1].y, OnyxiaMoveData[1].z, 12.0f);
                         bManyWhelpsAvailable = true;
-                        
-                        events.RescheduleEvent(EVENT_END_MANY_WHELPS_TIME, 10000);
+                        events.RescheduleEvent(EVENT_END_MANY_WHELPS_TIME, 10s);
                     }
                     break;
                 case EVENT_END_MANY_WHELPS_TIME:
@@ -399,8 +398,8 @@ public:
                         me->GetMotionMaster()->MovePoint(5, OnyxiaMoveData[5].x, OnyxiaMoveData[5].y, OnyxiaMoveData[5].z);
                         
                         whelpSpam = true;
-                        events.ScheduleEvent(EVENT_WHELP_SPAM, 90000);
-                        events.ScheduleEvent(EVENT_SUMMON_LAIR_GUARD, 30000);
+                        events.ScheduleEvent(EVENT_WHELP_SPAM, 90s);
+                        events.ScheduleEvent(EVENT_SUMMON_LAIR_GUARD, 30s);
                     }
                     break;
                 case EVENT_SUMMON_LAIR_GUARD:
@@ -430,8 +429,7 @@ public:
                             me->SetFacingToObject(v);
                             me->CastSpell(v, SPELL_FIREBALL, false);
                         }
-                        
-                        events.ScheduleEvent(EVENT_SPELL_FIREBALL_SECOND, 4000);
+                        events.ScheduleEvent(EVENT_SPELL_FIREBALL_SECOND, 4s);
                     }
                     break;
                 case EVENT_SPELL_FIREBALL_SECOND:
@@ -444,11 +442,11 @@ public:
 
                         uint8 rand = urand(0, 99);
                         if( rand < 33 )
-                            events.ScheduleEvent(EVENT_PHASE_2_STEP_CW, 4000);
+                            events.ScheduleEvent(EVENT_PHASE_2_STEP_CW, 4s);
                         else if( rand < 66 )
-                            events.ScheduleEvent(EVENT_PHASE_2_STEP_ACW, 4000);
+                            events.ScheduleEvent(EVENT_PHASE_2_STEP_ACW, 4s);
                         else
-                            events.ScheduleEvent(EVENT_PHASE_2_STEP_ACROSS, 4000);
+                            events.ScheduleEvent(EVENT_PHASE_2_STEP_ACROSS, 4s);
                     }
                     break;
                 case EVENT_PHASE_2_STEP_CW:
@@ -472,8 +470,7 @@ public:
                         me->SetFacingTo(OnyxiaMoveData[CurrentWP].o);
                         me->MonsterTextEmote("Onyxia takes in a deep breath...", 0, true);
                         me->CastSpell(me, OnyxiaMoveData[CurrentWP].spellId, false);
-                        
-                        events.ScheduleEvent(EVENT_SPELL_BREATH, 8250);
+                        events.ScheduleEvent(EVENT_SPELL_BREATH, 8250ms);
                     }
                     break;
                 case EVENT_SPELL_BREATH:
@@ -495,20 +492,20 @@ public:
                         AttackStart(SelectTarget(SELECT_TARGET_TOPAGGRO, 0, 0, false));
                         me->CastSpell(me, SPELL_BELLOWINGROAR, false);
 
-                        events.ScheduleEvent(EVENT_ERUPTION, 0);
-                        events.ScheduleEvent(EVENT_SPELL_WINGBUFFET, urand(10000, 20000));
-                        events.ScheduleEvent(EVENT_SPELL_FLAMEBREATH, urand(10000, 20000));
-                        events.ScheduleEvent(EVENT_SPELL_TAILSWEEP, urand(15000, 20000));
-                        events.ScheduleEvent(EVENT_SPELL_CLEAVE, urand(2000, 5000));
-                        events.ScheduleEvent(EVENT_SPELL_BELLOWINGROAR, 15000);
-                        events.ScheduleEvent(EVENT_SUMMON_WHELP, 10000);
+                        events.ScheduleEvent(EVENT_ERUPTION, 0s);
+                        events.ScheduleEvent(EVENT_SPELL_WINGBUFFET, 10s, 20s);
+                        events.ScheduleEvent(EVENT_SPELL_FLAMEBREATH, 10s, 20s);
+                        events.ScheduleEvent(EVENT_SPELL_TAILSWEEP, 15s, 20s);
+                        events.ScheduleEvent(EVENT_SPELL_CLEAVE, 2s, 5s);
+                        events.ScheduleEvent(EVENT_SPELL_BELLOWINGROAR, 15s);
+                        events.ScheduleEvent(EVENT_SUMMON_WHELP, 10s);
                     }
                     break;
                 case EVENT_SPELL_BELLOWINGROAR:
                     {
                         me->CastSpell(me, SPELL_BELLOWINGROAR, false);
                         events.RepeatEvent(22000);
-                        events.ScheduleEvent(EVENT_ERUPTION, 0);
+                        events.ScheduleEvent(EVENT_ERUPTION, 0s);
                     }
                     break;
                 case EVENT_ERUPTION:
@@ -553,8 +550,8 @@ public:
         npc_onyxian_lair_guardAI(Creature* pCreature) : ScriptedAI(pCreature)
         {
             events.Reset();
-            events.ScheduleEvent(EVENT_OLG_SPELL_BLASTNOVA, 15000);
-            events.ScheduleEvent(EVENT_OLG_SPELL_IGNITEWEAPON, 10000);
+            events.ScheduleEvent(EVENT_OLG_SPELL_BLASTNOVA, 15s);
+            events.ScheduleEvent(EVENT_OLG_SPELL_IGNITEWEAPON, 10s);
         }
 
         EventMap events;

@@ -73,11 +73,12 @@ public:
 
         void EnterCombat(Unit* /*who*/)
         {
-            events.ScheduleEvent(EVENT_ARCANE_BLAST, 10000);
-            events.ScheduleEvent(EVENT_TIME_LAPSE, 15000);
-            events.ScheduleEvent(EVENT_ARCANE_DISCHARGE, 25000);
+            events.ScheduleEvent(EVENT_ARCANE_BLAST, 10s);
+            events.ScheduleEvent(EVENT_TIME_LAPSE, 15s);
+            events.ScheduleEvent(EVENT_ARCANE_DISCHARGE, 25s);
+            
             if (IsHeroic())
-                events.ScheduleEvent(EVENT_ATTRACTION, 20000);
+                events.ScheduleEvent(EVENT_ATTRACTION, 20s);
 
             OwnTalk(SAY_AGGRO);
         }
@@ -123,19 +124,19 @@ public:
             {
                 case EVENT_ARCANE_BLAST:
                     me->CastSpell(me->GetVictim(), SPELL_ARCANE_BLAST, false);
-                    events.ScheduleEvent(EVENT_ARCANE_BLAST, 20000);
+                    events.ScheduleEvent(EVENT_ARCANE_BLAST, 20s);
                     break;
                 case EVENT_TIME_LAPSE:
                     me->CastSpell(me, SPELL_TIME_LAPSE, false);
-                    events.ScheduleEvent(EVENT_TIME_LAPSE, 20000);
+                    events.ScheduleEvent(EVENT_TIME_LAPSE, 20s);
                     break;
                 case EVENT_ARCANE_DISCHARGE:
                     me->CastSpell(me, SPELL_ARCANE_DISCHARGE, false);
-                    events.ScheduleEvent(EVENT_ARCANE_DISCHARGE, 25000);
+                    events.ScheduleEvent(EVENT_ARCANE_DISCHARGE, 25s);
                     break;
                 case EVENT_ATTRACTION:
                     me->CastSpell(me, SPELL_ATTRACTION, false);
-                    events.ScheduleEvent(EVENT_ATTRACTION, 30000);
+                    events.ScheduleEvent(EVENT_ATTRACTION, 30s);
                     break;
             }
 

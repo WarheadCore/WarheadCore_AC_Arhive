@@ -209,17 +209,18 @@ public:
                             Position Pos;
                             me->GetRandomPoint(SwarmerPos, 80.0f, Pos);
                             me->SummonCreature(NPC_SWARMER, Pos);
-                            events.ScheduleEvent(EVENT_SUMMON_SWARMER, 5000);
+                            events.ScheduleEvent(EVENT_SUMMON_SWARMER, 5s);
                             break;
                         }
-                    case EVENT_TRASH:
-                        DoCastVictim(SPELL_TRASH);
-                        events.ScheduleEvent(EVENT_TRASH, urand(5000, 7000));
-                        break;
-                    case EVENT_LASH:
-                        DoCastVictim(SPELL_LASH);
-                        events.ScheduleEvent(EVENT_LASH, urand(8000, 15000));
-                        break;
+                        case EVENT_TRASH:
+                            DoCastVictim(SPELL_TRASH);
+                            events.ScheduleEvent(EVENT_TRASH, 5s, 7s);
+                            break;
+                        case EVENT_LASH:
+                            DoCastVictim(SPELL_LASH);
+                            events.ScheduleEvent(EVENT_LASH, 8s, 15s);
+                            break;
+                    }
                 }
             }
         }

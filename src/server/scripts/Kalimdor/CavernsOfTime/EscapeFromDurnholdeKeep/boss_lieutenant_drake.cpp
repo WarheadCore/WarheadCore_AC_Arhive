@@ -98,11 +98,11 @@ public:
         {
             Talk(SAY_AGGRO);
 
-            events.ScheduleEvent(EVENT_WHIRLWIND, 4000);
-            events.ScheduleEvent(EVENT_FRIGHTENING_SHOUT, 14000);
-            events.ScheduleEvent(EVENT_MORTAL_STRIKE, 9000);
-            events.ScheduleEvent(EVENT_HAMSTRING, 18000);
-            events.ScheduleEvent(EVENT_EXPLODING_SHOT, 1000);
+            events.ScheduleEvent(EVENT_WHIRLWIND, 4s);
+            events.ScheduleEvent(EVENT_FRIGHTENING_SHOUT, 14s);
+            events.ScheduleEvent(EVENT_MORTAL_STRIKE, 9s);
+            events.ScheduleEvent(EVENT_HAMSTRING, 18s);
+            events.ScheduleEvent(EVENT_EXPLODING_SHOT, 1s);
         }
 
         void KilledUnit(Unit* victim)
@@ -131,28 +131,28 @@ public:
             {
                 case EVENT_WHIRLWIND:
                     me->CastSpell(me, SPELL_WHIRLWIND, false);
-                    events.ScheduleEvent(EVENT_WHIRLWIND, 25000);
+                    events.ScheduleEvent(EVENT_WHIRLWIND, 25s);
                     break;
                 case EVENT_EXPLODING_SHOT:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 40.0f))
                         me->CastSpell(target, SPELL_EXPLODING_SHOT, false);
-                    events.ScheduleEvent(EVENT_EXPLODING_SHOT, 25000);
+                    events.ScheduleEvent(EVENT_EXPLODING_SHOT, 25s);
                     break;
                 case EVENT_MORTAL_STRIKE:
                     if (roll_chance_i(40))
                         Talk(SAY_MORTAL);
                     me->CastSpell(me->GetVictim(), SPELL_MORTAL_STRIKE, false);
-                    events.ScheduleEvent(EVENT_MORTAL_STRIKE, 10000);
+                    events.ScheduleEvent(EVENT_MORTAL_STRIKE, 10s);
                     break;
                 case EVENT_FRIGHTENING_SHOUT:
                     if (roll_chance_i(40))
                         Talk(SAY_SHOUT);
                     me->CastSpell(me, SPELL_FRIGHTENING_SHOUT, false);
-                    events.ScheduleEvent(EVENT_FRIGHTENING_SHOUT, 25000);
+                    events.ScheduleEvent(EVENT_FRIGHTENING_SHOUT, 25s);
                     break;
                 case EVENT_HAMSTRING:
                     me->CastSpell(me->GetVictim(), SPELL_HAMSTRING, false);
-                    events.ScheduleEvent(EVENT_HAMSTRING, 25000);
+                    events.ScheduleEvent(EVENT_HAMSTRING, 25s);
                     break;
             }
 
