@@ -368,10 +368,10 @@ public:
                     if (Unit* target = SelectTargetFromPlayerList(40.0f))
                     {
                         AttackStart(target);
-                        events.ScheduleEvent(EVENT_CALL_BAXTER, 10000);
-                        events.ScheduleEvent(EVENT_CALL_FRYE, 20000);
-                        events.ScheduleEvent(EVENT_SPELL_PERFUME_SPRAY, 7000);
-                        events.ScheduleEvent(EVENT_SPELL_CHAIN_REACTION, 12000);
+                        events.ScheduleEvent(EVENT_CALL_BAXTER, 10s);
+                        events.ScheduleEvent(EVENT_CALL_FRYE, 20s);
+                        events.ScheduleEvent(EVENT_SPELL_PERFUME_SPRAY, 7s);
+                        events.ScheduleEvent(EVENT_SPELL_CHAIN_REACTION, 12s);
                     }
                     else
                         EnterEvadeMode();
@@ -392,14 +392,14 @@ public:
                     {
                         EntryCheckPredicate pred(NPC_APOTHECARY_BAXTER);
                         summons.DoAction(ACTION_RELEASE_HELPER, pred);
-                        
+
                         break;
                     }
                 case EVENT_CALL_FRYE:
                     {
                         EntryCheckPredicate pred(NPC_APOTHECARY_FRYE);
                         summons.DoAction(ACTION_RELEASE_HELPER, pred);
-                        
+
                         break;
                     }
                 case EVENT_SPELL_PERFUME_SPRAY:
@@ -460,11 +460,11 @@ public:
 
                 if (me->GetEntry() == NPC_APOTHECARY_BAXTER)
                 {
-                    events.ScheduleEvent(EVENT_SPELL_PERFUME_SPRAY, 7000);
-                    events.ScheduleEvent(EVENT_SPELL_CHAIN_REACTION, 12000);
+                    events.ScheduleEvent(EVENT_SPELL_PERFUME_SPRAY, 7s);
+                    events.ScheduleEvent(EVENT_SPELL_CHAIN_REACTION, 12s);
                 }
                 else
-                    events.ScheduleEvent(EVENT_SPELL_THROW, 5000);
+                    events.ScheduleEvent(EVENT_SPELL_THROW, 5s);
             }
         }
 
