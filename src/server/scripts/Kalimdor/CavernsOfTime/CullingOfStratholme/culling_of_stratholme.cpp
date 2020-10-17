@@ -440,7 +440,7 @@ public:
                 waveGroupId = 10;
                 eventInRun = true;
                 SetRun(true);
-                actionEvents.ScheduleEvent(EVENT_ACTION_PHASE2+9, 10s);
+                actionEvents.ScheduleEvent(EVENT_ACTION_PHASE2 + 9, 10s);
             }
             else if (param == ACTION_START_TOWN_HALL)
             {
@@ -486,7 +486,7 @@ public:
             {
                 EnterEvadeMode();
                 eventInRun = true;
-                actionEvents.ScheduleEvent(EVENT_ACTION_PHASE5+1, 22s);
+                actionEvents.ScheduleEvent(EVENT_ACTION_PHASE5 + 1, 22s);
                 me->SetFacingTo(1.84f);
 
                 if (!me->GetMap()->GetPlayers().isEmpty())
@@ -1210,7 +1210,7 @@ Creature* npc_arthas::npc_arthasAI::GetEventNpc(uint32 entry)
 
 void npc_arthas::npc_arthasAI::ScheduleNextEvent(uint32 currentEvent, uint32 time)
 {
-    actionEvents.ScheduleEvent(currentEvent+1, Milliseconds(time));
+    actionEvents.ScheduleEvent(currentEvent + 1, Milliseconds(time));
 }
 
 void npc_arthas::npc_arthasAI::SummonNextWave()
@@ -1259,7 +1259,7 @@ void npc_arthas::npc_arthasAI::ReorderInstance(uint32 data)
             if (data == COS_PROGRESS_FINISHED_CITY_INTRO)
             {
                 eventInRun = true;
-                actionEvents.RescheduleEvent(EVENT_ACTION_PHASE2+8, 10s);
+                actionEvents.RescheduleEvent(EVENT_ACTION_PHASE2 + 8, 10s);
             }
             else if (data == COS_PROGRESS_KILLED_MEATHOOK)
             {

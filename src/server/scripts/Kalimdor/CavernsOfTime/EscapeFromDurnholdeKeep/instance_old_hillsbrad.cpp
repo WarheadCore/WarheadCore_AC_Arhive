@@ -158,9 +158,9 @@ public:
                         DoUpdateWorldState(WORLD_STATE_BARRELS_PLANTED, ++_barrelCount);
                         if (_barrelCount == 5)
                         {
-                        _events.ScheduleEvent(EVENT_INITIAL_BARRELS_FLAME, 4s);
-                        _events.ScheduleEvent(EVENT_FINAL_BARRELS_FLAME, 12s);
-                        _events.ScheduleEvent(EVENT_SUMMON_LIEUTENANT, 18s);
+                            _events.ScheduleEvent(EVENT_INITIAL_BARRELS_FLAME, 4s);
+                            _events.ScheduleEvent(EVENT_FINAL_BARRELS_FLAME, 12s);
+                            _events.ScheduleEvent(EVENT_SUMMON_LIEUTENANT, 18s);
                         }
                         break;
                     }

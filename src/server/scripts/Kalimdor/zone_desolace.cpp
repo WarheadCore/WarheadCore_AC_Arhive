@@ -383,9 +383,9 @@ public:
                         }
                         break;
                     }
-                    case 282:
-                        events.ScheduleEvent(EVENT_RESTART_ESCORT, 1s);
-                        break;
+                case 282:
+                    events.ScheduleEvent(EVENT_RESTART_ESCORT, 1s);
+                    break;
 
             }
         }

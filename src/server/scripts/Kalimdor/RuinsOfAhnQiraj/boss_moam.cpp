@@ -62,14 +62,14 @@ public:
         {
         }
 
-            void Reset()
-            {
-                _Reset();
-                me->SetPower(POWER_MANA, 0);
-                _isStonePhase = false;
-                events.ScheduleEvent(EVENT_STONE_PHASE, 90s);
-                //events.ScheduleEvent(EVENT_WIDE_SLASH, 11000);
-            }
+        void Reset()
+        {
+            _Reset();
+            me->SetPower(POWER_MANA, 0);
+            _isStonePhase = false;
+            events.ScheduleEvent(EVENT_STONE_PHASE, 90s);
+            //events.ScheduleEvent(EVENT_WIDE_SLASH, 11000);
+        }
 
         void DamageTaken(Unit*, uint32& /*damage*/, DamageEffectType, SpellSchoolMask)
         {

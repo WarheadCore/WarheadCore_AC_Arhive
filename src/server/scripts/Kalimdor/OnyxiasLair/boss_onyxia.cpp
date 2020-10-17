@@ -274,27 +274,27 @@ public:
                 }
             }
             else switch( id )
-            {
-                case 10:
-                    me->SetFacingTo(OnyxiaMoveData[0].o);
-                    events.ScheduleEvent(EVENT_LIFTOFF, 0s);
-                    break;
-                case 11:
-                    me->SetFacingTo(OnyxiaMoveData[1].o);
-                    events.ScheduleEvent(EVENT_FLY_S_TO_N, 0s);
-                    break;
-                case 12:
-                    me->SetFacingTo(OnyxiaMoveData[1].o);
-                    events.ScheduleEvent(EVENT_LAND, 0s);
-                    break;
-                case 13:
-                    me->SetCanFly(false);
-                    me->SetDisableGravity(false);
-                    me->SetHover(false);
-                    me->SetSpeed(MOVE_RUN, me->GetCreatureTemplate()->speed_run, false);
-                    events.ScheduleEvent(EVENT_PHASE_3_ATTACK, 0s);
-                    break;
-            }
+                {
+                    case 10:
+                        me->SetFacingTo(OnyxiaMoveData[0].o);
+                        events.ScheduleEvent(EVENT_LIFTOFF, 0s);
+                        break;
+                    case 11:
+                        me->SetFacingTo(OnyxiaMoveData[1].o);
+                        events.ScheduleEvent(EVENT_FLY_S_TO_N, 0s);
+                        break;
+                    case 12:
+                        me->SetFacingTo(OnyxiaMoveData[1].o);
+                        events.ScheduleEvent(EVENT_LAND, 0s);
+                        break;
+                    case 13:
+                        me->SetCanFly(false);
+                        me->SetDisableGravity(false);
+                        me->SetHover(false);
+                        me->SetSpeed(MOVE_RUN, me->GetCreatureTemplate()->speed_run, false);
+                        events.ScheduleEvent(EVENT_PHASE_3_ATTACK, 0s);
+                        break;
+                }
         }
 
         void HandleWhelpSpam(const uint32 diff)
@@ -396,7 +396,7 @@ public:
                     {
                         me->SetSpeed(MOVE_RUN, 2.95f, false);
                         me->GetMotionMaster()->MovePoint(5, OnyxiaMoveData[5].x, OnyxiaMoveData[5].y, OnyxiaMoveData[5].z);
-                        
+
                         whelpSpam = true;
                         events.ScheduleEvent(EVENT_WHELP_SPAM, 90s);
                         events.ScheduleEvent(EVENT_SUMMON_LAIR_GUARD, 30s);

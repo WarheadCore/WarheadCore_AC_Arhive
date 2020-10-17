@@ -212,28 +212,28 @@ public:
                             events.ScheduleEvent(EVENT_SUMMON_SWARMER, 5s);
                             break;
                         }
-                        case EVENT_TRASH:
-                            DoCastVictim(SPELL_TRASH);
-                            events.ScheduleEvent(EVENT_TRASH, 5s, 7s);
-                            break;
-                        case EVENT_LASH:
-                            DoCastVictim(SPELL_LASH);
-                            events.ScheduleEvent(EVENT_LASH, 8s, 15s);
-                            break;
-                    }
+                    case EVENT_TRASH:
+                        DoCastVictim(SPELL_TRASH);
+                        events.ScheduleEvent(EVENT_TRASH, 5s, 7s);
+                        break;
+                    case EVENT_LASH:
+                        DoCastVictim(SPELL_LASH);
+                        events.ScheduleEvent(EVENT_LASH, 8s, 15s);
+                        break;
                 }
             }
         }
-    private:
-        std::list<uint64> _swarmers;
-        uint8 _phase;
-        bool _enraged;
-    };
-
-    CreatureAI* GetAI(Creature* creature) const
-    {
-        return GetInstanceAI<boss_ayamissAI>(creature);
     }
+private:
+    std::list<uint64> _swarmers;
+    uint8 _phase;
+    bool _enraged;
+};
+
+CreatureAI* GetAI(Creature* creature) const
+{
+    return GetInstanceAI<boss_ayamissAI>(creature);
+}
 };
 
 class npc_hive_zara_larva : public CreatureScript

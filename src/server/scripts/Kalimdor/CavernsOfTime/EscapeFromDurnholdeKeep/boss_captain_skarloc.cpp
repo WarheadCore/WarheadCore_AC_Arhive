@@ -143,7 +143,7 @@ public:
             events.ScheduleEvent(EVENT_SPELL_CLEANSE, 6s);
             events.ScheduleEvent(EVENT_SPELL_HAMMER, 20s);
             events.ScheduleEvent(EVENT_SPELL_HOLY_SHIELD, 10s);
-            
+
             if (IsHeroic())
                 events.ScheduleEvent(EVENT_SPELL_CONSECRATION, 1s);
         }
