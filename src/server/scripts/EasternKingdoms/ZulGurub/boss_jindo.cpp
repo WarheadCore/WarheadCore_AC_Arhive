@@ -78,11 +78,11 @@ public:
         void EnterCombat(Unit* /*who*/)
         {
             _EnterCombat();
-            events.ScheduleEvent(EVENT_BRAINWASHTOTEM, 20000);
-            events.ScheduleEvent(EVENT_POWERFULLHEALINGWARD, 16000);
-            events.ScheduleEvent(EVENT_HEX, 8000);
-            events.ScheduleEvent(EVENT_DELUSIONSOFJINDO, 10000);
-            events.ScheduleEvent(EVENT_TELEPORT, 5000);
+            events.ScheduleEvent(EVENT_BRAINWASHTOTEM, 20s);
+            events.ScheduleEvent(EVENT_POWERFULLHEALINGWARD, 16s);
+            events.ScheduleEvent(EVENT_HEX, 8s);
+            events.ScheduleEvent(EVENT_DELUSIONSOFJINDO, 10s);
+            events.ScheduleEvent(EVENT_TELEPORT, 5s);
             Talk(SAY_AGGRO);
         }
 
@@ -102,12 +102,12 @@ public:
                 {
                     case EVENT_BRAINWASHTOTEM:
                         DoCast(me, SPELL_BRAINWASHTOTEM);
-                        events.ScheduleEvent(EVENT_BRAINWASHTOTEM, urand(18000, 26000));
+                        events.ScheduleEvent(EVENT_BRAINWASHTOTEM, 18s, 26s);
                         break;
                     case EVENT_POWERFULLHEALINGWARD: // HACK
                         //DoCast(me, SPELL_POWERFULLHEALINGWARD);
                         me->SummonCreature(14987, me->GetPositionX() + 3, me->GetPositionY() - 2, me->GetPositionZ(), 0, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 30000);
-                        events.ScheduleEvent(EVENT_POWERFULLHEALINGWARD, urand(14000, 20000));
+                        events.ScheduleEvent(EVENT_POWERFULLHEALINGWARD, 14s, 20s);
                         break;
                     case EVENT_HEX:
                         if (Unit* target = me->GetVictim())
@@ -116,7 +116,7 @@ public:
                             if (DoGetThreat(target))
                                 DoModifyThreatPercent(target, -80);
                         }
-                        events.ScheduleEvent(EVENT_HEX, urand(12000, 20000));
+                        events.ScheduleEvent(EVENT_HEX, 12s, 20s);
                         break;
                     case EVENT_DELUSIONSOFJINDO: // HACK
                         // Casting the delusion curse with a shade so shade will attack the same target with the curse.
@@ -127,7 +127,7 @@ public:
                             if (Shade)
                                 Shade->AI()->AttackStart(target);
                         }
-                        events.ScheduleEvent(EVENT_DELUSIONSOFJINDO, urand(4000, 12000));
+                        events.ScheduleEvent(EVENT_DELUSIONSOFJINDO, 4s, 12s);
                         break;
                     case EVENT_TELEPORT: // Possible HACK
                         // Teleports a random player and spawns 9 Sacrificed Trolls to attack player
@@ -165,7 +165,7 @@ public:
                             if (SacrificedTroll)
                                 SacrificedTroll->AI()->AttackStart(target);
                         }
-                        events.ScheduleEvent(EVENT_TELEPORT, urand(15000, 23000));
+                        events.ScheduleEvent(EVENT_TELEPORT, 15s, 23s);
                         break;
                     default:
                         break;
