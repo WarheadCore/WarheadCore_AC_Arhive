@@ -146,7 +146,7 @@ public:
             }
 
             events.Update(diff);
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_SPELL_CORROSIVE:
                     me->CastSpell(me->GetVictim(), SPELL_CORROSIVE_ACID, false);
@@ -158,7 +158,6 @@ public:
                     break;
                 case EVENT_SPELL_ENRAGE:
                     me->CastSpell(me->GetVictim(), SPELL_ENRAGE, false);
-                    events.PopEvent();
                     break;
             }
 

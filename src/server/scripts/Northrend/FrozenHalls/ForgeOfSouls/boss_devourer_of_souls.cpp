@@ -177,7 +177,7 @@ public:
             if (Spell* s = me->GetCurrentSpell(CURRENT_CHANNELED_SPELL))
                 if (s->m_spellInfo->Id == SPELL_MIRRORED_SOUL)
                 {
-                    switch (events.GetEvent())
+                    switch (events.ExecuteEvent())
                     {
                         case 0:
                             break;
@@ -203,7 +203,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch(events.GetEvent())
+            switch(events.ExecuteEvent())
             {
                 case 0:
                     break;

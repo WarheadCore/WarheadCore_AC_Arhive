@@ -206,7 +206,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_CHECK_HEALTH:
                     {
@@ -237,7 +237,6 @@ public:
 
                             events.CancelEvent(EVENT_SUMMON);
                             events.ScheduleEvent(EVENT_SUMMON, 0);
-                            events.PopEvent();
                             break;
                         }
 
@@ -281,7 +280,6 @@ public:
                             brann->PlayDirectSound(14275);
                         }
 
-                        events.PopEvent();
                         break;
                     }
                 case EVENT_SUMMON:
@@ -311,7 +309,6 @@ public:
                             case PHASE_SUMMON_FRIENDLY_DWARFES:
                                 {
                                     SummonDwarfes(true);
-                                    events.PopEvent();
                                     break;
                                 }
                         }
@@ -451,7 +448,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 // Every 5 seconds
                 case EVENT_TOXIC_VOLLEY:
@@ -495,7 +492,7 @@ public:
         void UpdateAI(uint32 diff)
         {
             events.Update(diff);
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_MALFORMED_OOZE_CHECK:
                     {

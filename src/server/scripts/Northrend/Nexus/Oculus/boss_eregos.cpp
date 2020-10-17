@@ -187,7 +187,7 @@ public:
 
             DoMeleeAttackIfReady();
 
-            switch( events.GetEvent() )
+            switch( events.ExecuteEvent() )
             {
                 case 0:
                     break;
@@ -216,7 +216,6 @@ public:
                         float y = rand_norm() * 50.0f - 25.0f;
                         float z = rand_norm() * 50.0f - 25.0f;
                         me->SummonCreature(NPC_LEY_GUARDIAN_WHELP, me->GetPositionX() + x, me->GetPositionY() + y, me->GetPositionZ() + z, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000);
-                        events.PopEvent();
                     }
                     break;
                 case EVENT_SPELL_PLANAR_SHIFT:
@@ -241,7 +240,6 @@ public:
                                     pa->GetMotionMaster()->MoveChase(t, 0.01f);
                                 }
                             }
-                    events.PopEvent();
                     break;
             }
         }

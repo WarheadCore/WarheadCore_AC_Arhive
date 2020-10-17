@@ -437,7 +437,7 @@ public:
             events.Update(diff);
 
             // Special events which needs to be fired immidiately
-            switch(events.GetEvent())
+            switch(events.ExecuteEvent())
             {
                 case EVENT_SARTHARION_BOUNDARY:
                     if (me->GetPositionX() < 3218.86f || me->GetPositionX() > 3275.69f || me->GetPositionY() < 484.68f || me->GetPositionY() > 572.4f) // https://github.com/TrinityCore/TrinityCore/blob/3.3.5/src/server/scripts/Northrend/ChamberOfAspects/ObsidianSanctum/instance_obsidian_sanctum.cpp#L31
@@ -454,11 +454,11 @@ public:
                     return;
                 case EVENT_SARTHARION_START_LAVA:
                     SendLavaWaves(true);
-                    events.PopEvent();
+                    
                     return;
                 case EVENT_SARTHARION_FINISH_LAVA:
                     SendLavaWaves(false);
-                    events.PopEvent();
+                    
                     return;
             }
 
@@ -476,7 +476,7 @@ public:
 void boss_sartharion::boss_sartharionAI::HandleSartharionAbilities()
 {
     // Handling of Sartharion Events
-    switch (events.GetEvent())
+    switch (events.ExecuteEvent())
     {
         case EVENT_SARTHARION_CAST_CLEAVE:
             me->CastSpell(me->GetVictim(), SPELL_SARTHARION_CLEAVE, false);
@@ -536,14 +536,14 @@ void boss_sartharion::boss_sartharionAI::HandleSartharionAbilities()
                             cr->CastSpell(cr, SPELL_CYCLONE_AURA_PERIODIC, true);
                 }
                 Talk(SAY_SARTHARION_BERSERK);
-                events.PopEvent();
+                
                 break;
             }
             events.RepeatEvent(2000);
             break;
         case EVENT_SARTHARION_BERSERK:
             summons.DespawnEntry(NPC_SAFE_AREA_TRIGGER);
-            events.PopEvent();
+            
             break;
     }
 }
@@ -551,26 +551,26 @@ void boss_sartharion::boss_sartharionAI::HandleSartharionAbilities()
 void boss_sartharion::boss_sartharionAI::HandleDrakeAbilities()
 {
     // Handling of Drakes Events
-    switch (events.GetEvent())
+    switch (events.ExecuteEvent())
     {
         // Dragon Calls
         case EVENT_SARTHARION_CALL_TENEBRON:
             Talk(SAY_SARTHARION_CALL_TENEBRON);
             if (Creature* tenebron = ObjectAccessor::GetCreature(*me, dragons[DRAGON_TENEBRON]))
                 tenebron->AI()->DoAction(ACTION_CALL_DRAGON);
-            events.PopEvent();
+            
             break;
         case EVENT_SARTHARION_CALL_SHADRON:
             Talk(SAY_SARTHARION_CALL_SHADRON);
             if (Creature* shadron = ObjectAccessor::GetCreature(*me, dragons[DRAGON_SHADRON]))
                 shadron->AI()->DoAction(ACTION_CALL_DRAGON);
-            events.PopEvent();
+            
             break;
         case EVENT_SARTHARION_CALL_VESPERON:
             Talk(SAY_SARTHARION_CALL_VESPERON);
             if (Creature* vesperon = ObjectAccessor::GetCreature(*me, dragons[DRAGON_VESPERON]))
                 vesperon->AI()->DoAction(ACTION_CALL_DRAGON);
-            events.PopEvent();
+            
             break;
     }
 }
@@ -746,7 +746,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_MINIBOSS_SHADOW_BREATH:
                     if (!urand(0, 10))
@@ -789,7 +789,6 @@ public:
                         }
 
                         events.ScheduleEvent(EVENT_MINIBOSS_HATCH_EGGS, 25000);
-                        events.PopEvent();
                         break;
                     }
                 case EVENT_MINIBOSS_HATCH_EGGS:
@@ -823,7 +822,6 @@ public:
 
                         EntryCheckPredicate pred(NPC_TWILIGHT_EGG);
                         summons.DoAction(ACTION_SWITCH_PHASE, pred);
-                        events.PopEvent();
                         break;
                     }
             }
@@ -1018,7 +1016,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_MINIBOSS_SHADOW_BREATH:
                     if (!urand(0, 10))
@@ -1043,7 +1041,7 @@ public:
                         pInstance->SetData(DATA_ADD_PORTAL, 0);
 
                     events.ScheduleEvent(EVENT_MINIBOSS_SPAWN_HELPERS, 2000);
-                    events.PopEvent();
+                    
                     break;
                 case EVENT_MINIBOSS_SPAWN_HELPERS:
                     Talk(WHISPER_SUMMON_DICIPLE);
@@ -1054,7 +1052,7 @@ public:
                         cr->SetPhaseMask(16, true);
                     }
 
-                    events.PopEvent();
+                    
                     break;
             }
 
@@ -1248,7 +1246,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_MINIBOSS_SHADOW_BREATH:
                     if (!urand(0, 10))
@@ -1273,7 +1271,7 @@ public:
                         pInstance->SetData(DATA_ADD_PORTAL, 0);
 
                     events.ScheduleEvent(EVENT_MINIBOSS_SPAWN_HELPERS, 2000);
-                    events.PopEvent();
+                    
                     break;
                 case EVENT_MINIBOSS_SPAWN_HELPERS:
                     Talk(WHISPER_SUMMON_DICIPLE);
@@ -1284,7 +1282,7 @@ public:
                         cr->SetPhaseMask(16, true);
                     }
 
-                    events.PopEvent();
+                    
                     break;
             }
 

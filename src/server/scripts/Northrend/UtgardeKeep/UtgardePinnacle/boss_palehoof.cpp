@@ -235,7 +235,7 @@ public:
                 return;
 
             events.Update(diff);
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_UNFREEZE_MONSTER:
                     {
@@ -251,7 +251,6 @@ public:
                             else
                                 EnterEvadeMode();
                         }
-                        events.PopEvent();
                         break;
                     }
                 case EVENT_UNFREEZE_MONSTER2:
@@ -266,7 +265,6 @@ public:
                             else
                                 EnterEvadeMode();
                         }
-                        events.PopEvent();
                         break;
                     }
                 case EVENT_PALEHOOF_START:
@@ -276,7 +274,6 @@ public:
                             orb->CastSpell(me, SPELL_AWAKEN_SUBBOSS, true);
                             events.ScheduleEvent(EVENT_PALEHOOF_START2, 6000);
                         }
-                        events.PopEvent();
                         break;
                     }
                 case EVENT_PALEHOOF_START2:
@@ -294,7 +291,6 @@ public:
                         events.ScheduleEvent(EVENT_PALEHOOF_WITHERING_ROAR, 10000);
                         events.ScheduleEvent(EVENT_PALEHOOF_IMPALE, 12000);
                         events.ScheduleEvent(EVENT_PALEHOOF_ARCING_SMASH, 15000);
-                        events.PopEvent();
                         break;
                     }
                 case EVENT_PALEHOOF_WITHERING_ROAR:
@@ -413,7 +409,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_JORMUNGAR_ACID_SPIT:
                     {
@@ -535,7 +531,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_RHINO_STOMP:
                     {
@@ -643,7 +639,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_FURBOLG_CHAIN:
                     {
@@ -749,7 +745,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_WORGEN_MORTAL:
                     {

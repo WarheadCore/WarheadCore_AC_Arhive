@@ -157,7 +157,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.GetEvent())
+            switch (events.ExecuteEvent())
             {
                 case EVENT_SPELL_WEB_SPRAY:
                     Talk(EMOTE_WEB_SPRAY);
@@ -182,7 +182,6 @@ public:
                     if (me->GetHealthPct() < 30)
                     {
                         me->CastSpell(me, RAID_MODE(SPELL_FRENZY_10, SPELL_FRENZY_25, SPELL_FRENZY_10, SPELL_FRENZY_25), true);
-                        events.PopEvent();
                         break;
                     }
 

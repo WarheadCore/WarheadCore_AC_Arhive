@@ -242,7 +242,7 @@ public:
             if( me->HasUnitState(UNIT_STATE_CASTING) )
                 return;
 
-            switch( events.GetEvent() )
+            switch( events.ExecuteEvent() )
             {
                 case 0:
                     break;
@@ -250,7 +250,7 @@ public:
                     if( pInstance && !summons.empty() )
                         if( Creature* ghoul = pInstance->instance->GetCreature(*summons.begin()) )
                             ghoul->MonsterYell("[Zombie] .... . Brains ....", LANG_UNIVERSAL, 0);
-                    events.PopEvent();
+                    
                     break;
                 case EVENT_SPELL_PLAGUE_STRIKE:
                     if( me->GetVictim() )
@@ -451,7 +451,7 @@ public:
             if( me->HasUnitState(UNIT_STATE_CASTING) )
                 return;
 
-            switch( events.GetEvent() )
+            switch( events.ExecuteEvent() )
             {
                 case 0:
                     break;
@@ -460,7 +460,7 @@ public:
                         if (me->GetDistance(target) > 5.0f && me->GetDistance(target) < 30.0f)
                         {
                             me->CastSpell(target, SPELL_LEAP, false);
-                            events.PopEvent();
+                            
                             break;
                         }
                     events.RepeatEvent(1000);
