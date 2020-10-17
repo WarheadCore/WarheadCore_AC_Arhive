@@ -46,7 +46,7 @@ void EventMap::RemovePhase(uint8 phase)
 
 void EventMap::ScheduleEvent(uint32 eventId, Milliseconds minTime, Milliseconds maxTime, uint32 group /*= 0*/, uint32 phase /*= 0*/)
 {
-    ScheduleEvent(eventId, urand(uint32(minTime.count()), uint32(maxTime.count())), group, phase);
+    ScheduleEvent(eventId, randtime(minTime, maxTime), group, phase);
 }
 
 void EventMap::ScheduleEvent(uint32 eventId, uint32 time, uint32 group /*= 0*/, uint32 phase /*= 0*/)
@@ -57,12 +57,12 @@ void EventMap::ScheduleEvent(uint32 eventId, uint32 time, uint32 group /*= 0*/, 
     if (phase && phase <= 8)
         eventId |= (1 << (phase + 23));
 
-    _eventMap.insert(EventStore::value_type(_time + time, eventId));
+    _eventMap.emplace(_time + time, eventId);
 }
 
 void EventMap::RescheduleEvent(uint32 eventId, Milliseconds minTime, Milliseconds maxTime, uint32 group /*= 0*/, uint32 phase /*= 0*/)
 {
-    RescheduleEvent(eventId, urand(uint32(minTime.count()), uint32(maxTime.count())), group, phase);
+    RescheduleEvent(eventId, randtime(minTime, maxTime), group, phase);
 }
 
 void EventMap::RescheduleEvent(uint32 eventId, uint32 time, uint32 groupId /*= 0*/, uint32 phase /*= 0*/)
@@ -78,18 +78,7 @@ void EventMap::RepeatEvent(uint32 minTime, uint32 maxTime)
 
 void EventMap::RepeatEvent(uint32 time)
 {
-    if (Empty())
-        return;
-
-    uint32 eventId = _eventMap.begin()->second;
-    _eventMap.erase(_eventMap.begin());
-    ScheduleEvent(eventId, time);
-}
-
-void EventMap::PopEvent()
-{
-    if (!Empty())
-        _eventMap.erase(_eventMap.begin());
+    _eventMap.emplace(_time + time, _lastEvent);
 }
 
 uint32 EventMap::ExecuteEvent()
@@ -114,23 +103,6 @@ uint32 EventMap::ExecuteEvent()
     return 0;
 }
 
-uint32 EventMap::GetEvent()
-{
-    while (!Empty())
-    {
-        EventStore::iterator itr = _eventMap.begin();
-
-        if (itr->first > _time)
-            return 0;
-        else if (_phase && (itr->second & 0xFF000000) && !(itr->second & (_phase << 24)))
-            _eventMap.erase(itr);
-        else
-            return (itr->second & 0x0000FFFF);
-    }
-
-    return 0;
-}
-
 void EventMap::DelayEventsToMax(uint32 delay, uint32 group)
 {
     for (EventStore::iterator itr = _eventMap.begin(); itr != _eventMap.end();)
@@ -140,9 +112,10 @@ void EventMap::DelayEventsToMax(uint32 delay, uint32 group)
             ScheduleEvent(itr->second, delay);
             _eventMap.erase(itr);
             itr = _eventMap.begin();
+            continue;
         }
-        else
-            ++itr;
+
+        ++itr;
     }
 }
 
@@ -163,10 +136,11 @@ void EventMap::DelayEvents(uint32 delay, uint32 group)
         if (!group || (itr->second & (1 << (group + 15))))
         {
             delayed.insert(EventStore::value_type(itr->first + delay, itr->second));
-            _eventMap.erase(itr++);
+            itr = _eventMap.erase(itr);
+            continue;
         }
-        else
-            ++itr;
+
+        ++itr;
     }
 
     _eventMap.insert(delayed.begin(), delayed.end());
@@ -180,9 +154,12 @@ void EventMap::CancelEvent(uint32 eventId)
     for (EventStore::iterator itr = _eventMap.begin(); itr != _eventMap.end();)
     {
         if (eventId == (itr->second & 0x0000FFFF))
-            _eventMap.erase(itr++);
-        else
-            ++itr;
+        {
+            itr = _eventMap.erase(itr);
+            continue;
+        }
+
+        ++itr;
     }
 }
 
@@ -198,9 +175,10 @@ void EventMap::CancelEventGroup(uint32 group)
         {
             _eventMap.erase(itr);
             itr = _eventMap.begin();
+            continue;
         }
-        else
-            ++itr;
+
+        ++itr;
     }
 }
 
