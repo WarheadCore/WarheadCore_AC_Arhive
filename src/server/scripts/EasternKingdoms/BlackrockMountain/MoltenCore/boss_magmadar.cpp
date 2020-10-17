@@ -230,13 +230,9 @@ public:
                         if (me->HasUnitState(UNIT_STATE_DIED))
                         {
                             if (killer)
-                            {
                                 me->Kill(killer, me);
-                            }
                             else
-                            {
                                 me->Kill(me, me);
-                            }
                         }
                         break;
                     default:

@@ -90,7 +90,7 @@ public:
             events.ScheduleEvent(EVENT_CURSE_OF_TONGUES, 6s);
             events.ScheduleEvent(EVENT_DOMINATE_MIND, 20s);
             events.ScheduleEvent(EVENT_KIRTONOS_TRANSFORM, 5s);
-        }        
+        }
 
         void JustDied(Unit* /*killer*/)
         {
