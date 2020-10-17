@@ -1042,9 +1042,9 @@ public:
                     me->SetUInt32Value(UNIT_FIELD_FLAGS, 0);
                     me->StopMoving();
                     me->SetInCombatWithZone();
-                    
+
                     inFight = true;
-                    
+
                     events.ScheduleEvent(EVENT_HORSEMAN_FOLLOW, 500ms);
                     events.ScheduleEvent(EVENT_HORSEMAN_CLEAVE, 7s);
                 }
