@@ -56,8 +56,8 @@ public:
         void EnterCombat(Unit* /*who*/)
         {
             _EnterCombat();
-            events.ScheduleEvent(EVENT_REND, urand(17000, 20000));
-            events.ScheduleEvent(EVENT_THRASH, urand(10000, 12000));
+            events.ScheduleEvent(EVENT_REND, 17s, 20s);
+            events.ScheduleEvent(EVENT_THRASH, 10s, 12s);
         }
 
         void JustDied(Unit* /*killer*/)
@@ -84,7 +84,7 @@ public:
                 {
                     case EVENT_REND:
                         DoCastVictim(SPELL_REND);
-                        events.ScheduleEvent(EVENT_REND, urand(8000, 10000));
+                        events.ScheduleEvent(EVENT_REND, 8s, 10s);
                         break;
                     case EVENT_THRASH:
                         DoCast(me, SPELL_THRASH);
