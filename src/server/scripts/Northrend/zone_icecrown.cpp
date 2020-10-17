@@ -585,10 +585,10 @@ public:
         }
     };
 
-CreatureAI* GetAI(Creature* creature) const
-{
-    return new npc_lord_areteAI(creature);
-}
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new npc_lord_areteAI(creature);
+    }
 };
 
 class npc_boneguard_footman : public CreatureScript
@@ -1416,14 +1416,14 @@ public:
             }
         }
 
-private:
-    EventMap events;
-};
+    private:
+        EventMap events;
+    };
 
-CreatureAI* GetAI(Creature* creature) const
-{
-    return new npc_infra_green_bomber_genericAI(creature);
-}
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new npc_infra_green_bomber_genericAI(creature);
+    }
 };
 
 // Theirs

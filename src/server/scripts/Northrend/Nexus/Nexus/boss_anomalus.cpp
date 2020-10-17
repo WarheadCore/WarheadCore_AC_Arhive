@@ -124,7 +124,7 @@ public:
         {
             Talk(SAY_AGGRO);
             BossAI::EnterCombat(who);
-            
+
             activeRifts = 0;
             events.SetTimer(45000);
             events.ScheduleEvent(EVENT_ANOMALUS_SPARK, 5s);

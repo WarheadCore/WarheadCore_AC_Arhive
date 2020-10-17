@@ -279,7 +279,7 @@ public:
                 case EVENT_FLIGHT_START:
                     if (me->HealthBelowPct(11))
                         return;
-                    
+
                     events.RepeatEvent(45000);
                     events.DelayEvents(35000);
                     me->SetReactState(REACT_PASSIVE);
