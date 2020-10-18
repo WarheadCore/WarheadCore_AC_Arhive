@@ -253,15 +253,15 @@ public:
                     return;
                 case EVENT_SPELL_CLEAVE:
                     me->CastSpell(me->GetVictim(), SPELL_CLEAVE, false);
-                    events.RepeatEvent(10000);
+                    events.RepeatEvent(10s);
                     return;
                 case EVENT_SPELL_TAIL_SWEEP:
                     me->CastSpell(me, RAID_MODE(SPELL_TAIL_SWEEP_10, SPELL_TAIL_SWEEP_25, SPELL_TAIL_SWEEP_10, SPELL_TAIL_SWEEP_25), false);
-                    events.RepeatEvent(10000);
+                    events.RepeatEvent(10s);
                     return;
                 case EVENT_SPELL_LIFE_DRAIN:
                     me->CastCustomSpell(RAID_MODE(SPELL_LIFE_DRAIN_10, SPELL_LIFE_DRAIN_25, SPELL_LIFE_DRAIN_10, SPELL_LIFE_DRAIN_25), SPELLVALUE_MAX_TARGETS, RAID_MODE(2, 5, 2, 5), me, false);
-                    events.RepeatEvent(24000);
+                    events.RepeatEvent(24s);
                     return;
                 case EVENT_SPELL_BLIZZARD:
                     {

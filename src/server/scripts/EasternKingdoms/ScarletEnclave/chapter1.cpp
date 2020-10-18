@@ -520,7 +520,7 @@ public:
                             if (owner->GetVictim())
                                 AttackStart(owner->GetVictim());
 
-                    events.RepeatEvent(1000);
+                    events.RepeatEvent(1s);
                     return;
             }
 

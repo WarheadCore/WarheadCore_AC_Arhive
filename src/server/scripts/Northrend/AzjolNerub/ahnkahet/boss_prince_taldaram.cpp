@@ -161,11 +161,11 @@ public:
             switch (events.ExecuteEvent())
             {
                 case EVENT_PRINCE_BLOODTHIRST:
-                    {
-                        me->CastSpell(me->GetVictim(), SPELL_BLOODTHIRST, false);
-                        events.RepeatEvent(10000);
-                        break;
-                    }
+                {
+                    me->CastSpell(me->GetVictim(), SPELL_BLOODTHIRST, false);
+                    events.RepeatEvent(10s);
+                    break;
+                }
                 case EVENT_PRINCE_FLAME_SPHERES:
                     {
                         me->CastSpell(me->GetVictim(), SPELL_CONJURE_FLAME_SPHERE, false);

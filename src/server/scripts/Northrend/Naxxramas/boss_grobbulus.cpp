@@ -157,7 +157,7 @@ public:
             {
                 case EVENT_SPELL_POISON_CLOUD:
                     me->CastSpell(me, SPELL_POISON_CLOUD, true);
-                    events.RepeatEvent(15000);
+                    events.RepeatEvent(15s);
                     break;
                 case EVENT_SPELL_BERSERK:
                     me->CastSpell(me, SPELL_BERSERK, true);
@@ -165,14 +165,14 @@ public:
                     break;
                 case EVENT_SPELL_SLIME_SPRAY:
                     Talk(EMOTE_SLIME);
-                    me->CastSpell(me->GetVictim(), RAID_MODE(SPELL_SLIME_SPRAY_10, SPELL_SLIME_SPRAY_25, SPELL_SLIME_SPRAY_10, SPELL_SLIME_SPRAY_25), false);
-                    events.RepeatEvent(20000);
+                    me->CastSpell(me->GetVictim(), RAID_MODE(SPELL_SLIME_SPRAY_10, SPELL_SLIME_SPRAY_25), false);
+                    events.RepeatEvent(20s);
                     break;
                 case EVENT_SPELL_MUTATING_INJECTION:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 100.0f, true, -SPELL_MUTATING_INJECTION))
                         me->CastSpell(target, SPELL_MUTATING_INJECTION, false);
 
-                    events.RepeatEvent(8000 + uint32(120 * me->GetHealthPct()));
+                    events.RepeatEvent(8s + Milliseconds(120 * me->GetHealthPct()));
                     break;
             }
 

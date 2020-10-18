@@ -343,7 +343,7 @@ public:
                     break;
                 case EVENT_ENRAGE:
                     me->CastSpell(me, SPELL_BERSERK, true);
-                    events.RepeatEvent(600000);
+                    events.RepeatEvent(10min);
                     break;
                 case EVENT_COMMANDER_SAY_AGGRO:
                     if (Creature* commander = ObjectAccessor::GetCreature(*me, CommanderGUID))
@@ -361,12 +361,12 @@ public:
                 case EVENT_SPELL_FIREBALL:
                     if( Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 200.0f, true) )
                         me->CastSpell(pTarget, SPELL_FIREBALL, false);
-                    events.RepeatEvent(4000);
+                    events.RepeatEvent(4s);
                     break;
                 case EVENT_SPELL_DEVOURING_FLAME:
                     if( Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 200.0f, true) )
                         me->CastSpell(pTarget, SPELL_DEVOURINGFLAME, false);
-                    events.RepeatEvent(13000);
+                    events.RepeatEvent(13s);
                     break;
                 case EVENT_SUMMON_MOLE_MACHINES:
                     {
@@ -387,7 +387,7 @@ public:
                                 drill->SetGoAnimProgress(0);
                             }
                         }
-                        events.RepeatEvent(45000);
+                        events.RepeatEvent(45s);
                         events.RescheduleEvent(EVENT_SUMMON_ADDS, 4s);
                     }
                     break;
@@ -531,11 +531,11 @@ public:
                     break;
                 case EVENT_SPELL_FLAME_BREATH:
                     me->CastSpell(me->GetVictim(), S_FLAMEBREATH, false);
-                    events.RepeatEvent(20000);
+                    events.RepeatEvent(20s);
                     break;
                 case EVENT_SPELL_DEVOURING_FLAME_GROUND:
                     me->CastSpell(me->GetVictim(), SPELL_DEVOURINGFLAME, false);
-                    events.RepeatEvent(13000);
+                    events.RepeatEvent(13s);
                     break;
                 case EVENT_SPELL_FUSE_ARMOR:
                     if (Unit* victim = me->GetVictim())
@@ -545,14 +545,14 @@ public:
                             if (Aura* aur = victim->GetAura(SPELL_FUSEARMOR))
                                 if (aur->GetStackAmount() == 5)
                                     victim->CastSpell(victim, 64774, true);
-                            events.RepeatEvent(10000);
+                            events.RepeatEvent(10s);
                             break;
                         }
-                    events.RepeatEvent(2000);
+                    events.RepeatEvent(2s);
                     break;
                 case EVENT_SPELL_FLAME_BUFFET:
                     me->CastSpell(me->GetVictim(), S_FLAMEBUFFET, false);
-                    events.RepeatEvent(7000);
+                    events.RepeatEvent(7s);
                     break;
             }
 

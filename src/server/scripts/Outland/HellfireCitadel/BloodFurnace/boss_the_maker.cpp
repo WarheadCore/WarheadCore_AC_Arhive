@@ -109,24 +109,24 @@ public:
 
             switch (events.ExecuteEvent())
             {
-                case EVENT_SPELL_ACID:
-                    me->CastSpell(me->GetVictim(), SPELL_ACID_SPRAY, false);
-                    events.RepeatEvent(urand(15000, 23000));
-                    break;
-                case EVENT_SPELL_EXPLODING:
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                        me->CastSpell(target, SPELL_EXPLODING_BREAKER, false);
-                    events.RepeatEvent(urand(7000, 11000));
-                    break;
-                case EVENT_SPELL_DOMINATION:
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                        me->CastSpell(target, SPELL_DOMINATION, false);
-                    events.RepeatEvent(120000);
-                    break;
-                case EVENT_SPELL_KNOCKDOWN:
-                    me->CastSpell(me->GetVictim(), SPELL_KNOCKDOWN, false);
-                    events.RepeatEvent(urand(4000, 12000));
-                    break;
+                    case EVENT_SPELL_ACID:
+                        me->CastSpell(me->GetVictim(), SPELL_ACID_SPRAY, false);
+                        events.RepeatEvent(15s, 23s);
+                        break;
+                    case EVENT_SPELL_EXPLODING:
+                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                            me->CastSpell(target, SPELL_EXPLODING_BREAKER, false);
+                        events.RepeatEvent(7s, 11s);
+                        break;
+                    case EVENT_SPELL_DOMINATION:
+                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                            me->CastSpell(target, SPELL_DOMINATION, false);
+                        events.RepeatEvent(2min);
+                        break;
+                    case EVENT_SPELL_KNOCKDOWN:
+                        me->CastSpell(me->GetVictim(), SPELL_KNOCKDOWN, false);
+                        events.RepeatEvent(4s, 12s);
+                        break;
             }
 
             DoMeleeAttackIfReady();

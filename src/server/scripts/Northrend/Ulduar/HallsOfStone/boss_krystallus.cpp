@@ -126,29 +126,29 @@ public:
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true, 0))
                             me->CastSpell(target, DUNGEON_MODE(BOULDER_TOSS, BOULDER_TOSS_H), false);
 
-                        events.RepeatEvent(5000 + rand() % 2000);
-                        break;
-                    }
+                    events.RepeatEvent(5s, 7s);
+                    break;
+                }
                 case EVENT_GROUND_SPIKE:
-                    {
-                        me->CastSpell(me->GetVictim(), GROUND_SPIKE_H, false); // current enemy target
-                        events.RepeatEvent(8000 + rand() % 3000);
-                        break;
-                    }
+                {
+                    me->CastSpell(me->GetVictim(), GROUND_SPIKE_H, false); // current enemy target
+                    events.RepeatEvent(8s, 11s);
+                    break;
+                }
                 case EVENT_STOMP:
-                    {
-                        me->CastSpell(me, DUNGEON_MODE(STOMP, STOMP_H), false);
-                        events.RepeatEvent(13000 + rand() % 5000);
-                        break;
-                    }
+                {
+                    me->CastSpell(me, DUNGEON_MODE(STOMP, STOMP_H), false);
+                    events.RepeatEvent(13s, 18s);
+                    break;
+                }
                 case EVENT_GROUND_SLAM:
-                    {
-                        events.RepeatEvent(10000 + rand() % 3000);
-                        me->CastSpell(me->GetVictim(), GROUND_SLAM, true);
-                        events.DelayEvents(10000);
-                        events.RescheduleEvent(EVENT_SHATTER, 8s);
-                        break;
-                    }
+                {
+                    events.RepeatEvent(10s, 13s);
+                    me->CastSpell(me->GetVictim(), GROUND_SLAM, true);
+                    events.DelayEvents(10000);
+                    events.RescheduleEvent(EVENT_SHATTER, 8s);
+                    break;
+                }
                 case EVENT_SHATTER:
                     {
                         me->CastSpell((Unit*)NULL, DUNGEON_MODE(SHATTER, SHATTER_H), false);

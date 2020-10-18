@@ -115,27 +115,27 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.ExecuteEvent())
-            {
-                case EVENT_ROCK_SHARDS:
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                        me->CastSpell(target, SPELL_ROCK_SHARDS, false);
-
-                    events.RepeatEvent(15000);
-                    break;
-                case EVENT_CHOKING_CLOUD:
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
-                        me->CastSpell(target, RAID_MODE(SPELL_CRUSHING_LEAP_10, SPELL_CRUSHING_LEAP_25), true); //10y~80y, ignore range
-
-                    events.RepeatEvent(30000);
-                    break;
-                case EVENT_STOMP:
+                switch (events.GetEvent())
+                {
+                    case EVENT_ROCK_SHARDS:
+                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                            me->CastSpell(target, SPELL_ROCK_SHARDS, false);
+                        
+                        events.RepeatEvent(15s);
+                        break;
+                    case EVENT_CHOKING_CLOUD:
+                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
+                            me->CastSpell(target, RAID_MODE(SPELL_CRUSHING_LEAP_10, SPELL_CRUSHING_LEAP_25), true); //10y~80y, ignore range
+                        
+                        events.RepeatEvent(30s);
+                        break;
+                    case EVENT_STOMP:
                     {
                         char buffer[100];
                         sprintf(buffer, "Archavon the Stone Watcher lunges for %s!", me->GetVictim()->GetName().c_str());
                         me->MonsterTextEmote(buffer, 0);
                         me->CastSpell(me->GetVictim(), RAID_MODE(SPELL_STOMP_10, SPELL_STOMP_25), false);
-                        events.RepeatEvent(45000);
+                        events.RepeatEvent(45s);
                         events.ScheduleEvent(EVENT_IMPALE, 3s);
                         break;
                     }

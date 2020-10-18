@@ -249,7 +249,7 @@ public:
                         target->ToPlayer()->GetSession()->SendPacket(&data);
                         me->CastSpell(target, SPELL_THROW_SARONITE, false);
                     }
-                    events.RepeatEvent(urand(12500, 20000));
+                    events.RepeatEvent(12500ms, 20s);
                     break;
                 case EVENT_JUMP:
                     me->DisableRotate(true);
@@ -261,7 +261,7 @@ public:
                     break;
                 case EVENT_SPELL_CHILLING_WAVE:
                     me->CastSpell(me->GetVictim(), SPELL_CHILLING_WAVE, false);
-                    events.RepeatEvent(35000);
+                    events.RepeatEvent(35s);
                     break;
                 case EVENT_SPELL_DEEP_FREEZE:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
@@ -269,7 +269,7 @@ public:
                         Talk(EMOTE_DEEP_FREEZE, target);
                         me->CastSpell(target, SPELL_DEEP_FREEZE, false);
                     }
-                    events.RepeatEvent(35000);
+                    events.RepeatEvent(35s);
                     break;
             }
 

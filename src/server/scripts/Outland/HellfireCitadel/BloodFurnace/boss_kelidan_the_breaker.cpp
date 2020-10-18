@@ -245,17 +245,17 @@ public:
                 return;
 
             switch (events.ExecuteEvent())
-            {
-                case EVENT_SPELL_VOLLEY:
-                    me->CastSpell(me, SPELL_SHADOW_BOLT_VOLLEY, false);
-                    events.RepeatEvent(urand(8000, 13000));
-                    break;
-                case EVENT_SPELL_CORRUPTION:
-                    me->CastSpell(me, SPELL_CORRUPTION, false);
-                    events.RepeatEvent(urand(30000, 50000));
-                    break;
-                case EVENT_SPELL_BURNING_NOVA:
-                    Talk(SAY_NOVA);
+                {
+                    case EVENT_SPELL_VOLLEY:
+                        me->CastSpell(me, SPELL_SHADOW_BOLT_VOLLEY, false);
+                        events.RepeatEvent(8s, 13s);
+                        break;
+                    case EVENT_SPELL_CORRUPTION:
+                        me->CastSpell(me, SPELL_CORRUPTION, false);
+                        events.RepeatEvent(30s, 50s);
+                        break;
+                    case EVENT_SPELL_BURNING_NOVA:
+                        Talk(SAY_NOVA);
 
                     ApplyImmunities(false);
                     me->AddAura(SPELL_BURNING_NOVA, me);
@@ -333,16 +333,16 @@ public:
                 return;
 
             switch (events.ExecuteEvent())
-            {
-                case EVENT_SPELL_SHADOW_BOLT:
-                    me->CastSpell(me->GetVictim(), IsHeroic() ? SPELL_SHADOW_BOLT_H : SPELL_SHADOW_BOLT, false);
-                    events.RepeatEvent(urand(6000, 7500));
-                    break;
-                case EVENT_SPELL_MARK:
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                        me->CastSpell(target, SPELL_MARK_OF_SHADOW, false);
-                    events.RepeatEvent(urand(16000, 17500));
-                    break;
+                {
+                    case EVENT_SPELL_SHADOW_BOLT:
+                        me->CastSpell(me->GetVictim(), IsHeroic() ? SPELL_SHADOW_BOLT_H : SPELL_SHADOW_BOLT, false);
+                        events.RepeatEvent(6s, 7500ms);
+                        break;
+                    case EVENT_SPELL_MARK:
+                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                            me->CastSpell(target, SPELL_MARK_OF_SHADOW, false);
+                        events.RepeatEvent(16s, 17500ms);
+                        break;
             }
 
             DoMeleeAttackIfReady();

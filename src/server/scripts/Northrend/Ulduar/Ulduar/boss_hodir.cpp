@@ -439,7 +439,7 @@ public:
                         me->MonsterYell(TEXT_HODIR_FLASH_FREEZE, LANG_UNIVERSAL, 0);
                         me->PlayDirectSound(SOUND_HODIR_FLASH_FREEZE, 0);
                         SmallIcicles(false);
-                        events.RepeatEvent(55000 + urand(0, 10000));
+                        events.RepeatEvent(55s, 65s);
                         events.ScheduleEvent(EVENT_SMALL_ICICLES_ENABLE, Is25ManRaid() ? 12s : 24s);
                         events.ScheduleEvent(EVENT_FROZEN_BLOWS, 15s);
                         events.RescheduleEvent(EVENT_FREEZE, 20s);
@@ -463,7 +463,7 @@ public:
                         me->CastSpell(plr, SPELL_FREEZE, false);
                     else if (Unit* plr = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true))
                         me->CastSpell(plr, SPELL_FREEZE, false);
-                    events.RepeatEvent(15000);
+                    events.RepeatEvent(15s);
                     break;
             }
 
@@ -800,21 +800,21 @@ public:
                                         ScheduleAbilities();
                                         break;
                                     }
-                        events.RepeatEvent(2000);
+                        events.RepeatEvent(2s);
                     }
                     break;
                 case EVENT_PRIEST_DISPELL_MAGIC:
                     me->CastCustomSpell(SPELL_PRIEST_DISPELL_MAGIC, SPELLVALUE_MAX_TARGETS, 1, (Unit*)NULL, false);
-                    events.RepeatEvent(7000);
+                    events.RepeatEvent(7s);
                     break;
                 case EVENT_PRIEST_GREAT_HEAL:
                     me->CastSpell(me, SPELL_PRIEST_GREAT_HEAL, false);
-                    events.RepeatEvent(urand(6000, 7000));
+                    events.RepeatEvent(6s, 7s);
                     break;
                 case EVENT_PRIEST_SMITE:
                     if (Unit* victim = me->GetVictim())
                         me->CastSpell(victim, SPELL_PRIEST_SMITE, false);
-                    events.RepeatEvent(2100);
+                    events.RepeatEvent(2100ms);
                     break;
             }
         }
@@ -896,22 +896,22 @@ public:
                                         ScheduleAbilities();
                                         break;
                                     }
-                        events.RepeatEvent(2000);
+                        events.RepeatEvent(2s);
                     }
                     break;
                 case EVENT_DRUID_WRATH:
                     if (Unit* victim = me->GetVictim())
                         me->CastSpell(victim, SPELL_DRUID_WRATH, false);
-                    events.RepeatEvent(1600);
+                    events.RepeatEvent(1600ms);
                     break;
                 case EVENT_DRUID_STARLIGHT:
                     if (me->GetPositionZ() < 433.0f) // ensure npc is on the ground
                     {
                         me->CastSpell(me, SPELL_DRUID_STARLIGHT_AREA_AURA, false);
-                        events.RepeatEvent(15000);
+                        events.RepeatEvent(15s);
                         break;
                     }
-                    events.RepeatEvent(3000);
+                    events.RepeatEvent(3s);
                     break;
             }
         }
@@ -1000,18 +1000,18 @@ public:
                                         ScheduleAbilities();
                                         break;
                                     }
-                        events.RepeatEvent(2000);
+                        events.RepeatEvent(2s);
                     }
                     break;
                 case EVENT_SHAMAN_LAVA_BURST:
                     if (Unit* victim = me->GetVictim())
                         me->CastSpell(victim, SPELL_SHAMAN_LAVA_BURST, false);
-                    events.RepeatEvent(2600);
+                    events.RepeatEvent(2600ms);
                     break;
                 case EVENT_SHAMAN_STORM_CLOUD:
                     if (Player* target = ScriptedAI::SelectTargetFromPlayerList(35.0f, SPELL_SHAMAN_STORM_CLOUD))
                         me->CastSpell(target, SPELL_SHAMAN_STORM_CLOUD, false);
-                    events.RepeatEvent(30000);
+                    events.RepeatEvent(30s);
                     break;
             }
         }
@@ -1094,17 +1094,17 @@ public:
                                         ScheduleAbilities();
                                         break;
                                     }
-                        events.RepeatEvent(2000);
+                        events.RepeatEvent(2s);
                     }
                     break;
                 case EVENT_MAGE_FIREBALL:
                     if (Unit* victim = me->GetVictim())
                         me->CastSpell(victim, SPELL_MAGE_FIREBALL, false);
-                    events.RepeatEvent(3100);
+                    events.RepeatEvent(3100ms);
                     break;
                 case EVENT_MAGE_TOASTY_FIRE:
                     me->CastSpell(me, SPELL_MAGE_CONJURE_TOASTY_FIRE, false);
-                    events.RepeatEvent(10000);
+                    events.RepeatEvent(10s);
                     break;
                 case EVENT_MAGE_MELT_ICE:
                     {
@@ -1121,11 +1121,11 @@ public:
 
                         if( found )
                         {
-                            events.DelayEvents(2000);
-                            events.RepeatEvent(1999);
+                            events.DelayEvents(2s);
+                            events.RepeatEvent(1999ms);
                             break;
                         }
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                     }
                     break;
             }

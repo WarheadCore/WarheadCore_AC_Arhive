@@ -413,12 +413,12 @@ public:
 
                     break;
                 case EVENT_SPELL_SHADOW_BOLT:
-                    me->CastSpell(me->GetVictim(), RAID_MODE(SPELL_SHADOW_BOLT_10, SPELL_SHADOW_BOLT_25, SPELL_SHADOW_BOLT_10, SPELL_SHADOW_BOLT_25), false);
-                    events.RepeatEvent(2000);
+                    me->CastSpell(me->GetVictim(), RAID_MODE(SPELL_SHADOW_BOLT_10, SPELL_SHADOW_BOLT_25), false);
+                    events.RepeatEvent(2s);
                     break;
                 case EVENT_SPELL_HARVEST_SOUL:
                     me->CastSpell(me, SPELL_HARVEST_SOUL, false);
-                    events.RepeatEvent(15000);
+                    events.RepeatEvent(15s);
                     break;
                 case EVENT_TELEPORT:
                     me->AttackStop();
@@ -433,7 +433,7 @@ public:
                         me->getThreatManager().addThreat(pTarget, 100.0f);
                         AttackStart(pTarget);
                     }
-                    events.RepeatEvent(20000);
+                    events.RepeatEvent(20s);
                     break;
                 case EVENT_CHECK_HEALTH:
                     if (me->HealthBelowPct(30) && pInstance)
@@ -445,13 +445,13 @@ public:
 
                         break;
                     }
-                    events.RepeatEvent(1000);
+                    events.RepeatEvent(1s);
                     break;
                 case EVENT_SUMMON_ADDS:
                     if (gothikWaves[waveCount][0])
                     {
                         SummonHelpers(gothikWaves[waveCount][0]);
-                        events.RepeatEvent(gothikWaves[waveCount][1]);
+                        events.RepeatEvent(Milliseconds(gothikWaves[waveCount][1]));
                     }
                     else
                     {
@@ -599,25 +599,25 @@ public:
             {
                 case EVENT_SPELL_DEATH_PLAGUE:
                     me->CastSpell(me->GetVictim(), SPELL_DEATH_PLAGUE, false);
-                    events.RepeatEvent(urand(15000, 20000));
+                    events.RepeatEvent(15s, 20s);
                     break;
                 case EVENT_SPELL_ARCANE_EXPLOSION:
                     if (Unit* victim = me->GetVictim())
                         if (victim->IsWithinDist(me, 20))
                             me->CastSpell(victim, SPELL_ARCANE_EXPLOSION, false);
-                    events.RepeatEvent(urand(5000, 10000));
+                    events.RepeatEvent(5s, 10s);
                     break;
                 case EVENT_SPELL_SHADOW_MARK:
                     if (Unit* victim = me->GetVictim())
                         if (!victim->HasAura(SPELL_SHADOW_MARK))
                             me->CastSpell(me->GetVictim(), SPELL_SHADOW_MARK, false);
-                    events.RepeatEvent(urand(15000, 20000));
+                    events.RepeatEvent(15s, 20s);
                     break;
                 case EVENT_SPELL_WHIRLWIND:
                     if (Unit* victim = me->GetVictim())
                         if (victim->IsWithinDist(me, 10))
                             me->CastSpell(victim, SPELL_WHIRLWIND, false);
-                    events.RepeatEvent(urand(5000, 8000));
+                    events.RepeatEvent(5s, 8s);
                     break;
                 case EVENT_SPELL_BLOOD_PRESENCE:
                     if (!me->HasAura(SPELL_BLOOD_PRESENCE))
@@ -629,40 +629,40 @@ public:
                     break;
                 case EVENT_SPELL_DEATH_COIL:
                     me->CastSpell(me->GetVictim(), SPELL_DEATH_COIL, false);
-                    events.RepeatEvent(urand(5000, 9000));
+                    events.RepeatEvent(5s, 9s);
                     break;
                 case EVENT_SPELL_HYSTERIA:
                     if (!me->HasAura(SPELL_HYSTERIA))
                         me->CastSpell(me, SPELL_HYSTERIA, false);
-                    events.RepeatEvent(urand(15000, 20000));
+                    events.RepeatEvent(15s, 20s);
                     break;
                 case EVENT_SPELL_INTIMIDATING_SHOUT:
                     if (Unit* victim = me->GetVictim())
                         if (victim->IsWithinDist(me, 10))
                             me->CastSpell(victim, SPELL_INTIMIDATING_SHOUT, false);
-                    events.RepeatEvent(urand(14000, 22000));
+                    events.RepeatEvent(14s, 22s);
                     break;
                 case EVENT_SPELL_VEIL_OF_DARKNESS:
                     me->CastSpell(me->GetVictim(), SPELL_VEIL_OF_DARKNESS, false);
-                    events.RepeatEvent(urand(13000, 19000));
+                    events.RepeatEvent(13s, 19s);
                     break;
                 case EVENT_SPELL_DRAIN_LIFE:
                     me->CastSpell(me->GetVictim(), SPELL_DRAIN_LIFE, false);
-                    events.RepeatEvent(urand(6000, 15000));
+                    events.RepeatEvent(6s, 15s);
                     break;
                 case EVENT_SPELL_UNHOLY_AURA:
                     if (!me->HasAura(SPELL_UNHOLY_AURA))
                         me->CastSpell(me, SPELL_UNHOLY_AURA, false);
-                    events.RepeatEvent(urand(2000, 5000));
+                    events.RepeatEvent(2s, 5s);
                     break;
                 case EVENT_SPELL_UNHOLY_FRENZY:
                     if (!me->HasAura(SPELL_UNHOLY_FRENZY))
                         me->CastSpell(me, SPELL_UNHOLY_FRENZY, false);
-                    events.RepeatEvent(urand(2000, 5000));
+                    events.RepeatEvent(2s, 5s);
                     break;
                 case NPC_DEAD_HORSE:
                     me->CastSpell(me->GetVictim(), SPELL_STOMP, false);
-                    events.RepeatEvent(urand(4000, 9000));
+                    events.RepeatEvent(4s, 9s);
                     break;
                 default:
                     break;

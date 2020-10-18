@@ -123,16 +123,16 @@ public:
             {
                 case EVENT_SPELL_ARCANE_VOLLEY:
                     me->CastSpell(me, SPELL_ARCANE_VOLLEY_N, false);
-                    events.RepeatEvent(urand(7000, 12000));
+                    events.RepeatEvent(7s, 12s);
                     break;
                 case EVENT_SPELL_POLYMORPH:
                     if (Unit* target = (IsHeroic() ? SelectTarget(SELECT_TARGET_RANDOM, 0) : SelectTarget(SELECT_TARGET_TOPAGGRO, 1)))
                         me->CastSpell(target, SPELL_POLYMORPH_N, false);
-                    events.RepeatEvent(urand(15000, 17500));
+                    events.RepeatEvent(15s, 17500ms);
                     break;
                 case EVENT_SPELL_SLOW:
                     me->CastSpell(me, SPELL_SLOW, false);
-                    events.RepeatEvent(urand(15000, 30000));
+                    events.RepeatEvent(15s, 30s);
                     break;
                 case EVENT_HEALTH_CHECK:
                     if (me->HealthBelowPct(20))
@@ -140,7 +140,7 @@ public:
                         me->CastSpell(me, SPELL_MANA_SHIELD, false);
                         return;
                     }
-                    events.RepeatEvent(1000);
+                    events.RepeatEvent(1s);
                     break;
                 case EVENT_SPELL_BLINK:
                     Talk(EMOTE_ARCANE_EXP);
@@ -151,7 +151,7 @@ public:
 
                         DoCast(target, SPELL_BLINK_TELEPORT);
                     }
-                    events.RepeatEvent(urand(35000, 40000));
+                    events.RepeatEvent(35s, 40s);
                     events.DelayEvents(500);
                     events.ScheduleEvent(EVENT_SPELL_BLINK_2, 0s);
                     return;
@@ -287,19 +287,19 @@ public:
             {
                 case EVENT_SPELL_SCREECH:
                     me->CastSpell(me, SPELL_PARALYZING_SCREECH, false);
-                    events.RepeatEvent(23000);
+                    events.RepeatEvent(23s);
                     events.DelayEvents(3000);
                     break;
                 case EVENT_SPELL_BOMB:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true))
                         me->CastSpell(target, SPELL_SPELL_BOMB, false);
-                    events.RepeatEvent(urand(16000, 24500));
+                    events.RepeatEvent(16s, 24500ms);
                     events.DelayEvents(3000);
                     break;
                 case EVENT_SPELL_CYCLONE:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 45.0f, true))
                         me->CastSpell(target, SPELL_CYCLONE, false);
-                    events.RepeatEvent(urand(22000, 27000));
+                    events.RepeatEvent(22s, 27s);
                     events.DelayEvents(3000);
                     break;
                 case EVENT_ANZU_HEALTH1:
@@ -309,7 +309,7 @@ public:
                         events.DelayEvents(10000);
                         return;
                     }
-                    events.RepeatEvent(1000);
+                    events.RepeatEvent(1s);
                     break;
                 case EVENT_ANZU_HEALTH2:
                     if (me->HealthBelowPct(33))
@@ -318,7 +318,7 @@ public:
                         events.DelayEvents(10000);
                         return;
                     }
-                    events.RepeatEvent(1000);
+                    events.RepeatEvent(1s);
                     break;
             }
 

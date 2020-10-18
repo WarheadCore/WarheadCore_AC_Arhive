@@ -319,16 +319,16 @@ public:
                         if (c->IsSummon())
                             if (c->ToTempSummon()->GetSummonerGUID() != me->GetGUID())
                                 me->CastSpell(me, 63528, true);
-                    events.RepeatEvent(2000);
+                    events.RepeatEvent(2s);
                     break;
                 case 2:
                     me->CastSpell(me->GetVictim(), 63541, false);
-                    events.RepeatEvent(urand(10000, 14000));
+                    events.RepeatEvent(10s, 14s);
                     break;
                 case 3:
                     if (!me->HasAura(63630))
                         me->CastSpell(me, 63527, false);
-                    events.RepeatEvent(60000);
+                    events.RepeatEvent(1min);
                     break;
             }
 
@@ -426,11 +426,11 @@ public:
                         break;
                     case 1:
                         me->CastSpell(me->GetVictim(), RAID_MODE(64717, 65241), false);
-                        events.RepeatEvent(urand(15000, 25000));
+                        events.RepeatEvent(15s, 25s);
                         break;
                     case 2:
                         me->CastSpell(me->GetVictim(), RAID_MODE(64776, 65240), false);
-                        events.RepeatEvent(urand(10000, 15000));
+                        events.RepeatEvent(10s, 15s);
                         break;
                     case 3:
                         {
@@ -438,10 +438,10 @@ public:
                             if (dist > 10.0f && dist < 40.0f)
                             {
                                 me->CastSpell(me->GetVictim(), 64779, false);
-                                events.RepeatEvent(25000);
+                                events.RepeatEvent(25s);
                             }
                             else
-                                events.RepeatEvent(3000);
+                                events.RepeatEvent(3s);
                         }
                         break;
                 }

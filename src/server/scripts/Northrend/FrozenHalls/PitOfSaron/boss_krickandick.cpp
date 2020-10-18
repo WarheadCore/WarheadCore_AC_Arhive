@@ -191,14 +191,14 @@ public:
                             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40.0f, true))
                             {
                                 k->CastSpell(target, SPELL_TOXIC_WASTE);
-                                events.RepeatEvent(urand(7000, 10000));
+                                events.RepeatEvent(7s, 10s);
                                 break;
                             }
-                    events.RepeatEvent(2500);
+                    events.RepeatEvent(2500ms);
                     break;
                 case EVENT_SPELL_MIGHTY_KICK:
                     me->CastSpell(me->GetVictim(), SPELL_MIGHTY_KICK, false);
-                    events.RepeatEvent(urand(20000, 25000));
+                    events.RepeatEvent(20s, 25s);
                     break;
                 case EVENT_SPELL_SHADOW_BOLT:
                     if (Creature* k = GetKrick())
@@ -206,10 +206,10 @@ public:
                             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 35.0f, true))
                             {
                                 k->CastSpell(target, SPELL_SHADOW_BOLT);
-                                events.RepeatEvent(14000);
+                                events.RepeatEvent(14s);
                                 break;
                             }
-                    events.RepeatEvent(2500);
+                    events.RepeatEvent(2500ms);
                     break;
                 case EVENT_SET_REACT_AGGRESSIVE:
                     me->SetReactState(REACT_AGGRESSIVE);
@@ -247,7 +247,7 @@ public:
                             events.DelayEvents(20000);
                             break;
                     }
-                    events.RepeatEvent(urand(25000, 30000));
+                    events.RepeatEvent(25s, 30s);
                     break;
             }
 

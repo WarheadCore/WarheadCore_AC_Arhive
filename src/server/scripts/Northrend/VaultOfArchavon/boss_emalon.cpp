@@ -166,32 +166,33 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.ExecuteEvent())
-            {
-                case EVENT_CHAIN_LIGHTNING:
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                        me->CastSpell(target, RAID_MODE(SPELL_CHAIN_LIGHTNING_10, SPELL_CHAIN_LIGHTNING_25), false);
-                    events.RepeatEvent(25000);
-                    break;
-                case EVENT_LIGHTNING_NOVA:
-                    me->CastSpell(me, RAID_MODE(SPELL_LIGHTNING_NOVA_10, SPELL_LIGHTNING_NOVA_25), false);
-                    events.RepeatEvent(40000);
-                    break;
-                case EVENT_OVERCHARGE:
-                    if (!summons.empty())
-                        me->CastCustomSpell(SPELL_OVERCHARGE, SPELLVALUE_MAX_TARGETS, 1, me, true);
-                    Talk(EMOTE_OVERCHARGE);
-                    events.RepeatEvent(40000);
-                    break;
-                case EVENT_BERSERK:
-                    me->CastSpell(me, SPELL_BERSERK, true);
-                    Talk(EMOTE_BERSERK);
-                    break;
-                case EVENT_SUMMON_NEXT_MINION:
-                    me->SummonCreature(NPC_TEMPEST_MINION, TempestMinions[urand(0, 3)], TEMPSUMMON_CORPSE_DESPAWN, 0);
-                    break;
-                default:
-                    break;
+                switch (events.GetEvent())
+                {
+                    case EVENT_CHAIN_LIGHTNING:
+                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                            me->CastSpell(target, RAID_MODE(SPELL_CHAIN_LIGHTNING_10, SPELL_CHAIN_LIGHTNING_25), false);
+                        events.RepeatEvent(25s);
+                        break;
+                    case EVENT_LIGHTNING_NOVA:
+                        me->CastSpell(me, RAID_MODE(SPELL_LIGHTNING_NOVA_10, SPELL_LIGHTNING_NOVA_25), false);
+                        events.RepeatEvent(40s);
+                        break;
+                    case EVENT_OVERCHARGE:
+                        if (!summons.empty())
+                            me->CastCustomSpell(SPELL_OVERCHARGE, SPELLVALUE_MAX_TARGETS, 1, me, true);
+                        Talk(EMOTE_OVERCHARGE);
+                        events.RepeatEvent(40s);
+                        break;
+                    case EVENT_BERSERK:
+                        me->CastSpell(me, SPELL_BERSERK, true);
+                        Talk(EMOTE_BERSERK);
+                        break;
+                    case EVENT_SUMMON_NEXT_MINION:
+                        me->SummonCreature(NPC_TEMPEST_MINION, TempestMinions[urand(0,3)], TEMPSUMMON_CORPSE_DESPAWN, 0);
+                        events.PopEvent();
+                        break;
+                    default:
+                        break;
             }
 
             DoMeleeAttackIfReady();

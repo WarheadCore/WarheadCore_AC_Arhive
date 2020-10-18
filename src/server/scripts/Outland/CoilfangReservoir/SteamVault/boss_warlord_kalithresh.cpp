@@ -102,12 +102,12 @@ public:
             {
                 case EVENT_SPELL_REFLECTION:
                     me->CastSpell(me, SPELL_SPELL_REFLECTION, false);
-                    events.RepeatEvent(urand(15000, 20000));
+                    events.RepeatEvent(15s, 20s);
                     break;
                 case EVENT_SPELL_IMPALE:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 10.0f, true))
                         me->CastSpell(target, SPELL_IMPALE, false);
-                    events.RepeatEvent(urand(7500, 12500));
+                    events.RepeatEvent(7500ms, 12500ms);
                     break;
                 case EVENT_SPELL_RAGE:
                     if (Creature* distiller = me->FindNearestCreature(NPC_NAGA_DISTILLER, 100.0f))
@@ -116,7 +116,7 @@ public:
                         //me->CastSpell(me, SPELL_WARLORDS_RAGE, false);
                         distiller->AI()->DoAction(1);
                     }
-                    events.RepeatEvent(45000);
+                    events.RepeatEvent(45s);
                     break;
             }
 

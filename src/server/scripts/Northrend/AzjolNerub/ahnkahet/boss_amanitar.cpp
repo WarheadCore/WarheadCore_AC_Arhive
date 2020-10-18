@@ -136,25 +136,25 @@ public:
             switch (events.ExecuteEvent())
             {
                 case EVENT_AMANITAR_SPAWN:
-                    {
-                        SpawnAdds();
-                        events.RepeatEvent(urand(35000, 40000));
-                        break;
-                    }
+                {
+                    SpawnAdds();
+                    events.RepeatEvent(35s, 40s);
+                    break;
+                }
                 case EVENT_AMANITAR_ROOTS:
                     {
                         if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                             me->CastSpell(pTarget, SPELL_ENTANGLING_ROOTS, false);
 
-                        events.RepeatEvent(urand(15000, 20000));
-                        break;
-                    }
+                    events.RepeatEvent(15s, 20s);
+                    break;
+                }
                 case EVENT_AMANITAR_BASH:
-                    {
-                        me->CastSpell(me->GetVictim(), SPELL_BASH, false);
-                        events.RepeatEvent(urand(15000, 20000));
-                        break;
-                    }
+                {
+                    me->CastSpell(me->GetVictim(), SPELL_BASH, false);
+                    events.RepeatEvent(15s, 20s);
+                    break;
+                }
                 case EVENT_AMANITAR_BOLT:
                     {
                         if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))

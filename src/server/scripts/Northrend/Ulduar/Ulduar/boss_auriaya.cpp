@@ -251,19 +251,19 @@ public:
                 case EVENT_TERRIFYING_SCREECH:
                     me->MonsterTextEmote("Auriaya begins to cast Terrifying Screech.", 0, true);
                     me->CastSpell(me, SPELL_TERRIFYING_SCREECH, false);
-                    events.RepeatEvent(35000);
+                    events.RepeatEvent(35s);
                     break;
                 case EVENT_SONIC_SCREECH:
                     me->CastSpell(me, SPELL_SONIC_SCREECH, false);
-                    events.RepeatEvent(50000);
+                    events.RepeatEvent(50s);
                     break;
                 case EVENT_GUARDIAN_SWARM:
                     me->CastSpell(me->GetVictim(), SPELL_GUARDIAN_SWARM, false);
-                    events.RepeatEvent(40000);
+                    events.RepeatEvent(40s);
                     break;
                 case EVENT_SENTINEL_BLAST:
                     me->CastSpell(me, SPELL_SENTINEL_BLAST, false);
-                    events.RepeatEvent(35000);
+                    events.RepeatEvent(35s);
                     events.DelayEvents(5000, 0);
                     break;
                 case EVENT_RESPAWN_FERAL_DEFENDER:

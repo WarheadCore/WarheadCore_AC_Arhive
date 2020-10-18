@@ -244,27 +244,27 @@ public:
                         break;
                     }
                 case EVENT_SHIELD:
-                    {
-                        me->CastSpell(me, DUNGEON_MODE(SPELL_LIGHTNING_SHIELD, SPELL_LIGHTNING_SHIELD_H), false);
-                        events.RepeatEvent(14000 + rand() % 5000);
-                        break;
-                    }
+                {
+                    me->CastSpell(me, DUNGEON_MODE(SPELL_LIGHTNING_SHIELD, SPELL_LIGHTNING_SHIELD_H), false);
+                    events.RepeatEvent(14s, 19s);
+                    break;
+                }
                 case EVENT_CHAIN_LIGHTNING:
                     {
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true, 0))
                             me->CastSpell(target, DUNGEON_MODE(SPELL_CHAIN_LIGHTNING, SPELL_CHAIN_LIGHTNING_H), false);
 
-                        events.RepeatEvent(6000 + rand() % 6000);
-                        break;
-                    }
+                    events.RepeatEvent(6s, 12s);
+                    break;
+                }
                 case EVENT_STATIC_CHARGE:
                     {
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true, 0))
                             me->CastSpell(target, DUNGEON_MODE(SPELL_STATIC_CHARGE, SPELL_STATIC_CHARGE_H), false);
 
-                        events.RepeatEvent(20000);
-                        break;
-                    }
+                    events.RepeatEvent(20s);
+                    break;
+                }
                 case EVENT_LIGHTNING_RING:
                     {
                         me->CastSpell(me, DUNGEON_MODE(SPELL_LIGHTNING_RING, SPELL_LIGHTNING_RING_H), false);
@@ -452,11 +452,11 @@ public:
             {
                 // Every 5 seconds
                 case EVENT_TOXIC_VOLLEY:
-                    {
-                        me->CastSpell(me, DUNGEON_MODE(SPELL_TOXIC_VOLLEY, SPELL_TOXIC_VOLLEY_H), false);
-                        events.RepeatEvent(5000);
-                        break;
-                    }
+                {
+                    me->CastSpell(me, DUNGEON_MODE(SPELL_TOXIC_VOLLEY, SPELL_TOXIC_VOLLEY_H), false);
+                    events.RepeatEvent(5s);
+                    break;
+                }
             }
 
             DoMeleeAttackIfReady();
@@ -508,9 +508,9 @@ public:
                                     break;
                                 }
 
-                        events.RepeatEvent(1000);
-                        break;
-                    }
+                    events.RepeatEvent(1s);
+                    break;
+                }
             }
         }
     };

@@ -351,19 +351,19 @@ public:
                 switch (events.ExecuteEvent())
                 {
                     case EVENT_JEDOGA_CYCLONE:
-                        {
-                            me->CastSpell(me, IsHeroic() ? SPELL_CYCLONE_STRIKE_H : SPELL_CYCLONE_STRIKE, false);
-                            events.RepeatEvent(urand(10000, 14000));
-                            break;
-                        }
+                    {
+                        me->CastSpell(me, IsHeroic() ? SPELL_CYCLONE_STRIKE_H : SPELL_CYCLONE_STRIKE, false);
+                        events.RepeatEvent(10s, 14s);
+                        break;
+                    }
                     case EVENT_JEDOGA_LIGHTNING_BOLT:
                         {
                             if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                                 me->CastSpell(pTarget, IsHeroic() ? SPELL_LIGHTNING_BOLT_H : SPELL_LIGHTNING_BOLT, false);
 
-                            events.RepeatEvent(urand(11000, 15000));
-                            break;
-                        }
+                        events.RepeatEvent(11s, 15s);
+                        break;
+                    }
                     case EVENT_JEDOGA_THUNDERSHOCK:
                         {
                             if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))

@@ -293,11 +293,11 @@ public:
                     break;
                 case EVENT_THADDIUS_SPELL_CHAIN_LIGHTNING:
                     me->CastSpell(me->GetVictim(), RAID_MODE(SPELL_CHAIN_LIGHTNING_10, SPELL_CHAIN_LIGHTNING_25, SPELL_CHAIN_LIGHTNING_10, SPELL_CHAIN_LIGHTNING_25), false);
-                    events.RepeatEvent(15000);
+                    events.RepeatEvent(15s);
                     break;
                 case EVENT_THADDIUS_POLARITY_SHIFT:
                     me->CastSpell(me, SPELL_POLARITY_SHIFT, false);
-                    events.RepeatEvent(30000);
+                    events.RepeatEvent(30s);
                     break;
                 case EVENT_ACTIVATE_BALL_LIGHTNING:
                     ballLightningEnabled = true;
@@ -470,14 +470,14 @@ public:
             {
                 case EVENT_MINION_SPELL_POWER_SURGE:
                     me->CastSpell(me, RAID_MODE(SPELL_POWER_SURGE_10, SPELL_POWER_SURGE_25, SPELL_POWER_SURGE_10, SPELL_POWER_SURGE_25), false);
-                    events.RepeatEvent(19000);
+                    events.RepeatEvent(19s);
                     break;
                 case EVENT_MINION_SPELL_STATIC_FIELD:
                     me->CastSpell(me, RAID_MODE(SPELL_STATIC_FIELD_10, SPELL_STATIC_FIELD_25, SPELL_STATIC_FIELD_10, SPELL_STATIC_FIELD_25), false);
-                    events.RepeatEvent(3000);
+                    events.RepeatEvent(3s);
                     break;
                 case EVENT_MINION_SPELL_MAGNETIC_PULL:
-                    events.RepeatEvent(25000);
+                    events.RepeatEvent(25s);
                     if (pInstance)
                         if (Creature* feugen = ObjectAccessor::GetCreature(*me, pInstance->GetData64(DATA_FEUGEN_BOSS)))
                         {
@@ -518,7 +518,7 @@ public:
                                 cr->CastStop(SPELL_TESLA_SHOCK);
                                 cr->CastSpell(target, SPELL_TESLA_SHOCK, true);
                             }
-                            events.RepeatEvent(1500);
+                            events.RepeatEvent(1500ms);
                             break;
                         }
                         else
@@ -528,7 +528,7 @@ public:
                         }
                     }
 
-                    events.RepeatEvent(5000);
+                    events.RepeatEvent(5s);
                     break;
             }
 

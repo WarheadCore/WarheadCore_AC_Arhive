@@ -168,7 +168,7 @@ public:
                 case EVENT_SPELL_BATTER:
                     if( t->GetTypeId() == TYPEID_PLAYER )
                         me->CastSpell(t, SPELL_BATTER);
-                    events.RepeatEvent(urand(6000, 8000));
+                    events.RepeatEvent(6s, 8s);
                     break;
                 case EVENT_SPELL_FIRE_BOMB:
                     {
@@ -194,13 +194,13 @@ public:
                                     }
                         }
 
-                        events.RepeatEvent(urand(20000, 30000));
+                        events.RepeatEvent(20s, 30s);
                     }
                     break;
                 case EVENT_SPELL_HEAD_CRACK:
                     if( t->GetTypeId() == TYPEID_PLAYER )
                         me->CastSpell(t, SPELL_HEAD_CRACK);
-                    events.RepeatEvent(urand(30000, 35000));
+                    events.RepeatEvent(30s, 35s);
                     break;
             }
 
@@ -297,14 +297,14 @@ public:
                     {
                         if( Unit* victim = me->GetVictim() )
                             me->CastSpell(victim, SPELL_IMPALE, false);
-                        events.RepeatEvent(urand(9000, 10000));
+                        events.RepeatEvent(9s, 10s);
                     }
                     else
-                        events.RepeatEvent(2500);
+                        events.RepeatEvent(2500ms);
                     break;
                 case EVENT_SPELL_STAGGERING_STOMP:
                     me->CastSpell((Unit*)NULL, SPELL_STAGGERING_STOMP, false);
-                    events.RepeatEvent(urand(20000, 25000));
+                    events.RepeatEvent(20s, 25s);
                     break;
                 case EVENT_PICK_SNOBOLD_TARGET:
                     if( Vehicle* vk = me->GetVehicleKit() )
@@ -331,7 +331,7 @@ public:
 
                                 break;
                             }
-                    events.RepeatEvent(urand(16000, 24000));
+                    events.RepeatEvent(16s, 24s);
                     break;
                 case EVENT_RELEASE_SNOBOLD:
                     {
@@ -625,25 +625,25 @@ struct boss_jormungarAI : public ScriptedAI
             case EVENT_SPELL_SPRAY:
                 if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true) )
                     me->CastSpell(target, _SPELL_SPRAY, false);
-                events.RepeatEvent(20000);
+                events.RepeatEvent(20s);
                 break;
             case EVENT_SPELL_SWEEP:
                 me->CastSpell((Unit*)NULL, SPELL_SWEEP_0, false);
-                events.RepeatEvent(urand(15000, 30000));
+                events.RepeatEvent(15s, 30s);
                 break;
             case EVENT_SPELL_BITE:
                 if( Unit* victim = me->GetVictim() )
                     me->CastSpell(victim, _SPELL_BITE, false);
-                events.RepeatEvent(20000);
+                events.RepeatEvent(20s);
                 break;
             case EVENT_SPELL_SPEW:
                 me->CastSpell(me->GetVictim(), _SPELL_SPEW, false);
-                events.RepeatEvent(urand(15000, 30000));
+                events.RepeatEvent(15s, 30s);
                 break;
             case EVENT_SPELL_SLIME_POOL:
                 if( Creature* c = me->SummonCreature(NPC_SLIME_POOL, *me, TEMPSUMMON_TIMED_DESPAWN, 30000) )
                     c->CastSpell(c, SPELL_SLIME_POOL_EFFECT, true);
-                events.RepeatEvent(30000);
+                events.RepeatEvent(30s);
                 break;
         }
 
@@ -879,16 +879,16 @@ public:
                 case EVENT_SPELL_FEROCIOUS_BUTT:
                     if( Unit* victim = me->GetVictim() )
                         me->CastSpell(victim, SPELL_FEROCIOUS_BUTT, false);
-                    events.RepeatEvent(urand(15000, 30000));
+                    events.RepeatEvent(15s, 30s);
                     break;
                 case EVENT_SPELL_WHIRL:
                     me->CastSpell((Unit*)NULL, SPELL_WHIRL, false);
-                    events.RepeatEvent(urand(15000, 20000));
+                    events.RepeatEvent(15s, 20s);
                     break;
                 case EVENT_SPELL_ARCTIC_BREATH:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 90.0f, true) )
                         me->CastSpell(target, SPELL_ARCTIC_BREATH, false);
-                    events.RepeatEvent(urand(20000, 30000));
+                    events.RepeatEvent(20s, 30s);
                     break;
                 case EVENT_JUMP_MIDDLE:
                     me->StopMoving();

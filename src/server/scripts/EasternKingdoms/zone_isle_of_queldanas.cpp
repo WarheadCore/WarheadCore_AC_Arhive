@@ -239,7 +239,7 @@ public:
                     if (Player* p = ObjectAccessor::GetPlayer(*me, playerGUID))
                         if (p->GetExactDist(me) <= 50.0f)
                         {
-                            events.RepeatEvent(5000);
+                            events.RepeatEvent(5s);
                             break;
                         }
                     me->setActive(false);
@@ -278,7 +278,7 @@ public:
                             {
                                 if (!summons.empty())
                                 {
-                                    events.RepeatEvent(5000);
+                                    events.RepeatEvent(5s);
                                     return;
                                 }
                                 else

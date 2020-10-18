@@ -195,7 +195,7 @@ public:
                     break;
                 case EVENT_SPELL_SHADOWBOLT:
                     me->CastSpell(me->GetVictim(), SPELL_SHADOWBOLT, false);
-                    events.RepeatEvent(urand(4000, 5000));
+                    events.RepeatEvent(4s, 5s);
                     break;
                 case EVENT_FROST_TOMB:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true) )
@@ -204,10 +204,10 @@ public:
                             Talk(SAY_FROST_TOMB_EMOTE, target);
                             Talk(SAY_FROST_TOMB);
                             me->CastSpell(target, SPELL_FROST_TOMB, false);
-                            events.RepeatEvent(15000);
+                            events.RepeatEvent(15s);
                             break;
                         }
-                    events.RepeatEvent(1000);
+                    events.RepeatEvent(1s);
                     break;
                 case EVENT_SUMMON_SKELETONS:
                     Talk(SAY_SUMMON_SKELETONS);
@@ -316,12 +316,12 @@ public:
                 case EVENT_SPELL_DECREPIFY:
                     if( !me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE) )
                         me->CastSpell(me->GetVictim(), SPELL_DECREPIFY, false);
-                    events.RepeatEvent(urand(15000, 25000));
+                    events.RepeatEvent(15s, 25s);
                     break;
                 case EVENT_SPELL_BONE_ARMOR:
                     if( !me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE) )
                         me->CastSpell((Unit*)NULL, SPELL_BONE_ARMOR, false);
-                    events.RepeatEvent(urand(40000, 120000));
+                    events.RepeatEvent(40s, 2min);
                     break;
                 case EVENT_RESURRECT:
                     events.DelayEvents(3500);

@@ -294,25 +294,25 @@ public:
                         break;
                     }
                 case EVENT_PALEHOOF_WITHERING_ROAR:
-                    {
-                        me->CastSpell(me, IsHeroic() ? SPELL_WITHERING_ROAR_H : SPELL_WITHERING_ROAR_N, false);
-                        events.RepeatEvent(8000 + rand() % 4000);
-                        break;
-                    }
+                {
+                    me->CastSpell(me, IsHeroic() ? SPELL_WITHERING_ROAR_H : SPELL_WITHERING_ROAR_N, false);
+                    events.RepeatEvent(8s, 12s);
+                    break;
+                }
                 case EVENT_PALEHOOF_IMPALE:
                     {
                         if (Unit* tgt = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             me->CastSpell(tgt, IsHeroic() ? SPELL_IMPALE_H : SPELL_IMPALE_N, false);
 
-                        events.RepeatEvent(8000 + rand() % 4000);
-                        break;
-                    }
+                    events.RepeatEvent(8s, 12s);
+                    break;
+                }
                 case EVENT_PALEHOOF_ARCING_SMASH:
-                    {
-                        me->CastSpell(me->GetVictim(), SPELL_ARCING_SMASH, false);
-                        events.RepeatEvent(13000 + rand() % 4000);
-                        break;
-                    }
+                {
+                    me->CastSpell(me->GetVictim(), SPELL_ARCING_SMASH, false);
+                    events.RepeatEvent(13s, 17s);
+                    break;
+                }
             }
 
             DoMeleeAttackIfReady();
@@ -416,9 +416,9 @@ public:
                         if (Unit* tgt = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             me->CastSpell(tgt, SPELL_ACID_SPIT, false);
 
-                        events.RepeatEvent(2000 + rand() % 2000);
-                        break;
-                    }
+                    events.RepeatEvent(2s, 4s);
+                    break;
+                }
                 case EVENT_JORMUNGAR_ACID_SPLATTER:
                     {
                         me->CastSpell(me, IsHeroic() ? SPELL_ACID_SPLATTER_H : SPELL_ACID_SPLATTER_N, false);
@@ -437,14 +437,17 @@ public:
                         events.RepeatEvent(10000 + rand() % 4000);
                         break;
                     }
+                    events.RepeatEvent(10s, 14s);
+                    break;
+                }
                 case EVENT_JORMUNGAR_POISON_BREATH:
                     {
                         if (Unit* tgt = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             me->CastSpell(tgt, IsHeroic() ? SPELL_POISON_BREATH_H : SPELL_POISON_BREATH_N, false);
 
-                        events.RepeatEvent(8000 + rand() % 4000);
-                        break;
-                    }
+                    events.RepeatEvent(8s, 12s);
+                    break;
+                }
             }
 
             DoMeleeAttackIfReady();
@@ -534,25 +537,25 @@ public:
             switch (events.ExecuteEvent())
             {
                 case EVENT_RHINO_STOMP:
-                    {
-                        me->CastSpell(me->GetVictim(), SPELL_STOMP, false);
-                        events.RepeatEvent(8000 + rand() % 4000);
-                        break;
-                    }
+                {
+                    me->CastSpell(me->GetVictim(), SPELL_STOMP, false);
+                    events.RepeatEvent(8s, 12s);
+                    break;
+                }
                 case EVENT_RHINO_GORE:
-                    {
-                        me->CastSpell(me->GetVictim(), IsHeroic() ? SPELL_GORE_H : SPELL_GORE_N, false);
-                        events.RepeatEvent(13000 + rand() % 4000);
-                        break;
-                    }
+                {
+                    me->CastSpell(me->GetVictim(), IsHeroic() ? SPELL_GORE_H : SPELL_GORE_N, false);
+                    events.RepeatEvent(13s, 17s);
+                    break;
+                }
                 case EVENT_RHINO_WOUND:
                     {
                         if (Unit* tgt = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             me->CastSpell(tgt, IsHeroic() ? SPELL_GRIEVOUS_WOUND_H : SPELL_GRIEVOUS_WOUND_N, false);
 
-                        events.RepeatEvent(18000 + rand() % 4000);
-                        break;
-                    }
+                    events.RepeatEvent(18s, 22s);
+                    break;
+                }
             }
 
             DoMeleeAttackIfReady();
@@ -642,23 +645,23 @@ public:
             switch (events.ExecuteEvent())
             {
                 case EVENT_FURBOLG_CHAIN:
-                    {
-                        me->CastSpell(me->GetVictim(), IsHeroic() ? SPELL_CHAIN_LIGHTING_H : SPELL_CHAIN_LIGHTING_N, false);
-                        events.RepeatEvent(4000 + rand() % 3000);
-                        break;
-                    }
+                {
+                    me->CastSpell(me->GetVictim(), IsHeroic() ? SPELL_CHAIN_LIGHTING_H : SPELL_CHAIN_LIGHTING_N, false);
+                    events.RepeatEvent(4s, 7s);
+                    break;
+                }
                 case EVENT_FURBOLG_CRAZED:
-                    {
-                        me->CastSpell(me, SPELL_CRAZED, false);
-                        events.RepeatEvent(8000 + rand() % 4000);
-                        break;
-                    }
+                {
+                    me->CastSpell(me, SPELL_CRAZED, false);
+                    events.RepeatEvent(8s, 12s);
+                    break;
+                }
                 case EVENT_FURBOLG_ROAR:
-                    {
-                        me->CastSpell(me, SPELL_TERRIFYING_ROAR, false);
-                        events.RepeatEvent(10000 + rand() % 5000);
-                        break;
-                    }
+                {
+                    me->CastSpell(me, SPELL_TERRIFYING_ROAR, false);
+                    events.RepeatEvent(10s, 15s);
+                    break;
+                }
             }
 
             DoMeleeAttackIfReady();
@@ -754,17 +757,17 @@ public:
                         break;
                     }
                 case EVENT_WORGEN_ENRAGE1:
-                    {
-                        me->CastSpell(me, SPELL_ENRAGE_1, false);
-                        events.RepeatEvent(15000);
-                        break;
-                    }
+                {
+                    me->CastSpell(me, SPELL_ENRAGE_1, false);
+                    events.RepeatEvent(15s);
+                    break;
+                }
                 case EVENT_WORGEN_ENRAGE2:
-                    {
-                        me->CastSpell(me, SPELL_ENRAGE_2, false);
-                        events.RepeatEvent(10000);
-                        break;
-                    }
+                {
+                    me->CastSpell(me, SPELL_ENRAGE_2, false);
+                    events.RepeatEvent(10s);
+                    break;
+                }
             }
 
             DoMeleeAttackIfReady();

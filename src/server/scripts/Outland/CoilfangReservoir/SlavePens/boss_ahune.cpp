@@ -223,14 +223,14 @@ public:
                             target->GetNearPoint(target, x, y, z, target->GetObjectSize(), 30.0f, target->GetAngle(me->GetPositionX(), me->GetPositionY()) + M_PI);
                             target->GetMotionMaster()->MoveJump(x, y, z + 20.0f, 10.0f, 20.0f);
                         }
-                    events.RepeatEvent(1500);
+                    events.RepeatEvent(1500ms);
                     break;
                 case EVENT_SPELL_SUMMON_HAILSTONE:
                     {
                         float dist = (float)urand(3, 10);
                         float angle = rand_norm() * 2 * M_PI;
                         me->CastSpell(MinionSummonPos.GetPositionX() + cos(angle)*dist, MinionSummonPos.GetPositionY() + sin(angle)*dist, MinionSummonPos.GetPositionZ(), SPELL_SUMMON_HAILSTONE, false);
-                        events.RepeatEvent(30000);
+                        events.RepeatEvent(30s);
                     }
                     break;
                 case EVENT_SPELL_SUMMON_COLDWAVE:
@@ -245,7 +245,7 @@ public:
                         float angle = rand_norm() * 2 * M_PI;
                         me->CastSpell(MinionSummonPos.GetPositionX() + cos(angle)*dist, MinionSummonPos.GetPositionY() + sin(angle)*dist, MinionSummonPos.GetPositionZ(), SPELL_SUMMON_FROSTWIND, false);
                     }
-                    events.RepeatEvent(6000);
+                    events.RepeatEvent(6s);
                     break;
 
                 default:

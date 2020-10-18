@@ -205,12 +205,12 @@ public:
                 case EVENT_SPELL_CURSE:
                     if (events.GetPhaseMask() == 0)
                         me->CastCustomSpell(RAID_MODE(SPELL_CURSE_OF_THE_PLAGUEBRINGER_10, SPELL_CURSE_OF_THE_PLAGUEBRINGER_25, SPELL_CURSE_OF_THE_PLAGUEBRINGER_10, SPELL_CURSE_OF_THE_PLAGUEBRINGER_25), SPELLVALUE_MAX_TARGETS, RAID_MODE(3, 10, 3, 10), me, false);
-                    events.RepeatEvent(25000);
+                    events.RepeatEvent(25s);
                     break;
                 case EVENT_SUMMON_PLAGUED_WARRIOR_ANNOUNCE:
                     Talk(SAY_SUMMON);
                     Talk(EMOTE_SUMMON);
-                    events.RepeatEvent(25000);
+                    events.RepeatEvent(25s);
                     events.ScheduleEvent(EVENT_SUMMON_PLAGUED_WARRIOR_REAL, 4s);
                     break;
                 case EVENT_SUMMON_PLAGUED_WARRIOR_REAL:
@@ -228,12 +228,12 @@ public:
                     me->CastSpell(me, RAID_MODE(SPELL_CRIPPLE_10, SPELL_CRIPPLE_25, SPELL_CRIPPLE_10, SPELL_CRIPPLE_25), false);
                     me->CastSpell(me, SPELL_BLINK, true);
                     Talk(EMOTE_BLINK);
-                    events.RepeatEvent(30000);
+                    events.RepeatEvent(30s);
                     break;
                 // BALCONY
                 case EVENT_BALCONY_SUMMON_ANNOUNCE:
                     Talk(EMOTE_SUMMON_WAVE);
-                    events.RepeatEvent(25000);
+                    events.RepeatEvent(25s);
                     events.ScheduleEvent(EVENT_BALCONY_SUMMON_REAL, 4s);
                     break;
                 case EVENT_BALCONY_SUMMON_REAL:

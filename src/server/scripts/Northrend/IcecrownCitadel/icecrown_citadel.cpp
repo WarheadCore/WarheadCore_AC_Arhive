@@ -2602,21 +2602,21 @@ public:
                 case 1:
                     if (Unit* target = DoSelectLowestHpFriendly(35.0f, 5000))
                         me->CastSpell(target, 69899, false);
-                    events.RepeatEvent(urand(10000, 20000));
+                    events.RepeatEvent(10s, 20s);
                     break;
                 case 2:
                     if (Unit* target = DoSelectLowestHpFriendly(35.0f, 5000))
                         me->CastSpell(target, 69882, false);
-                    events.RepeatEvent(urand(10000, 20000));
+                    events.RepeatEvent(10s, 20s);
                     break;
                 case 3:
                     if (Unit* target = DoSelectLowestHpFriendly(35.0f, 5000))
                         me->CastSpell(target, 69898, false);
-                    events.RepeatEvent(urand(10000, 20000));
+                    events.RepeatEvent(10s, 20s);
                     break;
                 case 4:
                     me->CastSpell(me->GetVictim(), 69968, false);
-                    events.RepeatEvent(urand(2000, 3000));
+                    events.RepeatEvent(2s, 3s);
                     break;
             }
 
@@ -2670,7 +2670,7 @@ public:
                     break;
                 case 2:
                     me->CastSpell(me->GetVictim(), 69975, false);
-                    events.RepeatEvent(urand(10000, 15000));
+                    events.RepeatEvent(10s, 15s);
                     break;
             }
 
@@ -2722,16 +2722,16 @@ public:
                 case 1:
                     if (Unit* target = DoSelectLowestHpFriendly(35.0f, 5000))
                         me->CastSpell(target, 69963, false);
-                    events.RepeatEvent(urand(10000, 20000));
+                    events.RepeatEvent(10s, 20s);
                     break;
                 case 2:
                     if (Unit* target = DoSelectLowestHpFriendly(35.0f, 5000))
                         me->CastSpell(target, 69910, false);
-                    events.RepeatEvent(urand(10000, 20000));
+                    events.RepeatEvent(10s, 20s);
                     break;
                 case 3:
                     me->CastSpell(me->GetVictim(), 69967, false);
-                    events.RepeatEvent(urand(2000, 3000));
+                    events.RepeatEvent(2s, 3s);
                     break;
             }
 
@@ -2784,21 +2784,21 @@ public:
                 case 1:
                     if (Unit* target = DoSelectLowestHpFriendly(35.0f, 5000))
                         me->CastSpell(target, 69923, false);
-                    events.RepeatEvent(urand(10000, 20000));
+                    events.RepeatEvent(10s, 20s);
                     break;
                 case 2:
                     if (Unit* target = DoSelectLowestHpFriendly(35.0f, 5000))
                         me->CastSpell(target, 69926, false);
-                    events.RepeatEvent(urand(20000, 30000));
+                    events.RepeatEvent(20s, 30s);
                     break;
                 case 3:
                     if (Unit* target = DoSelectLowestHpFriendly(35.0f, 5000))
                         me->CastSpell(target, 69958, false);
-                    events.RepeatEvent(urand(10000, 20000));
+                    events.RepeatEvent(10s, 20s);
                     break;
                 case 4:
                     me->CastSpell(me->GetVictim(), 69970, false);
-                    events.RepeatEvent(urand(3000, 4000));
+                    events.RepeatEvent(3s, 4s);
                     break;
             }
 
@@ -2910,7 +2910,7 @@ public:
                                 casted = true;
                                 me->CastSpell(target, 71906, true); // Severed Essence
                             }
-                        events.RepeatEvent(casted ? 25000 : 5000);
+                        events.RepeatEvent(casted ? 25s : 5s);
                     }
                     break;
             }
@@ -3123,11 +3123,11 @@ public:
                 case 1:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40.0f, true))
                         me->CastSpell(target, 70362, false);
-                    events.RepeatEvent(urand(25000, 35000));
+                    events.RepeatEvent(25s, 35s);
                     break;
                 case 2:
                     me->CastSpell(me->GetVictim(), 70361, false);
-                    events.RepeatEvent(5000);
+                    events.RepeatEvent(5s);
                     break;
                 case 3:
                     me->CastSpell(me->GetVictim(), 70116, false);
@@ -3277,7 +3277,7 @@ public:
                         events.RepeatEvent(15s, 20s);
                     }
                     else
-                        events.RepeatEvent(3000);
+                        events.RepeatEvent(3s);
                     break;
             }
 
@@ -3415,16 +3415,16 @@ public:
                     break;
                 case 1:
                     me->CastSpell(me->GetVictim(), 70965, false);
-                    events.RepeatEvent(urand(20000, 30000));
+                    events.RepeatEvent(20s, 30s);
                     break;
                 case 2:
                     me->CastSpell(me->GetVictim(), 71020, false);
-                    events.RepeatEvent(urand(20000, 30000));
+                    events.RepeatEvent(20s, 30s);
                     break;
                 case 3:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40.0f, true))
                         me->CastSpell(target, 70980, false);
-                    events.RepeatEvent(urand(20000, 30000));
+                    events.RepeatEvent(20s, 30s);
                     break;
             }
 

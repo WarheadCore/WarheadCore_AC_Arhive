@@ -328,19 +328,19 @@ public:
                 case EVENT_FROSTBOMB:
                     if( Unit* v = me->GetVictim() )
                         me->CastSpell(v, SPELL_FROSTBOMB, false);
-                    events.RepeatEvent(urand(7000, 11000));
+                    events.RepeatEvent(7s, 11s);
                     break;
                 case EVENT_TIME_BOMB:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true) )
                         DoCast(target, DUNGEON_MODE(SPELL_TIME_BOMB_N, SPELL_TIME_BOMB_H));
-                    events.RepeatEvent(urand(20000, 25000));
+                    events.RepeatEvent(20s, 25s);
                     break;
                 case EVENT_TELEPORT_TO_CENTER:
                     x = me->GetPositionX();
                     y = me->GetPositionY();
                     z = me->GetPositionZ();
                     me->CastSpell(me, SPELL_TELEPORT, false);
-                    events.RepeatEvent(urand(25000, 30000));
+                    events.RepeatEvent(25s, 30s);
                     events.DelayEvents(10000);
                     break;
                 case EVENT_TELE_BACK:

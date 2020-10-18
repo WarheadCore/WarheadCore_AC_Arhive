@@ -336,8 +336,8 @@ struct boss_twin_valkyrAI : public ScriptedAI
                 }
                 break;
             case EVENT_SPELL_SPIKE:
-                me->CastSpell(me->GetVictim(), me->GetEntry() == NPC_LIGHTBANE ? SPELL_LIGHT_TWIN_SPIKE : SPELL_DARK_TWIN_SPIKE, false);
-                events.RepeatEvent(urand(7000, 10000));
+                me->CastSpell(me->GetVictim(), me->GetEntry()==NPC_LIGHTBANE ? SPELL_LIGHT_TWIN_SPIKE : SPELL_DARK_TWIN_SPIKE, false);
+                events.RepeatEvent(7s, 10s);
                 break;
             case EVENT_SPELL_TOUCH:
                 {
@@ -380,14 +380,9 @@ struct boss_twin_valkyrAI : public ScriptedAI
                             break;
                     }
 
-                    /*
-                    if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true, essenceId) )
-                        me->CastSpell(target, me->GetEntry()==NPC_LIGHTBANE ? SPELL_LIGHT_TOUCH : SPELL_DARK_TOUCH, false);
-                    events.RepeatEvent(urand(45000,50000));
-                    */
-
                     std::vector<uint64> tList;
-                    Map::PlayerList const& pList = me->GetMap()->GetPlayers();
+                    Map::PlayerList const &pList = me->GetMap()->GetPlayers();
+
                     if (pList.getSize())
                     {
                         for (Map::PlayerList::const_iterator itr = pList.begin(); itr != pList.end(); ++itr)
@@ -399,12 +394,13 @@ struct boss_twin_valkyrAI : public ScriptedAI
                         if (!tList.empty())
                             if (Player* target = ObjectAccessor::GetPlayer(*me, tList[urand(0, tList.size() - 1)]))
                             {
-                                me->CastSpell(target, me->GetEntry() == NPC_LIGHTBANE ? SPELL_LIGHT_TOUCH : SPELL_DARK_TOUCH, false);
-                                events.RepeatEvent(urand(45000, 50000));
+                                me->CastSpell(target, me->GetEntry()==NPC_LIGHTBANE ? SPELL_LIGHT_TOUCH : SPELL_DARK_TOUCH, false);
+                                events.RepeatEvent(45s, 50s);
                                 break;
                             }
                     }
-                    events.RepeatEvent(10000);
+
+                    events.RepeatEvent(10s);
                 }
                 break;
             case EVENT_SPECIAL:
@@ -456,7 +452,7 @@ struct boss_twin_valkyrAI : public ScriptedAI
                     }
                     if( (SpecialMask & 0xF) == 0xF )
                         SpecialMask = 0;
-                    events.RepeatEvent(45000);
+                    events.RepeatEvent(45s);
                     events.DelayEventsToMax(15000, 1); // no touch of light/darkness during special abilities!
                 }
                 break;

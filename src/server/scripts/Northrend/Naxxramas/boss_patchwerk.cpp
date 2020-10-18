@@ -161,9 +161,9 @@ public:
                         if (finalTarget)
                             me->CastSpell(finalTarget, RAID_MODE(SPELL_HATEFUL_STRIKE_10, SPELL_HATEFUL_STRIKE_25, SPELL_HATEFUL_STRIKE_10, SPELL_HATEFUL_STRIKE_25), false);
 
-                        events.RepeatEvent(1000);
-                        break;
-                    }
+                    events.RepeatEvent(1s);
+                    break;
+                }
                 case EVENT_SPELL_BERSERK:
                     Talk(EMOTE_BERSERK);
                     me->CastSpell(me, SPELL_BERSERK, true);
@@ -171,7 +171,7 @@ public:
                     break;
                 case EVENT_SPELL_SLIME_BOLT:
                     me->CastSpell(me, SPELL_SLIME_BOLT, false);
-                    events.RepeatEvent(3000);
+                    events.RepeatEvent(3s);
                     break;
                 case EVENT_HEALTH_CHECK:
                     if (me->GetHealthPct() <= 5)
@@ -181,7 +181,7 @@ public:
 
                         break;
                     }
-                    events.RepeatEvent(1000);
+                    events.RepeatEvent(1s);
                     break;
 
             }

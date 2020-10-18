@@ -339,40 +339,47 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING) && !(events.GetPhaseMask() & PHASE_INTRO_MASK))
                 return;
 
-            switch (events.ExecuteEvent())
-            {
-                case 0:
-                    break;
-                case EVENT_INTRO_2:
-                    Talk(SAY_INTRO_2);
-                    break;
-                case EVENT_INTRO_3:
-                    Talk(SAY_INTRO_3);
-                    break;
-                case EVENT_INTRO_4:
-                    Talk(SAY_INTRO_4);
-                    break;
-                case EVENT_INTRO_5:
-                    Talk(SAY_INTRO_5);
-                    break;
-                case EVENT_INTRO_6:
-                    Talk(SAY_INTRO_6);
-                    break;
-                case EVENT_INTRO_7:
-                    Talk(SAY_INTRO_7);
-                    break;
-                case EVENT_BERSERK:
-                    me->CastSpell(me, SPELL_BERSERK, true);
-                    Talk(SAY_BERSERK);
-                    break;
-                case EVENT_SPELL_DEATH_AND_DECAY:
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
-                        me->CastSpell(target, SPELL_DEATH_AND_DECAY, false);
-                    events.RepeatEvent(urand(22000, 30000));
-                    break;
-                case EVENT_SPELL_DOMINATE_MIND_25:
-                    {
-                        Talk(SAY_DOMINATE_MIND);
+                switch (events.GetEvent())
+                {
+                    case 0:
+                        break;
+                    case EVENT_INTRO_2:
+                        Talk(SAY_INTRO_2);
+                        events.PopEvent();
+                        break;
+                    case EVENT_INTRO_3:
+                        Talk(SAY_INTRO_3);
+                        events.PopEvent();
+                        break;
+                    case EVENT_INTRO_4:
+                        Talk(SAY_INTRO_4);
+                        events.PopEvent();
+                        break;
+                    case EVENT_INTRO_5:
+                        Talk(SAY_INTRO_5);
+                        events.PopEvent();
+                        break;
+                    case EVENT_INTRO_6:
+                        Talk(SAY_INTRO_6);
+                        events.PopEvent();
+                        break;
+                    case EVENT_INTRO_7:
+                        Talk(SAY_INTRO_7);
+                        events.PopEvent();
+                        break;
+                    case EVENT_BERSERK:
+                        me->CastSpell(me, SPELL_BERSERK, true);
+                        Talk(SAY_BERSERK);
+                        events.PopEvent();
+                        break;
+                    case EVENT_SPELL_DEATH_AND_DECAY:
+                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
+                            me->CastSpell(target, SPELL_DEATH_AND_DECAY, false);
+                        events.RepeatEvent(22s, 30s);
+                        break;
+                    case EVENT_SPELL_DOMINATE_MIND_25:
+                        {
+                            Talk(SAY_DOMINATE_MIND);
 
                         std::vector<Player*> validPlayers;
                         Map::PlayerList const& pList = me->GetMap()->GetPlayers();
@@ -728,29 +735,29 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.ExecuteEvent())
-            {
-                case EVENT_SPELL_FANATIC_NECROTIC_STRIKE:
-                    me->CastSpell(me->GetVictim(), SPELL_NECROTIC_STRIKE, false);
-                    events.RepeatEvent(urand(11000, 13000));
-                    break;
-                case EVENT_SPELL_FANATIC_SHADOW_CLEAVE:
-                    me->CastSpell(me->GetVictim(), SPELL_SHADOW_CLEAVE, false);
-                    events.RepeatEvent(urand(9500, 11000));
-                    break;
-                case EVENT_SPELL_FANATIC_VAMPIRIC_MIGHT:
-                    me->CastSpell(me, SPELL_VAMPIRIC_MIGHT, false);
-                    events.RepeatEvent(urand(20000, 27000));
-                    break;
-                case EVENT_CULTIST_DARK_MARTYRDOM_REVIVE:
-                    me->RemoveAurasDueToSpell(SPELL_PERMANENT_FEIGN_DEATH);
-                    me->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_DEAD);
-                    me->RemoveFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_FEIGN_DEATH);
-                    me->UpdateEntry(NPC_REANIMATED_FANATIC);
-                    me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_STUNNED | UNIT_FLAG_UNK_29 | UNIT_FLAG_NOT_SELECTABLE);
-                    me->SetReactState(REACT_AGGRESSIVE);
-                    DoZoneInCombat(me);
-                    me->CastSpell(me, SPELL_FANATIC_S_DETERMINATION);
+                switch (events.GetEvent())
+                {
+                    case EVENT_SPELL_FANATIC_NECROTIC_STRIKE:
+                        me->CastSpell(me->GetVictim(), SPELL_NECROTIC_STRIKE, false);
+                        events.RepeatEvent(11s, 13s);
+                        break;
+                    case EVENT_SPELL_FANATIC_SHADOW_CLEAVE:
+                        me->CastSpell(me->GetVictim(), SPELL_SHADOW_CLEAVE, false);
+                        events.RepeatEvent(9500ms, 11s);
+                        break;
+                    case EVENT_SPELL_FANATIC_VAMPIRIC_MIGHT:
+                        me->CastSpell(me, SPELL_VAMPIRIC_MIGHT, false);
+                        events.RepeatEvent(20s, 27s);
+                        break;
+                    case EVENT_CULTIST_DARK_MARTYRDOM_REVIVE:
+                        me->RemoveAurasDueToSpell(SPELL_PERMANENT_FEIGN_DEATH);
+                        me->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_DEAD);
+                        me->RemoveFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_FEIGN_DEATH);
+                        me->UpdateEntry(NPC_REANIMATED_FANATIC);
+                        me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_STUNNED | UNIT_FLAG_UNK_29 | UNIT_FLAG_NOT_SELECTABLE);
+                        me->SetReactState(REACT_AGGRESSIVE);
+                        DoZoneInCombat(me);
+                        me->CastSpell(me, SPELL_FANATIC_S_DETERMINATION);
 
                     if (Creature* ladyDeathwhisper = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_LADY_DEATHWHISPER)))
                         ladyDeathwhisper->AI()->Talk(SAY_ANIMATE_DEAD);
@@ -841,37 +848,37 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.ExecuteEvent())
-            {
-                case EVENT_SPELL_ADHERENT_FROST_FEVER:
-                    me->CastSpell(me->GetVictim(), SPELL_FROST_FEVER, false);
-                    events.RepeatEvent(urand(9000, 13000));
-                    break;
-                case EVENT_SPELL_ADHERENT_DEATHCHILL:
-                    if (me->GetEntry() == NPC_EMPOWERED_ADHERENT)
-                        me->CastSpell(me->GetVictim(), SPELL_DEATHCHILL_BLAST, false);
-                    else
-                        me->CastSpell(me->GetVictim(), SPELL_DEATHCHILL_BOLT, false);
-                    events.RepeatEvent(urand(9000, 13000));
-                    break;
-                case EVENT_SPELL_ADHERENT_CURSE_OF_TORPOR:
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
-                        me->CastSpell(target, SPELL_CURSE_OF_TORPOR, false);
-                    events.RepeatEvent(urand(9000, 13000));
-                    break;
-                case EVENT_SPELL_ADHERENT_SHROUD_OF_THE_OCCULT:
-                    me->CastSpell(me, SPELL_SHORUD_OF_THE_OCCULT, false);
-                    events.RepeatEvent(urand(27000, 32000));
-                    break;
-                case EVENT_CULTIST_DARK_MARTYRDOM_REVIVE:
-                    me->RemoveAurasDueToSpell(SPELL_PERMANENT_FEIGN_DEATH);
-                    me->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_DEAD);
-                    me->RemoveFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_FEIGN_DEATH);
-                    me->UpdateEntry(NPC_REANIMATED_ADHERENT);
-                    me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_STUNNED | UNIT_FLAG_UNK_29 | UNIT_FLAG_NOT_SELECTABLE);
-                    me->SetReactState(REACT_AGGRESSIVE);
-                    DoZoneInCombat(me);
-                    me->CastSpell(me, SPELL_ADHERENT_S_DETERMINATION);
+                switch (events.GetEvent())
+                {
+                    case EVENT_SPELL_ADHERENT_FROST_FEVER:
+                        me->CastSpell(me->GetVictim(), SPELL_FROST_FEVER, false);
+                        events.RepeatEvent(9s, 13s);
+                        break;
+                    case EVENT_SPELL_ADHERENT_DEATHCHILL:
+                        if (me->GetEntry() == NPC_EMPOWERED_ADHERENT)
+                            me->CastSpell(me->GetVictim(), SPELL_DEATHCHILL_BLAST, false);
+                        else
+                            me->CastSpell(me->GetVictim(), SPELL_DEATHCHILL_BOLT, false);
+                        events.RepeatEvent(9s, 13s);
+                        break;
+                    case EVENT_SPELL_ADHERENT_CURSE_OF_TORPOR:
+                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
+                            me->CastSpell(target, SPELL_CURSE_OF_TORPOR, false);
+                        events.RepeatEvent(9s, 13s);
+                        break;
+                    case EVENT_SPELL_ADHERENT_SHROUD_OF_THE_OCCULT:
+                        me->CastSpell(me, SPELL_SHORUD_OF_THE_OCCULT, false);
+                        events.RepeatEvent(27s, 32s);
+                        break;
+                    case EVENT_CULTIST_DARK_MARTYRDOM_REVIVE:
+                        me->RemoveAurasDueToSpell(SPELL_PERMANENT_FEIGN_DEATH);
+                        me->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_DEAD);
+                        me->RemoveFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_FEIGN_DEATH);
+                        me->UpdateEntry(NPC_REANIMATED_ADHERENT);
+                        me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_STUNNED | UNIT_FLAG_UNK_29 | UNIT_FLAG_NOT_SELECTABLE);
+                        me->SetReactState(REACT_AGGRESSIVE);
+                        DoZoneInCombat(me);
+                        me->CastSpell(me, SPELL_ADHERENT_S_DETERMINATION);
 
                     if (Creature* ladyDeathwhisper = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_LADY_DEATHWHISPER)))
                         ladyDeathwhisper->AI()->Talk(SAY_ANIMATE_DEAD);
@@ -1073,32 +1080,34 @@ public:
                 return;
             }
 
-            switch (events.ExecuteEvent())
-            {
-                case EVENT_DARNAVAN_BLADESTORM:
-                    me->CastSpell((Unit*)nullptr, SPELL_BLADESTORM, false);
-                    events.RepeatEvent(urand(90000, 100000));
-                    break;
-                case EVENT_DARNAVAN_CHARGE:
-                    _canCharge = true;
-                    break;
-                case EVENT_DARNAVAN_INTIMIDATING_SHOUT:
-                    me->CastSpell((Unit*)nullptr, SPELL_INTIMIDATING_SHOUT, false);
-                    events.RepeatEvent(urand(90000, 120000));
-                    break;
-                case EVENT_DARNAVAN_MORTAL_STRIKE:
-                    me->CastSpell(me->GetVictim(), SPELL_MORTAL_STRIKE, false);
-                    events.RepeatEvent(urand(15000, 30000));
-                    break;
-                case EVENT_DARNAVAN_SHATTERING_THROW:
-                    _canShatter = true;
-                    break;
-                case EVENT_DARNAVAN_SUNDER_ARMOR:
-                    me->CastSpell(me->GetVictim(), SPELL_SUNDER_ARMOR, false);
-                    events.RepeatEvent(urand(3000, 7000));
-                    break;
-                default:
-                    break;
+                switch (events.GetEvent())
+                {
+                    case EVENT_DARNAVAN_BLADESTORM:
+                        me->CastSpell((Unit*)nullptr, SPELL_BLADESTORM, false);
+                        events.RepeatEvent(90s, 100s);
+                        break;
+                    case EVENT_DARNAVAN_CHARGE:
+                        _canCharge = true;
+                        events.PopEvent();
+                        break;
+                    case EVENT_DARNAVAN_INTIMIDATING_SHOUT:
+                        me->CastSpell((Unit*)nullptr, SPELL_INTIMIDATING_SHOUT, false);
+                        events.RepeatEvent(90s, 2min);
+                        break;
+                    case EVENT_DARNAVAN_MORTAL_STRIKE:
+                        me->CastSpell(me->GetVictim(), SPELL_MORTAL_STRIKE, false);
+                        events.RepeatEvent(15s, 30s);
+                        break;
+                    case EVENT_DARNAVAN_SHATTERING_THROW:
+                        _canShatter = true;
+                        events.PopEvent();
+                        break;
+                    case EVENT_DARNAVAN_SUNDER_ARMOR:
+                        me->CastSpell(me->GetVictim(), SPELL_SUNDER_ARMOR, false);
+                        events.RepeatEvent(3s, 7s);
+                        break;
+                    default:
+                        break;
             }
 
             DoMeleeAttackIfReady();
