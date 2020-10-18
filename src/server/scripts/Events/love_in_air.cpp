@@ -404,11 +404,11 @@ public:
                     }
                 case EVENT_SPELL_PERFUME_SPRAY:
                     me->CastSpell(me->GetVictim(), SPELL_ALLURING_PERFUME_SPRAY, false);
-                    events.RepeatEvent(6000);
+                    events.RepeatEvent(6s);
                     break;
                 case EVENT_SPELL_CHAIN_REACTION:
                     me->CastSpell(me->GetVictim(), SPELL_CHAIN_REACTION, false);
-                    events.RepeatEvent(12000);
+                    events.RepeatEvent(12s);
                     break;
             }
 

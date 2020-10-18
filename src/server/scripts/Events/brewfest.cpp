@@ -240,7 +240,7 @@ public:
                 case EVENT_DIREBREW_DISARM:
                     me->CastSpell(me->GetVictim(), SPELL_DIREBREW_DISARM, false);
                     me->CastSpell(me, SPELL_DISARM_VISUAL, true);
-                    events.RepeatEvent(20000);
+                    events.RepeatEvent(20s);
                     break;
                 case EVENT_DIREBREW_HEALTH:
                     if (me->GetHealthPct() < 66 && phase == 0)
@@ -254,7 +254,7 @@ public:
                         return;
                     }
 
-                    events.RepeatEvent(1000);
+                    events.RepeatEvent(1s);
                     break;
             }
 
@@ -343,7 +343,7 @@ public:
             {
                 case EVENT_SISTERS_BARREL:
                     me->CastSpell(me->GetVictim(), SPELL_BARRELED, false);
-                    events.RepeatEvent(15000);
+                    events.RepeatEvent(15s);
                     break;
                 case EVENT_SISTERS_CHUCK_MUG:
                     Map::PlayerList const& pList = me->GetMap()->GetPlayers();
@@ -360,7 +360,7 @@ public:
                     if (Player* player = SelectTargetFromPlayerList(50.0f, SPELL_DARK_STUN))
                         me->CastSpell(player, SPELL_CHUCK_MUG, false);
 
-                    events.RepeatEvent(18000);
+                    events.RepeatEvent(18s);
                     break;
             }
 
