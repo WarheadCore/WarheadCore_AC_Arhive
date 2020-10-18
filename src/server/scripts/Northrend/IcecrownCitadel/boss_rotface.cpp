@@ -315,12 +315,12 @@ public:
                             if (targets.size() >= minTargets)
                                 minDist = -5.0f;
 
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, minDist, true))
-                            if (Creature* professor = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_PROFESSOR_PUTRICIDE)))
-                                professor->CastSpell(target, SPELL_VILE_GAS_H, true); // triggered, to skip LoS check
-                    }
-                    events.ScheduleEvent(EVENT_ROTFACE_VILE_GAS, urand(15000, 20000));
-                    break;
+                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, minDist, true))
+                                if (Creature* professor = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_PROFESSOR_PUTRICIDE)))
+                                    professor->CastSpell(target, SPELL_VILE_GAS_H, true); // triggered, to skip LoS check
+                        }
+                        events.ScheduleEvent(EVENT_ROTFACE_VILE_GAS, urand(15000, 20000));
+                        break;
                 default:
                     break;
             }
