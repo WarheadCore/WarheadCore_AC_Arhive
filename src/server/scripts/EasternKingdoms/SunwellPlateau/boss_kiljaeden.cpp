@@ -511,7 +511,7 @@ public:
                         events2.ScheduleEvent(EVENT_TEXT_SPEACH22, 22s, EVENT_GROUP_SPEACH);
                         events2.ScheduleEvent(EVENT_TEXT_SPEACH23, 28s, EVENT_GROUP_SPEACH);
                         events2.RescheduleEvent(EVENT_EMPOWER_ORBS1, 35s);
-                        
+
                         events.DelayEvents(2s);
                         events.ScheduleEvent(EVENT_SPELL_SINISTER_REFLECTION, 500ms);
                         events.ScheduleEvent(EVENT_SPELL_SHADOW_SPIKE, 1200ms);
@@ -531,7 +531,7 @@ public:
                         events2.ScheduleEvent(EVENT_TEXT_SPEACH32, 22s, EVENT_GROUP_SPEACH);
                         events2.ScheduleEvent(EVENT_TEXT_SPEACH33, 28s, EVENT_GROUP_SPEACH);
                         events2.RescheduleEvent(EVENT_EMPOWER_ORBS2, 350s);
-                        
+
                         events.DelayEvents(2s);
                         events.ScheduleEvent(EVENT_SPELL_SINISTER_REFLECTION, 500ms);
                         events.ScheduleEvent(EVENT_SPELL_SHADOW_SPIKE, 1200ms);

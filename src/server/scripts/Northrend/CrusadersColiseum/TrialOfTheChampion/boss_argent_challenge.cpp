@@ -618,7 +618,7 @@ public:
             if( bCheck && damage >= me->GetHealth() )
             {
                 bCheck = false;
-                damage = me->GetHealth()-1;
+                damage = me->GetHealth() - 1;
                 events.DelayEvents(10s);
                 me->CastSpell(me, SPELL_DIVINE_SHIELD_H, true);
                 me->CastSpell((Unit*)NULL, SPELL_FINAL_MEDITATION_H, true);
@@ -703,7 +703,7 @@ public:
                         Unit* target = DoSelectLowestHpFriendly(40.0f);
                         if(!target)
                             target = me;
-                        
+
                         me->CastSpell(target, SPELL_BLAZING_LIGHT, false);
                         events.RepeatEvent(8s, 12s);
                     }

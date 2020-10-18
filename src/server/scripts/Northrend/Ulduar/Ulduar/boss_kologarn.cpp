@@ -413,7 +413,7 @@ public:
                         me->CastSpell(me->GetVictim(), SPELL_OVERHEAD_SMASH, false);
                     else if (_left || _right)
                         me->CastSpell(me->GetVictim(), SPELL_ONEARMED_OVERHEAD_SMASH, false);
-                    
+
                     events.DelayEvents(1s);
                     events.ScheduleEvent(EVENT_SMASH, 14s);
                     return;

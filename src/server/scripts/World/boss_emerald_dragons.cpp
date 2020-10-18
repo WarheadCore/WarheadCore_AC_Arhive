@@ -249,12 +249,12 @@ public:
         {
         }
 
-            void Reset()
-            {
-                _stage = 1;
-                emerald_dragonAI::Reset();
-                events.ScheduleEvent(EVENT_LIGHTNING_WAVE, 12s);
-            }
+        void Reset()
+        {
+            _stage = 1;
+            emerald_dragonAI::Reset();
+            events.ScheduleEvent(EVENT_LIGHTNING_WAVE, 12s);
+        }
 
         void EnterCombat(Unit* who)
         {
@@ -279,13 +279,13 @@ public:
         {
             switch (eventId)
             {
-                    case EVENT_LIGHTNING_WAVE:
-                        DoCastVictim(SPELL_LIGHTNING_WAVE);
-                        events.ScheduleEvent(EVENT_LIGHTNING_WAVE, 10s, 20s);
-                        break;
-                    default:
-                        emerald_dragonAI::ExecuteEvent(eventId);
-                        break;
+                case EVENT_LIGHTNING_WAVE:
+                    DoCastVictim(SPELL_LIGHTNING_WAVE);
+                    events.ScheduleEvent(EVENT_LIGHTNING_WAVE, 10s, 20s);
+                    break;
+                default:
+                    emerald_dragonAI::ExecuteEvent(eventId);
+                    break;
             }
         }
 
@@ -337,12 +337,12 @@ public:
         {
         }
 
-            void Reset()
-            {
-                _stage = 1;
-                emerald_dragonAI::Reset();
-                events.ScheduleEvent(EVENT_SHADOW_BOLT_WHIRL, 10s);
-            }
+        void Reset()
+        {
+            _stage = 1;
+            emerald_dragonAI::Reset();
+            events.ScheduleEvent(EVENT_SHADOW_BOLT_WHIRL, 10s);
+        }
 
         void EnterCombat(Unit* who)
         {
@@ -374,13 +374,13 @@ public:
         {
             switch (eventId)
             {
-                    case EVENT_SHADOW_BOLT_WHIRL:
-                        me->CastSpell((Unit*)NULL, SPELL_SHADOW_BOLT_WHIRL, false);
-                        events.ScheduleEvent(EVENT_SHADOW_BOLT_WHIRL, 15s, 30s);
-                        break;
-                    default:
-                        emerald_dragonAI::ExecuteEvent(eventId);
-                        break;
+                case EVENT_SHADOW_BOLT_WHIRL:
+                    me->CastSpell((Unit*)NULL, SPELL_SHADOW_BOLT_WHIRL, false);
+                    events.ScheduleEvent(EVENT_SHADOW_BOLT_WHIRL, 15s, 30s);
+                    break;
+                default:
+                    emerald_dragonAI::ExecuteEvent(eventId);
+                    break;
             }
         }
 
@@ -463,12 +463,12 @@ public:
         {
         }
 
-            void Reset()
-            {
-                _stage = 1;
-                emerald_dragonAI::Reset();
-                events.ScheduleEvent(EVENT_VOLATILE_INFECTION, 12s);
-            }
+        void Reset()
+        {
+            _stage = 1;
+            emerald_dragonAI::Reset();
+            events.ScheduleEvent(EVENT_VOLATILE_INFECTION, 12s);
+        }
 
         void KilledUnit(Unit* who)
         {
@@ -497,13 +497,13 @@ public:
         {
             switch (eventId)
             {
-                    case EVENT_VOLATILE_INFECTION:
-                        DoCastVictim(SPELL_VOLATILE_INFECTION);
-                        events.ScheduleEvent(EVENT_VOLATILE_INFECTION, 2min);
-                        break;
-                    default:
-                        emerald_dragonAI::ExecuteEvent(eventId);
-                        break;
+                case EVENT_VOLATILE_INFECTION:
+                    DoCastVictim(SPELL_VOLATILE_INFECTION);
+                    events.ScheduleEvent(EVENT_VOLATILE_INFECTION, 2min);
+                    break;
+                default:
+                    emerald_dragonAI::ExecuteEvent(eventId);
+                    break;
             }
         }
 
@@ -564,10 +564,10 @@ public:
             _banished = false;
             _banishedTimer = 0;
 
-                emerald_dragonAI::Reset();
-                events.ScheduleEvent(EVENT_ARCANE_BLAST, 12s);
-                events.ScheduleEvent(EVENT_BELLOWING_ROAR, 30s);
-            }
+            emerald_dragonAI::Reset();
+            events.ScheduleEvent(EVENT_ARCANE_BLAST, 12s);
+            events.ScheduleEvent(EVENT_BELLOWING_ROAR, 30s);
+        }
 
         void EnterCombat(Unit* who)
         {
@@ -611,17 +611,17 @@ public:
         {
             switch (eventId)
             {
-                    case EVENT_ARCANE_BLAST:
-                        DoCast(SPELL_ARCANE_BLAST);
-                        events.ScheduleEvent(EVENT_ARCANE_BLAST, 7s, 12s);
-                        break;
-                    case EVENT_BELLOWING_ROAR:
-                        DoCast(SPELL_BELLOWING_ROAR);
-                        events.ScheduleEvent(EVENT_BELLOWING_ROAR, 20s, 30s);
-                        break;
-                    default:
-                        emerald_dragonAI::ExecuteEvent(eventId);
-                        break;
+                case EVENT_ARCANE_BLAST:
+                    DoCast(SPELL_ARCANE_BLAST);
+                    events.ScheduleEvent(EVENT_ARCANE_BLAST, 7s, 12s);
+                    break;
+                case EVENT_BELLOWING_ROAR:
+                    DoCast(SPELL_BELLOWING_ROAR);
+                    events.ScheduleEvent(EVENT_BELLOWING_ROAR, 20s, 30s);
+                    break;
+                default:
+                    emerald_dragonAI::ExecuteEvent(eventId);
+                    break;
             }
         }
 

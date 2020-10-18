@@ -302,13 +302,13 @@ public:
                     break;
                 case EVENT_SPELL_PENETRATING_COLD:
                     {
-                        me->CastCustomSpell(SPELL_PENETRATING_COLD, SPELLVALUE_MAX_TARGETS, RAID_MODE(2,5,2,5));
+                        me->CastCustomSpell(SPELL_PENETRATING_COLD, SPELLVALUE_MAX_TARGETS, RAID_MODE(2, 5, 2, 5));
                         events.RepeatEvent(18s);
                     }
                     break;
                 case EVENT_SUMMON_NERUBIAN:
                     {
-                        me->CastCustomSpell(SPELL_SUMMON_BURROWER, SPELLVALUE_MAX_TARGETS, RAID_MODE(1,2,2,4));
+                        me->CastCustomSpell(SPELL_SUMMON_BURROWER, SPELLVALUE_MAX_TARGETS, RAID_MODE(1, 2, 2, 4));
                         events.RepeatEvent(45s);
                     }
                     break;

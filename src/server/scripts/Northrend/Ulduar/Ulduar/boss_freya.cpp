@@ -602,20 +602,20 @@ public:
                             }
                         }
 
-                me->CastSpell(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), SPELL_SUMMON_LIFEBINDER, true);
-                break;
-            }
-            case EVENT_FREYA_SUNBEAM:
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
-                    me->CastSpell(target, SPELL_SUNBEAM, false);
-                events.RepeatEvent(15s, 20s);
-                break;
-            case EVENT_FREYA_RESPAWN_TRIO:
-                events.PopEvent();
-                _deforestation = 0;
-                _respawningTrio = false;
-                if (_trioKilled < 3)
-                    summons.DoAction(ACTION_RESPAWN_TRIO);
+                        me->CastSpell(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), SPELL_SUMMON_LIFEBINDER, true);
+                        break;
+                    }
+                case EVENT_FREYA_SUNBEAM:
+                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
+                        me->CastSpell(target, SPELL_SUNBEAM, false);
+                    events.RepeatEvent(15s, 20s);
+                    break;
+                case EVENT_FREYA_RESPAWN_TRIO:
+                    events.PopEvent();
+                    _deforestation = 0;
+                    _respawningTrio = false;
+                    if (_trioKilled < 3)
+                        summons.DoAction(ACTION_RESPAWN_TRIO);
 
                     _trioKilled = 0;
                     break;
@@ -854,7 +854,7 @@ public:
             {
                 case EVENT_BRIGHTLEAF_FLUX:
                     if (Aura* aur = me->AddAura(SPELL_BRIGHTLEAF_FLUX, me))
-                        aur->SetStackAmount(urand(1,10));
+                        aur->SetStackAmount(urand(1, 10));
                     events.RepeatEvent(10s);
                     break;
                 case EVENT_BRIGHTLEAF_SOLAR_FLARE:

@@ -392,9 +392,9 @@ public:
                             Talk(SAY_SPECIAL);
                         }
 
-                    events.RepeatEvent(30s);
-                    break;
-                }
+                        events.RepeatEvent(30s);
+                        break;
+                    }
                 case EVENT_SECOND_PHASE_HEALTH_CHECK:
                     if (me->HealthBelowPct(45))
                     {

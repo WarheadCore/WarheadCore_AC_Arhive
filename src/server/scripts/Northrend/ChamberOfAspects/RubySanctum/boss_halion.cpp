@@ -372,45 +372,45 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-                switch (events.ExecuteEvent())
-                {
-                    case EVENT_CLEAVE:
-                        me->CastSpell(me->GetVictim(), SPELL_CLEAVE, false);
-                        events.ScheduleEvent(EVENT_CLEAVE, 8s, 10s);
-                        break;
-                    case EVENT_TAIL_LASH:
-                        me->CastSpell(me, SPELL_TAIL_LASH, false);
-                        events.ScheduleEvent(EVENT_TAIL_LASH, 10s);
-                        break;
-                    case EVENT_BREATH:
-                        me->CastSpell(me->GetVictim(), SPELL_FLAME_BREATH, false);
-                        events.ScheduleEvent(EVENT_BREATH, 10s, 12s);
-                        break;
-                    case EVENT_ACTIVATE_FIREWALL:
-                        instance->HandleGameObject(instance->GetData64(GO_FLAME_RING), false, NULL);
-                        instance->HandleGameObject(instance->GetData64(GO_TWILIGHT_FLAME_RING), false, NULL);
-                        break;
-                    case EVENT_METEOR_STRIKE:
-                        _livingEmberCount = summons.GetEntryCount(NPC_LIVING_EMBER);
-                        me->CastCustomSpell(SPELL_METEOR_STRIKE_TARGETING, SPELLVALUE_MAX_TARGETS, 1, me, false);
-                        Talk(SAY_METEOR_STRIKE);
-                        events.ScheduleEvent(EVENT_METEOR_STRIKE, 40s);
-                        break;
-                    case EVENT_FIERY_COMBUSTION:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 100.0f, true, -SPELL_TWILIGHT_REALM))
-                            me->CastSpell(target, SPELL_FIERY_COMBUSTION, false);
-                        events.ScheduleEvent(EVENT_FIERY_COMBUSTION, 25s);
-                        break;
-                    case EVENT_CHECK_HEALTH:
-                        if (me->HealthBelowPct(75))
-                        {
-                            Talk(SAY_PHASE_TWO);
-                            me->CastSpell(me, SPELL_TWILIGHT_PHASING, false);
-                            events.DelayEvents(10s);
-                            return;
-                        }
-                        events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
-                        break;
+            switch (events.ExecuteEvent())
+            {
+                case EVENT_CLEAVE:
+                    me->CastSpell(me->GetVictim(), SPELL_CLEAVE, false);
+                    events.ScheduleEvent(EVENT_CLEAVE, 8s, 10s);
+                    break;
+                case EVENT_TAIL_LASH:
+                    me->CastSpell(me, SPELL_TAIL_LASH, false);
+                    events.ScheduleEvent(EVENT_TAIL_LASH, 10s);
+                    break;
+                case EVENT_BREATH:
+                    me->CastSpell(me->GetVictim(), SPELL_FLAME_BREATH, false);
+                    events.ScheduleEvent(EVENT_BREATH, 10s, 12s);
+                    break;
+                case EVENT_ACTIVATE_FIREWALL:
+                    instance->HandleGameObject(instance->GetData64(GO_FLAME_RING), false, NULL);
+                    instance->HandleGameObject(instance->GetData64(GO_TWILIGHT_FLAME_RING), false, NULL);
+                    break;
+                case EVENT_METEOR_STRIKE:
+                    _livingEmberCount = summons.GetEntryCount(NPC_LIVING_EMBER);
+                    me->CastCustomSpell(SPELL_METEOR_STRIKE_TARGETING, SPELLVALUE_MAX_TARGETS, 1, me, false);
+                    Talk(SAY_METEOR_STRIKE);
+                    events.ScheduleEvent(EVENT_METEOR_STRIKE, 40s);
+                    break;
+                case EVENT_FIERY_COMBUSTION:
+                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 100.0f, true, -SPELL_TWILIGHT_REALM))
+                        me->CastSpell(target, SPELL_FIERY_COMBUSTION, false);
+                    events.ScheduleEvent(EVENT_FIERY_COMBUSTION, 25s);
+                    break;
+                case EVENT_CHECK_HEALTH:
+                    if (me->HealthBelowPct(75))
+                    {
+                        Talk(SAY_PHASE_TWO);
+                        me->CastSpell(me, SPELL_TWILIGHT_PHASING, false);
+                        events.DelayEvents(10s);
+                        return;
+                    }
+                    events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
+                    break;
             }
 
             DoMeleeAttackIfReady();

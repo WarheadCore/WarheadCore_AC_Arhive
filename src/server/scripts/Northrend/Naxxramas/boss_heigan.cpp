@@ -157,7 +157,7 @@ public:
             {
                 if (who->GetGUID() == me->GetGUID())
                     EnterEvadeMode();
-                
+
                 return false;
             }
 

@@ -343,7 +343,7 @@ public:
                 case EVENT_SPELL_SHADOW_BOLT:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 42.0f, true) )
                         me->CastSpell(target, SPELL_SHADOW_BOLT, false);
-                    events.RepeatEvent(2500ms);                   
+                    events.RepeatEvent(2500ms);
                     break;
                 case EVENT_SPELL_DEBILITATE:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 45.0f, true) )

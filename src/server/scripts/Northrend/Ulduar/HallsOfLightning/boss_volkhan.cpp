@@ -296,11 +296,11 @@ public:
                     events.RepeatEvent(1s);
                     return;
                 case EVENT_SHATTER:
-                {
-                    events.RepeatEvent(10s);
-                    summons.DoAction(ACTION_SHATTER);
-                    break;
-                }
+                    {
+                        events.RepeatEvent(10s);
+                        summons.DoAction(ACTION_SHATTER);
+                        break;
+                    }
                 case EVENT_MOVE_TO_ANVIL:
                     GetNextPos();
                     me->GetMotionMaster()->MovePoint(PointID, x, y, z);
@@ -310,7 +310,7 @@ public:
                         EnterEvadeMode();
                     else
                         events.RepeatEvent(4s);
-                
+
                     return;
             }
 
@@ -557,11 +557,11 @@ public:
                     events.RepeatEvent(12s);
                     break;
                 case EVENT_THROW:
-                    me->CastSpell(SelectTarget(SELECT_TARGET_RANDOM,0,50.0f, true,0), me->GetMap()->IsHeroic() ? SPELL_THROW_H : SPELL_THROW_N, true);
+                    me->CastSpell(SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true, 0), me->GetMap()->IsHeroic() ? SPELL_THROW_H : SPELL_THROW_N, true);
                     events.RepeatEvent(10s, 25s);
                     break;
                 case EVENT_DEADLY_THROW:
-                    me->CastSpell(SelectTarget(SELECT_TARGET_RANDOM,0,50.0f, true,0), me->GetMap()->IsHeroic() ? SPELL_DEADLY_THROW_H : SPELL_DEADLY_THROW_N, true);
+                    me->CastSpell(SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true, 0), me->GetMap()->IsHeroic() ? SPELL_DEADLY_THROW_H : SPELL_DEADLY_THROW_N, true);
                     events.RepeatEvent(15s, 30s);
                     break;
                 case EVENT_DEFLECTION:

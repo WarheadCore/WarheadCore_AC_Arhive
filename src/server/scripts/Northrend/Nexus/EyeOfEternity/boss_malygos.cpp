@@ -451,7 +451,7 @@ public:
                             c->AI()->DoAction(1);
                             c->AI()->Talk(EMOTE_POWER_SPARK);
                         }
-                        
+
                         events.RepeatEvent(20s, 30s);
                     }
                     break;

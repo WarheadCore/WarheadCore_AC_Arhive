@@ -182,7 +182,7 @@ public:
                     break;
                 case EVENT_SUMMON_TRAVELER:
                     spawnVoidTraveler();
-                    events.RepeatEvent(HealthBelowPct(20) ? 5s: 10s);
+                    events.RepeatEvent(HealthBelowPct(20) ? 5s : 10s);
                     break;
                 case EVENT_SPELL_DRAWSHADOWS:
                     {
@@ -197,10 +197,10 @@ public:
                         me->CastSpell(me, SPELL_DRAW_SHADOWS, true);
                         me->CastSpell(me, SPELL_RAIN_OF_FIRE_N);
 
-                    events.Repeat(24s);
-                    events.DelayEvents(6s);
-                    break;
-                }
+                        events.Repeat(24s);
+                        events.DelayEvents(6s);
+                        break;
+                    }
             }
 
             DoMeleeAttackIfReady();

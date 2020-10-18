@@ -743,15 +743,15 @@ public:
                         if (Unit* tgt = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             me->CastSpell(tgt, SPELL_DRP_CHARGE, false);
 
-                    events.RepeatEvent(10s);
-                    break;
-                }
+                        events.RepeatEvent(10s);
+                        break;
+                    }
                 case EVENT_DRP_CLEAVE:
-                {
-                    me->CastSpell(me->GetVictim(), SPELL_DRP_CLEAVE, false);
-                    events.RepeatEvent(7s);
-                    break;
-                }
+                    {
+                        me->CastSpell(me->GetVictim(), SPELL_DRP_CLEAVE, false);
+                        events.RepeatEvent(7s);
+                        break;
+                    }
             }
 
             DoMeleeAttackIfReady();
@@ -797,17 +797,17 @@ public:
             switch (events.ExecuteEvent())
             {
                 case EVENT_DRS_LIGHTNING_BOLD:
-                {
-                    me->CastSpell(me->GetVictim(), IsHeroic() ? SPELL_DRS_LIGHTING_BOLT_H : SPELL_DRS_LIGHTING_BOLT, false);
-                    events.RepeatEvent(5s);
-                    break;
-                }
+                    {
+                        me->CastSpell(me->GetVictim(), IsHeroic() ? SPELL_DRS_LIGHTING_BOLT_H : SPELL_DRS_LIGHTING_BOLT, false);
+                        events.RepeatEvent(5s);
+                        break;
+                    }
                 case EVENT_DRS_SHADOW_WORD_PAIN:
-                {
-                    me->CastSpell(me->GetVictim(), IsHeroic() ? SPELL_DRS_SHADOW_WORD_PAIN_H : SPELL_DRS_SHADOW_WORD_PAIN, false);
-                    events.RepeatEvent(12s);
-                    break;
-                }
+                    {
+                        me->CastSpell(me->GetVictim(), IsHeroic() ? SPELL_DRS_SHADOW_WORD_PAIN_H : SPELL_DRS_SHADOW_WORD_PAIN, false);
+                        events.RepeatEvent(12s);
+                        break;
+                    }
             }
 
             DoMeleeAttackIfReady();
@@ -851,17 +851,17 @@ public:
             switch (events.ExecuteEvent())
             {
                 case EVENT_IGC_CRUSH:
-                {
-                    me->CastSpell(me->GetVictim(), SPELL_IGC_CRUSH_ARMOR, false);
-                    events.RepeatEvent(6s);
-                    break;
-                }
+                    {
+                        me->CastSpell(me->GetVictim(), SPELL_IGC_CRUSH_ARMOR, false);
+                        events.RepeatEvent(6s);
+                        break;
+                    }
                 case EVENT_IGC_GROUND_SMASH:
-                {
-                    me->CastSpell(me->GetVictim(), IsHeroic() ? SPELL_IGC_GROUND_SMASH_H : SPELL_IGC_GROUND_SMASH, false);
-                    events.RepeatEvent(5s);
-                    break;
-                }
+                    {
+                        me->CastSpell(me->GetVictim(), IsHeroic() ? SPELL_IGC_GROUND_SMASH_H : SPELL_IGC_GROUND_SMASH, false);
+                        events.RepeatEvent(5s);
+                        break;
+                    }
             }
 
             DoMeleeAttackIfReady();

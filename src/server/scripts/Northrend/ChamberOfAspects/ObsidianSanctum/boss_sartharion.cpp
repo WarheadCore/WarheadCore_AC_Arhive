@@ -444,7 +444,7 @@ public:
                         EnterEvadeMode();
 
                     events.RepeatEvent(1s);
-                break;
+                    break;
                 case EVENT_SARTHARION_SUMMON_LAVA:
                     if (!urand(0, 3))
                         Talk(SAY_SARTHARION_SPECIAL);
@@ -513,8 +513,8 @@ void boss_sartharion::boss_sartharionAI::HandleSartharionAbilities()
                         }
                 }
 
-            events.RepeatEvent(20s);
-            break;
+                events.RepeatEvent(20s);
+                break;
             }
         case EVENT_SARTHARION_HEALTH_CHECK:
             if (dragonsCount && !usedBerserk && me->HealthBelowPct(36))

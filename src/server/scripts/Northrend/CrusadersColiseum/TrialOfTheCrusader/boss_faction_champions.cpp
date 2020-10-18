@@ -117,7 +117,7 @@ struct boss_faction_championsAI : public ScriptedAI
         }
     }
 
-    void EventMapGCD(EventMap &e, uint32 delay)
+    void EventMapGCD(EventMap& e, uint32 delay)
     {
         e.DelayEvents(Milliseconds(delay));
     }
@@ -2123,7 +2123,7 @@ public:
                     EventMapGCD(events, 1500);
                     break;
                 case EVENT_SUMMON_TOTEM:
-                    me->CastSpell((Unit*)NULL, RAND(SPELL_GROUNDING_TOTEM,SPELL_WINDFURY_TOTEM,SPELL_TREMOR_TOTEM), false);
+                    me->CastSpell((Unit*)NULL, RAND(SPELL_GROUNDING_TOTEM, SPELL_WINDFURY_TOTEM, SPELL_TREMOR_TOTEM), false);
                     events.RepeatEvent(30s);
                     EventMapGCD(events, 1500);
                     break;

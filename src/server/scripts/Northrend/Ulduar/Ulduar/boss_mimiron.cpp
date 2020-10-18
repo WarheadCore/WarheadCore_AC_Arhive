@@ -408,7 +408,7 @@ public:
                     events.ScheduleEvent(EVENT_COMPUTER_SAY_MINUTES, 1min * (i + 1));
 
                 Milliseconds computerSay = Milliseconds(TALK_COMPUTER_ZERO - minutesTalkNum) * Milliseconds(1min).count() + 6s;
-                
+
                 events.ScheduleEvent(EVENT_COMPUTER_SAY_MINUTES, computerSay);
             }
 

@@ -134,23 +134,23 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-                switch (events.GetEvent())
-                {
-                    case EVENT_BURNING_BREATH:
-                        rotateTimer = 1500;
-                        me->CastSpell(me, SPELL_BURNING_BREATH, false);
-                        events.RepeatEvent(45s);
-                        break;
-                    case EVENT_METEOR_FISTS:
-                        me->CastSpell(me, SPELL_METEOR_FISTS, true);
-                        events.RepeatEvent(45s);
-                        break;
-                    case EVENT_FLAME_CINDER:
-                        me->CastSpell(me, SPELL_FLAMING_CINDER, true);
-                        events.RepeatEvent(30s);
-                        break;
-                    default:
-                        break;
+            switch (events.GetEvent())
+            {
+                case EVENT_BURNING_BREATH:
+                    rotateTimer = 1500;
+                    me->CastSpell(me, SPELL_BURNING_BREATH, false);
+                    events.RepeatEvent(45s);
+                    break;
+                case EVENT_METEOR_FISTS:
+                    me->CastSpell(me, SPELL_METEOR_FISTS, true);
+                    events.RepeatEvent(45s);
+                    break;
+                case EVENT_FLAME_CINDER:
+                    me->CastSpell(me, SPELL_FLAMING_CINDER, true);
+                    events.RepeatEvent(30s);
+                    break;
+                default:
+                    break;
             }
 
             DoMeleeAttackIfReady();

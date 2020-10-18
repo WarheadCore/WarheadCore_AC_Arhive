@@ -313,9 +313,9 @@ public:
                         if (fail)
                             EnterEvadeMode();
 
-                    events.RepeatEvent(5s);
-                    break;
-                }
+                        events.RepeatEvent(5s);
+                        break;
+                    }
             }
         }
     };

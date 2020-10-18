@@ -728,7 +728,7 @@ public:
                         if (GetArenaPlayer())
                         {
                             // Player found, repeat and return
-                        events.RepeatEvent(5s);
+                            events.RepeatEvent(5s);
                             return;
                         }
 
@@ -913,7 +913,7 @@ public:
                     events.RepeatEvent(30s);
                     return;
                 case EVENT_SIF_FROST_NOVA_START:
-                    me->NearTeleportTo(2108+urand(0, 42), -238-irand(0,46), 420.02f, me->GetAngle(&Middle));
+                    me->NearTeleportTo(2108 + urand(0, 42), -238 - irand(0, 46), 420.02f, me->GetAngle(&Middle));
                     events.Repeat(20s);
                     events.DelayEvents(5001ms);
                     events.ScheduleEvent(EVENT_SIF_FROST_NOVA_CAST, 2500ms);

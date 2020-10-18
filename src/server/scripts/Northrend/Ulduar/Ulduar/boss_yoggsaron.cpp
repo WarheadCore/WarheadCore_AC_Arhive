@@ -772,13 +772,13 @@ public:
                     InformCloud();
                     break;
                 case EVENT_SARA_P1_SPELLS:
-                {
-                    uint32 spell = RAND(SPELL_SARAS_ANGER_TARGET_SELECTOR, SPELL_SARAS_BLESSING_TARGET_SELECTOR, SPELL_SARAS_FAVOR_TARGET_SELECTOR);
-                    me->CastSpell(me, spell, false);
-                    SpellSounds();
-                    events.RepeatEvent(me->GetMap()->Is25ManRaid() ? randtime(0s, 3s) : randtime(4s, 6s));
-                    break;
-                }
+                    {
+                        uint32 spell = RAND(SPELL_SARAS_ANGER_TARGET_SELECTOR, SPELL_SARAS_BLESSING_TARGET_SELECTOR, SPELL_SARAS_FAVOR_TARGET_SELECTOR);
+                        me->CastSpell(me, spell, false);
+                        SpellSounds();
+                        events.RepeatEvent(me->GetMap()->Is25ManRaid() ? randtime(0s, 3s) : randtime(4s, 6s));
+                        break;
+                    }
                 case EVENT_SARA_P2_START:
                     {
                         EntryCheckPredicate pred(NPC_YOGG_SARON);
@@ -819,13 +819,13 @@ public:
                     events.RepeatEvent(30s);
                     break;
                 case EVENT_SARA_P2_OPEN_PORTALS:
-                {
-                    AddPortals();
-                    EntryCheckPredicate pred(NPC_YOGG_SARON);
-                    summons.DoAction(ACTION_YOGG_SARON_OPEN_PORTAL_YELL, pred);
-                    events.RepeatEvent(80s);
-                    break;
-                }
+                    {
+                        AddPortals();
+                        EntryCheckPredicate pred(NPC_YOGG_SARON);
+                        summons.DoAction(ACTION_YOGG_SARON_OPEN_PORTAL_YELL, pred);
+                        events.RepeatEvent(80s);
+                        break;
+                    }
                 case EVENT_SARA_P2_REMOVE_STUN:
                     {
                         me->RemoveAura(SPELL_SHATTERED_ILLUSION);

@@ -336,7 +336,7 @@ struct boss_twin_valkyrAI : public ScriptedAI
                 }
                 break;
             case EVENT_SPELL_SPIKE:
-                me->CastSpell(me->GetVictim(), me->GetEntry()==NPC_LIGHTBANE ? SPELL_LIGHT_TWIN_SPIKE : SPELL_DARK_TWIN_SPIKE, false);
+                me->CastSpell(me->GetVictim(), me->GetEntry() == NPC_LIGHTBANE ? SPELL_LIGHT_TWIN_SPIKE : SPELL_DARK_TWIN_SPIKE, false);
                 events.RepeatEvent(7s, 10s);
                 break;
             case EVENT_SPELL_TOUCH:
@@ -381,7 +381,7 @@ struct boss_twin_valkyrAI : public ScriptedAI
                     }
 
                     std::vector<uint64> tList;
-                    Map::PlayerList const &pList = me->GetMap()->GetPlayers();
+                    Map::PlayerList const& pList = me->GetMap()->GetPlayers();
 
                     if (pList.getSize())
                     {
@@ -394,7 +394,7 @@ struct boss_twin_valkyrAI : public ScriptedAI
                         if (!tList.empty())
                             if (Player* target = ObjectAccessor::GetPlayer(*me, tList[urand(0, tList.size() - 1)]))
                             {
-                                me->CastSpell(target, me->GetEntry()==NPC_LIGHTBANE ? SPELL_LIGHT_TOUCH : SPELL_DARK_TOUCH, false);
+                                me->CastSpell(target, me->GetEntry() == NPC_LIGHTBANE ? SPELL_LIGHT_TOUCH : SPELL_DARK_TOUCH, false);
                                 events.RepeatEvent(45s, 50s);
                                 break;
                             }

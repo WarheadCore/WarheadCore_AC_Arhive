@@ -193,13 +193,13 @@ public:
                         break;
                     }
                 case EVENT_BROOD_RAGE:
-                {
-                    if (Creature *pSwarmer = me->FindNearestCreature(NPC_AHNKAHAR_SWARMER, 40, true))
-                        me->CastSpell(pSwarmer, SPELL_BROOD_RAGE_H, true);
-                    
-                    events.RepeatEvent(10s);
-                    break;
-                }
+                    {
+                        if (Creature* pSwarmer = me->FindNearestCreature(NPC_AHNKAHAR_SWARMER, 40, true))
+                            me->CastSpell(pSwarmer, SPELL_BROOD_RAGE_H, true);
+
+                        events.RepeatEvent(10s);
+                        break;
+                    }
                 case EVENT_PLAGUE:
                     {
                         me->CastSpell(me->GetVictim(), DUNGEON_MODE(SPELL_BROOD_PLAGUE, SPELL_BROOD_PLAGUE_H), false);

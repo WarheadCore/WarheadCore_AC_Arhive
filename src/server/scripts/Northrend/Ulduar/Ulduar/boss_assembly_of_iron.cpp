@@ -517,10 +517,10 @@ public:
                         if (!target || !target->IsAlive())
                             target = me;
 
-                    me->CastSpell(target, SPELL_RUNE_OF_POWER, true);
-                    events.RepeatEvent(1min);
-                    break;
-                }
+                        me->CastSpell(target, SPELL_RUNE_OF_POWER, true);
+                        events.RepeatEvent(1min);
+                        break;
+                    }
                 case EVENT_SHIELD_OF_RUNES:
                     me->CastSpell(me, SPELL_SHIELD_OF_RUNES, false);
                     events.RescheduleEvent(EVENT_SHIELD_OF_RUNES, 27s, 34s);
@@ -799,8 +799,8 @@ public:
                 case EVENT_LIGHTNING_TENDRILS:
                     {
                         // Reschedule old
-                    events.RepeatEvent(35s);
-                    events.DelayEvents(18000);
+                        events.RepeatEvent(35s);
+                        events.DelayEvents(18000);
                         Talk(SAY_BRUNDIR_FLIGHT);
 
                         _flyPhase = true;
