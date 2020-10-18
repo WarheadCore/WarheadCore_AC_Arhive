@@ -216,7 +216,7 @@ public:
 
             if (uint32 spellId = events.ExecuteEvent())
             {
-                events.RescheduleEvent(spellId, spellId == 59637 ? 6500 : 2500);
+                events.RescheduleEvent(spellId, spellId == 59637 ? 6500ms : 2500ms);
                 me->CastSpell(me->GetVictim(), spellId, false);
             }
         }
