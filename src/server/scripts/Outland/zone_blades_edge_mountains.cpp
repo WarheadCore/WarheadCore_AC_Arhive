@@ -676,11 +676,11 @@ public:
             else if (type == clusterIds[SIMON_YELLOW])
                 pressedColor = SIMON_YELLOW;
 
-                PlayColor(pressedColor);
-                playerSequence.push_back(pressedColor);
-                _events.ScheduleEvent(EVENT_SIMON_RESET_CLUSTERS, 500ms);
-                CheckPlayerSequence();
-            }
+            PlayColor(pressedColor);
+            playerSequence.push_back(pressedColor);
+            _events.ScheduleEvent(EVENT_SIMON_RESET_CLUSTERS, 500ms);
+            CheckPlayerSequence();
+        }
 
         // Used for getting involved player guid. Parameter id is used for defining if is a large(Monument) or small(Relic) node
         void SetGUID(uint64 guid, int32 id)
@@ -764,9 +764,9 @@ public:
                 }
             }
 
-                _events.Reset();
-                _events.ScheduleEvent(EVENT_SIMON_ROUND_FINISHED, 1s);
-                _events.ScheduleEvent(EVENT_SIMON_PERIODIC_PLAYER_CHECK, 2s);
+            _events.Reset();
+            _events.ScheduleEvent(EVENT_SIMON_ROUND_FINISHED, 1s);
+            _events.ScheduleEvent(EVENT_SIMON_PERIODIC_PLAYER_CHECK, 2s);
 
             if (GameObject* relic = me->FindNearestGameObject(large ? GO_APEXIS_MONUMENT : GO_APEXIS_RELIC, searchDistance))
                 relic->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);

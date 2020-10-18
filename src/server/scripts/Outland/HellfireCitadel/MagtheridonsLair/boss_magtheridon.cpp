@@ -175,27 +175,27 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-                switch (events.ExecuteEvent())
-                {
-                    case EVENT_EMOTE1:
-                        Talk(SAY_EMOTE_BEGIN);
-                        break;
-                    case EVENT_EMOTE2:
-                        Talk(SAY_EMOTE_NEARLY);
-                        break;
-                    case EVENT_EMOTE3:
-                        Talk(SAY_EMOTE_FREE);
-                        Talk(SAY_FREE);
-                        break;
-                    case EVENT_ENTER_COMBAT:
-                        me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE|UNIT_FLAG_IMMUNE_TO_PC);
-                        me->SetReactState(REACT_AGGRESSIVE);
-                        events.ScheduleEvent(EVENT_CLEAVE, 9s);
-                        events.ScheduleEvent(EVENT_BLAST_NOVA, 1min);
-                        events.ScheduleEvent(EVENT_BLAZE, 10s);
-                        events.ScheduleEvent(EVENT_QUAKE, 40s);
-                        events.ScheduleEvent(EVENT_CHECK_HEALTH, 500ms);
-                        events.ScheduleEvent(EVENT_ENRAGE, 22min);
+            switch (events.ExecuteEvent())
+            {
+                case EVENT_EMOTE1:
+                    Talk(SAY_EMOTE_BEGIN);
+                    break;
+                case EVENT_EMOTE2:
+                    Talk(SAY_EMOTE_NEARLY);
+                    break;
+                case EVENT_EMOTE3:
+                    Talk(SAY_EMOTE_FREE);
+                    Talk(SAY_FREE);
+                    break;
+                case EVENT_ENTER_COMBAT:
+                    me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_IMMUNE_TO_PC);
+                    me->SetReactState(REACT_AGGRESSIVE);
+                    events.ScheduleEvent(EVENT_CLEAVE, 9s);
+                    events.ScheduleEvent(EVENT_BLAST_NOVA, 1min);
+                    events.ScheduleEvent(EVENT_BLAZE, 10s);
+                    events.ScheduleEvent(EVENT_QUAKE, 40s);
+                    events.ScheduleEvent(EVENT_CHECK_HEALTH, 500ms);
+                    events.ScheduleEvent(EVENT_ENRAGE, 22min);
 
                     instance->SetData(DATA_ACTIVATE_CUBES, 1);
                     me->RemoveAurasDueToSpell(SPELL_SHADOW_CAGE);

@@ -83,15 +83,15 @@ public:
             Talk(SAY_AGGRO);
             me->SetInCombatWithZone();
 
-                events.ScheduleEvent(EVENT_SUMMON_IMAGE1, 1s);
-                events.ScheduleEvent(EVENT_SUMMON_IMAGE2, 1s);
-                events.ScheduleEvent(EVENT_SPELL_MIND_REND, 10s);
-                events.ScheduleEvent(EVENT_SPELL_FEAR, 15s);
-                events.ScheduleEvent(EVENT_SPELL_DOMINATION, 30s);
+            events.ScheduleEvent(EVENT_SUMMON_IMAGE1, 1s);
+            events.ScheduleEvent(EVENT_SUMMON_IMAGE2, 1s);
+            events.ScheduleEvent(EVENT_SPELL_MIND_REND, 10s);
+            events.ScheduleEvent(EVENT_SPELL_FEAR, 15s);
+            events.ScheduleEvent(EVENT_SPELL_DOMINATION, 30s);
 
-                if (IsHeroic())
-                    events.ScheduleEvent(EVENT_SPELL_MANA_BURN, 25s);
-            }
+            if (IsHeroic())
+                events.ScheduleEvent(EVENT_SPELL_MANA_BURN, 25s);
+        }
 
         void JustDied(Unit* /*killer*/)
         {

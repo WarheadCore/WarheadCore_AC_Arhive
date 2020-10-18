@@ -82,7 +82,7 @@ public:
             events.ScheduleEvent(EVENT_SPELL_MURMURS_TOUCH, 8s, 20s);
             events.ScheduleEvent(EVENT_SPELL_RESONANCE, 5s);
             events.ScheduleEvent(EVENT_SPELL_MAGNETIC, 15s, 30s);
-            
+
             if (IsHeroic())
             {
                 events.ScheduleEvent(EVENT_SPELL_THUNDERING, 15s);

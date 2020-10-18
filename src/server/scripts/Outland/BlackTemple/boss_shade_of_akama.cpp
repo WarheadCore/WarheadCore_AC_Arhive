@@ -99,7 +99,7 @@ public:
     {
         boss_shade_of_akamaAI(Creature* creature) : BossAI(creature, DATA_SHADE_OF_AKAMA), summonsChanneler(me), summonsGenerator(me)
         {
-                events2.ScheduleEvent(EVENT_SHADE_GATHER_NPCS, 1s);
+            events2.ScheduleEvent(EVENT_SHADE_GATHER_NPCS, 1s);
         }
 
         SummonList summonsChanneler;
@@ -131,14 +131,14 @@ public:
             me->SetWalk(true);
         }
 
-            void EnterEvadeMode()
-            {
-                BossAI::EnterEvadeMode();
-                summonsGenerator.DoAction(ACTION_DESPAWN_ALL);
-                events2.ScheduleEvent(EVENT_SHADE_RESET_ENCOUNTER, 20s);
-                me->SetVisible(false);
-                ChannelersAction(ACTION_KILL_CHANNELERS);                   
-            }
+        void EnterEvadeMode()
+        {
+            BossAI::EnterEvadeMode();
+            summonsGenerator.DoAction(ACTION_DESPAWN_ALL);
+            events2.ScheduleEvent(EVENT_SHADE_RESET_ENCOUNTER, 20s);
+            me->SetVisible(false);
+            ChannelersAction(ACTION_KILL_CHANNELERS);
+        }
 
         void JustDied(Unit* killer)
         {

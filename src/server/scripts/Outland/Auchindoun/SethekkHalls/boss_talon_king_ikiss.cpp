@@ -91,7 +91,7 @@ public:
             events.ScheduleEvent(EVENT_SPELL_ARCANE_VOLLEY, 5s);
             events.ScheduleEvent(EVENT_SPELL_POLYMORPH, 8s);
             events.ScheduleEvent(EVENT_HEALTH_CHECK, 2s);
-            
+
             if (IsHeroic())
                 events.ScheduleEvent(EVENT_SPELL_SLOW, 15s, 25s);
         }

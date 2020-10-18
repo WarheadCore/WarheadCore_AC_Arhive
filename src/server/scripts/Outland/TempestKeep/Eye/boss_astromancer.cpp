@@ -111,12 +111,12 @@ public:
             BossAI::EnterCombat(who);
             me->CallForHelp(105.0f);
 
-                events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
-                events.ScheduleEvent(EVENT_SPELL_ARCANE_MISSILES, 3s);
-                events.ScheduleEvent(EVENT_SPELL_WRATH_OF_ASTROMANCER, 1s);
-                events.ScheduleEvent(EVENT_SPELL_BLINDING_LIGHT, 40s);
-                events.ScheduleEvent(EVENT_SPAWN_PORTALS, 50s);
-            }
+            events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
+            events.ScheduleEvent(EVENT_SPELL_ARCANE_MISSILES, 3s);
+            events.ScheduleEvent(EVENT_SPELL_WRATH_OF_ASTROMANCER, 1s);
+            events.ScheduleEvent(EVENT_SPELL_BLINDING_LIGHT, 40s);
+            events.ScheduleEvent(EVENT_SPAWN_PORTALS, 50s);
+        }
 
         void JustSummoned(Creature* summon)
         {

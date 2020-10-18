@@ -77,16 +77,16 @@ public:
         }
 
 
-            void EnterCombat(Unit* /*who*/)
-            {
-                _EnterCombat();
-                Talk(SAY_AGGRO);
-                events.ScheduleEvent(EVENT_SACRIFICE, 6s);
-                events.ScheduleEvent(EVENT_HELLFIRE, 18s);
-                events.ScheduleEvent(EVENT_ENRAGE, 15s);
-                events.ScheduleEvent(EVENT_HEALTH_CHECK_50, 500ms);
-                events.ScheduleEvent(EVENT_HEALTH_CHECK_20, 500ms);
-            }
+        void EnterCombat(Unit* /*who*/)
+        {
+            _EnterCombat();
+            Talk(SAY_AGGRO);
+            events.ScheduleEvent(EVENT_SACRIFICE, 6s);
+            events.ScheduleEvent(EVENT_HELLFIRE, 18s);
+            events.ScheduleEvent(EVENT_ENRAGE, 15s);
+            events.ScheduleEvent(EVENT_HEALTH_CHECK_50, 500ms);
+            events.ScheduleEvent(EVENT_HEALTH_CHECK_20, 500ms);
+        }
 
         void KilledUnit(Unit* victim)
         {

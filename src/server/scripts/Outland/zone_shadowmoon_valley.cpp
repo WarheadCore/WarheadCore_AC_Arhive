@@ -688,15 +688,15 @@ public:
 
             switch (events.ExecuteEvent())
             {
-            case EVENT_KICK:
-                if (me->GetVictim()->HasUnitState(SPELL_STATE_CASTING))
-                    DoCastVictim(SPELL_KICK);
-                events.RepeatEvent(5s, 10s);
-                break;
-            case EVENT_SUNDER:
-                DoCastVictim(SPELL_SUNDER);
-                events.RepeatEvent(5s, 10s);
-                break;
+                case EVENT_KICK:
+                    if (me->GetVictim()->HasUnitState(SPELL_STATE_CASTING))
+                        DoCastVictim(SPELL_KICK);
+                    events.RepeatEvent(5s, 10s);
+                    break;
+                case EVENT_SUNDER:
+                    DoCastVictim(SPELL_SUNDER);
+                    events.RepeatEvent(5s, 10s);
+                    break;
             }
 
             DoMeleeAttackIfReady();

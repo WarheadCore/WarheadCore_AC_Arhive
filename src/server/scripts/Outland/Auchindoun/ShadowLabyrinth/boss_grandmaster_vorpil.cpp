@@ -144,7 +144,7 @@ public:
             events.ScheduleEvent(EVENT_SPELL_SHADOWBOLT, 7s, 14s);
             events.ScheduleEvent(EVENT_SPELL_DRAWSHADOWS, 45s);
             events.ScheduleEvent(EVENT_SUMMON_TRAVELER, 5s);
-            
+
             if (IsHeroic())
                 events.ScheduleEvent(EVENT_SPELL_BANISH, 17s);
 
