@@ -133,7 +133,7 @@ public:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         me->CastSpell(target, SPELL_CHAIN_LIGHTNING, false);
                     events.DelayEvents(3s);
-                    events.Repeat(9s);
+                    events.RepeatEvent(9s);
                     break;
                 case EVENT_SPELL_STATIC:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 30, true))
