@@ -737,7 +737,7 @@ public:
 
                         if (Unit* trigger = getTrigger())
                             me->CastSpell(trigger, SPELL_START_FIRE, true);
-                        events.RepeatEvent(12000);
+                        events.RepeatEvent(12s);
                         break;
                     }
             }
@@ -1144,7 +1144,7 @@ public:
                                 talkCount = 0;
                                 return; // pop and return, skip repeat
                         }
-                        events.RepeatEvent(2000);
+                        events.RepeatEvent(2s);
                         break;
                     }
                 case EVENT_HORSEMAN_FOLLOW:
@@ -1160,7 +1160,7 @@ public:
                 case EVENT_HORSEMAN_CLEAVE:
                     {
                         me->CastSpell(me->GetVictim(), SPELL_HORSEMAN_CLEAVE, false);
-                        events.RepeatEvent(8000);
+                        events.RepeatEvent(8s);
                         break;
                     }
                 case EVENT_HORSEMAN_WHIRLWIND:
@@ -1168,11 +1168,11 @@ public:
                         if (me->HasAuraEffect(SPELL_HORSEMAN_WHIRLWIND, EFFECT_0))
                         {
                             me->RemoveAura(SPELL_HORSEMAN_WHIRLWIND);
-                            events.RepeatEvent(15000);
+                            events.RepeatEvent(15s);
                             break;
                         }
                         me->CastSpell(me, SPELL_HORSEMAN_WHIRLWIND, true);
-                        events.RepeatEvent(6000);
+                        events.RepeatEvent(6s);
                         break;
                     }
                 case EVENT_HORSEMAN_CHECK_HEALTH:
@@ -1183,7 +1183,7 @@ public:
                             return;
                         }
 
-                        events.RepeatEvent(1000);
+                        events.RepeatEvent(1s);
                         break;
                     }
                 case EVENT_HORSEMAN_CONFLAGRATION:
@@ -1191,14 +1191,14 @@ public:
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             me->CastSpell(target, SPELL_HORSEMAN_CONFLAGRATION, false);
 
-                        events.RepeatEvent(12500);
+                        events.RepeatEvent(12500ms);
                         break;
                     }
                 case EVENT_SUMMON_PUMPKIN:
                     {
                         if (talkCount < 4)
                         {
-                            events.RepeatEvent(1);
+                            events.RepeatEvent(10ms);
                             talkCount++;
                             me->CastSpell(me, SPELL_SUMMON_PUMPKIN, false);
                         }
@@ -1206,7 +1206,7 @@ public:
                         {
                             me->MonsterSay("Soldiers arise, stand and fight! Bring victory at last to this fallen knight!", LANG_UNIVERSAL, 0);
                             me->PlayDirectSound(SOUND_SPROUT);
-                            events.RepeatEvent(15000);
+                            events.RepeatEvent(15s);
                             talkCount = 0;
                         }
 
