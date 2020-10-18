@@ -282,15 +282,15 @@ public:
                             me->CastSpell(c, SPELL_SLIME_SPRAY, false);
                         }
                     }
-                    events.DelayEvents(1);
-                    events.ScheduleEvent(EVENT_SLIME_SPRAY, 20000);
-                    events.ScheduleEvent(EVENT_UNROOT, 0);
+                    events.DelayEvents(10ms);
+                    events.ScheduleEvent(EVENT_SLIME_SPRAY, 20s);
+                    events.ScheduleEvent(EVENT_UNROOT, 0s);
                     break;
                 case EVENT_HASTEN_INFECTIONS:
-                    if (infectionCooldown >= 8000)
+                    if (infectionCooldown >= 8s)
                     {
-                        infectionCooldown -= 2000;
-                        events.ScheduleEvent(EVENT_HASTEN_INFECTIONS, 90000);
+                        infectionCooldown -= 2s;
+                        events.ScheduleEvent(EVENT_HASTEN_INFECTIONS, 90s);
                     }
                     break;
                 case EVENT_MUTATED_INFECTION:
@@ -305,7 +305,7 @@ public:
                         if (++_oozeFloodStage == 4)
                             _oozeFloodStage = 0;
                     }
-                    events.ScheduleEvent(EVENT_ROTFACE_OOZE_FLOOD, 25000);
+                    events.ScheduleEvent(EVENT_ROTFACE_OOZE_FLOOD, 25s);
                     break;
                 case EVENT_ROTFACE_VILE_GAS:
                     {

@@ -112,12 +112,12 @@ public:
         {
             BossAI::EnterCombat(who);
             me->SetInCombatWithZone();
-            events.ScheduleEvent(EVENT_SPELL_MORTAL_WOUND, 10000);
-            events.ScheduleEvent(EVENT_SPELL_ENRAGE, 30000);
-            events.ScheduleEvent(EVENT_SPELL_DECIMATE, 105000);
-            events.ScheduleEvent(EVENT_SPELL_BERSERK, 8 * 60000);
-            events.ScheduleEvent(EVENT_SUMMON_ZOMBIE, 10000);
-            events.ScheduleEvent(EVENT_CAN_EAT_ZOMBIE, 1000);
+            events.ScheduleEvent(EVENT_SPELL_MORTAL_WOUND, 10s);
+            events.ScheduleEvent(EVENT_SPELL_ENRAGE, 30s);
+            events.ScheduleEvent(EVENT_SPELL_DECIMATE, 105s);
+            events.ScheduleEvent(EVENT_SPELL_BERSERK, 8min);
+            events.ScheduleEvent(EVENT_SUMMON_ZOMBIE, 10s);
+            events.ScheduleEvent(EVENT_CAN_EAT_ZOMBIE, 1s);
         }
 
         void JustSummoned(Creature* summon) override
@@ -179,21 +179,21 @@ public:
             {
                 case EVENT_SPELL_BERSERK:
                     me->CastSpell(me, SPELL_BERSERK, true);
-                    
+
                     break;
                 case EVENT_SPELL_ENRAGE:
                     Talk(EMOTE_ENRAGE);
-                    me->CastSpell(me, RAID_MODE(SPELL_ENRAGE_10, SPELL_ENRAGE_25, SPELL_ENRAGE_10, SPELL_ENRAGE_25), true);
-                    events.RepeatEvent(30000);
+                    me->CastSpell(me, RAID_MODE(SPELL_ENRAGE_10, SPELL_ENRAGE_25), true);
+                    events.RepeatEvent(30s);
                     break;
                 case EVENT_SPELL_MORTAL_WOUND:
                     me->CastSpell(me->GetVictim(), SPELL_MORTAL_WOUND, false);
-                    events.RepeatEvent(10000);
+                    events.RepeatEvent(10s);
                     break;
                 case EVENT_SPELL_DECIMATE:
                     Talk(EMOTE_DECIMATE);
-                    me->CastSpell(me, RAID_MODE(SPELL_DECIMATE_10, SPELL_DECIMATE_25, SPELL_DECIMATE_10, SPELL_DECIMATE_25), false);
-                    events.RepeatEvent(105000);
+                    me->CastSpell(me, RAID_MODE(SPELL_DECIMATE_10, SPELL_DECIMATE_25), false);
+                    events.RepeatEvent(105s);
                     break;
                 case EVENT_SUMMON_ZOMBIE:
                     {
@@ -210,11 +210,11 @@ public:
                             (rand == 2 ? rand = 0 : rand++);
                         }
 
-                        events.RepeatEvent(10000);
+                        events.RepeatEvent(10s);
                         break;
                     }
                 case EVENT_CAN_EAT_ZOMBIE:
-                    events.RepeatEvent(1000);
+                    events.RepeatEvent(1s);
                     if (me->GetVictim()->GetEntry() == NPC_ZOMBIE_CHOW && me->IsWithinMeleeRange(me->GetVictim()))
                     {
                         me->CastCustomSpell(SPELL_CHOW_SEARCHER, SPELLVALUE_RADIUS_MOD, 20000, me, true);
@@ -276,4 +276,3 @@ void AddSC_boss_gluth()
     new boss_gluth();
     new spell_gluth_decimate();
 }
-

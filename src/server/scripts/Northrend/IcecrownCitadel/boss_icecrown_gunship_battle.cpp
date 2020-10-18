@@ -757,11 +757,11 @@ public:
             me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
             me->GetTransport()->setActive(true);
             me->GetTransport()->ToMotionTransport()->EnableMovement(true);
-            _events.ScheduleEvent(EVENT_INTRO_H_1, 5000);
-            _events.ScheduleEvent(EVENT_INTRO_H_2, 16000);
-            _events.ScheduleEvent(EVENT_INTRO_SUMMON_SKYBREAKER, 24600);
-            _events.ScheduleEvent(EVENT_INTRO_H_3, 29600);
-            _events.ScheduleEvent(EVENT_INTRO_H_4, 39200);
+            _events.ScheduleEvent(EVENT_INTRO_H_1, 5s);
+            _events.ScheduleEvent(EVENT_INTRO_H_2, 16s);
+            _events.ScheduleEvent(EVENT_INTRO_SUMMON_SKYBREAKER, 24600ms);
+            _events.ScheduleEvent(EVENT_INTRO_H_3, 29600ms);
+            _events.ScheduleEvent(EVENT_INTRO_H_4, 39200ms);
         }
 
         void EnterCombat(Unit* /*target*/)
@@ -771,7 +771,7 @@ public:
             if (!me->HasAura(SPELL_BATTLE_FURY))
                 me->CastSpell(me, SPELL_BATTLE_FURY, true);
             _events.CancelEvent(EVENT_CLEAVE);
-            _events.ScheduleEvent(EVENT_CLEAVE, urand(3000, 6000));
+            _events.ScheduleEvent(EVENT_CLEAVE, 3s, 6s);
         }
 
         void EnterEvadeMode()
@@ -795,9 +795,9 @@ public:
                     muradin->AI()->DoAction(ACTION_SPAWN_ALL_ADDS);
 
                 Talk(SAY_SAURFANG_INTRO_5);
-                _events.ScheduleEvent(EVENT_INTRO_H_5, 4000);
-                _events.ScheduleEvent(EVENT_INTRO_H_6, 11000);
-                _events.ScheduleEvent(EVENT_KEEP_PLAYER_IN_COMBAT, 1);
+                _events.ScheduleEvent(EVENT_INTRO_H_5, 4s);
+                _events.ScheduleEvent(EVENT_INTRO_H_6, 11s);
+                _events.ScheduleEvent(EVENT_KEEP_PLAYER_IN_COMBAT, 10ms);
 
                 if (Creature* skybreaker = me->FindNearestCreature(NPC_THE_SKYBREAKER, 200.0f))
                     _instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, skybreaker, 1);
@@ -1092,12 +1092,12 @@ public:
             me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
             me->GetTransport()->setActive(true);
             me->GetTransport()->ToMotionTransport()->EnableMovement(true);
-            _events.ScheduleEvent(EVENT_INTRO_A_1, 5000);
-            _events.ScheduleEvent(EVENT_INTRO_A_2, 10000);
-            _events.ScheduleEvent(EVENT_INTRO_SUMMON_ORGRIMS_HAMMER, 28000);
-            _events.ScheduleEvent(EVENT_INTRO_A_3, 33000);
-            _events.ScheduleEvent(EVENT_INTRO_A_4, 39000);
-            _events.ScheduleEvent(EVENT_INTRO_A_5, 45000);
+            _events.ScheduleEvent(EVENT_INTRO_A_1, 5s);
+            _events.ScheduleEvent(EVENT_INTRO_A_2, 10s);
+            _events.ScheduleEvent(EVENT_INTRO_SUMMON_ORGRIMS_HAMMER, 28s);
+            _events.ScheduleEvent(EVENT_INTRO_A_3, 33s);
+            _events.ScheduleEvent(EVENT_INTRO_A_4, 39s);
+            _events.ScheduleEvent(EVENT_INTRO_A_5, 45s);
         }
 
         void EnterCombat(Unit* /*target*/)
@@ -1107,7 +1107,7 @@ public:
             if (!me->HasAura(SPELL_BATTLE_FURY))
                 me->CastSpell(me, SPELL_BATTLE_FURY, true);
             _events.CancelEvent(EVENT_CLEAVE);
-            _events.ScheduleEvent(EVENT_CLEAVE, urand(3000, 6000));
+            _events.ScheduleEvent(EVENT_CLEAVE, 3s, 6s);
         }
 
         void EnterEvadeMode()
@@ -1131,9 +1131,9 @@ public:
                     saurfang->AI()->DoAction(ACTION_SPAWN_ALL_ADDS);
 
                 Talk(SAY_MURADIN_INTRO_6);
-                _events.ScheduleEvent(EVENT_INTRO_A_6, 5000);
-                _events.ScheduleEvent(EVENT_INTRO_A_7, 11000);
-                _events.ScheduleEvent(EVENT_KEEP_PLAYER_IN_COMBAT, 1);
+                _events.ScheduleEvent(EVENT_INTRO_A_6, 5s);
+                _events.ScheduleEvent(EVENT_INTRO_A_7, 11s);
+                _events.ScheduleEvent(EVENT_KEEP_PLAYER_IN_COMBAT, 10ms);
 
                 if (Creature* orgrimsHammer = me->FindNearestCreature(NPC_ORGRIMS_HAMMER, 200.0f))
                     _instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, orgrimsHammer, 1);

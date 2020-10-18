@@ -546,13 +546,13 @@ public:
                         if (!targets.empty())
                             for (std::list<Unit*>::iterator itr = targets.begin(); itr != targets.end(); ++itr)
                                 me->CastSpell(*itr, SPELL_SLIME_PUDDLE_TRIGGER, true);
-                        events.ScheduleEvent(EVENT_SLIME_PUDDLE, 35000, EVENT_GROUP_ABILITIES);
+                        events.ScheduleEvent(EVENT_SLIME_PUDDLE, 35s, EVENT_GROUP_ABILITIES);
                     }
                     break;
                 case EVENT_UNSTABLE_EXPERIMENT:
                     Talk(EMOTE_UNSTABLE_EXPERIMENT);
                     me->CastSpell(me, SPELL_UNSTABLE_EXPERIMENT, false);
-                    events.ScheduleEvent(EVENT_UNSTABLE_EXPERIMENT, urand(35000, 40000), EVENT_GROUP_ABILITIES);
+                    events.ScheduleEvent(EVENT_UNSTABLE_EXPERIMENT, 35s, 40s, EVENT_GROUP_ABILITIES);
                     break;
                 case EVENT_GO_TO_TABLE:
                     me->CastSpell(me, SPELL_TEAR_GAS_PERIODIC_TRIGGER, true);
@@ -565,14 +565,14 @@ public:
                             {
                                 SpellInfo const* spell = sSpellMgr->GetSpellInfo(SPELL_CREATE_CONCOCTION);
                                 me->CastSpell(me, SPELL_CREATE_CONCOCTION, false);
-                                events.ScheduleEvent(EVENT_PHASE_TRANSITION, sSpellMgr->GetSpellForDifficultyFromSpell(spell, me)->CalcCastTime() + 2250);
+                                events.ScheduleEvent(EVENT_PHASE_TRANSITION, Milliseconds(sSpellMgr->GetSpellForDifficultyFromSpell(spell, me)->CalcCastTime()) + 2250ms);
                                 break;
                             }
                         case 3:
                             {
                                 SpellInfo const* spell = sSpellMgr->GetSpellInfo(SPELL_GUZZLE_POTIONS);
                                 me->CastSpell(me, SPELL_GUZZLE_POTIONS, false);
-                                events.ScheduleEvent(EVENT_PHASE_TRANSITION, sSpellMgr->GetSpellForDifficultyFromSpell(spell, me)->CalcCastTime() + 2250);
+                                events.ScheduleEvent(EVENT_PHASE_TRANSITION, Milliseconds(sSpellMgr->GetSpellForDifficultyFromSpell(spell, me)->CalcCastTime()) + 2250ms);
                                 break;
                             }
                         default:

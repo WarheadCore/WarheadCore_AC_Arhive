@@ -86,18 +86,18 @@ public:
                 case EVENT_VOID_ZONE:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 60.0f, true))
                         me->CastSpell(target, SPELL_VOID_ZONE, false);
-                    events.ScheduleEvent(EVENT_VOID_ZONE, 15000);
+                    events.ScheduleEvent(EVENT_VOID_ZONE, 15s);
                     break;
                 case EVENT_SHADOW_NOVA:
                     me->CastSpell(me, SPELL_SHADOW_NOVA, false);
                     if (roll_chance_i(50))
                         Talk(SAY_SHADOW_NOVA);
-                    events.ScheduleEvent(EVENT_SHADOW_NOVA, 12000);
+                    events.ScheduleEvent(EVENT_SHADOW_NOVA, 12s);
                     break;
                 case EVENT_SEED_OF_CORRUPTION:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 30.0f, true))
                         me->CastSpell(target, SPELL_SEED_OF_CORRUPTION, false);
-                    events.ScheduleEvent(EVENT_SEED_OF_CORRUPTION, 16000);
+                    events.ScheduleEvent(EVENT_SEED_OF_CORRUPTION, 16s);
                     break;
             }
 

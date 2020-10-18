@@ -163,7 +163,7 @@ public:
             if (action == ACTION_GUNSHIP_READY)
             {
                 DoCast(me, SPELL_SIMPLE_TELEPORT);
-                _events.ScheduleEvent(EVENT_TALK, 3000);
+                _events.ScheduleEvent(EVENT_TALK, 3s);
             }
         }
 
@@ -175,7 +175,7 @@ public:
                 switch (eventId)
                 {
                     case EVENT_TALK:
-                        _events.ScheduleEvent(EVENT_DESPAWN, 1000);
+                        _events.ScheduleEvent(EVENT_DESPAWN, 1s);
                         Talk(SAY_ONBOARD);
                         DoCast(me, SPELL_TELEPORT_VISUAL_ONLY);
                         break;

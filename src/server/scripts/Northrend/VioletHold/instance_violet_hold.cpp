@@ -20,8 +20,7 @@
 #include "violet_hold.h"
 #include "Player.h"
 
-#define CLEANUP_CHECK_INTERVAL  5000
-#define SPAWN_TIME              20000
+constexpr Seconds CLEANUP_CHECK_INTERVAL = 5s;
 
 enum vYells
 {
@@ -90,7 +89,7 @@ public:
             uiFirstBoss = 0;
             uiSecondBoss = 0;
             events.Reset();
-            events.RescheduleEvent(EVENT_CHECK_PLAYERS, 0);
+            events.RescheduleEvent(EVENT_CHECK_PLAYERS, 0s);
             GateHealth = 100;
             WaveCount = 0;
             PortalLocation = 0;
@@ -241,11 +240,11 @@ public:
                         EncounterStatus = IN_PROGRESS;
                         if (Creature* c = instance->GetCreature(NPC_SinclariGUID))
                             c->AI()->Talk(SAY_SINCLARI_1);
-                        events.RescheduleEvent(EVENT_GUARDS_FALL_BACK, 4000);
+                        events.RescheduleEvent(EVENT_GUARDS_FALL_BACK, 4s);
                     }
                     break;
                 case DATA_PORTAL_DEFEATED:
-                    events.RescheduleEvent(EVENT_SUMMON_PORTAL, 3000);
+                    events.RescheduleEvent(EVENT_SUMMON_PORTAL, 3s);
                     break;
                 case DATA_PORTAL_LOCATION:
                     PortalLocation = data;
@@ -281,7 +280,7 @@ public:
                     }
                     SaveToDB();
                     if (WaveCount < 18)
-                        events.RescheduleEvent(EVENT_SUMMON_PORTAL, 35000);
+                        events.RescheduleEvent(EVENT_SUMMON_PORTAL, 35s);
                     break;
                 case DATA_FAILED:
                     CLEANED = false;
@@ -439,7 +438,7 @@ public:
                                 c->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
                                 c->GetMotionMaster()->MovePoint(0, guardMovePosition);
                             }
-                        events.RescheduleEvent(EVENT_GUARDS_DISAPPEAR, 5000);
+                        events.RescheduleEvent(EVENT_GUARDS_DISAPPEAR, 5s);
                     }
                     break;
                 case EVENT_GUARDS_DISAPPEAR:
@@ -447,7 +446,7 @@ public:
                         for (uint8 i = 0; i < 4; ++i)
                             if (Creature* c = instance->GetCreature(NPC_GuardGUID[i]))
                                 c->SetVisible(false);
-                        events.RescheduleEvent(EVENT_SINCLARI_FALL_BACK, 2000);
+                        events.RescheduleEvent(EVENT_SINCLARI_FALL_BACK, 2s);
                     }
                     break;
                 case EVENT_SINCLARI_FALL_BACK:
@@ -458,7 +457,7 @@ public:
                             c->GetMotionMaster()->MovePoint(0, sinclariOutsidePosition);
                         }
                         SetData(DATA_ACTIVATE_DEFENSE_SYSTEM, 0);
-                        events.RescheduleEvent(EVENT_START_ENCOUNTER, 4000);
+                        events.RescheduleEvent(EVENT_START_ENCOUNTER, 4s);
                     }
                     break;
                 case EVENT_START_ENCOUNTER:
@@ -477,7 +476,7 @@ public:
                                 HandleGameObject(0, false, go); // not used yet
                                 go->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE); // make it useable
                             }
-                        events.RescheduleEvent(EVENT_SUMMON_PORTAL, 4000);
+                        events.RescheduleEvent(EVENT_SUMMON_PORTAL, 4s);
                     }
                     break;
                 case EVENT_SUMMON_PORTAL:
@@ -507,7 +506,7 @@ public:
                                 cyanigosa->AI()->Talk(CYANIGOSA_SAY_SPAWN);
                                 cyanigosa->GetMotionMaster()->MoveJump(MiddleRoomLocation.GetPositionX(), MiddleRoomLocation.GetPositionY(), MiddleRoomLocation.GetPositionZ(), 10.0f, 20.0f);
                             }
-                            events.RescheduleEvent(EVENT_CYANIGOSSA_TRANSFORM, 10000);
+                            events.RescheduleEvent(EVENT_CYANIGOSSA_TRANSFORM, 10s);
                         }
                     }
                     break;
@@ -516,7 +515,7 @@ public:
                     {
                         c->RemoveAurasDueToSpell(SPELL_CYANIGOSA_BLUE_AURA);
                         c->CastSpell(c, SPELL_CYANIGOSA_TRANSFORM, 0);
-                        events.RescheduleEvent(EVENT_CYANIGOSA_ATTACK, 2500);
+                        events.RescheduleEvent(EVENT_CYANIGOSA_ATTACK, 2500ms);
                     }
                     break;
                 case EVENT_CYANIGOSA_ATTACK:
@@ -671,7 +670,7 @@ public:
             EncounterStatus = NOT_STARTED;
             CLEANED = false;
             events.Reset();
-            events.RescheduleEvent(EVENT_CHECK_PLAYERS, 0);
+            events.RescheduleEvent(EVENT_CHECK_PLAYERS, 0s);
 
             if (!in)
             {

@@ -113,11 +113,12 @@ public:
             BossAI::EnterCombat(who);
             Talk(SAY_AGGRO);
 
-            events.ScheduleEvent(EVENT_CLEAVE, 9000);
-            events.ScheduleEvent(EVENT_INTIDMDATING_ROAR, 14000);
-            events.ScheduleEvent(EVENT_SUMMON_ADDS1, 18000);
+            events.ScheduleEvent(EVENT_CLEAVE, 9s);
+            events.ScheduleEvent(EVENT_INTIDMDATING_ROAR, 14s);
+            events.ScheduleEvent(EVENT_SUMMON_ADDS1, 18s);
+
             if (Is25ManRaid())
-                events.ScheduleEvent(EVENT_SUMMON_ADDS2, 20000);
+                events.ScheduleEvent(EVENT_SUMMON_ADDS2, 20s);
         }
 
         void JustSummoned(Creature* summon)
@@ -136,7 +137,7 @@ public:
             if (events.GetNextEventTime(EVENT_KILL_TALK) == 0)
             {
                 Talk(SAY_KILL);
-                events.ScheduleEvent(EVENT_KILL_TALK, 6000);
+                events.ScheduleEvent(EVENT_KILL_TALK, 6s);
             }
         }
 
@@ -214,8 +215,8 @@ public:
         void EnterCombat(Unit* /*who*/)
         {
             _events.Reset();
-            _events.ScheduleEvent(EVENT_BLAST_NOVA, urand(20000, 30000));
-            _events.ScheduleEvent(EVENT_LAVA_GOUT, 5000);
+            _events.ScheduleEvent(EVENT_BLAST_NOVA, 20s, 30s);
+            _events.ScheduleEvent(EVENT_LAVA_GOUT, 5s);
         }
 
         void EnterEvadeMode()

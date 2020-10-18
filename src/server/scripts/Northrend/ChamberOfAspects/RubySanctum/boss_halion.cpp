@@ -225,7 +225,7 @@ public:
             me->SetVisible(false);
             me->SetReactState(REACT_PASSIVE);
             _events2.Reset();
-            _events2.RescheduleEvent(EVENT_HALION_VISIBILITY, 30000);
+            _events2.RescheduleEvent(EVENT_HALION_VISIBILITY, 30s);
         }
 
         void JustSummoned(Creature* summon)
@@ -298,14 +298,14 @@ public:
             Talk(SAY_AGGRO);
             instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me, 1);
 
-            events.ScheduleEvent(EVENT_CLEAVE, urand(8000, 10000));
-            events.ScheduleEvent(EVENT_TAIL_LASH, 10000);
-            events.ScheduleEvent(EVENT_BREATH, urand(10000, 15000));
-            events.ScheduleEvent(EVENT_ACTIVATE_FIREWALL, 5000);
-            events.ScheduleEvent(EVENT_METEOR_STRIKE, urand(20000, 25000));
-            events.ScheduleEvent(EVENT_FIERY_COMBUSTION, urand(15000, 18000));
-            events.ScheduleEvent(EVENT_CHECK_HEALTH, 1000);
-            _events2.ScheduleEvent(EVENT_TRIGGER_BERSERK, 8 * MINUTE * IN_MILLISECONDS);
+            events.ScheduleEvent(EVENT_CLEAVE, 8s, 10s);
+            events.ScheduleEvent(EVENT_TAIL_LASH, 10s);
+            events.ScheduleEvent(EVENT_BREATH, 10s, 15s);
+            events.ScheduleEvent(EVENT_ACTIVATE_FIREWALL, 5s);
+            events.ScheduleEvent(EVENT_METEOR_STRIKE, 20s, 25s);
+            events.ScheduleEvent(EVENT_FIERY_COMBUSTION, 15s, 18s);
+            events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
+            _events2.ScheduleEvent(EVENT_TRIGGER_BERSERK, 8min);
         }
 
         void KilledUnit(Unit* victim)
@@ -313,7 +313,7 @@ public:
             if (victim->GetTypeId() == TYPEID_PLAYER && events.GetNextEventTime(EVENT_KILL_TALK) == 0)
             {
                 Talk(SAY_KILL);
-                events.ScheduleEvent(EVENT_KILL_TALK, 6000);
+                events.ScheduleEvent(EVENT_KILL_TALK, 6s);
             }
         }
 
@@ -376,40 +376,40 @@ public:
             {
                 case EVENT_CLEAVE:
                     me->CastSpell(me->GetVictim(), SPELL_CLEAVE, false);
-                    events.ScheduleEvent(EVENT_CLEAVE, urand(8000, 10000));
+                    events.ScheduleEvent(EVENT_CLEAVE, 8s, 10s);
                     break;
                 case EVENT_TAIL_LASH:
                     me->CastSpell(me, SPELL_TAIL_LASH, false);
-                    events.ScheduleEvent(EVENT_TAIL_LASH, 10000);
+                    events.ScheduleEvent(EVENT_TAIL_LASH, 10s);
                     break;
                 case EVENT_BREATH:
                     me->CastSpell(me->GetVictim(), SPELL_FLAME_BREATH, false);
-                    events.ScheduleEvent(EVENT_BREATH, urand(10000, 12000));
+                    events.ScheduleEvent(EVENT_BREATH, 10s, 12s);
                     break;
                 case EVENT_ACTIVATE_FIREWALL:
-                    instance->HandleGameObject(instance->GetData64(GO_FLAME_RING), false, nullptr);
-                    instance->HandleGameObject(instance->GetData64(GO_TWILIGHT_FLAME_RING), false, nullptr);
+                    instance->HandleGameObject(instance->GetData64(GO_FLAME_RING), false, NULL);
+                    instance->HandleGameObject(instance->GetData64(GO_TWILIGHT_FLAME_RING), false, NULL);
                     break;
                 case EVENT_METEOR_STRIKE:
                     _livingEmberCount = summons.GetEntryCount(NPC_LIVING_EMBER);
                     me->CastCustomSpell(SPELL_METEOR_STRIKE_TARGETING, SPELLVALUE_MAX_TARGETS, 1, me, false);
                     Talk(SAY_METEOR_STRIKE);
-                    events.ScheduleEvent(EVENT_METEOR_STRIKE, 40000);
+                    events.ScheduleEvent(EVENT_METEOR_STRIKE, 40s);
                     break;
                 case EVENT_FIERY_COMBUSTION:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 100.0f, true, -SPELL_TWILIGHT_REALM))
                         me->CastSpell(target, SPELL_FIERY_COMBUSTION, false);
-                    events.ScheduleEvent(EVENT_FIERY_COMBUSTION, 25000);
+                    events.ScheduleEvent(EVENT_FIERY_COMBUSTION, 25s);
                     break;
                 case EVENT_CHECK_HEALTH:
                     if (me->HealthBelowPct(75))
                     {
                         Talk(SAY_PHASE_TWO);
                         me->CastSpell(me, SPELL_TWILIGHT_PHASING, false);
-                        events.DelayEvents(10000);
+                        events.DelayEvents(10s);
                         return;
                     }
-                    events.ScheduleEvent(EVENT_CHECK_HEALTH, 1000);
+                    events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
                     break;
             }
 
@@ -457,16 +457,16 @@ public:
             me->SetReactState(REACT_DEFENSIVE);
         }
 
-        void EnterCombat(Unit*  /*who*/)
+        void EnterCombat(Unit* /*who*/)
         {
             _events.Reset();
-            _events.ScheduleEvent(EVENT_CLEAVE, urand(8000, 10000));
-            _events.ScheduleEvent(EVENT_TAIL_LASH, 10000);
-            _events.ScheduleEvent(EVENT_BREATH, urand(10000, 15000));
-            _events.ScheduleEvent(EVENT_SOUL_CONSUMPTION, 20000);
-            _events.ScheduleEvent(EVENT_SHADOW_PULSARS, 16000);
-            _events.ScheduleEvent(EVENT_SEND_ENCOUNTER_UNIT, 2000);
-            _events.ScheduleEvent(EVENT_CHECK_HEALTH, 1000);
+            _events.ScheduleEvent(EVENT_CLEAVE, 8s, 10s);
+            _events.ScheduleEvent(EVENT_TAIL_LASH, 10s);
+            _events.ScheduleEvent(EVENT_BREATH, 10s, 15s);
+            _events.ScheduleEvent(EVENT_SOUL_CONSUMPTION, 20s);
+            _events.ScheduleEvent(EVENT_SHADOW_PULSARS, 16s);
+            _events.ScheduleEvent(EVENT_SEND_ENCOUNTER_UNIT, 2s);
+            _events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
 
             me->SetInCombatWithZone();
         }

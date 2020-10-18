@@ -190,12 +190,12 @@ public:
                 case EVENT_ENTER_COMBAT:
                     me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_IMMUNE_TO_PC);
                     me->SetReactState(REACT_AGGRESSIVE);
-                    events.ScheduleEvent(EVENT_CLEAVE, 9000);
-                    events.ScheduleEvent(EVENT_BLAST_NOVA, 60000);
-                    events.ScheduleEvent(EVENT_BLAZE, 10000);
-                    events.ScheduleEvent(EVENT_QUAKE, 40000);
-                    events.ScheduleEvent(EVENT_CHECK_HEALTH, 500);
-                    events.ScheduleEvent(EVENT_ENRAGE, 22 * MINUTE * IN_MILLISECONDS);
+                    events.ScheduleEvent(EVENT_CLEAVE, 9s);
+                    events.ScheduleEvent(EVENT_BLAST_NOVA, 1min);
+                    events.ScheduleEvent(EVENT_BLAZE, 10s);
+                    events.ScheduleEvent(EVENT_QUAKE, 40s);
+                    events.ScheduleEvent(EVENT_CHECK_HEALTH, 500ms);
+                    events.ScheduleEvent(EVENT_ENRAGE, 22min);
 
                     instance->SetData(DATA_ACTIVATE_CUBES, 1);
                     me->RemoveAurasDueToSpell(SPELL_SHADOW_CAGE);
@@ -338,4 +338,3 @@ void AddSC_boss_magtheridon()
     new spell_magtheridon_blaze();
     new spell_magtheridon_shadow_grasp();
 }
-

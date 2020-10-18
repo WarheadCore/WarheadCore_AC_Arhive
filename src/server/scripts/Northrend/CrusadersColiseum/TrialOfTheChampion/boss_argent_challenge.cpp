@@ -129,8 +129,8 @@ public:
         void EnterCombat(Unit*  /*who*/)
         {
             events.Reset();
-            events.ScheduleEvent(EVENT_SPELL_RADIANCE, 16000);
-            events.ScheduleEvent(EVENT_SPELL_HAMMER_RIGHTEOUS, 25000);
+            events.ScheduleEvent(EVENT_SPELL_RADIANCE, 16s);
+            events.ScheduleEvent(EVENT_SPELL_HAMMER_RIGHTEOUS, 25s);
             Talk(TEXT_EADRIC_AGGRO);
             me->CastSpell(me, SPELL_VENGEANCE, false);
             if( pInstance )
@@ -182,7 +182,7 @@ public:
                 case EVENT_SPELL_RADIANCE:
                     me->CastSpell((Unit*)NULL, SPELL_RADIANCE, false);
                     me->MonsterTextEmote(TEXT_RADIATE, 0, true);
-                    events.RepeatEvent(16000);
+                    events.RepeatEvent(16s);
                     break;
                 case EVENT_SPELL_HAMMER_RIGHTEOUS:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 55.0f, true) )
@@ -194,7 +194,7 @@ public:
                         me->CastSpell(target, SPELL_HAMMER_JUSTICE, true);
                         me->CastSpell(target, SPELL_HAMMER_RIGHTEOUS, false);
                     }
-                    events.RepeatEvent(25000);
+                    events.RepeatEvent(25s);
                     break;
             }
 
@@ -257,11 +257,11 @@ public:
             }
         }
 
-        void EnterCombat(Unit*  /*who*/)
+        void EnterCombat(Unit* /*who*/)
         {
             events.Reset();
-            events.ScheduleEvent(EVENT_SPELL_HOLY_FIRE, urand(9000, 12000));
-            events.ScheduleEvent(EVENT_SPELL_SMITE, urand(2000, 3000));
+            events.ScheduleEvent(EVENT_SPELL_HOLY_FIRE, 9s, 12s);
+            events.ScheduleEvent(EVENT_SPELL_SMITE, 2s, 3s);
             me->RemoveUnitMovementFlag(MOVEMENTFLAG_WALKING);
             Talk(TEXT_PALETRESS_AGGRO);
             if( pInstance )
@@ -345,7 +345,7 @@ public:
                 me->CastSpell((Unit*)NULL, SPELL_SUMMON_MEMORY, false);
                 SummonMemory();
                 me->CastSpell((Unit*)NULL, SPELL_CONFESS, false);
-                events.ScheduleEvent(EVENT_SPELL_RENEW, urand(6000, 8000));
+                events.ScheduleEvent(EVENT_SPELL_RENEW, 6s, 8s);
                 summoned = true;
                 return;
             }
@@ -360,24 +360,22 @@ public:
                 case EVENT_SPELL_SMITE:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true) )
                         me->CastSpell(target, SPELL_SMITE, false);
-                    events.RepeatEvent(urand(3000, 4000));
+                    events.RepeatEvent(3s, 4s);
                     break;
                 case EVENT_SPELL_HOLY_FIRE:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 30.0f, true) )
                         me->CastSpell(target, SPELL_HOLY_FIRE, false);
-                    events.RepeatEvent(urand(9000, 12000));
+                    events.RepeatEvent(9s, 12s);
                     break;
                 case EVENT_SPELL_RENEW:
                     if( !MemoryGUID )
-                    {
                         break;
-                    }
                     if( urand(0, 1) )
                         me->CastSpell(me, SPELL_RENEW, false);
                     else if( Creature* memory = ObjectAccessor::GetCreature(*me, MemoryGUID) )
                         if( memory->IsAlive() )
                             me->CastSpell(memory, SPELL_RENEW, false);
-                    events.RepeatEvent(urand(15000, 17000));
+                    events.RepeatEvent(15s, 17s);
                     break;
             }
 
@@ -404,7 +402,7 @@ public:
             events.Reset();
             me->SetReactState(REACT_PASSIVE);
             me->SetObjectScale(0.01f);
-            events.ScheduleEvent(EVENT_MEMORY_SCALE, 500);
+            events.ScheduleEvent(EVENT_MEMORY_SCALE, 500ms);
         }
 
         InstanceScript* pInstance;
@@ -435,8 +433,7 @@ public:
                     break;
                 case EVENT_MEMORY_SCALE:
                     me->SetObjectScale(1.0f);
-                    events.ScheduleEvent(EVENT_MEMORY_START_ATTACK, 5000);
-                    
+                    events.ScheduleEvent(EVENT_MEMORY_START_ATTACK, 5s);
                     break;
                 case EVENT_MEMORY_START_ATTACK:
                     me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
@@ -446,23 +443,23 @@ public:
                         DoZoneInCombat();
                     }
                     me->SetReactState(REACT_AGGRESSIVE);
-                    events.ScheduleEvent(EVENT_SPELL_OLD_WOUNDS, 8000);
-                    events.ScheduleEvent(EVENT_SPELL_SHADOWS_PAST, 4000);
-                    events.ScheduleEvent(EVENT_SPELL_WAKING_NIGHTMARE, urand(20000, 30000));
+                    events.ScheduleEvent(EVENT_SPELL_OLD_WOUNDS, 8s);
+                    events.ScheduleEvent(EVENT_SPELL_SHADOWS_PAST, 4s);
+                    events.ScheduleEvent(EVENT_SPELL_WAKING_NIGHTMARE, 20s, 30s);
                     break;
                 case EVENT_SPELL_OLD_WOUNDS:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 10.0f, true) )
                         me->CastSpell(target, SPELL_OLD_WOUNDS, true);
-                    events.RepeatEvent(12000);
+                    events.RepeatEvent(12s);
                     break;
                 case EVENT_SPELL_SHADOWS_PAST:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40.0f, true) )
                         me->CastSpell(target, SPELL_SHADOWS_PAST, false);
-                    events.RepeatEvent(urand(15000, 20000));
+                    events.RepeatEvent(15s, 20s);
                     break;
                 case EVENT_SPELL_WAKING_NIGHTMARE:
                     me->CastSpell(me, SPELL_WAKING_NIGHTMARE, false);
-                    events.RepeatEvent(35000);
+                    events.RepeatEvent(35s);
                     break;
             }
 
@@ -622,7 +619,7 @@ public:
             {
                 bCheck = false;
                 damage = me->GetHealth() - 1;
-                events.DelayEvents(10000);
+                events.DelayEvents(10s);
                 me->CastSpell(me, SPELL_DIVINE_SHIELD_H, true);
                 me->CastSpell((Unit*)NULL, SPELL_FINAL_MEDITATION_H, true);
             }
@@ -633,23 +630,23 @@ public:
             switch( me->GetEntry() )
             {
                 case NPC_ARGENT_MONK:
-                    events.RescheduleEvent(EVENT_MONK_SPELL_FLURRY_OF_BLOWS, 5000);
-                    events.RescheduleEvent(EVENT_MONK_SPELL_PUMMEL, 7000);
+                    events.RescheduleEvent(EVENT_MONK_SPELL_FLURRY_OF_BLOWS, 5s);
+                    events.RescheduleEvent(EVENT_MONK_SPELL_PUMMEL, 7s);
                     if( IsHeroic() )
                         bCheck = true;
                     break;
                 case NPC_PRIESTESS:
-                    events.RescheduleEvent(EVENT_PRIESTESS_SPELL_HOLY_SMITE, urand(5000, 8000));
-                    events.RescheduleEvent(EVENT_PRIESTESS_SPELL_SHADOW_WORD_PAIN, urand(3000, 6000));
-                    events.RescheduleEvent(EVENT_PRIESTESS_SPELL_FOUNTAIN_OF_LIGHT, urand(8000, 15000));
+                    events.RescheduleEvent(EVENT_PRIESTESS_SPELL_HOLY_SMITE, 5s, 8s);
+                    events.RescheduleEvent(EVENT_PRIESTESS_SPELL_SHADOW_WORD_PAIN, 3s, 6s);
+                    events.RescheduleEvent(EVENT_PRIESTESS_SPELL_FOUNTAIN_OF_LIGHT, 8s, 15s);
                     if( IsHeroic() )
-                        events.RescheduleEvent(EVENT_PRIESTESS_SPELL_MIND_CONTROL_H, 12000);
+                        events.RescheduleEvent(EVENT_PRIESTESS_SPELL_MIND_CONTROL_H, 12s);
                     break;
                 case NPC_ARGENT_LIGHTWIELDER:
-                    events.RescheduleEvent(EVENT_LIGHTWIELDER_SPELL_BLAZING_LIGHT, urand(12000, 15000));
-                    events.RescheduleEvent(EVENT_LIGHTWIELDER_SPELL_CLEAVE, urand(3000, 5000));
+                    events.RescheduleEvent(EVENT_LIGHTWIELDER_SPELL_BLAZING_LIGHT, 12s, 15s);
+                    events.RescheduleEvent(EVENT_LIGHTWIELDER_SPELL_CLEAVE, 3s, 5s);
                     if( IsHeroic() )
-                        events.RescheduleEvent(EVENT_LIGHTWIELDER_SPELL_UNBALANCING_STRIKE_H, urand(8000, 12000));
+                        events.RescheduleEvent(EVENT_LIGHTWIELDER_SPELL_UNBALANCING_STRIKE_H, 8s, 12s);
                     break;
             }
         }
@@ -673,52 +670,53 @@ public:
 
                 case EVENT_MONK_SPELL_FLURRY_OF_BLOWS:
                     me->CastSpell(me, SPELL_FLURRY_OF_BLOWS, false);
-                    events.RepeatEvent(urand(12000, 18000));
+                    events.RepeatEvent(12s, 18s);
                     break;
                 case EVENT_MONK_SPELL_PUMMEL:
                     if( me->GetVictim() )
                         me->CastSpell(me->GetVictim(), SPELL_PUMMEL, false);
-                    events.RepeatEvent(urand(8000, 11000));
+                    events.RepeatEvent(8s, 11s);
                     break;
 
                 case EVENT_PRIESTESS_SPELL_HOLY_SMITE:
                     if( me->GetVictim() )
                         me->CastSpell(me->GetVictim(), SPELL_HOLY_SMITE, false);
-                    events.RepeatEvent(urand(6000, 8000));
+                    events.RepeatEvent(6s, 8s);
                     break;
                 case EVENT_PRIESTESS_SPELL_SHADOW_WORD_PAIN:
                     if( me->GetVictim() )
                         me->CastSpell(me->GetVictim(), SPELL_SHADOW_WORD_PAIN, false);
-                    events.RepeatEvent(urand(12000, 15000));
+                    events.RepeatEvent(12s, 15s);
                     break;
                 case EVENT_PRIESTESS_SPELL_FOUNTAIN_OF_LIGHT:
                     me->CastSpell((Unit*)NULL, SPELL_FOUNTAIN_OF_LIGHT, false);
-                    events.RepeatEvent(urand(35000, 45000));
+                    events.RepeatEvent(35s, 45s);
                     break;
                 case EVENT_PRIESTESS_SPELL_MIND_CONTROL_H:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 30.0f, true) )
                         me->CastSpell(target, SPELL_MIND_CONTROL_H, false);
-                    events.RepeatEvent(urand(22000, 30000));
+                    events.RepeatEvent(22s, 30s);
                     break;
 
                 case EVENT_LIGHTWIELDER_SPELL_BLAZING_LIGHT:
                     {
                         Unit* target = DoSelectLowestHpFriendly(40.0f);
-                        if( !target )
+                        if(!target)
                             target = me;
+
                         me->CastSpell(target, SPELL_BLAZING_LIGHT, false);
-                        events.RepeatEvent(urand(8000, 12000));
+                        events.RepeatEvent(8s, 12s);
                     }
                     break;
                 case EVENT_LIGHTWIELDER_SPELL_CLEAVE:
                     if( me->GetVictim() )
                         me->CastSpell(me->GetVictim(), SPELL_CLEAVE, false);
-                    events.RepeatEvent(urand(6000, 8000));
+                    events.RepeatEvent(6s, 8s);
                     break;
                 case EVENT_LIGHTWIELDER_SPELL_UNBALANCING_STRIKE_H:
                     if( me->GetVictim() )
                         me->CastSpell(me->GetVictim(), SPELL_UNBALANCING_STRIKE_H, false);
-                    events.RepeatEvent(urand(12000, 15000));
+                    events.RepeatEvent(12s, 15s);
                     break;
             }
 

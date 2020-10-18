@@ -91,11 +91,11 @@ public:
             if (pInstance)
                 pInstance->SetData(DATA_AMANITAR_EVENT, IN_PROGRESS);
 
-            events.ScheduleEvent(EVENT_AMANITAR_ROOTS, urand(5000, 9000));
-            events.ScheduleEvent(EVENT_AMANITAR_BASH, urand(10000, 14000));
-            events.ScheduleEvent(EVENT_AMANITAR_BOLT, urand(15000, 20000));
+            events.ScheduleEvent(EVENT_AMANITAR_ROOTS, 5s, 9s);
+            events.ScheduleEvent(EVENT_AMANITAR_BASH, 10s, 14s);
+            events.ScheduleEvent(EVENT_AMANITAR_BOLT, 15s, 20s);
             events.ScheduleEvent(EVENT_AMANITAR_MINI, 30000);
-            events.ScheduleEvent(EVENT_AMANITAR_SPAWN, 0);
+            events.ScheduleEvent(EVENT_AMANITAR_SPAWN, 0s);
         }
 
         void JustSummoned(Creature* cr) { summons.Summon(cr); }
@@ -138,7 +138,7 @@ public:
                 case EVENT_AMANITAR_SPAWN:
                     {
                         SpawnAdds();
-                        events.RepeatEvent(urand(35000, 40000));
+                        events.RepeatEvent(35s, 40s);
                         break;
                     }
                 case EVENT_AMANITAR_ROOTS:
@@ -146,13 +146,13 @@ public:
                         if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                             me->CastSpell(pTarget, SPELL_ENTANGLING_ROOTS, false);
 
-                        events.RepeatEvent(urand(15000, 20000));
+                        events.RepeatEvent(15s, 20s);
                         break;
                     }
                 case EVENT_AMANITAR_BASH:
                     {
                         me->CastSpell(me->GetVictim(), SPELL_BASH, false);
-                        events.RepeatEvent(urand(15000, 20000));
+                        events.RepeatEvent(15s, 20s);
                         break;
                     }
                 case EVENT_AMANITAR_BOLT:

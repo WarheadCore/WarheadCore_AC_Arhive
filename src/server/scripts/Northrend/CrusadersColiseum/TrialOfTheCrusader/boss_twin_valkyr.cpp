@@ -119,13 +119,15 @@ struct boss_twin_valkyrAI : public ScriptedAI
                 pInstance->DoStopTimedAchievement(ACHIEVEMENT_TIMED_TYPE_EVENT, 21853);
 
             // special events here
-            events.RescheduleEvent(EVENT_BERSERK, IsHeroic() ? 360000 : 600000);
-            events.RescheduleEvent(EVENT_SUMMON_BALLS_1, urand(10000, 15000));
-            events.RescheduleEvent(EVENT_SPECIAL, 45000);
+            events.RescheduleEvent(EVENT_BERSERK, IsHeroic() ? 6min : 10min);
+            events.RescheduleEvent(EVENT_SUMMON_BALLS_1, 10s, 15s);
+            events.RescheduleEvent(EVENT_SPECIAL, 45s);
         }
-        events.RescheduleEvent(EVENT_SPELL_SPIKE, urand(5000, 8000));
-        if( IsHeroic() )
-            events.RescheduleEvent(EVENT_SPELL_TOUCH, urand(10000, 25000), 1);
+
+        events.RescheduleEvent(EVENT_SPELL_SPIKE, 5s, 8s);
+
+        if(IsHeroic())
+            events.RescheduleEvent(EVENT_SPELL_TOUCH, 10s, 25s, 1);
 
         me->SetDisableGravity(true);
         me->SetHover(true);
@@ -193,7 +195,7 @@ struct boss_twin_valkyrAI : public ScriptedAI
             case -3:
                 me->SetCanDualWield(true);
                 me->CastSpell(me, SPELL_TWIN_POWER, true);
-                events.RescheduleEvent(EVENT_REMOVE_DUAL_WIELD, 15000);
+                events.RescheduleEvent(EVENT_REMOVE_DUAL_WIELD, 15s);
                 break;
         }
     }
@@ -300,7 +302,7 @@ struct boss_twin_valkyrAI : public ScriptedAI
                     twin->CastSpell(twin, SPELL_BERSERK, true);
                     twin->AI()->Talk(SAY_BERSERK);
                 }
-                
+
                 break;
             case EVENT_SUMMON_BALLS_1:
             case EVENT_SUMMON_BALLS_2:
@@ -318,24 +320,24 @@ struct boss_twin_valkyrAI : public ScriptedAI
                         if( Creature* ball = me->SummonCreature((i % 2) ? NPC_CONCENTRATED_DARK : NPC_CONCENTRATED_LIGHT, Locs[LOC_CENTER].GetPositionX() + cos(angle) * 47.0f, Locs[LOC_CENTER].GetPositionY() + sin(angle) * 47.0f, Locs[LOC_CENTER].GetPositionZ() + 1.5f, 0.0f, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 1500) )
                             boss_twin_valkyrAI::JustSummoned(ball);
                     }
-                    
+
                     switch( eventId )
                     {
                         case EVENT_SUMMON_BALLS_1:
-                            events.RescheduleEvent(EVENT_SUMMON_BALLS_2, 8000);
+                            events.RescheduleEvent(EVENT_SUMMON_BALLS_2, 8s);
                             break;
                         case EVENT_SUMMON_BALLS_2:
-                            events.RescheduleEvent(EVENT_SUMMON_BALLS_3, 8000);
+                            events.RescheduleEvent(EVENT_SUMMON_BALLS_3, 8s);
                             break;
                         case EVENT_SUMMON_BALLS_3:
-                            events.RescheduleEvent(EVENT_SUMMON_BALLS_1, 15000);
+                            events.RescheduleEvent(EVENT_SUMMON_BALLS_1, 15s);
                             break;
                     }
                 }
                 break;
             case EVENT_SPELL_SPIKE:
                 me->CastSpell(me->GetVictim(), me->GetEntry() == NPC_LIGHTBANE ? SPELL_LIGHT_TWIN_SPIKE : SPELL_DARK_TWIN_SPIKE, false);
-                events.RepeatEvent(urand(7000, 10000));
+                events.RepeatEvent(7s, 10s);
                 break;
             case EVENT_SPELL_TOUCH:
                 {
@@ -378,14 +380,9 @@ struct boss_twin_valkyrAI : public ScriptedAI
                             break;
                     }
 
-                    /*
-                    if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true, essenceId) )
-                        me->CastSpell(target, me->GetEntry()==NPC_LIGHTBANE ? SPELL_LIGHT_TOUCH : SPELL_DARK_TOUCH, false);
-                    events.RepeatEvent(urand(45000,50000));
-                    */
-
                     std::vector<uint64> tList;
                     Map::PlayerList const& pList = me->GetMap()->GetPlayers();
+
                     if (pList.getSize())
                     {
                         for (Map::PlayerList::const_iterator itr = pList.begin(); itr != pList.end(); ++itr)
@@ -398,11 +395,12 @@ struct boss_twin_valkyrAI : public ScriptedAI
                             if (Player* target = ObjectAccessor::GetPlayer(*me, tList[urand(0, tList.size() - 1)]))
                             {
                                 me->CastSpell(target, me->GetEntry() == NPC_LIGHTBANE ? SPELL_LIGHT_TOUCH : SPELL_DARK_TOUCH, false);
-                                events.RepeatEvent(urand(45000, 50000));
+                                events.RepeatEvent(45s, 50s);
                                 break;
                             }
                     }
-                    events.RepeatEvent(10000);
+
+                    events.RepeatEvent(10s);
                 }
                 break;
             case EVENT_SPECIAL:
@@ -454,13 +452,13 @@ struct boss_twin_valkyrAI : public ScriptedAI
                     }
                     if( (SpecialMask & 0xF) == 0xF )
                         SpecialMask = 0;
-                    events.RepeatEvent(45000);
-                    events.DelayEventsToMax(15000, 1); // no touch of light/darkness during special abilities!
+                    events.Repeat(45s);
+                    events.DelayEvents(15s, 1); // no touch of light/darkness during special abilities!
                 }
                 break;
             case EVENT_REMOVE_DUAL_WIELD:
                 me->SetCanDualWield(false);
-                
+
                 break;
         }
 

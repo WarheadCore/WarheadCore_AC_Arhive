@@ -181,14 +181,14 @@ public:
             me->CastSpell(me, SPELL_SHROUD_OF_SORROW, true);
             me->CastSpell(me, SPELL_FRENZIED_BLOODTHIRST_VISUAL, true);
             events.Reset();
-            events.ScheduleEvent(EVENT_BERSERK, 330000);
-            events.ScheduleEvent(EVENT_VAMPIRIC_BITE, 15000);
-            events.ScheduleEvent(EVENT_BLOOD_MIRROR, 2500);
-            events.ScheduleEvent(EVENT_DELIRIOUS_SLASH, urand(10000, 12000));
-            events.ScheduleEvent(EVENT_PACT_OF_THE_DARKFALLEN, 20000);
-            events.ScheduleEvent(EVENT_SWARMING_SHADOWS, 30000);
-            events.ScheduleEvent(EVENT_TWILIGHT_BLOODBOLT, urand(15000, 25000));
-            events.ScheduleEvent(EVENT_AIR_PHASE, 124000 + uint32(Is25ManRaid() ? 3000 : 0));
+            events.ScheduleEvent(EVENT_BERSERK, 330s);
+            events.ScheduleEvent(EVENT_VAMPIRIC_BITE, 15s);
+            events.ScheduleEvent(EVENT_BLOOD_MIRROR, 2500ms);
+            events.ScheduleEvent(EVENT_DELIRIOUS_SLASH, 10s, 12s);
+            events.ScheduleEvent(EVENT_PACT_OF_THE_DARKFALLEN, 20s);
+            events.ScheduleEvent(EVENT_SWARMING_SHADOWS, 30s);
+            events.ScheduleEvent(EVENT_TWILIGHT_BLOODBOLT, 15s, 25s);
+            events.ScheduleEvent(EVENT_AIR_PHASE, 124s + (Is25ManRaid() ? 3s : 0s));
 
             CleanAuras();
             me->setActive(true);

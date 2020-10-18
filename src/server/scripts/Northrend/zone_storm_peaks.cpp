@@ -256,13 +256,13 @@ public:
             events.Reset();
             if (me->GetEntry() == NPC_TIME_LOST_PROTO_DRAKE)
             {
-                events.ScheduleEvent(SPELL_TIME_SHIFT, 10000);
-                events.ScheduleEvent(SPELL_TIME_LAPSE, 5000);
+                events.ScheduleEvent(SPELL_TIME_SHIFT, 10s);
+                events.ScheduleEvent(SPELL_TIME_LAPSE, 5s);
             }
             else
             {
-                events.ScheduleEvent(SPELL_FROST_BREATH, 8000);
-                events.ScheduleEvent(SPELL_FROST_CLEAVE, 5000);
+                events.ScheduleEvent(SPELL_FROST_BREATH, 8s);
+                events.ScheduleEvent(SPELL_FROST_CLEAVE, 5s);
             }
         }
 
@@ -290,19 +290,19 @@ public:
             {
                 case SPELL_TIME_SHIFT:
                     me->CastSpell(me, SPELL_TIME_SHIFT, false);
-                    events.RepeatEvent(18000);
+                    events.RepeatEvent(18s);
                     break;
                 case SPELL_TIME_LAPSE:
                     me->CastSpell(me->GetVictim(), SPELL_TIME_LAPSE, false);
-                    events.RepeatEvent(12000);
+                    events.RepeatEvent(12s);
                     break;
                 case SPELL_FROST_BREATH:
                     me->CastSpell(me->GetVictim(), SPELL_FROST_BREATH, false);
-                    events.RepeatEvent(12000);
+                    events.RepeatEvent(12s);
                     break;
                 case SPELL_FROST_CLEAVE:
                     me->CastSpell(me->GetVictim(), SPELL_FROST_CLEAVE, false);
-                    events.RepeatEvent(8000);
+                    events.RepeatEvent(8s);
                     break;
             }
 
@@ -845,14 +845,14 @@ public:
 
         void Reset()
         {
-            events.ScheduleEvent(EVENT_CHECK_AREA, 5000);
+            events.ScheduleEvent(EVENT_CHECK_AREA, 5s);
             me->SetSpeed(MOVE_RUN, 2.0f);
         }
 
         void MovementInform(uint32 type, uint32  /*id*/)
         {
             if (type == ESCORT_MOTION_TYPE && me->movespline->Finalized())
-                events.ScheduleEvent(EVENT_REACHED_HOME, 2000);
+                events.ScheduleEvent(EVENT_REACHED_HOME, 2s);
         }
 
         void UpdateAI(uint32 diff)
@@ -883,7 +883,7 @@ public:
                             }
                     }
                     else
-                        events.ScheduleEvent(EVENT_CHECK_AREA, 5000);
+                        events.ScheduleEvent(EVENT_CHECK_AREA, 5s);
                     break;
                 case EVENT_REACHED_HOME:
                     if (Vehicle* vehicle = me->GetVehicleKit())

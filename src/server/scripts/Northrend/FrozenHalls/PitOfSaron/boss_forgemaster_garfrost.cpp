@@ -115,7 +115,7 @@ public:
 
             Talk(SAY_AGGRO);
             DoZoneInCombat();
-            events.RescheduleEvent(EVENT_SPELL_THROW_SARONITE, urand(5000, 7500));
+            events.RescheduleEvent(EVENT_SPELL_THROW_SARONITE, 5s, 7500ms);
 
             if (pInstance)
                 pInstance->SetData(DATA_GARFROST, IN_PROGRESS);
@@ -129,9 +129,9 @@ public:
                 me->SetReactState(REACT_PASSIVE);
                 me->SetTarget(0);
                 me->SendMeleeAttackStop(me->GetVictim());
-                events.DelayEvents(8000);
+                events.DelayEvents(8s);
                 me->CastSpell(me, SPELL_THUNDERING_STOMP, false);
-                events.RescheduleEvent(EVENT_JUMP, 1250);
+                events.RescheduleEvent(EVENT_JUMP, 1250ms);
                 return;
             }
 
@@ -142,9 +142,9 @@ public:
                 me->SetReactState(REACT_PASSIVE);
                 me->SetTarget(0);
                 me->SendMeleeAttackStop(me->GetVictim());
-                events.DelayEvents(8000);
+                events.DelayEvents(8s);
                 me->CastSpell(me, SPELL_THUNDERING_STOMP, false);
-                events.RescheduleEvent(EVENT_JUMP, 1250);
+                events.RescheduleEvent(EVENT_JUMP, 1250ms);
                 return;
             }
         }
@@ -181,7 +181,7 @@ public:
             }
             if (spell->Id == uint32(SPELL_FORGE_BLADE))
             {
-                events.RescheduleEvent(EVENT_SPELL_CHILLING_WAVE, 10000);
+                events.RescheduleEvent(EVENT_SPELL_CHILLING_WAVE, 10s);
                 SetEquipmentSlots(false, EQUIP_ID_SWORD);
                 me->SetReactState(REACT_AGGRESSIVE);
                 me->SetControlled(false, UNIT_STATE_ROOT);
@@ -194,7 +194,7 @@ public:
             }
             else if (spell->Id == uint32(SPELL_FORGE_MACE))
             {
-                events.RescheduleEvent(EVENT_SPELL_DEEP_FREEZE, 10000);
+                events.RescheduleEvent(EVENT_SPELL_DEEP_FREEZE, 10s);
                 SetEquipmentSlots(false, EQUIP_ID_MACE);
                 me->SetReactState(REACT_AGGRESSIVE);
                 me->SetControlled(false, UNIT_STATE_ROOT);
@@ -249,7 +249,7 @@ public:
                         target->ToPlayer()->GetSession()->SendPacket(&data);
                         me->CastSpell(target, SPELL_THROW_SARONITE, false);
                     }
-                    events.RepeatEvent(urand(12500, 20000));
+                    events.RepeatEvent(12500ms, 20s);
                     break;
                 case EVENT_JUMP:
                     me->DisableRotate(true);
@@ -257,11 +257,11 @@ public:
                         me->GetMotionMaster()->MoveJump(northForgePos.GetPositionX(), northForgePos.GetPositionY(), northForgePos.GetPositionZ(), 25.0f, 15.0f, 0);
                     else if (phase == 2)
                         me->GetMotionMaster()->MoveJump(southForgePos.GetPositionX(), southForgePos.GetPositionY(), southForgePos.GetPositionZ(), 25.0f, 15.0f, 0);
-                    
+
                     break;
                 case EVENT_SPELL_CHILLING_WAVE:
                     me->CastSpell(me->GetVictim(), SPELL_CHILLING_WAVE, false);
-                    events.RepeatEvent(35000);
+                    events.RepeatEvent(35s);
                     break;
                 case EVENT_SPELL_DEEP_FREEZE:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
@@ -269,7 +269,7 @@ public:
                         Talk(EMOTE_DEEP_FREEZE, target);
                         me->CastSpell(target, SPELL_DEEP_FREEZE, false);
                     }
-                    events.RepeatEvent(35000);
+                    events.RepeatEvent(35s);
                     break;
             }
 

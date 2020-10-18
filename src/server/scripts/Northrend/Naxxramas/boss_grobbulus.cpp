@@ -100,10 +100,10 @@ public:
             BossAI::EnterCombat(who);
             PullChamberAdds();
             me->SetInCombatWithZone();
-            events.ScheduleEvent(EVENT_SPELL_POISON_CLOUD, 15000);
-            events.ScheduleEvent(EVENT_SPELL_MUTATING_INJECTION, 20000);
-            events.ScheduleEvent(EVENT_SPELL_SLIME_SPRAY, 10000);
-            events.ScheduleEvent(EVENT_SPELL_BERSERK, RAID_MODE(12 * MINUTE * IN_MILLISECONDS, 9 * MINUTE * IN_MILLISECONDS, 12 * MINUTE * IN_MILLISECONDS, 9 * MINUTE * IN_MILLISECONDS));
+            events.ScheduleEvent(EVENT_SPELL_POISON_CLOUD, 15s);
+            events.ScheduleEvent(EVENT_SPELL_MUTATING_INJECTION, 20s);
+            events.ScheduleEvent(EVENT_SPELL_SLIME_SPRAY, 10s);
+            events.ScheduleEvent(EVENT_SPELL_BERSERK, RAID_MODE(12min, 9min, 12min, 9min));
         }
 
         void SpellHitTarget(Unit* target, const SpellInfo* spellInfo) override
@@ -157,22 +157,22 @@ public:
             {
                 case EVENT_SPELL_POISON_CLOUD:
                     me->CastSpell(me, SPELL_POISON_CLOUD, true);
-                    events.RepeatEvent(15000);
+                    events.RepeatEvent(15s);
                     break;
                 case EVENT_SPELL_BERSERK:
                     me->CastSpell(me, SPELL_BERSERK, true);
-                    
+
                     break;
                 case EVENT_SPELL_SLIME_SPRAY:
                     Talk(EMOTE_SLIME);
-                    me->CastSpell(me->GetVictim(), RAID_MODE(SPELL_SLIME_SPRAY_10, SPELL_SLIME_SPRAY_25, SPELL_SLIME_SPRAY_10, SPELL_SLIME_SPRAY_25), false);
-                    events.RepeatEvent(20000);
+                    me->CastSpell(me->GetVictim(), RAID_MODE(SPELL_SLIME_SPRAY_10, SPELL_SLIME_SPRAY_25), false);
+                    events.RepeatEvent(20s);
                     break;
                 case EVENT_SPELL_MUTATING_INJECTION:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 100.0f, true, -SPELL_MUTATING_INJECTION))
                         me->CastSpell(target, SPELL_MUTATING_INJECTION, false);
 
-                    events.RepeatEvent(8000 + uint32(120 * me->GetHealthPct()));
+                    events.RepeatEvent(8s + Milliseconds(120 * me->GetHealthPct()));
                     break;
             }
 

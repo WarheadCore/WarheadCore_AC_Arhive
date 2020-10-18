@@ -111,11 +111,11 @@ public:
             BossAI::EnterCombat(who);
             me->CallForHelp(105.0f);
 
-            events.ScheduleEvent(EVENT_CHECK_HEALTH, 1000);
-            events.ScheduleEvent(EVENT_SPELL_ARCANE_MISSILES, 3000);
-            events.ScheduleEvent(EVENT_SPELL_WRATH_OF_ASTROMANCER, 1000);
-            events.ScheduleEvent(EVENT_SPELL_BLINDING_LIGHT, 40000);
-            events.ScheduleEvent(EVENT_SPAWN_PORTALS, 50000);
+            events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
+            events.ScheduleEvent(EVENT_SPELL_ARCANE_MISSILES, 3s);
+            events.ScheduleEvent(EVENT_SPELL_WRATH_OF_ASTROMANCER, 1s);
+            events.ScheduleEvent(EVENT_SPELL_BLINDING_LIGHT, 40s);
+            events.ScheduleEvent(EVENT_SPAWN_PORTALS, 50s);
         }
 
         void JustSummoned(Creature* summon)
@@ -314,4 +314,3 @@ void AddSC_boss_high_astromancer_solarian()
     new spell_astromancer_wrath_of_the_astromancer();
     new spell_astromancer_solarian_transform();
 }
-
