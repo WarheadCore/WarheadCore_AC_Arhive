@@ -91,12 +91,12 @@ public:
         {
             if (isBanished)
                 return;
-            
+
             Talk(SAY_AGGRO);
-            
+
             events.ScheduleEvent(EVENT_SPELL_CORROSIVE, 5s, 10s);
             events.ScheduleEvent(EVENT_SPELL_FEAR, 15s, 20s);
-            
+
             if (IsHeroic())
                 events.ScheduleEvent(EVENT_SPELL_ENRAGE, 3min);
 

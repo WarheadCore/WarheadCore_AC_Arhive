@@ -114,7 +114,7 @@ public:
             if (events.GetNextEventTime(EVENT_KILL_TALK) == 0)
             {
                 Talk(SAY_SLAY);
-                    events.ScheduleEvent(EVENT_KILL_TALK, 6s);
+                events.ScheduleEvent(EVENT_KILL_TALK, 6s);
             }
         }
 
@@ -133,11 +133,11 @@ public:
             Talk(SAY_AGGRO);
             me->CallForHelp(10.0f);
 
-                events.ScheduleEvent(EVENT_SPELL_CATACLYSMIC_BOLT, 10s);
-                events.ScheduleEvent(EVENT_SPELL_ENRAGE, 10min);
-                events.ScheduleEvent(EVENT_SPELL_SEAR_NOVA, 25s);
-                events.ScheduleEvent(EVENT_HEALTH_CHECK, 1s);
-            }
+            events.ScheduleEvent(EVENT_SPELL_CATACLYSMIC_BOLT, 10s);
+            events.ScheduleEvent(EVENT_SPELL_ENRAGE, 10min);
+            events.ScheduleEvent(EVENT_SPELL_SEAR_NOVA, 25s);
+            events.ScheduleEvent(EVENT_HEALTH_CHECK, 1s);
+        }
 
         void UpdateAI(uint32 diff)
         {
@@ -148,27 +148,27 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-                switch (events.ExecuteEvent())
-                {
-                    case EVENT_SPELL_ENRAGE:
-                        me->CastSpell(me, SPELL_ENRAGE, true);
-                        break;
-                    case EVENT_SPELL_CATACLYSMIC_BOLT:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, PowerUsersSelector(me, POWER_MANA, 50.0f, true)))
-                            me->CastSpell(target, SPELL_CATACLYSMIC_BOLT, false);
-                        events.ScheduleEvent(EVENT_SPELL_CATACLYSMIC_BOLT, 6s);
-                        break;
-                    case EVENT_SPELL_SEAR_NOVA:
-                        me->CastSpell(me, SPELL_SEAR_NOVA, false);
-                        events.ScheduleEvent(EVENT_SPELL_SEAR_NOVA, 20s, 40s);
-                        break;
-                    case EVENT_HEALTH_CHECK:
-                        if (me->HealthBelowPct(76))
-                        {
-                            for (SummonList::const_iterator itr = summons.begin(); itr != summons.end(); ++itr)
-                                if (Creature* summon = ObjectAccessor::GetCreature(*me, *itr))
-                                    if (summon->GetMaxHealth() > 500000)
-                                        summon->CastSpell(me, SPELL_BLESSING_OF_THE_TIDES, true);
+            switch (events.ExecuteEvent())
+            {
+                case EVENT_SPELL_ENRAGE:
+                    me->CastSpell(me, SPELL_ENRAGE, true);
+                    break;
+                case EVENT_SPELL_CATACLYSMIC_BOLT:
+                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, PowerUsersSelector(me, POWER_MANA, 50.0f, true)))
+                        me->CastSpell(target, SPELL_CATACLYSMIC_BOLT, false);
+                    events.ScheduleEvent(EVENT_SPELL_CATACLYSMIC_BOLT, 6s);
+                    break;
+                case EVENT_SPELL_SEAR_NOVA:
+                    me->CastSpell(me, SPELL_SEAR_NOVA, false);
+                    events.ScheduleEvent(EVENT_SPELL_SEAR_NOVA, 20s, 40s);
+                    break;
+                case EVENT_HEALTH_CHECK:
+                    if (me->HealthBelowPct(76))
+                    {
+                        for (SummonList::const_iterator itr = summons.begin(); itr != summons.end(); ++itr)
+                            if (Creature* summon = ObjectAccessor::GetCreature(*me, *itr))
+                                if (summon->GetMaxHealth() > 500000)
+                                    summon->CastSpell(me, SPELL_BLESSING_OF_THE_TIDES, true);
 
                         if (me->HasAura(SPELL_BLESSING_OF_THE_TIDES))
                             Talk(SAY_GAIN_BLESSING);

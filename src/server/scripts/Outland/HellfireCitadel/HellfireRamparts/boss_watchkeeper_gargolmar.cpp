@@ -64,16 +64,16 @@ public:
             BossAI::Reset();
         }
 
-            void EnterCombat(Unit* who)
-            {
-                Talk(SAY_AGGRO);
-                BossAI::EnterCombat(who);
+        void EnterCombat(Unit* who)
+        {
+            Talk(SAY_AGGRO);
+            BossAI::EnterCombat(who);
 
-                events.ScheduleEvent(EVENT_MORTAL_WOUND, 5s);
-                events.ScheduleEvent(EVENT_SURGE, 3s);
-                events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
-                events.ScheduleEvent(EVENT_RETALIATION, 1s);
-            }
+            events.ScheduleEvent(EVENT_MORTAL_WOUND, 5s);
+            events.ScheduleEvent(EVENT_SURGE, 3s);
+            events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
+            events.ScheduleEvent(EVENT_RETALIATION, 1s);
+        }
 
         void MoveInLineOfSight(Unit* who)
         {

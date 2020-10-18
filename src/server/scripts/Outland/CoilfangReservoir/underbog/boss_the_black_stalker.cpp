@@ -80,7 +80,7 @@ public:
             events.ScheduleEvent(EVENT_SPELL_CHAIN, 6s);
             events.ScheduleEvent(EVENT_SPELL_STATIC, 10s);
             events.ScheduleEvent(EVENT_CHECK, 5s);
-            
+
             if (IsHeroic())
                 events.ScheduleEvent(EVENT_SPELL_SPORES, 10s, 15s);
         }

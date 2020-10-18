@@ -58,16 +58,16 @@ public:
         {
         }
 
-            void Reset()
-            {
-                _events.Reset();
-                _events.ScheduleEvent(EVENT_ENRAGE, 0s);
-                _events.ScheduleEvent(EVENT_ARMOR, 5s, 13s);
-                _events.ScheduleEvent(EVENT_CHAIN, 10s, 30s);
-                _events.ScheduleEvent(EVENT_QUAKE, 25s, 35s);
-                _events.ScheduleEvent(EVENT_OVERRUN, 30s, 45s);
-                _inEnrage = false;
-            }
+        void Reset()
+        {
+            _events.Reset();
+            _events.ScheduleEvent(EVENT_ENRAGE, 0s);
+            _events.ScheduleEvent(EVENT_ARMOR, 5s, 13s);
+            _events.ScheduleEvent(EVENT_CHAIN, 10s, 30s);
+            _events.ScheduleEvent(EVENT_QUAKE, 25s, 35s);
+            _events.ScheduleEvent(EVENT_OVERRUN, 30s, 45s);
+            _inEnrage = false;
+        }
 
         void KilledUnit(Unit* victim)
         {
@@ -110,22 +110,22 @@ public:
             {
                 switch (eventId)
                 {
-                        case EVENT_ENRAGE:
-                            if (!HealthAbovePct(20))
-                            {
-                                DoCast(me, SPELL_ENRAGE);
-                                _events.ScheduleEvent(EVENT_ENRAGE, 6000);
-                                _inEnrage = true;
-                            }
-                            break;
-                        case EVENT_OVERRUN:
-                            Talk(SAY_OVERRUN);
-                            DoCastVictim(SPELL_OVERRUN);
-                            _events.ScheduleEvent(EVENT_OVERRUN, 25s, 40s);
-                            break;
-                        case EVENT_QUAKE:
-                            if (urand(0, 1))
-                                return;
+                    case EVENT_ENRAGE:
+                        if (!HealthAbovePct(20))
+                        {
+                            DoCast(me, SPELL_ENRAGE);
+                            _events.ScheduleEvent(EVENT_ENRAGE, 6000);
+                            _inEnrage = true;
+                        }
+                        break;
+                    case EVENT_OVERRUN:
+                        Talk(SAY_OVERRUN);
+                        DoCastVictim(SPELL_OVERRUN);
+                        _events.ScheduleEvent(EVENT_OVERRUN, 25s, 40s);
+                        break;
+                    case EVENT_QUAKE:
+                        if (urand(0, 1))
+                            return;
 
                         Talk(SAY_EARTHQUAKE);
 
@@ -133,20 +133,20 @@ public:
                         if (_inEnrage)
                             me->RemoveAurasDueToSpell(SPELL_ENRAGE);
 
-                            DoCast(me, SPELL_EARTHQUAKE);
-                            _events.ScheduleEvent(EVENT_QUAKE, 30s, 55s);
-                            break;
-                        case EVENT_CHAIN:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true))
-                                DoCast(target, SPELL_CHAIN_LIGHTNING);
-                            _events.ScheduleEvent(EVENT_CHAIN, 7s, 27s);
-                            break;
-                        case EVENT_ARMOR:
-                            DoCastVictim(SPELL_SUNDER_ARMOR);
-                            _events.ScheduleEvent(EVENT_ARMOR, 10s, 25s);
-                            break;
-                        default:
-                            break;
+                        DoCast(me, SPELL_EARTHQUAKE);
+                        _events.ScheduleEvent(EVENT_QUAKE, 30s, 55s);
+                        break;
+                    case EVENT_CHAIN:
+                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true))
+                            DoCast(target, SPELL_CHAIN_LIGHTNING);
+                        _events.ScheduleEvent(EVENT_CHAIN, 7s, 27s);
+                        break;
+                    case EVENT_ARMOR:
+                        DoCastVictim(SPELL_SUNDER_ARMOR);
+                        _events.ScheduleEvent(EVENT_ARMOR, 10s, 25s);
+                        break;
+                    default:
+                        break;
                 }
             }
             DoMeleeAttackIfReady();
