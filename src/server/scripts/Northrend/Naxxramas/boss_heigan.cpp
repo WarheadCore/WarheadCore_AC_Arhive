@@ -213,7 +213,6 @@ public:
                     break;
                 case EVENT_SAFETY_DANCE:
                     {
-                        Map::PlayerList const& pList = ;
                         for(const auto& itr : me->GetMap()->GetPlayers())
                         {
                             if (IsInRoom(itr.GetSource()) && !itr.GetSource()->IsAlive())

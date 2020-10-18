@@ -804,9 +804,7 @@ public:
                         events.PopEvent();
                         break;
                     case EVENT_CHECK_HERALD_ITEMS:
-                        if (DoCheckHeraldOfTheTitans())
-                            events.PopEvent();
-                        else
+                        if (!DoCheckHeraldOfTheTitans())
                             events.RepeatEvent(5s);
                         break;
             }

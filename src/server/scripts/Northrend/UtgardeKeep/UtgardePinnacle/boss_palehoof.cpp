@@ -416,9 +416,9 @@ public:
                         if (Unit* tgt = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             me->CastSpell(tgt, SPELL_ACID_SPIT, false);
 
-                    events.RepeatEvent(2s, 4s);
-                    break;
-                }
+                        events.RepeatEvent(2s, 4s);
+                        break;
+                    }
                 case EVENT_JORMUNGAR_ACID_SPLATTER:
                     {
                         me->CastSpell(me, IsHeroic() ? SPELL_ACID_SPLATTER_H : SPELL_ACID_SPLATTER_N, false);
@@ -434,20 +434,17 @@ public:
                                 pJormungarWorm->SetInCombatWithZone();
                             }
                         }
-                        events.RepeatEvent(10000 + rand() % 4000);
+                        events.RepeatEvent(10s, 14s);
                         break;
                     }
-                    events.RepeatEvent(10s, 14s);
-                    break;
-                }
                 case EVENT_JORMUNGAR_POISON_BREATH:
                     {
                         if (Unit* tgt = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             me->CastSpell(tgt, IsHeroic() ? SPELL_POISON_BREATH_H : SPELL_POISON_BREATH_N, false);
 
-                    events.RepeatEvent(8s, 12s);
-                    break;
-                }
+                        events.RepeatEvent(8s, 12s);
+                        break;
+                    }
             }
 
             DoMeleeAttackIfReady();
