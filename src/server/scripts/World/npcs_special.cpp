@@ -86,7 +86,7 @@ public:
         npc_elder_clearwaterAI(Creature* c) : ScriptedAI(c)
         {
             events.Reset();
-            events.ScheduleEvent(EVENT_CLEARWATER_ANNOUNCE, 1000, 1, 0);
+            events.ScheduleEvent(EVENT_CLEARWATER_ANNOUNCE, 1s, 1);
             finished = false;
             preWarning = false;
             startWarning = false;
@@ -146,7 +146,7 @@ public:
                             }
                         }
 
-                        events.RepeatEvent(1000);
+                        events.RepeatEvent(1s);
                         break;
                     }
             }
@@ -232,7 +232,7 @@ public:
         npc_riggle_bassbaitAI(Creature* c) : ScriptedAI(c)
         {
             events.Reset();
-            events.ScheduleEvent(EVENT_RIGGLE_ANNOUNCE, 1000, 1, 0);
+            events.ScheduleEvent(EVENT_RIGGLE_ANNOUNCE, 1s, 1);
             finished = false;
             startWarning = false;
             finishWarning = false;
@@ -284,7 +284,7 @@ public:
                             }
                         }
 
-                        events.RepeatEvent(1000);
+                        events.RepeatEvent(1s);
                         break;
                     }
             }
