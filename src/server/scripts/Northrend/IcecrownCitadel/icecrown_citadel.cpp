@@ -2937,7 +2937,7 @@ public:
 
 SeveredEssenceSpellInfo sesi_spells[] =
 {
-    {CLASS_SHAMAN, 71938, 5s, 1, 0.0f},
+    {CLASS_SHAMAN,  71938, 5s, 1, 0.0f},
     {CLASS_PALADIN, 57767, 8s, 2, 30.0f},
     {CLASS_WARLOCK, 71937, 10s, 1, 0.0f},
     {CLASS_DEATH_KNIGHT, 49576, 15s, 1, 30.0f},
@@ -2961,7 +2961,7 @@ SeveredEssenceSpellInfo sesi_spells[] =
     {CLASS_WARRIOR, 71552, 5s, 1, 0.0f},
     {CLASS_HUNTER, 36984, 7s, 1, 0.0f},
     {CLASS_HUNTER, 29576, 5s, 1, 0.0f},
-    {0, 0, 0, 0, 0.0f},
+    {0, 0, 0s, 0, 0.0f},
 };
 
 class npc_icc_severed_essence : public CreatureScript
