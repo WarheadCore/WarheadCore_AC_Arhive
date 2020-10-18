@@ -252,9 +252,6 @@ public:
                 me->RemoveAurasDueToSpell(SPELL_FRENZY);
                 events.Reset();
                 events.ScheduleEvent(EVENT_PHASE_4_START, 16s);
-                me->RemoveAurasDueToSpell(SPELL_FRENZY);
-                events.Reset();
-                events.ScheduleEvent(EVENT_PHASE_4_START, 16s);
             }
         }
 
