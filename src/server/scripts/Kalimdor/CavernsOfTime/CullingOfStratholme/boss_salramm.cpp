@@ -130,29 +130,29 @@ public:
             {
                 case EVENT_SPELL_SHADOW_BOLT:
                     me->CastSpell(me->GetVictim(), DUNGEON_MODE(SPELL_SHADOW_BOLT_N, SPELL_SHADOW_BOLT_H), false);
-                    events.RepeatEvent(10000);
+                    events.RepeatEvent(10s);
                     break;
                 case EVENT_SPELL_STEAL_FLESH:
                     if (!urand(0, 2))
                         Talk(SAY_STEAL_FLESH);
                     me->CastSpell(me->GetVictim(), SPELL_STEAL_FLESH_CHANNEL, false);
-                    events.RepeatEvent(12000);
+                    events.RepeatEvent(12s);
                     break;
                 case EVENT_SPELL_SUMMON_GHOULS:
                     if (!urand(0, 2))
                         Talk(SAY_SUMMON_GHOULS);
                     me->CastSpell(me, SPELL_SUMMON_GHOULS, false);
-                    events.RepeatEvent(10000);
+                    events.RepeatEvent(10s);
                     break;
                 case EVENT_EXPLODE_GHOUL:
                     if (!urand(0, 2))
                         Talk(SAY_EXPLODE_GHOUL);
                     ExplodeGhoul();
-                    events.RepeatEvent(15000);
+                    events.RepeatEvent(15s);
                     break;
                 case EVENT_SPELL_CURSE:
                     me->CastSpell(me->GetVictim(), SPELL_CURSE_OF_TWISTED_FAITH, false);
-                    events.RepeatEvent(30000);
+                    events.RepeatEvent(30s);
                     break;
             }
 

@@ -343,25 +343,25 @@ public:
                 case EVENT_SPELL_WINGBUFFET:
                     {
                         me->CastSpell(me, SPELL_WINGBUFFET, false);
-                        events.RepeatEvent(urand(15000, 30000));
+                        events.RepeatEvent(15s, 30s);
                     }
                     break;
                 case EVENT_SPELL_FLAMEBREATH:
                     {
                         me->CastSpell(me, SPELL_FLAMEBREATH, false);
-                        events.RepeatEvent(urand(10000, 20000));
+                        events.RepeatEvent(10s, 20s);
                     }
                     break;
                 case EVENT_SPELL_TAILSWEEP:
                     {
                         me->CastSpell(me, SPELL_TAILSWEEP, false);
-                        events.RepeatEvent(urand(15000, 20000));
+                        events.RepeatEvent(15s, 20s);
                     }
                     break;
                 case EVENT_SPELL_CLEAVE:
                     {
                         me->CastSpell(me->GetVictim(), SPELL_CLEAVE, false);
-                        events.RepeatEvent(urand(2000, 5000));
+                        events.RepeatEvent(2s, 5s);
                     }
                     break;
                 case EVENT_START_PHASE_2:
@@ -405,13 +405,13 @@ public:
                 case EVENT_SUMMON_LAIR_GUARD:
                     {
                         me->CastSpell(-101.654f, -214.491f, -80.70f, SPELL_SUMMON_LAIR_GUARD, true);
-                        events.RepeatEvent(30000);
+                        events.RepeatEvent(30s);
                     }
                     break;
                 case EVENT_WHELP_SPAM:
                     {
                         whelpSpam = true;
-                        events.RepeatEvent(90000);
+                        events.RepeatEvent(90s);
                     }
                     break;
                 case EVENT_LAND:
@@ -504,7 +504,7 @@ public:
                 case EVENT_SPELL_BELLOWINGROAR:
                     {
                         me->CastSpell(me, SPELL_BELLOWINGROAR, false);
-                        events.RepeatEvent(22000);
+                        events.RepeatEvent(22s);
                         events.ScheduleEvent(EVENT_ERUPTION, 0s);
                     }
                     break;
@@ -520,7 +520,7 @@ public:
                         float dist = rand_norm() * 4.0f;
                         me->CastSpell(-33.18f + cos(angle)*dist, -258.80f + sin(angle)*dist, -89.0f, 17646, true);
                         me->CastSpell(-32.535f + cos(angle)*dist, -170.190f + sin(angle)*dist, -89.0f, 17646, true);
-                        events.RepeatEvent(30000);
+                        events.RepeatEvent(30s);
                     }
                     break;
             }
@@ -581,15 +581,15 @@ public:
                     break;
                 case EVENT_OLG_SPELL_BLASTNOVA:
                     me->CastSpell(me, SPELL_OLG_BLASTNOVA, false);
-                    events.RepeatEvent(15000);
+                    events.RepeatEvent(15s);
                     break;
                 case EVENT_OLG_SPELL_IGNITEWEAPON:
                     if (me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISARMED))
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                     else
                     {
                         me->CastSpell(me, SPELL_OLG_IGNITEWEAPON, false);
-                        events.RepeatEvent(urand(18000, 21000));
+                        events.RepeatEvent(18s, 21s);
                     }
                     break;
             }

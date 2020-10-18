@@ -116,15 +116,15 @@ public:
                 case EVENT_SPELL_CURSE_OF_EXERTION:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true))
                         me->CastSpell(target, SPELL_CURSE_OF_EXERTION, false);
-                    events.RepeatEvent(9000);
+                    events.RepeatEvent(9s);
                     break;
                 case EVENT_SPELL_WOUNDING_STRIKE:
                     me->CastSpell(me->GetVictim(), DUNGEON_MODE(SPELL_WOUNDING_STRIKE_N, SPELL_WOUNDING_STRIKE_H), false);
-                    events.RepeatEvent(6000);
+                    events.RepeatEvent(6s);
                     break;
                 case EVENT_SPELL_TIME_STOP:
                     me->CastSpell(me, SPELL_TIME_STOP, false);
-                    events.RepeatEvent(20000);
+                    events.RepeatEvent(20s);
                     break;
                 case EVENT_SPELL_TIME_WARP:
                     Talk(SAY_TIME_WARP);
@@ -132,7 +132,7 @@ public:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true))
                         me->CastSpell(target, DUNGEON_MODE(SPELL_TIME_STEP_N, SPELL_TIME_STEP_H), true);
 
-                    events.RepeatEvent(25000);
+                    events.RepeatEvent(25s);
                     break;
             }
 
