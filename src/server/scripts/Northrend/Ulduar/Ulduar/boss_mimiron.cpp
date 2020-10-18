@@ -407,7 +407,9 @@ public:
                 for (uint32 i = 0; i < uint32(TALK_COMPUTER_ZERO - minutesTalkNum - 1); ++i)
                     events.ScheduleEvent(EVENT_COMPUTER_SAY_MINUTES, 1min * (i + 1));
 
-                events.ScheduleEvent(EVENT_COMPUTER_SAY_MINUTES, Milliseconds(TALK_COMPUTER_ZERO - minutesTalkNum) * Milliseconds(1min) + 6s);
+                Milliseconds computerSay = Milliseconds(TALK_COMPUTER_ZERO - minutesTalkNum) * Milliseconds(1min).count() + 6s;
+                
+                events.ScheduleEvent(EVENT_COMPUTER_SAY_MINUTES, computerSay);
             }
 
             // ensure LMK2 is at proper position
