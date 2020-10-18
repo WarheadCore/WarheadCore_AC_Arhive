@@ -148,7 +148,7 @@ public:
         }
 
     private:
-        Seconds _caveInTimer;
+        Milliseconds _caveInTimer;
     };
 
     CreatureAI* GetAI(Creature* creature) const
