@@ -326,7 +326,7 @@ public:
             if (events.GetNextEventTime(EVENT_KILL_TALK) == 0)
             {
                 Talk(SUFF_SAY_SLAY);
-                events.ScheduleEvent(EVENT_KILL_TALK, 6000);
+                    events.ScheduleEvent(EVENT_KILL_TALK, 6s);
             }
         }
 
@@ -337,9 +337,9 @@ public:
             me->CastSpell(me, SPELL_ESSENCE_OF_SUFFERING_PASSIVE, true);
             me->CastSpell(me, SPELL_ESSENCE_OF_SUFFERING_PASSIVE2, true);
 
-            events.ScheduleEvent(EVENT_SUFF_FRENZY, 45000);
-            events.ScheduleEvent(EVENT_SUFF_SOUL_DRAIN, 25000);
-        }
+                events.ScheduleEvent(EVENT_SUFF_FRENZY, 45s);
+                events.ScheduleEvent(EVENT_SUFF_SOUL_DRAIN, 25s);
+            }
 
         void UpdateAI(uint32 diff)
         {
@@ -350,22 +350,22 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.ExecuteEvent())
-            {
-                case EVENT_SUFF_SOUL_DRAIN:
-                    me->CastCustomSpell(SPELL_SOUL_DRAIN, SPELLVALUE_MAX_TARGETS, 3, me, false);
-                    events.ScheduleEvent(EVENT_SUFF_SOUL_DRAIN, 30000);
-                    break;
-                case EVENT_SUFF_FRENZY:
-                    Talk(SUFF_SAY_ENRAGE);
-                    Talk(SUFF_EMOTE_ENRAGE);
-                    me->CastSpell(me, SPELL_FRENZY, false);
-                    events.ScheduleEvent(EVENT_SUFF_FRENZY, 45000);
-                    events.ScheduleEvent(EVENT_SUFF_FRENZY_EMOTE, 3000);
-                    break;
-                case EVENT_SUFF_FRENZY_EMOTE:
-                    Talk(SUFF_EMOTE_ENRAGE);
-                    break;
+                switch (events.ExecuteEvent())
+                {
+                    case EVENT_SUFF_SOUL_DRAIN:
+                        me->CastCustomSpell(SPELL_SOUL_DRAIN, SPELLVALUE_MAX_TARGETS, 3, me, false);
+                        events.ScheduleEvent(EVENT_SUFF_SOUL_DRAIN, 30s);
+                        break;
+                    case EVENT_SUFF_FRENZY:
+                        Talk(SUFF_SAY_ENRAGE);
+                        Talk(SUFF_EMOTE_ENRAGE);
+                        me->CastSpell(me, SPELL_FRENZY, false);
+                        events.ScheduleEvent(EVENT_SUFF_FRENZY, 45s);
+                        events.ScheduleEvent(EVENT_SUFF_FRENZY_EMOTE, 3s);
+                        break;
+                    case EVENT_SUFF_FRENZY_EMOTE:
+                        Talk(SUFF_EMOTE_ENRAGE);
+                        break;
             }
 
             DoMeleeAttackIfReady();
@@ -436,7 +436,7 @@ public:
             if (events.GetNextEventTime(EVENT_KILL_TALK) == 0)
             {
                 Talk(DESI_SAY_SLAY);
-                events.ScheduleEvent(EVENT_KILL_TALK, 6000);
+                    events.ScheduleEvent(EVENT_KILL_TALK, 6s);
             }
         }
 
@@ -551,29 +551,29 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.ExecuteEvent())
-            {
-                case EVENT_ANGER_SPITE:
-                    if (roll_chance_i(30))
-                        Talk(ANGER_SAY_SPEC);
-                    me->CastCustomSpell(SPELL_SPITE, SPELLVALUE_MAX_TARGETS, 3, me, false);
-                    events.ScheduleEvent(EVENT_ANGER_SPITE, 25000);
-                    break;
-                case EVENT_ANGER_SOUL_SCREAM:
-                    me->CastSpell(me->GetVictim(), SPELL_SOUL_SCREAM, false);
-                    events.ScheduleEvent(EVENT_ANGER_SOUL_SCREAM, 10000);
-                    break;
-                case EVENT_ANGER_SEETHE:
-                    if (Unit* victim = me->GetVictim())
-                    {
-                        uint64 victimGUID = victim->GetGUID();
-                        if (targetGUID && targetGUID != victimGUID)
-                            me->CastSpell(me, SPELL_SEETHE, false);
-                        // victim can be lost
-                        targetGUID = victimGUID;
-                    }
-                    events.ScheduleEvent(EVENT_ANGER_SEETHE, 1000);
-                    break;
+                switch (events.ExecuteEvent())
+                {
+                    case EVENT_ANGER_SPITE:
+                        if (roll_chance_i(30))
+                            Talk(ANGER_SAY_SPEC);
+                        me->CastCustomSpell(SPELL_SPITE, SPELLVALUE_MAX_TARGETS, 3, me, false);
+                        events.ScheduleEvent(EVENT_ANGER_SPITE, 25s);
+                        break;
+                    case EVENT_ANGER_SOUL_SCREAM:
+                        me->CastSpell(me->GetVictim(), SPELL_SOUL_SCREAM, false);
+                        events.ScheduleEvent(EVENT_ANGER_SOUL_SCREAM, 10s);
+                        break;
+                    case EVENT_ANGER_SEETHE:
+                        if (Unit* victim = me->GetVictim())
+                        {
+                            uint64 victimGUID = victim->GetGUID();
+                            if (targetGUID && targetGUID != victimGUID)
+                                me->CastSpell(me, SPELL_SEETHE, false);
+                            // victim can be lost
+                            targetGUID = victimGUID;
+                        }     
+                        events.ScheduleEvent(EVENT_ANGER_SEETHE, 1s);
+                        break;
 
             }
 

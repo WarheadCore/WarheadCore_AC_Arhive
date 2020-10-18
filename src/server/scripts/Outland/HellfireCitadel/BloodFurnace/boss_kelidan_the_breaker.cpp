@@ -312,10 +312,10 @@ public:
             if (Creature* kelidan = GetKelidan())
                 kelidan->AI()->DoAction(ACTION_CHANNELER_ENGAGED);
 
-            me->InterruptNonMeleeSpells(false);
-            events.ScheduleEvent(EVENT_SPELL_SHADOW_BOLT, urand(1500, 3500));
-            events.ScheduleEvent(EVENT_SPELL_MARK, urand(5000, 6500));
-        }
+                me->InterruptNonMeleeSpells(false);
+                events.ScheduleEvent(EVENT_SPELL_SHADOW_BOLT, 1500ms, 3500ms);
+                events.ScheduleEvent(EVENT_SPELL_MARK, 5s, 6500ms);
+            }
 
         void JustDied(Unit*  /*killer*/)
         {

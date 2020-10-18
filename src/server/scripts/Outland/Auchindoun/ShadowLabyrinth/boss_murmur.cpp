@@ -78,14 +78,15 @@ public:
 
         void EnterCombat(Unit* /*who*/)
         {
-            events.ScheduleEvent(EVENT_SPELL_SONIC_BOOM, 30000);
-            events.ScheduleEvent(EVENT_SPELL_MURMURS_TOUCH, urand(8000, 20000));
-            events.ScheduleEvent(EVENT_SPELL_RESONANCE, 5000);
-            events.ScheduleEvent(EVENT_SPELL_MAGNETIC, urand(15000, 30000));
+            events.ScheduleEvent(EVENT_SPELL_SONIC_BOOM, 30s);
+            events.ScheduleEvent(EVENT_SPELL_MURMURS_TOUCH, 8s, 20s);
+            events.ScheduleEvent(EVENT_SPELL_RESONANCE, 5s);
+            events.ScheduleEvent(EVENT_SPELL_MAGNETIC, 15s, 30s);
+            
             if (IsHeroic())
             {
-                events.ScheduleEvent(EVENT_SPELL_THUNDERING, 15000);
-                events.ScheduleEvent(EVENT_SPELL_SONIC_SHOCK, 10000);
+                events.ScheduleEvent(EVENT_SPELL_THUNDERING, 15s);
+                events.ScheduleEvent(EVENT_SPELL_SONIC_SHOCK, 10s);
             }
 
             if (instance)
@@ -111,7 +112,7 @@ public:
                     me->CastSpell(me, DUNGEON_MODE(SPELL_SONIC_BOOM_CAST_N, SPELL_SONIC_BOOM_CAST_H), false);
                     events.RepeatEvent(28500);
                     events.DelayEvents(1500);
-                    events.ScheduleEvent(EVENT_SPELL_SONIC_BOOM_EFFECT, 0);
+                    events.ScheduleEvent(EVENT_SPELL_SONIC_BOOM_EFFECT, 0s);
                     return;
                 case EVENT_SPELL_SONIC_BOOM_EFFECT:
                     me->CastSpell(me, DUNGEON_MODE(SPELL_SONIC_BOOM_EFFECT_N, SPELL_SONIC_BOOM_EFFECT_H), true);

@@ -141,11 +141,12 @@ public:
             Talk(SAY_AGGRO);
             summonPortals();
 
-            events.ScheduleEvent(EVENT_SPELL_SHADOWBOLT, urand(7000, 14000));
-            events.ScheduleEvent(EVENT_SPELL_DRAWSHADOWS, 45000);
-            events.ScheduleEvent(EVENT_SUMMON_TRAVELER, 5000);
+            events.ScheduleEvent(EVENT_SPELL_SHADOWBOLT, 7s, 14s);
+            events.ScheduleEvent(EVENT_SPELL_DRAWSHADOWS, 45s);
+            events.ScheduleEvent(EVENT_SUMMON_TRAVELER, 5s);
+            
             if (IsHeroic())
-                events.ScheduleEvent(EVENT_SPELL_BANISH, 17000);
+                events.ScheduleEvent(EVENT_SPELL_BANISH, 17s);
 
             if (instance)
                 instance->SetData(DATA_GRANDMASTERVORPILEVENT, IN_PROGRESS);

@@ -166,11 +166,11 @@ public:
             me->DespawnOrUnsummon(1);
         }
 
-        void EnterCombat(Unit*)
-        {
-            events.ScheduleEvent(EVENT_CHANGE_POS, 0);
-            events.ScheduleEvent(EVENT_SPELL_FIREBALL, 5000);
-        }
+            void EnterCombat(Unit*)
+            {
+                events.ScheduleEvent(EVENT_CHANGE_POS, 0s);
+                events.ScheduleEvent(EVENT_SPELL_FIREBALL, 5s);
+            }
 
         void AttackStart(Unit* who)
         {
@@ -194,12 +194,14 @@ public:
         {
             if (type == POINT_MOTION_TYPE && id == POINT_MIDDLE)
             {
-                me->SetDisableGravity(false);
-                me->SetCanFly(false);
-                events.ScheduleEvent(EVENT_RESTORE_COMBAT, 0);
-                events.ScheduleEvent(EVENT_SPELL_CONE_OF_FIRE, 5000);
-                if (IsHeroic())
-                    events.ScheduleEvent(EVENT_SPELL_BELLOWING_ROAR, 10000);
+                    me->SetDisableGravity(false);
+                    me->SetCanFly(false);
+
+                    events.ScheduleEvent(EVENT_RESTORE_COMBAT, 0s);
+                    events.ScheduleEvent(EVENT_SPELL_CONE_OF_FIRE, 5s);
+
+                    if (IsHeroic())
+                        events.ScheduleEvent(EVENT_SPELL_BELLOWING_ROAR, 10s);
             }
         }
 
@@ -212,29 +214,29 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            switch (events.ExecuteEvent())
-            {
-                case EVENT_SPELL_FIREBALL:
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                        me->CastSpell(target, SPELL_FIREBALL, false);
-                    events.ScheduleEvent(EVENT_SPELL_FIREBALL, urand(4000, 6000));
-                    break;
-                case EVENT_CHANGE_POS:
-                    me->GetMotionMaster()->MovePoint(POINT_FLIGHT, NazanPos[urand(0, 2)], false);
-                    events.DelayEvents(7000);
-                    events.ScheduleEvent(EVENT_CHANGE_POS, 30000);
-                    break;
-                case EVENT_RESTORE_COMBAT:
-                    me->GetMotionMaster()->MoveChase(me->GetVictim());
-                    break;
-                case EVENT_SPELL_CONE_OF_FIRE:
-                    me->CastSpell(me->GetVictim(), SPELL_CONE_OF_FIRE, false);
-                    events.ScheduleEvent(EVENT_SPELL_CONE_OF_FIRE, 12000);
-                    break;
-                case EVENT_SPELL_BELLOWING_ROAR:
-                    me->CastSpell(me, SPELL_BELLOWING_ROAR, false);
-                    events.ScheduleEvent(EVENT_SPELL_BELLOWING_ROAR, 30000);
-                    break;
+                switch (events.ExecuteEvent())
+                {
+                    case EVENT_SPELL_FIREBALL:
+                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                            me->CastSpell(target, SPELL_FIREBALL, false);
+                        events.ScheduleEvent(EVENT_SPELL_FIREBALL, 4s, 6s);
+                        break;
+                    case EVENT_CHANGE_POS:
+                        me->GetMotionMaster()->MovePoint(POINT_FLIGHT, NazanPos[urand(0,2)], false);
+                        events.DelayEvents(7000);
+                        events.ScheduleEvent(EVENT_CHANGE_POS, 30s);
+                        break;
+                    case EVENT_RESTORE_COMBAT:
+                        me->GetMotionMaster()->MoveChase(me->GetVictim());
+                        break;
+                    case EVENT_SPELL_CONE_OF_FIRE:
+                        me->CastSpell(me->GetVictim(), SPELL_CONE_OF_FIRE, false);
+                        events.ScheduleEvent(EVENT_SPELL_CONE_OF_FIRE, 12s);
+                        break;
+                    case EVENT_SPELL_BELLOWING_ROAR:
+                        me->CastSpell(me, SPELL_BELLOWING_ROAR, false);
+                        events.ScheduleEvent(EVENT_SPELL_BELLOWING_ROAR, 30s);
+                        break;
             }
 
             if (!me->IsLevitating())

@@ -106,7 +106,7 @@ public:
 
                     CannonGUID = caster->GetGUID();
                     PartyTime = true;
-                    events.ScheduleEvent(EVENT_PARTY_TIMER, 3000);
+                    events.ScheduleEvent(EVENT_PARTY_TIMER, 3s);
                 }
 
                 if (count >= 3)
@@ -169,7 +169,7 @@ public:
                         else
                         {
                             me->SummonCreature(NPC_FEL_IMP, 0, 0, 0, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000);
-                            events.ScheduleEvent(EVENT_PARTY_TIMER, 3000);
+                            events.ScheduleEvent(EVENT_PARTY_TIMER, 3s);
                         }
                         break;
                 }
@@ -676,11 +676,11 @@ public:
             else if (type == clusterIds[SIMON_YELLOW])
                 pressedColor = SIMON_YELLOW;
 
-            PlayColor(pressedColor);
-            playerSequence.push_back(pressedColor);
-            _events.ScheduleEvent(EVENT_SIMON_RESET_CLUSTERS, 500);
-            CheckPlayerSequence();
-        }
+                PlayColor(pressedColor);
+                playerSequence.push_back(pressedColor);
+                _events.ScheduleEvent(EVENT_SIMON_RESET_CLUSTERS, 500ms);
+                CheckPlayerSequence();
+            }
 
         // Used for getting involved player guid. Parameter id is used for defining if is a large(Monument) or small(Relic) node
         void SetGUID(uint64 guid, int32 id)
@@ -764,9 +764,9 @@ public:
                 }
             }
 
-            _events.Reset();
-            _events.ScheduleEvent(EVENT_SIMON_ROUND_FINISHED, 1000);
-            _events.ScheduleEvent(EVENT_SIMON_PERIODIC_PLAYER_CHECK, 2000);
+                _events.Reset();
+                _events.ScheduleEvent(EVENT_SIMON_ROUND_FINISHED, 1s);
+                _events.ScheduleEvent(EVENT_SIMON_PERIODIC_PLAYER_CHECK, 2s);
 
             if (GameObject* relic = me->FindNearestGameObject(large ? GO_APEXIS_MONUMENT : GO_APEXIS_RELIC, searchDistance))
                 relic->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);

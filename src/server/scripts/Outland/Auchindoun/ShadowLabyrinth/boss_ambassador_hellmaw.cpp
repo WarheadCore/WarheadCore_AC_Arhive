@@ -91,11 +91,14 @@ public:
         {
             if (isBanished)
                 return;
+            
             Talk(SAY_AGGRO);
-            events.ScheduleEvent(EVENT_SPELL_CORROSIVE, urand(5000, 10000));
-            events.ScheduleEvent(EVENT_SPELL_FEAR, urand(15000, 20000));
+            
+            events.ScheduleEvent(EVENT_SPELL_CORROSIVE, 5s, 10s);
+            events.ScheduleEvent(EVENT_SPELL_FEAR, 15s, 20s);
+            
             if (IsHeroic())
-                events.ScheduleEvent(EVENT_SPELL_ENRAGE, 180000);
+                events.ScheduleEvent(EVENT_SPELL_ENRAGE, 3min);
 
             if (instance)
                 instance->SetData(TYPE_HELLMAW, IN_PROGRESS);

@@ -76,7 +76,7 @@ public:
             if (victim->GetTypeId() == TYPEID_PLAYER && events.GetNextEventTime(EVENT_KILL_SPEAK) == 0)
             {
                 Talk(SAY_SLAY);
-                events.ScheduleEvent(EVENT_KILL_SPEAK, 5000);
+                events.ScheduleEvent(EVENT_KILL_SPEAK, 5s);
             }
         }
 
@@ -90,11 +90,11 @@ public:
         {
             BossAI::EnterCombat(who);
             Talk(SAY_AGGRO);
-            events.ScheduleEvent(EVENT_SPELL_BERSERK, 480000);
-            events.ScheduleEvent(EVENT_YELL, urand(25000, 100000));
-            events.RescheduleEvent(EVENT_SPELL_NEEDLE, 10000);
-            events.RescheduleEvent(EVENT_SPELL_SPINE, 20001);
-            events.RescheduleEvent(EVENT_SPELL_SHIELD, 60000);
+            events.ScheduleEvent(EVENT_SPELL_BERSERK, 8min);
+            events.ScheduleEvent(EVENT_YELL, 25s, 100s);
+            events.RescheduleEvent(EVENT_SPELL_NEEDLE, 10s);
+            events.RescheduleEvent(EVENT_SPELL_SPINE, 20001ms);
+            events.RescheduleEvent(EVENT_SPELL_SHIELD, 1min);
         }
 
         void UpdateAI(uint32 diff)
@@ -111,7 +111,7 @@ public:
                 case EVENT_SPELL_SHIELD:
                     me->CastSpell(me, SPELL_TIDAL_SHIELD, false);
                     events.DelayEvents(10000);
-                    events.ScheduleEvent(EVENT_SPELL_SHIELD, 60000);
+                    events.ScheduleEvent(EVENT_SPELL_SHIELD, 1min);
                     break;
                 case EVENT_SPELL_BERSERK:
                     Talk(SAY_ENRAGE);
@@ -119,7 +119,7 @@ public:
                     break;
                 case EVENT_SPELL_NEEDLE:
                     me->CastCustomSpell(SPELL_NEEDLE_SPINE, SPELLVALUE_MAX_TARGETS, 3, me, false);
-                    events.ScheduleEvent(EVENT_SPELL_NEEDLE, 15000);
+                    events.ScheduleEvent(EVENT_SPELL_NEEDLE, 15s);
                     break;
                 case EVENT_SPELL_SPINE:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
@@ -128,11 +128,11 @@ public:
                         target->CastSpell(target, SPELL_SUMMON_IMPALING_SPINE, true);
                         Talk(SAY_NEEDLE);
                     }
-                    events.ScheduleEvent(EVENT_SPELL_SPINE, 20000);
+                    events.ScheduleEvent(EVENT_SPELL_SPINE, 20s);
                     return;
                 case EVENT_YELL:
                     Talk(SAY_SPECIAL);
-                    events.ScheduleEvent(EVENT_YELL, urand(25000, 100000));
+                    events.ScheduleEvent(EVENT_YELL, 25s, 100s);
                     break;
             }
 

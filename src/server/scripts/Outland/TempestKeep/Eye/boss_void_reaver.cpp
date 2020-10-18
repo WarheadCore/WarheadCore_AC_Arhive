@@ -76,12 +76,12 @@ public:
             Talk(SAY_AGGRO);
             BossAI::EnterCombat(who);
 
-            events.ScheduleEvent(EVENT_SPELL_POUNDING, 15000);
-            events.ScheduleEvent(EVENT_SPELL_ARCANEORB, 3000);
-            events.ScheduleEvent(EVENT_SPELL_KNOCK_AWAY, 30000);
-            events.ScheduleEvent(EVENT_SPELL_BERSERK, 600000);
-            me->CallForHelp(105.0f);
-        }
+                events.ScheduleEvent(EVENT_SPELL_POUNDING, 15s);
+                events.ScheduleEvent(EVENT_SPELL_ARCANEORB, 3s);
+                events.ScheduleEvent(EVENT_SPELL_KNOCK_AWAY, 30s);
+                events.ScheduleEvent(EVENT_SPELL_BERSERK, 10min);
+                me->CallForHelp(105.0f);
+            }
 
         void UpdateAI(uint32 diff)
         {

@@ -127,9 +127,9 @@ public:
                     me->SetInCombatWithZone();
                     break;
                 case ACTION_ACTIVATE_BROGGOK:
-                    events.ScheduleEvent(EVENT_SPELL_SLIME, 10000);
-                    events.ScheduleEvent(EVENT_SPELL_POISON, 5000);
-                    events.ScheduleEvent(EVENT_SPELL_BOLT, 7000);
+                        events.ScheduleEvent(EVENT_SPELL_SLIME, 10s);
+                        events.ScheduleEvent(EVENT_SPELL_POISON, 5s);
+                        events.ScheduleEvent(EVENT_SPELL_BOLT, 7s);
 
                     me->SetReactState(REACT_AGGRESSIVE);
                     me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_IMMUNE_TO_NPC | UNIT_FLAG_NON_ATTACKABLE);
