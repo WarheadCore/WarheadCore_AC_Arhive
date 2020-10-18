@@ -280,8 +280,8 @@ public:
                     if (me->HealthBelowPct(11))
                         return;
 
-                    events.RepeatEvent(45000);
-                    events.DelayEvents(35000);
+                    events.Repeat(45s);
+                    events.DelayEvents(35s);
                     me->SetReactState(REACT_PASSIVE);
                     me->AttackStop();
                     float x, y, z, o;

@@ -132,8 +132,8 @@ public:
                 case EVENT_SPELL_CHAIN:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         me->CastSpell(target, SPELL_CHAIN_LIGHTNING, false);
-                    events.DelayEvents(3000);
-                    events.RepeatEvent(9s);
+                    events.DelayEvents(3s);
+                    events.Repeat(9s);
                     break;
                 case EVENT_SPELL_STATIC:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 30, true))
@@ -146,7 +146,7 @@ public:
                     {
                         me->CastSpell(target, SPELL_LEVITATE, false);
                         lTarget = target->GetGUID();
-                        events.DelayEvents(5000);
+                        events.DelayEvents(5s);
                         events.ScheduleEvent(EVENT_LEVITATE_TARGET_1, 2s);
                     }
                     break;

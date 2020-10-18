@@ -110,8 +110,8 @@ public:
                 case EVENT_SPELL_SONIC_BOOM:
                     Talk(EMOTE_SONIC_BOOM);
                     me->CastSpell(me, DUNGEON_MODE(SPELL_SONIC_BOOM_CAST_N, SPELL_SONIC_BOOM_CAST_H), false);
-                    events.RepeatEvent(28500ms);
-                    events.DelayEvents(1500);
+                    events.Repeat(28500ms);
+                    events.DelayEvents(1500ms);
                     events.ScheduleEvent(EVENT_SPELL_SONIC_BOOM_EFFECT, 0s);
                     return;
                 case EVENT_SPELL_SONIC_BOOM_EFFECT:

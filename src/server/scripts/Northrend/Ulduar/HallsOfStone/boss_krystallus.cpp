@@ -145,7 +145,7 @@ public:
                 {
                     events.RepeatEvent(10s, 13s);
                     me->CastSpell(me->GetVictim(), GROUND_SLAM, true);
-                    events.DelayEvents(10000);
+                    events.DelayEvents(10s);
                     events.RescheduleEvent(EVENT_SHATTER, 8s);
                     break;
                 }

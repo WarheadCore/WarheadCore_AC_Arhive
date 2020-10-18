@@ -324,7 +324,7 @@ public:
                     events.RepeatEvent(40s, 2min);
                     break;
                 case EVENT_RESURRECT:
-                    events.DelayEvents(3500);
+                    events.DelayEvents(3500ms);
                     DoCast(me, SPELL_SCOURGE_RESURRECTION, true);
                     me->SetStandState(UNIT_STAND_STATE_STAND);
                     me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_UNK_29);

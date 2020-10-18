@@ -676,7 +676,7 @@ public:
                 me->NearTeleportTo(target->GetPositionX() + cos(o) * 5.0f, target->GetPositionY() + sin(o) * 5.0f, target->GetPositionZ() + 0.6f, target->GetOrientation());
                 AttackStart(target);
                 me->GetMotionMaster()->MoveChase(target);
-                events.DelayEvents(3000);
+                events.DelayEvents(3s);
             }
         }
 
@@ -708,8 +708,7 @@ public:
                         me->CastSpell(me, SPELL_EXPOSE_WEAKNESS, true);
                         me->CastSpell(me, SPELL_SPIDER_FRENZY, true);
                         me->CastSpell(me, SPELL_SUBMERGE, false);
-
-                        events.DelayEvents(15000);
+                        events.DelayEvents(15s);
                         events.RescheduleEvent(EVENT_EMERGE, 10s);
                     }
                     else

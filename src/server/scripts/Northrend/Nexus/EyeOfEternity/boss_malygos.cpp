@@ -474,7 +474,7 @@ public:
                         me->SendMovementFlagUpdate();
                         me->GetMotionMaster()->MoveTakeoff(MI_POINT_VORTEX_TAKEOFF, me->GetPositionX(), me->GetPositionY(), CenterPos.GetPositionZ() + 20.0f, 7.0f);
 
-                        events.DelayEvents(25000, 1); // don't delay berserk (group 0)
+                        events.DelayEvents(25s, 1); // don't delay berserk (group 0)
                     }
                     break;
                 case EVENT_VORTEX_FLY_TO_CENTER:

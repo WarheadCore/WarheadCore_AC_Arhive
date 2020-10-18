@@ -266,12 +266,12 @@ public:
                     break;
                 }
                 case EVENT_LIGHTNING_RING:
-                    {
-                        me->CastSpell(me, DUNGEON_MODE(SPELL_LIGHTNING_RING, SPELL_LIGHTNING_RING_H), false);
-                        events.RepeatEvent(25000 + rand() % 6000);
-                        events.DelayEvents(10000); // Channel duration
-                        break;
-                    }
+                {
+                    me->CastSpell(me, DUNGEON_MODE(SPELL_LIGHTNING_RING, SPELL_LIGHTNING_RING_H), false);
+                    events.Repeat(25s, 31s);
+                    events.DelayEvents(10s); // Channel duration
+                    break;
+                }
                 case EVENT_SUMMON_SPEACH:
                     {
                         if (Creature* brann = ObjectAccessor::GetCreature(*me, pInstance->GetData64(NPC_BRANN)))

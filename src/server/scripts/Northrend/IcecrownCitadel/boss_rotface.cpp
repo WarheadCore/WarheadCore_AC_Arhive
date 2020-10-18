@@ -281,40 +281,39 @@ public:
                             Talk(EMOTE_SLIME_SPRAY);
                             me->CastSpell(c, SPELL_SLIME_SPRAY, false);
                         }
-                    }
-                    events.DelayEvents(1);
-                    events.ScheduleEvent(EVENT_SLIME_SPRAY, 20000);
-                    events.ScheduleEvent(EVENT_UNROOT, 0);
-                    break;
-                case EVENT_HASTEN_INFECTIONS:
-                    if (infectionCooldown >= 8000)
-                    {
-                        infectionCooldown -= 2000;
-                        events.ScheduleEvent(EVENT_HASTEN_INFECTIONS, 90000);
-                    }
-                    break;
-                case EVENT_MUTATED_INFECTION:
-                    me->CastCustomSpell(SPELL_MUTATED_INFECTION, SPELLVALUE_MAX_TARGETS, 1, NULL, false);
-                    events.ScheduleEvent(EVENT_MUTATED_INFECTION, infectionCooldown);
-                    break;
-                case EVENT_ROTFACE_OOZE_FLOOD:
-                    if (Creature* professor = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_PROFESSOR_PUTRICIDE)))
-                    {
-                        professor->AI()->Talk(SAY_ROTFACE_OOZE_FLOOD);
-                        me->CastSpell((Unit*)NULL, oozeFloodSpells[_oozeFloodStage], true);
-                        if (++_oozeFloodStage == 4)
-                            _oozeFloodStage = 0;
-                    }
-                    events.ScheduleEvent(EVENT_ROTFACE_OOZE_FLOOD, 25000);
-                    break;
-                case EVENT_ROTFACE_VILE_GAS:
-                    {
-                        std::list<Unit*> targets;
-                        uint32 minTargets = RAID_MODE<uint32>(3, 8, 3, 8);
-                        SelectTargetList(targets, minTargets, SELECT_TARGET_RANDOM, -5.0f, true);
-                        float minDist = 0.0f;
-                        if (targets.size() >= minTargets)
-                            minDist = -5.0f;
+                        events.DelayEvents(10ms);
+                        events.ScheduleEvent(EVENT_SLIME_SPRAY, 20s);
+                        events.ScheduleEvent(EVENT_UNROOT, 0s);
+                        break;
+                    case EVENT_HASTEN_INFECTIONS:
+                        if (infectionCooldown >= 8s)
+                        {
+                            infectionCooldown -= 2s;
+                            events.ScheduleEvent(EVENT_HASTEN_INFECTIONS, 90s);
+                        }
+                        break;
+                    case EVENT_MUTATED_INFECTION:
+                        me->CastCustomSpell(SPELL_MUTATED_INFECTION, SPELLVALUE_MAX_TARGETS, 1, NULL, false);
+                        events.ScheduleEvent(EVENT_MUTATED_INFECTION, infectionCooldown);
+                        break;
+                    case EVENT_ROTFACE_OOZE_FLOOD:
+                        if (Creature* professor = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_PROFESSOR_PUTRICIDE)))
+                        {
+                            professor->AI()->Talk(SAY_ROTFACE_OOZE_FLOOD);
+                            me->CastSpell((Unit*)NULL, oozeFloodSpells[_oozeFloodStage], true);
+                            if (++_oozeFloodStage == 4)
+                                _oozeFloodStage = 0;
+                        }
+                        events.ScheduleEvent(EVENT_ROTFACE_OOZE_FLOOD, 25s);
+                        break;
+                    case EVENT_ROTFACE_VILE_GAS:
+                        {
+                            std::list<Unit*> targets;
+                            uint32 minTargets = RAID_MODE<uint32>(3, 8, 3, 8);
+                            SelectTargetList(targets, minTargets, SELECT_TARGET_RANDOM, -5.0f, true);
+                            float minDist = 0.0f;
+                            if (targets.size() >= minTargets)
+                                minDist = -5.0f;
 
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, minDist, true))
                             if (Creature* professor = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_PROFESSOR_PUTRICIDE)))

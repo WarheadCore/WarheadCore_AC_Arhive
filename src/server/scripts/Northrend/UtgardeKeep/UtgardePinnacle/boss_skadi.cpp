@@ -236,8 +236,8 @@ public:
                 case EVENT_SKADI_WHIRLWIND:
                 {
                     me->CastSpell(me, IsHeroic() ? SPELL_WHIRLWIND_H : SPELL_WHIRLWIND_N, false);
-                    events.RepeatEvent(15s, 20s);
-                    events.DelayEvents(10000);
+                    events.Repeat(15s, 20s);
+                    events.DelayEvents(10s);
                     break;
                 }
             }

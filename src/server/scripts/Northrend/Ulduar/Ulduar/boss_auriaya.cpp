@@ -263,8 +263,8 @@ public:
                     break;
                 case EVENT_SENTINEL_BLAST:
                     me->CastSpell(me, SPELL_SENTINEL_BLAST, false);
-                    events.RepeatEvent(35s);
-                    events.DelayEvents(5000, 0);
+                    events.Repeat(35s);
+                    events.DelayEvents(5s);
                     break;
                 case EVENT_RESPAWN_FERAL_DEFENDER:
                     {

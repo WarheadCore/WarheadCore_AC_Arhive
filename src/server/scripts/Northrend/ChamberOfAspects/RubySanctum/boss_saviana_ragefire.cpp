@@ -144,7 +144,7 @@ public:
                         me->SetDisableGravity(true);
                         me->GetMotionMaster()->MovePoint(POINT_TAKEOFF, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ() + 6.0f, false);
                         events.ScheduleEvent(EVENT_FLIGHT, 50s);
-                        events.DelayEvents(15000);
+                        events.DelayEvents(15s);
                         events.ScheduleEvent(EVENT_AIR_MOVEMENT, 2s);
                         break;
                     }

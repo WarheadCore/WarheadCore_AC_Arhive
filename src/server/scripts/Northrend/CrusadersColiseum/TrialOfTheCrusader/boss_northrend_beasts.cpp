@@ -850,7 +850,7 @@ public:
                     me->CastSpell(me, SPELL_STAGGERED_DAZE, true);
                     me->CastSpell((Unit*)NULL, SPELL_TRAMPLE, true);
                     Talk(EMOTE_TRAMPLE_CRASH);
-                    events.DelayEvents(15000);
+                    events.DelayEvents(15s);
                 }
                 else
                 {

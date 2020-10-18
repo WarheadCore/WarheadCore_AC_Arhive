@@ -413,8 +413,8 @@ public:
                         me->CastSpell(me->GetVictim(), SPELL_OVERHEAD_SMASH, false);
                     else if (_left || _right)
                         me->CastSpell(me->GetVictim(), SPELL_ONEARMED_OVERHEAD_SMASH, false);
-
-                    events.DelayEvents(1000);
+                    
+                    events.DelayEvents(1s);
                     events.ScheduleEvent(EVENT_SMASH, 14s);
                     return;
                 case EVENT_SWEEP:
@@ -427,7 +427,7 @@ public:
                             Talk(SAY_SHOCKWAVE);
                     }
 
-                    events.DelayEvents(1000);
+                    events.DelayEvents(1s);
                     events.ScheduleEvent(EVENT_SWEEP, 17s);
                     return;
                 case EVENT_GRIP:

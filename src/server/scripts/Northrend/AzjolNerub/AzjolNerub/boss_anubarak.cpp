@@ -196,14 +196,17 @@ public:
                         me->CastSpell(me, SPELL_SUBMERGE, false);
                         me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
 
-                        events.DelayEvents(46000, 0);
-                        events.ScheduleEvent(EVENT_EMERGE, 45s);
-                        events.ScheduleEvent(EVENT_SUMMON_ASSASSINS, 2s);
-                        events.ScheduleEvent(EVENT_SUMMON_GUARDIAN, 4s);
-                        events.ScheduleEvent(EVENT_SUMMON_ASSASSINS, 15s);
-                        events.ScheduleEvent(EVENT_SUMMON_VENOMANCER, 20s);
-                        events.ScheduleEvent(EVENT_SUMMON_DARTER, 30s);
-                        events.ScheduleEvent(EVENT_SUMMON_ASSASSINS, 35s);
+                            events.DelayEvents(46s);
+                            events.ScheduleEvent(EVENT_EMERGE, 45s);
+                            events.ScheduleEvent(EVENT_SUMMON_ASSASSINS, 2s);
+                            events.ScheduleEvent(EVENT_SUMMON_GUARDIAN, 4s);
+                            events.ScheduleEvent(EVENT_SUMMON_ASSASSINS, 15s);
+                            events.ScheduleEvent(EVENT_SUMMON_VENOMANCER, 20s);
+                            events.ScheduleEvent(EVENT_SUMMON_DARTER, 30s);
+                            events.ScheduleEvent(EVENT_SUMMON_ASSASSINS, 35s);
+                            break;
+                        }
+                        events.ScheduleEvent(eventId, 500ms);
                         break;
                     }
                     events.ScheduleEvent(eventId, 500);

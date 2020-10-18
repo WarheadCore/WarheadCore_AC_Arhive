@@ -623,7 +623,7 @@ void boss_flame_leviathan::boss_flame_leviathanAI::SpellHit(Unit*  /*caster*/, c
         Talk(FLAME_LEVIATHAN_EMOTE_REPAIR);
         Talk(FLAME_LEVIATHAN_SAY_OVERLOAD);
 
-        events.DelayEvents(20 * IN_MILLISECONDS + 1);
+        events.DelayEvents(20001ms);
         events.ScheduleEvent(EVENT_REINSTALL, 20s);
     }
     else if (spellInfo->Id == 62522 /*SPELL_ELECTROSHOCK*/)

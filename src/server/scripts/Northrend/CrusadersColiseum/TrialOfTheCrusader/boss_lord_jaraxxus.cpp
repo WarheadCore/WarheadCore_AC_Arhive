@@ -227,8 +227,8 @@ public:
                     break;
                 case EVENT_SPELL_NETHER_POWER:
                     me->CastSpell(me, SPELL_NETHER_POWER, false);
-                    events.DelayEvents(5000);
-                    events.RepeatEvent(25s, 45s);
+                    events.DelayEvents(5s);
+                    events.Repeat(25s, 45s);
                     break;
                 case EVENT_SPELL_LEGION_FLAME:
                     if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true) )

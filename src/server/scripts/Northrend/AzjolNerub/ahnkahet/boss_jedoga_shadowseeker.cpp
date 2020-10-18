@@ -198,13 +198,13 @@ public:
             else if (param == ACTION_HERALD)
             {
                 me->CastSpell(me, SPELL_GIFT_OF_THE_HERALD, true);
-                events.DelayEvents(1001);
+                events.DelayEvents(1001ms);
                 events.ScheduleEvent(EVENT_JEDOGA_MOVE_DOWN, 1s);
                 isFlying = false;
             }
             else if (param == ACTION_SACRIFICE_FAILED)
             {
-                events.DelayEvents(1001);
+                events.DelayEvents(1001ms);
                 events.ScheduleEvent(EVENT_JEDOGA_MOVE_DOWN, 1s);
                 isFlying = false;
                 if (pInstance)

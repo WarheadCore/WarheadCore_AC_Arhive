@@ -452,8 +452,8 @@ struct boss_twin_valkyrAI : public ScriptedAI
                     }
                     if( (SpecialMask & 0xF) == 0xF )
                         SpecialMask = 0;
-                    events.RepeatEvent(45s);
-                    events.DelayEventsToMax(15000, 1); // no touch of light/darkness during special abilities!
+                    events.Repeat(45s);
+                    events.DelayEvents(15s, 1); // no touch of light/darkness during special abilities!
                 }
                 break;
             case EVENT_REMOVE_DUAL_WIELD:

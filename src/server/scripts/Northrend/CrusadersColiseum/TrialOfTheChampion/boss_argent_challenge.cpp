@@ -618,8 +618,8 @@ public:
             if( bCheck && damage >= me->GetHealth() )
             {
                 bCheck = false;
-                damage = me->GetHealth() - 1;
-                events.DelayEvents(10000);
+                damage = me->GetHealth()-1;
+                events.DelayEvents(10s);
                 me->CastSpell(me, SPELL_DIVINE_SHIELD_H, true);
                 me->CastSpell((Unit*)NULL, SPELL_FINAL_MEDITATION_H, true);
             }

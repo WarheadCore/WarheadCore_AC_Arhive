@@ -117,9 +117,9 @@ struct boss_faction_championsAI : public ScriptedAI
         }
     }
 
-    void EventMapGCD(EventMap& e, uint32 delay, uint32 gcd = 0)
+    void EventMapGCD(EventMap &e, uint32 delay)
     {
-        e.DelayEventsToMax(delay, gcd);
+        e.DelayEvents(Milliseconds(delay));
     }
 
     void JustDied(Unit* /*pKiller*/)
@@ -1570,8 +1570,8 @@ public:
                     if( EnemiesInRange(8.0f) >= 3 )
                     {
                         me->CastSpell(me, SPELL_BLADESTORM, false);
-                        events.RepeatEvent(90s);
-                        events.DelayEvents(9000);
+                        events.Repeat(90s);
+                        events.DelayEvents(9s);
                     }
                     else
                         events.RepeatEvent(5s);
