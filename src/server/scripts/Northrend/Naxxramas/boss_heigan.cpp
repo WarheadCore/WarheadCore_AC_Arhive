@@ -103,7 +103,7 @@ public:
                 pInstance->SetData(DATA_IMMORTAL_FAIL, 0);
         }
 
-        void JustDied(Unit*  killer) override
+        void JustDied(Unit* killer) override
         {
             BossAI::JustDied(killer);
             Talk(SAY_DEATH);
@@ -157,6 +157,7 @@ public:
             {
                 if (who->GetGUID() == me->GetGUID())
                     EnterEvadeMode();
+                
                 return false;
             }
 
@@ -172,8 +173,6 @@ public:
                 return;
 
             events.Update(diff);
-            //if (me->HasUnitState(UNIT_STATE_CASTING))
-            //  return;
 
             switch (events.ExecuteEvent())
             {
@@ -214,8 +213,8 @@ public:
                     break;
                 case EVENT_SAFETY_DANCE:
                     {
-                        Map::PlayerList const& pList = me->GetMap()->GetPlayers();
-                        for(const auto& itr : pList)
+                        Map::PlayerList const& pList = ;
+                        for(const auto& itr : me->GetMap()->GetPlayers())
                         {
                             if (IsInRoom(itr.GetSource()) && !itr.GetSource()->IsAlive())
                             {
@@ -225,12 +224,9 @@ public:
                             }
 
                         }
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                         return;
                     }
-                    events.RepeatEvent(5s);
-                    return;
-                }
             }
 
             DoMeleeAttackIfReady();
