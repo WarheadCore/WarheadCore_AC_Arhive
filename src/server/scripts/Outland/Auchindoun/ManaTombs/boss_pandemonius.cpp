@@ -98,7 +98,7 @@ public:
                     else
                     {
                         events.RescheduleEvent(EVENT_VOID_BLAST, 500ms);
-                        events.DelayEvents(EVENT_DARK_SHELL, 500ms);
+                        events.RescheduleEvent(EVENT_DARK_SHELL, 500ms);
                     }
                     break;
                 case EVENT_DARK_SHELL:
