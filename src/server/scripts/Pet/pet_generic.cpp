@@ -114,7 +114,7 @@ public:
         npc_pet_gen_soul_trader_beaconAI(Creature* c) : ScriptedAI(c)
         {
             events.Reset();
-            events.ScheduleEvent(EVENT_INITIAL_TALK, 0);
+            events.ScheduleEvent(EVENT_INITIAL_TALK, 0s);
             if (me->ToTempSummon())
                 if (Unit* owner = me->ToTempSummon()->GetOwner())
                 {
@@ -130,7 +130,7 @@ public:
             if (spellInfo->Id == SPELL_STEAL_ESSENCE_VISUAL && target == me)
             {
                 Talk(1);
-                events.ScheduleEvent(EVENT_ADD_TOKEN, 3000);
+                events.ScheduleEvent(EVENT_ADD_TOKEN, 3s);
                 me->CastSpell(me, SPELL_EMOTE_STATE_SWIM_RUN, true);
             }
         }
