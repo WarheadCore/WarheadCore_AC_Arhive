@@ -55,7 +55,7 @@ public:
         void EnterCombat(Unit*)
         {
             _events.Reset();
-            _events.ScheduleEvent(EVENT_SHAMAN_ANGEREDEARTH, 0);
+            _events.ScheduleEvent(EVENT_SHAMAN_ANGEREDEARTH, 0s);
         }
 
         void InitializeAI()
@@ -83,7 +83,7 @@ public:
             if (_events.ExecuteEvent() == EVENT_SHAMAN_ANGEREDEARTH)
             {
                 DoCastVictim(SPELL_SHAMAN_ANGEREDEARTH);
-                _events.ScheduleEvent(EVENT_SHAMAN_ANGEREDEARTH, urand(5000, 20000));
+                _events.ScheduleEvent(EVENT_SHAMAN_ANGEREDEARTH, 5s, 20s);
             }
 
             DoMeleeAttackIfReady();
@@ -117,9 +117,8 @@ public:
         void EnterCombat(Unit*)
         {
             _events.Reset();
-            _events.ScheduleEvent(EVENT_SHAMAN_FIRENOVA, urand(5000, 20000));
-            _events.ScheduleEvent(EVENT_SHAMAN_FIREBLAST, urand(5000, 20000));
-            //_events.ScheduleEvent(EVENT_SHAMAN_FIRESHIELD, 0);
+            _events.ScheduleEvent(EVENT_SHAMAN_FIRENOVA, 5s, 20s);
+            _events.ScheduleEvent(EVENT_SHAMAN_FIREBLAST, 5s, 20s);
 
             me->RemoveAurasDueToSpell(SPELL_SHAMAN_FIRESHIELD);
             me->CastSpell(me, SPELL_SHAMAN_FIRESHIELD, true);
@@ -147,11 +146,11 @@ public:
                 {
                     case EVENT_SHAMAN_FIRENOVA:
                         me->CastSpell(me, SPELL_SHAMAN_FIRENOVA, false);
-                        _events.ScheduleEvent(EVENT_SHAMAN_FIRENOVA, urand(8000, 15000));
+                        _events.ScheduleEvent(EVENT_SHAMAN_FIRENOVA, 8s, 15s);
                         break;
                     case EVENT_SHAMAN_FIREBLAST:
                         me->CastSpell(me->GetVictim(), SPELL_SHAMAN_FIREBLAST, false);
-                        _events.ScheduleEvent(EVENT_SHAMAN_FIREBLAST, urand(4000, 8000));
+                        _events.ScheduleEvent(EVENT_SHAMAN_FIREBLAST, 4s, 8s);
                         break;
                     default:
                         break;
