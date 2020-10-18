@@ -146,7 +146,7 @@ public:
                             }
                         }
 
-                        events.RepeatEvent(1000);
+                        events.RepeatEvent(1s);
                         break;
                     }
             }
@@ -284,7 +284,7 @@ public:
                             }
                         }
 
-                        events.RepeatEvent(1000);
+                        events.RepeatEvent(1s);
                         break;
                     }
             }
