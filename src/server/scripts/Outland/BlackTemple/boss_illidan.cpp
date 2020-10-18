@@ -251,6 +251,9 @@ public:
             {
                 me->RemoveAurasDueToSpell(SPELL_FRENZY);
                 events.Reset();
+                events.ScheduleEvent(EVENT_PHASE_4_START, 16s);
+                me->RemoveAurasDueToSpell(SPELL_FRENZY);
+                events.Reset();
                 events.ScheduleEvent(EVENT_PHASE_4_START, 16000);
             }
         }
@@ -352,7 +355,7 @@ public:
             if (events.GetNextEventTime(EVENT_KILL_TALK) == 0)
             {
                 Talk(SAY_ILLIDAN_KILL);
-                events.ScheduleEvent(EVENT_KILL_TALK, 6000);
+                events.ScheduleEvent(EVENT_KILL_TALK, 6s);
             }
         }
 
@@ -381,13 +384,13 @@ public:
                     if (events.GetNextEventTime(EVENT_REMOVE_DEMON_FORM) != 0)
                     {
                         me->CastSpell(me, SPELL_DEMON_TRANSFORM_1, true);
-                        events2.ScheduleEvent(EVENT_OUTRO_DEMON, 12000);
+                        events2.ScheduleEvent(EVENT_OUTRO_DEMON, 12s);
                     }
                     else
                     {
                         me->CastSpell(me, SPELL_TELEPORT_MAIEV, true);
                         me->CastSpell(me, SPELL_DEATH, true);
-                        events2.ScheduleEvent(EVENT_OUTRO_1, 1000);
+                        events2.ScheduleEvent(EVENT_OUTRO_1, 1s);
                     }
 
                     if (Creature* maiev = summons.GetCreatureWithEntry(NPC_MAIEV_SHADOWSONG))

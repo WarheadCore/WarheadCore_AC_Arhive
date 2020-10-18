@@ -160,8 +160,8 @@ public:
 
         void EnterCombat(Unit*)
         {
-            events.ScheduleEvent(EVENT_SPELL_FIRE_TAIL, 500);
-            events.ScheduleEvent(EVENT_SPELL_INFERNO, urand(10000, 20000));
+            events.ScheduleEvent(EVENT_SPELL_FIRE_TAIL, 500ms);
+            events.ScheduleEvent(EVENT_SPELL_INFERNO, 10s, 20s);
         }
 
         void UpdateAI(uint32 diff)

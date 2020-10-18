@@ -86,12 +86,12 @@ public:
         void EnterCombat(Unit* /*who*/)
         {
             Talk(SAY_AGGRO);
-            events.ScheduleEvent(EVENT_SPELL_SHRINK, 20000);
-            events.ScheduleEvent(EVENT_SPELL_SAW, 15000);
-            events.ScheduleEvent(EVENT_SPELL_NET, 10000);
-            events.ScheduleEvent(EVENT_CHECK_HP75, 5000);
-            events.ScheduleEvent(EVENT_CHECK_HP50, 5000);
-            events.ScheduleEvent(EVENT_CHECK_HP25, 5000);
+            events.ScheduleEvent(EVENT_SPELL_SHRINK, 20s);
+            events.ScheduleEvent(EVENT_SPELL_SAW, 15s);
+            events.ScheduleEvent(EVENT_SPELL_NET, 10s);
+            events.ScheduleEvent(EVENT_CHECK_HP75, 5s);
+            events.ScheduleEvent(EVENT_CHECK_HP50, 5s);
+            events.ScheduleEvent(EVENT_CHECK_HP25, 5s);
 
             if (instance)
                 instance->SetData(TYPE_MEKGINEER_STEAMRIGGER, IN_PROGRESS);
@@ -123,19 +123,19 @@ public:
             {
                 case EVENT_SPELL_SHRINK:
                     me->CastSpell(me->GetVictim(), SPELL_SUPER_SHRINK_RAY, false);
-                    events.RepeatEvent(20000);
+                    events.RepeatEvent(20s);
                     break;
                 case EVENT_SPELL_SAW:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
                         me->CastSpell(target, SPELL_SAW_BLADE, false);
                     else
                         me->CastSpell(me->GetVictim(), SPELL_SAW_BLADE, false);
-                    events.RepeatEvent(15000);
+                    events.RepeatEvent(15s);
                     break;
                 case EVENT_SPELL_NET:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         me->CastSpell(target, SPELL_ELECTRIFIED_NET, false);
-                    events.RepeatEvent(10000);
+                    events.RepeatEvent(10s);
                     break;
                 case EVENT_CHECK_HP25:
                 case EVENT_CHECK_HP50:
@@ -145,7 +145,7 @@ public:
                         SummonMechanics();
                         return;
                     }
-                    events.RepeatEvent(2000);
+                    events.RepeatEvent(2s);
                     break;
             }
 

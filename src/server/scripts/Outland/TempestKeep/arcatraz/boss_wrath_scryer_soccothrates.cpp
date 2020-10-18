@@ -111,10 +111,10 @@ public:
         {
             _EnterCombat();
             events2.Reset();
-            events.ScheduleEvent(EVENT_FELFIRE_SHOCK, urand(12000, 14000));
-            events.ScheduleEvent(EVENT_KNOCK_AWAY, urand(11000, 12000));
-            events.ScheduleEvent(EVENT_ME_FIRST, 6000);
-            events.ScheduleEvent(EVENT_CHECK_HEALTH, 1000);
+            events.ScheduleEvent(EVENT_FELFIRE_SHOCK, 12s, 14s);
+            events.ScheduleEvent(EVENT_KNOCK_AWAY, 11s, 12s);
+            events.ScheduleEvent(EVENT_ME_FIRST, 6s);
+            events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
             Talk(SAY_AGGRO);
         }
 

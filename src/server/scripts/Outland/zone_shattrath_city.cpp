@@ -483,8 +483,8 @@ public:
         void EnterCombat(Unit* who) override
         {
             AttackStart(who);
-            _events.ScheduleEvent(EVENT_SPELL_ISHANAH_HOLY_SMITE, 2000);
-            _events.ScheduleEvent(EVENT_SPELL_POWER_WORD_SHIELD, 1000);
+            _events.ScheduleEvent(EVENT_SPELL_ISHANAH_HOLY_SMITE, 2s);
+            _events.ScheduleEvent(EVENT_SPELL_POWER_WORD_SHIELD, 1s);
         }
 
         void MovementInform(uint32 type, uint32 point) override
@@ -521,11 +521,11 @@ public:
             {
                 case EVENT_SPELL_ISHANAH_HOLY_SMITE:
                     me->CastSpell(me->GetVictim(), HOLY_SMITE_ISHANAH, false);
-                    _events.ScheduleEvent(EVENT_SPELL_ISHANAH_HOLY_SMITE, 2500);
+                    _events.ScheduleEvent(EVENT_SPELL_ISHANAH_HOLY_SMITE, 2500ms);
                     break;
                 case EVENT_SPELL_POWER_WORD_SHIELD:
                     me->CastSpell(me, POWER_WORLD_SHIELD, false);
-                    _events.ScheduleEvent(EVENT_SPELL_POWER_WORD_SHIELD, 30000);
+                    _events.ScheduleEvent(EVENT_SPELL_POWER_WORD_SHIELD, 30s);
                     break;
             }
 

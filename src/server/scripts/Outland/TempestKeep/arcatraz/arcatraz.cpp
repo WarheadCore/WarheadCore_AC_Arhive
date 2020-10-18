@@ -95,8 +95,8 @@ public:
             me->SetReactState(REACT_PASSIVE);
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_IMMUNE_TO_NPC);
             events2.Reset();
-            events2.ScheduleEvent(EVENT_TELEPORT_VISUAL, 0);
-            events2.ScheduleEvent(EVENT_MILLHOUSE_INTRO1, 3000);
+            events2.ScheduleEvent(EVENT_TELEPORT_VISUAL, 0s);
+            events2.ScheduleEvent(EVENT_MILLHOUSE_INTRO1, 3s);
         }
 
         void Reset()
@@ -122,10 +122,10 @@ public:
 
         void EnterCombat(Unit*)
         {
-            events.ScheduleEvent(EVENT_MILL_CHECK_HEALTH, 1000);
-            events.ScheduleEvent(EVENT_MILL_PYROBLAST, 30000);
-            events.ScheduleEvent(EVENT_MILL_BASE_SPELL, 2000);
-            events.ScheduleEvent(EVENT_MILL_ICEBLOCK, 1000);
+            events.ScheduleEvent(EVENT_MILL_CHECK_HEALTH, 1s);
+            events.ScheduleEvent(EVENT_MILL_PYROBLAST, 30s);
+            events.ScheduleEvent(EVENT_MILL_BASE_SPELL, 2s);
+            events.ScheduleEvent(EVENT_MILL_ICEBLOCK, 1s);
         }
 
         void UpdateAI(uint32 diff)
@@ -138,52 +138,52 @@ public:
                     break;
                 case EVENT_MILLHOUSE_INTRO1:
                     Talk(SAY_INTRO_1);
-                    events2.ScheduleEvent(EVENT_MILLHOUSE_INTRO2, 18000);
+                    events2.ScheduleEvent(EVENT_MILLHOUSE_INTRO2, 18s);
                     break;
                 case EVENT_MILLHOUSE_INTRO2:
                     Talk(SAY_INTRO_2);
-                    events2.ScheduleEvent(EVENT_MILLHOUSE_INTRO3, 8000);
+                    events2.ScheduleEvent(EVENT_MILLHOUSE_INTRO3, 8s);
                     break;
                 case EVENT_MILLHOUSE_INTRO3:
                     Talk(SAY_INTRO_3);
-                    events2.ScheduleEvent(EVENT_MILLHOUSE_INTRO4, 6000);
+                    events2.ScheduleEvent(EVENT_MILLHOUSE_INTRO4, 6s);
                     break;
                 case EVENT_MILLHOUSE_INTRO4:
                     Talk(SAY_INTRO_4);
-                    events2.ScheduleEvent(EVENT_MILLHOUSE_INTRO5, 8000);
+                    events2.ScheduleEvent(EVENT_MILLHOUSE_INTRO5, 8s);
                     break;
                 case EVENT_MILLHOUSE_INTRO5:
                     Talk(SAY_WATER);
                     me->CastSpell(me, SPELL_CONJURE_WATER, false);
-                    events2.ScheduleEvent(EVENT_MILLHOUSE_INTRO6, 7000);
+                    events2.ScheduleEvent(EVENT_MILLHOUSE_INTRO6, 7s);
                     break;
                 case EVENT_MILLHOUSE_INTRO6:
                     Talk(SAY_BUFFS);
                     me->CastSpell(me, SPELL_ICE_ARMOR, false);
-                    events2.ScheduleEvent(EVENT_MILLHOUSE_INTRO7, 7000);
+                    events2.ScheduleEvent(EVENT_MILLHOUSE_INTRO7, 7s);
                     break;
                 case EVENT_MILLHOUSE_INTRO7:
                     Talk(SAY_DRINK);
                     me->CastSpell(me, SPELL_ARCANE_INTELLECT, false);
-                    events2.ScheduleEvent(EVENT_MILLHOUSE_INTRO8, 7000);
+                    events2.ScheduleEvent(EVENT_MILLHOUSE_INTRO8, 7s);
                     break;
                 case EVENT_MILLHOUSE_INTRO8:
                     Talk(SAY_READY);
                     me->GetMotionMaster()->MovePoint(1, 445.82f, -158.38f, 43.067f);
-                    events2.ScheduleEvent(EVENT_MILLHOUSE_INTRO9, 5000);
+                    events2.ScheduleEvent(EVENT_MILLHOUSE_INTRO9, 5s);
                     break;
                 case EVENT_MILLHOUSE_INTRO9:
                     me->SetFacingTo(M_PI * 1.5f);
                     me->SetHomePosition(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), M_PI * 1.5f);
                     me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_IMMUNE_TO_NPC);
                     me->SetReactState(REACT_AGGRESSIVE);
-                    events2.ScheduleEvent(EVENT_SEARCH_FIGHT, 1000);
+                    events2.ScheduleEvent(EVENT_SEARCH_FIGHT, 1s);
                     break;
                 case EVENT_SEARCH_FIGHT:
                     if (!me->IsInCombat() && !me->IsInEvadeMode())
-                        if (Unit* target = me->SelectNearbyTarget(nullptr, 30.0f))
+                        if (Unit* target = me->SelectNearbyTarget(NULL, 30.0f))
                             AttackStart(target);
-                    events2.ScheduleEvent(EVENT_SEARCH_FIGHT, 1000);
+                    events2.ScheduleEvent(EVENT_SEARCH_FIGHT, 1s);
                     break;
 
             }

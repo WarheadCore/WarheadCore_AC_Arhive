@@ -67,7 +67,7 @@ public:
         void Reset()
         {
             _Reset();
-            _caveInTimer = 29000;
+            _caveInTimer = 29s;
         }
 
         void EnterCombat(Unit* /*who*/)
@@ -111,30 +111,32 @@ public:
                 case EVENT_GROWTH:
                     Talk(EMOTE_GROW);
                     DoCast(me, SPELL_GROWTH);
-                    events.ScheduleEvent(EVENT_GROWTH, 30000);
+                    events.ScheduleEvent(EVENT_GROWTH, 30s);
                     break;
                 case EVENT_CAVE_IN:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         me->CastSpell(target, SPELL_CAVE_IN, false);
-                    if (_caveInTimer >= 4000)
-                        _caveInTimer -= 1500;
+
+                    if (_caveInTimer >= 4s)
+                        _caveInTimer -= 1500ms;
+
                     events.ScheduleEvent(EVENT_CAVE_IN, _caveInTimer);
                     break;
                 case EVENT_REVERBERATION:
                     me->CastSpell(me, SPELL_REVERBERATION, false);
-                    events.ScheduleEvent(EVENT_REVERBERATION, 22000);
+                    events.ScheduleEvent(EVENT_REVERBERATION, 22s);
                     break;
                 case EVENT_HURTFUL_STRIKE:
                     if (Unit* target = SelectTarget(SELECT_TARGET_TOPAGGRO, 1, 5.0f))
                         me->CastSpell(target, SPELL_HURTFUL_STRIKE, false);
-                    events.ScheduleEvent(EVENT_HURTFUL_STRIKE, 15000);
+                    events.ScheduleEvent(EVENT_HURTFUL_STRIKE, 15s);
                     break;
                 case EVENT_GROUND_SLAM:
                     Talk(SAY_SLAM);
                     me->CastSpell(me, SPELL_GROUND_SLAM, false);
                     events.DelayEvents(8001);
-                    events.ScheduleEvent(EVENT_GROUND_SLAM, 60000);
-                    events.ScheduleEvent(EVENT_SHATTER, 8000);
+                    events.ScheduleEvent(EVENT_GROUND_SLAM, 1min);
+                    events.ScheduleEvent(EVENT_SHATTER, 8s);
                     break;
                 case EVENT_SHATTER:
                     Talk(SAY_SHATTER);
@@ -146,7 +148,7 @@ public:
         }
 
     private:
-        uint32 _caveInTimer;
+        Seconds _caveInTimer;
     };
 
     CreatureAI* GetAI(Creature* creature) const

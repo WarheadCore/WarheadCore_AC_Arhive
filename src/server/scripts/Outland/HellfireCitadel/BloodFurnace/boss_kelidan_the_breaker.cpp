@@ -248,11 +248,11 @@ public:
             {
                 case EVENT_SPELL_VOLLEY:
                     me->CastSpell(me, SPELL_SHADOW_BOLT_VOLLEY, false);
-                    events.RepeatEvent(urand(8000, 13000));
+                    events.RepeatEvent(8s, 13s);
                     break;
                 case EVENT_SPELL_CORRUPTION:
                     me->CastSpell(me, SPELL_CORRUPTION, false);
-                    events.RepeatEvent(urand(30000, 50000));
+                    events.RepeatEvent(30s, 50s);
                     break;
                 case EVENT_SPELL_BURNING_NOVA:
                     Talk(SAY_NOVA);
@@ -313,8 +313,8 @@ public:
                 kelidan->AI()->DoAction(ACTION_CHANNELER_ENGAGED);
 
             me->InterruptNonMeleeSpells(false);
-            events.ScheduleEvent(EVENT_SPELL_SHADOW_BOLT, urand(1500, 3500));
-            events.ScheduleEvent(EVENT_SPELL_MARK, urand(5000, 6500));
+            events.ScheduleEvent(EVENT_SPELL_SHADOW_BOLT, 1500ms, 3500ms);
+            events.ScheduleEvent(EVENT_SPELL_MARK, 5s, 6500ms);
         }
 
         void JustDied(Unit*  /*killer*/)
@@ -336,12 +336,12 @@ public:
             {
                 case EVENT_SPELL_SHADOW_BOLT:
                     me->CastSpell(me->GetVictim(), IsHeroic() ? SPELL_SHADOW_BOLT_H : SPELL_SHADOW_BOLT, false);
-                    events.RepeatEvent(urand(6000, 7500));
+                    events.RepeatEvent(6s, 7500ms);
                     break;
                 case EVENT_SPELL_MARK:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         me->CastSpell(target, SPELL_MARK_OF_SHADOW, false);
-                    events.RepeatEvent(urand(16000, 17500));
+                    events.RepeatEvent(16s, 17500ms);
                     break;
             }
 
@@ -360,4 +360,3 @@ void AddSC_boss_kelidan_the_breaker()
     new boss_kelidan_the_breaker();
     new npc_shadowmoon_channeler();
 }
-

@@ -170,7 +170,7 @@ public:
         {
             ground = me->GetMap()->GetHeight(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ());
             SummonInfernal();
-            events.ScheduleEvent(EVENT_CAST_SUMMON_INFERNAL, urand(1000, 3000));
+            events.ScheduleEvent(EVENT_CAST_SUMMON_INFERNAL, 1s, 3s);
         }
 
         void SetData(uint32 id, uint32 data)
@@ -615,8 +615,8 @@ public:
 
         void EnterCombat(Unit* /*who*/) override
         {
-            events.ScheduleEvent(EVENT_KICK, urand(5000, 10000));
-            events.ScheduleEvent(EVENT_SUNDER, urand(5000, 10000));
+            events.ScheduleEvent(EVENT_KICK, 5s, 10s);
+            events.ScheduleEvent(EVENT_SUNDER, 5s, 10s);
         }
 
         void SpellHit(Unit* caster, const SpellInfo* spell) override
@@ -631,7 +631,7 @@ public:
                 Tapped = true;
                 caster->GetClosePoint(x, y, z, me->GetObjectSize());
                 Talk(SAY_1);
-                events.ScheduleEvent(EVENT_WALK_TO_MUTTON, 0);
+                events.ScheduleEvent(EVENT_WALK_TO_MUTTON, 0s);
             }
         }
 
@@ -642,7 +642,7 @@ public:
                 if (GameObject* food = me->FindNearestGameObject(DELICIOUS_MUTTON, 5.0f))
                     me->SetFacingToObject(food);
                 me->HandleEmoteCommand(EMOTE_ONESHOT_EAT);
-                events.ScheduleEvent(EVENT_POISONED, 5000);
+                events.ScheduleEvent(EVENT_POISONED, 5s);
             }
         }
 
@@ -691,11 +691,11 @@ public:
                 case EVENT_KICK:
                     if (me->GetVictim()->HasUnitState(SPELL_STATE_CASTING))
                         DoCastVictim(SPELL_KICK);
-                    events.RepeatEvent(urand(5000, 10000));
+                    events.RepeatEvent(5s, 10s);
                     break;
                 case EVENT_SUNDER:
                     DoCastVictim(SPELL_SUNDER);
-                    events.RepeatEvent(urand(5000, 10000));
+                    events.RepeatEvent(5s, 10s);
                     break;
             }
 
@@ -1828,4 +1828,3 @@ void AddSC_shadowmoon_valley()
     new npc_enraged_spirit();
     new npc_shadowmoon_tuber_node();
 }
-

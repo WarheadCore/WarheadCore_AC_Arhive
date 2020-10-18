@@ -258,7 +258,7 @@ struct boss_illidari_council_memberAI : public ScriptedAI
         if (events.GetNextEventTime(EVENT_KILL_TALK) == 0)
         {
             Talk(SAY_COUNCIL_SLAY);
-            events.ScheduleEvent(EVENT_KILL_TALK, 6000);
+            events.ScheduleEvent(EVENT_KILL_TALK, 6s);
         }
     }
 

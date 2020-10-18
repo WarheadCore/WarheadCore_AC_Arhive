@@ -78,9 +78,9 @@ public:
         void EnterCombat(Unit* /*who*/)
         {
             Talk(SAY_AGGRO);
-            events.ScheduleEvent(EVENT_SPELL_LIGHTNING, 15000);
-            events.ScheduleEvent(EVENT_SPELL_LUNG, 7000);
-            events.ScheduleEvent(EVENT_SPELL_ENVELOPING, 9000);
+            events.ScheduleEvent(EVENT_SPELL_LIGHTNING, 15s);
+            events.ScheduleEvent(EVENT_SPELL_LUNG, 7s);
+            events.ScheduleEvent(EVENT_SPELL_ENVELOPING, 9s);
 
             if (instance)
                 instance->SetData(TYPE_HYDROMANCER_THESPIA, IN_PROGRESS);
@@ -98,18 +98,18 @@ public:
                     for (uint8 i = 0; i < DUNGEON_MODE(1, 2); ++i)
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             me->CastSpell(target, SPELL_LIGHTNING_CLOUD, false);
-                    events.RepeatEvent(urand(15000, 25000));
+                    events.RepeatEvent(15s, 25s);
                     break;
                 case EVENT_SPELL_LUNG:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         DoCast(target, SPELL_LUNG_BURST);
-                    events.RepeatEvent(urand(7000, 12000));
+                    events.RepeatEvent(7s, 12s);
                     break;
                 case EVENT_SPELL_ENVELOPING:
                     for (uint8 i = 0; i < DUNGEON_MODE(1, 2); ++i)
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             me->CastSpell(target, SPELL_ENVELOPING_WINDS, false);
-                    events.RepeatEvent(urand(10000, 15000));
+                    events.RepeatEvent(10s, 15s);
                     break;
             }
 

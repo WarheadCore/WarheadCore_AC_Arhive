@@ -114,7 +114,7 @@ public:
             if (events.GetNextEventTime(EVENT_KILL_TALK) == 0)
             {
                 Talk(SAY_SLAY);
-                events.ScheduleEvent(EVENT_KILL_TALK, 6000);
+                events.ScheduleEvent(EVENT_KILL_TALK, 6s);
             }
         }
 
@@ -133,10 +133,10 @@ public:
             Talk(SAY_AGGRO);
             me->CallForHelp(10.0f);
 
-            events.ScheduleEvent(EVENT_SPELL_CATACLYSMIC_BOLT, 10000);
-            events.ScheduleEvent(EVENT_SPELL_ENRAGE, 600000);
-            events.ScheduleEvent(EVENT_SPELL_SEAR_NOVA, 25000);
-            events.ScheduleEvent(EVENT_HEALTH_CHECK, 1000);
+            events.ScheduleEvent(EVENT_SPELL_CATACLYSMIC_BOLT, 10s);
+            events.ScheduleEvent(EVENT_SPELL_ENRAGE, 10min);
+            events.ScheduleEvent(EVENT_SPELL_SEAR_NOVA, 25s);
+            events.ScheduleEvent(EVENT_HEALTH_CHECK, 1s);
         }
 
         void UpdateAI(uint32 diff)
@@ -156,11 +156,11 @@ public:
                 case EVENT_SPELL_CATACLYSMIC_BOLT:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, PowerUsersSelector(me, POWER_MANA, 50.0f, true)))
                         me->CastSpell(target, SPELL_CATACLYSMIC_BOLT, false);
-                    events.ScheduleEvent(EVENT_SPELL_CATACLYSMIC_BOLT, 6000);
+                    events.ScheduleEvent(EVENT_SPELL_CATACLYSMIC_BOLT, 6s);
                     break;
                 case EVENT_SPELL_SEAR_NOVA:
                     me->CastSpell(me, SPELL_SEAR_NOVA, false);
-                    events.ScheduleEvent(EVENT_SPELL_SEAR_NOVA, 20000 + urand(0, 20000));
+                    events.ScheduleEvent(EVENT_SPELL_SEAR_NOVA, 20s, 40s);
                     break;
                 case EVENT_HEALTH_CHECK:
                     if (me->HealthBelowPct(76))
