@@ -314,4 +314,3 @@ void AddSC_boss_high_astromancer_solarian()
     new spell_astromancer_wrath_of_the_astromancer();
     new spell_astromancer_solarian_transform();
 }
-

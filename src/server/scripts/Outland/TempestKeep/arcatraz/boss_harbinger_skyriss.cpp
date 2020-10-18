@@ -185,4 +185,3 @@ void AddSC_boss_harbinger_skyriss()
 {
     new boss_harbinger_skyriss();
 }
-

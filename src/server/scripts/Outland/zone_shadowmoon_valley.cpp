@@ -1828,4 +1828,3 @@ void AddSC_shadowmoon_valley()
     new npc_enraged_spirit();
     new npc_shadowmoon_tuber_node();
 }
-

@@ -338,4 +338,3 @@ void AddSC_boss_magtheridon()
     new spell_magtheridon_blaze();
     new spell_magtheridon_shadow_grasp();
 }
-
