@@ -234,7 +234,7 @@ public:
                     _spoken = false;
                     SummonPeasants();
                     _spoken = false;
-                    events.RepeatEvent(60 * IN_MILLISECONDS);
+                    events.RepeatEvent(1min);
                     break;
             }
         }

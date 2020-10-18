@@ -132,8 +132,8 @@ public:
                 case EVENT_SPELL_HATEFUL_BOLT:
                     {
                         if (Unit* target = SelectTarget(SELECT_TARGET_TOPAGGRO, urand(1, 2), 40.0f))
-                        me->CastSpell(target, SPELL_HATEFUL_BOLT, false);
-                    
+                            me->CastSpell(target, SPELL_HATEFUL_BOLT, false);
+
                         Milliseconds nextEventTime = Milliseconds(urand(5000, 7500) * events.GetNextEventTime(EVENT_SPELL_BERSERK) == 0 ? 1 : 2);
                         events.ScheduleEvent(EVENT_SPELL_HATEFUL_BOLT, nextEventTime);
                         break;
@@ -148,7 +148,7 @@ public:
                             Talk(SAY_EVOCATE);
                             me->CastSpell(me, SPELL_EVOCATION, false);
 
-                            events.DelayEvents(20000);
+                            events.DelayEvents(20s);
                             events.ScheduleEvent(EVENT_SPELL_ASTRAL_FLARE, 20s);
                         }
                         else
