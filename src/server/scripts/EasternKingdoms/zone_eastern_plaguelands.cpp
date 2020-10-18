@@ -224,7 +224,7 @@ public:
                             EnterEvadeMode();
                             return;
                         }
-                        events.RepeatEvent(2000);
+                        events.RepeatEvent(2s);
                         break;
                     }
                 case EVENT_SUMMON_ARCHERS:
@@ -234,7 +234,7 @@ public:
                     _spoken = false;
                     SummonPeasants();
                     _spoken = false;
-                    events.RepeatEvent(60 * IN_MILLISECONDS);
+                    events.RepeatEvent(1min);
                     break;
             }
         }

@@ -479,7 +479,7 @@ public:
                         anveena->CastSpell(anveena, SPELL_SACRIFICE_OF_ANVEENA, true);
                         me->CastSpell(me, SPELL_CUSTOM_08_STATE, true);
                         me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PACIFIED);
-                        events.DelayEvents(7001);
+                        events.DelayEvents(7001ms);
                         events2.ScheduleEvent(EVENT_RESTORE_MELEE, 7s);
                     }
                     Talk(SAY_KJ_PHASE5);
@@ -512,7 +512,7 @@ public:
                         events2.ScheduleEvent(EVENT_TEXT_SPEACH23, 28s, EVENT_GROUP_SPEACH);
                         events2.RescheduleEvent(EVENT_EMPOWER_ORBS1, 35s);
 
-                        events.DelayEvents(2000);
+                        events.DelayEvents(2s);
                         events.ScheduleEvent(EVENT_SPELL_SINISTER_REFLECTION, 500ms);
                         events.ScheduleEvent(EVENT_SPELL_SHADOW_SPIKE, 1200ms);
                         events.ScheduleEvent(EVENT_SPELL_FLAME_DART, 3s);
@@ -532,7 +532,7 @@ public:
                         events2.ScheduleEvent(EVENT_TEXT_SPEACH33, 28s, EVENT_GROUP_SPEACH);
                         events2.RescheduleEvent(EVENT_EMPOWER_ORBS2, 350s);
 
-                        events.DelayEvents(2000);
+                        events.DelayEvents(2s);
                         events.ScheduleEvent(EVENT_SPELL_SINISTER_REFLECTION, 500ms);
                         events.ScheduleEvent(EVENT_SPELL_SHADOW_SPIKE, 1200ms);
                         events.RescheduleEvent(EVENT_SPELL_DARKNESS, 15s); // will be delayed by 29 secs
@@ -556,7 +556,7 @@ public:
                         events2.RescheduleEvent(EVENT_EMPOWER_ORBS3, 61s);
 
                         events.CancelEvent(EVENT_SUMMON_ORBS);
-                        events.DelayEvents(4000);
+                        events.DelayEvents(4s);
                         events.ScheduleEvent(EVENT_SPELL_SINISTER_REFLECTION, 500ms);
                         events.ScheduleEvent(EVENT_SPELL_SHADOW_SPIKE, 1200ms);
                         events.RescheduleEvent(EVENT_SPELL_DARKNESS, 15s); // will be delayed by 29 secs
@@ -608,7 +608,7 @@ public:
                     events.ScheduleEvent(EVENT_SUMMON_ORBS, 40s);
                     break;
                 case EVENT_SPELL_SHADOW_SPIKE:
-                    events.DelayEvents(27000);
+                    events.DelayEvents(27s);
                     me->CastSpell(me, SPELL_SHADOW_SPIKE, false);
                     break;
                 case EVENT_SPELL_SINISTER_REFLECTION:
@@ -626,7 +626,7 @@ public:
                     Talk(EMOTE_KJ_DARKNESS);
                     me->CastSpell(me, SPELL_DARKNESS_OF_A_THOUSAND_SOULS, false);
                     events.ScheduleEvent(EVENT_SPELL_DARKNESS, phase == PHASE_SACRIFICE ? 20s : 45s);
-                    events.DelayEvents(8000);
+                    events.DelayEvents(8s);
                     break;
                 case EVENT_SPELL_ARMAGEDDON:
                     me->CastSpell(me, SPELL_ARMAGEDDON_PERIODIC, true);

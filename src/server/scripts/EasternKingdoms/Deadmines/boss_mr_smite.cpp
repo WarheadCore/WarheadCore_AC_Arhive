@@ -93,7 +93,7 @@ public:
                     if (me->HealthBelowPct(67) && !health67)
                     {
                         me->CastSpell(me, SPELL_SMITE_STOMP, false);
-                        events.DelayEvents(10000);
+                        events.DelayEvents(10s);
                         me->GetMotionMaster()->Clear();
                         me->GetMotionMaster()->MovePoint(EQUIP_TWO_SWORDS, 1.859f, -780.72f, 9.831f);
                         Talk(SAY_SWAP1);
@@ -108,7 +108,7 @@ public:
                     if (me->HealthBelowPct(34) && !health34)
                     {
                         me->CastSpell(me, SPELL_SMITE_STOMP, false);
-                        events.DelayEvents(10000);
+                        events.DelayEvents(10s);
                         me->GetMotionMaster()->Clear();
                         me->GetMotionMaster()->MovePoint(EQUIP_MACE, 1.859f, -780.72f, 9.831f);
                         Talk(SAY_SWAP2);

@@ -205,7 +205,7 @@ public:
                     events.ScheduleEvent(EVENT_SPELL_FEL_EXPLOSION, 2s);
                     break;
                 case EVENT_DRAIN_CRYSTAL:
-                    events.DelayEvents(10001);
+                    events.DelayEvents(10001ms);
                     events.ScheduleEvent(EVENT_EMPOWER, 10s);
                     events.ScheduleEvent(EVENT_DRAIN_CRYSTAL, 30s);
                     SelectNearestCrystal();
@@ -216,7 +216,7 @@ public:
                         Talk(SAY_EMPOWERED);
                         if (Unit* crystal = ObjectAccessor::GetUnit(*me, CrystalGUID))
                             Unit::Kill(crystal, crystal);
-                        events.DelayEvents(10000, 1);
+                        events.DelayEvents(10s, 1);
                         events.ScheduleEvent(EVENT_RESTORE_COMBAT, 0s);
                     }
                     else
