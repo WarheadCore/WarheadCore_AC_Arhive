@@ -198,7 +198,7 @@ public:
                             if (Unit* infernal = ObjectAccessor::GetUnit(*me, infernalGUID))
                                 if (infernal->GetDisplayId() == MODEL_INVISIBLE)
                                     me->CastSpell(infernal, SPELL_SUMMON_INFERNAL, true);
-                            events.ScheduleEvent(EVENT_CAST_SUMMON_INFERNAL, 12000);
+                            events.ScheduleEvent(EVENT_CAST_SUMMON_INFERNAL, 12s);
                             break;
                         }
                     default:
@@ -677,7 +677,7 @@ public:
                             Talk(SAY_POISONED_1);
                         CreditPlayer();
                         me->CastSpell(me, SPELL_VOMIT);
-                        events.ScheduleEvent(EVENT_KILL, 5000);
+                        events.ScheduleEvent(EVENT_KILL, 5s);
                         break;
                     case EVENT_KILL:
                         Unit::DealDamage(me, me, me->GetHealth(), NULL, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, NULL, false);

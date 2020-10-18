@@ -57,8 +57,8 @@ public:
 
             Talk(SAY_AGGRO);
 
-            events.ScheduleEvent(EVENT_DARK_SHELL, 20000);
-            events.ScheduleEvent(EVENT_VOID_BLAST, urand(8000, 23000));
+            events.ScheduleEvent(EVENT_DARK_SHELL, 20s);
+            events.ScheduleEvent(EVENT_VOID_BLAST, 8s, 23s);
         }
 
         void KilledUnit(Unit* victim)
@@ -93,12 +93,12 @@ public:
                     if (VoidBlastCounter == 5)
                     {
                         VoidBlastCounter = 0;
-                        events.RescheduleEvent(EVENT_VOID_BLAST, urand(15000, 25000));
+                        events.RescheduleEvent(EVENT_VOID_BLAST, 15s, 25s);
                     }
                     else
                     {
-                        events.RescheduleEvent(EVENT_VOID_BLAST, 500);
-                        events.DelayEvents(EVENT_DARK_SHELL, 500);
+                        events.RescheduleEvent(EVENT_VOID_BLAST, 500ms);
+                        events.DelayEvents(EVENT_DARK_SHELL, 500ms);
                     }
                     break;
                 case EVENT_DARK_SHELL:
@@ -107,7 +107,7 @@ public:
 
                     Talk(EMOTE_DARK_SHELL);
                     DoCast(me, SPELL_DARK_SHELL);
-                    events.RescheduleEvent(EVENT_DARK_SHELL, 20000);
+                    events.RescheduleEvent(EVENT_DARK_SHELL, 20s);
                     break;
                 default:
                     break;

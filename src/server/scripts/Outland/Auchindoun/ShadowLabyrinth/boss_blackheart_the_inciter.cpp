@@ -126,9 +126,9 @@ public:
 
                         DoResetThreat();
                         InciteChaos = true;
-                        events.DelayEvents(15000);
-                        events.RepeatEvent(40000);
-                        events.ScheduleEvent(EVENT_INCITE_WAIT, 15000);
+                        events.DelayEvents(15s);
+                        events.RepeatEvent(40s);
+                        events.ScheduleEvent(EVENT_INCITE_WAIT, 15s);
                         break;
                     }
                 case EVENT_SPELL_CHARGE:

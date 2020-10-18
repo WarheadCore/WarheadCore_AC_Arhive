@@ -318,9 +318,9 @@ public:
 
         void EnterCombat(Unit* /*who*/) override
         {
-            _events.ScheduleEvent(EVENT_CRUSADER_STRIKE, 3000);
-            _events.ScheduleEvent(EVENT_HAMMER_OF_JUSTICE, 6000);
-            _events.ScheduleEvent(EVENT_HOLY_LIGHT, 1000);
+            _events.ScheduleEvent(EVENT_CRUSADER_STRIKE, 3s);
+            _events.ScheduleEvent(EVENT_HAMMER_OF_JUSTICE, 6s);
+            _events.ScheduleEvent(EVENT_HOLY_LIGHT, 1s);
         }
 
         void UpdateAI(uint32 diff) override
@@ -421,7 +421,7 @@ public:
         void EnterCombat(Unit* who) override
         {
             AttackStart(who);
-            _events.ScheduleEvent(EVENT_SPELL_HOLY_SMITE, 1000);
+            _events.ScheduleEvent(EVENT_SPELL_HOLY_SMITE, 1s);
         }
 
         void UpdateAI(uint32 diff) override
@@ -438,7 +438,7 @@ public:
             {
                 case EVENT_SPELL_HOLY_SMITE:
                     me->CastSpell(me->GetVictim(), HOLY_SMITE_KARJA, false);
-                    _events.ScheduleEvent(EVENT_SPELL_HOLY_SMITE, 2500);
+                    _events.ScheduleEvent(EVENT_SPELL_HOLY_SMITE, 2500ms);
                     break;
             }
 
@@ -503,9 +503,9 @@ public:
 
         void EnterCombat(Unit* /*who*/) override
         {
-            _events.ScheduleEvent(EVENT_SPELL_DEMORALIZING_SHOUT, 1000);
-            _events.ScheduleEvent(EVENT_SPELL_HEROIC_STRIKE, urand(2500, 4000));
-            _events.ScheduleEvent(EVENT_SPELL_REND, urand(1500, 6000));
+            _events.ScheduleEvent(EVENT_SPELL_DEMORALIZING_SHOUT, 1s);
+            _events.ScheduleEvent(EVENT_SPELL_HEROIC_STRIKE, 2500ms, 4s);
+            _events.ScheduleEvent(EVENT_SPELL_REND, 1500ms, 6s);
         }
 
         void UpdateAI(uint32 diff) override
@@ -524,18 +524,18 @@ public:
                     if (me->FindNearestCreature(me->GetVictim()->GetEntry(), 10.0f, true))
                     {
                         me->CastSpell(me->GetVictim(), DEMORALIZING_SHOUT, false);
-                        _events.ScheduleEvent(EVENT_SPELL_DEMORALIZING_SHOUT, urand(10000, 12000));
+                        _events.ScheduleEvent(EVENT_SPELL_DEMORALIZING_SHOUT, 10s, 12s);
                     }
                     else
-                        _events.ScheduleEvent(EVENT_SPELL_DEMORALIZING_SHOUT, 1000);
+                        _events.ScheduleEvent(EVENT_SPELL_DEMORALIZING_SHOUT, 1s);
                     break;
                 case EVENT_SPELL_HEROIC_STRIKE:
                     me->CastSpell(me->GetVictim(), HEROIC_STRIKE, false);
-                    _events.ScheduleEvent(EVENT_SPELL_HEROIC_STRIKE, urand(3000, 4000));
+                    _events.ScheduleEvent(EVENT_SPELL_HEROIC_STRIKE, 3s, 4s);
                     break;
                 case EVENT_SPELL_REND:
                     me->CastSpell(me->GetVictim(), REND, false);
-                    _events.ScheduleEvent(EVENT_SPELL_REND, urand(5000, 8000));
+                    _events.ScheduleEvent(EVENT_SPELL_REND, 5s, 8s);
                     break;
             }
 
@@ -619,19 +619,19 @@ public:
             {
                 case EVENT_ADYEN_SAY_1:
                     DeathblowToTheLegionRunning = true;
-                    _actionEvents.ScheduleEvent(EVENT_ADYEN_SAY_1, 1000);
+                    _actionEvents.ScheduleEvent(EVENT_ADYEN_SAY_1, 1s);
                     break;
                 case EVENT_ADYEN_SAY_3:
-                    _actionEvents.ScheduleEvent(EVENT_ADYEN_SAY_3, 2000);
+                    _actionEvents.ScheduleEvent(EVENT_ADYEN_SAY_3, 2s);
                     break;
                 case EVENT_KAYLAAN_SAY_1:
-                    _actionEvents.ScheduleEvent(EVENT_KAYLAAN_SAY_1, 4000);
+                    _actionEvents.ScheduleEvent(EVENT_KAYLAAN_SAY_1, 4s);
                     break;
                 case EVENT_END_ALDOR_FIGHT:
-                    _actionEvents.ScheduleEvent(EVENT_END_ALDOR_FIGHT, 1);
+                    _actionEvents.ScheduleEvent(EVENT_END_ALDOR_FIGHT, 100ms);
                     break;
                 case EVENT_ISHANAH_SAY_1:
-                    _actionEvents.ScheduleEvent(EVENT_ISHANAH_SAY_1, 2000);
+                    _actionEvents.ScheduleEvent(EVENT_ISHANAH_SAY_1, 2s);
                     break;
                 case RESET_DEATHBLOW_EVENT:
                     DeathblowToTheLegionRunning = false;
@@ -662,12 +662,12 @@ public:
 
         void EnterCombat(Unit* /*who*/) override
         {
-            combatEvents.ScheduleEvent(EVENT_SPELL_ANTI_MAGIC_SHIELD, 20000);
-            combatEvents.ScheduleEvent(EVENT_SPELL_BACKLASH, 4000);
-            combatEvents.ScheduleEvent(EVENT_SPELL_CLEAVE, 2000);
-            combatEvents.ScheduleEvent(EVENT_SPELL_FIREBALL_BARRAGE, 9000);
-            combatEvents.ScheduleEvent(EVENT_SPELL_SHADOW_BOLT_VOLLEY, 5000);
-            combatEvents.ScheduleEvent(EVENT_SPELL_NETHER_PROTECTION, 1);
+            combatEvents.ScheduleEvent(EVENT_SPELL_ANTI_MAGIC_SHIELD, 20s);
+            combatEvents.ScheduleEvent(EVENT_SPELL_BACKLASH, 4s);
+            combatEvents.ScheduleEvent(EVENT_SPELL_CLEAVE, 2s);
+            combatEvents.ScheduleEvent(EVENT_SPELL_FIREBALL_BARRAGE, 9s);
+            combatEvents.ScheduleEvent(EVENT_SPELL_SHADOW_BOLT_VOLLEY, 5s);
+            combatEvents.ScheduleEvent(EVENT_SPELL_NETHER_PROTECTION, 100ms);
         }
 
         void DamageTaken(Unit* /*attacker*/, uint32& /*damage*/, DamageEffectType /*damagetype*/, SpellSchoolMask /*damageSchoolMask*/) override
@@ -686,16 +686,16 @@ public:
                     case EVENT_ADYEN_SAY_1:
                         if (GetCreature(ADYEN_THE_LIGHTBRINGER))
                             adyen->AI()->Talk(0);
-                        _actionEvents.ScheduleEvent(EVENT_SOCRETHAR_SAY_1, 11000);
+                        _actionEvents.ScheduleEvent(EVENT_SOCRETHAR_SAY_1, 11s);
                         break;
                     case EVENT_SOCRETHAR_SAY_1:
                         Talk(0);
-                        _actionEvents.ScheduleEvent(EVENT_ADYEN_SAY_2, 7000);
+                        _actionEvents.ScheduleEvent(EVENT_ADYEN_SAY_2, 7s);
                         break;
                     case EVENT_ADYEN_SAY_2:
                         if (GetCreature(ADYEN_THE_LIGHTBRINGER))
                             adyen->AI()->Talk(1);
-                        _actionEvents.ScheduleEvent(EVENT_SOCRETHAR_SAY_2, 11000);
+                        _actionEvents.ScheduleEvent(EVENT_SOCRETHAR_SAY_2, 11s);
                         break;
                     case EVENT_SOCRETHAR_SAY_2:
                         Talk(1);
@@ -707,7 +707,7 @@ public:
                             adyen->AI()->Talk(2);
                         if (GetCreature(KAYLAAN_THE_LOST))
                             kaylaan->SetStandState(UNIT_STAND_STATE_STAND);
-                        _actionEvents.ScheduleEvent(EVENT_KAYLAAN_WALK_TO_ADYEN, 3500);
+                        _actionEvents.ScheduleEvent(EVENT_KAYLAAN_WALK_TO_ADYEN, 3500ms);
                         break;
                     case EVENT_KAYLAAN_WALK_TO_ADYEN:
                         if (GetCreature(KAYLAAN_THE_LOST))
@@ -719,33 +719,33 @@ public:
                             kaylaan->AI()->Talk(0);
                             kaylaan->SetHomePosition(kaylaan->GetPosition());
                         }
-                        _actionEvents.ScheduleEvent(EVENT_KAYLAAN_SAY_2, 9000);
+                        _actionEvents.ScheduleEvent(EVENT_KAYLAAN_SAY_2, 9s);
                         break;
                     case EVENT_KAYLAAN_SAY_2:
                         if (GetCreature(KAYLAAN_THE_LOST))
                             kaylaan->AI()->Talk(1);
-                        _actionEvents.ScheduleEvent(EVENT_KAYLAAN_SAY_3, 8000);
+                        _actionEvents.ScheduleEvent(EVENT_KAYLAAN_SAY_3, 8s);
                         break;
                     case EVENT_KAYLAAN_SAY_3:
                         if (GetCreature(KAYLAAN_THE_LOST))
                             kaylaan->AI()->Talk(2);
-                        _actionEvents.ScheduleEvent(EVENT_ADYEN_SAY_4, 8000);
+                        _actionEvents.ScheduleEvent(EVENT_ADYEN_SAY_4, 8s);
                         break;
                     case EVENT_ADYEN_SAY_4:
                         if (GetCreature(ADYEN_THE_LIGHTBRINGER))
                             adyen->AI()->Talk(3);
-                        _actionEvents.ScheduleEvent(EVENT_KAYLAAN_SAY_4, 11000);
+                        _actionEvents.ScheduleEvent(EVENT_KAYLAAN_SAY_4, 11s);
                         break;
                     case EVENT_KAYLAAN_SAY_4:
                         if (GetCreature(KAYLAAN_THE_LOST))
                             kaylaan->AI()->Talk(3);
-                        _actionEvents.ScheduleEvent(EVENT_SPELL_POWER_OF_THE_LEGION, 5000);
+                        _actionEvents.ScheduleEvent(EVENT_SPELL_POWER_OF_THE_LEGION, 5s);
                         break;
                     case EVENT_SPELL_POWER_OF_THE_LEGION:
                         if (GetCreature(KAYLAAN_THE_LOST))
                             me->CastSpell(kaylaan, POWER_OF_THE_LEGION, false);
                         Talk(2);
-                        _actionEvents.ScheduleEvent(EVENT_FIGHT_ALDOR, 3000);
+                        _actionEvents.ScheduleEvent(EVENT_FIGHT_ALDOR, 3s);
                         break;
                     case EVENT_FIGHT_ALDOR:
                         if (GetCreature(KAYLAAN_THE_LOST))
@@ -784,11 +784,11 @@ public:
                             karja->CombatStop();
                             karja->ClearInCombat();
                         }
-                        _actionEvents.ScheduleEvent(EVENT_SOCRETHAR_SAY_4, 2000);
+                        _actionEvents.ScheduleEvent(EVENT_SOCRETHAR_SAY_4, 2s);
                         break;
                     case EVENT_SOCRETHAR_SAY_4:
                         Talk(3);
-                        _actionEvents.ScheduleEvent(EVENT_KAYLAAN_SAY_5, 8000);
+                        _actionEvents.ScheduleEvent(EVENT_KAYLAAN_SAY_5, 8s);
                         break;
                     case EVENT_KAYLAAN_SAY_5:
                         if (GetCreature(KAYLAAN_THE_LOST))
@@ -807,26 +807,26 @@ public:
                             kaylaan->RemoveAurasDueToSpell(POWER_OF_THE_LEGION);
                             kaylaan->SetStandState(UNIT_STAND_STATE_KNEEL);
                         }
-                        _actionEvents.ScheduleEvent(EVENT_ISHANAH_SAY_2, 6000);
+                        _actionEvents.ScheduleEvent(EVENT_ISHANAH_SAY_2, 6s);
                         break;
                     case EVENT_ISHANAH_SAY_2:
                         if (GetCreature(ISHANAH_HIGH_PRIESTESS))
                             ishanah->AI()->Talk(1);
-                        _actionEvents.ScheduleEvent(EVENT_SOCRETHAR_SAY_5, 8000);
+                        _actionEvents.ScheduleEvent(EVENT_SOCRETHAR_SAY_5, 8s);
                         break;
                     case EVENT_SOCRETHAR_SAY_5:
                         Talk(4);
-                        _actionEvents.ScheduleEvent(EVENT_KILL_ISHANAH, 4000);
+                        _actionEvents.ScheduleEvent(EVENT_KILL_ISHANAH, 4s);
                         break;
                     case EVENT_KILL_ISHANAH:
                         if (GetCreature(ISHANAH_HIGH_PRIESTESS))
                             me->CastSpell(ishanah, WRATH_OF_SOCRETHAR);
-                        _actionEvents.ScheduleEvent(EVENT_ISHANAH_DIES, 1500);
+                        _actionEvents.ScheduleEvent(EVENT_ISHANAH_DIES, 1500ms);
                         break;
                     case EVENT_ISHANAH_DIES:
                         if (GetCreature(ISHANAH_HIGH_PRIESTESS))
                             me->Kill(me, ishanah);
-                        _actionEvents.ScheduleEvent(EVENT_KAYLAAN_SAY_6, 4000);
+                        _actionEvents.ScheduleEvent(EVENT_KAYLAAN_SAY_6, 4s);
                         break;
                     case EVENT_KAYLAAN_SAY_6:
                         if (GetCreature(KAYLAAN_THE_LOST))
@@ -835,7 +835,7 @@ public:
                             kaylaan->SetStandState(UNIT_STAND_STATE_STAND);
                             kaylaan->GetMotionMaster()->MovePath(207942, false);
                         }
-                        _actionEvents.ScheduleEvent(EVENT_KAYLAAN_SAY_7, 9000);
+                        _actionEvents.ScheduleEvent(EVENT_KAYLAAN_SAY_7, 9s);
                         break;
                     case EVENT_KAYLAAN_SAY_7:
                         if (GetCreature(KAYLAAN_THE_LOST))
@@ -843,12 +843,12 @@ public:
                             kaylaan->AI()->Talk(7);
                             kaylaan->CastSpell(kaylaan, DIVINE_SHIELD);
                         }
-                        _actionEvents.ScheduleEvent(EVENT_KAYLAAN_RESSURECTION, 1000);
+                        _actionEvents.ScheduleEvent(EVENT_KAYLAAN_RESSURECTION, 1s);
                         break;
                     case EVENT_KAYLAAN_RESSURECTION:
                         if (GetCreature(KAYLAAN_THE_LOST))
                             kaylaan->CastSpell(ishanah, REDEMPTION);
-                        _actionEvents.ScheduleEvent(EVENT_ISHANAH_IS_BACK_AGAIN, 11000);
+                        _actionEvents.ScheduleEvent(EVENT_ISHANAH_IS_BACK_AGAIN, 11s);
                         break;
                     case EVENT_ISHANAH_IS_BACK_AGAIN:
                         if (GetCreature(ISHANAH_HIGH_PRIESTESS))
@@ -858,21 +858,21 @@ public:
                             ishanah->DespawnOrUnsummon(600000); // ensure that Ishanah disappears after 10 minutes
                             ishanah->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP | UNIT_NPC_FLAG_QUESTGIVER);
                         }
-                        _actionEvents.ScheduleEvent(EVENT_SOCRETHAR_SAY_6, 3000);
+                        _actionEvents.ScheduleEvent(EVENT_SOCRETHAR_SAY_6, 3s);
                         break;
                     case EVENT_SOCRETHAR_SAY_6:
                         Talk(5);
-                        _actionEvents.ScheduleEvent(EVENT_KILL_KAYLAAN, 4000);
+                        _actionEvents.ScheduleEvent(EVENT_KILL_KAYLAAN, 4s);
                         break;
                     case EVENT_KILL_KAYLAAN:
                         if (GetCreature(KAYLAAN_THE_LOST))
                             me->CastSpell(kaylaan, WRATH_OF_SOCRETHAR);
-                        _actionEvents.ScheduleEvent(EVENT_KAYLAAN_DIES, 1500);
+                        _actionEvents.ScheduleEvent(EVENT_KAYLAAN_DIES, 1500ms);
                         break;
                     case EVENT_KAYLAAN_DIES:
                         if (GetCreature(KAYLAAN_THE_LOST))
                             me->Kill(me, kaylaan);
-                        _actionEvents.ScheduleEvent(EVENT_FINAL_FIGHT, 3000);
+                        _actionEvents.ScheduleEvent(EVENT_FINAL_FIGHT, 3s);
                         break;
                     case EVENT_FINAL_FIGHT:
                         // Prepare Socrethar for encounter
@@ -909,23 +909,23 @@ public:
                     break;
                 case EVENT_SPELL_ANTI_MAGIC_SHIELD:
                     me->CastSpell(me, ANTI_MAGIC_SHIELD, false);
-                    combatEvents.ScheduleEvent(EVENT_SPELL_ANTI_MAGIC_SHIELD, 20000);
+                    combatEvents.ScheduleEvent(EVENT_SPELL_ANTI_MAGIC_SHIELD, 20s);
                     break;
                 case EVENT_SPELL_BACKLASH:
                     DoCastVictim(BACKLASH);
-                    combatEvents.ScheduleEvent(EVENT_SPELL_BACKLASH, 7000);
+                    combatEvents.ScheduleEvent(EVENT_SPELL_BACKLASH, 7s);
                     break;
                 case EVENT_SPELL_CLEAVE:
                     me->CastSpell(me->GetVictim(), CLEAVE, false);
-                    combatEvents.ScheduleEvent(EVENT_SPELL_CLEAVE, 3000);
+                    combatEvents.ScheduleEvent(EVENT_SPELL_CLEAVE, 3s);
                     break;
                 case EVENT_SPELL_FIREBALL_BARRAGE:
                     me->CastSpell(me->GetVictim(), FIREBALL_BARRAGE, false);
-                    combatEvents.ScheduleEvent(EVENT_SPELL_FIREBALL_BARRAGE, 15000);
+                    combatEvents.ScheduleEvent(EVENT_SPELL_FIREBALL_BARRAGE, 15s);
                     break;
                 case EVENT_SPELL_SHADOW_BOLT_VOLLEY:
                     me->CastSpell(me->GetVictim(), SHADOW_BOLT_VOLLEY, false);
-                    combatEvents.ScheduleEvent(EVENT_SPELL_SHADOW_BOLT_VOLLEY, 10000);
+                    combatEvents.ScheduleEvent(EVENT_SPELL_SHADOW_BOLT_VOLLEY, 10s);
                     break;
             }
 
@@ -955,8 +955,8 @@ public:
 
         void EnterCombat(Unit* /*who*/) override
         {
-            _events.ScheduleEvent(EVENT_SPELL_BURNING_LIGHT, 2000);
-            _events.ScheduleEvent(EVENT_SPELL_CONSECRATION, 3000);
+            _events.ScheduleEvent(EVENT_SPELL_BURNING_LIGHT, 2s);
+            _events.ScheduleEvent(EVENT_SPELL_CONSECRATION, 3s);
         }
 
         void ResetDeathblowEvent(bool event_over /* If true then reset the event*/)
@@ -1048,12 +1048,12 @@ public:
             {
                 case EVENT_SPELL_BURNING_LIGHT:
                     me->CastSpell(me->GetVictim(), BURNING_LIGHT, false);
-                    _events.ScheduleEvent(EVENT_SPELL_BURNING_LIGHT, 4000);
+                    _events.ScheduleEvent(EVENT_SPELL_BURNING_LIGHT, 4s);
                     break;
                 case EVENT_SPELL_CONSECRATION:
                     if (me->FindNearestCreature(me->GetVictim()->GetGUID(), 10.0f, true))
                         me->CastSpell(me, CONSECRATION, false);
-                    _events.ScheduleEvent(EVENT_SPELL_CONSECRATION, 14000);
+                    _events.ScheduleEvent(EVENT_SPELL_CONSECRATION, 14s);
                     break;
             }
 
@@ -1164,7 +1164,7 @@ public:
 
                 me->setFaction(250);
                 Talk(SAY_SAEED_0);
-                events.ScheduleEvent(EVENT_START_WALK, 3000);
+                events.ScheduleEvent(EVENT_START_WALK, 3s);
             }
             else if (type == DATA_START_FIGHT)
             {
@@ -1216,7 +1216,7 @@ public:
                     SetEscortPaused(true);
                     break;
                 case 18:
-                    events.ScheduleEvent(EVENT_START_FIGHT1, 0);
+                    events.ScheduleEvent(EVENT_START_FIGHT1, 0s);
                     SetEscortPaused(true);
                     break;
                 case 19:
@@ -1265,7 +1265,7 @@ public:
                     break;
                 case EVENT_START_FIGHT1:
                     Talk(SAY_SAEED_3);
-                    events.ScheduleEvent(EVENT_START_FIGHT2, 3000);
+                    events.ScheduleEvent(EVENT_START_FIGHT2, 3s);
                     break;
                 case EVENT_START_FIGHT2:
                     if (Creature* dimensius = me->FindNearestCreature(NPC_DIMENSIUS, 50.0f))

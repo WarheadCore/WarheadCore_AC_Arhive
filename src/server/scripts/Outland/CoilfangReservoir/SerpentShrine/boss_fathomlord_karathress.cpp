@@ -174,7 +174,7 @@ public:
                             Talk(SAY_GAIN_BLESSING);
                         break;
                     }
-                    events.ScheduleEvent(EVENT_HEALTH_CHECK, 1000);
+                    events.ScheduleEvent(EVENT_HEALTH_CHECK, 1s);
                     break;
             }
 

@@ -164,7 +164,7 @@ public:
             {
                 summonsGenerator.DoAction(ACTION_START_ENCOUNTER);
                 ChannelersAction(ACTION_START_ENCOUNTER);
-                events.ScheduleEvent(EVENT_SHADE_CHECK_DISTANCE, 1000);
+                events.ScheduleEvent(EVENT_SHADE_CHECK_DISTANCE, 1s);
             }
             else if (param == ACTION_AKAMA_DIED)
                 EnterEvadeMode();
@@ -247,7 +247,7 @@ public:
                         summonsGenerator.DoAction(ACTION_STOP_SPAWNING);
                         break;
                     }
-                    events.ScheduleEvent(EVENT_SHADE_CHECK_DISTANCE, 1000);
+                    events.ScheduleEvent(EVENT_SHADE_CHECK_DISTANCE, 1s);
                     break;
             }
 
@@ -304,19 +304,19 @@ public:
                 return;
 
             me->SetFacingTo(0.0f);
-            events2.ScheduleEvent(EVENT_AKAMA_SCENE1, 1000);
-            events2.ScheduleEvent(EVENT_AKAMA_SCENE2, 16500);
-            events2.ScheduleEvent(EVENT_AKAMA_SCENE3, 17500);
-            events2.ScheduleEvent(EVENT_AKAMA_SCENE4, 27000);
-            events2.ScheduleEvent(EVENT_AKAMA_SCENE5, 37000);
-            events2.ScheduleEvent(EVENT_AKAMA_SCENE6, 51000);
-            events2.ScheduleEvent(EVENT_AKAMA_SCENE7, 56000);
+            events2.ScheduleEvent(EVENT_AKAMA_SCENE1, 1s);
+            events2.ScheduleEvent(EVENT_AKAMA_SCENE2, 16500ms);
+            events2.ScheduleEvent(EVENT_AKAMA_SCENE3, 17500ms);
+            events2.ScheduleEvent(EVENT_AKAMA_SCENE4, 27s);
+            events2.ScheduleEvent(EVENT_AKAMA_SCENE5, 37s);
+            events2.ScheduleEvent(EVENT_AKAMA_SCENE6, 51s);
+            events2.ScheduleEvent(EVENT_AKAMA_SCENE7, 56s);
         }
 
         void DoAction(int32 param)
         {
             if (param == ACTION_SHADE_DIED)
-                events2.ScheduleEvent(EVENT_AKAMA_SCENE0, 1000);
+                events2.ScheduleEvent(EVENT_AKAMA_SCENE0, 1s);
         }
 
         void JustDied(Unit* /*killer*/)
@@ -327,8 +327,8 @@ public:
 
         void EnterCombat(Unit* /*who*/)
         {
-            events.ScheduleEvent(EVENT_SPELL_CHAIN_LIGHTNING, 2000);
-            events.ScheduleEvent(EVENT_SPELL_DESTRUCTIVE_POISON, 5000);
+            events.ScheduleEvent(EVENT_SPELL_CHAIN_LIGHTNING, 2s);
+            events.ScheduleEvent(EVENT_SPELL_DESTRUCTIVE_POISON, 5s);
         }
 
         void JustSummoned(Creature* summon)
@@ -348,7 +348,7 @@ public:
                     me->RemoveAura(SPELL_STEALTH);
                     me->SetWalk(true);
                     me->GetMotionMaster()->MovePoint(POINT_START, 517.4877f, 400.7993f, 112.7837f, false);
-                    events2.ScheduleEvent(EVENT_AKAMA_START_CHANNEL, 11000);
+                    events2.ScheduleEvent(EVENT_AKAMA_START_CHANNEL, 11s);
                     break;
                 case EVENT_AKAMA_START_CHANNEL:
                     me->CastSpell(me, SPELL_AKAMA_SOUL_CHANNEL, false);
@@ -403,11 +403,11 @@ public:
             {
                 case EVENT_SPELL_CHAIN_LIGHTNING:
                     me->CastSpell(me->GetVictim(), SPELL_CHAIN_LIGHTNING, false);
-                    events.ScheduleEvent(EVENT_SPELL_CHAIN_LIGHTNING, urand(10000, 15000));
+                    events.ScheduleEvent(EVENT_SPELL_CHAIN_LIGHTNING, 10s, 15s);
                     break;
                 case EVENT_SPELL_DESTRUCTIVE_POISON:
                     me->CastSpell(me, SPELL_DESTRUCTIVE_POISON, false);
-                    events.ScheduleEvent(EVENT_SPELL_DESTRUCTIVE_POISON, urand(4000, 5000));
+                    events.ScheduleEvent(EVENT_SPELL_DESTRUCTIVE_POISON, 4s, 5s);
                     break;
             }
 
@@ -420,7 +420,7 @@ public:
             {
                 CloseGossipMenuFor(player);
                 me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
-                events2.ScheduleEvent(EVENT_AKAMA_START_ENCOUNTER, 0);
+                events2.ScheduleEvent(EVENT_AKAMA_START_ENCOUNTER, 0s);
             }
         }
     };
@@ -510,9 +510,9 @@ public:
                 events.CancelEvent(EVENT_SUMMON_ASHTONGUE_SORCERER);
             else if (param == ACTION_START_ENCOUNTER)
             {
-                events.ScheduleEvent(EVENT_SUMMON_WAVE_B, 5000);
-                events.ScheduleEvent(EVENT_SUMMON_ASHTONGUE_DEFENDER, 20000);
-                events.ScheduleEvent(EVENT_SUMMON_ASHTONGUE_SORCERER, 35000);
+                events.ScheduleEvent(EVENT_SUMMON_WAVE_B, 5s);
+                events.ScheduleEvent(EVENT_SUMMON_ASHTONGUE_DEFENDER, 20s);
+                events.ScheduleEvent(EVENT_SUMMON_ASHTONGUE_SORCERER, 35s);
             }
         }
 
@@ -524,15 +524,15 @@ public:
             {
                 case EVENT_SUMMON_WAVE_B:
                     me->CastSpell(me, SPELL_ASHTONGUE_WAVE_B, true);
-                    events.ScheduleEvent(EVENT_SUMMON_WAVE_B, 45000);
+                    events.ScheduleEvent(EVENT_SUMMON_WAVE_B, 45s);
                     break;
                 case EVENT_SUMMON_ASHTONGUE_SORCERER: // left
                     me->CastSpell(me, SPELL_SUMMON_ASHTONGUE_SORCERER, true);
-                    events.ScheduleEvent(EVENT_SUMMON_ASHTONGUE_SORCERER, 45000);
+                    events.ScheduleEvent(EVENT_SUMMON_ASHTONGUE_SORCERER, 45s);
                     break;
                 case EVENT_SUMMON_ASHTONGUE_DEFENDER: // right
                     me->CastSpell(me, SPELL_SUMMON_ASHTONGUE_DEFENDER, true);
-                    events.ScheduleEvent(EVENT_SUMMON_ASHTONGUE_DEFENDER, 45000);
+                    events.ScheduleEvent(EVENT_SUMMON_ASHTONGUE_DEFENDER, 45s);
                     break;
                 default:
                     break;
