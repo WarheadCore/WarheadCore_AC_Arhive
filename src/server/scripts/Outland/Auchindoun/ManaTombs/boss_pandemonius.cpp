@@ -28,6 +28,7 @@ enum Events
     EVENT_DARK_SHELL
 };
 
+constexpr uint32 DARK_SHELL_EVENT_GROUP = 1;
 
 class boss_pandemonius : public CreatureScript
 {
@@ -57,7 +58,7 @@ public:
 
             Talk(SAY_AGGRO);
 
-            events.ScheduleEvent(EVENT_DARK_SHELL, 20s);
+            events.ScheduleEvent(EVENT_DARK_SHELL, 20s, DARK_SHELL_EVENT_GROUP);
             events.ScheduleEvent(EVENT_VOID_BLAST, 8s, 23s);
         }
 
@@ -98,7 +99,7 @@ public:
                     else
                     {
                         events.RescheduleEvent(EVENT_VOID_BLAST, 500ms);
-                        events.RescheduleEvent(EVENT_DARK_SHELL, 500ms);
+                        events.DelayEvents(500ms, DARK_SHELL_EVENT_GROUP);
                     }
                     break;
                 case EVENT_DARK_SHELL:
@@ -107,7 +108,7 @@ public:
 
                     Talk(EMOTE_DARK_SHELL);
                     DoCast(me, SPELL_DARK_SHELL);
-                    events.RescheduleEvent(EVENT_DARK_SHELL, 20s);
+                    events.RescheduleEvent(EVENT_DARK_SHELL, 20s, DARK_SHELL_EVENT_GROUP);
                     break;
                 default:
                     break;
