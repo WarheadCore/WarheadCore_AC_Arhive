@@ -725,10 +725,10 @@ public:
                         if (AllowStart())
                         {
                             PrepareEvent();
-                            events.RepeatEvent(300000);
+                            events.RepeatEvent(5min);
                             return;
                         }
-                        events.RepeatEvent(2000);
+                        events.RepeatEvent(2s);
                         break;
                     }
                 case EVENT_SPAWN_MOLE_MACHINE:
@@ -751,7 +751,7 @@ public:
                             if (Creature* cr = me->SummonCreature(NPC_MOLE_MACHINE_TRIGGER, x, y, 398.11f, 0.0f))
                                 cr->CastSpell(cr, SPELL_SPAWN_MOLE_MACHINE, true);
                         }
-                        events.RepeatEvent(3000);
+                        events.RepeatEvent(3s);
                         break;
                     }
                 case EVENT_PRE_FINISH_ATTACK:
@@ -768,7 +768,7 @@ public:
                     }
                 case EVENT_BARTENDER_SAY:
                     {
-                        events.RepeatEvent(12000);
+                        events.RepeatEvent(12s);
                         Creature* sayer = GetRandomBartender();
                         if (!sayer)
                             return;
