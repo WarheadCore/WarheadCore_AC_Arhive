@@ -281,7 +281,7 @@ public:
                             me->HandleStatModifier(UNIT_MOD_DAMAGE_MAINHAND, TOTAL_PCT, 35.0f, false); // hack
                             events.ScheduleEvent(EVENT_SHADOW_WORD_PAIN, 4s, 7s, 0, PHASE_ONE);
                             events.ScheduleEvent(EVENT_GOUGE, 12s, 15s, 0, PHASE_ONE);
-                            events.ScheduleEvent(EVENT_TRANSFORM, 15s, 20s, 0, PHASE_ONE);
+                            events.ScheduleEvent(EVENT_TRANSFORM, 16s, 20s, 0, PHASE_ONE);
                             events.SetPhase(PHASE_ONE);
                             break;
                         }

@@ -251,7 +251,7 @@ public:
                 case EVENT_RANDOM_TALK:
                     if (instance->GetBossState(DATA_KILJAEDEN) == NOT_STARTED)
                         Talk(SAY_KJ_OFFCOMBAT);
-                    events.ScheduleEvent(EVENT_RANDOM_TALK, 90s, 2min);
+                    events.ScheduleEvent(EVENT_RANDOM_TALK, 90s, 3min);
                     break;
                 case EVENT_CHECK_PLAYERS:
                     {
@@ -530,7 +530,7 @@ public:
                         events2.ScheduleEvent(EVENT_TEXT_SPEACH31, 16s, EVENT_GROUP_SPEACH);
                         events2.ScheduleEvent(EVENT_TEXT_SPEACH32, 22s, EVENT_GROUP_SPEACH);
                         events2.ScheduleEvent(EVENT_TEXT_SPEACH33, 28s, EVENT_GROUP_SPEACH);
-                        events2.RescheduleEvent(EVENT_EMPOWER_ORBS2, 350s);
+                        events2.RescheduleEvent(EVENT_EMPOWER_ORBS2, 35s);
 
                         events.DelayEvents(2s);
                         events.ScheduleEvent(EVENT_SPELL_SINISTER_REFLECTION, 500ms);
