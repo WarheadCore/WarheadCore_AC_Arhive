@@ -161,7 +161,7 @@ public:
                     me->SetReactState(REACT_PASSIVE);
                     me->CastSpell(me, SPELL_EMBER_BLAST, true);
                     me->setAttackTimer(BASE_ATTACK, 16000);
-                    
+
                     events.Reset();
                     events.ScheduleEvent(EVENT_RELOCATE_MIDDLE, 8s);
                     events.ScheduleEvent(EVENT_MOVE_TO_PHASE_2, 12s);

@@ -359,13 +359,13 @@ public:
                 me->RemoveAurasDueToSpell(SPELL_KAEL_FULL_POWER);
                 me->SetReactState(REACT_AGGRESSIVE);
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
-                
+
                 events.SetTimer(1min);
                 events.ScheduleEvent(EVENT_SPELL_FIREBALL, 0s);
                 events.ScheduleEvent(EVENT_SPELL_FLAMESTRIKE, 10s);
                 events.ScheduleEvent(EVENT_SPELL_SUMMON_PHOENIX, 20s);
                 events.ScheduleEvent(EVENT_SPELL_GRAVITY_LAPSE, 5s);
-                
+
                 if (me->GetVictim())
                 {
                     me->SetTarget(me->GetVictim()->GetGUID());
