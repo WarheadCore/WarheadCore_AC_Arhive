@@ -95,9 +95,9 @@ public:
             me->SetInCombatWithZone();
             summons.DoZoneInCombat();
 
-            events.ScheduleEvent(EVENT_SPELL_BEACON, 10000);
-            events.ScheduleEvent(EVENT_SPELL_FR_FI, 4000);
-            events.ScheduleEvent(EVENT_SPELL_FROST_NOVA, 15000);
+            events.ScheduleEvent(EVENT_SPELL_BEACON, 10s);
+            events.ScheduleEvent(EVENT_SPELL_FR_FI, 4s);
+            events.ScheduleEvent(EVENT_SPELL_FROST_NOVA, 15s);
         }
 
         void JustSummoned(Creature* summon)
@@ -142,24 +142,24 @@ public:
             {
                 case EVENT_SPELL_FROST_NOVA:
                     me->CastSpell(me, SPELL_FROSTNOVA, false);
-                    events.RepeatEvent(urand(16000, 23000));
-                    events.DelayEvents(1500);
-                    events.ScheduleEvent(EVENT_SPELL_BLINK, 1500);
+                    events.RepeatEvent(16s, 23s);
+                    events.DelayEvents(1500ms);
+                    events.ScheduleEvent(EVENT_SPELL_BLINK, 1500ms);
                     break;
                 case EVENT_SPELL_FR_FI:
                     me->CastSpell(me->GetVictim(), RAND(SPELL_FROSTBOLT, SPELL_FIREBALL), false);
-                    events.RepeatEvent(urand(3000, 4000));
+                    events.RepeatEvent(3s, 4s);
                     break;
                 case EVENT_SPELL_BLINK:
                     me->CastSpell(me, SPELL_BLINK, false);
-                    events.RescheduleEvent(EVENT_SPELL_FR_FI, 0);
+                    events.RescheduleEvent(EVENT_SPELL_FR_FI, 0s);
                     break;
                 case EVENT_SPELL_BEACON:
                     if (!urand(0, 3))
                         Talk(SAY_SUMMON);
 
                     me->CastSpell(me, SPELL_ETHEREAL_BEACON, true);
-                    events.RepeatEvent(10000);
+                    events.RepeatEvent(10s);
                     break;
             }
 
@@ -192,7 +192,7 @@ public:
 
         void EnterCombat(Unit* /*who*/) override
         {
-            events.ScheduleEvent(EVENT_DOUBLE_BREATH, urand(6000, 9000));
+            events.ScheduleEvent(EVENT_DOUBLE_BREATH, 6s, 9s);
         }
 
         void UpdateAI(uint32 diff) override
@@ -209,7 +209,7 @@ public:
                     case EVENT_DOUBLE_BREATH:
                         if (me->IsWithinDist(me->GetVictim(), ATTACK_DISTANCE))
                             DoCastVictim(SPELL_DOUBLE_BREATH);
-                        events.ScheduleEvent(EVENT_DOUBLE_BREATH, urand(6000, 9000));
+                        events.ScheduleEvent(EVENT_DOUBLE_BREATH, 6s, 9s);
                         break;
                     default:
                         break;
