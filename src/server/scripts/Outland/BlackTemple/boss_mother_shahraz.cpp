@@ -94,13 +94,13 @@ public:
 
             me->CastSpell(me, SPELL_SABER_LASH_AURA, true);
             me->CastSpell(me, SPELL_RANDOM_PERIODIC, true);
-            events.ScheduleEvent(EVENT_CHECK_HEALTH, 1000);
-            events.ScheduleEvent(EVENT_RANDOM_TALK, 60000);
-            events.ScheduleEvent(EVENT_SPELL_PRISMATIC_AURA, 0);
-            events.ScheduleEvent(EVENT_SPELL_ENRAGE, 600000);
-            events.ScheduleEvent(EVENT_SPELL_SILENCING_SHRIEK, 30000);
-            events.ScheduleEvent(EVENT_SPELL_FATAL_ATTRACTION, 50000);
-            events.ScheduleEvent(EVENT_SPELL_SABER_LASH, 4000);
+            events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
+            events.ScheduleEvent(EVENT_RANDOM_TALK, 1min);
+            events.ScheduleEvent(EVENT_SPELL_PRISMATIC_AURA, 0s);
+            events.ScheduleEvent(EVENT_SPELL_ENRAGE, 10min);
+            events.ScheduleEvent(EVENT_SPELL_SILENCING_SHRIEK, 30s);
+            events.ScheduleEvent(EVENT_SPELL_FATAL_ATTRACTION, 50s);
+            events.ScheduleEvent(EVENT_SPELL_SABER_LASH, 4s);
         }
 
         void KilledUnit(Unit* /*victim*/)
@@ -108,7 +108,7 @@ public:
             if (events.GetNextEventTime(EVENT_KILL_TALK) == 0)
             {
                 Talk(SAY_SLAY);
-                events.ScheduleEvent(EVENT_KILL_TALK, 6000);
+                events.ScheduleEvent(EVENT_KILL_TALK, 6s);
             }
         }
 
@@ -136,7 +136,7 @@ public:
                         Talk(SAY_EMOTE_FRENZY);
                         break;
                     }
-                    events.ScheduleEvent(EVENT_CHECK_HEALTH, 1000);
+                    events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
                     break;
                 case EVENT_SPELL_ENRAGE:
                     me->CastSpell(me, SPELL_ENRAGE, true);
@@ -144,24 +144,24 @@ public:
                     break;
                 case EVENT_RANDOM_TALK:
                     Talk(SAY_TAUNT);
-                    events.ScheduleEvent(EVENT_RANDOM_TALK, urand(60000, 120000));
+                    events.ScheduleEvent(EVENT_RANDOM_TALK, 1min, 2min);
                     break;
                 case EVENT_SPELL_SABER_LASH:
                     me->CastSpell(me->GetVictim(), SPELL_SABER_LASH, false);
-                    events.ScheduleEvent(EVENT_SPELL_SABER_LASH, 30000);
+                    events.ScheduleEvent(EVENT_SPELL_SABER_LASH, 30s);
                     break;
                 case EVENT_SPELL_PRISMATIC_AURA:
                     me->CastSpell(me, RAND(SPELL_PRISMATIC_AURA_SHADOW, SPELL_PRISMATIC_AURA_FIRE, SPELL_PRISMATIC_AURA_NATURE, SPELL_PRISMATIC_AURA_ARCANE, SPELL_PRISMATIC_AURA_FROST, SPELL_PRISMATIC_AURA_HOLY), false);
-                    events.ScheduleEvent(EVENT_SPELL_PRISMATIC_AURA, 15000);
+                    events.ScheduleEvent(EVENT_SPELL_PRISMATIC_AURA, 15s);
                     break;
                 case EVENT_SPELL_SILENCING_SHRIEK:
                     me->CastSpell(me, SPELL_SILENCING_SHRIEK, false);
-                    events.ScheduleEvent(EVENT_SPELL_SILENCING_SHRIEK, 30000);
+                    events.ScheduleEvent(EVENT_SPELL_SILENCING_SHRIEK, 30s);
                     break;
                 case EVENT_SPELL_FATAL_ATTRACTION:
                     Talk(SAY_SPELL);
                     me->CastCustomSpell(SPELL_FATAL_ATTRACTION, SPELLVALUE_MAX_TARGETS, 3, me, false);
-                    events.ScheduleEvent(EVENT_SPELL_FATAL_ATTRACTION, 60000);
+                    events.ScheduleEvent(EVENT_SPELL_FATAL_ATTRACTION, 1min);
                     break;
             }
 
