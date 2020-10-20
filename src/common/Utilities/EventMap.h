@@ -74,6 +74,14 @@ public:
     }
 
     /**
+    * @name SetTimer
+    */
+    void SetTimer(Milliseconds time)
+    {
+        _time = time.count();
+    }
+
+    /**
     * @name GetPhaseMask
     * @return Active phases as mask.
     */
