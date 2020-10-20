@@ -90,7 +90,7 @@ public:
             if (events.GetNextEventTime(EVENT_KILL_TALK) == 0)
             {
                 Talk(SAY_SLAY);
-                events.ScheduleEvent(EVENT_KILL_TALK, 6000);
+                events.ScheduleEvent(EVENT_KILL_TALK, 6s);
             }
         }
 
@@ -111,9 +111,9 @@ public:
             BossAI::EnterCombat(who);
             Talk(SAY_AGGRO);
 
-            events.ScheduleEvent(EVENT_SPELL_TIDAL_WAVE, 10000);
-            events.ScheduleEvent(EVENT_SPELL_WATERY_GRAVE, 28000);
-            events.ScheduleEvent(EVENT_SPELL_EARTHQUAKE, 40000);
+            events.ScheduleEvent(EVENT_SPELL_TIDAL_WAVE, 10s);
+            events.ScheduleEvent(EVENT_SPELL_WATERY_GRAVE, 28s);
+            events.ScheduleEvent(EVENT_SPELL_EARTHQUAKE, 40s);
         }
 
         void UpdateAI(uint32 diff)
@@ -129,7 +129,7 @@ public:
             {
                 case EVENT_SPELL_TIDAL_WAVE:
                     me->CastSpell(me->GetVictim(), SPELL_TIDAL_WAVE, false);
-                    events.ScheduleEvent(EVENT_SPELL_TIDAL_WAVE, 20000);
+                    events.ScheduleEvent(EVENT_SPELL_TIDAL_WAVE, 20s);
                     break;
                 case EVENT_SPELL_WATERY_GRAVE:
                     Talk(SAY_SUMMON_BUBLE);
@@ -144,13 +144,13 @@ public:
                         for (uint8 i = 0; i < 4; ++i)
                             me->CastSpell(me, waterGlobuleId[i], true);
                     }
-                    events.ScheduleEvent(EVENT_SPELL_WATERY_GRAVE, 25000);
+                    events.ScheduleEvent(EVENT_SPELL_WATERY_GRAVE, 25s);
                     break;
                 case EVENT_SPELL_EARTHQUAKE:
                     Talk(EMOTE_EARTHQUAKE);
                     me->CastSpell(me, SPELL_EARTHQUAKE, false);
-                    events.ScheduleEvent(EVENT_SPELL_EARTHQUAKE, urand(45000, 60000));
-                    events.ScheduleEvent(EVENT_SUMMON_MURLOCS, 8000);
+                    events.ScheduleEvent(EVENT_SPELL_EARTHQUAKE, 45s, 1min);
+                    events.ScheduleEvent(EVENT_SUMMON_MURLOCS, 8s);
                     break;
                 case EVENT_SUMMON_MURLOCS:
                     Talk(SAY_SUMMON);

@@ -76,12 +76,13 @@ public:
 
         void EnterCombat(Unit*)
         {
-            events.ScheduleEvent(EVENT_LEVITATE, 12000);
-            events.ScheduleEvent(EVENT_SPELL_CHAIN, 6000);
-            events.ScheduleEvent(EVENT_SPELL_STATIC, 10000);
-            events.ScheduleEvent(EVENT_CHECK, 5000);
+            events.ScheduleEvent(EVENT_LEVITATE, 12s);
+            events.ScheduleEvent(EVENT_SPELL_CHAIN, 6s);
+            events.ScheduleEvent(EVENT_SPELL_STATIC, 10s);
+            events.ScheduleEvent(EVENT_CHECK, 5s);
+
             if (IsHeroic())
-                events.ScheduleEvent(EVENT_SPELL_SPORES, urand(10000, 15000));
+                events.ScheduleEvent(EVENT_SPELL_SPORES, 10s, 15s);
         }
 
 
@@ -122,31 +123,31 @@ public:
                         EnterEvadeMode();
                         return;
                     }
-                    events.RepeatEvent(5000);
+                    events.RepeatEvent(5s);
                     break;
                 case EVENT_SPELL_SPORES:
                     me->CastSpell(me, SPELL_SUMMON_SPORE_STRIDER, false);
-                    events.RepeatEvent(urand(10000, 15000));
+                    events.RepeatEvent(10s, 15s);
                     break;
                 case EVENT_SPELL_CHAIN:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         me->CastSpell(target, SPELL_CHAIN_LIGHTNING, false);
-                    events.DelayEvents(3000);
-                    events.RepeatEvent(9000);
+                    events.DelayEvents(3s);
+                    events.RepeatEvent(9s);
                     break;
                 case EVENT_SPELL_STATIC:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 30, true))
                         me->CastSpell(target, SPELL_STATIC_CHARGE, false);
-                    events.RepeatEvent(10000);
+                    events.RepeatEvent(10s);
                     break;
                 case EVENT_LEVITATE:
-                    events.RepeatEvent(15000);
+                    events.RepeatEvent(15s);
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
                     {
                         me->CastSpell(target, SPELL_LEVITATE, false);
                         lTarget = target->GetGUID();
-                        events.DelayEvents(5000);
-                        events.ScheduleEvent(EVENT_LEVITATE_TARGET_1, 2000);
+                        events.DelayEvents(5s);
+                        events.ScheduleEvent(EVENT_LEVITATE_TARGET_1, 2s);
                     }
                     break;
                 case EVENT_LEVITATE_TARGET_1:
@@ -157,7 +158,7 @@ public:
                         else
                         {
                             target->CastSpell(target, SPELL_MAGNETIC_PULL, true);
-                            events.ScheduleEvent(EVENT_LEVITATE_TARGET_2, 1500);
+                            events.ScheduleEvent(EVENT_LEVITATE_TARGET_2, 1500ms);
                         }
                     }
                     break;
