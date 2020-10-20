@@ -54,9 +54,9 @@ public:
         void EnterCombat(Unit* /*who*/)
         {
             _EnterCombat();
-            events.ScheduleEvent(EVENT_STREAM_OF_MACHINE_FLUID, 15000);
-            events.ScheduleEvent(EVENT_JACKHAMMER, 35000);
-            events.ScheduleEvent(EVENT_SHADOW_POWER, 25000);
+            events.ScheduleEvent(EVENT_STREAM_OF_MACHINE_FLUID, 15s);
+            events.ScheduleEvent(EVENT_JACKHAMMER, 35s);
+            events.ScheduleEvent(EVENT_SHADOW_POWER, 25s);
             Talk(SAY_AGGRO);
         }
 
@@ -85,17 +85,17 @@ public:
             {
                 case EVENT_STREAM_OF_MACHINE_FLUID:
                     me->CastSpell(me->GetVictim(), SPELL_STREAM_OF_MACHINE_FLUID, false);
-                    events.ScheduleEvent(EVENT_STREAM_OF_MACHINE_FLUID, 20000);
+                    events.ScheduleEvent(EVENT_STREAM_OF_MACHINE_FLUID, 20s);
                     break;
                 case EVENT_JACKHAMMER:
                     Talk(EMOTE_HAMMER);
                     Talk(SAY_HAMMER);
                     me->CastSpell(me, SPELL_JACKHAMMER, false);
-                    events.ScheduleEvent(EVENT_JACKHAMMER, 40000);
+                    events.ScheduleEvent(EVENT_JACKHAMMER, 40s);
                     break;
                 case EVENT_SHADOW_POWER:
                     me->CastSpell(me, SPELL_SHADOW_POWER, false);
-                    events.ScheduleEvent(EVENT_SHADOW_POWER, 25000);
+                    events.ScheduleEvent(EVENT_SHADOW_POWER, 25s);
                     break;
                 default:
                     break;
@@ -115,4 +115,3 @@ void AddSC_boss_gatewatcher_iron_hand()
 {
     new boss_gatewatcher_iron_hand();
 }
-

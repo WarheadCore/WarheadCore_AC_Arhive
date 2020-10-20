@@ -106,7 +106,7 @@ public:
 
                     CannonGUID = caster->GetGUID();
                     PartyTime = true;
-                    events.ScheduleEvent(EVENT_PARTY_TIMER, 3000);
+                    events.ScheduleEvent(EVENT_PARTY_TIMER, 3s);
                 }
 
                 if (count >= 3)
@@ -169,7 +169,7 @@ public:
                         else
                         {
                             me->SummonCreature(NPC_FEL_IMP, 0, 0, 0, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000);
-                            events.ScheduleEvent(EVENT_PARTY_TIMER, 3000);
+                            events.ScheduleEvent(EVENT_PARTY_TIMER, 3s);
                         }
                         break;
                 }
@@ -590,18 +590,18 @@ public:
                     if (!CheckPlayer())
                         ResetNode();
                     else
-                        _events.ScheduleEvent(EVENT_SIMON_PERIODIC_PLAYER_CHECK, 2000);
+                        _events.ScheduleEvent(EVENT_SIMON_PERIODIC_PLAYER_CHECK, 2s);
                     break;
                 case EVENT_SIMON_SETUP_PRE_GAME:
                     SetUpPreGame();
                     _events.CancelEvent(EVENT_SIMON_GAME_TICK);
-                    _events.ScheduleEvent(EVENT_SIMON_PLAY_SEQUENCE, 1000);
+                    _events.ScheduleEvent(EVENT_SIMON_PLAY_SEQUENCE, 1s);
                     break;
                 case EVENT_SIMON_PLAY_SEQUENCE:
                     if (!playableSequence.empty())
                     {
                         PlayNextColor();
-                        _events.ScheduleEvent(EVENT_SIMON_PLAY_SEQUENCE, 1500);
+                        _events.ScheduleEvent(EVENT_SIMON_PLAY_SEQUENCE, 1500ms);
                     }
                     else
                     {
@@ -610,16 +610,16 @@ public:
                         playerSequence.clear();
                         PrepareClusters();
                         gameTicks = 0;
-                        _events.ScheduleEvent(EVENT_SIMON_GAME_TICK, 3000);
+                        _events.ScheduleEvent(EVENT_SIMON_GAME_TICK, 3s);
                     }
                     break;
                 case EVENT_SIMON_GAME_TICK:
                     DoCast(SPELL_AUDIBLE_GAME_TICK);
 
                     if (gameTicks > gameLevel)
-                        _events.ScheduleEvent(EVENT_SIMON_TOO_LONG_TIME, 500);
+                        _events.ScheduleEvent(EVENT_SIMON_TOO_LONG_TIME, 500ms);
                     else
-                        _events.ScheduleEvent(EVENT_SIMON_GAME_TICK, 3000);
+                        _events.ScheduleEvent(EVENT_SIMON_GAME_TICK, 3s);
                     gameTicks++;
                     break;
                 case EVENT_SIMON_RESET_CLUSTERS:
@@ -646,7 +646,7 @@ public:
                     if (gameLevel == 10)
                         ResetNode();
                     else
-                        _events.ScheduleEvent(EVENT_SIMON_SETUP_PRE_GAME, 1000);
+                        _events.ScheduleEvent(EVENT_SIMON_SETUP_PRE_GAME, 1s);
                     break;
                 case ACTION_SIMON_CORRECT_FULL_SEQUENCE:
                     gameLevel++;
@@ -678,7 +678,7 @@ public:
 
             PlayColor(pressedColor);
             playerSequence.push_back(pressedColor);
-            _events.ScheduleEvent(EVENT_SIMON_RESET_CLUSTERS, 500);
+            _events.ScheduleEvent(EVENT_SIMON_RESET_CLUSTERS, 500ms);
             CheckPlayerSequence();
         }
 
@@ -765,8 +765,8 @@ public:
             }
 
             _events.Reset();
-            _events.ScheduleEvent(EVENT_SIMON_ROUND_FINISHED, 1000);
-            _events.ScheduleEvent(EVENT_SIMON_PERIODIC_PLAYER_CHECK, 2000);
+            _events.ScheduleEvent(EVENT_SIMON_ROUND_FINISHED, 1s);
+            _events.ScheduleEvent(EVENT_SIMON_PERIODIC_PLAYER_CHECK, 2s);
 
             if (GameObject* relic = me->FindNearestGameObject(large ? GO_APEXIS_MONUMENT : GO_APEXIS_RELIC, searchDistance))
                 relic->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);

@@ -67,10 +67,10 @@ public:
         {
             _EnterCombat();
             Talk(YELL_AGGRO);
-            events.ScheduleEvent(EVENT_HEADCRACK, 6000);
-            events.ScheduleEvent(EVENT_SUMMON_NETHER_CHARGE, 10000);
-            events.ScheduleEvent(EVENT_BERSERK, 180000);
-            events.ScheduleEvent(IsHeroic() ? EVENT_POSITIVE_SHIFT : EVENT_REFLECTIVE_DAMAGE_SHIELD, 15000);
+            events.ScheduleEvent(EVENT_HEADCRACK, 6s);
+            events.ScheduleEvent(EVENT_SUMMON_NETHER_CHARGE, 10s);
+            events.ScheduleEvent(EVENT_BERSERK, 3min);
+            events.ScheduleEvent(IsHeroic() ? EVENT_POSITIVE_SHIFT : EVENT_REFLECTIVE_DAMAGE_SHIELD, 15s);
         }
 
         void KilledUnit(Unit* victim)
@@ -104,29 +104,29 @@ public:
             {
                 case EVENT_HEADCRACK:
                     me->CastSpell(me->GetVictim(), SPELL_HEADCRACK, false);
-                    events.ScheduleEvent(EVENT_HEADCRACK, 20000);
+                    events.ScheduleEvent(EVENT_HEADCRACK, 20s);
                     break;
                 case EVENT_REFLECTIVE_DAMAGE_SHIELD:
                     Talk(YELL_REFLECTIVE_DAMAGE_SHIELD);
                     me->CastSpell(me, SPELL_REFLECTIVE_DAMAGE_SHIELD, false);
-                    events.ScheduleEvent(EVENT_REFLECTIVE_MAGIE_SHIELD, 20000);
+                    events.ScheduleEvent(EVENT_REFLECTIVE_MAGIE_SHIELD, 20s);
                     break;
                 case EVENT_REFLECTIVE_MAGIE_SHIELD:
                     Talk(YELL_REFLECTIVE_MAGIC_SHIELD);
                     me->CastSpell(me, SPELL_REFLECTIVE_MAGIC_SHIELD, false);
-                    events.ScheduleEvent(EVENT_REFLECTIVE_DAMAGE_SHIELD, 20000);
+                    events.ScheduleEvent(EVENT_REFLECTIVE_DAMAGE_SHIELD, 20s);
                     break;
                 case EVENT_SUMMON_NETHER_CHARGE:
                     {
                         Position pos;
                         me->GetRandomNearPosition(pos, 8.0f);
                         me->SummonCreature(NPC_NETHER_CHARGE, pos, TEMPSUMMON_TIMED_DESPAWN, 18000);
-                        events.ScheduleEvent(EVENT_SUMMON_NETHER_CHARGE, 5000);
+                        events.ScheduleEvent(EVENT_SUMMON_NETHER_CHARGE, 5s);
                         break;
                     }
                 case EVENT_POSITIVE_SHIFT:
                     me->CastSpell(me, SPELL_POLARITY_SHIFT, true);
-                    events.ScheduleEvent(EVENT_POSITIVE_SHIFT, 30000);
+                    events.ScheduleEvent(EVENT_POSITIVE_SHIFT, 30s);
                     break;
                 case EVENT_BERSERK:
                     me->CastSpell(me, SPELL_BERSERK, true);

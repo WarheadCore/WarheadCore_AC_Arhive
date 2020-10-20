@@ -112,7 +112,7 @@ public:
         void Reset()
         {
             events2.Reset();
-            events2.ScheduleEvent(EVENT_RANDOM_TAUNT, 90000);
+            events2.ScheduleEvent(EVENT_RANDOM_TAUNT, 90s);
             _Reset();
             me->CastSpell(me, SPELL_SHADOW_CAGE, true);
             me->SetReactState(REACT_PASSIVE);
@@ -123,7 +123,7 @@ public:
         {
             if (events.GetNextEventTime(EVENT_RECENTLY_SPOKEN) == 0)
             {
-                events.ScheduleEvent(EVENT_RECENTLY_SPOKEN, 5000);
+                events.ScheduleEvent(EVENT_RECENTLY_SPOKEN, 5s);
                 Talk(SAY_SLAY);
             }
         }
@@ -140,10 +140,10 @@ public:
         {
             events2.Reset();
             _EnterCombat();
-            events.ScheduleEvent(EVENT_EMOTE1, 0);
-            events.ScheduleEvent(EVENT_EMOTE2, 60000);
-            events.ScheduleEvent(EVENT_EMOTE3, 120000);
-            events.ScheduleEvent(EVENT_ENTER_COMBAT, 123000);
+            events.ScheduleEvent(EVENT_EMOTE1, 0s);
+            events.ScheduleEvent(EVENT_EMOTE2, 1min);
+            events.ScheduleEvent(EVENT_EMOTE3, 2min);
+            events.ScheduleEvent(EVENT_ENTER_COMBAT, 123s);
 
         }
 
@@ -154,7 +154,7 @@ public:
             {
                 case EVENT_RANDOM_TAUNT:
                     Talk(SAY_TAUNT);
-                    events2.ScheduleEvent(EVENT_RANDOM_TAUNT, 90000);
+                    events2.ScheduleEvent(EVENT_RANDOM_TAUNT, 90s);
                     break;
                 case EVENT_CHECK_GRASP:
                     if (me->GetAuraCount(SPELL_SHADOW_GRASP_VISUAL) == 5)
@@ -163,7 +163,7 @@ public:
                         me->InterruptNonMeleeSpells(true);
                         break;
                     }
-                    events2.ScheduleEvent(EVENT_CHECK_GRASP, 0);
+                    events2.ScheduleEvent(EVENT_CHECK_GRASP, 0s);
                     break;
             }
 
@@ -190,29 +190,29 @@ public:
                 case EVENT_ENTER_COMBAT:
                     me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_IMMUNE_TO_PC);
                     me->SetReactState(REACT_AGGRESSIVE);
-                    events.ScheduleEvent(EVENT_CLEAVE, 9000);
-                    events.ScheduleEvent(EVENT_BLAST_NOVA, 60000);
-                    events.ScheduleEvent(EVENT_BLAZE, 10000);
-                    events.ScheduleEvent(EVENT_QUAKE, 40000);
-                    events.ScheduleEvent(EVENT_CHECK_HEALTH, 500);
-                    events.ScheduleEvent(EVENT_ENRAGE, 22 * MINUTE * IN_MILLISECONDS);
+                    events.ScheduleEvent(EVENT_CLEAVE, 9s);
+                    events.ScheduleEvent(EVENT_BLAST_NOVA, 1min);
+                    events.ScheduleEvent(EVENT_BLAZE, 10s);
+                    events.ScheduleEvent(EVENT_QUAKE, 40s);
+                    events.ScheduleEvent(EVENT_CHECK_HEALTH, 500ms);
+                    events.ScheduleEvent(EVENT_ENRAGE, 22min);
 
                     instance->SetData(DATA_ACTIVATE_CUBES, 1);
                     me->RemoveAurasDueToSpell(SPELL_SHADOW_CAGE);
                     break;
                 case EVENT_CLEAVE:
                     me->CastSpell(me->GetVictim(), SPELL_CLEAVE, false);
-                    events.ScheduleEvent(EVENT_CLEAVE, 10000);
+                    events.ScheduleEvent(EVENT_CLEAVE, 10s);
                     break;
                 case EVENT_BLAST_NOVA:
                     me->CastSpell(me, SPELL_BLAST_NOVA, false);
-                    events.ScheduleEvent(EVENT_BLAST_NOVA, 60000);
-                    events.ScheduleEvent(EVENT_CANCEL_GRASP_CHECK, 12000);
-                    events2.ScheduleEvent(EVENT_CHECK_GRASP, 0);
+                    events.ScheduleEvent(EVENT_BLAST_NOVA, 1min);
+                    events.ScheduleEvent(EVENT_CANCEL_GRASP_CHECK, 12s);
+                    events2.ScheduleEvent(EVENT_CHECK_GRASP, 0s);
                     break;
                 case EVENT_BLAZE:
                     me->CastCustomSpell(SPELL_BLAZE, SPELLVALUE_MAX_TARGETS, 1);
-                    events.ScheduleEvent(EVENT_BLAZE, 30000);
+                    events.ScheduleEvent(EVENT_BLAZE, 30s);
                     break;
                 case EVENT_ENRAGE:
                     me->CastSpell(me, SPELL_BERSERK, true);
@@ -222,19 +222,19 @@ public:
                     break;
                 case EVENT_QUAKE:
                     me->CastSpell(me, SPELL_QUAKE, false);
-                    events.ScheduleEvent(EVENT_QUAKE, 50000);
+                    events.ScheduleEvent(EVENT_QUAKE, 50s);
                     break;
                 case EVENT_CHECK_HEALTH:
                     if (me->HealthBelowPct(30))
                     {
                         Talk(SAY_PHASE3);
                         events.SetPhase(1);
-                        events.DelayEvents(18000);
-                        events.ScheduleEvent(EVENT_COLLAPSE_CEIL, 8000);
-                        events.ScheduleEvent(EVENT_COLLAPSE_DAMAGE, 15000);
+                        events.DelayEvents(18s);
+                        events.ScheduleEvent(EVENT_COLLAPSE_CEIL, 8s);
+                        events.ScheduleEvent(EVENT_COLLAPSE_DAMAGE, 15s);
                         break;
                     }
-                    events.ScheduleEvent(EVENT_CHECK_HEALTH, 500);
+                    events.ScheduleEvent(EVENT_CHECK_HEALTH, 500ms);
                     break;
                 case EVENT_COLLAPSE_CEIL:
                     me->CastSpell(me, SPELL_CAMERA_SHAKE, true);
@@ -244,7 +244,7 @@ public:
                     me->CastSpell(me, SPELL_COLLAPSE_DAMAGE, true);
                     me->resetAttackTimer();
                     events.SetPhase(0);
-                    events.ScheduleEvent(EVENT_DEBRIS, 20000);
+                    events.ScheduleEvent(EVENT_DEBRIS, 20s);
                     break;
                 case EVENT_DEBRIS:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
@@ -252,7 +252,7 @@ public:
                         target->CastSpell(target, SPELL_DEBRIS_VISUAL, true, nullptr, nullptr, me->GetGUID());
                         me->m_Events.AddEvent(new DealDebrisDamage(*me, target->GetGUID()), me->m_Events.CalculateTime(5000));
                     }
-                    events.ScheduleEvent(EVENT_DEBRIS, 20000);
+                    events.ScheduleEvent(EVENT_DEBRIS, 20s);
                     break;
             }
 
@@ -338,4 +338,3 @@ void AddSC_boss_magtheridon()
     new spell_magtheridon_blaze();
     new spell_magtheridon_shadow_grasp();
 }
-
