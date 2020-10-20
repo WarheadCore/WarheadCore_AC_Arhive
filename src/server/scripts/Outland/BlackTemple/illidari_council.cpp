@@ -258,7 +258,7 @@ struct boss_illidari_council_memberAI : public ScriptedAI
         if (events.GetNextEventTime(EVENT_KILL_TALK) == 0)
         {
             Talk(SAY_COUNCIL_SLAY);
-            events.ScheduleEvent(EVENT_KILL_TALK, 6000);
+            events.ScheduleEvent(EVENT_KILL_TALK, 6s);
         }
     }
 
@@ -306,12 +306,12 @@ public:
         void EnterCombat(Unit* who)
         {
             boss_illidari_council_memberAI::EnterCombat(who);
-            events.ScheduleEvent(EVENT_SPELL_BLESSING, 10000);
-            events.ScheduleEvent(EVENT_SPELL_AURA, 0);
-            events.ScheduleEvent(EVENT_SPELL_SEAL, 2000);
-            events.ScheduleEvent(EVENT_SPELL_HAMMER_OF_JUSTICE, 6000);
-            events.ScheduleEvent(EVENT_SPELL_JUDGEMENT, 8000);
-            events.ScheduleEvent(EVENT_SPELL_CONSECRATION, 4000);
+            events.ScheduleEvent(EVENT_SPELL_BLESSING, 10s);
+            events.ScheduleEvent(EVENT_SPELL_AURA, 0s);
+            events.ScheduleEvent(EVENT_SPELL_SEAL, 2s);
+            events.ScheduleEvent(EVENT_SPELL_HAMMER_OF_JUSTICE, 6s);
+            events.ScheduleEvent(EVENT_SPELL_JUDGEMENT, 8s);
+            events.ScheduleEvent(EVENT_SPELL_CONSECRATION, 4s);
         }
 
         void UpdateAI(uint32 diff)
@@ -328,34 +328,34 @@ public:
                 case EVENT_SPELL_BLESSING:
                     if (Unit* member = SelectCouncilMember())
                         me->CastSpell(member, RAND(SPELL_BLESSING_OF_SPELL_WARDING, SPELL_BLESSING_OF_PROTECTION), false);
-                    events.ScheduleEvent(EVENT_SPELL_BLESSING, 15000);
+                    events.ScheduleEvent(EVENT_SPELL_BLESSING, 15s);
                     break;
                 case EVENT_SPELL_AURA:
                     me->CastSpell(me, RAND(SPELL_DEVOTION_AURA, SPELL_CHROMATIC_RESISTANCE_AURA), false);
-                    events.ScheduleEvent(EVENT_SPELL_AURA, 60000);
+                    events.ScheduleEvent(EVENT_SPELL_AURA, 1min);
                     break;
                 case EVENT_SPELL_CONSECRATION:
                     if (roll_chance_i(50))
                         Talk(SAY_COUNCIL_SPECIAL);
                     me->CastSpell(me, SPELL_CONSECRATION, false);
-                    events.ScheduleEvent(EVENT_SPELL_AURA, 30000);
+                    events.ScheduleEvent(EVENT_SPELL_AURA, 30s);
                     break;
                 case EVENT_SPELL_HAMMER_OF_JUSTICE:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, HammerOfJusticeSelector(me)))
                     {
                         me->CastSpell(target, SPELL_HAMMER_OF_JUSTICE, false);
-                        events.ScheduleEvent(EVENT_SPELL_HAMMER_OF_JUSTICE, 20000);
+                        events.ScheduleEvent(EVENT_SPELL_HAMMER_OF_JUSTICE, 20s);
                         break;
                     }
-                    events.ScheduleEvent(EVENT_SPELL_HAMMER_OF_JUSTICE, 0);
+                    events.ScheduleEvent(EVENT_SPELL_HAMMER_OF_JUSTICE, 0s);
                     break;
                 case EVENT_SPELL_SEAL:
                     me->CastSpell(me, RAND(SPELL_SEAL_OF_COMMAND, SPELL_SEAL_OF_BLOOD), false);
-                    events.ScheduleEvent(EVENT_SPELL_SEAL, 20000);
+                    events.ScheduleEvent(EVENT_SPELL_SEAL, 20s);
                     break;
                 case EVENT_SPELL_JUDGEMENT:
                     me->CastSpell(me->GetVictim(), SPELL_JUDGEMENT, false);
-                    events.ScheduleEvent(EVENT_SPELL_JUDGEMENT, 20000);
+                    events.ScheduleEvent(EVENT_SPELL_JUDGEMENT, 20s);
                     break;
             }
 
@@ -387,11 +387,11 @@ public:
         void EnterCombat(Unit* who)
         {
             boss_illidari_council_memberAI::EnterCombat(who);
-            events.ScheduleEvent(EVENT_SPELL_FLAMESTRIKE, 25000);
-            events.ScheduleEvent(EVENT_SPELL_BLIZZARD, 5000);
-            events.ScheduleEvent(EVENT_SPELL_ARCANE_BOLT, 15000);
-            events.ScheduleEvent(EVENT_SPELL_DAMPEN_MAGIC, 0);
-            events.ScheduleEvent(EVENT_SPELL_ARCANE_EXPLOSION, 10000);
+            events.ScheduleEvent(EVENT_SPELL_FLAMESTRIKE, 25s);
+            events.ScheduleEvent(EVENT_SPELL_BLIZZARD, 5s);
+            events.ScheduleEvent(EVENT_SPELL_ARCANE_BOLT, 15s);
+            events.ScheduleEvent(EVENT_SPELL_DAMPEN_MAGIC, 0s);
+            events.ScheduleEvent(EVENT_SPELL_ARCANE_EXPLOSION, 10s);
         }
 
         void UpdateAI(uint32 diff)
@@ -407,28 +407,28 @@ public:
             {
                 case EVENT_SPELL_DAMPEN_MAGIC:
                     me->CastSpell(me, SPELL_DAMPEN_MAGIC, false);
-                    events.ScheduleEvent(EVENT_SPELL_DAMPEN_MAGIC, 120000);
+                    events.ScheduleEvent(EVENT_SPELL_DAMPEN_MAGIC, 2min);
                     break;
                 case EVENT_SPELL_ARCANE_BOLT:
                     me->CastSpell(me->GetVictim(), SPELL_ARCANE_BOLT, false);
-                    events.ScheduleEvent(EVENT_SPELL_ARCANE_BOLT, 3000);
+                    events.ScheduleEvent(EVENT_SPELL_ARCANE_BOLT, 3s);
                     break;
                 case EVENT_SPELL_FLAMESTRIKE:
                     if (roll_chance_i(50))
                         Talk(SAY_COUNCIL_SPECIAL);
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f))
                         me->CastSpell(target, SPELL_FLAMESTRIKE, false);
-                    events.ScheduleEvent(EVENT_SPELL_FLAMESTRIKE, 40000);
+                    events.ScheduleEvent(EVENT_SPELL_FLAMESTRIKE, 40s);
                     break;
                 case EVENT_SPELL_BLIZZARD:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f))
                         me->CastSpell(target, SPELL_BLIZZARD, false);
-                    events.ScheduleEvent(EVENT_SPELL_BLIZZARD, 40000);
+                    events.ScheduleEvent(EVENT_SPELL_BLIZZARD, 40s);
                     break;
                 case EVENT_SPELL_ARCANE_EXPLOSION:
                     if (SelectTarget(SELECT_TARGET_RANDOM, 0, 10.0f))
                         me->CastSpell(me, SPELL_ARCANE_EXPLOSION, false);
-                    events.ScheduleEvent(EVENT_SPELL_ARCANE_EXPLOSION, 10000);
+                    events.ScheduleEvent(EVENT_SPELL_ARCANE_EXPLOSION, 10s);
                     break;
             }
 
@@ -460,10 +460,10 @@ public:
         void EnterCombat(Unit* who)
         {
             boss_illidari_council_memberAI::EnterCombat(who);
-            events.ScheduleEvent(EVENT_SPELL_REFLECTIVE_SHIELD, 10000);
-            events.ScheduleEvent(EVENT_SPELL_CIRCLE_OF_HEALING, 20000);
-            events.ScheduleEvent(EVENT_SPELL_DIVINE_WRATH, 5000);
-            events.ScheduleEvent(EVENT_SPELL_EMPOWERED_SMITE, 15000);
+            events.ScheduleEvent(EVENT_SPELL_REFLECTIVE_SHIELD, 10s);
+            events.ScheduleEvent(EVENT_SPELL_CIRCLE_OF_HEALING, 20s);
+            events.ScheduleEvent(EVENT_SPELL_DIVINE_WRATH, 5s);
+            events.ScheduleEvent(EVENT_SPELL_EMPOWERED_SMITE, 15s);
         }
 
         void UpdateAI(uint32 diff)
@@ -479,22 +479,22 @@ public:
             {
                 case EVENT_SPELL_CIRCLE_OF_HEALING:
                     me->CastSpell(me, SPELL_CIRCLE_OF_HEALING, false);
-                    events.ScheduleEvent(EVENT_SPELL_CIRCLE_OF_HEALING, 20000);
+                    events.ScheduleEvent(EVENT_SPELL_CIRCLE_OF_HEALING, 20s);
                     break;
                 case EVENT_SPELL_REFLECTIVE_SHIELD:
                     if (roll_chance_i(50))
                         Talk(SAY_COUNCIL_SPECIAL);
                     me->CastSpell(me, SPELL_REFLECTIVE_SHIELD, false);
-                    events.ScheduleEvent(EVENT_SPELL_REFLECTIVE_SHIELD, 40000);
+                    events.ScheduleEvent(EVENT_SPELL_REFLECTIVE_SHIELD, 40s);
                     break;
                 case EVENT_SPELL_DIVINE_WRATH:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f))
                         me->CastSpell(target, SPELL_DIVINE_WRATH, false);
-                    events.ScheduleEvent(EVENT_SPELL_DIVINE_WRATH, 20000);
+                    events.ScheduleEvent(EVENT_SPELL_DIVINE_WRATH, 20s);
                     break;
                 case EVENT_SPELL_EMPOWERED_SMITE:
                     me->CastSpell(me->GetVictim(), SPELL_EMPOWERED_SMITE, false);
-                    events.ScheduleEvent(EVENT_SPELL_EMPOWERED_SMITE, 3000);
+                    events.ScheduleEvent(EVENT_SPELL_EMPOWERED_SMITE, 3s);
                     break;
             }
         }
@@ -519,8 +519,8 @@ public:
         {
             me->SetCanDualWield(true);
             boss_illidari_council_memberAI::EnterCombat(who);
-            events.ScheduleEvent(EVENT_SPELL_VANISH, 10000);
-            events.ScheduleEvent(EVENT_SPELL_ENRAGE, 900000);
+            events.ScheduleEvent(EVENT_SPELL_VANISH, 10s);
+            events.ScheduleEvent(EVENT_SPELL_ENRAGE, 15min);
         }
 
         void JustSummoned(Creature* summon)
@@ -544,8 +544,8 @@ public:
                         Talk(SAY_COUNCIL_SPECIAL);
                     me->CastSpell(me, SPELL_DEADLY_STRIKE, false);
                     me->CastSpell(me, SPELL_VANISH, false);
-                    events.ScheduleEvent(EVENT_SPELL_VANISH, 60000);
-                    events.ScheduleEvent(EVENT_SPELL_VANISH_OUT, 29000);
+                    events.ScheduleEvent(EVENT_SPELL_VANISH, 1min);
+                    events.ScheduleEvent(EVENT_SPELL_VANISH_OUT, 29s);
                     break;
                 case EVENT_SPELL_VANISH_OUT:
                     me->CastSpell(me, SPELL_VANISH_OUT, false);

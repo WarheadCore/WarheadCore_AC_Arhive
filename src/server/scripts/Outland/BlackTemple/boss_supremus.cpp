@@ -72,28 +72,28 @@ public:
             BossAI::EnterCombat(who);
 
             SchedulePhase(false);
-            events.ScheduleEvent(EVENT_SPELL_BERSERK, 900000);
-            events.ScheduleEvent(EVENT_SPELL_MOLTEN_FLAMES, 4000);
+            events.ScheduleEvent(EVENT_SPELL_BERSERK, 15min);
+            events.ScheduleEvent(EVENT_SPELL_MOLTEN_FLAMES, 4s);
         }
 
         void SchedulePhase(bool run)
         {
             events.CancelEventGroup(EVENT_GROUP_ABILITIES);
-            events.ScheduleEvent(EVENT_SWITCH_PHASE, 60000);
+            events.ScheduleEvent(EVENT_SWITCH_PHASE, 60s);
             DoResetThreat();
 
             if (!run)
             {
-                events.ScheduleEvent(EVENT_SPELL_HATEFUL_STRIKE, 5000, EVENT_GROUP_ABILITIES);
+                events.ScheduleEvent(EVENT_SPELL_HATEFUL_STRIKE, 5s, EVENT_GROUP_ABILITIES);
                 me->ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_MOD_TAUNT, false);
                 me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_ATTACK_ME, false);
                 me->RemoveAurasDueToSpell(SPELL_SNARE_SELF);
             }
             else
             {
-                events.ScheduleEvent(EVENT_SPELL_VOLCANIC_ERUPTION, 5000, EVENT_GROUP_ABILITIES);
-                events.ScheduleEvent(EVENT_SWITCH_TARGET, 0, EVENT_GROUP_ABILITIES);
-                events.ScheduleEvent(EVENT_CHECK_DIST, 0, EVENT_GROUP_ABILITIES);
+                events.ScheduleEvent(EVENT_SPELL_VOLCANIC_ERUPTION, 5s, EVENT_GROUP_ABILITIES);
+                events.ScheduleEvent(EVENT_SWITCH_TARGET, 0s, EVENT_GROUP_ABILITIES);
+                events.ScheduleEvent(EVENT_CHECK_DIST, 0s, EVENT_GROUP_ABILITIES);
                 me->ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_MOD_TAUNT, true);
                 me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_ATTACK_ME, true);
                 me->CastSpell(me, SPELL_SNARE_SELF, true);
@@ -155,11 +155,11 @@ public:
                 case EVENT_SPELL_HATEFUL_STRIKE:
                     if (Unit* target = FindHatefulStrikeTarget())
                         me->CastSpell(target, SPELL_HATEFUL_STRIKE, false);
-                    events.ScheduleEvent(EVENT_SPELL_HATEFUL_STRIKE, urand(1500, 3000), EVENT_GROUP_ABILITIES);
+                    events.ScheduleEvent(EVENT_SPELL_HATEFUL_STRIKE, 1500ms, 3s, EVENT_GROUP_ABILITIES);
                     break;
                 case EVENT_SPELL_MOLTEN_FLAMES:
                     me->CastSpell(me, SPELL_MOLTEN_PUNCH, false);
-                    events.ScheduleEvent(EVENT_SPELL_MOLTEN_FLAMES, 20000, EVENT_GROUP_ABILITIES);
+                    events.ScheduleEvent(EVENT_SPELL_MOLTEN_FLAMES, 20s, EVENT_GROUP_ABILITIES);
                     break;
                 case EVENT_SWITCH_PHASE:
                     SchedulePhase(!me->HasAura(SPELL_SNARE_SELF));
@@ -171,17 +171,17 @@ public:
                         me->AddThreat(target, 5000000.0f);
                         Talk(EMOTE_NEW_TARGET);
                     }
-                    events.ScheduleEvent(EVENT_SWITCH_TARGET, 10000, EVENT_GROUP_ABILITIES);
+                    events.ScheduleEvent(EVENT_SWITCH_TARGET, 10s, EVENT_GROUP_ABILITIES);
                     break;
                 case EVENT_CHECK_DIST:
                     if (me->GetDistance(me->GetVictim()) > 40.0f)
                     {
                         Talk(EMOTE_PUNCH_GROUND);
                         me->CastSpell(me->GetVictim(), SPELL_CHARGE, true);
-                        events.ScheduleEvent(EVENT_CHECK_DIST, 5000, EVENT_GROUP_ABILITIES);
+                        events.ScheduleEvent(EVENT_CHECK_DIST, 5s, EVENT_GROUP_ABILITIES);
                         break;
                     }
-                    events.ScheduleEvent(EVENT_CHECK_DIST, 1, EVENT_GROUP_ABILITIES);
+                    events.ScheduleEvent(EVENT_CHECK_DIST, 100ms, EVENT_GROUP_ABILITIES);
                     break;
                 case EVENT_SPELL_VOLCANIC_ERUPTION:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
@@ -189,7 +189,7 @@ public:
                         me->CastSpell(target, SPELL_VOLCANIC_ERUPTION, true);
                         Talk(EMOTE_GROUND_CRACK);
                     }
-                    events.ScheduleEvent(EVENT_SPELL_VOLCANIC_ERUPTION, urand(10000, 18000), EVENT_GROUP_ABILITIES);
+                    events.ScheduleEvent(EVENT_SPELL_VOLCANIC_ERUPTION, 10s, 18s, EVENT_GROUP_ABILITIES);
                     break;
             }
 

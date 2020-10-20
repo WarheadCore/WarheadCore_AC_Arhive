@@ -251,7 +251,7 @@ public:
             {
                 me->RemoveAurasDueToSpell(SPELL_FRENZY);
                 events.Reset();
-                events.ScheduleEvent(EVENT_PHASE_4_START, 16000);
+                events.ScheduleEvent(EVENT_PHASE_4_START, 16s);
             }
         }
 
@@ -290,10 +290,10 @@ public:
             {
                 if (events2.GetNextEventTime(EVENT_START_PHASE_2_END) == 0)
                 {
-                    events.ScheduleEvent(EVENT_PHASE_2_SUMMON2, 2000);
-                    events.ScheduleEvent(EVENT_PHASE_2_CHANGE_POS, 6000);
-                    events.ScheduleEvent(EVENT_PHASE_2_EYE_BEAM, 15000, GROUP_PHASE_2_ABILITY);
-                    events2.ScheduleEvent(EVENT_START_PHASE_2_END, 10000);
+                    events.ScheduleEvent(EVENT_PHASE_2_SUMMON2, 2s);
+                    events.ScheduleEvent(EVENT_PHASE_2_CHANGE_POS, 6s);
+                    events.ScheduleEvent(EVENT_PHASE_2_EYE_BEAM, 15s, GROUP_PHASE_2_ABILITY);
+                    events2.ScheduleEvent(EVENT_START_PHASE_2_END, 10s);
                 }
                 me->SetFacingTo(me->GetAngle(676.02f, 305.45f));
             }
@@ -301,24 +301,24 @@ public:
             {
                 EntryCheckPredicate pred(NPC_BLADE_OF_AZZINOTH);
                 summons.DoAction(ACTION_RETURN_BLADE, pred);
-                events.ScheduleEvent(EVENT_START_PHASE_2_WEAPON, 1500);
-                events.ScheduleEvent(EVENT_START_PHASE_3_LAND, 4000);
+                events.ScheduleEvent(EVENT_START_PHASE_2_WEAPON, 1500ms);
+                events.ScheduleEvent(EVENT_START_PHASE_3_LAND, 4s);
             }
         }
 
         void ScheduleNormalEvents(uint8 phase)
         {
-            events.ScheduleEvent(EVENT_SPELL_FLAME_CRASH, 15000);
-            events.ScheduleEvent(EVENT_SPELL_DRAW_SOUL, 30000);
-            events.ScheduleEvent(EVENT_SPELL_PARASITIC_SHADOWFIEND, 20000);
-            events.ScheduleEvent(EVENT_SAY_TAUNT, 40000);
+            events.ScheduleEvent(EVENT_SPELL_FLAME_CRASH, 15s);
+            events.ScheduleEvent(EVENT_SPELL_DRAW_SOUL, 30s);
+            events.ScheduleEvent(EVENT_SPELL_PARASITIC_SHADOWFIEND, 20s);
+            events.ScheduleEvent(EVENT_SAY_TAUNT, 40s);
             if (phase >= 3)
             {
-                events.ScheduleEvent(EVENT_PHASE_4_START, 60000);
-                events.ScheduleEvent(EVENT_SPELL_AGONIZING_FLAMES, 10000);
+                events.ScheduleEvent(EVENT_PHASE_4_START, 1min);
+                events.ScheduleEvent(EVENT_SPELL_AGONIZING_FLAMES, 10s);
             }
             if (phase >= 5)
-                events.ScheduleEvent(EVENT_SPELL_FRENZY, 40000);
+                events.ScheduleEvent(EVENT_SPELL_FRENZY, 40s);
         }
 
         void EnterCombat(Unit* who)
@@ -326,9 +326,9 @@ public:
             summons.DespawnAll();
             BossAI::EnterCombat(who);
             ScheduleNormalEvents(1);
-            events.ScheduleEvent(EVENT_SPELL_BERSERK, 25 * MINUTE * IN_MILLISECONDS);
-            events.ScheduleEvent(EVENT_SUMMON_MINIONS, 1000);
-            events.ScheduleEvent(EVENT_PHASE_2_START, 1000);
+            events.ScheduleEvent(EVENT_SPELL_BERSERK, 25min);
+            events.ScheduleEvent(EVENT_SUMMON_MINIONS, 1s);
+            events.ScheduleEvent(EVENT_PHASE_2_START, 1s);
         }
 
         void AttackStart(Unit* victim)
@@ -352,7 +352,7 @@ public:
             if (events.GetNextEventTime(EVENT_KILL_TALK) == 0)
             {
                 Talk(SAY_ILLIDAN_KILL);
-                events.ScheduleEvent(EVENT_KILL_TALK, 6000);
+                events.ScheduleEvent(EVENT_KILL_TALK, 6s);
             }
         }
 
@@ -381,13 +381,13 @@ public:
                     if (events.GetNextEventTime(EVENT_REMOVE_DEMON_FORM) != 0)
                     {
                         me->CastSpell(me, SPELL_DEMON_TRANSFORM_1, true);
-                        events2.ScheduleEvent(EVENT_OUTRO_DEMON, 12000);
+                        events2.ScheduleEvent(EVENT_OUTRO_DEMON, 12s);
                     }
                     else
                     {
                         me->CastSpell(me, SPELL_TELEPORT_MAIEV, true);
                         me->CastSpell(me, SPELL_DEATH, true);
-                        events2.ScheduleEvent(EVENT_OUTRO_1, 1000);
+                        events2.ScheduleEvent(EVENT_OUTRO_1, 1s);
                     }
 
                     if (Creature* maiev = summons.GetCreatureWithEntry(NPC_MAIEV_SHADOWSONG))
@@ -429,12 +429,12 @@ public:
                         me->GetMotionMaster()->MovePoint(POINT_ILLIDAN_MIDDLE, 676.02f, 305.45f, 353.6f);
                         break;
                     }
-                    events2.ScheduleEvent(EVENT_START_PHASE_2_END, 1000);
+                    events2.ScheduleEvent(EVENT_START_PHASE_2_END, 1s);
                     break;
                 case EVENT_OUTRO_DEMON:
                     me->CastSpell(me, SPELL_TELEPORT_MAIEV, true);
                     me->CastSpell(me, SPELL_DEATH, true);
-                    events2.ScheduleEvent(EVENT_OUTRO_1, 1000);
+                    events2.ScheduleEvent(EVENT_OUTRO_1, 1s);
                     break;
                 case EVENT_OUTRO_1:
                     if (Creature* maiev = summons.GetCreatureWithEntry(NPC_MAIEV_SHADOWSONG))
@@ -451,11 +451,11 @@ public:
                         akama->SetTarget(me->GetGUID());
                         akama->GetMotionMaster()->MovePoint(0, 695.63f, 306.63f, 354.26f);
                     }
-                    events2.ScheduleEvent(EVENT_OUTRO_2, 6000);
+                    events2.ScheduleEvent(EVENT_OUTRO_2, 6s);
                     break;
                 case EVENT_OUTRO_2:
                     Talk(SAY_ILLIDAN_MAIEV3);
-                    events2.ScheduleEvent(EVENT_OUTRO_3, 17000);
+                    events2.ScheduleEvent(EVENT_OUTRO_3, 17s);
                     break;
                 case EVENT_OUTRO_3:
                     Unit::Kill(nullptr, me);
@@ -478,10 +478,10 @@ public:
                     if (me->HealthBelowPct(90))
                     {
                         Talk(SAY_ILLIDAN_MINION);
-                        events2.ScheduleEvent(EVENT_SUMMON_MINIONS2, 10000);
+                        events2.ScheduleEvent(EVENT_SUMMON_MINIONS2, 10s);
                         break;
                     }
-                    events.ScheduleEvent(EVENT_SUMMON_MINIONS, 1000);
+                    events.ScheduleEvent(EVENT_SUMMON_MINIONS, 1s);
                     break;
                 // ///////////////////////////
                 // PHASE 1, 3, 5
@@ -492,20 +492,20 @@ public:
                     break;
                 case EVENT_SPELL_FLAME_CRASH:
                     me->CastSpell(me->GetVictim(), SPELL_FLAME_CRASH, false);
-                    events.ScheduleEvent(EVENT_SPELL_FLAME_CRASH, 25000);
+                    events.ScheduleEvent(EVENT_SPELL_FLAME_CRASH, 25s);
                     break;
                 case EVENT_SPELL_DRAW_SOUL:
                     me->CastSpell(me->GetVictim(), SPELL_DRAW_SOUL, false);
-                    events.ScheduleEvent(EVENT_SPELL_DRAW_SOUL, 40000);
+                    events.ScheduleEvent(EVENT_SPELL_DRAW_SOUL, 40s);
                     break;
                 case EVENT_SPELL_PARASITIC_SHADOWFIEND:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
                         me->CastSpell(target, SPELL_PARASITIC_SHADOWFIEND, false);
-                    events.ScheduleEvent(EVENT_SPELL_PARASITIC_SHADOWFIEND, 30000);
+                    events.ScheduleEvent(EVENT_SPELL_PARASITIC_SHADOWFIEND, 30s);
                     break;
                 case EVENT_SAY_TAUNT:
                     Talk(SAY_ILLIDAN_TAUNT);
-                    events.ScheduleEvent(EVENT_SAY_TAUNT, urand(30000, 60000));
+                    events.ScheduleEvent(EVENT_SAY_TAUNT, 30s, 1min);
                     break;
                 case EVENT_SPELL_FRENZY:
                     Talk(SAY_ILLIDAN_FRENZY);
@@ -523,14 +523,14 @@ public:
                         me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
                         Talk(SAY_ILLIDAN_MAIEV1);
                         events.Reset();
-                        events.ScheduleEvent(EVENT_PHASE_5_SCENE1, 9000);
-                        events.ScheduleEvent(EVENT_PHASE_5_SCENE2, 18000);
-                        events.ScheduleEvent(EVENT_PHASE_5_SCENE3, 24000);
-                        events.ScheduleEvent(EVENT_PHASE_5_SCENE4, 27000);
-                        events.ScheduleEvent(EVENT_PHASE_5_SCENE5, 30000);
+                        events.ScheduleEvent(EVENT_PHASE_5_SCENE1, 9s);
+                        events.ScheduleEvent(EVENT_PHASE_5_SCENE2, 18s);
+                        events.ScheduleEvent(EVENT_PHASE_5_SCENE3, 24s);
+                        events.ScheduleEvent(EVENT_PHASE_5_SCENE4, 27s);
+                        events.ScheduleEvent(EVENT_PHASE_5_SCENE5, 30s);
                         break;
                     }
-                    events.ScheduleEvent(EVENT_PHASE_5_START, 1000);
+                    events.ScheduleEvent(EVENT_PHASE_5_START, 1s);
                     break;
                 case EVENT_PHASE_5_SCENE1:
                     me->CastSpell(me, SPELL_SUMMON_MAIEV, true);
@@ -564,7 +564,7 @@ public:
                     if (me->HealthBelowPct(65))
                     {
                         if (events2.GetNextEventTime(EVENT_SUMMON_MINIONS2) != 0)
-                            events2.RescheduleEvent(EVENT_SUMMON_MINIONS2, 0);
+                            events2.RescheduleEvent(EVENT_SUMMON_MINIONS2, 0s);
 
                         Talk(SAY_ILLIDAN_TAKEOFF);
                         me->SendMeleeAttackStop(me->GetVictim());
@@ -576,10 +576,10 @@ public:
                         me->SetDisableGravity(true);
 
                         events.Reset();
-                        events.ScheduleEvent(EVENT_PHASE_2_SUMMON1, 6000);
+                        events.ScheduleEvent(EVENT_PHASE_2_SUMMON1, 6s);
                         break;
                     }
-                    events.ScheduleEvent(EVENT_PHASE_2_START, 1000);
+                    events.ScheduleEvent(EVENT_PHASE_2_START, 1s);
                     break;
                 case EVENT_PHASE_2_SUMMON1:
                     me->LoadEquipment(1, true);
@@ -593,28 +593,28 @@ public:
                     break;
                 case EVENT_PHASE_2_CHANGE_POS:
                     beamPosId = (beamPosId + 1) % MAX_EYE_BEAM_POS;
-                    events.ScheduleEvent(EVENT_SPELL_FIREBALL, 8000, GROUP_PHASE_2_ABILITY);
-                    events.ScheduleEvent(EVENT_SPELL_DARK_BARRAGE, 18000, GROUP_PHASE_2_ABILITY);
-                    events.ScheduleEvent(EVENT_PHASE_2_EYE_BEAM, urand(25000, 50000), GROUP_PHASE_2_ABILITY);
+                    events.ScheduleEvent(EVENT_SPELL_FIREBALL, 8s, GROUP_PHASE_2_ABILITY);
+                    events.ScheduleEvent(EVENT_SPELL_DARK_BARRAGE, 18s, GROUP_PHASE_2_ABILITY);
+                    events.ScheduleEvent(EVENT_PHASE_2_EYE_BEAM, 25s, 50s, GROUP_PHASE_2_ABILITY);
                     me->GetMotionMaster()->MovePoint(POINT_ILLIDAN_HOVER, airHoverPos[beamPosId], false, true);
                     break;
                 case EVENT_PHASE_2_EYE_BEAM:
                     me->SummonCreature(NPC_ILLIDAN_DB_TARGET, eyeBeamPos[beamPosId], TEMPSUMMON_TIMED_DESPAWN, 15000);
                     events.CancelEventGroup(GROUP_PHASE_2_ABILITY);
-                    events.ScheduleEvent(EVENT_PHASE_2_CHANGE_POS, 20000);
+                    events.ScheduleEvent(EVENT_PHASE_2_CHANGE_POS, 20s);
 
-                    events2.ScheduleEvent(EVENT_PHASE_2_EYE_BEAM_START, 2000);
-                    events2.ScheduleEvent(EVENT_PHASE_2_INTERRUPT, 20000);
+                    events2.ScheduleEvent(EVENT_PHASE_2_EYE_BEAM_START, 2s);
+                    events2.ScheduleEvent(EVENT_PHASE_2_INTERRUPT, 20s);
                     break;
                 case EVENT_SPELL_FIREBALL:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
                         me->CastSpell(target, SPELL_FIREBALL, false);
-                    events.ScheduleEvent(EVENT_SPELL_FIREBALL, 2200, GROUP_PHASE_2_ABILITY);
+                    events.ScheduleEvent(EVENT_SPELL_FIREBALL, 2200ms, GROUP_PHASE_2_ABILITY);
                     break;
                 case EVENT_SPELL_DARK_BARRAGE:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
                         me->CastSpell(target, SPELL_DARK_BARRAGE, false);
-                    events.ScheduleEvent(EVENT_SPELL_DARK_BARRAGE, 30000, GROUP_PHASE_2_ABILITY);
+                    events.ScheduleEvent(EVENT_SPELL_DARK_BARRAGE, 30s, GROUP_PHASE_2_ABILITY);
                     break;
                 case EVENT_START_PHASE_2_WEAPON:
                     me->LoadEquipment(1, true);
@@ -628,7 +628,7 @@ public:
                     AttackStart(me->GetVictim());
                     me->GetMotionMaster()->MoveChase(me->GetVictim());
                     ScheduleNormalEvents(3);
-                    events.ScheduleEvent(EVENT_PHASE_5_START, 1000);
+                    events.ScheduleEvent(EVENT_PHASE_5_START, 1s);
                     break;
                 // ///////////////////////////
                 // PHASE 4
@@ -638,20 +638,20 @@ public:
                     me->getThreatManager().resetAllAggro();
                     me->GetMotionMaster()->MoveChase(me->GetVictim(), 35.0f);
                     events.Reset();
-                    events.ScheduleEvent(EVENT_SPELL_SHADOW_BLAST, 11000);
-                    events.ScheduleEvent(EVENT_MOVE_MAIEV, 5000);
-                    events.ScheduleEvent(EVENT_FINISH_TRANSFORM, 10500);
-                    events.ScheduleEvent(EVENT_SPELL_FLAME_BURST, 21000);
-                    events.ScheduleEvent(EVENT_SPELL_SHADOW_DEMONS, 36000);
-                    events.ScheduleEvent(EVENT_REMOVE_DEMON_FORM, 60000);
+                    events.ScheduleEvent(EVENT_SPELL_SHADOW_BLAST, 11s);
+                    events.ScheduleEvent(EVENT_MOVE_MAIEV, 5s);
+                    events.ScheduleEvent(EVENT_FINISH_TRANSFORM, 10500ms);
+                    events.ScheduleEvent(EVENT_SPELL_FLAME_BURST, 21s);
+                    events.ScheduleEvent(EVENT_SPELL_SHADOW_DEMONS, 36s);
+                    events.ScheduleEvent(EVENT_REMOVE_DEMON_FORM, 1min);
                     break;
                 case EVENT_SPELL_SHADOW_BLAST:
                     me->CastSpell(me->GetVictim(), SPELL_SHADOW_BLAST, false);
-                    events.ScheduleEvent(EVENT_SPELL_SHADOW_BLAST, 2200);
+                    events.ScheduleEvent(EVENT_SPELL_SHADOW_BLAST, 2200ms);
                     break;
                 case EVENT_SPELL_FLAME_BURST:
                     me->CastSpell(me, SPELL_FLAME_BURST, false);
-                    events.ScheduleEvent(EVENT_SPELL_FLAME_BURST, 22000);
+                    events.ScheduleEvent(EVENT_SPELL_FLAME_BURST, 22s);
                     break;
                 case EVENT_SPELL_SHADOW_DEMONS:
                     me->CastSpell(me, SPELL_SUMMON_SHADOW_DEMON, false);
@@ -663,16 +663,16 @@ public:
                     if (summons.HasEntry(NPC_MAIEV_SHADOWSONG))
                     {
                         ScheduleNormalEvents(5);
-                        events.DelayEvents(11000);
-                        events.ScheduleEvent(EVENT_MOVE_MAIEV, 10000);
-                        events.ScheduleEvent(EVENT_FINISH_TRANSFORM, 10500);
+                        events.DelayEvents(11s);
+                        events.ScheduleEvent(EVENT_MOVE_MAIEV, 10s);
+                        events.ScheduleEvent(EVENT_FINISH_TRANSFORM, 10500ms);
                     }
                     else
                     {
                         ScheduleNormalEvents(3);
-                        events.ScheduleEvent(EVENT_PHASE_5_START, 1000);
-                        events.DelayEvents(11000);
-                        events.ScheduleEvent(EVENT_FINISH_TRANSFORM, 10500);
+                        events.ScheduleEvent(EVENT_PHASE_5_START, 1s);
+                        events.DelayEvents(11s);
+                        events.ScheduleEvent(EVENT_FINISH_TRANSFORM, 10500ms);
                     }
                     break;
                 case EVENT_MOVE_MAIEV:
@@ -780,9 +780,9 @@ public:
             if (param == ACTION_FIGHT_MINIONS)
             {
                 me->CombatStop(true);
-                events.ScheduleEvent(EVENT_AKAMA_SUMMON_ILLIDARI, 8000);
-                events.ScheduleEvent(EVENT_AKAMA_SPELL_CHAIN, 7000);
-                events.ScheduleEvent(EVENT_AKAMA_HEALTH, 1000);
+                events.ScheduleEvent(EVENT_AKAMA_SUMMON_ILLIDARI, 8s);
+                events.ScheduleEvent(EVENT_AKAMA_SPELL_CHAIN, 7s);
+                events.ScheduleEvent(EVENT_AKAMA_HEALTH, 1s);
                 me->GetMotionMaster()->MoveCharge(741.97f, 358.74f, 353.0f, 10.0f, POINT_FIGHT_MINIONS);
                 Talk(SAY_AKAMA_LEAVE);
             }
@@ -820,16 +820,16 @@ public:
             {
                 me->GetMotionMaster()->MovePoint(POINT_ILLIDAN, 744.45f, 304.84f, 353.0f);
                 events.Reset();
-                events.ScheduleEvent(EVENT_AKAMA_SCENE_20, 5000);
-                events.ScheduleEvent(EVENT_AKAMA_SCENE_21, 8000);
-                events.ScheduleEvent(EVENT_AKAMA_SCENE_22, 10000);
-                events.ScheduleEvent(EVENT_AKAMA_SCENE_23, 23000);
-                events.ScheduleEvent(EVENT_AKAMA_SCENE_24, 34000);
-                events.ScheduleEvent(EVENT_AKAMA_SCENE_25, 41000);
-                events.ScheduleEvent(EVENT_AKAMA_SCENE_26, 46000);
-                events.ScheduleEvent(EVENT_AKAMA_SCENE_27, 49000);
-                events.ScheduleEvent(EVENT_AKAMA_SCENE_28, 49200);
-                events.ScheduleEvent(EVENT_AKAMA_SCENE_29, 52000);
+                events.ScheduleEvent(EVENT_AKAMA_SCENE_20, 5s);
+                events.ScheduleEvent(EVENT_AKAMA_SCENE_21, 8s);
+                events.ScheduleEvent(EVENT_AKAMA_SCENE_22, 10s);
+                events.ScheduleEvent(EVENT_AKAMA_SCENE_23, 23s);
+                events.ScheduleEvent(EVENT_AKAMA_SCENE_24, 34s);
+                events.ScheduleEvent(EVENT_AKAMA_SCENE_25, 41s);
+                events.ScheduleEvent(EVENT_AKAMA_SCENE_26, 46s);
+                events.ScheduleEvent(EVENT_AKAMA_SCENE_27, 49s);
+                events.ScheduleEvent(EVENT_AKAMA_SCENE_28, 49s);
+                events.ScheduleEvent(EVENT_AKAMA_SCENE_29, 52s);
             }
         }
 
@@ -851,17 +851,17 @@ public:
             if (pointId == POINT_DOORS)
             {
                 SetEscortPaused(true);
-                events.ScheduleEvent(EVENT_AKAMA_SCENE_1, 0);
-                events.ScheduleEvent(EVENT_AKAMA_SCENE_2, 4000);
-                events.ScheduleEvent(EVENT_AKAMA_SCENE_3, 7000);
-                events.ScheduleEvent(EVENT_AKAMA_SCENE_4, 17000);
-                events.ScheduleEvent(EVENT_AKAMA_SCENE_5, 23000);
-                events.ScheduleEvent(EVENT_AKAMA_SCENE_6, 25000);
-                events.ScheduleEvent(EVENT_AKAMA_SCENE_7, 31000);
-                events.ScheduleEvent(EVENT_AKAMA_SCENE_8, 40000);
-                events.ScheduleEvent(EVENT_AKAMA_SCENE_9, 54000);
-                events.ScheduleEvent(EVENT_AKAMA_SCENE_10, 57000);
-                events.ScheduleEvent(EVENT_AKAMA_SCENE_11, 62000);
+                events.ScheduleEvent(EVENT_AKAMA_SCENE_1, 0s);
+                events.ScheduleEvent(EVENT_AKAMA_SCENE_2, 4s);
+                events.ScheduleEvent(EVENT_AKAMA_SCENE_3, 7s);
+                events.ScheduleEvent(EVENT_AKAMA_SCENE_4, 17s);
+                events.ScheduleEvent(EVENT_AKAMA_SCENE_5, 23s);
+                events.ScheduleEvent(EVENT_AKAMA_SCENE_6, 25s);
+                events.ScheduleEvent(EVENT_AKAMA_SCENE_7, 31s);
+                events.ScheduleEvent(EVENT_AKAMA_SCENE_8, 40s);
+                events.ScheduleEvent(EVENT_AKAMA_SCENE_9, 54s);
+                events.ScheduleEvent(EVENT_AKAMA_SCENE_10, 57s);
+                events.ScheduleEvent(EVENT_AKAMA_SCENE_11, 62s);
             }
             else if (pointId == POINT_ILLIDAN)
             {
@@ -968,17 +968,17 @@ public:
                     break;
                 case EVENT_AKAMA_SUMMON_ILLIDARI:
                     me->SummonCreature(NPC_ILLIDARI_ELITE, 742.55f, 359.12f, 353.0f, 4.35f, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 30000);
-                    events.ScheduleEvent(EVENT_AKAMA_SUMMON_ILLIDARI, urand(2000, 6000));
+                    events.ScheduleEvent(EVENT_AKAMA_SUMMON_ILLIDARI, 2s, 6s);
                     break;
                 case EVENT_AKAMA_SPELL_CHAIN:
                     if (me->GetVictim())
                         me->CastSpell(me->GetVictim(), SPELL_CHAIN_LIGHTNING, false);
-                    events.ScheduleEvent(EVENT_AKAMA_SPELL_CHAIN, 20000);
+                    events.ScheduleEvent(EVENT_AKAMA_SPELL_CHAIN, 20s);
                     break;
                 case EVENT_AKAMA_HEALTH:
                     if (me->HealthBelowPct(20))
                         me->CastSpell(me, SPELL_HEALING_POTION, false);
-                    events.ScheduleEvent(EVENT_AKAMA_HEALTH, 1000);
+                    events.ScheduleEvent(EVENT_AKAMA_HEALTH, 1s);
                     break;
             }
 
