@@ -81,12 +81,12 @@ public:
         void EnterCombat(Unit* /*who*/)
         {
             _EnterCombat();
-            events.ScheduleEvent(EVENT_SUMMON, 30000);
-            events.ScheduleEvent(EVENT_MANA_TAP, 12000);
-            events.ScheduleEvent(EVENT_ARCANE_TORRENT, 16000);
-            events.ScheduleEvent(EVENT_DOMINATION, 25000);
-            events.ScheduleEvent(EVENT_ARCANE_EXPLOSION, 8000);
-            events.ScheduleEvent(EVENT_FRENZY, 1000);
+            events.ScheduleEvent(EVENT_SUMMON, 30s);
+            events.ScheduleEvent(EVENT_MANA_TAP, 12s);
+            events.ScheduleEvent(EVENT_ARCANE_TORRENT, 16s);
+            events.ScheduleEvent(EVENT_DOMINATION, 25s);
+            events.ScheduleEvent(EVENT_ARCANE_EXPLOSION, 8s);
+            events.ScheduleEvent(EVENT_FRENZY, 1s);
             Talk(SAY_AGGRO);
         }
 
@@ -115,24 +115,24 @@ public:
             {
                 case EVENT_ARCANE_EXPLOSION:
                     me->CastSpell(me, SPELL_ARCANE_EXPLOSION, false);
-                    events.ScheduleEvent(EVENT_ARCANE_EXPLOSION, 12000);
+                    events.ScheduleEvent(EVENT_ARCANE_EXPLOSION, 12s);
                     break;
                 case EVENT_ARCANE_TORRENT:
                     me->RemoveAurasDueToSpell(SPELL_MANA_TAP);
                     me->ModifyPower(POWER_MANA, 5000);
                     me->CastSpell(me, SPELL_ARCANE_TORRENT, false);
-                    events.ScheduleEvent(EVENT_ARCANE_TORRENT, 15000);
+                    events.ScheduleEvent(EVENT_ARCANE_TORRENT, 15s);
                     break;
                 case EVENT_MANA_TAP:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, PowerUsersSelector(me, POWER_MANA, 40.0f, false)))
                         me->CastSpell(target, SPELL_MANA_TAP, false);
-                    events.ScheduleEvent(EVENT_MANA_TAP, 18000);
+                    events.ScheduleEvent(EVENT_MANA_TAP, 18s);
                     break;
                 case EVENT_DOMINATION:
                     Talk(SAY_DOMINATION);
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 50.0f))
                         me->CastSpell(target, SPELL_DOMINATION, false);
-                    events.ScheduleEvent(EVENT_DOMINATION, 30000);
+                    events.ScheduleEvent(EVENT_DOMINATION, 30s);
                     break;
                 case EVENT_FRENZY:
                     if (me->HealthBelowPct(20))
@@ -142,14 +142,14 @@ public:
                         Talk(SAY_ENRAGE);
                         break;
                     }
-                    events.ScheduleEvent(EVENT_FRENZY, 1000);
+                    events.ScheduleEvent(EVENT_FRENZY, 1s);
                     break;
                 case EVENT_SUMMON:
                     for (uint8 i = 0; i < DUNGEON_MODE(3, 4); ++i)
                         me->CastSpell(me, SPELL_SUMMON_NETHER_WRAITH_1 + i, true);
 
                     Talk(SAY_SUMMON);
-                    events.ScheduleEvent(EVENT_SUMMON, urand(30000, 45000));
+                    events.ScheduleEvent(EVENT_SUMMON, 30s, 45s);
                     break;
             }
 

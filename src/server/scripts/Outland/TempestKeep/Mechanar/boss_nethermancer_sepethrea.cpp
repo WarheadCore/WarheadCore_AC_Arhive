@@ -55,9 +55,9 @@ public:
         void EnterCombat(Unit*  /*who*/)
         {
             _EnterCombat();
-            events.ScheduleEvent(EVENT_FROST_ATTACK, 6000);
-            events.ScheduleEvent(EVENT_ARCANE_BLAST, 14000);
-            events.ScheduleEvent(EVENT_DRAGONS_BREATH, 18000);
+            events.ScheduleEvent(EVENT_FROST_ATTACK, 6s);
+            events.ScheduleEvent(EVENT_ARCANE_BLAST, 14s);
+            events.ScheduleEvent(EVENT_DRAGONS_BREATH, 18s);
 
             Talk(SAY_AGGRO);
             me->CastSpell(me, SPELL_SUMMON_RAGIN_FLAMES, true);
@@ -108,15 +108,15 @@ public:
             {
                 case EVENT_FROST_ATTACK:
                     me->CastSpell(me->GetVictim(), SPELL_FROST_ATTACK, false);
-                    events.ScheduleEvent(EVENT_FROST_ATTACK, 8000);
+                    events.ScheduleEvent(EVENT_FROST_ATTACK, 8s);
                     break;
                 case EVENT_ARCANE_BLAST:
                     me->CastSpell(me->GetVictim(), SPELL_ARCANE_BLAST, false);
-                    events.ScheduleEvent(EVENT_ARCANE_BLAST, 12000);
+                    events.ScheduleEvent(EVENT_ARCANE_BLAST, 12s);
                     break;
                 case EVENT_DRAGONS_BREATH:
                     me->CastSpell(me->GetVictim(), SPELL_DRAGONS_BREATH, true);
-                    events.ScheduleEvent(EVENT_DRAGONS_BREATH, 16000);
+                    events.ScheduleEvent(EVENT_DRAGONS_BREATH, 16s);
                     if (roll_chance_i(50))
                         Talk(SAY_DRAGONS_BREATH);
                     break;
@@ -176,14 +176,14 @@ public:
                     if (me->IsWithinCombatRange(me->GetVictim(), 5.0f))
                     {
                         me->CastSpell(me, SPELL_INFERNO, true);
-                        events.ScheduleEvent(EVENT_SPELL_INFERNO, 20000);
+                        events.ScheduleEvent(EVENT_SPELL_INFERNO, 20s);
                     }
                     else
-                        events.ScheduleEvent(EVENT_SPELL_INFERNO, 1000);
+                        events.ScheduleEvent(EVENT_SPELL_INFERNO, 1s);
                     break;
                 case EVENT_SPELL_FIRE_TAIL:
                     me->CastSpell(me, SPELL_FIRE_TAIL, true);
-                    events.ScheduleEvent(EVENT_SPELL_FIRE_TAIL, 500);
+                    events.ScheduleEvent(EVENT_SPELL_FIRE_TAIL, 500ms);
                     break;
             }
 

@@ -103,9 +103,9 @@ public:
         {
             _EnterCombat();
 
-            events.ScheduleEvent(EVENT_ALERGIC_REACTION, 5000);
-            events.ScheduleEvent(EVENT_TRANSFORM, 30000);
-            events.ScheduleEvent(EVENT_TELEPORT, 20000);
+            events.ScheduleEvent(EVENT_ALERGIC_REACTION, 5s);
+            events.ScheduleEvent(EVENT_TRANSFORM, 30s);
+            events.ScheduleEvent(EVENT_TELEPORT, 20s);
         }
 
         void UpdateAI(uint32 diff)
@@ -121,12 +121,12 @@ public:
             {
                 case EVENT_ALERGIC_REACTION:
                     me->CastSpell(me->GetVictim(), SPELL_ALLERGIC_REACTION, false);
-                    events.ScheduleEvent(EVENT_ALERGIC_REACTION, 25000);
+                    events.ScheduleEvent(EVENT_ALERGIC_REACTION, 25s);
                     break;
                 case EVENT_TELEPORT:
                     me->CastSpell(me, SPELL_TELEPORT_SELF, false);
-                    events.ScheduleEvent(EVENT_SUMMON, 2500);
-                    events.ScheduleEvent(EVENT_TELEPORT, 30000);
+                    events.ScheduleEvent(EVENT_SUMMON, 2500ms);
+                    events.ScheduleEvent(EVENT_TELEPORT, 30s);
                     break;
                 case EVENT_SUMMON:
                     Talk(EMOTE_SUMMON);
@@ -135,7 +135,7 @@ public:
                     break;
                 case EVENT_TRANSFORM:
                     DoTransform();
-                    events.ScheduleEvent(EVENT_TRANSFORM, 35000);
+                    events.ScheduleEvent(EVENT_TRANSFORM, 35s);
                     break;
             }
 

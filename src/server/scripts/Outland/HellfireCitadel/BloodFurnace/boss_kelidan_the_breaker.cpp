@@ -102,9 +102,9 @@ public:
 
         void EnterCombat(Unit*  /*who*/)
         {
-            events.ScheduleEvent(EVENT_SPELL_VOLLEY, 1000);
-            events.ScheduleEvent(EVENT_SPELL_CORRUPTION, 5000);
-            events.ScheduleEvent(EVENT_SPELL_BURNING_NOVA, 15000);
+            events.ScheduleEvent(EVENT_SPELL_VOLLEY, 1s);
+            events.ScheduleEvent(EVENT_SPELL_CORRUPTION, 5s);
+            events.ScheduleEvent(EVENT_SPELL_BURNING_NOVA, 15s);
 
             me->InterruptNonMeleeSpells(false);
             Talk(SAY_WAKE);
@@ -264,9 +264,9 @@ public:
                     if (IsHeroic())
                         DoTeleportAll(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation());
 
-                    events.DelayEvents(6000, 0);
-                    events.RepeatEvent(urand(25000, 32000));
-                    events.ScheduleEvent(EVENT_SPELL_FIRE_NOVA, 5000);
+                    events.DelayEvents(6s, 0);
+                    events.RepeatEvent(25s, 32s);
+                    events.ScheduleEvent(EVENT_SPELL_FIRE_NOVA, 5s);
                     break;
                 case EVENT_SPELL_FIRE_NOVA:
                     me->CastSpell(me, SPELL_FIRE_NOVA, true);

@@ -75,18 +75,18 @@ public:
             _EnterCombat();
             Talk(SAY_AGGRO);
 
-            events.ScheduleEvent(EVENT_GROWTH, 30000);
+            events.ScheduleEvent(EVENT_GROWTH, 30s);
             events.ScheduleEvent(EVENT_CAVE_IN, _caveInTimer);
-            events.ScheduleEvent(EVENT_REVERBERATION, 20000);
-            events.ScheduleEvent(EVENT_HURTFUL_STRIKE, 10000);
-            events.ScheduleEvent(EVENT_GROUND_SLAM, 35000);
+            events.ScheduleEvent(EVENT_REVERBERATION, 20s);
+            events.ScheduleEvent(EVENT_HURTFUL_STRIKE, 10s);
+            events.ScheduleEvent(EVENT_GROUND_SLAM, 35s);
         }
 
         void KilledUnit(Unit*  /*who*/)
         {
             if (events.GetNextEventTime(EVENT_RECENTLY_SPOKEN) == 0)
             {
-                events.ScheduleEvent(EVENT_RECENTLY_SPOKEN, 5000);
+                events.ScheduleEvent(EVENT_RECENTLY_SPOKEN, 5s);
                 Talk(SAY_SLAY);
             }
         }

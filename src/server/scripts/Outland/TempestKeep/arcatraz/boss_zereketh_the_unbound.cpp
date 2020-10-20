@@ -60,9 +60,9 @@ public:
         void EnterCombat(Unit* /*who*/)
         {
             _EnterCombat();
-            events.ScheduleEvent(EVENT_VOID_ZONE, 6000);
-            events.ScheduleEvent(EVENT_SHADOW_NOVA, 10000);
-            events.ScheduleEvent(EVENT_SEED_OF_CORRUPTION, 16000);
+            events.ScheduleEvent(EVENT_VOID_ZONE, 6s);
+            events.ScheduleEvent(EVENT_SHADOW_NOVA, 10s);
+            events.ScheduleEvent(EVENT_SEED_OF_CORRUPTION, 16s);
             Talk(SAY_AGGRO);
         }
 

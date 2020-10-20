@@ -101,15 +101,15 @@ public:
             {
                 uint8 aggroYell = urand(EVENT_AGGRO_YELL_1, EVENT_AGGRO_YELL_3);
                 LeftHead->AI()->Talk(aggroYell - 1);
-                events2.ScheduleEvent(aggroYell, 3000);
+                events2.ScheduleEvent(aggroYell, 3s);
             }
 
             _EnterCombat();
 
-            events.ScheduleEvent(EVENT_SPELL_FEAR, 8000);
-            events.ScheduleEvent(EVENT_SPELL_BURNING_MAUL, 25000);
-            events.ScheduleEvent(EVENT_SPELL_THUNDER_CLAP, 15000);
-            events.ScheduleEvent(EVENT_RESET_THREAT, 30000);
+            events.ScheduleEvent(EVENT_SPELL_FEAR, 8s);
+            events.ScheduleEvent(EVENT_SPELL_BURNING_MAUL, 25s);
+            events.ScheduleEvent(EVENT_SPELL_THUNDER_CLAP, 15s);
+            events.ScheduleEvent(EVENT_RESET_THREAT, 30s);
         }
 
         void JustSummoned(Creature* summoned)
@@ -135,7 +135,7 @@ public:
             if (head)
                 head->AI()->Talk(eventId - 1);
 
-            events2.ScheduleEvent(eventId, 3000);
+            events2.ScheduleEvent(eventId, 3s);
         }
 
         void JustDied(Unit* /*killer*/)

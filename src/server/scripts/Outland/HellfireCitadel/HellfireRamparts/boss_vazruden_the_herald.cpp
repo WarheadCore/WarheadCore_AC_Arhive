@@ -223,7 +223,7 @@ public:
                     break;
                 case EVENT_CHANGE_POS:
                     me->GetMotionMaster()->MovePoint(POINT_FLIGHT, NazanPos[urand(0, 2)], false);
-                    events.DelayEvents(7000);
+                    events.DelayEvents(7s);
                     events.ScheduleEvent(EVENT_CHANGE_POS, 30s);
                     break;
                 case EVENT_RESTORE_COMBAT:
@@ -275,8 +275,8 @@ public:
 
         void EnterCombat(Unit*)
         {
-            events.ScheduleEvent(EVENT_AGGRO_TALK, 5000);
-            events.ScheduleEvent(EVENT_SPELL_REVENGE, 4000);
+            events.ScheduleEvent(EVENT_AGGRO_TALK, 5s);
+            events.ScheduleEvent(EVENT_SPELL_REVENGE, 4s);
         }
 
         void KilledUnit(Unit*)
@@ -284,7 +284,7 @@ public:
             if (events.GetNextEventTime(EVENT_KILL_TALK) == 0)
             {
                 Talk(SAY_KILL);
-                events.ScheduleEvent(EVENT_KILL_TALK, 6000);
+                events.ScheduleEvent(EVENT_KILL_TALK, 6s);
             }
         }
 
@@ -307,7 +307,7 @@ public:
                     break;
                 case EVENT_SPELL_REVENGE:
                     me->CastSpell(me->GetVictim(), DUNGEON_MODE(SPELL_REVENGE, SPELL_REVENGE_H), false);
-                    events.ScheduleEvent(EVENT_SPELL_REVENGE, 6000);
+                    events.ScheduleEvent(EVENT_SPELL_REVENGE, 6s);
                     break;
             }
 

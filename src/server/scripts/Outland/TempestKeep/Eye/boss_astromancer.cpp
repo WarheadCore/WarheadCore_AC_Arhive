@@ -140,35 +140,35 @@ public:
                     if (me->HealthBelowPct(21))
                     {
                         events.Reset();
-                        events.ScheduleEvent(EVENT_SPELL_VOID_BOLT, 3000);
-                        events.ScheduleEvent(EVENT_SPELL_PSYCHIC_SCREAM, 7000);
+                        events.ScheduleEvent(EVENT_SPELL_VOID_BOLT, 3s);
+                        events.ScheduleEvent(EVENT_SPELL_PSYCHIC_SCREAM, 7s);
                         me->CastSpell(me, SPELL_SOLARIAN_TRANSFORM, true);
                         me->GetMotionMaster()->MoveChase(me->GetVictim());
                         break;
                     }
-                    events.ScheduleEvent(EVENT_CHECK_HEALTH, 1000);
+                    events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
                     break;
                 case EVENT_SPELL_ARCANE_MISSILES:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40.0f, true))
                         me->CastSpell(target, SPELL_ARCANE_MISSILES, false);
-                    events.ScheduleEvent(EVENT_SPELL_ARCANE_MISSILES, 3000);
+                    events.ScheduleEvent(EVENT_SPELL_ARCANE_MISSILES, 3s);
                     break;
                 case EVENT_SPELL_WRATH_OF_ASTROMANCER:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
                         me->CastSpell(target, SPELL_WRATH_OF_THE_ASTROMANCER, false);
-                    events.ScheduleEvent(EVENT_SPELL_WRATH_OF_ASTROMANCER, 22000);
+                    events.ScheduleEvent(EVENT_SPELL_WRATH_OF_ASTROMANCER, 22s);
                     break;
                 case EVENT_SPELL_BLINDING_LIGHT:
                     me->CastSpell(me, SPELL_BLINDING_LIGHT, false);
-                    events.ScheduleEvent(EVENT_SPELL_BLINDING_LIGHT, 40000);
+                    events.ScheduleEvent(EVENT_SPELL_BLINDING_LIGHT, 40s);
                     break;
                 case EVENT_SPAWN_PORTALS:
                     me->setAttackTimer(BASE_ATTACK, 21000);
                     me->SetModelVisible(false);
-                    events.ScheduleEvent(EVENT_SPAWN_PORTALS, 50000);
-                    events.DelayEvents(21000);
-                    events.ScheduleEvent(EVENT_SUMMON_ADDS, 6000);
-                    events.ScheduleEvent(EVENT_REAPPEAR, 20000);
+                    events.ScheduleEvent(EVENT_SPAWN_PORTALS, 50s);
+                    events.DelayEvents(21s);
+                    events.ScheduleEvent(EVENT_SUMMON_ADDS, 6s);
+                    events.ScheduleEvent(EVENT_REAPPEAR, 20s);
                     for (uint8 i = 0; i < 3; ++i)
                     {
                         float o = rand_norm() * 2 * M_PI;
@@ -221,11 +221,11 @@ public:
                     break;
                 case EVENT_SPELL_VOID_BOLT:
                     me->CastSpell(me->GetVictim(), SPELL_VOID_BOLT, false);
-                    events.ScheduleEvent(EVENT_SPELL_VOID_BOLT, 7000);
+                    events.ScheduleEvent(EVENT_SPELL_VOID_BOLT, 7s);
                     break;
                 case EVENT_SPELL_PSYCHIC_SCREAM:
                     me->CastSpell(me, SPELL_PSYCHIC_SCREAM, false);
-                    events.ScheduleEvent(EVENT_SPELL_PSYCHIC_SCREAM, 12000);
+                    events.ScheduleEvent(EVENT_SPELL_PSYCHIC_SCREAM, 12s);
                     break;
 
             }

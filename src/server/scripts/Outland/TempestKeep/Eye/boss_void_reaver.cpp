@@ -100,18 +100,18 @@ public:
                 case EVENT_SPELL_POUNDING:
                     Talk(SAY_POUNDING);
                     me->CastSpell(me, SPELL_POUNDING, false);
-                    events.ScheduleEvent(EVENT_SPELL_POUNDING, 15000);
+                    events.ScheduleEvent(EVENT_SPELL_POUNDING, 15s);
                     break;
                 case EVENT_SPELL_ARCANEORB:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, -18.0f, true))
                         me->CastSpell(target, SPELL_ARCANE_ORB, false);
                     else if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 20.0f, true))
                         me->CastSpell(target, SPELL_ARCANE_ORB, false);
-                    events.ScheduleEvent(EVENT_SPELL_ARCANEORB, 4000);
+                    events.ScheduleEvent(EVENT_SPELL_ARCANEORB, 4s);
                     break;
                 case EVENT_SPELL_KNOCK_AWAY:
                     me->CastSpell(me->GetVictim(), SPELL_KNOCK_AWAY, false);
-                    events.ScheduleEvent(EVENT_SPELL_POUNDING, 25000);
+                    events.ScheduleEvent(EVENT_SPELL_POUNDING, 25s);
                     break;
             }
 

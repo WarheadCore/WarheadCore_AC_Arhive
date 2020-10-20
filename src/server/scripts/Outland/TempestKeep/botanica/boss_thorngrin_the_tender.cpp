@@ -117,18 +117,18 @@ public:
                         Talk(SAY_CAST_SACRIFICE);
                         me->CastSpell(target, SPELL_SACRIFICE, false);
                     }
-                    events.ScheduleEvent(EVENT_SACRIFICE, 30000);
+                    events.ScheduleEvent(EVENT_SACRIFICE, 30s);
                     break;
                 case EVENT_HELLFIRE:
                     if (roll_chance_i(50))
                         Talk(SAY_CAST_HELLFIRE);
                     me->CastSpell(me, SPELL_HELLFIRE, false);
-                    events.ScheduleEvent(EVENT_HELLFIRE, 22000);
+                    events.ScheduleEvent(EVENT_HELLFIRE, 22s);
                     break;
                 case EVENT_ENRAGE:
                     Talk(EMOTE_ENRAGE);
                     me->CastSpell(me, SPELL_ENRAGE, false);
-                    events.ScheduleEvent(EVENT_ENRAGE, 30000);
+                    events.ScheduleEvent(EVENT_ENRAGE, 30s);
                     break;
                 case EVENT_HEALTH_CHECK_50:
                     if (me->HealthBelowPct(50))
@@ -136,7 +136,7 @@ public:
                         Talk(SAY_50_PERCENT_HP);
                         break;
                     }
-                    events.ScheduleEvent(EVENT_HEALTH_CHECK_50, 500);
+                    events.ScheduleEvent(EVENT_HEALTH_CHECK_50, 500ms);
                     break;
                 case EVENT_HEALTH_CHECK_20:
                     if (me->HealthBelowPct(20))
@@ -144,7 +144,7 @@ public:
                         Talk(SAY_20_PERCENT_HP);
                         break;
                     }
-                    events.ScheduleEvent(EVENT_HEALTH_CHECK_20, 500);
+                    events.ScheduleEvent(EVENT_HEALTH_CHECK_20, 500ms);
                     break;
             }
 

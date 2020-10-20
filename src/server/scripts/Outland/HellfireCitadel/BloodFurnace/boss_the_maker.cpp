@@ -67,10 +67,10 @@ public:
         void EnterCombat(Unit* /*who*/)
         {
             Talk(SAY_AGGRO);
-            events.ScheduleEvent(EVENT_SPELL_ACID, 15000);
-            events.ScheduleEvent(EVENT_SPELL_EXPLODING, 6000);
-            events.ScheduleEvent(EVENT_SPELL_DOMINATION, 120000);
-            events.ScheduleEvent(EVENT_SPELL_KNOCKDOWN, 10000);
+            events.ScheduleEvent(EVENT_SPELL_ACID, 15s);
+            events.ScheduleEvent(EVENT_SPELL_EXPLODING, 6s);
+            events.ScheduleEvent(EVENT_SPELL_DOMINATION, 2min);
+            events.ScheduleEvent(EVENT_SPELL_KNOCKDOWN, 10s);
 
             if (!instance)
                 return;

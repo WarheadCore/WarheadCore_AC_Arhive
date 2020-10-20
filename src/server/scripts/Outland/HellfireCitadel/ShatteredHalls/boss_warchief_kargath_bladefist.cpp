@@ -83,16 +83,16 @@ public:
                     executioner->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
         }
 
-        void EnterCombat(Unit*  /*who*/)
+        void EnterCombat(Unit* /*who*/)
         {
             Talk(SAY_AGGRO);
             _EnterCombat();
 
-            events.ScheduleEvent(EVENT_CHECK_ROOM, 5000);
-            events.ScheduleEvent(EVENT_SUMMON_ADDS, 30000);
-            events.ScheduleEvent(EVENT_SUMMON_ASSASSINS, 5000);
-            events.ScheduleEvent(EVENT_BLADE_DANCE, 30000);
-            events.ScheduleEvent(EVENT_SPELL_CHARGE, 0);
+            events.ScheduleEvent(EVENT_CHECK_ROOM, 5s);
+            events.ScheduleEvent(EVENT_SUMMON_ADDS, 30s);
+            events.ScheduleEvent(EVENT_SUMMON_ASSASSINS, 5s);
+            events.ScheduleEvent(EVENT_BLADE_DANCE, 30s);
+            events.ScheduleEvent(EVENT_SPELL_CHARGE, 0s);
         }
 
         void JustSummoned(Creature* summon)
@@ -115,7 +115,7 @@ public:
                 return;
 
             me->CastSpell(me, SPELL_BLADE_DANCE, true);
-            events.ScheduleEvent(EVENT_MOVE_TO_NEXT_POINT, 0);
+            events.ScheduleEvent(EVENT_MOVE_TO_NEXT_POINT, 0s);
         }
 
         void UpdateAI(uint32 diff)
@@ -132,7 +132,7 @@ public:
                         EnterEvadeMode();
                         return;
                     }
-                    events.ScheduleEvent(EVENT_CHECK_ROOM, 5000);
+                    events.ScheduleEvent(EVENT_CHECK_ROOM, 5s);
                     break;
                 case EVENT_SUMMON_ASSASSINS:
                     me->SummonCreature(NPC_SHATTERED_ASSASSIN, AssassEntrance[0], AssassEntrance[1] + 8, AssassEntrance[2], 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
@@ -144,13 +144,13 @@ public:
                     for (uint8 i = 0; i < 2; ++i)
                         me->SummonCreature(NPC_HEARTHEN_GUARD + urand(0, 2), AddsEntrance[0], AddsEntrance[1], AddsEntrance[2], 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000);
 
-                    events.ScheduleEvent(EVENT_SUMMON_ADDS, 30000);
+                    events.ScheduleEvent(EVENT_SUMMON_ADDS, 30s);
                     break;
                 case EVENT_BLADE_DANCE:
-                    events.DelayEvents(10001);
-                    events.ScheduleEvent(EVENT_BLADE_DANCE, 40000);
-                    events.ScheduleEvent(EVENT_MOVE_TO_NEXT_POINT, 0);
-                    events.ScheduleEvent(EVENT_FINISH_BLADE_DANCE, 10000);
+                    events.DelayEvents(10001ms);
+                    events.ScheduleEvent(EVENT_BLADE_DANCE, 40s);
+                    events.ScheduleEvent(EVENT_MOVE_TO_NEXT_POINT, 0s);
+                    events.ScheduleEvent(EVENT_FINISH_BLADE_DANCE, 10s);
                     events.SetPhase(1);
                     me->CastSpell(me, SPELL_SPRINT, true);
                     break;
@@ -166,7 +166,7 @@ public:
                     me->GetMotionMaster()->Clear();
                     me->GetMotionMaster()->MoveChase(me->GetVictim());
                     if (IsHeroic())
-                        events.ScheduleEvent(EVENT_SPELL_CHARGE, 3000);
+                        events.ScheduleEvent(EVENT_SPELL_CHARGE, 3s);
                     break;
                 case EVENT_SPELL_CHARGE:
                     me->CastSpell(me->GetVictim(), SPELL_CHARGE, false);
