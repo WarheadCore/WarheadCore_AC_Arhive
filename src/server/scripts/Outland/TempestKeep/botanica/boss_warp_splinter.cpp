@@ -122,4 +122,3 @@ void AddSC_boss_warp_splinter()
 {
     new boss_warp_splinter();
 }
-
