@@ -134,7 +134,7 @@ public:
                 case EVENT_GROUND_SLAM:
                     Talk(SAY_SLAM);
                     me->CastSpell(me, SPELL_GROUND_SLAM, false);
-                    events.DelayEvents(8001);
+                    events.DelayEvents(8001ms);
                     events.ScheduleEvent(EVENT_GROUND_SLAM, 1min);
                     events.ScheduleEvent(EVENT_SHATTER, 8s);
                     break;

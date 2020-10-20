@@ -339,25 +339,25 @@ public:
                 {
                     case EVENT_CRUSADER_STRIKE:
                         me->CastSpell(me->GetVictim(), CRUSADER_STRIKE, false);
-                        _events.RepeatEvent(3500);
+                        _events.RepeatEvent(3500ms);
                         break;
                     case EVENT_HAMMER_OF_JUSTICE:
                         me->CastSpell(me->GetVictim(), HAMMER_OF_JUSTICE, false);
-                        _events.RepeatEvent(urand(10000, 14000));
+                        _events.RepeatEvent(10s, 14s);
                         break;
                     case EVENT_HOLY_LIGHT:
                         // if low enough will heal and trigger again in 18s.
                         if (me->GetHealthPct() <= 45)
                         {
                             me->CastSpell(me, HOLY_LIGHT, false);
-                            _events.RepeatEvent(urand(18000, 22000));
+                            _events.RepeatEvent(18s, 22s);
                         }
                         else if (Unit* who = me->FindNearestCreature(ANCHORITE_KARJA, 30.0f, true))
                         {
                             if (who->GetHealthPct() <= 45)
                             {
                                 me->CastSpell(who, HOLY_LIGHT, false);
-                                _events.RepeatEvent(urand(18000, 22000));
+                                _events.RepeatEvent(18s, 22s);
                             }
                         }
                         else if (Unit* who = me->FindNearestCreature(EXARCH_ORELIS, 30.0f, true))
@@ -365,11 +365,11 @@ public:
                             if (who->GetHealthPct() <= 45)
                             {
                                 me->CastSpell(who, HOLY_LIGHT, false);
-                                _events.RepeatEvent(urand(18000, 22000));
+                                _events.RepeatEvent(18s, 22s);
                             }
                         }
                         else
-                            _events.RepeatEvent(1000);
+                            _events.RepeatEvent(1s);
                         break;
                 }
             }

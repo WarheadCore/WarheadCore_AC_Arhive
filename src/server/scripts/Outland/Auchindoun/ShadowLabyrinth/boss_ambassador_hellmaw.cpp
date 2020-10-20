@@ -153,11 +153,11 @@ public:
             {
                 case EVENT_SPELL_CORROSIVE:
                     me->CastSpell(me->GetVictim(), SPELL_CORROSIVE_ACID, false);
-                    events.RepeatEvent(urand(15000, 25000));
+                    events.RepeatEvent(15s, 25s);
                     break;
                 case EVENT_SPELL_FEAR:
                     me->CastSpell(me, SPELL_FEAR, false);
-                    events.RepeatEvent(urand(20000, 35000));
+                    events.RepeatEvent(20s, 35s);
                     break;
                 case EVENT_SPELL_ENRAGE:
                     me->CastSpell(me->GetVictim(), SPELL_ENRAGE, false);

@@ -142,7 +142,7 @@ public:
                     {
                         _targetGUID = target->GetGUID();
                         me->CastSpell(target, SPELL_ORBITAL_STRIKE, false);
-                        events.DelayEvents(5000);
+                        events.DelayEvents(5s);
                         events.ScheduleEvent(EVENT_SHADOW_WHIP, 4s);
                         me->GetMotionMaster()->Clear();
                     }

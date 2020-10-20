@@ -663,7 +663,7 @@ public:
                     if (summons.HasEntry(NPC_MAIEV_SHADOWSONG))
                     {
                         ScheduleNormalEvents(5);
-                        events.DelayEvents(11000);
+                        events.DelayEvents(11s);
                         events.ScheduleEvent(EVENT_MOVE_MAIEV, 10s);
                         events.ScheduleEvent(EVENT_FINISH_TRANSFORM, 10500ms);
                     }
@@ -671,7 +671,7 @@ public:
                     {
                         ScheduleNormalEvents(3);
                         events.ScheduleEvent(EVENT_PHASE_5_START, 1s);
-                        events.DelayEvents(11000);
+                        events.DelayEvents(11s);
                         events.ScheduleEvent(EVENT_FINISH_TRANSFORM, 10500ms);
                     }
                     break;
