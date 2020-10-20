@@ -92,16 +92,16 @@ public:
             {
                 case EVENT_SPELL_SLIME:
                     me->CastSpell(me->GetVictim(), SPELL_SLIME_SPRAY, false);
-                    events.RepeatEvent(urand(7000, 12000));
+                    events.RepeatEvent(7s, 12s);
                     break;
                 case EVENT_SPELL_BOLT:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         me->CastSpell(target, SPELL_POISON_BOLT, false);
-                    events.RepeatEvent(urand(6000, 11000));
+                    events.RepeatEvent(6s, 11s);
                     break;
                 case EVENT_SPELL_POISON:
                     me->CastSpell(me, SPELL_POISON_CLOUD, false);
-                    events.RepeatEvent(20000);
+                    events.RepeatEvent(20s);
                     break;
 
             }
@@ -127,9 +127,9 @@ public:
                     me->SetInCombatWithZone();
                     break;
                 case ACTION_ACTIVATE_BROGGOK:
-                    events.ScheduleEvent(EVENT_SPELL_SLIME, 10000);
-                    events.ScheduleEvent(EVENT_SPELL_POISON, 5000);
-                    events.ScheduleEvent(EVENT_SPELL_BOLT, 7000);
+                    events.ScheduleEvent(EVENT_SPELL_SLIME, 10s);
+                    events.ScheduleEvent(EVENT_SPELL_POISON, 5s);
+                    events.ScheduleEvent(EVENT_SPELL_BOLT, 7s);
 
                     me->SetReactState(REACT_AGGRESSIVE);
                     me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_IMMUNE_TO_NPC | UNIT_FLAG_NON_ATTACKABLE);

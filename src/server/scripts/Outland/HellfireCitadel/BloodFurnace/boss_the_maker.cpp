@@ -67,10 +67,10 @@ public:
         void EnterCombat(Unit* /*who*/)
         {
             Talk(SAY_AGGRO);
-            events.ScheduleEvent(EVENT_SPELL_ACID, 15000);
-            events.ScheduleEvent(EVENT_SPELL_EXPLODING, 6000);
-            events.ScheduleEvent(EVENT_SPELL_DOMINATION, 120000);
-            events.ScheduleEvent(EVENT_SPELL_KNOCKDOWN, 10000);
+            events.ScheduleEvent(EVENT_SPELL_ACID, 15s);
+            events.ScheduleEvent(EVENT_SPELL_EXPLODING, 6s);
+            events.ScheduleEvent(EVENT_SPELL_DOMINATION, 2min);
+            events.ScheduleEvent(EVENT_SPELL_KNOCKDOWN, 10s);
 
             if (!instance)
                 return;
@@ -111,21 +111,21 @@ public:
             {
                 case EVENT_SPELL_ACID:
                     me->CastSpell(me->GetVictim(), SPELL_ACID_SPRAY, false);
-                    events.RepeatEvent(urand(15000, 23000));
+                    events.RepeatEvent(15s, 23s);
                     break;
                 case EVENT_SPELL_EXPLODING:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         me->CastSpell(target, SPELL_EXPLODING_BREAKER, false);
-                    events.RepeatEvent(urand(7000, 11000));
+                    events.RepeatEvent(7s, 11s);
                     break;
                 case EVENT_SPELL_DOMINATION:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         me->CastSpell(target, SPELL_DOMINATION, false);
-                    events.RepeatEvent(120000);
+                    events.RepeatEvent(2min);
                     break;
                 case EVENT_SPELL_KNOCKDOWN:
                     me->CastSpell(me->GetVictim(), SPELL_KNOCKDOWN, false);
-                    events.RepeatEvent(urand(4000, 12000));
+                    events.RepeatEvent(4s, 12s);
                     break;
             }
 
@@ -143,4 +143,3 @@ void AddSC_boss_the_maker()
 {
     new boss_the_maker();
 }
-
