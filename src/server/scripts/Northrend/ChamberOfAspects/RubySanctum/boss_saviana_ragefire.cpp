@@ -79,9 +79,9 @@ public:
             BossAI::EnterCombat(who);
             Talk(SAY_AGGRO);
 
-            events.ScheduleEvent(EVENT_ENRAGE, 15000);
-            events.ScheduleEvent(EVENT_FLAME_BREATH, 10000);
-            events.ScheduleEvent(EVENT_FLIGHT, 30000);
+            events.ScheduleEvent(EVENT_ENRAGE, 15s);
+            events.ScheduleEvent(EVENT_FLAME_BREATH, 10s);
+            events.ScheduleEvent(EVENT_FLIGHT, 30s);
         }
 
         void JustDied(Unit* killer)
@@ -122,7 +122,7 @@ public:
             if (events.GetNextEventTime(EVENT_KILL_TALK) == 0)
             {
                 Talk(SAY_KILL);
-                events.ScheduleEvent(EVENT_KILL_TALK, 6000);
+                events.ScheduleEvent(EVENT_KILL_TALK, 6s);
             }
         }
 
@@ -143,9 +143,9 @@ public:
                         me->AttackStop();
                         me->SetDisableGravity(true);
                         me->GetMotionMaster()->MovePoint(POINT_TAKEOFF, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ() + 6.0f, false);
-                        events.ScheduleEvent(EVENT_FLIGHT, 50000);
-                        events.DelayEvents(15000);
-                        events.ScheduleEvent(EVENT_AIR_MOVEMENT, 2000);
+                        events.ScheduleEvent(EVENT_FLIGHT, 50s);
+                        events.DelayEvents(15s);
+                        events.ScheduleEvent(EVENT_AIR_MOVEMENT, 2s);
                         break;
                     }
                 case EVENT_CONFLAGRATION:

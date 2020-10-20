@@ -177,10 +177,10 @@ public:
 
         void ScheduleEvents()
         {
-            events.RescheduleEvent(EVENT_JEDOGA_CYCLONE, 3000);
-            events.RescheduleEvent(EVENT_JEDOGA_LIGHTNING_BOLT, 7000);
-            events.RescheduleEvent(EVENT_JEDOGA_THUNDERSHOCK, 12000);
-            events.RescheduleEvent(EVENT_JEDOGA_MOVE_UP, urand(20000, 25000));
+            events.RescheduleEvent(EVENT_JEDOGA_CYCLONE, 3s);
+            events.RescheduleEvent(EVENT_JEDOGA_LIGHTNING_BOLT, 7s);
+            events.RescheduleEvent(EVENT_JEDOGA_THUNDERSHOCK, 12s);
+            events.RescheduleEvent(EVENT_JEDOGA_MOVE_UP, 20s, 25s);
         }
 
         void DoAction(int32 param)
@@ -198,14 +198,14 @@ public:
             else if (param == ACTION_HERALD)
             {
                 me->CastSpell(me, SPELL_GIFT_OF_THE_HERALD, true);
-                events.DelayEvents(1001);
-                events.ScheduleEvent(EVENT_JEDOGA_MOVE_DOWN, 1000);
+                events.DelayEvents(1001ms);
+                events.ScheduleEvent(EVENT_JEDOGA_MOVE_DOWN, 1s);
                 isFlying = false;
             }
             else if (param == ACTION_SACRIFICE_FAILED)
             {
-                events.DelayEvents(1001);
-                events.ScheduleEvent(EVENT_JEDOGA_MOVE_DOWN, 1000);
+                events.DelayEvents(1001ms);
+                events.ScheduleEvent(EVENT_JEDOGA_MOVE_DOWN, 1s);
                 isFlying = false;
                 if (pInstance)
                     pInstance->SetData(DATA_JEDOGA_ACHIEVEMENT, false);
@@ -353,7 +353,7 @@ public:
                     case EVENT_JEDOGA_CYCLONE:
                         {
                             me->CastSpell(me, IsHeroic() ? SPELL_CYCLONE_STRIKE_H : SPELL_CYCLONE_STRIKE, false);
-                            events.RepeatEvent(urand(10000, 14000));
+                            events.RepeatEvent(10s, 14s);
                             break;
                         }
                     case EVENT_JEDOGA_LIGHTNING_BOLT:
@@ -361,7 +361,7 @@ public:
                             if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                                 me->CastSpell(pTarget, IsHeroic() ? SPELL_LIGHTNING_BOLT_H : SPELL_LIGHTNING_BOLT, false);
 
-                            events.RepeatEvent(urand(11000, 15000));
+                            events.RepeatEvent(11s, 15s);
                             break;
                         }
                     case EVENT_JEDOGA_THUNDERSHOCK:

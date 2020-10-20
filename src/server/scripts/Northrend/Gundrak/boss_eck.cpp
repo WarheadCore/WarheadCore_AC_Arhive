@@ -130,7 +130,7 @@ public:
                         me->CastSpell(target, SPELL_ECK_SPRING, false);
                     }
 
-                    events.ScheduleEvent(EVENT_ECK_SPRING, urand(5000, 10000));
+                    events.ScheduleEvent(EVENT_ECK_SPRING, 5s, 10s);
                     break;
             }
 

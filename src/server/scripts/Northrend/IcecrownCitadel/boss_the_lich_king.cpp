@@ -2630,13 +2630,13 @@ public:
                                         me->CastSpell(target, SPELL_VALKYR_CARRY, false);
                                         _destPoint.Relocate(triggers.front());
                                         _events.Reset();
-                                        _events.ScheduleEvent(EVENT_MOVE_TO_DROP_POS, 1000);
+                                        _events.ScheduleEvent(EVENT_MOVE_TO_DROP_POS, 1s);
                                     }
                                 }
                         if (!valid)
                         {
                             _events.Reset();
-                            _events.ScheduleEvent(EVENT_GRAB_PLAYER, 500);
+                            _events.ScheduleEvent(EVENT_GRAB_PLAYER, 500ms);
                             _grabbedPlayer = 0;
                         }
                     }

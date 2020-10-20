@@ -253,10 +253,10 @@ public:
             bShattered = false;
             lastShatterMSTime = 0;
             events.Reset();
-            events.ScheduleEvent(EVENT_ACTIVATE_CONSTRUCT, RAID_MODE(40000, 30000));
-            events.ScheduleEvent(EVENT_SPELL_SCORCH, 10000);
-            events.ScheduleEvent(EVENT_SPELL_FLAME_JETS, 32000);
-            events.ScheduleEvent(EVENT_GRAB, 25000);
+            events.ScheduleEvent(EVENT_ACTIVATE_CONSTRUCT, RAID_MODE(40s, 30s));
+            events.ScheduleEvent(EVENT_SPELL_SCORCH, 10s);
+            events.ScheduleEvent(EVENT_SPELL_FLAME_JETS, 32s);
+            events.ScheduleEvent(EVENT_GRAB, 25s);
 
             me->MonsterYell(TEXT_AGGRO, LANG_UNIVERSAL, 0);
             me->PlayDirectSound(SOUND_AGGRO);
@@ -363,7 +363,7 @@ public:
                         me->CastSpell(me, SPELL_BERSERK, true);
                         break;
                     }
-                    events.RepeatEvent(RAID_MODE(40000, 30000));
+                    events.RepeatEvent(RAID_MODE(40s, 30s));
                     break;
                 case EVENT_SPELL_SCORCH:
                     if( rand() % 2 )
@@ -380,8 +380,8 @@ public:
                     me->DisableRotate(true);
                     me->SendMovementFlagUpdate();
                     me->CastSpell(me->GetVictim(), S_SCORCH, false);
-                    events.RepeatEvent(20000);
-                    events.RescheduleEvent(EVENT_ENABLE_ROTATE, 3001);
+                    events.RepeatEvent(20s);
+                    events.RescheduleEvent(EVENT_ENABLE_ROTATE, 3001ms);
                     break;
                 case EVENT_ENABLE_ROTATE:
                     me->SetControlled(false, UNIT_STATE_ROOT);
@@ -390,7 +390,7 @@ public:
                 case EVENT_SPELL_FLAME_JETS:
                     me->MonsterTextEmote(TEXT_FLAME_JETS, 0, true);
                     me->CastSpell(me->GetVictim(), S_FLAME_JETS, false);
-                    events.RepeatEvent(25000);
+                    events.RepeatEvent(25s);
                     break;
                 case EVENT_GRAB:
                     {
@@ -431,8 +431,8 @@ public:
                             }
                         }
 
-                        events.RepeatEvent(24000); // +6000 below
-                        events.DelayEvents(6000);
+                        events.RepeatEvent(24s); // +6000 below
+                        events.DelayEvents(6s);
                     }
                     break;
             }

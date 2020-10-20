@@ -1367,7 +1367,7 @@ public:
                         switch (data)
                         {
                             case IN_PROGRESS:
-                                Events.ScheduleEvent(EVENT_UPDATE_EXECUTION_TIME, 60000);
+                                Events.ScheduleEvent(EVENT_UPDATE_EXECUTION_TIME, 1min);
                                 BloodQuickeningMinutes = 30;
                                 DoUpdateWorldState(WORLDSTATE_SHOW_TIMER, 1);
                                 DoUpdateWorldState(WORLDSTATE_EXECUTION_TIME, BloodQuickeningMinutes);
@@ -1712,7 +1712,7 @@ public:
                             --BloodQuickeningMinutes;
                             if (BloodQuickeningMinutes)
                             {
-                                Events.ScheduleEvent(EVENT_UPDATE_EXECUTION_TIME, 60000);
+                                Events.ScheduleEvent(EVENT_UPDATE_EXECUTION_TIME, 1min);
                                 DoUpdateWorldState(WORLDSTATE_SHOW_TIMER, 1);
                                 DoUpdateWorldState(WORLDSTATE_EXECUTION_TIME, BloodQuickeningMinutes);
                             }
