@@ -60,7 +60,7 @@ GuildCriteriaProgressStruct* GuildCriteria::GetProgress(uint32 criteriaID, bool 
         if (_progress != _guildCriteriaProgress.end())
             return &_progress->second;
 
-        ABORT_MSG("> GLS: Not found criteria progress (%u) after insert empty", criteriaID);
+        LOG_FATAL("modules.gls", "> GLS: Not found criteria progress (%u) after insert empty", criteriaID);
     }
 
     return nullptr;
@@ -70,7 +70,7 @@ GuildCriteriaStruct* GuildCriteria::GetCriteria(uint32 criteriaID)
 {
     auto const& criteria = _guildCriteria.find(criteriaID);
     if (criteria == _guildCriteria.end())
-        ABORT_MSG("> GLS: Not found criteria (%u) for guild id (%u)", criteriaID, _guildID);
+        LOG_FATAL("modules.gls", "> GLS: Not found criteria (%u) for guild id (%u)", criteriaID, _guildID);
 
     return &criteria->second;
 }
@@ -87,7 +87,7 @@ void GuildCriteria::RescalingCriterias()
     uint32 members = guild ? guild->GetMemberCount() : 0;
 
     if (!members)
-        ABORT_MSG("> GLS: No members count in guild (%u)", _guildID);
+        LOG_FATAL("modules.gls", "> GLS: No members count in guild (%u)", _guildID);
 
     for (auto& itr : _guildCriteria)
     {
@@ -169,13 +169,18 @@ uint32 GuildCriteria::GetMaxCountProgressDone(uint32 criteriaID)
 
 void GuildCriteria::SetSelectedSpell(uint32 criteriaID, uint32 spellID)
 {
-    GetProgress(criteriaID)->SelectedSpell = spellID;
+    if (auto progress = GetProgress(criteriaID))
+        progress->SelectedSpell = spellID;
 }
 
 void GuildCriteria::AddItemProgess(uint32 criteriaID, uint8 itemType, uint32 itemCount)
 {
+    auto progress = GetProgress(criteriaID, true);
+    if (!progress)
+        return;
+
     // Add progress count
-    GetProgress(criteriaID, true)->ItemCount[itemType] += itemCount;
+    progress->ItemCount[itemType] += itemCount;
 
     // Save in DB
     SaveToDB(criteriaID);
@@ -183,12 +188,20 @@ void GuildCriteria::AddItemProgess(uint32 criteriaID, uint8 itemType, uint32 ite
 
 uint32 GuildCriteria::GetCriteriaItemID(uint32 criteriaID, uint8 itemType)
 {
-    return GetCriteria(criteriaID)->ItemID[itemType];
+    auto criteria = GetCriteria(criteriaID);
+    if (!criteria)
+        return 0;
+
+    return criteria->ItemID[itemType];
 }
 
 uint32 GuildCriteria::GetRewardSpellID(uint32 criteriaID, uint8 spellType)
 {
-    return GetCriteria(criteriaID)->RewardSpells[spellType];
+    auto criteria = GetCriteria(criteriaID);
+    if (!criteria)
+        return 0;
+
+    return criteria->RewardSpells[spellType];
 }
 
 void GuildCriteria::SaveToDB(uint32 criteriaID)
@@ -197,7 +210,7 @@ void GuildCriteria::SaveToDB(uint32 criteriaID)
     std::string itemsCount;
 
     for (uint32 i = 0; i < GLS_ITEMS_COUNT; ++i)
-        itemsCount += std::to_string(progressStruct->ItemCount[i]) + ",";
+        itemsCount += Warhead::ToString(progressStruct->ItemCount[i]) + ",";
 
     // Delete last (,)
     if (!itemsCount.empty())
@@ -233,6 +246,7 @@ uint32 GuildCriteria::GetCountCriteriaProgressDone()
 
     auto const& stagesAll = sGuildLevelSystem->GetStages();
     auto const& stages = stagesAll.find(_stageID);
+
     if (stages == stagesAll.end())
         return count;
 
@@ -306,7 +320,7 @@ void GuildLevelSystem::Init()
     LoadCriteriaProgress();
     LoadStageProgress();
 
-    LOG_INFO("modules", "");
+    LOG_INFO("modules.gls", "");
 }
 
 void GuildLevelSystem::SendGuildMessage(uint32 guildID, std::string&& message)
@@ -713,7 +727,7 @@ void GuildLevelSystem::InvestItem(Player* player, Creature* creature, uint32 sen
 
     auto criteriaProgress = GetCriteriaProgress(guildID, true);
     if (!criteriaProgress)
-        ABORT();
+        return;
 
     uint32 itemID = criteriaProgress->GetCriteriaItemID(criteriaID, itemType);
     if (!itemID)
@@ -776,7 +790,7 @@ void GuildLevelSystem::InvestItemFull(Player* player, Creature* creature, uint32
 
     auto criteriaProgress = GetCriteriaProgress(guildID, true);
     if (!criteriaProgress)
-        ABORT();
+        return;
 
     uint32 itemID = criteriaProgress->GetCriteriaItemID(criteriaID, itemType);
     if (!itemID)
@@ -823,7 +837,7 @@ GuildCriteria* GuildLevelSystem::GetCriteriaProgress(uint32 guildid, bool forceC
         if (_itr != _guildCriteriaProgress.end())
             return _itr->second;
 
-        ABORT_MSG("> GLS: Invalid create empty guild criteria for guild (%u)", guildid);
+        LOG_FATAL("modules.gls", "> GLS: Invalid create empty guild criteria for guild (%u)", guildid);
     }
 
     return nullptr;
@@ -835,7 +849,7 @@ GuildCriteriaStruct* GuildLevelSystem::GetCriteriaBase(uint32 criteriaID)
     if (itr != _guildCriteriaBase.end())
         return &itr->second;
 
-    ABORT_MSG("> GLS: Not found base criteria (%u)", criteriaID);
+    LOG_FATAL("modules.gls", "> GLS: Not found base criteria (%u)", criteriaID);
 
     return nullptr;
 }
@@ -855,7 +869,7 @@ void GuildLevelSystem::ShowAllCriteriaInfo(Player* player, Creature* creature)
 {
     auto criteriaProgress = GetCriteriaProgress(player->GetGuildId(), true);
     if (!criteriaProgress)
-        ABORT();
+        return;
 
     uint32 stageID = criteriaProgress->GetStageID();
 
@@ -920,7 +934,7 @@ void GuildLevelSystem::ShowCriteriaInfo(Player* player, Creature* creature, uint
 {
     auto criteriaProgress = GetCriteriaProgress(player->GetGuildId(), true);
     if (!criteriaProgress)
-        ABORT();
+        return;
 
     uint32 criteriaID = action - GLS_GOSSIP_CRITERIA_ID;
 
@@ -975,7 +989,7 @@ void GuildLevelSystem::ShowRewardInfo(Player* player, Creature* creature, uint32
 {
     auto criteriaProgress = GetCriteriaProgress(player->GetGuildId(), true);
     if (!criteriaProgress)
-        ABORT();
+        return;
 
     if (player->GetRank() != 0)
     {
@@ -991,7 +1005,7 @@ void GuildLevelSystem::ShowRewardInfo(Player* player, Creature* creature, uint32
 
     auto criteria = GetCriteriaBase(criteriaID);
     if (!criteria)
-        ABORT();
+        return;
 
     uint32 selectShoose = 0;
 
@@ -1040,7 +1054,7 @@ void GuildLevelSystem::GetRewardsCriteria(Player* player, Creature* creature, ui
 
     auto criteriaProgress = GetCriteriaProgress(player->GetGuildId());
     if (!criteriaProgress)
-        ABORT();
+        return;
 
     if (player->GetRank() != 0)
     {
@@ -1051,7 +1065,10 @@ void GuildLevelSystem::GetRewardsCriteria(Player* player, Creature* creature, ui
     uint32 spellType = sender - GLS_GOSSIP_GET_ALL_REWARDS_SENDER;
 
     if (spellType >= GLS_SPELLS_REWARD_COUNT)
-        ABORT();
+    {
+        LOG_FATAL("modules.gls", "> GLS: spellType(%u) >= GLS_SPELLS_REWARD_COUNT(%u)", spellType, GLS_SPELLS_REWARD_COUNT);
+        return;
+    }
 
     uint32 spellID = criteriaProgress->GetRewardSpellID(criteriaID, spellType);
 
@@ -1068,7 +1085,7 @@ void GuildLevelSystem::GetRewardsCriteria(Player* player, Creature* creature, ui
         {
             auto player = member->FindPlayer();
             if (!player)
-                ABORT();
+                return;
 
             if (!player->HasSpell(spellID))
                 player->learnSpell(spellID);
@@ -1090,7 +1107,7 @@ void GuildLevelSystem::GetAllLink(Player* player, Creature* creature, uint32 sen
 
     auto criteriaProgress = GetCriteriaProgress(player->GetGuildId(), true);
     if (!criteriaProgress)
-        ABORT();
+        return;
 
     ChatHandler handler(player->GetSession());
 
@@ -1138,7 +1155,7 @@ void GuildLevelSystem::SetNextStage(Player* player)
 
     auto criteriaProgress = GetCriteriaProgress(guildID);
     if (!criteriaProgress)
-        ABORT();
+        return;
 
     uint32 nextStage = GetNextStage(criteriaProgress->GetStageID());
 
@@ -1173,11 +1190,11 @@ void GuildLevelSystem::ShowInvestedMenu(Player* player, Creature* creature, uint
 
     auto criteriaProgress = GetCriteriaProgress(player->GetGuildId(), true);
     if (!criteriaProgress)
-        ABORT();
+        return;
 
     uint32 itemID = criteriaProgress->GetCriteriaItemID(criteriaID, sender);
     if (!itemID)
-        ABORT();
+        return;
 
     auto itemLink = GetItemLink(itemID, player->GetSession()->GetSessionDbLocaleIndex());
     uint32 currentItems = criteriaProgress->GetItemCountProgress(criteriaID, sender);
@@ -1217,7 +1234,11 @@ void GuildLevelSystem::AddEmptyGuildCriteria(uint32 guildID)
 
 void GuildLevelSystem::RescaleCriterias(uint32 guildID)
 {
-    GetCriteriaProgress(guildID, true)->RescalingCriterias();
+    auto criteriaProgress = GetCriteriaProgress(guildID, true);
+    if (!criteriaProgress)
+        return;
+
+    criteriaProgress->RescalingCriterias();
 }
 
 uint32 GuildLevelSystem::GetCountCriteriaInStage(uint32 stageID)
@@ -1226,7 +1247,7 @@ uint32 GuildLevelSystem::GetCountCriteriaInStage(uint32 stageID)
     if (_stages != _guildStages.end())
         return static_cast<uint32>(_stages->second.size());
 
-    ABORT_MSG("> GLS: Not find stage %u", stageID);
+    LOG_FATAL("modules.gls", "> GLS: Not find stage %u", stageID);
 
     return 0;
 }
