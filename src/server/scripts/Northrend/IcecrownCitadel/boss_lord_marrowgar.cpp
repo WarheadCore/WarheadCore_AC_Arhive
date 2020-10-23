@@ -240,9 +240,9 @@ public:
                     me->SetReactState(REACT_AGGRESSIVE);
                     DoStartMovement(me->GetVictim());
                     events.CancelEvent(EVENT_BONE_STORM_MOVE);
-                    events.ScheduleEvent(EVENT_ENABLE_BONE_SLICE, 10000);
+                    events.ScheduleEvent(EVENT_ENABLE_BONE_SLICE, 10s);
                     if (!IsHeroic())
-                        events.RescheduleEvent(EVENT_SPELL_BONE_SPIKE_GRAVEYARD, urand(15000, 20000));
+                        events.RescheduleEvent(EVENT_SPELL_BONE_SPIKE_GRAVEYARD, 15s, 20s);
                     break;
                 case EVENT_ENRAGE:
                     me->CastSpell(me, SPELL_BERSERK, true);

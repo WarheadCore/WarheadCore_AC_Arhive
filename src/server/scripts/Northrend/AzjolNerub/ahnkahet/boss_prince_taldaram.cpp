@@ -169,7 +169,7 @@ public:
                 case EVENT_PRINCE_FLAME_SPHERES:
                     {
                         me->CastSpell(me->GetVictim(), SPELL_CONJURE_FLAME_SPHERE, false);
-                        events.RescheduleEvent(EVENT_PRINCE_VANISH, 14000);
+                        events.RescheduleEvent(EVENT_PRINCE_VANISH, 14s);
                         Creature* cr;
                         if ((cr = me->SummonCreature(CREATURE_FLAME_SPHERE, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ() + 5.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 10 * IN_MILLISECONDS)))
                             summons.Summon(cr);

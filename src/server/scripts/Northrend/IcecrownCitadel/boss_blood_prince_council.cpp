@@ -1414,7 +1414,7 @@ public:
                     me->StopMoving();
                     me->GetMotionMaster()->MoveCharge(_x, _y, me->GetPositionZ() + 60.0f, me->GetSpeed(MOVE_RUN));
                 }
-                _events.RescheduleEvent(EVENT_CONTINUE_FALLING, 3000);
+                _events.RescheduleEvent(EVENT_CONTINUE_FALLING, 3s);
             }
         }
 

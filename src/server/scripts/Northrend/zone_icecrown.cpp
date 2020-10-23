@@ -1552,7 +1552,7 @@ public:
         void DamageTaken(Unit*, uint32& damage, DamageEffectType, SpellSchoolMask)
         {
             damage = 0;
-            events.RescheduleEvent(EVENT_DUMMY_RESET, 10000);
+            events.RescheduleEvent(EVENT_DUMMY_RESET, 10s);
         }
 
         void SpellHit(Unit* caster, SpellInfo const* spell)

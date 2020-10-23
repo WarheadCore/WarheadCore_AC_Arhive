@@ -545,7 +545,7 @@ public:
                                 c->GetMotionMaster()->MovePath(FBSData[i].pathId, false);
                             ++i;
                         }
-                        events.RescheduleEvent(2, 3000);
+                        events.RescheduleEvent(2, 3s);
                         break;
                     }
                 case 2:

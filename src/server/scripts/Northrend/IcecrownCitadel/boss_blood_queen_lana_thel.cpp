@@ -301,8 +301,8 @@ public:
                     me->SetReactState(REACT_AGGRESSIVE);
                     if (Unit* target = me->SelectVictim())
                         AttackStart(target);
-                    events.RescheduleEvent(EVENT_PACT_OF_THE_DARKFALLEN, 5000);
-                    events.RescheduleEvent(EVENT_SWARMING_SHADOWS, 20000);
+                    events.RescheduleEvent(EVENT_PACT_OF_THE_DARKFALLEN, 5s);
+                    events.RescheduleEvent(EVENT_SWARMING_SHADOWS, 20s);
                     break;
                 case POINT_MINCHAR:
                     me->CastSpell(me, SPELL_ANNIHILATE, true);

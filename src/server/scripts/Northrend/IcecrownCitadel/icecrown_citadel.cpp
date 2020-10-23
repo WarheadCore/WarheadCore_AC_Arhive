@@ -1089,10 +1089,10 @@ public:
                     break;
                 case ACTION_START_GAUNTLET:
                     me->setActive(true);
-                    events.ScheduleEvent(EVENT_SVALNA_START, 25000);
+                    events.ScheduleEvent(EVENT_SVALNA_START, 25s);
                     break;
                 case ACTION_RESURRECT_CAPTAINS:
-                    events.RescheduleEvent(EVENT_SVALNA_RESURRECT, 7000);
+                    events.RescheduleEvent(EVENT_SVALNA_RESURRECT, 7s);
                     break;
                 case ACTION_CAPTAIN_DIES:
                     Talk(SAY_SVALNA_CAPTAIN_DEATH);

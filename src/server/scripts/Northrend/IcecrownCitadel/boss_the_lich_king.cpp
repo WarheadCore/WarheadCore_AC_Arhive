@@ -773,7 +773,7 @@ public:
                 case ACTION_TELEPORT_BACK:
                     {
                         if (_phase == PHASE_FROSTMOURNE)
-                            events.RescheduleEvent(EVENT_START_ATTACK, 1000);
+                            events.RescheduleEvent(EVENT_START_ATTACK, 1s);
                         EntryCheckPredicate pred(NPC_STRANGULATE_VEHICLE);
                         summons.DoAction(ACTION_TELEPORT_BACK, pred);
                         if (!IsHeroic() && _phase != PHASE_OUTRO && me->IsInCombat() && _lastTalkTimeBuff + 5 <= GameTime::GetGameTime())
@@ -1027,8 +1027,8 @@ public:
                     {
                         _bFrostmournePhase = false;
                         _phase = PHASE_THREE;
-                        events.RescheduleEvent(EVENT_DEFILE, 0, EVENT_GROUP_ABILITIES);
-                        events.RescheduleEvent(EVENT_SOUL_REAPER, urand(7000, 12000), EVENT_GROUP_ABILITIES);
+                        events.RescheduleEvent(EVENT_DEFILE, 0s, EVENT_GROUP_ABILITIES);
+                        events.RescheduleEvent(EVENT_SOUL_REAPER, 7s, 12s, EVENT_GROUP_ABILITIES);
 
                         for (SummonList::iterator i = summons.begin(); i != summons.end(); ++i)
                             if (Creature* summon = ObjectAccessor::GetCreature(*me, *i))
@@ -1132,7 +1132,7 @@ public:
 
                             // if valkyr is coming between 1.5 and 3 seconds after defile then we've to
                             // delay valkyr just a bit
-                            events.RescheduleEvent(EVENT_SUMMON_VALKYR, 5000, EVENT_GROUP_ABILITIES);
+                            events.RescheduleEvent(EVENT_SUMMON_VALKYR, 5s, EVENT_GROUP_ABILITIES);
                         }
 
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, DefileTargetSelector(me, true, true, 100.0f)))
@@ -1168,9 +1168,9 @@ public:
 
                         // schedule a defile (or reschedule it) if next defile event
                         // doesn't exist ( now > next defile ) or defile is coming too soon
-                        uint32 minTime = (Is25ManRaid() ? 5000 : 4000);
+                        Seconds minTime = (Is25ManRaid() ? 5s : 4s);
                         if (uint32 evTime = events.GetNextEventTime(EVENT_DEFILE))
-                            if (events.GetTimer() > evTime || evTime - events.GetTimer() < minTime)
+                            if (events.GetTimer() > evTime || evTime - events.GetTimer() < minTime.count())
                                 events.RescheduleEvent(EVENT_DEFILE, minTime, EVENT_GROUP_ABILITIES);
                     }
                     break;
@@ -3254,7 +3254,7 @@ public:
                             else
                             {
                                 summoner->ExitVehicle(summoner);
-                                _events.RescheduleEvent(EVENT_DESPAWN_SELF, 0);
+                                _events.RescheduleEvent(EVENT_DESPAWN_SELF, 0s);
                             }
                         }
                     break;

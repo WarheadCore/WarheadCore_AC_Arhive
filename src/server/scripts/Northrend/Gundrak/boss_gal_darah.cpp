@@ -99,15 +99,15 @@ public:
             events.Reset();
             if (troll)
             {
-                events.RescheduleEvent(EVENT_STAMPEDE, 10000);
-                events.RescheduleEvent(EVENT_WHIRLING_SLASH, 21000);
+                events.RescheduleEvent(EVENT_STAMPEDE, 10s);
+                events.RescheduleEvent(EVENT_WHIRLING_SLASH, 21s);
             }
             else
             {
-                events.RescheduleEvent(EVENT_PUNCTURE, 10000);
-                events.RescheduleEvent(EVENT_ENRAGE, 15000);
-                events.RescheduleEvent(EVENT_IMPALING_CHARGE, 21000);
-                events.RescheduleEvent(EVENT_STOMP, 5000);
+                events.RescheduleEvent(EVENT_PUNCTURE, 10s);
+                events.RescheduleEvent(EVENT_ENRAGE, 15s);
+                events.RescheduleEvent(EVENT_IMPALING_CHARGE, 21s);
+                events.RescheduleEvent(EVENT_STOMP, 5s);
             }
         }
 

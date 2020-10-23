@@ -587,14 +587,14 @@ public:
                     events.ScheduleEvent(EVENT_BLISTERING_COLD, 1000, EVENT_GROUP_LAND_PHASE);
                     if (uint32 evTime = events.GetNextEventTime(EVENT_ICE_TOMB))
                         if (events.GetTimer() > evTime || evTime - events.GetTimer() < 7000)
-                            events.RescheduleEvent(EVENT_ICE_TOMB, 7000);
+                            events.RescheduleEvent(EVENT_ICE_TOMB, 7s);
                     break;
                 case EVENT_BLISTERING_COLD:
                     Talk(EMOTE_WARN_BLISTERING_COLD);
                     me->CastSpell(me, SPELL_BLISTERING_COLD, false);
                     events.ScheduleEvent(EVENT_BLISTERING_COLD_YELL, 5000, EVENT_GROUP_LAND_PHASE);
                     if (_isThirdPhase)
-                        events.RescheduleEvent(EVENT_ICY_GRIP, urand(65000, 70000));
+                        events.RescheduleEvent(EVENT_ICY_GRIP, 65s, 70s);
                     break;
                 case EVENT_BLISTERING_COLD_YELL:
                     Talk(SAY_BLISTERING_COLD);

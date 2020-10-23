@@ -582,7 +582,7 @@ public:
                             DoCast(player, SPELL_MANABONKED);
                             SendMailToPlayer(player);
                         }
-                        events.ScheduleEvent(EVENT_BLINK, 3 * IN_MILLISECONDS);
+                        events.ScheduleEvent(EVENT_BLINK, 3s);
                         break;
                     case EVENT_BLINK:
                         {

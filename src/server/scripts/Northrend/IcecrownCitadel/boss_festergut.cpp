@@ -212,7 +212,7 @@ public:
                         Talk(SAY_PUNGENT_BLIGHT);
                         me->CastSpell(me, SPELL_PUNGENT_BLIGHT, false);
                         _inhaleCounter = 0;
-                        events.RescheduleEvent(EVENT_GAS_SPORE, urand(20000, 25000));
+                        events.RescheduleEvent(EVENT_GAS_SPORE, 20s, 25s);
                     }
                     else
                     {
