@@ -326,8 +326,8 @@ public:
             _instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me);
             _events.Reset();
             _events.ScheduleEvent(EVENT_INTRO_TALK, 15s);
-            _events.ScheduleEvent(EVENT_DREAM_PORTAL, 45s, 48s;
-            
+            _events.ScheduleEvent(EVENT_DREAM_PORTAL, 45s, 48s);
+
             if (IsHeroic())
                 _events.ScheduleEvent(EVENT_BERSERK, 7min);
         }
@@ -457,7 +457,7 @@ public:
                         Talk(SAY_VALITHRIA_DREAM_PORTAL);
                     for (uint32 i = 0; i < _portalCount; ++i)
                         me->CastSpell(me, SUMMON_PORTAL, false);
-                    _events.ScheduleEvent(EVENT_DREAM_PORTAL, 45,s 48s);
+                    _events.ScheduleEvent(EVENT_DREAM_PORTAL, 45s, 48s);
                     break;
                 case EVENT_DREAM_SLIP:
                     me->CastSpell(me, SPELL_DREAM_SLIP, false);
