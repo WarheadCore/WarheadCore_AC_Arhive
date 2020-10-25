@@ -637,6 +637,7 @@ class PlayerDumpReader;
 
 class ObjectMgr
 {
+    friend class Player;
     friend class PlayerDumpReader;
 
 private:

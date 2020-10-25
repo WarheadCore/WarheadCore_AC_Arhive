@@ -1046,6 +1046,24 @@ bool Player::Create(uint32 guidlow, CharacterCreateInfo* createInfo)
     // should check that skin, face, hair* are valid via DBC per race/class
     // also do it in Player::BuildEnumData, Player::LoadFromDB
 
+    //select and update guid count from DB
+    bool incHighest = true;
+    if (guidlow != 0 && guidlow <= sObjectMgr->_hiCharGuid)
+    {
+        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CHECK_GUID);
+        stmt->setUInt32(0, guidlow);
+        PreparedQueryResult result2 = CharacterDatabase.Query(stmt);
+
+        if (result2)
+            guidlow = sObjectMgr->_hiCharGuid;                     // use first free if exists
+        else incHighest = false;
+    }
+    else
+        guidlow = sObjectMgr->_hiCharGuid;
+        
+    if (incHighest)
+        ++sObjectMgr->_hiCharGuid;
+
     Object::_Create(guidlow, 0, HIGHGUID_PLAYER);
 
     m_name = createInfo->Name;
