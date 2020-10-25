@@ -579,16 +579,16 @@ public:
                     else if (me->GetAura(SPELL_ATTUNED_TO_NATURE))
                     {
                         me->RemoveAura(SPELL_ATTUNED_TO_NATURE);
-                        events.ScheduleEvent(EVENT_FREYA_NATURE_BOMB, 5000);
+                        events.ScheduleEvent(EVENT_FREYA_NATURE_BOMB, 5s);
                         events.SetPhase(EVENT_PHASE_FINAL);
                         return;
                     }
                     _spawnedAmount++;
-                    events.RepeatEvent(60000);
+                    events.RepeatEvent(1min);
                     break;
                 case EVENT_FREYA_LIFEBINDER:
                     {
-                        events.RepeatEvent(45000);
+                        events.RepeatEvent(45s);
                         float x, y, z;
                         for (uint8 i = 0; i < 10; ++i)
                         {

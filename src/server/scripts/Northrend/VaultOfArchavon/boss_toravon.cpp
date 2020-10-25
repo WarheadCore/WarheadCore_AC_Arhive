@@ -136,16 +136,16 @@ public:
                 case EVENT_FREEZING_GROUND:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         me->CastSpell(target, SPELL_FREEZING_GROUND, false);
-                    events.RepeatEvent(20000);
+                    events.RepeatEvent(20s);
                     break;
                 case EVENT_FROZEN_ORB_STALKER:
                     me->CastCustomSpell(SPELL_FROZEN_ORB, SPELLVALUE_MAX_TARGETS, RAID_MODE(1, 3, 2, 4), me, false);
-                    events.RepeatEvent(30000);
+                    events.RepeatEvent(30s);
                     break;
                 case EVENT_CAST_WHITEOUT:
                     me->CastSpell(me, SPELL_WHITEOUT, false);
-                    events.ScheduleEvent(EVENT_CAST_WHITEOUT_GROUND_EFFECT, 1000); // triggers after 1 sec "plus 1 from trigger to cast visual"
-                    events.RepeatEvent(40000); // next whiteout instead first 25 SEC is now 45 SEC
+                    events.ScheduleEvent(EVENT_CAST_WHITEOUT_GROUND_EFFECT, 1s); // triggers after 1 sec "plus 1 from trigger to cast visual"
+                    events.RepeatEvent(40s); // next whiteout instead first 25 SEC is now 45 SEC
                     break;
                 case EVENT_CAST_WHITEOUT_GROUND_EFFECT: // Whiteout Ground effect trigger
                     if (Unit* whiteOutGround = me->SummonCreature(NPC_WHITEOUT_GROUND_EFFECT, -43.3316, -288.708, 92.2511, 1.58825, TEMPSUMMON_TIMED_DESPAWN, 4000))

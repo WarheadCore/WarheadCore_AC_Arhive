@@ -120,7 +120,7 @@ public:
             me->DisableRotate(false);
         }
 
-        void EnterCombat(Unit*  /*who*/)
+        void EnterCombat(Unit* /*who*/)
         {
             Talk(SAY_AGGRO);
 

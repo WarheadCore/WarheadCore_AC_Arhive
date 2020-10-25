@@ -817,7 +817,7 @@ public:
 
                         me->CastSpell(me, SPELL_LIGHTNING_TENDRILS, true);
                         me->CastSpell(me, 61883, true);
-                        events.ScheduleEvent(EVENT_LIGHTNING_LAND, 16000);
+                        events.ScheduleEvent(EVENT_LIGHTNING_LAND, 16s);
 
                         me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_INTERRUPT_CAST, true);
                         break;

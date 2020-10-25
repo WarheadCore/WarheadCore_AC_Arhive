@@ -274,21 +274,21 @@ public:
             {
                 case EVENT_CHECK_RAGE:
                     CheckRageBuff();
-                    events.RepeatEvent(2000);
+                    events.RepeatEvent(2s);
                     break;
                 case EVENT_BRUTAL_STRIKE:
                     me->CastSpell(me->GetVictim(), SPELL_IOCBOSS_BRUTAL_STRIKE, false);
-                    events.RepeatEvent(6000);
+                    events.RepeatEvent(6s);
                     break;
                 case EVENT_CRUSHING_LEAP:
                     me->CastSpell(me, SPELL_IOCBOSS_CRUSHING_LEAP, false);
-                    events.RepeatEvent(22000);
+                    events.RepeatEvent(22s);
                     break;
                 case EVENT_DAGGER_THROW:
                     if (Unit* tgt = SelectTarget(SELECT_TARGET_RANDOM))
                         me->CastSpell(tgt, SPELL_IOCBOSS_DAGGER_THROW, false);
 
-                    events.RepeatEvent(10000);
+                    events.RepeatEvent(10s);
                     break;
             }
 

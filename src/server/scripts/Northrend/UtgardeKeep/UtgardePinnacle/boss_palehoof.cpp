@@ -246,7 +246,7 @@ public:
                                 Counter++;
                                 miniBoss->AI()->DoAction(ACTION_UNFREEZE);
                                 orb->CastSpell(miniBoss, SPELL_AWAKEN_SUBBOSS, true);
-                                events.ScheduleEvent(EVENT_UNFREEZE_MONSTER2, 6000);
+                                events.ScheduleEvent(EVENT_UNFREEZE_MONSTER2, 6s);
                             }
                             else
                                 EnterEvadeMode();
@@ -272,7 +272,7 @@ public:
                         if (Creature* orb = ObjectAccessor::GetCreature(*me, OrbGUID))
                         {
                             orb->CastSpell(me, SPELL_AWAKEN_SUBBOSS, true);
-                            events.ScheduleEvent(EVENT_PALEHOOF_START2, 6000);
+                            events.ScheduleEvent(EVENT_PALEHOOF_START2, 6s);
                         }
                         break;
                     }

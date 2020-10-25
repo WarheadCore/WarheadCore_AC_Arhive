@@ -83,7 +83,7 @@ public:
             events.Reset();
         }
 
-        void EnterCombat(Unit*  /*who*/)
+        void EnterCombat(Unit* /*who*/)
         {
             Talk(SAY_AGGRO);
 
@@ -97,7 +97,7 @@ public:
             events.RescheduleEvent(EVENT_SUMMON, 2s);
         }
 
-        void JustDied(Unit*  /*killer*/)
+        void JustDied(Unit* /*killer*/)
         {
             Talk(SAY_DEATH);
 

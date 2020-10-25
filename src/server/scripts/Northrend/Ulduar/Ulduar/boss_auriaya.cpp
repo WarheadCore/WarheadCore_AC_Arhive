@@ -172,7 +172,7 @@ public:
 
         void JustReachedHome() { me->setActive(false); }
 
-        void EnterCombat(Unit*  /*who*/)
+        void EnterCombat(Unit* /*who*/)
         {
             if (m_pInstance)
                 m_pInstance->SetData(TYPE_AURIAYA, IN_PROGRESS);

@@ -83,11 +83,11 @@ public:
             BossAI::EnterCombat(who);
 
             me->CastSpell(me, SPELL_INTENSE_COLD, true);
-            events.ScheduleEvent(EVENT_CRYSTALFIRE_BREATH, 14000);
-            events.ScheduleEvent(EVENT_CRYSTAL_CHAINS, DUNGEON_MODE(20000, 11000));
-            events.ScheduleEvent(EVENT_TAIL_SWEEP, 5000);
-            events.ScheduleEvent(EVENT_HEALTH_CHECK, 1000);
-            events.ScheduleEvent(EVENT_ACHIEVEMENT_CHECK, 1000);
+            events.ScheduleEvent(EVENT_CRYSTALFIRE_BREATH, 14s);
+            events.ScheduleEvent(EVENT_CRYSTAL_CHAINS, DUNGEON_MODE(20s, 11s));
+            events.ScheduleEvent(EVENT_TAIL_SWEEP, 5s);
+            events.ScheduleEvent(EVENT_HEALTH_CHECK, 1s);
+            events.ScheduleEvent(EVENT_ACHIEVEMENT_CHECK, 1s);
         }
 
         void JustDied(Unit* killer)
@@ -101,7 +101,7 @@ public:
             if (events.GetNextEventTime(EVENT_KILL_TALK) == 0)
             {
                 Talk(SAY_SLAY);
-                events.ScheduleEvent(EVENT_KILL_TALK, 6000);
+                events.ScheduleEvent(EVENT_KILL_TALK, 6s);
             }
         }
 
@@ -157,7 +157,7 @@ public:
                         me->CastSpell(me, SPELL_ENRAGE, true);
                         break;
                     }
-                    events.ScheduleEvent(EVENT_HEALTH_CHECK, 1000);
+                    events.ScheduleEvent(EVENT_HEALTH_CHECK, 1s);
                     break;
                 case EVENT_ACHIEVEMENT_CHECK:
                     {
@@ -171,11 +171,11 @@ public:
                     }
                 case EVENT_CRYSTALFIRE_BREATH:
                     me->CastSpell(me->GetVictim(), SPELL_CRYSTALFIRE_BREATH, false);
-                    events.ScheduleEvent(EVENT_CRYSTALFIRE_BREATH, 14000);
+                    events.ScheduleEvent(EVENT_CRYSTALFIRE_BREATH, 14s);
                     break;
                 case EVENT_TAIL_SWEEP:
                     me->CastSpell(me, SPELL_TAIL_SWEEP, false);
-                    events.ScheduleEvent(EVENT_TAIL_SWEEP, 5000);
+                    events.ScheduleEvent(EVENT_TAIL_SWEEP, 5s);
                     break;
                 case EVENT_CRYSTAL_CHAINS:
                     Talk(SAY_CRYSTAL_NOVA);
@@ -183,7 +183,7 @@ public:
                         me->CastSpell(me, SPELL_CRYSTALIZE, false);
                     else if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40.0f, true))
                         me->CastSpell(target, SPELL_CRYSTAL_CHAINS, false);
-                    events.ScheduleEvent(EVENT_CRYSTAL_CHAINS, DUNGEON_MODE(20000, 11000));
+                    events.ScheduleEvent(EVENT_CRYSTAL_CHAINS, DUNGEON_MODE(20s, 11s));
                     break;
             }
 

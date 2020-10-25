@@ -161,7 +161,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit*  /*who*/)
+        void EnterCombat(Unit* /*who*/)
         {
             Talk(SAY_AGGRO);
 
@@ -236,7 +236,7 @@ public:
                             me->CastSpell(me, SPELL_FRENZY, false);
 
                             events.CancelEvent(EVENT_SUMMON);
-                            events.ScheduleEvent(EVENT_SUMMON, 0);
+                            events.ScheduleEvent(EVENT_SUMMON, 0s);
                             break;
                         }
 
@@ -424,6 +424,7 @@ public:
         boss_sjonnir_iron_sludgeAI(Creature* c) : ScriptedAI(c) { }
 
         EventMap events;
+        
         void Reset()
         {
             events.Reset();
@@ -433,6 +434,7 @@ public:
         {
             events.ScheduleEvent(EVENT_TOXIC_VOLLEY, 5s);
         }
+        
         void JustDied(Unit*  /*killer*/)
         {
             if (InstanceScript* pInstance = me->GetInstanceScript())

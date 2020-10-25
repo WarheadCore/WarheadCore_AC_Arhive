@@ -419,23 +419,27 @@ public:
                         break;
                     }
                 case ACTION_DESPAWN_ALGALON:
-                    _fightWon = true;
+                    _fightWon = true;                    
                     events.Reset();
                     summons.DespawnAll();
+                    
                     events.SetPhase(PHASE_ROLE_PLAY);
                     events.ScheduleEvent(EVENT_DESPAWN_ALGALON_1, 5s);
                     events.ScheduleEvent(EVENT_DESPAWN_ALGALON_2, 17s);
                     events.ScheduleEvent(EVENT_DESPAWN_ALGALON_3, 26s);
+                    
                     if (me->IsInCombat())
                         events.ScheduleEvent(EVENT_DESPAWN_ALGALON_4, 26s);
+                    
                     events.ScheduleEvent(EVENT_DESPAWN_ALGALON_5, 32s);
+                    
                     me->DespawnOrUnsummon(39000);
-
                     me->SetReactState(REACT_PASSIVE);
                     me->AttackStop();
                     me->setFaction(35);
                     me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                     me->InterruptNonMeleeSpells(false);
+                    
                     if (m_pInstance)
                         m_pInstance->SetData(TYPE_ALGALON, NOT_STARTED);
                     break;
@@ -470,7 +474,7 @@ public:
                 return;
             }
 
-            uint32 introDelay = 0;
+            Seconds introDelay = 0s;
             me->setActive(true);
             me->SetInCombatWithZone();
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_IMMUNE_TO_NPC);
@@ -479,30 +483,30 @@ public:
 
             if (!_firstPull)
             {
-                events.ScheduleEvent(EVENT_START_COMBAT, 0);
-                introDelay = 8000;
+                events.ScheduleEvent(EVENT_START_COMBAT, 0s);
+                introDelay = 8s;
             }
             else
             {
                 summons.DespawnEntry(NPC_AZEROTH);
                 _firstPull = false;
                 Talk(SAY_ALGALON_START_TIMER);
-                introDelay = 22000;
-                events.ScheduleEvent(EVENT_START_COMBAT, 14000);
+                introDelay = 22s;
+                events.ScheduleEvent(EVENT_START_COMBAT, 14s);
                 m_pInstance->SetData(DATA_DESPAWN_ALGALON, 0);
             }
 
-            events.ScheduleEvent(EVENT_REMOVE_UNNATTACKABLE, introDelay - 500);
+            events.ScheduleEvent(EVENT_REMOVE_UNNATTACKABLE, introDelay - 500ms);
             events.ScheduleEvent(EVENT_INTRO_TIMER_DONE, introDelay);
-            events.ScheduleEvent(EVENT_QUANTUM_STRIKE, 3500 + introDelay);
-            events.ScheduleEvent(EVENT_PHASE_PUNCH, 15500 + introDelay);
-            events.ScheduleEvent(EVENT_SUMMON_COLLAPSING_STAR, 16500 + introDelay);
-            events.ScheduleEvent(EVENT_COSMIC_SMASH, 25000 + introDelay);
-            events.ScheduleEvent(EVENT_ACTIVATE_LIVING_CONSTELLATION, 50500 + introDelay);
-            events.ScheduleEvent(EVENT_BIG_BANG, 90000 + introDelay);
-            events.ScheduleEvent(EVENT_ASCEND_TO_THE_HEAVENS, 360000 + introDelay);
+            events.ScheduleEvent(EVENT_QUANTUM_STRIKE, 3500ms + introDelay);
+            events.ScheduleEvent(EVENT_PHASE_PUNCH, 15500ms + introDelay);
+            events.ScheduleEvent(EVENT_SUMMON_COLLAPSING_STAR, 16500ms + introDelay);
+            events.ScheduleEvent(EVENT_COSMIC_SMASH, 25s + introDelay);
+            events.ScheduleEvent(EVENT_ACTIVATE_LIVING_CONSTELLATION, 50500ms + introDelay);
+            events.ScheduleEvent(EVENT_BIG_BANG, 90s + introDelay);
+            events.ScheduleEvent(EVENT_ASCEND_TO_THE_HEAVENS, 6min + introDelay);
 
-            events.ScheduleEvent(EVENT_CHECK_HERALD_ITEMS, 5000);
+            events.ScheduleEvent(EVENT_CHECK_HERALD_ITEMS, 5s);
             DoCheckHeraldOfTheTitans();
         }
 
@@ -516,15 +520,15 @@ public:
             else if (pointId == POINT_ALGALON_OUTRO)
             {
                 me->SetFacingTo(1.605703f);
-                events.ScheduleEvent(EVENT_OUTRO_3, 1200);
-                events.ScheduleEvent(EVENT_OUTRO_4, 2400);
-                events.ScheduleEvent(EVENT_OUTRO_5, 8500);
-                events.ScheduleEvent(EVENT_OUTRO_6, 15500);
-                events.ScheduleEvent(EVENT_OUTRO_7, 55500);
-                events.ScheduleEvent(EVENT_OUTRO_8, 73500);
-                events.ScheduleEvent(EVENT_OUTRO_9, 85500);
-                events.ScheduleEvent(EVENT_OUTRO_10, 101500);
-                events.ScheduleEvent(EVENT_OUTRO_11, 117500);
+                events.ScheduleEvent(EVENT_OUTRO_3, 1200ms);
+                events.ScheduleEvent(EVENT_OUTRO_4, 2400ms);
+                events.ScheduleEvent(EVENT_OUTRO_5, 8500ms);
+                events.ScheduleEvent(EVENT_OUTRO_6, 15500ms);
+                events.ScheduleEvent(EVENT_OUTRO_7, 55500ms);
+                events.ScheduleEvent(EVENT_OUTRO_8, 73500ms);
+                events.ScheduleEvent(EVENT_OUTRO_9, 85500ms);
+                events.ScheduleEvent(EVENT_OUTRO_10, 101500ms);
+                events.ScheduleEvent(EVENT_OUTRO_11, 117500ms);
             }
         }
 
@@ -604,9 +608,9 @@ public:
                 summons.DespawnAll();
                 me->InterruptNonMeleeSpells(false);
                 events.SetPhase(PHASE_ROLE_PLAY);
-                events.ScheduleEvent(EVENT_OUTRO_START, 1500);
-                events.ScheduleEvent(EVENT_OUTRO_1, 7200);
-                events.ScheduleEvent(EVENT_OUTRO_2, 8700);
+                events.ScheduleEvent(EVENT_OUTRO_START, 1500ms);
+                events.ScheduleEvent(EVENT_OUTRO_1, 7200ms);
+                events.ScheduleEvent(EVENT_OUTRO_2, 8700ms);
             }
         }
 
@@ -836,19 +840,19 @@ public:
             if (movementType != POINT_MOTION_TYPE)
                 return;
 
-            uint32 delay = 1;
+            Milliseconds delay = 10ms;
             _currentPoint = pointId + 1;
             switch (pointId)
             {
                 case 2:
-                    delay = 8000;
+                    delay = 8s;
                     me->SetWalk(true);
                     break;
                 case 6:
                     me->SetFacingTo(4.6156f);
                     me->SetWalk(false);
                     Talk(SAY_BRANN_ALGALON_INTRO_1);
-                    events.ScheduleEvent(EVENT_SUMMON_ALGALON, 7500);
+                    events.ScheduleEvent(EVENT_SUMMON_ALGALON, 7500ms);
                     return;
                 case 10:
                     me->DespawnOrUnsummon(1);
@@ -947,7 +951,7 @@ public:
         void Reset()
         {
             events.Reset();
-            events.ScheduleEvent(EVENT_ARCANE_BARRAGE, 2500);
+            events.ScheduleEvent(EVENT_ARCANE_BARRAGE, 2500ms);
             _isActive = false;
         }
 
@@ -974,7 +978,7 @@ public:
                     break;
                 case ACTION_BIG_BANG:
                     events.SetPhase(PHASE_BIG_BANG);
-                    events.DelayEvents(9500);
+                    events.DelayEvents(9500ms);
                     events.ScheduleEvent(EVENT_RESUME_UPDATING, 9500ms);
                     break;
             }
@@ -1099,7 +1103,7 @@ public:
             _locked = true;
             // Start Algalon event
             go->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_IN_USE);
-            events.ScheduleEvent(EVENT_DESPAWN_CONSOLE, 5000);
+            events.ScheduleEvent(EVENT_DESPAWN_CONSOLE, 5s);
             if (Creature* brann = go->SummonCreature(NPC_BRANN_BRONZBEARD_ALG, BrannIntroSpawnPos))
                 brann->AI()->DoAction(ACTION_START_INTRO);
 

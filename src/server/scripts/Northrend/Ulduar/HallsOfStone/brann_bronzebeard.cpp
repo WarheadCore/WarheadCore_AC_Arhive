@@ -428,8 +428,8 @@ public:
                                 kaddrak->CastSpell(plr, DUNGEON_MODE(SPELL_GLARE_OF_THE_TRIBUNAL, SPELL_GLARE_OF_THE_TRIBUNAL_H), true);
                         }
 
-                        events.RescheduleEvent(EVENT_KADDRAK_SWITCH_EYE, 1500);
-                        events.RepeatEvent(2000 + urand(0, 2000));
+                        events.RescheduleEvent(EVENT_KADDRAK_SWITCH_EYE, 1500ms);
+                        events.RepeatEvent(2s, 4s);
                         break;
                     }
                 case EVENT_KADDRAK_SWITCH_EYE:
@@ -524,7 +524,7 @@ public:
                             plr->GroupEventHappens(QUEST_HALLS_OF_STONE, me);
                         }
 
-                        events.ScheduleEvent(EVENT_GO_TO_SJONNIR, 279000);
+                        events.ScheduleEvent(EVENT_GO_TO_SJONNIR, 279s);
                         break;
                     }
                 case EVENT_GO_TO_SJONNIR:

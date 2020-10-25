@@ -501,7 +501,7 @@ public:
                 me->AddThreat(who, 1000000.0f);
         }
 
-        void EnterCombat(Unit*  /*who*/) override
+        void EnterCombat(Unit* /*who*/) override
         {
             me->SetInCombatWithZone();
             if (me->GetEntry() == NPC_UNSTOPPABLE_ABOMINATION)

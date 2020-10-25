@@ -333,14 +333,14 @@ public:
                             events.ScheduleEvent(EVENT_FLIGHT_ICEBOLT, (me->GetExactDist(*itr) / 13.0f)*IN_MILLISECONDS);
                         }
                         else
-                            events.ScheduleEvent(EVENT_FLIGHT_BREATH, 1000);
+                            events.ScheduleEvent(EVENT_FLIGHT_BREATH, 1s);
                         return;
                     }
                 case EVENT_FLIGHT_BREATH:
                     currentTarget = 0;
                     Talk(EMOTE_BREATH);
                     me->CastSpell(me, SPELL_FROST_MISSILE, false);
-                    events.ScheduleEvent(EVENT_FLIGHT_SPELL_EXPLOSION, 8500);
+                    events.ScheduleEvent(EVENT_FLIGHT_SPELL_EXPLOSION, 8500ms);
                     return;
                 case EVENT_FLIGHT_SPELL_EXPLOSION:
                     me->CastSpell(me, SPELL_FROST_EXPLOSION, true);

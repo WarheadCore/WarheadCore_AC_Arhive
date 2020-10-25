@@ -543,7 +543,7 @@ public:
                                     }
                         }
 
-                        events.RescheduleEvent(EVENT_VORTEX_LAND_0, 11000, 1);
+                        events.RescheduleEvent(EVENT_VORTEX_LAND_0, 11s, 1);
                         break;
                     }
                 case EVENT_VORTEX_LAND_0:
@@ -561,7 +561,7 @@ public:
                             AttackStart(target);
                             me->GetMotionMaster()->MoveChase(target);
                         }
-                        events.RescheduleEvent(EVENT_START_VORTEX_0, 60000, 1);
+                        events.RescheduleEvent(EVENT_START_VORTEX_0, 1min, 1);
                         break;
                     }
                 case EVENT_START_PHASE_2:

@@ -274,16 +274,16 @@ public:
                             switch(BoatOrder[BoatNum - 1])
                             {
                                 case 0:
-                                    events.ScheduleEvent(EVENT_YMIRON_RANULF_ABILITY, 3000, 1);
+                                    events.ScheduleEvent(EVENT_YMIRON_RANULF_ABILITY, 3s, 1);
                                     break;
                                 case 1:
-                                    events.ScheduleEvent(EVENT_YMIRON_TORGYN_ABILITY, 3000, 1);
+                                    events.ScheduleEvent(EVENT_YMIRON_TORGYN_ABILITY, 3s, 1);
                                     break;
                                 case 2:
-                                    events.ScheduleEvent(EVENT_YMIRON_BJORN_ABILITY, 3000, 1);
+                                    events.ScheduleEvent(EVENT_YMIRON_BJORN_ABILITY, 3s, 1);
                                     break;
                                 case 3:
-                                    events.ScheduleEvent(EVENT_YMIRON_HALDOR_ABILITY, 3000, 1);
+                                    events.ScheduleEvent(EVENT_YMIRON_HALDOR_ABILITY, 3s, 1);
                                     break;
                             }
                         }
