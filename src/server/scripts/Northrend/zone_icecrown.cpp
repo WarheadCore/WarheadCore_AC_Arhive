@@ -234,11 +234,11 @@ public:
                         switch (currentQuest)
                         {
                             case QUEST_BFV_FALLEN_HEROES:
-                                events.ScheduleEvent(EVENT_VALHALAS_SECOND, 8000);
+                                events.ScheduleEvent(EVENT_VALHALAS_SECOND, 8s);
                                 me->MonsterYell("$N and comrades in arms have chosen to accept honorable combat within the sacred confines of Valhalas.", LANG_UNIVERSAL, ObjectAccessor::GetPlayer(*me, playerGUID));
                                 break;
                             case QUEST_BFV_DARK_MASTER:
-                                events.ScheduleEvent(EVENT_VALHALAS_SECOND, 8000);
+                                events.ScheduleEvent(EVENT_VALHALAS_SECOND, 8s);
                                 me->MonsterYell("$N has accepted the challenge of Khit'rix the Dark Master. May the gods show mercy upon him for Khit'rix surely will not.", LANG_UNIVERSAL, ObjectAccessor::GetPlayer(*me, playerGUID));
                                 break;
                             case QUEST_BFV_SIGRID:
@@ -246,15 +246,15 @@ public:
                                 me->MonsterTextEmote("Circling Valhalas, Sigrid Iceborn approaches to seek her revenge!", NULL, true);
                                 break;
                             case QUEST_BFV_CARNAGE:
-                                events.ScheduleEvent(EVENT_VALHALAS_SECOND, 8000);
+                                events.ScheduleEvent(EVENT_VALHALAS_SECOND, 8s);
                                 me->MonsterYell("From the bowels of the Underhalls comes Carnage. Brave and foolish $N has accepted the challenge. $N and his group stand ready to face the monstrosity.", LANG_UNIVERSAL, ObjectAccessor::GetPlayer(*me, playerGUID));
                                 break;
                             case QUEST_BFV_THANE:
-                                events.ScheduleEvent(EVENT_VALHALAS_SECOND, 8000);
+                                events.ScheduleEvent(EVENT_VALHALAS_SECOND, 8s);
                                 me->MonsterYell("Thane Banahogg returns to Valhalas for the first time in ages to prove that the vrykul are the only beings worthy to fight within its sacred ring. Will $N prove him wrong?", LANG_UNIVERSAL, ObjectAccessor::GetPlayer(*me, playerGUID));
                                 break;
                             case QUEST_BFV_FINAL:
-                                events.ScheduleEvent(EVENT_VALHALAS_SECOND, 8000);
+                                events.ScheduleEvent(EVENT_VALHALAS_SECOND, 8s);
                                 me->MonsterYell("From the depths of Icecrown Citadel, one of the Lich King's chosen comes to put an end to the existence of $N and his friends.", LANG_UNIVERSAL, ObjectAccessor::GetPlayer(*me, playerGUID));
                                 break;
                         }
@@ -698,7 +698,7 @@ public:
         void SetData(uint32 type, uint32 data) override
         {
             if (type == 1 && data == 1)
-                events.ScheduleEvent(EVENT_SCENE_0 + 30, 10000);
+                events.ScheduleEvent(EVENT_SCENE_0 + 30, 10s);
         }
 
         void DoAction(int32 param) override
@@ -990,23 +990,23 @@ public:
                                     summon->GetMotionMaster()->MovePoint(6, 6138.36f + frand(-2.0f, 2.0f), 2749.25f + frand(-2.0f, 2.0f), 573.92f);
                             }
 
-                    events.ScheduleEvent(EVENT_SCENE_0 + 310, 4000);
+                    events.ScheduleEvent(EVENT_SCENE_0 + 310, 4s);
                     break;
                 case EVENT_SCENE_0+310:
                     DoSummonAction(NPC_TIRION_MOGRAINE, ACTION_SUMMON_TALK, 0);
                     DoSummonAction(NPC_TIRION_LICH_KING, ACTION_SUMMON_STAND_STATE, UNIT_STAND_STATE_STAND);
                     me->SummonGameObject(GO_ESCAPE_PORTAL, 6133.83f, 2757.24f, 573.914f, 1.97f, 0.0f, 0.0f, 0.0f, 0.0f, 60);
                     me->CastSpell(me, SPELL_TIRIONS_GAMBIT_CREDIT, true);
-                    events.ScheduleEvent(EVENT_SCENE_0 + 31, 6000);
+                    events.ScheduleEvent(EVENT_SCENE_0 + 31, 6s);
                     DoSummonAction(NPC_DISGUISED_CRUSADER, ACTION_SUMMON_EMOTE, EMOTE_ONESHOT_NONE);
                     break;
                 case EVENT_SCENE_0+31:
                     DoSummonAction(NPC_TIRION_THASSARIAN, ACTION_SUMMON_TALK, 1);
-                    events.ScheduleEvent(EVENT_SCENE_0 + 32, 7000);
+                    events.ScheduleEvent(EVENT_SCENE_0 + 32, 7s);
                     break;
                 case EVENT_SCENE_0+32:
                     DoSummonAction(NPC_TIRION_MOGRAINE, ACTION_SUMMON_TALK, 1);
-                    events.ScheduleEvent(EVENT_SCENE_0 + 33, 7000);
+                    events.ScheduleEvent(EVENT_SCENE_0 + 33, 7s);
                     break;
                 case EVENT_SCENE_0+33:
                     for (SummonList::const_iterator itr = summons.begin(); itr != summons.end(); ++itr)
@@ -1538,7 +1538,7 @@ public:
             }
 
             events.Reset();
-            events.ScheduleEvent(EVENT_DUMMY_RECAST_DEFEND, 5000);
+            events.ScheduleEvent(EVENT_DUMMY_RECAST_DEFEND, 5s);
         }
 
         void EnterEvadeMode()
@@ -2090,7 +2090,7 @@ public:
                     break;
                 case SPELL_RIDE:
                     DoCastAOE(SPELL_PING_BUNNY);
-                    events.ScheduleEvent(EVENT_FLY_AWAY, 100);
+                    events.ScheduleEvent(EVENT_FLY_AWAY, 100ms);
                     break;
             }
         }

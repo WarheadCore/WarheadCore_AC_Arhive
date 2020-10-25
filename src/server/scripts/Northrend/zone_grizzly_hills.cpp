@@ -845,7 +845,7 @@ public:
                         me->GetMotionMaster()->MoveIdle();
                         me->SetFacingToObject(player);
                         _runningScript = true;
-                        _events.ScheduleEvent(EVENT_LAKEFROG_1, 2000);
+                        _events.ScheduleEvent(EVENT_LAKEFROG_1, 2s);
                     }
                 }
             }

@@ -403,7 +403,7 @@ public:
             events.Reset();
         }
 
-        void EnterCombat(Unit*  /*who*/)
+        void EnterCombat(Unit* /*who*/)
         {
             events.Reset();
 
@@ -413,7 +413,7 @@ public:
             events.RescheduleEvent(2, 3s, 4s); // claw
         }
 
-        void SpellHit(Unit*  /*caster*/, const SpellInfo* spell)
+        void SpellHit(Unit* /*caster*/, const SpellInfo* spell)
         {
             if (spell->Id == SPELL_BK_GHOUL_EXPLODE)
             {

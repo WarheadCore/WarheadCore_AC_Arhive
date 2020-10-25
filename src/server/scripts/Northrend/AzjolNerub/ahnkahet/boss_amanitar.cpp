@@ -94,7 +94,7 @@ public:
             events.ScheduleEvent(EVENT_AMANITAR_ROOTS, 5s, 9s);
             events.ScheduleEvent(EVENT_AMANITAR_BASH, 10s, 14s);
             events.ScheduleEvent(EVENT_AMANITAR_BOLT, 15s, 20s);
-            events.ScheduleEvent(EVENT_AMANITAR_MINI, 30000);
+            events.ScheduleEvent(EVENT_AMANITAR_MINI, 30s);
             events.ScheduleEvent(EVENT_AMANITAR_SPAWN, 0s);
         }
 

@@ -285,14 +285,14 @@ public:
             {
                 case POINT_CENTER:
                     me->CastSpell(me, SPELL_INCITE_TERROR, false);
-                    events.ScheduleEvent(EVENT_AIR_PHASE, 100000 + uint32(Is25ManRaid() ? 0 : 20000));
-                    events.ScheduleEvent(EVENT_AIR_START_FLYING, 2500);
+                    events.ScheduleEvent(EVENT_AIR_PHASE, 100s + (Is25ManRaid() ? 0s : 20s));
+                    events.ScheduleEvent(EVENT_AIR_START_FLYING, 2500ms);
                     break;
                 case POINT_AIR:
                     _bloodboltedPlayers.clear();
                     me->CastSpell(me, SPELL_BLOODBOLT_WHIRL, false);
                     Talk(SAY_AIR_PHASE);
-                    events.ScheduleEvent(EVENT_AIR_FLY_DOWN, 7000);
+                    events.ScheduleEvent(EVENT_AIR_FLY_DOWN, 7s);
                     break;
                 case POINT_GROUND:
                     me->SetCanFly(false);
@@ -388,7 +388,7 @@ public:
                                 {
                                     _tankGUID = 0;
                                     _offtankGUID = 0;
-                                    events.ScheduleEvent(EVENT_BLOOD_MIRROR, 2500);
+                                    events.ScheduleEvent(EVENT_BLOOD_MIRROR, 2500ms);
                                     break;
                                 }
 
@@ -404,7 +404,7 @@ public:
                             }
                         }
                     }
-                    events.ScheduleEvent(EVENT_BLOOD_MIRROR, 2500);
+                    events.ScheduleEvent(EVENT_BLOOD_MIRROR, 2500ms);
                     break;
                 case EVENT_DELIRIOUS_SLASH:
                     if (!me->HasReactState(REACT_PASSIVE))
@@ -419,14 +419,14 @@ public:
                                 target = me->GetVictim();
                         if (!target)
                         {
-                            events.ScheduleEvent(EVENT_DELIRIOUS_SLASH, 5000);
+                            events.ScheduleEvent(EVENT_DELIRIOUS_SLASH, 5s);
                             break;
                         }
                         me->CastSpell(target, SPELL_DELIRIOUS_SLASH, false);
-                        events.ScheduleEvent(EVENT_DELIRIOUS_SLASH, urand(20000, 24000));
+                        events.ScheduleEvent(EVENT_DELIRIOUS_SLASH, 20s, 24s);
                         break;
                     }
-                    events.ScheduleEvent(EVENT_DELIRIOUS_SLASH, 5000);
+                    events.ScheduleEvent(EVENT_DELIRIOUS_SLASH, 5s);
                     break;
                 case EVENT_PACT_OF_THE_DARKFALLEN:
                     if (!me->HasReactState(REACT_PASSIVE))
@@ -443,13 +443,13 @@ public:
                             Talk(SAY_PACT_OF_THE_DARKFALLEN);
                             for (std::list<Player*>::iterator itr = myList.begin(); itr != myList.end(); ++itr)
                                 me->CastSpell(*itr, SPELL_PACT_OF_THE_DARKFALLEN, false);
-                            events.ScheduleEvent(EVENT_PACT_OF_THE_DARKFALLEN, 30000);
+                            events.ScheduleEvent(EVENT_PACT_OF_THE_DARKFALLEN, 30s);
                         }
                         else
-                            events.ScheduleEvent(EVENT_PACT_OF_THE_DARKFALLEN, 5000);
+                            events.ScheduleEvent(EVENT_PACT_OF_THE_DARKFALLEN, 5s);
                         break;
                     }
-                    events.ScheduleEvent(EVENT_PACT_OF_THE_DARKFALLEN, 5000);
+                    events.ScheduleEvent(EVENT_PACT_OF_THE_DARKFALLEN, 5s);
                     break;
                 case EVENT_SWARMING_SHADOWS:
                     if (!me->HasReactState(REACT_PASSIVE))
@@ -470,10 +470,10 @@ public:
                             me->CastSpell(target, SPELL_SWARMING_SHADOWS, false);
                         }
 
-                        events.ScheduleEvent(EVENT_SWARMING_SHADOWS, 30000);
+                        events.ScheduleEvent(EVENT_SWARMING_SHADOWS, 30s);
                         break;
                     }
-                    events.ScheduleEvent(EVENT_SWARMING_SHADOWS, 5000);
+                    events.ScheduleEvent(EVENT_SWARMING_SHADOWS, 5s);
                     break;
                 case EVENT_TWILIGHT_BLOODBOLT:
                     if (!me->HasReactState(REACT_PASSIVE))
@@ -489,10 +489,10 @@ public:
                         for (std::list<Player*>::iterator itr = myList.begin(); itr != myList.end(); ++itr)
                             me->CastSpell(*itr, SPELL_TWILIGHT_BLOODBOLT, false);
                         me->CastSpell(me, SPELL_TWILIGHT_BLOODBOLT_TARGET, false);
-                        events.ScheduleEvent(EVENT_TWILIGHT_BLOODBOLT, urand(10000, 15000));
+                        events.ScheduleEvent(EVENT_TWILIGHT_BLOODBOLT, 10s, 15s);
                         break;
                     }
-                    events.ScheduleEvent(EVENT_TWILIGHT_BLOODBOLT, 5000);
+                    events.ScheduleEvent(EVENT_TWILIGHT_BLOODBOLT, 5s);
                     break;
                 case EVENT_AIR_PHASE:
                     me->AttackStop();

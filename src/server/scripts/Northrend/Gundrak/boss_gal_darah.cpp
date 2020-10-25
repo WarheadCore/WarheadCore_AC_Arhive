@@ -149,7 +149,7 @@ public:
             if (events.GetNextEventTime(EVENT_KILL_TALK) == 0)
             {
                 Talk(SAY_SLAY);
-                events.ScheduleEvent(EVENT_KILL_TALK, 6000);
+                events.ScheduleEvent(EVENT_KILL_TALK, 6s);
             }
         }
 
@@ -167,7 +167,7 @@ public:
                 case EVENT_STAMPEDE:
                     Talk(SAY_SUMMON_RHINO);
                     me->CastSpell(me->GetVictim(), SPELL_STAMPEDE, false);
-                    events.ScheduleEvent(EVENT_STAMPEDE, 15000);
+                    events.ScheduleEvent(EVENT_STAMPEDE, 15);
                     break;
                 case EVENT_WHIRLING_SLASH:
                     if (++phaseCounter >= 3)
@@ -178,21 +178,21 @@ public:
                         phaseCounter = 0;
                         return;
                     }
-                    events.ScheduleEvent(EVENT_WHIRLING_SLASH, 21000);
+                    events.ScheduleEvent(EVENT_WHIRLING_SLASH, 21s);
                     me->CastSpell(me, SPELL_WHIRLING_SLASH, false);
                     break;
                 case EVENT_PUNCTURE:
                     me->CastSpell(me->GetVictim(), SPELL_PUNCTURE, false);
-                    events.ScheduleEvent(EVENT_PUNCTURE, 8000);
+                    events.ScheduleEvent(EVENT_PUNCTURE, 8s);
                     break;
                 case EVENT_ENRAGE:
                     me->CastSpell(me, SPELL_ENRAGE, false);
-                    events.ScheduleEvent(EVENT_ENRAGE, 20000);
+                    events.ScheduleEvent(EVENT_ENRAGE, 20s);
                     break;
                 case EVENT_STOMP:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 30.0f, true))
                         me->CastSpell(target, SPELL_STOMP, false);
-                    events.ScheduleEvent(EVENT_STOMP, 20000);
+                    events.ScheduleEvent(EVENT_STOMP, 20s);
                     break;
                 case EVENT_IMPALING_CHARGE:
                     if (++phaseCounter >= 3)
@@ -203,7 +203,7 @@ public:
                         phaseCounter = 0;
                         return;
                     }
-                    events.ScheduleEvent(EVENT_IMPALING_CHARGE, 21000);
+                    events.ScheduleEvent(EVENT_IMPALING_CHARGE, 21s);
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 100.0f, true))
                     {
                         me->CastSpell(target, SPELL_IMPALING_CHARGE, false);

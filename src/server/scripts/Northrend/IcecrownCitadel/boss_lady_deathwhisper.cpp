@@ -279,13 +279,13 @@ public:
 
             events.Reset();
             events.SetPhase(PHASE_ONE);
-            events.ScheduleEvent(EVENT_BERSERK, 600000);
-            events.ScheduleEvent(EVENT_SPELL_DEATH_AND_DECAY, 10000);
+            events.ScheduleEvent(EVENT_BERSERK, 10min);
+            events.ScheduleEvent(EVENT_SPELL_DEATH_AND_DECAY, 10s);
             if (GetDifficulty() != RAID_DIFFICULTY_10MAN_NORMAL)
-                events.ScheduleEvent(EVENT_SPELL_DOMINATE_MIND_25, 30000);
-            events.ScheduleEvent(EVENT_SPELL_SHADOW_BOLT, 2000, 0, PHASE_ONE);
-            events.ScheduleEvent(EVENT_SUMMON_WAVE_P1, 5000, 0, PHASE_ONE);
-            events.ScheduleEvent(EVENT_EMPOWER_CULTIST, urand(20000, 30000), 0, PHASE_ONE);
+                events.ScheduleEvent(EVENT_SPELL_DOMINATE_MIND_25, 30s);
+            events.ScheduleEvent(EVENT_SPELL_SHADOW_BOLT, 2s, 0, PHASE_ONE);
+            events.ScheduleEvent(EVENT_SUMMON_WAVE_P1, 5s, 0, PHASE_ONE);
+            events.ScheduleEvent(EVENT_EMPOWER_CULTIST, 20s, 30s, 0, PHASE_ONE);
 
             Talk(SAY_AGGRO);
             me->RemoveAurasDueToSpell(SPELL_SHADOW_CHANNELING);
@@ -556,12 +556,12 @@ public:
                 _introDone = true;
                 Talk(SAY_INTRO_1);
                 events.SetPhase(PHASE_INTRO);
-                events.ScheduleEvent(EVENT_INTRO_2, 11000, 0, PHASE_INTRO);
-                events.ScheduleEvent(EVENT_INTRO_3, 21000, 0, PHASE_INTRO);
-                events.ScheduleEvent(EVENT_INTRO_4, 31500, 0, PHASE_INTRO);
-                events.ScheduleEvent(EVENT_INTRO_5, 39500, 0, PHASE_INTRO);
-                events.ScheduleEvent(EVENT_INTRO_6, 48500, 0, PHASE_INTRO);
-                events.ScheduleEvent(EVENT_INTRO_7, 58000, 0, PHASE_INTRO);
+                events.ScheduleEvent(EVENT_INTRO_2, 11s, 0, PHASE_INTRO);
+                events.ScheduleEvent(EVENT_INTRO_3, 21s, 0, PHASE_INTRO);
+                events.ScheduleEvent(EVENT_INTRO_4, 31500ms, 0, PHASE_INTRO);
+                events.ScheduleEvent(EVENT_INTRO_5, 39500ms, 0, PHASE_INTRO);
+                events.ScheduleEvent(EVENT_INTRO_6, 48500ms, 0, PHASE_INTRO);
+                events.ScheduleEvent(EVENT_INTRO_7, 58s, 0, PHASE_INTRO);
             }
         }
 

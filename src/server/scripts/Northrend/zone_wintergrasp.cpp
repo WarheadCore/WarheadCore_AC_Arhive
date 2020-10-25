@@ -334,7 +334,7 @@ public:
         npc_wg_queueAI(Creature* creature) : ScriptedAI(creature)
         {
             if (creature->GetEntry() == NPC_ARCANIST_BRAEDIN)
-                events.ScheduleEvent(EVENT_ARCANIST_BRAEDIN_YELL, 0);
+                events.ScheduleEvent(EVENT_ARCANIST_BRAEDIN_YELL, 0s);
             else if (creature->GetEntry() == NPC_MAGISTER_SURDIEL)
                 events.ScheduleEvent(EVENT_MAGISTER_SURDIEL_YELL, 0s);
 
@@ -359,11 +359,11 @@ public:
                         if (wintergrasp->IsWarTime())
                         {
                             Talk(SAY_ARCANIST_BRAEDIN);
-                            events.ScheduleEvent(EVENT_ARCANIST_BRAEDIN_YELL, 240000);
+                            events.ScheduleEvent(EVENT_ARCANIST_BRAEDIN_YELL, 4min);
                             break;
                         }
                     }
-                    events.ScheduleEvent(EVENT_ARCANIST_BRAEDIN_YELL, 5000);
+                    events.ScheduleEvent(EVENT_ARCANIST_BRAEDIN_YELL, 5s);
                     break;
                 case EVENT_MAGISTER_SURDIEL_YELL:
                     if (Battlefield* wintergrasp = sBattlefieldMgr->GetBattlefieldByBattleId(BATTLEFIELD_BATTLEID_WG))
@@ -372,15 +372,15 @@ public:
                         if (!wintergrasp->IsWarTime() && timer < 5 * MINUTE && timer > 4 * MINUTE)
                         {
                             Talk(SAY_MAGISTER_SURDIEL);
-                            events.ScheduleEvent(EVENT_MAGISTER_SURDIEL_YELL, 300000);
+                            events.ScheduleEvent(EVENT_MAGISTER_SURDIEL_YELL, 5min);
                             break;
                         }
                     }
-                    events.ScheduleEvent(EVENT_MAGISTER_SURDIEL_YELL, 5000);
+                    events.ScheduleEvent(EVENT_MAGISTER_SURDIEL_YELL, 5s);
                     break;
                 case EVENT_SPELL_FROST_ARMOR:
                     me->CastSpell(me, SPELL_FROST_ARMOR, true);
-                    events.ScheduleEvent(EVENT_SPELL_FROST_ARMOR, 900000);
+                    events.ScheduleEvent(EVENT_SPELL_FROST_ARMOR, 15min);
                     break;
             }
         }

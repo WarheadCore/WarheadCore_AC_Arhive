@@ -216,17 +216,17 @@ public:
             {
                 case EVENT_CLEAVE:
                     me->CastSpell(me->GetVictim(), SPELL_CLEAVE, false);
-                    events.ScheduleEvent(EVENT_CLEAVE, 24000);
+                    events.ScheduleEvent(EVENT_CLEAVE, 24s);
                     break;
                 case EVENT_BLADE_TEMPEST:
                     me->CastSpell(me, SPELL_BLADE_TEMPEST, false);
-                    events.ScheduleEvent(EVENT_BLADE_TEMPEST, 24000);
+                    events.ScheduleEvent(EVENT_BLADE_TEMPEST, 24s);
                     break;
                 case EVENT_ENERVATING_BRAND:
                     for (uint8 i = 0; i < RAID_MODE<uint8>(2, 4, 2, 4); i++)
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 45.0f, true, -SPELL_ENERVATING_BRAND))
                             me->CastSpell(target, SPELL_ENERVATING_BRAND, true);
-                    events.ScheduleEvent(EVENT_ENERVATING_BRAND, 26000);
+                    events.ScheduleEvent(EVENT_ENERVATING_BRAND, 26s);
                     break;
                 case EVENT_CHECK_HEALTH1:
                     if (me->HealthBelowPct(50))
@@ -234,7 +234,7 @@ public:
                         DoAction(ACTION_CLONE);
                         break;
                     }
-                    events.ScheduleEvent(EVENT_CHECK_HEALTH1, 1000);
+                    events.ScheduleEvent(EVENT_CHECK_HEALTH1, 1s);
                     break;
                 case EVENT_CHECK_HEALTH2:
                     if (me->HealthBelowPct(66))
@@ -242,7 +242,7 @@ public:
                         DoAction(ACTION_CLONE);
                         break;
                     }
-                    events.ScheduleEvent(EVENT_CHECK_HEALTH2, 1000);
+                    events.ScheduleEvent(EVENT_CHECK_HEALTH2, 1s);
                     break;
                 case EVENT_CHECK_HEALTH3:
                     if (me->HealthBelowPct(33))
@@ -250,7 +250,7 @@ public:
                         DoAction(ACTION_CLONE);
                         break;
                     }
-                    events.ScheduleEvent(EVENT_CHECK_HEALTH3, 1000);
+                    events.ScheduleEvent(EVENT_CHECK_HEALTH3, 1s);
                     break;
                 case EVENT_SUMMON_CLONE:
                     me->CastSpell(me, SPELL_CLONE, false);

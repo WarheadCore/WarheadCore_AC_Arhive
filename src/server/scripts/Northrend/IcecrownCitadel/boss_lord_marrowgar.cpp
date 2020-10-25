@@ -199,16 +199,16 @@ public:
                     me->SetReactState(REACT_PASSIVE); // to prevent chasing another target on UpdateVictim()
                     me->GetMotionMaster()->MoveIdle();
                     me->GetMotionMaster()->MovementExpired();
-                    events.RepeatEvent(urand(90000, 95000));
-                    events.ScheduleEvent(EVENT_BEGIN_BONE_STORM, 3050);
+                    events.RepeatEvent(90s, 95s);
+                    events.ScheduleEvent(EVENT_BEGIN_BONE_STORM, 3050ms);
                     break;
                 case EVENT_BEGIN_BONE_STORM:
                     {
-                        uint32 _boneStormDuration = RAID_MODE<uint32>(20000, 30000, 20000, 30000);
+                        Seconds _boneStormDuration = RAID_MODE<uint32>(20s, 30s, 20s, 30s);
                         if (Aura* pStorm = me->GetAura(SPELL_BONE_STORM))
                             pStorm->SetDuration(int32(_boneStormDuration));
-                        events.ScheduleEvent(EVENT_BONE_STORM_MOVE, 0);
-                        events.ScheduleEvent(EVENT_END_BONE_STORM, _boneStormDuration + 1);
+                        events.ScheduleEvent(EVENT_BONE_STORM_MOVE, 0s);
+                        events.ScheduleEvent(EVENT_END_BONE_STORM, _boneStormDuration + 10ms);
                     }
                     break;
                 case EVENT_BONE_STORM_MOVE:

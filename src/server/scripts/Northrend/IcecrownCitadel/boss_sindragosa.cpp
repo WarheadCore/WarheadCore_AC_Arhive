@@ -451,20 +451,20 @@ public:
                     me->SetInCombatWithZone();
                     break;
                 case POINT_TAKEOFF:
-                    events.ScheduleEvent(EVENT_AIR_MOVEMENT, 0);
+                    events.ScheduleEvent(EVENT_AIR_MOVEMENT, 0s);
                     break;
                 case POINT_AIR_PHASE:
                     me->CastCustomSpell(SPELL_ICE_TOMB_TARGET, SPELLVALUE_MAX_TARGETS, RAID_MODE<int32>(2, 5, 2, 6), nullptr);
                     me->SetFacingTo(float(M_PI));
-                    events.ScheduleEvent(EVENT_AIR_MOVEMENT_FAR, 0); // won't be processed during cast time anyway, so 0
-                    events.ScheduleEvent(EVENT_FROST_BOMB, 7000);
+                    events.ScheduleEvent(EVENT_AIR_MOVEMENT_FAR, 0s); // won't be processed during cast time anyway, so 0
+                    events.ScheduleEvent(EVENT_FROST_BOMB, 7s);
                     _bombCount = 0;
                     break;
                 case POINT_AIR_PHASE_FAR:
                     me->SetFacingTo(float(M_PI));
                     break;
                 case POINT_LAND:
-                    events.ScheduleEvent(EVENT_LAND_GROUND, 0);
+                    events.ScheduleEvent(EVENT_LAND_GROUND, 0s);
                     break;
                 case POINT_LAND_GROUND:
                     {
@@ -552,7 +552,7 @@ public:
                     break;
                 case EVENT_CLEAVE:
                     me->CastSpell(me->GetVictim(), SPELL_CLEAVE, false);
-                    events.ScheduleEvent(EVENT_CLEAVE, urand(10000, 15000), EVENT_GROUP_LAND_PHASE);
+                    events.ScheduleEvent(EVENT_CLEAVE, 10s, 15s, EVENT_GROUP_LAND_PHASE);
                     break;
                 case EVENT_TAIL_SMASH:
                     me->DisableRotate(true);
@@ -560,8 +560,8 @@ public:
                     me->SendMovementFlagUpdate();
                     me->CastSpell(me->GetVictim(), SPELL_TAIL_SMASH, false);
                     events.DelayEventsToMax(1, 0);
-                    events.ScheduleEvent(EVENT_UNROOT, 0);
-                    events.ScheduleEvent(EVENT_TAIL_SMASH, urand(22000, 27000), EVENT_GROUP_LAND_PHASE);
+                    events.ScheduleEvent(EVENT_UNROOT, 0s);
+                    events.ScheduleEvent(EVENT_TAIL_SMASH, 22s, 27s, EVENT_GROUP_LAND_PHASE);
                     break;
                 case EVENT_FROST_BREATH:
                     me->DisableRotate(true);
@@ -569,8 +569,8 @@ public:
                     me->SendMovementFlagUpdate();
                     me->CastSpell(me->GetVictim(), _isThirdPhase ? SPELL_FROST_BREATH_P2 : SPELL_FROST_BREATH_P1, false);
                     events.DelayEventsToMax(1, 0);
-                    events.ScheduleEvent(EVENT_UNROOT, 0);
-                    events.ScheduleEvent(EVENT_FROST_BREATH, urand(20000, 25000), EVENT_GROUP_LAND_PHASE);
+                    events.ScheduleEvent(EVENT_UNROOT, 0s);
+                    events.ScheduleEvent(EVENT_FROST_BREATH, 20s, 25s, EVENT_GROUP_LAND_PHASE);
                     break;
                 case EVENT_UNROOT:
                     me->DisableRotate(false);
@@ -579,12 +579,12 @@ public:
                 case EVENT_UNCHAINED_MAGIC:
                     Talk(SAY_UNCHAINED_MAGIC);
                     me->CastSpell((Unit*)NULL, SPELL_UNCHAINED_MAGIC, false);
-                    events.ScheduleEvent(EVENT_UNCHAINED_MAGIC, urand(30000, 35000), EVENT_GROUP_LAND_PHASE);
+                    events.ScheduleEvent(EVENT_UNCHAINED_MAGIC, 30s, 35s, EVENT_GROUP_LAND_PHASE);
                     break;
                 case EVENT_ICY_GRIP:
                     me->CastSpell((Unit*)NULL, SPELL_ICY_GRIP, false);
                     events.DelayEventsToMax(1001, 0);
-                    events.ScheduleEvent(EVENT_BLISTERING_COLD, 1000, EVENT_GROUP_LAND_PHASE);
+                    events.ScheduleEvent(EVENT_BLISTERING_COLD, 1s, EVENT_GROUP_LAND_PHASE);
                     if (uint32 evTime = events.GetNextEventTime(EVENT_ICE_TOMB))
                         if (events.GetTimer() > evTime || evTime - events.GetTimer() < 7000)
                             events.RescheduleEvent(EVENT_ICE_TOMB, 7s);
@@ -592,7 +592,7 @@ public:
                 case EVENT_BLISTERING_COLD:
                     Talk(EMOTE_WARN_BLISTERING_COLD);
                     me->CastSpell(me, SPELL_BLISTERING_COLD, false);
-                    events.ScheduleEvent(EVENT_BLISTERING_COLD_YELL, 5000, EVENT_GROUP_LAND_PHASE);
+                    events.ScheduleEvent(EVENT_BLISTERING_COLD_YELL, 5s, EVENT_GROUP_LAND_PHASE);
                     if (_isThirdPhase)
                         events.RescheduleEvent(EVENT_ICY_GRIP, 65s, 70s);
                     break;
@@ -624,7 +624,7 @@ public:
                     me->SendMovementFlagUpdate();
                     me->GetMotionMaster()->MoveTakeoff(POINT_TAKEOFF, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ() + 20.0f, 10.0f);
                     events.CancelEventGroup(EVENT_GROUP_LAND_PHASE);
-                    events.ScheduleEvent(EVENT_AIR_PHASE, 110000);
+                    events.ScheduleEvent(EVENT_AIR_PHASE, 110s);
                     break;
                 case EVENT_AIR_MOVEMENT:
                     me->GetMotionMaster()->MovePoint(POINT_AIR_PHASE, SindragosaAirPos);
@@ -1409,9 +1409,9 @@ public:
         void Reset()
         {
             _events.Reset();
-            _events.ScheduleEvent(EVENT_BELLOWING_ROAR, urand(20000, 25000));
-            _events.ScheduleEvent(EVENT_CLEAVE_SPINESTALKER, urand(10000, 15000));
-            _events.ScheduleEvent(EVENT_TAIL_SWEEP, urand(8000, 12000));
+            _events.ScheduleEvent(EVENT_BELLOWING_ROAR, 20s, 25s);
+            _events.ScheduleEvent(EVENT_CLEAVE_SPINESTALKER, 10s, 15s);
+            _events.ScheduleEvent(EVENT_TAIL_SWEEP, 8s, 12s);
             me->SetReactState(REACT_DEFENSIVE);
 
             if (!_summoned)
@@ -1494,15 +1494,15 @@ public:
             {
                 case EVENT_BELLOWING_ROAR:
                     me->CastSpell(me, SPELL_BELLOWING_ROAR, false);
-                    _events.ScheduleEvent(EVENT_BELLOWING_ROAR, urand(25000, 30000));
+                    _events.ScheduleEvent(EVENT_BELLOWING_ROAR, 25s, 30s);
                     break;
                 case EVENT_CLEAVE_SPINESTALKER:
                     me->CastSpell(me->GetVictim(), SPELL_CLEAVE_SPINESTALKER, false);
-                    _events.ScheduleEvent(EVENT_CLEAVE_SPINESTALKER, urand(10000, 15000));
+                    _events.ScheduleEvent(EVENT_CLEAVE_SPINESTALKER, 10s, 15s);
                     break;
                 case EVENT_TAIL_SWEEP:
                     me->CastSpell(me->GetVictim(), SPELL_TAIL_SWEEP, false);
-                    _events.ScheduleEvent(EVENT_TAIL_SWEEP, urand(22000, 25000));
+                    _events.ScheduleEvent(EVENT_TAIL_SWEEP, 22s, 25s);
                     break;
                 default:
                     break;
@@ -1650,10 +1650,10 @@ public:
                     if (!me->IsFlying())
                     {
                         me->CastSpell(me->GetVictim(), SPELL_FROST_BREATH, false);
-                        _events.ScheduleEvent(EVENT_FROST_BREATH_RIMEFANG, urand(20000, 25000));
+                        _events.ScheduleEvent(EVENT_FROST_BREATH_RIMEFANG, 20s, 25s);
                     }
                     else
-                        _events.ScheduleEvent(EVENT_FROST_BREATH_RIMEFANG, 5000);
+                        _events.ScheduleEvent(EVENT_FROST_BREATH_RIMEFANG, 5s);
                     break;
                 case EVENT_ICY_BLAST:
                     {
@@ -1675,7 +1675,7 @@ public:
                         else destZ = me->GetPositionZ() + 25.0f;
                         me->GetMotionMaster()->MoveTakeoff(0, me->GetPositionX(), me->GetPositionY(), destZ, me->GetSpeed(MOVE_RUN));
                         uint32 moveTime = static_cast<uint32>(fabs(destZ - me->GetPositionZ()) / (me->GetSpeed(MOVE_RUN) * 0.001f));
-                        _events.ScheduleEvent(EVENT_ICY_BLAST, 1min + Milliseconds(moveTime), 70s + Milliseconds(moveTime));
+                        _events.ScheduleEvent(EVENT_ICY_BLAST, randtime(1min, 70s) + Milliseconds(moveTime));
                         _events.ScheduleEvent(EVENT_ICY_BLAST_CAST, Milliseconds(moveTime) + 250ms);
                         break;
                     }
@@ -1687,7 +1687,7 @@ public:
                             me->SetFacingToObject(target);
                             me->CastSpell(target, SPELL_ICY_BLAST, false);
                         }
-                        _events.ScheduleEvent(EVENT_ICY_BLAST_CAST, 3000);
+                        _events.ScheduleEvent(EVENT_ICY_BLAST_CAST, 3s);
                     }
                     else
                     {
@@ -1822,7 +1822,7 @@ public:
                 _events.ScheduleEvent(EVENT_CONCUSSIVE_SHOCK, 8s, 10s);
             }
             else
-                _events.ScheduleEvent(EVENT_WHELP_FROST_BLAST, urand(3000, 6000));
+                _events.ScheduleEvent(EVENT_WHELP_FROST_BLAST, 3s, 6s);
         }
 
         void EnterCombat(Unit* who)
@@ -1882,15 +1882,15 @@ public:
             {
                 case EVENT_FROSTWARDEN_ORDER_WHELP:
                     me->CastSpell(me, SPELL_ORDER_WHELP, false);
-                    _events.ScheduleEvent(EVENT_FROSTWARDEN_ORDER_WHELP, 3000);
+                    _events.ScheduleEvent(EVENT_FROSTWARDEN_ORDER_WHELP, 3s);
                     break;
                 case EVENT_CONCUSSIVE_SHOCK:
                     me->CastSpell(me, SPELL_CONCUSSIVE_SHOCK, false);
-                    _events.ScheduleEvent(EVENT_CONCUSSIVE_SHOCK, urand(10000, 13000));
+                    _events.ScheduleEvent(EVENT_CONCUSSIVE_SHOCK, 10s, 13su);
                     break;
                 case EVENT_WHELP_FROST_BLAST:
                     me->CastSpell(me->GetVictim(), 71361, false);
-                    _events.ScheduleEvent(EVENT_WHELP_FROST_BLAST, urand(5000, 8000));
+                    _events.ScheduleEvent(EVENT_WHELP_FROST_BLAST, 5s, 8s);
                 default:
                     break;
             }

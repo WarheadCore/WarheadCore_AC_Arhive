@@ -223,13 +223,13 @@ public:
                             me->CastSpell(me, gaseousBlight[_inhaleCounter], true, nullptr, nullptr, me->GetGUID());
                     }
 
-                    events.ScheduleEvent(EVENT_INHALE_BLIGHT, 34000);
+                    events.ScheduleEvent(EVENT_INHALE_BLIGHT, 34s);
                     break;
                 case EVENT_GAS_SPORE:
                     Talk(EMOTE_WARN_GAS_SPORE);
                     Talk(EMOTE_GAS_SPORE);
                     me->CastCustomSpell(SPELL_GAS_SPORE, SPELLVALUE_MAX_TARGETS, RAID_MODE<int32>(2, 3, 2, 3), me);
-                    events.ScheduleEvent(EVENT_GAS_SPORE, urand(40000, 45000));
+                    events.ScheduleEvent(EVENT_GAS_SPORE, 40s, 45s);
                     events.DelayEventsToMax(20000, 1); // delay EVENT_VILE_GAS
                     break;
                 case EVENT_VILE_GAS:
@@ -444,8 +444,8 @@ public:
         {
             me->setActive(true);
             me->CastSpell(me, SPELL_PLAGUE_STENCH, true);
-            events.ScheduleEvent(EVENT_DECIMATE, urand(20000, 25000));
-            events.ScheduleEvent(EVENT_MORTAL_WOUND, urand(1500, 2500));
+            events.ScheduleEvent(EVENT_DECIMATE, 20s, 25s);
+            events.ScheduleEvent(EVENT_MORTAL_WOUND, 1500ms, 2500ms);
         }
 
         void UpdateAI(uint32 diff)

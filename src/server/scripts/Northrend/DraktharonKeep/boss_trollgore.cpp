@@ -118,7 +118,7 @@ public:
                     me->CastSpell(me, SPELL_SUMMON_INVADER_A, true);
                     me->CastSpell(me, SPELL_SUMMON_INVADER_B, true);
                     me->CastSpell(me, SPELL_SUMMON_INVADER_C, true);
-                    events2.ScheduleEvent(EVENT_SPAWN_INVADERS, 30000);
+                    events2.ScheduleEvent(EVENT_SPAWN_INVADERS, 30s);
                     break;
             }
 
@@ -133,21 +133,21 @@ public:
             {
                 case EVENT_SPELL_INFECTED_WOUND:
                     me->CastSpell(me->GetVictim(), SPELL_INFECTED_WOUND, false);
-                    events.ScheduleEvent(EVENT_SPELL_INFECTED_WOUND, urand(25000, 35000));
+                    events.ScheduleEvent(EVENT_SPELL_INFECTED_WOUND, 25s, 35s);
                     break;
                 case EVENT_SPELL_CRUSH:
                     me->CastSpell(me->GetVictim(), SPELL_CRUSH, false);
-                    events.ScheduleEvent(EVENT_SPELL_CRUSH, urand(10000, 15000));
+                    events.ScheduleEvent(EVENT_SPELL_CRUSH, 10s, 15s);
                     break;
                 case EVENT_SPELL_CONSUME:
                     Talk(SAY_CONSUME);
                     me->CastSpell(me, SPELL_CONSUME, false);
-                    events.ScheduleEvent(EVENT_SPELL_CONSUME, 15000);
+                    events.ScheduleEvent(EVENT_SPELL_CONSUME, 15s);
                     break;
                 case EVENT_SPELL_CORPSE_EXPLODE:
                     Talk(SAY_EXPLODE);
                     me->CastSpell(me, SPELL_CORPSE_EXPLODE, false);
-                    events.ScheduleEvent(EVENT_SPELL_CORPSE_EXPLODE, urand(15000, 19000));
+                    events.ScheduleEvent(EVENT_SPELL_CORPSE_EXPLODE, 15s, 19s);
                     break;
             }
 

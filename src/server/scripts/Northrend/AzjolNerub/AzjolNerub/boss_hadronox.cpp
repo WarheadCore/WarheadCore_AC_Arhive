@@ -286,7 +286,7 @@ public:
             {
                 case EVENT_CRUSHER_SMASH:
                     me->CastSpell(me->GetVictim(), SPELL_SMASH, false);
-                    events.ScheduleEvent(EVENT_CRUSHER_SMASH, 15000);
+                    events.ScheduleEvent(EVENT_CRUSHER_SMASH, 15s);
                     break;
                 case EVENT_CHECK_HEALTH:
                     if (me->HealthBelowPct(30))
@@ -295,7 +295,7 @@ public:
                         me->CastSpell(me, SPELL_FRENZY, false);
                         break;
                     }
-                    events.ScheduleEvent(EVENT_CHECK_HEALTH, 1000);
+                    events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
                     break;
             }
 

@@ -86,11 +86,12 @@ public:
             BossAI::EnterCombat(who);
             _raptorCount = 0;
 
-            events.ScheduleEvent(EVENT_SPELL_BELLOWING_ROAR, 33000);
-            events.ScheduleEvent(EVENT_SPELL_GRIEVOUS_BITE, 20000);
-            events.ScheduleEvent(EVENT_SPELL_MANGLING_SLASH, 18500);
-            events.ScheduleEvent(EVENT_SPELL_FEARSOME_ROAR, urand(10000, 20000));
-            events.ScheduleEvent(EVENT_SPELL_PIERCING_SLASH, 17000);
+            events.ScheduleEvent(EVENT_SPELL_BELLOWING_ROAR, 33s);
+            events.ScheduleEvent(EVENT_SPELL_GRIEVOUS_BITE, 20s);
+            events.ScheduleEvent(EVENT_SPELL_MANGLING_SLASH, 18500ms);
+            events.ScheduleEvent(EVENT_SPELL_FEARSOME_ROAR, 10s, 20s);
+            events.ScheduleEvent(EVENT_SPELL_PIERCING_SLASH, 17s);
+            
             if (IsHeroic())
             {
                 events.ScheduleEvent(EVENT_MENACING_CLAW, 21s);

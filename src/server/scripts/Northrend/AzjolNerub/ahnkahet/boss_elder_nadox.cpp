@@ -178,7 +178,7 @@ public:
             {
                 case EVENT_CHECK_HEALTH:
                     {
-                        events.RepeatEvent(1000);
+                        events.RepeatEvent(1s);
                         if (HealthBelowPct(50))
                         {
                             events.CancelEvent(EVENT_CHECK_HEALTH);

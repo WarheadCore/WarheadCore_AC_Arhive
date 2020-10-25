@@ -399,19 +399,19 @@ public:
                                 cr->AI()->AttackStart(me);
                             }
 
-                            events.ScheduleEvent(EVENT_CHECK_FINISH, 20000);
+                            events.ScheduleEvent(EVENT_CHECK_FINISH, 20s);
                             return;
                         }
 
                         ++phase;
-                        events.ScheduleEvent(EVENT_FIGHT_2, 35000);
+                        events.ScheduleEvent(EVENT_FIGHT_2, 35s);
                         break;
                     }
                 case EVENT_CHECK_FINISH:
                     {
                         if (me->FindNearestCreature(NPC_INFINITE_TIMERENDER, 50.0f))
                         {
-                            events.RepeatEvent(5000);
+                            events.RepeatEvent(5s);
                             return;
                         }
 
@@ -419,7 +419,7 @@ public:
                             player->GroupEventHappens(IsFuture() ? QUEST_MYSTERY_OF_THE_INFINITE : QUEST_MYSTERY_OF_THE_INFINITE_REDUX, me);
 
                         me->MonsterWhisper(IsFuture() ? "Look, $N, the hourglass has revealed Nozdormu!" : "What the heck? Nozdormu is up there!", getSummoner());
-                        events.ScheduleEvent(EVENT_FINISH_EVENT, 6000);
+                        events.ScheduleEvent(EVENT_FINISH_EVENT, 6s);
                         break;
                     }
                 case EVENT_FINISH_EVENT:
@@ -1545,7 +1545,7 @@ public:
                                 {
                                     case 0:
                                         ChangeImage(NPC_IMAGE_OF_KELTHUZAD, MODEL_IMAGE_OF_KELTHUZAD, SAY_KELTHUZAD_1);
-                                        _events.ScheduleEvent(EVENT_KELTHUZAD_2, 8000);
+                                        _events.ScheduleEvent(EVENT_KELTHUZAD_2, 8s);
                                         break;
                                     case 1:
                                         ChangeImage(NPC_IMAGE_OF_SAPPHIRON, MODEL_IMAGE_OF_SAPPHIRON, SAY_SAPPHIRON);
@@ -1565,7 +1565,7 @@ public:
                                         break;
                                     case 2:
                                         ChangeImage(NPC_IMAGE_OF_THANE, MODEL_IMAGE_OF_THANE, SAY_DEATH_KNIGHTS_1);
-                                        _events.ScheduleEvent(EVENT_DEATH_KNIGHTS_2, 10000);
+                                        _events.ScheduleEvent(EVENT_DEATH_KNIGHTS_2, 10s);
                                         break;
                                 }
                             }

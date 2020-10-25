@@ -811,15 +811,15 @@ public:
             {
                 time_t now = GameTime::GetGameTime();
                 if (_firstMageCooldown > now)
-                    _events.ScheduleEvent(EVENT_SUMMON_MAGE, (_firstMageCooldown - now) * IN_MILLISECONDS);
+                    _events.ScheduleEvent(EVENT_SUMMON_MAGE, Milliseconds((_firstMageCooldown - now) * IN_MILLISECONDS));
                 else
-                    _events.ScheduleEvent(EVENT_SUMMON_MAGE, 1);
+                    _events.ScheduleEvent(EVENT_SUMMON_MAGE, 10ms);
             }
             else if (action == ACTION_SPAWN_ALL_ADDS)
             {
-                _events.ScheduleEvent(EVENT_ADDS, 12000);
-                _events.ScheduleEvent(EVENT_CHECK_RIFLEMAN, 13000);
-                _events.ScheduleEvent(EVENT_CHECK_MORTAR, 13000);
+                _events.ScheduleEvent(EVENT_ADDS, 12s);
+                _events.ScheduleEvent(EVENT_CHECK_RIFLEMAN, 13s);
+                _events.ScheduleEvent(EVENT_CHECK_MORTAR, 13s);
                 if (Is25ManRaid())
                     _controller.SummonCreatures(me, SLOT_MAGE_1, SLOT_MORTAR_4);
                 else
@@ -854,7 +854,7 @@ public:
             {
                 _controller.ClearSlot(PassengerSlots(data));
                 if (data == SLOT_FREEZE_MAGE)
-                    _events.ScheduleEvent(EVENT_SUMMON_MAGE, urand(30000, 33500));
+                    _events.ScheduleEvent(EVENT_SUMMON_MAGE, 30s, 33500ms);
             }
         }
 
@@ -944,7 +944,7 @@ public:
                             if (Player* p = itr->GetSource())
                                 if (!p->IsGameMaster())
                                     p->SetInCombatState(true);
-                        _events.ScheduleEvent(EVENT_KEEP_PLAYER_IN_COMBAT, 4000);
+                        _events.ScheduleEvent(EVENT_KEEP_PLAYER_IN_COMBAT, 4s);
                     }
                     break;
 
@@ -974,8 +974,8 @@ public:
                             me->SummonCreature(NPC_TELEPORT_EXIT, x, y, z, o, TEMPSUMMON_TIMED_DESPAWN, 23000);
                         }
 
-                    _events.ScheduleEvent(EVENT_ADDS_BOARD_YELL, 6000);
-                    _events.ScheduleEvent(EVENT_ADDS, 60000);
+                    _events.ScheduleEvent(EVENT_ADDS_BOARD_YELL, 6s);
+                    _events.ScheduleEvent(EVENT_ADDS, 1min);
                     break;
                 case EVENT_ADDS_BOARD_YELL:
                     if (Creature* muradin = me->FindNearestCreature(NPC_IGB_MURADIN_BRONZEBEARD, 200.0f))
@@ -990,7 +990,7 @@ public:
                             _axethrowersYellCooldown = GameTime::GetGameTime() + 5;
                         }
                     }
-                    _events.ScheduleEvent(EVENT_CHECK_RIFLEMAN, 1500);
+                    _events.ScheduleEvent(EVENT_CHECK_RIFLEMAN, 1500ms);
                     break;
                 case EVENT_CHECK_MORTAR:
                     if (_controller.SummonCreatures(me, SLOT_MORTAR_1, Is25ManRaid() ? SLOT_MORTAR_4 : SLOT_MORTAR_2))
@@ -1001,12 +1001,12 @@ public:
                             _rocketeersYellCooldown = GameTime::GetGameTime() + 5;
                         }
                     }
-                    _events.ScheduleEvent(EVENT_CHECK_MORTAR, 1500);
+                    _events.ScheduleEvent(EVENT_CHECK_MORTAR, 1500ms);
                     break;
                 case EVENT_CLEAVE:
                     if (me->GetVictim())
                         me->CastSpell(me->GetVictim(), SPELL_CLEAVE, false);
-                    _events.ScheduleEvent(EVENT_CLEAVE, urand(4000, 8000));
+                    _events.ScheduleEvent(EVENT_CLEAVE, 4s, 8s);
                     break;
 
                 default:
@@ -1147,15 +1147,15 @@ public:
             {
                 time_t now = GameTime::GetGameTime();
                 if (_firstMageCooldown > now)
-                    _events.ScheduleEvent(EVENT_SUMMON_MAGE, (_firstMageCooldown - now) * IN_MILLISECONDS);
+                    _events.ScheduleEvent(EVENT_SUMMON_MAGE, Milliseconds((_firstMageCooldown - now) * IN_MILLISECONDS));
                 else
-                    _events.ScheduleEvent(EVENT_SUMMON_MAGE, 1);
+                    _events.ScheduleEvent(EVENT_SUMMON_MAGE, 10ms);
             }
             else if (action == ACTION_SPAWN_ALL_ADDS)
             {
-                _events.ScheduleEvent(EVENT_ADDS, 12000);
-                _events.ScheduleEvent(EVENT_CHECK_RIFLEMAN, 13000);
-                _events.ScheduleEvent(EVENT_CHECK_MORTAR, 13000);
+                _events.ScheduleEvent(EVENT_ADDS, 12s);
+                _events.ScheduleEvent(EVENT_CHECK_RIFLEMAN, 13s);
+                _events.ScheduleEvent(EVENT_CHECK_MORTAR, 13s);
                 if (Is25ManRaid())
                     _controller.SummonCreatures(me, SLOT_MAGE_1, SLOT_MORTAR_4);
                 else
@@ -1190,7 +1190,7 @@ public:
             {
                 _controller.ClearSlot(PassengerSlots(data));
                 if (data == SLOT_FREEZE_MAGE)
-                    _events.ScheduleEvent(EVENT_SUMMON_MAGE, urand(30000, 33500));
+                    _events.ScheduleEvent(EVENT_SUMMON_MAGE, 30s, 33500ms);
             }
         }
 
@@ -1283,7 +1283,7 @@ public:
                             if (Player* p = itr->GetSource())
                                 if (!p->IsGameMaster())
                                     p->SetInCombatState(true);
-                        _events.ScheduleEvent(EVENT_KEEP_PLAYER_IN_COMBAT, 4000);
+                        _events.ScheduleEvent(EVENT_KEEP_PLAYER_IN_COMBAT, 4s);
                     }
                     break;
 
@@ -1313,8 +1313,8 @@ public:
                             me->SummonCreature(NPC_TELEPORT_EXIT, x, y, z, o, TEMPSUMMON_TIMED_DESPAWN, 23000);
                         }
 
-                    _events.ScheduleEvent(EVENT_ADDS_BOARD_YELL, 6000);
-                    _events.ScheduleEvent(EVENT_ADDS, 60000);
+                    _events.ScheduleEvent(EVENT_ADDS_BOARD_YELL, 6s);
+                    _events.ScheduleEvent(EVENT_ADDS, 1min);
                     break;
                 case EVENT_ADDS_BOARD_YELL:
                     if (Creature* saurfang = me->FindNearestCreature(NPC_IGB_HIGH_OVERLORD_SAURFANG, 200.0f))
@@ -1329,7 +1329,7 @@ public:
                             _riflemanYellCooldown = GameTime::GetGameTime() + 5;
                         }
                     }
-                    _events.ScheduleEvent(EVENT_CHECK_RIFLEMAN, 1500);
+                    _events.ScheduleEvent(EVENT_CHECK_RIFLEMAN, 1500ms);
                     break;
                 case EVENT_CHECK_MORTAR:
                     if (_controller.SummonCreatures(me, SLOT_MORTAR_1, Is25ManRaid() ? SLOT_MORTAR_4 : SLOT_MORTAR_2))
@@ -1340,12 +1340,12 @@ public:
                             _mortarYellCooldown = GameTime::GetGameTime() + 5;
                         }
                     }
-                    _events.ScheduleEvent(EVENT_CHECK_MORTAR, 1500);
+                    _events.ScheduleEvent(EVENT_CHECK_MORTAR, 1500ms);
                     break;
                 case EVENT_CLEAVE:
                     if (me->GetVictim())
                         me->CastSpell(me->GetVictim(), SPELL_CLEAVE, false);
-                    _events.ScheduleEvent(EVENT_CLEAVE, urand(4000, 8000));
+                    _events.ScheduleEvent(EVENT_CLEAVE, 4s, 8s);
                     break;
 
                 default:
@@ -1652,11 +1652,11 @@ public:
         {
         }
 
-        void EnterCombat(Unit*  /*target*/)
+        void EnterCombat(Unit* /*target*/)
         {
             _events.Reset();
-            _events.ScheduleEvent(EVENT_BLADESTORM, urand(13000, 18000));
-            _events.ScheduleEvent(EVENT_WOUNDING_STRIKE, urand(5000, 10000));
+            _events.ScheduleEvent(EVENT_BLADESTORM, 13s, 18s);
+            _events.ScheduleEvent(EVENT_WOUNDING_STRIKE, 5s, 10s);
         }
 
         void UpdateAI(uint32 diff)
@@ -1683,11 +1683,11 @@ public:
                     break;
                 case EVENT_BLADESTORM:
                     me->CastSpell(me->GetVictim(), SPELL_BLADESTORM, false);
-                    _events.ScheduleEvent(EVENT_BLADESTORM, urand(25000, 30000));
+                    _events.ScheduleEvent(EVENT_BLADESTORM, 25s, 30s);
                     break;
                 case EVENT_WOUNDING_STRIKE:
                     me->CastSpell(me->GetVictim(), SPELL_WOUNDING_STRIKE, false);
-                    _events.ScheduleEvent(EVENT_WOUNDING_STRIKE, urand(7000, 13000));
+                    _events.ScheduleEvent(EVENT_WOUNDING_STRIKE, 7s, 13s);
                     break;
                 default:
                     break;
