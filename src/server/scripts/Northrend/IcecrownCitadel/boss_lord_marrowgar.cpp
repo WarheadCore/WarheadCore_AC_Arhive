@@ -204,7 +204,7 @@ public:
                     break;
                 case EVENT_BEGIN_BONE_STORM:
                     {
-                        Seconds _boneStormDuration = RAID_MODE<uint32>(20s, 30s, 20s, 30s);
+                        Seconds _boneStormDuration = RAID_MODE<Seconds>(20s, 30s, 20s, 30s);
                         if (Aura* pStorm = me->GetAura(SPELL_BONE_STORM))
                             pStorm->SetDuration(int32(_boneStormDuration));
                         events.ScheduleEvent(EVENT_BONE_STORM_MOVE, 0s);
