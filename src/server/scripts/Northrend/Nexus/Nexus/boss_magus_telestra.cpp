@@ -118,7 +118,7 @@ public:
             events.ScheduleEvent(EVENT_MAGUS_FIREBOMB, 0s);
             events.ScheduleEvent(EVENT_MAGUS_GRAVITY_WELL, 20s);
             events.ScheduleEvent(EVENT_MAGUS_HEALTH1, 1s);
-            
+
             if (IsHeroic())
                 events.ScheduleEvent(EVENT_MAGUS_HEALTH2, 1s);
         }

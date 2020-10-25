@@ -419,27 +419,27 @@ public:
                         break;
                     }
                 case ACTION_DESPAWN_ALGALON:
-                    _fightWon = true;                    
+                    _fightWon = true;
                     events.Reset();
                     summons.DespawnAll();
-                    
+
                     events.SetPhase(PHASE_ROLE_PLAY);
                     events.ScheduleEvent(EVENT_DESPAWN_ALGALON_1, 5s);
                     events.ScheduleEvent(EVENT_DESPAWN_ALGALON_2, 17s);
                     events.ScheduleEvent(EVENT_DESPAWN_ALGALON_3, 26s);
-                    
+
                     if (me->IsInCombat())
                         events.ScheduleEvent(EVENT_DESPAWN_ALGALON_4, 26s);
-                    
+
                     events.ScheduleEvent(EVENT_DESPAWN_ALGALON_5, 32s);
-                    
+
                     me->DespawnOrUnsummon(39000);
                     me->SetReactState(REACT_PASSIVE);
                     me->AttackStop();
                     me->setFaction(35);
                     me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                     me->InterruptNonMeleeSpells(false);
-                    
+
                     if (m_pInstance)
                         m_pInstance->SetData(TYPE_ALGALON, NOT_STARTED);
                     break;

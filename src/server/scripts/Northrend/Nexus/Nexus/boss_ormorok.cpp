@@ -93,7 +93,7 @@ public:
             events.ScheduleEvent(EVENT_ORMOROK_TRAMPLE, 10s);
             events.ScheduleEvent(EVENT_ORMOROK_SPELL_REFLECTION, 30s);
             events.ScheduleEvent(EVENT_ORMOROK_HEALTH, 1s);
-            
+
             if (IsHeroic())
                 events.ScheduleEvent(EVENT_ORMOROK_SUMMON, 17s);
         }

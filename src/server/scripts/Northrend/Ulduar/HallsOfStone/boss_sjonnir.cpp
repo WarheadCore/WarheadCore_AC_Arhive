@@ -424,7 +424,7 @@ public:
         boss_sjonnir_iron_sludgeAI(Creature* c) : ScriptedAI(c) { }
 
         EventMap events;
-        
+
         void Reset()
         {
             events.Reset();
@@ -434,7 +434,7 @@ public:
         {
             events.ScheduleEvent(EVENT_TOXIC_VOLLEY, 5s);
         }
-        
+
         void JustDied(Unit*  /*killer*/)
         {
             if (InstanceScript* pInstance = me->GetInstanceScript())
