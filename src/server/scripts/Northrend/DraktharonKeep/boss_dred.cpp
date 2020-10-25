@@ -91,7 +91,7 @@ public:
             events.ScheduleEvent(EVENT_SPELL_MANGLING_SLASH, 18500ms);
             events.ScheduleEvent(EVENT_SPELL_FEARSOME_ROAR, 10s, 20s);
             events.ScheduleEvent(EVENT_SPELL_PIERCING_SLASH, 17s);
-            
+
             if (IsHeroic())
             {
                 events.ScheduleEvent(EVENT_MENACING_CLAW, 21s);

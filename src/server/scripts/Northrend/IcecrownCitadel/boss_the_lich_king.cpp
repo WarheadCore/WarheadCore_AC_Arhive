@@ -712,7 +712,7 @@ public:
             events.ScheduleEvent(EVENT_SUMMON_DRUDGE_GHOUL, 10s, EVENT_GROUP_ABILITIES);
             events.ScheduleEvent(EVENT_INFEST, 5s, EVENT_GROUP_ABILITIES);
             events.ScheduleEvent(EVENT_NECROTIC_PLAGUE, 30s, 31s, EVENT_GROUP_ABILITIES);
-            
+
             if (IsHeroic())
                 events.ScheduleEvent(EVENT_SHADOW_TRAP, 15500ms, EVENT_GROUP_ABILITIES);
         }

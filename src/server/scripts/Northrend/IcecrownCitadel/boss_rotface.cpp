@@ -158,7 +158,7 @@ public:
             events.ScheduleEvent(EVENT_HASTEN_INFECTIONS, 90s);
             events.ScheduleEvent(EVENT_MUTATED_INFECTION, 14s);
             events.ScheduleEvent(EVENT_ROTFACE_OOZE_FLOOD, 8s);
-            
+
             if (IsHeroic())
                 events.ScheduleEvent(EVENT_ROTFACE_VILE_GAS, 15s, 20s);
 
