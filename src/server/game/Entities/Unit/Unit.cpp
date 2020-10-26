@@ -679,6 +679,13 @@ void Unit::DealDamageMods(Unit const* victim, uint32& damage, uint32* absorb)
 
 uint32 Unit::DealDamage(Unit* attacker, Unit* victim, uint32 damage, CleanDamage const* cleanDamage, DamageEffectType damagetype, SpellSchoolMask damageSchoolMask, SpellInfo const* spellProto, bool durabilityLoss, bool  /*allowGM*/)
 {
+    if (victim->IsImmunedToDamage(spellProto))
+    {
+        if (attacker)
+            attacker->SendSpellDamageImmune(victim, spellProto->Id);
+        return 0;
+    }
+
     // Xinef: initialize damage done for rage calculations
     // Xinef: its rare to modify damage in hooks, however training dummy's sets damage to 0
     uint32 rage_damage = damage + ((cleanDamage != nullptr) ? cleanDamage->absorbed_damage : 0);
@@ -2484,7 +2491,7 @@ void Unit::SendMeleeAttackStop(Unit* victim)
 bool Unit::isSpellBlocked(Unit* victim, SpellInfo const* spellProto, WeaponAttackType attackType)
 {
     // These spells can't be blocked
-    if (spellProto && spellProto->HasAttribute(SPELL_ATTR0_IMPOSSIBLE_DODGE_PARRY_BLOCK))
+    if (spellProto && (spellProto->HasAttribute(SPELL_ATTR0_IMPOSSIBLE_DODGE_PARRY_BLOCK) || spellProto->HasAttribute(SPELL_ATTR3_IGNORE_HIT_RESULT)))
         return false;
 
     if (victim->HasAuraType(SPELL_AURA_IGNORE_HIT_DIRECTION) || victim->HasInArc(M_PI, this))
@@ -2537,11 +2544,6 @@ int32 Unit::GetMechanicResistChance(const SpellInfo* spell)
 // Melee based spells hit result calculations
 SpellMissInfo Unit::MeleeSpellHitResult(Unit* victim, SpellInfo const* spell)
 {
-    // Spells with SPELL_ATTR3_IGNORE_HIT_RESULT will additionally fully ignore
-    // resist and deflect chances
-    if (spell->HasAttribute(SPELL_ATTR3_IGNORE_HIT_RESULT))
-        return SPELL_MISS_NONE;
-
     WeaponAttackType attType = BASE_ATTACK;
 
     // Check damage class instead of attack type to correctly handle judgements
@@ -2715,12 +2717,6 @@ SpellMissInfo Unit::MagicSpellHitResult(Unit* victim, SpellInfo const* spell)
     if (IsVehicle())
         return SPELL_MISS_NONE;
 
-    // Spells with SPELL_ATTR3_IGNORE_HIT_RESULT will additionally fully ignore
-    // resist and deflect chances
-    // xinef: skip all calculations, proof: Toxic Tolerance quest
-    if (spell->HasAttribute(SPELL_ATTR3_IGNORE_HIT_RESULT))
-        return SPELL_MISS_NONE;
-
     SpellSchoolMask schoolMask = spell->GetSchoolMask();
     // PvP - PvE spell misschances per leveldif > 2
     int32 lchance = victim->GetTypeId() == TYPEID_PLAYER ? 7 : 11;
@@ -2743,20 +2739,15 @@ SpellMissInfo Unit::MagicSpellHitResult(Unit* victim, SpellInfo const* spell)
     // Increase from attacker SPELL_AURA_MOD_INCREASES_SPELL_PCT_TO_HIT auras
     modHitChance += GetTotalAuraModifierByMiscMask(SPELL_AURA_MOD_INCREASES_SPELL_PCT_TO_HIT, schoolMask);
 
-    // Spells with SPELL_ATTR3_IGNORE_HIT_RESULT will ignore target's avoidance effects
-    // xinef: imo it should completly ignore all calculations, eg: 14792. Hits 80 level players on blizz without any problems
-    //if (!spell->HasAttribute(SPELL_ATTR3_IGNORE_HIT_RESULT))
-    {
-        // Chance hit from victim SPELL_AURA_MOD_ATTACKER_SPELL_HIT_CHANCE auras
-        modHitChance += victim->GetTotalAuraModifierByMiscMask(SPELL_AURA_MOD_ATTACKER_SPELL_HIT_CHANCE, schoolMask);
-        // Reduce spell hit chance for Area of effect spells from victim SPELL_AURA_MOD_AOE_AVOIDANCE aura
-        if (spell->IsAffectingArea())
-            modHitChance -= victim->GetTotalAuraModifier(SPELL_AURA_MOD_AOE_AVOIDANCE);
+    // victim has chance to hit from SPELL_AURA_MOD_ATTACKER_SPELL_HIT_CHANCE auras
+    modHitChance += victim->GetTotalAuraModifierByMiscMask(SPELL_AURA_MOD_ATTACKER_SPELL_HIT_CHANCE, schoolMask);
+    // Decrease Spell Hit Chance for Area of spells effect from victim SPELL_AURA_MOD_AOE_AVOIDANCE aura
+    if (spell->IsAffectingArea())
+        modHitChance -= victim->GetTotalAuraModifier(SPELL_AURA_MOD_AOE_AVOIDANCE);
 
-        // Decrease hit chance from victim rating bonus
-        if (victim->GetTypeId() == TYPEID_PLAYER)
-            modHitChance -= int32(victim->ToPlayer()->GetRatingBonusValue(CR_HIT_TAKEN_SPELL));
-    }
+    // Decrease hit chance from victim rating bonus
+    if (victim->GetTypeId() == TYPEID_PLAYER)
+        modHitChance -= int32(victim->ToPlayer()->GetRatingBonusValue(CR_HIT_TAKEN_SPELL));
 
     int32 HitChance = modHitChance * 100;
     // Increase hit chance from attacker SPELL_AURA_MOD_SPELL_HIT_CHANCE and attacker ratings
@@ -2833,10 +2824,6 @@ SpellMissInfo Unit::MagicSpellHitResult(Unit* victim, SpellInfo const* spell)
 //   Resist
 SpellMissInfo Unit::SpellHitResult(Unit* victim, SpellInfo const* spell, bool CanReflect)
 {
-    // Check for immune
-    if (victim->IsImmunedToSpell(spell))
-        return SPELL_MISS_IMMUNE;
-
     // All positive spells can`t miss
     // TODO: client not show miss log for this spells - so need find info for this in dbc and use it!
     if ((spell->IsPositive() || spell->HasEffect(SPELL_EFFECT_DISPEL))
@@ -2870,6 +2857,14 @@ SpellMissInfo Unit::SpellHitResult(Unit* victim, SpellInfo const* spell, bool Ca
             return SPELL_MISS_REFLECT;
         }
     }
+
+    //must be cheked here
+    if (spell->HasAttribute(SPELL_ATTR3_IGNORE_HIT_RESULT))
+        return SPELL_MISS_NONE;
+
+    // Check for immune
+    if (victim->IsImmunedToSpell(spell))
+        return SPELL_MISS_IMMUNE;
 
     switch (spell->DmgClass)
     {
@@ -11826,7 +11821,13 @@ bool Unit::IsImmunedToDamage(SpellSchoolMask meleeSchoolMask) const
 
 bool Unit::IsImmunedToDamage(SpellInfo const* spellInfo) const
 {
+    if (!spellInfo)
+        return false;
+
     if (spellInfo->HasAttribute(SPELL_ATTR0_UNAFFECTED_BY_INVULNERABILITY) && !HasAuraType(SPELL_AURA_SPIRIT_OF_REDEMPTION))
+        return false;
+
+    if (spellInfo->HasAttribute(SPELL_ATTR1_UNAFFECTED_BY_SCHOOL_IMMUNE) || spellInfo->HasAttribute(SPELL_ATTR2_UNAFFECTED_BY_AURA_SCHOOL_IMMUNE))
         return false;
 
     uint32 schoolMask = spellInfo->GetSchoolMask();
@@ -11972,35 +11973,48 @@ bool Unit::IsImmunedToSpellEffect(SpellInfo const* spellInfo, uint32 index) cons
     //If m_immuneToEffect type contain this effect type, IMMUNE effect.
     uint32 effect = spellInfo->Effects[index].Effect;
     SpellImmuneList const& effectList = m_spellImmune[IMMUNITY_EFFECT];
-    for (SpellImmuneList::const_iterator itr = effectList.begin(); itr != effectList.end(); ++itr)
-        if (itr->type == effect && (itr->spellId != 62692 || spellInfo->Effects[index].MiscValue == POWER_MANA))
+    for (auto const& itr : effectList)
+    {
+        if (itr.type == effect && (itr.spellId != 62692 || spellInfo->Effects[index].MiscValue == POWER_MANA))
             return true;
+    }
 
     if (uint32 mechanic = spellInfo->Effects[index].Mechanic)
     {
         SpellImmuneList const& mechanicList = m_spellImmune[IMMUNITY_MECHANIC];
-        for (SpellImmuneList::const_iterator itr = mechanicList.begin(); itr != mechanicList.end(); ++itr)
-            if (itr->type == mechanic)
+        for (auto const& itr : mechanicList)
+        {
+            if (itr.type == mechanic)
                 return true;
+        }
     }
 
-    if (uint32 aura = spellInfo->Effects[index].ApplyAuraName)
+    if (!spellInfo->HasAttribute(SPELL_ATTR3_IGNORE_HIT_RESULT))
     {
-        SpellImmuneList const& list = m_spellImmune[IMMUNITY_STATE];
-        for (SpellImmuneList::const_iterator itr = list.begin(); itr != list.end(); ++itr)
-            if (itr->type == aura && (itr->spellId != 64848 || spellInfo->Effects[index].MiscValue == POWER_MANA))
-                if (!spellInfo->HasAttribute(SPELL_ATTR3_IGNORE_HIT_RESULT))
-                    if (itr->blockType == SPELL_BLOCK_TYPE_ALL || spellInfo->IsPositive()) // xinef: added for pet scaling
-                        return true;
+        if (uint32 aura = spellInfo->Effects[index].ApplyAuraName)
+        {
+            SpellImmuneList const& list = m_spellImmune[IMMUNITY_STATE];
+            for (auto const& itr : list)
+            {
+                if (itr.type == aura && (itr.spellId != 64848 || spellInfo->Effects[index].MiscValue == POWER_MANA))
+                {
+                        if (itr.blockType == SPELL_BLOCK_TYPE_ALL || spellInfo->IsPositive()) // xinef: added for pet scaling
+                            return true;
+                }
+            }
 
-        // Check for immune to application of harmful magical effects
-        AuraEffectList const& immuneAuraApply = GetAuraEffectsByType(SPELL_AURA_MOD_IMMUNE_AURA_APPLY_SCHOOL);
-        for (AuraEffectList::const_iterator iter = immuneAuraApply.begin(); iter != immuneAuraApply.end(); ++iter)
-            if (/*(spellInfo->Dispel == DISPEL_MAGIC || spellInfo->Dispel == DISPEL_CURSE || spellInfo->Dispel == DISPEL_DISEASE) &&*/ // Magic debuff, xinef: all kinds?
-                ((*iter)->GetMiscValue() & spellInfo->GetSchoolMask()) &&  // Check school
-                !spellInfo->IsPositiveEffect(index) &&                                  // Harmful
-                spellInfo->Effects[index].Effect != SPELL_EFFECT_PERSISTENT_AREA_AURA)  // Not Persistent area auras
-                return true;
+            if (!spellInfo->HasAttribute(SPELL_ATTR2_UNAFFECTED_BY_AURA_SCHOOL_IMMUNE))
+            {
+
+                // Check for immune to application of harmful magical effects
+                AuraEffectList const& immuneAuraApply = GetAuraEffectsByType(SPELL_AURA_MOD_IMMUNE_AURA_APPLY_SCHOOL);
+                for (auto const& iter : immuneAuraApply)
+                {
+                    if (((*iter).GetMiscValue() & spellInfo->GetSchoolMask()) && !spellInfo->IsPositiveEffect(index) && spellInfo->Effects[index].Effect != SPELL_EFFECT_PERSISTENT_AREA_AURA)
+                        return true;
+                }
+            }
+        }
     }
 
     return false;

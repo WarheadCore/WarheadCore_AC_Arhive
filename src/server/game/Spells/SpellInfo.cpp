@@ -1318,16 +1318,17 @@ bool SpellInfo::CanDispelAura(SpellInfo const* aura) const
     if (aura->HasAttribute(SPELL_ATTR0_UNAFFECTED_BY_INVULNERABILITY) && aura->SpellFamilyName == SPELLFAMILY_GENERIC)
         return false;
 
-    // These spells (like Mass Dispel) can dispell all auras
+    // These auras (like Divine Shield) can't be dispelled
+    if (auraSpellInfo->HasAttribute(SPELL_ATTR0_UNAFFECTED_BY_INVULNERABILITY))
+        return false;
+
+    // These spells (like Mass Dispel) can dispel all auras
     if (HasAttribute(SPELL_ATTR0_UNAFFECTED_BY_INVULNERABILITY))
         return true;
 
-    // These auras (like Divine Shield) can't be dispelled
-    if (aura->HasAttribute(SPELL_ATTR0_UNAFFECTED_BY_INVULNERABILITY))
-        return false;
-
     // These auras (Cyclone for example) are not dispelable
-    if (aura->HasAttribute(SPELL_ATTR1_UNAFFECTED_BY_SCHOOL_IMMUNE))
+    if ((auraSpellInfo->HasAttribute(SPELL_ATTR1_UNAFFECTED_BY_SCHOOL_IMMUNE) && auraSpellInfo->Mechanic != MECHANIC_NONE)
+        || auraSpellInfo->HasAttribute(SPELL_ATTR2_UNAFFECTED_BY_AURA_SCHOOL_IMMUNE))
         return false;
 
     return true;
@@ -2653,6 +2654,7 @@ bool SpellInfo::_IsPositiveEffect(uint8 effIndex, bool deep) const
                     case SPELL_AURA_ADD_TARGET_TRIGGER:
                         return true;
                     case SPELL_AURA_PERIODIC_TRIGGER_SPELL_WITH_VALUE:
+                    case SPELL_AURA_PERIODIC_TRIGGER_SPELL_FROM_CLIENT:
                     case SPELL_AURA_PERIODIC_TRIGGER_SPELL:
                         if (!deep)
                         {

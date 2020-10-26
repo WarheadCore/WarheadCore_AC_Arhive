@@ -3723,8 +3723,8 @@ void AuraEffect::HandleAuraModSchoolImmunity(AuraApplication const* aurApp, uint
         {
             bool banishFound = false;
             Unit::AuraEffectList const& banishAuras = target->GetAuraEffectsByType(GetAuraType());
-            for (Unit::AuraEffectList::const_iterator i = banishAuras.begin(); i != banishAuras.end(); ++i)
-                if ((*i)->GetSpellInfo()->Mechanic == MECHANIC_BANISH)
+            for (auto const& i : banishAuras)
+                if ((*i).GetSpellInfo()->Mechanic == MECHANIC_BANISH)
                 {
                     banishFound = true;
                     break;
@@ -3738,25 +3738,19 @@ void AuraEffect::HandleAuraModSchoolImmunity(AuraApplication const* aurApp, uint
         target->RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_IMMUNE_OR_LOST_SELECTION);
 
     // remove all flag auras (they are positive, but they must be removed when you are immune)
-    if (GetSpellInfo()->HasAttribute(SPELL_ATTR1_DISPEL_AURAS_ON_IMMUNITY)
-            && GetSpellInfo()->HasAttribute(SPELL_ATTR2_DAMAGE_REDUCED_SHIELD))
+    if (GetSpellInfo()->HasAttribute(SPELL_ATTR1_DISPEL_AURAS_ON_IMMUNITY) && GetSpellInfo()->HasAttribute(SPELL_ATTR2_DAMAGE_REDUCED_SHIELD))
         target->RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_IMMUNE_OR_LOST_SELECTION);
 
     // TODO: optimalize this cycle - use RemoveAurasWithInterruptFlags call or something else
-    if ((apply)
-            && GetSpellInfo()->HasAttribute(SPELL_ATTR1_DISPEL_AURAS_ON_IMMUNITY)
-            && GetSpellInfo()->IsPositive())                       //Only positive immunity removes auras
+    if ((apply) && GetSpellInfo()->HasAttribute(SPELL_ATTR1_DISPEL_AURAS_ON_IMMUNITY) && GetSpellInfo()->IsPositive())    //Only positive immunity removes auras
     {
         uint32 school_mask = GetMiscValue();
         Unit::AuraApplicationMap& Auras = target->GetAppliedAuras();
-        for (Unit::AuraApplicationMap::iterator iter = Auras.begin(); iter != Auras.end();)
+        for (auto& iter : Auras)
         {
-            SpellInfo const* spell = iter->second->GetBase()->GetSpellInfo();
-            if ((spell->GetSchoolMask() & school_mask)//Check for school mask
-                    && GetSpellInfo()->CanDispelAura(spell)
-                    && !iter->second->IsPositive()          //Don't remove positive spells
-                    && spell->Id != GetId())               //Don't remove self
-                target->RemoveAura(iter);
+            SpellInfo const* spell = iter.second->GetBase()->GetSpellInfo();
+            if ((spell->GetSchoolMask() & school_mask) && GetSpellInfo()->CanDispelAura(spell) && !iter.second->IsPositive() && spell->Id != GetId())
+                target->RemoveAura(iter, AURA_REMOVE_BY_ENEMY_SPELL)
             else
                 ++iter;
         }
