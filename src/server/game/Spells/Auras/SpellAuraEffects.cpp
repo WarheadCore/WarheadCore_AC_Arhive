@@ -3750,11 +3750,11 @@ void AuraEffect::HandleAuraModSchoolImmunity(AuraApplication const* aurApp, uint
     {
         uint32 school_mask = GetMiscValue();
         Unit::AuraApplicationMap& Auras = target->GetAppliedAuras();
-        for (auto& iter : Auras)
+        for (Unit::AuraApplicationMap::iterator iter = Auras.begin(); iter != Auras.end();)
         {
-            SpellInfo const* spell = iter.second->GetBase()->GetSpellInfo();
-            if ((spell->GetSchoolMask() & school_mask) && GetSpellInfo()->CanDispelAura(spell) && !iter.second->IsPositive() && spell->Id != GetId())
-                target->RemoveAura(iter, AURA_REMOVE_BY_ENEMY_SPELL)
+            SpellInfo const* spell = iter->second->GetBase()->GetSpellInfo();
+            if ((spell->GetSchoolMask() & school_mask) && GetSpellInfo()->CanDispelAura(spell) && !iter->second->IsPositive() && spell->Id != GetId())
+                target->RemoveAura(iter, AURA_REMOVE_BY_ENEMY_SPELL);
             else
                 ++iter;
         }

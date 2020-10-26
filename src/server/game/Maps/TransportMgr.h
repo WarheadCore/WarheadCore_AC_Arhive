@@ -92,7 +92,7 @@ struct TransportAnimation
     uint32 TotalTime;
 
     bool GetAnimNode(uint32 time, TransportAnimationEntry const*& curr, TransportAnimationEntry const*& next, float& percPos) const;
-    void GetAnimRotation(uint32 time, G3D::Quat& curr, G3D::Quat& next, float& percRot) const;
+    void GetAnimRotation(uint32 time, QuaternionData& curr, QuaternionData& next, float& percRot) const;
 };
 
 typedef std::map<uint32, TransportAnimation> TransportAnimationContainer;

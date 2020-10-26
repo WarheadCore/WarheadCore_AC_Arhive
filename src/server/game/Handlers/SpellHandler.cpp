@@ -327,7 +327,7 @@ void WorldSession::HandleGameobjectReportUse(WorldPacket& recvPacket)
     if (!go)
         return;
 
-    if (!go->IsWithinDistInMap(_player, INTERACTION_DISTANCE))
+    if (!go->IsWithinDistInMap(_player))
         return;
 
     if (go->AI()->GossipHello(_player, true))
@@ -341,6 +341,7 @@ void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
     uint32 spellId;
     uint8  castCount, castFlags;
     recvPacket >> castCount >> spellId >> castFlags;
+    TriggerCastFlags triggerFlag = TRIGGERED_NONE;
 
     LOG_DEBUG("network", "WORLD: got cast spell packet, castCount: %u, spellId: %u, castFlags: %u, data length = %u", castCount, spellId, castFlags, (uint32)recvPacket.size());
 
@@ -353,7 +354,6 @@ void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
     }
 
     SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(spellId);
-
     if (!spellInfo)
     {
         LOG_ERROR("sernetwork.opcodever", "WORLD: unknown spell id %u", spellId);
@@ -361,69 +361,7 @@ void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
         return;
     }
 
-    if (mover->GetTypeId() == TYPEID_PLAYER)
-    {
-        // not have spell in spellbook or spell passive and not casted by client
-        if( !(spellInfo->Targets & TARGET_FLAG_GAMEOBJECT_ITEM) && (!mover->ToPlayer()->HasActiveSpell(spellId) || spellInfo->IsPassive()) )
-        {
-            //cheater? kick? ban?
-            recvPacket.rfinish(); // prevent spam at ignore packet
-            return;
-        }
-    }
-    else
-    {
-        // pussywizard: casting player's spells from vehicle when seat allows it
-        // if ANYTHING CHANGES in this function, INFORM ME BEFORE applying!!!
-        if (Vehicle* veh = mover->GetVehicleKit())
-            if (const VehicleSeatEntry* seat = veh->GetSeatForPassenger(_player))
-                if (seat->m_flags & VEHICLE_SEAT_FLAG_CAN_ATTACK || spellInfo->Effects[EFFECT_0].Effect == SPELL_EFFECT_OPEN_LOCK /*allow looting from vehicle, but only if player has required spell (all necessary opening spells are in playercreateinfo_spell)*/)
-                    if ((mover->GetTypeId() == TYPEID_UNIT && !mover->ToCreature()->HasSpell(spellId)) || spellInfo->IsPassive()) // the creature can't cast that spell, check player instead
-                    {
-                        if( !(spellInfo->Targets & TARGET_FLAG_GAMEOBJECT_ITEM) && (!_player->HasActiveSpell (spellId) || spellInfo->IsPassive()) )
-                        {
-                            //cheater? kick? ban?
-                            recvPacket.rfinish(); // prevent spam at ignore packet
-                            return;
-                        }
-
-                        // at this point, player is a valid caster
-                        // swapping the mover will stop the check below at == TYPEID_UNIT, so everything works fine
-                        mover = _player;
-                    }
-    }
-
-    // not have spell in spellbook
-    if (mover->GetTypeId() == TYPEID_PLAYER && !mover->ToPlayer()->HasActiveSpell(spellId))
-    {
-        bool allow = false;
-        // allow casting of unknown spells for special lock cases
-        if (GameObject *go = targets.GetGOTarget())
-            if (go->GetSpellForLock(mover->ToPlayer()) == spellInfo)
-                allow = true;
-
-        // allow casting of spells triggered by clientside periodic trigger auras
-        if (caster->HasAuraTypeWithTriggerSpell(SPELL_AURA_PERIODIC_TRIGGER_SPELL_FROM_CLIENT, spellId))
-        {
-            allow = true;
-            triggerFlag = TRIGGERED_FULL_MASK;
-        }
-
-        if (!allow)
-            return;
-    }
-
-    // Client is resending autoshot cast opcode when other spell is casted during shoot rotation
-    // Skip it to prevent "interrupt" message
-    if (spellInfo->IsAutoRepeatRangedSpell() && _player->GetCurrentSpell(CURRENT_AUTOREPEAT_SPELL)
-            && _player->GetCurrentSpell(CURRENT_AUTOREPEAT_SPELL)->m_spellInfo == spellInfo)
-    {
-        recvPacket.rfinish();
-        return;
-    }
-
-    // can't use our own spells when we're in possession of another unit,
-    if (_player->isPossessing())
+    if (spellInfo->IsPassive())
     {
         recvPacket.rfinish(); // prevent spam at ignore packet
         return;
@@ -434,8 +372,64 @@ void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
     targets.Read(recvPacket, mover);
     HandleClientCastFlags(recvPacket, castFlags, targets);
 
+    Unit* caster = mover;
+    if (caster->GetTypeId() == TYPEID_PLAYER)
+    {
+        // not have spell in spellbook or spell passive and not casted by client
+        if(!caster->ToPlayer()->HasActiveSpell(spellId))
+        {
+            bool allow = false;
+    
+            // allow casting of unknown spells for special lock cases
+            if (GameObject *go = targets.GetGOTarget())
+                if (go->GetSpellForLock(caster->ToPlayer()) == spellInfo)
+                    allow = true;
+    
+            // allow casting of spells triggered by clientside periodic trigger auras
+            if (caster->HasAuraTypeWithTriggerSpell(SPELL_AURA_PERIODIC_TRIGGER_SPELL_FROM_CLIENT, spellId))
+            {
+                allow = true;
+                triggerFlag = TRIGGERED_FULL_MASK;
+            }
+    
+            if (!allow)
+                return;
+        }
+    }
+    else
+    {
+        // pussywizard: casting player's spells from vehicle when seat allows it
+        // if ANYTHING CHANGES in this function, INFORM ME BEFORE applying!!!
+        if (Vehicle* veh = caster->GetVehicleKit())
+            if (const VehicleSeatEntry* seat = veh->GetSeatForPassenger(_player))
+                if (seat->m_flags & VEHICLE_SEAT_FLAG_CAN_ATTACK || spellInfo->Effects[EFFECT_0].Effect == SPELL_EFFECT_OPEN_LOCK /*allow looting from vehicle, but only if player has required spell (all necessary opening spells are in playercreateinfo_spell)*/)
+                    if ((caster->GetTypeId() == TYPEID_UNIT && !caster->ToCreature()->HasSpell(spellId))) // the creature can't cast that spell, check player instead
+                    {
+                        if( !(spellInfo->Targets & TARGET_FLAG_GAMEOBJECT_ITEM) && (!_player->HasActiveSpell (spellId)) )
+                        {
+                            //cheater? kick? ban?
+                            recvPacket.rfinish(); // prevent spam at ignore packet
+                            return;
+                        }
+
+                        // at this point, player is a valid caster
+                        // swapping the mover will stop the check below at == TYPEID_UNIT, so everything works fine
+                        caster = _player;
+                    }
+    }
+
+    // Client is resending autoshot cast opcode when other spell is cast during shoot rotation
+    // Skip it to prevent "interrupt" message
+    if (spellInfo->IsAutoRepeatRangedSpell() && caster->GetCurrentSpell(CURRENT_AUTOREPEAT_SPELL)
+        && caster->GetCurrentSpell(CURRENT_AUTOREPEAT_SPELL)->m_spellInfo == spellInfo)
+        return;
+
+    // can't use our own spells when we're in possession of another unit,
+    if (_player->isPossessing())
+        return;
+
     // pussywizard: HandleClientCastFlags calls HandleMovementOpcodes, which can result in pretty much anything. Caster not in map will crash at GetMap() for spell difficulty in Spell constructor.
-    if (!mover->FindMap())
+    if (!caster->FindMap())
     {
         recvPacket.rfinish(); // prevent spam at ignore packet
         return;

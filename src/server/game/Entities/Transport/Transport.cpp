@@ -99,7 +99,7 @@ bool MotionTransport::CreateMoTrans(uint32 guidlow, uint32 entry, uint32 mapid, 
     SetName(goinfo->name);
 
     // pussywizard: no WorldRotation for MotionTransports
-    SetWorldRotation(G3D::Quat());
+    SetLocalRotation(0.0f, 0.0f, 0.0f, 1.0f);
     // pussywizard: no PathRotation for MotionTransports
     SetTransportPathRotation(0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -664,7 +664,7 @@ StaticTransport::~StaticTransport()
     ASSERT(_passengers.empty());
 }
 
-bool StaticTransport::Create(uint32 guidlow, uint32 name_id, Map* map, uint32 phaseMask, float x, float y, float z, float ang, G3D::Quat const& rotation, uint32 animprogress, GOState go_state, uint32 artKit)
+bool StaticTransport::Create(uint32 guidlow, uint32 name_id, Map* map, uint32 phaseMask, float x, float y, float z, float ang, QuaternionData const& rotation, uint32 animprogress, GOState go_state, uint32 artKit)
 {
     ASSERT(map);
     SetMap(map);
@@ -706,7 +706,7 @@ bool StaticTransport::Create(uint32 guidlow, uint32 name_id, Map* map, uint32 ph
 
     // pussywizard: temporarily calculate WorldRotation from orientation, do so until values in db are correct
     //SetWorldRotation( /*for StaticTransport we need 2 rotation Quats in db for World- and Path- Rotation*/ );
-    SetWorldRotationAngles(NormalizeOrientation(GetOrientation()), 0.0f, 0.0f);
+    SetLocalRotationAngles(NormalizeOrientation(GetOrientation()), 0.0f, 0.0f);
     // pussywizard: PathRotation for StaticTransport (only StaticTransports have PathRotation)
     SetTransportPathRotation(rotation.x, rotation.y, rotation.z, rotation.w);
 
@@ -867,7 +867,7 @@ void StaticTransport::RelocateToProgress(uint32 progress)
 
         // rotate by AnimRotation at current segment
         // pussywizard: AnimRotation in dbc is only simple orientation rotation, so don't use sophisticated and not working code
-        G3D::Quat currRot, nextRot;
+        QuaternionData currRot, nextRot;
         float percRot;
         m_goValue.Transport.AnimationInfo->GetAnimRotation(progress, currRot, nextRot, percRot);
         float signCurr = currRot.z >= 0.0f ? 1.0f : -1.0f;

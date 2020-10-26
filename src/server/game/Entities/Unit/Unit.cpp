@@ -4969,8 +4969,8 @@ bool Unit::HasAuraType(AuraType auraType) const
 bool Unit::HasAuraTypeWithCaster(AuraType auratype, uint64 caster) const
 {
     AuraEffectList const& mTotalAuraList = GetAuraEffectsByType(auratype);
-    for (AuraEffectList::const_iterator i = mTotalAuraList.begin(); i != mTotalAuraList.end(); ++i)
-        if (caster == (*i)->GetCasterGUID())
+    for (auto const& i : mTotalAuraList)
+        if (caster == (*i).GetCasterGUID())
             return true;
     return false;
 }
@@ -4978,8 +4978,8 @@ bool Unit::HasAuraTypeWithCaster(AuraType auratype, uint64 caster) const
 bool Unit::HasVisibleAuraType(AuraType auraType) const
 {
     AuraEffectList const& mAuraList = GetAuraEffectsByType(auraType);
-    for (AuraEffectList::const_iterator i = mAuraList.begin(); i != mAuraList.end(); ++i)
-        if( (*i)->GetBase()->CanBeSentToClient() )
+    for (auto const& i : mAuraList)
+        if( (*i).GetBase()->CanBeSentToClient() )
             return true;
 
     return false;
@@ -4988,8 +4988,8 @@ bool Unit::HasVisibleAuraType(AuraType auraType) const
 bool Unit::HasAuraTypeWithMiscvalue(AuraType auratype, int32 miscvalue) const
 {
     AuraEffectList const& mTotalAuraList = GetAuraEffectsByType(auratype);
-    for (AuraEffectList::const_iterator i = mTotalAuraList.begin(); i != mTotalAuraList.end(); ++i)
-        if (miscvalue == (*i)->GetMiscValue())
+    for (auto const& i : mTotalAuraList)
+        if (miscvalue == (*i).GetMiscValue())
             return true;
     return false;
 }
@@ -4997,8 +4997,8 @@ bool Unit::HasAuraTypeWithMiscvalue(AuraType auratype, int32 miscvalue) const
 bool Unit::HasAuraTypeWithAffectMask(AuraType auratype, SpellInfo const* affectedSpell) const
 {
     AuraEffectList const& mTotalAuraList = GetAuraEffectsByType(auratype);
-    for (AuraEffectList::const_iterator i = mTotalAuraList.begin(); i != mTotalAuraList.end(); ++i)
-        if ((*i)->IsAffectedOnSpell(affectedSpell))
+    for (auto const& i : mTotalAuraList)
+        if ((*i).IsAffectedOnSpell(affectedSpell))
             return true;
     return false;
 }
@@ -5006,8 +5006,8 @@ bool Unit::HasAuraTypeWithAffectMask(AuraType auratype, SpellInfo const* affecte
 bool Unit::HasAuraTypeWithValue(AuraType auratype, int32 value) const
 {
     AuraEffectList const& mTotalAuraList = GetAuraEffectsByType(auratype);
-    for (AuraEffectList::const_iterator i = mTotalAuraList.begin(); i != mTotalAuraList.end(); ++i)
-        if (value == (*i)->GetAmount())
+    for (auto const& i : mTotalAuraList)
+        if (value == (*i).GetAmount())
             return true;
     return false;
 }
@@ -5026,7 +5026,7 @@ bool Unit::HasNegativeAuraWithInterruptFlag(uint32 flag, uint64 guid)
         return false;
     for (auto const& iter : m_interruptableAuras)
     {
-        if (!(*iter)->IsPositive() && (*iter)->GetBase()->GetSpellInfo()->AuraInterruptFlags & flag && (!guid || (*iter)->GetBase()->GetCasterGUID() == guid))
+        if (!(*iter).IsPositive() && (*iter).GetBase()->GetSpellInfo()->AuraInterruptFlags & flag && (!guid || (*iter).GetBase()->GetCasterGUID() == guid))
             return true;
     }
     return false;
@@ -5034,10 +5034,10 @@ bool Unit::HasNegativeAuraWithInterruptFlag(uint32 flag, uint64 guid)
 
 bool Unit::HasNegativeAuraWithAttribute(uint32 flag, uint64 guid)
 {
-    for (AuraApplicationMap::const_iterator iter = m_appliedAuras.begin(); iter != m_appliedAuras.end(); ++iter)
+    for (auto const& iter : m_appliedAuras)
     {
-        Aura const* aura = iter->second->GetBase();
-        if (!iter->second->IsPositive() && aura->GetSpellInfo()->Attributes & flag && (!guid || aura->GetCasterGUID() == guid))
+        Aura const* aura = iter.second->GetBase();
+        if (!iter.second->IsPositive() && aura->GetSpellInfo()->Attributes & flag && (!guid || aura->GetCasterGUID() == guid))
             return true;
     }
     return false;
@@ -5045,14 +5045,14 @@ bool Unit::HasNegativeAuraWithAttribute(uint32 flag, uint64 guid)
 
 bool Unit::HasAuraWithMechanic(uint32 mechanicMask) const
 {
-    for (AuraApplicationMap::const_iterator iter = m_appliedAuras.begin(); iter != m_appliedAuras.end(); ++iter)
+    for (auto const& iter : m_appliedAuras)
     {
-        SpellInfo const* spellInfo  = iter->second->GetBase()->GetSpellInfo();
+        SpellInfo const* spellInfo  = iter.second->GetBase()->GetSpellInfo();
         if (spellInfo->Mechanic && (mechanicMask & (1 << spellInfo->Mechanic)))
             return true;
 
         for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
-            if (iter->second->HasEffect(i) && spellInfo->Effects[i].Effect && spellInfo->Effects[i].Mechanic)
+            if (iter.second->HasEffect(i) && spellInfo->Effects[i].Effect && spellInfo->Effects[i].Mechanic)
                 if (mechanicMask & (1 << spellInfo->Effects[i].Mechanic))
                     return true;
     }

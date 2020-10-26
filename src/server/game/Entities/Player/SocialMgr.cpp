@@ -65,7 +65,7 @@ bool PlayerSocial::AddToSocialList(uint64 friendGuid, bool ignore)
     if (ignore)
         flag = SOCIAL_FLAG_IGNORED;
 
-    for auto const& itr : m_playerSocialMap.find(friendGuid);
+    auto const& itr = m_playerSocialMap.find(friendGuid);
     if (itr != m_playerSocialMap.end())
     {
         PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_ADD_CHARACTER_SOCIAL_FLAGS);
@@ -97,7 +97,7 @@ bool PlayerSocial::AddToSocialList(uint64 friendGuid, bool ignore)
 
 void PlayerSocial::RemoveFromSocialList(uint64 friendGuid, bool ignore)
 {
-    for auto& itr : m_playerSocialMap.find(friendGuid);
+    auto const& itr = m_playerSocialMap.find(friendGuid);
     if (itr == m_playerSocialMap.end())                     // not exist
         return;
 
@@ -105,8 +105,8 @@ void PlayerSocial::RemoveFromSocialList(uint64 friendGuid, bool ignore)
     if (ignore)
         flag = SOCIAL_FLAG_IGNORED;
 
-    itr.second.Flags &= ~flag;
-    if (itr.second.Flags == 0)
+    itr->second.Flags &= ~flag;
+    if (itr->second.Flags == 0)
     {
         PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHARACTER_SOCIAL);
 
@@ -131,7 +131,7 @@ void PlayerSocial::RemoveFromSocialList(uint64 friendGuid, bool ignore)
 
 void PlayerSocial::SetFriendNote(uint64 friendGuid, std::string note)
 {
-    for auto const& itr : m_playerSocialMap.find(friendGuid);
+    auto const& itr = m_playerSocialMap.find(friendGuid);
     if (itr == m_playerSocialMap.end())                     // not exist
         return;
 
@@ -205,9 +205,9 @@ void PlayerSocial::SendSocialList(Player* player)
 
 bool PlayerSocial::_checkContact(uint64 guid, SocialFlag flags) const
 {
-    for auto const& itr : m_playerSocialMap.find(guid);
+    auto const& itr = m_playerSocialMap.find(guid);
     if (itr != m_playerSocialMap.end())
-        return (itr.second.Flags & flags) != 0;
+        return (itr->second.Flags & flags) != 0;
 
     return false;
 }
@@ -255,7 +255,7 @@ void SocialMgr::GetFriendInfo(Player* player, uint64 friendGUID, FriendInfo& fri
     bool allowTwoSideWhoList = sGameConfig->GetBoolConfig("AllowTwoSide.WhoList");
     AccountTypes gmLevelInWhoList = AccountTypes(sGameConfig->GetIntConfig("GM.InWhoList.Level"));
 
-    for auto const& itr : player->GetSocial()->m_playerSocialMap.find(friendGUID);
+    auto const& itr = player->GetSocial()->m_playerSocialMap.find(friendGUID);
     if (itr != player->GetSocial()->m_playerSocialMap.end())
         friendInfo.Note = itr->second.Note;
 
@@ -330,8 +330,8 @@ void SocialMgr::BroadcastToFriendListers(Player* player, WorldPacket* packet)
 
     for (auto const& itr : m_socialMap)
     {
-        for auto const& itr2 : itr.second.m_playerSocialMap.find(guid);
-        if (itr2 != itr.second.m_playerSocialMap.end() && (itr2.second.Flags & SOCIAL_FLAG_FRIEND))
+        auto const& itr2 = itr.second.m_playerSocialMap.find(guid);
+        if (itr2 != itr.second.m_playerSocialMap.end() && (itr2->second.Flags & SOCIAL_FLAG_FRIEND))
         {
             Player* pFriend = ObjectAccessor::FindPlayer(MAKE_NEW_GUID(itr.first, 0, HIGHGUID_PLAYER));
 
