@@ -493,6 +493,7 @@ int32 SpellEffectInfo::CalcValue(Unit const* caster, int32 const* bp, Unit const
                 case SPELL_AURA_PERIODIC_MANA_LEECH:
                 case SPELL_AURA_SCHOOL_ABSORB:
                 case SPELL_AURA_PERIODIC_TRIGGER_SPELL_WITH_VALUE:
+                case SPELL_AURA_PERIODIC_TRIGGER_SPELL_FROM_CLIENT:
                     canEffectScale = true;
                     break;
                 default:

@@ -2001,6 +2001,7 @@ public:
     bool HasAuraTypeWithMiscvalue(AuraType auratype, int32 miscvalue) const;
     bool HasAuraTypeWithAffectMask(AuraType auratype, SpellInfo const* affectedSpell) const;
     bool HasAuraTypeWithValue(AuraType auratype, int32 value) const;
+    bool HasAuraTypeWithTriggerSpell(AuraType auratype, uint32 triggerSpell) const;
     bool HasNegativeAuraWithInterruptFlag(uint32 flag, uint64 guid = 0);
     bool HasVisibleAuraType(AuraType auraType) const;
     bool HasNegativeAuraWithAttribute(uint32 flag, uint64 guid = 0);

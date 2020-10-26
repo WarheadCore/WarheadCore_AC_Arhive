@@ -391,14 +391,26 @@ void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
                         // swapping the mover will stop the check below at == TYPEID_UNIT, so everything works fine
                         mover = _player;
                     }
+    }
 
-        // not have spell in spellbook or spell passive and not casted by client
-        if ((mover->GetTypeId() == TYPEID_UNIT && !mover->ToCreature()->HasSpell(spellId)) || spellInfo->IsPassive())
+    // not have spell in spellbook
+    if (mover->GetTypeId() == TYPEID_PLAYER && !mover->ToPlayer()->HasActiveSpell(spellId))
+    {
+        bool allow = false;
+        // allow casting of unknown spells for special lock cases
+        if (GameObject *go = targets.GetGOTarget())
+            if (go->GetSpellForLock(mover->ToPlayer()) == spellInfo)
+                allow = true;
+
+        // allow casting of spells triggered by clientside periodic trigger auras
+        if (caster->HasAuraTypeWithTriggerSpell(SPELL_AURA_PERIODIC_TRIGGER_SPELL_FROM_CLIENT, spellId))
         {
-            //cheater? kick? ban?
-            recvPacket.rfinish(); // prevent spam at ignore packet
-            return;
+            allow = true;
+            triggerFlag = TRIGGERED_FULL_MASK;
         }
+
+        if (!allow)
+            return;
     }
 
     // Client is resending autoshot cast opcode when other spell is casted during shoot rotation

@@ -1312,10 +1312,6 @@ void WorldSession::HandlePetCastSpellOpcode(WorldPacket& recvPacket)
         return;
     }
 
-    // do not cast not learned spells
-    if (!caster->HasSpell(spellId) || spellInfo->IsPassive())
-        return;
-
     SpellCastTargets targets;
     targets.Read(recvPacket, caster);
     HandleClientCastFlags(recvPacket, castFlags, targets);
@@ -1323,7 +1319,28 @@ void WorldSession::HandlePetCastSpellOpcode(WorldPacket& recvPacket)
     bool SetFollow = caster->HasUnitState(UNIT_STATE_FOLLOW);
     caster->ClearUnitState(UNIT_STATE_FOLLOW);
 
-    Spell* spell = new Spell(caster, spellInfo, TRIGGERED_NONE);
+    TriggerCastFlags triggerCastFlags = TRIGGERED_NONE;
+
+    if (spellInfo->IsPassive())
+        return;
+
+    // cast only learned spells
+    if (!caster->HasSpell(spellId))
+    {
+        bool allow = false;
+
+        // allow casting of spells triggered by clientside periodic trigger auras
+        if (caster->HasAuraTypeWithTriggerSpell(SPELL_AURA_PERIODIC_TRIGGER_SPELL_FROM_CLIENT, spellId))
+        {
+            allow = true;
+            triggerCastFlags = TRIGGERED_FULL_MASK;
+        }
+
+        if (!allow)
+            return;
+    }
+
+    Spell* spell = new Spell(caster, spellInfo, triggerCastFlags);
     spell->m_cast_count = castCount;                    // probably pending spell cast
     spell->m_targets = targets;
     spell->LoadScripts();
