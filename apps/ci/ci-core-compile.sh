@@ -2,11 +2,12 @@
 
 set -e
 
+$MTHREADS = "$(($(grep -c ^processor /proc/cpuinfo) + 2))"
+
 echo "Compile core"
 export CCACHE_CPP2=true
 export CCACHE_MAXSIZE='500MB'
 export CCACHE_COMPRESS=1
-"$MTHREADS=$(($(grep -c ^processor /proc/cpuinfo) + 2))"
 ccache -s
 cd build
 echo "> Using $MTHREADS threads"
