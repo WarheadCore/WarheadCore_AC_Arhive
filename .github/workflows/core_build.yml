@@ -27,7 +27,7 @@ jobs:
             ccache:${{ matrix.os }}:${{ matrix.compiler }}:${{ matrix.modules }}-modules:${{ github.ref }}
             ccache:${{ matrix.os }}:${{ matrix.compiler }}:${{ matrix.modules }}-modules
       - name: Configure OS and install deps
-        run: source ./apps/ci/ci-os-config.sh core-build
+        run: source ./apps/ci/ci-os-config-core.sh
         env:
           CONTINUOUS_INTEGRATION: true
       - name: Build
