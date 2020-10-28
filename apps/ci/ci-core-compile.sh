@@ -2,7 +2,7 @@
 
 set -e
 
-$MTHREADS = "$(($(grep -c ^processor /proc/cpuinfo) + 2))"
+"$MTHREADS" = "$(($(grep -c ^processor /proc/cpuinfo) + 2))"
 
 echo "Compile core"
 export CCACHE_CPP2=true
