@@ -30,6 +30,8 @@ jobs:
         run: source ./apps/ci/ci-os-config-core.sh
         env:
           CONTINUOUS_INTEGRATION: true
+      - name: Configure CMake
+        run: source ./apps/ci/ci-cmake-config.sh
       - name: Build
         run: source ./apps/ci/ci-core-compile.sh
       - name: Import DB
