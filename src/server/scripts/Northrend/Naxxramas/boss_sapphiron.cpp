@@ -164,13 +164,13 @@ public:
             EnterCombatSelfFunction();
             me->CastSpell(me, RAID_MODE(SPELL_FROST_AURA_10, SPELL_FROST_AURA_25, SPELL_FROST_AURA_10, SPELL_FROST_AURA_25), true);
 
-            events.ScheduleEvent(EVENT_BERSERK, 15 * 60000);
-            events.ScheduleEvent(EVENT_SPELL_CLEAVE, 5000);
-            events.ScheduleEvent(EVENT_SPELL_TAIL_SWEEP, 10000);
-            events.ScheduleEvent(EVENT_SPELL_LIFE_DRAIN, 17000);
-            events.ScheduleEvent(EVENT_SPELL_BLIZZARD, 17000);
-            events.ScheduleEvent(EVENT_FLIGHT_START, 45000);
-            events.ScheduleEvent(EVENT_HUNDRED_CLUB, 5000);
+            events.ScheduleEvent(EVENT_BERSERK, 15min);
+            events.ScheduleEvent(EVENT_SPELL_CLEAVE, 5s);
+            events.ScheduleEvent(EVENT_SPELL_TAIL_SWEEP, 10s);
+            events.ScheduleEvent(EVENT_SPELL_LIFE_DRAIN, 17s);
+            events.ScheduleEvent(EVENT_SPELL_BLIZZARD, 17s);
+            events.ScheduleEvent(EVENT_FLIGHT_START, 45s);
+            events.ScheduleEvent(EVENT_HUNDRED_CLUB, 5s);
         }
 
         void JustDied(Unit*  killer) override
@@ -188,7 +188,7 @@ public:
         void MovementInform(uint32 type, uint32 id) override
         {
             if (type == POINT_MOTION_TYPE && id == POINT_CENTER)
-                events.ScheduleEvent(EVENT_FLIGHT_LIFTOFF, 500);
+                events.ScheduleEvent(EVENT_FLIGHT_LIFTOFF, 500ms);
         }
 
         void SpellHitTarget(Unit* target, const SpellInfo* spellInfo) override
@@ -249,19 +249,19 @@ public:
             {
                 case EVENT_BERSERK:
                     Talk(EMOTE_ENRAGE);
-                    me->CastSpell(me, SPELL_BERSERK, true);  
+                    me->CastSpell(me, SPELL_BERSERK, true);
                     return;
                 case EVENT_SPELL_CLEAVE:
                     me->CastSpell(me->GetVictim(), SPELL_CLEAVE, false);
-                    events.RepeatEvent(10000);
+                    events.RepeatEvent(10s);
                     return;
                 case EVENT_SPELL_TAIL_SWEEP:
                     me->CastSpell(me, RAID_MODE(SPELL_TAIL_SWEEP_10, SPELL_TAIL_SWEEP_25, SPELL_TAIL_SWEEP_10, SPELL_TAIL_SWEEP_25), false);
-                    events.RepeatEvent(10000);
+                    events.RepeatEvent(10s);
                     return;
                 case EVENT_SPELL_LIFE_DRAIN:
                     me->CastCustomSpell(RAID_MODE(SPELL_LIFE_DRAIN_10, SPELL_LIFE_DRAIN_25, SPELL_LIFE_DRAIN_10, SPELL_LIFE_DRAIN_25), SPELLVALUE_MAX_TARGETS, RAID_MODE(2, 5, 2, 5), me, false);
-                    events.RepeatEvent(24000);
+                    events.RepeatEvent(24s);
                     return;
                 case EVENT_SPELL_BLIZZARD:
                     {
@@ -273,17 +273,15 @@ public:
 
                         if (cr)
                             cr->GetMotionMaster()->MoveRandom(40);
-                        events.RepeatEvent(RAID_MODE(8000, 6500, 8000, 6500));
+                        events.RepeatEvent(RAID_MODE(8000ms, 6500ms, 8000ms, 6500ms));
                         return;
                     }
                 case EVENT_FLIGHT_START:
                     if (me->HealthBelowPct(11))
-                    {
-                        
                         return;
-                    }
-                    events.RepeatEvent(45000);
-                    events.DelayEvents(35000);
+
+                    events.RepeatEvent(45s);
+                    events.DelayEvents(35s);
                     me->SetReactState(REACT_PASSIVE);
                     me->AttackStop();
                     float x, y, z, o;
@@ -297,7 +295,7 @@ public:
                     me->SetDisableGravity(true);
                     me->SetHover(true);
                     currentTarget = 0;
-                    events.ScheduleEvent(EVENT_FLIGHT_ICEBOLT, 3000);
+                    events.ScheduleEvent(EVENT_FLIGHT_ICEBOLT, 3s);
                     iceboltCount = RAID_MODE(2, 3, 3, 4);
                     return;
                 case EVENT_FLIGHT_ICEBOLT:
@@ -335,18 +333,18 @@ public:
                             events.ScheduleEvent(EVENT_FLIGHT_ICEBOLT, (me->GetExactDist(*itr) / 13.0f)*IN_MILLISECONDS);
                         }
                         else
-                            events.ScheduleEvent(EVENT_FLIGHT_BREATH, 1000);
+                            events.ScheduleEvent(EVENT_FLIGHT_BREATH, 1s);
                         return;
                     }
                 case EVENT_FLIGHT_BREATH:
                     currentTarget = 0;
                     Talk(EMOTE_BREATH);
                     me->CastSpell(me, SPELL_FROST_MISSILE, false);
-                    events.ScheduleEvent(EVENT_FLIGHT_SPELL_EXPLOSION, 8500);
+                    events.ScheduleEvent(EVENT_FLIGHT_SPELL_EXPLOSION, 8500ms);
                     return;
                 case EVENT_FLIGHT_SPELL_EXPLOSION:
                     me->CastSpell(me, SPELL_FROST_EXPLOSION, true);
-                    events.ScheduleEvent(EVENT_FLIGHT_START_LAND, 3000);
+                    events.ScheduleEvent(EVENT_FLIGHT_START_LAND, 3s);
                     return;
                 case EVENT_FLIGHT_START_LAND:
                     if (!blockList.empty())
@@ -356,15 +354,14 @@ public:
 
                     blockList.clear();
                     me->RemoveAllGameObjects();
-                    events.ScheduleEvent(EVENT_LAND, 1000);
+                    events.ScheduleEvent(EVENT_LAND, 1s);
                     return;
                 case EVENT_LAND:
                     me->HandleEmoteCommand(EMOTE_ONESHOT_LAND);
                     me->SetDisableGravity(false);
 
                     me->SetHover(false);
-                    
-                    events.ScheduleEvent(EVENT_GROUND, 1500);
+                    events.ScheduleEvent(EVENT_GROUND, 1500ms);
                     return;
                 case EVENT_GROUND:
                     me->SetReactState(REACT_AGGRESSIVE);
@@ -382,7 +379,7 @@ public:
                             }
 
                         }
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                         return;
                     }
             }
