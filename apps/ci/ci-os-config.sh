@@ -18,31 +18,24 @@ CONFIG_SH
   ;;
 
 "core-build" )
-cat >>conf/config.sh <<CONFIG_SH
-MTHREADS=$(expr $(grep -c ^processor /proc/cpuinfo) + 2)
-CWARNINGS=OFF
-CDEBUG=OFF
-CTYPE=Release
-CSCRIPTS=ON
-CUNIT_TESTS=ON
-CSERVERS=ON
-CTOOLS=ON
-CSCRIPTPCH=OFF
-CCOREPCH=OFF
-CCUSTOMOPTIONS='-DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache'
-DB_CHARACTERS_CONF="MYSQL_USER='root'; MYSQL_PASS='root'; MYSQL_HOST='localhost';"
-DB_AUTH_CONF="MYSQL_USER='root'; MYSQL_PASS='root'; MYSQL_HOST='localhost';"
-DB_WORLD_CONF="MYSQL_USER='root'; MYSQL_PASS='root'; MYSQL_HOST='localhost';"
-CONFIG_SH
-
 time sudo apt-get install -y ccache cmake make gcc g++ clang \
   libssl-dev libbz2-dev libreadline-dev libncurses-dev libace-6.* libace-dev \
   libboost-system1.6*-dev libboost-filesystem1.6*-dev libboost-program-options1.6*-dev libboost-iostreams1.6*-dev
 
-time sudo apt-get install -y clang-7
-  echo "CCOMPILERC=\"clang-7\"" >> ./conf/config.sh
-  echo "CCOMPILERCXX=\"clang++-7\"" >> ./conf/config.sh
-  ;;
+case $COMPILER in
+  "clang7" )
+    time sudo apt-get install -y clang-7
+    ;;
+
+  "clang10" )
+    time sudo apt-get install -y clang-10
+    ;;
+
+  * )
+    echo "Unknown compiler $COMPILER"
+    exit 1
+    ;;
+esac
 
 * )
   echo "Unknown CI type ($ci_type)"
