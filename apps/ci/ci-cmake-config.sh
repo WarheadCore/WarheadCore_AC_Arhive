@@ -5,7 +5,7 @@ set -e
 mkdir build
 cd build
 
-echo ">> Config CMake ($COMPILER, $BUILDTYPE)"
+echo ">> Config CMake for ($COMPILER) compiler"
 
 case $COMPILER in
   "clang7")
