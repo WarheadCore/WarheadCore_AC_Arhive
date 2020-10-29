@@ -113,9 +113,7 @@ void CreateDir( const std::string& Path )
     {
         int ret = chdir("../");
         if (ret < 0)
-        {
             printf("Error while executing chdir");
-        }
         return;
     }
 

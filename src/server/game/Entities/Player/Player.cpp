@@ -1060,7 +1060,7 @@ bool Player::Create(uint32 guidlow, CharacterCreateInfo* createInfo)
     }
     else
         guidlow = sObjectMgr->_hiCharGuid;
-        
+
     if (incHighest)
         ++sObjectMgr->_hiCharGuid;
 

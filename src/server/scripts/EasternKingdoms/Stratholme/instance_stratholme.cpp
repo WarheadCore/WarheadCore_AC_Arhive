@@ -136,15 +136,15 @@ public:
             {
                 for (uint32 i = 0; i < 33; ++i)
                     events.ScheduleEvent(EVENT_SPAWN_MINDLESS, Milliseconds(5000 + i * 210));
-                
+
                 if (Creature* baron = instance->GetCreature(_baronRivendareGUID))
                     if (GameObject* gate = baron->FindNearestGameObject(GO_SLAUGHTER_GATE_SIDE, 200.0f))
                         gate->SetGoState(GO_STATE_ACTIVE);
             }
-            
+
             if (_slaughterProgress == 3)
                 events.ScheduleEvent(EVENT_SPAWN_BLACK_GUARD, 20s);
-            
+
             if (_slaughterProgress == 4)
             {
                 if (Creature* baron = instance->GetCreature(_baronRivendareGUID))

@@ -379,19 +379,19 @@ void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
         if(!caster->ToPlayer()->HasActiveSpell(spellId))
         {
             bool allow = false;
-    
+
             // allow casting of unknown spells for special lock cases
-            if (GameObject *go = targets.GetGOTarget())
+            if (GameObject* go = targets.GetGOTarget())
                 if (go->GetSpellForLock(caster->ToPlayer()) == spellInfo)
                     allow = true;
-    
+
             // allow casting of spells triggered by clientside periodic trigger auras
             if (caster->HasAuraTypeWithTriggerSpell(SPELL_AURA_PERIODIC_TRIGGER_SPELL_FROM_CLIENT, spellId))
             {
                 allow = true;
                 triggerFlag = TRIGGERED_FULL_MASK;
             }
-    
+
             if (!allow)
                 return;
         }
@@ -421,7 +421,7 @@ void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
     // Client is resending autoshot cast opcode when other spell is cast during shoot rotation
     // Skip it to prevent "interrupt" message
     if (spellInfo->IsAutoRepeatRangedSpell() && caster->GetCurrentSpell(CURRENT_AUTOREPEAT_SPELL)
-        && caster->GetCurrentSpell(CURRENT_AUTOREPEAT_SPELL)->m_spellInfo == spellInfo)
+            && caster->GetCurrentSpell(CURRENT_AUTOREPEAT_SPELL)->m_spellInfo == spellInfo)
         return;
 
     // can't use our own spells when we're in possession of another unit,

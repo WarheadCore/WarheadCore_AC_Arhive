@@ -1329,7 +1329,7 @@ bool SpellInfo::CanDispelAura(SpellInfo const* aura) const
 
     // These auras (Cyclone for example) are not dispelable
     if ((aura->HasAttribute(SPELL_ATTR1_UNAFFECTED_BY_SCHOOL_IMMUNE) && aura->Mechanic != MECHANIC_NONE)
-        || aura->HasAttribute(SPELL_ATTR2_UNAFFECTED_BY_AURA_SCHOOL_IMMUNE))
+            || aura->HasAttribute(SPELL_ATTR2_UNAFFECTED_BY_AURA_SCHOOL_IMMUNE))
         return false;
 
     return true;

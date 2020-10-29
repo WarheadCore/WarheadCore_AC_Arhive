@@ -185,7 +185,7 @@ public:
             // Make the Spirits chase Ambassador Flamelash
             if (Creature* Spirit = me->SummonCreature(NPC_FIRE_SPIRIT, SummonPositions[getValidRandomPosition()], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 60000))
                 Spirit->AI()->DoAction(EVENT_CHASE_AMBASSADOR);
-            
+
             _events.ScheduleEvent(EVENT_SUMMON_SPIRITS, 12s, 14s);
         }
 
