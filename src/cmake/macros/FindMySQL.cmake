@@ -98,7 +98,7 @@ if (WIN32)
       "$ENV{SystemDrive}/${MariaDBVersion}/bin/opt"
     DOC
         "path to your mysql binary.")
-  
+
   endmacro(FindLibMariaDB)
 
   foreach(version ${_MARIADB_KNOWN_VERSIONS})
