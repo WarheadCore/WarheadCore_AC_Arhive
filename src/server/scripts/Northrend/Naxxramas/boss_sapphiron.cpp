@@ -162,7 +162,7 @@ public:
         {
             BossAI::EnterCombat(who);
             EnterCombatSelfFunction();
-            me->CastSpell(me, RAID_MODE(SPELL_FROST_AURA_10, SPELL_FROST_AURA_25, SPELL_FROST_AURA_10, SPELL_FROST_AURA_25), true);
+            me->CastSpell(me, RAID_MODE_HEROIC(SPELL_FROST_AURA_10, SPELL_FROST_AURA_25), true);
 
             events.ScheduleEvent(EVENT_BERSERK, 15min);
             events.ScheduleEvent(EVENT_SPELL_CLEAVE, 5s);
@@ -256,11 +256,11 @@ public:
                     events.RepeatEvent(10s);
                     return;
                 case EVENT_SPELL_TAIL_SWEEP:
-                    me->CastSpell(me, RAID_MODE(SPELL_TAIL_SWEEP_10, SPELL_TAIL_SWEEP_25, SPELL_TAIL_SWEEP_10, SPELL_TAIL_SWEEP_25), false);
+                    me->CastSpell(me, RAID_MODE_HEROIC(SPELL_TAIL_SWEEP_10, SPELL_TAIL_SWEEP_25), false);
                     events.RepeatEvent(10s);
                     return;
                 case EVENT_SPELL_LIFE_DRAIN:
-                    me->CastCustomSpell(RAID_MODE(SPELL_LIFE_DRAIN_10, SPELL_LIFE_DRAIN_25, SPELL_LIFE_DRAIN_10, SPELL_LIFE_DRAIN_25), SPELLVALUE_MAX_TARGETS, RAID_MODE(2, 5, 2, 5), me, false);
+                    me->CastCustomSpell(RAID_MODE_HEROIC(SPELL_LIFE_DRAIN_10, SPELL_LIFE_DRAIN_25), SPELLVALUE_MAX_TARGETS, RAID_MODE_HEROIC(2, 5), me, false);
                     events.RepeatEvent(24s);
                     return;
                 case EVENT_SPELL_BLIZZARD:
@@ -273,7 +273,7 @@ public:
 
                         if (cr)
                             cr->GetMotionMaster()->MoveRandom(40);
-                        events.RepeatEvent(RAID_MODE(8000ms, 6500ms, 8000ms, 6500ms));
+                        events.RepeatEvent(RAID_MODE_HEROIC(8000ms, 6500ms));
                         return;
                     }
                 case EVENT_FLIGHT_START:

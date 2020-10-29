@@ -181,7 +181,7 @@ public:
                     events.RepeatEvent(10s);
                     break;
                 case EVENT_SPELL_DECEPIT_FEVER:
-                    me->CastSpell(me, RAID_MODE(SPELL_DECREPIT_FEVER_10, SPELL_DECREPIT_FEVER_25, SPELL_DECREPIT_FEVER_10, SPELL_DECREPIT_FEVER_25), false);
+                    me->CastSpell(me, RAID_MODE_HEROIC(SPELL_DECREPIT_FEVER_10, SPELL_DECREPIT_FEVER_25), false);
                     events.RepeatEvent(20s);
                     break;
                 case EVENT_SWITCH_PHASE:

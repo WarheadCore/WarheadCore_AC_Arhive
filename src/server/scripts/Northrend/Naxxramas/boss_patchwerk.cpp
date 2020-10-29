@@ -159,7 +159,7 @@ public:
                         }
 
                         if (finalTarget)
-                            me->CastSpell(finalTarget, RAID_MODE(SPELL_HATEFUL_STRIKE_10, SPELL_HATEFUL_STRIKE_25, SPELL_HATEFUL_STRIKE_10, SPELL_HATEFUL_STRIKE_25), false);
+                            me->CastSpell(finalTarget, RAID_MODE_HEROIC(SPELL_HATEFUL_STRIKE_10, SPELL_HATEFUL_STRIKE_25), false);
 
                         events.RepeatEvent(1s);
                         break;

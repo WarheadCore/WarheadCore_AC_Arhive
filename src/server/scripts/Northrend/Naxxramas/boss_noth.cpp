@@ -204,7 +204,7 @@ public:
                 // GROUND
                 case EVENT_SPELL_CURSE:
                     if (events.GetPhaseMask() == 0)
-                        me->CastCustomSpell(RAID_MODE(SPELL_CURSE_OF_THE_PLAGUEBRINGER_10, SPELL_CURSE_OF_THE_PLAGUEBRINGER_25, SPELL_CURSE_OF_THE_PLAGUEBRINGER_10, SPELL_CURSE_OF_THE_PLAGUEBRINGER_25), SPELLVALUE_MAX_TARGETS, RAID_MODE(3, 10, 3, 10), me, false);
+                        me->CastCustomSpell(RAID_MODE_HEROIC(SPELL_CURSE_OF_THE_PLAGUEBRINGER_10, SPELL_CURSE_OF_THE_PLAGUEBRINGER_25), SPELLVALUE_MAX_TARGETS, RAID_MODE_HEROIC(3, 10), me, false);
                     events.RepeatEvent(25s);
                     break;
                 case EVENT_SUMMON_PLAGUED_WARRIOR_ANNOUNCE:
@@ -225,7 +225,7 @@ public:
                     break;
                 case EVENT_SPELL_BLINK:
                     DoResetThreat();
-                    me->CastSpell(me, RAID_MODE(SPELL_CRIPPLE_10, SPELL_CRIPPLE_25, SPELL_CRIPPLE_10, SPELL_CRIPPLE_25), false);
+                    me->CastSpell(me, RAID_MODE_HEROIC(SPELL_CRIPPLE_10, SPELL_CRIPPLE_25), false);
                     me->CastSpell(me, SPELL_BLINK, true);
                     Talk(EMOTE_BLINK);
                     events.RepeatEvent(30s);

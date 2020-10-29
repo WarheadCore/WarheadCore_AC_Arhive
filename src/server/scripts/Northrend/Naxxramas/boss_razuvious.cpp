@@ -156,7 +156,7 @@ public:
                     break;
                 case EVENT_SPELL_DISRUPTING_SHOUT:
                     Talk(SAY_SHOUT);
-                    me->CastSpell(me, RAID_MODE(SPELL_DISRUPTING_SHOUT_10, SPELL_DISRUPTING_SHOUT_25, SPELL_DISRUPTING_SHOUT_10, SPELL_DISRUPTING_SHOUT_25), false);
+                    me->CastSpell(me, RAID_MODE_HEROIC(SPELL_DISRUPTING_SHOUT_10, SPELL_DISRUPTING_SHOUT_25), false);
                     events.RepeatEvent(25s);
                     break;
                 case EVENT_SPELL_JAGGED_KNIFE:

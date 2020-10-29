@@ -410,10 +410,9 @@ public:
                     break;
                 case EVENT_INTRO_4:
                     Talk(SAY_INTRO_4);
-
                     break;
                 case EVENT_SPELL_SHADOW_BOLT:
-                    me->CastSpell(me->GetVictim(), RAID_MODE(SPELL_SHADOW_BOLT_10, SPELL_SHADOW_BOLT_25), false);
+                    me->CastSpell(me->GetVictim(), RAID_MODE_HEROIC(SPELL_SHADOW_BOLT_10, SPELL_SHADOW_BOLT_25), false);
                     events.RepeatEvent(2s);
                     break;
                 case EVENT_SPELL_HARVEST_SOUL:

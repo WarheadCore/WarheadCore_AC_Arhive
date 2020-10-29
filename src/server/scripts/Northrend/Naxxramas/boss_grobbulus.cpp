@@ -103,12 +103,12 @@ public:
             events.ScheduleEvent(EVENT_SPELL_POISON_CLOUD, 15s);
             events.ScheduleEvent(EVENT_SPELL_MUTATING_INJECTION, 20s);
             events.ScheduleEvent(EVENT_SPELL_SLIME_SPRAY, 10s);
-            events.ScheduleEvent(EVENT_SPELL_BERSERK, RAID_MODE(12min, 9min, 12min, 9min));
+            events.ScheduleEvent(EVENT_SPELL_BERSERK, RAID_MODE_HEROIC(12min, 9min));
         }
 
         void SpellHitTarget(Unit* target, const SpellInfo* spellInfo) override
         {
-            if (spellInfo->Id == RAID_MODE(SPELL_SLIME_SPRAY_10, SPELL_SLIME_SPRAY_25, SPELL_SLIME_SPRAY_10, SPELL_SLIME_SPRAY_25) && target->GetTypeId() == TYPEID_PLAYER)
+            if (spellInfo->Id == RAID_MODE_HEROIC(SPELL_SLIME_SPRAY_10, SPELL_SLIME_SPRAY_25) && target->GetTypeId() == TYPEID_PLAYER)
                 me->SummonCreature(NPC_FALLOUT_SLIME, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ());
         }
 
@@ -165,7 +165,7 @@ public:
                     break;
                 case EVENT_SPELL_SLIME_SPRAY:
                     Talk(EMOTE_SLIME);
-                    me->CastSpell(me->GetVictim(), RAID_MODE(SPELL_SLIME_SPRAY_10, SPELL_SLIME_SPRAY_25), false);
+                    me->CastSpell(me->GetVictim(), RAID_MODE_HEROIC(SPELL_SLIME_SPRAY_10, SPELL_SLIME_SPRAY_25), false);
                     events.RepeatEvent(20s);
                     break;
                 case EVENT_SPELL_MUTATING_INJECTION:

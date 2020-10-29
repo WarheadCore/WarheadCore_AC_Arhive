@@ -183,7 +183,7 @@ public:
                     break;
                 case EVENT_SPELL_ENRAGE:
                     Talk(EMOTE_ENRAGE);
-                    me->CastSpell(me, RAID_MODE(SPELL_ENRAGE_10, SPELL_ENRAGE_25), true);
+                    me->CastSpell(me, RAID_MODE_HEROIC(SPELL_ENRAGE_10, SPELL_ENRAGE_25), true);
                     events.RepeatEvent(30s);
                     break;
                 case EVENT_SPELL_MORTAL_WOUND:
@@ -192,7 +192,7 @@ public:
                     break;
                 case EVENT_SPELL_DECIMATE:
                     Talk(EMOTE_DECIMATE);
-                    me->CastSpell(me, RAID_MODE(SPELL_DECIMATE_10, SPELL_DECIMATE_25), false);
+                    me->CastSpell(me, RAID_MODE_HEROIC(SPELL_DECIMATE_10, SPELL_DECIMATE_25), false);
                     events.RepeatEvent(105s);
                     break;
                 case EVENT_SUMMON_ZOMBIE:
