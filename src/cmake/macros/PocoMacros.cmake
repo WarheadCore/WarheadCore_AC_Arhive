@@ -2,7 +2,7 @@
 # Copyright (c) 2004-2006, Applied Informatics Software Engineering GmbH.
 # and Contributors.
 #
-# SPDX-License-Identifier:	BSL-1.0
+# SPDX-License-Identifier:  BSL-1.0
 #
 # Collection of common functionality for Poco CMake
 
@@ -26,7 +26,7 @@ if (WIN32)
       set(kit81_bindir "${kit81_dir}/bin/x64")
       foreach (tmp_elem ${kit10_list})
         if (IS_DIRECTORY ${tmp_elem})
-		  list(APPEND kit10_bindir "${tmp_elem}/x64")
+          list(APPEND kit10_bindir "${tmp_elem}/x64")
         endif()
       endforeach()
     else (X64)
@@ -35,7 +35,7 @@ if (WIN32)
       set(kit81_bindir "${kit81_dir}/bin/x86")
       foreach (tmp_elem ${kit10_list})
         if (IS_DIRECTORY ${tmp_elem})
-		  list(APPEND kit10_bindir "${tmp_elem}/x86")
+          list(APPEND kit10_bindir "${tmp_elem}/x86")
         endif()
       endforeach()
     endif (X64)

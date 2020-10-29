@@ -391,12 +391,12 @@ LogChannel.Auth = "2","local","%Y-%m-%d %H:%M:%S %t","Auth.log","false","never",
 #                         0 - (Disabled)
 #                         1 - (Fatal)
 #                         2 - (Critical)
-#						  3 - (Error)
+#                         3 - (Error)
 #                         4 - (Warning)
 #                         5 - (Notice)
 #                         6 - (Info)
 #                         7 - (Debug)
-#						  8 - (Trace)
+#                         8 - (Trace)
 #
 #                     File channel: file channel linked to logger
 #                     (Using spaces as separator).
