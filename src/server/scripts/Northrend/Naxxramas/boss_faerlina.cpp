@@ -109,9 +109,9 @@ public:
             me->CallForHelp(VISIBLE_RANGE);
             summons.DoZoneInCombat();
             Talk(SAY_AGGRO);
-            events.ScheduleEvent(EVENT_SPELL_POISON_BOLT, urand(12000, 15000));
-            events.ScheduleEvent(EVENT_SPELL_RAIN_OF_FIRE, urand(6000, 18000));
-            events.ScheduleEvent(EVENT_SPELL_FRENZY, urand(60000, 80000), 1);
+            events.ScheduleEvent(EVENT_SPELL_POISON_BOLT, 12s, 15s);
+            events.ScheduleEvent(EVENT_SPELL_RAIN_OF_FIRE, 6s, 18s);
+            events.ScheduleEvent(EVENT_SPELL_FRENZY, 1min, 80s, 1);
             events.SetPhase(1);
         }
 
@@ -157,24 +157,24 @@ public:
             {
                 case EVENT_SPELL_POISON_BOLT:
                     if (!me->HasAura(SPELL_WIDOWS_EMBRACE))
-                        me->CastCustomSpell(RAID_MODE(SPELL_POISON_BOLT_VOLLEY_10, SPELL_POISON_BOLT_VOLLEY_25, SPELL_POISON_BOLT_VOLLEY_10, SPELL_POISON_BOLT_VOLLEY_25), SPELLVALUE_MAX_TARGETS, 3, me, false);
-                    events.RepeatEvent(14000);
+                        me->CastCustomSpell(RAID_MODE_HEROIC(SPELL_POISON_BOLT_VOLLEY_10, SPELL_POISON_BOLT_VOLLEY_25), SPELLVALUE_MAX_TARGETS, 3, me, false);
+                    events.RepeatEvent(14s);
                     break;
                 case EVENT_SPELL_RAIN_OF_FIRE:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                        me->CastSpell(target, RAID_MODE(SPELL_RAIN_OF_FIRE_10, SPELL_RAIN_OF_FIRE_25, SPELL_RAIN_OF_FIRE_10, SPELL_RAIN_OF_FIRE_25), false);
-                    events.RepeatEvent(12000);
+                        me->CastSpell(target, RAID_MODE_HEROIC(SPELL_RAIN_OF_FIRE_10, SPELL_RAIN_OF_FIRE_25), false);
+                    events.RepeatEvent(12s);
                     break;
                 case EVENT_SPELL_FRENZY:
-                    if (!me->HasAura(RAID_MODE(SPELL_FRENZY_10, SPELL_FRENZY_25, SPELL_FRENZY_10, SPELL_FRENZY_25)))
+                    if (!me->HasAura(RAID_MODE_HEROIC(SPELL_FRENZY_10, SPELL_FRENZY_25)))
                     {
                         Talk(SAY_FRENZY);
                         Talk(EMOTE_FRENZY);
-                        me->CastSpell(me, RAID_MODE(SPELL_FRENZY_10, SPELL_FRENZY_25, SPELL_FRENZY_10, SPELL_FRENZY_25), true);
-                        events.RepeatEvent(60000);
+                        me->CastSpell(me, RAID_MODE_HEROIC(SPELL_FRENZY_10, SPELL_FRENZY_25), true);
+                        events.RepeatEvent(1min);
                     }
                     else
-                        events.RepeatEvent(30000);
+                        events.RepeatEvent(30s);
                     break;
             }
 
@@ -186,10 +186,10 @@ public:
             if (spell->Id == SPELL_WIDOWS_EMBRACE)
             {
                 Talk(EMOTE_WIDOWS_EMBRACE);
-                if (me->HasAura(RAID_MODE(SPELL_FRENZY_10, SPELL_FRENZY_25, SPELL_FRENZY_10, SPELL_FRENZY_25)))
+                if (me->HasAura(RAID_MODE_HEROIC(SPELL_FRENZY_10, SPELL_FRENZY_25)))
                 {
-                    me->RemoveAurasDueToSpell(RAID_MODE(SPELL_FRENZY_10, SPELL_FRENZY_25, SPELL_FRENZY_10, SPELL_FRENZY_25));
-                    events.RescheduleEvent(EVENT_SPELL_FRENZY, 60000);
+                    me->RemoveAurasDueToSpell(RAID_MODE_HEROIC(SPELL_FRENZY_10, SPELL_FRENZY_25));
+                    events.RescheduleEvent(EVENT_SPELL_FRENZY, 1min);
                 }
 
                 pInstance->SetData(DATA_FRENZY_REMOVED, 0);

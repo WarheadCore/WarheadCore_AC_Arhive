@@ -131,10 +131,10 @@ public:
             BossAI::EnterCombat(who);
             Talk(SAY_AGGRO);
 
-            events.ScheduleEvent(EVENT_SPELL_UNBALANCING_STRIKE, 30000);
-            events.ScheduleEvent(EVENT_SPELL_DISRUPTING_SHOUT, 25000);
-            events.ScheduleEvent(EVENT_SPELL_JAGGED_KNIFE, 15000);
-            events.ScheduleEvent(EVENT_PLAY_COMMAND, 40000);
+            events.ScheduleEvent(EVENT_SPELL_UNBALANCING_STRIKE, 30s);
+            events.ScheduleEvent(EVENT_SPELL_DISRUPTING_SHOUT, 25s);
+            events.ScheduleEvent(EVENT_SPELL_JAGGED_KNIFE, 15s);
+            events.ScheduleEvent(EVENT_PLAY_COMMAND, 40s);
 
             summons.DoZoneInCombat();
         }
@@ -152,22 +152,22 @@ public:
             {
                 case EVENT_SPELL_UNBALANCING_STRIKE:
                     me->CastSpell(me->GetVictim(), SPELL_UNBALANCING_STRIKE, false);
-                    events.RepeatEvent(30000);
+                    events.RepeatEvent(30s);
                     break;
                 case EVENT_SPELL_DISRUPTING_SHOUT:
                     Talk(SAY_SHOUT);
-                    me->CastSpell(me, RAID_MODE(SPELL_DISRUPTING_SHOUT_10, SPELL_DISRUPTING_SHOUT_25, SPELL_DISRUPTING_SHOUT_10, SPELL_DISRUPTING_SHOUT_25), false);
-                    events.RepeatEvent(25000);
+                    me->CastSpell(me, RAID_MODE_HEROIC(SPELL_DISRUPTING_SHOUT_10, SPELL_DISRUPTING_SHOUT_25), false);
+                    events.RepeatEvent(25s);
                     break;
                 case EVENT_SPELL_JAGGED_KNIFE:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 45.0f))
                         me->CastSpell(target, SPELL_JAGGED_KNIFE, false);
 
-                    events.RepeatEvent(25000);
+                    events.RepeatEvent(25s);
                     break;
                 case EVENT_PLAY_COMMAND:
                     Talk(SAY_TAUNTED);
-                    events.RepeatEvent(40000);
+                    events.RepeatEvent(40s);
                     break;
             }
 
@@ -214,8 +214,8 @@ public:
                 cr->AI()->AttackStart(who);
             }
 
-            events.ScheduleEvent(EVENT_MINION_BLOOD_STRIKE, 4000);
-            events.ScheduleEvent(EVENT_MINION_BONE_BARRIER, 9000);
+            events.ScheduleEvent(EVENT_MINION_BLOOD_STRIKE, 4s);
+            events.ScheduleEvent(EVENT_MINION_BONE_BARRIER, 9s);
         }
 
         void UpdateAI(uint32 diff) override
@@ -231,11 +231,11 @@ public:
             {
                 case EVENT_MINION_BLOOD_STRIKE:
                     me->CastSpell(me->GetVictim(), SPELL_BLOOD_STRIKE, false);
-                    events.RepeatEvent(8000);
+                    events.RepeatEvent(8s);
                     break;
                 case EVENT_MINION_BONE_BARRIER:
                     me->CastSpell(me, SPELL_BONE_BARRIER, true);
-                    events.RepeatEvent(40000);
+                    events.RepeatEvent(40s);
                     break;
             }
 

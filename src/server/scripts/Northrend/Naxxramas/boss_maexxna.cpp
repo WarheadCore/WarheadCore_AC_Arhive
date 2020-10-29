@@ -113,12 +113,12 @@ public:
         {
             BossAI::EnterCombat(who);
             me->SetInCombatWithZone();
-            events.ScheduleEvent(EVENT_WEB_WRAP, 20000);
-            events.ScheduleEvent(EVENT_SPELL_WEB_SPRAY, 40000);
-            events.ScheduleEvent(EVENT_SPELL_POISON_SHOCK, 10000);
-            events.ScheduleEvent(EVENT_SPELL_NECROTIC_POISON, 5000);
-            events.ScheduleEvent(EVENT_HEALTH_CHECK, 1000);
-            events.ScheduleEvent(EVENT_SUMMON_SPIDERLINGS, 30000);
+            events.ScheduleEvent(EVENT_WEB_WRAP, 20s);
+            events.ScheduleEvent(EVENT_SPELL_WEB_SPRAY, 40s);
+            events.ScheduleEvent(EVENT_SPELL_POISON_SHOCK, 10s);
+            events.ScheduleEvent(EVENT_SPELL_NECROTIC_POISON, 5s);
+            events.ScheduleEvent(EVENT_HEALTH_CHECK, 1s);
+            events.ScheduleEvent(EVENT_SUMMON_SPIDERLINGS, 30s);
 
             if (pInstance)
             {
@@ -161,38 +161,38 @@ public:
             {
                 case EVENT_SPELL_WEB_SPRAY:
                     Talk(EMOTE_WEB_SPRAY);
-                    me->CastSpell(me, RAID_MODE(SPELL_WEB_SPRAY_10, SPELL_WEB_SPRAY_25, SPELL_WEB_SPRAY_10, SPELL_WEB_SPRAY_25), true);
-                    events.RepeatEvent(40000);
+                    me->CastSpell(me, RAID_MODE_HEROIC(SPELL_WEB_SPRAY_10, SPELL_WEB_SPRAY_25), true);
+                    events.RepeatEvent(40s);
                     break;
                 case EVENT_SPELL_POISON_SHOCK:
-                    me->CastSpell(me->GetVictim(), RAID_MODE(SPELL_POISON_SHOCK_10, SPELL_POISON_SHOCK_25, SPELL_POISON_SHOCK_10, SPELL_POISON_SHOCK_25), false);
-                    events.RepeatEvent(40000);
+                    me->CastSpell(me->GetVictim(), RAID_MODE_HEROIC(SPELL_POISON_SHOCK_10, SPELL_POISON_SHOCK_25), false);
+                    events.RepeatEvent(40s);
                     break;
                 case EVENT_SPELL_NECROTIC_POISON:
-                    me->CastSpell(me->GetVictim(), RAID_MODE(SPELL_NECROTIC_POISON_10, SPELL_NECROTIC_POISON_25, SPELL_NECROTIC_POISON_10, SPELL_NECROTIC_POISON_25), false);
-                    events.RepeatEvent(30000);
+                    me->CastSpell(me->GetVictim(), RAID_MODE_HEROIC(SPELL_NECROTIC_POISON_10, SPELL_NECROTIC_POISON_25), false);
+                    events.RepeatEvent(30s);
                     break;
                 case EVENT_SUMMON_SPIDERLINGS:
                     Talk(EMOTE_SPIDERS);
                     for (uint8 i = 0; i < 8; ++i)
                         me->SummonCreature(NPC_MAEXXNA_SPIDERLING, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation());
-                    events.RepeatEvent(40000);
+                    events.RepeatEvent(40s);
                     break;
                 case EVENT_HEALTH_CHECK:
                     if (me->GetHealthPct() < 30)
                     {
-                        me->CastSpell(me, RAID_MODE(SPELL_FRENZY_10, SPELL_FRENZY_25, SPELL_FRENZY_10, SPELL_FRENZY_25), true);
+                        me->CastSpell(me, RAID_MODE_HEROIC(SPELL_FRENZY_10, SPELL_FRENZY_25), true);
                         break;
                     }
 
-                    events.RepeatEvent(1000);
+                    events.RepeatEvent(1s);
                     break;
                 case EVENT_WEB_WRAP:
                     Talk(EMOTE_WEB_WRAP);
                     for (uint8 i = 0; i < RAID_MODE(1, 2, 2, 3); ++i)
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0, true, -SPELL_WEB_WRAP))
                         {
-                            target->RemoveAura(RAID_MODE(SPELL_WEB_SPRAY_10, SPELL_WEB_SPRAY_25, SPELL_WEB_SPRAY_10, SPELL_WEB_SPRAY_25));
+                            target->RemoveAura(RAID_MODE_HEROIC(SPELL_WEB_SPRAY_10, SPELL_WEB_SPRAY_25));
                             uint8 pos = urand(0, 2);
 
                             if (Creature* wrap = me->SummonCreature(NPC_WEB_WRAP, PosWrap[pos].GetPositionX(), PosWrap[pos].GetPositionY(), PosWrap[pos].GetPositionZ(), 0.0f, TEMPSUMMON_TIMED_DESPAWN, 60000))
@@ -201,7 +201,7 @@ public:
                                 target->GetMotionMaster()->MoveJump(PosWrap[pos].GetPositionX(), PosWrap[pos].GetPositionY(), PosWrap[pos].GetPositionZ(), 20, 20);
                             }
                         }
-                    events.RepeatEvent(40000);
+                    events.RepeatEvent(40s);
                     break;
             }
 
@@ -248,4 +248,3 @@ void AddSC_boss_maexxna()
     new boss_maexxna();
     new boss_maexxna_webwrap();
 }
-
