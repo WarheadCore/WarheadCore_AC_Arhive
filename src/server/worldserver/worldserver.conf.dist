@@ -3032,10 +3032,10 @@ MonsterSight = 50.000000
 StrictChannelNames = 0
 
 #
-#	Instance.SharedNormalHeroicId
-#		Description: 	No description
-#		Default:		0 - Disable
-#						1 - Enable
+#   Instance.SharedNormalHeroicId
+#       Description:    No description
+#       Default:        0 - Disable
+#                       1 - Enable
 #
 
 Instance.SharedNormalHeroicId = 0
@@ -3051,17 +3051,17 @@ Instance.SharedNormalHeroicId = 0
 Instance.ResetTimeRelativeTimestamp = 1135814400
 
 #
-#	TeleportTimeoutNear
-#		Description: 	No description
-#		Default:		25
+#   TeleportTimeoutNear
+#       Description:    No description
+#       Default:        25
 #
 
 TeleportTimeoutNear = 25
 
 #
-#	TeleportTimeoutFar
-#		Description: 	No description
-#		Default:		45
+#   TeleportTimeoutFar
+#       Description:    No description
+#       Default:        45
 #
 
 TeleportTimeoutFar = 45
@@ -3433,12 +3433,12 @@ LogChannel.Modules = "2","local","%Y-%m-%d %H:%M:%S %t","Modules.log","true","da
 #                         0 - (Disabled)
 #                         1 - (Fatal)
 #                         2 - (Critical)
-#						  3 - (Error)
+#                         3 - (Error)
 #                         4 - (Warning)
 #                         5 - (Notice)
 #                         6 - (Info)
 #                         7 - (Debug)
-#						  8 - (Trace)
+#                         8 - (Trace)
 #
 #                     File channel: file channel linked to logger
 #                     (Using spaces as separator).
