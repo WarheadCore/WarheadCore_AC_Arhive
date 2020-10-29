@@ -362,6 +362,26 @@ struct ScriptedAI : public CreatureAI
         return heroic25;
     }
 
+    template<class T> inline
+    const T& RAID_MODE_HEROIC(const T& normal10, const T& normal25) const
+    {
+        switch (_difficulty)
+        {
+        case RAID_DIFFICULTY_10MAN_NORMAL:
+            return normal10;
+        case RAID_DIFFICULTY_25MAN_NORMAL:
+            return normal25;
+        case RAID_DIFFICULTY_10MAN_HEROIC:
+            return normal10;
+        case RAID_DIFFICULTY_25MAN_HEROIC:
+            return normal25;
+        default:
+            break;
+        }
+
+        return normal25;
+    }
+
     Player* SelectTargetFromPlayerList(float maxdist, uint32 excludeAura = 0, bool mustBeInLOS = false) const;
 
 private:
