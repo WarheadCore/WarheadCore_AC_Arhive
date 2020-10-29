@@ -47,7 +47,7 @@ if(PLATFORM EQUAL 64)
   target_compile_definitions(warhead-compile-option-interface
     INTERFACE
       -D_WIN64)
-  
+
   message(STATUS "MSVC: 64-bit platform, enforced -D_WIN64 parameter")
 
   # Enable extended object support for debug compiles on X64 (not required on X86)
@@ -61,7 +61,7 @@ else()
   target_compile_options(warhead-compile-option-interface
     INTERFACE
       /arch:SSE2)
-  
+
   message(STATUS "MSVC: Enabled SSE2 support")
 
   set(CMAKE_EXE_LINKER_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG} /SAFESEH:NO")
@@ -149,8 +149,8 @@ if(NOT WITH_WARNINGS)
       /wd4985
       /wd4267
       /wd4619
-      /wd4512)    
-    
+      /wd4512)
+
   message(STATUS "MSVC: Disabled generic compiletime warnings")
 endif()
 
