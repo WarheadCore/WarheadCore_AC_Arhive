@@ -439,7 +439,6 @@ public:
                             go->SetGoState(GO_STATE_ACTIVE);
 
                         events.CancelEvent(EVENT_TELEPORT);
-
                         break;
                     }
                     events.RepeatEvent(1s);

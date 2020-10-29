@@ -345,7 +345,7 @@ public:
                         events.ScheduleEvent(EVENT_SPELL_CHAINS, 50s);
                     break;
                 case EVENT_SPELL_FROST_BOLT_SINGLE:
-                    me->CastSpell(me->GetVictim(), RAID_MODE(SPELL_FROST_BOLT_SINGLE_10, SPELL_FROST_BOLT_SINGLE_25), false);
+                    me->CastSpell(me->GetVictim(), RAID_MODE_HEROIC(SPELL_FROST_BOLT_SINGLE_10, SPELL_FROST_BOLT_SINGLE_25), false);
                     events.RepeatEvent(2s, 15s);
                     break;
                 case EVENT_SPELL_FROST_BOLT_MULTI:
@@ -538,7 +538,6 @@ public:
                     if (me->HealthBelowPct(35))
                     {
                         me->CastSpell(me, SPELL_FRENZY, true);
-
                         break;
                     }
                     events.RepeatEvent(1s);

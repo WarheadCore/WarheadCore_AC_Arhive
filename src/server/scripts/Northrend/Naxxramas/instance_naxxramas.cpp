@@ -830,10 +830,11 @@ public:
                 case EVENT_KELTHUZAD_WING_TAUNT:
                     // Loads Kel'Thuzad's grid. We need this as he must be active in order for his texts to work.
                     instance->LoadGrid(3749.67f, -5114.06f);
+                    
                     if (Creature* kelthuzad = instance->GetCreature(_kelthuzadGUID))
                         kelthuzad->AI()->Talk(_currentWingTaunt);
+                    
                     ++_currentWingTaunt;
-
                     break;
             }
         }

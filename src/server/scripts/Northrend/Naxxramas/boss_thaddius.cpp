@@ -275,7 +275,6 @@ public:
                     StartEvent();
                     break;
                 case EVENT_THADDIUS_START_2:
-
                     Talk(SAY_AGGRO);
                     me->SetReactState(REACT_AGGRESSIVE);
                     me->SetControlled(false, UNIT_STATE_STUNNED);
@@ -300,7 +299,6 @@ public:
                     break;
                 case EVENT_ACTIVATE_BALL_LIGHTNING:
                     ballLightningEnabled = true;
-
                     break;
             }
 
