@@ -171,22 +171,22 @@ public:
             me->SetInCombatWithZone();
             Talk(SAY_AGGRO);
 
-            events.ScheduleEvent(EVENT_BJARNGRIM_CHANGE_STANCE, 20000, 0);
+            events.ScheduleEvent(EVENT_BJARNGRIM_CHANGE_STANCE, 20s);
 
             // DEFENSIVE STANCE
-            events.ScheduleEvent(EVENT_BJARNGRIM_REFLECTION, 8000, STANCE_DEFENSIVE);
-            events.ScheduleEvent(EVENT_BJARNGRIM_PUMMEL, 5000, STANCE_DEFENSIVE);
-            events.ScheduleEvent(EVENT_BJARNGRIM_KNOCK, 16000, STANCE_DEFENSIVE);
-            events.ScheduleEvent(EVENT_BJARNGRIM_IRONFORM, 12000, STANCE_DEFENSIVE);
+            events.ScheduleEvent(EVENT_BJARNGRIM_REFLECTION, 8s, STANCE_DEFENSIVE);
+            events.ScheduleEvent(EVENT_BJARNGRIM_PUMMEL, 5s, STANCE_DEFENSIVE);
+            events.ScheduleEvent(EVENT_BJARNGRIM_KNOCK, 16s, STANCE_DEFENSIVE);
+            events.ScheduleEvent(EVENT_BJARNGRIM_IRONFORM, 12s, STANCE_DEFENSIVE);
 
             // BERSERKER STANCE
-            events.ScheduleEvent(EVENT_BJARNGRIM_MORTAL_STRIKE, 20000 + 4000, STANCE_BERSERKER);
-            events.ScheduleEvent(EVENT_BJARNGRIM_WHIRLWIND, 20000 + 6000, STANCE_BERSERKER);
+            events.ScheduleEvent(EVENT_BJARNGRIM_MORTAL_STRIKE, 24s, STANCE_BERSERKER);
+            events.ScheduleEvent(EVENT_BJARNGRIM_WHIRLWIND, 26s, STANCE_BERSERKER);
 
             // BATTLE STANCE
-            events.ScheduleEvent(EVENT_BJARNGRIM_INTERCEPT, 20000 + 3000, STANCE_BATTLE);
-            events.ScheduleEvent(EVENT_BJARNGRIM_CLEAVE, 20000 + 5000, STANCE_BATTLE);
-            events.ScheduleEvent(EVENT_BJARNGRIM_SLAM, 20000 + 10000, STANCE_BATTLE);
+            events.ScheduleEvent(EVENT_BJARNGRIM_INTERCEPT, 23s, STANCE_BATTLE);
+            events.ScheduleEvent(EVENT_BJARNGRIM_CLEAVE, 25s, STANCE_BATTLE);
+            events.ScheduleEvent(EVENT_BJARNGRIM_SLAM, 30s, STANCE_BATTLE);
 
             if (m_pInstance)
             {
@@ -248,8 +248,8 @@ public:
                     me->CastSpell(me, SPELL_DEFENSIVE_STANCE, true);
                     me->CastSpell(me, SPELL_DEFENSIVE_AURA, true);
 
-                    events.DelayEvents(20000, STANCE_BERSERKER);
-                    events.DelayEvents(20000, STANCE_BATTLE);
+                    events.DelayEvents(20s, STANCE_BERSERKER);
+                    events.DelayEvents(20s, STANCE_BATTLE);
 
                     SetEquipmentSlots(false, EQUIP_SWORD, EQUIP_SHIELD, EQUIP_NO_CHANGE);
                     break;
@@ -259,8 +259,8 @@ public:
                     me->CastSpell(me, SPELL_BERSERKER_STANCE, true);
                     me->CastSpell(me, SPELL_BERSERKER_AURA, true);
 
-                    events.DelayEvents(20000, STANCE_DEFENSIVE);
-                    events.DelayEvents(20000, STANCE_BATTLE);
+                    events.DelayEvents(20s, STANCE_DEFENSIVE);
+                    events.DelayEvents(20s, STANCE_BATTLE);
 
                     SetEquipmentSlots(false, EQUIP_SWORD, EQUIP_SWORD, EQUIP_NO_CHANGE);
                     break;
@@ -270,8 +270,8 @@ public:
                     me->CastSpell(me, SPELL_BATTLE_STANCE, true);
                     me->CastSpell(me, SPELL_BATTLE_AURA, true);
 
-                    events.DelayEvents(20000, STANCE_BERSERKER);
-                    events.DelayEvents(20000, STANCE_DEFENSIVE);
+                    events.DelayEvents(20s, STANCE_BERSERKER);
+                    events.DelayEvents(20s, STANCE_DEFENSIVE);
 
                     SetEquipmentSlots(false, EQUIP_MACE, EQUIP_UNEQUIP, EQUIP_NO_CHANGE);
                     break;
@@ -311,7 +311,7 @@ public:
                     // roll new stance
                     RemoveStanceAura(m_uiStance);
                     RollStance(m_uiStance);
-                    events.RepeatEvent(20000);
+                    events.RepeatEvent(20s);
                     break;
 
                 ///////////////////////////////////////////////////////
@@ -319,19 +319,19 @@ public:
                 ///////////////////////////////////////////////////////
                 case EVENT_BJARNGRIM_REFLECTION:
                     me->CastSpell(me, SPELL_BJARNGRIM_REFLETION, true);
-                    events.RepeatEvent(8000 + rand() % 1000);
+                    events.RepeatEvent(8s, 9s);
                     break;
                 case EVENT_BJARNGRIM_PUMMEL:
                     me->CastSpell(me->GetVictim(), SPELL_PUMMEL, false);
-                    events.RepeatEvent(10000 + rand() % 1000);
+                    events.RepeatEvent(1s, 2s);
                     break;
                 case EVENT_BJARNGRIM_KNOCK:
                     me->CastSpell(me, SPELL_KNOCK_AWAY, false);
-                    events.RepeatEvent(20000 + rand() % 1000);
+                    events.RepeatEvent(20s, 21s);
                     break;
                 case EVENT_BJARNGRIM_IRONFORM:
                     me->CastSpell(me, SPELL_IRONFORM, true);
-                    events.RepeatEvent(18000 + rand() % 5000);
+                    events.RepeatEvent(18s, 23s);
                     break;
 
                 ///////////////////////////////////////////////////////
@@ -339,11 +339,11 @@ public:
                 ///////////////////////////////////////////////////////
                 case EVENT_BJARNGRIM_MORTAL_STRIKE:
                     me->CastSpell(me->GetVictim(), SPELL_MORTAL_STRIKE, false);
-                    events.RepeatEvent(10000);
+                    events.RepeatEvent(10s);
                     break;
                 case EVENT_BJARNGRIM_WHIRLWIND:
                     me->CastSpell(me, SPELL_WHIRLWIND, true);
-                    events.RepeatEvent(25000);
+                    events.RepeatEvent(25s);
                     break;
 
                 ///////////////////////////////////////////////////////
@@ -353,15 +353,15 @@ public:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
                         me->CastSpell(target, SPELL_INTERCEPT, true);
 
-                    events.RepeatEvent(30000);
+                    events.RepeatEvent(30s);
                     break;
                 case EVENT_BJARNGRIM_CLEAVE:
                     me->CastSpell(me->GetVictim(), SPELL_CLEAVE, false);
-                    events.RepeatEvent(25000);
+                    events.RepeatEvent(25s);
                     break;
                 case EVENT_BJARNGRIM_SLAM:
                     me->CastSpell(me->GetVictim(), SPELL_SLAM, false);
-                    events.RepeatEvent(10000 + rand() % 2000);
+                    events.RepeatEvent(10s, 12s);
                     break;
             }
 
@@ -395,10 +395,10 @@ public:
                 BjarngrimGUID = 0;
         }
 
-        void EnterCombat(Unit*)
+        void EnterCombat(Unit* /*who*/)
         {
-            events.ScheduleEvent(EVENT_ARC_WELD, 2000);
-            events.ScheduleEvent(EVENT_RENEW_STEEL, 10000 + rand() % 1000);
+            events.ScheduleEvent(EVENT_ARC_WELD, 2s);
+            events.ScheduleEvent(EVENT_RENEW_STEEL, 10s, 11s);
         }
 
         void UpdateAI(uint32 diff)
@@ -416,14 +416,14 @@ public:
             {
                 case EVENT_ARC_WELD:
                     me->CastSpell(me->GetVictim(), SPELL_ARC_WELD, true);
-                    events.RepeatEvent(20000);
+                    events.RepeatEvent(20s);
                     break;
                 case EVENT_RENEW_STEEL:
                     if (Creature* bjarngrim = ObjectAccessor::GetCreature(*me, BjarngrimGUID))
                         if (bjarngrim->IsAlive())
                             me->CastSpell(bjarngrim, me->GetMap()->IsHeroic() ? SPELL_RENEW_STEEL_H : SPELL_RENEW_STEEL_N, true);
 
-                    events.RepeatEvent(10000 + rand() % 4000);
+                    events.RepeatEvent(10s, 14s);
                     break;
             }
 
