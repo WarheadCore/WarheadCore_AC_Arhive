@@ -2,4 +2,4 @@
 
 set -e
 
-(cd ./env/dist/bin/ && timeout 5m ./worldserver --dry-run)
+(cd ./build/check_install/bin/ && timeout 5m ./worldserver --dry-run)

@@ -8,12 +8,12 @@ jobs:
     strategy:
       fail-fast: false      
     runs-on: ubuntu-18.04
-    name: Import db    
+    name: Import DB    
     steps:
       - uses: actions/checkout@v2
-      - name: Configure OS
-        run: source ./apps/ci/ci-install.sh import-db
+      - name: Configure OS and install deps
+        run: source ./apps/ci/ci-os-config-db.sh
         env:
           CONTINUOUS_INTEGRATION: true
       - name: Import db
-        run: source ./apps/ci/ci-import-db.sh
+        run: source ./apps/ci/ci-db-import.sh

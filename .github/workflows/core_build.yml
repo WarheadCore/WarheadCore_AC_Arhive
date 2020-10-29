@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        compiler: [clang7]
+        compiler: [clang7, clang10]
     runs-on: ubuntu-20.04
     name: ${{ matrix.compiler }}
     env:
@@ -26,12 +26,14 @@ jobs:
           restore-keys: |
             ccache:${{ matrix.os }}:${{ matrix.compiler }}:${{ matrix.modules }}-modules:${{ github.ref }}
             ccache:${{ matrix.os }}:${{ matrix.compiler }}:${{ matrix.modules }}-modules
-      - name: Configure OS
-        run: source ./apps/ci/ci-install.sh core-build
+      - name: Configure OS and install deps
+        run: source ./apps/ci/ci-os-config-core.sh
         env:
-          CONTINUOUS_INTEGRATION: true      
+          CONTINUOUS_INTEGRATION: true
+      - name: Configure CMake
+        run: source ./apps/ci/ci-cmake-config.sh
       - name: Build
-        run: source ./apps/ci/ci-compile.sh
+        run: source ./apps/ci/ci-core-compile.sh
       - name: Import DB
         run: source ./apps/ci/ci-worldserver-import-db.sh
       - name: Dry run
