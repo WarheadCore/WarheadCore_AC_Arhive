@@ -12006,8 +12006,8 @@ bool Unit::IsImmunedToSpellEffect(SpellInfo const* spellInfo, uint32 index) cons
             {
                 if (itr.type == aura && (itr.spellId != 64848 || spellInfo->Effects[index].MiscValue == POWER_MANA))
                 {
-                        if (itr.blockType == SPELL_BLOCK_TYPE_ALL || spellInfo->IsPositive()) // xinef: added for pet scaling
-                            return true;
+                    if (itr.blockType == SPELL_BLOCK_TYPE_ALL || spellInfo->IsPositive()) // xinef: added for pet scaling
+                        return true;
                 }
             }
 

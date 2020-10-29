@@ -279,13 +279,9 @@ bool scan_patches(char* scanmatch, std::vector<std::string>& pArchiveNames)
     for (i = 1; i <= 99; i++)
     {
         if (i != 1)
-        {
             sprintf(path, "%s-%d.MPQ", scanmatch, i);
-        }
         else
-        {
             sprintf(path, "%s.MPQ", scanmatch);
-        }
 #ifdef __linux__
         if(FILE* h = fopen64(path, "rb"))
 #else
@@ -401,9 +397,7 @@ bool processArgv(int argc, char** argv, const char* versionString)
     for(int i = 1; i < argc; ++i)
     {
         if(strcmp("-s", argv[i]) == 0)
-        {
             preciseVectorData = false;
-        }
         else if(strcmp("-d", argv[i]) == 0)
         {
             if((i + 1) < argc)
@@ -415,18 +409,12 @@ bool processArgv(int argc, char** argv, const char* versionString)
                 ++i;
             }
             else
-            {
                 result = false;
-            }
         }
         else if(strcmp("-?", argv[1]) == 0)
-        {
             result = false;
-        }
         else if(strcmp("-l", argv[i]) == 0)
-        {
             preciseVectorData = true;
-        }
         else
         {
             result = false;

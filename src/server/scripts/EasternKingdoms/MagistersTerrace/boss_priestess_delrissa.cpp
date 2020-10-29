@@ -754,7 +754,7 @@ public:
 
                         if (InMeleeRange)
                             me->CastSpell(me, SPELL_BLINK, false);
-                        
+
                         events.ScheduleEvent(EVENT_SPELL_BLINK, 15s);
                         break;
                     }

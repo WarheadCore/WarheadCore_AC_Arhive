@@ -1195,8 +1195,8 @@ public:
 
     bool CanInteractWithQuestGiver(Object* questGiver);
     Creature* GetNPCIfCanInteractWith(uint64 guid, uint32 npcflagmask);
-        GameObject* GetGameObjectIfCanInteractWith(uint64 const& guid) const;
-        GameObject* GetGameObjectIfCanInteractWith(uint64 const& guid, GameobjectTypes type) const;
+    GameObject* GetGameObjectIfCanInteractWith(uint64 const& guid) const;
+    GameObject* GetGameObjectIfCanInteractWith(uint64 const& guid, GameobjectTypes type) const;
 
     void ToggleAFK();
     void ToggleDND();
