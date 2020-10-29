@@ -136,7 +136,7 @@ public:
             me->RemoveAllAuras();
             me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
             me->CastSpell(me, SPELL_THADDIUS_VISUAL_LIGHTNING, true);
-            events.ScheduleEvent(EVENT_THADDIUS_START_2, 1000);
+            events.ScheduleEvent(EVENT_THADDIUS_START_2, 1s);
         }
 
         void DoAction(int32 param) override
@@ -237,7 +237,7 @@ public:
                 reviveTimer += diff;
                 if (reviveTimer >= 12000)
                 {
-                    events.ScheduleEvent(EVENT_THADDIUS_START, 1500);
+                    events.ScheduleEvent(EVENT_THADDIUS_START, 1500ms);
                     for (SummonList::const_iterator itr = summons.begin(); itr != summons.end(); ++itr)
                         if (Creature* cr = ObjectAccessor::GetCreature(*me, (*itr)))
                             if (cr->GetEntry() == NPC_TESLA_COIL)
@@ -275,33 +275,30 @@ public:
                     StartEvent();
                     break;
                 case EVENT_THADDIUS_START_2:
-                    
                     Talk(SAY_AGGRO);
                     me->SetReactState(REACT_AGGRESSIVE);
                     me->SetControlled(false, UNIT_STATE_STUNNED);
                     me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                     me->setAttackTimer(BASE_ATTACK, 4000);
 
-                    events.ScheduleEvent(EVENT_THADDIUS_SPELL_CHAIN_LIGHTNING, 14000);
-                    events.ScheduleEvent(EVENT_THADDIUS_SPELL_BERSERK, 360000);
-                    events.ScheduleEvent(EVENT_THADDIUS_POLARITY_SHIFT, 30000);
-                    events.ScheduleEvent(EVENT_ACTIVATE_BALL_LIGHTNING, 5000);
+                    events.ScheduleEvent(EVENT_THADDIUS_SPELL_CHAIN_LIGHTNING, 14s);
+                    events.ScheduleEvent(EVENT_THADDIUS_SPELL_BERSERK, 6min);
+                    events.ScheduleEvent(EVENT_THADDIUS_POLARITY_SHIFT, 30s);
+                    events.ScheduleEvent(EVENT_ACTIVATE_BALL_LIGHTNING, 5s);
                     return;
                 case EVENT_THADDIUS_SPELL_BERSERK:
                     me->CastSpell(me, SPELL_BERSERK, true);
-                    
                     break;
                 case EVENT_THADDIUS_SPELL_CHAIN_LIGHTNING:
-                    me->CastSpell(me->GetVictim(), RAID_MODE(SPELL_CHAIN_LIGHTNING_10, SPELL_CHAIN_LIGHTNING_25, SPELL_CHAIN_LIGHTNING_10, SPELL_CHAIN_LIGHTNING_25), false);
-                    events.RepeatEvent(15000);
+                    me->CastSpell(me->GetVictim(), RAID_MODE_HEROIC(SPELL_CHAIN_LIGHTNING_10, SPELL_CHAIN_LIGHTNING_25), false);
+                    events.RepeatEvent(15s);
                     break;
                 case EVENT_THADDIUS_POLARITY_SHIFT:
                     me->CastSpell(me, SPELL_POLARITY_SHIFT, false);
-                    events.RepeatEvent(30000);
+                    events.RepeatEvent(30s);
                     break;
                 case EVENT_ACTIVATE_BALL_LIGHTNING:
                     ballLightningEnabled = true;
-                    
                     break;
             }
 
@@ -370,20 +367,20 @@ public:
 
             if (me->GetEntry() == NPC_STALAGG)
             {
-                events.ScheduleEvent(EVENT_MINION_SPELL_POWER_SURGE, 10000);
+                events.ScheduleEvent(EVENT_MINION_SPELL_POWER_SURGE, 10s);
                 Talk(SAY_STAL_AGGRO);
             }
             else
             {
-                events.ScheduleEvent(EVENT_MINION_SPELL_STATIC_FIELD, 5000);
+                events.ScheduleEvent(EVENT_MINION_SPELL_STATIC_FIELD, 5s);
                 Talk(SAY_FEUG_AGGRO);
             }
 
-            events.ScheduleEvent(EVENT_MINION_CHECK_DISTANCE, 5000);
+            events.ScheduleEvent(EVENT_MINION_CHECK_DISTANCE, 5s);
 
             // This event needs synchronisation, called for stalagg only
             if (me->GetEntry() == NPC_STALAGG)
-                events.ScheduleEvent(EVENT_MINION_SPELL_MAGNETIC_PULL, 25000);
+                events.ScheduleEvent(EVENT_MINION_SPELL_MAGNETIC_PULL, 25s);
 
             if (pInstance)
                 if (Creature* cr = ObjectAccessor::GetCreature(*me, pInstance->GetData64(DATA_THADDIUS_BOSS)))
@@ -469,15 +466,15 @@ public:
             switch (events.ExecuteEvent())
             {
                 case EVENT_MINION_SPELL_POWER_SURGE:
-                    me->CastSpell(me, RAID_MODE(SPELL_POWER_SURGE_10, SPELL_POWER_SURGE_25, SPELL_POWER_SURGE_10, SPELL_POWER_SURGE_25), false);
-                    events.RepeatEvent(19000);
+                    me->CastSpell(me, RAID_MODE_HEROIC(SPELL_POWER_SURGE_10, SPELL_POWER_SURGE_25), false);
+                    events.RepeatEvent(19s);
                     break;
                 case EVENT_MINION_SPELL_STATIC_FIELD:
-                    me->CastSpell(me, RAID_MODE(SPELL_STATIC_FIELD_10, SPELL_STATIC_FIELD_25, SPELL_STATIC_FIELD_10, SPELL_STATIC_FIELD_25), false);
-                    events.RepeatEvent(3000);
+                    me->CastSpell(me, RAID_MODE_HEROIC(SPELL_STATIC_FIELD_10, SPELL_STATIC_FIELD_25), false);
+                    events.RepeatEvent(3s);
                     break;
                 case EVENT_MINION_SPELL_MAGNETIC_PULL:
-                    events.RepeatEvent(25000);
+                    events.RepeatEvent(25s);
                     if (pInstance)
                         if (Creature* feugen = ObjectAccessor::GetCreature(*me, pInstance->GetData64(DATA_FEUGEN_BOSS)))
                         {
@@ -518,7 +515,7 @@ public:
                                 cr->CastStop(SPELL_TESLA_SHOCK);
                                 cr->CastSpell(target, SPELL_TESLA_SHOCK, true);
                             }
-                            events.RepeatEvent(1500);
+                            events.RepeatEvent(1500ms);
                             break;
                         }
                         else
@@ -528,7 +525,7 @@ public:
                         }
                     }
 
-                    events.RepeatEvent(5000);
+                    events.RepeatEvent(5s);
                     break;
             }
 

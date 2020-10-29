@@ -103,7 +103,7 @@ public:
                 pInstance->SetData(DATA_IMMORTAL_FAIL, 0);
         }
 
-        void JustDied(Unit*  killer) override
+        void JustDied(Unit* killer) override
         {
             BossAI::JustDied(killer);
             Talk(SAY_DEATH);
@@ -130,10 +130,10 @@ public:
             events.Reset();
             if (phase == PHASE_SLOW_DANCE)
             {
-                events.ScheduleEvent(EVENT_SPELL_SPELL_DISRUPTION, 0);
-                events.ScheduleEvent(EVENT_SPELL_DECEPIT_FEVER, 12000);
-                events.ScheduleEvent(EVENT_ERUPT_SECTION, 10000);
-                events.ScheduleEvent(EVENT_SWITCH_PHASE, 90000);
+                events.ScheduleEvent(EVENT_SPELL_SPELL_DISRUPTION, 0s);
+                events.ScheduleEvent(EVENT_SPELL_DECEPIT_FEVER, 12s);
+                events.ScheduleEvent(EVENT_ERUPT_SECTION, 10s);
+                events.ScheduleEvent(EVENT_SWITCH_PHASE, 90s);
             }
             else // if (phase == PHASE_FAST_DANCE)
             {
@@ -145,10 +145,10 @@ public:
                 me->NearTeleportTo(x, y, z, o);
 
                 me->CastSpell(me, SPELL_PLAGUE_CLOUD, false);
-                events.ScheduleEvent(EVENT_ERUPT_SECTION, 4000);
-                events.ScheduleEvent(EVENT_SWITCH_PHASE, 45000);
+                events.ScheduleEvent(EVENT_ERUPT_SECTION, 4s);
+                events.ScheduleEvent(EVENT_SWITCH_PHASE, 45s);
             }
-            events.ScheduleEvent(EVENT_SAFETY_DANCE, 5000);
+            events.ScheduleEvent(EVENT_SAFETY_DANCE, 5s);
         }
 
         bool IsInRoom(Unit* who)
@@ -157,6 +157,7 @@ public:
             {
                 if (who->GetGUID() == me->GetGUID())
                     EnterEvadeMode();
+
                 return false;
             }
 
@@ -172,18 +173,16 @@ public:
                 return;
 
             events.Update(diff);
-            //if (me->HasUnitState(UNIT_STATE_CASTING))
-            //  return;
 
             switch (events.ExecuteEvent())
             {
                 case EVENT_SPELL_SPELL_DISRUPTION:
                     me->CastSpell(me, SPELL_SPELL_DISRUPTION, false);
-                    events.RepeatEvent(10000);
+                    events.RepeatEvent(10s);
                     break;
                 case EVENT_SPELL_DECEPIT_FEVER:
-                    me->CastSpell(me, RAID_MODE(SPELL_DECREPIT_FEVER_10, SPELL_DECREPIT_FEVER_25, SPELL_DECREPIT_FEVER_10, SPELL_DECREPIT_FEVER_25), false);
-                    events.RepeatEvent(20000);
+                    me->CastSpell(me, RAID_MODE_HEROIC(SPELL_DECREPIT_FEVER_10, SPELL_DECREPIT_FEVER_25), false);
+                    events.RepeatEvent(20s);
                     break;
                 case EVENT_SWITCH_PHASE:
                     if (currentPhase == PHASE_SLOW_DANCE)
@@ -210,12 +209,11 @@ public:
                     if (currentPhase == PHASE_SLOW_DANCE)
                         Talk(SAY_TAUNT);
 
-                    events.RepeatEvent(currentPhase == PHASE_SLOW_DANCE ? 10000 : 4000);
+                    events.RepeatEvent(currentPhase == PHASE_SLOW_DANCE ? 10s : 4s);
                     break;
                 case EVENT_SAFETY_DANCE:
                     {
-                        Map::PlayerList const& pList = me->GetMap()->GetPlayers();
-                        for(const auto& itr : pList)
+                        for(const auto& itr : me->GetMap()->GetPlayers())
                         {
                             if (IsInRoom(itr.GetSource()) && !itr.GetSource()->IsAlive())
                             {
@@ -225,7 +223,7 @@ public:
                             }
 
                         }
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                         return;
                     }
             }

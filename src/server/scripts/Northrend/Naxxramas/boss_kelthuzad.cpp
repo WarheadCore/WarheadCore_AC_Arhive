@@ -249,15 +249,15 @@ public:
             // Spawn helpers
             SpawnHelpers();
 
-            events.ScheduleEvent(EVENT_SUMMON_SOLDIER, 3200);
-            events.ScheduleEvent(EVENT_SUMMON_UNSTOPPABLE_ABOMINATION, 10000);
-            events.ScheduleEvent(EVENT_SUMMON_SOUL_WEAVER, 24000);
-            events.ScheduleEvent(EVENT_START_SECOND_PHASE, 228000);
+            events.ScheduleEvent(EVENT_SUMMON_SOLDIER, 3200ms);
+            events.ScheduleEvent(EVENT_SUMMON_UNSTOPPABLE_ABOMINATION, 10s);
+            events.ScheduleEvent(EVENT_SUMMON_SOUL_WEAVER, 24s);
+            events.ScheduleEvent(EVENT_START_SECOND_PHASE, 228s);
             if (pInstance)
             {
                 if (GameObject* go = me->GetMap()->GetGameObject(pInstance->GetData64(DATA_KELTHUZAD_FLOOR)))
                 {
-                    events.ScheduleEvent(EVENT_FLOOR_CHANGE, 15000);
+                    events.ScheduleEvent(EVENT_FLOOR_CHANGE, 15s);
                     go->SetGoState(GO_STATE_ACTIVE);
                 }
             }
@@ -283,12 +283,12 @@ public:
                     {
                         if (GameObject* go = me->GetMap()->GetGameObject(pInstance->GetData64(DATA_KELTHUZAD_FLOOR)))
                         {
-                            events.ScheduleEvent(EVENT_FLOOR_CHANGE, 15000);
+                            events.ScheduleEvent(EVENT_FLOOR_CHANGE, 15s);
                             go->SetGoState(GO_STATE_READY);
                             go->SetPhaseMask(2, true);
                         }
                     }
-                    
+
                     break;
                 case EVENT_SUMMON_SOLDIER:
                     if (Creature* cr = me->SummonCreature(NPC_SOLDIER_OF_THE_FROZEN_WASTES, SummonPositions[urand(0, 5)], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 20000))
@@ -300,7 +300,7 @@ public:
                         }
                     }
 
-                    events.RepeatEvent(3200);
+                    events.RepeatEvent(3200ms);
                     break;
                 case EVENT_SUMMON_UNSTOPPABLE_ABOMINATION:
                     if (Creature* cr = me->SummonCreature(NPC_UNSTOPPABLE_ABOMINATION, SummonPositions[urand(0, 5)], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 20000))
@@ -312,7 +312,7 @@ public:
                         }
                     }
 
-                    events.RepeatEvent(30000);
+                    events.RepeatEvent(30s);
                     break;
                 case EVENT_SUMMON_SOUL_WEAVER:
                     if (Creature* cr = me->SummonCreature(NPC_SOUL_WEAVER, SummonPositions[urand(0, 5)], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 20000))
@@ -324,7 +324,7 @@ public:
                         }
                     }
 
-                    events.RepeatEvent(30000);
+                    events.RepeatEvent(30s);
                     break;
                 case EVENT_START_SECOND_PHASE:
                     // same as pop
@@ -334,34 +334,35 @@ public:
                     me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_DISABLE_MOVE);
                     me->GetMotionMaster()->MoveChase(me->GetVictim());
                     me->SetReactState(REACT_AGGRESSIVE);
-                    events.ScheduleEvent(EVENT_SPELL_FROST_BOLT_SINGLE, 2000);
-                    events.ScheduleEvent(EVENT_SPELL_FROST_BOLT_MULTI, 15000);
-                    events.ScheduleEvent(EVENT_SPELL_DETONATE_MANA, 20000);
-                    events.ScheduleEvent(EVENT_SECOND_PHASE_HEALTH_CHECK, 1000);
-                    events.ScheduleEvent(EVENT_SPELL_SHADOW_FISSURE, 25000);
-                    events.ScheduleEvent(EVENT_SPELL_FROST_BLAST, 45000);
+                    events.ScheduleEvent(EVENT_SPELL_FROST_BOLT_SINGLE, 2s);
+                    events.ScheduleEvent(EVENT_SPELL_FROST_BOLT_MULTI, 15s);
+                    events.ScheduleEvent(EVENT_SPELL_DETONATE_MANA, 20s);
+                    events.ScheduleEvent(EVENT_SECOND_PHASE_HEALTH_CHECK, 1s);
+                    events.ScheduleEvent(EVENT_SPELL_SHADOW_FISSURE, 25s);
+                    events.ScheduleEvent(EVENT_SPELL_FROST_BLAST, 45s);
+
                     if (Is25ManRaid())
-                        events.ScheduleEvent(EVENT_SPELL_CHAINS, 50000);
+                        events.ScheduleEvent(EVENT_SPELL_CHAINS, 50s);
                     break;
                 case EVENT_SPELL_FROST_BOLT_SINGLE:
-                    me->CastSpell(me->GetVictim(), RAID_MODE(SPELL_FROST_BOLT_SINGLE_10, SPELL_FROST_BOLT_SINGLE_25, SPELL_FROST_BOLT_SINGLE_10, SPELL_FROST_BOLT_SINGLE_25), false);
-                    events.RepeatEvent(urand(2000, 15000));
+                    me->CastSpell(me->GetVictim(), RAID_MODE_HEROIC(SPELL_FROST_BOLT_SINGLE_10, SPELL_FROST_BOLT_SINGLE_25), false);
+                    events.RepeatEvent(2s, 15s);
                     break;
                 case EVENT_SPELL_FROST_BOLT_MULTI:
-                    me->CastSpell(me, RAID_MODE(SPELL_FROST_BOLT_MULTI_10, SPELL_FROST_BOLT_MULTI_25, SPELL_FROST_BOLT_MULTI_10, SPELL_FROST_BOLT_MULTI_25), false);
-                    events.RepeatEvent(24000);
+                    me->CastSpell(me, RAID_MODE_HEROIC(SPELL_FROST_BOLT_MULTI_10, SPELL_FROST_BOLT_MULTI_25), false);
+                    events.RepeatEvent(24s);
                     break;
                 case EVENT_SPELL_SHADOW_FISSURE:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
                         me->CastSpell(target, SPELL_SHADOW_FISURE, false);
-                    events.RepeatEvent(25000);
+                    events.RepeatEvent(25s);
                     break;
                 case EVENT_SPELL_FROST_BLAST:
                     if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, RAID_MODE(1, 0, 1, 0), 0, true))
                         me->CastSpell(target, SPELL_FROST_BLAST, false);
 
                     Talk(SAY_FROST_BLAST);
-                    events.RepeatEvent(45000);
+                    events.RepeatEvent(45s);
                     break;
                 case EVENT_SPELL_CHAINS:
                     for (uint8 i = 0; i < 3; ++i)
@@ -369,7 +370,7 @@ public:
                             me->CastSpell(target, SPELL_CHAINS_OF_KELTHUZAD, true);
 
                     Talk(SAY_CHAIN);
-                    events.RepeatEvent(50000);
+                    events.RepeatEvent(50s);
                     break;
                 case EVENT_SPELL_DETONATE_MANA:
                     {
@@ -391,18 +392,18 @@ public:
                             Talk(SAY_SPECIAL);
                         }
 
-                        events.RepeatEvent(30000);
+                        events.RepeatEvent(30s);
                         break;
                     }
                 case EVENT_SECOND_PHASE_HEALTH_CHECK:
                     if (me->HealthBelowPct(45))
                     {
                         Talk(SAY_REQUEST_AID);
-                        events.DelayEvents(5500);
-                        events.ScheduleEvent(EVENT_THIRD_PHASE_LICH_KING_SAY, 5000);
+                        events.DelayEvents(5500ms);
+                        events.ScheduleEvent(EVENT_THIRD_PHASE_LICH_KING_SAY, 5s);
                         break;
                     }
-                    events.RepeatEvent(1000);
+                    events.RepeatEvent(1s);
                     break;
                 case EVENT_THIRD_PHASE_LICH_KING_SAY:
                     if (pInstance)
@@ -410,8 +411,7 @@ public:
                             cr->AI()->Talk(SAY_ANSWER_REQUEST);
 
                     for (uint8 i = 0 ; i < RAID_MODE(2, 4, 3, 5); ++i)
-                        events.ScheduleEvent(EVENT_SUMMON_GUARDIAN_OF_ICECROWN, 10000 + (i * 5000));
-
+                        events.ScheduleEvent(EVENT_SUMMON_GUARDIAN_OF_ICECROWN, 10s + (i * 5s));
                     break;
                 case EVENT_SUMMON_GUARDIAN_OF_ICECROWN:
                     if (Creature* cr = me->SummonCreature(NPC_GUARDIAN_OF_ICECROWN, SummonPositions[RAND(0, 1, 3, 4)]))
@@ -501,16 +501,16 @@ public:
                 me->AddThreat(who, 1000000.0f);
         }
 
-        void EnterCombat(Unit*  /*who*/) override
+        void EnterCombat(Unit* /*who*/) override
         {
             me->SetInCombatWithZone();
             if (me->GetEntry() == NPC_UNSTOPPABLE_ABOMINATION)
             {
-                events.ScheduleEvent(EVENT_MINION_SPELL_FRENZY, 1000);
-                events.ScheduleEvent(EVENT_MINION_SPELL_MORTAL_WOUND, 5000);
+                events.ScheduleEvent(EVENT_MINION_SPELL_FRENZY, 1s);
+                events.ScheduleEvent(EVENT_MINION_SPELL_MORTAL_WOUND, 5s);
             }
             else if (me->GetEntry() == NPC_GUARDIAN_OF_ICECROWN)
-                events.ScheduleEvent(EVENT_MINION_SPELL_BLOOD_TAP, 15000);
+                events.ScheduleEvent(EVENT_MINION_SPELL_BLOOD_TAP, 15s);
         }
 
         void KilledUnit(Unit* who) override
@@ -532,20 +532,19 @@ public:
             {
                 case EVENT_MINION_SPELL_MORTAL_WOUND:
                     me->CastSpell(me->GetVictim(), SPELL_MORTAL_WOUND, false);
-                    events.RepeatEvent(15000);
+                    events.RepeatEvent(15s);
                     break;
                 case EVENT_MINION_SPELL_FRENZY:
                     if (me->HealthBelowPct(35))
                     {
                         me->CastSpell(me, SPELL_FRENZY, true);
-                        
                         break;
                     }
-                    events.RepeatEvent(1000);
+                    events.RepeatEvent(1s);
                     break;
                 case EVENT_MINION_SPELL_BLOOD_TAP:
                     me->CastSpell(me->GetVictim(), SPELL_BLOOD_TAP, false);
-                    events.RepeatEvent(15000);
+                    events.RepeatEvent(15s);
                     break;
             }
 
