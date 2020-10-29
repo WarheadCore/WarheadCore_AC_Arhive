@@ -104,10 +104,10 @@ public:
                 k->AI()->Talk(SAY_AGGRO);
             DoZoneInCombat();
             events.Reset();
-            events.RescheduleEvent(EVENT_SPELL_TOXIC_WASTE, urand(3000, 5000));
-            events.RescheduleEvent(EVENT_SPELL_MIGHTY_KICK, urand(10000, 20000));
-            events.RescheduleEvent(EVENT_SPELL_SHADOW_BOLT, 10000);
-            events.RescheduleEvent(EVENT_SPECIAL, 25000);
+            events.RescheduleEvent(EVENT_SPELL_TOXIC_WASTE, 3s, 5s);
+            events.RescheduleEvent(EVENT_SPELL_MIGHTY_KICK, 10s, 20s);
+            events.RescheduleEvent(EVENT_SPELL_SHADOW_BOLT, 10s);
+            events.RescheduleEvent(EVENT_SPECIAL, 25s);
 
             if (pInstance)
                 pInstance->SetData(DATA_ICK, IN_PROGRESS);
@@ -126,7 +126,7 @@ public:
 
                 AttackStart(target);
                 me->SetReactState(REACT_PASSIVE);
-                events.RescheduleEvent(EVENT_SET_REACT_AGGRESSIVE, 12000);
+                events.RescheduleEvent(EVENT_SET_REACT_AGGRESSIVE, 12s);
             }
         }
 
@@ -191,14 +191,14 @@ public:
                             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40.0f, true))
                             {
                                 k->CastSpell(target, SPELL_TOXIC_WASTE);
-                                events.RepeatEvent(urand(7000, 10000));
+                                events.RepeatEvent(7s, 10s);
                                 break;
                             }
-                    events.RepeatEvent(2500);
+                    events.RepeatEvent(2500ms);
                     break;
                 case EVENT_SPELL_MIGHTY_KICK:
                     me->CastSpell(me->GetVictim(), SPELL_MIGHTY_KICK, false);
-                    events.RepeatEvent(urand(20000, 25000));
+                    events.RepeatEvent(20s, 25s);
                     break;
                 case EVENT_SPELL_SHADOW_BOLT:
                     if (Creature* k = GetKrick())
@@ -206,16 +206,16 @@ public:
                             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 35.0f, true))
                             {
                                 k->CastSpell(target, SPELL_SHADOW_BOLT);
-                                events.RepeatEvent(14000);
+                                events.RepeatEvent(14s);
                                 break;
                             }
-                    events.RepeatEvent(2500);
+                    events.RepeatEvent(2500ms);
                     break;
                 case EVENT_SET_REACT_AGGRESSIVE:
                     me->SetReactState(REACT_AGGRESSIVE);
                     if (!UpdateVictim())
                         return;
-                    
+
                     break;
                 case EVENT_SPECIAL:
                     switch(urand(0, 2))
@@ -244,10 +244,10 @@ public:
                                 k->CastSpell(k, SPELL_EXPLOSIVE_BARRAGE_KRICK, false);
                                 me->CastSpell(me, SPELL_EXPLOSIVE_BARRAGE_ICK, false);
                             }
-                            events.DelayEvents(20000);
+                            events.DelayEvents(20s);
                             break;
                     }
-                    events.RepeatEvent(urand(25000, 30000));
+                    events.RepeatEvent(25s, 30s);
                     break;
             }
 
@@ -304,7 +304,7 @@ public:
             if (a == 1)
             {
                 me->setActive(true);
-                events.RescheduleEvent(20, 0);
+                events.RescheduleEvent(20, 0s);
             }
         }
 
@@ -328,8 +328,8 @@ public:
                             c->AI()->Reset();
                         }
                     }
-                    
-                    events.RescheduleEvent(1, 3000);
+
+                    events.RescheduleEvent(1, 3s);
                     break;
                 case 1:
                     Talk(SAY_OUTRO_KRICK_1);
@@ -348,8 +348,8 @@ public:
                             if (Creature* c = pInstance->instance->GetCreature(pInstance->GetData64(DATA_GUARD_1_GUID + i)))
                                 c->DespawnOrUnsummon();
                     }
-                    
-                    events.RescheduleEvent(2, 7000);
+
+                    events.RescheduleEvent(2, 7s);
                     break;
                 case 2:
                     if (pInstance)
@@ -363,13 +363,12 @@ public:
                         if (Creature* c = pInstance->instance->GetCreature(pInstance->GetData64(DATA_LEADER_FIRST_GUID)))
                             c->AI()->Talk(c->GetEntry() == NPC_JAINA_PART1 ? SAY_JAINA_KRICK_1 : SAY_SYLVANAS_KRICK_1);
                     }
-                    
-                    events.RescheduleEvent(3, 6500);
+
+                    events.RescheduleEvent(3, 6500ms);
                     break;
                 case 3:
                     Talk(SAY_OUTRO_KRICK_2);
-                    
-                    events.RescheduleEvent(4, 17000);
+                    events.RescheduleEvent(4, 17s);
                     break;
                 case 4:
                     if (pInstance)
@@ -379,13 +378,12 @@ public:
                         if (Creature* c = pInstance->instance->GetCreature(pInstance->GetData64(DATA_LEADER_FIRST_GUID)))
                             c->AI()->Talk(c->GetEntry() == NPC_JAINA_PART1 ? SAY_JAINA_KRICK_2 : SAY_SYLVANAS_KRICK_2);
                     }
-                    
-                    events.RescheduleEvent(5, 6500);
+
+                    events.RescheduleEvent(5, 6500ms);
                     break;
                 case 5:
                     Talk(SAY_OUTRO_KRICK_3);
-                    
-                    events.RescheduleEvent(6, 6500);
+                    events.RescheduleEvent(6, 6500ms);
                     break;
                 case 6:
                     if (pInstance)
@@ -394,8 +392,8 @@ public:
                             c->SetFacingToObject(me);
                             c->AI()->Talk(SAY_TYRANNUS_KRICK_1);
                         }
-                    
-                    events.RescheduleEvent(7, 4000);
+
+                    events.RescheduleEvent(7, 4s);
                     break;
                 case 7:
                     me->CastSpell(me, 69413, true);
@@ -405,13 +403,11 @@ public:
                     me->SendMovementFlagUpdate();
                     me->GetMotionMaster()->MoveTakeoff(0, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ() + 9.0f, 0.5f * 7.0f);
 
-                    
-                    events.RescheduleEvent(8, 2000);
+                    events.RescheduleEvent(8, 2s);
                     break;
                 case 8:
                     Talk(SAY_OUTRO_KRICK_4);
-                    
-                    events.RescheduleEvent(9, 1500);
+                    events.RescheduleEvent(9, 1500ms);
                     break;
                 case 9:
                     if (pInstance)
@@ -428,15 +424,15 @@ public:
 
                     me->RemoveAllAuras();
                     me->GetMotionMaster()->MoveFall(0, true);
-                    
-                    events.RescheduleEvent(10, 5000);
+
+                    events.RescheduleEvent(10, 5s);
                     break;
                 case 10:
                     if (pInstance)
                         if (Creature* c = pInstance->instance->GetCreature(pInstance->GetData64(DATA_TYRANNUS_EVENT_GUID)))
                             c->AI()->Talk(SAY_TYRANNUS_KRICK_2);
-                    
-                    events.RescheduleEvent(11, 9000);
+
+                    events.RescheduleEvent(11, 9s);
                     break;
                 case 11:
                     if (pInstance)
@@ -451,7 +447,7 @@ public:
                     }
                     me->setActive(false);
                     Unit::Kill(me, me);
-                    
+
                     break;
             }
         }
