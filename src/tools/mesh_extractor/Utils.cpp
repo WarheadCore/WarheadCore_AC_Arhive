@@ -457,9 +457,7 @@ LiquidData LiquidData::Read(FILE* stream, LiquidHeader& header)
             float tmp;
             if (fread(&discard, sizeof(uint32), 1, stream) == 1 &&
                     fread(&tmp, sizeof(float), 1, stream) == 1)
-            {
                 ret.HeightMap[x][y] = tmp;
-            }
         }
     }
 

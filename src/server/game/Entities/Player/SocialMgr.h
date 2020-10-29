@@ -101,52 +101,52 @@ enum FriendsResult : uint8
 
 class PlayerSocial
 {
-friend class SocialMgr;
+    friend class SocialMgr;
 
-    public:
-    
-        PlayerSocial();
-        ~PlayerSocial();
-        // adding/removing
-        bool AddToSocialList(uint64 friend_guid, bool ignore);
-        void RemoveFromSocialList(uint64 friend_guid, bool ignore);
-        void SetFriendNote(uint64 friendGuid, std::string note);
-        // Packet send's
-        void SendSocialList(Player* player);
-        // Misc
-        bool HasFriend(uint64 friend_guid) const;
-        bool HasIgnore(uint64 ignore_guid) const;
-        uint64 GetPlayerGUID() const { return m_playerGUID; }
-        void SetPlayerGUID(uint64 guid) { m_playerGUID = guid; }
-        uint32 GetNumberOfSocialsWithFlag(SocialFlag flag) const;
+public:
 
-    private:
-        bool _checkContact(uint64 guid, SocialFlag flags) const;
-        PlayerSocialMap m_playerSocialMap;
-        uint64 m_playerGUID;
+    PlayerSocial();
+    ~PlayerSocial();
+    // adding/removing
+    bool AddToSocialList(uint64 friend_guid, bool ignore);
+    void RemoveFromSocialList(uint64 friend_guid, bool ignore);
+    void SetFriendNote(uint64 friendGuid, std::string note);
+    // Packet send's
+    void SendSocialList(Player* player);
+    // Misc
+    bool HasFriend(uint64 friend_guid) const;
+    bool HasIgnore(uint64 ignore_guid) const;
+    uint64 GetPlayerGUID() const { return m_playerGUID; }
+    void SetPlayerGUID(uint64 guid) { m_playerGUID = guid; }
+    uint32 GetNumberOfSocialsWithFlag(SocialFlag flag) const;
+
+private:
+    bool _checkContact(uint64 guid, SocialFlag flags) const;
+    PlayerSocialMap m_playerSocialMap;
+    uint64 m_playerGUID;
 };
 
 class SocialMgr
 {
-    private:
-        SocialMgr();
-        ~SocialMgr();
-    
-    public:
-        static SocialMgr* instance();
-    
-        // Misc
-        void RemovePlayerSocial(uint64 guid) { m_socialMap.erase(guid); }
-    
-        void GetFriendInfo(Player* player, uint64 friendGUID, FriendInfo& friendInfo);
-        // Packet management
-        void MakeFriendStatusPacket(FriendsResult result, uint64 friend_guid, WorldPacket* data);
-        void SendFriendStatus(Player* player, FriendsResult result, uint64 friend_guid, bool broadcast);
-        void BroadcastToFriendListers(Player* player, WorldPacket* packet);
-        // Loading
-        PlayerSocial* LoadFromDB(PreparedQueryResult result, uint64 guid);
-    private:
-        SocialMap m_socialMap;
+private:
+    SocialMgr();
+    ~SocialMgr();
+
+public:
+    static SocialMgr* instance();
+
+    // Misc
+    void RemovePlayerSocial(uint64 guid) { m_socialMap.erase(guid); }
+
+    void GetFriendInfo(Player* player, uint64 friendGUID, FriendInfo& friendInfo);
+    // Packet management
+    void MakeFriendStatusPacket(FriendsResult result, uint64 friend_guid, WorldPacket* data);
+    void SendFriendStatus(Player* player, FriendsResult result, uint64 friend_guid, bool broadcast);
+    void BroadcastToFriendListers(Player* player, WorldPacket* packet);
+    // Loading
+    PlayerSocial* LoadFromDB(PreparedQueryResult result, uint64 guid);
+private:
+    SocialMap m_socialMap;
 };
 
 #define sSocialMgr SocialMgr::instance()

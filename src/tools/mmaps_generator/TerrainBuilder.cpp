@@ -588,21 +588,21 @@ namespace MMAP
                     break;
             }
 
-            /*
-                0-----1 .... 128
-                |\    |
-                | \ T |
-                |  \  |
-                | B \ |
-                |    \|
-                129---130 ... 386
-                |\    |
-                | \   |
-                |  \  |
-                |   \ |
-                |    \|
-                258---259 ... 515
-            */
+        /*
+            0-----1 .... 128
+            |\    |
+            | \ T |
+            |  \  |
+            | B \ |
+            |    \|
+            129---130 ... 386
+            |\    |
+            | \   |
+            |  \  |
+            |   \ |
+            |    \|
+            258---259 ... 515
+        */
 
     }
 
@@ -766,13 +766,13 @@ namespace MMAP
                         {
                             for (uint32 y = 0; y < tilesY; ++y)
                             {
-                                if ((flags[x+y*tilesX] & 0x0f) != 0x0f)
+                                if ((flags[x + y * tilesX] & 0x0f) != 0x0f)
                                 {
                                     square = x * tilesY + y;
-                                    idx1 = square+x;
-                                    idx2 = square+1+x;
-                                    idx3 = square+tilesY+1+1+x;
-                                    idx4 = square+tilesY+1+x;
+                                    idx1 = square + x;
+                                    idx2 = square + 1 + x;
+                                    idx3 = square + tilesY + 1 + 1 + x;
+                                    idx4 = square + tilesY + 1 + x;
                                     // top triangle
                                     liqTris.push_back(idx3);
                                     liqTris.push_back(idx2);
@@ -784,7 +784,7 @@ namespace MMAP
                                 }
                             }
                         }
-                        
+
                         uint32 liqOffset = meshData.liquidVerts.size() / 3;
                         for (uint32 j = 0; j < liqVerts.size(); ++j)
                             meshData.liquidVerts.append(liqVerts[j].y, liqVerts[j].z, liqVerts[j].x);

@@ -262,7 +262,7 @@ namespace MMAP
 
         delete mmap;
         itr->second = nullptr;
-        
+
         LOG_DEBUG("maps", "MMAP:unloadMap: Unloaded %03i.mmap", mapId);
 
         return true;

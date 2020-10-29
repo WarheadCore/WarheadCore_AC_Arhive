@@ -196,9 +196,7 @@ namespace MMAP
         printf("Using %u threads to extract mmaps\n", threads);
 
         for (unsigned int i = 0; i < threads; ++i)
-        {
             _workerThreads.push_back(std::thread(&MapBuilder::WorkerThread, this));
-        }
 
         m_tiles.sort([](MapTiles a, MapTiles b)
         {
@@ -218,18 +216,14 @@ namespace MMAP
         }
 
         while (!_queue.Empty())
-        {
             std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-        }
 
         _cancelationToken = true;
 
         _queue.Cancel();
 
         for (auto& thread : _workerThreads)
-        {
             thread.join();
-        }
     }
 
     /**************************************************************************/

@@ -162,9 +162,7 @@ bool WMOGroup::open()
         f.read(&size, 4);
         flipcc(fourcc);
         if (!strcmp(fourcc, "MOGP")) //Fix sizeoff = Data size.
-        {
             size = 68;
-        }
         fourcc[4] = 0;
         size_t nextpos = f.getPos() + size;
         LiquEx_size = 0;
@@ -260,9 +258,7 @@ int WMOGroup::ConvertToVMAPGroupWmo(FILE* output, WMORoot* rootWMO, bool precise
         int moba_batch = moba_size / 12;
         MobaEx = new int[moba_batch * 4];
         for(int i = 8; i < moba_size; i += 12)
-        {
             MobaEx[k++] = MOBA[i];
-        }
         int moba_size_grp = moba_batch * 4 + 4;
         fwrite(&moba_size_grp, 4, 1, output);
         fwrite(&moba_batch, 4, 1, output);
@@ -331,9 +327,7 @@ int WMOGroup::ConvertToVMAPGroupWmo(FILE* output, WMORoot* rootWMO, bool precise
         int moba_batch = moba_size / 12;
         MobaEx = new int[moba_batch * 4];
         for(int i = 8; i < moba_size; i += 12)
-        {
             MobaEx[k++] = MOBA[i];
-        }
 
         int moba_size_grp = moba_batch * 4 + 4;
         fwrite(&moba_size_grp, 4, 1, output);

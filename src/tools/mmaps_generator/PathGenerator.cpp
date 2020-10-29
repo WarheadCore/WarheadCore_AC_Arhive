@@ -191,9 +191,7 @@ bool handleArgs(int argc, char** argv,
                 printf("invalid option for '--debugOutput', using default true\n");
         }
         else if (strcmp(argv[i], "--silent") == 0)
-        {
             silent = true;
-        }
         else if (strcmp(argv[i], "--bigBaseUnit") == 0)
         {
             param = argv[++i];

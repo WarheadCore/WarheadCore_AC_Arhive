@@ -2587,8 +2587,8 @@ bool GameObject::IsAtInteractDistance(Position const& pos, float radius) const
         G3D::Quat worldRotationQuat(worldRotation.x, worldRotation.y, worldRotation.z, worldRotation.w);
 
         return G3D::CoordinateFrame { { worldRotationQuat }, { GetPositionX(), GetPositionY(), GetPositionZ() } }
-                .toWorldSpace(G3D::Box { { minX, minY, minZ }, { maxX, maxY, maxZ } })
-                .contains({ pos.GetPositionX(), pos.GetPositionY(), pos.GetPositionZ() });
+        .toWorldSpace(G3D::Box { { minX, minY, minZ }, { maxX, maxY, maxZ } })
+        .contains({ pos.GetPositionX(), pos.GetPositionY(), pos.GetPositionZ() });
     }
 
     return GetExactDist(&pos) <= radius;

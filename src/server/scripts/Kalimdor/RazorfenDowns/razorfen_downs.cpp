@@ -227,7 +227,7 @@ public:
                         break;
                 }
             }
-            
+
             if (!channeling)
                 DoMeleeAttackIfReady();
         }

@@ -46,7 +46,7 @@ void ACSoapRunnable::run()
             continue;   // ran into an accept timeout
 
         LOG_DEBUG("network", "ACSoap: accepted connection from IP=%d.%d.%d.%d", (int)(soap.ip >> 24) & 0xFF, (int)(soap.ip >> 16) & 0xFF, (int)(soap.ip >> 8) & 0xFF, (int)soap.ip & 0xFF);
-        
+
         struct soap* thread_soap = soap_copy(&soap);// make a safe copy
 
         ACE_Message_Block* mb = new ACE_Message_Block(sizeof(struct soap*));
