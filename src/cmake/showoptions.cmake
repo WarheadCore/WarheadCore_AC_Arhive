@@ -128,7 +128,6 @@ if (BUILD_SHARED_LIBS)
   message(" *** WITH_DYNAMIC_LINKING - INFO!")
   message(" *** Will link against shared libraries!")
   message(" *** Please note that this is an experimental feature!")
-  
   add_definitions(-DWARHEAD_API_USE_DYNAMIC_LINKING)
 endif()
 

@@ -25,7 +25,7 @@ macro(PrepareScripts name out)
   file(GLOB_RECURSE found
     ${name}/*.h
     ${name}/*.cpp)
-  
+
   list(APPEND ${out} ${found})
   WH_ADD_DEF_SCRIPT_LOADER("${name}")
   WH_ADD_SCRIPT_LOADER("${name}" "")

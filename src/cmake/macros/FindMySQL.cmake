@@ -1,14 +1,27 @@
 #
+# This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+#
+# This file is free software; as a special exception the author gives
+# unlimited permission to copy and/or distribute it, with or without
+# modifications, as long as this notice is preserved.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# User has manually chosen to ignore the git-tests, so throw them a warning.
+# This is done EACH compile so they can be alerted about the consequences.
+#
 # Find the MySQL client includes and library
-# 
-
+#
 # This module defines
 # MYSQL_INCLUDE_DIR, where to find mysql.h
 # MYSQL_LIBRARIES, the libraries to link against to connect to MySQL
 # MYSQL_FOUND, if false, you cannot build anything that requires MySQL.
-
+#
 # also defined, but not for general use are
 # MYSQL_LIBRARY, where to find the MySQL library.
+#
 
 set( MYSQL_FOUND 0 )
 
@@ -175,7 +188,7 @@ find_path(MYSQL_INCLUDE_DIR
 
 if( UNIX )
   foreach(LIB ${MYSQL_ADD_LIBRARIES})
-    find_library( MYSQL_LIBRARY 
+    find_library( MYSQL_LIBRARY
       NAMES
         mysql libmysql ${LIB}
       PATHS
@@ -191,7 +204,7 @@ if( UNIX )
 endif( UNIX )
 
 if( WIN32 )
-  find_library( MYSQL_LIBRARY 
+  find_library( MYSQL_LIBRARY
     NAMES
       libmysql
     PATHS
