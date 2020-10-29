@@ -368,7 +368,7 @@ public:
                 case ACTION_SJONNIR_DEAD:
                     me->MonsterYell("Loken? That's downright bothersome... We might've neutralized the iron dwarves, but I'd lay odds there's another machine somewhere else churnin' out a whole mess o' these iron vrykul!", LANG_UNIVERSAL, 0);
                     me->PlayDirectSound(14278);
-                    events.ScheduleEvent(EVENT_END, 14000);
+                    events.ScheduleEvent(EVENT_END, 14s);
                     break;
                 case ACTION_ENTEREVADEMODE:
                     RemoveEscortState(0x7); // all states
@@ -428,8 +428,8 @@ public:
                                 kaddrak->CastSpell(plr, DUNGEON_MODE(SPELL_GLARE_OF_THE_TRIBUNAL, SPELL_GLARE_OF_THE_TRIBUNAL_H), true);
                         }
 
-                        events.RescheduleEvent(EVENT_KADDRAK_SWITCH_EYE, 1500);
-                        events.RepeatEvent(2000 + urand(0, 2000));
+                        events.RescheduleEvent(EVENT_KADDRAK_SWITCH_EYE, 1500ms);
+                        events.RepeatEvent(2s, 4s);
                         break;
                     }
                 case EVENT_KADDRAK_SWITCH_EYE:
@@ -460,7 +460,7 @@ public:
                                 }
                             }
                         }
-                        events.RepeatEvent(20000);
+                        events.RepeatEvent(20s);
                         break;
                     }
                 case EVENT_ABEDNEUM_HEAD: // Third
@@ -478,7 +478,7 @@ public:
                                 cr->CastSpell(cr, DUNGEON_MODE(SPELL_SEARING_GAZE, SPELL_SEARING_GAZE_H), true);
                             }
                         }
-                        events.RepeatEvent(30000);
+                        events.RepeatEvent(30s);
                         break;
                     }
                 case EVENT_SUMMON_MONSTERS:
@@ -524,7 +524,7 @@ public:
                             plr->GroupEventHappens(QUEST_HALLS_OF_STONE, me);
                         }
 
-                        events.ScheduleEvent(EVENT_GO_TO_SJONNIR, 279000);
+                        events.ScheduleEvent(EVENT_GO_TO_SJONNIR, 279s);
                         break;
                     }
                 case EVENT_GO_TO_SJONNIR:
@@ -640,16 +640,16 @@ void brann_bronzebeard::brann_bronzebeardAI::InitializeEvent()
     TalkEvent = true;
 
     events.Reset();
-    events.ScheduleEvent(EVENT_SUMMON_MONSTERS, 21000);
-    events.ScheduleEvent(EVENT_KADDRAK_HEAD, 20000);
-    events.ScheduleEvent(EVENT_MARNAK_HEAD, 105000);
-    events.ScheduleEvent(EVENT_ABEDNEUM_HEAD, 205000);
-    events.ScheduleEvent(EVENT_TRIBUNAL_END, 315000);
+    events.ScheduleEvent(EVENT_SUMMON_MONSTERS, 21s);
+    events.ScheduleEvent(EVENT_KADDRAK_HEAD, 20s);
+    events.ScheduleEvent(EVENT_MARNAK_HEAD, 105s);
+    events.ScheduleEvent(EVENT_ABEDNEUM_HEAD, 205s);
+    events.ScheduleEvent(EVENT_TRIBUNAL_END, 315s);
 
     // Viusals
-    events.ScheduleEvent(EVENT_KADDRAK_VISUAL, 20000);
-    events.ScheduleEvent(EVENT_MARNAK_VISUAL, 105000);
-    events.ScheduleEvent(EVENT_ABEDNEUM_VISUAL, 205000);
+    events.ScheduleEvent(EVENT_KADDRAK_VISUAL, 20s);
+    events.ScheduleEvent(EVENT_MARNAK_VISUAL, 105s);
+    events.ScheduleEvent(EVENT_ABEDNEUM_VISUAL, 205s);
 }
 
 void brann_bronzebeard::brann_bronzebeardAI::WaypointReached(uint32 id)
@@ -723,8 +723,8 @@ public:
 
         void EnterCombat(Unit*)
         {
-            events.ScheduleEvent(EVENT_DRP_CHARGE, 10000);
-            events.ScheduleEvent(EVENT_DRP_CLEAVE, 7000);
+            events.ScheduleEvent(EVENT_DRP_CHARGE, 10s);
+            events.ScheduleEvent(EVENT_DRP_CLEAVE, 7s);
         }
 
         void UpdateAI(uint32 diff)
@@ -743,13 +743,13 @@ public:
                         if (Unit* tgt = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             me->CastSpell(tgt, SPELL_DRP_CHARGE, false);
 
-                        events.RepeatEvent(10000);
+                        events.RepeatEvent(10s);
                         break;
                     }
                 case EVENT_DRP_CLEAVE:
                     {
                         me->CastSpell(me->GetVictim(), SPELL_DRP_CLEAVE, false);
-                        events.RepeatEvent(7000);
+                        events.RepeatEvent(7s);
                         break;
                     }
             }
@@ -781,8 +781,8 @@ public:
 
         void EnterCombat(Unit*)
         {
-            events.ScheduleEvent(EVENT_DRS_LIGHTNING_BOLD, 5000);
-            events.ScheduleEvent(EVENT_DRS_SHADOW_WORD_PAIN, 12000);
+            events.ScheduleEvent(EVENT_DRS_LIGHTNING_BOLD, 5s);
+            events.ScheduleEvent(EVENT_DRS_SHADOW_WORD_PAIN, 12s);
         }
 
         void UpdateAI(uint32 diff)
@@ -799,13 +799,13 @@ public:
                 case EVENT_DRS_LIGHTNING_BOLD:
                     {
                         me->CastSpell(me->GetVictim(), IsHeroic() ? SPELL_DRS_LIGHTING_BOLT_H : SPELL_DRS_LIGHTING_BOLT, false);
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                         break;
                     }
                 case EVENT_DRS_SHADOW_WORD_PAIN:
                     {
                         me->CastSpell(me->GetVictim(), IsHeroic() ? SPELL_DRS_SHADOW_WORD_PAIN_H : SPELL_DRS_SHADOW_WORD_PAIN, false);
-                        events.RepeatEvent(12000);
+                        events.RepeatEvent(12s);
                         break;
                     }
             }
@@ -836,8 +836,8 @@ public:
 
         void EnterCombat(Unit*)
         {
-            events.ScheduleEvent(EVENT_IGC_CRUSH, 6000);
-            events.ScheduleEvent(EVENT_IGC_GROUND_SMASH, 4000);
+            events.ScheduleEvent(EVENT_IGC_CRUSH, 6s);
+            events.ScheduleEvent(EVENT_IGC_GROUND_SMASH, 4s);
         }
         void UpdateAI(uint32 diff)
         {
@@ -853,13 +853,13 @@ public:
                 case EVENT_IGC_CRUSH:
                     {
                         me->CastSpell(me->GetVictim(), SPELL_IGC_CRUSH_ARMOR, false);
-                        events.RepeatEvent(6000);
+                        events.RepeatEvent(6s);
                         break;
                     }
                 case EVENT_IGC_GROUND_SMASH:
                     {
                         me->CastSpell(me->GetVictim(), IsHeroic() ? SPELL_IGC_GROUND_SMASH_H : SPELL_IGC_GROUND_SMASH, false);
-                        events.RepeatEvent(5000);
+                        events.RepeatEvent(5s);
                         break;
                     }
             }

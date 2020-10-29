@@ -62,7 +62,7 @@ public:
                     me->setFaction(faction);
                 me->CreateVehicleKit(510, NPC_KEEP_CANNON);
                 me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_SPELLCLICK);
-                events.ScheduleEvent(EVENT_RESTORE_FLAG, 4000);
+                events.ScheduleEvent(EVENT_RESTORE_FLAG, 4s);
             }
         }
 
@@ -163,7 +163,7 @@ public:
             if (action == ACTION_GUNSHIP_READY)
             {
                 DoCast(me, SPELL_SIMPLE_TELEPORT);
-                _events.ScheduleEvent(EVENT_TALK, 3000);
+                _events.ScheduleEvent(EVENT_TALK, 3s);
             }
         }
 
@@ -175,7 +175,7 @@ public:
                 switch (eventId)
                 {
                     case EVENT_TALK:
-                        _events.ScheduleEvent(EVENT_DESPAWN, 1000);
+                        _events.ScheduleEvent(EVENT_DESPAWN, 1s);
                         Talk(SAY_ONBOARD);
                         DoCast(me, SPELL_TELEPORT_VISUAL_ONLY);
                         break;
@@ -253,12 +253,12 @@ public:
             }
         }
 
-        void EnterCombat(Unit*  /*who*/)
+        void EnterCombat(Unit* /*who*/)
         {
-            events.ScheduleEvent(EVENT_CHECK_RAGE, 2000);
-            events.ScheduleEvent(EVENT_BRUTAL_STRIKE, 6000);
-            events.ScheduleEvent(EVENT_CRUSHING_LEAP, 22000);
-            events.ScheduleEvent(EVENT_DAGGER_THROW, 10000);
+            events.ScheduleEvent(EVENT_CHECK_RAGE, 2s);
+            events.ScheduleEvent(EVENT_BRUTAL_STRIKE, 6s);
+            events.ScheduleEvent(EVENT_CRUSHING_LEAP, 22s);
+            events.ScheduleEvent(EVENT_DAGGER_THROW, 10s);
         }
 
         void UpdateAI(uint32 diff)
@@ -274,21 +274,21 @@ public:
             {
                 case EVENT_CHECK_RAGE:
                     CheckRageBuff();
-                    events.RepeatEvent(2000);
+                    events.RepeatEvent(2s);
                     break;
                 case EVENT_BRUTAL_STRIKE:
                     me->CastSpell(me->GetVictim(), SPELL_IOCBOSS_BRUTAL_STRIKE, false);
-                    events.RepeatEvent(6000);
+                    events.RepeatEvent(6s);
                     break;
                 case EVENT_CRUSHING_LEAP:
                     me->CastSpell(me, SPELL_IOCBOSS_CRUSHING_LEAP, false);
-                    events.RepeatEvent(22000);
+                    events.RepeatEvent(22s);
                     break;
                 case EVENT_DAGGER_THROW:
                     if (Unit* tgt = SelectTarget(SELECT_TARGET_RANDOM))
                         me->CastSpell(tgt, SPELL_IOCBOSS_DAGGER_THROW, false);
 
-                    events.RepeatEvent(10000);
+                    events.RepeatEvent(10s);
                     break;
             }
 

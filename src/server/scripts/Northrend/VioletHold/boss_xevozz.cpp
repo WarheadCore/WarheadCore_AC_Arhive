@@ -90,8 +90,8 @@ public:
             Talk(SAY_AGGRO);
             DoZoneInCombat();
             events.Reset();
-            events.RescheduleEvent(EVENT_SPELL_ARCANE_BARRAGE_VOLLEY, urand(16000, 20000));
-            events.RescheduleEvent(EVENT_SUMMON_SPHERES, 10000);
+            events.RescheduleEvent(EVENT_SPELL_ARCANE_BARRAGE_VOLLEY, 16s, 20s);
+            events.RescheduleEvent(EVENT_SUMMON_SPHERES, 10s);
         }
 
         void UpdateAI(uint32 diff)
@@ -110,7 +110,7 @@ public:
                     break;
                 case EVENT_SPELL_ARCANE_BARRAGE_VOLLEY:
                     me->CastSpell((Unit*)NULL, SPELL_ARCANE_BARRAGE_VOLLEY, false);
-                    events.RepeatEvent(20000);
+                    events.RepeatEvent(20s);
                     break;
                 case EVENT_SPELL_ARCANE_BUFFET:
                     me->CastSpell(me->GetVictim(), SPELL_ARCANE_BUFFET, false);
@@ -128,9 +128,9 @@ public:
                             while (entry1 == entry2);
                             me->CastSpell((Unit*)NULL, entry2, true);
                         }
-                        events.RepeatEvent(45000);
-                        events.RescheduleEvent(EVENT_SPELL_ARCANE_BUFFET, 5000);
-                        events.RescheduleEvent(EVENT_CHECK_DISTANCE, 6000);
+                        events.RepeatEvent(45s);
+                        events.RescheduleEvent(EVENT_SPELL_ARCANE_BUFFET, 5s);
+                        events.RescheduleEvent(EVENT_CHECK_DISTANCE, 6s);
                     }
                     break;
                 case EVENT_CHECK_DISTANCE:
@@ -148,11 +148,11 @@ public:
                         if (found)
                         {
                             Talk(SAY_CHARGED);
-                            events.RepeatEvent(9000);
-                            events.RescheduleEvent(EVENT_SUMMON_SPHERES, 10000);
+                            events.RepeatEvent(9s);
+                            events.RescheduleEvent(EVENT_SUMMON_SPHERES, 10s);
                         }
                         else
-                            events.RepeatEvent(2000);
+                            events.RepeatEvent(2s);
                     }
                     break;
             }
