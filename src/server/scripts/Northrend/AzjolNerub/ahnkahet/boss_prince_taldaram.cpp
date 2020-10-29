@@ -137,8 +137,8 @@ public:
         void ScheduleEvents()
         {
             events.Reset();
-            events.ScheduleEvent(EVENT_PRINCE_FLAME_SPHERES, 10000);
-            events.ScheduleEvent(EVENT_PRINCE_BLOODTHIRST, 10000);
+            events.ScheduleEvent(EVENT_PRINCE_FLAME_SPHERES, 10s);
+            events.ScheduleEvent(EVENT_PRINCE_BLOODTHIRST, 10s);
             vanishTarget = 0;
             vanishDamage = 0;
         }
@@ -163,13 +163,13 @@ public:
                 case EVENT_PRINCE_BLOODTHIRST:
                     {
                         me->CastSpell(me->GetVictim(), SPELL_BLOODTHIRST, false);
-                        events.RepeatEvent(10000);
+                        events.RepeatEvent(10s);
                         break;
                     }
                 case EVENT_PRINCE_FLAME_SPHERES:
                     {
                         me->CastSpell(me->GetVictim(), SPELL_CONJURE_FLAME_SPHERE, false);
-                        events.RescheduleEvent(EVENT_PRINCE_VANISH, 14000);
+                        events.RescheduleEvent(EVENT_PRINCE_VANISH, 14s);
                         Creature* cr;
                         if ((cr = me->SummonCreature(CREATURE_FLAME_SPHERE, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ() + 5.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 10 * IN_MILLISECONDS)))
                             summons.Summon(cr);
@@ -182,7 +182,7 @@ public:
                             if ((cr = me->SummonCreature(CREATURE_FLAME_SPHERE_2, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ() + 5.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 10 * IN_MILLISECONDS)))
                                 summons.Summon(cr);
                         }
-                        events.RepeatEvent(15000);
+                        events.RepeatEvent(15s);
                         break;
                     }
                 case EVENT_PRINCE_VANISH:
@@ -205,7 +205,7 @@ public:
 
                             events.CancelEvent(EVENT_PRINCE_FLAME_SPHERES);
                             events.CancelEvent(EVENT_PRINCE_BLOODTHIRST);
-                            events.ScheduleEvent(EVENT_PRINCE_VANISH_RUN, 2499);
+                            events.ScheduleEvent(EVENT_PRINCE_VANISH_RUN, 2499ms);
                             if (Unit* pEmbraceTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                                 vanishTarget = pEmbraceTarget->GetGUID();
                         }
@@ -220,7 +220,7 @@ public:
                             me->RemoveAura(SPELL_VANISH);
                         }
 
-                        events.ScheduleEvent(EVENT_PRINCE_RESCHEDULE, 20000);
+                        events.ScheduleEvent(EVENT_PRINCE_RESCHEDULE, 20s);
                         break;
                     }
                 case EVENT_PRINCE_RESCHEDULE:

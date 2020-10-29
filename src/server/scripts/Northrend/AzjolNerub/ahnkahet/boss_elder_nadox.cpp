@@ -117,11 +117,11 @@ public:
         {
             Talk(SAY_AGGRO);
 
-            events.ScheduleEvent(EVENT_CHECK_HEALTH, 1000);
-            events.ScheduleEvent(EVENT_SWARMER, 10000);
-            events.ScheduleEvent(EVENT_CHECK_HOME, 2000);
-            events.ScheduleEvent(EVENT_PLAGUE, 5000 + rand() % 3000);
-            events.ScheduleEvent(EVENT_BROOD_RAGE, 5000);
+            events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
+            events.ScheduleEvent(EVENT_SWARMER, 10s);
+            events.ScheduleEvent(EVENT_CHECK_HOME, 2s);
+            events.ScheduleEvent(EVENT_PLAGUE, 5s, 8s);
+            events.ScheduleEvent(EVENT_BROOD_RAGE, 5s);
 
             if (pInstance)
                 pInstance->SetData(DATA_ELDER_NADOX_EVENT, IN_PROGRESS);
@@ -178,11 +178,11 @@ public:
             {
                 case EVENT_CHECK_HEALTH:
                     {
-                        events.RepeatEvent(1000);
+                        events.RepeatEvent(1s);
                         if (HealthBelowPct(50))
                         {
                             events.CancelEvent(EVENT_CHECK_HEALTH);
-                            events.ScheduleEvent(EVENT_SUMMON_GUARD, 100);
+                            events.ScheduleEvent(EVENT_SUMMON_GUARD, 100ms);
                         }
                         break;
                     }
@@ -197,19 +197,19 @@ public:
                         if (Creature* pSwarmer = me->FindNearestCreature(NPC_AHNKAHAR_SWARMER, 40, true))
                             me->CastSpell(pSwarmer, SPELL_BROOD_RAGE_H, true);
 
-                        events.RepeatEvent(10000);
+                        events.RepeatEvent(10s);
                         break;
                     }
                 case EVENT_PLAGUE:
                     {
                         me->CastSpell(me->GetVictim(), DUNGEON_MODE(SPELL_BROOD_PLAGUE, SPELL_BROOD_PLAGUE_H), false);
-                        events.RepeatEvent(12000 + rand() % 5000);
+                        events.RepeatEvent(12s, 17s);
                         break;
                     }
                 case EVENT_SWARMER:
                     {
                         SummonHelpers(true);
-                        events.RepeatEvent(10000);
+                        events.RepeatEvent(10s);
                         break;
                     }
                 case EVENT_CHECK_HOME:
@@ -223,7 +223,7 @@ public:
                             break;
                         }
 
-                        events.RepeatEvent(2000);
+                        events.RepeatEvent(2s);
                         break;
                     }
             }
