@@ -201,7 +201,6 @@ public:
                     }
                 case EVENT_SPELL_BERSERK:
                     me->CastSpell(me, SPELL_BERSERK, true);
-
                     break;
             }
 

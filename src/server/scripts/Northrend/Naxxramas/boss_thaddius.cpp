@@ -289,7 +289,6 @@ public:
                     return;
                 case EVENT_THADDIUS_SPELL_BERSERK:
                     me->CastSpell(me, SPELL_BERSERK, true);
-
                     break;
                 case EVENT_THADDIUS_SPELL_CHAIN_LIGHTNING:
                     me->CastSpell(me->GetVictim(), RAID_MODE_HEROIC(SPELL_CHAIN_LIGHTNING_10, SPELL_CHAIN_LIGHTNING_25), false);
