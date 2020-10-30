@@ -110,7 +110,6 @@ namespace Warhead::Locale
                     i_data_cache.resize(cache_idx + 1);
 
                 data_list = &i_data_cache[cache_idx];
-
                 i_builder(*data_list, loc_idx);
             }
             else
