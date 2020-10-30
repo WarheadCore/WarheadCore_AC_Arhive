@@ -16,6 +16,7 @@
  */
 
 #include "GameLocale.h"
+#include "ModulesLocale.h"
 #include "AccountMgr.h"
 #include "Chat.h"
 #include "DatabaseEnv.h"
@@ -58,7 +59,7 @@ void GameLocale::LoadAllLocales()
     LoadPointOfInterestLocales();
     LoadRaceStrings();
     LoadClassStrings();
-    LoadModuleString();
+    sModulesLocale->Init();
 
     // Get once for all the locale index of DBC language (console/broadcasts)
     sGameLocale->SetDBCLocaleIndex(sWorld->GetDefaultDbcLocale());
@@ -835,102 +836,4 @@ ClassString const* GameLocale::GetClassString(uint32 id) const
         return &itr->second;
 
     return nullptr;
-}
-
-// Module string
-void GameLocale::AddModuleString(std::string const& moduleName, ModuleStringContainer& data)
-{
-    if (data.empty())
-    {
-        LOG_ERROR("game.locale", "ModuleStringContainer& data for module (%s) is empty!", moduleName.c_str());
-        return;
-    }
-
-    _modulesStringStore.insert(std::make_pair(moduleName, data));
-}
-
-std::string GameLocale::GetModuleString(std::string _moduleName, uint32 id, uint8 _locale) const
-{
-    auto const& itr = _modulesStringStore.find(_moduleName);
-    if (itr == _modulesStringStore.end())
-        return "<error>";
-
-    auto const& itr2 = itr->second.find(id);
-    if (itr2 == itr->second.end())
-        return "<error>";
-
-    return itr2->second.GetText(_locale);
-}
-
-void GameLocale::LoadModuleString()
-{
-    uint32 oldMSTime = getMSTime();
-
-    QueryResult result = WorldDatabase.Query("SELECT DISTINCT `ModuleName` FROM `string_module`");
-    if (!result)
-    {
-        LOG_WARN("sql.sql", "> DB table `string_module` is empty");
-        return;
-    }
-
-    ModuleStringContainer _tempStore;
-    std::vector<std::string> _localesModuleList;
-    uint32 countAll = 0;
-
-    // Add module list
-    do
-    {
-        _localesModuleList.push_back(result->Fetch()->GetString());
-
-    } while (result->NextRow());
-
-    for (auto const& itr : _localesModuleList)
-    {
-        std::string moduleName = itr;
-
-        result = WorldDatabase.PQuery("SELECT `ID`, `Locale`, `Text` FROM `string_module` WHERE `ModuleName` = '%s'", moduleName.c_str());
-        if (!result)
-        {
-            LOG_WARN("sql.sql", "> Strings for module %s is bad!", moduleName.c_str());
-            return;
-        }
-
-        do
-        {
-            Field* fields = result->Fetch();
-
-            AddLocaleString(fields[2].GetString(), GetLocaleByName(fields[1].GetString()), _tempStore[fields[0].GetUInt32()].Content);
-            countAll++;
-
-        } while (result->NextRow());
-
-        AddModuleString(moduleName, _tempStore);
-    }
-
-    LOG_INFO("server.loading", ">> Loaded %u module strings for %u modules in %u ms", countAll, static_cast<uint32>(_modulesStringStore.size()), GetMSTimeDiffToNow(oldMSTime));
-}
-
-void GameLocale::SendPlayerMessage(Player* player, std::string&& message)
-{
-    ChatHandler(player->GetSession()).SendSysMessage(message.c_str());
-}
-
-void GameLocale::SendGlobalMessage(bool gmOnly, std::string&& message)
-{
-    WorldPacket data;
-
-    for (auto const& itr : sWorld->GetAllSessions())
-    {
-        auto session = itr.second;
-        auto player = itr.second->GetPlayer();
-
-        if (!session || !player || !player->IsInWorld())
-            continue;
-
-        if (gmOnly && AccountMgr::IsPlayerAccount(player->GetSession()->GetSecurity()))
-            continue;
-
-        ChatHandler::BuildChatPacket(data, CHAT_MSG_SYSTEM, LANG_UNIVERSAL, nullptr, nullptr, message);
-        sWorld->SendGlobalMessage(&data);
-    }
 }

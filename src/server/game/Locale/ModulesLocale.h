@@ -20,7 +20,8 @@
 
 #include "Common.h"
 #include "Player.h"
-#include <vector>
+#include <unordered_map>
+#include <optional>
 
 struct ModuleString
 {
@@ -31,7 +32,7 @@ struct ModuleString
 
     std::vector<std::string> Content;
 
-    std::string GetText(uint8 locale = 0) const
+    std::optional<std::string> GetText(uint8 locale = 0) const
     {
         if (Content.size() > size_t(locale) && !Content[locale].empty())
             return Content[locale];
@@ -39,64 +40,38 @@ struct ModuleString
         if (!Content[0].empty())
             return Content[0];
 
-        return "<error>";
+        return nullopt;
     }
 };
 
 class ModulesLocale
 {
 private:
-    ModulesLocale();
+    ModulesLocale() = default;
     ~ModulesLocale() = default;
 
 public:
     static ModulesLocale* instance();
 
     void Init();
-
-    void AddLocaleString(std::string const& str, LocaleConstant locale, std::vector<std::string>& data);
-
-    inline void GetLocaleString(const std::vector<std::string>& data, int loc_idx, std::string& value)
-    {
-        if (data.size() > size_t(loc_idx) && !data[loc_idx].empty())
-            value = data[loc_idx];
-    }
-
-    LocaleConstant GetDBCLocaleIndex() const { return DBCLocaleIndex; }
-    void SetDBCLocaleIndex(LocaleConstant locale) { DBCLocaleIndex = locale; }
-
-    // Module strings
     void LoadModuleString();
-    std::string GetModuleString(std::string _moduleName, uint32 id, uint8 _locale) const;
+
+    std::optional<std::string> GetModuleString(std::string const& moduleName, uint32 id, uint8 _locale) const;
+    uint32 GetStringsCount(std::string const& moduleName);
 
     // Chat func
-    template<typename... Args>
-    void SendPlayerMessage(Player* player, std::string moduleName, uint32 id, Args&& ... args)
-    {
-        SendPlayerMessage(player, Warhead::StringFormat(GetModuleString(moduleName, id, uint8(player->GetSession()->GetSessionDbLocaleIndex())), std::forward<Args>(args)...));
-    }
-
-    template<typename... Args>
-    void SendGlobalMessage(std::string moduleName, uint32 id, bool gmOnly, Args&& ... args)
-    {
-        SendGlobalMessage(gmOnly, Warhead::StringFormat(GetModuleString(moduleName, id, DBCLocaleIndex), std::forward<Args>(args)...));
-    }
+    void SendPlayerMessage(Player* player, std::string const& moduleName, uint32 id, ...);
+    void SendGlobalMessage(bool gmOnly, std::string const& moduleName, uint32 id, ...);
 
 private:
-
-    LocaleConstant DBCLocaleIndex;
-
-    // Module string
     using ModuleStringContainer = std::unordered_map<uint32, ModuleString>;
     using AllModulesStringContainer = std::unordered_map<std::string, ModuleStringContainer>;
 
     AllModulesStringContainer _modulesStringStore;
 
     void AddModuleString(std::string const& moduleName, ModuleStringContainer& data);
-    void SendPlayerMessage(Player* player, std::string&& message);
-    void SendGlobalMessage(bool gmOnly, std::string&& message);
 };
 
-#define sModulesLocale GameLocale::instance()
+#define sModulesLocale ModulesLocale::instance()
 
 #endif // _MODULES_LOCALE_H_

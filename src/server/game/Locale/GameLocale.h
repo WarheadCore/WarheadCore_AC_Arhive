@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _LOCALE_H_
-#define _LOCALE_H_
+#ifndef _GAME_LOCALE_H_
+#define _GAME_LOCALE_H_
 
 #include "Common.h"
 #include "Player.h"
@@ -292,23 +292,6 @@ public:
     RaceString const* GetRaseString(uint32 id) const;
     ClassString const* GetClassString(uint32 id) const;
 
-    // Module strings
-    void LoadModuleString();
-    std::string GetModuleString(std::string _moduleName, uint32 id, uint8 _locale) const;
-
-    // Chat func
-    template<typename... Args>
-    void SendPlayerMessage(Player* player, std::string moduleName, uint32 id, Args&& ... args)
-    {
-        SendPlayerMessage(player, Warhead::StringFormat(GetModuleString(moduleName, id, uint8(player->GetSession()->GetSessionDbLocaleIndex())), std::forward<Args>(args)...));
-    }
-
-    template<typename... Args>
-    void SendGlobalMessage(std::string moduleName, uint32 id, bool gmOnly, Args&& ... args)
-    {
-        SendGlobalMessage(gmOnly, Warhead::StringFormat(GetModuleString(moduleName, id, DBCLocaleIndex), std::forward<Args>(args)...));
-    }
-
 private:
     typedef std::unordered_map<uint32, AcoreString> AcoreStringContainer;
 
@@ -349,18 +332,8 @@ private:
 
     RaceStringContainer _raceStringStore;
     ClassStringContainer _classStringStore;
-
-    // Module string
-    typedef std::unordered_map<uint32, ModuleString> ModuleStringContainer;
-    typedef std::unordered_map<std::string, ModuleStringContainer> AllModulesStringContainer;
-
-    AllModulesStringContainer _modulesStringStore;
-
-    void AddModuleString(std::string const& moduleName, ModuleStringContainer& data);
-    void SendPlayerMessage(Player* player, std::string&& message);
-    void SendGlobalMessage(bool gmOnly, std::string&& message);
 };
 
 #define sGameLocale GameLocale::instance()
 
-#endif //_LOCALE_H_
+#endif // _GAME_LOCALE_H_

@@ -68,7 +68,8 @@ public:
     static Transmogrification* instance();
 
     // Config options
-    void LoadConfig(bool reload); // thread unsafe
+    void Init(bool reload);
+    void LoadConfig(bool reload);
 
     bool GetEnableSets() const;
     uint8 GetMaxSets() const;
