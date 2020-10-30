@@ -208,27 +208,6 @@ struct ClassString
     }
 };
 
-struct ModuleString
-{
-    ModuleString()
-    {
-        Content.resize(DEFAULT_LOCALE + 1);
-    }
-
-    std::vector<std::string> Content;
-
-    std::string GetText(uint8 locale = 0) const
-    {
-        if (Content.size() > size_t(locale) && !Content[locale].empty())
-            return Content[locale];
-
-        if (!Content[0].empty())
-            return Content[0];
-
-        return "<error>";
-    }
-};
-
 class GameLocale
 {
 private:
