@@ -63,13 +63,13 @@ public:
 
         messages.clear();
 
-        LOG_INFO("modules.aniad", "Loading forbidden words...");
+        LOG_INFO("modules.antiad", "Loading forbidden words...");
 
         QueryResult result = WorldDatabase.PQuery("SELECT message FROM `anti_ad_messages`");
         if (!result)
         {
-            LOG_INFO("modules.aniad", ">> Loading 0 word. DB table `anti_ad_messages` is empty.");
-            LOG_INFO("modules.aniad", "");
+            LOG_INFO("modules.antiad", ">> Loading 0 word. DB table `anti_ad_messages` is empty.");
+            LOG_INFO("modules.antiad", "");
             return;
         }
 
@@ -80,8 +80,8 @@ public:
 
         } while (result->NextRow());
 
-        LOG_INFO("modules.aniad", ">> Loaded forbidden words %u in %u ms", static_cast<uint32>(messages.size()), GetMSTimeDiffToNow(oldMSTime));
-        LOG_INFO("modules.aniad", "");
+        LOG_INFO("modules.antiad", ">> Loaded forbidden words %u in %u ms", static_cast<uint32>(messages.size()), GetMSTimeDiffToNow(oldMSTime));
+        LOG_INFO("modules.antiad", "");
     }
 
     bool IsBadMessage(std::string& msg)
