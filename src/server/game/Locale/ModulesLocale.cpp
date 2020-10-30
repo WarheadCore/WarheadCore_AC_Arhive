@@ -41,7 +41,6 @@ namespace Warhead::Locale
     {
     public:
         typedef std::vector<WorldPacket*> WorldPacketList;
-
         explicit ModulesLocaleTextBuilder(uint32 textId, std::string const& moduleName, va_list* args = nullptr) : i_textId(textId), i_args(args), _moduleName(moduleName) { }
 
         void operator()(WorldPacketList& data_list, LocaleConstant loc_idx)
@@ -64,7 +63,7 @@ namespace Warhead::Locale
                 do_helper(data_list, (char*)text);
         }
     private:
-        char* lineFromMessage(char*& pos) { char* start = strtok(pos, "\n"); pos = nullptr; return start; }
+        char* lineFromMessage(char*& pos) { char* start = strtok_r(pos, "\n"); pos = nullptr; return start; }
 
         void do_helper(WorldPacketList& data_list, char* text)
         {
@@ -89,7 +88,6 @@ namespace Warhead::Locale
     {
     public:
         typedef std::vector<WorldPacket*> WorldPacketList;
-
         explicit LocalizedPacketListDo(Builder& builder) : i_builder(builder) { }
 
         ~LocalizedPacketListDo()
