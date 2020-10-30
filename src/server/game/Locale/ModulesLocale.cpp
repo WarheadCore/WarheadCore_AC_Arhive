@@ -148,7 +148,7 @@ std::optional<std::string> ModulesLocale::GetModuleString(std::string const& mod
     {
         LOG_FATAL("locales.modules", "> ModulesLocales: Not found strings for module (%s)", moduleName.c_str());
         return nullopt;
-    }        
+    }
 
     auto const& itr2 = itr->second.find(id);
     if (itr2 == itr->second.end())
@@ -238,7 +238,7 @@ void ModulesLocale::SendPlayerMessage(Player* player, std::string const& moduleN
     va_list ap;
     va_start(ap, id);
 
-    Warhead::Locale::ModulesLocaleTextBuilder wt_builder(id, moduleName , &ap);
+    Warhead::Locale::ModulesLocaleTextBuilder wt_builder(id, moduleName, &ap);
     Warhead::Locale::LocalizedPacketListDo<Warhead::Locale::ModulesLocaleTextBuilder> wt_do(wt_builder);
 
     wt_do(player);
