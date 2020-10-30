@@ -21,9 +21,20 @@
 #include "Player.h"
 #include "Chat.h"
 #include "ExternalMail.h"
-#include "GameLocale.h"
+#include "ModulesLocale.h"
 #include "Tokenize.h"
 #include "StringConvert.h"
+
+enum StringLocales : uint8
+{
+    OR_LOCALE_SUBJECT = 1,
+    OR_LOCALE_TEXT,
+    OR_LOCALE_MESSAGE,
+
+    OR_LOCALE_MAX
+};
+
+#define MODULE_NAME "mod-online-reward"
 
 OnlineReward* OnlineReward::instance()
 {
@@ -35,6 +46,12 @@ void OnlineReward::InitSystem()
 {
     if (CONF_GET_BOOL("OnlineReward.Enable") && !CONF_GET_BOOL("OnlineReward.PerOnline.Enable") && !CONF_GET_BOOL("OnlineReward.PerTime.Enable"))
         sGameConfig->SetBool("OnlineReward.Enable", false);
+
+    if (sModulesLocale->GetStringsCount(MODULE_NAME) != StringLocales::OR_LOCALE_MAX - 1)
+    {
+        LOG_FATAL("modules.or", "> OnlineReward: string locales (%u) for module != (%u)", sModulesLocale->GetStringsCount(MODULE_NAME), StringLocales::OR_LOCALE_MAX - 1);
+        return;
+    }
 
     LoadRewards();
 }
@@ -273,13 +290,12 @@ uint32 OnlineReward::GetHistoryPerTime(uint32 lowGuid)
 void OnlineReward::SendRewardForPlayer(Player* player, uint32 itemID, uint32 itemCount, uint32 secondsOnine, bool isPerOnline /*= true*/)
 {
     ChatHandler handler(player->GetSession());
-    std::string subject, text, selfMessage;
+    std::string subject, text;
     std::string playedTimeSecStr = secsToTimeString(secondsOnine);
+    uint8 localeIndex = static_cast<uint8>(player->GetSession()->GetSessionDbLocaleIndex());
 
-    // @TODO locale this
-    subject = Warhead::StringFormat(sGameLocale->GetModuleString("mod-online-reward", 1, player->GetSession()->GetSessionDbLocaleIndex()), playedTimeSecStr.c_str());
-    text = Warhead::StringFormat(sGameLocale->GetModuleString("mod-online-reward", 2, player->GetSession()->GetSessionDbLocaleIndex()), player->GetName().c_str(), playedTimeSecStr.c_str());
-    selfMessage = Warhead::StringFormat(sGameLocale->GetModuleString("mod-online-reward", 3, player->GetSession()->GetSessionDbLocaleIndex()), playedTimeSecStr.c_str());
+    subject = Warhead::StringFormat(*sModulesLocale->GetModuleString(MODULE_NAME, StringLocales::OR_LOCALE_SUBJECT, localeIndex), playedTimeSecStr.c_str());
+    text = Warhead::StringFormat(*sModulesLocale->GetModuleString(MODULE_NAME, StringLocales::OR_LOCALE_TEXT, localeIndex), player->GetName().c_str(), playedTimeSecStr.c_str());
 
     // Send External mail
     sEM->AddMail(player->GetName(), subject, text, itemID, itemCount, 37688);
@@ -288,7 +304,7 @@ void OnlineReward::SendRewardForPlayer(Player* player, uint32 itemID, uint32 ite
     SaveDataForDB(player->GetGUIDLow(), secondsOnine, isPerOnline);
 
     // Send chat text
-    handler.PSendSysMessage("%s", selfMessage.c_str());
+    sModulesLocale->SendPlayerMessage(player, MODULE_NAME, StringLocales::OR_LOCALE_MESSAGE, playedTimeSecStr.c_str());
 }
 
 void OnlineReward::SaveDataForDB(uint32 lowGuid, uint32 seconds, bool isPerOnline /*= true*/)

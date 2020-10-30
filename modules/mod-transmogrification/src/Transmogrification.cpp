@@ -18,8 +18,49 @@
 #include "Transmogrification.h"
 #include "GameConfig.h"
 #include "GameLocale.h"
+#include "ModulesLocale.h"
 #include "ScriptedGossip.h"
 #include "GameEventMgr.h"
+
+enum StringLocales : uint8
+{
+    // Slots
+    TRANSMOG_LOCALE_HEAD = 1,
+    TRANSMOG_LOCALE_SHOULDERS,
+    TRANSMOG_LOCALE_SHIRT,
+    TRANSMOG_LOCALE_CHEST,
+    TRANSMOG_LOCALE_WAIST,
+    TRANSMOG_LOCALE_LEGS,
+    TRANSMOG_LOCALE_FEET,
+    TRANSMOG_LOCALE_WRISTS,
+    TRANSMOG_LOCALE_HANDS,
+    TRANSMOG_LOCALE_BACK,
+    TRANSMOG_LOCALE_MAIN_HAND,
+    TRANSMOG_LOCALE_OFF_HAND,
+    TRANSMOG_LOCALE_RANGED,
+    TRANSMOG_LOCALE_TABARD,
+
+    // Gossips
+    TRANSMOG_LOCALE_GOSSIP_ITEM_HOW_WORKS,
+    TRANSMOG_LOCALE_GOSSIP_ITEM_MANAGE_SETS,
+    TRANSMOG_LOCALE_GOSSIP_ITEM_REMOVE_ALL_TRANSMOG,
+    TRANSMOG_LOCALE_GOSSIP_ITEM_REMOVE_SINGLE_TRANSMOG,
+    TRANSMOG_LOCALE_GOSSIP_ITEM_UPDATE_MENU,
+    TRANSMOG_LOCALE_GOSSIP_ITEM_BACK,
+    TRANSMOG_LOCALE_GOSSIP_ITEM_REMOVE_ALL_TRANSMOG_Q,
+    TRANSMOG_LOCALE_GOSSIP_ITEM_REMOVE_SINGLE_TRANSMOG_Q,
+    TRANSMOG_LOCALE_GOSSIP_ITEM_SAVE_SET,
+    TRANSMOG_LOCALE_GOSSIP_ITEM_ITEM_BIND_Q,
+    TRANSMOG_LOCALE_GOSSIP_ITEM_HOW_SET_WORKS,
+    TRANSMOG_LOCALE_GOSSIP_ITEM_SET_USE,
+    TRANSMOG_LOCALE_GOSSIP_ITEM_SET_DELETE,
+    TRANSMOG_LOCALE_GOSSIP_ITEM_SET_DELETE_Q,
+    TRANSMOG_LOCALE_GOSSIP_ITEM_SET_INSERT_NAME,
+
+    TRANSMOG_LOCALE_MAX
+};
+
+#define MODULE_NAME "mod-transmogrification"
 
 Transmogrification* Transmogrification::instance()
 {
@@ -131,38 +172,43 @@ void Transmogrification::UnloadPlayerSets(uint64 pGUID)
 
 std::string const Transmogrification::GetSlotName(Player* player, uint8 slot) const
 {
+    uint8 localeIndex = static_cast<uint8>(player->GetSession()->GetSessionDbLocaleIndex());
+
     switch (slot)
     {
         case EQUIPMENT_SLOT_HEAD:
-            return sGameLocale->GetModuleString("mod-transmogrification", 1, player->GetSession()->GetSessionDbLocaleIndex()); // Head
+            return sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_HEAD, localeIndex).value_or("Head"); // Head
         case EQUIPMENT_SLOT_SHOULDERS:
-            return sGameLocale->GetModuleString("mod-transmogrification", 2, player->GetSession()->GetSessionDbLocaleIndex()); // Shoulders
+            return sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_SHOULDERS, localeIndex).value_or("Shoulders"); // Shoulders
         case EQUIPMENT_SLOT_BODY:
-            return sGameLocale->GetModuleString("mod-transmogrification", 3, player->GetSession()->GetSessionDbLocaleIndex()); // Shirt
+            return sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_SHIRT, localeIndex).value_or("Shirt"); // Shirt
         case EQUIPMENT_SLOT_CHEST:
-            return sGameLocale->GetModuleString("mod-transmogrification", 4, player->GetSession()->GetSessionDbLocaleIndex()); // Chest
+            return sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_CHEST, localeIndex).value_or("Chest"); // Chest
         case EQUIPMENT_SLOT_WAIST:
-            return sGameLocale->GetModuleString("mod-transmogrification", 5, player->GetSession()->GetSessionDbLocaleIndex()); // Waist
+            return sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_WAIST, localeIndex).value_or("Waist"); // Waist
         case EQUIPMENT_SLOT_LEGS:
-            return sGameLocale->GetModuleString("mod-transmogrification", 6, player->GetSession()->GetSessionDbLocaleIndex()); // Legs
+            return sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_LEGS, localeIndex).value_or("Legs"); // Legs
         case EQUIPMENT_SLOT_FEET:
-            return sGameLocale->GetModuleString("mod-transmogrification", 7, player->GetSession()->GetSessionDbLocaleIndex()); // Feet
+            return sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_FEET, localeIndex).value_or("Feet"); // Feet
         case EQUIPMENT_SLOT_WRISTS:
-            return sGameLocale->GetModuleString("mod-transmogrification", 8, player->GetSession()->GetSessionDbLocaleIndex()); // Wrists
+            return sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_WRISTS, localeIndex).value_or("Wrists"); // Wrists
         case EQUIPMENT_SLOT_HANDS:
-            return sGameLocale->GetModuleString("mod-transmogrification", 9, player->GetSession()->GetSessionDbLocaleIndex()); // Hands
+            return sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_HANDS, localeIndex).value_or("Hands"); // Hands
         case EQUIPMENT_SLOT_BACK:
-            return sGameLocale->GetModuleString("mod-transmogrification", 10, player->GetSession()->GetSessionDbLocaleIndex()); // Back
+            return sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_BACK, localeIndex).value_or("Back"); // Back
         case EQUIPMENT_SLOT_MAINHAND:
-            return sGameLocale->GetModuleString("mod-transmogrification", 11, player->GetSession()->GetSessionDbLocaleIndex()); // Main hand
+            return sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_MAIN_HAND, localeIndex).value_or("Main hand"); // Main hand
         case EQUIPMENT_SLOT_OFFHAND:
-            return sGameLocale->GetModuleString("mod-transmogrification", 12, player->GetSession()->GetSessionDbLocaleIndex()); // Off hand
+            return sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_OFF_HAND, localeIndex).value_or("Off hand"); // Off hand
         case EQUIPMENT_SLOT_RANGED:
-            return sGameLocale->GetModuleString("mod-transmogrification", 13, player->GetSession()->GetSessionDbLocaleIndex()); // Ranged
+            return sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_RANGED, localeIndex).value_or("Ranged"); // Ranged
         case EQUIPMENT_SLOT_TABARD:
-            return sGameLocale->GetModuleString("mod-transmogrification", 14, player->GetSession()->GetSessionDbLocaleIndex()); // Tabard
+            return sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_TABARD, localeIndex).value_or("Tabard"); // Tabard
         default:
-            return "";
+            {
+                LOG_FATAL("modules.transmog", "> Transmog: unknown slot (%u)", slot);
+                return "";
+            }
     }
 }
 
@@ -677,47 +723,6 @@ bool Transmogrification::IsAllowedQuality(uint32 quality) const
 
 void Transmogrification::LoadConfig(bool reload)
 {
-    // Add bool
-    sGameConfig->AddBoolConfig("Transmogrification.EnableSetInfo");
-    sGameConfig->AddBoolConfig("Transmogrification.EnableSets", true);
-    sGameConfig->AddBoolConfig("Transmogrification.EnableTransmogInfo", true);
-    sGameConfig->AddBoolConfig("Transmogrification.RequireToken");
-    sGameConfig->AddBoolConfig("Transmogrification.AllowPoor");
-    sGameConfig->AddBoolConfig("Transmogrification.AllowCommon");
-    sGameConfig->AddBoolConfig("Transmogrification.AllowUncommon", true);
-    sGameConfig->AddBoolConfig("Transmogrification.AllowRare", true);
-    sGameConfig->AddBoolConfig("Transmogrification.AllowEpic", true);
-    sGameConfig->AddBoolConfig("Transmogrification.AllowLegendary");
-    sGameConfig->AddBoolConfig("Transmogrification.AllowArtifact");
-    sGameConfig->AddBoolConfig("Transmogrification.AllowHeirloom", true);
-    sGameConfig->AddBoolConfig("Transmogrification.AllowMixedArmorTypes");
-    sGameConfig->AddBoolConfig("Transmogrification.AllowMixedWeaponTypes");
-    sGameConfig->AddBoolConfig("Transmogrification.AllowFishingPoles");
-    sGameConfig->AddBoolConfig("Transmogrification.IgnoreReqRace");
-    sGameConfig->AddBoolConfig("Transmogrification.IgnoreReqClass");
-    sGameConfig->AddBoolConfig("Transmogrification.IgnoreReqSkill");
-    sGameConfig->AddBoolConfig("Transmogrification.IgnoreReqSpell");
-    sGameConfig->AddBoolConfig("Transmogrification.IgnoreReqLevel");
-    sGameConfig->AddBoolConfig("Transmogrification.IgnoreReqEvent");
-    sGameConfig->AddBoolConfig("Transmogrification.IgnoreReqStats");
-
-    // Add int
-    sGameConfig->AddIntConfig("Transmogrification.SetNpcText", 601084);
-    sGameConfig->AddIntConfig("Transmogrification.MaxSets", 10);
-    sGameConfig->AddIntConfig("Transmogrification.SetCopperCost");
-    sGameConfig->AddIntConfig("Transmogrification.TransmogNpcText", 601083);
-    sGameConfig->AddIntConfig("Transmogrification.CopperCost");
-    sGameConfig->AddIntConfig("Transmogrification.TokenEntry", 49426);
-    sGameConfig->AddIntConfig("Transmogrification.TokenAmount", 1);
-
-    // Add float
-    sGameConfig->AddFloatConfig("Transmogrification.SetCostModifier", 3.0f);
-    sGameConfig->AddFloatConfig("Transmogrification.ScaledCostModifier");
-
-    // Add string
-    sGameConfig->AddStringConfig("Transmogrification.Allowed");
-    sGameConfig->AddStringConfig("Transmogrification.NotAllowed");
-
     EnableSetInfo = sGameConfig->GetBoolConfig("Transmogrification.EnableSetInfo");
     SetNpcText = uint32(sGameConfig->GetIntConfig("Transmogrification.SetNpcText"));
     EnableSets = sGameConfig->GetBoolConfig("Transmogrification.EnableSets");
@@ -728,21 +733,6 @@ void Transmogrification::LoadConfig(bool reload)
     MaxSets = (uint8)sGameConfig->GetIntConfig("Transmogrification.MaxSets");
     if (MaxSets > MAX_OPTIONS)
         MaxSets = MAX_OPTIONS;
-
-    if (reload) // dont store presets for nothing
-    {
-        for (auto const& itr : sWorld->GetAllSessions())
-        {
-            if (Player* player = itr.second->GetPlayer())
-            {
-                // skipping session check
-                UnloadPlayerSets(player->GetGUID());
-
-                if (GetEnableSets())
-                    LoadPlayerSets(player->GetGUID());
-            }
-        }
-    }
 
     EnableTransmogInfo = sGameConfig->GetBoolConfig("Transmogrification.EnableTransmogInfo");
     TransmogNpcText = uint32(sGameConfig->GetIntConfig("Transmogrification.TransmogNpcText"));
@@ -776,7 +766,6 @@ void Transmogrification::LoadConfig(bool reload)
     CopperCost = sGameConfig->GetIntConfig("Transmogrification.CopperCost");
 
     RequireToken = sGameConfig->GetBoolConfig("Transmogrification.RequireToken");
-    TokenEntry = uint32(sGameConfig->GetIntConfig("Transmogrification.TokenEntry"));
     TokenAmount = uint32(sGameConfig->GetIntConfig("Transmogrification.TokenAmount"));
 
     AllowPoor = sGameConfig->GetBoolConfig("Transmogrification.AllowPoor");
@@ -800,20 +789,46 @@ void Transmogrification::LoadConfig(bool reload)
     IgnoreReqEvent = sGameConfig->GetBoolConfig("Transmogrification.IgnoreReqEvent");
     IgnoreReqStats = sGameConfig->GetBoolConfig("Transmogrification.IgnoreReqStats");
 
-    if (!sObjectMgr->GetItemTemplate(TokenEntry))
+    if (reload) // dont store presets for nothing
     {
-        LOG_ERROR("server.loading", "Transmogrification.TokenEntry (%u) does not exist. Using default.", TokenEntry);
-        TokenEntry = 49426;
+        for (auto const& itr : sWorld->GetAllSessions())
+        {
+            if (Player* player = itr.second->GetPlayer())
+            {
+                // skipping session check
+                UnloadPlayerSets(player->GetGUID());
+
+                if (GetEnableSets())
+                    LoadPlayerSets(player->GetGUID());
+            }
+        }
     }
 
     if (!reload)
     {
-        LOG_DEBUG("modules", "Deleting non-existing transmogrification entries...");
+        LOG_DEBUG("modules.transmog", "Deleting non-existing transmogrification entries...");
         CharacterDatabase.Execute("DELETE FROM custom_transmogrification WHERE NOT EXISTS (SELECT 1 FROM item_instance WHERE item_instance.guid = custom_transmogrification.GUID)");
 
         // Clean even if disabled
         // Dont delete even if player has more presets than should
         CharacterDatabase.Execute("DELETE FROM `custom_transmogrification_sets` WHERE NOT EXISTS(SELECT 1 FROM characters WHERE characters.guid = custom_transmogrification_sets.Owner)");
+    }
+}
+
+void Transmogrification::Init(bool reload)
+{
+    if (sModulesLocale->GetStringsCount(MODULE_NAME) != StringLocales::TRANSMOG_LOCALE_MAX - 1)
+    {
+        LOG_FATAL("modules.transmog", "> AntiAD: string locales (%u) for module != (%u)", sModulesLocale->GetStringsCount(MODULE_NAME), StringLocales::TRANSMOG_LOCALE_MAX - 1);
+        return;
+    }
+
+    TokenEntry = uint32(sGameConfig->GetIntConfig("Transmogrification.TokenEntry"));
+
+    if (!sObjectMgr->GetItemTemplate(TokenEntry))
+    {
+        LOG_ERROR("modules.transmog", "Transmogrification.TokenEntry (%u) does not exist. Using default.", TokenEntry);
+        TokenEntry = 49426;
     }
 }
 
@@ -955,38 +970,40 @@ std::string const Transmogrification::GetGossipIcon(uint8 slot, Player* player)
 
 std::string const Transmogrification::GetGossipItemName(Player* player, TransmogrificationGossipItem gossipItem)
 {
+    uint8 localeIndex = static_cast<uint8>(player->GetSession()->GetSessionDbLocaleIndex());
+
     switch (gossipItem)
     {
         case ITEM_HOW_WORKS:
-            return sGameLocale->GetModuleString("mod-transmogrification", 15, player->GetSession()->GetSessionDbLocaleIndex());
+            return *sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_GOSSIP_ITEM_HOW_WORKS, localeIndex);
         case ITEM_MANAGE_SETS:
-            return sGameLocale->GetModuleString("mod-transmogrification", 16, player->GetSession()->GetSessionDbLocaleIndex());
+            return *sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_GOSSIP_ITEM_MANAGE_SETS, localeIndex);
         case ITEM_REMOVE_ALL_TRANSMOG:
-            return sGameLocale->GetModuleString("mod-transmogrification", 17, player->GetSession()->GetSessionDbLocaleIndex());
+            return *sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_GOSSIP_ITEM_REMOVE_ALL_TRANSMOG, localeIndex);
         case ITEM_REMOVE_SINGLE_TRANSMOG:
-            return sGameLocale->GetModuleString("mod-transmogrification", 18, player->GetSession()->GetSessionDbLocaleIndex());
+            return *sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_GOSSIP_ITEM_REMOVE_SINGLE_TRANSMOG, localeIndex);
         case ITEM_UPDATE_MENU:
-            return sGameLocale->GetModuleString("mod-transmogrification", 19, player->GetSession()->GetSessionDbLocaleIndex());
+            return *sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_GOSSIP_ITEM_UPDATE_MENU, localeIndex);
         case ITEM_BACK:
-            return sGameLocale->GetModuleString("mod-transmogrification", 20, player->GetSession()->GetSessionDbLocaleIndex());
+            return *sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_GOSSIP_ITEM_BACK, localeIndex);
         case ITEM_REMOVE_ALL_TRANSMOG_Q:
-            return sGameLocale->GetModuleString("mod-transmogrification", 21, player->GetSession()->GetSessionDbLocaleIndex());
+            return *sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_GOSSIP_ITEM_REMOVE_ALL_TRANSMOG_Q, localeIndex);
         case ITEM_REMOVE_SINGLE_TRANSMOG_Q:
-            return sGameLocale->GetModuleString("mod-transmogrification", 22, player->GetSession()->GetSessionDbLocaleIndex());
+            return *sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_GOSSIP_ITEM_REMOVE_SINGLE_TRANSMOG_Q, localeIndex);
         case ITEM_SAVE_SET:
-            return sGameLocale->GetModuleString("mod-transmogrification", 23, player->GetSession()->GetSessionDbLocaleIndex());
+            return *sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_GOSSIP_ITEM_SAVE_SET, localeIndex);
         case ITEM_ITEM_BIND_Q:
-            return sGameLocale->GetModuleString("mod-transmogrification", 24, player->GetSession()->GetSessionDbLocaleIndex());
+            return *sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_GOSSIP_ITEM_ITEM_BIND_Q, localeIndex);
         case ITEM_HOW_SET_WORKS:
-            return sGameLocale->GetModuleString("mod-transmogrification", 25, player->GetSession()->GetSessionDbLocaleIndex());
+            return *sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_GOSSIP_ITEM_HOW_SET_WORKS, localeIndex);
         case ITEM_SET_USE:
-            return sGameLocale->GetModuleString("mod-transmogrification", 26, player->GetSession()->GetSessionDbLocaleIndex());
+            return *sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_GOSSIP_ITEM_SET_USE, localeIndex);
         case ITEM_SET_DELETE:
-            return sGameLocale->GetModuleString("mod-transmogrification", 27, player->GetSession()->GetSessionDbLocaleIndex());
+            return *sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_GOSSIP_ITEM_SET_DELETE, localeIndex);
         case ITEM_SET_DELETE_Q:
-            return sGameLocale->GetModuleString("mod-transmogrification", 28, player->GetSession()->GetSessionDbLocaleIndex());
+            return *sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_GOSSIP_ITEM_SET_DELETE_Q, localeIndex);
         case ITEM_SET_INSERT_NAME:
-            return sGameLocale->GetModuleString("mod-transmogrification", 29, player->GetSession()->GetSessionDbLocaleIndex());
+            return *sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_GOSSIP_ITEM_SET_INSERT_NAME, localeIndex);
         default:
             return "";
     }

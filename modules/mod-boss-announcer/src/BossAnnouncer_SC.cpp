@@ -38,10 +38,13 @@ public:
         auto creatureTemplate = sObjectMgr->GetCreatureTemplate(creature->GetEntry());
         auto cretureLocale = sGameLocale->GetCreatureLocale(creature->GetEntry());
         char const* name = nullptr;
+
         if (cretureLocale)
             name = cretureLocale->Name[player->GetSession()->GetSessionDbcLocale()].c_str();
+
         if ((!name || !*name) && creatureTemplate)
             name = creatureTemplate->Name.c_str();
+
         if (!name)
             name = "Unknown creature";
 
