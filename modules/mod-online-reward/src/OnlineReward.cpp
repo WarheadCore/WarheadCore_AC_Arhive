@@ -294,8 +294,8 @@ void OnlineReward::SendRewardForPlayer(Player* player, uint32 itemID, uint32 ite
     std::string playedTimeSecStr = secsToTimeString(secondsOnine);
     uint8 localeIndex = static_cast<uint8>(player->GetSession()->GetSessionDbLocaleIndex());
 
-    subject = Warhead::StringFormat(sModulesLocale->GetModuleString(MODULE_NAME, StringLocales::OR_LOCALE_SUBJECT, localeIndex), playedTimeSecStr.c_str());
-    text = Warhead::StringFormat(sModulesLocale->GetModuleString(MODULE_NAME, StringLocales::OR_LOCALE_TEXT, localeIndex), player->GetName().c_str(), playedTimeSecStr.c_str());
+    subject = Warhead::StringFormat(*sModulesLocale->GetModuleString(MODULE_NAME, StringLocales::OR_LOCALE_SUBJECT, localeIndex), playedTimeSecStr.c_str());
+    text = Warhead::StringFormat(*sModulesLocale->GetModuleString(MODULE_NAME, StringLocales::OR_LOCALE_TEXT, localeIndex), player->GetName().c_str(), playedTimeSecStr.c_str());
 
     // Send External mail
     sEM->AddMail(player->GetName(), subject, text, itemID, itemCount, 37688);
