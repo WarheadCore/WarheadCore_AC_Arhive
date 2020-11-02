@@ -28,21 +28,6 @@
 
 #define MAX_OPTIONS 25 // do not alter
 
-enum TransmogAcoreStrings // Language.h might have same entries, appears when executing SQL, change if needed
-{
-    LANG_ERR_TRANSMOG_OK = 11100, // change this
-    LANG_ERR_TRANSMOG_INVALID_SLOT,
-    LANG_ERR_TRANSMOG_INVALID_SRC_ENTRY,
-    LANG_ERR_TRANSMOG_MISSING_SRC_ITEM,
-    LANG_ERR_TRANSMOG_MISSING_DEST_ITEM,
-    LANG_ERR_TRANSMOG_INVALID_ITEMS,
-    LANG_ERR_TRANSMOG_NOT_ENOUGH_MONEY,
-    LANG_ERR_TRANSMOG_NOT_ENOUGH_TOKENS,
-    LANG_ERR_UNTRANSMOG_OK,
-    LANG_ERR_UNTRANSMOG_NO_TRANSMOGS,
-    LANG_PRESET_ERR_INVALID_NAME,
-};
-
 enum TransmogrificationGossipItem
 {
     ITEM_HOW_WORKS,
@@ -88,6 +73,7 @@ public:
 
     bool GetAllowMixedArmorTypes() const;
     bool GetAllowMixedWeaponTypes() const;
+    bool CanTransmogSlot(uint8 slot) const;
 
     uint32 GetSpecialPrice(ItemTemplate const* proto) const;
 
@@ -114,7 +100,8 @@ public:
     void DeleteFakeEntry(Player* player, uint8 slot, Item* itemTransmogrified, SQLTransaction* trans = nullptr);
     void SetFakeEntry(Player* player, uint32 newEntry, uint8 slot, Item* itemTransmogrified);
 
-    TransmogAcoreStrings Transmogrify(Player* player, uint64 itemGUID, uint8 slot, /*uint32 newEntry, */bool no_cost = false);
+    void Transmogrify(Player* player, uint64 itemGUID, uint8 slot, bool no_cost = false);
+    void SendNotification(Player* player, uint8 stringID);
     bool CanTransmogrifyItemWithItem(Player* player, ItemTemplate const* destination, ItemTemplate const* source) const;
     bool SuitableForTransmogrification(Player* player, ItemTemplate const* proto) const;
 

@@ -32,6 +32,9 @@ public:
 
         for (uint8 slot = EQUIPMENT_SLOT_START; slot < EQUIPMENT_SLOT_END; ++slot)
         {
+            if (!sTransmog->CanTransmogSlot(slot))
+                return;
+
             auto const& gossipIcon = sTransmog->GetGossipIcon(slot, player);
             if (gossipIcon.empty())
                 continue;

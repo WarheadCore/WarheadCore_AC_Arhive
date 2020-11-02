@@ -1,4 +1,4 @@
-DELETE FROM `string_module` WHERE `ModuleName` = 'mod-transmogrification' AND `ID` BETWEEN 1 AND 29;
+DELETE FROM `string_module` WHERE `ModuleName` = 'mod-transmogrification' AND `ID` BETWEEN 1 AND 40;
 INSERT INTO `string_module`(`ModuleName`, `ID`, `Locale`, `Text`) VALUES 
 
 -- Slot name enUS
@@ -65,4 +65,30 @@ INSERT INTO `string_module`(`ModuleName`, `ID`, `Locale`, `Text`) VALUES
 ('mod-transmogrification', 26, 'ruRU', '|TInterface/ICONS/INV_Misc_Statue_02:30:30:-18:0|tИспользовать комплект'),
 ('mod-transmogrification', 27, 'ruRU', '|TInterface/PaperDollInfoFrame/UI-GearManager-LeaveItem-Opaque:30:30:-18:0|tУдалить комплект'),
 ('mod-transmogrification', 28, 'ruRU', 'Вы действительно хотите удалить '),
-('mod-transmogrification', 29, 'ruRU', 'Введите имя комплекта');
+('mod-transmogrification', 29, 'ruRU', 'Введите имя комплекта'),
+
+-- Strings ruRU
+('mod-transmogrification', 30, 'ruRU', 'Предмет изменён'),
+('mod-transmogrification', 31, 'ruRU', 'Пустой слот'),
+('mod-transmogrification', 32, 'ruRU', 'Неверно выбранный предмет'),
+('mod-transmogrification', 33, 'ruRU', 'Изначальный предмет не найден'),
+('mod-transmogrification', 34, 'ruRU', 'Выбранный предмет не найден'),
+('mod-transmogrification', 35, 'ruRU', 'Выбранный предмет неверный'),
+('mod-transmogrification', 36, 'ruRU', 'Вам не хватает золота'),
+('mod-transmogrification', 37, 'ruRU', 'Вам не хватает токенов'),
+('mod-transmogrification', 38, 'ruRU', 'Трансмогрификация удалена'),
+('mod-transmogrification', 39, 'ruRU', 'Трансмогрификации не найдены'),
+('mod-transmogrification', 40, 'ruRU', 'Введёное имя некорректно'),
+
+-- Strings enUS
+('mod-transmogrification', 30, 'enUS', 'Item transmogrified'),
+('mod-transmogrification', 31, 'enUS', 'Equipment slot is empty'),
+('mod-transmogrification', 32, 'enUS', 'Invalid source item selected'),
+('mod-transmogrification', 33, 'enUS', 'Source item does not exist'),
+('mod-transmogrification', 34, 'enUS', 'Destination item does not exist'),
+('mod-transmogrification', 35, 'enUS', 'Selected items are invalid'),
+('mod-transmogrification', 36, 'enUS', 'Not enough money'),
+('mod-transmogrification', 37, 'enUS', 'You don\'t have enough tokens'),
+('mod-transmogrification', 38, 'enUS', 'Transmogrifications removed'),
+('mod-transmogrification', 39, 'enUS', 'There are no transmogrifications'),
+('mod-transmogrification', 40, 'enUS', 'Invalid name inserted');
