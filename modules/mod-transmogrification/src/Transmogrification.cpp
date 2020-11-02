@@ -83,7 +83,7 @@ Transmogrification* Transmogrification::instance()
 
 void Transmogrification::PresetTransmog(Player* player, Item* itemTransmogrified, uint32 fakeEntry, uint8 slot)
 {
-    if (!GetEnableSets())
+    if (!CONF_GET_BOOL("Transmogrification.EnableSets"))
         return;
 
     if (!player || !itemTransmogrified)
@@ -152,11 +152,6 @@ void Transmogrification::LoadPlayerSets(uint64 pGUID)
             CharacterDatabase.PExecute("DELETE FROM `custom_transmogrification_sets` WHERE Owner = %u AND PresetID = %u", GUID_LOPART(pGUID), PresetID);
         }
     } while (result->NextRow());
-}
-
-bool Transmogrification::GetEnableSets() const
-{
-    return EnableSets;
 }
 
 uint8 Transmogrification::GetMaxSets() const
@@ -751,7 +746,6 @@ void Transmogrification::LoadConfig(bool reload)
 {
     EnableSetInfo = sGameConfig->GetBoolConfig("Transmogrification.EnableSetInfo");
     SetNpcText = uint32(sGameConfig->GetIntConfig("Transmogrification.SetNpcText"));
-    EnableSets = sGameConfig->GetBoolConfig("Transmogrification.EnableSets");
 
     SetCostModifier = sGameConfig->GetFloatConfig("Transmogrification.SetCostModifier");
     SetCopperCost = sGameConfig->GetIntConfig("Transmogrification.SetCopperCost");
@@ -824,7 +818,7 @@ void Transmogrification::LoadConfig(bool reload)
                 // skipping session check
                 UnloadPlayerSets(player->GetGUID());
 
-                if (GetEnableSets())
+                if (CONF_GET_BOOL("Transmogrification.EnableSets"))
                     LoadPlayerSets(player->GetGUID());
             }
         }
@@ -962,7 +956,7 @@ void Transmogrification::ClearPlayerAtLogout(Player* player)
 
     _mapStore.erase(pGUID);
 
-    if (GetEnableSets())
+    if (CONF_GET_BOOL("Transmogrification.EnableSets"))
         UnloadPlayerSets(pGUID);
 }
 
@@ -998,7 +992,7 @@ void Transmogrification::LoadPlayerAtLogin(Player* player)
         }
     }
 
-    if (GetEnableSets())
+    if (CONF_GET_BOOL("Transmogrification.EnableSets"))
         LoadPlayerSets(playerGUID);
 }
 
@@ -1058,7 +1052,7 @@ std::string const Transmogrification::GetGossipItemName(Player* player, Transmog
 
 bool Transmogrification::CanSavePresets(Player* player)
 {
-    return GetEnableSets() && static_cast<uint8>(_presetByName[player->GetGUID()].size()) < GetMaxSets();
+    return CONF_GET_BOOL("Transmogrification.EnableSets") && static_cast<uint8>(_presetByName[player->GetGUID()].size()) < GetMaxSets();
 }
 
 void Transmogrification::SavePreset(Player* player, Creature* creature, std::string const& name)

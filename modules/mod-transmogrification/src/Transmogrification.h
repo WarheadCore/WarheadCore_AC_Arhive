@@ -56,7 +56,6 @@ public:
     void Init(bool reload);
     void LoadConfig(bool reload);
 
-    bool GetEnableSets() const;
     uint8 GetMaxSets() const;
     float GetSetCostModifier() const;
     int32 GetSetCopperCost() const;
@@ -176,7 +175,6 @@ private:
     bool EnableSetInfo;
     uint32 SetNpcText;
 
-    bool EnableSets;
     uint8 MaxSets;
     float SetCostModifier;
     int32 SetCopperCost;

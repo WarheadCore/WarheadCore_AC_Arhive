@@ -42,7 +42,7 @@ public:
             AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, gossipIcon, EQUIPMENT_SLOT_END, slot);
         }
 
-        if (sTransmog->GetEnableSets())
+        if (CONF_GET_BOOL("Transmogrification.EnableSets"))
             AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, sTransmog->GetGossipItemName(player, ITEM_MANAGE_SETS), EQUIPMENT_SLOT_END + 4, 0);
 
         AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, sTransmog->GetGossipItemName(player, ITEM_REMOVE_ALL_TRANSMOG), EQUIPMENT_SLOT_END + 2, 0, sTransmog->GetGossipItemName(player, ITEM_REMOVE_ALL_TRANSMOG_Q), 0, false);
@@ -121,7 +121,7 @@ public:
         if (sender || action)
             return true; // should never happen
 
-        if (!sTransmog->GetEnableSets())
+        if (!CONF_GET_BOOL("Transmogrification.EnableSets"))
         {
             OnGossipHello(player, creature);
             return true;
@@ -152,7 +152,7 @@ private:
 
     void ShowPresetsMenu(Player* player, Creature* creature)
     {
-        if (!sTransmog->GetEnableSets())
+        if (!CONF_GET_BOOL("Transmogrification.EnableSets"))
         {
             OnGossipHello(player, creature);
             return;
@@ -163,7 +163,7 @@ private:
 
     void UsePreset(Player* player, Creature* creature, uint32 const& action)
     {
-        if (!sTransmog->GetEnableSets())
+        if (!CONF_GET_BOOL("Transmogrification.EnableSets"))
         {
             OnGossipHello(player, creature);
             return;
@@ -176,7 +176,7 @@ private:
 
     void ViewPreset(Player* player, Creature* creature, uint32 const& action, uint32 const& sender)
     {
-        if (!sTransmog->GetEnableSets())
+        if (!CONF_GET_BOOL("Transmogrification.EnableSets"))
         {
             OnGossipHello(player, creature);
             return;
@@ -187,7 +187,7 @@ private:
 
     void DeletePreset(Player* player, Creature* creature, uint32 const& action)
     {
-        if (!sTransmog->GetEnableSets())
+        if (!CONF_GET_BOOL("Transmogrification.EnableSets"))
         {
             OnGossipHello(player, creature);
             return;
