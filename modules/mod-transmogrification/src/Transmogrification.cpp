@@ -57,6 +57,19 @@ enum StringLocales : uint8
     TRANSMOG_LOCALE_GOSSIP_ITEM_SET_DELETE_Q,
     TRANSMOG_LOCALE_GOSSIP_ITEM_SET_INSERT_NAME,
 
+    // Strings
+    TRANSMOG_LOCALE_TRANSMOG_OK,
+    TRANSMOG_LOCALE_TRANSMOG_INVALID_SLOT,
+    TRANSMOG_LOCALE_TRANSMOG_INVALID_SRC_ENTRY,
+    TRANSMOG_LOCALE_TRANSMOG_MISSING_SRC_ITEM,
+    TRANSMOG_LOCALE_TRANSMOG_MISSING_DEST_ITEM,
+    TRANSMOG_LOCALE_TRANSMOG_INVALID_ITEMS,
+    TRANSMOG_LOCALE_TRANSMOG_NOT_ENOUGH_MONEY,
+    TRANSMOG_LOCALE_TRANSMOG_NOT_ENOUGH_TOKENS,
+    TRANSMOG_LOCALE_UNTRANSMOG_OK,
+    TRANSMOG_LOCALE_UNTRANSMOG_NO_TRANSMOGS,
+    TRANSMOG_LOCALE_PRESET_ERR_INVALID_NAME,
+
     TRANSMOG_LOCALE_MAX
 };
 
@@ -172,6 +185,9 @@ void Transmogrification::UnloadPlayerSets(uint64 pGUID)
 
 std::string const Transmogrification::GetSlotName(Player* player, uint8 slot) const
 {
+    if (!CanTransmogSlot(slot))
+        return "";
+
     uint8 localeIndex = static_cast<uint8>(player->GetSession()->GetSessionDbLocaleIndex());
 
     switch (slot)
@@ -405,17 +421,18 @@ void Transmogrification::SetFakeEntry(Player* player, uint32 newEntry, uint8 /*s
     UpdateItem(player, itemTransmogrified);
 }
 
-TransmogAcoreStrings Transmogrification::Transmogrify(Player* player, uint64 itemGUID, uint8 slot, /*uint32 newEntry, */bool no_cost)
+void Transmogrification::Transmogrify(Player* player, uint64 itemGUID, uint8 slot, bool no_cost)
 {
     int32 cost = 0;
 
     // slot of the transmogrified item
     if (slot >= EQUIPMENT_SLOT_END)
     {
-        LOG_DEBUG("modules", "WORLD: HandleTransmogrifyItems - Player (GUID: %u, name: %s) tried to transmogrify an item (lowguid: %u) with a wrong slot (%u) when transmogrifying items.",
+        LOG_DEBUG("modules.transmog", "WORLD: HandleTransmogrifyItems - Player (GUID: %u, name: %s) tried to transmogrify an item (lowguid: %u) with a wrong slot (%u) when transmogrifying items.",
                   player->GetGUIDLow(), player->GetName().c_str(), GUID_LOPART(itemGUID), slot);
 
-        return LANG_ERR_TRANSMOG_INVALID_SLOT;
+        SendNotification(player, TRANSMOG_LOCALE_TRANSMOG_INVALID_SLOT);
+        return;
     }
 
     Item* itemTransmogrifier = nullptr;
@@ -426,8 +443,9 @@ TransmogAcoreStrings Transmogrification::Transmogrify(Player* player, uint64 ite
         itemTransmogrifier = player->GetItemByGuid(itemGUID);
         if (!itemTransmogrifier)
         {
-            //TC_LOG_DEBUG(LOG_FILTER_NETWORKIO, "WORLD: HandleTransmogrifyItems - Player (GUID: %u, name: %s) tried to transmogrify with an invalid item (lowguid: %u).", player->GetGUIDLow(), player->GetName().c_str(), GUID_LOPART(itemGUID));
-            return LANG_ERR_TRANSMOG_MISSING_SRC_ITEM;
+            LOG_ERROR("modules.transmog", "WORLD: HandleTransmogrifyItems - Player (GUID: %u, name: %s) tried to transmogrify with an invalid item (lowguid: %u).", player->GetGUIDLow(), player->GetName().c_str(), GUID_LOPART(itemGUID));
+            SendNotification(player, TRANSMOG_LOCALE_TRANSMOG_MISSING_SRC_ITEM);
+            return;
         }
     }
 
@@ -436,7 +454,8 @@ TransmogAcoreStrings Transmogrification::Transmogrify(Player* player, uint64 ite
     if (!itemTransmogrified)
     {
         LOG_DEBUG("modules", "WORLD: HandleTransmogrifyItems - Player (GUID: %u, name: %s) tried to transmogrify an invalid item in a valid slot (slot: %u).", player->GetGUIDLow(), player->GetName().c_str(), slot);
-        return LANG_ERR_TRANSMOG_MISSING_DEST_ITEM;
+        SendNotification(player, TRANSMOG_LOCALE_TRANSMOG_MISSING_DEST_ITEM);
+        return;
     }
 
     if (!itemTransmogrifier) // reset look newEntry
@@ -451,7 +470,8 @@ TransmogAcoreStrings Transmogrification::Transmogrify(Player* player, uint64 ite
             LOG_DEBUG("modules", "WORLD: HandleTransmogrifyItems - Player (GUID: %u, name: %s) failed CanTransmogrifyItemWithItem (%u with %u).",
                       player->GetGUIDLow(), player->GetName().c_str(), itemTransmogrified->GetEntry(), itemTransmogrifier->GetEntry());
 
-            return LANG_ERR_TRANSMOG_INVALID_ITEMS;
+            SendNotification(player, TRANSMOG_LOCALE_TRANSMOG_INVALID_ITEMS);
+            return;
         }
 
         if (!no_cost)
@@ -461,7 +481,10 @@ TransmogAcoreStrings Transmogrification::Transmogrify(Player* player, uint64 ite
                 if (player->HasItemCount(TokenEntry, TokenAmount))
                     player->DestroyItemCount(TokenEntry, TokenAmount, true);
                 else
-                    return LANG_ERR_TRANSMOG_NOT_ENOUGH_TOKENS;
+                {
+                    SendNotification(player, TRANSMOG_LOCALE_TRANSMOG_NOT_ENOUGH_TOKENS);
+                    return;
+                }
             }
 
             cost = GetSpecialPrice(itemTransmogrified->GetTemplate());
@@ -476,7 +499,10 @@ TransmogAcoreStrings Transmogrification::Transmogrify(Player* player, uint64 ite
                 else
                 {
                     if (!player->HasEnoughMoney(cost))
-                        return LANG_ERR_TRANSMOG_NOT_ENOUGH_MONEY;
+                    {
+                        SendNotification(player, TRANSMOG_LOCALE_TRANSMOG_NOT_ENOUGH_MONEY);
+                        return;
+                    }
 
                     player->ModifyMoney(-cost, false);
                 }
@@ -499,7 +525,7 @@ TransmogAcoreStrings Transmogrification::Transmogrify(Player* player, uint64 ite
         itemTransmogrifier->ClearSoulboundTradeable(player);
     }
 
-    return LANG_ERR_TRANSMOG_OK;
+    SendNotification(player, TRANSMOG_LOCALE_TRANSMOG_OK);
 }
 
 bool Transmogrification::CanTransmogrifyItemWithItem(Player* player, ItemTemplate const* target, ItemTemplate const* source) const
@@ -903,6 +929,27 @@ bool Transmogrification::GetAllowMixedWeaponTypes() const
     return AllowMixedWeaponTypes;
 }
 
+bool Transmogrification::CanTransmogSlot(uint8 slot) const
+{
+    if (slot == EQUIPMENT_SLOT_HEAD ||
+            slot == EQUIPMENT_SLOT_SHOULDERS ||
+            slot == EQUIPMENT_SLOT_BODY ||
+            slot == EQUIPMENT_SLOT_CHEST ||
+            slot == EQUIPMENT_SLOT_WAIST ||
+            slot == EQUIPMENT_SLOT_LEGS ||
+            slot == EQUIPMENT_SLOT_FEET ||
+            slot == EQUIPMENT_SLOT_WRISTS ||
+            slot == EQUIPMENT_SLOT_HANDS ||
+            slot == EQUIPMENT_SLOT_BACK ||
+            slot == EQUIPMENT_SLOT_MAINHAND ||
+            slot == EQUIPMENT_SLOT_OFFHAND ||
+            slot == EQUIPMENT_SLOT_RANGED ||
+            slot == EQUIPMENT_SLOT_TABARD)
+        return true;
+
+    return false;
+}
+
 void Transmogrification::ClearPlayerAtLogout(Player* player)
 {
     if (!player)
@@ -1018,7 +1065,7 @@ void Transmogrification::SavePreset(Player* player, Creature* creature, std::str
 {
     if (name.find('"') != std::string::npos || name.find('\\') != std::string::npos)
     {
-        player->GetSession()->SendNotification(LANG_PRESET_ERR_INVALID_NAME);
+        SendNotification(player, TRANSMOG_LOCALE_PRESET_ERR_INVALID_NAME);
         return;
     }
 
@@ -1062,7 +1109,7 @@ void Transmogrification::SavePreset(Player* player, Creature* creature, std::str
 
         if (!player->HasEnoughMoney(cost))
         {
-            player->GetSession()->SendNotification(LANG_ERR_TRANSMOG_NOT_ENOUGH_MONEY);
+            SendNotification(player, TRANSMOG_LOCALE_TRANSMOG_NOT_ENOUGH_MONEY);
             break;
         }
 
@@ -1183,11 +1230,11 @@ void Transmogrification::GossipRemoveAllTransmogrifications(Player* player)
 
     if (removed)
     {
-        session->SendAreaTriggerMessage("%s", session->GetAcoreString(LANG_ERR_UNTRANSMOG_OK));
+        SendNotification(player, TRANSMOG_LOCALE_UNTRANSMOG_OK);
         CharacterDatabase.CommitTransaction(trans);
     }
     else
-        session->SendNotification(LANG_ERR_UNTRANSMOG_NO_TRANSMOGS);
+        SendNotification(player, TRANSMOG_LOCALE_UNTRANSMOG_NO_TRANSMOGS);
 }
 
 void Transmogrification::GossipRemoveSingleTransmogrifications(Player* player, uint32 const& action)
@@ -1201,10 +1248,10 @@ void Transmogrification::GossipRemoveSingleTransmogrifications(Player* player, u
     if (GetFakeEntry(newItem->GetGUID()))
     {
         DeleteFakeEntry(player, action, newItem);
-        session->SendAreaTriggerMessage("%s", session->GetAcoreString(LANG_ERR_UNTRANSMOG_OK));
+        SendNotification(player, TRANSMOG_LOCALE_UNTRANSMOG_OK);
     }
     else
-        session->SendNotification(LANG_ERR_UNTRANSMOG_NO_TRANSMOGS);
+        SendNotification(player, TRANSMOG_LOCALE_UNTRANSMOG_NO_TRANSMOGS);
 }
 
 void Transmogrification::GossipShowPresetsMenu(Player* player, Creature* creature)
@@ -1299,12 +1346,17 @@ void Transmogrification::GossipSavePreset(Player* player, Creature* creature, ui
 
 void Transmogrification::GossipTransmogrify(Player* player, Creature* creature, uint32 const& action, uint32 const& sender)
 {
-    auto session = player->GetSession();
-
     // sender = slot, action = display
-    TransmogAcoreStrings res = Transmogrify(player, MAKE_NEW_GUID(action, 0, HIGHGUID_ITEM), sender);
-    if (res == LANG_ERR_TRANSMOG_OK)
-        session->SendAreaTriggerMessage("%s", session->GetAcoreString(LANG_ERR_TRANSMOG_OK));
-    else
-        session->SendNotification(res);
+    Transmogrify(player, MAKE_NEW_GUID(action, 0, HIGHGUID_ITEM), sender);
+}
+
+void Transmogrification::SendNotification(Player* player, uint8 stringID)
+{
+    auto session = player->GetSession();
+    if (!session)
+        return;
+
+    uint8 localeIndex = static_cast<uint8>(session->GetSessionDbLocaleIndex());
+
+    session->SendNotification("%s", sModulesLocale->GetModuleString(MODULE_NAME, stringID, localeIndex).value().c_str());
 }
