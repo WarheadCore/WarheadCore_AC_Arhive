@@ -932,19 +932,19 @@ bool Transmogrification::GetAllowMixedWeaponTypes() const
 bool Transmogrification::CanTransmogSlot(uint8 slot) const
 {
     if (slot == EQUIPMENT_SLOT_HEAD ||
-        slot == EQUIPMENT_SLOT_SHOULDERS ||
-        slot == EQUIPMENT_SLOT_BODY ||
-        slot == EQUIPMENT_SLOT_CHEST ||
-        slot == EQUIPMENT_SLOT_WAIST ||
-        slot == EQUIPMENT_SLOT_LEGS ||
-        slot == EQUIPMENT_SLOT_FEET ||
-        slot == EQUIPMENT_SLOT_WRISTS ||
-        slot == EQUIPMENT_SLOT_HANDS ||
-        slot == EQUIPMENT_SLOT_BACK ||
-        slot == EQUIPMENT_SLOT_MAINHAND ||
-        slot == EQUIPMENT_SLOT_OFFHAND ||
-        slot == EQUIPMENT_SLOT_RANGED ||
-        slot == EQUIPMENT_SLOT_TABARD)
+            slot == EQUIPMENT_SLOT_SHOULDERS ||
+            slot == EQUIPMENT_SLOT_BODY ||
+            slot == EQUIPMENT_SLOT_CHEST ||
+            slot == EQUIPMENT_SLOT_WAIST ||
+            slot == EQUIPMENT_SLOT_LEGS ||
+            slot == EQUIPMENT_SLOT_FEET ||
+            slot == EQUIPMENT_SLOT_WRISTS ||
+            slot == EQUIPMENT_SLOT_HANDS ||
+            slot == EQUIPMENT_SLOT_BACK ||
+            slot == EQUIPMENT_SLOT_MAINHAND ||
+            slot == EQUIPMENT_SLOT_OFFHAND ||
+            slot == EQUIPMENT_SLOT_RANGED ||
+            slot == EQUIPMENT_SLOT_TABARD)
         return true;
 
     return false;
