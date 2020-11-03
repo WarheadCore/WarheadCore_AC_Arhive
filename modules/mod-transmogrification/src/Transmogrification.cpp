@@ -83,7 +83,7 @@ Transmogrification* Transmogrification::instance()
 
 void Transmogrification::PresetTransmog(Player* player, Item* itemTransmogrified, uint32 fakeEntry, uint8 slot)
 {
-    if (!GetEnableSets())
+    if (!CONF_GET_BOOL("Transmogrification.EnableSets"))
         return;
 
     if (!player || !itemTransmogrified)
@@ -152,26 +152,6 @@ void Transmogrification::LoadPlayerSets(uint64 pGUID)
             CharacterDatabase.PExecute("DELETE FROM `custom_transmogrification_sets` WHERE Owner = %u AND PresetID = %u", GUID_LOPART(pGUID), PresetID);
         }
     } while (result->NextRow());
-}
-
-bool Transmogrification::GetEnableSets() const
-{
-    return EnableSets;
-}
-
-uint8 Transmogrification::GetMaxSets() const
-{
-    return MaxSets;
-}
-
-float Transmogrification::GetSetCostModifier() const
-{
-    return SetCostModifier;
-}
-
-int32 Transmogrification::GetSetCopperCost() const
-{
-    return SetCopperCost;
 }
 
 void Transmogrification::UnloadPlayerSets(uint64 pGUID)
@@ -476,10 +456,10 @@ void Transmogrification::Transmogrify(Player* player, uint64 itemGUID, uint8 slo
 
         if (!no_cost)
         {
-            if (GetRequireToken())
+            if (CONF_GET_BOOL("Transmogrification.RequireToken"))
             {
-                if (player->HasItemCount(TokenEntry, TokenAmount))
-                    player->DestroyItemCount(TokenEntry, TokenAmount, true);
+                if (player->HasItemCount(CONF_GET_INT("Transmogrification.TokenEntry"), CONF_GET_INT("Transmogrification.TokenAmount")))
+                    player->DestroyItemCount(CONF_GET_INT("Transmogrification.TokenEntry"), CONF_GET_INT("Transmogrification.TokenAmount"), true);
                 else
                 {
                     SendNotification(player, TRANSMOG_LOCALE_TRANSMOG_NOT_ENOUGH_TOKENS);
@@ -488,8 +468,8 @@ void Transmogrification::Transmogrify(Player* player, uint64 itemGUID, uint8 slo
             }
 
             cost = GetSpecialPrice(itemTransmogrified->GetTemplate());
-            cost *= GetScaledCostModifier();
-            cost += GetCopperCost();
+            cost *= CONF_GET_FLOAT("Transmogrification.ScaledCostModifier");
+            cost += CONF_GET_INT("Transmogrification.CopperCost");
 
             if (cost) // 0 cost if reverting look
             {
@@ -558,7 +538,7 @@ bool Transmogrification::CanTransmogrifyItemWithItem(Player* player, ItemTemplat
             target->InventoryType == INVTYPE_QUIVER)
         return false;
 
-    if (!SuitableForTransmogrification(player, target) || !SuitableForTransmogrification(player, source)) // if (!transmogrified->CanTransmogrify() || !transmogrifier->CanBeTransmogrified())
+    if (!SuitableForTransmogrification(player, target) || !SuitableForTransmogrification(player, source))
         return false;
 
     if (IsRangedWeapon(source->Class, source->SubClass) != IsRangedWeapon(target->Class, target->SubClass))
@@ -566,16 +546,14 @@ bool Transmogrification::CanTransmogrifyItemWithItem(Player* player, ItemTemplat
 
     if (source->SubClass != target->SubClass && !IsRangedWeapon(target->Class, target->SubClass) && !IsAllowed(source->ItemId))
     {
-        if (source->Class == ITEM_CLASS_ARMOR && !AllowMixedArmorTypes)
+        if (source->Class == ITEM_CLASS_ARMOR && !CONF_GET_BOOL("Transmogrification.AllowMixedArmorTypes"))
             return false;
 
-        /*if (source->Class == ITEM_CLASS_WEAPON) && !AllowMixedWeaponTypes)
-            return false;*/
         if (source->Class == ITEM_CLASS_WEAPON && !player->GetSkillValue(target->GetSkill()))
             return false;
     }
 
-    if (!AllowMixedArmorTypes && source->InventoryType != target->InventoryType)
+    if (!CONF_GET_BOOL("Transmogrification.AllowMixedArmorTypes") && source->InventoryType != target->InventoryType)
     {
         if (source->Class == ITEM_CLASS_ARMOR &&
                 !((source->InventoryType == INVTYPE_CHEST || source->InventoryType == INVTYPE_ROBE) &&
@@ -583,7 +561,7 @@ bool Transmogrification::CanTransmogrifyItemWithItem(Player* player, ItemTemplat
             return false;
     }
 
-    if (!AllowMixedWeaponTypes && source->InventoryType != target->InventoryType)
+    if (!CONF_GET_BOOL("Transmogrification.AllowMixedWeaponTypes") && source->InventoryType != target->InventoryType)
     {
         if (target->Class != ITEM_CLASS_WEAPON || source->Class != ITEM_CLASS_WEAPON)
             return false;
@@ -592,7 +570,7 @@ bool Transmogrification::CanTransmogrifyItemWithItem(Player* player, ItemTemplat
             return false;
     }
 
-    if (AllowMixedWeaponTypes && source->InventoryType != target->InventoryType)
+    if (CONF_GET_BOOL("Transmogrification.AllowMixedWeaponTypes") && source->InventoryType != target->InventoryType)
     {
         if (source->Class == ITEM_CLASS_WEAPON && !(IsRangedWeapon(target->Class, target->SubClass) ||
                 (
@@ -630,9 +608,9 @@ bool Transmogrification::SuitableForTransmogrification(Player* player, ItemTempl
     //[AZTH] Yehonal
     if (proto->SubClass && !player->GetSkillValue(proto->GetSkill()))
     {
-        if (proto->Class == ITEM_CLASS_ARMOR && !AllowMixedArmorTypes)
+        if (proto->Class == ITEM_CLASS_ARMOR && !CONF_GET_BOOL("Transmogrification.AllowMixedArmorTypes"))
             return false;
-        else if (proto->Class == ITEM_CLASS_WEAPON && !AllowMixedWeaponTypes)
+        else if (proto->Class == ITEM_CLASS_WEAPON && !CONF_GET_BOOL("Transmogrification.AllowMixedWeaponTypes"))
             return false;
         else
             return false;
@@ -641,7 +619,7 @@ bool Transmogrification::SuitableForTransmogrification(Player* player, ItemTempl
     if (IsNotAllowed(proto->ItemId))
         return false;
 
-    if (!AllowFishingPoles && proto->Class == ITEM_CLASS_WEAPON && proto->SubClass == ITEM_SUBCLASS_WEAPON_FISHING_POLE)
+    if (!CONF_GET_BOOL("Transmogrification.AllowFishingPoles") && proto->Class == ITEM_CLASS_WEAPON && proto->SubClass == ITEM_SUBCLASS_WEAPON_FISHING_POLE)
         return false;
 
     if (!IsAllowedQuality(proto->Quality)) // (proto->Quality == ITEM_QUALITY_LEGENDARY)
@@ -653,27 +631,27 @@ bool Transmogrification::SuitableForTransmogrification(Player* player, ItemTempl
     if ((proto->Flags2 & ITEM_FLAGS_EXTRA_ALLIANCE_ONLY) && player->GetTeamId() != TEAM_ALLIANCE)
         return false;
 
-    if (!IgnoreReqClass && (proto->AllowableClass & player->getClassMask()) == 0)
+    if (!CONF_GET_BOOL("Transmogrification.IgnoreReqClass") && (proto->AllowableClass & player->getClassMask()) == 0)
         return false;
 
-    if (!IgnoreReqRace && (proto->AllowableRace & player->getRaceMask()) == 0)
+    if (!CONF_GET_BOOL("Transmogrification.IgnoreReqRace") && (proto->AllowableRace & player->getRaceMask()) == 0)
         return false;
 
-    if (!IgnoreReqSkill && proto->RequiredSkill != 0 &&
+    if (!CONF_GET_BOOL("Transmogrification.IgnoreReqSkill") && proto->RequiredSkill &&
             (!player->GetSkillValue(proto->RequiredSkill) || player->GetSkillValue(proto->RequiredSkill) < proto->RequiredSkillRank))
         return false;
 
-    if (!IgnoreReqSpell && proto->RequiredSpell != 0 && !player->HasSpell(proto->RequiredSpell))
+    if (!CONF_GET_BOOL("Transmogrification.IgnoreReqSpell") && proto->RequiredSpell != 0 && !player->HasSpell(proto->RequiredSpell))
         return false;
 
-    if (!IgnoreReqLevel && player->getLevel() < proto->RequiredLevel)
+    if (!CONF_GET_BOOL("Transmogrification.IgnoreReqLevel") && player->getLevel() < proto->RequiredLevel)
         return false;
 
     // If World Event is not active, prevent using event dependant items
-    if (!IgnoreReqEvent && proto->HolidayId && !IsHolidayActive((HolidayIds)proto->HolidayId))
+    if (!CONF_GET_BOOL("Transmogrification.IgnoreReqEvent") && proto->HolidayId && !IsHolidayActive((HolidayIds)proto->HolidayId))
         return false;
 
-    if (!IgnoreReqStats)
+    if (!CONF_GET_BOOL("Transmogrification.IgnoreReqStats"))
     {
         if (!proto->RandomProperty && !proto->RandomSuffix
                 /*[AZTH] Yehonal: we should transmorg also items without stats*/
@@ -683,7 +661,7 @@ bool Transmogrification::SuitableForTransmogrification(Player* player, ItemTempl
 
             for (uint8 i = 0; i < proto->StatsCount; ++i)
             {
-                if (proto->ItemStat[i].ItemStatValue != 0)
+                if (proto->ItemStat[i].ItemStatValue)
                 {
                     found = true;
                     break;
@@ -727,21 +705,21 @@ bool Transmogrification::IsAllowedQuality(uint32 quality) const
     switch (quality)
     {
         case ITEM_QUALITY_POOR:
-            return AllowPoor;
+            return CONF_GET_BOOL("Transmogrification.AllowPoor");
         case ITEM_QUALITY_NORMAL:
-            return AllowCommon;
+            return CONF_GET_BOOL("Transmogrification.AllowCommon");
         case ITEM_QUALITY_UNCOMMON:
-            return AllowUncommon;
+            return CONF_GET_BOOL("Transmogrification.AllowUncommon");
         case ITEM_QUALITY_RARE:
-            return AllowRare;
+            return CONF_GET_BOOL("Transmogrification.AllowRare");
         case ITEM_QUALITY_EPIC:
-            return AllowEpic;
+            return CONF_GET_BOOL("Transmogrification.AllowEpic");
         case ITEM_QUALITY_LEGENDARY:
-            return AllowLegendary;
+            return CONF_GET_BOOL("Transmogrification.AllowLegendary");
         case ITEM_QUALITY_ARTIFACT:
-            return AllowArtifact;
+            return CONF_GET_BOOL("Transmogrification.AllowArtifact");
         case ITEM_QUALITY_HEIRLOOM:
-            return AllowHeirloom;
+            return CONF_GET_BOOL("Transmogrification.AllowHeirloom");
         default:
             return false;
     }
@@ -749,19 +727,8 @@ bool Transmogrification::IsAllowedQuality(uint32 quality) const
 
 void Transmogrification::LoadConfig(bool reload)
 {
-    EnableSetInfo = sGameConfig->GetBoolConfig("Transmogrification.EnableSetInfo");
-    SetNpcText = uint32(sGameConfig->GetIntConfig("Transmogrification.SetNpcText"));
-    EnableSets = sGameConfig->GetBoolConfig("Transmogrification.EnableSets");
-
-    SetCostModifier = sGameConfig->GetFloatConfig("Transmogrification.SetCostModifier");
-    SetCopperCost = sGameConfig->GetIntConfig("Transmogrification.SetCopperCost");
-
-    MaxSets = (uint8)sGameConfig->GetIntConfig("Transmogrification.MaxSets");
-    if (MaxSets > MAX_OPTIONS)
-        MaxSets = MAX_OPTIONS;
-
-    EnableTransmogInfo = sGameConfig->GetBoolConfig("Transmogrification.EnableTransmogInfo");
-    TransmogNpcText = uint32(sGameConfig->GetIntConfig("Transmogrification.TransmogNpcText"));
+    if (CONF_GET_INT("Transmogrification.MaxSets") > MAX_OPTIONS)
+        sGameConfig->SetInt("Transmogrification.MaxSets", MAX_OPTIONS);
 
     std::istringstream issAllowed(sGameConfig->GetStringConfig("Transmogrification.Allowed"));
     std::istringstream issNotAllowed(sGameConfig->GetStringConfig("Transmogrification.NotAllowed"));
@@ -788,33 +755,6 @@ void Transmogrification::LoadConfig(bool reload)
         NotAllowed.insert(entry);
     }
 
-    ScaledCostModifier = sGameConfig->GetFloatConfig("Transmogrification.ScaledCostModifier");
-    CopperCost = sGameConfig->GetIntConfig("Transmogrification.CopperCost");
-
-    RequireToken = sGameConfig->GetBoolConfig("Transmogrification.RequireToken");
-    TokenAmount = uint32(sGameConfig->GetIntConfig("Transmogrification.TokenAmount"));
-
-    AllowPoor = sGameConfig->GetBoolConfig("Transmogrification.AllowPoor");
-    AllowCommon = sGameConfig->GetBoolConfig("Transmogrification.AllowCommon");
-    AllowUncommon = sGameConfig->GetBoolConfig("Transmogrification.AllowUncommon");
-    AllowRare = sGameConfig->GetBoolConfig("Transmogrification.AllowRare");
-    AllowEpic = sGameConfig->GetBoolConfig("Transmogrification.AllowEpic");
-    AllowLegendary = sGameConfig->GetBoolConfig("Transmogrification.AllowLegendary");
-    AllowArtifact = sGameConfig->GetBoolConfig("Transmogrification.AllowArtifact");
-    AllowHeirloom = sGameConfig->GetBoolConfig("Transmogrification.AllowHeirloom");
-
-    AllowMixedArmorTypes = sGameConfig->GetBoolConfig("Transmogrification.AllowMixedArmorTypes");
-    AllowMixedWeaponTypes = sGameConfig->GetBoolConfig("Transmogrification.AllowMixedWeaponTypes");
-    AllowFishingPoles = sGameConfig->GetBoolConfig("Transmogrification.AllowFishingPoles");
-
-    IgnoreReqRace = sGameConfig->GetBoolConfig("Transmogrification.IgnoreReqRace");
-    IgnoreReqClass = sGameConfig->GetBoolConfig("Transmogrification.IgnoreReqClass");
-    IgnoreReqSkill = sGameConfig->GetBoolConfig("Transmogrification.IgnoreReqSkill");
-    IgnoreReqSpell = sGameConfig->GetBoolConfig("Transmogrification.IgnoreReqSpell");
-    IgnoreReqLevel = sGameConfig->GetBoolConfig("Transmogrification.IgnoreReqLevel");
-    IgnoreReqEvent = sGameConfig->GetBoolConfig("Transmogrification.IgnoreReqEvent");
-    IgnoreReqStats = sGameConfig->GetBoolConfig("Transmogrification.IgnoreReqStats");
-
     if (reload) // dont store presets for nothing
     {
         for (auto const& itr : sWorld->GetAllSessions())
@@ -824,7 +764,7 @@ void Transmogrification::LoadConfig(bool reload)
                 // skipping session check
                 UnloadPlayerSets(player->GetGUID());
 
-                if (GetEnableSets())
+                if (CONF_GET_BOOL("Transmogrification.EnableSets"))
                     LoadPlayerSets(player->GetGUID());
             }
         }
@@ -839,9 +779,11 @@ void Transmogrification::LoadConfig(bool reload)
         // Dont delete even if player has more presets than should
         CharacterDatabase.Execute("DELETE FROM `custom_transmogrification_sets` WHERE NOT EXISTS(SELECT 1 FROM characters WHERE characters.guid = custom_transmogrification_sets.Owner)");
     }
+
+    Init();
 }
 
-void Transmogrification::Init(bool reload)
+void Transmogrification::Init()
 {
     if (sModulesLocale->GetStringsCount(MODULE_NAME) != StringLocales::TRANSMOG_LOCALE_MAX - 1)
     {
@@ -849,12 +791,12 @@ void Transmogrification::Init(bool reload)
         return;
     }
 
-    TokenEntry = uint32(sGameConfig->GetIntConfig("Transmogrification.TokenEntry"));
+    uint32 tokenEntry = CONF_GET_INT("Transmogrification.TokenEntry");
 
-    if (!sObjectMgr->GetItemTemplate(TokenEntry))
+    if (!sObjectMgr->GetItemTemplate(tokenEntry))
     {
-        LOG_ERROR("modules.transmog", "Transmogrification.TokenEntry (%u) does not exist. Using default.", TokenEntry);
-        TokenEntry = 49426;
+        LOG_ERROR("modules.transmog", "Transmogrification.TokenEntry (%u) does not exist. Using default.", tokenEntry);
+        sGameConfig->SetInt("Transmogrification.TokenEntry", 49426);
     }
 }
 
@@ -872,61 +814,6 @@ void Transmogrification::DeleteFakeFromDB(uint64 itemGUID, SQLTransaction* trans
         (*trans)->PAppend("DELETE FROM custom_transmogrification WHERE GUID = %u", GUID_LOPART(itemGUID));
     else
         CharacterDatabase.PExecute("DELETE FROM custom_transmogrification WHERE GUID = %u", GUID_LOPART(itemGUID));
-}
-
-bool Transmogrification::GetEnableTransmogInfo() const
-{
-    return EnableTransmogInfo;
-}
-
-uint32 Transmogrification::GetTransmogNpcText() const
-{
-    return TransmogNpcText;
-}
-
-bool Transmogrification::GetEnableSetInfo() const
-{
-    return EnableSetInfo;
-}
-
-uint32 Transmogrification::GetSetNpcText() const
-{
-    return SetNpcText;
-}
-
-float Transmogrification::GetScaledCostModifier() const
-{
-    return ScaledCostModifier;
-}
-
-int32 Transmogrification::GetCopperCost() const
-{
-    return CopperCost;
-}
-
-bool Transmogrification::GetRequireToken() const
-{
-    return RequireToken;
-}
-
-uint32 Transmogrification::GetTokenEntry() const
-{
-    return TokenEntry;
-}
-
-uint32 Transmogrification::GetTokenAmount() const
-{
-    return TokenAmount;
-}
-
-bool Transmogrification::GetAllowMixedArmorTypes() const
-{
-    return AllowMixedArmorTypes;
-}
-
-bool Transmogrification::GetAllowMixedWeaponTypes() const
-{
-    return AllowMixedWeaponTypes;
 }
 
 bool Transmogrification::CanTransmogSlot(uint8 slot) const
@@ -962,7 +849,7 @@ void Transmogrification::ClearPlayerAtLogout(Player* player)
 
     _mapStore.erase(pGUID);
 
-    if (GetEnableSets())
+    if (CONF_GET_BOOL("Transmogrification.EnableSets"))
         UnloadPlayerSets(pGUID);
 }
 
@@ -998,7 +885,7 @@ void Transmogrification::LoadPlayerAtLogin(Player* player)
         }
     }
 
-    if (GetEnableSets())
+    if (CONF_GET_BOOL("Transmogrification.EnableSets"))
         LoadPlayerSets(playerGUID);
 }
 
@@ -1015,50 +902,15 @@ std::string const Transmogrification::GetGossipIcon(uint8 slot, Player* player)
     return icon + slotName;
 }
 
-std::string const Transmogrification::GetGossipItemName(Player* player, TransmogrificationGossipItem gossipItem)
+std::string const Transmogrification::GetGossipItemName(Player* player, uint8 gossipItem)
 {
-    uint8 localeIndex = static_cast<uint8>(player->GetSession()->GetSessionDbLocaleIndex());
-
-    switch (gossipItem)
-    {
-        case ITEM_HOW_WORKS:
-            return *sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_GOSSIP_ITEM_HOW_WORKS, localeIndex);
-        case ITEM_MANAGE_SETS:
-            return *sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_GOSSIP_ITEM_MANAGE_SETS, localeIndex);
-        case ITEM_REMOVE_ALL_TRANSMOG:
-            return *sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_GOSSIP_ITEM_REMOVE_ALL_TRANSMOG, localeIndex);
-        case ITEM_REMOVE_SINGLE_TRANSMOG:
-            return *sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_GOSSIP_ITEM_REMOVE_SINGLE_TRANSMOG, localeIndex);
-        case ITEM_UPDATE_MENU:
-            return *sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_GOSSIP_ITEM_UPDATE_MENU, localeIndex);
-        case ITEM_BACK:
-            return *sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_GOSSIP_ITEM_BACK, localeIndex);
-        case ITEM_REMOVE_ALL_TRANSMOG_Q:
-            return *sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_GOSSIP_ITEM_REMOVE_ALL_TRANSMOG_Q, localeIndex);
-        case ITEM_REMOVE_SINGLE_TRANSMOG_Q:
-            return *sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_GOSSIP_ITEM_REMOVE_SINGLE_TRANSMOG_Q, localeIndex);
-        case ITEM_SAVE_SET:
-            return *sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_GOSSIP_ITEM_SAVE_SET, localeIndex);
-        case ITEM_ITEM_BIND_Q:
-            return *sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_GOSSIP_ITEM_ITEM_BIND_Q, localeIndex);
-        case ITEM_HOW_SET_WORKS:
-            return *sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_GOSSIP_ITEM_HOW_SET_WORKS, localeIndex);
-        case ITEM_SET_USE:
-            return *sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_GOSSIP_ITEM_SET_USE, localeIndex);
-        case ITEM_SET_DELETE:
-            return *sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_GOSSIP_ITEM_SET_DELETE, localeIndex);
-        case ITEM_SET_DELETE_Q:
-            return *sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_GOSSIP_ITEM_SET_DELETE_Q, localeIndex);
-        case ITEM_SET_INSERT_NAME:
-            return *sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_GOSSIP_ITEM_SET_INSERT_NAME, localeIndex);
-        default:
-            return "";
-    }
+    return sModulesLocale->GetModuleString(MODULE_NAME, gossipItem, static_cast<uint8>(player->GetSession()->GetSessionDbLocaleIndex())).value_or("");
 }
 
 bool Transmogrification::CanSavePresets(Player* player)
 {
-    return GetEnableSets() && static_cast<uint8>(_presetByName[player->GetGUID()].size()) < GetMaxSets();
+    return CONF_GET_BOOL("Transmogrification.EnableSets") &&
+           static_cast<uint8>(_presetByName[player->GetGUID()].size()) < CONF_GET_INT("Transmogrification.MaxSets");
 }
 
 void Transmogrification::SavePreset(Player* player, Creature* creature, std::string const& name)
@@ -1069,7 +921,9 @@ void Transmogrification::SavePreset(Player* player, Creature* creature, std::str
         return;
     }
 
-    for (uint8 presetID = 0; presetID < GetMaxSets(); ++presetID) // should never reach over max
+    uint8 maxSets = static_cast<uint8>(CONF_GET_INT("Transmogrification.MaxSets"));
+
+    for (uint8 presetID = 0; presetID < maxSets; ++presetID) // should never reach over max
     {
         if (_presetByName[player->GetGUID()].find(presetID) != _presetByName[player->GetGUID()].end())
             continue; // Just remember never to use _presetByName[pGUID][presetID] when finding etc!
@@ -1104,8 +958,8 @@ void Transmogrification::SavePreset(Player* player, Creature* creature, std::str
         if (items.empty())
             break; // no transmogrified items were found to be saved
 
-        cost *= GetSetCostModifier();
-        cost += GetSetCopperCost();
+        cost *= CONF_GET_FLOAT("Transmogrification.SetCostModifier");
+        cost += CONF_GET_INT("Transmogrification.SetCopperCost");
 
         if (!player->HasEnoughMoney(cost))
         {
@@ -1144,13 +998,14 @@ void Transmogrification::GossipShowTransmogItems(Player* player, Creature* creat
         uint32 limit = 0;
         uint32 price = GetSpecialPrice(oldItem->GetTemplate());
 
-        price *= GetScaledCostModifier();
-        price += GetCopperCost();
+        price *= CONF_GET_FLOAT("Transmogrification.ScaledCostModifier");
+        price += CONF_GET_INT("Transmogrification.CopperCost");
 
         std::ostringstream ss;
         ss << std::endl;
-        if (GetRequireToken())
-            ss << std::endl << std::endl << GetTokenAmount() << " x " << GetItemLink(GetTokenEntry(), session);
+
+        if (CONF_GET_BOOL("Transmogrification.RequireToken"))
+            ss << std::endl << std::endl << CONF_GET_INT("Transmogrification.TokenAmount") << " x " << GetItemLink(CONF_GET_INT("Transmogrification.TokenEntry"), session);
 
         for (uint8 i = INVENTORY_SLOT_ITEM_START; i < INVENTORY_SLOT_ITEM_END; ++i)
         {
@@ -1170,7 +1025,7 @@ void Transmogrification::GossipShowTransmogItems(Player* player, Creature* creat
             ++limit;
 
             AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetItemIcon(newItem->GetEntry(), 30, 30, -18, 0) + GetItemLink(newItem, session), slot, newItem->GetGUIDLow(),
-                             GetGossipItemName(player, ITEM_ITEM_BIND_Q) + GetItemIcon(newItem->GetEntry(), 40, 40, -15, -10) + GetItemLink(newItem, session) + ss.str(), price, false);
+                             GetGossipItemName(player, TRANSMOG_LOCALE_GOSSIP_ITEM_ITEM_BIND_Q) + GetItemIcon(newItem->GetEntry(), 40, 40, -15, -10) + GetItemLink(newItem, session) + ss.str(), price, false);
         }
 
         for (uint8 i = INVENTORY_SLOT_BAG_START; i < INVENTORY_SLOT_BAG_END; ++i)
@@ -1197,14 +1052,16 @@ void Transmogrification::GossipShowTransmogItems(Player* player, Creature* creat
                 ++limit;
 
                 AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetItemIcon(newItem->GetEntry(), 30, 30, -18, 0) + GetItemLink(newItem, session), slot, newItem->GetGUIDLow(),
-                                 GetGossipItemName(player, ITEM_ITEM_BIND_Q) + GetItemIcon(newItem->GetEntry(), 40, 40, -15, -10) + GetItemLink(newItem, session) + ss.str(), price, false);
+                                 GetGossipItemName(player, TRANSMOG_LOCALE_GOSSIP_ITEM_ITEM_BIND_Q) + GetItemIcon(newItem->GetEntry(), 40, 40, -15, -10) + GetItemLink(newItem, session) + ss.str(), price, false);
             }
         }
     }
 
-    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, ITEM_REMOVE_SINGLE_TRANSMOG), EQUIPMENT_SLOT_END + 3, slot, GetGossipItemName(player, ITEM_REMOVE_SINGLE_TRANSMOG_Q), 0, false);
-    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, ITEM_UPDATE_MENU), EQUIPMENT_SLOT_END, slot);
-    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, ITEM_BACK), EQUIPMENT_SLOT_END + 1, 0);
+    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, TRANSMOG_LOCALE_GOSSIP_ITEM_REMOVE_SINGLE_TRANSMOG), EQUIPMENT_SLOT_END + 3, slot,
+                     GetGossipItemName(player, TRANSMOG_LOCALE_GOSSIP_ITEM_REMOVE_SINGLE_TRANSMOG_Q), 0, false);
+
+    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, TRANSMOG_LOCALE_GOSSIP_ITEM_UPDATE_MENU), EQUIPMENT_SLOT_END, slot);
+    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, TRANSMOG_LOCALE_GOSSIP_ITEM_BACK), EQUIPMENT_SLOT_END + 1, 0);
 
     SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, creature->GetGUID());
 }
@@ -1256,16 +1113,17 @@ void Transmogrification::GossipRemoveSingleTransmogrifications(Player* player, u
 
 void Transmogrification::GossipShowPresetsMenu(Player* player, Creature* creature)
 {
-    if (GetEnableSetInfo())
-        AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, ITEM_HOW_SET_WORKS), EQUIPMENT_SLOT_END + 10, 0);
+    if (CONF_GET_BOOL("Transmogrification.EnableSetInfo"))
+        AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, TRANSMOG_LOCALE_GOSSIP_ITEM_HOW_SET_WORKS), EQUIPMENT_SLOT_END + 10, 0);
 
     for (auto const& itr : _presetByName[player->GetGUID()])
         AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, "|TInterface/ICONS/INV_Misc_Statue_02:30:30:-18:0|t" + itr.second, EQUIPMENT_SLOT_END + 6, itr.first);
 
-    if (_presetByName[player->GetGUID()].size() < GetMaxSets())
-        AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, ITEM_SAVE_SET), EQUIPMENT_SLOT_END + 8, 0);
+    if (_presetByName[player->GetGUID()].size() < CONF_GET_INT("Transmogrification.MaxSets"))
+        AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, TRANSMOG_LOCALE_GOSSIP_ITEM_SAVE_SET), EQUIPMENT_SLOT_END + 8, 0);
 
-    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, ITEM_BACK), EQUIPMENT_SLOT_END + 1, 0);
+    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, TRANSMOG_LOCALE_GOSSIP_ITEM_BACK), EQUIPMENT_SLOT_END + 1, 0);
+
     SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, creature->GetGUID());
 }
 
@@ -1287,12 +1145,13 @@ void Transmogrification::GossipViewPreset(Player* player, Creature* creature, ui
     for (auto const& itr : _presetById[player->GetGUID()][action])
         AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetItemIcon(itr.second, 30, 30, -18, 0) + GetItemLink(itr.second, session), sender, action);
 
-    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, ITEM_SET_USE), EQUIPMENT_SLOT_END + 5, action,
-                     GetGossipItemName(player, ITEM_ITEM_BIND_Q) + _presetByName[player->GetGUID()][action], 0, false);
+    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, TRANSMOG_LOCALE_GOSSIP_ITEM_SET_USE), EQUIPMENT_SLOT_END + 5, action,
+                     GetGossipItemName(player, TRANSMOG_LOCALE_GOSSIP_ITEM_ITEM_BIND_Q) + _presetByName[player->GetGUID()][action], 0, false);
 
-    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, ITEM_SET_DELETE), EQUIPMENT_SLOT_END + 7, action, GetGossipItemName(player, ITEM_SET_DELETE_Q) + _presetByName[player->GetGUID()][action] + "?", 0, false);
+    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, TRANSMOG_LOCALE_GOSSIP_ITEM_SET_DELETE), EQUIPMENT_SLOT_END + 7, action,
+                     GetGossipItemName(player, TRANSMOG_LOCALE_GOSSIP_ITEM_SET_DELETE_Q) + _presetByName[player->GetGUID()][action] + "?", 0, false);
 
-    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, ITEM_BACK), EQUIPMENT_SLOT_END + 4, 0);
+    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, TRANSMOG_LOCALE_GOSSIP_ITEM_BACK), EQUIPMENT_SLOT_END + 4, 0);
     SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, creature->GetGUID());
 }
 
@@ -1337,10 +1196,11 @@ void Transmogrification::GossipSavePreset(Player* player, Creature* creature, ui
     }
 
     if (canSave)
-        AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, ITEM_SAVE_SET), 0, 0, GetGossipItemName(player, ITEM_SET_INSERT_NAME), cost * GetSetCostModifier() + GetSetCopperCost(), true);
+        AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, TRANSMOG_LOCALE_GOSSIP_ITEM_SAVE_SET), 0, 0,
+                         GetGossipItemName(player, TRANSMOG_LOCALE_GOSSIP_ITEM_SET_INSERT_NAME), cost * CONF_GET_FLOAT("Transmogrification.SetCostModifier") + CONF_GET_INT("Transmogrification.SetCopperCost"), true);
 
-    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, ITEM_UPDATE_MENU), sender, action);
-    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, ITEM_BACK), EQUIPMENT_SLOT_END + 4, 0);
+    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, TRANSMOG_LOCALE_GOSSIP_ITEM_UPDATE_MENU), sender, action);
+    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, TRANSMOG_LOCALE_GOSSIP_ITEM_BACK), EQUIPMENT_SLOT_END + 4, 0);
     SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, creature->GetGUID());
 }
 
@@ -1359,4 +1219,165 @@ void Transmogrification::SendNotification(Player* player, uint8 stringID)
     uint8 localeIndex = static_cast<uint8>(session->GetSessionDbLocaleIndex());
 
     session->SendNotification("%s", sModulesLocale->GetModuleString(MODULE_NAME, stringID, localeIndex).value().c_str());
+}
+
+void Transmogrification::OnGossipHello(Player* player, Creature* creature)
+{
+    if (CONF_GET_BOOL("Transmogrification.EnableTransmogInfo"))
+        AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, TRANSMOG_LOCALE_GOSSIP_ITEM_HOW_WORKS), EQUIPMENT_SLOT_END + 9, 0);
+
+    for (uint8 slot = EQUIPMENT_SLOT_START; slot < EQUIPMENT_SLOT_END; ++slot)
+    {
+        if (!CanTransmogSlot(slot))
+            continue;
+
+        auto const& gossipIcon = GetGossipIcon(slot, player);
+        if (gossipIcon.empty())
+            continue;
+
+        AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, gossipIcon, EQUIPMENT_SLOT_END, slot);
+    }
+
+    if (CONF_GET_BOOL("Transmogrification.EnableSets"))
+        AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, TRANSMOG_LOCALE_GOSSIP_ITEM_MANAGE_SETS), EQUIPMENT_SLOT_END + 4, 0);
+
+    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, TRANSMOG_LOCALE_GOSSIP_ITEM_REMOVE_ALL_TRANSMOG), EQUIPMENT_SLOT_END + 2, 0,
+                     GetGossipItemName(player, TRANSMOG_LOCALE_GOSSIP_ITEM_REMOVE_ALL_TRANSMOG_Q), 0, false);
+
+    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, TRANSMOG_LOCALE_GOSSIP_ITEM_UPDATE_MENU), EQUIPMENT_SLOT_END + 1, 0);
+
+    SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, creature->GetGUID());
+}
+
+void Transmogrification::OnGossipSelect(Player* player, Creature* creature, uint32 const& action, uint32 const& sender)
+{
+    ClearGossipMenuFor(player);
+
+    switch (sender)
+    {
+        case EQUIPMENT_SLOT_END: // Show items you can use
+            GossipShowTransmogItems(player, creature, action);
+            break;
+        case EQUIPMENT_SLOT_END + 1: // Main menu
+            OnGossipHello(player, creature);
+            break;
+        case EQUIPMENT_SLOT_END + 2: // Remove Transmogrifications
+            GossipRemoveAllTransmogrifications(player);
+            OnGossipHello(player, creature);
+            break;
+        case EQUIPMENT_SLOT_END + 3: // Remove Transmogrification from single item
+            GossipRemoveSingleTransmogrifications(player, action);
+            OnGossipSelect(player, creature, EQUIPMENT_SLOT_END, action);
+            break;
+        case EQUIPMENT_SLOT_END + 4: // Presets menu
+            {
+                if (!CONF_GET_BOOL("Transmogrification.EnableSets"))
+                {
+                    OnGossipHello(player, creature);
+                    return;
+                }
+
+                GossipShowPresetsMenu(player, creature);
+            }
+            break;
+        case EQUIPMENT_SLOT_END + 5: // Use preset
+            {
+                if (!CONF_GET_BOOL("Transmogrification.EnableSets"))
+                {
+                    OnGossipHello(player, creature);
+                    return;
+                }
+
+                GossipUsePreset(player, creature, action);
+                OnGossipSelect(player, creature, EQUIPMENT_SLOT_END + 6, action);
+            }
+            break;
+        case EQUIPMENT_SLOT_END + 6: // view preset
+            {
+                if (!CONF_GET_BOOL("Transmogrification.EnableSets"))
+                {
+                    OnGossipHello(player, creature);
+                    return;
+                }
+
+                GossipViewPreset(player, creature, action, sender);
+            }
+            break;
+        case EQUIPMENT_SLOT_END + 7: // Delete preset
+            {
+                if (!CONF_GET_BOOL("Transmogrification.EnableSets"))
+                {
+                    OnGossipHello(player, creature);
+                    return;
+                }
+
+                GossipDeletePreset(player, creature, action);
+                OnGossipSelect(player, creature, EQUIPMENT_SLOT_END + 4, 0);
+            }
+            break;
+        case EQUIPMENT_SLOT_END + 8: // Save preset
+            {
+                if (!CanSavePresets(player))
+                {
+                    OnGossipHello(player, creature);
+                    return;
+                }
+
+                GossipSavePreset(player, creature, action, sender);
+            }
+            break;
+        case EQUIPMENT_SLOT_END + 10: // Set info
+            AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, TRANSMOG_LOCALE_GOSSIP_ITEM_BACK), EQUIPMENT_SLOT_END + 4, 0);
+            SendGossipMenuFor(player, CONF_GET_INT("Transmogrification.SetNpcText"), creature->GetGUID());
+            break;
+        case EQUIPMENT_SLOT_END + 9: // Transmog info
+            AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, TRANSMOG_LOCALE_GOSSIP_ITEM_BACK), EQUIPMENT_SLOT_END + 1, 0);
+            SendGossipMenuFor(player, CONF_GET_INT("Transmogrification.TransmogNpcText"), creature->GetGUID());
+            break;
+        default: // Transmogrify
+            {
+                if (!sender && !action)
+                {
+                    OnGossipHello(player, creature);
+                    return;
+                }
+
+                GossipTransmogrify(player, creature, action, sender);
+                CloseGossipMenuFor(player); // Wait for SetMoney to get fixed, issue #10053
+            }
+            break;
+    }
+}
+
+void Transmogrification::OnGossipSelectCode(Player* player, Creature* creature, uint32 const& action, uint32 const& sender, const char* code)
+{
+    ClearGossipMenuFor(player);
+
+    if (sender || action)
+        return; // should never happen
+
+    if (!CONF_GET_BOOL("Transmogrification.EnableSets"))
+    {
+        OnGossipHello(player, creature);
+        return;
+    }
+
+    SavePreset(player, creature, std::string(code));
+
+    CloseGossipMenuFor(player); // Wait for SetMoney to get fixed, issue #10053
+}
+
+void Transmogrification::MirrorImageDisplayItem(const Item* item, uint32& display)
+{
+    if (uint32 entry = GetFakeEntry(item->GetGUID()))
+        display = uint32(sObjectMgr->GetItemTemplate(entry)->DisplayInfoID);
+}
+
+void Transmogrification::SetVisibleItemSlot(Player* player, uint8 slot, Item* item)
+{
+    if (!item)
+        return;
+
+    if (uint32 entry = GetFakeEntry(item->GetGUID()))
+        player->SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), entry);
 }

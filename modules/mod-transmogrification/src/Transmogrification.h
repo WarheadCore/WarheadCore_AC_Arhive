@@ -28,100 +28,27 @@
 
 #define MAX_OPTIONS 25 // do not alter
 
-enum TransmogrificationGossipItem
-{
-    ITEM_HOW_WORKS,
-    ITEM_MANAGE_SETS,
-    ITEM_REMOVE_ALL_TRANSMOG,
-    ITEM_REMOVE_SINGLE_TRANSMOG,
-    ITEM_UPDATE_MENU,
-    ITEM_BACK,
-    ITEM_REMOVE_ALL_TRANSMOG_Q,
-    ITEM_REMOVE_SINGLE_TRANSMOG_Q,
-    ITEM_SAVE_SET,
-    ITEM_ITEM_BIND_Q,
-    ITEM_HOW_SET_WORKS,
-    ITEM_SET_USE,
-    ITEM_SET_DELETE,
-    ITEM_SET_DELETE_Q,
-    ITEM_SET_INSERT_NAME
-};
-
 class Transmogrification
 {
 public:
     static Transmogrification* instance();
 
     // Config options
-    void Init(bool reload);
+    void Init();
     void LoadConfig(bool reload);
 
-    bool GetEnableSets() const;
-    uint8 GetMaxSets() const;
-    float GetSetCostModifier() const;
-    int32 GetSetCopperCost() const;
-
-    bool GetEnableTransmogInfo() const;
-    uint32 GetTransmogNpcText() const;
-    bool GetEnableSetInfo() const;
-    uint32 GetSetNpcText() const;
-
-    int32 GetCopperCost() const;
-    bool GetRequireToken() const;
-    uint32 GetTokenEntry() const;
-    uint32 GetTokenAmount() const;
-
-    bool GetAllowMixedArmorTypes() const;
-    bool GetAllowMixedWeaponTypes() const;
-    bool CanTransmogSlot(uint8 slot) const;
-
-    uint32 GetSpecialPrice(ItemTemplate const* proto) const;
-
     void DeleteFakeFromDB(uint64 itemGUID, SQLTransaction* trans = nullptr);
-    float GetScaledCostModifier() const;
-
-    bool IsAllowed(uint32 entry) const;
-    bool IsNotAllowed(uint32 entry) const;
-    bool IsAllowedQuality(uint32 quality) const;
-    bool IsRangedWeapon(uint32 Class, uint32 SubClass) const;
-
-    void PresetTransmog(Player* player, Item* itemTransmogrified, uint32 fakeEntry, uint8 slot);
-
+    void MirrorImageDisplayItem(const Item* item, uint32& display);
+    void SetVisibleItemSlot(Player* player, uint8 slot, Item* item);
     void LoadPlayerSets(uint64 pGUID);
     void UnloadPlayerSets(uint64 pGUID);
-
-    std::string GetItemIcon(uint32 entry, uint32 width, uint32 height, int x, int y) const;
-    std::string GetSlotIcon(uint8 slot, uint32 width, uint32 height, int x, int y) const;
-    std::string const GetSlotName(Player* player, uint8 slot) const;
-    std::string GetItemLink(Item* item, WorldSession* session) const;
-    std::string GetItemLink(uint32 entry, WorldSession* session) const;
-    uint32 GetFakeEntry(uint64 itemGUID) const;
-    void UpdateItem(Player* player, Item* item) const;
-    void DeleteFakeEntry(Player* player, uint8 slot, Item* itemTransmogrified, SQLTransaction* trans = nullptr);
-    void SetFakeEntry(Player* player, uint32 newEntry, uint8 slot, Item* itemTransmogrified);
-
-    void Transmogrify(Player* player, uint64 itemGUID, uint8 slot, bool no_cost = false);
-    void SendNotification(Player* player, uint8 stringID);
-    bool CanTransmogrifyItemWithItem(Player* player, ItemTemplate const* destination, ItemTemplate const* source) const;
-    bool SuitableForTransmogrification(Player* player, ItemTemplate const* proto) const;
-
     void ClearPlayerAtLogout(Player* player);
     void LoadPlayerAtLogin(Player* player);
-    std::string const GetGossipIcon(uint8 slot, Player* player);
-    std::string const GetGossipItemName(Player* player, TransmogrificationGossipItem gossipItem);
 
-    bool CanSavePresets(Player* player);
-    void SavePreset(Player* player, Creature* creature, std::string const& name);
-
-    void GossipShowTransmogItems(Player* player, Creature* creature, uint8 slot);
-    void GossipRemoveAllTransmogrifications(Player* player);
-    void GossipRemoveSingleTransmogrifications(Player* player, uint32 const& action);
-    void GossipShowPresetsMenu(Player* player, Creature* creature);
-    void GossipUsePreset(Player* player, Creature* creature, uint32 const& action);
-    void GossipViewPreset(Player* player, Creature* creature, uint32 const& action, uint32 const& sender);
-    void GossipDeletePreset(Player* player, Creature* creature, uint32 const& action);
-    void GossipSavePreset(Player* player, Creature* creature, uint32 const& action, uint32 const& sender);
-    void GossipTransmogrify(Player* player, Creature* creature, uint32 const& action, uint32 const& sender);
+    // Gossip
+    void OnGossipHello(Player* player, Creature* creature);
+    void OnGossipSelect(Player* player, Creature* creature, uint32 const& action, uint32 const& sender);
+    void OnGossipSelectCode(Player* player, Creature* creature, uint32 const& action, uint32 const& sender, const char* code);
 
 private:
     typedef std::unordered_map<uint64, uint64> TransmogrificationDataContainer;
@@ -137,49 +64,51 @@ private:
     TransmogrificationMapContainer _mapStore;
     TransmogrificationDataContainer _dataMapStore;
 
-    bool EnableTransmogInfo;
-    uint32 TransmogNpcText;
-
     // Use IsAllowed() and IsNotAllowed()
     // these are thread unsafe, but assumed to be static data so it should be safe
     std::set<uint32> Allowed;
     std::set<uint32> NotAllowed;
 
-    float ScaledCostModifier;
-    int32 CopperCost;
+    bool CanTransmogSlot(uint8 slot) const;
+    void PresetTransmog(Player* player, Item* itemTransmogrified, uint32 fakeEntry, uint8 slot);
+    uint32 GetSpecialPrice(ItemTemplate const* proto) const;
 
-    bool RequireToken;
-    uint32 TokenEntry;
-    uint32 TokenAmount;
+    bool IsAllowed(uint32 entry) const;
+    bool IsNotAllowed(uint32 entry) const;
+    bool IsAllowedQuality(uint32 quality) const;
+    bool IsRangedWeapon(uint32 Class, uint32 SubClass) const;
 
-    bool AllowPoor;
-    bool AllowCommon;
-    bool AllowUncommon;
-    bool AllowRare;
-    bool AllowEpic;
-    bool AllowLegendary;
-    bool AllowArtifact;
-    bool AllowHeirloom;
+    std::string GetItemIcon(uint32 entry, uint32 width, uint32 height, int x, int y) const;
+    std::string GetSlotIcon(uint8 slot, uint32 width, uint32 height, int x, int y) const;
+    std::string const GetSlotName(Player* player, uint8 slot) const;
+    std::string GetItemLink(Item* item, WorldSession* session) const;
+    std::string GetItemLink(uint32 entry, WorldSession* session) const;
+    void UpdateItem(Player* player, Item* item) const;
+    void DeleteFakeEntry(Player* player, uint8 slot, Item* itemTransmogrified, SQLTransaction* trans = nullptr);
+    void SetFakeEntry(Player* player, uint32 newEntry, uint8 slot, Item* itemTransmogrified);
+    uint32 GetFakeEntry(uint64 itemGUID) const;
 
-    bool AllowMixedArmorTypes;
-    bool AllowMixedWeaponTypes;
-    bool AllowFishingPoles;
+    void Transmogrify(Player* player, uint64 itemGUID, uint8 slot, bool no_cost = false);
+    void SendNotification(Player* player, uint8 stringID);
+    bool CanTransmogrifyItemWithItem(Player* player, ItemTemplate const* destination, ItemTemplate const* source) const;
+    bool SuitableForTransmogrification(Player* player, ItemTemplate const* proto) const;
 
-    bool IgnoreReqRace;
-    bool IgnoreReqClass;
-    bool IgnoreReqSkill;
-    bool IgnoreReqSpell;
-    bool IgnoreReqLevel;
-    bool IgnoreReqEvent;
-    bool IgnoreReqStats;
+    std::string const GetGossipIcon(uint8 slot, Player* player);
+    std::string const GetGossipItemName(Player* player, uint8 gossipItem);
 
-    bool EnableSetInfo;
-    uint32 SetNpcText;
+    bool CanSavePresets(Player* player);
+    void SavePreset(Player* player, Creature* creature, std::string const& name);
 
-    bool EnableSets;
-    uint8 MaxSets;
-    float SetCostModifier;
-    int32 SetCopperCost;
+    // Private gossips
+    void GossipShowTransmogItems(Player* player, Creature* creature, uint8 slot);
+    void GossipRemoveAllTransmogrifications(Player* player);
+    void GossipRemoveSingleTransmogrifications(Player* player, uint32 const& action);
+    void GossipShowPresetsMenu(Player* player, Creature* creature);
+    void GossipUsePreset(Player* player, Creature* creature, uint32 const& action);
+    void GossipViewPreset(Player* player, Creature* creature, uint32 const& action, uint32 const& sender);
+    void GossipDeletePreset(Player* player, Creature* creature, uint32 const& action);
+    void GossipSavePreset(Player* player, Creature* creature, uint32 const& action, uint32 const& sender);
+    void GossipTransmogrify(Player* player, Creature* creature, uint32 const& action, uint32 const& sender);
 };
 
 #define sTransmog Transmogrification::instance()

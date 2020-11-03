@@ -15,14 +15,16 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRANSMOGRIFICATION_LOADER_H
-#define TRANSMOGRIFICATION_LOADER_H
+#ifndef _TRANSMOGRIFICATION_LOADER_H_
+#define _TRANSMOGRIFICATION_LOADER_H_
 
+// From SC
 void AddSC_Transmogrification();
 
+// Add all
 void AddTransmogrificationScripts()
 {
     AddSC_Transmogrification();
 }
 
-#endif /* TRANSMOGRIFICATION_LOADER_H */
+#endif /* _TRANSMOGRIFICATION_LOADER_H_ */
