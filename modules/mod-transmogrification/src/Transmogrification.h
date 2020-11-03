@@ -56,28 +56,11 @@ public:
     void Init(bool reload);
     void LoadConfig(bool reload);
 
-    uint8 GetMaxSets() const;
-    float GetSetCostModifier() const;
-    int32 GetSetCopperCost() const;
-
-    bool GetEnableTransmogInfo() const;
-    uint32 GetTransmogNpcText() const;
-    bool GetEnableSetInfo() const;
-    uint32 GetSetNpcText() const;
-
-    int32 GetCopperCost() const;
-    bool GetRequireToken() const;
-    uint32 GetTokenEntry() const;
-    uint32 GetTokenAmount() const;
-
-    bool GetAllowMixedArmorTypes() const;
-    bool GetAllowMixedWeaponTypes() const;
     bool CanTransmogSlot(uint8 slot) const;
 
     uint32 GetSpecialPrice(ItemTemplate const* proto) const;
 
     void DeleteFakeFromDB(uint64 itemGUID, SQLTransaction* trans = nullptr);
-    float GetScaledCostModifier() const;
 
     bool IsAllowed(uint32 entry) const;
     bool IsNotAllowed(uint32 entry) const;
@@ -136,39 +119,10 @@ private:
     TransmogrificationMapContainer _mapStore;
     TransmogrificationDataContainer _dataMapStore;
 
-    bool EnableTransmogInfo;
-    uint32 TransmogNpcText;
-
     // Use IsAllowed() and IsNotAllowed()
     // these are thread unsafe, but assumed to be static data so it should be safe
     std::set<uint32> Allowed;
     std::set<uint32> NotAllowed;
-
-    float ScaledCostModifier;
-    int32 CopperCost;
-
-    bool RequireToken;
-    uint32 TokenEntry;
-    uint32 TokenAmount;
-
-    bool AllowMixedArmorTypes;
-    bool AllowMixedWeaponTypes;
-    bool AllowFishingPoles;
-
-    bool IgnoreReqRace;
-    bool IgnoreReqClass;
-    bool IgnoreReqSkill;
-    bool IgnoreReqSpell;
-    bool IgnoreReqLevel;
-    bool IgnoreReqEvent;
-    bool IgnoreReqStats;
-
-    bool EnableSetInfo;
-    uint32 SetNpcText;
-
-    uint8 MaxSets;
-    float SetCostModifier;
-    int32 SetCopperCost;
 };
 
 #define sTransmog Transmogrification::instance()

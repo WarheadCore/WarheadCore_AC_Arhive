@@ -27,7 +27,7 @@ public:
 
     bool OnGossipHello(Player* player, Creature* creature) override
     {
-        if (sTransmog->GetEnableTransmogInfo())
+        if (CONF_GET_BOOL("Transmogrification.EnableTransmogInfo"))
             AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, sTransmog->GetGossipItemName(player, ITEM_HOW_WORKS), EQUIPMENT_SLOT_END + 9, 0);
 
         for (uint8 slot = EQUIPMENT_SLOT_START; slot < EQUIPMENT_SLOT_END; ++slot)
@@ -90,11 +90,11 @@ public:
                 break;
             case EQUIPMENT_SLOT_END + 10: // Set info
                 AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, sTransmog->GetGossipItemName(player, ITEM_BACK), EQUIPMENT_SLOT_END + 4, 0);
-                SendGossipMenuFor(player, sTransmog->GetSetNpcText(), creature->GetGUID());
+                SendGossipMenuFor(player, CONF_GET_INT("Transmogrification.SetNpcText"), creature->GetGUID());
                 break;
             case EQUIPMENT_SLOT_END + 9: // Transmog info
                 AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, sTransmog->GetGossipItemName(player, ITEM_BACK), EQUIPMENT_SLOT_END + 1, 0);
-                SendGossipMenuFor(player, sTransmog->GetTransmogNpcText(), creature->GetGUID());
+                SendGossipMenuFor(player, CONF_GET_INT("Transmogrification.TransmogNpcText"), creature->GetGUID());
                 break;
             default: // Transmogrify
                 {
