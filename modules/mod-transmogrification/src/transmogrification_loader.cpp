@@ -24,7 +24,7 @@ void AddSC_Transmogrification();
 // Add all
 void AddTransmogrificationScripts()
 {
-   AddSC_Transmogrification();
+    AddSC_Transmogrification();
 }
 
 #endif /* _TRANSMOGRIFICATION_LOADER_H_ */
