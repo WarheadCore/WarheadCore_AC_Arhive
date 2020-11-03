@@ -44,7 +44,7 @@ public:
     void UnloadPlayerSets(uint64 pGUID);
     void ClearPlayerAtLogout(Player* player);
     void LoadPlayerAtLogin(Player* player);
-    
+
     // Gossip
     void OnGossipHello(Player* player, Creature* creature);
     void OnGossipSelect(Player* player, Creature* creature, uint32 const& action, uint32 const& sender);
@@ -71,7 +71,7 @@ private:
 
     bool CanTransmogSlot(uint8 slot) const;
     void PresetTransmog(Player* player, Item* itemTransmogrified, uint32 fakeEntry, uint8 slot);
-    uint32 GetSpecialPrice(ItemTemplate const* proto) const;    
+    uint32 GetSpecialPrice(ItemTemplate const* proto) const;
 
     bool IsAllowed(uint32 entry) const;
     bool IsNotAllowed(uint32 entry) const;

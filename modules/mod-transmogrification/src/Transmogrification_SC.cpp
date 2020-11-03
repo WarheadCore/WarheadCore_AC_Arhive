@@ -139,7 +139,7 @@ public:
 
     void OnMirrorImageDisplayItem(const Item* item, uint32& display) override
     {
-        sTransmog->MirrorImageDisplayItem(item, display);        
+        sTransmog->MirrorImageDisplayItem(item, display);
     }
 };
 
