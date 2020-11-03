@@ -1289,7 +1289,6 @@ void Transmogrification::OnGossipSelect(Player* player, Creature* creature, uint
                 }
 
                 GossipUsePreset(player, creature, action);
-
                 OnGossipSelect(player, creature, EQUIPMENT_SLOT_END + 6, action);
             }
             break;
@@ -1313,7 +1312,6 @@ void Transmogrification::OnGossipSelect(Player* player, Creature* creature, uint
                 }
 
                 GossipDeletePreset(player, creature, action);
-
                 OnGossipSelect(player, creature, EQUIPMENT_SLOT_END + 4, 0);
             }
             break;
@@ -1345,7 +1343,6 @@ void Transmogrification::OnGossipSelect(Player* player, Creature* creature, uint
                 }
 
                 GossipTransmogrify(player, creature, action, sender);
-
                 CloseGossipMenuFor(player); // Wait for SetMoney to get fixed, issue #10053
             }
             break;
