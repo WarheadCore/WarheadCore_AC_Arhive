@@ -151,15 +151,6 @@ private:
     uint32 TokenEntry;
     uint32 TokenAmount;
 
-    bool AllowPoor;
-    bool AllowCommon;
-    bool AllowUncommon;
-    bool AllowRare;
-    bool AllowEpic;
-    bool AllowLegendary;
-    bool AllowArtifact;
-    bool AllowHeirloom;
-
     bool AllowMixedArmorTypes;
     bool AllowMixedWeaponTypes;
     bool AllowFishingPoles;

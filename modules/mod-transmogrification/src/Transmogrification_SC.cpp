@@ -314,6 +314,7 @@ public:
     }
 };
 
+// Group all custom scripts
 void AddSC_Transmogrification()
 {
     new Transmogrification_Global();

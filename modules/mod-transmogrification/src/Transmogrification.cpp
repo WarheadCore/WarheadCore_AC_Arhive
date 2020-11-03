@@ -722,21 +722,21 @@ bool Transmogrification::IsAllowedQuality(uint32 quality) const
     switch (quality)
     {
         case ITEM_QUALITY_POOR:
-            return AllowPoor;
+            return CONF_GET_BOOL("Transmogrification.AllowPoor");
         case ITEM_QUALITY_NORMAL:
-            return AllowCommon;
+            return CONF_GET_BOOL("Transmogrification.AllowCommon");
         case ITEM_QUALITY_UNCOMMON:
-            return AllowUncommon;
+            return CONF_GET_BOOL("Transmogrification.AllowUncommon");
         case ITEM_QUALITY_RARE:
-            return AllowRare;
+            return CONF_GET_BOOL("Transmogrification.AllowRare");
         case ITEM_QUALITY_EPIC:
-            return AllowEpic;
+            return CONF_GET_BOOL("Transmogrification.AllowEpic");
         case ITEM_QUALITY_LEGENDARY:
-            return AllowLegendary;
+            return CONF_GET_BOOL("Transmogrification.AllowLegendary");
         case ITEM_QUALITY_ARTIFACT:
-            return AllowArtifact;
+            return CONF_GET_BOOL("Transmogrification.AllowArtifact");
         case ITEM_QUALITY_HEIRLOOM:
-            return AllowHeirloom;
+            return CONF_GET_BOOL("Transmogrification.AllowHeirloom");
         default:
             return false;
     }
@@ -787,15 +787,6 @@ void Transmogrification::LoadConfig(bool reload)
 
     RequireToken = sGameConfig->GetBoolConfig("Transmogrification.RequireToken");
     TokenAmount = uint32(sGameConfig->GetIntConfig("Transmogrification.TokenAmount"));
-
-    AllowPoor = sGameConfig->GetBoolConfig("Transmogrification.AllowPoor");
-    AllowCommon = sGameConfig->GetBoolConfig("Transmogrification.AllowCommon");
-    AllowUncommon = sGameConfig->GetBoolConfig("Transmogrification.AllowUncommon");
-    AllowRare = sGameConfig->GetBoolConfig("Transmogrification.AllowRare");
-    AllowEpic = sGameConfig->GetBoolConfig("Transmogrification.AllowEpic");
-    AllowLegendary = sGameConfig->GetBoolConfig("Transmogrification.AllowLegendary");
-    AllowArtifact = sGameConfig->GetBoolConfig("Transmogrification.AllowArtifact");
-    AllowHeirloom = sGameConfig->GetBoolConfig("Transmogrification.AllowHeirloom");
 
     AllowMixedArmorTypes = sGameConfig->GetBoolConfig("Transmogrification.AllowMixedArmorTypes");
     AllowMixedWeaponTypes = sGameConfig->GetBoolConfig("Transmogrification.AllowMixedWeaponTypes");
