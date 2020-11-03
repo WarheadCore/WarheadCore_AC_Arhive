@@ -53,7 +53,7 @@ public:
     static Transmogrification* instance();
 
     // Config options
-    void Init(bool reload);
+    void Init();
     void LoadConfig(bool reload);
 
     bool CanTransmogSlot(uint8 slot) const;

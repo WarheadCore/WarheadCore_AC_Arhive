@@ -293,7 +293,7 @@ public:
 
     void OnStartup() override
     {
-        sTransmog->Init(false);
+        sTransmog->Init();
     }
 };
 
