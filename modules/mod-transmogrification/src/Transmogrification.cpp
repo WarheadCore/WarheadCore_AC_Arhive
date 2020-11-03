@@ -637,7 +637,7 @@ bool Transmogrification::SuitableForTransmogrification(Player* player, ItemTempl
     if (!CONF_GET_BOOL("Transmogrification.IgnoreReqRace") && (proto->AllowableRace & player->getRaceMask()) == 0)
         return false;
 
-    if (!CONF_GET_BOOL("Transmogrification.IgnoreReqSkill" && proto->RequiredSkill &&
+    if (!CONF_GET_BOOL("Transmogrification.IgnoreReqSkill") && proto->RequiredSkill &&
             (!player->GetSkillValue(proto->RequiredSkill) || player->GetSkillValue(proto->RequiredSkill) < proto->RequiredSkillRank))
         return false;
 
