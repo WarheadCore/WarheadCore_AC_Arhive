@@ -946,8 +946,8 @@ std::string const Transmogrification::GetGossipItemName(Player* player, Transmog
 
 bool Transmogrification::CanSavePresets(Player* player)
 {
-    return CONF_GET_BOOL("Transmogrification.EnableSets") && 
-        static_cast<uint8>(_presetByName[player->GetGUID()].size()) < CONF_GET_INT("Transmogrification.MaxSets");
+    return CONF_GET_BOOL("Transmogrification.EnableSets") &&
+           static_cast<uint8>(_presetByName[player->GetGUID()].size()) < CONF_GET_INT("Transmogrification.MaxSets");
 }
 
 void Transmogrification::SavePreset(Player* player, Creature* creature, std::string const& name)
@@ -1040,7 +1040,7 @@ void Transmogrification::GossipShowTransmogItems(Player* player, Creature* creat
 
         std::ostringstream ss;
         ss << std::endl;
-        
+
         if (CONF_GET_BOOL("Transmogrification.RequireToken"))
             ss << std::endl << std::endl << CONF_GET_INT("Transmogrification.TokenAmount") << " x " << GetItemLink(CONF_GET_INT("Transmogrification.TokenEntry"), session);
 
@@ -1229,8 +1229,8 @@ void Transmogrification::GossipSavePreset(Player* player, Creature* creature, ui
     }
 
     if (canSave)
-        AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, ITEM_SAVE_SET), 0, 0, 
-        GetGossipItemName(player, ITEM_SET_INSERT_NAME), cost * CONF_GET_FLOAT("Transmogrification.SetCostModifier") + CONF_GET_INT("Transmogrification.SetCopperCost"), true);
+        AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, ITEM_SAVE_SET), 0, 0,
+                         GetGossipItemName(player, ITEM_SET_INSERT_NAME), cost * CONF_GET_FLOAT("Transmogrification.SetCostModifier") + CONF_GET_INT("Transmogrification.SetCopperCost"), true);
 
     AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, ITEM_UPDATE_MENU), sender, action);
     AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, GetGossipItemName(player, ITEM_BACK), EQUIPMENT_SLOT_END + 4, 0);
