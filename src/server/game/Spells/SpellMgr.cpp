@@ -3495,6 +3495,60 @@ void SpellMgr::LoadSpellInfoCorrections()
         spellInfo->Effects[EFFECT_0].Amplitude = 3000;
     });
 
+    // Desecration Arm - 36 instead of 37 - typo? :/
+    ApplySpellFix({ 29809 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(37);
+    });
+
+    // Sic'em
+    ApplySpellFix({ 42767 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_NEARBY_ENTRY);
+    });
+
+    // Master Shapeshifter: missing stance data for forms other than bear - bear version has correct data
+    // To prevent aura staying on target after talent unlearned
+    ApplySpellFix({ 48420 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Stances = 1 << (FORM_CAT - 1);
+    });
+
+    ApplySpellFix({ 48421 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Stances = 1 << (FORM_MOONKIN - 1);
+    });
+
+    ApplySpellFix({ 48422 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Stances = 1 << (FORM_TREE - 1);
+    });
+
+    // Elemental Oath
+    ApplySpellFix({
+        51466, // Elemental Oath (Rank 1)
+        51470  // Elemental Oath (Rank 2)
+    }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_1].Effect = SPELL_EFFECT_APPLY_AURA;
+        spellInfo->Effects[EFFECT_1].ApplyAuraName = SPELL_AURA_ADD_FLAT_MODIFIER;
+        spellInfo->Effects[EFFECT_1].MiscValue = SPELLMOD_EFFECT2;
+        spellInfo->Effects[EFFECT_1].SpellClassMask = flag96(0x00000000, 0x00004000, 0x00000000);
+    });
+
+    // Improved Shadowform (Rank 1)
+    ApplySpellFix({ 47569 }, [](SpellInfo* spellInfo)
+    {
+        // with this spell atrribute aura can be stacked several times
+        spellInfo->Attributes &= ~SPELL_ATTR0_NOT_SHAPESHIFT;
+    });
+
+    // Nether Portal - Perseverence
+    ApplySpellFix({ 30421 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_2].BasePoints += 30000;
+    });
+
     for (auto spellInfo : mSpellInfoMap)
     {
         for (uint8 j = 0; j < MAX_SPELL_EFFECTS; ++j)
@@ -3530,37 +3584,6 @@ void SpellMgr::LoadSpellInfoCorrections()
 
         switch (spellInfo->Id)
         {
-            case 29809: // Desecration Arm - 36 instead of 37 - typo? :/
-                spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(37);
-                break;
-            case 42767: // Sic'em
-                spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_NEARBY_ENTRY);
-                break;
-            // Master Shapeshifter: missing stance data for forms other than bear - bear version has correct data
-            // To prevent aura staying on target after talent unlearned
-            case 48420:
-                spellInfo->Stances = 1 << (FORM_CAT - 1);
-                break;
-            case 48421:
-                spellInfo->Stances = 1 << (FORM_MOONKIN - 1);
-                break;
-            case 48422:
-                spellInfo->Stances = 1 << (FORM_TREE - 1);
-                break;
-            case 51466: // Elemental Oath (Rank 1)
-            case 51470: // Elemental Oath (Rank 2)
-                spellInfo->Effects[EFFECT_1].Effect = SPELL_EFFECT_APPLY_AURA;
-                spellInfo->Effects[EFFECT_1].ApplyAuraName = SPELL_AURA_ADD_FLAT_MODIFIER;
-                spellInfo->Effects[EFFECT_1].MiscValue = SPELLMOD_EFFECT2;
-                spellInfo->Effects[EFFECT_1].SpellClassMask = flag96(0x00000000, 0x00004000, 0x00000000);
-                break;
-            case 47569: // Improved Shadowform (Rank 1)
-                // with this spell atrribute aura can be stacked several times
-                spellInfo->Attributes &= ~SPELL_ATTR0_NOT_SHAPESHIFT;
-                break;
-            case 30421: // Nether Portal - Perseverence
-                spellInfo->Effects[EFFECT_2].BasePoints += 30000;
-                break;
             case 16834: // Natural shapeshifter
             case 16835:
                 spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(21);
