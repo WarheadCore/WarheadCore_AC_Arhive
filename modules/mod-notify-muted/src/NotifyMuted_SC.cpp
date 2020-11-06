@@ -22,14 +22,16 @@
 #include "Player.h"
 #include "GameTime.h"
 #include "MuteManager.h"
+#include "ModulesLocale.h"
 
-namespace lang
+enum StringLocales : uint8
 {
-    enum KargatumStrings
-    {
-        RECEIVER_NOT_SPEAK = 50003
-    };
-}
+    NM_LOCALE_MESSAGE = 1,
+
+    NM_LOCALE_MAX
+};
+
+#define MODULE_NAME "mod-notify-muted"
 
 class NotifyMuted_Player : public PlayerScript
 {
@@ -48,10 +50,10 @@ public:
         if (!MuteTime)
             return;
 
-        std::string MuteTimeStr = secsToTimeString(MuteTime - GameTime::GetGameTime(), true);
-        std::string NameLink = ChatHandler(receiver->GetSession()).playerLink(receiver->GetName());
+        std::string muteTimeStr = secsToTimeString(MuteTime - GameTime::GetGameTime(), true);
+        std::string nameLink = ChatHandler(receiver->GetSession()).playerLink(receiver->GetName());
 
-        ChatHandler(player->GetSession()).PSendSysMessage(lang::RECEIVER_NOT_SPEAK, NameLink.c_str(), MuteTimeStr.c_str());
+        sModulesLocale->SendPlayerMessage(player, MODULE_NAME, NM_LOCALE_MESSAGE, nameLink.c_str(), muteTimeStr.c_str());
     }
 };
 
@@ -63,6 +65,12 @@ public:
     void OnAfterConfigLoad(bool /*reload*/) override
     {
         sGameConfig->AddBoolConfig("NotCanSpeakMsg.Enable");
+    }
+
+    void OnStartup() override
+    {
+        if (sModulesLocale->GetStringsCount(MODULE_NAME) != StringLocales::NM_LOCALE_MAX - 1)
+            LOG_FATAL("modules.nm", "> NotifyMuted: String locales (%u) for module != (%u)", sModulesLocale->GetStringsCount(MODULE_NAME), StringLocales::NM_LOCALE_MAX - 1);
     }
 };
 
