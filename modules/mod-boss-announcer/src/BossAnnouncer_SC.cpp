@@ -21,6 +21,20 @@
 #include "StringFormat.h"
 #include "GameConfig.h"
 #include "GameLocale.h"
+#include "ModulesLocale.h"
+
+enum StringLocales : uint8
+{
+    BOSS_AN_LOCALE_SEND_TEXT = 1,
+    BOSS_AN_LOCALE_10_MAN_NORMAL,
+    BOSS_AN_LOCALE_10_MAN_HEROIC,
+    BOSS_AN_LOCALE_25_MAN_NORMAL,
+    BOSS_AN_LOCALE_25_MAN_HEROIC,
+
+    BOSS_AN_LOCALE_MAX
+};
+
+#define MODULE_NAME "mod-boss-announcer"
 
 class Boss_Announcer_Player : public PlayerScript
 {
@@ -35,23 +49,53 @@ public:
         if (!creature->isWorldBoss())
             return;
 
+        sModulesLocale->SendGlobalMessage(false, MODULE_NAME, BOSS_AN_LOCALE_SEND_TEXT, player->GetName().c_str(), GetCreatureName(player, creature).c_str(), GetDiffString(player).c_str());
+    };
+
+private:
+    std::string const GetDiffString(Player* player)
+    {
+        if (!player)
+            return "";
+
+        auto map = player->GetMap();
+        if (!map || !map->IsRaid())
+            return "";
+
+        uint8 localeIndex = static_cast<uint8>(player->GetSession()->GetSessionDbLocaleIndex());
+
+        switch (map->GetDifficulty())
+        {
+            case RAID_DIFFICULTY_10MAN_NORMAL:
+                return *sModulesLocale->GetModuleString(MODULE_NAME, BOSS_AN_LOCALE_10_MAN_NORMAL, localeIndex);
+            case RAID_DIFFICULTY_10MAN_HEROIC:
+                return *sModulesLocale->GetModuleString(MODULE_NAME, BOSS_AN_LOCALE_10_MAN_HEROIC, localeIndex);
+            case RAID_DIFFICULTY_25MAN_NORMAL:
+                return *sModulesLocale->GetModuleString(MODULE_NAME, BOSS_AN_LOCALE_25_MAN_NORMAL, localeIndex);
+            case RAID_DIFFICULTY_25MAN_HEROIC:
+                return *sModulesLocale->GetModuleString(MODULE_NAME, BOSS_AN_LOCALE_25_MAN_HEROIC, localeIndex);
+            default:
+                return "";
+        }
+    }
+
+    std::string const GetCreatureName(Player* player, Creature* creature)
+    {
         auto creatureTemplate = sObjectMgr->GetCreatureTemplate(creature->GetEntry());
         auto cretureLocale = sGameLocale->GetCreatureLocale(creature->GetEntry());
-        char const* name = nullptr;
+        std::string name;
 
         if (cretureLocale)
             name = cretureLocale->Name[player->GetSession()->GetSessionDbcLocale()].c_str();
 
-        if ((!name || !*name) && creatureTemplate)
+        if (name.empty() && creatureTemplate)
             name = creatureTemplate->Name.c_str();
 
-        if (!name)
+        if (name.empty())
             name = "Unknown creature";
 
-        std::string message = Warhead::StringFormat("|cffff0000# |cff7bbef7%s|r и его группа убили мирового босса |cffff0000%s|r", player->GetName(), name);
-
-        sWorld->SendServerMessage(SERVER_MSG_STRING, message.c_str());
-    };
+        return name;
+    }
 };
 
 class Boss_Announcer_World : public WorldScript
@@ -62,6 +106,12 @@ public:
     void OnAfterConfigLoad(bool /*reload*/) override
     {
         sGameConfig->AddBoolConfig("BossAnnouncer.Enable");
+    }
+
+    void OnStartup() override
+    {
+        if (sModulesLocale->GetStringsCount(MODULE_NAME) != StringLocales::BOSS_AN_LOCALE_MAX - 1)
+            LOG_FATAL("modules.bossan", "> String locales (%u) for module != (%u)", sModulesLocale->GetStringsCount(MODULE_NAME), StringLocales::BOSS_AN_LOCALE_MAX - 1);
     }
 };
 
