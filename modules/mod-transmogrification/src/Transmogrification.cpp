@@ -779,15 +779,13 @@ void Transmogrification::LoadConfig(bool reload)
         // Dont delete even if player has more presets than should
         CharacterDatabase.Execute("DELETE FROM `custom_transmogrification_sets` WHERE NOT EXISTS(SELECT 1 FROM characters WHERE characters.guid = custom_transmogrification_sets.Owner)");
     }
-
-    Init();
 }
 
 void Transmogrification::Init()
 {
     if (sModulesLocale->GetStringsCount(MODULE_NAME) != StringLocales::TRANSMOG_LOCALE_MAX - 1)
     {
-        LOG_FATAL("modules.transmog", "> AntiAD: string locales (%u) for module != (%u)", sModulesLocale->GetStringsCount(MODULE_NAME), StringLocales::TRANSMOG_LOCALE_MAX - 1);
+        LOG_FATAL("modules.transmog", "> String locales (%u) for module != (%u)", sModulesLocale->GetStringsCount(MODULE_NAME), StringLocales::TRANSMOG_LOCALE_MAX - 1);
         return;
     }
 
