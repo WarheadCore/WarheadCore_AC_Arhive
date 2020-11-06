@@ -18,10 +18,21 @@
 #include "Log.h"
 #include "ScriptMgr.h"
 #include "GameConfig.h"
+#include "ModulesLocale.h"
 #include "Chat.h"
 #include "Player.h"
 #include "AccountMgr.h"
 #include <vector>
+
+enum StringLocales : uint8
+{
+    BC_LOCALE_COMMAND_DISABLE = 1,
+    BC_LOCALE_COMMAND_CANT,
+
+    BC_LOCALE_MAX
+};
+
+#define MODULE_NAME "mod-buff-command"
 
 class BuffCommand
 {
@@ -96,14 +107,17 @@ public:
 
     static bool HandleBuffCommand(ChatHandler* handler, const char* args)
     {
+        Player* player = handler->GetSession()->GetPlayer();
+        if (!player)
+            return false;
+
         if (!CONF_GET_BOOL("BuffCommand.Enable"))
         {
-            handler->SendSysMessage("Command is disabled");
+            sModulesLocale->SendPlayerMessage(player, MODULE_NAME, BC_LOCALE_COMMAND_DISABLE);
             handler->SetSentErrorMessage(true);
             return false;
         }
 
-        Player* player = handler->GetSession()->GetPlayer();
         std::string stringArg = (char*)args;
 
         if (stringArg == "reload" && AccountMgr::IsAdminAccount(player->GetSession()->GetSecurity()))
@@ -117,7 +131,7 @@ public:
         {
             if (player->duel || player->GetMap()->IsBattleArena() || player->HasFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_FEIGN_DEATH) || player->isDead(), player->IsInCombat() || player->IsInFlight())
             {
-                handler->SendSysMessage("You can not do it now");
+                sModulesLocale->SendPlayerMessage(player, MODULE_NAME, BC_LOCALE_COMMAND_CANT);
                 handler->SetSentErrorMessage(true);
                 return false;
             }
@@ -145,6 +159,9 @@ public:
     {
         if (!CONF_GET_BOOL("BuffCommand.Enable"))
             return;
+
+        if (sModulesLocale->GetStringsCount(MODULE_NAME) != StringLocales::BC_LOCALE_MAX - 1)
+            LOG_FATAL("modules.bc", "> BC: String locales (%u) for module != (%u)", sModulesLocale->GetStringsCount(MODULE_NAME), StringLocales::BC_LOCALE_MAX - 1);
 
         sBC->LoadDataFromDB();
     }
