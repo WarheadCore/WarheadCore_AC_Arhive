@@ -151,7 +151,7 @@ private:
         typedef std::pair<uint32, uint32> MailItemsPair;
         typedef std::vector<MailItemsPair> MailItemsVector;
 
-        auto SendMailItems = [](Player* player, std::string Subject, std::string Text, uint32 Money, MailItemsVector ListItemPairs)
+        auto SendMailItems = [](Player * player, std::string Subject, std::string Text, uint32 Money, MailItemsVector ListItemPairs)
         {
             if (ListItemPairs.size() > MAX_MAIL_ITEMS)
             {
