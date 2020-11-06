@@ -146,8 +146,6 @@ private:
         if (!levelReward)
             return;
 
-        uint8 localeIndex = static_cast<uint8>(player->GetSession()->GetSessionDbLocaleIndex());
-
         std::string subject = *sModulesLocale->GetModuleString(MODULE_NAME, LEVEL_REWARD_LOCALE_SUBJECT, Level);
         std::string text = *sModulesLocale->GetModuleString(MODULE_NAME, LEVEL_REWARD_LOCALE_TEXT, Level);
 
