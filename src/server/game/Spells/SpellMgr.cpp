@@ -3268,17 +3268,235 @@ void SpellMgr::LoadSpellInfoCustomAttributes()
     LOG_INFO("server.loading", "");
 }
 
+inline void ApplySpellFix(std::initializer_list<uint32> spellIds, void(*fix)(SpellInfo*))
+{
+    for (uint32 spellId : spellIds)
+    {
+        SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(spellId);
+        if (!spellInfo)
+        {
+            LOG_ERROR("server.loading", "Spell info correction specified for non-existing spell %u", spellId);
+            continue;
+        }
+
+        fix(const_cast<SpellInfo*>(spellInfo));
+    }
+}
+
 void SpellMgr::LoadSpellInfoCorrections()
 {
     uint32 oldMSTime = getMSTime();
 
-    SpellInfo* spellInfo = nullptr;
-    for (uint32 i = 0; i < sSpellStore.GetNumRows(); ++i)
+    // Evergrove Druid Transform Crow
+    ApplySpellFix({ 38776 }, [](SpellInfo* spellInfo)
     {
-        spellInfo = mSpellInfoMap[i];
-        if (!spellInfo)
-            continue;
+        spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(4); // 120 seconds
+    });
 
+    ApplySpellFix({
+        63026, // Force Cast (HACK: Target shouldn't be changed)
+        63137  // Force Cast (HACK: Target shouldn't be changed; summon position should be untied from spell destination)
+    }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[0].TargetA = SpellImplicitTargetInfo(TARGET_DEST_DB);
+    });
+
+    ApplySpellFix({
+        53096, // Quetz'lun's Judgment
+        70743, // AoD Special
+        70614 // AoD Special - Vegard
+    }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->MaxAffectedTargets = 1;
+    });
+
+    // Summon Skeletons
+    ApplySpellFix({ 52611, 52612 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].MiscValueB = 64;
+    });
+
+    // Crashes client on pressing ESC
+    ApplySpellFix({
+        45257, // Using Steam Tonk Controller
+        45440, // Steam Tonk Controller
+        60256, // Collect Sample
+        45634  // Neural Needle
+    }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->MaxAffectedTargets = 1;
+    });
+
+    ApplySpellFix({
+        40244, // Simon Game Visual
+        40245, // Simon Game Visual
+        40246, // Simon Game Visual
+        40247, // Simon Game Visual
+        42835  // Spout, remove damage effect, only anim is needed
+    }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].Effect = 0;
+    });
+
+    ApplySpellFix({
+        63665, // Charge (Argent Tournament emote on riders)
+        31298, // Sleep (needs target selection script)
+        2895,  // Wrath of Air Totem rank 1 (Aura)
+        68933, // Wrath of Air Totem rank 2 (Aura)
+        29200, // Purify Helboar Meat
+    }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_CASTER);
+        spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo();
+    });
+
+    // Howl of Azgalor
+    ApplySpellFix({ 31344 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_100_YARDS); // 100yards instead of 50000?!
+    });
+
+    // Headless Horseman
+    ApplySpellFix({
+        42818, // Headless Horseman - Wisp Flight Port
+        42821  // Headless Horseman - Wisp Flight Missile
+    }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->RangeEntry = sSpellRangeStore.LookupEntry(6); // 100 yards
+    });
+
+    // They Must Burn Bomb Aura (self)
+    ApplySpellFix({ 36350 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].TriggerSpell = 36325; // They Must Burn Bomb Drop (DND)
+    });
+
+    // Mana Shield (rank 2)
+    ApplySpellFix({ 8494 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->ProcChance = 0; // because of bug in dbc
+    });
+
+    // Glyph of Life Tap
+    ApplySpellFix({ 63320 }, [](SpellInfo* spellInfo)
+    {
+        // Entries were not updated after spell effect change, we have to do that manually :/
+        spellInfo->AttributesEx3 |= SPELL_ATTR3_CAN_PROC_WITH_TRIGGERED;
+    });
+
+    ApplySpellFix({
+        31347, // Doom
+        41635, // Prayer of Mending
+        39365, // Thundering Storm
+        52124, // Sky Darkener Assault
+        42442, // Vengeance Landing Cannonfire
+        45863, // Cosmetic - Incinerate to Random Target
+        25425, // Shoot
+        45761, // Shoot
+        42611, // Shoot
+        61588, // Blazing Harpoon
+        36327  // Shoot Arcane Explosion Arrow
+    }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->MaxAffectedTargets = 1;
+    });
+
+    // Skartax Purple Beam
+    ApplySpellFix({ 36384 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->MaxAffectedTargets = 2;
+    });
+
+    ApplySpellFix({
+        37790, // Spread Shot
+        54172, // Divine Storm (heal)
+        66588, // Flaming Spear
+        54171  // Divine Storm
+    }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->MaxAffectedTargets = 3;
+    });
+
+    // Divine Storm (Damage)
+    ApplySpellFix({ 53385 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->MaxAffectedTargets = 4;
+    });
+
+    // Spitfire Totem
+    ApplySpellFix({ 38296 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->MaxAffectedTargets = 5;
+    });
+
+    ApplySpellFix({
+        40827, // Sinful Beam
+        40859, // Sinister Beam
+        40860, // Vile Beam
+        40861  // Wicked Beam
+    }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->MaxAffectedTargets = 10;
+    });
+
+    // Unholy Frenzy
+    ApplySpellFix({ 50312 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->MaxAffectedTargets = 15;
+    });
+
+    ApplySpellFix({
+        17941, // Shadow Trance
+        22008, // Netherwind Focus
+        31834, // Light's Grace
+        34754, // Clearcasting
+        34936, // Backlash
+        48108, // Hot Streak
+        51124, // Killing Machine
+        54741, // Firestarter
+        57761, // Fireball!
+        39805, // Lightning Overload
+        64823, // Item - Druid T8 Balance 4P Bonus
+        34477, // Misdirection
+        44401, // Missile Barrage
+        18820  // Insight
+    }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->ProcCharges = 1;
+    });
+
+    // Tidal Wave
+    ApplySpellFix({ 53390 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->ProcCharges = 2;
+    });
+
+    // Oscillation Field
+    ApplySpellFix({ 37408 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->AttributesEx3 |= SPELL_ATTR3_STACK_FOR_DIFF_CASTERS;
+    });
+
+    // Ascendance (Talisman of Ascendance trinket)
+    ApplySpellFix({ 28200 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->ProcCharges = 6;
+    });
+
+    // The Eye of Acherus (no spawn in phase 2 in db)
+    ApplySpellFix({ 51852 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].MiscValue |= 1;
+    });
+
+    // Crafty's Ultra-Advanced Proto-Typical Shortening Blaster
+    ApplySpellFix({ 51912 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].Amplitude = 3000;
+    });
+
+    for (auto spellInfo : mSpellInfoMap)
+    {
         for (uint8 j = 0; j < MAX_SPELL_EFFECTS; ++j)
         {
             switch (spellInfo->Effects[j].Effect)
@@ -3300,7 +3518,7 @@ void SpellMgr::LoadSpellInfoCorrections()
 
         // Xinef: Fix range for trajectories and triggered spells
         {
-            auto _spellEntry = (SpellEntry*)sSpellStore.LookupEntry(i);
+            auto _spellEntry = (SpellEntry*)sSpellStore.LookupEntry(spellInfo->Id);
             for (uint8 j = 0; j < MAX_SPELL_EFFECTS; ++j)
                 if (_spellEntry->rangeIndex == 1 && (_spellEntry->EffectImplicitTargetA[j] == TARGET_DEST_TRAJ || _spellEntry->EffectImplicitTargetB[j] == TARGET_DEST_TRAJ))
                     if (SpellEntry* spellInfo2 = (SpellEntry*)sSpellStore.LookupEntry(_spellEntry->EffectTriggerSpell[j]))
@@ -3312,130 +3530,6 @@ void SpellMgr::LoadSpellInfoCorrections()
 
         switch (spellInfo->Id)
         {
-            case 38776: // Evergrove Druid Transform Crow
-                spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(4); // 120 seconds
-                break;
-            case 63026: // Force Cast (HACK: Target shouldn't be changed)
-            case 63137: // Force Cast (HACK: Target shouldn't be changed; summon position should be untied from spell destination)
-                spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_DEST_DB);
-                break;
-            case 53096: // Quetz'lun's Judgment
-            case 70743: // AoD Special
-            case 70614: // AoD Special - Vegard
-                spellInfo->MaxAffectedTargets = 1;
-                break;
-            case 52611: // Summon Skeletons
-            case 52612: // Summon Skeletons
-                spellInfo->Effects[EFFECT_0].MiscValueB = 64;
-                break;
-            case 45257: // Using Steam Tonk Controller
-            case 45440: // Steam Tonk Controller
-            case 60256: // Collect Sample
-            case 45634: // Neural Needle
-                // Crashes client on pressing ESC
-                spellInfo->AttributesEx4 &= ~SPELL_ATTR4_CAN_CAST_WHILE_CASTING;
-                break;
-            case 40244: // Simon Game Visual
-            case 40245: // Simon Game Visual
-            case 40246: // Simon Game Visual
-            case 40247: // Simon Game Visual
-            case 42835: // Spout, remove damage effect, only anim is needed
-                spellInfo->Effects[EFFECT_0].Effect = 0;
-                break;
-            case 63665: // Charge (Argent Tournament emote on riders)
-            case 31298: // Sleep (needs target selection script)
-            case 2895:  // Wrath of Air Totem rank 1 (Aura)
-            case 68933: // Wrath of Air Totem rank 2 (Aura)
-            case 29200: // Purify Helboar Meat
-                spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_CASTER);
-                spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo();
-                break;
-            case 31344: // Howl of Azgalor
-                spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_100_YARDS); // 100yards instead of 50000?!
-                break;
-            case 42818: // Headless Horseman - Wisp Flight Port
-            case 42821: // Headless Horseman - Wisp Flight Missile
-                spellInfo->RangeEntry = sSpellRangeStore.LookupEntry(6); // 100 yards
-                break;
-            case 36350: //They Must Burn Bomb Aura (self)
-                spellInfo->Effects[EFFECT_0].TriggerSpell = 36325; // They Must Burn Bomb Drop (DND)
-                break;
-            case 8494: // Mana Shield (rank 2)
-                // because of bug in dbc
-                spellInfo->ProcChance = 0;
-                break;
-            case 63320: // Glyph of Life Tap
-                // Entries were not updated after spell effect change, we have to do that manually :/
-                spellInfo->AttributesEx3 |= SPELL_ATTR3_CAN_PROC_WITH_TRIGGERED;
-                break;
-            case 31347: // Doom
-            case 41635: // Prayer of Mending
-            case 39365: // Thundering Storm
-            case 52124: // Sky Darkener Assault
-            case 42442: // Vengeance Landing Cannonfire
-            case 45863: // Cosmetic - Incinerate to Random Target
-            case 25425: // Shoot
-            case 45761: // Shoot
-            case 42611: // Shoot
-            case 61588: // Blazing Harpoon
-            case 36327: // Shoot Arcane Explosion Arrow
-                spellInfo->MaxAffectedTargets = 1;
-                break;
-            case 36384: // Skartax Purple Beam
-                spellInfo->MaxAffectedTargets = 2;
-                break;
-            case 37790: // Spread Shot
-            case 54172: // Divine Storm (heal)
-            case 66588: // Flaming Spear
-            case 54171: // Divine Storm
-                spellInfo->MaxAffectedTargets = 3;
-                break;
-            case 53385: // Divine Storm (Damage)
-                spellInfo->MaxAffectedTargets = 4;
-                break;
-            case 38296: // Spitfire Totem
-                spellInfo->MaxAffectedTargets = 5;
-                break;
-            case 40827: // Sinful Beam
-            case 40859: // Sinister Beam
-            case 40860: // Vile Beam
-            case 40861: // Wicked Beam
-                spellInfo->MaxAffectedTargets = 10;
-                break;
-            case 50312: // Unholy Frenzy
-                spellInfo->MaxAffectedTargets = 15;
-                break;
-            case 17941: // Shadow Trance
-            case 22008: // Netherwind Focus
-            case 31834: // Light's Grace
-            case 34754: // Clearcasting
-            case 34936: // Backlash
-            case 48108: // Hot Streak
-            case 51124: // Killing Machine
-            case 54741: // Firestarter
-            case 57761: // Fireball!
-            case 39805: // Lightning Overload
-            case 64823: // Item - Druid T8 Balance 4P Bonus
-            case 34477: // Misdirection
-            case 44401: // Missile Barrage
-            case 18820: // Insight
-                spellInfo->ProcCharges = 1;
-                break;
-            case 53390: // Tidal Wave
-                spellInfo->ProcCharges = 2;
-                break;
-            case 37408: // Oscillation Field
-                spellInfo->AttributesEx3 |= SPELL_ATTR3_STACK_FOR_DIFF_CASTERS;
-                break;
-            case 28200: // Ascendance (Talisman of Ascendance trinket)
-                spellInfo->ProcCharges = 6;
-                break;
-            case 51852: // The Eye of Acherus (no spawn in phase 2 in db)
-                spellInfo->Effects[EFFECT_0].MiscValue |= 1;
-                break;
-            case 51912: // Crafty's Ultra-Advanced Proto-Typical Shortening Blaster
-                spellInfo->Effects[EFFECT_0].Amplitude = 3000;
-                break;
             case 29809: // Desecration Arm - 36 instead of 37 - typo? :/
                 spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(37);
                 break;
