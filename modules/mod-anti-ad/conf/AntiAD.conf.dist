@@ -40,11 +40,11 @@
 #        Description: Enable mute at writing forbidden word.
 #        Default: 1
 #
-#    AntiAD.MuteGM.Enable 
+#    AntiAD.MuteGM.Enable
 #        Description: Enable mute for GMs.
 #        Default: 0
 #
-#    AntiAD.Mute.Time 
+#    AntiAD.Mute.Time
 #        Description: Mute time in minutes.
 #        Default: 5
 #
