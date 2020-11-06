@@ -26,3 +26,11 @@
 #
 
 LevelReward.Enable = 0
+
+#
+#    LevelReward.NpcID
+#        Description: Entry npc sender's
+#        Default: 37688
+#
+
+LevelReward.NpcID = 37688

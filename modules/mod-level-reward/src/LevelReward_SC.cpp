@@ -17,11 +17,12 @@
 
 #include "Log.h"
 #include "ScriptMgr.h"
+#include "ModulesLocale.h"
 #include "GameConfig.h"
 #include "Chat.h"
 #include "Player.h"
 #include "StringFormat.h"
-#include "ModulesLocale.h"
+#include "ExternalMail.h"
 
 enum StringLocales : uint8
 {
@@ -145,83 +146,14 @@ private:
         if (!levelReward)
             return;
 
-        ChatHandler handler(player->GetSession());
-        std::string Subject, Text, SelfMessage;
-
-        typedef std::pair<uint32, uint32> MailItemsPair;
-        typedef std::vector<MailItemsPair> MailItemsVector;
-
-        auto SendMailItems = [](Player * player, std::string Subject, std::string Text, uint32 Money, MailItemsVector ListItemPairs)
-        {
-            if (ListItemPairs.size() > MAX_MAIL_ITEMS)
-            {
-                LOG_ERROR("modules", "> SendMailItems: ListItemPairs.size() = %u", (uint32)ListItemPairs.size());
-                return;
-            }
-
-            MailItemsVector _listItemPairs;
-
-            // check
-            for (auto itr : ListItemPairs)
-            {
-                uint32 ItemID = itr.first;
-                uint32 ItemCount = itr.second;
-
-                ItemTemplate const* item = sObjectMgr->GetItemTemplate(ItemID);
-                if (!item)
-                    continue;
-
-                if (ItemCount < 1 || (item->MaxCount > 0 && ItemCount > uint32(item->MaxCount)))
-                    break;
-
-                while (ItemCount > item->GetMaxStackSize())
-                {
-                    _listItemPairs.push_back(MailItemsPair(ItemID, item->GetMaxStackSize()));
-                    ItemCount -= item->GetMaxStackSize();
-                }
-
-                _listItemPairs.push_back(MailItemsPair(ItemID, ItemCount));
-
-                if (_listItemPairs.size() > MAX_MAIL_ITEMS)
-                {
-                    LOG_ERROR("modules", "> SendMailItems: _listItemPairs.size() = %u", (uint32)_listItemPairs.size());
-                    break;
-                }
-            }
-
-            // from console show not existed sender
-            MailSender sender(MAIL_NORMAL, player->GetGUIDLow(), MAIL_STATIONERY_DEFAULT);
-
-            SQLTransaction trans = CharacterDatabase.BeginTransaction();
-
-            // fill mail
-            MailDraft draft(Subject, Text);
-
-            for (auto itr : _listItemPairs)
-            {
-                if (Item* item = Item::CreateItem(itr.first, itr.second, player))
-                {
-                    item->SaveToDB(trans);                               // save for prevent lost at next mail load, if send fail then item will deleted
-                    draft.AddItem(item);
-                }
-            }
-
-            if (Money)
-                draft.AddMoney(Money);
-
-            draft.SendMailTo(trans, player, sender);
-            CharacterDatabase.CommitTransaction(trans);
-        };
-
-        MailItemsVector ListItemPairs;
-        ListItemPairs.push_back(MailItemsPair(levelReward->ItemID, levelReward->ItemCount));
+        std::string subject = *sModulesLocale->GetModuleString(MODULE_NAME, LEVEL_REWARD_LOCALE_SUBJECT, Level);
+        std::string text = *sModulesLocale->GetModuleString(MODULE_NAME, LEVEL_REWARD_LOCALE_TEXT, Level);
 
         uint8 localeIndex = static_cast<uint8>(player->GetSession()->GetSessionDbLocaleIndex());
 
-        Subject = *sModulesLocale->GetModuleString(MODULE_NAME, LEVEL_REWARD_LOCALE_SUBJECT, Level);
-        Text = *sModulesLocale->GetModuleString(MODULE_NAME, LEVEL_REWARD_LOCALE_TEXT, Level);
+        // Send External mail
+        sEM->AddMail(player->GetName(), subject, text, levelReward->ItemID, levelReward->ItemCount, CONF_GET_INT("LevelReward.NpcID"));
 
-        SendMailItems(player, Subject, Text, levelReward->Money, ListItemPairs);
         sModulesLocale->SendPlayerMessage(player, MODULE_NAME, LEVEL_REWARD_LOCALE_MESSAGE, Level);
     }
 };
@@ -250,6 +182,7 @@ public:
     void OnAfterConfigLoad(bool /*reload*/) override
     {
         sGameConfig->AddBoolConfig("LevelReward.Enable");
+        sGameConfig->AddIntConfig("LevelReward.NpcID", 37688);
     }
 
     void OnStartup() override
