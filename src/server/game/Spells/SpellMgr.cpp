@@ -2680,7 +2680,7 @@ void SpellMgr::UnloadSpellInfoStore()
         if (mSpellInfoMap[i])
             delete mSpellInfoMap[i];
     }
-    
+
     mSpellInfoMap.clear();
 }
 
@@ -3302,9 +3302,9 @@ void SpellMgr::LoadSpellInfoCorrections()
         {
             auto _spellEntry = (SpellEntry*)sSpellStore.LookupEntry(i);
             for (uint8 j = 0; j < MAX_SPELL_EFFECTS; ++j)
-            if (_spellEntry->rangeIndex == 1 && (_spellEntry->EffectImplicitTargetA[j] == TARGET_DEST_TRAJ || _spellEntry->EffectImplicitTargetB[j] == TARGET_DEST_TRAJ))
-                if (SpellEntry* spellInfo2 = (SpellEntry*)sSpellStore.LookupEntry(_spellEntry->EffectTriggerSpell[j]))
-                    spellInfo2->rangeIndex = 187; // 300yd
+                if (_spellEntry->rangeIndex == 1 && (_spellEntry->EffectImplicitTargetA[j] == TARGET_DEST_TRAJ || _spellEntry->EffectImplicitTargetB[j] == TARGET_DEST_TRAJ))
+                    if (SpellEntry* spellInfo2 = (SpellEntry*)sSpellStore.LookupEntry(_spellEntry->EffectTriggerSpell[j]))
+                        spellInfo2->rangeIndex = 187; // 300yd
         }
 
         if (spellInfo->ActiveIconID == 2158)  // flight
