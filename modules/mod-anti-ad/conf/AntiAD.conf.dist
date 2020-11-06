@@ -48,6 +48,18 @@
 #        Description: Mute time in minutes.
 #        Default: 5
 #
+#    AntiAD.CheckChannels
+#        Description: A mask that describes which channels checks
+#
+#          Following flags are available
+#           ANTIAD_CHANNEL_SAY      = 0 // Say
+#           ANTIAD_CHANNEL_WHISPER  = 1 // Whisper
+#           ANTIAD_CHANNEL_GROUP    = 2 // Group
+#           ANTIAD_CHANNEL_GUILD    = 4 // Guild
+#           ANTIAD_CHANNEL_CHANNEL  = 8 // Channels (lfg and etc)
+#
+#        Default: 8
+#
 
 AntiAD.Enable = 0
 AntiAD.MessageGMsInWorld.Enable = 1
@@ -56,3 +68,4 @@ AntiAD.SelfMessage.Enable = 1
 AntiAD.Mute.Enable = 1
 AntiAD.MuteGM.Enable = 1
 AntiAD.Mute.Time = 1
+AntiAD.CheckChannels = 8

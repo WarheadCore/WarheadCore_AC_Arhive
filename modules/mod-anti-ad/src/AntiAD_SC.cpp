@@ -26,6 +26,15 @@
 #include "MuteManager.h"
 #include <vector>
 
+enum AntiADChannelsType : uint8
+{
+    ANTIAD_CHANNEL_SAY,
+    ANTIAD_CHANNEL_WHISPER  = 1,
+    ANTIAD_CHANNEL_GROUP    = 2,
+    ANTIAD_CHANNEL_GUILD    = 4,
+    ANTIAD_CHANNEL_CHANNEL  = 8,
+};
+
 enum StringLocales : uint8
 {
     ANTIAD_LOCALE_SEND_GM_TEXT = 1,
@@ -84,6 +93,14 @@ public:
         LOG_INFO("modules.antiad", "");
     }
 
+    bool IsNeedCheckChannel(uint8 channelType)
+    {
+        if (!CONF_GET_BOOL("AntiAD.Enable"))
+            return false;
+
+        return (CONF_GET_INT("AntiAD.CheckChannels") & channelType) ? true : false;
+    }
+
     bool IsBadMessage(std::string& msg)
     {
         if (messages.empty())
@@ -117,26 +134,41 @@ public:
 
     void OnChat(Player* player, uint32 /*type*/, uint32 /*lang*/, std::string& msg) override
     {
+        if (!sAD->IsNeedCheckChannel(ANTIAD_CHANNEL_SAY))
+            return;
+
         CheckMessage(player, msg);
     }
 
     void OnChat(Player* player, uint32 /*type*/, uint32 /*lang*/, std::string& msg, Player* /*receiver*/) override
     {
+        if (!sAD->IsNeedCheckChannel(ANTIAD_CHANNEL_WHISPER))
+            return;
+
         CheckMessage(player, msg);
     }
 
     void OnChat(Player* player, uint32 /*type*/, uint32 /*lang*/, std::string& msg, Group* /*group*/) override
     {
+        if (!sAD->IsNeedCheckChannel(ANTIAD_CHANNEL_GROUP))
+            return;
+
         CheckMessage(player, msg);
     }
 
     void OnChat(Player* player, uint32 /*type*/, uint32 /*lang*/, std::string& msg, Guild* /*guild*/) override
     {
+        if (!sAD->IsNeedCheckChannel(ANTIAD_CHANNEL_GUILD))
+            return;
+
         CheckMessage(player, msg);
     }
 
     void OnChat(Player* player, uint32 /*type*/, uint32 /*lang*/, std::string& msg, Channel* /*channel*/) override
     {
+        if (!sAD->IsNeedCheckChannel(ANTIAD_CHANNEL_CHANNEL))
+            return;
+
         CheckMessage(player, msg);
     }
 
