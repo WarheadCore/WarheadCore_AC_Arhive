@@ -7,7 +7,7 @@ SET @MODULE_NAME := 'mod-notify-muted';
 
 DELETE FROM `string_module`
 WHERE `ModuleName` = @MODULE_NAME
-    AND `ID` BETWEEN 1 AND 3;
+    AND `ID` BETWEEN 1 AND 1;
 
 INSERT INTO `string_module` (`ModuleName`, `ID`, `Locale`, `Text`)
         VALUES
