@@ -21,6 +21,18 @@
 #include "Chat.h"
 #include "Player.h"
 #include "StringFormat.h"
+#include "ModulesLocale.h"
+
+enum StringLocales : uint8
+{
+    LEVEL_REWARD_LOCALE_SUBJECT = 1,
+    LEVEL_REWARD_LOCALE_TEXT,
+    LEVEL_REWARD_LOCALE_MESSAGE,
+
+    LEVEL_REWARD_LOCALE_MAX
+};
+
+#define MODULE_NAME "mod-level-reward"
 
 struct LevelRewardStruct
 {
@@ -204,12 +216,13 @@ private:
         MailItemsVector ListItemPairs;
         ListItemPairs.push_back(MailItemsPair(levelReward->ItemID, levelReward->ItemCount));
 
-        Subject = Warhead::StringFormat("Reward for level up to %u", Level);
-        Text = Warhead::StringFormat("You increased level to %u and get a reward!", Level);
-        SelfMessage = Warhead::StringFormat("You increased level to %u and get a reward!", Level);
+        uint8 localeIndex = static_cast<uint8>(player->GetSession()->GetSessionDbLocaleIndex());
 
-        handler.PSendSysMessage("%s", SelfMessage.c_str());
+        Subject = *sModulesLocale->GetModuleString(MODULE_NAME, LEVEL_REWARD_LOCALE_SUBJECT, Level);
+        Text = *sModulesLocale->GetModuleString(MODULE_NAME, LEVEL_REWARD_LOCALE_TEXT, Level);
+
         SendMailItems(player, Subject, Text, levelReward->Money, ListItemPairs);
+        sModulesLocale->SendPlayerMessage(player, MODULE_NAME, LEVEL_REWARD_LOCALE_MESSAGE, Level);
     }
 };
 
