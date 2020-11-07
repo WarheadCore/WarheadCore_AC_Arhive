@@ -3288,103 +3288,110 @@ void SpellMgr::LoadSpellInfoCorrections()
     uint32 oldMSTime = getMSTime();
 
     // Evergrove Druid Transform Crow
-    ApplySpellFix({ 38776 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 38776 }, [](SpellInfo * spellInfo)
     {
         spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(4); // 120 seconds
     });
 
-    ApplySpellFix({
+    ApplySpellFix(
+    {
         63026, // Force Cast (HACK: Target shouldn't be changed)
         63137  // Force Cast (HACK: Target shouldn't be changed; summon position should be untied from spell destination)
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[0].TargetA = SpellImplicitTargetInfo(TARGET_DEST_DB);
     });
 
-    ApplySpellFix({
+    ApplySpellFix(
+    {
         53096, // Quetz'lun's Judgment
         70743, // AoD Special
         70614 // AoD Special - Vegard
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->MaxAffectedTargets = 1;
     });
 
     // Summon Skeletons
-    ApplySpellFix({ 52611, 52612 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 52611, 52612 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].MiscValueB = 64;
     });
 
     // Crashes client on pressing ESC
-    ApplySpellFix({
+    ApplySpellFix(
+    {
         45257, // Using Steam Tonk Controller
         45440, // Steam Tonk Controller
         60256, // Collect Sample
         45634  // Neural Needle
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->MaxAffectedTargets = 1;
     });
 
-    ApplySpellFix({
+    ApplySpellFix(
+    {
         40244, // Simon Game Visual
         40245, // Simon Game Visual
         40246, // Simon Game Visual
         40247, // Simon Game Visual
         42835  // Spout, remove damage effect, only anim is needed
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].Effect = 0;
     });
 
-    ApplySpellFix({
+    ApplySpellFix(
+    {
         63665, // Charge (Argent Tournament emote on riders)
         31298, // Sleep (needs target selection script)
         2895,  // Wrath of Air Totem rank 1 (Aura)
         68933, // Wrath of Air Totem rank 2 (Aura)
         29200, // Purify Helboar Meat
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_CASTER);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo();
     });
 
     // Howl of Azgalor
-    ApplySpellFix({ 31344 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 31344 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_100_YARDS); // 100yards instead of 50000?!
     });
 
     // Headless Horseman
-    ApplySpellFix({
+    ApplySpellFix(
+    {
         42818, // Headless Horseman - Wisp Flight Port
         42821  // Headless Horseman - Wisp Flight Missile
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->RangeEntry = sSpellRangeStore.LookupEntry(6); // 100 yards
     });
 
     // They Must Burn Bomb Aura (self)
-    ApplySpellFix({ 36350 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 36350 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TriggerSpell = 36325; // They Must Burn Bomb Drop (DND)
     });
 
     // Mana Shield (rank 2)
-    ApplySpellFix({ 8494 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 8494 }, [](SpellInfo * spellInfo)
     {
         spellInfo->ProcChance = 0; // because of bug in dbc
     });
 
     // Glyph of Life Tap
-    ApplySpellFix({ 63320 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 63320 }, [](SpellInfo * spellInfo)
     {
         // Entries were not updated after spell effect change, we have to do that manually :/
         spellInfo->AttributesEx3 |= SPELL_ATTR3_CAN_PROC_WITH_TRIGGERED;
     });
 
-    ApplySpellFix({
+    ApplySpellFix(
+    {
         31347, // Doom
         41635, // Prayer of Mending
         39365, // Thundering Storm
@@ -3396,56 +3403,59 @@ void SpellMgr::LoadSpellInfoCorrections()
         42611, // Shoot
         61588, // Blazing Harpoon
         36327  // Shoot Arcane Explosion Arrow
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->MaxAffectedTargets = 1;
     });
 
     // Skartax Purple Beam
-    ApplySpellFix({ 36384 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 36384 }, [](SpellInfo * spellInfo)
     {
         spellInfo->MaxAffectedTargets = 2;
     });
 
-    ApplySpellFix({
+    ApplySpellFix(
+    {
         37790, // Spread Shot
         54172, // Divine Storm (heal)
         66588, // Flaming Spear
         54171  // Divine Storm
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->MaxAffectedTargets = 3;
     });
 
     // Divine Storm (Damage)
-    ApplySpellFix({ 53385 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 53385 }, [](SpellInfo * spellInfo)
     {
         spellInfo->MaxAffectedTargets = 4;
     });
 
     // Spitfire Totem
-    ApplySpellFix({ 38296 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 38296 }, [](SpellInfo * spellInfo)
     {
         spellInfo->MaxAffectedTargets = 5;
     });
 
-    ApplySpellFix({
+    ApplySpellFix(
+    {
         40827, // Sinful Beam
         40859, // Sinister Beam
         40860, // Vile Beam
         40861  // Wicked Beam
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->MaxAffectedTargets = 10;
     });
 
     // Unholy Frenzy
-    ApplySpellFix({ 50312 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 50312 }, [](SpellInfo * spellInfo)
     {
         spellInfo->MaxAffectedTargets = 15;
     });
 
-    ApplySpellFix({
+    ApplySpellFix(
+    {
         17941, // Shadow Trance
         22008, // Netherwind Focus
         31834, // Light's Grace
@@ -3460,75 +3470,76 @@ void SpellMgr::LoadSpellInfoCorrections()
         34477, // Misdirection
         44401, // Missile Barrage
         18820  // Insight
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->ProcCharges = 1;
     });
 
     // Tidal Wave
-    ApplySpellFix({ 53390 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 53390 }, [](SpellInfo * spellInfo)
     {
         spellInfo->ProcCharges = 2;
     });
 
     // Oscillation Field
-    ApplySpellFix({ 37408 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 37408 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_STACK_FOR_DIFF_CASTERS;
     });
 
     // Ascendance (Talisman of Ascendance trinket)
-    ApplySpellFix({ 28200 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 28200 }, [](SpellInfo * spellInfo)
     {
         spellInfo->ProcCharges = 6;
     });
 
     // The Eye of Acherus (no spawn in phase 2 in db)
-    ApplySpellFix({ 51852 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 51852 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].MiscValue |= 1;
     });
 
     // Crafty's Ultra-Advanced Proto-Typical Shortening Blaster
-    ApplySpellFix({ 51912 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 51912 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].Amplitude = 3000;
     });
 
     // Desecration Arm - 36 instead of 37 - typo? :/
-    ApplySpellFix({ 29809 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 29809 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(37);
     });
 
     // Sic'em
-    ApplySpellFix({ 42767 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 42767 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_NEARBY_ENTRY);
     });
 
     // Master Shapeshifter: missing stance data for forms other than bear - bear version has correct data
     // To prevent aura staying on target after talent unlearned
-    ApplySpellFix({ 48420 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 48420 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Stances = 1 << (FORM_CAT - 1);
     });
 
-    ApplySpellFix({ 48421 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 48421 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Stances = 1 << (FORM_MOONKIN - 1);
     });
 
-    ApplySpellFix({ 48422 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 48422 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Stances = 1 << (FORM_TREE - 1);
     });
 
     // Elemental Oath
-    ApplySpellFix({
+    ApplySpellFix(
+    {
         51466, // Elemental Oath (Rank 1)
         51470  // Elemental Oath (Rank 2)
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].Effect = SPELL_EFFECT_APPLY_AURA;
         spellInfo->Effects[EFFECT_1].ApplyAuraName = SPELL_AURA_ADD_FLAT_MODIFIER;
@@ -3537,26 +3548,26 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Improved Shadowform (Rank 1)
-    ApplySpellFix({ 47569 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 47569 }, [](SpellInfo * spellInfo)
     {
         // with this spell atrribute aura can be stacked several times
         spellInfo->Attributes &= ~SPELL_ATTR0_NOT_SHAPESHIFT;
     });
 
     // Nether Portal - Perseverence
-    ApplySpellFix({ 30421 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 30421 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_2].BasePoints += 30000;
     });
 
     // Natural shapeshifter
-    ApplySpellFix({ 16834, 16835 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 16834, 16835 }, [](SpellInfo * spellInfo)
     {
         spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(21);
     });
 
     // Ebon Plague
-    ApplySpellFix({ 41013 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 41013 }, [](SpellInfo * spellInfo)
     {
         spellInfo->SpellFamilyFlags[2] = 0x10;
         spellInfo->Effects[EFFECT_1].ApplyAuraName = SPELL_AURA_MOD_DAMAGE_PERCENT_TAKEN;
@@ -3564,78 +3575,83 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Parasitic Shadowfiend Passive
-    ApplySpellFix({ 41013 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 41013 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].ApplyAuraName = SPELL_AURA_DUMMY; // proc debuff, and summon infinite fiends
     });
 
-    ApplySpellFix({
+    ApplySpellFix(
+    {
         27892, // To Anchor 1
         27928, // To Anchor 1
         27935, // To Anchor 1
         27915, // Anchor to Skulls
         27931, // Anchor to Skulls
         27937  // Anchor to Skulls
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->RangeEntry = sSpellRangeStore.LookupEntry(13);
     });
 
     // target allys instead of enemies, target A is src_caster, spells with effect like that have ally target
     // this is the only known exception, probably just wrong data
-    ApplySpellFix({
+    ApplySpellFix(
+    {
         29214, // Wrath of the Plaguebringer
         54836  // Wrath of the Plaguebringer
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo(TARGET_UNIT_SRC_AREA_ALLY);
         spellInfo->Effects[EFFECT_1].TargetB = SpellImplicitTargetInfo(TARGET_UNIT_SRC_AREA_ALLY);
     });
 
     // Wind Shear - improper data for EFFECT_1 in 3.3.5 DBC, but is correct in 4.x
-    ApplySpellFix({ 57994 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 57994 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].Effect = SPELL_EFFECT_MODIFY_THREAT_PERCENT;
         spellInfo->Effects[EFFECT_1].BasePoints = -6; // -5%
     });
 
     // Improved Devouring Plague
-    ApplySpellFix({ 63675 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 63675 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].BonusMultiplier = 0;
         spellInfo->AttributesEx3 |= SPELL_ATTR3_NO_DONE_BONUS;
     });
 
-    ApplySpellFix({
+    ApplySpellFix(
+    {
         8145, // Tremor Totem (instant pulse)
         6474  // Earthbind Totem (instant pulse)
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx5 |= SPELL_ATTR5_START_PERIODIC_AT_APPLY;
     });
 
-    ApplySpellFix({
+    ApplySpellFix(
+    {
         53241, // Marked for Death (Rank 1)
         53243, // Marked for Death (Rank 2)
         53244, // Marked for Death (Rank 3)
         53245, // Marked for Death (Rank 4)
         53246  // Marked for Death (Rank 5)
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].SpellClassMask = flag96(423937, 276955137, 2049);
     });
 
-    ApplySpellFix({
+    ApplySpellFix(
+    {
         70728, // Exploit Weakness
         70840  // Devious Minds
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_CASTER);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo(TARGET_UNIT_PET);
     });
 
     // Culling The Herd
-    ApplySpellFix({ 70893 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 70893 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_CASTER);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo(TARGET_UNIT_MASTER);
@@ -3645,60 +3661,63 @@ void SpellMgr::LoadSpellInfoCorrections()
     // this is done because another spell also uses the same SpellFamilyFlags as Icy Touch
     // SpellFamilyFlags[0] & 0x00000040 in SPELLFAMILY_DEATHKNIGHT is currently unused (3.3.5a)
     // this needs research on modifier applying rules, does not seem to be in Attributes fields
-    ApplySpellFix({ 54800 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 54800 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].SpellClassMask = flag96(0x00000040, 0x00000000, 0x00000000);
     });
 
     // Idol of the Flourishing Life
-    ApplySpellFix({ 64949 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 64949 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].SpellClassMask = flag96(0x00000000, 0x02000000, 0x00000000);
         spellInfo->Effects[EFFECT_0].ApplyAuraName = SPELL_AURA_ADD_FLAT_MODIFIER;
     });
 
-    ApplySpellFix({
+    ApplySpellFix(
+    {
         34231, // Libram of the Lightbringer
         60792, // Libram of Tolerance
         64956  // Libram of the Resolute
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].SpellClassMask = flag96(0x80000000, 0x00000000, 0x00000000);
         spellInfo->Effects[EFFECT_0].ApplyAuraName = SPELL_AURA_ADD_FLAT_MODIFIER;
     });
 
-    ApplySpellFix({
+    ApplySpellFix(
+    {
         28851, // Libram of Light
         28853, // Libram of Divinity
         32403  // Blessed Book of Nagrand
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].SpellClassMask = flag96(0x40000000, 0x00000000, 0x00000000);
         spellInfo->Effects[EFFECT_0].ApplyAuraName = SPELL_AURA_ADD_FLAT_MODIFIER;
     });
 
     // Ride Carpet
-    ApplySpellFix({ 45602 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 45602 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].BasePoints = 0; // force seat 0, vehicle doesn't have the required seat flags for "no seat specified (-1)"
     });
 
-    ApplySpellFix({
+    ApplySpellFix(
+    {
         64745, // Item - Death Knight T8 Tank 4P Bonus
         64936  // Item - Warrior T8 Protection 4P Bonus
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].BasePoints = 100; // 100% chance of procc'ing, not -10% (chance calculated in PrepareTriggersExecutedOnHit)
     });
 
     // Easter Lay Noblegarden Egg Aura - Interrupt flags copied from aura which this aura is linked with
-    ApplySpellFix({ 61719 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 61719 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AuraInterruptFlags = AURA_INTERRUPT_FLAG_HITBYSPELL | AURA_INTERRUPT_FLAG_TAKE_DAMAGE;
     });
 
     // Spell for item The Flag of Ownership (38578)
-    ApplySpellFix({ 51640 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 51640 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_ONLY_TARGET_PLAYERS;
         spellInfo->AttributesEx2 |= SPELL_ATTR2_CAN_TARGET_DEAD;
@@ -3706,26 +3725,26 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // The Beast Within
-    ApplySpellFix({ 34471 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 34471 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx5 |= SPELL_ATTR5_USABLE_WHILE_CONFUSED | SPELL_ATTR5_USABLE_WHILE_FEARED | SPELL_ATTR5_USABLE_WHILE_STUNNED;
     });
 
     // Introspection
-    ApplySpellFix({ 40055, 40165, 40166, 40167 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 40055, 40165, 40166, 40167 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Attributes |= SPELL_ATTR0_NEGATIVE_1;
     });
 
     // Minor Fortitude
-    ApplySpellFix({ 2378 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 2378 }, [](SpellInfo * spellInfo)
     {
         spellInfo->ManaCost = 0;
         spellInfo->ManaPerSecond = 0;
     });
 
     // Threatening Gaze
-    ApplySpellFix({ 24314 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 24314 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AuraInterruptFlags |= AURA_INTERRUPT_FLAG_CAST | AURA_INTERRUPT_FLAG_MOVE | AURA_INTERRUPT_FLAG_JUMP;
     });
@@ -3737,9 +3756,9 @@ void SpellMgr::LoadSpellInfoCorrections()
     /////////////////////////////////
     ///// PALADIN
     /////////////////////////////////
-    
+
     // Heart of the Crusader
-    ApplySpellFix({ 20335, 20336, 20337 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 20335, 20336, 20337 }, [](SpellInfo * spellInfo)
     {
         if (spellInfo->Id == 20335)
             spellInfo->Effects[EFFECT_0].TriggerSpell = 21183;
@@ -3747,40 +3766,40 @@ void SpellMgr::LoadSpellInfoCorrections()
             spellInfo->Effects[EFFECT_0].TriggerSpell = 54498;
         else
             spellInfo->Effects[EFFECT_0].TriggerSpell = 54499;
-        
+
         spellInfo->Effects[EFFECT_0].ApplyAuraName = SPELL_AURA_PROC_TRIGGER_SPELL;
     });
 
     // Bleh, need to change FamilyFlags :/ (have the same as original aura - bad!)
-    ApplySpellFix({ 63510 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 63510 }, [](SpellInfo * spellInfo)
     {
         spellInfo->SpellFamilyFlags[0] = 0;
         spellInfo->SpellFamilyFlags[2] = 0x4000000;
     });
 
-    ApplySpellFix({ 63514 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 63514 }, [](SpellInfo * spellInfo)
     {
         spellInfo->SpellFamilyFlags[0] = 0;
         spellInfo->SpellFamilyFlags[2] = 0x2000000;
     });
 
-    ApplySpellFix({ 63531 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 63531 }, [](SpellInfo * spellInfo)
     {
         spellInfo->SpellFamilyFlags[0] = 0;
         spellInfo->SpellFamilyFlags[2] = 0x8000000;
     });
 
     // And affecting spells
-    
+
     // Improved Devotion Aura
-    ApplySpellFix({ 20138, 20139, 20140 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 20138, 20139, 20140 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].SpellClassMask[0] = 0;
         spellInfo->Effects[EFFECT_1].SpellClassMask[2] = 0x2000000;
     });
 
     // Improved concentration aura
-    ApplySpellFix({ 20254, 20255, 20256 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 20254, 20255, 20256 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].SpellClassMask[0] = 0;
         spellInfo->Effects[EFFECT_1].SpellClassMask[2] = 0x4000000;
@@ -3789,21 +3808,21 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Swift Retribution
-    ApplySpellFix({ 53379, 53484, 53648 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 53379, 53484, 53648 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].SpellClassMask[0] = 0;
         spellInfo->Effects[EFFECT_0].SpellClassMask[2] = 0x8000000;
     });
 
     // Sanctified Retribution
-    ApplySpellFix({ 31869 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 31869 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].SpellClassMask[0] = 0;
         spellInfo->Effects[EFFECT_0].SpellClassMask[2] = 0x8000000;
     });
 
     // Seal of Light trigger
-    ApplySpellFix({ 20167 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 20167 }, [](SpellInfo * spellInfo)
     {
         spellInfo->SpellLevel = 0;
         spellInfo->BaseLevel = 0;
@@ -3811,32 +3830,32 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Light's Beacon, Beacon of Light
-    ApplySpellFix({ 53651 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 53651 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_STACK_FOR_DIFF_CASTERS;
     });
 
     // Hand of Reckoning
-    ApplySpellFix({ 62124 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 62124 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx |= SPELL_ATTR1_CANT_BE_REDIRECTED;
     });
 
     // Redemption
-    ApplySpellFix({ 7328, 10322, 10324, 20772, 20773, 48949, 48950 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 7328, 10322, 10324, 20772, 20773, 48949, 48950 }, [](SpellInfo * spellInfo)
     {
         spellInfo->SpellFamilyName = SPELLFAMILY_PALADIN;
     });
 
     // hack for seal of light and few spells, judgement consists of few single casts and each of them can proc
     // some spell, base one has disabled proc flag but those dont have this flag
-    ApplySpellFix({ 20184, 20185, 20186, 68055 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 20184, 20185, 20186, 68055 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_CANT_TRIGGER_PROC;
     });
 
     // Blessing of sanctuary stats
-    ApplySpellFix({ 67480 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 67480 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].MiscValue = -1;
         spellInfo->SpellFamilyName = SPELLFAMILY_UNK1; // allows stacking
@@ -3844,16 +3863,17 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Seal of Command trigger
-    ApplySpellFix({ 20424 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 20424 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 &= ~SPELL_ATTR3_CANT_TRIGGER_PROC;
     });
 
-    ApplySpellFix({ 
+    ApplySpellFix(
+    {
         54968, // Glyph of Holy Light, Damage Class should be magic
         53652, // Beacon of Light heal, Damage Class should be magic
         53654  // Beacon of Light heal, Damage Class should be magic
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_NO_DONE_BONUS;
         spellInfo->DmgClass = SPELL_DAMAGE_CLASS_MAGIC;
@@ -3862,9 +3882,9 @@ void SpellMgr::LoadSpellInfoCorrections()
     /////////////////////////////////
     ///// HUNTER
     /////////////////////////////////
-    
+
     // Furious Howl
-    ApplySpellFix({ 64491, 64492, 64493, 64494, 64495 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 64491, 64492, 64493, 64494, 64495 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_CASTER);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo(TARGET_UNIT_MASTER);
@@ -3873,7 +3893,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Call of the Wild
-    ApplySpellFix({ 53434 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 53434 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_MASTER);
         spellInfo->Effects[EFFECT_1].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_MASTER);
@@ -3882,7 +3902,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Wild Hunt
-    ApplySpellFix({ 62758, 62762 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 62758, 62762 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].Effect = SPELL_EFFECT_APPLY_AURA;
         spellInfo->Effects[EFFECT_0].ApplyAuraName = SPELL_AURA_DUMMY;
@@ -3891,14 +3911,14 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Intervene
-    ApplySpellFix({ 3411 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 3411 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Attributes |= SPELL_ATTR0_STOP_ATTACK_TARGET;
         spellInfo->AttributesEx3 |= SPELL_ATTR3_NO_INITIAL_AGGRO;
     });
 
     // Roar of Sacrifice
-    ApplySpellFix({ 3411 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 3411 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].Effect = SPELL_EFFECT_APPLY_AURA;
         spellInfo->Effects[EFFECT_1].ApplyAuraName = SPELL_AURA_SPLIT_DAMAGE_PCT;
@@ -3909,51 +3929,51 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Silencing Shot
-    ApplySpellFix({ 34490, 41084, 42671 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 34490, 41084, 42671 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Speed = 0.0f;
     });
 
     // Monstrous Bite
-    ApplySpellFix({ 54680, 55495, 55496, 55497, 55498, 55499 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 54680, 55495, 55496, 55497, 55498, 55499 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_CASTER);
     });
 
     // Hunter's Mark
-    ApplySpellFix({ 1130, 14323, 14324, 14325, 53338 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 1130, 14323, 14324, 14325, 53338 }, [](SpellInfo * spellInfo)
     {
         spellInfo->DmgClass = SPELL_DAMAGE_CLASS_MAGIC;
         spellInfo->AttributesEx3 |= SPELL_ATTR3_IGNORE_HIT_RESULT;
     });
 
     // Cobra Strikes
-    ApplySpellFix({ 53257 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 53257 }, [](SpellInfo * spellInfo)
     {
         spellInfo->ProcCharges = 2;
         spellInfo->StackAmount = 0;
     });
 
     // Kill Command
-    ApplySpellFix({ 34027 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 34027 }, [](SpellInfo * spellInfo)
     {
         spellInfo->ProcCharges = 0;
     });
 
     // Kindred Spirits, damage aura
-    ApplySpellFix({ 57458 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 57458 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx4 |= SPELL_ATTR4_UNK21;
     });
 
     // Chimera Shot - Serpent trigger
-    ApplySpellFix({ 53353 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 53353 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_NO_DONE_BONUS;
     });
 
     // Entrapment trigger
-    ApplySpellFix({ 19185, 64803, 64804 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 19185, 64803, 64804 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_DEST_TARGET_ENEMY);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo(TARGET_UNIT_DEST_AREA_ENEMY);
@@ -3961,19 +3981,19 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Improved Stings (Rank 2)
-    ApplySpellFix({ 19465 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 19465 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_2].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_CASTER);
     });
 
     // Explosive Shot (trigger)
-    ApplySpellFix({ 53352 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 53352 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_IGNORE_HIT_RESULT;
     });
 
     // Heart of the Phoenix (triggered)
-    ApplySpellFix({ 54114 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 54114 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx &= ~SPELL_ATTR1_DISMISS_PET;
         spellInfo->RecoveryTime = 8 * 60 * IN_MILLISECONDS; // prev 600000
@@ -3984,45 +4004,46 @@ void SpellMgr::LoadSpellInfoCorrections()
     /////////////////////////////////
 
     // Master of Subtlety
-    ApplySpellFix({ 31221, 31222, 31223 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 31221, 31222, 31223 }, [](SpellInfo * spellInfo)
     {
         spellInfo->SpellFamilyName = SPELLFAMILY_ROGUE;
     });
 
-    ApplySpellFix({ 
+    ApplySpellFix(
+    {
         31221, // Master of Subtlety triggers
         58428  // Overkill
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].Effect = SPELL_EFFECT_SCRIPT_EFFECT;
     });
 
     // Honor Among Thieves
-    ApplySpellFix({ 51698, 51700, 51701 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 51698, 51700, 51701 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TriggerSpell = 51699;
     });
 
     // Slice and Dice | Distract
-    ApplySpellFix({ 5171, 6774, 1725 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 5171, 6774, 1725 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_NO_INITIAL_AGGRO;
     });
 
     // Envenom
-    ApplySpellFix({ 32645, 32684, 57992, 57993 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 32645, 32684, 57992, 57993 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Dispel = DISPEL_NONE;
     });
 
     // Killing Spree (teleport)
-    ApplySpellFix({ 57840 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 57840 }, [](SpellInfo * spellInfo)
     {
         spellInfo->RangeEntry = sSpellRangeStore.LookupEntry(6); // 100 yards
     });
 
     // Killing Spree
-    ApplySpellFix({ 51690 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 51690 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx |= SPELL_ATTR1_NOT_BREAK_STEALTH;
     });
@@ -4032,7 +4053,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     /////////////////////////////////
 
     // Blood Tap visual cd reset
-    ApplySpellFix({ 47804 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 47804 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_2].Effect = 0;
         spellInfo->Effects[EFFECT_1].Effect = 0;
@@ -4040,13 +4061,13 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Chains of Ice
-    ApplySpellFix({ 45524 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 45524 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_2].Effect = 0;
     });
 
     // Impurity
-    ApplySpellFix({ 49220, 49633, 49635, 49636, 49638 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 49220, 49633, 49635, 49636, 49638 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].Effect = SPELL_EFFECT_APPLY_AURA;
         spellInfo->Effects[EFFECT_0].ApplyAuraName = SPELL_AURA_DUMMY;
@@ -4055,102 +4076,102 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Deadly Aggression (Deadly Gladiator's Death Knight Relic, item: 42620)
-    ApplySpellFix({ 60549 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 60549 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].Effect = 0;
     });
 
     // Magic Suppression
-    ApplySpellFix({ 49224, 49610, 49611 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 49224, 49610, 49611 }, [](SpellInfo * spellInfo)
     {
         spellInfo->ProcCharges = 0;
     });
 
     // Wandering Plague
-    ApplySpellFix({ 50526 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 50526 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_NO_DONE_BONUS;
         spellInfo->AttributesEx3 |=  SPELL_ATTR3_NO_INITIAL_AGGRO;
     });
 
     // Dancing Rune Weapon
-    ApplySpellFix({ 49028 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 49028 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_2].Effect = 0;
         spellInfo->ProcFlags |= PROC_FLAG_DONE_MELEE_AUTO_ATTACK;
     });
 
     // Death and Decay
-    ApplySpellFix({ 52212 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 52212 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx2 |= SPELL_ATTR2_CAN_TARGET_NOT_IN_LOS;
         spellInfo->AttributesEx6 |= SPELL_ATTR6_CAN_TARGET_INVISIBLE;
     });
 
     // T9 blood plague crit bonus
-    ApplySpellFix({ 67118 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 67118 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].Effect = 0;
     });
-    
+
     // Pestilence
-    ApplySpellFix({ 50842 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 50842 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].Effect = 0;
     });
 
     // Horn of Winter, stacking issues
-    ApplySpellFix({ 57330, 57623 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 57330, 57623 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].TargetA = SpellImplicitTargetInfo();
     });
 
     // Scourge Strike trigger
     // Blood-caked Blade - Blood-caked Strike trigger
-    ApplySpellFix({ 70890, 50463 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 70890, 50463 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_CANT_TRIGGER_PROC;
     });
 
     // Blood Gorged - ARP affect Death Strike and Rune Strike
-    ApplySpellFix({ 61274, 61275, 61276, 61277, 61278 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 61274, 61275, 61276, 61277, 61278 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].SpellClassMask = flag96(0x1400011, 0x20000000, 0x0);
     });
 
     // Death Grip, remove main grip mechanic, leave only effect one
     // Death Grip, should fix taunt on bosses and not break the pull protection at the same time (no aura provides immunity to grip mechanic)
-    ApplySpellFix({ 49576, 49560 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 49576, 49560 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Mechanic = 0;
     });
 
     // Death Grip Jump Dest
-    ApplySpellFix({ 57604 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 57604 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx2 |= SPELL_ATTR2_CAN_TARGET_NOT_IN_LOS;
     });
 
     // Death Pact
-    ApplySpellFix({ 48743 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 48743 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx &= ~SPELL_ATTR1_CANT_TARGET_SELF;
     });
 
     // Raise Ally (trigger)
-    ApplySpellFix({ 46619 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 46619 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Attributes &= ~SPELL_ATTR0_CANT_CANCEL;
     });
 
     // Frost Strike
-    ApplySpellFix({ 49143, 51416, 51417, 51418, 51419, 55268 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 49143, 51416, 51417, 51418, 51419, 55268 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_BLOCKABLE_SPELL;
     });
 
     // Death Knight T10 Tank 2p Bonus
-    ApplySpellFix({ 70650 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 70650 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].ApplyAuraName = SPELL_AURA_ADD_PCT_MODIFIER;
     });
@@ -4160,7 +4181,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     /////////////////////////////////
 
     // Lightning overload
-    ApplySpellFix({ 45297, 45284 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 45297, 45284 }, [](SpellInfo * spellInfo)
     {
         spellInfo->CategoryRecoveryTime = 0;
         spellInfo->RecoveryTime = 0;
@@ -4168,20 +4189,20 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Improved Earth Shield
-    ApplySpellFix({ 51560, 51561 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 51560, 51561 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].MiscValue = SPELLMOD_DAMAGE;
     });
 
     // Tidal Force
-    ApplySpellFix({ 55166, 55198 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 55166, 55198 }, [](SpellInfo * spellInfo)
     {
         spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(18);
         spellInfo->ProcCharges = 0;
     });
 
     // Healing Stream Totem
-    ApplySpellFix({ 52042 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 52042 }, [](SpellInfo * spellInfo)
     {
         spellInfo->SpellLevel = 0;
         spellInfo->BaseLevel = 0;
@@ -4189,7 +4210,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Earth Shield
-    ApplySpellFix({ 379 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 379 }, [](SpellInfo * spellInfo)
     {
         spellInfo->SpellLevel = 0;
         spellInfo->BaseLevel = 0;
@@ -4197,33 +4218,33 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Stormstrike
-    ApplySpellFix({ 17364 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 17364 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_STACK_FOR_DIFF_CASTERS;
     });
 
     // Strength of Earth totem effect
-    ApplySpellFix({ 8076, 8162, 8163, 10441, 25362, 25527, 57621, 58646 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 8076, 8162, 8163, 10441, 25362, 25527, 57621, 58646 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].RadiusEntry = spellInfo->Effects[EFFECT_0].RadiusEntry;
         spellInfo->Effects[EFFECT_2].RadiusEntry = spellInfo->Effects[EFFECT_0].RadiusEntry;
     });
 
     // Flametongue Totem effect
-    ApplySpellFix({ 52109, 52110, 52111, 52112, 52113, 58651, 58654, 58655 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 52109, 52110, 52111, 52112, 52113, 58651, 58654, 58655 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_2].TargetB = spellInfo->Effects[EFFECT_1].TargetB;
         spellInfo->Effects[EFFECT_2].TargetA = spellInfo->Effects[EFFECT_1].TargetA;
     });
 
     // Sentry Totem
-    ApplySpellFix({ 6495 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 6495 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(0);
     });
 
     // Bind Sight (PT)
-    ApplySpellFix({ 6277 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 6277 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx &= ~SPELL_ATTR1_CHANNELED_1;
         spellInfo->Attributes |= SPELL_ATTR0_PASSIVE;
@@ -4231,20 +4252,20 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Ancestral Awakening Heal
-    ApplySpellFix({ 52752 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 52752 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_NO_DONE_BONUS;
     });
 
     // Heroism
-    ApplySpellFix({ 32182 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 32182 }, [](SpellInfo * spellInfo)
     {
         spellInfo->ExcludeTargetAuraSpell = 57723; // Exhaustion
         spellInfo->AttributesEx2 |= SPELL_ATTR2_CAN_TARGET_NOT_IN_LOS;
     });
 
     // Bloodlust
-    ApplySpellFix({ 2825 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 2825 }, [](SpellInfo * spellInfo)
     {
         spellInfo->ExcludeTargetAuraSpell = 57724; // Sated
         spellInfo->AttributesEx2 |= SPELL_ATTR2_CAN_TARGET_NOT_IN_LOS;
@@ -4253,33 +4274,33 @@ void SpellMgr::LoadSpellInfoCorrections()
     /////////////////////////////////
     ///// WARLOCK
     /////////////////////////////////
-    
+
     // Improved Succubus
-    ApplySpellFix({ 18754, 18755, 18756 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 18754, 18755, 18756 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_CASTER);
     });
 
     // Unstable Affliction
-    ApplySpellFix({ 31117 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 31117 }, [](SpellInfo * spellInfo)
     {
         spellInfo->PreventionType = SPELL_PREVENTION_TYPE_NONE;
     });
 
     // Shadowflame - trigger
-    ApplySpellFix({ 47960 /*r1*/, 61291 /*r2*/ }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 47960 /*r1*/, 61291 /*r2*/ }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx |= SPELL_ATTR1_CANT_BE_REDIRECTED;
     });
 
     // Curse of Doom - summoned doomguard duration fix
-    ApplySpellFix({ 18662 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 18662 }, [](SpellInfo * spellInfo)
     {
         spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(6);
     });
 
     // Glyph of Voidwalker
-    ApplySpellFix({ 56247 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 56247 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].ApplyAuraName = SPELL_AURA_ADD_FLAT_MODIFIER;
         spellInfo->Effects[EFFECT_0].MiscValue = SPELLMOD_EFFECT1;
@@ -4287,19 +4308,19 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Everlasting Affliction
-    ApplySpellFix({ 47201, 47202, 47203, 47204, 47205  }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 47201, 47202, 47203, 47204, 47205  }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].SpellClassMask[0] |= 2; // add corruption to affected spells
     });
 
     // Death's Embrace
-    ApplySpellFix({ 47198, 47199, 47200 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 47198, 47199, 47200 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].SpellClassMask[0] |= 0x4000; // include Drain Soul
     });
 
     // Improved Demonic Tactics
-    ApplySpellFix({ 54347, 54348, 54349 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 54347, 54348, 54349 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].Effect = spellInfo->Effects[EFFECT_0].Effect;
         spellInfo->Effects[EFFECT_1].ApplyAuraName = spellInfo->Effects[EFFECT_0].ApplyAuraName;
@@ -4309,13 +4330,13 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Rain of Fire (Doomguard)
-    ApplySpellFix({ 42227 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 42227 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Speed = 0.0f;
     });
 
     // Ritual Enslavement
-    ApplySpellFix({ 22987 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 22987 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].ApplyAuraName = SPELL_AURA_MOD_CHARM;
     });
@@ -4323,83 +4344,83 @@ void SpellMgr::LoadSpellInfoCorrections()
     /////////////////////////////////
     ///// MAGE
     /////////////////////////////////
-    
+
     // Combustion, make this passive
-    ApplySpellFix({ 11129 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 11129 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Dispel = DISPEL_NONE;
     });
 
     // Magic Absorption (nigga stole my code)
-    ApplySpellFix({ 29441, 29444 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 29441, 29444 }, [](SpellInfo * spellInfo)
     {
         spellInfo->SpellLevel = 0;
     });
 
     // Living Bomb
-    ApplySpellFix({ 44461, 55361, 55362 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 44461, 55361, 55362 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |=  SPELL_ATTR3_NO_INITIAL_AGGRO;
         spellInfo->AttributesEx4 |= SPELL_ATTR4_DAMAGE_DOESNT_BREAK_AURAS;
     });
 
     // Evocation
-    ApplySpellFix({ 12051 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 12051 }, [](SpellInfo * spellInfo)
     {
         spellInfo->InterruptFlags |= SPELL_INTERRUPT_FLAG_INTERRUPT;
     });
 
     // MI Fireblast, WE Frostbolt, MI Frostbolt
-    ApplySpellFix({ 59637, 31707, 72898 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 59637, 31707, 72898 }, [](SpellInfo * spellInfo)
     {
         spellInfo->DmgClass = SPELL_DAMAGE_CLASS_MAGIC;
     });
 
     // Blazing Speed
-    ApplySpellFix({ 31641, 31642 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 31641, 31642 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TriggerSpell = 31643;
     });
 
     // Summon Water Elemental (permanent), treat it as pet
-    ApplySpellFix({ 70908 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 70908 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].Effect = SPELL_EFFECT_SUMMON_PET;
     });
 
     // Burnout, trigger
-    ApplySpellFix({ 44450 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 44450 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].Effect = SPELL_EFFECT_POWER_BURN;
     });
 
     // Mirror Image - Summon Spells
-    ApplySpellFix({ 58831, 58833, 58834, 65047 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 58831, 58833, 58834, 65047 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_DEST_CASTER);
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(0);
     });
 
     // Initialize Images (Mirror Image)
-    ApplySpellFix({ 58836 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 58836 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_CASTER);
     });
 
     // Arcane Blast, can't be dispelled
-    ApplySpellFix({ 36032 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 36032 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Attributes |= SPELL_ATTR0_UNAFFECTED_BY_INVULNERABILITY;
     });
 
     // Chilled (frost armor, ice armor proc)
-    ApplySpellFix({ 6136, 7321 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 6136, 7321 }, [](SpellInfo * spellInfo)
     {
         spellInfo->PreventionType = SPELL_PREVENTION_TYPE_NONE;
     });
 
     // Mirror Image Frostbolt
-    ApplySpellFix({ 59638 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 59638 }, [](SpellInfo * spellInfo)
     {
         spellInfo->DmgClass = SPELL_DAMAGE_CLASS_MAGIC;
         spellInfo->SpellFamilyName = SPELLFAMILY_MAGE;
@@ -4407,7 +4428,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Fingers of Frost
-    ApplySpellFix({ 44544 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 44544 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Dispel = DISPEL_NONE;
         spellInfo->AttributesEx4 |= SPELL_ATTR4_NOT_STEALABLE;
@@ -4415,7 +4436,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Fingers of Frost visual buff
-    ApplySpellFix({ 74396 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 74396 }, [](SpellInfo * spellInfo)
     {
         spellInfo->ProcCharges = 2;
         spellInfo->StackAmount = 0;
@@ -4424,74 +4445,75 @@ void SpellMgr::LoadSpellInfoCorrections()
     /////////////////////////////////
     ///// WARRIOR
     /////////////////////////////////
-    
+
     // Glyph of blocking
-    ApplySpellFix({ 58375 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 58375 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TriggerSpell = 58374;
     });
 
     // Sweeping Strikes stance change
-    ApplySpellFix({ 12328 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 12328 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Attributes |= SPELL_ATTR0_NOT_SHAPESHIFT;
     });
 
     // Damage Shield
-    ApplySpellFix({ 59653 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 59653 }, [](SpellInfo * spellInfo)
     {
         spellInfo->DmgClass = SPELL_DAMAGE_CLASS_MAGIC;
         spellInfo->SpellLevel = 0;
     });
 
-     // Strange shared cooldown
-    ApplySpellFix({ 
+    // Strange shared cooldown
+    ApplySpellFix(
+    {
         20230,  // Retaliation
         871,    // Shield Wall
         1719    // Recklessness
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx6 |= SPELL_ATTR6_IGNORE_CATEGORY_COOLDOWN_MODS;
     });
 
     // Vigilance, fixes bug with empowered renew, single target aura
-    ApplySpellFix({ 50720 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 50720 }, [](SpellInfo * spellInfo)
     {
         spellInfo->SpellFamilyName = SPELLFAMILY_WARRIOR;
     });
 
     // Sunder Armor - trigger, remove spellfamilyflags because of glyph of sunder armor
-    ApplySpellFix({ 58567 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 58567 }, [](SpellInfo * spellInfo)
     {
         spellInfo->SpellFamilyFlags = flag96(0x0, 0x0, 0x0);
     });
 
     // Sunder Armor - Old Ranks
-    ApplySpellFix({ 7405, 8380, 11596, 11597, 25225, 47467 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 7405, 8380, 11596, 11597, 25225, 47467 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TriggerSpell = 11971;
         spellInfo->Effects[EFFECT_0].Effect = SPELL_EFFECT_TRIGGER_SPELL_WITH_VALUE;
     });
-    
+
     // Improved Spell Reflection
-    ApplySpellFix({ 59725 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 59725 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_CASTER_AREA_PARTY);
     });
-    
+
     /////////////////////////////////
     ///// PRIEST
     /////////////////////////////////
 
     // Shadow Weaving
-    ApplySpellFix({ 15257, 15331, 15332 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 15257, 15331, 15332 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_CASTER);
         spellInfo->Effects[EFFECT_0].ApplyAuraName = SPELL_AURA_PROC_TRIGGER_SPELL;
     });
-    
+
     // Hymn of Hope - rewrite part of aura system or swap effects...
-    ApplySpellFix({ 64904 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 64904 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].ApplyAuraName = SPELL_AURA_MOD_INCREASE_ENERGY_PERCENT;
         spellInfo->Effects[EFFECT_2].Effect = spellInfo->Effects[EFFECT_0].Effect;
@@ -4503,26 +4525,27 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Divine Hymn
-    ApplySpellFix({ 64844 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 64844 }, [](SpellInfo * spellInfo)
     {
         spellInfo->DmgClass = SPELL_DAMAGE_CLASS_MAGIC;
         spellInfo->SpellLevel = 0;
     });
 
-    ApplySpellFix({ 
+    ApplySpellFix(
+    {
         // Spiritual Healing affects prayer of mending
-        14898, 15349, 15354, 15355, 15356,             
+        14898, 15349, 15354, 15355, 15356,
         // Divine Providence affects prayer of mending
         47562, 47564, 47565, 47566, 47567,
         // Twin Disciplines affects prayer of mending
         47586, 47587, 47588, 52802, 52803
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].SpellClassMask[1] |= 0x20; // prayer of mending
     });
 
     // Power Infusion, hack to fix stacking with arcane power
-    ApplySpellFix({ 10060 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 10060 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_2].Effect = SPELL_EFFECT_APPLY_AURA;
         spellInfo->Effects[EFFECT_2].ApplyAuraName = SPELL_AURA_ADD_PCT_MODIFIER;
@@ -4532,47 +4555,47 @@ void SpellMgr::LoadSpellInfoCorrections()
     /////////////////////////////////
     ///// DRUID
     /////////////////////////////////
-    
+
     // Lifebloom final bloom
-    ApplySpellFix({ 33778 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 33778 }, [](SpellInfo * spellInfo)
     {
         spellInfo->DmgClass = SPELL_DAMAGE_CLASS_MAGIC;
         spellInfo->SpellLevel = 0;
         spellInfo->SpellFamilyFlags = flag96(0, 0x10, 0);
     });
-    
+
     // Clearcasting
-    ApplySpellFix({ 16870 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 16870 }, [](SpellInfo * spellInfo)
     {
         spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(31); // 8 secs
     });
 
     // Owlkin Frenzy
-    ApplySpellFix({ 48391 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 48391 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Attributes |= SPELL_ATTR0_NOT_SHAPESHIFT;
     });
 
     // Item T10 Restoration 4P Bonus
-    ApplySpellFix({ 70691 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 70691 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_NO_DONE_BONUS;
     });
 
     // Faerie Fire, Faerie Fire (Feral)
-    ApplySpellFix({ 770, 16857 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 770, 16857 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx &= ~SPELL_ATTR1_UNAFFECTED_BY_SCHOOL_IMMUNE;
     });
 
     // Feral Charge - Cat
-    ApplySpellFix({ 49376, 61138, 61132, 50259 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 49376, 61138, 61132, 50259 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_NO_INITIAL_AGGRO;
     });
 
     // Glyph of Barkskin
-    ApplySpellFix({ 63058 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 63058 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].ApplyAuraName = SPELL_AURA_MOD_ATTACKER_MELEE_CRIT_CHANCE;
     });
@@ -4582,19 +4605,19 @@ void SpellMgr::LoadSpellInfoCorrections()
     /////////////////////////////////
 
     // Resurrection Sickness
-    ApplySpellFix({ 15007 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 15007 }, [](SpellInfo * spellInfo)
     {
         spellInfo->SpellFamilyName = SPELLFAMILY_GENERIC;
     });
 
     // Luck of the Draw
-    ApplySpellFix({ 72221 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 72221 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AuraInterruptFlags |= AURA_INTERRUPT_FLAG_CHANGE_MAP;
     });
 
     // Bind
-    ApplySpellFix({ 3286 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 3286 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Targets = 0; // neutral innkeepers not friendly?
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_TARGET_ANY);
@@ -4602,13 +4625,13 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Remove creature target type
-    ApplySpellFix({ 2641, 23356 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 2641, 23356 }, [](SpellInfo * spellInfo)
     {
         spellInfo->TargetCreatureType = 0;
     });
 
     // Aspect of the Viper
-    ApplySpellFix({ 34074 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 34074 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_2].Effect = SPELL_EFFECT_APPLY_AURA;
         spellInfo->Effects[EFFECT_2].TargetA = SpellImplicitTargetInfo(1);
@@ -4616,7 +4639,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Strength of Wrynn
-    ApplySpellFix({ 60509 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 60509 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_2].BasePoints = 1500;
         spellInfo->Effects[EFFECT_1].BasePoints = 150;
@@ -4624,13 +4647,13 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Playback Speech
-    ApplySpellFix({ 74209 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 74209 }, [](SpellInfo * spellInfo)
     {
         spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(1);
     });
 
     // Winterfin First Responder
-    ApplySpellFix({ 48739 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 48739 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].BasePoints = 1;
         spellInfo->Effects[EFFECT_0].RealPointsPerLevel = 0;
@@ -4640,19 +4663,19 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Army of the Dead (trigger npc aura)
-    ApplySpellFix({ 48739 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 48739 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].Amplitude = 15000;
     });
 
     // Isle of Conquest - Teleport in, missing range
-    ApplySpellFix({ 48739 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 48739 }, [](SpellInfo * spellInfo)
     {
         spellInfo->RangeEntry = sSpellRangeStore.LookupEntry(13); // 50000yd
     });
 
     // A'dal's Song of Battle
-    ApplySpellFix({ 39953 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 39953 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_SRC_CASTER);
         spellInfo->Effects[EFFECT_1].TargetA = SpellImplicitTargetInfo(TARGET_SRC_CASTER);
@@ -4664,24 +4687,25 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Wintergrasp spells
-    ApplySpellFix({ 
+    ApplySpellFix(
+    {
         57607, // Wintergrasp Catapult - Spell Plague Barrel - EffectRadiusIndex
         57619, // Wintergrasp Demolisher - Spell Hourl Boulder - EffectRadiusIndex
         57610  // Cannon (Siege Turret)
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_25_YARDS); // SPELL_EFFECT_WMO_DAMAGE
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_10_YARDS); // SPELL_EFFECT_SCHOOL_DAMAGE
     });
 
     // WintergraspCannon - Spell Fire Cannon - EffectRadiusIndex
-    ApplySpellFix({ 51422 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 51422 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_10_YARDS); // SPELL_EFFECT_SCHOOL_DAMAGE
     });
 
     // WintergraspDemolisher - Spell Ram -  EffectRadiusIndex
-    ApplySpellFix({ 54107 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 54107 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_3_YARDS); // SPELL_EFFECT_KNOCK_BACK
         spellInfo->Effects[EFFECT_1].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_3_YARDS); // SPELL_EFFECT_SCHOOL_DAMAGE
@@ -4689,7 +4713,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // WintergraspSiegeEngine - Spell Ram - EffectRadiusIndex
-    ApplySpellFix({ 51678 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 51678 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_10_YARDS); // SPELL_EFFECT_KNOCK_BACK
         spellInfo->Effects[EFFECT_1].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_10_YARDS); // SPELL_EFFECT_SCHOOL_DAMAGE
@@ -4697,52 +4721,53 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // WintergraspCatapult - Spell Plague Barrell - Range
-    ApplySpellFix({ 57606 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 57606 }, [](SpellInfo * spellInfo)
     {
         spellInfo->RangeEntry = sSpellRangeStore.LookupEntry(164); // "Catapult Range"
     });
 
     // Boulder (Demolisher)
-    ApplySpellFix({ 50999 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 50999 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(13); // 10yd
     });
 
     // Flame Breath (Catapult)
-    ApplySpellFix({ 50990 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 50990 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(19); // 18yd
     });
 
     // Jormungar Bite
-    ApplySpellFix({ 50990 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 50990 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_TARGET_ENEMY);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo();
     });
-    
+
     /////////////////////////////////
     ///// Generic NPC Spells
     /////////////////////////////////
 
     // Throw Proximity Bomb
-    ApplySpellFix({ 34095 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 34095 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_DEST_TARGET_ENEMY);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo();
     });
 
-    ApplySpellFix({ 
+    ApplySpellFix(
+    {
         53348, // DEATH KNIGHT SCARLET FIRE ARROW
         53117  // BALISTA
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->RecoveryTime = 5000;
         spellInfo->CategoryRecoveryTime = 5000;
     });
-    
+
     // Teleport To Molten Core
-    ApplySpellFix({ 25139 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 25139 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_DEATH_PERSISTENT;
     });
@@ -4757,21 +4782,21 @@ void SpellMgr::LoadSpellInfoCorrections()
 
     // Shadowfang Keep
     // Landen Stilwell Transform
-    ApplySpellFix({ 31310 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 31310 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Attributes |= SPELL_ATTR0_PASSIVE;
     });
 
     // Blackfathom Deeps
     // Shadowstalker Stealth
-    ApplySpellFix({ 5916 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 5916 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RealPointsPerLevel = 5.0f;
     });
 
     // Maraudon
     // Sneak
-    ApplySpellFix({ 22766 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 22766 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RealPointsPerLevel = 5.0f;
     });
@@ -4782,7 +4807,7 @@ void SpellMgr::LoadSpellInfoCorrections()
 
     // Shadow Labirynth
     // Murmur's Touch
-    ApplySpellFix({ 38794, 33711 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 38794, 33711 }, [](SpellInfo * spellInfo)
     {
         spellInfo->MaxAffectedTargets = 1;
         spellInfo->Effects[EFFECT_0].TriggerSpell = 33760;
@@ -4790,20 +4815,20 @@ void SpellMgr::LoadSpellInfoCorrections()
 
     // The Arcatraz
     // Negaton Field
-    ApplySpellFix({ 38794 /*Normal*/, 33711 /*Heroic*/ }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 38794 /*Normal*/, 33711 /*Heroic*/ }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_STACK_FOR_DIFF_CASTERS;
     });
 
     // Curse of the Doomsayer NORMAL
-    ApplySpellFix({ 36173 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 36173 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TriggerSpell = 36174; // Currently triggers heroic version...
     });
 
     // The Botanica
     // Crystal Channel
-    ApplySpellFix({ 34156 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 34156 }, [](SpellInfo * spellInfo)
     {
         spellInfo->RangeEntry = sSpellRangeStore.LookupEntry(35); // 35yd;
         spellInfo->ChannelInterruptFlags |= AURA_INTERRUPT_FLAG_MOVE;
@@ -4811,51 +4836,51 @@ void SpellMgr::LoadSpellInfoCorrections()
 
     // Magtheridon's Lair
     // Debris
-    ApplySpellFix({ 36449 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 36449 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Attributes |= SPELL_ATTR0_NEGATIVE_1;
     });
 
     // Soul Channel
-    ApplySpellFix({ 30531 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 30531 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_STACK_FOR_DIFF_CASTERS;
     });
-    
+
     // Debris Visual
-    ApplySpellFix({ 30632 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 30632 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo(TARGET_DEST_DYNOBJ_ALLY);
     });
 
     // Sunwell Plateu
     // Activate Sunblade Protecto
-    ApplySpellFix({ 46475, 46476 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 46475, 46476 }, [](SpellInfo * spellInfo)
     {
         spellInfo->RangeEntry = sSpellRangeStore.LookupEntry(14); // 60yd
     });
 
     // Break Ice
-    ApplySpellFix({ 46638 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 46638 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 &= ~SPELL_ATTR3_ONLY_TARGET_PLAYERS; // Obvious fail, it targets gameobject...
     });
 
     // Sinister Reflection Clone
-    ApplySpellFix({ 45785 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 45785 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Speed = 0.0f;
     });
 
     // Armageddon
-    ApplySpellFix({ 45909 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 45909 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Speed = 8.0f;
     });
 
     // Black Temple
     // Spell Absorption
-    ApplySpellFix({ 41034 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 41034 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_2].Effect = SPELL_EFFECT_APPLY_AURA;
         spellInfo->Effects[EFFECT_2].ApplyAuraName = SPELL_AURA_SCHOOL_ABSORB;
@@ -4864,47 +4889,47 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Shared Bonds
-    ApplySpellFix({ 41363 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 41363 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx &= ~SPELL_ATTR1_CHANNELED_1;
     });
 
     // Deadly Poison | Envenom
-    ApplySpellFix({ 41485, 41487 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 41485, 41487 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx6 |= SPELL_ATTR6_CAN_TARGET_INVISIBLE;
     });
 
     // Parasitic Shadowfiend
-    ApplySpellFix({ 41914 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 41914 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Attributes |= SPELL_ATTR0_NEGATIVE_1;
         spellInfo->AttributesEx3 |= SPELL_ATTR3_STACK_FOR_DIFF_CASTERS;
     });
 
     // Teleport Maiev
-    ApplySpellFix({ 41221 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 41221 }, [](SpellInfo * spellInfo)
     {
         spellInfo->RangeEntry = sSpellRangeStore.LookupEntry(13); // 0-50000yd
     });
 
     // Serpentshrine Cavern
     // Watery Grave Explosion
-    ApplySpellFix({ 37852 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 37852 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx5 |= SPELL_ATTR5_USABLE_WHILE_STUNNED;
     });
 
     // Karazhan
     // Amplify Damage
-    ApplySpellFix({ 39095 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 39095 }, [](SpellInfo * spellInfo)
     {
         spellInfo->MaxAffectedTargets = 1;
     });
 
     // Magisters' Terrace
     // Energy Feedback
-    ApplySpellFix({ 44335 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 44335 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AuraInterruptFlags |= AURA_INTERRUPT_FLAG_CHANGE_MAP;
     });
@@ -4913,16 +4938,17 @@ void SpellMgr::LoadSpellInfoCorrections()
         Raid: Battle for Mount Hyjal
         Boss: Archimonde
     */
-    ApplySpellFix({ 
-        31984, 
+    ApplySpellFix(
+    {
+        31984,
         35354  // Spell doesn't need to ignore invulnerabilities
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->Attributes = SPELL_ATTR0_ABILITY;
     });
 
     // We only need the animation, no damage
-    ApplySpellFix({ 32111 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 32111 }, [](SpellInfo * spellInfo)
     {
         spellInfo->CastTimeEntry = sSpellCastTimesStore.LookupEntry(0);
     });
@@ -4930,15 +4956,15 @@ void SpellMgr::LoadSpellInfoCorrections()
     //////////////////////////////////////////
     ////////// Vault of Archavon (VOA)
     //////////////////////////////////////////
-    
+
     // Flame Breath, catapult spell
-    ApplySpellFix({ 50989 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 50989 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Attributes &= ~SPELL_ATTR0_LEVEL_DAMAGE_CALCULATION;
     });
 
     // Koralon, Flaming Cinder missing radius index
-    ApplySpellFix({ 66690 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 66690 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(12); //100yd
         spellInfo->MaxAffectedTargets = 1;
@@ -4947,40 +4973,40 @@ void SpellMgr::LoadSpellInfoCorrections()
     //////////////////////////////////////////
     ////////// Naxxramas
     //////////////////////////////////////////
-    
+
     // Acid Volley
-    ApplySpellFix({ 54714, 29325 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 54714, 29325 }, [](SpellInfo * spellInfo)
     {
         spellInfo->MaxAffectedTargets = 1;
     });
 
     // Summon Plagued Warrior
-    ApplySpellFix({ 29237 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 29237 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].Effect = SPELL_EFFECT_DUMMY;
         spellInfo->Effects[EFFECT_1].Effect = spellInfo->Effects[EFFECT_2].Effect = 0;
     });
 
     // Icebolt
-    ApplySpellFix({ 28526 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 28526 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_TARGET_ANY);
     });
 
     // Infected Wound
-    ApplySpellFix({ 29306 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 29306 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_STACK_FOR_DIFF_CASTERS;
     });
 
     // Hopeless
-    ApplySpellFix({ 29125 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 29125 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo(TARGET_UNIT_SRC_AREA_ENTRY);
     });
 
     // Jagged Knife
-    ApplySpellFix({ 55550 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 55550 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Attributes |= SPELL_ATTR0_REQ_AMMO;
     });
@@ -4988,19 +5014,20 @@ void SpellMgr::LoadSpellInfoCorrections()
     //////////////////////////////////////////
     ////////// Gundrak
     //////////////////////////////////////////
-    
+
     // Moorabi - Transformation
-    ApplySpellFix({ 55098 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 55098 }, [](SpellInfo * spellInfo)
     {
         spellInfo->InterruptFlags |= SPELL_INTERRUPT_FLAG_INTERRUPT;
     });
 
-    ApplySpellFix({ 
+    ApplySpellFix(
+    {
         55521, // Poisoned Spear (Normal)
         58967, // Poisoned Spear (Heroic)
         55348, // Throw (Normal)
-        58966  // Throw (Heroic) 
-    }, [](SpellInfo* spellInfo)
+        58966  // Throw (Heroic)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->Attributes |= SPELL_ATTR0_REQ_AMMO;
     });
@@ -5008,9 +5035,9 @@ void SpellMgr::LoadSpellInfoCorrections()
     //////////////////////////////////////////
     ////////// The Nexus: Nexus
     //////////////////////////////////////////
-    
+
     // Charged Chaotic rift aura, trigger
-    ApplySpellFix({ 47737 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 47737 }, [](SpellInfo * spellInfo)
     {
         spellInfo->RangeEntry = sSpellRangeStore.LookupEntry(37); // 50yd
     });
@@ -5018,9 +5045,9 @@ void SpellMgr::LoadSpellInfoCorrections()
     //////////////////////////////////////////
     ////////// AHN'KAHET: THE OLD KINGDOM
     //////////////////////////////////////////
-    
+
     // Vanish
-    ApplySpellFix({ 55964 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 55964 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].Effect = 0;
         spellInfo->Effects[EFFECT_2].Effect = 0;
@@ -5029,61 +5056,62 @@ void SpellMgr::LoadSpellInfoCorrections()
     //////////////////////////////////////////
     ////////// DRAK'THARON KEEP
     //////////////////////////////////////////
-    
+
     // Trollgore - Summon Drakkari Invader
-    ApplySpellFix({ 49456, 49457, 49458 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 49456, 49457, 49458 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_DEST_DB);
     });
 
     //////////////////////////////////////////
     ////////// UTGARDE PINNACLE
-    //////////////////////////////////////////    
-    
-    ApplySpellFix({ 
+    //////////////////////////////////////////
+
+    ApplySpellFix(
+    {
         48278, // Paralyse
         47669  // Awaken subboss
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_TARGET_ANY);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo();
     });
 
     // Flame Breath
-    ApplySpellFix({ 47592 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 47592 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].Amplitude = 200;
     });
-    
+
     //////////////////////////////////////////
     ////////// UTGARDE KEEP
     //////////////////////////////////////////
-    
+
     // Skarvald, Charge
-    ApplySpellFix({ 43651 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 43651 }, [](SpellInfo * spellInfo)
     {
         spellInfo->RangeEntry = sSpellRangeStore.LookupEntry(13); // 0-50000yd
     });
 
     // Ingvar the Plunderer, Woe Strike
-    ApplySpellFix({ 42730 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 42730 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].TriggerSpell = 42739;
     });
 
-    ApplySpellFix({ 59735 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 59735 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].TriggerSpell = 59736;
     });
 
     // Ingvar the Plunderer, Ingvar transform
-    ApplySpellFix({ 42796 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 42796 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_DEATH_PERSISTENT;
     });
 
     // Hurl Dagger
-    ApplySpellFix({ 42772 /*Normal*/, 59685 /*Heroic*/ }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 42772 /*Normal*/, 59685 /*Heroic*/ }, [](SpellInfo * spellInfo)
     {
         spellInfo->Attributes |= SPELL_ATTR0_REQ_AMMO;
     });
@@ -5091,22 +5119,22 @@ void SpellMgr::LoadSpellInfoCorrections()
     //////////////////////////////////////////
     ////////// VIOLET HOLD
     //////////////////////////////////////////
-    
+
     // Control Crystal Activation
-    ApplySpellFix({ 57804 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 57804 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(1);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo();
     });
 
     // Destroy Door Seal
-    ApplySpellFix({ 58040 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 58040 }, [](SpellInfo * spellInfo)
     {
         spellInfo->ChannelInterruptFlags &= ~(AURA_INTERRUPT_FLAG_HITBYSPELL | AURA_INTERRUPT_FLAG_TAKE_DAMAGE);
     });
 
     // Ichoron, Water Blast
-    ApplySpellFix({ 54237, 59520 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 54237, 59520 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_IGNORE_HIT_RESULT;
     });
@@ -5116,7 +5144,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     //////////////////////////////////////////
 
     // Krik'thir - Mind Flay
-    ApplySpellFix({ 52586, 59367 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 52586, 59367 }, [](SpellInfo * spellInfo)
     {
         spellInfo->ChannelInterruptFlags |= AURA_INTERRUPT_FLAG_MOVE;
     });
@@ -5124,16 +5152,16 @@ void SpellMgr::LoadSpellInfoCorrections()
     //////////////////////////////////////////
     ////////// HALLS OF STONE
     //////////////////////////////////////////
-    
+
     // Glare of the Tribunal
-    ApplySpellFix({ 50988, 59870 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 50988, 59870 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_TARGET_ANY);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo();
     });
 
     // Static Charge
-    ApplySpellFix({ 50835, 59847 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 50835, 59847 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo(TARGET_UNIT_SRC_AREA_ALLY);
     });
@@ -5141,27 +5169,27 @@ void SpellMgr::LoadSpellInfoCorrections()
     //////////////////////////////////////////
     ////////// OBSIDIAN SANCTUM
     //////////////////////////////////////////
-    
+
     // Lava Strike damage
-    ApplySpellFix({ 57697 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 57697 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_DEST_DEST);
     });
 
     // Lava Strike trigger
-    ApplySpellFix({ 57578 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 57578 }, [](SpellInfo * spellInfo)
     {
         spellInfo->MaxAffectedTargets = 1;
     });
 
     // Gift of Twilight Shadow/Fire
-    ApplySpellFix({ 57835, 58766 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 57835, 58766 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx &= ~SPELL_ATTR1_CHANNELED_1;
     });
 
     // Pyrobuffet
-    ApplySpellFix({ 57557 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 57557 }, [](SpellInfo * spellInfo)
     {
         spellInfo->ExcludeTargetAuraSpell = 56911;
     });
@@ -5169,9 +5197,9 @@ void SpellMgr::LoadSpellInfoCorrections()
     //////////////////////////////////////////
     ////////// EYE OF ETERNITY
     //////////////////////////////////////////
-    
+
     // Arcane Barrage
-    ApplySpellFix({ 56397 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 56397 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_TARGET_ENEMY);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo();
@@ -5181,28 +5209,29 @@ void SpellMgr::LoadSpellInfoCorrections()
         spellInfo->Effects[EFFECT_2].TargetB = SpellImplicitTargetInfo();
     });
 
-    ApplySpellFix({ 
-        55859, // Power Spark (ground +50% dmg aura) 
+    ApplySpellFix(
+    {
+        55859, // Power Spark (ground +50% dmg aura)
         56438  // Arcane Overload (-50% dmg taken) - this is to prevent apply -> unapply -> apply ... dunno whether it's correct
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_STACK_FOR_DIFF_CASTERS;
     });
 
     // Vortex (Control Vehicle)
-    ApplySpellFix({ 56263 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 56263 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_IGNORE_HIT_RESULT;
     });
 
     // Haste (Nexus Lord, increase run speed of the disk)
-    ApplySpellFix({ 57060 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 57060 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_2].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_VEHICLE);
     });
 
     // Arcane Overload
-    ApplySpellFix({ 56430 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 56430 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].Effect = SPELL_EFFECT_TRIGGER_MISSILE;
         spellInfo->Effects[EFFECT_0].TriggerSpell = 56429;
@@ -5214,7 +5243,7 @@ void SpellMgr::LoadSpellInfoCorrections()
         spellInfo->Effects[EFFECT_2].TargetB = SpellImplicitTargetInfo();
     });
 
-    ApplySpellFix({ 56429 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 56429 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_DEST_DEST);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo();
@@ -5225,7 +5254,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Destroy Platform Event
-    ApplySpellFix({ 59099 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 59099 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].TargetA = SpellImplicitTargetInfo(22);
         spellInfo->Effects[EFFECT_1].TargetB = SpellImplicitTargetInfo(15);
@@ -5234,7 +5263,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Surge of Power (Phase 3) | Normal and Heroic
-    ApplySpellFix({ 57407, 60936 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 57407, 60936 }, [](SpellInfo * spellInfo)
     {
         spellInfo->MaxAffectedTargets = (spellInfo->Id == 60936 ? 3 : 1);
         spellInfo->InterruptFlags = 0;
@@ -5246,7 +5275,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Wyrmrest Drake - Life Burst
-    ApplySpellFix({ 57143 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 57143 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].Effect = 0;
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(0);
@@ -5260,13 +5289,13 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Alexstrasza - Gift
-    ApplySpellFix({ 61028 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 61028 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_DEST_DEST);
     });
 
     // Vortex (freeze anim)
-    ApplySpellFix({ 55883 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 55883 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AuraInterruptFlags |= AURA_INTERRUPT_FLAG_CHANGE_MAP;
     });
@@ -5274,114 +5303,114 @@ void SpellMgr::LoadSpellInfoCorrections()
     //////////////////////////////////////////
     ////////// ULDUAR
     //////////////////////////////////////////
-    
+
     // Flame Leviathan
     // Hurl Pyrite
-    ApplySpellFix({ 62490 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 62490 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].Effect = 0;
     });
 
     // Ulduar, Mimiron, Magnetic Core (summon)
-    ApplySpellFix({ 64444 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 64444 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_DEST_CASTER);
     });
-    
+
     // Ulduar, Mimiron, bomb bot explosion
-    ApplySpellFix({ 63801 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 63801 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].MiscValue = 17286;
     });
-    
+
     // Ulduar, Mimiron, Summon Flames Initial
-    ApplySpellFix({ 64563 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 64563 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx2 |= SPELL_ATTR2_CAN_TARGET_NOT_IN_LOS;
         spellInfo->AttributesEx3 |= SPELL_ATTR3_IGNORE_HIT_RESULT;
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_DEST_DEST);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo();
     });
-    
+
     // Ulduar, Mimiron, Flames (damage)
-    ApplySpellFix({ 64566 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 64566 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx2 |= SPELL_ATTR2_CAN_TARGET_NOT_IN_LOS;
         spellInfo->AttributesEx4 &= ~SPELL_ATTR4_IGNORE_RESISTANCES;
     });
 
     // Ulduar, Hodir, Starlight
-    ApplySpellFix({ 62807 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 62807 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(16); // 1yd
     });
 
     // Ulduar, General Vezax, Mark of the Faceless
-    ApplySpellFix({ 63278 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 63278 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].Effect = 0;
     });
 
     // XT-002 DECONSTRUCTOR
-    ApplySpellFix({ 62834 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 62834 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].Effect = 0;
     });
 
     // ASSEMBLY OF IRON
     // Supercharge
-    ApplySpellFix({ 61920 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 61920 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_STACK_FOR_DIFF_CASTERS;
     });
 
     // Lightning Whirl
-    ApplySpellFix({ 61916 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 61916 }, [](SpellInfo * spellInfo)
     {
         spellInfo->MaxAffectedTargets = 3;
     });
 
-    ApplySpellFix({ 63482 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 63482 }, [](SpellInfo * spellInfo)
     {
         spellInfo->MaxAffectedTargets = 8;
     });
 
     // KOLOGARN
     // Stone Grip, remove absorb aura
-    ApplySpellFix({ 62056, 63985 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 62056, 63985 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].Effect = 0;
     });
 
     // AURIAYA
     // Sentinel Blast
-    ApplySpellFix({ 64389, 64678 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 64389, 64678 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Dispel = DISPEL_MAGIC;
     });
 
     // FREYA
     // Potent Pheromones
-    ApplySpellFix({ 62619 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 62619 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx |= SPELL_ATTR1_DISPEL_AURAS_ON_IMMUNITY;
     });
 
     // Healthy spore summon periodic
-    ApplySpellFix({ 62566 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 62566 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].Amplitude = 2000;
         spellInfo->Effects[EFFECT_0].ApplyAuraName = SPELL_AURA_PERIODIC_TRIGGER_SPELL;
     });
 
     // Brightleaf Essence trigger
-    ApplySpellFix({ 62968 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 62968 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].Effect = 0; // duplicate
     });
 
     // Potent Pheromones
-    ApplySpellFix({ 64321 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 64321 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_ONLY_TARGET_PLAYERS;
         spellInfo->AttributesEx |= SPELL_ATTR1_DISPEL_AURAS_ON_IMMUNITY;
@@ -5389,20 +5418,20 @@ void SpellMgr::LoadSpellInfoCorrections()
 
     // THORIM
     // charge obr stuff
-    ApplySpellFix({ 62186 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 62186 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].Amplitude = 5000; // Duration 5 secs, amplitude 8 secs...
     });
 
     // Charge Orb P2
-    ApplySpellFix({ 62976 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 62976 }, [](SpellInfo * spellInfo)
     {
         spellInfo->RangeEntry = sSpellRangeStore.LookupEntry(6);
         spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(28);
     });
 
     // Sif's Blizzard
-    ApplySpellFix({ 62576, 62602 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 62576, 62602 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(14); // 8yd
         spellInfo->Effects[EFFECT_1].RadiusEntry = sSpellRadiusStore.LookupEntry(14); // 8yd
@@ -5410,38 +5439,38 @@ void SpellMgr::LoadSpellInfoCorrections()
 
     // YOGG-SARON
     // Protective Gaze
-    ApplySpellFix({ 64175 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 64175 }, [](SpellInfo * spellInfo)
     {
         spellInfo->RecoveryTime = 25000;
     });
 
     // Shadow Beacon
-    ApplySpellFix({ 64465 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 64465 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TriggerSpell = 64467; // why do they need two script effects :/ (this one has visual effect)
     });
 
     // Sanity
-    ApplySpellFix({ 63050 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 63050 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx6 |= SPELL_ATTR6_CAN_TARGET_INVISIBLE;
     });
 
     // Shadow Nova
-    ApplySpellFix({ 62714, 65209 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 62714, 65209 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_IGNORE_HIT_RESULT;
     });
 
     // ALGALON
     // Cosmic Smash (Algalon the Observer)
-    ApplySpellFix({ 62714, 65209 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 62714, 65209 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo(TARGET_DEST_CASTER);
     });
 
     // Cosmic Smash (Algalon the Observer)
-    ApplySpellFix({ 62311, 64596 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 62311, 64596 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx2 |= SPELL_ATTR2_CAN_TARGET_NOT_IN_LOS;
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(12); // 100yd
@@ -5449,20 +5478,20 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Constellation Phase Effect
-    ApplySpellFix({ 65509 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 65509 }, [](SpellInfo * spellInfo)
     {
         spellInfo->MaxAffectedTargets = 1;
     });
 
     // Black Hole
-    ApplySpellFix({ 62168, 65250, 62169 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 62168, 65250, 62169 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Attributes |= SPELL_ATTR0_NEGATIVE_1;
     });
 
     // TRASH
     // Ground Slam
-    ApplySpellFix({ 62625 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 62625 }, [](SpellInfo * spellInfo)
     {
         spellInfo->InterruptFlags |= SPELL_INTERRUPT_FLAG_INTERRUPT;
     });
@@ -5472,21 +5501,22 @@ void SpellMgr::LoadSpellInfoCorrections()
     //////////////////////////////////////////
 
     // Onyxia's Lair, Onyxia, Flame Breath (TriggerSpell = 0 and spamming errors in console)
-    ApplySpellFix({ 18435 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 18435 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].Effect = 0;
     });
 
     // Onyxia's Lair, Onyxia, Create Onyxia Spawner
-    ApplySpellFix({ 17647 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 17647 }, [](SpellInfo * spellInfo)
     {
         spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(37);
     });
 
-    ApplySpellFix({ 
+    ApplySpellFix(
+    {
         17646, // Onyxia's Lair, Onyxia, Summon Onyxia Whelp
         68968  // Onyxia's Lair, Onyxia, Summon Lair Guard
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->Targets |= TARGET_FLAG_DEST_LOCATION;
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_DEST_DEST);
@@ -5495,7 +5525,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Onyxia's Lair, Onyxia, Eruption:
-    ApplySpellFix({ 17731, 69294 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 17731, 69294 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].Effect = SPELL_EFFECT_DUMMY;
         spellInfo->CastTimeEntry = sSpellCastTimesStore.LookupEntry(3);
@@ -5504,23 +5534,24 @@ void SpellMgr::LoadSpellInfoCorrections()
 
     // Onyxia's Lair, Onyxia, Breath:
     // TODO: fix it by IconId / SpellVisual
-    ApplySpellFix({ 
-        18576, 18578, 18579, 18580, 18581, 18582, 18583, 18609, 18611, 
-        18612, 18613, 18614, 18615, 18616, 18584, 18585, 18586, 18587, 
-        18588, 18589, 18590, 18591, 18592, 18593, 18594, 18595, 18564, 
-        18565, 18566, 18567, 18568, 18569, 18570, 18571, 18572, 18573, 
-        18574, 18575, 18596, 18597, 18598, 18599, 18600, 18601, 18602, 
-        18603, 18604, 18605, 18606, 18607, 18617, 18619, 18620, 18621, 
-        18622, 18623, 18624, 18625, 18626, 18627, 18628, 18618, 18351, 
-        18352, 18353, 18354, 18355, 18356, 18357, 18358, 18359, 18360, 
-        18361, 17086, 17087, 17088, 17089, 17090, 17091, 17092, 17093, 
-        17094, 17095, 17097, 22267, 22268, 21132, 21133, 21135, 21136, 
-        21137, 21138, 21139 
-    }, [](SpellInfo* spellInfo)
+    ApplySpellFix(
+    {
+        18576, 18578, 18579, 18580, 18581, 18582, 18583, 18609, 18611,
+        18612, 18613, 18614, 18615, 18616, 18584, 18585, 18586, 18587,
+        18588, 18589, 18590, 18591, 18592, 18593, 18594, 18595, 18564,
+        18565, 18566, 18567, 18568, 18569, 18570, 18571, 18572, 18573,
+        18574, 18575, 18596, 18597, 18598, 18599, 18600, 18601, 18602,
+        18603, 18604, 18605, 18606, 18607, 18617, 18619, 18620, 18621,
+        18622, 18623, 18624, 18625, 18626, 18627, 18628, 18618, 18351,
+        18352, 18353, 18354, 18355, 18356, 18357, 18358, 18359, 18360,
+        18361, 17086, 17087, 17088, 17089, 17090, 17091, 17092, 17093,
+        17094, 17095, 17097, 22267, 22268, 21132, 21133, 21135, 21136,
+        21137, 21138, 21139
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(328); // 250ms
         spellInfo->Effects[EFFECT_1].TargetA = SpellImplicitTargetInfo(1);
-        
+
         if (spellInfo->Effects[EFFECT_1].Effect)
         {
             spellInfo->Effects[EFFECT_1].Effect = SPELL_EFFECT_APPLY_AURA;
@@ -5532,18 +5563,19 @@ void SpellMgr::LoadSpellInfoCorrections()
     //////////////////////////////////////////
     ////////// THE NEXUS: OCULUS
     //////////////////////////////////////////
-    
-    ApplySpellFix({ 
+
+    ApplySpellFix(
+    {
         48760,  // Oculus, Teleport to Coldarra DND
         49305   // Oculus, Teleport to Boss 1 DND
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(25);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo(17);
     });
 
     // Oculus, Drake spell Stop Time
-    ApplySpellFix({ 49838 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 49838 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_NO_INITIAL_AGGRO;
         spellInfo->ExcludeTargetAuraSpell = 51162; // exclude planar shift
@@ -5551,7 +5583,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Oculus, Varos Cloudstrider, Energize Cores
-    ApplySpellFix({ 61407, 62136, 56251, 54069 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 61407, 62136, 56251, 54069 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_CONE_ENTRY);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo();
@@ -5560,15 +5592,15 @@ void SpellMgr::LoadSpellInfoCorrections()
     //////////////////////////////////////////
     ////////// HALLS OF LIGHTNING
     //////////////////////////////////////////
-    
+
     // Halls of Lightning, Arc Weld
-    ApplySpellFix({ 59086 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 59086 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(1);
     });
 
     // Halls of Lightning, Arcing Burn
-    ApplySpellFix({ 52671, 59834 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 52671, 59834 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_STACK_FOR_DIFF_CASTERS;
     });
@@ -5576,41 +5608,41 @@ void SpellMgr::LoadSpellInfoCorrections()
     //////////////////////////////////////////
     ////////// TRIAL OF THE CHAMPION
     //////////////////////////////////////////
-    
+
     // Trial of the Champion, Death's Respite
-    ApplySpellFix({ 68306 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 68306 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(25);
         spellInfo->Effects[EFFECT_1].TargetA = SpellImplicitTargetInfo(25);
     });
 
     // Trial of the Champion, Eadric Achievement (The Faceroller)
-    ApplySpellFix({ 68197 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 68197 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo(TARGET_UNIT_SRC_AREA_ALLY);
         spellInfo->Attributes |= SPELL_ATTR0_CASTABLE_WHILE_DEAD;
     });
 
     // Trial of the Champion, Earth Shield
-    ApplySpellFix({ 67530 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 67530 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].ApplyAuraName = SPELL_AURA_PROC_TRIGGER_SPELL; // will trigger 67537
     });
 
     // Trial of the Champion, Hammer of the Righteous
-    ApplySpellFix({ 66867 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 66867 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].Effect = SPELL_EFFECT_DUMMY;
     });
 
     // Trial of the Champion, Summon Risen Jaeren/Arelas
-    ApplySpellFix({ 67705, 67715 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 67705, 67715 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx2 |= SPELL_ATTR2_CAN_TARGET_DEAD;
     });
 
     // Trial of the Champion, Ghoul Explode
-    ApplySpellFix({ 67751 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 67751 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_SRC_CASTER);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo(TARGET_UNIT_SRC_AREA_ENTRY);
@@ -5624,7 +5656,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Trial of the Champion, Desecration
-    ApplySpellFix({ 67778, 67877 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 67778, 67877 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TriggerSpell = 68766;
     });
@@ -5632,9 +5664,9 @@ void SpellMgr::LoadSpellInfoCorrections()
     //////////////////////////////////////////
     ////////// TRIAL OF THE CRUSADER
     //////////////////////////////////////////
-    
+
     // Trial of the Crusader, Jaraxxus Intro spell
-    ApplySpellFix({ 67888 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 67888 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Attributes |= SPELL_ATTR0_STOP_ATTACK_TARGET;
         spellInfo->AttributesEx |= SPELL_ATTR1_NO_THREAT;
@@ -5642,13 +5674,13 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Trial of the Crusader, Lich King Intro spell
-    ApplySpellFix({ 68193 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 68193 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo(TARGET_UNIT_SRC_AREA_ENEMY);
     });
 
     // Trial of the Crusader, Gormok, player vehicle spell, CUSTOM! (default jump to hand, not used)
-    ApplySpellFix({ 66342 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 66342 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].Effect = SPELL_EFFECT_APPLY_AURA;
         spellInfo->Effects[EFFECT_0].ApplyAuraName = SPELL_AURA_SET_VEHICLE_ID;
@@ -5661,7 +5693,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Trial of the Crusader, Gormok, Fire Bomb
-    ApplySpellFix({ 66313 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 66313 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_TARGET_ANY);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo(TARGET_DEST_TARGET_ANY);
@@ -5673,14 +5705,14 @@ void SpellMgr::LoadSpellInfoCorrections()
         spellInfo->AttributesEx3 |= SPELL_ATTR3_NO_INITIAL_AGGRO;
     });
 
-    ApplySpellFix({ 66317 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 66317 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Attributes |= SPELL_ATTR0_STOP_ATTACK_TARGET;
         spellInfo->AttributesEx |= SPELL_ATTR1_NO_THREAT;
         spellInfo->AttributesEx3 |= SPELL_ATTR3_NO_INITIAL_AGGRO;
     });
 
-    ApplySpellFix({ 66318 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 66318 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_TARGET_ANY);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo();
@@ -5690,37 +5722,37 @@ void SpellMgr::LoadSpellInfoCorrections()
         spellInfo->AttributesEx3 |= SPELL_ATTR3_NO_INITIAL_AGGRO;
     });
 
-    ApplySpellFix({ 66320, 67472, 67473, 67475 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 66320, 67472, 67473, 67475 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(7);
         spellInfo->Effects[EFFECT_1].RadiusEntry = sSpellRadiusStore.LookupEntry(7);
     });
 
     // Trial of the Crusader, Acidmaw & Dreadscale, Emerge
-    ApplySpellFix({ 66947 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 66947 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx5 |= SPELL_ATTR5_USABLE_WHILE_STUNNED;
     });
 
     // Trial of the Crusader, Jaraxxus, Curse of the Nether
-    ApplySpellFix({ 66211 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 66211 }, [](SpellInfo * spellInfo)
     {
         spellInfo->ExcludeTargetAuraSpell = 66209; // exclude Touch of Jaraxxus
     });
 
     // Trial of the Crusader, Jaraxxus, Summon Volcano
-    ApplySpellFix({ 66258, 67901 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 66258, 67901 }, [](SpellInfo * spellInfo)
     {
         spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(85); // summon for 18 seconds, 15 not enough
     });
 
     // Trial of the Crusader, Jaraxxus, Spinning Pain Spike
-    ApplySpellFix({ 66281 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 66281 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(26);
     });
 
-    ApplySpellFix({ 66287 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 66287 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].Effect = SPELL_EFFECT_APPLY_AURA;
         spellInfo->Effects[EFFECT_1].ApplyAuraName = SPELL_AURA_MOD_TAUNT;
@@ -5732,50 +5764,50 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Trial of the Crusader, Jaraxxus, Fel Fireball
-    ApplySpellFix({ 66532, 66963, 66964, 66965 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 66532, 66963, 66964, 66965 }, [](SpellInfo * spellInfo)
     {
         spellInfo->InterruptFlags |= SPELL_INTERRUPT_FLAG_INTERRUPT;
     });
 
     // tempfix, make Nether Power not stealable
-    ApplySpellFix({ 66228, 67106, 67107, 67108 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 66228, 67106, 67107, 67108 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx4 |= SPELL_ATTR4_NOT_STEALABLE;
     });
 
     // Trial of the Crusader, Faction Champions, Druid - Tranquality
-    ApplySpellFix({ 66086, 67974, 67975, 67976 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 66086, 67974, 67975, 67976 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].Effect = SPELL_EFFECT_APPLY_AREA_AURA_FRIEND;
     });
 
     // Trial of the Crusader, Faction Champions, Shaman - Earth Shield
-    ApplySpellFix({ 66063 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 66063 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].ApplyAuraName = SPELL_AURA_PROC_TRIGGER_SPELL;
         spellInfo->Effects[EFFECT_0].TriggerSpell = 66064;
     });
 
     // Trial of the Crusader, Faction Champions, Priest - Mana Burn
-    ApplySpellFix({ 66100 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 66100 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].BasePoints = 5;
         spellInfo->Effects[EFFECT_0].DieSides = 0;
     });
 
-    ApplySpellFix({ 68026 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 68026 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].BasePoints = 8;
         spellInfo->Effects[EFFECT_0].DieSides = 0;
     });
 
-    ApplySpellFix({ 68027 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 68027 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].BasePoints = 6;
         spellInfo->Effects[EFFECT_0].DieSides = 0;
     });
 
-    ApplySpellFix({ 68028 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 68028 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].BasePoints = 10;
         spellInfo->Effects[EFFECT_0].DieSides = 0;
@@ -5783,7 +5815,7 @@ void SpellMgr::LoadSpellInfoCorrections()
 
     // Trial of the Crusader, Twin Valkyr, Touch of Light/Darkness, Light/Dark Surge
     // light 0
-    ApplySpellFix({ 65950 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 65950 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(6);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo();
@@ -5793,13 +5825,13 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // light surge 0
-    ApplySpellFix({ 65767 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 65767 }, [](SpellInfo * spellInfo)
     {
         spellInfo->ExcludeTargetAuraSpell = 65686;
     });
 
     // light 1
-    ApplySpellFix({ 67296 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 67296 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(6);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo();
@@ -5809,13 +5841,13 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // light surge 1
-    ApplySpellFix({ 67274 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 67274 }, [](SpellInfo * spellInfo)
     {
         spellInfo->ExcludeTargetAuraSpell = 67222;
     });
 
     // light 2
-    ApplySpellFix({ 67297 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 67297 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(6);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo();
@@ -5825,13 +5857,13 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // light surge 2
-    ApplySpellFix({ 67275 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 67275 }, [](SpellInfo * spellInfo)
     {
         spellInfo->ExcludeTargetAuraSpell = 67223;
     });
 
     // light 3
-    ApplySpellFix({ 67298 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 67298 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(6);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo();
@@ -5841,13 +5873,13 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // light surge 3
-    ApplySpellFix({ 67276 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 67276 }, [](SpellInfo * spellInfo)
     {
         spellInfo->ExcludeTargetAuraSpell = 67224;
     });
 
     // Dark 0
-    ApplySpellFix({ 66001 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 66001 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(6);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo();
@@ -5857,13 +5889,13 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Dark surge 0
-    ApplySpellFix({ 65769 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 65769 }, [](SpellInfo * spellInfo)
     {
         spellInfo->ExcludeTargetAuraSpell = 65684;
     });
 
     // Dark 1
-    ApplySpellFix({ 67281 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 67281 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(6);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo();
@@ -5873,13 +5905,13 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Dark surge 1
-    ApplySpellFix({ 67265 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 67265 }, [](SpellInfo * spellInfo)
     {
         spellInfo->ExcludeTargetAuraSpell = 67176;
     });
 
     // Dark 2
-    ApplySpellFix({ 67282 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 67282 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(6);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo();
@@ -5889,13 +5921,13 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Dark surge 2
-    ApplySpellFix({ 67266 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 67266 }, [](SpellInfo * spellInfo)
     {
         spellInfo->ExcludeTargetAuraSpell = 67177;
     });
 
     // Dark 3
-    ApplySpellFix({ 67283 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 67283 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(6);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo();
@@ -5905,45 +5937,45 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Dark surge 3
-    ApplySpellFix({ 67267 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 67267 }, [](SpellInfo * spellInfo)
     {
         spellInfo->ExcludeTargetAuraSpell = 67178;
     });
 
     // Trial of the Crusader, Twin Valkyr, Twin's Pact
-    ApplySpellFix({ 65875, 67303, 67304, 67305, 65876, 67306, 67307, 67308 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 65875, 67303, 67304, 67305, 65876, 67306, 67307, 67308 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].Effect = 0;
         spellInfo->Effects[EFFECT_2].Effect = 0;
     });
 
     // Trial of the Crusader, Anub'arak, Emerge
-    ApplySpellFix({ 65982 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 65982 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx5 |= SPELL_ATTR5_USABLE_WHILE_STUNNED;
     });
 
     // Trial of the Crusader, Anub'arak, Penetrating Cold
-    ApplySpellFix({ 66013, 67700, 68509, 68510 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 66013, 67700, 68509, 68510 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(12); // 100yd
     });
 
     // Trial of the Crusader, Anub'arak, Shadow Strike
-    ApplySpellFix({ 66134 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 66134 }, [](SpellInfo * spellInfo)
     {
         spellInfo->InterruptFlags |= SPELL_INTERRUPT_FLAG_INTERRUPT;
         spellInfo->Effects[EFFECT_0].Effect = 0;
     });
 
     // Trial of the Crusader, Anub'arak, Pursuing Spikes
-    ApplySpellFix({ 65920, 65922, 65923 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 65920, 65922, 65923 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].ApplyAuraName = SPELL_AURA_PERIODIC_DUMMY;
     });
 
     // Trial of the Crusader, Anub'arak, Summon Scarab
-    ApplySpellFix({ 66339 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 66339 }, [](SpellInfo * spellInfo)
     {
         spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(35);
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(25);
@@ -5951,10 +5983,11 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Trial of the Crusader, Anub'arak, Achievements: The Traitor King
-    ApplySpellFix({ 
+    ApplySpellFix(
+    {
         68186, // Anub'arak Scarab Achievement 10
         68515  // Anub'arak Scarab Achievement 25
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_SRC_CASTER);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo(TARGET_UNIT_SRC_AREA_ENEMY);
@@ -5962,7 +5995,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Trial of the Crusader, Anub'arak, Spider Frenzy
-    ApplySpellFix({ 66129 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 66129 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_STACK_FOR_DIFF_CASTERS;
     });
@@ -5972,7 +6005,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     //////////////////////////////////////////
 
     // Soul Sickness
-    ApplySpellFix({ 69131 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 69131 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].ApplyAuraName = SPELL_AURA_PERIODIC_TRIGGER_SPELL;
         spellInfo->Effects[EFFECT_0].Amplitude = 8000;
@@ -5980,7 +6013,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Phantom Blast
-    ApplySpellFix({ 68982, 70322 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 68982, 70322 }, [](SpellInfo * spellInfo)
     {
         spellInfo->InterruptFlags |= SPELL_INTERRUPT_FLAG_INTERRUPT;
     });
@@ -5990,40 +6023,42 @@ void SpellMgr::LoadSpellInfoCorrections()
     //////////////////////////////////////////
 
     // Empowered Blizzard
-    ApplySpellFix({ 70131 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 70131 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_DEST_DEST);
     });
 
     // Ice Lance Volley
-    ApplySpellFix({ 70464 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 70464 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_SRC_CASTER);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo(TARGET_UNIT_SRC_AREA_ENTRY);
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(25);
     });
 
-    ApplySpellFix({ 
-        70513, // Multi-Shot 
+    ApplySpellFix(
+    {
+        70513, // Multi-Shot
         59514  // Shriek of the Highborne
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_CONE_ENTRY);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo();
     });
 
     // Icicle
-    ApplySpellFix({ 69428, 69426 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 69428, 69426 }, [](SpellInfo * spellInfo)
     {
         spellInfo->InterruptFlags = 0;
         spellInfo->AuraInterruptFlags = 0;
         spellInfo->ChannelInterruptFlags = 0;
     });
 
-    ApplySpellFix({ 
+    ApplySpellFix(
+    {
         70525, // Jaina's Call
         70639  // Call of Sylvanas
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].Effect = 0;
         spellInfo->Effects[EFFECT_1].Effect = 0;
@@ -6033,35 +6068,35 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Frost Nova
-    ApplySpellFix({ 68198 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 68198 }, [](SpellInfo * spellInfo)
     {
         spellInfo->RangeEntry = sSpellRangeStore.LookupEntry(13);
         spellInfo->Targets |= TARGET_FLAG_DEST_LOCATION;
     });
 
     // Blight
-    ApplySpellFix({ 69604, 70286 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 69604, 70286 }, [](SpellInfo * spellInfo)
     {
         spellInfo->MaxAffectedTargets = 1;
         spellInfo->AttributesEx3 |= (SPELL_ATTR3_IGNORE_HIT_RESULT | SPELL_ATTR3_ONLY_TARGET_PLAYERS);
     });
 
     // Chilling Wave
-    ApplySpellFix({ 68778, 70333 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 68778, 70333 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_DEST_TARGET_ENEMY);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo();
     });
 
     // Permafrost
-    ApplySpellFix({ 68786, 70336 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 68786, 70336 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= (SPELL_ATTR3_IGNORE_HIT_RESULT | SPELL_ATTR3_ONLY_TARGET_PLAYERS);
         spellInfo->Effects[EFFECT_2].Effect = SPELL_EFFECT_DUMMY;
     });
 
     // Pursuit
-    ApplySpellFix({ 68987 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 68987 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_TARGET_ANY);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo();
@@ -6073,37 +6108,37 @@ void SpellMgr::LoadSpellInfoCorrections()
         spellInfo->AttributesEx3 |= SPELL_ATTR3_IGNORE_HIT_RESULT;
     });
 
-    ApplySpellFix({ 69029, 70850 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 69029, 70850 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_2].Effect = 0;
     });
 
     // Explosive Barrage
-    ApplySpellFix({ 69263 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 69263 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].ApplyAuraName = SPELL_AURA_MOD_STUN;
     });
 
     // Overlord's Brand
-    ApplySpellFix({ 69172 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 69172 }, [](SpellInfo * spellInfo)
     {
         spellInfo->ProcFlags = DONE_HIT_PROC_FLAG_MASK & ~PROC_FLAG_DONE_PERIODIC;
         spellInfo->ProcChance = 100;
     });
 
     // Icy Blast
-    ApplySpellFix({ 69232 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 69232 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].TriggerSpell = 69238;
         spellInfo->AttributesEx2 |= SPELL_ATTR2_CAN_TARGET_NOT_IN_LOS;
     });
 
-    ApplySpellFix({ 69233, 69646 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 69233, 69646 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx2 |= SPELL_ATTR2_CAN_TARGET_NOT_IN_LOS;
     });
 
-    ApplySpellFix({ 69238, 69628 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 69238, 69628 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_DEST_DEST);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo(TARGET_DEST_DYNOBJ_NONE);
@@ -6113,13 +6148,13 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Hoarfrost
-    ApplySpellFix({ 69246, 69245, 69645 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 69246, 69245, 69645 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx2 |= SPELL_ATTR2_CAN_TARGET_NOT_IN_LOS;
     });
 
     // Devour Humanoid
-    ApplySpellFix({ 69503 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 69503 }, [](SpellInfo * spellInfo)
     {
         spellInfo->ChannelInterruptFlags |= 0;
         spellInfo->AuraInterruptFlags = AURA_INTERRUPT_FLAG_MOVE | AURA_INTERRUPT_FLAG_TURNING;
@@ -6128,47 +6163,47 @@ void SpellMgr::LoadSpellInfoCorrections()
     //////////////////////////////////////////
     ////////// HALLS OF REFLECTION
     //////////////////////////////////////////
-    
+
     // Falric: Defiling Horror
-    ApplySpellFix({ 72435, 72452 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 72435, 72452 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_200_YARDS);
         spellInfo->Effects[EFFECT_1].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_200_YARDS);
     });
 
     // Frostsworn General - Throw Shield
-    ApplySpellFix({ 69222, 73076 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 69222, 73076 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_2].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_TARGET_ENEMY);
     });
 
     // Halls of Reflection Clone
-    ApplySpellFix({ 69828 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 69828 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].Effect = 0;
         spellInfo->Effects[EFFECT_2].Effect = 0;
     });
 
     // Summon Ice Wall
-    ApplySpellFix({ 69768 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 69768 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_TARGET_ANY);
     });
 
-    ApplySpellFix({ 69767 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 69767 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_DEST_TARGET_ANY);
         spellInfo->Effects[EFFECT_2].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_TARGET_ANY);
     });
 
     // Essence of the Captured
-    ApplySpellFix({ 73035, 70719 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 73035, 70719 }, [](SpellInfo * spellInfo)
     {
         spellInfo->RangeEntry = sSpellRangeStore.LookupEntry(13);
     });
 
     // Achievement Check
-    ApplySpellFix({ 72830 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 72830 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_200_YARDS);
     });
@@ -6177,7 +6212,8 @@ void SpellMgr::LoadSpellInfoCorrections()
     ////////// ICECROWN CITADEL
     //////////////////////////////////////////
 
-    ApplySpellFix({ 
+    ApplySpellFix(
+    {
         70781, // Light's Hammer Teleport
         70856, // Oratory of the Damned Teleport
         70857, // Rampart of Skulls Teleport
@@ -6185,7 +6221,7 @@ void SpellMgr::LoadSpellInfoCorrections()
         70859, // Upper Spire Teleport
         70860, // Frozen Throne Teleport
         70861  // Sindragosa's Lair Teleport
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_TARGET_ANY);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo();
@@ -6195,28 +6231,29 @@ void SpellMgr::LoadSpellInfoCorrections()
         spellInfo->Effects[EFFECT_2].TargetB = SpellImplicitTargetInfo();
     });
 
-    ApplySpellFix({ 
+    ApplySpellFix(
+    {
         70960, // Bone Flurry
         71258, // Adrenaline Rush (Ymirjar Battle-Maiden)
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx &= ~SPELL_ATTR1_CHANNELED_2;
     });
 
     // Saber Lash (Lord Marrowgar)
-    ApplySpellFix({ 69055, 70814 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 69055, 70814 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_200_YARDS);
     });
 
     // Impaled (Lord Marrowgar)
-    ApplySpellFix({ 69065 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 69065 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].Effect = 0; // remove stun so Dispersion can be used
     });
 
     // Cold Flame (Lord Marrowgar)
-    ApplySpellFix({ 72701, 72702, 72703, 72704 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 72701, 72702, 72703, 72704 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_CASTER);
         spellInfo->Effects[EFFECT_1].TargetA = SpellImplicitTargetInfo(TARGET_DEST_DEST);
@@ -6225,7 +6262,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Coldflame (Lord Marrowgar)
-    ApplySpellFix({ 69138 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 69138 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].Effect = 0;
         spellInfo->Effects[EFFECT_1].TargetA = SpellImplicitTargetInfo(TARGET_DEST_DEST);
@@ -6233,19 +6270,20 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Coldflame (Lord Marrowgar)
-    ApplySpellFix({ 69146, 70823, 70824, 70825 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 69146, 70823, 70824, 70825 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(15); // 3yd instead of 5yd
         spellInfo->AttributesEx4 &= ~SPELL_ATTR4_IGNORE_RESISTANCES;
     });
 
     // Dark Martyrdom (Lady Deathwhisper)
-    ApplySpellFix({ 70897 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 70897 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx2 |= SPELL_ATTR2_CAN_TARGET_DEAD;
     });
 
-    ApplySpellFix({ 
+    ApplySpellFix(
+    {
         69075, // Bone Storm (Lord Marrowgar)
         70834, // Bone Storm (Lord Marrowgar)
         70835, // Bone Storm (Lord Marrowgar)
@@ -6260,127 +6298,131 @@ void SpellMgr::LoadSpellInfoCorrections()
         71160, // Plague Stench (Stinky)
         71161, // Plague Stench (Stinky)
         71123, // Decimate (Stinky & Precious)
-        71464  // Divine Surge (Sister Svalna) 
-    }, [](SpellInfo* spellInfo)
+        71464  // Divine Surge (Sister Svalna)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(12);   // 100yd
     });
 
     // Shadow's Fate
-    ApplySpellFix({ 71169 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 71169 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_STACK_FOR_DIFF_CASTERS;
     });
 
     // Lock Players and Tap Chest
-    ApplySpellFix({ 72347 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 72347 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 &= ~SPELL_ATTR3_NO_INITIAL_AGGRO;
     });
 
     // Award Reputation - Boss Kill
-    ApplySpellFix({ 73843, 73844, 73845, 73846 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 73843, 73844, 73845, 73846 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_50000_YARDS);
     });
 
     // Death Plague (Rotting Frost Giant)
-    ApplySpellFix({ 72864 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 72864 }, [](SpellInfo * spellInfo)
     {
         spellInfo->ExcludeTargetAuraSpell = 0;
     });
 
     // Gunship Battle, spell Below Zero
-    ApplySpellFix({ 72864 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 72864 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_IGNORE_HIT_RESULT;
     });
 
     // Resistant Skin (Deathbringer Saurfang adds)
-    ApplySpellFix({ 72723 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 72723 }, [](SpellInfo * spellInfo)
     {
         // this spell initially granted Shadow damage immunity, however it was removed but the data was left in client
         spellInfo->Effects[EFFECT_2].Effect = 0;
     });
 
-    // Mark of the Fallen Champion (Deathbringer Saurfang) 
+    // Mark of the Fallen Champion (Deathbringer Saurfang)
     // Patch 3.3.2 (2010-01-02): Deathbringer Saurfang will no longer gain blood power from Mark of the Fallen Champion.
     // Xinef: prevented in script, effect needed for Prayer of Mending
-    ApplySpellFix({ 72255, 72444, 72445, 72446 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 72255, 72444, 72445, 72446 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 &= ~SPELL_ATTR3_CANT_TRIGGER_PROC;
     });
 
     // Coldflame Jets (Traps after Saurfang)
-    ApplySpellFix({ 70460 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 70460 }, [](SpellInfo * spellInfo)
     {
         spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(1);  // 10 seconds
     });
 
-    ApplySpellFix({ 
+    ApplySpellFix(
+    {
         70461, // Coldflame Jets (Traps after Saurfang)
         71289  // Dominate Mind (Lady Deathwhisper)
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx2 |= SPELL_ATTR2_CAN_TARGET_NOT_IN_LOS;
     });
 
     // Severed Essence (Val'kyr Herald)
-    ApplySpellFix({ 71906, 71942 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 71906, 71942 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_TARGET_ENEMY);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo();
         spellInfo->Effects[EFFECT_1].Effect = 0;
     });
 
-    ApplySpellFix({ 
+    ApplySpellFix(
+    {
         71159, // Awaken Plagued Zombies (Precious)
         71302  // Awaken Ymirjar Fallen (Ymirjar Deathbringer)
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(21);
     });
 
     // Blood Prince Council, Invocation of Blood
-    ApplySpellFix({ 70981, 70982, 70952 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 70981, 70982, 70952 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].Effect = 0; // clear share health aura
     });
 
     // Ymirjar Frostbinder, Frozen Orb
-    ApplySpellFix({ 71274 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 71274 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(6);
     });
 
     // Ooze Flood (Rotface)
-    ApplySpellFix({ 69783, 69797, 69799, 69802 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 69783, 69797, 69799, 69802 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx |= SPELL_ATTR1_CANT_TARGET_SELF;
     });
 
     // Volatile Ooze Beam Protection
-    ApplySpellFix({ 70530 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 70530 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].Effect = SPELL_EFFECT_APPLY_AURA; // blizzard typo, 65 instead of 6, aura itself is defined (dummy)
     });
 
     // Professor Putricide, Gaseous Bloat (Orange Ooze Channel) -- copied attributes from Green Ooze Channel
-    ApplySpellFix({ 70672, 72455, 72832, 72833 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 70672, 72455, 72832, 72833 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Attributes |= SPELL_ATTR0_UNAFFECTED_BY_INVULNERABILITY;
         spellInfo->AttributesEx3 |= SPELL_ATTR3_IGNORE_HIT_RESULT;
     });
 
-    ApplySpellFix({ 
+    ApplySpellFix(
+    {
         71412, // Green Ooze Summon (Professor Putricide)
         71415  // Orange Ooze Summon (Professor Putricide)
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_TARGET_ANY);
     });
 
-    ApplySpellFix({ 
+    ApplySpellFix(
+    {
         71621,
         72850,
         72851,
@@ -6389,101 +6431,104 @@ void SpellMgr::LoadSpellInfoCorrections()
         73120,
         73121,
         73122  // Guzzle Potions (Professor Putricide)
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->CastTimeEntry = sSpellCastTimesStore.LookupEntry(15); // 4 sec
     });
 
     // Mutated Plague (Professor Putricide)
-    ApplySpellFix({ 72454, 72464, 72506, 72507 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 72454, 72464, 72506, 72507 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx4 |= SPELL_ATTR4_IGNORE_RESISTANCES;
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_50000_YARDS);   // 50000yd
     });
 
     // Unbound Plague (Professor Putricide) (needs target selection script)
-    ApplySpellFix({ 70911, 72854, 72855, 72856 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 70911, 72854, 72855, 72856 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo(TARGET_UNIT_TARGET_ENEMY);
     });
 
     // Mutated Transformation (Professor Putricide)
-    ApplySpellFix({ 70402, 72511, 72512, 72513 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 70402, 72511, 72512, 72513 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx2 |= SPELL_ATTR2_CANT_CRIT;
     });
 
     // Empowered Flare (Blood Prince Council)
-    ApplySpellFix({ 71708, 72785, 72786, 72787 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 71708, 72785, 72786, 72787 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_NO_DONE_BONUS;
     });
-    
-    ApplySpellFix({ 
+
+    ApplySpellFix(
+    {
         71518, // Unholy Infusion Quest Credit (Professor Putricide)
         72934, // Blood Infusion Quest Credit (Blood-Queen Lana'thel)
         72289  // Frost Infusion Quest Credit (Sindragosa)
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_200_YARDS);   // another missing radius
     });
 
     // Swarming Shadows
-    ApplySpellFix({ 71266, 72890 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 71266, 72890 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AreaGroupId = 0; // originally, these require area 4522, which is... outside of Icecrown Citadel
     });
 
-    ApplySpellFix({ 
+    ApplySpellFix(
+    {
         71301, // Summon Dream Portal (Valithria Dreamwalker)
         71977  // Summon Nightmare Portal (Valithria Dreamwalker)
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_DEST_DEST);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo();
     });
 
     // Column of Frost (visual marker)
-    ApplySpellFix({ 70715 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 70715 }, [](SpellInfo * spellInfo)
     {
         spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(32); // 6 seconds (missing)
     });
 
     // Mana Void (periodic aura)
-    ApplySpellFix({ 71085 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 71085 }, [](SpellInfo * spellInfo)
     {
         spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(9); // 30 seconds (missing)
     });
 
     // Summon Suppressor (needs target selection script)
-    ApplySpellFix({ 70936 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 70936 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_TARGET_ANY);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo();
     });
 
     // Corruption
-    ApplySpellFix({ 70602 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 70602 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_STACK_FOR_DIFF_CASTERS;
     });
 
-    ApplySpellFix({ 
+    ApplySpellFix(
+    {
         72706, // Achievement Check (Valithria Dreamwalker)
         71357  // Achievement Check (Valithria Dreamwalker)
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_200_YARDS);   // 200yd
     });
 
     // Sindragosa's Fury
-    ApplySpellFix({ 70598 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 70598 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_DEST_DEST);
     });
 
     // Tail Smash (Sindragosa)
-    ApplySpellFix({ 71077 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 71077 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_DEST_CASTER_BACK);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo(TARGET_UNIT_DEST_AREA_ENEMY);
@@ -6492,79 +6537,81 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Frost Bomb
-    ApplySpellFix({ 69846 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 69846 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Speed = 0.0f;    // This spell's summon happens instantly
     });
 
     // Mystic Buffet (Sindragosa) - remove obsolete spell effect with no targets
-    ApplySpellFix({ 
+    ApplySpellFix(
+    {
         70127,
         72528,
         72529,
         72530
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].Effect = 0;
     });
 
     // Sindragosa, Frost Aura
-    ApplySpellFix({ 70084, 71050, 71051, 71052 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 70084, 71050, 71051, 71052 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Attributes &= ~SPELL_ATTR0_UNAFFECTED_BY_INVULNERABILITY;
     });
 
     // Ice Lock
-    ApplySpellFix({ 71614 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 71614 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Mechanic = MECHANIC_STUN;
     });
 
     // Lich King, Infest
-    ApplySpellFix({ 70541, 73779, 73780, 73781 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 70541, 73779, 73780, 73781 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx2 |= SPELL_ATTR2_CAN_TARGET_NOT_IN_LOS;
     });
 
     // Lich King, Necrotic Plague
-    ApplySpellFix({ 70337, 73912, 73913, 73914, 70338, 73785, 73786, 73787 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 70337, 73912, 73913, 73914, 70338, 73785, 73786, 73787 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_IGNORE_HIT_RESULT;
     });
 
     // Ice Pulse
-    ApplySpellFix({ 69099, 73776, 73777, 73778 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 69099, 73776, 73777, 73778 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx2 |= SPELL_ATTR2_CANT_CRIT;
         spellInfo->AttributesEx4 &= ~SPELL_ATTR4_IGNORE_RESISTANCES;
     });
 
     // Fury of Frostmourne
-    ApplySpellFix({ 72350 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 72350 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_50000_YARDS);   // 50000yd
         spellInfo->Effects[EFFECT_1].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_50000_YARDS);   // 50000yd
     });
 
-    ApplySpellFix({ 
+    ApplySpellFix(
+    {
         72351, // Fury of Frostmourne
         72431, // Jump (removes Fury of Frostmourne debuff)
         72429, // Mass Resurrection
-        73159  // Play Movie 
-    }, [](SpellInfo* spellInfo)
+        73159  // Play Movie
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_50000_YARDS);   // 50000yd
     });
 
     // Raise Dead
-    ApplySpellFix({ 72376 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 72376 }, [](SpellInfo * spellInfo)
     {
         spellInfo->MaxAffectedTargets = 4;
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_50000_YARDS);   // 50000yd
     });
 
     // Jump
-    ApplySpellFix({ 71809 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 71809 }, [](SpellInfo * spellInfo)
     {
         spellInfo->RangeEntry = sSpellRangeStore.LookupEntry(5); // 40yd
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_10_YARDS); // 10yd
@@ -6572,31 +6619,31 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Broken Frostmourne
-    ApplySpellFix({ 72405 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 72405 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_200_YARDS);   // 200yd
     });
 
     // Summon Shadow Trap
-    ApplySpellFix({ 73540 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 73540 }, [](SpellInfo * spellInfo)
     {
         spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(3);  // 60 seconds
     });
 
     // Shadow Trap (visual)
-    ApplySpellFix({ 73530 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 73530 }, [](SpellInfo * spellInfo)
     {
         spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(28); // 5 seconds
     });
 
     // Shadow Trap
-    ApplySpellFix({ 73529 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 73529 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_10_YARDS);   // 10yd
     });
 
     // Raging Spirit Visual
-    ApplySpellFix({ 69198 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 69198 }, [](SpellInfo * spellInfo)
     {
         spellInfo->RangeEntry = sSpellRangeStore.LookupEntry(13);             // 50000yd
         spellInfo->AttributesEx2 |= SPELL_ATTR2_CAN_TARGET_NOT_IN_LOS;
@@ -6604,7 +6651,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Defile
-    ApplySpellFix({ 72762 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 72762 }, [](SpellInfo * spellInfo)
     {
         spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(559); // 53 seconds
         spellInfo->ExcludeCasterAuraSpell = 0;
@@ -6613,20 +6660,20 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Defile
-    ApplySpellFix({ 72743 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 72743 }, [](SpellInfo * spellInfo)
     {
         spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(22); // 45 seconds
     });
 
     // Defile
-    ApplySpellFix({ 72754, 73708, 73709, 73710 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 72754, 73708, 73709, 73710 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_200_YARDS);   // 200yd
         spellInfo->Effects[EFFECT_1].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_200_YARDS);   // 200yd
     });
 
     // Val'kyr Target Search
-    ApplySpellFix({ 69030 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 69030 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_200_YARDS);   // 200yd
         spellInfo->Effects[EFFECT_1].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_200_YARDS);   // 200yd
@@ -6634,7 +6681,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Harvest Souls
-    ApplySpellFix({ 73654, 74295, 74296, 74297 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 73654, 74295, 74296, 74297 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_50000_YARDS);   // 50000yd
         spellInfo->Effects[EFFECT_1].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_50000_YARDS);   // 50000yd
@@ -6642,63 +6689,63 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Restore Soul
-    ApplySpellFix({ 72595, 73650 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 72595, 73650 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_200_YARDS);   // 200yd
     });
 
     // Kill Frostmourne Players
-    ApplySpellFix({ 75127 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 75127 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_50000_YARDS);   // 50000yd
     });
 
     // Harvest Soul
-    ApplySpellFix({ 73655 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 73655 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_NO_DONE_BONUS;
     });
 
     // Destroy Soul
-    ApplySpellFix({ 74086 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 74086 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_200_YARDS);   // 200yd
     });
 
     // Summon Spirit Bomb
-    ApplySpellFix({ 74302, 74342 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 74302, 74342 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_200_YARDS);   // 200yd
         spellInfo->MaxAffectedTargets = 1;
     });
 
     // Summon Spirit Bomb
-    ApplySpellFix({ 74341, 74343 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 74341, 74343 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_200_YARDS);   // 200yd
         spellInfo->MaxAffectedTargets = 3;
     });
 
     // Summon Spirit Bomb
-    ApplySpellFix({ 73579 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 73579 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_25_YARDS);   // 25yd
     });
 
     // Trigger Vile Spirit (Inside, Heroic)
-    ApplySpellFix({ 73582 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 73582 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_50000_YARDS);   // 50000yd
     });
 
     // Scale Aura (used during Dominate Mind from Lady Deathwhisper)
-    ApplySpellFix({ 73261 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 73261 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AuraInterruptFlags |= AURA_INTERRUPT_FLAG_CHANGE_MAP;
     });
 
     // Leap to a Random Location
-    ApplySpellFix({ 70485 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 70485 }, [](SpellInfo * spellInfo)
     {
         spellInfo->RangeEntry = sSpellRangeStore.LookupEntry(6); // 100yd
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_10_YARDS);
@@ -6706,7 +6753,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Empowered Blood
-    ApplySpellFix({ 70227, 70232 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 70227, 70232 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AreaGroupId = 2452; // Whole icc instead of Crimson Halls only, remove when area calculation is fixed
     });
@@ -6714,51 +6761,52 @@ void SpellMgr::LoadSpellInfoCorrections()
     //////////////////////////////////////////
     ////////// RUBY SANCTUN
     //////////////////////////////////////////
-    
+
     // Repelling Wave
-    ApplySpellFix({ 74509 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 74509 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_20_YARDS);
         spellInfo->Effects[EFFECT_1].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_20_YARDS);
     });
 
     // Rallying Shout
-    ApplySpellFix({ 75414 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 75414 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_20_YARDS);
     });
 
     // Barrier Channel
-    ApplySpellFix({ 76221 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 76221 }, [](SpellInfo * spellInfo)
     {
         spellInfo->ChannelInterruptFlags &= ~(AURA_INTERRUPT_FLAG_TURNING | AURA_INTERRUPT_FLAG_MOVE);
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_NEARBY_ENTRY);
     });
 
     // Intimidating Roar
-    ApplySpellFix({ 74384 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 74384 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_100_YARDS);
         spellInfo->Effects[EFFECT_1].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_100_YARDS);
     });
 
-    ApplySpellFix({ 
+    ApplySpellFix(
+    {
         74562, // Fiery Combustion
         74792  // Soul Consumption
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx |= SPELL_ATTR1_CANT_BE_REDIRECTED;
     });
 
     // Combustion
-    ApplySpellFix({ 75883, 75884 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 75883, 75884 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_6_YARDS);
         spellInfo->Effects[EFFECT_1].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_6_YARDS);
     });
 
     // Consumption
-    ApplySpellFix({ 75875, 75876 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 75875, 75876 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_6_YARDS);
         spellInfo->Effects[EFFECT_1].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_6_YARDS);
@@ -6767,19 +6815,19 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Soul Consumption
-    ApplySpellFix({ 74799 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 74799 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_12_YARDS);
     });
 
     // Twilight Cutter
-    ApplySpellFix({ 74769, 77844, 77845, 77846 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 74769, 77844, 77845, 77846 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_100_YARDS);
     });
 
     // Twilight Mending
-    ApplySpellFix({ 75509 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 75509 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx6 |= SPELL_ATTR6_CAN_TARGET_INVISIBLE;
         spellInfo->AttributesEx2 |= SPELL_ATTR2_CAN_TARGET_NOT_IN_LOS;
@@ -6788,21 +6836,22 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Meteor Strike
-    ApplySpellFix({ 74637 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 74637 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Speed = 0;
     });
 
     // Blazing Aura
-    ApplySpellFix({ 75885, 75886 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 75885, 75886 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx4 &= ~SPELL_ATTR4_IGNORE_RESISTANCES;
     });
 
-    ApplySpellFix({ 
+    ApplySpellFix(
+    {
         75952, // Meteor Strike
         74629  // Combustion Periodic
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx4 &= ~SPELL_ATTR4_IGNORE_RESISTANCES;
     });
@@ -6812,7 +6861,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     // ///////////////////////////////////////////
 
     // Going Bearback (12851)
-    ApplySpellFix({ 54897 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 54897 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].Effect = SPELL_EFFECT_DUMMY;
         spellInfo->Effects[EFFECT_1].RadiusEntry = spellInfo->Effects[EFFECT_0].RadiusEntry;
@@ -6821,80 +6870,81 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Still At It (12644)
-    ApplySpellFix({ 51931, 51932, 51933 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 51931, 51932, 51933 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(38);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo();
     });
 
     // Rallying the Troops (12070)
-    ApplySpellFix({ 47394 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 47394 }, [](SpellInfo * spellInfo)
     {
         spellInfo->ExcludeTargetAuraSpell = 47394;
     });
 
     // A Tangled Skein (12555)
-    ApplySpellFix({ 51165, 51173 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 51165, 51173 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_NO_INITIAL_AGGRO;
     });
 
     // A Cloudlet of Classy Cologne (24635)
-    ApplySpellFix({ 
+    ApplySpellFix(
+    {
         69563, // A Cloudlet of Classy Cologne (24635)
         69445, // A Perfect Puff of Perfume (24629)
         69489  // Bonbon Blitz (24636)
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_CASTER);
     });
 
     // Control (9595)
-    ApplySpellFix({ 30790 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 30790 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].MiscValue = 0;
     });
 
     // Reclusive Runemaster (12150)
-    ApplySpellFix({ 48028 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 48028 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_SRC_CASTER);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo(TARGET_UNIT_SRC_AREA_ENEMY);
     });
 
     // Mastery of
-    ApplySpellFix({ 65147 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 65147 }, [](SpellInfo * spellInfo)
     {
         spellInfo->CategoryEntry = sSpellCategoryStore.LookupEntry(1244);
         spellInfo->CategoryRecoveryTime = 1500;
     });
 
     // Weakness to Lightning (11896)
-    ApplySpellFix({ 46432 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 46432 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 &= ~SPELL_ATTR3_DEATH_PERSISTENT;
     });
 
     // Wrangle Some Aether Rays! (11065)
-    ApplySpellFix({ 40856 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 40856 }, [](SpellInfo * spellInfo)
     {
         spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(27); // 3000ms
     });
 
     // The Black Knight's Orders (13663)
-    ApplySpellFix({ 63163 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 63163 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].BasePoints = 52390;
     });
 
     // The Warp Rifts (10278)
-    ApplySpellFix({ 34888 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 34888 }, [](SpellInfo * spellInfo)
     {
         spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(5); // 300 secs
     });
 
     // The Smallest Creatures (10720)
-    ApplySpellFix({ 38544 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 38544 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].MiscValueB = 427;
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(1);
@@ -6902,39 +6952,39 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Ridding the red rocket
-    ApplySpellFix({ 49177 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 49177 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].BasePoints = 1; // corrects seat id (points - 1 = seatId)
     });
 
     // The Iron Colossus (13007)
-    ApplySpellFix({ 56513, 56524 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 56513, 56524 }, [](SpellInfo * spellInfo)
     {
         spellInfo->RecoveryTime = (spellInfo->Id == 56524 ? 6000 : 2000);
     });
 
     // Kaw the Mammoth Destroyer (11879)
-    ApplySpellFix({ 46260 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 46260 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx2 |= SPELL_ATTR2_CAN_TARGET_NOT_IN_LOS;
     });
 
     // That's Abominable (13264, 13276, 13288, 13289)
-    ApplySpellFix({ 59565 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 59565 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].MiscValueB = 1721; // controlable guardian
     });
 
     // Investigate the Blue Recluse (1920)
     // Investigate the Alchemist Shop (1960)
-    ApplySpellFix({ 9095 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 9095 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].ApplyAuraName = SPELL_AURA_DUMMY;
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(13);
     });
 
     // Dragonmaw Race: All parts
-    ApplySpellFix({ 40890 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 40890 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Targets |= TARGET_FLAG_DEST_LOCATION;
         spellInfo->Effects[EFFECT_0].TriggerSpell = 40905;
@@ -6943,7 +6993,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Trope's Slime Cannon
-    ApplySpellFix({ 40909 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 40909 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Targets |= TARGET_FLAG_DEST_LOCATION;
         spellInfo->Effects[EFFECT_0].TriggerSpell = 40905;
@@ -6952,7 +7002,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Corlok's Skull Barrage
-    ApplySpellFix({ 40894 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 40894 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Targets |= TARGET_FLAG_DEST_LOCATION;
         spellInfo->Effects[EFFECT_0].TriggerSpell = 40900;
@@ -6961,7 +7011,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Ichman's Blazing Fireball
-    ApplySpellFix({ 40928 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 40928 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Targets |= TARGET_FLAG_DEST_LOCATION;
         spellInfo->Effects[EFFECT_0].TriggerSpell = 40929;
@@ -6970,7 +7020,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Mulverick's Great Balls of Lightning
-    ApplySpellFix({ 40930 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 40930 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Targets |= TARGET_FLAG_DEST_LOCATION;
         spellInfo->Effects[EFFECT_0].TriggerSpell = 40931;
@@ -6979,7 +7029,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Sky Shatter
-    ApplySpellFix({ 40945 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 40945 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Targets |= TARGET_FLAG_DEST_LOCATION;
         spellInfo->Effects[EFFECT_0].TriggerSpell = 41064;
@@ -6988,92 +7038,92 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Gauging the Resonant Frequency (10594)
-    ApplySpellFix({ 37390 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 37390 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].MiscValueB = 181;
     });
 
     // Where in the World is Hemet Nesingwary? (12521)
-    ApplySpellFix({ 50860 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 50860 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].BasePoints = 50860;
     });
 
-    ApplySpellFix({ 50861 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 50861 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].BasePoints = 0;
     });
 
     // Krolmir, Hammer of Storms (13010)
-    ApplySpellFix({ 56606, 56541 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 56606, 56541 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].BasePoints = 1;
     });
 
     // Blightbeasts be Damned! (12072)
-    ApplySpellFix({ 47424 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 47424 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AuraInterruptFlags &= ~AURA_INTERRUPT_FLAG_NOT_ABOVEWATER;
     });
 
     // Leading the Charge (13380), All Infra-Green bomber quests
-    ApplySpellFix({ 59059 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 59059 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx4 &= ~SPELL_ATTR4_CAN_CAST_WHILE_CASTING;
     });
 
     // Dark Horizon (12664), Reunited (12663)
-    ApplySpellFix({ 52190 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 52190 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].BasePoints = 52391 - 1;
     });
 
     // The Sum is Greater than the Parts (13043) - Chained Grip
-    ApplySpellFix({ 60540 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 60540 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].MiscValue = 300;
     });
 
     // Not a Bug (13342)
-    ApplySpellFix({ 60531 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 60531 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx2 |= SPELL_ATTR2_CAN_TARGET_DEAD;
     });
 
     // Frankly,  It Makes No Sense... (10672)
-    ApplySpellFix({ 37851 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 37851 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_NO_INITIAL_AGGRO;
     });
 
     // Honor Challenge (12939)
-    ApplySpellFix({ 21855 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 21855 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_NO_INITIAL_AGGRO;
     });
 
     // Convocation at Zol'Heb (12730)
-    ApplySpellFix({ 52956 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 52956 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_DEST_AREA_ENTRY);
     });
 
     // Mangletooth Quests (http://www.wowhead.com/npc=3430)
-    ApplySpellFix({ 7764, 10767, 16610, 16612, 16618, 17013 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 7764, 10767, 16610, 16612, 16618, 17013 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx2 |= SPELL_ATTR2_CAN_TARGET_NOT_IN_LOS;
         spellInfo->AttributesEx5 |= SPELL_ATTR5_SKIP_CHECKCAST_LOS_CHECK;
     });
 
     // Crushing the Crown
-    ApplySpellFix({ 71024 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 71024 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_DEST_DYNOBJ_NONE);
     });
 
     // Battle for the Undercity
     // Cyclone fall
-    ApplySpellFix({ 59892 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 59892 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].Effect = SPELL_EFFECT_APPLY_AREA_AURA_FRIEND;
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_10_YARDS);
@@ -7086,118 +7136,119 @@ void SpellMgr::LoadSpellInfoCorrections()
     // ///////////////////////////////////////////
 
     // Enchant Lightweave Embroidery
-    ApplySpellFix({ 55637 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 55637 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].MiscValue = 126;
     });
 
     // Magic Broom
-    ApplySpellFix({ 47977 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 47977 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].Effect = 0;
         spellInfo->Effects[EFFECT_1].Effect = 0;
     });
 
     // Titanium Seal of Dalaran, Toss your luck
-    ApplySpellFix({ 60476 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 60476 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_CASTER);
     });
 
     // Mind Amplification Dish, change charm aura
-    ApplySpellFix({ 26740 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 26740 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].ApplyAuraName = SPELL_AURA_MOD_CHARM;
     });
 
     // Persistent Shield (fixes idiocity)
-    ApplySpellFix({ 26467 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 26467 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].ApplyAuraName = SPELL_AURA_PROC_TRIGGER_SPELL_WITH_VALUE;
         spellInfo->Effects[EFFECT_0].TriggerSpell = 26470;
     });
 
     // Deadly Swiftness
-    ApplySpellFix({ 31255 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 31255 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TriggerSpell = 22588;
     });
 
     // Black Magic enchant
-    ApplySpellFix({ 59630 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 59630 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Attributes |= SPELL_ATTR0_PASSIVE;
     });
 
     // Precious's Ribbon
-    ApplySpellFix({ 72968 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 72968 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_DEATH_PERSISTENT;
     });
 
-    ApplySpellFix({ 
+    ApplySpellFix(
+    {
         71646, // Item - Bauble of True Blood 10m
         71607, // Item - Bauble of True Blood 25m
         71610, // Item - Althor's Abacus trigger 10m
         71641  // Item - Althor's Abacus trigger 25m
-    }, [](SpellInfo* spellInfo)
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->DmgClass = SPELL_DAMAGE_CLASS_MAGIC;
         spellInfo->SpellLevel = 0;
     });
 
     // Drain Life - Bryntroll Normal / Heroic
-    ApplySpellFix({ 71838, 71839 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 71838, 71839 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx2 |= SPELL_ATTR2_CANT_CRIT;
         spellInfo->AttributesEx4 |= SPELL_ATTR4_IGNORE_RESISTANCES;
     });
 
     // Alchemist's Stone
-    ApplySpellFix({ 17619 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 17619 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_DEATH_PERSISTENT;
     });
 
     // Gnomish Death Ray
-    ApplySpellFix({ 13278, 13280 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 13278, 13280 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_TARGET_ENEMY);
     });
 
     // Stormchops
-    ApplySpellFix({ 43730 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 43730 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].TargetA = SpellImplicitTargetInfo(1);
         spellInfo->Effects[EFFECT_1].TargetB = SpellImplicitTargetInfo();
     });
 
     // Savory Deviate Delight (transformations), allow to mount while transformed
-    ApplySpellFix({ 8219, 8220, 8221, 8222 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 8219, 8220, 8221, 8222 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Attributes &= ~SPELL_ATTR0_UNAFFECTED_BY_INVULNERABILITY;
     });
 
     // Clamlette Magnifique
-    ApplySpellFix({ 72623 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 72623 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].BasePoints = spellInfo->Effects[EFFECT_1].BasePoints;
     });
 
     // Compact Harvest Reaper
-    ApplySpellFix({ 4078 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 4078 }, [](SpellInfo * spellInfo)
     {
         spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(6); // 10 minutes
     });
 
     // Dragon Kite, Tuskarr Kite - Kite String
-    ApplySpellFix({ 45192 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 45192 }, [](SpellInfo * spellInfo)
     {
         spellInfo->RangeEntry = sSpellRangeStore.LookupEntry(6); // 100yd
     });
 
     // Frigid Frostling, Infrigidate
-    ApplySpellFix({ 74960 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 74960 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(9); // 20yd
     });
@@ -7211,7 +7262,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     //////////////////////////////////////////
 
     // Apple Trap
-    ApplySpellFix({ 43450 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 43450 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_SRC_AREA_ENEMY);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo(TARGET_UNIT_CASTER);
@@ -7219,19 +7270,19 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Dark Iron Attack - spawn mole machine
-    ApplySpellFix({ 43563 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 43563 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_2].Effect = 0; // summon GO's manually
     });
 
     // Throw Mug visual
-    ApplySpellFix({ 42300 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 42300 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_TARGET_ANY);
     });
 
     // Dark Iron knockback Aura
-    ApplySpellFix({ 42299 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 42299 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].ApplyAuraName = SPELL_AURA_DUMMY;
         spellInfo->Effects[EFFECT_0].MiscValue = 100;
@@ -7239,7 +7290,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Chug and Chuck!
-    ApplySpellFix({ 42436 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 42436 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_SRC_CASTER);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo(TARGET_UNIT_SRC_AREA_ENTRY);
@@ -7248,19 +7299,19 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Catch the Wild Wolpertinger!
-    ApplySpellFix({ 41621 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 41621 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].Effect = SPELL_EFFECT_DUMMY;
     });
 
     // Brewfest quests
-    ApplySpellFix({ 47134, 51798 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 47134, 51798 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].Effect = 0;
     });
 
     // The Heart of The Storms (12998)
-    ApplySpellFix({ 43528 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 43528 }, [](SpellInfo * spellInfo)
     {
         spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(18);
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(25);
@@ -7271,20 +7322,20 @@ void SpellMgr::LoadSpellInfoCorrections()
     //////////////////////////////////////////
 
     // Water splash
-    ApplySpellFix({ 42348 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 42348 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].Effect = 0;
     });
 
     // Summon Lantersn
-    ApplySpellFix({ 44255, 44231 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 44255, 44231 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_DEST_DEST);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo();
     });
 
     // Throw Head Back
-    ApplySpellFix({ 42401 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 42401 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_DEST_DEST);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo();
@@ -7293,29 +7344,29 @@ void SpellMgr::LoadSpellInfoCorrections()
     //////////////////////////////////////////
     ////////// Pilgrim's Bounty
     //////////////////////////////////////////
-    
+
     // Various food
-    ApplySpellFix({ 65418 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 65418 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_2].TriggerSpell = 65410;
     });
 
-    ApplySpellFix({ 65422 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 65422 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_2].TriggerSpell = 65414;
     });
 
-    ApplySpellFix({ 65419 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 65419 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_2].TriggerSpell = 65416;
     });
 
-    ApplySpellFix({ 65420 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 65420 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_2].TriggerSpell = 65412;
     });
 
-    ApplySpellFix({ 65421 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 65421 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_2].TriggerSpell = 65415;
     });
@@ -7323,9 +7374,9 @@ void SpellMgr::LoadSpellInfoCorrections()
     //////////////////////////////////////////
     ////////// Midsummer
     //////////////////////////////////////////
-    
+
     // Stamp Out Bonfire
-    ApplySpellFix({ 45437 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 45437 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].Effect = SPELL_EFFECT_DUMMY;
         spellInfo->Effects[EFFECT_1].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_NEARBY_ENTRY);
@@ -7333,7 +7384,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Light Bonfire (DND)
-    ApplySpellFix({ 29831 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 29831 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx2 |= SPELL_ATTR2_CAN_TARGET_NOT_IN_LOS;
     });
@@ -7341,9 +7392,9 @@ void SpellMgr::LoadSpellInfoCorrections()
     //////////////////////////////////////////
     ////////// Misc Events
     //////////////////////////////////////////
-    
+
     // Infernal
-    ApplySpellFix({ 33240 }, [](SpellInfo* spellInfo)
+    ApplySpellFix({ 33240 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_DEST_TARGET_ANY);
         spellInfo->Effects[EFFECT_1].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_TARGET_ANY);
@@ -7351,17 +7402,18 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Check for SPELL_ATTR7_INTERRUPT_ONLY_NONPLAYER
-    ApplySpellFix({ 
+    ApplySpellFix(
+    {
         47476, // Deathknight - Strangulate
         15487, // Priest - Silence
         5211,  // Druid - Bash  - R1
         6798,  // Druid - Bash  - R2
-        8983   // Druid - Bash  - R3 
-    }, [](SpellInfo* spellInfo)
+        8983   // Druid - Bash  - R3
+    }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx7 |= SPELL_ATTR7_INTERRUPT_ONLY_NONPLAYER;
     });
-    
+
     for (auto spellInfo : mSpellInfoMap)
     {
         for (uint8 j = 0; j < MAX_SPELL_EFFECTS; ++j)
@@ -7392,7 +7444,7 @@ void SpellMgr::LoadSpellInfoCorrections()
 
         if (spellInfo->ActiveIconID == 2158) // flight
             spellInfo->Attributes |= SPELL_ATTR0_PASSIVE;
-        
+
         switch (spellInfo->SpellFamilyName)
         {
             case SPELLFAMILY_PALADIN:
@@ -7424,7 +7476,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     properties->Type = SUMMON_TYPE_TOTEM;
     properties = const_cast<SummonPropertiesEntry*>(sSummonPropertiesStore.LookupEntry(647)); // 52893
     properties->Type = SUMMON_TYPE_TOTEM;
-    
+
     if ((properties = const_cast<SummonPropertiesEntry*>(sSummonPropertiesStore.LookupEntry(628)))) // Hungry Plaguehound
     {
         properties->Category = SUMMON_CATEGORY_PET;
