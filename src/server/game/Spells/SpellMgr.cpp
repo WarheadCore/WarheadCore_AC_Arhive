@@ -3327,7 +3327,7 @@ void SpellMgr::LoadSpellInfoCorrections()
         45634  // Neural Needle
     }, [](SpellInfo * spellInfo)
     {
-        spellInfo->MaxAffectedTargets = 1;
+        spellInfo->AttributesEx4 &= ~SPELL_ATTR4_CAN_CAST_WHILE_CASTING;
     });
 
     ApplySpellFix(
@@ -3364,8 +3364,8 @@ void SpellMgr::LoadSpellInfoCorrections()
     // Headless Horseman
     ApplySpellFix(
     {
-        42818, // Headless Horseman - Wisp Flight Port
-        42821  // Headless Horseman - Wisp Flight Missile
+        42818, // Wisp Flight Port
+        42821  // Wisp Flight Missile
     }, [](SpellInfo * spellInfo)
     {
         spellInfo->RangeEntry = sSpellRangeStore.LookupEntry(6); // 100 yards
@@ -3567,7 +3567,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Ebon Plague
-    ApplySpellFix({ 41013 }, [](SpellInfo * spellInfo)
+    ApplySpellFix({ 51735, 51734, 51726 }, [](SpellInfo * spellInfo)
     {
         spellInfo->SpellFamilyFlags[2] = 0x10;
         spellInfo->Effects[EFFECT_1].ApplyAuraName = SPELL_AURA_MOD_DAMAGE_PERCENT_TAKEN;
@@ -3595,11 +3595,8 @@ void SpellMgr::LoadSpellInfoCorrections()
 
     // target allys instead of enemies, target A is src_caster, spells with effect like that have ally target
     // this is the only known exception, probably just wrong data
-    ApplySpellFix(
-    {
-        29214, // Wrath of the Plaguebringer
-        54836  // Wrath of the Plaguebringer
-    }, [](SpellInfo * spellInfo)
+    /// Wrath of the Plaguebringer
+    ApplySpellFix({ 29214, 54836 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo(TARGET_UNIT_SRC_AREA_ALLY);
         spellInfo->Effects[EFFECT_1].TargetB = SpellImplicitTargetInfo(TARGET_UNIT_SRC_AREA_ALLY);
