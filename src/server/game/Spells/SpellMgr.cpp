@@ -4102,7 +4102,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     // Horn of Winter, stacking issues
     ApplySpellFix({ 57330, 57623 }, [](SpellInfo* spellInfo)
     {
-        spellInfo->Effects[EFFECT_1].TargetA = 0;
+        spellInfo->Effects[EFFECT_1].TargetA = SpellImplicitTargetInfo();
     });
 
     // Scourge Strike trigger
@@ -4376,14 +4376,14 @@ void SpellMgr::LoadSpellInfoCorrections()
     // Mirror Image - Summon Spells
     ApplySpellFix({ 58831, 58833, 58834, 65047 }, [](SpellInfo* spellInfo)
     {
-        spellInfo->Effects[EFFECT_0].TargetA = TARGET_DEST_CASTER;
+        spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_DEST_CASTER);
         spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(0);
     });
 
     // Initialize Images (Mirror Image)
     ApplySpellFix({ 58836 }, [](SpellInfo* spellInfo)
     {
-        spellInfo->Effects[EFFECT_1].TargetA = TARGET_UNIT_CASTER;
+        spellInfo->Effects[EFFECT_1].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_CASTER);
     });
 
     // Arcane Blast, can't be dispelled
@@ -4476,7 +4476,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     // Improved Spell Reflection
     ApplySpellFix({ 59725 }, [](SpellInfo* spellInfo)
     {
-        spellInfo->Effects[EFFECT_0].TargetA = TARGET_UNIT_CASTER_AREA_PARTY;
+        spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_CASTER_AREA_PARTY);
     });
     
     /////////////////////////////////
@@ -4526,7 +4526,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     {
         spellInfo->Effects[EFFECT_2].Effect = SPELL_EFFECT_APPLY_AURA;
         spellInfo->Effects[EFFECT_2].ApplyAuraName = SPELL_AURA_ADD_PCT_MODIFIER;
-        spellInfo->Effects[EFFECT_2].TargetA = TARGET_UNIT_TARGET_ALLY;
+        spellInfo->Effects[EFFECT_2].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_TARGET_ALLY);
     });
 
     /////////////////////////////////
@@ -4611,7 +4611,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     ApplySpellFix({ 34074 }, [](SpellInfo* spellInfo)
     {
         spellInfo->Effects[EFFECT_2].Effect = SPELL_EFFECT_APPLY_AURA;
-        spellInfo->Effects[EFFECT_2].TargetA = 1;
+        spellInfo->Effects[EFFECT_2].TargetA = SpellImplicitTargetInfo(1);
         spellInfo->Effects[EFFECT_2].ApplyAuraName = SPELL_AURA_DUMMY;
     });
 
@@ -4717,7 +4717,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     // Jormungar Bite
     ApplySpellFix({ 50990 }, [](SpellInfo* spellInfo)
     {
-        spellInfo->Effects[EFFECT_0].TargetA = TARGET_UNIT_TARGET_ENEMY;
+        spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_TARGET_ENEMY);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo();
     });
     
@@ -4728,7 +4728,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     // Throw Proximity Bomb
     ApplySpellFix({ 34095 }, [](SpellInfo* spellInfo)
     {
-        spellInfo->Effects[EFFECT_0].TargetA = TARGET_DEST_TARGET_ENEMY;
+        spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_DEST_TARGET_ENEMY);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo();
     });
 
@@ -4859,7 +4859,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     {
         spellInfo->Effects[EFFECT_2].Effect = SPELL_EFFECT_APPLY_AURA;
         spellInfo->Effects[EFFECT_2].ApplyAuraName = SPELL_AURA_SCHOOL_ABSORB;
-        spellInfo->Effects[EFFECT_2].TargetA = TARGET_UNIT_CASTER;
+        spellInfo->Effects[EFFECT_2].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_CASTER);
         spellInfo->Effects[EFFECT_2].MiscValue = SPELL_SCHOOL_MASK_MAGIC;
     });
 
@@ -5198,7 +5198,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     // Haste (Nexus Lord, increase run speed of the disk)
     ApplySpellFix({ 57060 }, [](SpellInfo* spellInfo)
     {
-        spellInfo->Effects[EFFECT_2].TargetA = TARGET_UNIT_VEHICLE;
+        spellInfo->Effects[EFFECT_2].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_VEHICLE);
     });
 
     // Arcane Overload
@@ -5227,10 +5227,10 @@ void SpellMgr::LoadSpellInfoCorrections()
     // Destroy Platform Event
     ApplySpellFix({ 59099 }, [](SpellInfo* spellInfo)
     {
-        spellInfo->Effects[EFFECT_1].TargetA = 22;
-        spellInfo->Effects[EFFECT_1].TargetB = 15;
-        spellInfo->Effects[EFFECT_2].TargetA = 22;
-        spellInfo->Effects[EFFECT_2].TargetB = 15;
+        spellInfo->Effects[EFFECT_1].TargetA = SpellImplicitTargetInfo(22);
+        spellInfo->Effects[EFFECT_1].TargetB = SpellImplicitTargetInfo(15);
+        spellInfo->Effects[EFFECT_2].TargetA = SpellImplicitTargetInfo(22);
+        spellInfo->Effects[EFFECT_2].TargetB = SpellImplicitTargetInfo(15);
     });
 
     // Surge of Power (Phase 3) | Normal and Heroic
@@ -5251,8 +5251,8 @@ void SpellMgr::LoadSpellInfoCorrections()
         spellInfo->Effects[EFFECT_0].Effect = 0;
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(0);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo();
-        spellInfo->Effects[EFFECT_1].TargetA = TARGET_SRC_CASTER;
-        spellInfo->Effects[EFFECT_1].TargetB = TARGET_UNIT_SRC_AREA_ALLY;
+        spellInfo->Effects[EFFECT_1].TargetA = SpellImplicitTargetInfo(TARGET_SRC_CASTER);
+        spellInfo->Effects[EFFECT_1].TargetB = SpellImplicitTargetInfo(TARGET_UNIT_SRC_AREA_ALLY);
         spellInfo->Effects[EFFECT_1].PointsPerComboPoint = 2500;
         spellInfo->Effects[EFFECT_1].BasePoints = 2499;
         spellInfo->RangeEntry = sSpellRangeStore.LookupEntry(1);
@@ -5519,7 +5519,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     }, [](SpellInfo* spellInfo)
     {
         spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(328); // 250ms
-        spellInfo->Effects[EFFECT_1].TargetA = 1;
+        spellInfo->Effects[EFFECT_1].TargetA = SpellImplicitTargetInfo(1);
         
         if (spellInfo->Effects[EFFECT_1].Effect)
         {
@@ -5724,10 +5724,10 @@ void SpellMgr::LoadSpellInfoCorrections()
     {
         spellInfo->Effects[EFFECT_1].Effect = SPELL_EFFECT_APPLY_AURA;
         spellInfo->Effects[EFFECT_1].ApplyAuraName = SPELL_AURA_MOD_TAUNT;
-        spellInfo->Effects[EFFECT_1].TargetA = TARGET_UNIT_NEARBY_ENTRY;
+        spellInfo->Effects[EFFECT_1].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_NEARBY_ENTRY);
         spellInfo->Effects[EFFECT_2].Effect = SPELL_EFFECT_APPLY_AURA;
         spellInfo->Effects[EFFECT_2].ApplyAuraName = SPELL_AURA_MOD_STUN;
-        spellInfo->Effects[EFFECT_2].TargetA = TARGET_UNIT_CASTER;
+        spellInfo->Effects[EFFECT_2].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_CASTER);
         spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(35); // 4 secs
     });
 
@@ -6027,8 +6027,8 @@ void SpellMgr::LoadSpellInfoCorrections()
     {
         spellInfo->Effects[EFFECT_0].Effect = 0;
         spellInfo->Effects[EFFECT_1].Effect = 0;
-        spellInfo->Effects[EFFECT_2].TargetA = TARGET_SRC_CASTER;
-        spellInfo->Effects[EFFECT_2].TargetB = TARGET_UNIT_SRC_AREA_ENTRY;
+        spellInfo->Effects[EFFECT_2].TargetA = SpellImplicitTargetInfo(TARGET_SRC_CASTER);
+        spellInfo->Effects[EFFECT_2].TargetB = SpellImplicitTargetInfo(TARGET_UNIT_SRC_AREA_ENTRY);
         spellInfo->Effects[EFFECT_2].RadiusEntry = sSpellRadiusStore.LookupEntry(30); // 500yd
     });
 
@@ -6065,10 +6065,10 @@ void SpellMgr::LoadSpellInfoCorrections()
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_TARGET_ANY);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo();
-        spellInfo->Effects[EFFECT_1].TargetA = TARGET_UNIT_TARGET_ANY;
-        spellInfo->Effects[EFFECT_1].TargetB = 0;
-        spellInfo->Effects[EFFECT_2].TargetA = TARGET_UNIT_CASTER;
-        spellInfo->Effects[EFFECT_2].TargetB = 0;
+        spellInfo->Effects[EFFECT_1].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_TARGET_ANY);
+        spellInfo->Effects[EFFECT_1].TargetB = SpellImplicitTargetInfo();
+        spellInfo->Effects[EFFECT_2].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_CASTER);
+        spellInfo->Effects[EFFECT_2].TargetB = SpellImplicitTargetInfo();
         spellInfo->RangeEntry = sSpellRangeStore.LookupEntry(6); // 100yd
         spellInfo->AttributesEx3 |= SPELL_ATTR3_IGNORE_HIT_RESULT;
     });
@@ -6139,7 +6139,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     // Frostsworn General - Throw Shield
     ApplySpellFix({ 69222, 73076 }, [](SpellInfo* spellInfo)
     {
-        spellInfo->Effects[EFFECT_2].TargetA = TARGET_UNIT_TARGET_ENEMY;
+        spellInfo->Effects[EFFECT_2].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_TARGET_ENEMY);
     });
 
     // Halls of Reflection Clone
@@ -6228,7 +6228,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     ApplySpellFix({ 69138 }, [](SpellInfo* spellInfo)
     {
         spellInfo->Effects[EFFECT_0].Effect = 0;
-        spellInfo->Effects[EFFECT_1].TargetA = TARGET_DEST_DEST;
+        spellInfo->Effects[EFFECT_1].TargetA = SpellImplicitTargetInfo(TARGET_DEST_DEST);
         spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(9); // 30 secs instead of 12, need him for longer, but will stop his actions after 12 secs
     });
 
@@ -6732,7 +6732,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     ApplySpellFix({ 76221 }, [](SpellInfo* spellInfo)
     {
         spellInfo->ChannelInterruptFlags &= ~(AURA_INTERRUPT_FLAG_TURNING | AURA_INTERRUPT_FLAG_MOVE);
-        spellInfo->Effects[EFFECT_0].TargetA = TARGET_UNIT_NEARBY_ENTRY;
+        spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_NEARBY_ENTRY);
     });
 
     // Intimidating Roar
@@ -6816,7 +6816,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     {
         spellInfo->Effects[EFFECT_1].Effect = SPELL_EFFECT_DUMMY;
         spellInfo->Effects[EFFECT_1].RadiusEntry = spellInfo->Effects[EFFECT_0].RadiusEntry;
-        spellInfo->Effects[EFFECT_1].TargetA = TARGET_UNIT_DEST_AREA_ENTRY;
+        spellInfo->Effects[EFFECT_1].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_DEST_AREA_ENTRY);
         spellInfo->AttributesEx4 &= ~SPELL_ATTR4_CAN_CAST_WHILE_CASTING;
     });
 
@@ -6846,7 +6846,7 @@ void SpellMgr::LoadSpellInfoCorrections()
         69489  // Bonbon Blitz (24636)
     }, [](SpellInfo* spellInfo)
     {
-        spellInfo->Effects[EFFECT_1].TargetA = TARGET_UNIT_CASTER;
+        spellInfo->Effects[EFFECT_1].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_CASTER);
     });
 
     // Control (9595)
@@ -7027,6 +7027,340 @@ void SpellMgr::LoadSpellInfoCorrections()
     {
         spellInfo->Effects[EFFECT_0].BasePoints = 52391 - 1;
     });
+
+    // The Sum is Greater than the Parts (13043) - Chained Grip
+    ApplySpellFix({ 60540 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].MiscValue = 300;
+    });
+
+    // Not a Bug (13342)
+    ApplySpellFix({ 60531 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->AttributesEx2 |= SPELL_ATTR2_CAN_TARGET_DEAD;
+    });
+
+    // Frankly,  It Makes No Sense... (10672)
+    ApplySpellFix({ 37851 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->AttributesEx3 |= SPELL_ATTR3_NO_INITIAL_AGGRO;
+    });
+
+    // Honor Challenge (12939)
+    ApplySpellFix({ 21855 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->AttributesEx3 |= SPELL_ATTR3_NO_INITIAL_AGGRO;
+    });
+
+    // Convocation at Zol'Heb (12730)
+    ApplySpellFix({ 52956 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_DEST_AREA_ENTRY);
+    });
+
+    // Mangletooth Quests (http://www.wowhead.com/npc=3430)
+    ApplySpellFix({ 7764, 10767, 16610, 16612, 16618, 17013 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->AttributesEx2 |= SPELL_ATTR2_CAN_TARGET_NOT_IN_LOS;
+        spellInfo->AttributesEx5 |= SPELL_ATTR5_SKIP_CHECKCAST_LOS_CHECK;
+    });
+
+    // Crushing the Crown
+    ApplySpellFix({ 71024 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_DEST_DYNOBJ_NONE);
+    });
+
+    // Battle for the Undercity
+    // Cyclone fall
+    ApplySpellFix({ 59892 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].Effect = SPELL_EFFECT_APPLY_AREA_AURA_FRIEND;
+        spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_10_YARDS);
+        spellInfo->AttributesEx &= ~SPELL_ATTR0_CANT_CANCEL;
+        spellInfo->AttributesEx3 |= SPELL_ATTR3_ONLY_TARGET_PLAYERS;
+    });
+
+    // ///////////////////////////////////////////
+    // ////////////////ITEMS//////////////////////
+    // ///////////////////////////////////////////
+
+    // Enchant Lightweave Embroidery
+    ApplySpellFix({ 55637 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_1].MiscValue = 126;
+    });
+
+    // Magic Broom
+    ApplySpellFix({ 47977 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].Effect = 0;
+        spellInfo->Effects[EFFECT_1].Effect = 0;
+    });
+
+    // Titanium Seal of Dalaran, Toss your luck
+    ApplySpellFix({ 60476 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_CASTER);
+    });
+
+    // Mind Amplification Dish, change charm aura
+    ApplySpellFix({ 26740 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].ApplyAuraName = SPELL_AURA_MOD_CHARM;
+    });
+
+    // Persistent Shield (fixes idiocity)
+    ApplySpellFix({ 26467 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].ApplyAuraName = SPELL_AURA_PROC_TRIGGER_SPELL_WITH_VALUE;
+        spellInfo->Effects[EFFECT_0].TriggerSpell = 26470;
+    });
+
+    // Deadly Swiftness
+    ApplySpellFix({ 31255 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].TriggerSpell = 22588;
+    });
+
+    // Black Magic enchant
+    ApplySpellFix({ 59630 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Attributes |= SPELL_ATTR0_PASSIVE;
+    });
+
+    // Precious's Ribbon
+    ApplySpellFix({ 72968 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->AttributesEx3 |= SPELL_ATTR3_DEATH_PERSISTENT;
+    });
+
+    ApplySpellFix({ 
+        71646, // Item - Bauble of True Blood 10m
+        71607, // Item - Bauble of True Blood 25m
+        71610, // Item - Althor's Abacus trigger 10m
+        71641  // Item - Althor's Abacus trigger 25m
+    }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->DmgClass = SPELL_DAMAGE_CLASS_MAGIC;
+        spellInfo->SpellLevel = 0;
+    });
+
+    // Drain Life - Bryntroll Normal / Heroic
+    ApplySpellFix({ 71838, 71839 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->AttributesEx2 |= SPELL_ATTR2_CANT_CRIT;
+        spellInfo->AttributesEx4 |= SPELL_ATTR4_IGNORE_RESISTANCES;
+    });
+
+    // Alchemist's Stone
+    ApplySpellFix({ 17619 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->AttributesEx3 |= SPELL_ATTR3_DEATH_PERSISTENT;
+    });
+
+    // Gnomish Death Ray
+    ApplySpellFix({ 13278, 13280 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_TARGET_ENEMY);
+    });
+
+    // Stormchops
+    ApplySpellFix({ 43730 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_1].TargetA = SpellImplicitTargetInfo(1);
+        spellInfo->Effects[EFFECT_1].TargetB = SpellImplicitTargetInfo();
+    });
+
+    // Savory Deviate Delight (transformations), allow to mount while transformed
+    ApplySpellFix({ 8219, 8220, 8221, 8222 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Attributes &= ~SPELL_ATTR0_UNAFFECTED_BY_INVULNERABILITY;
+    });
+
+    // Clamlette Magnifique
+    ApplySpellFix({ 72623 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].BasePoints = spellInfo->Effects[EFFECT_1].BasePoints;
+    });
+
+    // Compact Harvest Reaper
+    ApplySpellFix({ 4078 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(6); // 10 minutes
+    });
+
+    // Dragon Kite, Tuskarr Kite - Kite String
+    ApplySpellFix({ 45192 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->RangeEntry = sSpellRangeStore.LookupEntry(6); // 100yd
+    });
+
+    // Frigid Frostling, Infrigidate
+    ApplySpellFix({ 74960 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(9); // 20yd
+    });
+
+    // ///////////////////////////////////////////
+    // ////////////////EVENTS/////////////////////
+    // ///////////////////////////////////////////
+
+    //////////////////////////////////////////
+    ////////// BREWFEST
+    //////////////////////////////////////////
+
+    // Apple Trap
+    ApplySpellFix({ 43450 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_SRC_AREA_ENEMY);
+        spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo(TARGET_UNIT_CASTER);
+        spellInfo->Effects[EFFECT_0].Effect = SPELL_EFFECT_DUMMY;
+    });
+
+    // Dark Iron Attack - spawn mole machine
+    ApplySpellFix({ 43563 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_2].Effect = 0; // summon GO's manually
+    });
+
+    // Throw Mug visual
+    ApplySpellFix({ 42300 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_TARGET_ANY);
+    });
+
+    // Dark Iron knockback Aura
+    ApplySpellFix({ 42299 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_1].ApplyAuraName = SPELL_AURA_DUMMY;
+        spellInfo->Effects[EFFECT_0].MiscValue = 100;
+        spellInfo->Effects[EFFECT_0].BasePoints = 79;
+    });
+
+    // Chug and Chuck!
+    ApplySpellFix({ 42436 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_SRC_CASTER);
+        spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo(TARGET_UNIT_SRC_AREA_ENTRY);
+        spellInfo->MaxAffectedTargets = 0;
+        spellInfo->ExcludeCasterAuraSpell = 42299;
+    });
+
+    // Catch the Wild Wolpertinger!
+    ApplySpellFix({ 41621 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].Effect = SPELL_EFFECT_DUMMY;
+    });
+
+    // Brewfest quests
+    ApplySpellFix({ 47134, 51798 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].Effect = 0;
+    });
+
+    // The Heart of The Storms (12998)
+    ApplySpellFix({ 43528 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(18);
+        spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(25);
+    });
+
+    //////////////////////////////////////////
+    ////////// Hallow's End
+    //////////////////////////////////////////
+
+    // Water splash
+    ApplySpellFix({ 42348 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].Effect = 0;
+    });
+
+    // Summon Lantersn
+    ApplySpellFix({ 44255, 44231 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_DEST_DEST);
+        spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo();
+    });
+
+    // Throw Head Back
+    ApplySpellFix({ 42401 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_DEST_DEST);
+        spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo();
+    });
+
+    //////////////////////////////////////////
+    ////////// Pilgrim's Bounty
+    //////////////////////////////////////////
+    
+    // Various food
+    ApplySpellFix({ 65418 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_2].TriggerSpell = 65410;
+    });
+
+    ApplySpellFix({ 65422 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_2].TriggerSpell = 65414;
+    });
+
+    ApplySpellFix({ 65419 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_2].TriggerSpell = 65416;
+    });
+
+    ApplySpellFix({ 65420 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_2].TriggerSpell = 65412;
+    });
+
+    ApplySpellFix({ 65421 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_2].TriggerSpell = 65415;
+    });
+
+    //////////////////////////////////////////
+    ////////// Midsummer
+    //////////////////////////////////////////
+    
+    // Stamp Out Bonfire
+    ApplySpellFix({ 45437 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_1].Effect = SPELL_EFFECT_DUMMY;
+        spellInfo->Effects[EFFECT_1].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_NEARBY_ENTRY);
+        spellInfo->AttributesEx2 |= SPELL_ATTR2_CAN_TARGET_NOT_IN_LOS;
+    });
+
+    // Light Bonfire (DND)
+    ApplySpellFix({ 29831 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->AttributesEx2 |= SPELL_ATTR2_CAN_TARGET_NOT_IN_LOS;
+    });
+
+    //////////////////////////////////////////
+    ////////// Misc Events
+    //////////////////////////////////////////
+    
+    // Infernal
+    ApplySpellFix({ 33240 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_DEST_TARGET_ANY);
+        spellInfo->Effects[EFFECT_1].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_TARGET_ANY);
+        spellInfo->Effects[EFFECT_2].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_TARGET_ANY);
+    });
+
+    // Check for SPELL_ATTR7_INTERRUPT_ONLY_NONPLAYER
+    ApplySpellFix({ 
+        47476, // Deathknight - Strangulate
+        15487, // Priest - Silence
+        5211,  // Druid - Bash  - R1
+        6798,  // Druid - Bash  - R2
+        8983   // Druid - Bash  - R3 
+    }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->AttributesEx7 |= SPELL_ATTR7_INTERRUPT_ONLY_NONPLAYER;
+    });
     
     for (auto spellInfo : mSpellInfoMap)
     {
@@ -7050,277 +7384,15 @@ void SpellMgr::LoadSpellInfoCorrections()
         }
 
         // Xinef: Fix range for trajectories and triggered spells
-        {
-            auto _spellEntry = (SpellEntry*)sSpellStore.LookupEntry(spellInfo->Id);
-            for (uint8 j = 0; j < MAX_SPELL_EFFECTS; ++j)
-                if (_spellEntry->rangeIndex == 1 && (_spellEntry->EffectImplicitTargetA[j] == TARGET_DEST_TRAJ || _spellEntry->EffectImplicitTargetB[j] == TARGET_DEST_TRAJ))
-                    if (SpellEntry* spellInfo2 = (SpellEntry*)sSpellStore.LookupEntry(_spellEntry->EffectTriggerSpell[j]))
-                        spellInfo2->rangeIndex = 187; // 300yd
-        }
+        auto _spellEntry = (SpellEntry*)sSpellStore.LookupEntry(spellInfo->Id);
+        for (uint8 j = 0; j < MAX_SPELL_EFFECTS; ++j)
+            if (_spellEntry->rangeIndex == 1 && (_spellEntry->EffectImplicitTargetA[j] == TARGET_DEST_TRAJ || _spellEntry->EffectImplicitTargetB[j] == TARGET_DEST_TRAJ))
+                if (SpellEntry* spellInfo2 = (SpellEntry*)sSpellStore.LookupEntry(_spellEntry->EffectTriggerSpell[j]))
+                    spellInfo2->rangeIndex = 187; // 300yd
 
-        if (spellInfo->ActiveIconID == 2158)  // flight
+        if (spellInfo->ActiveIconID == 2158) // flight
             spellInfo->Attributes |= SPELL_ATTR0_PASSIVE;
-
-        switch (spellInfo->Id)
-        {
-            // Dark Horizon (12664), Reunited (12663)
-            case 52190:
-                spellInfo->Effects[EFFECT_0].BasePoints = 52391 - 1;
-                break;
-            // The Sum is Greater than the Parts (13043) - Chained Grip
-            case 60540:
-                spellInfo->Effects[EFFECT_0].MiscValue = 300;
-                break;
-            // Not a Bug (13342)
-            case 60531:
-                spellInfo->AttributesEx2 |= SPELL_ATTR2_CAN_TARGET_DEAD;
-                break;
-            // Frankly,  It Makes No Sense... (10672)
-            case 37851:
-                spellInfo->AttributesEx3 |= SPELL_ATTR3_NO_INITIAL_AGGRO;
-                break;
-            // Honor Challenge (12939)
-            case 21855:
-                spellInfo->AttributesEx3 |= SPELL_ATTR3_NO_INITIAL_AGGRO;
-                break;
-            // Convocation at Zol'Heb (12730)
-            case 52956:
-                spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_DEST_AREA_ENTRY);
-                break;
-            // Mangletooth Quests (http://www.wowhead.com/npc=3430)
-            case 7764:
-            case 10767:
-            case 16610:
-            case 16612:
-            case 16618:
-            case 17013:
-                spellInfo->AttributesEx2 |= SPELL_ATTR2_CAN_TARGET_NOT_IN_LOS;
-                spellInfo->AttributesEx5 |= SPELL_ATTR5_SKIP_CHECKCAST_LOS_CHECK;
-                break;
-            //Crushing the Crown
-            case 71024:
-                spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_DEST_DYNOBJ_NONE);
-                break;
-            // Battle for the Undercity
-            case 59892: // Cyclone fall
-                spellInfo->Effects[EFFECT_0].Effect = SPELL_EFFECT_APPLY_AREA_AURA_FRIEND;
-                spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_10_YARDS);
-                spellInfo->AttributesEx &= ~SPELL_ATTR0_CANT_CANCEL;
-                spellInfo->AttributesEx3 |= SPELL_ATTR3_ONLY_TARGET_PLAYERS;
-                break;
-
-            // ///////////////////////////////////////////
-            // ////////////////ITEMS//////////////////////
-            // ///////////////////////////////////////////
-            // enchant Lightweave Embroidery
-            case 55637:
-                spellInfo->Effects[EFFECT_1].MiscValue = 126;
-                break;
-            // Magic Broom
-            case 47977:
-                spellInfo->Effects[EFFECT_0].Effect = 0;
-                spellInfo->Effects[EFFECT_1].Effect = 0;
-                break;
-            // Titanium Seal of Dalaran, Toss your luck
-            case 60476:
-                spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_CASTER);
-                break;
-            // Mind Amplification Dish, change charm aura
-            case 26740:
-                spellInfo->Effects[EFFECT_0].ApplyAuraName = SPELL_AURA_MOD_CHARM;
-                break;
-            // Persistent Shield (fixes idiocity)
-            case 26467:
-                spellInfo->Effects[EFFECT_0].ApplyAuraName = SPELL_AURA_PROC_TRIGGER_SPELL_WITH_VALUE;
-                spellInfo->Effects[EFFECT_0].TriggerSpell = 26470;
-                break;
-            // Deadly Swiftness
-            case 31255:
-                spellInfo->Effects[EFFECT_0].TriggerSpell = 22588;
-                break;
-            // Black Magic enchant
-            case 59630:
-                spellInfo->Attributes |= SPELL_ATTR0_PASSIVE;
-                break;
-            // Precious's Ribbon
-            case 72968:
-                spellInfo->AttributesEx3 |= SPELL_ATTR3_DEATH_PERSISTENT;
-                break;
-            // Item - Bauble of True Blood 10m
-            // Item - Bauble of True Blood 25m
-            case 71646:
-            case 71607:
-            // Item - Althor's Abacus trigger 10m
-            // Item - Althor's Abacus trigger 25m
-            case 71610:
-            case 71641:
-                spellInfo->DmgClass = SPELL_DAMAGE_CLASS_MAGIC;
-                spellInfo->SpellLevel = 0;
-                break;
-            // Drain Life - Bryntroll Normal / Heroic
-            case 71838:
-            case 71839:
-                spellInfo->AttributesEx2 |= SPELL_ATTR2_CANT_CRIT;
-                spellInfo->AttributesEx4 |= SPELL_ATTR4_IGNORE_RESISTANCES;
-                break;
-            // Alchemist's Stone
-            case 17619:
-                spellInfo->AttributesEx3 |= SPELL_ATTR3_DEATH_PERSISTENT;
-                break;
-            // Gnomish Death Ray
-            case 13278:
-            case 13280:
-                spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_TARGET_ENEMY);
-                break;
-            // Stormchops
-            case 43730:
-                spellInfo->Effects[EFFECT_1].TargetA = 1;
-                spellInfo->Effects[EFFECT_1].TargetB = 0;
-                break;
-            // Savory Deviate Delight (transformations), allow to mount while transformed
-            case 8219:
-            case 8220:
-            case 8221:
-            case 8222:
-                spellInfo->Attributes &= ~SPELL_ATTR0_UNAFFECTED_BY_INVULNERABILITY;
-                break;
-            // Clamlette Magnifique
-            case 72623: // drink triggered spell
-                spellInfo->Effects[EFFECT_0].BasePoints = spellInfo->Effects[EFFECT_1].BasePoints;
-                break;
-            // Compact Harvest Reaper
-            case 4078:
-                spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(6); // 10 minutes
-                break;
-            // Dragon Kite, Tuskarr Kite - Kite String
-            case 45192:
-                spellInfo->RangeEntry = sSpellRangeStore.LookupEntry(6); // 100yd
-                break;
-            // Frigid Frostling, Infrigidate
-            case 74960:
-                spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(9); // 20yd
-                break;
-
-
-            // ///////////////////////////////////////////
-            // ////////////////EVENTS/////////////////////
-            // ///////////////////////////////////////////
-
-            //////////////////////////////////////////
-            ////////// BREWFEST
-            //////////////////////////////////////////
-            // Apple Trap
-            case 43450:
-                spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_SRC_AREA_ENEMY);
-                spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo(TARGET_UNIT_CASTER);
-                spellInfo->Effects[EFFECT_0].Effect = SPELL_EFFECT_DUMMY;
-                break;
-            // Dark Iron Attack - spawn mole machine
-            case 43563:
-                spellInfo->Effects[EFFECT_2].Effect = 0; // summon GO's manually
-                break;
-            // Throw Mug visual
-            case 42300:
-                spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_TARGET_ANY);
-                break;
-            // Dark Iron knockback Aura
-            case 42299:
-                spellInfo->Effects[EFFECT_1].ApplyAuraName = SPELL_AURA_DUMMY;
-                spellInfo->Effects[EFFECT_0].MiscValue = 100;
-                spellInfo->Effects[EFFECT_0].BasePoints = 79;
-                break;
-            // Chug and Chuck!
-            case 42436:
-                spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_SRC_CASTER);
-                spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo(TARGET_UNIT_SRC_AREA_ENTRY);
-                spellInfo->MaxAffectedTargets = 0;
-                spellInfo->ExcludeCasterAuraSpell = 42299;
-                break;
-            // Catch the Wild Wolpertinger!
-            case 41621:
-                spellInfo->Effects[EFFECT_0].Effect = SPELL_EFFECT_DUMMY;
-                break;
-            // Brewfest quests
-            case 47134:
-            case 51798:
-                spellInfo->Effects[EFFECT_0].Effect = 0;
-                break;
-            // The Heart of The Storms (12998)
-            case 43528:
-                spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(18);
-                spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(25);
-                break;
-
-            //////////////////////////////////////////
-            ////////// Hallow's End
-            //////////////////////////////////////////
-            // Water splash
-            case 42348:
-                spellInfo->Effects[EFFECT_0].Effect = 0;
-                break;
-            // Summon Lantersn
-            case 44255:
-            case 44231:
-                spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_DEST_DEST);
-                spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo();
-                break;
-            // Throw Head Back
-            case 42401:
-                spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_NEARBY_ENTRY);
-                break;
-
-            //////////////////////////////////////////
-            ////////// Pilgrim's Bounty
-            //////////////////////////////////////////
-            // Various food
-            case 65418:
-                spellInfo->Effects[EFFECT_2].TriggerSpell = 65410;
-                break;
-            case 65422:
-                spellInfo->Effects[EFFECT_2].TriggerSpell = 65414;
-                break;
-            case 65419:
-                spellInfo->Effects[EFFECT_2].TriggerSpell = 65416;
-                break;
-            case 65420:
-                spellInfo->Effects[EFFECT_2].TriggerSpell = 65412;
-                break;
-            case 65421:
-                spellInfo->Effects[EFFECT_2].TriggerSpell = 65415;
-                break;
-
-            //////////////////////////////////////////
-            ////////// Midsummer
-            //////////////////////////////////////////
-            // Stamp Out Bonfire
-            case 45437:
-                spellInfo->Effects[EFFECT_1].Effect = SPELL_EFFECT_DUMMY;
-                spellInfo->Effects[EFFECT_1].TargetA = TARGET_UNIT_NEARBY_ENTRY;
-                spellInfo->AttributesEx2 |= SPELL_ATTR2_CAN_TARGET_NOT_IN_LOS;
-                break;
-            // Light Bonfire (DND)
-            case 29831:
-                spellInfo->AttributesEx2 |= SPELL_ATTR2_CAN_TARGET_NOT_IN_LOS;
-                break;
-            //////////////////////////////////////////
-            ////////// Misc Events
-            //////////////////////////////////////////
-            // Infernal
-            case 33240:
-                spellInfo->Effects[EFFECT_0].TargetA = TARGET_DEST_TARGET_ANY;
-                spellInfo->Effects[EFFECT_1].TargetA = TARGET_UNIT_TARGET_ANY;
-                spellInfo->Effects[EFFECT_2].TargetA = TARGET_UNIT_TARGET_ANY;
-                break;
-            // Check for SPELL_ATTR7_INTERRUPT_ONLY_NONPLAYER
-            case 47476: // Deathknight - Strangulate
-            case 15487: // Priest - Silence
-            case 5211:  // Druid - Bash  - R1
-            case 6798:  // Druid - Bash  - R2
-            case 8983:  // Druid - Bash  - R3
-                spellInfo->AttributesEx7 |= SPELL_ATTR7_INTERRUPT_ONLY_NONPLAYER;
-                break;
-        }
-
+        
         switch (spellInfo->SpellFamilyName)
         {
             case SPELLFAMILY_PALADIN:
@@ -7347,12 +7419,12 @@ void SpellMgr::LoadSpellInfoCorrections()
                 areaEntry->flags |= AREA_FLAG_REST_ZONE_ALLIANCE;
         }
 
-
     // Xinef: fix for something?
     SummonPropertiesEntry* properties = const_cast<SummonPropertiesEntry*>(sSummonPropertiesStore.LookupEntry(121));
     properties->Type = SUMMON_TYPE_TOTEM;
     properties = const_cast<SummonPropertiesEntry*>(sSummonPropertiesStore.LookupEntry(647)); // 52893
     properties->Type = SUMMON_TYPE_TOTEM;
+    
     if ((properties = const_cast<SummonPropertiesEntry*>(sSummonPropertiesStore.LookupEntry(628)))) // Hungry Plaguehound
     {
         properties->Category = SUMMON_CATEGORY_PET;
@@ -7362,7 +7434,6 @@ void SpellMgr::LoadSpellInfoCorrections()
     // Correct Pet Size
     CreatureDisplayInfoEntry* displayEntry = const_cast<CreatureDisplayInfoEntry*>(sCreatureDisplayInfoStore.LookupEntry(17028)); // Kurken
     displayEntry->scale = 2.5f;
-
 
     // Oracles and Frenzyheart faction
     FactionEntry* factionEntry = const_cast<FactionEntry*>(sFactionStore.LookupEntry(1104));
@@ -7377,7 +7448,6 @@ void SpellMgr::LoadSpellInfoCorrections()
     factionTemplateEntry = const_cast<FactionTemplateEntry*>(sFactionTemplateStore.LookupEntry(1921)); // The Taunka
     factionTemplateEntry->hostileMask |= 8;
 
-
     // Remove vehicles attr, making accessories selectable
     VehicleSeatEntry* vse = const_cast<VehicleSeatEntry*>(sVehicleSeatStore.LookupEntry(4689)); // Siege Engine, Accessory
     vse->m_flags &= ~VEHICLE_SEAT_FLAG_PASSENGER_NOT_SELECTABLE;
@@ -7389,7 +7459,6 @@ void SpellMgr::LoadSpellInfoCorrections()
     vse->m_flags &= ~VEHICLE_SEAT_FLAG_CAN_SWITCH;
     vse = const_cast<VehicleSeatEntry*>(sVehicleSeatStore.LookupEntry(3077)); // Salvaged Demolisher Seat, Ulduar - not allow to change seats
     vse->m_flags &= ~VEHICLE_SEAT_FLAG_CAN_SWITCH;
-
 
     // pussywizard: fix z offset for some vehicles:
     vse = const_cast<VehicleSeatEntry*>(sVehicleSeatStore.LookupEntry(6206)); // Marrowgar - Bone Spike
@@ -7420,12 +7489,9 @@ void SpellMgr::LoadSpellInfoCorrections()
     vse->m_attachmentOffsetX += 0.0f;
     vse->m_attachmentOffsetY += 1.6f;
 
-
-
     // Once Bitten, Twice Shy (10 player) - Icecrown Citadel
     AchievementEntry* achievement = const_cast<AchievementEntry*>(sAchievementStore.LookupEntry(4539));
-    achievement->mapID = 631;    // Correct map requirement (currently has Ulduar)
-
+    achievement->mapID = 631;  // Correct map requirement (currently has Ulduar)
 
     // Ring of Valor starting Locations
     GraveyardStruct const* entry = sGraveyard->GetGraveyard(1364);
