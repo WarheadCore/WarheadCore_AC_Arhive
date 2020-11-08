@@ -2663,10 +2663,28 @@ void SpellMgr::LoadSpellInfoStore()
     UnloadSpellInfoStore();
     mSpellInfoMap.resize(sSpellStore.GetNumRows(), nullptr);
 
-    for (uint32 i = 0; i < sSpellStore.GetNumRows(); ++i)
+    for (SpellEntry const* spellEntry : sSpellStore)
+        mSpellInfoMap[spellEntry->Id] = new SpellInfo(spellEntry);
+
+    for (uint32 spellIndex = 0; spellIndex < GetSpellInfoStoreSize(); ++spellIndex)
     {
-        if (SpellEntry const* spellEntry = sSpellStore.LookupEntry(i))
-            mSpellInfoMap[i] = new SpellInfo(spellEntry);
+        if (!mSpellInfoMap[spellIndex])
+            continue;
+
+        for (auto const& effect : mSpellInfoMap[spellIndex]->Effects)
+        {
+            if (effect.Effect >= TOTAL_SPELL_EFFECTS)
+                LOG_FATAL("server.loading", "TOTAL_SPELL_EFFECTS must be at least %u, spellIndex %u", effect.Effect + 1, spellIndex);
+
+            if (effect.ApplyAuraName >= TOTAL_AURAS)
+                LOG_FATAL("server.loading", "TOTAL_AURAS must be at least %u, spellIndex %u", effect.ApplyAuraName + 1, spellIndex);
+
+            if (effect.TargetA.GetTarget() >= TOTAL_SPELL_TARGETS)
+                LOG_FATAL("server.loading", "TOTAL_SPELL_TARGETS must be at least %u, spellIndex %u", effect.TargetA.GetTarget() + 1, spellIndex);
+
+            if (effect.TargetB.GetTarget() >= TOTAL_SPELL_TARGETS)
+                LOG_FATAL("server.loading", "TOTAL_SPELL_TARGETS must be at least %u, spellIndex %u", effect.TargetB.GetTarget() + 1, spellIndex);
+        }
     }
 
     LOG_INFO("server.loading", ">> Loaded SpellInfo store in %u ms", GetMSTimeDiffToNow(oldMSTime));
@@ -7419,8 +7437,12 @@ void SpellMgr::LoadSpellInfoCorrections()
         spellInfo->AttributesEx7 |= SPELL_ATTR7_INTERRUPT_ONLY_NONPLAYER;
     });
 
-    for (auto spellInfo : mSpellInfoMap)
+    for (uint32 i = 0; i < GetSpellInfoStoreSize(); ++i)
     {
+        SpellInfo* spellInfo = mSpellInfoMap[i];
+        if (!spellInfo)
+            continue;
+
         for (uint8 j = 0; j < MAX_SPELL_EFFECTS; ++j)
         {
             switch (spellInfo->Effects[j].Effect)
@@ -7441,11 +7463,21 @@ void SpellMgr::LoadSpellInfoCorrections()
         }
 
         // Xinef: Fix range for trajectories and triggered spells
-        auto _spellEntry = (SpellEntry*)sSpellStore.LookupEntry(spellInfo->Id);
         for (uint8 j = 0; j < MAX_SPELL_EFFECTS; ++j)
-            if (_spellEntry->rangeIndex == 1 && (_spellEntry->EffectImplicitTargetA[j] == TARGET_DEST_TRAJ || _spellEntry->EffectImplicitTargetB[j] == TARGET_DEST_TRAJ))
-                if (SpellEntry* spellInfo2 = (SpellEntry*)sSpellStore.LookupEntry(_spellEntry->EffectTriggerSpell[j]))
-                    spellInfo2->rangeIndex = 187; // 300yd
+        {
+            if (spellInfo->RangeEntry != sSpellRangeStore.LookupEntry(1))
+                continue;
+
+            if (!spellInfo->Effects[j].IsEffect())
+                return;
+
+            if (spellInfo->Effects[j].TargetA.GetTarget() != TARGET_DEST_TRAJ && spellInfo->Effects[j].TargetB.GetTarget() != TARGET_DEST_TRAJ)
+                continue;
+
+            // Get triggered spell if any
+            if (SpellInfo* spellInfoTrigger = const_cast<SpellInfo*>(GetSpellInfo(spellInfo->Effects[j].TriggerSpell)))
+                spellInfoTrigger->RangeEntry = sSpellRangeStore.LookupEntry(187); // 300yd
+        }
 
         if (spellInfo->ActiveIconID == 2158) // flight
             spellInfo->Attributes |= SPELL_ATTR0_PASSIVE;
