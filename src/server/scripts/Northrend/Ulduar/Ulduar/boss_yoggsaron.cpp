@@ -804,15 +804,15 @@ public:
                     break;
                 case EVENT_SARA_P2_SUMMON_T1: // CRUSHER
                     SpawnTentacle(NPC_CRUSHER_TENTACLE);
-                    events.RepeatEvent(randtime(50s, 1min) * static_cast<uint32>(_summonSpeed));
+                    events.RepeatEvent(50s + (randtime(0s, 10s) * static_cast<uint32>(_summonSpeed)));
                     break;
                 case EVENT_SARA_P2_SUMMON_T2: // CONSTRICTOR
                     SpawnTentacle(NPC_CONSTRICTOR_TENTACLE);
-                    events.RepeatEvent(randtime(15s, 20s) * static_cast<uint32>(_summonSpeed));
+                    events.RepeatEvent(15s + (randtime(0s, 5s) * static_cast<uint32>(_summonSpeed)));
                     break;
                 case EVENT_SARA_P2_SUMMON_T3: // CORRUPTOR
                     SpawnTentacle(NPC_CORRUPTOR_TENTACLE);
-                    events.RepeatEvent(randtime(30s, 40s) * static_cast<uint32>(_summonSpeed));
+                    events.RepeatEvent(30s + (randtime(0s, 10s) * static_cast<uint32>(_summonSpeed)));
                     break;
                 case EVENT_SARA_P2_BRAIN_LINK:
                     me->CastCustomSpell(SPELL_BRAIN_LINK, SPELLVALUE_MAX_TARGETS, 1, me, false);
