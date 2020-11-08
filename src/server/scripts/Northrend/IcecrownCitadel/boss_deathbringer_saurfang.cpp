@@ -639,7 +639,7 @@ public:
                         _events.ScheduleEvent(EVENT_INTRO_HORDE_6, 29500ms, 0, PHASE_INTRO_H);
                         _events.ScheduleEvent(EVENT_INTRO_HORDE_7, 43800ms, 0, PHASE_INTRO_H);
                         _events.ScheduleEvent(EVENT_INTRO_HORDE_8, 47s, 0, PHASE_INTRO_H);
-                        _events.ScheduleEvent(EVENT_INTRO_HORDE_9, 47300ms, 0, PHASE_INTRO_H);
+                        _events.ScheduleEvent(EVENT_INTRO_HORDE_9, 48200ms, 0, PHASE_INTRO_H);
                         _events.ScheduleEvent(EVENT_INTRO_FINISH,  56700ms, 0, PHASE_INTRO_H);
                         break;
                     /*case POINT_CORPSE:
