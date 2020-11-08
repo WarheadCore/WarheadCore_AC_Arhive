@@ -4026,7 +4026,7 @@ void SpellMgr::LoadSpellInfoCorrections()
 
     ApplySpellFix(
     {
-        31221, // Master of Subtlety triggers
+        31666, // Master of Subtlety triggers
         58428  // Overkill
     }, [](SpellInfo * spellInfo)
     {
@@ -4679,13 +4679,13 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Army of the Dead (trigger npc aura)
-    ApplySpellFix({ 48739 }, [](SpellInfo * spellInfo)
+    ApplySpellFix({ 49099 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].Amplitude = 15000;
     });
 
     // Isle of Conquest - Teleport in, missing range
-    ApplySpellFix({ 48739 }, [](SpellInfo * spellInfo)
+    ApplySpellFix({ 66551 }, [](SpellInfo * spellInfo)
     {
         spellInfo->RangeEntry = sSpellRangeStore.LookupEntry(13); // 50000yd
     });
@@ -4831,7 +4831,7 @@ void SpellMgr::LoadSpellInfoCorrections()
 
     // The Arcatraz
     // Negaton Field
-    ApplySpellFix({ 38794 /*Normal*/, 33711 /*Heroic*/ }, [](SpellInfo * spellInfo)
+    ApplySpellFix({ 36729 /*Normal*/, 38834 /*Heroic*/ }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_STACK_FOR_DIFF_CASTERS;
     });
@@ -5481,7 +5481,7 @@ void SpellMgr::LoadSpellInfoCorrections()
 
     // ALGALON
     // Cosmic Smash (Algalon the Observer)
-    ApplySpellFix({ 62714, 65209 }, [](SpellInfo * spellInfo)
+    ApplySpellFix({ 62293 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo(TARGET_DEST_CASTER);
     });
@@ -6346,7 +6346,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Gunship Battle, spell Below Zero
-    ApplySpellFix({ 72864 }, [](SpellInfo * spellInfo)
+    ApplySpellFix({ 69705 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_IGNORE_HIT_RESULT;
     });
@@ -7113,7 +7113,7 @@ void SpellMgr::LoadSpellInfoCorrections()
         spellInfo->AttributesEx2 |= SPELL_ATTR2_CAN_TARGET_DEAD;
     });
 
-    // Frankly,  It Makes No Sense... (10672)
+    // Frankly, It Makes No Sense... (10672)
     ApplySpellFix({ 37851 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_NO_INITIAL_AGGRO;
