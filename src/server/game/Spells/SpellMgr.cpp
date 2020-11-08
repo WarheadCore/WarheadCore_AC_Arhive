@@ -3915,7 +3915,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Roar of Sacrifice
-    ApplySpellFix({ 3411 }, [](SpellInfo * spellInfo)
+    ApplySpellFix({ 53480 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].Effect = SPELL_EFFECT_APPLY_AURA;
         spellInfo->Effects[EFFECT_1].ApplyAuraName = SPELL_AURA_SPLIT_DAMAGE_PCT;
@@ -4088,7 +4088,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     ApplySpellFix({ 50526 }, [](SpellInfo * spellInfo)
     {
         spellInfo->AttributesEx3 |= SPELL_ATTR3_NO_DONE_BONUS;
-        spellInfo->AttributesEx3 |=  SPELL_ATTR3_NO_INITIAL_AGGRO;
+        spellInfo->AttributesEx3 |= SPELL_ATTR3_NO_INITIAL_AGGRO;
     });
 
     // Dancing Rune Weapon
@@ -4114,7 +4114,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     // Pestilence
     ApplySpellFix({ 50842 }, [](SpellInfo * spellInfo)
     {
-        spellInfo->Effects[EFFECT_1].Effect = 0;
+        spellInfo->Effects[EFFECT_2].TargetA = SpellImplicitTargetInfo(TARGET_DEST_TARGET_ENEMY);
     });
 
     // Horn of Winter, stacking issues
@@ -4212,6 +4212,7 @@ void SpellMgr::LoadSpellInfoCorrections()
         spellInfo->SpellLevel = 0;
         spellInfo->BaseLevel = 0;
         spellInfo->DmgClass = SPELL_DAMAGE_CLASS_MAGIC;
+        spellInfo->AttributesEx3 |= SPELL_ATTR3_NO_DONE_BONUS;
     });
 
     // Stormstrike
@@ -4230,8 +4231,8 @@ void SpellMgr::LoadSpellInfoCorrections()
     // Flametongue Totem effect
     ApplySpellFix({ 52109, 52110, 52111, 52112, 52113, 58651, 58654, 58655 }, [](SpellInfo * spellInfo)
     {
-        spellInfo->Effects[EFFECT_2].TargetB = spellInfo->Effects[EFFECT_1].TargetB;
-        spellInfo->Effects[EFFECT_2].TargetA = spellInfo->Effects[EFFECT_1].TargetA;
+        spellInfo->Effects[EFFECT_2].TargetB = spellInfo->Effects[EFFECT_1].TargetB = spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo();
+        spellInfo->Effects[EFFECT_2].TargetA = spellInfo->Effects[EFFECT_1].TargetA = spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_CASTER);
     });
 
     // Sentry Totem
@@ -4305,7 +4306,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Everlasting Affliction
-    ApplySpellFix({ 47201, 47202, 47203, 47204, 47205  }, [](SpellInfo * spellInfo)
+    ApplySpellFix({ 47201, 47202, 47203, 47204, 47205 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].SpellClassMask[0] |= 2; // add corruption to affected spells
     });
@@ -4357,7 +4358,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     // Living Bomb
     ApplySpellFix({ 44461, 55361, 55362 }, [](SpellInfo * spellInfo)
     {
-        spellInfo->AttributesEx3 |=  SPELL_ATTR3_NO_INITIAL_AGGRO;
+        spellInfo->AttributesEx3 |= SPELL_ATTR3_NO_INITIAL_AGGRO;
         spellInfo->AttributesEx4 |= SPELL_ATTR4_DAMAGE_DOESNT_BREAK_AURAS;
     });
 
@@ -4515,7 +4516,7 @@ void SpellMgr::LoadSpellInfoCorrections()
         spellInfo->Effects[EFFECT_1].ApplyAuraName = SPELL_AURA_MOD_INCREASE_ENERGY_PERCENT;
         spellInfo->Effects[EFFECT_2].Effect = spellInfo->Effects[EFFECT_0].Effect;
         spellInfo->Effects[EFFECT_0].Effect = 0;
-        spellInfo->Effects[EFFECT_0].DieSides = spellInfo->Effects[EFFECT_0].DieSides;
+        spellInfo->Effects[EFFECT_2].DieSides = spellInfo->Effects[EFFECT_0].DieSides;
         spellInfo->Effects[EFFECT_2].TargetA = spellInfo->Effects[EFFECT_0].TargetB;
         spellInfo->Effects[EFFECT_2].RadiusEntry = spellInfo->Effects[EFFECT_0].RadiusEntry;
         spellInfo->Effects[EFFECT_2].BasePoints = spellInfo->Effects[EFFECT_0].BasePoints;
@@ -4736,7 +4737,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Jormungar Bite
-    ApplySpellFix({ 50990 }, [](SpellInfo * spellInfo)
+    ApplySpellFix({ 56103 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_TARGET_ENEMY);
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo();
@@ -5275,7 +5276,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     ApplySpellFix({ 57143 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_0].Effect = 0;
-        spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(0);
+        spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo();
         spellInfo->Effects[EFFECT_0].TargetB = SpellImplicitTargetInfo();
         spellInfo->Effects[EFFECT_1].TargetA = SpellImplicitTargetInfo(TARGET_SRC_CASTER);
         spellInfo->Effects[EFFECT_1].TargetB = SpellImplicitTargetInfo(TARGET_UNIT_SRC_AREA_ALLY);
@@ -5349,6 +5350,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // XT-002 DECONSTRUCTOR
+    // Boom (XT-002)
     ApplySpellFix({ 62834 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].Effect = 0;
@@ -6240,7 +6242,7 @@ void SpellMgr::LoadSpellInfoCorrections()
     // Saber Lash (Lord Marrowgar)
     ApplySpellFix({ 69055, 70814 }, [](SpellInfo * spellInfo)
     {
-        spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_200_YARDS);
+        spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(8); // 5yd
     });
 
     // Impaled (Lord Marrowgar)
@@ -6637,6 +6639,12 @@ void SpellMgr::LoadSpellInfoCorrections()
     ApplySpellFix({ 73529 }, [](SpellInfo * spellInfo)
     {
         spellInfo->Effects[EFFECT_1].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_10_YARDS);   // 10yd
+    });
+
+    // Shadow Trap (searcher)
+    ApplySpellFix({ 74282 }, [](SpellInfo * spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_3_YARDS);   // 3yd
     });
 
     // Raging Spirit Visual
