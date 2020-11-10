@@ -27,6 +27,7 @@
 #include "SharedDefines.h"
 #include "QueryResult.h"
 #include "QueryCallback.h"
+#include "TaskScheduler.h"
 #include <map>
 #include <set>
 #include <list>
@@ -67,18 +68,11 @@ enum ShutdownExitCode
 /// Timers for different object refresh rates
 enum WorldTimers
 {
-    WUPDATE_AUCTIONS,
-    WUPDATE_WEATHERS,
-    WUPDATE_UPTIME,
-    WUPDATE_CORPSES,
+    WUPDATE_AUCTIONS,    
     WUPDATE_EVENTS,
-    WUPDATE_CLEANDB,
-    WUPDATE_AUTOBROADCAST,
-    WUPDATE_MAILBOXQUEUE,
-    WUPDATE_PINGDB,
-    WUPDATE_5_SECS,
     WUPDATE_COUNT
 };
+
 /// Can be used in SMSG_AUTH_RESPONSE packet
 enum BillingPlanFlags
 {
@@ -395,6 +389,8 @@ public:
     std::string const& GetRealmName() const { return _realmName; } // pussywizard
     void SetRealmName(std::string name) { _realmName = name; } // pussywizard
 
+    void SetTimers();
+
 protected:
     void _UpdateGameTime();
     // callback for UpdateRealmCharacters
@@ -423,6 +419,7 @@ private:
     bool m_isClosed;
 
     IntervalTimer m_timers[WUPDATE_COUNT];
+    TaskScheduler _scheduler;
     time_t mail_expire_check_timer;
 
     SessionMap m_sessions;

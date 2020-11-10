@@ -693,12 +693,6 @@ void World::LoadConfigSettings(bool reload)
         sGameConfig->SetInt("LogDB.Opt.ClearInterval", 10);
     }
 
-    if (reload)
-    {
-        m_timers[WUPDATE_CLEANDB].SetInterval(tempIntOption * MINUTE * IN_MILLISECONDS);
-        m_timers[WUPDATE_CLEANDB].Reset();
-    }
-
     LOG_TRACE("server.loading", "Will clear `logs` table of entries older than %i seconds every %u minutes.",
               sGameConfig->GetIntConfig("LogDB.Opt.ClearTime"), sGameConfig->GetIntConfig("LogDB.Opt.ClearInterval"));
 
@@ -857,12 +851,6 @@ void World::LoadConfigSettings(bool reload)
     {
         LOG_ERROR("config", "Calendar.DeleteOldEventsHour (%i) can't be load. Set to 6.", tempIntOption);
         sGameConfig->SetInt("Calendar.DeleteOldEventsHour", 6);
-    }
-
-    if (reload)
-    {
-        m_timers[WUPDATE_AUTOBROADCAST].SetInterval(sGameConfig->GetIntConfig("AutoBroadcast.Timer"));
-        m_timers[WUPDATE_AUTOBROADCAST].Reset();
     }
 
     MMAP::MMapFactory::InitializeDisabledMaps();
@@ -1387,25 +1375,11 @@ void World::SetInitialWorldSettings()
     LoginDatabase.PExecute("INSERT INTO uptime (realmid, starttime, uptime, revision) VALUES(%u, %u, 0, '%s')",
                            realmID, uint32(GameTime::GetStartTime()), GitRevision::GetFullVersion());  // One-time query
 
-    m_timers[WUPDATE_WEATHERS].SetInterval(1 * IN_MILLISECONDS);
     m_timers[WUPDATE_AUCTIONS].SetInterval(MINUTE * IN_MILLISECONDS);
     m_timers[WUPDATE_AUCTIONS].SetCurrent(MINUTE * IN_MILLISECONDS);
-    m_timers[WUPDATE_UPTIME].SetInterval(sGameConfig->GetIntConfig("UpdateUptimeInterval") * MINUTE * IN_MILLISECONDS);
-
-    //Update "uptime" table based on configuration entry in minutes.
-    m_timers[WUPDATE_CORPSES].SetInterval(20 * MINUTE * IN_MILLISECONDS);
-
-    //erase corpses every 20 minutes
-    m_timers[WUPDATE_CLEANDB].SetInterval(sGameConfig->GetIntConfig("LogDB.Opt.ClearInterval") * MINUTE * IN_MILLISECONDS);
-
-    // clean logs table every 14 days by default
-    m_timers[WUPDATE_AUTOBROADCAST].SetInterval(sGameConfig->GetIntConfig("AutoBroadcast.Timer"));
 
     // Mysql ping time in minutes
     m_timers[WUPDATE_PINGDB].SetInterval(sGameConfig->GetIntConfig("MaxPingTime") * MINUTE * IN_MILLISECONDS);
-
-    // our speed up
-    m_timers[WUPDATE_5_SECS].SetInterval(5 * IN_MILLISECONDS);
 
     mail_expire_check_timer = GameTime::GetGameTime() + 6 * 3600;
 
@@ -1605,7 +1579,113 @@ void World::LoadAutobroadcasts()
     LOG_INFO("server.loading", ">> Loaded %u autobroadcast definitions in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
 }
 
-/// Update the World !
+void World::SetTimers()
+{
+    // pussywizard: our speed up and functionality
+    _scheduler.Schedule(5s, [this](TaskContext context)
+    {
+        WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Update 5 sec"));
+
+        // moved here from HandleCharEnumOpcode
+        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_EXPIRED_BANS);
+        CharacterDatabase.Execute(stmt);
+
+        // copy players hashmapholder to avoid mutex
+        WhoListCacheMgr::Update();
+
+        // Repeat this
+        context.Repeat();
+    });
+
+    /// Handle weather updates when the timer has passed
+    _scheduler.Schedule(1s, [this](TaskContext context)
+    {
+        WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Update weathers"));
+
+        WeatherMgr::Update(1000);
+
+        // Repeat this
+        context.Repeat();
+    });
+
+    /// Update uptime table
+    _scheduler.Schedule(Minutes(sGameConfig->GetIntConfig("UpdateUptimeInterval")), [this](TaskContext context)
+    {
+        WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Update uptime"));
+
+        uint32 tmpDiff = GameTime::GetUptime();
+        uint32 maxOnlinePlayers = GetMaxPlayerCount();
+
+        PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPD_UPTIME_PLAYERS);
+
+        stmt->setUInt32(0, tmpDiff);
+        stmt->setUInt16(1, uint16(maxOnlinePlayers));
+        stmt->setUInt32(2, realmID);
+        stmt->setUInt32(3, uint32(GameTime::GetStartTime()));
+
+        LoginDatabase.Execute(stmt);
+
+        // Repeat this
+        context.Repeat();
+    });
+
+    ///- Erase corpses once every 20 minutes
+    _scheduler.Schedule(20min, [this](TaskContext context)
+    {
+        WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Remove old corpses"));
+
+        sObjectAccessor->RemoveOldCorpses();
+
+        // Repeat this
+        context.Repeat();
+    });
+
+    if (sGameConfig->GetIntConfig("LogDB.Opt.ClearInterval"))
+    {
+        ///- Clean DB logs
+        _scheduler.Schedule(Minutes(sGameConfig->GetIntConfig("LogDB.Opt.ClearInterval")), [this](TaskContext context)
+        {
+            PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_DEL_OLD_LOGS);
+
+            stmt->setUInt32(0, sGameConfig->GetIntConfig("LogDB.Opt.ClearTime"));
+            stmt->setUInt32(1, uint32(time(0)));
+
+            LoginDatabase.Execute(stmt);
+
+            // Repeat this
+            context.Repeat();
+        });
+    }
+
+    if (sGameConfig->GetBoolConfig("AutoBroadcast.On"))
+    {
+        _scheduler.Schedule(Minutes(sGameConfig->GetIntConfig("AutoBroadcast.Timer")), [this](TaskContext context)
+        {
+            WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Send autobroadcast"));
+
+            SendAutoBroadcast();
+
+            // Repeat this
+            context.Repeat();
+        });
+    }
+
+    _scheduler.Schedule(Minutes(sGameConfig->GetIntConfig("MaxPingTime")), [this](TaskContext context)
+    {
+        WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Ping MySQL"));
+
+        LOG_INFO("sql.driver", "Ping MySQL to keep connection alive");
+
+        CharacterDatabase.KeepAlive();
+        LoginDatabase.KeepAlive();
+        WorldDatabase.KeepAlive();
+
+        // Repeat this
+        context.Repeat();
+    });
+}
+
+/// Update the World!
 void World::Update(uint32 diff)
 {
     WH_METRIC_TIMER("world_update_time_total");
@@ -1618,29 +1698,8 @@ void World::Update(uint32 diff)
 
     DynamicVisibilityMgr::Update(GetActiveSessionCount());
 
-    ///- Update the different timers
-    for (int i = 0; i < WUPDATE_COUNT; ++i)
-    {
-        if (m_timers[i].GetCurrent() >= 0)
-            m_timers[i].Update(diff);
-        else
-            m_timers[i].SetCurrent(0);
-    }
-
-    // pussywizard: our speed up and functionality
-    if (m_timers[WUPDATE_5_SECS].Passed())
-    {
-        m_timers[WUPDATE_5_SECS].Reset();
-
-        WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Update 5 sec"));
-
-        // moved here from HandleCharEnumOpcode
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_EXPIRED_BANS);
-        CharacterDatabase.Execute(stmt);
-
-        // copy players hashmapholder to avoid mutex
-        WhoListCacheMgr::Update();
-    }
+    ///- Update the different timers    
+    _scheduler.Update(diff);
 
     /// Handle daily quests reset time
     if (currentGameTime > m_NextDailyQuestReset)
@@ -1715,30 +1774,6 @@ void World::Update(uint32 diff)
     // end of section with mutex
     AsyncAuctionListingMgr::SetAuctionListingAllowed(true);
 
-    /// <li> Handle weather updates when the timer has passed
-    if (m_timers[WUPDATE_WEATHERS].Passed())
-    {
-        WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Update weathers"));
-        m_timers[WUPDATE_WEATHERS].Reset();
-        WeatherMgr::Update(uint32(m_timers[WUPDATE_WEATHERS].GetInterval()));
-    }
-
-    /// <li> Clean logs table
-    if (sGameConfig->GetIntConfig("LogDB.Opt.ClearTime") > 0) // if not enabled, ignore the timer
-    {
-        if (m_timers[WUPDATE_CLEANDB].Passed())
-        {
-            m_timers[WUPDATE_CLEANDB].Reset();
-
-            PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_DEL_OLD_LOGS);
-
-            stmt->setUInt32(0, sGameConfig->GetIntConfig("LogDB.Opt.ClearTime"));
-            stmt->setUInt32(1, uint32(time(0)));
-
-            LoginDatabase.Execute(stmt);
-        }
-    }
-
     {
         WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Update LFG"));
         sLFGMgr->Update(diff, 0); // pussywizard: remove obsolete stuff before finding compatibility during map update
@@ -1747,17 +1782,7 @@ void World::Update(uint32 diff)
     {
         WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Update maps"));
         sMapMgr->Update(diff);
-    }
-
-    if (sGameConfig->GetBoolConfig("AutoBroadcast.On"))
-    {
-        if (m_timers[WUPDATE_AUTOBROADCAST].Passed())
-        {
-            WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Send autobroadcast"));
-            m_timers[WUPDATE_AUTOBROADCAST].Reset();
-            SendAutoBroadcast();
-        }
-    }
+    }    
 
     {
         WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Update battlegrounds"));
@@ -1785,33 +1810,6 @@ void World::Update(uint32 diff)
         ProcessQueryCallbacks();
     }
 
-    /// <li> Update uptime table
-    if (m_timers[WUPDATE_UPTIME].Passed())
-    {
-        WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Update uptime"));
-        uint32 tmpDiff = GameTime::GetUptime();
-        uint32 maxOnlinePlayers = GetMaxPlayerCount();
-
-        m_timers[WUPDATE_UPTIME].Reset();
-
-        PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPD_UPTIME_PLAYERS);
-
-        stmt->setUInt32(0, tmpDiff);
-        stmt->setUInt16(1, uint16(maxOnlinePlayers));
-        stmt->setUInt32(2, realmID);
-        stmt->setUInt32(3, uint32(GameTime::GetStartTime()));
-
-        LoginDatabase.Execute(stmt);
-    }
-
-    ///- Erase corpses once every 20 minutes
-    if (m_timers[WUPDATE_CORPSES].Passed())
-    {
-        WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Remove old corpses"));
-        m_timers[WUPDATE_CORPSES].Reset();
-        sObjectAccessor->RemoveOldCorpses();
-    }
-
     ///- Process Game events when necessary
     if (m_timers[WUPDATE_EVENTS].Passed())
     {
@@ -1820,19 +1818,6 @@ void World::Update(uint32 diff)
         uint32 nextGameEvent = sGameEventMgr->Update();
         m_timers[WUPDATE_EVENTS].SetInterval(nextGameEvent);
         m_timers[WUPDATE_EVENTS].Reset();
-    }
-
-    ///- Ping to keep MySQL connections alive
-    if (m_timers[WUPDATE_PINGDB].Passed())
-    {
-        WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Ping MySQL"));
-        m_timers[WUPDATE_PINGDB].Reset();
-
-        LOG_INFO("sql.driver", "Ping MySQL to keep connection alive");
-
-        CharacterDatabase.KeepAlive();
-        LoginDatabase.KeepAlive();
-        WorldDatabase.KeepAlive();
     }
 
     {
