@@ -48,9 +48,9 @@ public:
     size_t operator()(WorldPacket* data, LocaleConstant locale) const
     {
         BroadcastText const* bct = sObjectMgr->GetBroadcastText(_textId);
-        
+
         std::string text = "";
-        
+
         if (bct)
             ObjectMgr::GetLocaleString(_gender == GENDER_MALE ? bct->MaleText : bct->FemaleText, locale, text);
 
