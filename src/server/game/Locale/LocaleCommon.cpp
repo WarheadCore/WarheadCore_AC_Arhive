@@ -31,9 +31,9 @@ void Warhead::Game::Locale::AddLocaleString(std::string const& str, LocaleConsta
 }
 
 template<class Builder>
-void Warhead::Game::Locale::LocalizedPacketListDo<Builder>::operator()(Player* p)
+void Warhead::Game::Locale::LocalizedPacketListDo<Builder>::operator()(Player* player)
 {
-    LocaleConstant loc_idx = p->GetSession()->GetSessionDbLocaleIndex();
+    LocaleConstant loc_idx = player->GetSession()->GetSessionDbLocaleIndex();
     uint32 cache_idx = loc_idx + 1;
     WorldPacketList* data_list;
 
@@ -51,7 +51,7 @@ void Warhead::Game::Locale::LocalizedPacketListDo<Builder>::operator()(Player* p
         data_list = &i_data_cache[cache_idx];
 
     for (size_t i = 0; i < data_list->size(); ++i)
-        p->SendDirectMessage((*data_list)[i]);
+        player->SendDirectMessage((*data_list)[i]);
 }
 
 void Warhead::Game::Locale::ModulesLocaleTextBuilder::operator()(WorldPacketList& data_list, LocaleConstant loc_idx)
