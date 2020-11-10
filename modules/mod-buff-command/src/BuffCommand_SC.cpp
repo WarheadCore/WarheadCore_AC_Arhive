@@ -18,7 +18,7 @@
 #include "Log.h"
 #include "ScriptMgr.h"
 #include "GameConfig.h"
-#include "ModulesLocale.h"
+#include "ModuleLocale.h"
 #include "Chat.h"
 #include "Player.h"
 #include "AccountMgr.h"
@@ -49,13 +49,13 @@ public:
 
         buffs.clear();
 
-        LOG_INFO("modules", "Loading buff for command .buff...");
+        LOG_INFO("module", "Loading buff for command .buff...");
 
         QueryResult result = WorldDatabase.PQuery("SELECT SpellID FROM `player_buff`");
         if (!result)
         {
-            LOG_INFO("modules", ">> Loaded 0 buffs. DB table `player_buff` is empty.");
-            LOG_INFO("modules", "");
+            LOG_INFO("module", ">> Loaded 0 buffs. DB table `player_buff` is empty.");
+            LOG_INFO("module", "");
             return;
         }
 
@@ -66,7 +66,7 @@ public:
             auto spell = sSpellStore.LookupEntry(spellID);
             if (!spell)
             {
-                LOG_ERROR("modules", "-> Spell with number (%u) not found. Skip.", spellID);
+                LOG_ERROR("module", "-> Spell with number (%u) not found. Skip.", spellID);
                 continue;
             }
 
@@ -74,8 +74,8 @@ public:
 
         } while (result->NextRow());
 
-        LOG_INFO("modules", ">> Loaded %u buffs in %u ms", static_cast<uint32>(buffs.size()), GetMSTimeDiffToNow(oldMSTime));
-        LOG_INFO("modules", "");
+        LOG_INFO("module", ">> Loaded %u buffs in %u ms", static_cast<uint32>(buffs.size()), GetMSTimeDiffToNow(oldMSTime));
+        LOG_INFO("module", "");
     }
 
     void ApplyBuffs(Player* player)
@@ -113,7 +113,7 @@ public:
 
         if (!CONF_GET_BOOL("BuffCommand.Enable"))
         {
-            sModulesLocale->SendPlayerMessage(player, MODULE_NAME, BC_LOCALE_COMMAND_DISABLE);
+            sModuleLocale->SendPlayerMessage(player, MODULE_NAME, BC_LOCALE_COMMAND_DISABLE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -122,7 +122,7 @@ public:
 
         if (stringArg == "reload" && AccountMgr::IsAdminAccount(player->GetSession()->GetSecurity()))
         {
-            LOG_INFO("modules", "Re-Loading player buff data...");
+            LOG_INFO("module", "Re-Loading player buff data...");
             sBC->LoadDataFromDB();
             handler->SendGlobalGMSysMessage("|cff6C8CD5#|cFFFF0000 DB Table|r `player_buff` |cFFFF0000reloaded.|r");
             return true;
@@ -131,7 +131,7 @@ public:
         {
             if (player->duel || player->GetMap()->IsBattleArena() || player->HasFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_FEIGN_DEATH) || player->isDead(), player->IsInCombat() || player->IsInFlight())
             {
-                sModulesLocale->SendPlayerMessage(player, MODULE_NAME, BC_LOCALE_COMMAND_CANT);
+                sModuleLocale->SendPlayerMessage(player, MODULE_NAME, BC_LOCALE_COMMAND_CANT);
                 handler->SetSentErrorMessage(true);
                 return false;
             }
@@ -160,8 +160,7 @@ public:
         if (!CONF_GET_BOOL("BuffCommand.Enable"))
             return;
 
-        if (sModulesLocale->GetStringsCount(MODULE_NAME) != StringLocales::BC_LOCALE_MAX - 1)
-            LOG_FATAL("modules.bc", "> BC: String locales (%u) for module != (%u)", sModulesLocale->GetStringsCount(MODULE_NAME), StringLocales::BC_LOCALE_MAX - 1);
+        sModuleLocale->CheckStrings(MODULE_NAME, BC_LOCALE_MAX);
 
         sBC->LoadDataFromDB();
     }

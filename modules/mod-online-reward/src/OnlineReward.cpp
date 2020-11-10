@@ -21,7 +21,7 @@
 #include "Player.h"
 #include "Chat.h"
 #include "ExternalMail.h"
-#include "ModulesLocale.h"
+#include "ModuleLocale.h"
 #include "Tokenize.h"
 #include "StringConvert.h"
 
@@ -47,18 +47,14 @@ void OnlineReward::InitSystem()
     if (CONF_GET_BOOL("OnlineReward.Enable") && !CONF_GET_BOOL("OnlineReward.PerOnline.Enable") && !CONF_GET_BOOL("OnlineReward.PerTime.Enable"))
         sGameConfig->SetBool("OnlineReward.Enable", false);
 
-    if (sModulesLocale->GetStringsCount(MODULE_NAME) != StringLocales::OR_LOCALE_MAX - 1)
-    {
-        LOG_FATAL("modules.or", "> OnlineReward: string locales (%u) for module != (%u)", sModulesLocale->GetStringsCount(MODULE_NAME), StringLocales::OR_LOCALE_MAX - 1);
-        return;
-    }
+    sModuleLocale->CheckStrings(MODULE_NAME, OR_LOCALE_MAX);
 
     LoadRewards();
 }
 
 void OnlineReward::LoadRewards()
 {
-    LOG_INFO("modules", "Loading online rewards...");
+    LOG_INFO("module", "Loading online rewards...");
 
     _rewards.clear();
     uint32 msTime = getMSTime();
@@ -66,8 +62,8 @@ void OnlineReward::LoadRewards()
     QueryResult result = CharacterDatabase.Query("SELECT RewardPlayedTime, ItemID, Count FROM online_reward");
     if (!result)
     {
-        LOG_WARN("modules", "> DB table `online_reward` is empty!");
-        LOG_WARN("modules", "");
+        LOG_WARN("module", "> DB table `online_reward` is empty!");
+        LOG_WARN("module", "");
         return;
     }
 
@@ -84,20 +80,20 @@ void OnlineReward::LoadRewards()
         // Проверка
         if (!seconds)
         {
-            LOG_ERROR("modules", "-> Time = 0? Really? Skip...");
+            LOG_ERROR("module", "-> Time = 0? Really? Skip...");
             continue;
         }
 
         ItemTemplate const* itemTemplate = sObjectMgr->GetItemTemplate(RPT.ItemID);
         if (!itemTemplate)
         {
-            LOG_ERROR("modules", "-> Item with number %u not found. Skip", RPT.ItemID);
+            LOG_ERROR("module", "-> Item with number %u not found. Skip", RPT.ItemID);
             continue;
         }
 
         if (!RPT.ItemCount)
         {
-            LOG_ERROR("modules", "-> Item count for number %u - 0. Set to 1", RPT.ItemID);
+            LOG_ERROR("module", "-> Item count for number %u - 0. Set to 1", RPT.ItemID);
             RPT.ItemCount = 1;
         }
 
@@ -105,8 +101,8 @@ void OnlineReward::LoadRewards()
 
     } while (result->NextRow());
 
-    LOG_INFO("modules", ">> Loaded %u reward in %u ms", static_cast<uint32>(_rewards.size()), GetMSTimeDiffToNow(msTime));
-    LOG_INFO("modules", "");
+    LOG_INFO("module", ">> Loaded %u reward in %u ms", static_cast<uint32>(_rewards.size()), GetMSTimeDiffToNow(msTime));
+    LOG_INFO("module", "");
 }
 
 void OnlineReward::AddRewardHistory(uint32 lowGuid)
@@ -294,8 +290,8 @@ void OnlineReward::SendRewardForPlayer(Player* player, uint32 itemID, uint32 ite
     std::string playedTimeSecStr = secsToTimeString(secondsOnine);
     uint8 localeIndex = static_cast<uint8>(player->GetSession()->GetSessionDbLocaleIndex());
 
-    subject = Warhead::StringFormat(*sModulesLocale->GetModuleString(MODULE_NAME, StringLocales::OR_LOCALE_SUBJECT, localeIndex), playedTimeSecStr.c_str());
-    text = Warhead::StringFormat(*sModulesLocale->GetModuleString(MODULE_NAME, StringLocales::OR_LOCALE_TEXT, localeIndex), player->GetName().c_str(), playedTimeSecStr.c_str());
+    subject = Warhead::StringFormat(*sModuleLocale->GetModuleString(MODULE_NAME, StringLocales::OR_LOCALE_SUBJECT, localeIndex), playedTimeSecStr.c_str());
+    text = Warhead::StringFormat(*sModuleLocale->GetModuleString(MODULE_NAME, StringLocales::OR_LOCALE_TEXT, localeIndex), player->GetName().c_str(), playedTimeSecStr.c_str());
 
     // Send External mail
     sEM->AddMail(player->GetName(), subject, text, itemID, itemCount, 37688);
@@ -304,7 +300,7 @@ void OnlineReward::SendRewardForPlayer(Player* player, uint32 itemID, uint32 ite
     SaveDataForDB(player->GetGUIDLow(), secondsOnine, isPerOnline);
 
     // Send chat text
-    sModulesLocale->SendPlayerMessage(player, MODULE_NAME, StringLocales::OR_LOCALE_MESSAGE, playedTimeSecStr.c_str());
+    sModuleLocale->SendPlayerMessage(player, MODULE_NAME, StringLocales::OR_LOCALE_MESSAGE, playedTimeSecStr.c_str());
 }
 
 void OnlineReward::SaveDataForDB(uint32 lowGuid, uint32 seconds, bool isPerOnline /*= true*/)

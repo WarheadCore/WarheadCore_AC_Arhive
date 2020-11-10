@@ -18,7 +18,7 @@
 #include "Transmogrification.h"
 #include "GameConfig.h"
 #include "GameLocale.h"
-#include "ModulesLocale.h"
+#include "ModuleLocale.h"
 #include "ScriptedGossip.h"
 #include "GameEventMgr.h"
 
@@ -136,7 +136,7 @@ void Transmogrification::LoadPlayerSets(uint64 pGUID)
 
             if (slot >= EQUIPMENT_SLOT_END)
             {
-                LOG_ERROR("modules", "Item entry (FakeEntry: %u, playerGUID: %u, slot: %u, presetId: %u) has invalid slot, ignoring.", entry, GUID_LOPART(pGUID), slot, uint32(PresetID));
+                LOG_ERROR("module", "Item entry (FakeEntry: %u, playerGUID: %u, slot: %u, presetId: %u) has invalid slot, ignoring.", entry, GUID_LOPART(pGUID), slot, uint32(PresetID));
                 continue;
             }
 
@@ -173,36 +173,36 @@ std::string const Transmogrification::GetSlotName(Player* player, uint8 slot) co
     switch (slot)
     {
         case EQUIPMENT_SLOT_HEAD:
-            return sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_HEAD, localeIndex).value_or("Head"); // Head
+            return sModuleLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_HEAD, localeIndex).value_or("Head"); // Head
         case EQUIPMENT_SLOT_SHOULDERS:
-            return sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_SHOULDERS, localeIndex).value_or("Shoulders"); // Shoulders
+            return sModuleLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_SHOULDERS, localeIndex).value_or("Shoulders"); // Shoulders
         case EQUIPMENT_SLOT_BODY:
-            return sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_SHIRT, localeIndex).value_or("Shirt"); // Shirt
+            return sModuleLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_SHIRT, localeIndex).value_or("Shirt"); // Shirt
         case EQUIPMENT_SLOT_CHEST:
-            return sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_CHEST, localeIndex).value_or("Chest"); // Chest
+            return sModuleLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_CHEST, localeIndex).value_or("Chest"); // Chest
         case EQUIPMENT_SLOT_WAIST:
-            return sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_WAIST, localeIndex).value_or("Waist"); // Waist
+            return sModuleLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_WAIST, localeIndex).value_or("Waist"); // Waist
         case EQUIPMENT_SLOT_LEGS:
-            return sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_LEGS, localeIndex).value_or("Legs"); // Legs
+            return sModuleLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_LEGS, localeIndex).value_or("Legs"); // Legs
         case EQUIPMENT_SLOT_FEET:
-            return sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_FEET, localeIndex).value_or("Feet"); // Feet
+            return sModuleLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_FEET, localeIndex).value_or("Feet"); // Feet
         case EQUIPMENT_SLOT_WRISTS:
-            return sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_WRISTS, localeIndex).value_or("Wrists"); // Wrists
+            return sModuleLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_WRISTS, localeIndex).value_or("Wrists"); // Wrists
         case EQUIPMENT_SLOT_HANDS:
-            return sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_HANDS, localeIndex).value_or("Hands"); // Hands
+            return sModuleLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_HANDS, localeIndex).value_or("Hands"); // Hands
         case EQUIPMENT_SLOT_BACK:
-            return sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_BACK, localeIndex).value_or("Back"); // Back
+            return sModuleLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_BACK, localeIndex).value_or("Back"); // Back
         case EQUIPMENT_SLOT_MAINHAND:
-            return sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_MAIN_HAND, localeIndex).value_or("Main hand"); // Main hand
+            return sModuleLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_MAIN_HAND, localeIndex).value_or("Main hand"); // Main hand
         case EQUIPMENT_SLOT_OFFHAND:
-            return sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_OFF_HAND, localeIndex).value_or("Off hand"); // Off hand
+            return sModuleLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_OFF_HAND, localeIndex).value_or("Off hand"); // Off hand
         case EQUIPMENT_SLOT_RANGED:
-            return sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_RANGED, localeIndex).value_or("Ranged"); // Ranged
+            return sModuleLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_RANGED, localeIndex).value_or("Ranged"); // Ranged
         case EQUIPMENT_SLOT_TABARD:
-            return sModulesLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_TABARD, localeIndex).value_or("Tabard"); // Tabard
+            return sModuleLocale->GetModuleString(MODULE_NAME, TRANSMOG_LOCALE_TABARD, localeIndex).value_or("Tabard"); // Tabard
         default:
             {
-                LOG_FATAL("modules.transmog", "> Transmog: unknown slot (%u)", slot);
+                LOG_FATAL("module.transmog", "> Transmog: unknown slot (%u)", slot);
                 return "";
             }
     }
@@ -408,7 +408,7 @@ void Transmogrification::Transmogrify(Player* player, uint64 itemGUID, uint8 slo
     // slot of the transmogrified item
     if (slot >= EQUIPMENT_SLOT_END)
     {
-        LOG_DEBUG("modules.transmog", "WORLD: HandleTransmogrifyItems - Player (GUID: %u, name: %s) tried to transmogrify an item (lowguid: %u) with a wrong slot (%u) when transmogrifying items.",
+        LOG_DEBUG("module.transmog", "WORLD: HandleTransmogrifyItems - Player (GUID: %u, name: %s) tried to transmogrify an item (lowguid: %u) with a wrong slot (%u) when transmogrifying items.",
                   player->GetGUIDLow(), player->GetName().c_str(), GUID_LOPART(itemGUID), slot);
 
         SendNotification(player, TRANSMOG_LOCALE_TRANSMOG_INVALID_SLOT);
@@ -423,7 +423,7 @@ void Transmogrification::Transmogrify(Player* player, uint64 itemGUID, uint8 slo
         itemTransmogrifier = player->GetItemByGuid(itemGUID);
         if (!itemTransmogrifier)
         {
-            LOG_ERROR("modules.transmog", "WORLD: HandleTransmogrifyItems - Player (GUID: %u, name: %s) tried to transmogrify with an invalid item (lowguid: %u).", player->GetGUIDLow(), player->GetName().c_str(), GUID_LOPART(itemGUID));
+            LOG_ERROR("module.transmog", "WORLD: HandleTransmogrifyItems - Player (GUID: %u, name: %s) tried to transmogrify with an invalid item (lowguid: %u).", player->GetGUIDLow(), player->GetName().c_str(), GUID_LOPART(itemGUID));
             SendNotification(player, TRANSMOG_LOCALE_TRANSMOG_MISSING_SRC_ITEM);
             return;
         }
@@ -433,7 +433,7 @@ void Transmogrification::Transmogrify(Player* player, uint64 itemGUID, uint8 slo
     Item* itemTransmogrified = player->GetItemByPos(INVENTORY_SLOT_BAG_0, slot);
     if (!itemTransmogrified)
     {
-        LOG_DEBUG("modules", "WORLD: HandleTransmogrifyItems - Player (GUID: %u, name: %s) tried to transmogrify an invalid item in a valid slot (slot: %u).", player->GetGUIDLow(), player->GetName().c_str(), slot);
+        LOG_DEBUG("module", "WORLD: HandleTransmogrifyItems - Player (GUID: %u, name: %s) tried to transmogrify an invalid item in a valid slot (slot: %u).", player->GetGUIDLow(), player->GetName().c_str(), slot);
         SendNotification(player, TRANSMOG_LOCALE_TRANSMOG_MISSING_DEST_ITEM);
         return;
     }
@@ -447,7 +447,7 @@ void Transmogrification::Transmogrify(Player* player, uint64 itemGUID, uint8 slo
     {
         if (!CanTransmogrifyItemWithItem(player, itemTransmogrified->GetTemplate(), itemTransmogrifier->GetTemplate()))
         {
-            LOG_DEBUG("modules", "WORLD: HandleTransmogrifyItems - Player (GUID: %u, name: %s) failed CanTransmogrifyItemWithItem (%u with %u).",
+            LOG_DEBUG("module", "WORLD: HandleTransmogrifyItems - Player (GUID: %u, name: %s) failed CanTransmogrifyItemWithItem (%u with %u).",
                       player->GetGUIDLow(), player->GetName().c_str(), itemTransmogrified->GetEntry(), itemTransmogrifier->GetEntry());
 
             SendNotification(player, TRANSMOG_LOCALE_TRANSMOG_INVALID_ITEMS);
@@ -474,7 +474,7 @@ void Transmogrification::Transmogrify(Player* player, uint64 itemGUID, uint8 slo
             if (cost) // 0 cost if reverting look
             {
                 if (cost < 0)
-                    LOG_DEBUG("modules", "Transmogrification::Transmogrify - %s (%u) transmogrification invalid cost (non negative, amount %i). Transmogrified %u with %u",
+                    LOG_DEBUG("module", "Transmogrification::Transmogrify - %s (%u) transmogrification invalid cost (non negative, amount %i). Transmogrified %u with %u",
                               player->GetName().c_str(), player->GetGUIDLow(), -cost, itemTransmogrified->GetEntry(), itemTransmogrifier->GetEntry());
                 else
                 {
@@ -772,7 +772,7 @@ void Transmogrification::LoadConfig(bool reload)
 
     if (!reload)
     {
-        LOG_DEBUG("modules.transmog", "Deleting non-existing transmogrification entries...");
+        LOG_DEBUG("module.transmog", "Deleting non-existing transmogrification entries...");
         CharacterDatabase.Execute("DELETE FROM custom_transmogrification WHERE NOT EXISTS (SELECT 1 FROM item_instance WHERE item_instance.guid = custom_transmogrification.GUID)");
 
         // Clean even if disabled
@@ -783,17 +783,13 @@ void Transmogrification::LoadConfig(bool reload)
 
 void Transmogrification::Init()
 {
-    if (sModulesLocale->GetStringsCount(MODULE_NAME) != StringLocales::TRANSMOG_LOCALE_MAX - 1)
-    {
-        LOG_FATAL("modules.transmog", "> String locales (%u) for module != (%u)", sModulesLocale->GetStringsCount(MODULE_NAME), StringLocales::TRANSMOG_LOCALE_MAX - 1);
-        return;
-    }
+    sModuleLocale->CheckStrings(MODULE_NAME, TRANSMOG_LOCALE_MAX);
 
     uint32 tokenEntry = CONF_GET_INT("Transmogrification.TokenEntry");
 
     if (!sObjectMgr->GetItemTemplate(tokenEntry))
     {
-        LOG_ERROR("modules.transmog", "Transmogrification.TokenEntry (%u) does not exist. Using default.", tokenEntry);
+        LOG_ERROR("module.transmog", "Transmogrification.TokenEntry (%u) does not exist. Using default.", tokenEntry);
         sGameConfig->SetInt("Transmogrification.TokenEntry", 49426);
     }
 }
@@ -902,7 +898,7 @@ std::string const Transmogrification::GetGossipIcon(uint8 slot, Player* player)
 
 std::string const Transmogrification::GetGossipItemName(Player* player, uint8 gossipItem)
 {
-    return sModulesLocale->GetModuleString(MODULE_NAME, gossipItem, static_cast<uint8>(player->GetSession()->GetSessionDbLocaleIndex())).value_or("");
+    return sModuleLocale->GetModuleString(MODULE_NAME, gossipItem, static_cast<uint8>(player->GetSession()->GetSessionDbLocaleIndex())).value_or("");
 }
 
 bool Transmogrification::CanSavePresets(Player* player)
@@ -1216,7 +1212,7 @@ void Transmogrification::SendNotification(Player* player, uint8 stringID)
 
     uint8 localeIndex = static_cast<uint8>(session->GetSessionDbLocaleIndex());
 
-    session->SendNotification("%s", sModulesLocale->GetModuleString(MODULE_NAME, stringID, localeIndex).value().c_str());
+    session->SendNotification("%s", sModuleLocale->GetModuleString(MODULE_NAME, stringID, localeIndex).value().c_str());
 }
 
 void Transmogrification::OnGossipHello(Player* player, Creature* creature)

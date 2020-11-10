@@ -23,38 +23,20 @@
 #include <unordered_map>
 #include <optional>
 
-struct ModuleString
-{
-    ModuleString()
-    {
-        Content.resize(DEFAULT_LOCALE + 1);
-    }
+struct ModuleString;
 
-    std::vector<std::string> Content;
-
-    std::optional<std::string> GetText(uint8 locale = 0) const
-    {
-        if (Content.size() > size_t(locale) && !Content[locale].empty())
-            return Content[locale];
-
-        if (!Content[0].empty())
-            return Content[0];
-
-        return nullopt;
-    }
-};
-
-class ModulesLocale
+class ModuleLocale
 {
 private:
-    ModulesLocale() = default;
-    ~ModulesLocale() = default;
+    ModuleLocale() = default;
+    ~ModuleLocale() = default;
 
 public:
-    static ModulesLocale* instance();
+    static ModuleLocale* instance();
 
     void Init();
     void LoadModuleString();
+    void CheckStrings(std::string const& moduleName, uint8 maxString);
 
     std::optional<std::string> GetModuleString(std::string const& moduleName, uint32 id, uint8 _locale) const;
     uint32 GetStringsCount(std::string const& moduleName);
@@ -72,6 +54,6 @@ private:
     void AddModuleString(std::string const& moduleName, ModuleStringContainer& data);
 };
 
-#define sModulesLocale ModulesLocale::instance()
+#define sModuleLocale ModuleLocale::instance()
 
 #endif // _MODULES_LOCALE_H_
