@@ -27,13 +27,13 @@ bool ExMail::AddItems(uint32 itemID, uint32 itemCount)
     ItemTemplate const* itemTemplate = sObjectMgr->GetItemTemplate(itemID);
     if (!itemTemplate)
     {
-        LOG_ERROR("modules", "> External Mail: Предмета под номером %u не существует. ID (%u)", itemID, ID);
+        LOG_ERROR("module", "> External Mail: Предмета под номером %u не существует. ID (%u)", itemID, ID);
         return false;
     }
 
     if (itemCount < 1 || (itemTemplate->MaxCount > 0 && itemCount > static_cast<uint32>(itemTemplate->MaxCount)))
     {
-        LOG_ERROR("modules", "> External Mail: Некорректное количество (%u) для предмета (%u). ID (%u)", itemCount, itemID, ID);
+        LOG_ERROR("module", "> External Mail: Некорректное количество (%u) для предмета (%u). ID (%u)", itemCount, itemID, ID);
         return false;
     }
 
@@ -69,7 +69,7 @@ void ExternalMail::GetMailsFromDB()
     if (!result)
         return;
 
-    LOG_TRACE("modules.em", "> External Mail: GetMailsFromDB");
+    LOG_TRACE("module.em", "> External Mail: GetMailsFromDB");
 
     do
     {
@@ -86,7 +86,7 @@ void ExternalMail::GetMailsFromDB()
 
         if (!normalizePlayerName(PlayerName))
         {
-            LOG_ERROR("modules", "> External Mail: Неверное имя персонажа (%s)", PlayerName.c_str());
+            LOG_ERROR("module", "> External Mail: Неверное имя персонажа (%s)", PlayerName.c_str());
             continue;
         }
 
@@ -100,14 +100,14 @@ void ExternalMail::GetMailsFromDB()
         ItemTemplate const* itemTemplate = sObjectMgr->GetItemTemplate(ItemID);
         if (!itemTemplate)
         {
-            LOG_ERROR("modules", "> External Mail: Предмета под номером %u не существует. Пропуск", ItemID);
+            LOG_ERROR("module", "> External Mail: Предмета под номером %u не существует. Пропуск", ItemID);
             _error = true;
         }
 
         auto const* creature = sObjectMgr->GetCreatureTemplate(CreatureEntry);
         if (!creature)
         {
-            LOG_ERROR("modules", "> External Mail: НПС под номером %u не существует. Пропуск", CreatureEntry);
+            LOG_ERROR("module", "> External Mail: НПС под номером %u не существует. Пропуск", CreatureEntry);
             _error = true;
         }
 
@@ -139,7 +139,7 @@ void ExternalMail::SendMails()
     if (_store.empty())
         return;
 
-    LOG_TRACE("modules.em", "> External Mail: SendMails");
+    LOG_TRACE("module.em", "> External Mail: SendMails");
 
     SQLTransaction trans = CharacterDatabase.BeginTransaction();
 
@@ -173,8 +173,8 @@ void ExternalMail::SendMails()
 
     CharacterDatabase.CommitTransaction(trans);
 
-    LOG_DEBUG("modules", "> External Mail: Отправлено (%u) писем", static_cast<uint32>(_store.size()));
-    LOG_DEBUG("modules", "");
+    LOG_DEBUG("module", "> External Mail: Отправлено (%u) писем", static_cast<uint32>(_store.size()));
+    LOG_DEBUG("module", "");
 
     // Clear for next time
     _store.clear();

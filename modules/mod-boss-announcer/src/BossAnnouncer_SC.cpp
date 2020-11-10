@@ -21,7 +21,7 @@
 #include "StringFormat.h"
 #include "GameConfig.h"
 #include "GameLocale.h"
-#include "ModulesLocale.h"
+#include "ModuleLocale.h"
 
 enum StringLocales : uint8
 {
@@ -49,7 +49,7 @@ public:
         if (!creature->isWorldBoss())
             return;
 
-        sModulesLocale->SendGlobalMessage(false, MODULE_NAME, BOSS_AN_LOCALE_SEND_TEXT, player->GetName().c_str(), GetCreatureName(player, creature).c_str(), GetDiffString(player).c_str());
+        sModuleLocale->SendGlobalMessage(false, MODULE_NAME, BOSS_AN_LOCALE_SEND_TEXT, player->GetName().c_str(), GetCreatureName(player, creature).c_str(), GetDiffString(player).c_str());
     };
 
 private:
@@ -67,13 +67,13 @@ private:
         switch (map->GetDifficulty())
         {
             case RAID_DIFFICULTY_10MAN_NORMAL:
-                return *sModulesLocale->GetModuleString(MODULE_NAME, BOSS_AN_LOCALE_10_MAN_NORMAL, localeIndex);
+                return *sModuleLocale->GetModuleString(MODULE_NAME, BOSS_AN_LOCALE_10_MAN_NORMAL, localeIndex);
             case RAID_DIFFICULTY_10MAN_HEROIC:
-                return *sModulesLocale->GetModuleString(MODULE_NAME, BOSS_AN_LOCALE_10_MAN_HEROIC, localeIndex);
+                return *sModuleLocale->GetModuleString(MODULE_NAME, BOSS_AN_LOCALE_10_MAN_HEROIC, localeIndex);
             case RAID_DIFFICULTY_25MAN_NORMAL:
-                return *sModulesLocale->GetModuleString(MODULE_NAME, BOSS_AN_LOCALE_25_MAN_NORMAL, localeIndex);
+                return *sModuleLocale->GetModuleString(MODULE_NAME, BOSS_AN_LOCALE_25_MAN_NORMAL, localeIndex);
             case RAID_DIFFICULTY_25MAN_HEROIC:
-                return *sModulesLocale->GetModuleString(MODULE_NAME, BOSS_AN_LOCALE_25_MAN_HEROIC, localeIndex);
+                return *sModuleLocale->GetModuleString(MODULE_NAME, BOSS_AN_LOCALE_25_MAN_HEROIC, localeIndex);
             default:
                 return "";
         }
@@ -110,8 +110,7 @@ public:
 
     void OnStartup() override
     {
-        if (sModulesLocale->GetStringsCount(MODULE_NAME) != StringLocales::BOSS_AN_LOCALE_MAX - 1)
-            LOG_FATAL("modules.bossan", "> String locales (%u) for module != (%u)", sModulesLocale->GetStringsCount(MODULE_NAME), StringLocales::BOSS_AN_LOCALE_MAX - 1);
+        sModuleLocale->CheckStrings(MODULE_NAME, BOSS_AN_LOCALE_MAX);
     }
 };
 

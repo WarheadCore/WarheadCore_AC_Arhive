@@ -1005,7 +1005,7 @@ void World::SetInitialWorldSettings()
     LOG_INFO("server.loading", "Loading instances...");
     sInstanceSaveMgr->LoadInstances();
 
-    LOG_INFO("server.loading", "Loading Game locales texts...");
+    LOG_INFO("server.loading", "Loading Game locale texts...");
     sGameLocale->LoadAllLocales();
 
     LOG_INFO("server.loading", "Loading Page Texts...");

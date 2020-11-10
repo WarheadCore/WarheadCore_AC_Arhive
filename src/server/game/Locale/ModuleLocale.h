@@ -44,17 +44,18 @@ struct ModuleString
     }
 };
 
-class ModulesLocale
+class ModuleLocale
 {
 private:
-    ModulesLocale() = default;
-    ~ModulesLocale() = default;
+    ModuleLocale() = default;
+    ~ModuleLocale() = default;
 
 public:
-    static ModulesLocale* instance();
+    static ModuleLocale* instance();
 
     void Init();
     void LoadModuleString();
+    void CheckStrings(std::string const& moduleName, uint32 maxString);
 
     std::optional<std::string> GetModuleString(std::string const& moduleName, uint32 id, uint8 _locale) const;
     uint32 GetStringsCount(std::string const& moduleName);
@@ -72,6 +73,6 @@ private:
     void AddModuleString(std::string const& moduleName, ModuleStringContainer& data);
 };
 
-#define sModulesLocale ModulesLocale::instance()
+#define sModuleLocale ModuleLocale::instance()
 
 #endif // _MODULES_LOCALE_H_

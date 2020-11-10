@@ -22,7 +22,7 @@
 #include "Player.h"
 #include "GameTime.h"
 #include "MuteManager.h"
-#include "ModulesLocale.h"
+#include "ModuleLocale.h"
 
 enum StringLocales : uint8
 {
@@ -53,7 +53,7 @@ public:
         std::string muteTimeStr = secsToTimeString(MuteTime - GameTime::GetGameTime(), true);
         std::string nameLink = ChatHandler(receiver->GetSession()).playerLink(receiver->GetName());
 
-        sModulesLocale->SendPlayerMessage(player, MODULE_NAME, NM_LOCALE_MESSAGE, nameLink.c_str(), muteTimeStr.c_str());
+        sModuleLocale->SendPlayerMessage(player, MODULE_NAME, NM_LOCALE_MESSAGE, nameLink.c_str(), muteTimeStr.c_str());
     }
 };
 
@@ -69,8 +69,7 @@ public:
 
     void OnStartup() override
     {
-        if (sModulesLocale->GetStringsCount(MODULE_NAME) != StringLocales::NM_LOCALE_MAX - 1)
-            LOG_FATAL("modules.nm", "> NotifyMuted: String locales (%u) for module != (%u)", sModulesLocale->GetStringsCount(MODULE_NAME), StringLocales::NM_LOCALE_MAX - 1);
+        sModuleLocale->CheckStrings(MODULE_NAME, NM_LOCALE_MAX);
     }
 };
 

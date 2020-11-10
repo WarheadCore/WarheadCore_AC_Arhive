@@ -60,7 +60,7 @@ GuildCriteriaProgressStruct* GuildCriteria::GetProgress(uint32 criteriaID, bool 
         if (_progress != _guildCriteriaProgress.end())
             return &_progress->second;
 
-        LOG_FATAL("modules.gls", "> GLS: Not found criteria progress (%u) after insert empty", criteriaID);
+        LOG_FATAL("module.gls", "> GLS: Not found criteria progress (%u) after insert empty", criteriaID);
     }
 
     return nullptr;
@@ -70,7 +70,7 @@ GuildCriteriaStruct* GuildCriteria::GetCriteria(uint32 criteriaID)
 {
     auto const& criteria = _guildCriteria.find(criteriaID);
     if (criteria == _guildCriteria.end())
-        LOG_FATAL("modules.gls", "> GLS: Not found criteria (%u) for guild id (%u)", criteriaID, _guildID);
+        LOG_FATAL("module.gls", "> GLS: Not found criteria (%u) for guild id (%u)", criteriaID, _guildID);
 
     return &criteria->second;
 }
@@ -87,7 +87,7 @@ void GuildCriteria::RescalingCriterias()
     uint32 members = guild ? guild->GetMemberCount() : 0;
 
     if (!members)
-        LOG_FATAL("modules.gls", "> GLS: No members count in guild (%u)", _guildID);
+        LOG_FATAL("module.gls", "> GLS: No members count in guild (%u)", _guildID);
 
     for (auto& itr : _guildCriteria)
     {
@@ -314,13 +314,13 @@ GuildLevelSystem* GuildLevelSystem::instance()
 
 void GuildLevelSystem::Init()
 {
-    LOG_INFO("modules.gls", "Loading Guild Level System");
+    LOG_INFO("module.gls", "Loading Guild Level System");
 
     LoadBaseCriteria();
     LoadCriteriaProgress();
     LoadStageProgress();
 
-    LOG_INFO("modules.gls", "");
+    LOG_INFO("module.gls", "");
 }
 
 void GuildLevelSystem::SendGuildMessage(uint32 guildID, std::string&& message)
@@ -437,7 +437,7 @@ void GuildLevelSystem::LoadBaseCriteria()
 
     if (!result)
     {
-        LOG_WARN("modules.gls", "> Загружено 0 GLS критерий. Таблица `gls_criteria` пустая.");
+        LOG_WARN("module.gls", "> Загружено 0 GLS критерий. Таблица `gls_criteria` пустая.");
         return;
     }
 
@@ -453,7 +453,7 @@ void GuildLevelSystem::LoadBaseCriteria()
             ItemTemplate const* itemTemplate = sObjectMgr->GetItemTemplate(itemID);
             if (!itemTemplate)
             {
-                LOG_ERROR("modules.gls", "> GLS: ItemID (%u) for GLS criteria is not valid.", itemID);
+                LOG_ERROR("module.gls", "> GLS: ItemID (%u) for GLS criteria is not valid.", itemID);
                 return false;
             }
 
@@ -495,19 +495,19 @@ void GuildLevelSystem::LoadBaseCriteria()
 
         if (static_cast<uint32>(listItemIDTokens.size()) > GLS_ITEMS_COUNT)
         {
-            LOG_FATAL("modules.gls", "> GLS: List items for CriteriaID (%u) > %u", criteriaID, GLS_ITEMS_COUNT);
+            LOG_FATAL("module.gls", "> GLS: List items for CriteriaID (%u) > %u", criteriaID, GLS_ITEMS_COUNT);
             continue;
         }
 
         if (static_cast<uint32>(listItemCountTokens.size()) > GLS_ITEMS_COUNT)
         {
-            LOG_FATAL("modules.gls", "> GLS: List items count for CriteriaID (%u) > %u", criteriaID, GLS_ITEMS_COUNT);
+            LOG_FATAL("module.gls", "> GLS: List items count for CriteriaID (%u) > %u", criteriaID, GLS_ITEMS_COUNT);
             continue;
         }
 
         if (listItemIDTokens.size() != listItemCountTokens.size())
         {
-            LOG_FATAL("modules.gls", "> GLS: Differenst size data between `ListItemID` and `ListItemCount`");
+            LOG_FATAL("module.gls", "> GLS: Differenst size data between `ListItemID` and `ListItemCount`");
             continue;
         }
 
@@ -527,7 +527,7 @@ void GuildLevelSystem::LoadBaseCriteria()
         // Reward spells
         if (listRewardSpells.empty())
         {
-            LOG_ERROR("modules.gls", "> GLS: Not exist reward spells for criteria id (%u). Skip", criteriaID);
+            LOG_ERROR("module.gls", "> GLS: Not exist reward spells for criteria id (%u). Skip", criteriaID);
             continue;
         }
 
@@ -535,7 +535,7 @@ void GuildLevelSystem::LoadBaseCriteria()
 
         if (static_cast<uint32>(listRewardSpellsTokens.size()) > GLS_SPELLS_REWARD_COUNT)
         {
-            LOG_FATAL("modules.gls", "> GLS: List reward spells for CriteriaID (%u) > %u", criteriaID, GLS_SPELLS_REWARD_COUNT);
+            LOG_FATAL("module.gls", "> GLS: List reward spells for CriteriaID (%u) > %u", criteriaID, GLS_SPELLS_REWARD_COUNT);
             continue;
         }
 
@@ -545,7 +545,7 @@ void GuildLevelSystem::LoadBaseCriteria()
 
             if (!sSpellMgr->GetSpellInfo(spellID))
             {
-                LOG_ERROR("modules.gls", "> GLS: Spell id (%u) is not exist! Skip.", spellID);
+                LOG_ERROR("module.gls", "> GLS: Spell id (%u) is not exist! Skip.", spellID);
                 spellID = 0;
             }
 
@@ -565,7 +565,7 @@ void GuildLevelSystem::LoadBaseCriteria()
 
     } while (result->NextRow());
 
-    LOG_INFO("modules.gls", ">> Loading %u GLS criteria in %u мс", static_cast<uint32>(_guildCriteriaBase.size()), GetMSTimeDiffToNow(oldMSTime));
+    LOG_INFO("module.gls", ">> Loading %u GLS criteria in %u мс", static_cast<uint32>(_guildCriteriaBase.size()), GetMSTimeDiffToNow(oldMSTime));
 }
 
 void GuildLevelSystem::LoadCriteriaProgress()
@@ -584,7 +584,7 @@ void GuildLevelSystem::LoadCriteriaProgress()
 
     if (!result)
     {
-        LOG_WARN("modules.gls", "> Загружено 0 GLS критерий прогресса. Таблица `gls_criteria_progress` пустая.");
+        LOG_WARN("module.gls", "> Загружено 0 GLS критерий прогресса. Таблица `gls_criteria_progress` пустая.");
         return;
     }
 
@@ -603,7 +603,7 @@ void GuildLevelSystem::LoadCriteriaProgress()
         // Check guild
         if (!sGuildMgr->GetGuildById(guildID))
         {
-            LOG_ERROR("modules.gls", "> GLS: guild id (%u) is not exist!. Skip", guildID);
+            LOG_ERROR("module.gls", "> GLS: guild id (%u) is not exist!. Skip", guildID);
             continue;
         }
 
@@ -624,21 +624,21 @@ void GuildLevelSystem::LoadCriteriaProgress()
 
         if (static_cast<uint32>(listItemCountTokens.size()) > GLS_ITEMS_COUNT)
         {
-            LOG_FATAL("modules.gls", "> GLS: List items count for CriteriaID (%u) > %u", criteriaID, GLS_ITEMS_COUNT);
+            LOG_FATAL("module.gls", "> GLS: List items count for CriteriaID (%u) > %u", criteriaID, GLS_ITEMS_COUNT);
             continue;
         }
 
         // Check spell
         if (spellID && !sSpellMgr->GetSpellInfo(spellID))
         {
-            LOG_FATAL("modules.gls", "> GLS: spell (%u) for CriteriaID (%u) is invalid", spellID, criteriaID);
+            LOG_FATAL("module.gls", "> GLS: spell (%u) for CriteriaID (%u) is invalid", spellID, criteriaID);
             continue;
         }
 
         // Check wtf logic
         if (!spellID && isDone)
         {
-            LOG_FATAL("modules.gls", "> GLS: CriteriaID (%u) is done and spell not selectable!", criteriaID);
+            LOG_FATAL("module.gls", "> GLS: CriteriaID (%u) is done and spell not selectable!", criteriaID);
             continue;
         }
 
@@ -656,7 +656,7 @@ void GuildLevelSystem::LoadCriteriaProgress()
         count++;
     } while (result->NextRow());
 
-    LOG_INFO("modules.gls", ">> Загружено %u GLS критерий прогресса за %u мс", count, GetMSTimeDiffToNow(oldMSTime));
+    LOG_INFO("module.gls", ">> Загружено %u GLS критерий прогресса за %u мс", count, GetMSTimeDiffToNow(oldMSTime));
 }
 
 void GuildLevelSystem::LoadStageProgress()
@@ -670,7 +670,7 @@ void GuildLevelSystem::LoadStageProgress()
 
     if (!result)
     {
-        LOG_WARN("modules.gls", "> Загружено 0 GLS стадий прогресса. Таблица `gls_stages_progress` пустая.");
+        LOG_WARN("module.gls", "> Загружено 0 GLS стадий прогресса. Таблица `gls_stages_progress` пустая.");
         return;
     }
 
@@ -686,14 +686,14 @@ void GuildLevelSystem::LoadStageProgress()
         // Check guild
         if (!sGuildMgr->GetGuildById(guildID))
         {
-            LOG_ERROR("modules.gls", "> GLS: guild id (%u) is not exist!. Skip", guildID);
+            LOG_ERROR("module.gls", "> GLS: guild id (%u) is not exist!. Skip", guildID);
             continue;
         }
 
         auto criteriaProgress = GetCriteriaProgress(guildID);
         if (!criteriaProgress)
         {
-            LOG_ERROR("modules.gls", "> GLS: guild id (%u) is not exist in criteria progress!. Skip", guildID);
+            LOG_ERROR("module.gls", "> GLS: guild id (%u) is not exist in criteria progress!. Skip", guildID);
             continue;
         }
 
@@ -702,7 +702,7 @@ void GuildLevelSystem::LoadStageProgress()
         count++;
     } while (result->NextRow());
 
-    LOG_INFO("modules.gls", ">> Загружено %u GLS стадий прогресса за %u мс", count, GetMSTimeDiffToNow(oldMSTime));
+    LOG_INFO("module.gls", ">> Загружено %u GLS стадий прогресса за %u мс", count, GetMSTimeDiffToNow(oldMSTime));
 }
 
 // Gossip
@@ -712,7 +712,7 @@ void GuildLevelSystem::InvestItem(Player* player, Creature* creature, uint32 sen
 
     if (itemType > GLS_ITEMS_COUNT)
     {
-        LOG_ERROR("modules.gls", "> GLS: invalid item type (%u)", itemType);
+        LOG_ERROR("module.gls", "> GLS: invalid item type (%u)", itemType);
         return;
     }
 
@@ -732,7 +732,7 @@ void GuildLevelSystem::InvestItem(Player* player, Creature* creature, uint32 sen
     uint32 itemID = criteriaProgress->GetCriteriaItemID(criteriaID, itemType);
     if (!itemID)
     {
-        LOG_ERROR("modules.gls", "> GLS: invalid item id at invest (%u-%u)", criteriaID, itemType);
+        LOG_ERROR("module.gls", "> GLS: invalid item id at invest (%u-%u)", criteriaID, itemType);
         handler.PSendSysMessage("> Неверный номер предмета (%u-%u)", criteriaID, itemType);
     }
 
@@ -774,7 +774,7 @@ void GuildLevelSystem::InvestItemFull(Player* player, Creature* creature, uint32
 
     if (itemType > GLS_ITEMS_COUNT)
     {
-        LOG_ERROR("modules.gls", "> GLS: invalid item type (%u)", itemType);
+        LOG_ERROR("module.gls", "> GLS: invalid item type (%u)", itemType);
         ShowInvestedMenu(player, creature, sender, action);
         return;
     }
@@ -795,7 +795,7 @@ void GuildLevelSystem::InvestItemFull(Player* player, Creature* creature, uint32
     uint32 itemID = criteriaProgress->GetCriteriaItemID(criteriaID, itemType);
     if (!itemID)
     {
-        LOG_ERROR("modules.gls", "> GLS: invalid item id at invest (%u-%u)", criteriaID, itemType);
+        LOG_ERROR("module.gls", "> GLS: invalid item id at invest (%u-%u)", criteriaID, itemType);
         handler.PSendSysMessage("> Неверный номер предмета (%u-%u)", criteriaID, itemType);
     }
 
@@ -837,7 +837,7 @@ GuildCriteria* GuildLevelSystem::GetCriteriaProgress(uint32 guildid, bool forceC
         if (_itr != _guildCriteriaProgress.end())
             return _itr->second;
 
-        LOG_FATAL("modules.gls", "> GLS: Invalid create empty guild criteria for guild (%u)", guildid);
+        LOG_FATAL("module.gls", "> GLS: Invalid create empty guild criteria for guild (%u)", guildid);
     }
 
     return nullptr;
@@ -849,7 +849,7 @@ GuildCriteriaStruct* GuildLevelSystem::GetCriteriaBase(uint32 criteriaID)
     if (itr != _guildCriteriaBase.end())
         return &itr->second;
 
-    LOG_FATAL("modules.gls", "> GLS: Not found base criteria (%u)", criteriaID);
+    LOG_FATAL("module.gls", "> GLS: Not found base criteria (%u)", criteriaID);
 
     return nullptr;
 }
@@ -860,7 +860,7 @@ uint32 GuildLevelSystem::GetMaxCriteriaItemCountBase(uint32 criteriaID, uint8 it
     if (itr != _guildCriteriaBase.end())
         return itr->second.ItemCount[itemType];
 
-    LOG_FATAL("modules.gls", "> GLS: Not found base criteria (%u)", criteriaID);
+    LOG_FATAL("module.gls", "> GLS: Not found base criteria (%u)", criteriaID);
 
     return 0;
 }
@@ -1066,7 +1066,7 @@ void GuildLevelSystem::GetRewardsCriteria(Player* player, Creature* creature, ui
 
     if (spellType >= GLS_SPELLS_REWARD_COUNT)
     {
-        LOG_FATAL("modules.gls", "> GLS: spellType(%u) >= GLS_SPELLS_REWARD_COUNT(%u)", spellType, GLS_SPELLS_REWARD_COUNT);
+        LOG_FATAL("module.gls", "> GLS: spellType(%u) >= GLS_SPELLS_REWARD_COUNT(%u)", spellType, GLS_SPELLS_REWARD_COUNT);
         return;
     }
 
@@ -1247,7 +1247,7 @@ uint32 GuildLevelSystem::GetCountCriteriaInStage(uint32 stageID)
     if (_stages != _guildStages.end())
         return static_cast<uint32>(_stages->second.size());
 
-    LOG_FATAL("modules.gls", "> GLS: Not find stage %u", stageID);
+    LOG_FATAL("module.gls", "> GLS: Not find stage %u", stageID);
 
     return 0;
 }
@@ -1260,7 +1260,7 @@ uint32 GuildLevelSystem::GetNextStage(uint32 currStage)
         if (nextStage == itr.first)
             return nextStage;
 
-    LOG_FATAL("modules.gls", "> GLS: Not found next stage after %u", currStage);
+    LOG_FATAL("module.gls", "> GLS: Not found next stage after %u", currStage);
 
     return currStage;
 }

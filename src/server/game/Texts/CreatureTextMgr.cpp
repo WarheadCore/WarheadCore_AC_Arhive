@@ -26,6 +26,7 @@
 #include "CreatureTextMgr.h"
 #include "GameConfig.h"
 #include "GameLocale.h"
+#include "LocaleCommon.h"
 
 class CreatureTextBuilder
 {
@@ -192,10 +193,11 @@ void CreatureTextMgr::LoadCreatureTextLocales()
 
         CreatureTextLocale& data = mLocaleTextMap[CreatureTextId(CreatureId, GroupId, ID)];
         LocaleConstant locale = GetLocaleByName(LocaleName);
+
         if (locale == LOCALE_enUS)
             continue;
 
-        sGameLocale->AddLocaleString(Text, locale, data.Text);
+        Warhead::Game::Locale::AddLocaleString(Text, locale, data.Text);
 
     } while (result->NextRow());
 

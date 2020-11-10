@@ -22,7 +22,7 @@
 #include "Player.h"
 #include "AccountMgr.h"
 #include "GameTime.h"
-#include "ModulesLocale.h"
+#include "ModuleLocale.h"
 #include "MuteManager.h"
 #include <vector>
 
@@ -57,11 +57,7 @@ public:
 
     void Init()
     {
-        if (sModulesLocale->GetStringsCount(MODULE_NAME) != StringLocales::ANTIAD_LOCALE_MAX - 1)
-        {
-            LOG_FATAL("modules.antiad", "> AntiAD: string locales (%u) for module != (%u)", sModulesLocale->GetStringsCount(MODULE_NAME), StringLocales::ANTIAD_LOCALE_MAX - 1);
-            return;
-        }
+        sModuleLocale->CheckStrings(MODULE_NAME, ANTIAD_LOCALE_MAX);
 
         LoadDataFromDB();
     }
@@ -72,13 +68,13 @@ public:
 
         messages.clear();
 
-        LOG_INFO("modules.antiad", "Loading forbidden words...");
+        LOG_INFO("module.antiad", "Loading forbidden words...");
 
         QueryResult result = WorldDatabase.PQuery("SELECT message FROM `anti_ad_messages`");
         if (!result)
         {
-            LOG_INFO("modules.antiad", ">> Loading 0 word. DB table `anti_ad_messages` is empty.");
-            LOG_INFO("modules.antiad", "");
+            LOG_INFO("module.antiad", ">> Loading 0 word. DB table `anti_ad_messages` is empty.");
+            LOG_INFO("module.antiad", "");
             return;
         }
 
@@ -89,8 +85,8 @@ public:
 
         } while (result->NextRow());
 
-        LOG_INFO("modules.antiad", ">> Loaded forbidden words %u in %u ms", static_cast<uint32>(messages.size()), GetMSTimeDiffToNow(oldMSTime));
-        LOG_INFO("modules.antiad", "");
+        LOG_INFO("module.antiad", ">> Loaded forbidden words %u in %u ms", static_cast<uint32>(messages.size()), GetMSTimeDiffToNow(oldMSTime));
+        LOG_INFO("module.antiad", "");
     }
 
     bool IsNeedCheckChannel(uint8 channelType)
@@ -183,7 +179,7 @@ private:
         sMute->MutePlayer(player->GetName(), muteTime, "Console", "Advertisment");
 
         if (CONF_GET_BOOL("AntiAD.SelfMessage.Enable"))
-            sModulesLocale->SendGlobalMessage(true, MODULE_NAME, StringLocales::ANTIAD_LOCALE_SEND_SELF, muteTime);
+            sModuleLocale->SendGlobalMessage(true, MODULE_NAME, StringLocales::ANTIAD_LOCALE_SEND_SELF, muteTime);
     }
 
     void SendGMTexts(Player* player, std::string ADMessage, std::string FullMessage)
@@ -192,10 +188,10 @@ private:
         std::string NameLink = ChatHandler(player->GetSession()).GetNameLink(player);
 
         if (CONF_GET_BOOL("AntiAD.MessageGMsInWorld.Enable"))
-            sModulesLocale->SendGlobalMessage(true, MODULE_NAME, StringLocales::ANTIAD_LOCALE_SEND_GM_TEXT, NameLink.c_str(), ADMessage.c_str());
+            sModuleLocale->SendGlobalMessage(true, MODULE_NAME, StringLocales::ANTIAD_LOCALE_SEND_GM_TEXT, NameLink.c_str(), ADMessage.c_str());
 
         if (CONF_GET_BOOL("AntiAD.FullMessageGMsInWorld.Enable"))
-            sModulesLocale->SendGlobalMessage(true, MODULE_NAME, StringLocales::ANTIAD_LOCALE_SEND_GM_TEXT_FULL, NameLink.c_str(), FullMessage.c_str());
+            sModuleLocale->SendGlobalMessage(true, MODULE_NAME, StringLocales::ANTIAD_LOCALE_SEND_GM_TEXT_FULL, NameLink.c_str(), FullMessage.c_str());
     }
 
     void CheckMessage(Player* player, std::string& msg)

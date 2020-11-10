@@ -3450,7 +3450,7 @@ Logger.commands.gm = 6,GM
 Logger.sql = 4,Console DBErrors
 Logger.sql.updates = 6,Console Server
 Logger.mmaps= 6,Server
-Logger.modules = 6,Console Modules
+Logger.module = 6,Console Modules
 
 #Logger.achievement=6,Console Server
 #Logger.addon=6,Console Server
@@ -3495,6 +3495,7 @@ Logger.modules = 6,Console Modules
 #Logger.group=6,Console Server
 #Logger.guild=6,Console Server
 #Logger.lfg=6,Console Server
+#Logger.locale.module=6,Console Server
 #Logger.loot=6,Console Server
 #Logger.instance=6,Console Server
 #Logger.mail=6,Console Server

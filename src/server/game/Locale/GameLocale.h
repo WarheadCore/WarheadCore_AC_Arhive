@@ -220,8 +220,6 @@ public:
     void LoadAllLocales();
     bool LoadAcoreStrings();
 
-    void AddLocaleString(std::string const& str, LocaleConstant locale, std::vector<std::string>& data);
-
     inline void GetLocaleString(const std::vector<std::string>& data, int loc_idx, std::string& value)
     {
         if (data.size() > size_t(loc_idx) && !data[loc_idx].empty())

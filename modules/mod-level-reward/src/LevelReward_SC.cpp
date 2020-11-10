@@ -17,7 +17,7 @@
 
 #include "Log.h"
 #include "ScriptMgr.h"
-#include "ModulesLocale.h"
+#include "ModuleLocale.h"
 #include "GameConfig.h"
 #include "Chat.h"
 #include "Player.h"
@@ -56,14 +56,14 @@ public:
         uint32 msTime = getMSTime();
         rewards.clear();
 
-        LOG_INFO("modules", "Load level reward data...");
+        LOG_INFO("module", "Load level reward data...");
 
         //                                                  0      1      2       3
         QueryResult result = WorldDatabase.Query("SELECT Level, Money, ItemID, ItemCount FROM level_reward ORDER BY Level");
         if (!result)
         {
-            LOG_ERROR("modules", "In DB table `level_reward` not data. Loading canceled");
-            LOG_ERROR("modules", "");
+            LOG_ERROR("module", "In DB table `level_reward` not data. Loading canceled");
+            LOG_ERROR("module", "");
             return;
         }
 
@@ -82,7 +82,7 @@ public:
             // Проверка
             if (Level > CONF_GET_INT("MaxPlayerLevel"))
             {
-                LOG_ERROR("modules", "-> Level (%u) more, than max player level in world (%u). Skip", Level, CONF_GET_INT("MaxPlayerLevel"));
+                LOG_ERROR("module", "-> Level (%u) more, than max player level in world (%u). Skip", Level, CONF_GET_INT("MaxPlayerLevel"));
                 continue;
             }
 
@@ -91,14 +91,14 @@ public:
                 ItemTemplate const* itemTemplate = sObjectMgr->GetItemTemplate(_levelReward.ItemID);
                 if (!itemTemplate)
                 {
-                    LOG_ERROR("modules", "-> For level (%u) item witch nuber %u not found. Item delete from reward", Level, _levelReward.ItemID);
+                    LOG_ERROR("module", "-> For level (%u) item witch nuber %u not found. Item delete from reward", Level, _levelReward.ItemID);
                     _levelReward.ItemID = 0;
                 }
             }
 
             if (_levelReward.ItemID && !_levelReward.ItemCount)
             {
-                LOG_ERROR("modules", "-> For level (%u) item witch nuber %u adding 0 count - this useless. Set 1", Level, _levelReward.ItemID);
+                LOG_ERROR("module", "-> For level (%u) item witch nuber %u adding 0 count - this useless. Set 1", Level, _levelReward.ItemID);
                 _levelReward.ItemCount = 1;
             }
 
@@ -106,8 +106,8 @@ public:
 
         } while (result->NextRow());
 
-        LOG_INFO("modules", ">> Loaded %u reward for level in %u ms", static_cast<uint32>(rewards.size()), GetMSTimeDiffToNow(msTime));
-        LOG_INFO("modules", "");
+        LOG_INFO("module", ">> Loaded %u reward for level in %u ms", static_cast<uint32>(rewards.size()), GetMSTimeDiffToNow(msTime));
+        LOG_INFO("module", "");
     }
 
     void RewardPlayer(Player* player, uint8 oldLevel)
@@ -146,15 +146,15 @@ private:
         if (!levelReward)
             return;
 
-        std::string subject = *sModulesLocale->GetModuleString(MODULE_NAME, LEVEL_REWARD_LOCALE_SUBJECT, Level);
-        std::string text = *sModulesLocale->GetModuleString(MODULE_NAME, LEVEL_REWARD_LOCALE_TEXT, Level);
+        std::string subject = *sModuleLocale->GetModuleString(MODULE_NAME, LEVEL_REWARD_LOCALE_SUBJECT, Level);
+        std::string text = *sModuleLocale->GetModuleString(MODULE_NAME, LEVEL_REWARD_LOCALE_TEXT, Level);
 
         uint8 localeIndex = static_cast<uint8>(player->GetSession()->GetSessionDbLocaleIndex());
 
         // Send External mail
         sEM->AddMail(player->GetName(), subject, text, levelReward->ItemID, levelReward->ItemCount, CONF_GET_INT("LevelReward.NpcID"));
 
-        sModulesLocale->SendPlayerMessage(player, MODULE_NAME, LEVEL_REWARD_LOCALE_MESSAGE, Level);
+        sModuleLocale->SendPlayerMessage(player, MODULE_NAME, LEVEL_REWARD_LOCALE_MESSAGE, Level);
     }
 };
 
@@ -189,6 +189,8 @@ public:
     {
         if (!CONF_GET_BOOL("LevelReward.Enable"))
             return;
+
+        sModuleLocale->CheckStrings(MODULE_NAME, LEVEL_REWARD_LOCALE_MAX);
 
         sLR->LoadDataFromDB();
     }

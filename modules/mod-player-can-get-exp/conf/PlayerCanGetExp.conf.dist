@@ -20,7 +20,7 @@
 
 #
 #    PCGE.Enable
-#        Description: Enable/Disable modules for control give players exp
+#        Description: Enable/Disable module for control give players exp
 #        Default: 0
 #
 #    PCGE.MaxLevelDiff
