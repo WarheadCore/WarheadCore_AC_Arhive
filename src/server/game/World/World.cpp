@@ -1690,7 +1690,7 @@ void World::Update(uint32 diff)
     sWorldUpdateTime.UpdateWithDiff(diff);
 
     DynamicVisibilityMgr::Update(GetActiveSessionCount());
-  
+
     _scheduler.Update(diff);
 
     ///- Update the different timers
@@ -1783,7 +1783,7 @@ void World::Update(uint32 diff)
     {
         WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Update maps"));
         sMapMgr->Update(diff);
-    }    
+    }
 
     {
         WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Update battlegrounds"));
