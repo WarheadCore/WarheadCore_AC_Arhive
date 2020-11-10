@@ -193,7 +193,7 @@ void CreatureTextMgr::LoadCreatureTextLocales()
 
         CreatureTextLocale& data = mLocaleTextMap[CreatureTextId(CreatureId, GroupId, ID)];
         LocaleConstant locale = GetLocaleByName(LocaleName);
-        
+
         if (locale == LOCALE_enUS)
             continue;
 
