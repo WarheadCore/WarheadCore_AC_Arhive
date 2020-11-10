@@ -679,12 +679,6 @@ void World::LoadConfigSettings(bool reload)
         sGameConfig->SetInt("UpdateUptimeInterval", 10); // 10
     }
 
-    if (reload)
-    {
-        m_timers[WUPDATE_UPTIME].SetInterval(tempIntOption * MINUTE * IN_MILLISECONDS);
-        m_timers[WUPDATE_UPTIME].Reset();
-    }
-
     // log db cleanup interval
     tempIntOption = sGameConfig->GetIntConfig("LogDB.Opt.ClearInterval");
     if (tempIntOption <= 0)
@@ -854,6 +848,8 @@ void World::LoadConfigSettings(bool reload)
     }
 
     MMAP::MMapFactory::InitializeDisabledMaps();
+
+    SetTimers();
 
     // call ScriptMgr if we're reloading the configuration
     sScriptMgr->OnAfterConfigLoad(reload);
@@ -1378,9 +1374,6 @@ void World::SetInitialWorldSettings()
     m_timers[WUPDATE_AUCTIONS].SetInterval(MINUTE * IN_MILLISECONDS);
     m_timers[WUPDATE_AUCTIONS].SetCurrent(MINUTE * IN_MILLISECONDS);
 
-    // Mysql ping time in minutes
-    m_timers[WUPDATE_PINGDB].SetInterval(sGameConfig->GetIntConfig("MaxPingTime") * MINUTE * IN_MILLISECONDS);
-
     mail_expire_check_timer = GameTime::GetGameTime() + 6 * 3600;
 
     ///- Initilize static helper structures
@@ -1697,9 +1690,17 @@ void World::Update(uint32 diff)
     sWorldUpdateTime.UpdateWithDiff(diff);
 
     DynamicVisibilityMgr::Update(GetActiveSessionCount());
-
-    ///- Update the different timers    
+  
     _scheduler.Update(diff);
+
+    ///- Update the different timers
+    for (int i = 0; i < WUPDATE_COUNT; ++i)
+    {
+        if (m_timers[i].GetCurrent() >= 0)
+            m_timers[i].Update(diff);
+        else
+            m_timers[i].SetCurrent(0);
+    }
 
     /// Handle daily quests reset time
     if (currentGameTime > m_NextDailyQuestReset)
