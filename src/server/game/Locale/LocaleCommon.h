@@ -59,28 +59,28 @@ namespace Warhead::Game::Locale
                     delete i_data_cache[i][j];
         }
 
-        void operator()(Player* player)
-        {
-            LocaleConstant loc_idx = player->GetSession()->GetSessionDbLocaleIndex();
-            uint32 cache_idx = loc_idx + 1;
-            WorldPacketList* data_list;
+        void operator()(Player* player);
+        //{
+        //    LocaleConstant loc_idx = player->GetSession()->GetSessionDbLocaleIndex();
+        //    uint32 cache_idx = loc_idx + 1;
+        //    WorldPacketList* data_list;
 
-            // create if not cached yet
-            if (i_data_cache.size() < cache_idx + 1 || i_data_cache[cache_idx].empty())
-            {
-                if (i_data_cache.size() < cache_idx + 1)
-                    i_data_cache.resize(cache_idx + 1);
+        //    // create if not cached yet
+        //    if (i_data_cache.size() < cache_idx + 1 || i_data_cache[cache_idx].empty())
+        //    {
+        //        if (i_data_cache.size() < cache_idx + 1)
+        //            i_data_cache.resize(cache_idx + 1);
 
-                data_list = &i_data_cache[cache_idx];
+        //        data_list = &i_data_cache[cache_idx];
 
-                i_builder(*data_list, loc_idx);
-            }
-            else
-                data_list = &i_data_cache[cache_idx];
+        //        i_builder(*data_list, loc_idx);
+        //    }
+        //    else
+        //        data_list = &i_data_cache[cache_idx];
 
-            for (size_t i = 0; i < data_list->size(); ++i)
-                player->SendDirectMessage((*data_list)[i]);
-        }
+        //    for (size_t i = 0; i < data_list->size(); ++i)
+        //        player->SendDirectMessage((*data_list)[i]);
+        //}
 
     private:
         Builder& i_builder;
