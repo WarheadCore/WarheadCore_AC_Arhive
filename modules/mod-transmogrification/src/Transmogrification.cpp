@@ -105,6 +105,7 @@ void Transmogrification::PresetTransmog(Player* player, Item* itemTransmogrified
     itemTransmogrified->SetOwnerGUID(player->GetGUID());
     itemTransmogrified->SetNotRefundable(player);
     itemTransmogrified->ClearSoulboundTradeable(player);
+    itemTransmogrified->SetState(ITEM_CHANGED, player);
 }
 
 void Transmogrification::LoadPlayerSets(uint64 pGUID)
@@ -503,6 +504,8 @@ void Transmogrification::Transmogrify(Player* player, uint64 itemGUID, uint8 slo
         itemTransmogrifier->SetOwnerGUID(player->GetGUID());
         itemTransmogrifier->SetNotRefundable(player);
         itemTransmogrifier->ClearSoulboundTradeable(player);
+        itemTransmogrifier->SetState(ITEM_CHANGED, player);
+        itemTransmogrified->SetState(ITEM_CHANGED, player);
     }
 
     SendNotification(player, TRANSMOG_LOCALE_TRANSMOG_OK);
@@ -597,8 +600,7 @@ bool Transmogrification::SuitableForTransmogrification(Player* player, ItemTempl
     if (!player || !proto)
         return false;
 
-    if (proto->Class != ITEM_CLASS_ARMOR &&
-            proto->Class != ITEM_CLASS_WEAPON)
+    if (proto->Class != ITEM_CLASS_ARMOR && proto->Class != ITEM_CLASS_WEAPON)
         return false;
 
     // Skip all checks for allowed items
@@ -622,7 +624,7 @@ bool Transmogrification::SuitableForTransmogrification(Player* player, ItemTempl
     if (!CONF_GET_BOOL("Transmogrification.AllowFishingPoles") && proto->Class == ITEM_CLASS_WEAPON && proto->SubClass == ITEM_SUBCLASS_WEAPON_FISHING_POLE)
         return false;
 
-    if (!IsAllowedQuality(proto->Quality)) // (proto->Quality == ITEM_QUALITY_LEGENDARY)
+    if (!IsAllowedQuality(proto->Quality))
         return false;
 
     if ((proto->Flags2 & ITEM_FLAGS_EXTRA_HORDE_ONLY) && player->GetTeamId() != TEAM_HORDE)
@@ -637,11 +639,15 @@ bool Transmogrification::SuitableForTransmogrification(Player* player, ItemTempl
     if (!CONF_GET_BOOL("Transmogrification.IgnoreReqRace") && (proto->AllowableRace & player->getRaceMask()) == 0)
         return false;
 
-    if (!CONF_GET_BOOL("Transmogrification.IgnoreReqSkill") && proto->RequiredSkill &&
-            (!player->GetSkillValue(proto->RequiredSkill) || player->GetSkillValue(proto->RequiredSkill) < proto->RequiredSkillRank))
-        return false;
+    if (!CONF_GET_BOOL("Transmogrification.IgnoreReqSkill") && proto->RequiredSkill)
+    {
+        if (!player->GetSkillValue(proto->RequiredSkill))
+            return false;
+        else if (player->GetSkillValue(proto->RequiredSkill) < proto->RequiredSkillRank)
+            return false;
+    }
 
-    if (!CONF_GET_BOOL("Transmogrification.IgnoreReqSpell") && proto->RequiredSpell != 0 && !player->HasSpell(proto->RequiredSpell))
+    if (!CONF_GET_BOOL("Transmogrification.IgnoreReqSpell") && proto->RequiredSpell && !player->HasSpell(proto->RequiredSpell))
         return false;
 
     if (!CONF_GET_BOOL("Transmogrification.IgnoreReqLevel") && player->getLevel() < proto->RequiredLevel)
@@ -653,9 +659,7 @@ bool Transmogrification::SuitableForTransmogrification(Player* player, ItemTempl
 
     if (!CONF_GET_BOOL("Transmogrification.IgnoreReqStats"))
     {
-        if (!proto->RandomProperty && !proto->RandomSuffix
-                /*[AZTH] Yehonal: we should transmorg also items without stats*/
-                && proto->StatsCount > 0)
+        if (!proto->RandomProperty && !proto->RandomSuffix && proto->StatsCount)
         {
             bool found = false;
 
