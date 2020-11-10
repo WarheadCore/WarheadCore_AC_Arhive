@@ -30,7 +30,6 @@ void Warhead::Game::Locale::AddLocaleString(std::string const& str, LocaleConsta
     data[locale] = str;
 }
 
-// Prepare using Builder localized packets with caching and send to player
 template<class Builder>
 void Warhead::Game::Locale::LocalizedPacketListDo<Builder>::operator()(Player* p)
 {

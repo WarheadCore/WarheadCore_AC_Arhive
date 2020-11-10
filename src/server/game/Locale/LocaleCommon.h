@@ -19,6 +19,7 @@
 #define _LOCALE_COMMON_H_
 
 #include "Common.h"
+#include "WorldPacket.h"
 #include <vector>
 
 namespace Warhead::Game::Locale
