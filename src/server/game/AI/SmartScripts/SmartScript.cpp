@@ -15,9 +15,9 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Chat.h"
 #include "Cell.h"
 #include "CellImpl.h"
+#include "ChatTextBuilder.h"
 #include "CreatureTextMgr.h"
 #include "DatabaseEnv.h"
 #include "GameEventMgr.h"
@@ -38,31 +38,6 @@
 #include "SpellMgr.h"
 #include "Vehicle.h"
 #include "GameLocale.h"
-
-class BroadcastTextBuilder
-{
-public:
-    BroadcastTextBuilder(WorldObject const* obj, ChatMsg msgtype, uint32 id, WorldObject const* target, uint32 gender = GENDER_MALE)
-        : _source(obj), _msgType(msgtype), _textId(id), _target(target), _gender(gender) { }
-
-    size_t operator()(WorldPacket* data, LocaleConstant locale) const
-    {
-        BroadcastText const* bct = sGameLocale->GetBroadcastText(_textId);
-
-        std::string text = "";
-
-        if (bct)
-            sGameLocale->GetLocaleString(_gender == GENDER_MALE ? bct->MaleText : bct->FemaleText, locale, text);
-
-        return ChatHandler::BuildChatPacket(*data, _msgType, bct ? Language(bct->Language) : LANG_UNIVERSAL, _source, _target, text, 0, "", locale);
-    }
-
-    WorldObject const* _source;
-    ChatMsg _msgType;
-    uint32 _textId;
-    WorldObject const* _target;
-    uint32 _gender;
-};
 
 SmartScript::SmartScript()
 {
@@ -273,7 +248,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                     {
                         if (IsUnit(*itr))
                         {
-                            (*itr)->SendPlaySound(e.action.sound.sound, e.action.sound.onlySelf > 0);
+                            (*itr)->PlayDirectSound(e.action.sound.sound, e.action.sound.onlySelf ? (*itr)->ToPlayer() : nullptr);
 
                             LOG_DEBUG("scripts.ai", "SmartScript::ProcessAction:: SMART_ACTION_SOUND: target: %s (GuidLow: %u), sound: %u, onlyself: %u",
                                       (*itr)->GetName().c_str(), (*itr)->GetGUIDLow(), e.action.sound.sound, e.action.sound.onlySelf);
@@ -317,11 +292,10 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                     if (IsUnit(*itr))
                     {
                         uint32 sound = temp[urand(0, count - 1)];
-                        (*itr)->SendPlaySound(sound, e.action.randomSound.onlySelf > 0);
+                        (*itr)->PlayDirectSound(sound, e.action.randomSound.onlySelf ? (*itr)->ToPlayer() : nullptr);
 
                         LOG_DEBUG("scripts.ai", "SmartScript::ProcessAction:: SMART_ACTION_RANDOM_SOUND: target: %s (GuidLow: %u), sound: %u, onlyself: %u",
                                   (*itr)->GetName().c_str(), (*itr)->GetGUIDLow(), sound, e.action.randomSound.onlySelf);
-
                     }
                 }
 
@@ -1046,7 +1020,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
 
                 if (e.action.flee.withEmote)
                 {
-                    BroadcastTextBuilder builder(me, CHAT_MSG_MONSTER_EMOTE, BROADCAST_TEXT_FLEE_FOR_ASSIST, nullptr, me->getGender());
+                    Warhead::BroadcastTextBuilder builder(me, CHAT_MSG_MONSTER_EMOTE, BROADCAST_TEXT_FLEE_FOR_ASSIST, me->getGender());
                     sCreatureTextMgr->SendChatPacket(me, builder, CHAT_MSG_MONSTER_EMOTE);
                 }
 
@@ -1355,7 +1329,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
 
                         if (e.action.callHelp.withEmote)
                         {
-                            BroadcastTextBuilder builder(*itr, CHAT_MSG_MONSTER_EMOTE, BROADCAST_TEXT_CALL_FOR_HELP, nullptr, me->getGender());
+                            Warhead::BroadcastTextBuilder builder(me, CHAT_MSG_MONSTER_EMOTE, BROADCAST_TEXT_CALL_FOR_HELP, me->getGender());
                             sCreatureTextMgr->SendChatPacket(*itr, builder, CHAT_MSG_MONSTER_EMOTE);
                         }
                     }

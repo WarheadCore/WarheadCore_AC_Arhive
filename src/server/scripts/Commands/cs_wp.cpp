@@ -212,7 +212,7 @@ public:
         target->LoadPath(pathid);
         target->SetDefaultMovementType(WAYPOINT_MOTION_TYPE);
         target->GetMotionMaster()->Initialize();
-        target->MonsterSay("Path loaded.", LANG_UNIVERSAL, nullptr);
+        target->Say("Path loaded.", LANG_UNIVERSAL);
 
         return true;
     }
@@ -250,7 +250,6 @@ public:
             if (target->GetCreatureAddon()->path_id != 0)
             {
                 PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_DEL_CREATURE_ADDON);
-
                 stmt->setUInt32(0, guildLow);
 
                 WorldDatabase.Execute(stmt);
@@ -258,7 +257,6 @@ public:
                 target->UpdateWaypointID(0);
 
                 stmt = WorldDatabase.GetPreparedStatement(WORLD_UPD_CREATURE_MOVEMENT_TYPE);
-
                 stmt->setUInt8(0, uint8(IDLE_MOTION_TYPE));
                 stmt->setUInt32(1, guildLow);
 
@@ -268,9 +266,11 @@ public:
                 target->SetDefaultMovementType(IDLE_MOTION_TYPE);
                 target->GetMotionMaster()->MoveTargetedHome();
                 target->GetMotionMaster()->Initialize();
-                target->MonsterSay("Path unloaded.", LANG_UNIVERSAL, nullptr);
+                target->Say("Path unloaded.", LANG_UNIVERSAL);
+
                 return true;
             }
+
             handler->PSendSysMessage("%s%s|r", "|cffff33ff", "Target have no loaded path.");
         }
         return true;

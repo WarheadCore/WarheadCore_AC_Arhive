@@ -318,10 +318,11 @@ public:
             DoMeleeAttackIfReady();
         }
 
-        void JustDied(Unit*  /*pKiller*/)
+        void JustDied(Unit* /*pKiller*/)
         {
-            me->SendPlaySound(SOUND_DEATH, false);
-            if(m_pInstance)
+            me->PlayDirectSound(SOUND_DEATH);
+
+            if (m_pInstance)
                 m_pInstance->SetData(DATA_GORTOK_PALEHOOF, DONE);
         }
 

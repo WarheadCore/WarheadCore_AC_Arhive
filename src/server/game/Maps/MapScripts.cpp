@@ -378,84 +378,51 @@ void Map::ScriptsProcess()
         switch (step.script->command)
         {
             case SCRIPT_COMMAND_TALK:
-                if (step.script->Talk.ChatType > CHAT_TYPE_WHISPER && step.script->Talk.ChatType != CHAT_MSG_RAID_BOSS_WHISPER)
                 {
-                    LOG_ERROR("maps", "%s invalid chat type (%u) specified, skipping.", step.script->GetDebugInfo().c_str(), step.script->Talk.ChatType);
-                    break;
-                }
-                if (step.script->Talk.Flags & SF_TALK_USE_PLAYER)
-                {
-                    if (Player* player = _GetScriptPlayerSourceOrTarget(source, target, step.script))
+                    if (step.script->Talk.ChatType > CHAT_TYPE_WHISPER && step.script->Talk.ChatType != CHAT_MSG_RAID_BOSS_WHISPER)
                     {
-                        LocaleConstant loc_idx = player->GetSession()->GetSessionDbLocaleIndex();
-                        BroadcastText const* broadcastText = sGameLocale->GetBroadcastText(step.script->Talk.TextID);
-                        std::string text = broadcastText->GetText(loc_idx, player->getGender());
+                        LOG_ERROR("scripts", "%s invalid chat type (%u) specified, skipping.", step.script->GetDebugInfo().c_str(), step.script->Talk.ChatType);
+                        break;
+                    }
 
+                    Unit* source = nullptr;
+
+                    if (step.script->Talk.Flags & SF_TALK_USE_PLAYER)
+                        source = _GetScriptPlayerSourceOrTarget(source, target, step.script);
+                    else
+                        source = _GetScriptCreatureSourceOrTarget(source, target, step.script);
+
+                    if (source)
+                    {
                         switch (step.script->Talk.ChatType)
                         {
                             case CHAT_TYPE_SAY:
-                                player->Say(text, LANG_UNIVERSAL);
+                                source->Say(step.script->Talk.TextID, target);
                                 break;
                             case CHAT_TYPE_YELL:
-                                player->Yell(text, LANG_UNIVERSAL);
+                                source->Yell(step.script->Talk.TextID, target);
                                 break;
                             case CHAT_TYPE_TEXT_EMOTE:
                             case CHAT_TYPE_BOSS_EMOTE:
-                                player->TextEmote(text);
+                                source->TextEmote(step.script->Talk.TextID, target, step.script->Talk.ChatType == CHAT_TYPE_BOSS_EMOTE);
                                 break;
                             case CHAT_TYPE_WHISPER:
                             case CHAT_MSG_RAID_BOSS_WHISPER:
                                 {
-                                    uint64 targetGUID = target ? target->GetGUID() : 0;
-                                    if (!targetGUID || !IS_PLAYER_GUID(targetGUID))
-                                        LOG_ERROR("maps", "%s attempt to whisper to non-player unit, skipping.", step.script->GetDebugInfo().c_str());
+                                    Player* receiver = target ? target->ToPlayer() : nullptr;
+
+                                    if (!receiver)
+                                        LOG_ERROR("scripts", "%s attempt to whisper to non-player unit, skipping.", step.script->GetDebugInfo().c_str());
                                     else
-                                        player->Whisper(text, LANG_UNIVERSAL, targetGUID);
+                                        source->Whisper(step.script->Talk.TextID, receiver, step.script->Talk.ChatType == CHAT_MSG_RAID_BOSS_WHISPER);
                                     break;
                                 }
                             default:
                                 break;                              // must be already checked at load
                         }
                     }
+                    break;
                 }
-                else
-                {
-                    // Source or target must be Creature.
-                    if (Creature* cSource = _GetScriptCreatureSourceOrTarget(source, target, step.script))
-                    {
-                        uint64 targetGUID = target ? target->GetGUID() : 0;
-                        switch (step.script->Talk.ChatType)
-                        {
-                            case CHAT_TYPE_SAY:
-                                cSource->MonsterSay(step.script->Talk.TextID, LANG_UNIVERSAL, target);
-                                break;
-                            case CHAT_TYPE_YELL:
-                                cSource->MonsterYell(step.script->Talk.TextID, LANG_UNIVERSAL, target);
-                                break;
-                            case CHAT_TYPE_TEXT_EMOTE:
-                                cSource->MonsterTextEmote(step.script->Talk.TextID, target);
-                                break;
-                            case CHAT_TYPE_BOSS_EMOTE:
-                                cSource->MonsterTextEmote(step.script->Talk.TextID, target, true);
-                                break;
-                            case CHAT_TYPE_WHISPER:
-                                if (!targetGUID || !IS_PLAYER_GUID(targetGUID))
-                                    LOG_ERROR("maps", "%s attempt to whisper to non-player unit, skipping.", step.script->GetDebugInfo().c_str());
-                                else
-                                    cSource->MonsterWhisper(step.script->Talk.TextID, target->ToPlayer());
-                                break;
-                            case CHAT_MSG_RAID_BOSS_WHISPER:
-                                if (!targetGUID || !IS_PLAYER_GUID(targetGUID))
-                                    LOG_ERROR("maps", "%s attempt to raidbosswhisper to non-player unit, skipping.", step.script->GetDebugInfo().c_str());
-                                else
-                                    cSource->MonsterWhisper(step.script->Talk.TextID, target->ToPlayer(), true);
-                                break;
-                            default:
-                                break;                              // must be already checked at load
-                        }
-                    }
-                }
-                break;
 
             case SCRIPT_COMMAND_EMOTE:
                 // Source or target must be Creature.
