@@ -51,20 +51,26 @@ namespace Warhead
     class AchievementChatBuilder
     {
     public:
-        AchievementChatBuilder(Player const& player, ChatMsg msgtype, int32 textId, uint32 ach_id)
-            : i_player(player), i_msgtype(msgtype), i_textId(textId), i_achievementId(ach_id) {}
+        AchievementChatBuilder(Player const* player, ChatMsg msgType, uint32 textId, uint32 achievementId)
+            : _player(player), _msgType(msgType), _textId(textId), _achievementId(achievementId) { }
 
-        void operator()(WorldPacket& data, LocaleConstant loc_idx)
+        void operator()(WorldPacket& data, LocaleConstant locale)
         {
-            std::string text = sGameLocale->GetAcoreString(i_textId, loc_idx);
-            ChatHandler::BuildChatPacket(data, i_msgtype, LANG_UNIVERSAL, &i_player, &i_player, text, i_achievementId);
+            std::string text = "";
+
+            BroadcastText const* bct = sGameLocale->GetBroadcastText(_textId);
+
+            if (bct)
+                sGameLocale->GetLocaleString(_player->getGender() == GENDER_MALE ? bct->MaleText : bct->FemaleText, locale, text);
+
+            ChatHandler::BuildChatPacket(data, _msgType, LANG_UNIVERSAL, _player, _player, text, _achievementId);
         }
 
     private:
-        Player const& i_player;
-        ChatMsg i_msgtype;
-        int32 i_textId;
-        uint32 i_achievementId;
+        Player const* _player;
+        ChatMsg _msgType;
+        int32 _textId;
+        uint32 _achievementId;
     };
 }                                                           // namespace Warhead
 
@@ -680,9 +686,9 @@ void AchievementMgr::SendAchievementEarned(AchievementEntry const* achievement) 
 
     if (Guild* guild = sGuildMgr->GetGuildById(GetPlayer()->GetGuildId()))
     {
-        Warhead::AchievementChatBuilder say_builder(*GetPlayer(), CHAT_MSG_GUILD_ACHIEVEMENT, LANG_ACHIEVEMENT_EARNED, achievement->ID);
-        Warhead::LocalizedPacketDo<Warhead::AchievementChatBuilder> say_do(say_builder);
-        guild->BroadcastWorker(say_do, GetPlayer());
+        Warhead::AchievementChatBuilder _builder(GetPlayer(), CHAT_MSG_GUILD_ACHIEVEMENT, BROADCAST_TEXT_ACHIEVEMENT_EARNED, achievement->ID);
+        Warhead::LocalizedPacketDo<Warhead::AchievementChatBuilder> _localizer(_builder);
+        guild->BroadcastWorker(_localizer, GetPlayer());
     }
 
     if (achievement->flags & (ACHIEVEMENT_FLAG_REALM_FIRST_KILL | ACHIEVEMENT_FLAG_REALM_FIRST_REACH))
@@ -704,16 +710,12 @@ void AchievementMgr::SendAchievementEarned(AchievementEntry const* achievement) 
     // if player is in world he can tell his friends about new achievement
     else if (GetPlayer()->IsInWorld())
     {
-        CellCoord p = Warhead::ComputeCellCoord(GetPlayer()->GetPositionX(), GetPlayer()->GetPositionY());
+        float sayRange = sGameConfig->GetFloatConfig("ListenRange.Say");
 
-        Cell cell(p);
-        cell.SetNoCreate();
-
-        Warhead::AchievementChatBuilder say_builder(*GetPlayer(), CHAT_MSG_ACHIEVEMENT, LANG_ACHIEVEMENT_EARNED, achievement->ID);
-        Warhead::LocalizedPacketDo<Warhead::AchievementChatBuilder> say_do(say_builder);
-        Warhead::PlayerDistWorker<Warhead::LocalizedPacketDo<Warhead::AchievementChatBuilder> > say_worker(GetPlayer(), sGameConfig->GetFloatConfig("ListenRange.Say"), say_do);
-        TypeContainerVisitor<Warhead::PlayerDistWorker<Warhead::LocalizedPacketDo<Warhead::AchievementChatBuilder> >, WorldTypeMapContainer > message(say_worker);
-        cell.Visit(p, message, *GetPlayer()->GetMap(), *GetPlayer(), sGameConfig->GetFloatConfig("ListenRange.Say"));
+        Warhead::AchievementChatBuilder _builder(GetPlayer(), CHAT_MSG_ACHIEVEMENT, BROADCAST_TEXT_ACHIEVEMENT_EARNED, achievement->ID);
+        Warhead::LocalizedPacketDo<Warhead::AchievementChatBuilder> _localizer(_builder);
+        Warhead::PlayerDistWorker<Warhead::LocalizedPacketDo<Warhead::AchievementChatBuilder>> _worker(GetPlayer(), sayRange, _localizer);
+        GetPlayer()->VisitNearbyWorldObject(sayRange, _worker);
     }
 
     WorldPacket data(SMSG_ACHIEVEMENT_EARNED, 8 + 4 + 8);
