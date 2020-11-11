@@ -17894,9 +17894,7 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder* holder)
         instanceId = 0;
 
         if (mapId == MAPID_INVALID)
-        {
             RelocateToHomebind();
-        }
         else
         {
             Relocate(&_loc);
