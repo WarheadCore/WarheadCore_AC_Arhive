@@ -191,7 +191,7 @@ public:
                     events.RescheduleEvent(EVENT_SUBMERGE, 10s);
                     break;
                 case EVENT_SUBMERGE:
-                    me->MonsterTextEmote(TEXT_RETREAT, 0, true);
+                    me->TextEmote(TEXT_RETREAT, nullptr, true);
                     me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                     me->CastSpell(me, SPELL_SUBMERGE_0, true);
                     me->CastSpell(me, SPELL_SELF_STUN, true);
@@ -202,7 +202,7 @@ public:
                     events.RescheduleEvent(EVENT_EMERGE_WARNING, 20s);
                     break;
                 case EVENT_EMERGE_WARNING:
-                    me->MonsterTextEmote(TEXT_RESURFACE, 0, true);
+                    me->TextEmote(TEXT_RESURFACE, nullptr, true);
                     break;
                 case EVENT_COMBAT_EMERGE:
                     me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);

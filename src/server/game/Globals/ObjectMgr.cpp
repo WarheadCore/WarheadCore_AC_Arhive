@@ -4549,7 +4549,7 @@ void ObjectMgr::LoadScripts(ScriptsType type)
                         continue;
                     }
                     
-                    if (!sGameLocale->GetBroadcastText(uint32(tmp.Talk.TextID))
+                    if (!sGameLocale->GetBroadcastText(uint32(tmp.Talk.TextID)))
                     {
                         LOG_ERROR("sql.sql", "Table `%s` has invalid talk text id (dataint = %i) in SCRIPT_COMMAND_TALK for script id %u",
                                   tableName.c_str(), tmp.Talk.TextID, tmp.id);

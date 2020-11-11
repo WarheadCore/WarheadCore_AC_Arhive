@@ -118,7 +118,7 @@ public:
             case GOSSIP_ACTION_INFO_DEF+2:
                 CloseGossipMenuFor(player);
                 creature->AI()->DoAction(ACTION_START_FIGHT);
-                creature->Say("You'll pay for this insult, $C.", LANG_UNIVERSAL);
+                creature->Say("You'll pay for this insult, $C.", LANG_UNIVERSAL, player);
                 break;
         }
         return true;
@@ -801,7 +801,7 @@ public:
             {
                 char amount[500];
                 sprintf(amount, "We did it boys! Now back to the Grim Guzzler and we'll drink to the %u that were injured!", guzzlerCounter);
-                herald->Say(amount, LANG_UNIVERSAL);
+                herald->Yell(amount, LANG_UNIVERSAL);
             }
 
             Reset();
@@ -814,7 +814,7 @@ public:
             {
                 char amount[500];
                 sprintf(amount, "RETREAT!! We've already lost %u and we can't afford to lose any more!!", guzzlerCounter);
-                herald->Say(amount, LANG_UNIVERSAL);
+                herald->Yell(amount, LANG_UNIVERSAL);
             }
 
             me->CastSpell(me, (me->GetMapId() == 1 ? SPELL_SUMMON_PLANS_H : SPELL_SUMMON_PLANS_A), true);

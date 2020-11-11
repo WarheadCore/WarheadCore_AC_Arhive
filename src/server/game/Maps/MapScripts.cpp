@@ -412,7 +412,7 @@ void Map::ScriptsProcess()
                             Player* receiver = target ? target->ToPlayer() : nullptr;
 
                             if (!receiver)
-                                TC_LOG_ERROR("scripts", "%s attempt to whisper to non-player unit, skipping.", step.script->GetDebugInfo().c_str());
+                                LOG_ERROR("scripts", "%s attempt to whisper to non-player unit, skipping.", step.script->GetDebugInfo().c_str());
                             else
                                 source->Whisper(step.script->Talk.TextID, receiver, step.script->Talk.ChatType == CHAT_MSG_RAID_BOSS_WHISPER);
                             break;

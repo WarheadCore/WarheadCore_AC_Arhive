@@ -269,20 +269,20 @@ public:
                         {
                             case QUEST_BFV_FALLEN_HEROES:
                                 me->Yell("There can only be one outcome to such a battle: death for one side or the other. Let $n prove himself upon the bones of these outsiders who have fallen before!", LANG_UNIVERSAL, ObjectAccessor::GetPlayer(*me, playerGUID));
-                                me->MonsterTextEmote("The fallen heroes of Valhalas emerge from the ground to do battle once more!", NULL, true);
+                                me->TextEmote("The fallen heroes of Valhalas emerge from the ground to do battle once more!", nullptr, true);
                                 break;
                             case QUEST_BFV_DARK_MASTER:
-                                me->MonsterTextEmote("Khit'rix the Dark Master skitters into Valhalas from the southeast!", NULL, true);
+                                me->TextEmote("Khit'rix the Dark Master skitters into Valhalas from the southeast!", nullptr, true);
                                 break;
                             case QUEST_BFV_CARNAGE:
-                                me->MonsterTextEmote("Lumbering in from the south, the smell of Carnage precedes him!", NULL, true);
+                                me->TextEmote("Lumbering in from the south, the smell of Carnage precedes him!", nullptr, true);
                                 break;
                             case QUEST_BFV_THANE:
-                                me->MonsterTextEmote("Thane Banahogg appears upon the overlook to the southeast!", NULL, true);
+                                me->TextEmote("Thane Banahogg appears upon the overlook to the southeast!", nullptr, true);
                                 break;
                             case QUEST_BFV_FINAL:
                                 me->Yell("Warriors of Jotunheim, I present to you, Blood Prince Sandoval!", LANG_UNIVERSAL, nullptr);
-                                me->MonsterTextEmote("Without warning, Prince Sandoval magically appears within Valhalas!", NULL, true);
+                                me->TextEmote("Without warning, Prince Sandoval magically appears within Valhalas!", nullptr, true);
                                 break;
                         }
 
@@ -1307,7 +1307,7 @@ public:
             if (Unit* passenger = kit->GetPassenger(SEAT_ENGINEERING))
                 if (init && !passenger->HasAura(SPELL_BURNING))
                 {
-                    me->MonsterTextEmote("Your Vehicle is burning!", GetSummoner(), true);
+                    me->TextEmote("Your Vehicle is burning!", GetSummoner(), true);
                     passenger->AddAura(SPELL_BURNING, passenger);
                 }
 

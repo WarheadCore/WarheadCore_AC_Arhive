@@ -263,7 +263,7 @@ public:
             events.RescheduleEvent(EVENT_BERSERK, 8min);
             events.RescheduleEvent(EVENT_HARD_MODE_MISSED, 3min);
 
-            me->MonsterYell(TEXT_HODIR_AGGRO, LANG_UNIVERSAL, 0);
+            me->Yell(TEXT_HODIR_AGGRO, LANG_UNIVERSAL);
             me->PlayDirectSound(SOUND_HODIR_AGGRO, 0);
 
             if (pInstance && pInstance->GetData(TYPE_HODIR) != DONE)
@@ -347,7 +347,7 @@ public:
                     if (GameObject* go = me->FindNearestGameObject(GO_HODIR_FRONTDOOR, 300.0f))
                         go->SetGoState(GO_STATE_ACTIVE);
 
-                    me->MonsterYell(TEXT_HODIR_DEFEATED, LANG_UNIVERSAL, 0);
+                    me->Yell(TEXT_HODIR_DEFEATED, LANG_UNIVERSAL);
                     me->PlayDirectSound(SOUND_HODIR_DEFEATED, 0);
                     me->DespawnOrUnsummon(10000);
 
@@ -407,14 +407,14 @@ public:
                     {
                         berserk = true;
                         me->CastSpell(me, SPELL_BERSERK, true);
-                        me->MonsterYell(TEXT_HODIR_BERSERK, LANG_UNIVERSAL, 0);
+                        me->Yell(TEXT_HODIR_BERSERK, LANG_UNIVERSAL);
                         me->PlayDirectSound(SOUND_HODIR_BERSERK, 0);
                     }
                     break;
                 case EVENT_HARD_MODE_MISSED:
                     {
                         hardmode = false;
-                        me->MonsterTextEmote(TEXTEMOTE_HODIR_HARD_MODE_MISSED, 0);
+                        me->TextEmote(TEXTEMOTE_HODIR_HARD_MODE_MISSED);
                     }
                     break;
                 case EVENT_FLASH_FREEZE:
@@ -435,8 +435,8 @@ public:
                         }
 
                         me->CastSpell((Unit*)NULL, SPELL_FLASH_FREEZE_CAST, false);
-                        me->MonsterTextEmote("Hodir begins to cast Flash Freeze!", 0, true);
-                        me->MonsterYell(TEXT_HODIR_FLASH_FREEZE, LANG_UNIVERSAL, 0);
+                        me->TextEmote("Hodir begins to cast Flash Freeze!", nullptr, true);
+                        me->Yell(TEXT_HODIR_FLASH_FREEZE, LANG_UNIVERSAL);
                         me->PlayDirectSound(SOUND_HODIR_FLASH_FREEZE, 0);
                         SmallIcicles(false);
                         events.RepeatEvent(55s, 65s);
@@ -452,8 +452,8 @@ public:
                     break;
                 case EVENT_FROZEN_BLOWS:
                     {
-                        me->MonsterTextEmote("Hodir gains Frozen Blows!", 0, true);
-                        me->MonsterTextEmote(TEXTEMOTE_HODIR_FROZEN_BLOWS, 0);
+                        me->TextEmote("Hodir gains Frozen Blows!", nullptr, true);
+                        me->TextEmote(TEXTEMOTE_HODIR_FROZEN_BLOWS);
                         me->PlayDirectSound(SOUND_HODIR_FROZEN_BLOWS, 0);
                         me->CastSpell(me, SPELL_FROZEN_BLOWS, true);
                     }
@@ -524,12 +524,12 @@ public:
             {
                 if( urand(0, 1) )
                 {
-                    me->MonsterYell(TEXT_HODIR_SLAIN_1, LANG_UNIVERSAL, 0);
+                    me->Yell(TEXT_HODIR_SLAIN_1, LANG_UNIVERSAL);
                     me->PlayDirectSound(SOUND_HODIR_SLAIN_1, 0);
                 }
                 else
                 {
-                    me->MonsterYell(TEXT_HODIR_SLAIN_2, LANG_UNIVERSAL, 0);
+                    me->Yell(TEXT_HODIR_SLAIN_2, LANG_UNIVERSAL);
                     me->PlayDirectSound(SOUND_HODIR_SLAIN_2, 0);
                 }
             }

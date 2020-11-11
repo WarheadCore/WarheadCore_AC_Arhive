@@ -19749,7 +19749,7 @@ bool Unit::IsInCombatWith(Unit const* who) const
     return false;
 }
 
-void Unit::Talk(std::string const& text, ChatMsg msgType, Language language, float textRange, WorldObject const* target)
+void Unit::Talk(std::string_view text, ChatMsg msgType, Language language, float textRange, WorldObject const* target)
 {
     Warhead::CustomChatTextBuilder builder(this, msgType, text, language, target);
     Warhead::LocalizedPacketDo<Warhead::CustomChatTextBuilder> localizer(builder);
@@ -19757,43 +19757,43 @@ void Unit::Talk(std::string const& text, ChatMsg msgType, Language language, flo
     VisitNearbyWorldObject(textRange, worker);
 }
 
-void Unit::Say(std::string const& text, Language language, WorldObject const* target /*= nullptr*/)
+void Unit::Say(std::string_view text, Language language, WorldObject const* target /*= nullptr*/)
 {
-    Talk(text, CHAT_MSG_MONSTER_SAY, language, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_SAY), target);
+    Talk(text, CHAT_MSG_MONSTER_SAY, language, sGameConfig->GetFloatConfig("ListenRange.Say"), target);
 }
 
-void Unit::Yell(std::string const& text, Language language, WorldObject const* target /*= nullptr*/)
+void Unit::Yell(std::string_view text, Language language, WorldObject const* target /*= nullptr*/)
 {
-    Talk(text, CHAT_MSG_MONSTER_YELL, language, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_YELL), target);
+    Talk(text, CHAT_MSG_MONSTER_YELL, language, sGameConfig->GetFloatConfig("ListenRange.Yell"), target);
 }
 
-void Unit::TextEmote(std::string const& text, WorldObject const* target /*= nullptr*/, bool isBossEmote /*= false*/)
+void Unit::TextEmote(std::string_view text, WorldObject const* target /*= nullptr*/, bool isBossEmote /*= false*/)
 {
-    Talk(text, isBossEmote ? CHAT_MSG_RAID_BOSS_EMOTE : CHAT_MSG_MONSTER_EMOTE, LANG_UNIVERSAL, sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_TEXTEMOTE), target);
+    Talk(text, isBossEmote ? CHAT_MSG_RAID_BOSS_EMOTE : CHAT_MSG_MONSTER_EMOTE, LANG_UNIVERSAL, sGameConfig->GetFloatConfig("ListenRange.TextEmote"), target);
 }
 
-void Unit::Whisper(std::string const& text, Language language, Player* target, bool isBossWhisper /*= false*/)
+void Unit::Whisper(std::string_view text, Language language, Player* target, bool isBossWhisper /*= false*/)
 {
     if (!target)
         return;
 
     LocaleConstant locale = target->GetSession()->GetSessionDbLocaleIndex();
     WorldPacket data;
-    ChatHandler::BuildChatPacket(data, isBossWhisper ? CHAT_MSG_RAID_BOSS_WHISPER : CHAT_MSG_MONSTER_WHISPER, language, this, target, text, 0, "", locale);
+    ChatHandler::BuildChatPacket(data, isBossWhisper ? CHAT_MSG_RAID_BOSS_WHISPER : CHAT_MSG_MONSTER_WHISPER, language, this, target, std::string(text), 0, "", locale);
     target->SendDirectMessage(&data);
 }
 
 void Unit::Talk(uint32 textId, ChatMsg msgType, float textRange, WorldObject const* target)
 {
-    if (!sObjectMgr->GetBroadcastText(textId))
+    if (!sGameLocale->GetBroadcastText(textId))
     {
         LOG_ERROR("entities.unit", "WorldObject::MonsterText: `broadcast_text` was not %u found", textId);
         return;
     }
 
-    Warhead::BroadcastTextBuilder builder(this, msgType, textId, target);
+    Warhead::BroadcastTextBuilder builder(this, msgType, textId, getGender(), target);
     Warhead::LocalizedPacketDo<Warhead::BroadcastTextBuilder> localizer(builder);
-    Warhead::PlayerDistWorker<Warhead::LocalizedPacketDo<Warhead::BroadcastTextBuilder>> worker(this, textRange, localizer);
+    Warhead::PlayerDistWorker<Warhead::LocalizedPacketDo<Warhead::BroadcastTextBuilder> > worker(this, textRange, localizer);
     VisitNearbyWorldObject(textRange, worker);
 }
 

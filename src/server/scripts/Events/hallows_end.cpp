@@ -975,7 +975,7 @@ public:
         void JustDied(Unit*  /*killer*/)
         {
             summons.DespawnAll();
-            me->MonsterSay("This end have I reached before. What new adventure lies in store?", LANG_UNIVERSAL);
+            me->Say("This end have I reached before. What new adventure lies in store?", LANG_UNIVERSAL);
             me->PlayDirectSound(SOUND_DEATH);
             std::list<Creature*> unitList;
             me->GetCreaturesWithEntryInRange(unitList, 100.0f, NPC_PUMPKIN_FIEND);
@@ -990,7 +990,7 @@ public:
 
         void KilledUnit(Unit*  /*who*/)
         {
-            me->Yell("Your body lies beaten, battered and broken. Let my curse be your own, fate has spoken.", LANG_UNIVERSAL, 0);
+            me->Yell("Your body lies beaten, battered and broken. Let my curse be your own, fate has spoken.", LANG_UNIVERSAL);
             me->PlayDirectSound(SOUND_SLAY);
         }
 
@@ -1022,7 +1022,7 @@ public:
                 events.CancelEvent(EVENT_HORSEMAN_WHIRLWIND);
                 events.CancelEvent(EVENT_HORSEMAN_CONFLAGRATION);
                 events.CancelEvent(EVENT_SUMMON_PUMPKIN);
-                me->Yell("Here's my body, fit and pure! Now, your blackened souls I'll cure!", LANG_UNIVERSAL, 0);
+                me->Yell("Here's my body, fit and pure! Now, your blackened souls I'll cure!", LANG_UNIVERSAL);
 
                 if (phase == 1)
                     events.ScheduleEvent(EVENT_HORSEMAN_CONFLAGRATION, 6s);
@@ -1124,23 +1124,23 @@ public:
                         switch (talkCount)
                         {
                             case 1:
-                                player->MonsterSay("Horseman rise...", LANG_UNIVERSAL);
+                                player->Say("Horseman rise...", LANG_UNIVERSAL);
                                 break;
                             case 2:
-                                player->MonsterSay("Your time is nigh...", LANG_UNIVERSAL);
+                                player->Say("Your time is nigh...", LANG_UNIVERSAL);
                                 if (Creature* trigger = me->SummonTrigger(1765.28f, 1347.46f, 17.5514f, 0.0f, 15 * IN_MILLISECONDS))
                                     trigger->CastSpell(trigger, SPELL_EARTH_EXPLOSION, true);
                                 break;
                             case 3:
                                 me->GetMotionMaster()->MovePath(236820, false);
                                 me->CastSpell(me, SPELL_SHAKE_CAMERA_SMALL, true);
-                                player->MonsterSay("You felt death once...", LANG_UNIVERSAL);
-                                me->MonsterSay("It is over, your search is done. Let fate choose now, the righteous one.", LANG_UNIVERSAL);
+                                player->Say("You felt death once...", LANG_UNIVERSAL);
+                                me->Say("It is over, your search is done. Let fate choose now, the righteous one.", LANG_UNIVERSAL);
                                 me->PlayDirectSound(SOUND_AGGRO);
                                 break;
                             case 4:
                                 me->CastSpell(me, SPELL_SHAKE_CAMERA_MEDIUM, true);
-                                player->MonsterSay("Now, know demise!", LANG_UNIVERSAL);
+                                player->Say("Now, know demise!", LANG_UNIVERSAL);
                                 talkCount = 0;
                                 return; // pop and return, skip repeat
                         }
@@ -1204,7 +1204,7 @@ public:
                         }
                         else
                         {
-                            me->MonsterSay("Soldiers arise, stand and fight! Bring victory at last to this fallen knight!", LANG_UNIVERSAL);
+                            me->Say("Soldiers arise, stand and fight! Bring victory at last to this fallen knight!", LANG_UNIVERSAL);
                             me->PlayDirectSound(SOUND_SPROUT);
                             events.RepeatEvent(15s);
                             talkCount = 0;
@@ -1344,7 +1344,7 @@ public:
                 }
 
                 me->CastSpell(me, SPELL_HORSEMAN_SPEAKS, true);
-                me->MonsterTextEmote("Headless Horseman laughs", 0);
+                me->TextEmote("Headless Horseman laughs");
                 me->PlayDirectSound(sound);
             }
         }
