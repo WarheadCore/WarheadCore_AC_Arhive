@@ -442,27 +442,27 @@ public:
                         if (Unit* seat = vehicle->GetPassenger(i))
                             if (seat->GetTypeId() == TYPEID_UNIT)
                                 seat->ToCreature()->AI()->EnterEvadeMode();
-                    me->MonsterTextEmote("Flame Leviathan reactivated. Resumming combat functions.", 0, true);
+                    me->TextEmote("Flame Leviathan reactivated. Resumming combat functions.", nullptr, true);
                     return;
                 case EVENT_THORIMS_HAMMER:
                     SummonTowerHelpers(TOWER_OF_STORMS);
                     events.RepeatEvent(1min, 2min);
-                    me->MonsterTextEmote("Flame Leviathan activates Thorim's Hammer.", 0, true);
+                    me->TextEmote("Flame Leviathan activates Thorim's Hammer.", nullptr, true);
                     Talk(FLAME_LEVIATHAN_SAY_TOWER_STORM);
                     return;
                 case EVENT_FREYA:
                     SummonTowerHelpers(TOWER_OF_LIFE);
-                    me->MonsterTextEmote("Flame Leviathan activates Freya's Ward.", 0, true);
+                    me->TextEmote("Flame Leviathan activates Freya's Ward.", nullptr, true);
                     Talk(FLAME_LEVIATHAN_SAY_TOWER_NATURE);
                     return;
                 case EVENT_MIMIRONS_INFERNO:
                     SummonTowerHelpers(TOWER_OF_FLAMES);
-                    me->MonsterTextEmote("Flame Leviathan activates Mimiron's Inferno.", 0, true);
+                    me->TextEmote("Flame Leviathan activates Mimiron's Inferno.", nullptr, true);
                     Talk(FLAME_LEVIATHAN_SAY_TOWER_FLAME);
                     return;
                 case EVENT_HODIRS_FURY:
                     SummonTowerHelpers(TOWER_OF_FROST);
-                    me->MonsterTextEmote("Flame Leviathan activates Hodir's Fury.", 0, true);
+                    me->TextEmote("Flame Leviathan activates Hodir's Fury.", nullptr, true);
                     Talk(FLAME_LEVIATHAN_SAY_TOWER_FROST);
                     return;
             }
@@ -1235,13 +1235,13 @@ public:
         switch (uiAction)
         {
             case GOSSIP_ACTION_INFO_DEF+1:
-                creature->MonsterSay("Activating secondary defensive systems will result in the extermination of unauthorized life forms via orbital emplacements. You are an unauthorized life form.", LANG_UNIVERSAL, 0);
+                creature->Say("Activating secondary defensive systems will result in the extermination of unauthorized life forms via orbital emplacements. You are an unauthorized life form.", LANG_UNIVERSAL);
                 ClearGossipMenuFor(player);
                 AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Confirmed.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
                 SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, creature->GetGUID());
                 break;
             case GOSSIP_ACTION_INFO_DEF+2:
-                creature->MonsterSay("Security override permitted. Secondary defensive systems activated. Backup deactivation for secondary systems can be accessed via individual generators located on the concourse. ", LANG_UNIVERSAL, 0);
+                creature->Say("Security override permitted. Secondary defensive systems activated. Backup deactivation for secondary systems can be accessed via individual generators located on the concourse. ", LANG_UNIVERSAL);
                 creature->AI()->DoAction(ACTION_START_NORGANNON_EVENT);
 
                 CloseGossipMenuFor(player);
@@ -1469,7 +1469,7 @@ public:
                             if (Creature* cr = me->SummonCreature(NPC_BRANN_RADIO, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 5000))
                             {
                                 cr->PlayDirectSound(RSOUND_L0);
-                                cr->MonsterSay("Okay! Let's move out. Get into your machines; I'll speak to you from here via the radio.", LANG_UNIVERSAL, 0);
+                                cr->Say("Okay! Let's move out. Get into your machines; I'll speak to you from here via the radio.", LANG_UNIVERSAL);
                             }
                             NextStep(8000);
                             break;
@@ -1483,7 +1483,7 @@ public:
                         case 4:
                             Say("Our allies are ready. Bring down the shield and make way!", true);
                             _running = false;
-                            me->MonsterTextEmote("Go to your vehicles!", 0, true);
+                            me->TextEmote("Go to your vehicles!", nullptr, true);
                             if (me->GetInstanceScript())
                                 me->GetInstanceScript()->SetData(DATA_VEHICLE_SPAWN, VEHICLE_POS_START);
                             return;
@@ -1864,7 +1864,7 @@ public:
             if (!driver)
                 return;
 
-            driver->MonsterTextEmote("Automatic repair sequence initiated.", driver, true);
+            driver->TextEmote("Automatic repair sequence initiated.", driver, true);
 
             // Actually should/could use basepoints (100) for this spell effect as percentage of health, but oh well.
             vehicle->GetBase()->SetFullHealth();

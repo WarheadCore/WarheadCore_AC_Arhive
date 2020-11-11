@@ -390,7 +390,7 @@ public:
 
             if (!hardmode)
             {
-                me->MonsterYell(TEXT_LMK2_ACTIVATE, LANG_UNIVERSAL, 0);
+                me->Yell(TEXT_LMK2_ACTIVATE, LANG_UNIVERSAL);
                 me->PlayDirectSound(SOUND_TANK_ACTIVE);
                 events.ScheduleEvent(EVENT_SIT_LMK2, 6s);
                 events.ScheduleEvent(EVENT_BERSERK, 15min);
@@ -460,7 +460,7 @@ public:
                         computer->AI()->Talk(minutesTalkNum++);
                     break;
                 case EVENT_MIMIRON_SAY_HARDMODE:
-                    me->MonsterYell(TEXT_HARDMODE, LANG_UNIVERSAL, 0);
+                    me->Yell(TEXT_HARDMODE, LANG_UNIVERSAL);
                     me->PlayDirectSound(SOUND_TANK_HARD_INTRO);
                     events.ScheduleEvent(EVENT_SPAWN_FLAMES_INITIAL, 0s);
                     events.ScheduleEvent(EVENT_SIT_LMK2, 4s);
@@ -495,7 +495,7 @@ public:
                     break;
                 case EVENT_BERSERK:
                     berserk = true;
-                    me->MonsterYell(TEXT_BERSERK, LANG_UNIVERSAL, 0);
+                    me->Yell(TEXT_BERSERK, LANG_UNIVERSAL);
                     me->PlayDirectSound(SOUND_BERSERK);
                     if( hardmode )
                         me->SummonCreature(33576, 2744.78f, 2569.47f, 364.32f, 0.0f, TEMPSUMMON_TIMED_DESPAWN, 120000);
@@ -543,7 +543,7 @@ public:
                     if (Creature* LMK2 = GetLMK2())
                     {
                         me->EnterVehicle(LMK2, 1);
-                        me->MonsterYell(TEXT_LMK2_DEATH, LANG_UNIVERSAL, 0);
+                        me->Yell(TEXT_LMK2_DEATH, LANG_UNIVERSAL);
                         me->PlayDirectSound(SOUND_TANK_DEATH);
                         LMK2->SetFacingTo(3.58f);
                         events.ScheduleEvent(EVENT_ELEVATOR_INTERVAL_0, 6s);
@@ -584,7 +584,7 @@ public:
                     EnterEvadeMode();
                     break;
                 case EVENT_SITTING_ON_VX001:
-                    me->MonsterYell(TEXT_VX001_ACTIVATE, LANG_UNIVERSAL, 0);
+                    me->Yell(TEXT_VX001_ACTIVATE, LANG_UNIVERSAL);
                     me->PlayDirectSound(SOUND_TORSO_ACTIVE);
                     events.ScheduleEvent(EVENT_ENTER_VX001, 5s);
                     break;
@@ -642,7 +642,7 @@ public:
                     break;
                 case EVENT_SAY_VX001_DEAD:
                     changeAllowedFlameSpreadTime = true;
-                    me->MonsterYell(TEXT_VX001_DEATH, LANG_UNIVERSAL, 0);
+                    me->Yell(TEXT_VX001_DEATH, LANG_UNIVERSAL);
                     me->PlayDirectSound(SOUND_TORSO_DEATH);
                     events.ScheduleEvent(EVENT_ENTER_ACU, 7s);
                     break;
@@ -656,7 +656,7 @@ public:
                     EnterEvadeMode();
                     break;
                 case EVENT_SAY_ACU_ACTIVATE:
-                    me->MonsterYell(TEXT_ACU_ACTIVATE, LANG_UNIVERSAL, 0);
+                    me->Yell(TEXT_ACU_ACTIVATE, LANG_UNIVERSAL);
                     me->PlayDirectSound(SOUND_HEAD_ACTIVE);
                     events.ScheduleEvent(EVENT_ACU_START_ATTACK, 4s);
                     break;
@@ -672,7 +672,7 @@ public:
                     EnterEvadeMode();
                     break;
                 case EVENT_SAY_ACU_DEAD:
-                    me->MonsterYell(TEXT_ACU_DEATH, LANG_UNIVERSAL, 0);
+                    me->Yell(TEXT_ACU_DEATH, LANG_UNIVERSAL);
                     me->PlayDirectSound(SOUND_HEAD_DEATH);
                     events.ScheduleEvent(EVENT_LEVIATHAN_COME_CLOSER, 5s);
                     break;
@@ -732,7 +732,7 @@ public:
 
                         ACU->EnterVehicle(VX001, 3);
                         me->EnterVehicle(VX001, 1);
-                        me->MonsterYell(TEXT_VOLTRON_ACTIVATE, LANG_UNIVERSAL, 0);
+                        me->Yell(TEXT_VOLTRON_ACTIVATE, LANG_UNIVERSAL);
                         me->PlayDirectSound(SOUND_VOLTRON_ACTIVE);
                         events.ScheduleEvent(EVENT_START_PHASE4, 10s);
                     }
@@ -827,7 +827,7 @@ public:
                     }
                     break;
                 case EVENT_SAY_VOLTRON_DEAD:
-                    me->MonsterYell(TEXT_VOLTRON_DEATH, LANG_UNIVERSAL, 0);
+                    me->Yell(TEXT_VOLTRON_DEATH, LANG_UNIVERSAL);
                     me->PlayDirectSound(SOUND_VOLTRON_DEATH);
                     // spawn chest
                     if( uint32 chestId = (hardmode ? RAID_MODE(GO_MIMIRON_CHEST_HARD, GO_MIMIRON_CHEST_HERO_HARD) : RAID_MODE(GO_MIMIRON_CHEST, GO_MIMIRON_CHEST_HERO)) )
@@ -1174,7 +1174,7 @@ public:
                 case EVENT_SPELL_PLASMA_BLAST:
                     if (Unit* victim = me->GetVictim())
                     {
-                        me->MonsterTextEmote("Leviathan Mk II begins to cast Plasma Blast!", 0, true);
+                        me->TextEmote("Leviathan Mk II begins to cast Plasma Blast!", nullptr, true);
                         cannon->CastSpell(victim, SPELL_PLASMA_BLAST, false);
                     }
                     events.RepeatEvent(22s);
@@ -1218,12 +1218,12 @@ public:
                     {
                         if( rand() % 2 )
                         {
-                            c->MonsterYell(TEXT_LMK2_SLAIN_1, LANG_UNIVERSAL, 0);
+                            c->Yell(TEXT_LMK2_SLAIN_1, LANG_UNIVERSAL);
                             c->PlayDirectSound(SOUND_TANK_SLAY_1);
                         }
                         else
                         {
-                            c->MonsterYell(TEXT_LMK2_SLAIN_2, LANG_UNIVERSAL, 0);
+                            c->Yell(TEXT_LMK2_SLAIN_2, LANG_UNIVERSAL);
                             c->PlayDirectSound(SOUND_TANK_SLAY_2);
                         }
                     }
@@ -1231,12 +1231,12 @@ public:
                     {
                         if( rand() % 2 )
                         {
-                            c->MonsterYell(TEXT_VOLTRON_SLAIN_1, LANG_UNIVERSAL, 0);
+                            c->Yell(TEXT_VOLTRON_SLAIN_1, LANG_UNIVERSAL);
                             c->PlayDirectSound(SOUND_VOLTRON_SLAY_1);
                         }
                         else
                         {
-                            c->MonsterYell(TEXT_VOLTRON_SLAIN_2, LANG_UNIVERSAL, 0);
+                            c->Yell(TEXT_VOLTRON_SLAIN_2, LANG_UNIVERSAL);
                             c->PlayDirectSound(SOUND_VOLTRON_SLAY_2);
                         }
                     }
@@ -1568,12 +1568,12 @@ public:
                     {
                         if( rand() % 2 )
                         {
-                            c->MonsterYell(TEXT_VX001_SLAIN_1, LANG_UNIVERSAL, 0);
+                            c->Yell(TEXT_VX001_SLAIN_1, LANG_UNIVERSAL);
                             c->PlayDirectSound(SOUND_TORSO_SLAY_1);
                         }
                         else
                         {
-                            c->MonsterYell(TEXT_VX001_SLAIN_2, LANG_UNIVERSAL, 0);
+                            c->Yell(TEXT_VX001_SLAIN_2, LANG_UNIVERSAL);
                             c->PlayDirectSound(SOUND_TORSO_SLAY_2);
                         }
                     }
@@ -1581,12 +1581,12 @@ public:
                     {
                         if( rand() % 2 )
                         {
-                            c->MonsterYell(TEXT_VOLTRON_SLAIN_1, LANG_UNIVERSAL, 0);
+                            c->Yell(TEXT_VOLTRON_SLAIN_1, LANG_UNIVERSAL);
                             c->PlayDirectSound(SOUND_VOLTRON_SLAY_1);
                         }
                         else
                         {
-                            c->MonsterYell(TEXT_VOLTRON_SLAIN_2, LANG_UNIVERSAL, 0);
+                            c->Yell(TEXT_VOLTRON_SLAIN_2, LANG_UNIVERSAL);
                             c->PlayDirectSound(SOUND_VOLTRON_SLAY_2);
                         }
                     }
@@ -1892,12 +1892,12 @@ public:
                     {
                         if( rand() % 2 )
                         {
-                            c->MonsterYell(TEXT_ACU_SLAIN_1, LANG_UNIVERSAL, 0);
+                            c->Yell(TEXT_ACU_SLAIN_1, LANG_UNIVERSAL);
                             c->PlayDirectSound(SOUND_HEAD_SLAY_1);
                         }
                         else
                         {
-                            c->MonsterYell(TEXT_ACU_SLAIN_2, LANG_UNIVERSAL, 0);
+                            c->Yell(TEXT_ACU_SLAIN_2, LANG_UNIVERSAL);
                             c->PlayDirectSound(SOUND_HEAD_SLAY_2);
                         }
                     }
@@ -1905,12 +1905,12 @@ public:
                     {
                         if( rand() % 2 )
                         {
-                            c->MonsterYell(TEXT_VOLTRON_SLAIN_1, LANG_UNIVERSAL, 0);
+                            c->Yell(TEXT_VOLTRON_SLAIN_1, LANG_UNIVERSAL);
                             c->PlayDirectSound(SOUND_VOLTRON_SLAY_1);
                         }
                         else
                         {
-                            c->MonsterYell(TEXT_VOLTRON_SLAIN_2, LANG_UNIVERSAL, 0);
+                            c->Yell(TEXT_VOLTRON_SLAIN_2, LANG_UNIVERSAL);
                             c->PlayDirectSound(SOUND_VOLTRON_SLAY_2);
                         }
                     }
