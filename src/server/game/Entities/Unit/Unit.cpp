@@ -19793,7 +19793,7 @@ void Unit::Talk(uint32 textId, ChatMsg msgType, float textRange, WorldObject con
 
     Warhead::BroadcastTextBuilder builder(this, msgType, textId, getGender(), target);
     Warhead::LocalizedPacketDo<Warhead::BroadcastTextBuilder> localizer(builder);
-    Warhead::PlayerDistWorker<Warhead::LocalizedPacketDo<Warhead::BroadcastTextBuilder> > worker(this, textRange, localizer);
+    Warhead::PlayerDistWorker<Warhead::LocalizedPacketDo<Warhead::BroadcastTextBuilder>> worker(this, textRange, localizer);
     VisitNearbyWorldObject(textRange, worker);
 }
 
