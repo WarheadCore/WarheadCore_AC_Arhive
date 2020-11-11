@@ -1263,10 +1263,14 @@ public:
     void RemovePet(Pet* pet, PetSaveMode mode, bool returnreagent = false);
     uint32 GetPhaseMaskForSpawn() const;                // used for proper set phase for DB at GM-mode creature/GO spawn
 
-    void Say(std::string const& text, const uint32 language);
-    void Yell(std::string const& text, const uint32 language);
-    void TextEmote(std::string const& text);
-    void Whisper(std::string const& text, const uint32 language, uint64 receiver);
+    /// Handles said message in regular chat based on declared language and in config pre-defined Range.
+    void Say(std::string const& text, Language language, WorldObject const* = nullptr) override;
+    /// Handles yelled message in regular chat based on declared language and in config pre-defined Range.
+    void Yell(std::string const& text, Language language, WorldObject const* = nullptr) override;
+    /// Outputs an universal text which is supposed to be an action.
+    void TextEmote(std::string const& text, WorldObject const* = nullptr, bool = false) override;
+    /// Handles whispers from Addons and players based on sender, receiver's guid and language.
+    void Whisper(std::string const& text, Language language, Player* receiver, bool = false) override;
 
     /*********************************************************/
     /***                    STORAGE SYSTEM                 ***/

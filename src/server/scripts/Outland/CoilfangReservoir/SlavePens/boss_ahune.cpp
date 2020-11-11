@@ -157,19 +157,19 @@ public:
                 case EVENT_INVOKER_SAY_1:
                     if (Player* plr = ObjectAccessor::GetPlayer(*me, InvokerGUID))
                     {
-                        plr->MonsterSay("The Ice Stone has melted!", LANG_UNIVERSAL, 0);
+                        plr->Say("The Ice Stone has melted!", LANG_UNIVERSAL);
                         plr->CastSpell(plr, SPELL_MAKE_BONFIRE, true);
                     }
                     events.RescheduleEvent(EVENT_INVOKER_SAY_2, 2s);
                     break;
                 case EVENT_INVOKER_SAY_2:
                     if (Player* plr = ObjectAccessor::GetPlayer(*me, InvokerGUID))
-                        plr->MonsterSay("Ahune, your strength grows no more!", LANG_UNIVERSAL, 0);
+                        plr->Say("Ahune, your strength grows no more!", LANG_UNIVERSAL);
                     events.RescheduleEvent(EVENT_INVOKER_SAY_3, 2s);
                     break;
                 case EVENT_INVOKER_SAY_3:
                     if (Player* plr = ObjectAccessor::GetPlayer(*me, InvokerGUID))
-                        plr->MonsterSay("Your frozen reign will not come to pass!", LANG_UNIVERSAL, 0);
+                        plr->Say("Your frozen reign will not come to pass!", LANG_UNIVERSAL);
                     break;
                 case EVENT_ATTACK:
                     events.Reset();

@@ -105,9 +105,9 @@ public:
             }
 
             if (yell)
-                c->MonsterYell(text.c_str(), LANG_UNIVERSAL, player);
+                c->Yell(text.c_str(), LANG_UNIVERSAL, player);
             else
-                c->MonsterWhisper(text.c_str(), player, false);
+                c->Whisper(text.c_str(), player, false);
         }
 
         void DespawnOachanoa()

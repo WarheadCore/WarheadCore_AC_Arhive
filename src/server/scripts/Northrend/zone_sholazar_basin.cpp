@@ -202,7 +202,7 @@ public:
                         }
                         else if (action == ACTION_MAKE_FRIENDLY && me->GetVictim())
                         {
-                            minion->MonsterSay("Now you not catch us with back turned! Now we hurt you bad undead. BAD!", LANG_UNIVERSAL, 0);
+                            minion->Say("Now you not catch us with back turned! Now we hurt you bad undead. BAD!", LANG_UNIVERSAL);
                             minion->RemoveAurasDueToSpell(SPELL_ARTRUIS_BINDING);
                             minion->setFaction(me->GetVictim()->getFaction());
                             minion->AddThreat(me, 100000.0f);
@@ -343,7 +343,7 @@ public:
         void Say(const char* text)
         {
             if (Creature* th = ObjectAccessor::GetCreature(*me, thunderbrewGUID))
-                th->MonsterSay(text, LANG_UNIVERSAL, 0);
+                th->Say(text, LANG_UNIVERSAL);
             else
                 Reset();
         }
@@ -1027,7 +1027,7 @@ public:
                     continue;
 
                 player->KilledMonsterCredit(me->GetEntry(), 0);
-                player->MonsterSay(SAY_OFFER, LANG_UNIVERSAL, me);
+                player->Say(SAY_OFFER, LANG_UNIVERSAL, me);
                 sayStep = 1;
                 break;
             }
@@ -1483,10 +1483,10 @@ public:
                 switch (GetSpellInfo()->Id)
                 {
                     case SPELL_CORRECT_TRACKS:
-                        player->MonsterSay(sGameLocale->GetAcoreStringForDBCLocale(SAY_CORRECT_TRACKS), LANG_UNIVERSAL, player);
+                        player->Say(sGameLocale->GetAcoreStringForDBCLocale(SAY_CORRECT_TRACKS), LANG_UNIVERSAL, player);
                         break;
                     case SPELL_INCORRECT_TRACKS:
-                        player->MonsterSay(sGameLocale->GetAcoreStringForDBCLocale(SAY_INCORRECT_TRACKS), LANG_UNIVERSAL, player);
+                        player->Say(sGameLocale->GetAcoreStringForDBCLocale(SAY_INCORRECT_TRACKS), LANG_UNIVERSAL, player);
                         break;
                     default:
                         break;
