@@ -267,10 +267,10 @@ public:
                 target->GetMotionMaster()->MoveTargetedHome();
                 target->GetMotionMaster()->Initialize();
                 target->Say("Path unloaded.", LANG_UNIVERSAL);
-                
+
                 return true;
             }
-            
+
             handler->PSendSysMessage("%s%s|r", "|cffff33ff", "Target have no loaded path.");
         }
         return true;

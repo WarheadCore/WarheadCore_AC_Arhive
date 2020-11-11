@@ -356,7 +356,7 @@ public:
         void JustDied(Unit*  /*killer*/)
         {
             summons.DespawnAll();
-            
+
             if (pInstance)
                 pInstance->SetData(TYPE_VEZAX, DONE);
 

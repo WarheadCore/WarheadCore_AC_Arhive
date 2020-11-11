@@ -715,7 +715,7 @@ public:
         {
             if (me->GetEntry() == killer->GetEntry())
                 return;
-            
+
             me->Yell("Matron, flee! They are ruthless....", LANG_UNIVERSAL);
             me->PlayDirectSound(SOUND_STONEBARK_DEATH);
 
@@ -822,7 +822,7 @@ public:
         {
             if (me->GetEntry() == killer->GetEntry())
                 return;
-            
+
             me->Yell("Matron, one has fallen!", LANG_UNIVERSAL);
             me->PlayDirectSound(SOUND_BRIGHTLEAF_DEATH);
 
@@ -944,7 +944,7 @@ public:
         {
             if (me->GetEntry() == killer->GetEntry())
                 return;
-            
+
             me->Yell("Freya! They come for you.", LANG_UNIVERSAL);
             me->PlayDirectSound(SOUND_IRONBRANCH_DEATH);
 

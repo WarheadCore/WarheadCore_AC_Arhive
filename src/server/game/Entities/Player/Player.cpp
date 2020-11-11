@@ -17894,9 +17894,7 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder* holder)
         instanceId = 0;
 
         if (mapId == MAPID_INVALID)
-        {
             RelocateToHomebind();
-        }
         else
         {
             Relocate(&_loc);
@@ -20851,7 +20849,7 @@ void Player::Whisper(std::string_view text, Language language, Player* target, b
         LOG_FATAL("entities.player", "> Player::Whisper - !target");
         return;
     }
-    
+
     bool isAddonMessage = language == LANG_ADDON;
 
     if (!isAddonMessage)                                    // if not addon data
