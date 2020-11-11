@@ -47,12 +47,12 @@ public:
 
     size_t operator()(WorldPacket* data, LocaleConstant locale) const
     {
-        BroadcastText const* bct = sObjectMgr->GetBroadcastText(_textId);
+        BroadcastText const* bct = sGameLocale->GetBroadcastText(_textId);
 
         std::string text = "";
 
         if (bct)
-            ObjectMgr::GetLocaleString(_gender == GENDER_MALE ? bct->MaleText : bct->FemaleText, locale, text);
+            sGameLocale->GetLocaleString(_gender == GENDER_MALE ? bct->MaleText : bct->FemaleText, locale, text);
 
         return ChatHandler::BuildChatPacket(*data, _msgType, bct ? Language(bct->Language) : LANG_UNIVERSAL, _source, _target, text, 0, "", locale);
     }
