@@ -97,6 +97,13 @@ if ( NOJEM )
   message(" *** DO NOT DISABLE IT UNLESS YOU KNOW WHAT YOU'RE DOING!")
 endif()
 
+if( CLUSTER )
+  message("* Build Server Node Clustering   : No (default)")
+  add_definitions(-DCLUSTER)
+else()
+  message("* Build Server Node Clustering   : Yes")
+endif()
+
 # Performance optimization options:
 
 if( ENABLE_EXTRAS )

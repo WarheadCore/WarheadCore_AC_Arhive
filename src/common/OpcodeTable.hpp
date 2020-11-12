@@ -64,7 +64,7 @@ public:
     {
         if (isInValidRange && isNonZero)
         {
-            if (_opcodes[opcodeHandler->opcode] != NULL)
+            if (_opcodes[opcodeHandler->opcode] != nullptr)
             {
                 log("Tried to override handler of %s with %s (opcode %u)", _opcodes[opcodeHandler->opcode]->name, opcodeHandler->name, opcodeHandler->opcode);
                 delete opcodeHandler;
