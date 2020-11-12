@@ -2498,11 +2498,7 @@ public:
         void Absorb(AuraEffect* /*aurEff*/, DamageInfo& dmgInfo, uint32& absorbAmount)
         {
             // You have a chance equal to your Parry chance
-            float chance = GetTarget()->GetUnitParryChance();
-            if (GetTarget()->IsNonMeleeSpellCast(false, false, true) || GetTarget()->HasUnitState(UNIT_STATE_CONTROLLED))
-                chance = 0.0f;
-
-            if ((dmgInfo.GetDamageType() == SPELL_DIRECT_DAMAGE) && roll_chance_f(chance))
+            if ((dmgInfo.GetDamageType() == SPELL_DIRECT_DAMAGE) && roll_chance_f(GetTarget()->GetFloatValue(PLAYER_PARRY_PERCENTAGE)))
                 absorbAmount = CalculatePct(dmgInfo.GetDamage(), absorbPct);
         }
 
