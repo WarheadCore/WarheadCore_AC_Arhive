@@ -1322,7 +1322,7 @@ enum Opcodes
     NODE_MISC_DATA                                  = 0x527, // Miscdata
     NODE_PLAYERHOLDER_DATA                          = 0x528, // Data for our PlayerHolder
     CLUSTER_PLAYER_DATA                             = 0x529, // Data transfer from Proxy server to Node(s).
-    
-    
+
     NUM_MSG_TYPES                                   = 0x52D
 };
+ 

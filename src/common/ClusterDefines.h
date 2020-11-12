@@ -26,7 +26,7 @@ enum NodeAck
 // send packets from cluster(proxy) to nodes
 enum ProxyToNodes
 {
-    PTN_GUILD_INVITE = 0, 
+    PTN_GUILD_INVITE = 0,
     PTN_DEFAULT,
 };
 
@@ -49,9 +49,9 @@ enum PlayerClusterData
     CL_PLR_SEND_SET_DEATHSTATE,
     CL_PLR_SEND_POSITION_UPDATE,
     CL_PLR_SEND_GUILD_ID,
-    
+
     CL_PLR_SEND_NODE_CHANGED_MSG,
-    
+
     // misc
     CL_PLR_GROUP_UPDATE_ID,
 };
