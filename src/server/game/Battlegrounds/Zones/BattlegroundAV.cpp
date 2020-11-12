@@ -17,11 +17,9 @@
 
 #include "ObjectMgr.h"
 #include "WorldPacket.h"
-
 #include "BattlegroundAV.h"
 #include "Formulas.h"
 #include "GameObject.h"
-#include "Language.h"
 #include "Player.h"
 #include "SpellAuras.h"
 #include "GameEventMgr.h"
@@ -50,10 +48,9 @@ BattlegroundAV::BattlegroundAV()
     for (BG_AV_Nodes i = BG_AV_NODES_FIRSTAID_STATION; i < BG_AV_NODES_MAX; ++i)
         InitNode(i, TEAM_NEUTRAL, false);
 
-    StartMessageIds[BG_STARTING_EVENT_FIRST]  = LANG_BG_AV_START_TWO_MINUTES;
-    StartMessageIds[BG_STARTING_EVENT_SECOND] = LANG_BG_AV_START_ONE_MINUTE;
-    StartMessageIds[BG_STARTING_EVENT_THIRD]  = LANG_BG_AV_START_HALF_MINUTE;
-    StartMessageIds[BG_STARTING_EVENT_FOURTH] = LANG_BG_AV_HAS_BEGUN;
+    StartMessageIds[BG_STARTING_EVENT_SECOND] = BG_AV_TEXT_START_ONE_MINUTE;
+    StartMessageIds[BG_STARTING_EVENT_THIRD]  = BG_AV_TEXT_START_HALF_MINUTE;
+    StartMessageIds[BG_STARTING_EVENT_FOURTH] = BG_AV_TEXT_BATTLE_HAS_BEGUN;
 }
 
 BattlegroundAV::~BattlegroundAV()
@@ -277,6 +274,7 @@ void BattlegroundAV::UpdateScore(TeamId teamId, int16 points)
     m_Team_Scores[teamId] += points;
 
     UpdateWorldState(((teamId == TEAM_HORDE) ? AV_Horde_Score : AV_Alliance_Score), m_Team_Scores[teamId]);
+    
     if (points < 0)
     {
         if (m_Team_Scores[teamId] < 1)
@@ -286,7 +284,7 @@ void BattlegroundAV::UpdateScore(TeamId teamId, int16 points)
         }
         else if (!m_IsInformedNearVictory[teamId] && m_Team_Scores[teamId] < SEND_MSG_NEAR_LOSE)
         {
-            SendMessageToAll(teamId == TEAM_HORDE ? LANG_BG_AV_H_NEAR_LOSE : LANG_BG_AV_A_NEAR_LOSE, teamId == TEAM_HORDE ? CHAT_MSG_BG_SYSTEM_HORDE : CHAT_MSG_BG_SYSTEM_ALLIANCE);
+            SendBroadcastText(teamId == TEAM_HORDE ? BG_AV_TEXT_HORDE_NEAR_LOSE : BG_AV_TEXT_ALLIANCE_NEAR_LOSE, teamId == TEAM_HORDE ? CHAT_MSG_BG_SYSTEM_HORDE : CHAT_MSG_BG_SYSTEM_ALLIANCE);
             PlaySoundToAll(AV_SOUND_NEAR_VICTORY);
             m_IsInformedNearVictory[teamId] = true;
         }

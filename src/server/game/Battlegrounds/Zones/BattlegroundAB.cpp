@@ -21,7 +21,6 @@
 #include "ObjectMgr.h"
 #include "BattlegroundMgr.h"
 #include "Creature.h"
-#include "Language.h"
 #include "Object.h"
 #include "Player.h"
 #include "Util.h"
@@ -40,11 +39,6 @@ BattlegroundAB::BattlegroundAB()
     _teamScores500Disadvantage[TEAM_HORDE] = false;
     _honorTics = 0;
     _reputationTics = 0;
-
-    StartMessageIds[BG_STARTING_EVENT_FIRST]  = LANG_BG_AB_START_TWO_MINUTES;
-    StartMessageIds[BG_STARTING_EVENT_SECOND] = LANG_BG_AB_START_ONE_MINUTE;
-    StartMessageIds[BG_STARTING_EVENT_THIRD]  = LANG_BG_AB_START_HALF_MINUTE;
-    StartMessageIds[BG_STARTING_EVENT_FOURTH] = LANG_BG_AB_HAS_BEGUN;
 }
 
 BattlegroundAB::~BattlegroundAB() = default;
@@ -81,7 +75,8 @@ void BattlegroundAB::PostUpdateImpl(uint32 diff)
                         NodeOccupied(node);
                         SendNodeUpdate(node);
 
-                        SendMessage2ToAll(LANG_BG_AB_NODE_TAKEN, teamId == TEAM_ALLIANCE ? CHAT_MSG_BG_SYSTEM_ALLIANCE : CHAT_MSG_BG_SYSTEM_HORDE, nullptr, teamId == TEAM_ALLIANCE ? LANG_BG_AB_ALLY : LANG_BG_AB_HORDE, LANG_BG_AB_NODE_STABLES + node);
+                        SendBroadcastText(teamId == TEAM_ALLIANCE ? ABNodes[node].TextAllianceTaken : ABNodes[node].TextHordeTaken, teamId == TEAM_ALLIANCE ? CHAT_MSG_BG_SYSTEM_ALLIANCE : CHAT_MSG_BG_SYSTEM_HORDE);
+
                         PlaySoundToAll(teamId == TEAM_ALLIANCE ? BG_AB_SOUND_NODE_CAPTURED_ALLIANCE : BG_AB_SOUND_NODE_CAPTURED_HORDE);
                         break;
                     }
@@ -105,17 +100,21 @@ void BattlegroundAB::PostUpdateImpl(uint32 diff)
 
                         if (honorRewards < uint8(m_TeamScores[teamId] / _honorTics))
                             RewardHonorToTeam(GetBonusHonorFromKill(1), teamId);
+                        
                         if (reputationRewards < uint8(m_TeamScores[teamId] / _reputationTics))
                             RewardReputationToTeam(teamId == TEAM_ALLIANCE ? 509 : 510, 10, teamId);
+                        
                         if (information < uint8(m_TeamScores[teamId] / BG_AB_WARNING_NEAR_VICTORY_SCORE))
                         {
-                            SendMessageToAll(teamId == TEAM_ALLIANCE ? LANG_BG_AB_A_NEAR_VICTORY : LANG_BG_AB_H_NEAR_VICTORY, CHAT_MSG_BG_SYSTEM_NEUTRAL);
+                            SendBroadcastText(teamId == TEAM_ALLIANCE ? BG_AB_TEXT_ALLIANCE_NEAR_VICTORY : BG_AB_TEXT_HORDE_NEAR_VICTORY, CHAT_MSG_BG_SYSTEM_NEUTRAL);
                             PlaySoundToAll(BG_AB_SOUND_NEAR_VICTORY);
                         }
 
                         UpdateWorldState(teamId == TEAM_ALLIANCE ? BG_AB_OP_RESOURCES_ALLY : BG_AB_OP_RESOURCES_HORDE, m_TeamScores[teamId]);
+                        
                         if (m_TeamScores[teamId] > m_TeamScores[GetOtherTeamId(teamId)] + 500)
                             _teamScores500Disadvantage[GetOtherTeamId(teamId)] = true;
+                        
                         if (m_TeamScores[teamId] >= BG_AB_MAX_TEAM_SCORE)
                             EndBattleground(teamId);
 
@@ -130,9 +129,9 @@ void BattlegroundAB::PostUpdateImpl(uint32 diff)
 
 void BattlegroundAB::StartingEventCloseDoors()
 {
-
     for (uint32 obj = BG_AB_OBJECT_BANNER_NEUTRAL; obj < BG_AB_DYNAMIC_NODES_COUNT * BG_AB_OBJECTS_PER_NODE; ++obj)
         SpawnBGObject(obj, RESPAWN_ONE_DAY);
+    
     for (uint32 i = 0; i < BG_AB_DYNAMIC_NODES_COUNT * 3; ++i)
         SpawnBGObject(BG_AB_OBJECT_SPEEDBUFF_STABLES + i, RESPAWN_ONE_DAY);
 
@@ -301,8 +300,6 @@ void BattlegroundAB::EventPlayerClickedOnFlag(Player* player, GameObject* gameOb
     player->RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_ENTER_PVP_COMBAT);
 
     uint32 sound = 0;
-    uint32 message = 0;
-    uint32 message2 = 0;
     DeleteBanner(node);
     CreateBanner(node, true);
 
@@ -314,8 +311,9 @@ void BattlegroundAB::EventPlayerClickedOnFlag(Player* player, GameObject* gameOb
         _capturePointInfo[node]._ownerTeamId = TEAM_NEUTRAL;
         _bgEvents.RescheduleEvent(BG_AB_EVENT_CAPTURE_STABLE + node, BG_AB_FLAG_CAPTURING_TIME);
         sound = BG_AB_SOUND_NODE_CLAIMED;
-        message = LANG_BG_AB_NODE_CLAIMED;
-        message2 = player->GetTeamId() == TEAM_ALLIANCE ? LANG_BG_AB_ALLY : LANG_BG_AB_HORDE;
+
+        SendBroadcastText(player->GetTeamId() == TEAM_ALLIANCE ? ABNodes[node].TextAllianceClaims : ABNodes[node].TextHordeClaims, 
+            player->GetTeamId() == TEAM_ALLIANCE ? CHAT_MSG_BG_SYSTEM_ALLIANCE : CHAT_MSG_BG_SYSTEM_HORDE, player);
     }
     else if (_capturePointInfo[node]._state == BG_AB_NODE_STATE_ALLY_CONTESTED || _capturePointInfo[node]._state == BG_AB_NODE_STATE_HORDE_CONTESTED)
     {
@@ -326,7 +324,9 @@ void BattlegroundAB::EventPlayerClickedOnFlag(Player* player, GameObject* gameOb
             _capturePointInfo[node]._state = BG_AB_NODE_STATE_ALLY_CONTESTED + player->GetTeamId();
             _capturePointInfo[node]._ownerTeamId = TEAM_NEUTRAL;
             _bgEvents.RescheduleEvent(BG_AB_EVENT_CAPTURE_STABLE + node, BG_AB_FLAG_CAPTURING_TIME);
-            message = LANG_BG_AB_NODE_ASSAULTED;
+            
+            SendBroadcastText(player->GetTeamId() == TEAM_ALLIANCE ? ABNodes[node].TextAllianceAssaulted : ABNodes[node].TextHordeAssaulted, 
+                player->GetTeamId() == TEAM_ALLIANCE ? CHAT_MSG_BG_SYSTEM_ALLIANCE : CHAT_MSG_BG_SYSTEM_HORDE, player);
         }
         else
         {
@@ -335,8 +335,11 @@ void BattlegroundAB::EventPlayerClickedOnFlag(Player* player, GameObject* gameOb
             _capturePointInfo[node]._ownerTeamId = player->GetTeamId();
             _bgEvents.CancelEvent(BG_AB_EVENT_CAPTURE_STABLE + node);
             NodeOccupied(node); // after setting team owner
-            message = LANG_BG_AB_NODE_DEFENDED;
+            
+            SendBroadcastText(player->GetTeamId() == TEAM_ALLIANCE ? ABNodes[node].TextAllianceDefended : ABNodes[node].TextHordeDefended, 
+                player->GetTeamId() == TEAM_ALLIANCE ? CHAT_MSG_BG_SYSTEM_ALLIANCE : CHAT_MSG_BG_SYSTEM_HORDE, player);
         }
+        
         sound = player->GetTeamId() == TEAM_ALLIANCE ? BG_AB_SOUND_NODE_ASSAULTED_ALLIANCE : BG_AB_SOUND_NODE_ASSAULTED_HORDE;
     }
     else
@@ -349,13 +352,14 @@ void BattlegroundAB::EventPlayerClickedOnFlag(Player* player, GameObject* gameOb
 
         ApplyPhaseMask();
         _bgEvents.RescheduleEvent(BG_AB_EVENT_CAPTURE_STABLE + node, BG_AB_FLAG_CAPTURING_TIME);
-        message = LANG_BG_AB_NODE_ASSAULTED;
         sound = player->GetTeamId() == TEAM_ALLIANCE ? BG_AB_SOUND_NODE_ASSAULTED_ALLIANCE : BG_AB_SOUND_NODE_ASSAULTED_HORDE;
+
+        SendBroadcastText(player->GetTeamId() == TEAM_ALLIANCE ? ABNodes[node].TextAllianceAssaulted : ABNodes[node].TextHordeAssaulted, 
+                player->GetTeamId() == TEAM_ALLIANCE ? CHAT_MSG_BG_SYSTEM_ALLIANCE : CHAT_MSG_BG_SYSTEM_HORDE, player);
     }
 
     SendNodeUpdate(node);
     PlaySoundToAll(sound);
-    SendMessage2ToAll(message, player->GetTeamId() == TEAM_ALLIANCE ? CHAT_MSG_BG_SYSTEM_ALLIANCE : CHAT_MSG_BG_SYSTEM_HORDE, player, LANG_BG_AB_NODE_STABLES + node, message2);
 }
 
 TeamId BattlegroundAB::GetPrematureWinner()

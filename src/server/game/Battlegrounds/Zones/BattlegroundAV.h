@@ -41,7 +41,8 @@
 #define BG_AV_REP_TOWER                 12
 #define BG_AV_RES_TOWER                 75
 
-#define BG_AV_GET_COMMANDER            1 //for a safely returned wingcommander
+#define BG_AV_GET_COMMANDER             1 //for a safely returned wingcommander
+
 //bonushonor at the end
 #define BG_AV_KILL_SURVIVING_TOWER      2
 #define BG_AV_REP_SURVIVING_TOWER       12
@@ -50,6 +51,16 @@
 #define BG_AV_REP_SURVIVING_CAPTAIN     125
 
 #define AV_EVENT_START_BATTLE           9166 // Achievement: The Alterac Blitz
+
+enum BG_AV_BroadcastTexts
+{
+    BG_AV_TEXT_START_ONE_MINUTE         = 10638,
+    BG_AV_TEXT_START_HALF_MINUTE        = 10639,
+    BG_AV_TEXT_BATTLE_HAS_BEGUN         = 10640,
+    
+    BG_AV_TEXT_ALLIANCE_NEAR_LOSE       = 23210,
+    BG_AV_TEXT_HORDE_NEAR_LOSE          = 23211
+};
 
 enum BG_AV_Sounds
 {

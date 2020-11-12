@@ -54,6 +54,17 @@ enum BattlegroundDesertionType
     BG_DESERTION_TYPE_INVITE_LOGOUT     = 4, // player is invited to join and logs out
 };
 
+enum BattlegroundBroadcastTexts
+{
+    BG_TEXT_ALLIANCE_WINS           = 10633,
+    BG_TEXT_HORDE_WINS              = 10634,
+
+    BG_TEXT_START_TWO_MINUTES       = 18193,
+    BG_TEXT_START_ONE_MINUTE        = 18194,
+    BG_TEXT_START_HALF_MINUTE       = 18195,
+    BG_TEXT_BATTLE_HAS_BEGUN        = 18196,
+};
+
 enum BattlegroundSounds
 {
     SOUND_HORDE_WINS                = 8454,
@@ -227,6 +238,14 @@ enum ArenaType
     ARENA_TYPE_5v5          = 5
 };
 
+enum ArenaBroadcastTexts
+{
+    ARENA_TEXT_START_ONE_MINUTE             = 15740,
+    ARENA_TEXT_START_THIRTY_SECONDS         = 15741,
+    ARENA_TEXT_START_FIFTEEN_SECONDS        = 15739,
+    ARENA_TEXT_START_BATTLE_HAS_BEGUN       = 15742
+};
+
 enum BattlegroundType
 {
     TYPE_BATTLEGROUND     = 3,
@@ -249,6 +268,7 @@ enum BattlegroundStartingEventsIds
     BG_STARTING_EVENT_THIRD     = 2,
     BG_STARTING_EVENT_FOURTH    = 3
 };
+
 #define BG_STARTING_EVENT_COUNT 4
 
 struct BattlegroundScore
@@ -478,6 +498,7 @@ public:
     void SendPacketToTeam(TeamId teamId, WorldPacket* packet, Player* sender = NULL, bool self = true);
     void SendPacketToAll(WorldPacket* packet);
     void YellToAll(Creature* creature, const char* text, uint32 language);
+    void SendBroadcastText(uint32 id, ChatMsg msgType, WorldObject const* target = nullptr);
 
     template<class Do>
     void BroadcastWorker(Do& _do);
@@ -498,9 +519,6 @@ public:
     void SendWarningToAll(uint32 entry, ...);
     void SendMessageToAll(uint32 entry, ChatMsg type, Player const* source = nullptr);
     void PSendMessageToAll(uint32 entry, ChatMsg type, Player const* source, ...);
-
-    // specialized version with 2 string id args
-    void SendMessage2ToAll(uint32 entry, ChatMsg type, Player const* source, uint32 strId1 = 0, uint32 strId2 = 0);
 
     // Raid Group
     Group* GetBgRaid(TeamId teamId) const { return m_BgRaids[teamId]; }

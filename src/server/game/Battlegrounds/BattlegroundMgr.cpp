@@ -34,6 +34,7 @@
 #include "BattlegroundRV.h"
 #include "BattlegroundIC.h"
 #include "Chat.h"
+#include "Language.h"
 #include "Map.h"
 #include "MapInstanced.h"
 #include "MapManager.h"

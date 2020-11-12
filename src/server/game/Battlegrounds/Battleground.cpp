@@ -20,7 +20,7 @@
 #include "Battleground.h"
 #include "BattlegroundMgr.h"
 #include "Creature.h"
-#include "Chat.h"
+#include "ChatTextBuilder.h"
 #include "Formulas.h"
 #include "GridNotifiersImpl.h"
 #include "Group.h"
@@ -45,72 +45,6 @@
 #include "ScriptMgr.h"
 #include "GameGraveyard.h"
 #include "GameLocale.h"
-
-namespace Warhead
-{
-    class BattlegroundChatBuilder
-    {
-    public:
-        BattlegroundChatBuilder(ChatMsg msgtype, uint32 textId, Player const* source, va_list* args = nullptr)
-            : _msgtype(msgtype), _textId(textId), _source(source), _args(args) { }
-
-        void operator()(WorldPacket& data, LocaleConstant loc_idx)
-        {
-            char const* text = sGameLocale->GetAcoreString(_textId, loc_idx);
-            if (_args)
-            {
-                // we need copy va_list before use or original va_list will corrupted
-                va_list ap;
-                va_copy(ap, *_args);
-
-                char str[2048];
-                vsnprintf(str, 2048, text, ap);
-                va_end(ap);
-
-                do_helper(data, &str[0]);
-            }
-            else
-                do_helper(data, text);
-        }
-
-    private:
-        void do_helper(WorldPacket& data, char const* text)
-        {
-            ChatHandler::BuildChatPacket(data, _msgtype, LANG_UNIVERSAL, _source, _source, text);
-        }
-
-        ChatMsg _msgtype;
-        uint32 _textId;
-        Player const* _source;
-        va_list* _args;
-    };
-
-    class Battleground2ChatBuilder
-    {
-    public:
-        Battleground2ChatBuilder(ChatMsg msgtype, uint32 textId, Player const* source, int32 arg1, int32 arg2)
-            : _msgtype(msgtype), _textId(textId), _source(source), _arg1(arg1), _arg2(arg2) {}
-
-        void operator()(WorldPacket& data, LocaleConstant loc_idx)
-        {
-            char const* text = sGameLocale->GetAcoreString(_textId, loc_idx);
-            char const* arg1str = _arg1 ? sGameLocale->GetAcoreString(_arg1, loc_idx) : "";
-            char const* arg2str = _arg2 ? sGameLocale->GetAcoreString(_arg2, loc_idx) : "";
-
-            char str[2048];
-            snprintf(str, 2048, text, arg1str, arg2str);
-
-            ChatHandler::BuildChatPacket(data, _msgtype, LANG_UNIVERSAL, _source, _source, str);
-        }
-
-    private:
-        ChatMsg _msgtype;
-        uint32 _textId;
-        Player const* _source;
-        uint32 _arg1;
-        uint32 _arg2;
-    };
-}                                                           // namespace Warhead
 
 template<class Do>
 void Battleground::BroadcastWorker(Do& _do)
@@ -194,11 +128,11 @@ Battleground::Battleground()
     StartDelayTimes[BG_STARTING_EVENT_SECOND] = BG_START_DELAY_1M;
     StartDelayTimes[BG_STARTING_EVENT_THIRD]  = BG_START_DELAY_30S;
     StartDelayTimes[BG_STARTING_EVENT_FOURTH] = BG_START_DELAY_NONE;
-    //we must set to some default existing values
-    StartMessageIds[BG_STARTING_EVENT_FIRST]  = LANG_BG_WS_START_TWO_MINUTES;
-    StartMessageIds[BG_STARTING_EVENT_SECOND] = LANG_BG_WS_START_ONE_MINUTE;
-    StartMessageIds[BG_STARTING_EVENT_THIRD]  = LANG_BG_WS_START_HALF_MINUTE;
-    StartMessageIds[BG_STARTING_EVENT_FOURTH] = LANG_BG_WS_HAS_BEGUN;
+
+    StartMessageIds[BG_STARTING_EVENT_FIRST]  = BG_TEXT_START_TWO_MINUTES;
+    StartMessageIds[BG_STARTING_EVENT_SECOND] = BG_TEXT_START_ONE_MINUTE;
+    StartMessageIds[BG_STARTING_EVENT_THIRD]  = BG_TEXT_START_HALF_MINUTE;
+    StartMessageIds[BG_STARTING_EVENT_FOURTH] = BG_TEXT_BATTLE_HAS_BEGUN;
 
     // pussywizard:
     m_UpdateTimer = 0;
@@ -460,22 +394,29 @@ inline void Battleground::_ProcessJoin(uint32 diff)
 
         StartingEventCloseDoors();
         SetStartDelayTime(StartDelayTimes[BG_STARTING_EVENT_FIRST]);
+        
         // First start warning - 2 or 1 minute
-        SendMessageToAll(StartMessageIds[BG_STARTING_EVENT_FIRST], CHAT_MSG_BG_SYSTEM_NEUTRAL);
+        if (StartMessageIds[BG_STARTING_EVENT_FIRST])
+            SendBroadcastText(StartMessageIds[BG_STARTING_EVENT_FIRST], CHAT_MSG_BG_SYSTEM_NEUTRAL);
     }
     // After 1 minute or 30 seconds, warning is signaled
     else if (GetStartDelayTime() <= StartDelayTimes[BG_STARTING_EVENT_SECOND] && !(m_Events & BG_STARTING_EVENT_2))
     {
         m_Events |= BG_STARTING_EVENT_2;
-        SendMessageToAll(StartMessageIds[BG_STARTING_EVENT_SECOND], CHAT_MSG_BG_SYSTEM_NEUTRAL);
+
+        if (StartMessageIds[BG_STARTING_EVENT_SECOND])
+            SendBroadcastText(StartMessageIds[BG_STARTING_EVENT_SECOND], CHAT_MSG_BG_SYSTEM_NEUTRAL);
     }
     // After 30 or 15 seconds, warning is signaled
     else if (GetStartDelayTime() <= StartDelayTimes[BG_STARTING_EVENT_THIRD] && !(m_Events & BG_STARTING_EVENT_3))
     {
         m_Events |= BG_STARTING_EVENT_3;
-        SendMessageToAll(StartMessageIds[BG_STARTING_EVENT_THIRD], CHAT_MSG_BG_SYSTEM_NEUTRAL);
+        
+        if (StartMessageIds[BG_STARTING_EVENT_THIRD])
+            SendBroadcastText(StartMessageIds[BG_STARTING_EVENT_THIRD], CHAT_MSG_BG_SYSTEM_NEUTRAL);
 
         if (isArena())
+        {
             switch (GetBgTypeID())
             {
                 case BATTLEGROUND_NA:
@@ -501,6 +442,7 @@ inline void Battleground::_ProcessJoin(uint32 diff)
                 default:
                     break;
             }
+        }            
     }
     // Delay expired (after 2 or 1 minute)
     else if (GetStartDelayTime() <= 0 && !(m_Events & BG_STARTING_EVENT_4))
@@ -509,7 +451,9 @@ inline void Battleground::_ProcessJoin(uint32 diff)
 
         StartingEventOpenDoors();
 
-        SendWarningToAll(StartMessageIds[BG_STARTING_EVENT_FOURTH]);
+        if (StartMessageIds[BG_STARTING_EVENT_FOURTH])
+            SendBroadcastText(StartMessageIds[BG_STARTING_EVENT_FOURTH], CHAT_MSG_BG_SYSTEM_NEUTRAL);
+        
         SetStatus(STATUS_IN_PROGRESS);
         SetStartDelayTime(StartDelayTimes[BG_STARTING_EVENT_FOURTH]);
 
@@ -634,6 +578,19 @@ void Battleground::SendPacketToTeam(TeamId teamId, WorldPacket* packet, Player* 
             itr->second->GetSession()->SendPacket(packet);
 }
 
+void Battleground::SendBroadcastText(uint32 id, ChatMsg msgType, WorldObject const* target)
+{
+    if (!sGameLocale->GetBroadcastText(id))
+    {
+        LOG_ERROR("bg.battleground", "Battleground::SendBroadcastText: `broadcast_text` (ID: %u) was not found", id);
+        return;
+    }
+
+    Warhead::BroadcastTextBuilder builder(nullptr, msgType, id, GENDER_MALE, target);
+    Warhead::LocalizedPacketDo<Warhead::BroadcastTextBuilder> localizer(builder);
+    BroadcastWorker(localizer);
+}
+
 void Battleground::PlaySoundToAll(uint32 soundID)
 {
     WorldPacket data;
@@ -754,18 +711,20 @@ void Battleground::EndBattleground(TeamId winnerTeamId)
     int32  winnerChange = 0;
     int32  winnerMatchmakerChange = 0;
 
-    int32 winmsg_id = 0;
-
     if (winnerTeamId == TEAM_ALLIANCE)
     {
+        if (isBattleground())
+            SendBroadcastText(BG_TEXT_ALLIANCE_WINS, CHAT_MSG_BG_SYSTEM_NEUTRAL);
+        
         SetWinner(TEAM_HORDE); // reversed in packet
-        winmsg_id = isBattleground() ? LANG_BG_A_WINS : LANG_ARENA_GOLD_WINS;
         PlaySoundToAll(SOUND_ALLIANCE_WINS);                // alliance wins sound
     }
     else if (winnerTeamId == TEAM_HORDE)
     {
+        if (isBattleground())
+            SendBroadcastText(BG_TEXT_HORDE_WINS, CHAT_MSG_BG_SYSTEM_NEUTRAL);
+        
         SetWinner(TEAM_ALLIANCE); // reversed in packet
-        winmsg_id = isBattleground() ? LANG_BG_H_WINS : LANG_ARENA_GREEN_WINS;
         PlaySoundToAll(SOUND_HORDE_WINS);                   // horde wins sound
     }
     else
@@ -773,6 +732,7 @@ void Battleground::EndBattleground(TeamId winnerTeamId)
 
     PreparedStatement* stmt = nullptr;
     uint64 battlegroundId = 1;
+    
     if (isBattleground() && sGameConfig->GetBoolConfig("Battleground.StoreStatistics.Enable"))
     {
         stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_PVPSTATS_MAXID);
@@ -1054,9 +1014,6 @@ void Battleground::EndBattleground(TeamId winnerTeamId)
         if (bValidArena) winnerArenaTeam->NotifyStatsChanged();
         loserArenaTeam->NotifyStatsChanged();
     }
-
-    if (winmsg_id)
-        SendMessageToAll(winmsg_id, CHAT_MSG_BG_SYSTEM_NEUTRAL);
 }
 
 uint32 Battleground::GetBonusHonorFromKill(uint32 kills) const
@@ -1740,17 +1697,17 @@ bool Battleground::AddSpiritGuide(uint32 type, float x, float y, float z, float 
     return false;
 }
 
-void Battleground::SendMessageToAll(uint32 entry, ChatMsg type, Player const* source)
+void Battleground::SendMessageToAll(uint32 entry, ChatMsg msgType, Player const* source)
 {
     if (!entry)
         return;
 
-    Warhead::BattlegroundChatBuilder bg_builder(type, entry, source);
-    Warhead::LocalizedPacketDo<Warhead::BattlegroundChatBuilder> bg_do(bg_builder);
-    BroadcastWorker(bg_do);
+    Warhead::WarheadStringChatBuilder builder(nullptr, msgType, entry, source);
+    Warhead::LocalizedPacketDo<Warhead::WarheadStringChatBuilder> localizer(builder);
+    BroadcastWorker(localizer);
 }
 
-void Battleground::PSendMessageToAll(uint32 entry, ChatMsg type, Player const* source, ...)
+void Battleground::PSendMessageToAll(uint32 entry, ChatMsg msgType, Player const* source, ...)
 {
     if (!entry)
         return;
@@ -1758,43 +1715,11 @@ void Battleground::PSendMessageToAll(uint32 entry, ChatMsg type, Player const* s
     va_list ap;
     va_start(ap, source);
 
-    Warhead::BattlegroundChatBuilder bg_builder(type, entry, source, &ap);
-    Warhead::LocalizedPacketDo<Warhead::BattlegroundChatBuilder> bg_do(bg_builder);
-    BroadcastWorker(bg_do);
+    Warhead::WarheadStringChatBuilder builder(nullptr, msgType, entry, source, &ap);
+    Warhead::LocalizedPacketDo<Warhead::WarheadStringChatBuilder> localizer(builder);
+    BroadcastWorker(localizer);
 
     va_end(ap);
-}
-
-void Battleground::SendWarningToAll(uint32 entry, ...)
-{
-    if (!entry)
-        return;
-
-    std::map<uint32, WorldPacket> localizedPackets;
-    for (BattlegroundPlayerMap::const_iterator itr = m_Players.begin(); itr != m_Players.end(); ++itr)
-    {
-        if (localizedPackets.find(itr->second->GetSession()->GetSessionDbLocaleIndex()) == localizedPackets.end())
-        {
-            char const* format = sGameLocale->GetAcoreString(entry, itr->second->GetSession()->GetSessionDbLocaleIndex());
-
-            char str[1024];
-            va_list ap;
-            va_start(ap, entry);
-            vsnprintf(str, 1024, format, ap);
-            va_end(ap);
-
-            ChatHandler::BuildChatPacket(localizedPackets[itr->second->GetSession()->GetSessionDbLocaleIndex()], CHAT_MSG_RAID_BOSS_EMOTE, LANG_UNIVERSAL, nullptr, nullptr, str);
-        }
-
-        itr->second->SendDirectMessage(&localizedPackets[itr->second->GetSession()->GetSessionDbLocaleIndex()]);
-    }
-}
-
-void Battleground::SendMessage2ToAll(uint32 entry, ChatMsg type, Player const* source, uint32 arg1, uint32 arg2)
-{
-    Warhead::Battleground2ChatBuilder bg_builder(type, entry, source, arg1, arg2);
-    Warhead::LocalizedPacketDo<Warhead::Battleground2ChatBuilder> bg_do(bg_builder);
-    BroadcastWorker(bg_do);
 }
 
 void Battleground::EndNow()
