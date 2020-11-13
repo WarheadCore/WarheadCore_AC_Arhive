@@ -86,7 +86,9 @@ enum NXGOs
     GO_SAPPHIRON_GATE               = 181225,
 
     GO_HORSEMEN_CHEST_10            = 181366,
+    GO_HORSEMEN_CHEST_10_HEROIC     = 6181336, // wowka.su 10 heroic
     GO_HORSEMEN_CHEST_25            = 193426,
+    GO_HORSEMEN_CHEST_25_HEROIC     = 6193426, // wowka.su 25 heroic
 
     GO_SAPPHIRON_BIRTH              = 181356,
     GO_KELTHUZAD_FLOOR              = 181444,

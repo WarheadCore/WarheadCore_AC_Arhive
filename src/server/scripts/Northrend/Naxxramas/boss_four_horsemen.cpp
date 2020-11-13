@@ -275,7 +275,7 @@ public:
                 {
                     if (!me->GetMap()->GetPlayers().isEmpty())
                         if (Player* player = me->GetMap()->GetPlayers().getFirst()->GetSource())
-                            player->SummonGameObject(RAID_MODE_HEROIC(GO_HORSEMEN_CHEST_10, GO_HORSEMEN_CHEST_25), 2514.8f, -2944.9f, 245.55f, 5.51f, 0, 0, 0, 0, 0);
+                            player->SummonGameObject(RAID_MODE(GO_HORSEMEN_CHEST_10, GO_HORSEMEN_CHEST_10_HEROIC, GO_HORSEMEN_CHEST_25, GO_HORSEMEN_CHEST_25_HEROIC), 2514.8f, -2944.9f, 245.55f, 5.51f, 0, 0, 0, 0, 0);
                 }
             }
 
