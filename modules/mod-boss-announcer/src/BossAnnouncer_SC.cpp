@@ -25,7 +25,8 @@
 
 enum StringLocales : uint8
 {
-    BOSS_AN_LOCALE_SEND_TEXT = 1,
+    BOSS_AN_LOCALE_SEND_TEXT_RAID = 1,
+    BOSS_AN_LOCALE_SEND_TEXT_WORLD,
     BOSS_AN_LOCALE_10_MAN_NORMAL,
     BOSS_AN_LOCALE_10_MAN_HEROIC,
     BOSS_AN_LOCALE_25_MAN_NORMAL,
@@ -49,7 +50,10 @@ public:
         if (!creature->isWorldBoss())
             return;
 
-        sModuleLocale->SendGlobalMessage(false, MODULE_NAME, BOSS_AN_LOCALE_SEND_TEXT, player->GetName().c_str(), GetCreatureName(player, creature).c_str(), GetDiffString(player).c_str());
+        if (IsKilledRaidBoss(player))
+            sModuleLocale->SendGlobalMessage(false, MODULE_NAME, BOSS_AN_LOCALE_SEND_TEXT_RAID, player->GetName().c_str(), GetCreatureName(player, creature).c_str(), GetDiffString(player).c_str());
+        else
+            sModuleLocale->SendGlobalMessage(false, MODULE_NAME, BOSS_AN_LOCALE_SEND_TEXT_WORLD, player->GetName().c_str(), GetCreatureName(player, creature).c_str());
     };
 
 private:
@@ -95,6 +99,15 @@ private:
             name = "Unknown creature";
 
         return name;
+    }
+
+    bool IsKilledRaidBoss(Player* player)
+    {
+        auto map = player->GetMap();
+        if (!map || !map->IsRaid())
+            return false;
+
+        return true;
     }
 };
 
