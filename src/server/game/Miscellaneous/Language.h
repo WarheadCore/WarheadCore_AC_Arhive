@@ -952,7 +952,7 @@ enum AcoreStrings
     LANG_BG_AV_NODE_TOWER_FROST_E       = 1323,
     LANG_BG_AV_NODE_TOWER_FROST_W       = 1324,
     LANG_BG_AV_NODE_GRAVE_FROST_HUT     = 1325,
-    
+
     LANG_BG_AV_H_CAPTAIN_DEAD           = 1331,
     LANG_BG_AV_A_CAPTAIN_DEAD           = 1332,
 

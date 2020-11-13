@@ -266,7 +266,7 @@ inline void Battleground::_ProcessResurrect(uint32 diff)
     {
         if (GetReviveQueueSize())
         {
-            for (std::map<uint64, std::vector<uint64> >::iterator itr = m_ReviveQueue.begin(); itr != m_ReviveQueue.end(); ++itr)
+            for (std::map<uint64, std::vector<uint64>>::iterator itr = m_ReviveQueue.begin(); itr != m_ReviveQueue.end(); ++itr)
             {
                 Creature* sh = nullptr;
                 for (std::vector<uint64>::const_iterator itr2 = (itr->second).begin(); itr2 != (itr->second).end(); ++itr2)
@@ -394,7 +394,7 @@ inline void Battleground::_ProcessJoin(uint32 diff)
 
         StartingEventCloseDoors();
         SetStartDelayTime(StartDelayTimes[BG_STARTING_EVENT_FIRST]);
-        
+
         // First start warning - 2 or 1 minute
         if (StartMessageIds[BG_STARTING_EVENT_FIRST])
             SendBroadcastText(StartMessageIds[BG_STARTING_EVENT_FIRST], CHAT_MSG_BG_SYSTEM_NEUTRAL);
@@ -411,7 +411,7 @@ inline void Battleground::_ProcessJoin(uint32 diff)
     else if (GetStartDelayTime() <= StartDelayTimes[BG_STARTING_EVENT_THIRD] && !(m_Events & BG_STARTING_EVENT_3))
     {
         m_Events |= BG_STARTING_EVENT_3;
-        
+
         if (StartMessageIds[BG_STARTING_EVENT_THIRD])
             SendBroadcastText(StartMessageIds[BG_STARTING_EVENT_THIRD], CHAT_MSG_BG_SYSTEM_NEUTRAL);
 
@@ -442,7 +442,7 @@ inline void Battleground::_ProcessJoin(uint32 diff)
                 default:
                     break;
             }
-        }            
+        }
     }
     // Delay expired (after 2 or 1 minute)
     else if (GetStartDelayTime() <= 0 && !(m_Events & BG_STARTING_EVENT_4))
@@ -453,7 +453,7 @@ inline void Battleground::_ProcessJoin(uint32 diff)
 
         if (StartMessageIds[BG_STARTING_EVENT_FOURTH])
             SendBroadcastText(StartMessageIds[BG_STARTING_EVENT_FOURTH], CHAT_MSG_BG_SYSTEM_NEUTRAL);
-        
+
         SetStatus(STATUS_IN_PROGRESS);
         SetStartDelayTime(StartDelayTimes[BG_STARTING_EVENT_FOURTH]);
 
@@ -715,7 +715,7 @@ void Battleground::EndBattleground(TeamId winnerTeamId)
     {
         if (isBattleground())
             SendBroadcastText(BG_TEXT_ALLIANCE_WINS, CHAT_MSG_BG_SYSTEM_NEUTRAL);
-        
+
         SetWinner(TEAM_HORDE); // reversed in packet
         PlaySoundToAll(SOUND_ALLIANCE_WINS);                // alliance wins sound
     }
@@ -723,7 +723,7 @@ void Battleground::EndBattleground(TeamId winnerTeamId)
     {
         if (isBattleground())
             SendBroadcastText(BG_TEXT_HORDE_WINS, CHAT_MSG_BG_SYSTEM_NEUTRAL);
-        
+
         SetWinner(TEAM_ALLIANCE); // reversed in packet
         PlaySoundToAll(SOUND_HORDE_WINS);                   // horde wins sound
     }
@@ -732,7 +732,7 @@ void Battleground::EndBattleground(TeamId winnerTeamId)
 
     PreparedStatement* stmt = nullptr;
     uint64 battlegroundId = 1;
-    
+
     if (isBattleground() && sGameConfig->GetBoolConfig("Battleground.StoreStatistics.Enable"))
     {
         stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_PVPSTATS_MAXID);
@@ -1418,7 +1418,7 @@ void Battleground::AddPlayerToResurrectQueue(uint64 npc_guid, uint64 player_guid
 
 void Battleground::RemovePlayerFromResurrectQueue(Player* player)
 {
-    for (std::map<uint64, std::vector<uint64> >::iterator itr = m_ReviveQueue.begin(); itr != m_ReviveQueue.end(); ++itr)
+    for (std::map<uint64, std::vector<uint64>>::iterator itr = m_ReviveQueue.begin(); itr != m_ReviveQueue.end(); ++itr)
         for (std::vector<uint64>::iterator itr2 = (itr->second).begin(); itr2 != (itr->second).end(); ++itr2)
             if (*itr2 == player->GetGUID())
             {

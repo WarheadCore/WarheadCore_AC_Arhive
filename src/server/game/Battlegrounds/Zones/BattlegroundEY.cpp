@@ -529,7 +529,7 @@ void BattlegroundEY::EventPlayerCapturedFlag(Player* player, uint32 BgObjectType
     }
 
     UpdatePlayerScore(player, SCORE_FLAG_CAPTURES, 1);
-    
+
     if (_ownedPointsCount[player->GetTeamId()] > 0)
         AddPoints(player->GetTeamId(), BG_EY_FlagPoints[_ownedPointsCount[player->GetTeamId()] - 1]);
 }

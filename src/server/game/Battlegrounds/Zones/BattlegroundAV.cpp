@@ -274,7 +274,7 @@ void BattlegroundAV::UpdateScore(TeamId teamId, int16 points)
     m_Team_Scores[teamId] += points;
 
     UpdateWorldState(((teamId == TEAM_HORDE) ? AV_Horde_Score : AV_Alliance_Score), m_Team_Scores[teamId]);
-    
+
     if (points < 0)
     {
         if (m_Team_Scores[teamId] < 1)
