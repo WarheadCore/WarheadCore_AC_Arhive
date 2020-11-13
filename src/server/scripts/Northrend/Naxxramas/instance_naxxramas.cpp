@@ -661,6 +661,8 @@ public:
                 case BOSS_SAPPHIRON:
                     if (state == DONE)
                     {
+                        LOG_NOTICE("server", "> BOSS_SAPPHIRON - DONE");
+
                         _speakTimer = 1;
                         // Load KT's grid so he can talk
                         instance->LoadGrid(3763.43f, -5115.87f);
@@ -984,8 +986,42 @@ public:
     };
 };
 
+class AreaTrigger_nax_frostwyrm_lair : public AreaTriggerScript
+{
+public:
+    AreaTrigger_nax_frostwyrm_lair() : AreaTriggerScript("nax_frostwyrm_lair") { }
+
+    bool OnTrigger(Player* player, AreaTrigger const* /*trigger*/)
+    {
+        if (!player)
+            return true;
+
+        // For GM's okay
+        if (player->IsGameMaster())
+            return false;
+
+        auto instanceScript = player->GetInstanceScript();
+        if (instanceScript->GetBossState(BOSS_LOATHEB) != EncounterState::DONE ||
+            instanceScript->GetBossState(BOSS_MAEXXNA) != EncounterState::DONE ||
+            instanceScript->GetBossState(BOSS_THADDIUS) != EncounterState::DONE ||
+            instanceScript->GetBossState(BOSS_HORSEMAN) != EncounterState::DONE)
+            return true;
+
+        return false;
+    }
+private:
+    enum NaxBosses
+    {
+        BOSS_LOATHEB = 5,
+        BOSS_MAEXXNA = 8,
+        BOSS_THADDIUS = 9,
+        BOSS_HORSEMAN = 12
+    };
+};
+
 void AddSC_instance_naxxramas()
 {
     new instance_naxxramas();
     new boss_naxxramas_misc();
+    new AreaTrigger_nax_frostwyrm_lair();
 }
