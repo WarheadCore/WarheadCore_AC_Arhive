@@ -226,6 +226,7 @@ public:
         sGameConfig->AddBoolConfig("AntiAD.MuteGM.Enable");
 
         sGameConfig->AddIntConfig("AntiAD.Mute.Time", 5);
+        sGameConfig->AddIntConfig("AntiAD.CheckChannels", 8);
     }
 
     void OnStartup() override
