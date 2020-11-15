@@ -241,7 +241,7 @@ public:
                     break;
                 case EVENT_BALCONY_SUMMON_REAL:
                     me->CastSpell(me, SPELL_SUMMON_PLAGUED_WARRIORS, true); // visual only
-                    
+
                     if (events.GetPhaseMask() == 0)
                         SummonHelper(NPC_PLAGUED_CHAMPION, RAID_MODE(2, 4, 3, 5));
                     else if (events.GetPhaseMask() == 1)
