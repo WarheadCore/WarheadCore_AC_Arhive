@@ -888,7 +888,7 @@ public:
 
                     ++_currentWingTaunt;
                     break;
-                }  
+                }
             }
         }
 

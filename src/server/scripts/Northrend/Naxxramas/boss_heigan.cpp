@@ -216,21 +216,21 @@ public:
                     events.RepeatEvent(currentPhase == PHASE_SLOW_DANCE ? 10s : 4s);
                     break;
                 case EVENT_SAFETY_DANCE:
+                {
+                    for (const auto& itr : me->GetMap()->GetPlayers())
                     {
-                        for (const auto& itr : me->GetMap()->GetPlayers())
+                        if (IsInRoom(itr.GetSource()) && !itr.GetSource()->IsAlive())
                         {
-                            if (IsInRoom(itr.GetSource()) && !itr.GetSource()->IsAlive())
-                            {
-                                pInstance->SetData(DATA_DANCE_FAIL, 0);
-                                pInstance->SetData(DATA_IMMORTAL_FAIL, 0);
-                                return;
-                            }
-
+                            pInstance->SetData(DATA_DANCE_FAIL, 0);
+                            pInstance->SetData(DATA_IMMORTAL_FAIL, 0);
+                            return;
                         }
 
-                        events.RepeatEvent(5s);
-                        return;
                     }
+
+                    events.RepeatEvent(5s);
+                    return;
+                }
             }
 
             DoMeleeAttackIfReady();

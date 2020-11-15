@@ -100,7 +100,7 @@ public:
             me->SetReactState(REACT_AGGRESSIVE);
             me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_DISABLE_MOVE);
             me->SetControlled(false, UNIT_STATE_ROOT);
-            
+
             events.SetPhase(0);
             events.Reset();
             events.ScheduleEvent(EVENT_MOVE_TO_BALCONY, 110s);
@@ -117,7 +117,7 @@ public:
             me->AttackStop();
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_DISABLE_MOVE);
             me->SetControlled(true, UNIT_STATE_ROOT);
-            
+
             events.SetPhase(1);
             events.Reset();
             events.ScheduleEvent(EVENT_BALCONY_SUMMON_ANNOUNCE, 4s);

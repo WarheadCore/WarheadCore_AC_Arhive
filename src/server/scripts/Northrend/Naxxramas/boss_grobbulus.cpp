@@ -88,7 +88,7 @@ public:
         {
             std::list<Creature*> StichedGiants;
             me->GetCreaturesWithEntryInRange(StichedGiants, 300.0f, NPC_STICHED_GIANT);
-            
+
             for (auto const& itr : StichedGiants)
                 itr->AI()->AttackStart(me->GetVictim());
         }
@@ -120,8 +120,8 @@ public:
         }
 
         void SummonedCreatureDespawn(Creature* summon) override
-        { 
-            summons.Despawn(summon); 
+        {
+            summons.Despawn(summon);
         }
 
         void JustDied(Unit*  killer) override
