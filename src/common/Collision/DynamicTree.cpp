@@ -53,7 +53,7 @@ template<> struct BoundsTrait< GameObjectModel>
     static void getBounds2(const GameObjectModel* g, G3D::AABox& out) { out = g->getBounds();}
 };
 
-typedef RegularGrid2D<GameObjectModel, BIHWrap<GameObjectModel> > ParentTree;
+typedef RegularGrid2D<GameObjectModel, BIHWrap<GameObjectModel>> ParentTree;
 
 struct DynTreeImpl : public ParentTree
 {

@@ -117,7 +117,7 @@ namespace MMAP
     bool MMapManager::loadMap(uint32 mapId, int32 x, int32 y)
     {
         // make sure the mmap is loaded and ready to load tiles
-        if(!loadMapData(mapId))
+        if (!loadMapData(mapId))
             return false;
 
         // get this mmap data
@@ -162,7 +162,7 @@ namespace MMAP
         ASSERT(data);
 
         size_t result = fread(data, fileHeader.size, 1, file);
-        if(!result)
+        if (!result)
         {
             LOG_ERROR("maps", "MMAP:loadMap: Bad header or data in mmap %03u%02i%02i.mmtile", mapId, x, y);
             fclose(file);
