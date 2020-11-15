@@ -72,7 +72,7 @@ const Position summoningPosition[5] =
     { 2663.56f, -3464.43f, 262.66f, 5.20f }
 };
 
-constexpr Position nothPosition = { 2684.94f, -3502.53f, 261.31f, 4.7f };
+const Position nothPosition = { 2684.94f, -3502.53f, 261.31f, 4.7f };
 
 class boss_noth : public CreatureScript
 {

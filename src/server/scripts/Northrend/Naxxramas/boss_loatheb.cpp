@@ -88,7 +88,7 @@ public:
             summons.Summon(cr);
         }
 
-        void SummonedCreatureDies(Creature*  /*cr*/, Unit*) override
+        void SummonedCreatureDies(Creature* /*cr*/, Unit*) override
         {
             if (pInstance)
                 pInstance->SetData(DATA_SPORE_KILLED, 0);
