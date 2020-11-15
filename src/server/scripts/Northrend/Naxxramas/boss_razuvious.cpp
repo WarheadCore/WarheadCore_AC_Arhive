@@ -83,6 +83,7 @@ public:
         {
             me->SummonCreature(NPC_DEATH_KNIGHT_UNDERSTUDY, 2782.45f, -3088.03f, 267.685f, 0.75f);
             me->SummonCreature(NPC_DEATH_KNIGHT_UNDERSTUDY, 2778.56f, -3113.74f, 267.685f, 5.28f);
+
             if (Is25ManRaid())
             {
                 me->SummonCreature(NPC_DEATH_KNIGHT_UNDERSTUDY, 2762.23f, -3085.07f, 267.685f, 1.95f);
@@ -90,7 +91,10 @@ public:
             }
         }
 
-        void JustSummoned(Creature* cr) override { summons.Summon(cr); }
+        void JustSummoned(Creature* cr) override
+        { 
+            summons.Summon(cr); 
+        }
 
         void Reset() override
         {
@@ -114,7 +118,7 @@ public:
         void DamageTaken(Unit* who, uint32& damage, DamageEffectType, SpellSchoolMask) override
         {
             // Damage done by the controlled Death Knight understudies should also count toward damage done by players
-            if(who && who->GetTypeId() == TYPEID_UNIT && who->GetEntry() == NPC_DEATH_KNIGHT_UNDERSTUDY)
+            if (who && who->GetTypeId() == TYPEID_UNIT && who->GetEntry() == NPC_DEATH_KNIGHT_UNDERSTUDY)
                 me->LowerPlayerDamageReq(damage);
         }
 

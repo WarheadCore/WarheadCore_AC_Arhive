@@ -114,6 +114,7 @@ public:
             BossAI::EnterCombat(who);
             me->SetInCombatWithZone();
             Talk(SAY_AGGRO);
+
             if (pInstance)
             {
                 if (GameObject* go = me->GetMap()->GetGameObject(pInstance->GetData64(DATA_HEIGAN_ENTER_GATE)))
@@ -128,6 +129,7 @@ public:
             currentSection = 3;
             currentPhase = phase;
             events.Reset();
+
             if (phase == PHASE_SLOW_DANCE)
             {
                 events.ScheduleEvent(EVENT_SPELL_SPELL_DISRUPTION, 0s);
@@ -139,6 +141,7 @@ public:
             {
                 Talk(EMOTE_DANCE);
                 Talk(SAY_DANCE);
+
                 // teleport
                 float x, y, z, o;
                 me->GetHomePosition(x, y, z, o);
@@ -148,6 +151,7 @@ public:
                 events.ScheduleEvent(EVENT_ERUPT_SECTION, 4s);
                 events.ScheduleEvent(EVENT_SWITCH_PHASE, 45s);
             }
+
             events.ScheduleEvent(EVENT_SAFETY_DANCE, 5s);
         }
 
@@ -192,7 +196,7 @@ public:
                         StartFightPhase(PHASE_SLOW_DANCE);
                         Talk(EMOTE_DANCE_END); // we put this here to avoid play the emote on aggro.
                     }
-                    // no pop, there is reset in start fight
+
                     break;
                 case EVENT_ERUPT_SECTION:
                     if (pInstance)
@@ -213,7 +217,7 @@ public:
                     break;
                 case EVENT_SAFETY_DANCE:
                     {
-                        for(const auto& itr : me->GetMap()->GetPlayers())
+                        for (const auto& itr : me->GetMap()->GetPlayers())
                         {
                             if (IsInRoom(itr.GetSource()) && !itr.GetSource()->IsAlive())
                             {
@@ -223,6 +227,7 @@ public:
                             }
 
                         }
+
                         events.RepeatEvent(5s);
                         return;
                     }

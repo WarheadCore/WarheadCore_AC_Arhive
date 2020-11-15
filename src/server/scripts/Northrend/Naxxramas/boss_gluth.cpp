@@ -150,12 +150,13 @@ public:
             if (me->IsInCombat())
                 return false;
 
-            Map::PlayerList const& pList = me->GetMap()->GetPlayers();
-            for (const auto& itr : pList)
+            for (const auto& itr : me->GetMap()->GetPlayers())
             {
                 Player* player = itr.GetSource();
+
                 if (!player || !player->IsAlive())
                     continue;
+
                 if (player->GetPositionZ() > 300.0f || me->GetExactDist(player) > 50.0f)
                     continue;
 
@@ -197,6 +198,7 @@ public:
                 case EVENT_SUMMON_ZOMBIE:
                     {
                         uint8 rand = urand(0, 2);
+
                         for (int32 i = 0; i < RAID_MODE(1, 2, 2, 3); ++i)
                         {
                             // In 10 man raid, normal mode - should spawn only from mid gate
@@ -206,7 +208,8 @@ public:
                                 me->SummonCreature(NPC_ZOMBIE_CHOW, zombiePos[0]);
                             else
                                 me->SummonCreature(NPC_ZOMBIE_CHOW, zombiePos[urand(0, 2)]);
-                            (rand == 2 ? rand = 0 : rand++);
+
+                            rand == 2 ? rand = 0 : rand++;
                         }
 
                         events.RepeatEvent(10s);
@@ -214,12 +217,14 @@ public:
                     }
                 case EVENT_CAN_EAT_ZOMBIE:
                     events.RepeatEvent(1s);
+
                     if (me->GetVictim()->GetEntry() == NPC_ZOMBIE_CHOW && me->IsWithinMeleeRange(me->GetVictim()))
                     {
                         me->CastCustomSpell(SPELL_CHOW_SEARCHER, SPELLVALUE_RADIUS_MOD, 20000, me, true);
                         Talk(EMOTE_DEVOURS_ALL);
                         return; // leave it to skip DoMeleeAttackIfReady
                     }
+
                     break;
             }
 

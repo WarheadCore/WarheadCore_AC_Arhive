@@ -100,6 +100,7 @@ public:
             Talk(SAY_AGGRO);
 
             me->SetInCombatWithZone();
+
             events.ScheduleEvent(EVENT_SPELL_HATEFUL_STRIKE, 1200ms);
             events.ScheduleEvent(EVENT_SPELL_BERSERK, 6min);
             events.ScheduleEvent(EVENT_HEALTH_CHECK, 1s);
@@ -142,6 +143,7 @@ public:
 
                         counter = 0;
                         list<Unit*, std::allocator<Unit*>>::iterator itr;
+
                         for (itr = meleeRangeTargets.begin(); itr != meleeRangeTargets.end(); ++itr, ++counter)
                         {
                             // if there is only one target available
@@ -180,6 +182,7 @@ public:
                         me->CastSpell(me, SPELL_FRENZY, true);
                         break;
                     }
+
                     events.RepeatEvent(1s);
                     break;
             }

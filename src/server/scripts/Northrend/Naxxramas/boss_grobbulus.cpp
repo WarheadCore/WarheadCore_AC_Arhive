@@ -88,11 +88,9 @@ public:
         {
             std::list<Creature*> StichedGiants;
             me->GetCreaturesWithEntryInRange(StichedGiants, 300.0f, NPC_STICHED_GIANT);
-            for (std::list<Creature*>::const_iterator itr = StichedGiants.begin(); itr != StichedGiants.end(); ++itr)
-            {
-                if ((*itr)->GetGUID())
-                    (*itr)->ToCreature()->AI()->AttackStart(me->GetVictim());
-            }
+            
+            for (auto const& itr : StichedGiants)
+                itr->AI()->AttackStart(me->GetVictim());
         }
 
         void EnterCombat(Unit* who) override
@@ -100,6 +98,7 @@ public:
             BossAI::EnterCombat(who);
             PullChamberAdds();
             me->SetInCombatWithZone();
+
             events.ScheduleEvent(EVENT_SPELL_POISON_CLOUD, 15s);
             events.ScheduleEvent(EVENT_SPELL_MUTATING_INJECTION, 20s);
             events.ScheduleEvent(EVENT_SPELL_SLIME_SPRAY, 10s);
@@ -120,7 +119,10 @@ public:
             summons.Summon(cr);
         }
 
-        void SummonedCreatureDespawn(Creature* summon) override { summons.Despawn(summon); }
+        void SummonedCreatureDespawn(Creature* summon) override
+        { 
+            summons.Despawn(summon); 
+        }
 
         void JustDied(Unit*  killer) override
         {
@@ -138,6 +140,7 @@ public:
         {
             // Some nice visuals
             dropSludgeTimer += diff;
+
             if (!me->IsInCombat() && dropSludgeTimer >= 5000)
             {
                 if (me->IsWithinDist3d(3178, -3305, 319, 5.0f) && !summons.HasEntry(NPC_SEWAGE_SLIME))
@@ -201,6 +204,7 @@ public:
         {
             sizeTimer = 0;
             auraVisualTimer = 1;
+
             me->SetFloatValue(UNIT_FIELD_COMBATREACH, 2.0f);
             me->setFaction(21); // Grobbulus one
         }
@@ -217,6 +221,7 @@ public:
             if (auraVisualTimer)
             {
                 auraVisualTimer += diff;
+
                 if (auraVisualTimer >= 1000)
                 {
                     me->CastSpell(me, (me->GetMap()->Is25ManRaid() ? SPELL_POISON_CLOUD_DAMAGE_AURA_25 : SPELL_POISON_CLOUD_DAMAGE_AURA_10), true);
@@ -225,11 +230,11 @@ public:
             }
 
             sizeTimer += diff;
+
             // increase size to 15yd in 60 seconds, 0.00025 is the growth of size in 1ms
             me->SetFloatValue(UNIT_FIELD_COMBATREACH, 2.0f + (0.00025f * sizeTimer));
         }
     };
-
 };
 
 class spell_grobbulus_poison : public SpellScriptLoader
@@ -249,6 +254,7 @@ public:
                     tmplist.push_back(target);
 
             targets.clear();
+
             for (auto& itr : tmplist)
                 targets.push_back(itr);
         }

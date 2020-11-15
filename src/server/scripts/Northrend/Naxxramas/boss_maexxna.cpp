@@ -189,7 +189,9 @@ public:
                     break;
                 case EVENT_WEB_WRAP:
                     Talk(EMOTE_WEB_WRAP);
+
                     for (uint8 i = 0; i < RAID_MODE(1, 2, 2, 3); ++i)
+                    {
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0, true, -SPELL_WEB_WRAP))
                         {
                             target->RemoveAura(RAID_MODE_HEROIC(SPELL_WEB_SPRAY_10, SPELL_WEB_SPRAY_25));
@@ -201,6 +203,8 @@ public:
                                 target->GetMotionMaster()->MoveJump(PosWrap[pos].GetPositionX(), PosWrap[pos].GetPositionY(), PosWrap[pos].GetPositionZ(), 20, 20);
                             }
                         }
+                    }                        
+
                     events.RepeatEvent(40s);
                     break;
             }
@@ -209,7 +213,6 @@ public:
         }
     };
 };
-
 
 class boss_maexxna_webwrap : public CreatureScript
 {
@@ -226,9 +229,11 @@ public:
         explicit boss_maexxna_webwrapAI(Creature* c) : NullCreatureAI(c), victimGUID(0) {}
 
         uint64 victimGUID;
+        
         void SetGUID(uint64 guid, int32  /*param*/) override
         {
             victimGUID = guid;
+
             if (me->m_spells[0] && victimGUID)
                 if (Unit* victim = ObjectAccessor::GetUnit(*me, victimGUID))
                     victim->CastSpell(victim, me->m_spells[0], true, nullptr, nullptr, me->GetGUID());

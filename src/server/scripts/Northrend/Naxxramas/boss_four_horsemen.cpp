@@ -102,8 +102,6 @@ const uint32 TABLE_SPELL_PUNISH[4] = {SPELL_ZELIEK_CONDEMNATION, SPELL_BLAUMEUX_
 const uint32 TABLE_SPELL_SECONDARY_10[4] = {SPELL_ZELIEK_HOLY_WRATH_10, SPELL_BLAUMEUX_VOID_ZONE_10, 0, 0};
 const uint32 TABLE_SPELL_SECONDARY_25[4] = {SPELL_ZELIEK_HOLY_WRATH_25, SPELL_BLAUMEUX_VOID_ZONE_25, 0, 0};
 
-
-
 const Position WaypointPositions[12] =
 {
     // Thane waypoints
@@ -206,7 +204,7 @@ public:
             events.RescheduleEvent(EVENT_SPELL_MARK_CAST, 24s);
             events.RescheduleEvent(EVENT_BERSERK, 25min);
 
-            if ((me->GetEntry() != NPC_LADY_BLAUMEUX && me->GetEntry() != NPC_SIR_ZELIEK))
+            if (me->GetEntry() != NPC_LADY_BLAUMEUX && me->GetEntry() != NPC_SIR_ZELIEK)
                 events.RescheduleEvent(EVENT_SPELL_PRIMARY, 10s, 15s);
             else
             {
@@ -224,9 +222,10 @@ public:
             if (id % 3 == 2)
             {
                 movementPhase = MOVE_PHASE_FINISHED;
-                me->SetReactState(REACT_AGGRESSIVE);
 
+                me->SetReactState(REACT_AGGRESSIVE);
                 me->SetInCombatWithZone();
+
                 if (!UpdateVictim())
                 {
                     EnterEvadeMode();
@@ -238,6 +237,7 @@ public:
                     me->GetMotionMaster()->Clear(false);
                     me->GetMotionMaster()->MoveIdle();
                 }
+
                 return;
             }
 
@@ -269,14 +269,12 @@ public:
         void JustDied(Unit*  killer) override
         {
             BossAI::JustDied(killer);
-            if (pInstance)
+
+            if (pInstance && pInstance->GetBossState(BOSS_HORSEMAN) == DONE)
             {
-                if (pInstance->GetBossState(BOSS_HORSEMAN) == DONE)
-                {
-                    if (!me->GetMap()->GetPlayers().isEmpty())
-                        if (Player* player = me->GetMap()->GetPlayers().getFirst()->GetSource())
-                            player->SummonGameObject(RAID_MODE(GO_HORSEMEN_CHEST_10, GO_HORSEMEN_CHEST_10_HEROIC, GO_HORSEMEN_CHEST_25, GO_HORSEMEN_CHEST_25_HEROIC), 2514.8f, -2944.9f, 245.55f, 5.51f, 0, 0, 0, 0, 0);
-                }
+                if (!me->GetMap()->GetPlayers().isEmpty())
+                    if (Player* player = me->GetMap()->GetPlayers().getFirst()->GetSource())
+                        player->SummonGameObject(RAID_MODE(GO_HORSEMEN_CHEST_10, GO_HORSEMEN_CHEST_10_HEROIC, GO_HORSEMEN_CHEST_25, GO_HORSEMEN_CHEST_25_HEROIC), 2514.8f, -2944.9f, 245.55f, 5.51f, 0, 0, 0, 0, 0);
             }
 
             Talk(SAY_DEATH);
@@ -285,10 +283,10 @@ public:
         void EnterCombat(Unit* who) override
         {
             BossAI::EnterCombat(who);
+
             if (movementPhase == MOVE_PHASE_NONE)
             {
                 Talk(SAY_AGGRO);
-
                 me->SetReactState(REACT_PASSIVE);
                 movementPhase = MOVE_PHASE_STARTED;
                 me->SetSpeed(MOVE_RUN, me->GetSpeedRate(MOVE_RUN), true);
@@ -365,6 +363,7 @@ public:
             if (Unit* caster = GetCaster())
             {
                 int32 damage;
+
                 switch (GetStackAmount())
                 {
                     case 1:
@@ -389,6 +388,7 @@ public:
                         damage = 20000 + 1000 * (GetStackAmount() - 7);
                         break;
                 }
+
                 if (damage)
                     caster->CastCustomSpell(SPELL_MARK_DAMAGE, SPELLVALUE_BASE_POINT0, damage, GetTarget());
             }

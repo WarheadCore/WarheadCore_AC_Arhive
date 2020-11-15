@@ -65,14 +65,14 @@ enum Misc
 
 const Position summoningPosition[5] =
 {
-    {2728.12f, -3544.43f, 261.91f, 6.04f},
-    {2729.05f, -3544.47f, 261.91f, 5.58f},
-    {2728.24f, -3465.08f, 264.20f, 3.56f},
-    {2704.11f, -3456.81f, 265.53f, 4.51f},
-    {2663.56f, -3464.43f, 262.66f, 5.20f},
+    { 2728.12f, -3544.43f, 261.91f, 6.04f },
+    { 2729.05f, -3544.47f, 261.91f, 5.58f },
+    { 2728.24f, -3465.08f, 264.20f, 3.56f },
+    { 2704.11f, -3456.81f, 265.53f, 4.51f },
+    { 2663.56f, -3464.43f, 262.66f, 5.20f }
 };
 
-const Position nothPosition = {2684.94f, -3502.53f, 261.31f, 4.7f};
+constexpr Position nothPosition = { 2684.94f, -3502.53f, 261.31f, 4.7f };
 
 class boss_noth : public CreatureScript
 {
@@ -100,8 +100,8 @@ public:
             me->SetReactState(REACT_AGGRESSIVE);
             me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_DISABLE_MOVE);
             me->SetControlled(false, UNIT_STATE_ROOT);
+            
             events.SetPhase(0);
-
             events.Reset();
             events.ScheduleEvent(EVENT_MOVE_TO_BALCONY, 110s);
             events.ScheduleEvent(EVENT_SPELL_CURSE, 15s);
@@ -117,6 +117,7 @@ public:
             me->AttackStop();
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_DISABLE_MOVE);
             me->SetControlled(true, UNIT_STATE_ROOT);
+            
             events.SetPhase(1);
             events.Reset();
             events.ScheduleEvent(EVENT_BALCONY_SUMMON_ANNOUNCE, 4s);
@@ -145,8 +146,10 @@ public:
             BossAI::Reset();
             events.Reset();
             summons.DespawnAll();
+
             me->SetControlled(false, UNIT_STATE_ROOT);
             me->SetReactState(REACT_AGGRESSIVE);
+
             events.SetPhase(0);
         }
 
@@ -205,6 +208,7 @@ public:
                 case EVENT_SPELL_CURSE:
                     if (events.GetPhaseMask() == 0)
                         me->CastCustomSpell(RAID_MODE_HEROIC(SPELL_CURSE_OF_THE_PLAGUEBRINGER_10, SPELL_CURSE_OF_THE_PLAGUEBRINGER_25), SPELLVALUE_MAX_TARGETS, RAID_MODE_HEROIC(3, 10), me, false);
+
                     events.RepeatEvent(25s);
                     break;
                 case EVENT_SUMMON_PLAGUED_WARRIOR_ANNOUNCE:
@@ -221,7 +225,6 @@ public:
                     Talk(EMOTE_TELEPORT_BALCONY);
                     me->CastSpell(me, SPELL_TELEPORT, true);
                     StartBalconyPhase();
-                    // events.Reset()!!
                     break;
                 case EVENT_SPELL_BLINK:
                     DoResetThreat();
@@ -247,7 +250,8 @@ public:
                     }
                     else
                         SummonHelper(NPC_PLAGUED_GUARDIAN, RAID_MODE(2, 4, 3, 5));
-                    break;
+
+                    reak;
                 case EVENT_MOVE_TO_GROUND:
                     Talk(EMOTE_TELEPORT_BACK);
                     StartGroundPhase();

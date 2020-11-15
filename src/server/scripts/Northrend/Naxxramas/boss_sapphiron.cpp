@@ -127,6 +127,7 @@ public:
         void Reset() override
         {
             BossAI::Reset();
+
             if (me->IsVisible())
                 me->SetReactState(REACT_AGGRESSIVE);
 
@@ -141,13 +142,15 @@ public:
         {
             Map::PlayerList const& PlList = me->GetMap()->GetPlayers();
             if (PlList.isEmpty())
-                return;
+                return;            
+            
             for (const auto& i : PlList)
             {
                 if (Player* player = i.GetSource())
                 {
                     if (player->IsGameMaster())
                         continue;
+
                     if (player->IsAlive() && me->GetDistance(player) < 80.0f)
                     {
                         me->SetInCombatWith(player);

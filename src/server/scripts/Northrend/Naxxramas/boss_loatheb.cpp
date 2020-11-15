@@ -73,6 +73,7 @@ public:
             BossAI::Reset();
             events.Reset();
             summons.DespawnAll();
+
             if (pInstance)
             {
                 pInstance->SetData(BOSS_LOATHEB, NOT_STARTED);
@@ -102,6 +103,7 @@ public:
         void EnterCombat(Unit* who) override
         {
             BossAI::EnterCombat(who);
+
             if (pInstance)
             {
                 pInstance->SetData(BOSS_LOATHEB, IN_PROGRESS);
@@ -110,6 +112,7 @@ public:
             }
 
             me->SetInCombatWithZone();
+
             events.ScheduleEvent(EVENT_SPELL_NECROTIC_AURA, 10s);
             events.ScheduleEvent(EVENT_SPELL_DEATHBLOOM, 6s);
             events.ScheduleEvent(EVENT_SUMMON_SPORE, 12s);
@@ -119,8 +122,10 @@ public:
         void JustDied(Unit* killer) override
         {
             BossAI::JustDied(killer);
+
             if (pInstance)
                 pInstance->SetData(BOSS_LOATHEB, DONE);
+
             summons.DespawnAll();
         }
 
@@ -169,6 +174,7 @@ public:
                 EnterEvadeMode();
                 return false;
             }
+
             return true;
         }
     };
@@ -186,6 +192,7 @@ public:
         void HandleEffectApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
             Creature* target = GetTarget()->ToCreature();
+
             if (target->IsAIEnabled)
                 target->AI()->Talk(SAY_NECROTIC_AURA_APPLIED);
         }
@@ -193,6 +200,7 @@ public:
         void HandleEffectRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
             Creature* target = GetTarget()->ToCreature();
+
             if (target->IsAIEnabled)
                 target->AI()->Talk(SAY_NECROTIC_AURA_REMOVED);
         }

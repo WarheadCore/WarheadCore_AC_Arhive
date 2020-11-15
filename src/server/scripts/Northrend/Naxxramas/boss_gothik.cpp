@@ -122,67 +122,68 @@ enum Events
 
 const uint32 gothikWaves[24][2] =
 {
-    {NPC_LIVING_TRAINEE,    20000},
-    {NPC_LIVING_TRAINEE,    20000},
-    {NPC_LIVING_TRAINEE,    10000},
-    {NPC_LIVING_KNIGHT,     10000},
-    {NPC_LIVING_TRAINEE,    15000},
-    {NPC_LIVING_KNIGHT,     10000},
-    {NPC_LIVING_TRAINEE,    15000},
-    {NPC_LIVING_TRAINEE,    0},
-    {NPC_LIVING_KNIGHT,     10000},
-    {NPC_LIVING_RIDER,      10000},
-    {NPC_LIVING_TRAINEE,    5000},
-    {NPC_LIVING_KNIGHT,     15000},
-    {NPC_LIVING_RIDER,      0},
-    {NPC_LIVING_TRAINEE,    10000},
-    {NPC_LIVING_KNIGHT,     10000},
-    {NPC_LIVING_TRAINEE,    10000},
-    {NPC_LIVING_RIDER,      5000},
-    {NPC_LIVING_KNIGHT,     5000},
-    {NPC_LIVING_TRAINEE,    20000},
-    {NPC_LIVING_RIDER,      0},
-    {NPC_LIVING_KNIGHT,     0},
-    {NPC_LIVING_TRAINEE,    15000},
-    {NPC_LIVING_TRAINEE,    29000},
-    {0, 0}
+    { NPC_LIVING_TRAINEE,    20000 },
+    { NPC_LIVING_TRAINEE,    20000 },
+    { NPC_LIVING_TRAINEE,    10000 },
+    { NPC_LIVING_KNIGHT,     10000 },
+    { NPC_LIVING_TRAINEE,    15000 },
+    { NPC_LIVING_KNIGHT,     10000 },
+    { NPC_LIVING_TRAINEE,    15000 },
+    { NPC_LIVING_TRAINEE,    0 },
+    { NPC_LIVING_KNIGHT,     10000 },
+    { NPC_LIVING_RIDER,      10000 },
+    { NPC_LIVING_TRAINEE,    5000 },
+    { NPC_LIVING_KNIGHT,     15000 },
+    { NPC_LIVING_RIDER,      0 },
+    { NPC_LIVING_TRAINEE,    10000 },
+    { NPC_LIVING_KNIGHT,     10000 },
+    { NPC_LIVING_TRAINEE,    10000 },
+    { NPC_LIVING_RIDER,      5000 },
+    { NPC_LIVING_KNIGHT,     5000 },
+    { NPC_LIVING_TRAINEE,    20000 },
+    { NPC_LIVING_RIDER,      0 },
+    { NPC_LIVING_KNIGHT,     0 },
+    { NPC_LIVING_TRAINEE,    15000 },
+    { NPC_LIVING_TRAINEE,    29000 },
+    { 0, 0 }
 };
 
 const Position PosSummonLiving[6] =
 {
-    {2669.7f, -3428.76f, 268.56f, 1.6f},
-    {2692.1f, -3428.76f, 268.56f, 1.6f},
-    {2714.4f, -3428.76f, 268.56f, 1.6f},
-    {2669.7f, -3431.67f, 268.56f, 1.6f},
-    {2692.1f, -3431.67f, 268.56f, 1.6f},
-    {2714.4f, -3431.67f, 268.56f, 1.6f},
+    { 2669.7f, -3428.76f, 268.56f, 1.6f },
+    { 2692.1f, -3428.76f, 268.56f, 1.6f },
+    { 2714.4f, -3428.76f, 268.56f, 1.6f },
+    { 2669.7f, -3431.67f, 268.56f, 1.6f },
+    { 2692.1f, -3431.67f, 268.56f, 1.6f },
+    { 2714.4f, -3431.67f, 268.56f, 1.6f }
 };
 
 const Position PosSummonDead[5] =
 {
-    {2725.1f, -3310.0f, 268.85f, 3.4f},
-    {2699.3f, -3322.8f, 268.60f, 3.3f},
-    {2733.1f, -3348.5f, 268.84f, 3.1f},
-    {2682.8f, -3304.2f, 268.85f, 3.9f},
-    {2664.8f, -3340.7f, 268.23f, 3.7f},
+    { 2725.1f, -3310.0f, 268.85f, 3.4f },
+    { 2699.3f, -3322.8f, 268.60f, 3.3f },
+    { 2733.1f, -3348.5f, 268.84f, 3.1f },
+    { 2682.8f, -3304.2f, 268.85f, 3.9f },
+    { 2664.8f, -3340.7f, 268.23f, 3.7f }
 };
 
-const Position PosGroundLivingSide = {2691.2f, -3387.0f, 267.68f, 1.52f};
-const Position PosGroundDeadSide   = {2693.5f, -3334.6f, 267.68f, 4.67f};
-const Position PosPlatform         = {2640.5f, -3360.6f, 285.26f, 0.0f};
+constexpr Position PosGroundLivingSide = { 2691.2f, -3387.0f, 267.68f, 1.52f };
+constexpr Position PosGroundDeadSide   = { 2693.5f, -3334.6f, 267.68f, 4.67f };
+constexpr Position PosPlatform         = { 2640.5f, -3360.6f, 285.26f, 0.0f };
 
-#define POS_Y_GATE  -3360.78f
-#define POS_Y_WEST  -3285.0f
-#define POS_Y_EAST  -3434.0f
-#define POS_X_NORTH  2750.49f
-#define POS_X_SOUTH  2633.84f
+constexpr float POS_Y_GATE = -3360.78f;
+constexpr float POS_Y_WEST = -3285.0f;
+constexpr float POS_Y_EAST = -3434.0f;
+constexpr float POS_X_NORTH = 2750.49f;
+constexpr float POS_X_SOUTH = 2633.84f;
+
 #define IN_LIVE_SIDE(who) (who->GetPositionY() < POS_Y_GATE)
 
-// Predicate function to check that the r   efzr unit is NOT on the same side as the source.
-struct NotOnSameSide : public Warhead::unary_function<Unit*, bool>
+// Predicate function to check that the refzr unit is NOT on the same side as the source.
+struct NotOnSameSide
 {
     bool m_inLiveSide;
-    explicit NotOnSameSide(Unit* pSource) : m_inLiveSide(IN_LIVE_SIDE(pSource)) {}
+    explicit NotOnSameSide(Unit* pSource) : m_inLiveSide(IN_LIVE_SIDE(pSource)) { }
 
     bool operator() (const Unit* pTarget)
     {
@@ -230,8 +231,10 @@ public:
             BossAI::Reset();
             events.Reset();
             summons.DespawnAll();
+
             me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_DISABLE_MOVE);
             me->SetReactState(REACT_PASSIVE);
+
             secondPhase = false;
             gateOpened = false;
             waveCount = 0;
@@ -240,8 +243,10 @@ public:
             {
                 if (GameObject* go = me->GetMap()->GetGameObject(pInstance->GetData64(DATA_GOTHIK_ENTER_GATE)))
                     go->SetGoState(GO_STATE_ACTIVE);
+
                 if (GameObject* go = me->GetMap()->GetGameObject(pInstance->GetData64(DATA_GOTHIK_INNER_GATE)))
                     go->SetGoState(GO_STATE_ACTIVE);
+
                 if (GameObject* go = me->GetMap()->GetGameObject(pInstance->GetData64(DATA_GOTHIK_EXIT_GATE)))
                     go->SetGoState(GO_STATE_READY);
             }
@@ -252,9 +257,11 @@ public:
             BossAI::EnterCombat(who);
             me->SetInCombatWithZone();
             Talk(SAY_INTRO_1);
+
             events.ScheduleEvent(EVENT_INTRO_2, 4s);
             events.ScheduleEvent(EVENT_INTRO_3, 9s);
             events.ScheduleEvent(EVENT_INTRO_4, 14s);
+
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_DISABLE_MOVE);
             me->NearTeleportTo(PosPlatform.GetPositionX(), PosPlatform.GetPositionY(), PosPlatform.GetPositionZ(), PosPlatform.GetOrientation());
 
@@ -265,6 +272,7 @@ public:
             {
                 if (GameObject* go = me->GetMap()->GetGameObject(pInstance->GetData64(DATA_GOTHIK_ENTER_GATE)))
                     go->SetGoState(GO_STATE_READY);
+
                 if (GameObject* go = me->GetMap()->GetGameObject(pInstance->GetData64(DATA_GOTHIK_INNER_GATE)))
                     go->SetGoState(GO_STATE_READY);
             }
@@ -302,8 +310,10 @@ public:
             {
                 if (GameObject* go = me->GetMap()->GetGameObject(pInstance->GetData64(DATA_GOTHIK_ENTER_GATE)))
                     go->SetGoState(GO_STATE_ACTIVE);
+
                 if (GameObject* go = me->GetMap()->GetGameObject(pInstance->GetData64(DATA_GOTHIK_INNER_GATE)))
                     go->SetGoState(GO_STATE_ACTIVE);
+
                 if (GameObject* go = me->GetMap()->GetGameObject(pInstance->GetData64(DATA_GOTHIK_EXIT_GATE)))
                     go->SetGoState(GO_STATE_ACTIVE);
             }
@@ -316,13 +326,17 @@ public:
                 case NPC_LIVING_TRAINEE:
                     me->SummonCreature(NPC_LIVING_TRAINEE, PosSummonLiving[0].GetPositionX(), PosSummonLiving[0].GetPositionY(), PosSummonLiving[0].GetPositionZ(), PosSummonLiving[0].GetOrientation());
                     me->SummonCreature(NPC_LIVING_TRAINEE, PosSummonLiving[1].GetPositionX(), PosSummonLiving[1].GetPositionY(), PosSummonLiving[1].GetPositionZ(), PosSummonLiving[1].GetOrientation());
+
                     if (Is25ManRaid())
                         me->SummonCreature(NPC_LIVING_TRAINEE, PosSummonLiving[2].GetPositionX(), PosSummonLiving[2].GetPositionY(), PosSummonLiving[2].GetPositionZ(), PosSummonLiving[2].GetOrientation());
+
                     break;
                 case NPC_LIVING_KNIGHT:
                     me->SummonCreature(NPC_LIVING_KNIGHT, PosSummonLiving[3].GetPositionX(), PosSummonLiving[3].GetPositionY(), PosSummonLiving[3].GetPositionZ(), PosSummonLiving[3].GetOrientation());
+
                     if (Is25ManRaid())
                         me->SummonCreature(NPC_LIVING_KNIGHT, PosSummonLiving[5].GetPositionX(), PosSummonLiving[5].GetPositionY(), PosSummonLiving[5].GetPositionZ(), PosSummonLiving[5].GetOrientation());
+
                     break;
                 case NPC_LIVING_RIDER:
                     me->SummonCreature(NPC_LIVING_RIDER, PosSummonLiving[4].GetPositionX(), PosSummonLiving[4].GetPositionY(), PosSummonLiving[4].GetPositionZ(), PosSummonLiving[4].GetOrientation());
@@ -332,37 +346,36 @@ public:
 
         bool CheckGroupSplitted()
         {
-            Map::PlayerList const& PlayerList = me->GetMap()->GetPlayers();
-            if (!PlayerList.isEmpty())
+            bool checklife = false;
+            bool checkdead = false;
+
+            for (const auto& i : me->GetMap()->GetPlayers())
             {
-                bool checklife = false;
-                bool checkdead = false;
-                for (const auto& i : PlayerList)
-                {
-                    Player* player = i.GetSource();
-                    if (player->IsAlive() &&
+                Player* player = i.GetSource();
+                if (player->IsAlive() &&
+                        player->GetPositionX() <= POS_X_NORTH &&
+                        player->GetPositionX() >= POS_X_SOUTH &&
+                        player->GetPositionY() <= POS_Y_GATE &&
+                        player->GetPositionY() >= POS_Y_EAST)
+                    checklife = true;
+                else if (player->IsAlive() &&
                             player->GetPositionX() <= POS_X_NORTH &&
                             player->GetPositionX() >= POS_X_SOUTH &&
-                            player->GetPositionY() <= POS_Y_GATE &&
-                            player->GetPositionY() >= POS_Y_EAST)
-                        checklife = true;
-                    else if (player->IsAlive() &&
-                             player->GetPositionX() <= POS_X_NORTH &&
-                             player->GetPositionX() >= POS_X_SOUTH &&
-                             player->GetPositionY() >= POS_Y_GATE &&
-                             player->GetPositionY() <= POS_Y_WEST)
-                        checkdead = true;
+                            player->GetPositionY() >= POS_Y_GATE &&
+                            player->GetPositionY() <= POS_Y_WEST)
+                    checkdead = true;
 
-                    if (checklife && checkdead)
-                        return true;
-                }
+                if (checklife && checkdead)
+                    return true;
             }
+
             return false;
         }
 
         void SpellHit(Unit* /*caster*/, const SpellInfo* spellInfo) override
         {
             uint8 pos = urand(0, 4);
+
             switch (spellInfo->Id)
             {
                 case SPELL_INFORM_LIVING_TRAINEE:
@@ -419,17 +432,20 @@ public:
                     break;
                 case EVENT_TELEPORT:
                     me->AttackStop();
+
                     if (IN_LIVE_SIDE(me))
                         me->NearTeleportTo(PosGroundDeadSide.GetPositionX(), PosGroundDeadSide.GetPositionY(), PosGroundDeadSide.GetPositionZ(), PosGroundDeadSide.GetOrientation());
                     else
                         me->NearTeleportTo(PosGroundLivingSide.GetPositionX(), PosGroundLivingSide.GetPositionY(), PosGroundLivingSide.GetPositionZ(), PosGroundLivingSide.GetOrientation());
 
                     me->getThreatManager().resetAggro(NotOnSameSide(me));
+
                     if (Unit* pTarget = SelectTarget(SELECT_TARGET_NEAREST, 0))
                     {
                         me->getThreatManager().addThreat(pTarget, 100.0f);
                         AttackStart(pTarget);
                     }
+
                     events.RepeatEvent(20s);
                     break;
                 case EVENT_CHECK_HEALTH:
@@ -441,25 +457,29 @@ public:
                         events.CancelEvent(EVENT_TELEPORT);
                         break;
                     }
+
                     events.RepeatEvent(1s);
                     break;
                 case EVENT_SUMMON_ADDS:
                     if (gothikWaves[waveCount][0])
                     {
                         SummonHelpers(gothikWaves[waveCount][0]);
-                        events.RepeatEvent(Milliseconds(gothikWaves[waveCount][1]));
+                        events.RepeatEvent(gothikWaves[waveCount][1]);
                     }
                     else
                     {
                         secondPhase = true;
+
                         Talk(SAY_PHASE_TWO);
                         Talk(EMOTE_PHASE_TWO);
+
                         me->NearTeleportTo(PosGroundLivingSide.GetPositionX(), PosGroundLivingSide.GetPositionY(), PosGroundLivingSide.GetPositionZ(), PosGroundLivingSide.GetOrientation());
                         me->SetReactState(REACT_AGGRESSIVE);
                         me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_DISABLE_MOVE);
 
                         summons.DoAction(ACTION_GATE_OPEN);
                         summons.DoZoneInCombat();
+
                         events.ScheduleEvent(EVENT_SPELL_SHADOW_BOLT, 1s);
                         events.ScheduleEvent(EVENT_SPELL_HARVEST_SOUL, 5s, 15s);
                         events.ScheduleEvent(EVENT_TELEPORT, 20s);
@@ -601,18 +621,21 @@ public:
                     if (Unit* victim = me->GetVictim())
                         if (victim->IsWithinDist(me, 20))
                             me->CastSpell(victim, SPELL_ARCANE_EXPLOSION, false);
+
                     events.RepeatEvent(5s, 10s);
                     break;
                 case EVENT_SPELL_SHADOW_MARK:
                     if (Unit* victim = me->GetVictim())
                         if (!victim->HasAura(SPELL_SHADOW_MARK))
                             me->CastSpell(me->GetVictim(), SPELL_SHADOW_MARK, false);
+
                     events.RepeatEvent(15s, 20s);
                     break;
                 case EVENT_SPELL_WHIRLWIND:
                     if (Unit* victim = me->GetVictim())
                         if (victim->IsWithinDist(me, 10))
                             me->CastSpell(victim, SPELL_WHIRLWIND, false);
+
                     events.RepeatEvent(5s, 8s);
                     break;
                 case EVENT_SPELL_BLOOD_PRESENCE:
@@ -630,12 +653,14 @@ public:
                 case EVENT_SPELL_HYSTERIA:
                     if (!me->HasAura(SPELL_HYSTERIA))
                         me->CastSpell(me, SPELL_HYSTERIA, false);
+
                     events.RepeatEvent(15s, 20s);
                     break;
                 case EVENT_SPELL_INTIMIDATING_SHOUT:
                     if (Unit* victim = me->GetVictim())
                         if (victim->IsWithinDist(me, 10))
                             me->CastSpell(victim, SPELL_INTIMIDATING_SHOUT, false);
+
                     events.RepeatEvent(14s, 22s);
                     break;
                 case EVENT_SPELL_VEIL_OF_DARKNESS:
@@ -649,11 +674,13 @@ public:
                 case EVENT_SPELL_UNHOLY_AURA:
                     if (!me->HasAura(SPELL_UNHOLY_AURA))
                         me->CastSpell(me, SPELL_UNHOLY_AURA, false);
+
                     events.RepeatEvent(2s, 5s);
                     break;
                 case EVENT_SPELL_UNHOLY_FRENZY:
                     if (!me->HasAura(SPELL_UNHOLY_FRENZY))
                         me->CastSpell(me, SPELL_UNHOLY_FRENZY, false);
+
                     events.RepeatEvent(2s, 5s);
                     break;
                 case NPC_DEAD_HORSE:
