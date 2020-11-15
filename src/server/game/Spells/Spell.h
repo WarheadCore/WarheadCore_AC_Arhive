@@ -515,7 +515,8 @@ public:
     void SetDelayStart(uint64 m_time) { m_delayStart = m_time; }
     uint64 GetDelayMoment() const { return m_delayMoment; }
     uint64 GetDelayTrajectory() const { return m_delayTrajectory; }
-
+    uint64 CalculateDelayMomentForDst() const;
+    void RecalculateDelayMomentForDst();
     bool IsNeedSendToClient(bool go) const;
 
     CurrentSpellTypes GetCurrentContainer() const;
