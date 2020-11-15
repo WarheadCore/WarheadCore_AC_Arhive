@@ -31,7 +31,9 @@ class DynamicObject;
 class WorldObject;
 class Aura;
 class SpellScript;
+class SpellEvent;
 class ByteBuffer;
+class BasicEvent;
 
 #define SPELL_CHANNEL_UPDATE_INTERVAL (1 * IN_MILLISECONDS)
 
@@ -720,6 +722,8 @@ protected:
     uint32 m_spellState;
     int32 m_timer;
 
+
+    SpellEvent* _spellEvent;
     TriggerCastFlags _triggeredCastFlags;
 
     // if need this can be replaced by Aura copy
@@ -797,29 +801,16 @@ namespace Warhead
 
 typedef void(Spell::*pEffect)(SpellEffIndex effIndex);
 
-class SpellEvent : public BasicEvent
-{
-public:
-    SpellEvent(Spell* spell);
-    virtual ~SpellEvent();
-
-    virtual bool Execute(uint64 e_time, uint32 p_time);
-    virtual void Abort(uint64 e_time);
-    virtual bool IsDeletable() const;
-protected:
-    Spell* m_Spell;
-};
-
 class ReflectEvent : public BasicEvent
 {
-public:
-    ReflectEvent(uint64 casterGUID, uint64 targetGUID, const SpellInfo* spellInfo) : _casterGUID(casterGUID), _targetGUID(targetGUID), _spellInfo(spellInfo) { }
-    virtual bool Execute(uint64 e_time, uint32 p_time);
-
-protected:
-    uint64 _casterGUID;
-    uint64 _targetGUID;
-    const SpellInfo* _spellInfo;
+    public:
+        ReflectEvent(uint64 casterGUID, uint64 targetGUID, const SpellInfo* spellInfo) : _casterGUID(casterGUID), _targetGUID(targetGUID), _spellInfo(spellInfo) { }
+        virtual bool Execute(uint64 e_time, uint32 p_time);
+    
+    protected:
+        uint64 _casterGUID;
+        uint64 _targetGUID;
+        const SpellInfo* _spellInfo;
 };
 
 #endif

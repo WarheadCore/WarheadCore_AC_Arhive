@@ -452,40 +452,6 @@ struct MovementInfo
     void OutDebug();
 };
 
-#define MAPID_INVALID 0xFFFFFFFF
-
-class WorldLocation : public Position
-{
-public:
-    explicit WorldLocation(uint32 _mapid = MAPID_INVALID, float _x = 0, float _y = 0, float _z = 0, float _o = 0)
-        : m_mapId(_mapid) { Relocate(_x, _y, _z, _o); }
-    WorldLocation(const WorldLocation& loc) : Position () { WorldRelocate(loc); }
-    /* requried as of C++ 11 */
-#if __cplusplus >= 201103L
-    WorldLocation(WorldLocation&&) = default;
-    WorldLocation& operator=(const WorldLocation&) = default;
-    WorldLocation& operator=(WorldLocation&&) = default;
-#endif
-
-    void WorldRelocate(const WorldLocation& loc)
-    {
-        m_mapId = loc.GetMapId();
-        Relocate(loc);
-    }
-
-    uint32 GetMapId() const
-    {
-        return m_mapId;
-    }
-
-    WorldLocation GetWorldLocation() const
-    {
-        return *this;
-    }
-
-    uint32 m_mapId;
-};
-
 template<class T>
 class GridObject
 {

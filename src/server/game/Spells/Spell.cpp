@@ -516,6 +516,20 @@ void SpellCastTargets::Update(Unit* caster)
     }
 }
 
+class SpellEvent : public BasicEvent
+{
+    public:
+        SpellEvent(Spell* spell);
+        ~SpellEvent();
+    
+        bool Execute(uint64 e_time, uint32 p_time);
+        void Abort(uint64 e_time);
+        bool IsDeletable() const;
+
+    protected:
+        Spell* m_Spell;
+};
+
 void SpellCastTargets::OutDebug() const
 {
     if (!m_targetMask)
@@ -551,7 +565,7 @@ SpellValue::SpellValue(SpellInfo const* proto)
 Spell::Spell(Unit* caster, SpellInfo const* info, TriggerCastFlags triggerFlags, uint64 originalCasterGUID, bool skipCheck) :
     m_spellInfo(sSpellMgr->GetSpellForDifficultyFromSpell(info, caster)),
     m_caster((info->HasAttribute(SPELL_ATTR6_CAST_BY_CHARMER) && caster->GetCharmerOrOwner()) ? caster->GetCharmerOrOwner() : caster)
-    , m_spellValue(new SpellValue(m_spellInfo))
+    , m_spellValue(new SpellValue(m_spellInfo)), _spellEvent(nullptr)
 {
     m_customError = SPELL_CUSTOM_ERROR_NONE;
     m_skipCheck = skipCheck;
@@ -843,7 +857,7 @@ void Spell::SelectSpellTargets()
             uint8 mask = (1 << i);
             for (auto ihit = m_UniqueTargetInfo.begin(); ihit != m_UniqueTargetInfo.end(); ++ihit)
             {
-                if (ihit->EffectMask & mask)
+                if (ihit->effectMask & mask)
                 {
                     m_channelTargetEffectMask |= mask;
                     break;
@@ -856,10 +870,10 @@ void Spell::SelectSpellTargets()
             m_UniqueTargetInfo.erase(std::remove_if(std::begin(m_UniqueTargetInfo), std::end(m_UniqueTargetInfo), [&](TargetInfo const& targetInfo) -> bool
             {
                 // remove targets which did not pass min level check
-                if (m_auraScaleMask && targetInfo.EffectMask == m_auraScaleMask)
+                if (m_auraScaleMask && targetInfo.effectMask == m_auraScaleMask)
                 {
                     // Do not check for selfcast
-                    if (!targetInfo.ScaleAura && targetInfo.TargetGUID != m_caster->GetGUID())
+                    if (!targetInfo.scaleAura && targetInfo.targetGUID != m_caster->GetGUID())
                         return true;
                 }
 
@@ -3381,8 +3395,8 @@ void Spell::prepare(SpellCastTargets const* targets, AuraEffect const* triggered
         m_triggeredByAuraSpell  = triggeredByAura->GetSpellInfo();
 
     // create and add update event for this spell
-    SpellEvent* Event = new SpellEvent(this);
-    m_caster->m_Events.AddEvent(Event, m_caster->m_Events.CalculateTime(1));
+    _spellEvent = new SpellEvent(this);
+    m_caster->m_Events.AddEvent(_spellEvent, m_caster->m_Events.CalculateTime(1));
 
     //Prevent casting at cast another spell (ServerSide check)
     if (!(_triggeredCastFlags & TRIGGERED_IGNORE_CAST_IN_PROGRESS) && m_caster->IsNonMeleeSpellCast(false, true, true, m_spellInfo->Id == 75) && m_cast_count)
