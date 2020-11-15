@@ -203,7 +203,7 @@ public:
                                 target->GetMotionMaster()->MoveJump(PosWrap[pos].GetPositionX(), PosWrap[pos].GetPositionY(), PosWrap[pos].GetPositionZ(), 20, 20);
                             }
                         }
-                    }                        
+                    }
 
                     events.RepeatEvent(40s);
                     break;
@@ -229,7 +229,7 @@ public:
         explicit boss_maexxna_webwrapAI(Creature* c) : NullCreatureAI(c), victimGUID(0) {}
 
         uint64 victimGUID;
-        
+
         void SetGUID(uint64 guid, int32  /*param*/) override
         {
             victimGUID = guid;

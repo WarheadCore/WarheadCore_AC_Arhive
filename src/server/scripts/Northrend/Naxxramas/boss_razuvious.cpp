@@ -92,8 +92,8 @@ public:
         }
 
         void JustSummoned(Creature* cr) override
-        { 
-            summons.Summon(cr); 
+        {
+            summons.Summon(cr);
         }
 
         void Reset() override

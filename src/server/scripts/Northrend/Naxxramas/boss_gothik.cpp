@@ -321,7 +321,7 @@ public:
 
         void SummonHelpers(uint32 entry)
         {
-            switch(entry)
+            switch (entry)
             {
                 case NPC_LIVING_TRAINEE:
                     me->SummonCreature(NPC_LIVING_TRAINEE, PosSummonLiving[0].GetPositionX(), PosSummonLiving[0].GetPositionY(), PosSummonLiving[0].GetPositionZ(), PosSummonLiving[0].GetOrientation());
@@ -359,10 +359,10 @@ public:
                         player->GetPositionY() >= POS_Y_EAST)
                     checklife = true;
                 else if (player->IsAlive() &&
-                            player->GetPositionX() <= POS_X_NORTH &&
-                            player->GetPositionX() >= POS_X_SOUTH &&
-                            player->GetPositionY() >= POS_Y_GATE &&
-                            player->GetPositionY() <= POS_Y_WEST)
+                         player->GetPositionX() <= POS_X_NORTH &&
+                         player->GetPositionX() >= POS_X_SOUTH &&
+                         player->GetPositionY() >= POS_Y_GATE &&
+                         player->GetPositionY() <= POS_Y_WEST)
                     checkdead = true;
 
                 if (checklife && checkdead)

@@ -142,8 +142,8 @@ public:
         {
             Map::PlayerList const& PlList = me->GetMap()->GetPlayers();
             if (PlList.isEmpty())
-                return;            
-            
+                return;
+
             for (const auto& i : PlList)
             {
                 if (Player* player = i.GetSource())
@@ -267,18 +267,18 @@ public:
                     events.RepeatEvent(24s);
                     return;
                 case EVENT_SPELL_BLIZZARD:
-                    {
-                        Creature* cr;
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40.0f, true))
-                            cr = me->SummonCreature(NPC_BLIZZARD, *target, TEMPSUMMON_TIMED_DESPAWN, 16000);
-                        else
-                            cr = me->SummonCreature(NPC_BLIZZARD, *me, TEMPSUMMON_TIMED_DESPAWN, 16000);
+                {
+                    Creature* cr;
+                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40.0f, true))
+                        cr = me->SummonCreature(NPC_BLIZZARD, *target, TEMPSUMMON_TIMED_DESPAWN, 16000);
+                    else
+                        cr = me->SummonCreature(NPC_BLIZZARD, *me, TEMPSUMMON_TIMED_DESPAWN, 16000);
 
-                        if (cr)
-                            cr->GetMotionMaster()->MoveRandom(40);
-                        events.RepeatEvent(RAID_MODE_HEROIC(8000ms, 6500ms));
-                        return;
-                    }
+                    if (cr)
+                        cr->GetMotionMaster()->MoveRandom(40);
+                    events.RepeatEvent(RAID_MODE_HEROIC(8000ms, 6500ms));
+                    return;
+                }
                 case EVENT_FLIGHT_START:
                     if (me->HealthBelowPct(11))
                         return;
@@ -302,43 +302,43 @@ public:
                     iceboltCount = RAID_MODE(2, 3, 3, 4);
                     return;
                 case EVENT_FLIGHT_ICEBOLT:
-                    {
-                        if (currentTarget)
-                            if (Unit* target = ObjectAccessor::GetUnit(*me, currentTarget))
-                                me->SummonGameObject(GO_ICE_BLOCK, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), target->GetOrientation(), 0.0f, 0.0f, 0.0f, 0.0f, 0);
+                {
+                    if (currentTarget)
+                        if (Unit* target = ObjectAccessor::GetUnit(*me, currentTarget))
+                            me->SummonGameObject(GO_ICE_BLOCK, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), target->GetOrientation(), 0.0f, 0.0f, 0.0f, 0.0f, 0);
 
-                        std::vector<Unit*> targets;
-                        auto i = me->getThreatManager().getThreatList().begin();
-                        for (; i != me->getThreatManager().getThreatList().end(); ++i)
-                            if ((*i)->getTarget()->GetTypeId() == TYPEID_PLAYER)
-                            {
-                                bool inList = false;
-                                if (!blockList.empty())
-                                    for (std::list<uint64>::const_iterator itr = blockList.begin(); itr != blockList.end(); ++itr)
-                                        if ((*i)->getTarget()->GetGUID() == *itr)
-                                        {
-                                            inList = true;
-                                            break;
-                                        }
-
-                                if (!inList)
-                                    targets.push_back((*i)->getTarget());
-                            }
-
-                        if (!targets.empty() && iceboltCount)
+                    std::vector<Unit*> targets;
+                    auto i = me->getThreatManager().getThreatList().begin();
+                    for (; i != me->getThreatManager().getThreatList().end(); ++i)
+                        if ((*i)->getTarget()->GetTypeId() == TYPEID_PLAYER)
                         {
-                            auto itr = targets.begin();
-                            advance(itr, urand(0, targets.size() - 1));
-                            me->CastSpell(*itr, SPELL_ICEBOLT_CAST, false);
-                            blockList.push_back((*itr)->GetGUID());
-                            currentTarget = (*itr)->GetGUID();
-                            --iceboltCount;
-                            events.ScheduleEvent(EVENT_FLIGHT_ICEBOLT, (me->GetExactDist(*itr) / 13.0f)*IN_MILLISECONDS);
+                            bool inList = false;
+                            if (!blockList.empty())
+                                for (std::list<uint64>::const_iterator itr = blockList.begin(); itr != blockList.end(); ++itr)
+                                    if ((*i)->getTarget()->GetGUID() == *itr)
+                                    {
+                                        inList = true;
+                                        break;
+                                    }
+
+                            if (!inList)
+                                targets.push_back((*i)->getTarget());
                         }
-                        else
-                            events.ScheduleEvent(EVENT_FLIGHT_BREATH, 1s);
-                        return;
+
+                    if (!targets.empty() && iceboltCount)
+                    {
+                        auto itr = targets.begin();
+                        advance(itr, urand(0, targets.size() - 1));
+                        me->CastSpell(*itr, SPELL_ICEBOLT_CAST, false);
+                        blockList.push_back((*itr)->GetGUID());
+                        currentTarget = (*itr)->GetGUID();
+                        --iceboltCount;
+                        events.ScheduleEvent(EVENT_FLIGHT_ICEBOLT, (me->GetExactDist(*itr) / 13.0f)*IN_MILLISECONDS);
                     }
+                    else
+                        events.ScheduleEvent(EVENT_FLIGHT_BREATH, 1s);
+                    return;
+                }
                 case EVENT_FLIGHT_BREATH:
                     currentTarget = 0;
                     Talk(EMOTE_BREATH);
@@ -371,20 +371,20 @@ public:
                     me->SetInCombatWithZone();
                     return;
                 case EVENT_HUNDRED_CLUB:
+                {
+                    Map::PlayerList const& pList = me->GetMap()->GetPlayers();
+                    for (const auto& itr : pList)
                     {
-                        Map::PlayerList const& pList = me->GetMap()->GetPlayers();
-                        for (const auto& itr : pList)
+                        if (itr.GetSource()->GetResistance(SPELL_SCHOOL_FROST) > 100 && pInstance)
                         {
-                            if (itr.GetSource()->GetResistance(SPELL_SCHOOL_FROST) > 100 && pInstance)
-                            {
-                                pInstance->SetData(DATA_HUNDRED_CLUB, 0);
-                                return;
-                            }
-
+                            pInstance->SetData(DATA_HUNDRED_CLUB, 0);
+                            return;
                         }
-                        events.RepeatEvent(5s);
-                        return;
+
                     }
+                    events.RepeatEvent(5s);
+                    return;
+                }
             }
 
             DoMeleeAttackIfReady();

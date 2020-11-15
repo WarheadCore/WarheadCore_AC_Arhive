@@ -32,7 +32,7 @@ enum Yells
     SAY_REQUEST_AID                         = 12, // start of phase 3
     SAY_ANSWER_REQUEST                      = 3,  // lich king answer
     SAY_SUMMON_MINIONS                      = 14, // start of phase 1
-    SAY_SPECIAL                             
+    SAY_SPECIAL
     EMOTE_GUARDIAN_FLEE                     = 0,
     EMOTE_GUARDIAN_APPEAR                   = 1
 };
@@ -184,7 +184,7 @@ public:
 
             if (GameObject* go = me->GetMap()->GetGameObject(pInstance->GetData64(DATA_KELTHUZAD_GATE)))
             {
-                if(!_justSpawned) /* Don't open the door if we just spawned and are still doing the RP */
+                if (!_justSpawned) /* Don't open the door if we just spawned and are still doing the RP */
                     go->SetGoState(GO_STATE_ACTIVE);
             }
 
@@ -263,8 +263,8 @@ public:
         }
 
         void JustSummoned(Creature* cr) override
-        { 
-            summons.Summon(cr); 
+        {
+            summons.Summon(cr);
         }
 
         void UpdateAI(uint32 diff) override
@@ -334,7 +334,7 @@ public:
                     me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_DISABLE_MOVE);
                     me->GetMotionMaster()->MoveChase(me->GetVictim());
                     me->SetReactState(REACT_AGGRESSIVE);
-                    
+
                     events.ScheduleEvent(EVENT_SPELL_FROST_BOLT_SINGLE, 2s);
                     events.ScheduleEvent(EVENT_SPELL_FROST_BOLT_MULTI, 15s);
                     events.ScheduleEvent(EVENT_SPELL_DETONATE_MANA, 20s);
@@ -375,29 +375,29 @@ public:
                     events.RepeatEvent(50s);
                     break;
                 case EVENT_SPELL_DETONATE_MANA:
+                {
+                    std::vector<Unit*> unitList;
+                    ThreatContainer::StorageType const& threatList = me->getThreatManager().getThreatList();
+
+                    for (auto itr : threatList)
                     {
-                        std::vector<Unit*> unitList;
-                        ThreatContainer::StorageType const& threatList = me->getThreatManager().getThreatList();
-
-                        for (auto itr : threatList)
-                        {
-                            if (itr->getTarget()->GetTypeId() == TYPEID_PLAYER
-                                    && itr->getTarget()->getPowerType() == POWER_MANA
-                                    && itr->getTarget()->GetPower(POWER_MANA))
-                                unitList.push_back(itr->getTarget());
-                        }
-
-                        if (!unitList.empty())
-                        {
-                            auto itr = unitList.begin();
-                            advance(itr, urand(0, unitList.size() - 1));
-                            me->CastSpell(*itr, SPELL_DETONATE_MANA, false);
-                            Talk(SAY_SPECIAL);
-                        }
-
-                        events.RepeatEvent(30s);
-                        break;
+                        if (itr->getTarget()->GetTypeId() == TYPEID_PLAYER
+                                && itr->getTarget()->getPowerType() == POWER_MANA
+                                && itr->getTarget()->GetPower(POWER_MANA))
+                            unitList.push_back(itr->getTarget());
                     }
+
+                    if (!unitList.empty())
+                    {
+                        auto itr = unitList.begin();
+                        advance(itr, urand(0, unitList.size() - 1));
+                        me->CastSpell(*itr, SPELL_DETONATE_MANA, false);
+                        Talk(SAY_SPECIAL);
+                    }
+
+                    events.RepeatEvent(30s);
+                    break;
+                }
                 case EVENT_SECOND_PHASE_HEALTH_CHECK:
                     if (me->HealthBelowPct(45))
                     {
