@@ -518,16 +518,16 @@ void SpellCastTargets::Update(Unit* caster)
 
 class SpellEvent : public BasicEvent
 {
-    public:
-        SpellEvent(Spell* spell);
-        ~SpellEvent();
-    
-        bool Execute(uint64 e_time, uint32 p_time);
-        void Abort(uint64 e_time);
-        bool IsDeletable() const;
+public:
+    SpellEvent(Spell* spell);
+    ~SpellEvent();
 
-    protected:
-        Spell* m_Spell;
+    bool Execute(uint64 e_time, uint32 p_time);
+    void Abort(uint64 e_time);
+    bool IsDeletable() const;
+
+protected:
+    Spell* m_Spell;
 };
 
 void SpellCastTargets::OutDebug() const
@@ -806,7 +806,6 @@ void Spell::SelectExplicitTargets()
                 m_targets.SetUnitTarget(redirect);
                 m_spellFlags |= SPELL_FLAG_REDIRECTED;
             }
-
         }
     }
 }

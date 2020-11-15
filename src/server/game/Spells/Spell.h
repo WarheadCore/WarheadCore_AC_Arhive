@@ -803,14 +803,14 @@ typedef void(Spell::*pEffect)(SpellEffIndex effIndex);
 
 class ReflectEvent : public BasicEvent
 {
-    public:
-        ReflectEvent(uint64 casterGUID, uint64 targetGUID, const SpellInfo* spellInfo) : _casterGUID(casterGUID), _targetGUID(targetGUID), _spellInfo(spellInfo) { }
-        virtual bool Execute(uint64 e_time, uint32 p_time);
-    
-    protected:
-        uint64 _casterGUID;
-        uint64 _targetGUID;
-        const SpellInfo* _spellInfo;
+public:
+    ReflectEvent(uint64 casterGUID, uint64 targetGUID, const SpellInfo* spellInfo) : _casterGUID(casterGUID), _targetGUID(targetGUID), _spellInfo(spellInfo) { }
+    virtual bool Execute(uint64 e_time, uint32 p_time);
+
+protected:
+    uint64 _casterGUID;
+    uint64 _targetGUID;
+    const SpellInfo* _spellInfo;
 };
 
 #endif
