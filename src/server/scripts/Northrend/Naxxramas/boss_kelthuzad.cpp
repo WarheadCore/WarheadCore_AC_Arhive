@@ -32,7 +32,8 @@ enum Yells
     SAY_REQUEST_AID                         = 12, // start of phase 3
     SAY_ANSWER_REQUEST                      = 3,  // lich king answer
     SAY_SUMMON_MINIONS                      = 14, // start of phase 1
-    SAY_SPECIAL
+    SAY_SPECIAL                             = 15,
+
     EMOTE_GUARDIAN_FLEE                     = 0,
     EMOTE_GUARDIAN_APPEAR                   = 1
 };
