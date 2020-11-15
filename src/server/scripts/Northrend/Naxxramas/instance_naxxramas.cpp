@@ -23,8 +23,9 @@
 #include "CellImpl.h"
 #include "PassiveAI.h"
 
-const float HeiganPos[2] = {2796, -3707};
-const float HeiganEruptionSlope[3] =
+constexpr float HeiganPos[2] = {2796, -3707};
+
+constexpr float HeiganEruptionSlope[3] =
 {
     (-3685 - HeiganPos[1]) / (2724 - HeiganPos[0]),
     (-3647 - HeiganPos[1]) / (2749 - HeiganPos[0]),
@@ -42,9 +43,11 @@ inline uint8 GetEruptionSection(float x, float y)
         return 3;
 
     float slope = y / x;
+
     for (uint32 i = 0; i < 3; ++i)
         if (slope > HeiganEruptionSlope[i])
             return i;
+
     return 3;
 }
 
@@ -63,6 +66,7 @@ public:
         explicit instance_naxxramas_InstanceMapScript(Map* pMap) : InstanceScript(pMap)
         {
             SetBossNumber(MAX_ENCOUNTERS);
+
             for (auto& i : HeiganEruption)
                 i.clear();
 
@@ -122,7 +126,6 @@ public:
             sapphironAchievement = true;
             heiganAchievement = true;
             immortalAchievement = 1;
-
         }
 
         std::set<GameObject*> HeiganEruption[4];
@@ -210,6 +213,7 @@ public:
                 if (GetBossState(i) == IN_PROGRESS)
                     return true;
             }
+
             return false;
         }
 
@@ -273,158 +277,157 @@ public:
             }
         }
 
-        void OnGameObjectCreate(GameObject* pGo) override
+        void OnGameObjectCreate(GameObject* go) override
         {
-            if (pGo->GetGOInfo()->displayId == 6785 || pGo->GetGOInfo()->displayId == 1287)
+            if (go->GetGOInfo()->displayId == 6785 || go->GetGOInfo()->displayId == 1287)
             {
-                HeiganEruption[GetEruptionSection(pGo->GetPositionX(), pGo->GetPositionY())].insert(pGo);
+                HeiganEruption[GetEruptionSection(go->GetPositionX(), go->GetPositionY())].insert(go);
                 return;
             }
 
-            switch (pGo->GetEntry())
+            switch (go->GetEntry())
             {
                 case GO_PATCHWERK_GATE:
-                    _patchwerkGateGUID = pGo->GetGUID();
+                    _patchwerkGateGUID = go->GetGUID();
                     if (GetBossState(BOSS_PATCHWERK) == DONE)
-                        pGo->SetGoState(GO_STATE_ACTIVE);
+                        go->SetGoState(GO_STATE_ACTIVE);
                     break;
                 case GO_GLUTH_GATE:
-                    _gluthGateGUID = pGo->GetGUID();
+                    _gluthGateGUID = go->GetGUID();
                     if (GetBossState(BOSS_GLUTH) == DONE)
-                        pGo->SetGoState(GO_STATE_ACTIVE);
+                        go->SetGoState(GO_STATE_ACTIVE);
                     break;
                 case GO_NOTH_GATE:
-                    _nothGateGUID = pGo->GetGUID();
+                    _nothGateGUID = go->GetGUID();
                     if (GetBossState(BOSS_NOTH) == DONE)
-                        pGo->SetGoState(GO_STATE_ACTIVE);
+                        go->SetGoState(GO_STATE_ACTIVE);
                     break;
                 case GO_HEIGAN_ENTERANCE_GATE:
-                    _heiganGateGUID = pGo->GetGUID();
+                    _heiganGateGUID = go->GetGUID();
                     if (GetBossState(BOSS_HEIGAN) == DONE || GetBossState(BOSS_NOTH) == DONE)
-                        pGo->SetGoState(GO_STATE_ACTIVE);
+                        go->SetGoState(GO_STATE_ACTIVE);
                     break;
                 case GO_HEIGAN_EXIT_GATE:
-                    _heiganGateExitGUID = pGo->GetGUID();
+                    _heiganGateExitGUID = go->GetGUID();
                     if (GetBossState(BOSS_HEIGAN) == DONE)
-                        pGo->SetGoState(GO_STATE_ACTIVE);
+                        go->SetGoState(GO_STATE_ACTIVE);
                     break;
                 case GO_LOATHEB_GATE:
-                    _loathebGateGUID = pGo->GetGUID();
+                    _loathebGateGUID = go->GetGUID();
                     if (GetBossState(BOSS_LOATHEB) == DONE)
-                        pGo->SetGoState(GO_STATE_ACTIVE);
+                        go->SetGoState(GO_STATE_ACTIVE);
                     break;
                 case GO_ANUB_GATE:
-                    _anubGateGUID = pGo->GetGUID();
+                    _anubGateGUID = go->GetGUID();
                     if (GetBossState(BOSS_ANUB) == DONE)
-                        pGo->SetGoState(GO_STATE_ACTIVE);
+                        go->SetGoState(GO_STATE_ACTIVE);
                     break;
                 case GO_ANUB_NEXT_GATE:
-                    _anubNextGateGUID = pGo->GetGUID();
+                    _anubNextGateGUID = go->GetGUID();
                     if (GetBossState(BOSS_ANUB) == DONE)
-                        pGo->SetGoState(GO_STATE_ACTIVE);
+                        go->SetGoState(GO_STATE_ACTIVE);
                     break;
                 case GO_FAERLINA_GATE:
-                    _faerlinaGateGUID = pGo->GetGUID();
+                    _faerlinaGateGUID = go->GetGUID();
                     if (GetBossState(BOSS_FAERLINA) == DONE)
-                        pGo->SetGoState(GO_STATE_ACTIVE);
+                        go->SetGoState(GO_STATE_ACTIVE);
                     break;
                 case GO_MAEXXNA_GATE:
-                    _maexxnaGateGUID = pGo->GetGUID();
+                    _maexxnaGateGUID = go->GetGUID();
                     if (GetBossState(BOSS_FAERLINA) == DONE) // faerlina is correct
-                        pGo->SetGoState(GO_STATE_ACTIVE);
+                        go->SetGoState(GO_STATE_ACTIVE);
                     break;
                 case GO_THADDIUS_GATE:
-                    _thaddiusGateGUID = pGo->GetGUID();
+                    _thaddiusGateGUID = go->GetGUID();
                     if (GetBossState(BOSS_GLUTH) == DONE) // gluth is correct
-                        pGo->SetGoState(GO_STATE_ACTIVE);
+                        go->SetGoState(GO_STATE_ACTIVE);
                     break;
                 case GO_GOTHIK_ENTER_GATE:
-                    _gothikEnterGateGUID = pGo->GetGUID();
+                    _gothikEnterGateGUID = go->GetGUID();
                     break;
                 case GO_GOTHIK_INNER_GATE:
-                    _gothikInnerGateGUID = pGo->GetGUID();
+                    _gothikInnerGateGUID = go->GetGUID();
                     break;
                 case GO_GOTHIK_EXIT_GATE:
-                    _gothikExitGateGUID = pGo->GetGUID();
+                    _gothikExitGateGUID = go->GetGUID();
                     if (GetBossState(BOSS_GOTHIK) == DONE)
-                        pGo->SetGoState(GO_STATE_ACTIVE);
+                        go->SetGoState(GO_STATE_ACTIVE);
                     break;
                 case GO_HORSEMAN_GATE:
-                    _horsemanGateGUID = pGo->GetGUID();
+                    _horsemanGateGUID = go->GetGUID();
                     if (GetBossState(BOSS_GOTHIK) == DONE) // correct
-                        pGo->SetGoState(GO_STATE_ACTIVE);
+                        go->SetGoState(GO_STATE_ACTIVE);
                     break;
                 case GO_KELTHUZAD_FLOOR:
-                    _kelthuzadfloorGUID = pGo->GetGUID();
+                    _kelthuzadfloorGUID = go->GetGUID();
                     break;
                 case GO_KELTHUZAD_GATE:
-                    _kelthuzadgateGUID = pGo->GetGUID();
+                    _kelthuzadgateGUID = go->GetGUID();
                     if (GetBossState(BOSS_SAPPHIRON) == DONE && _speakTimer == 0)
-                        pGo->SetGoState(GO_STATE_ACTIVE);
+                        go->SetGoState(GO_STATE_ACTIVE);
                     break;
                 case GO_SAPPHIRON_GATE:
-                    _sapphironGateGUID = pGo->GetGUID();
+                    _sapphironGateGUID = go->GetGUID();
                     if (GetBossState(BOSS_SAPPHIRON) == DONE)
-                        pGo->SetGoState(GO_STATE_ACTIVE);
+                        go->SetGoState(GO_STATE_ACTIVE);
                     break;
                 case GO_DEATHKNIGHT_WING:
-                    _loathebPortalGUID = pGo->GetGUID();
+                    _loathebPortalGUID = go->GetGUID();
                     if (GetBossState(BOSS_LOATHEB) == DONE)
-                        pGo->SetPhaseMask(1, true);
+                        go->SetPhaseMask(1, true);
                     break;
                 case GO_THADDIUS_PORTAL:
-                    _thaddiusPortalGUID = pGo->GetGUID();
+                    _thaddiusPortalGUID = go->GetGUID();
                     if (GetBossState(BOSS_THADDIUS) == DONE)
-                        pGo->SetPhaseMask(1, true);
+                        go->SetPhaseMask(1, true);
                     break;
                 case GO_MAEXXNA_PORTAL:
-                    _maexxnaPortalGUID = pGo->GetGUID();
+                    _maexxnaPortalGUID = go->GetGUID();
                     if (GetBossState(BOSS_MAEXXNA) == DONE)
-                        pGo->SetPhaseMask(1, true);
+                        go->SetPhaseMask(1, true);
                     break;
                 case GO_HORSEMAN_PORTAL:
-                    _horsemanPortalGUID = pGo->GetGUID();
+                    _horsemanPortalGUID = go->GetGUID();
                     if (GetBossState(BOSS_HORSEMAN) == DONE)
-                        pGo->SetPhaseMask(1, true);
+                        go->SetPhaseMask(1, true);
                     break;
                 case GO_DEATHKNIGHT_EYE_PORTAL:
-                    _deathknightEyePortalGUID = pGo->GetGUID();
+                    _deathknightEyePortalGUID = go->GetGUID();
                     if (GetBossState(BOSS_HORSEMAN) == DONE)
-                        pGo->SetGoState(GO_STATE_ACTIVE);
+                        go->SetGoState(GO_STATE_ACTIVE);
                     break;
                 case GO_PLAGUE_EYE_PORTAL:
-                    _plagueEyePortalGUID = pGo->GetGUID();
+                    _plagueEyePortalGUID = go->GetGUID();
                     if (GetBossState(BOSS_LOATHEB) == DONE)
-                        pGo->SetGoState(GO_STATE_ACTIVE);
+                        go->SetGoState(GO_STATE_ACTIVE);
                     break;
                 case GO_SPIDER_EYE_PORTAL:
-                    _spiderEyePortalGUID = pGo->GetGUID();
+                    _spiderEyePortalGUID = go->GetGUID();
                     if (GetBossState(BOSS_MAEXXNA) == DONE)
-                        pGo->SetGoState(GO_STATE_ACTIVE);
+                        go->SetGoState(GO_STATE_ACTIVE);
                     break;
                 case GO_ABOM_EYE_PORTAL:
-                    _abomEyePortalGUID = pGo->GetGUID();
+                    _abomEyePortalGUID = go->GetGUID();
                     if (GetBossState(BOSS_THADDIUS) == DONE)
-                        pGo->SetGoState(GO_STATE_ACTIVE);
+                        go->SetGoState(GO_STATE_ACTIVE);
                     break;
             }
         }
 
-        void OnGameObjectRemove(GameObject* pGo) override
+        void OnGameObjectRemove(GameObject* go) override
         {
-            if (pGo->GetGOInfo()->displayId == 6785 || pGo->GetGOInfo()->displayId == 1287)
+            if (go->GetGOInfo()->displayId == 6785 || go->GetGOInfo()->displayId == 1287)
             {
-                uint32 section = GetEruptionSection(pGo->GetPositionX(), pGo->GetPositionY());
-                HeiganEruption[section].erase(pGo);
+                HeiganEruption[GetEruptionSection(go->GetPositionX(), go->GetPositionY())].erase(go);
                 return;
             }
 
-            if (pGo->GetEntry() == GO_SAPPHIRON_BIRTH)
-                if (Creature* cr = instance->GetCreature(_sapphironGUID))
-                    cr->AI()->DoAction(ACTION_SAPPHIRON_BIRTH);
+            if (go->GetEntry() == GO_SAPPHIRON_BIRTH)
+                if (Creature* creature = instance->GetCreature(_sapphironGUID))
+                    creature->AI()->DoAction(ACTION_SAPPHIRON_BIRTH);
         }
 
-        bool CheckAchievementCriteriaMeet(uint32 criteria_id, Player const*  /*source*/, Unit const*  /*target*/, uint32  /*miscvalue1*/) override
+        bool CheckAchievementCriteriaMeet(uint32 criteria_id, Player const* /*source*/, Unit const* /*target*/, uint32 /*miscvalue1*/) override
         {
             switch (criteria_id)
             {
@@ -503,7 +506,6 @@ public:
 
                     return !count && immortalAchievement;
                 }
-
                 default:
                     return false;
             }
@@ -540,6 +542,7 @@ public:
                     return;
                 case DATA_HAD_THADDIUS_GREET:
                     _hadThaddiusGreet = (data == 1);
+                    return;
                 default:
                     return;
             }
@@ -576,55 +579,49 @@ public:
                 {
                     _horsemanTimer++;
                     _horsemanKilled++;
+
                     if (_horsemanKilled < 4)
                         return false;
 
                     // All horsemans are killed
-                    if (Creature* cr = instance->GetCreature(_blaumeuxGUID))
-                        cr->CastSpell(cr, 59450, true); // credit
+                    if (Creature* creature = instance->GetCreature(_blaumeuxGUID))
+                        creature->CastSpell(creature, 59450, true); // credit
                 }
 
                 // respawn
                 else if (state == NOT_STARTED && _horsemanKilled > 0)
                 {
-                    Creature* cr;
                     _horsemanKilled = 0;
-                    if ((cr = instance->GetCreature(_blaumeuxGUID)))
-                        if (!cr->IsAlive())
+
+                    auto SetPosAndRespawn = [&](std::initializer_list<uint64> listGuids)
+                    {
+                        for (auto const& creatureGuid : listGuids)
                         {
-                            cr->SetPosition(cr->GetHomePosition());
-                            cr->Respawn();
+                            if (Creature* creature = instance->GetCreature(creatureGuid))
+                            {
+                                if (creature->IsAlive())
+                                    return;
+
+                                creature->SetPosition(creature->GetHomePosition());
+                                creature->Respawn();
+                            }
                         }
-                    if ((cr = instance->GetCreature(_rivendareGUID)))
-                        if (!cr->IsAlive())
-                        {
-                            cr->SetPosition(cr->GetHomePosition());
-                            cr->Respawn();
-                        }
-                    if ((cr = instance->GetCreature(_zeliekGUID)))
-                        if (!cr->IsAlive())
-                        {
-                            cr->SetPosition(cr->GetHomePosition());
-                            cr->Respawn();
-                        }
-                    if ((cr = instance->GetCreature(_korthazzGUID)))
-                        if (!cr->IsAlive())
-                        {
-                            cr->SetPosition(cr->GetHomePosition());
-                            cr->Respawn();
-                        }
+                    };
+
+                    SetPosAndRespawn({ _blaumeuxGUID, _rivendareGUID, _zeliekGUID, _korthazzGUID });
                 }
                 else if (state == IN_PROGRESS)
                 {
-                    Creature* cr;
-                    if ((cr = instance->GetCreature(_blaumeuxGUID)))
-                        cr->SetInCombatWithZone();
-                    if ((cr = instance->GetCreature(_rivendareGUID)))
-                        cr->SetInCombatWithZone();
-                    if ((cr = instance->GetCreature(_zeliekGUID)))
-                        cr->SetInCombatWithZone();
-                    if ((cr = instance->GetCreature(_korthazzGUID)))
-                        cr->SetInCombatWithZone();
+                    auto _setInCombatWithZone = [&](std::initializer_list<uint64> listGuids)
+                    {
+                        for (auto const& creatureGuid : listGuids)
+                        {
+                            if (Creature* creature = instance->GetCreature(creatureGuid))
+                                creature->SetInCombatWithZone();
+                        }
+                    };
+
+                    _setInCombatWithZone({ _blaumeuxGUID, _rivendareGUID, _zeliekGUID, _korthazzGUID });
                 }
 
                 if (state == NOT_STARTED)
@@ -662,6 +659,7 @@ public:
                     if (state == DONE)
                     {
                         _speakTimer = 1;
+
                         // Load KT's grid so he can talk
                         instance->LoadGrid(3763.43f, -5115.87f);
                     }
@@ -680,83 +678,132 @@ public:
                 switch (bossId)
                 {
                     case BOSS_PATCHWERK:
+                    {
                         if (GameObject* go = instance->GetGameObject(_patchwerkGateGUID))
                             go->SetGoState(GO_STATE_ACTIVE);
+
                         break;
+                    }
                     case BOSS_GLUTH:
+                    {
                         if (GameObject* go = instance->GetGameObject(_gluthGateGUID))
                             go->SetGoState(GO_STATE_ACTIVE);
+
                         if (GameObject* go = instance->GetGameObject(_thaddiusGateGUID))
                             go->SetGoState(GO_STATE_ACTIVE);
+
                         break;
+                    }
                     case BOSS_NOTH:
+                    {
                         if (GameObject* go = instance->GetGameObject(_nothGateGUID))
                             go->SetGoState(GO_STATE_ACTIVE);
+
                         if (GameObject* go = instance->GetGameObject(_heiganGateGUID))
                             go->SetGoState(GO_STATE_ACTIVE);
+
                         break;
+                    }
                     case BOSS_HEIGAN:
+                    {
                         if (GameObject* go = instance->GetGameObject(_heiganGateGUID))
                             go->SetGoState(GO_STATE_ACTIVE);
+
                         if (GameObject* go = instance->GetGameObject(_heiganGateExitGUID))
                             go->SetGoState(GO_STATE_ACTIVE);
+
                         break;
+                    }
                     case BOSS_LOATHEB:
+                    {
                         if (GameObject* go = instance->GetGameObject(_loathebGateGUID))
                             go->SetGoState(GO_STATE_ACTIVE);
+
                         if (GameObject* go = instance->GetGameObject(_loathebPortalGUID))
                             go->SetPhaseMask(1, true);
+
                         if (GameObject* go = instance->GetGameObject(_plagueEyePortalGUID))
                             go->SetGoState(GO_STATE_ACTIVE);
+
                         events.ScheduleEvent(EVENT_KELTHUZAD_WING_TAUNT, 6s);
                         break;
+                    }
                     case BOSS_ANUB:
+                    {
                         if (GameObject* go = instance->GetGameObject(_anubGateGUID))
                             go->SetGoState(GO_STATE_ACTIVE);
+
                         if (GameObject* go = instance->GetGameObject(_anubNextGateGUID))
                             go->SetGoState(GO_STATE_ACTIVE);
+
                         break;
+                    }
                     case BOSS_FAERLINA:
+                    {
                         if (GameObject* go = instance->GetGameObject(_faerlinaGateGUID))
                             go->SetGoState(GO_STATE_ACTIVE);
+
                         if (GameObject* go = instance->GetGameObject(_maexxnaGateGUID))
                             go->SetGoState(GO_STATE_ACTIVE);
+
                         break;
+                    }
                     case BOSS_MAEXXNA:
+                    {
                         if (GameObject* go = instance->GetGameObject(_maexxnaGateGUID))
                             go->SetGoState(GO_STATE_ACTIVE);
+
                         if (GameObject* go = instance->GetGameObject(_maexxnaPortalGUID))
                             go->SetPhaseMask(1, true);
+
                         if (GameObject* go = instance->GetGameObject(_spiderEyePortalGUID))
                             go->SetGoState(GO_STATE_ACTIVE);
+
                         events.ScheduleEvent(EVENT_KELTHUZAD_WING_TAUNT, 6s);
                         break;
+                    }
                     case BOSS_GOTHIK:
+                    {
                         if (GameObject* go = instance->GetGameObject(_gothikEnterGateGUID))
                             go->SetGoState(GO_STATE_ACTIVE);
+
                         if (GameObject* go = instance->GetGameObject(_gothikExitGateGUID))
                             go->SetGoState(GO_STATE_ACTIVE);
+
                         if (GameObject* go = instance->GetGameObject(_horsemanGateGUID))
                             go->SetGoState(GO_STATE_ACTIVE);
+
                         break;
+                    }
                     case BOSS_SAPPHIRON:
+                    {
                         if (GameObject* go = instance->GetGameObject(_sapphironGateGUID))
                             go->SetGoState(GO_STATE_ACTIVE);
+
                         break;
+                    }
                     case BOSS_THADDIUS:
+                    {
                         if (GameObject* go = instance->GetGameObject(_thaddiusPortalGUID))
                             go->SetPhaseMask(1, true);
+
                         if (GameObject* go = instance->GetGameObject(_abomEyePortalGUID))
                             go->SetGoState(GO_STATE_ACTIVE);
+
                         events.ScheduleEvent(EVENT_KELTHUZAD_WING_TAUNT, 6s);
                         break;
+                    }
                     case BOSS_HORSEMAN:
+                    {
                         if (GameObject* go = instance->GetGameObject(_horsemanPortalGUID))
                             go->SetPhaseMask(1, true);
+
                         if (GameObject* go = instance->GetGameObject(_deathknightEyePortalGUID))
                             go->SetGoState(GO_STATE_ACTIVE);
+
                         events.ScheduleEvent(EVENT_KELTHUZAD_WING_TAUNT, 6s);
                         break;
+                    }
                     default:
                         break;
                 }
@@ -771,10 +818,12 @@ public:
             {
                 Creature* kel = instance->GetCreature(_kelthuzadGUID);
                 Creature* lich = instance->GetCreature(_lichkingGUID);
+
                 if (kel && lich)
                     _speakTimer += diff;
                 else
                     return;
+
                 if (_speakTimer > 10000 && _speakTimer < 20000)
                 {
                     kel->AI()->Talk(SAY_SAPP_DIALOG1);
@@ -804,6 +853,7 @@ public:
                 {
                     kel->AI()->Talk(SAY_SAPP_DIALOG6);
                     _speakTimer = 0;
+
                     if (GameObject* go = instance->GetGameObject(_kelthuzadgateGUID))
                         go->SetGoState(GO_STATE_ACTIVE);
                 }
@@ -825,9 +875,11 @@ public:
             }
 
             events.Update(diff);
+
             switch (events.ExecuteEvent())
             {
                 case EVENT_KELTHUZAD_WING_TAUNT:
+                {
                     // Loads Kel'Thuzad's grid. We need this as he must be active in order for his texts to work.
                     instance->LoadGrid(3749.67f, -5114.06f);
 
@@ -836,6 +888,7 @@ public:
 
                     ++_currentWingTaunt;
                     break;
+                }  
             }
         }
 
@@ -948,10 +1001,10 @@ public:
         {
             if (me->GetEntry() == NPC_MR_BIGGLESWORTH && me->GetInstanceScript())
             {
-                if (Creature* cr = me->SummonCreature(20350/*NPC_KELTHUZAD*/, *me, TEMPSUMMON_TIMED_DESPAWN, 1))
+                if (Creature* creature = me->SummonCreature(20350/*NPC_KELTHUZAD*/, *me, TEMPSUMMON_TIMED_DESPAWN, 1))
                 {
-                    cr->SetDisplayId(11686);
-                    cr->AI()->Talk(SAY_CAT_DIED);
+                    creature->SetDisplayId(11686);
+                    creature->AI()->Talk(SAY_CAT_DIED);
                 }
             }
         }
@@ -961,13 +1014,15 @@ public:
             if (me->GetEntry() == NPC_NAXXRAMAS_TRIGGER)
             {
                 timer += diff;
+
                 if (timer >= 5000)
                 {
-                    if (Creature* cr = me->SummonCreature(NPC_LIVING_POISON, *me, TEMPSUMMON_TIMED_DESPAWN, 9000))
+                    if (Creature* creature = me->SummonCreature(NPC_LIVING_POISON, *me, TEMPSUMMON_TIMED_DESPAWN, 9000))
                     {
-                        cr->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
-                        cr->GetMotionMaster()->MovePoint(0, me->GetPositionX() + 50 * cos(me->GetOrientation()), me->GetPositionY() + 50 * sin(me->GetOrientation()), me->GetPositionZ(), false);
+                        creature->AddUnitMovementFlag(MOVEMENTFLAG_WALKING);
+                        creature->GetMotionMaster()->MovePoint(0, me->GetPositionX() + 50 * cos(me->GetOrientation()), me->GetPositionY() + 50 * sin(me->GetOrientation()), me->GetPositionZ(), false);
                     }
+
                     timer = 0;
                 }
             }
@@ -976,7 +1031,9 @@ public:
                 Unit* target = nullptr;
                 Warhead::AnyUnfriendlyUnitInObjectRangeCheck u_check(me, me, 0.5f);
                 Warhead::UnitLastSearcher<Warhead::AnyUnfriendlyUnitInObjectRangeCheck> searcher(me, target, u_check);
+
                 me->VisitNearbyObject(1.5f, searcher);
+
                 if (target)
                     me->CastSpell(me, SPELL_FROGGER_EXPLODE, true);
             }
@@ -994,27 +1051,23 @@ public:
         if (!player)
             return true;
 
-        // For GM's okay
+        // For GM's okay anyway
         if (player->IsGameMaster())
             return false;
 
-        auto instanceScript = player->GetInstanceScript();
-        if (instanceScript->GetBossState(BOSS_LOATHEB) != EncounterState::DONE ||
-                instanceScript->GetBossState(BOSS_MAEXXNA) != EncounterState::DONE ||
-                instanceScript->GetBossState(BOSS_THADDIUS) != EncounterState::DONE ||
-                instanceScript->GetBossState(BOSS_HORSEMAN) != EncounterState::DONE)
-            return true;
+        auto CheckBossState = [&](std::initializer_list<uint8> _boss)
+        {
+            auto instanceScript = player->GetInstanceScript();
 
-        return false;
+            for (auto const itr : _boss)
+                if (instanceScript->GetBossState(itr) != EncounterState::DONE)
+                    return true;
+
+            return false;
+        };
+
+        return CheckBossState({ BOSS_LOATHEB, BOSS_MAEXXNA, BOSS_THADDIUS, BOSS_HORSEMAN });
     }
-private:
-    enum NaxBosses
-    {
-        BOSS_LOATHEB = 5,
-        BOSS_MAEXXNA = 8,
-        BOSS_THADDIUS = 9,
-        BOSS_HORSEMAN = 12
-    };
 };
 
 void AddSC_instance_naxxramas()
