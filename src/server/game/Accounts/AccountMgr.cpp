@@ -21,9 +21,10 @@
 #include "Player.h"
 #include "ScriptMgr.h"
 #include "Util.h"
-#include "SHA1.h"
+#include "CryptoHash.h"
 #include "WorldSession.h"
 #include "GameConfig.h"
+#include "SRP6.h"
 
 namespace AccountMgr
 {
@@ -44,8 +45,10 @@ namespace AccountMgr
         PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_INS_ACCOUNT);
 
         stmt->setString(0, username);
-        stmt->setString(1, CalculateShaPassHash(username, password));
-        stmt->setInt8(2, uint8(sGameConfig->GetIntConfig("Expansion")));
+        auto [salt, verifier] = Crypto::SRP6::MakeRegistrationData(username, password);
+        stmt->setBinary(1, salt);
+        stmt->setBinary(2, verifier);
+        stmt->setInt8(3, uint8(sGameConfig->GetIntConfig("Expansion")));
 
         LoginDatabase.Execute(stmt);
 
@@ -152,11 +155,15 @@ namespace AccountMgr
         Utf8ToUpperOnlyLatin(newPassword);
 
         stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPD_USERNAME);
-
         stmt->setString(0, newUsername);
-        stmt->setString(1, CalculateShaPassHash(newUsername, newPassword));
-        stmt->setUInt32(2, accountId);
+        stmt->setUInt32(1, accountId);
+        LoginDatabase.Execute(stmt);
 
+        auto [salt, verifier] = Crypto::SRP6::MakeRegistrationData(newUsername, newPassword);
+        stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPD_LOGON);
+        stmt->setBinary(0, salt);
+        stmt->setBinary(1, verifier);
+        stmt->setUInt32(2, accountId);
         LoginDatabase.Execute(stmt);
 
         return AOR_OK;
@@ -181,11 +188,12 @@ namespace AccountMgr
         Utf8ToUpperOnlyLatin(username);
         Utf8ToUpperOnlyLatin(newPassword);
 
-        PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPD_PASSWORD);
+        auto [salt, verifier] = Crypto::SRP6::MakeRegistrationData(username, newPassword);
 
-        stmt->setString(0, CalculateShaPassHash(username, newPassword));
-        stmt->setUInt32(1, accountId);
-
+        LoginDatabasePreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPD_LOGON);
+        stmt->setBinary(0, salt);
+        stmt->setBinary(1, verifier);
+        stmt->setUInt32(2, accountId);;
         LoginDatabase.Execute(stmt);
 
         sScriptMgr->OnPasswordChange(accountId);
@@ -261,18 +269,6 @@ namespace AccountMgr
         PreparedQueryResult result = CharacterDatabase.Query(stmt);
 
         return (result) ? (*result)[0].GetUInt64() : 0;
-    }
-
-    std::string CalculateShaPassHash(std::string const& name, std::string const& password)
-    {
-        SHA1Hash sha;
-        sha.Initialize();
-        sha.UpdateData(name);
-        sha.UpdateData(":");
-        sha.UpdateData(password);
-        sha.Finalize();
-
-        return ByteArrayToHexStr(sha.GetDigest(), sha.GetLength());
     }
 
     bool IsPlayerAccount(uint32 gmlevel)
