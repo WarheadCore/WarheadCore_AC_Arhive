@@ -938,12 +938,15 @@ void Spell::SelectEffectImplicitTargets(SpellEffIndex effIndex, SpellImplicitTar
             for (uint32 j = effIndex + 1; j < MAX_SPELL_EFFECTS; ++j)
             {
                 SpellEffectInfo const* effects = GetSpellInfo()->Effects;
-                if (effects[effIndex].TargetA.GetTarget() == effects[j].TargetA.GetTarget() &&
-                        effects[effIndex].TargetB.GetTarget() == effects[j].TargetB.GetTarget() &&
-                        effects[effIndex].ImplicitTargetConditions == effects[j].ImplicitTargetConditions &&
-                        effects[effIndex].CalcRadius(m_caster) == effects[j].CalcRadius(m_caster) &&
-                        CheckScriptEffectImplicitTargets(effIndex, j))
+                if (effects[j].IsEffect() &&
+                    effects[effIndex].TargetA.GetTarget() == effects[j].TargetA.GetTarget() &&
+                    effects[effIndex].TargetB.GetTarget() == effects[j].TargetB.GetTarget() &&
+                    effects[effIndex].ImplicitTargetConditions == effects[j].ImplicitTargetConditions &&
+                    effects[effIndex].CalcRadius(m_caster) == effects[j].CalcRadius(m_caster) &&
+                    CheckScriptEffectImplicitTargets(effIndex, j))
+                {
                     effectMask |= 1 << j;
+                }
             }
             processedEffectMask |= effectMask;
             break;
@@ -966,9 +969,8 @@ void Spell::SelectEffectImplicitTargets(SpellEffIndex effIndex, SpellImplicitTar
             SelectImplicitAreaTargets(effIndex, targetType, effectMask);
             break;
         case TARGET_SELECT_CATEGORY_TRAJ:
-            // xinef: just in case there is no dest, explanation in SelectImplicitDestDestTargets
-            if (!m_targets.HasDst())
-                m_targets.SetDst(*m_caster);
+            // just in case there is no dest, explanation in SelectImplicitDestDestTargets
+            CheckDst();
 
             SelectImplicitTrajTargets(effIndex, targetType);
             break;
@@ -987,22 +989,22 @@ void Spell::SelectEffectImplicitTargets(SpellEffIndex effIndex, SpellImplicitTar
                     }
                     break;
                 case TARGET_OBJECT_TYPE_DEST:
-                    switch (targetType.GetReferenceType())
-                    {
-                        case TARGET_REFERENCE_TYPE_CASTER:
-                            SelectImplicitCasterDestTargets(effIndex, targetType);
-                            break;
-                        case TARGET_REFERENCE_TYPE_TARGET:
-                            SelectImplicitTargetDestTargets(effIndex, targetType);
-                            break;
-                        case TARGET_REFERENCE_TYPE_DEST:
-                            SelectImplicitDestDestTargets(effIndex, targetType);
-                            break;
-                        default:
-                            ASSERT(false && "Spell::SelectEffectImplicitTargets: received not implemented select target reference type for TARGET_TYPE_OBJECT_DEST");
-                            break;
-                    }
-                    break;
+                     switch (targetType.GetReferenceType())
+                     {
+                         case TARGET_REFERENCE_TYPE_CASTER:
+                             SelectImplicitCasterDestTargets(effIndex, targetType);
+                             break;
+                         case TARGET_REFERENCE_TYPE_TARGET:
+                             SelectImplicitTargetDestTargets(effIndex, targetType);
+                             break;
+                         case TARGET_REFERENCE_TYPE_DEST:
+                             SelectImplicitDestDestTargets(effIndex, targetType);
+                             break;
+                         default:
+                             ASSERT(false && "Spell::SelectEffectImplicitTargets: received not implemented select target reference type for TARGET_TYPE_OBJECT_DEST");
+                             break;
+                     }
+                     break;
                 default:
                     switch (targetType.GetReferenceType())
                     {
@@ -1020,7 +1022,7 @@ void Spell::SelectEffectImplicitTargets(SpellEffIndex effIndex, SpellImplicitTar
             }
             break;
         case TARGET_SELECT_CATEGORY_NYI:
-            LOG_DEBUG("spells.aura", "SPELL: target type %u, found in spellID %u, effect %u is not implemented yet!", m_spellInfo->Id, effIndex, targetType.GetTarget());
+            LOG_DEBUG("spells", "SPELL: target type %u, found in spellID %u, effect %u is not implemented yet!", m_spellInfo->Id, effIndex, targetType.GetTarget());
             break;
         default:
             ASSERT(false && "Spell::SelectEffectImplicitTargets: received not implemented select target category");
