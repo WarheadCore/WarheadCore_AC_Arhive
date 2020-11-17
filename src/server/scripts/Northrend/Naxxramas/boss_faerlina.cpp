@@ -181,11 +181,12 @@ public:
             DoMeleeAttackIfReady();
         }
 
-        void SpellHit(Unit*  /*caster*/, const SpellInfo* spell) override
+        void SpellHit(Unit* /*caster*/, const SpellInfo* spell) override
         {
             if (spell->Id == SPELL_WIDOWS_EMBRACE)
             {
                 Talk(EMOTE_WIDOWS_EMBRACE);
+
                 if (me->HasAura(RAID_MODE_HEROIC(SPELL_FRENZY_10, SPELL_FRENZY_25)))
                 {
                     me->RemoveAurasDueToSpell(RAID_MODE_HEROIC(SPELL_FRENZY_10, SPELL_FRENZY_25));
