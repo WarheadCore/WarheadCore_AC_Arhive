@@ -67,7 +67,7 @@ void CrossFactionInstanceICC::SetNormalGroup(uint32 instanceID)
             continue;
 
         ClearFakePlayer(player);
-    }    
+    }
 }
 
 // Functions from CFBG module

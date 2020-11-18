@@ -1121,7 +1121,7 @@ public:
             if (group && group->isRaidGroup() && !group->IsLeader(player->GetGUID()) || group->IsAssistant(player->GetGUID()))
                 return;
 
-            
+
 
             me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
             me->GetTransport()->setActive(true);
@@ -1146,7 +1146,7 @@ public:
             _events.RescheduleEvent(EVENT_CLEAVE, 3s, 6s);
         }
 
-        void EnterEvadeMode() override 
+        void EnterEvadeMode() override
         {
             if (!me->IsAlive())
                 return;
@@ -2001,7 +2001,7 @@ public:
             return true;
         }
 
-        void HandlePeriodic(AuraEffect const* /*aurEff*/) 
+        void HandlePeriodic(AuraEffect const* /*aurEff*/)
         {
             if (GetTarget()->movespline->Finalized())
                 Remove(AURA_REMOVE_BY_EXPIRE);
