@@ -28,6 +28,7 @@
 #include "Transport.h"
 #include "Group.h"
 #include "CreatureTextMgr.h"
+#include "crossfaction_instance.h"
 
 enum EventIds
 {
@@ -1100,6 +1101,10 @@ public:
                     }
                     else if (state == FAIL)
                         Events.ScheduleEvent(EVENT_RESPAWN_GUNSHIP, 30s);
+
+                    for (auto const& player : instance->GetPlayers())
+                        CFI->SetNormalGroup(instance->GetInstanceId());
+
                     break;
                 case DATA_DEATHBRINGER_SAURFANG:
                     switch (state)
@@ -1773,6 +1778,10 @@ public:
                 case EVENT_ENEMY_GUNSHIP_COMBAT:
                     if (Creature* captain = source->FindNearestCreature(TeamIdInInstance == TEAM_HORDE ? NPC_IGB_HIGH_OVERLORD_SAURFANG : NPC_IGB_MURADIN_BRONZEBEARD, 200.0f))
                         captain->AI()->DoAction(ACTION_ENEMY_GUNSHIP_TALK);
+
+                    for (auto const& player : instance->GetPlayers())
+                        CFI->SetGroupFakeFaction(instance->GetInstanceId(), player.GetSource(), TeamIdInInstance);
+
                     [[fallthrough]];
                 case EVENT_PLAYERS_GUNSHIP_SPAWN:
                 case EVENT_PLAYERS_GUNSHIP_COMBAT:
