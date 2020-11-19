@@ -15,7 +15,7 @@
 * with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _ITEMLEVELUP_H_
-#define _ITEMLEVELUP_H_
+#ifndef _ITEM_LEVEL_UP_H_
+#define _ITEM_LEVEL_UP_H_
 
-#endif /* _ITEMLEVELUP_H_ */
+#endif /* _ITEM_LEVEL_UP_H_ */
