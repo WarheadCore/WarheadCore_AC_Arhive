@@ -19,5 +19,19 @@
 [worldserver]
 
 #
+#    ILU.Enable
+#        Enable item level up
+#        Default: 0 (disabled)
+#                 1 (enabled)
 #
+
+ILU.Enable = 0
+
 #
+#    ILU.Enable
+#        Enable item level up
+#        Default: 0 (max server player level)
+#                 1-255 (optional level)
+#
+
+ILU.LevelUP = 0

@@ -19,9 +19,48 @@
 #include "Log.h"
 #include "ScriptMgr.h"
 #include "GameConfig.h"
-#include "Chat.h"
 #include "Player.h"
-#include "ScriptedGossip.h"
+#include "ModuleLocale.h"
+
+enum StringLocales : uint8
+{
+    ILU_LOCALE_MAX_LEVEL = 1,
+    ILU_LOCALE_GET_LEVEL,
+
+    ILU_LOCALE_MAX
+};
+
+#define MODULE_NAME "mod-item-level-up"
+
+class ItemLevelUp_Item : public ItemScript
+{
+public: ItemLevelUp_Item() : ItemScript("ItemLevelUp_Item") {}
+
+    bool OnUse(Player* player, Item* item, const SpellCastTargets& /*Targets*/) override
+    {
+        if (!CONF_GET_BOOL("ILU.Enable"))
+            return false;
+
+        uint8 playerLevel = player->getLevel();
+        if (playerLevel >= CONF_GET_INT("MaxPlayerLevel"))
+        {
+            sModuleLocale->SendPlayerMessage(player, MODULE_NAME, ILU_LOCALE_MAX_LEVEL, playerLevel);
+            return false;
+        }
+
+        uint8 configLevel = static_cast<uint8>(CONF_GET_INT("ILU.LevelUP"));
+        uint8 newLevel = !configLevel ? CONF_GET_INT("MaxPlayerLevel") : configLevel;
+
+        player->GiveLevel(newLevel);
+        player->SetUInt32Value(PLAYER_XP, 0);
+        player->DestroyItemCount(item->GetEntry(), 1, true);
+
+        sModuleLocale->SendPlayerMessage(player, MODULE_NAME, ILU_LOCALE_GET_LEVEL, newLevel);
+
+        return true;
+    }
+};
+
 
 class ItemLevelUp_World : public WorldScript
 {
@@ -30,12 +69,19 @@ public:
 
     void OnAfterConfigLoad(bool /*reload*/) override
     {
-        // Add conigs options configiration
+        sGameConfig->AddBoolConfig("ILU.Enable");
+        sGameConfig->AddIntConfig("ILU.LevelUP");
+    }
+
+    void OnStartup() override
+    {
+        sModuleLocale->CheckStrings(MODULE_NAME, ILU_LOCALE_MAX);
     }
 };
 
 // Group all custom scripts
 void AddSC_ItemLevelUp()
 {
+    new ItemLevelUp_Item();
     new ItemLevelUp_World();
 }
