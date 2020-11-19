@@ -34,7 +34,8 @@ enum StringLocales : uint8
 
 class ItemLevelUp_Item : public ItemScript
 {
-public: ItemLevelUp_Item() : ItemScript("ItemLevelUp_Item") {}
+public:
+    ItemLevelUp_Item() : ItemScript("ItemLevelUp_Item") {}
 
     bool OnUse(Player* player, Item* item, const SpellCastTargets& /*Targets*/) override
     {

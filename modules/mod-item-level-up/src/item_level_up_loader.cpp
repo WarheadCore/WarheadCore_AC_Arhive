@@ -24,7 +24,7 @@ void AddSC_ItemLevelUp();
 // Add all
 void AddItemLevelUpScripts()
 {
-   AddSC_ItemLevelUp();
+    AddSC_ItemLevelUp();
 }
 
 #endif /* _ITEM_LEVEL_UP_LOADER_H_ */
