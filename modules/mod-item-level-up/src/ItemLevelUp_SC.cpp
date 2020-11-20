@@ -62,7 +62,6 @@ public:
     }
 };
 
-
 class ItemLevelUp_World : public WorldScript
 {
 public:
