@@ -17,7 +17,7 @@ INSERT INTO `string_module` (`ModuleName`, `ID`, `Locale`, `Text`)
             (@MODULE_NAME, 1, 'enUS', '|cffff0000# |cff00ff00You already have the highest possible level in the game:|r %s'), (@MODULE_NAME, 2, 'enUS', '|cffff0000# |cff00ff00You got the maximum level in game:|r %s');
 -- Add item
 
-SET @ITEM_ID := 90000;
+SET @ITEM_ID := 113874;
 
 DELETE FROM `item_template`
 WHERE `entry` = @ITEM_ID;
