@@ -642,10 +642,13 @@ void Player::UpdateCritPercentage(WeaponAttackType attType)
             break;
     }
 
-    float value = GetTotalPercentageModValue(modGroup) + GetRatingBonusValue(cr);
+    // flat = bonus from crit auras, pct = bonus from agility, combat rating = mods from items
+    float value = GetBaseModValue(modGroup, FLAT_MOD) + GetBaseModValue(modGroup, PCT_MOD) + GetRatingBonusValue(cr);
+
     // Modify crit from weapon skill and maximized defense skill of same level victim difference
     value += (int32(GetWeaponSkillValue(attType)) - int32(GetMaxSkillValueForLevel())) * 0.04f;
-    value = value < 0.0f ? 0.0f : value;
+
+    value = std::max(0.0f, value);
     SetStatFloatValue(index, value);
 }
 
@@ -745,7 +748,6 @@ void Player::UpdateParryPercentage()
 {
     // No parry
     float value = 0.0f;
-    m_realParry = 0.0f;
     uint32 pclass = getClass() - 1;
     if (CanParry() && parry_cap[pclass] > 0.0f)
     {
@@ -753,17 +755,16 @@ void Player::UpdateParryPercentage()
         // Parry from rating
         float diminishing = GetRatingBonusValue(CR_PARRY);
         // Modify value from defense skill (only bonus from defense rating diminishes)
-        nondiminishing += (GetSkillValue(SKILL_DEFENSE) - GetMaxSkillValueForLevel()) * 0.04f;
-        diminishing += (int32(GetRatingBonusValue(CR_DEFENSE_SKILL))) * 0.04f;
+        nondiminishing += (int32(GetSkillValue(SKILL_DEFENSE)) - int32(GetMaxSkillValueForLevel())) * 0.04f;
+        diminishing += (GetRatingBonusValue(CR_DEFENSE_SKILL) * 0.04f);
         // Parry from SPELL_AURA_MOD_PARRY_PERCENT aura
         nondiminishing += GetTotalAuraModifier(SPELL_AURA_MOD_PARRY_PERCENT);
+
         // apply diminishing formula to diminishing parry chance
-        m_realParry = nondiminishing + diminishing * parry_cap[pclass] / (diminishing + parry_cap[pclass] * m_diminishing_k[pclass]);
-        m_realParry = m_realParry < 0.0f ? 0.0f : m_realParry;
-
         value = CalculateDiminishingReturns(parry_cap, getClass(), nondiminishing, diminishing);
-    }
 
+        value = value < 0.0f ? 0.0f : value;
+    }
     SetStatFloatValue(PLAYER_PARRY_PERCENTAGE, value);
 }
 
@@ -787,19 +788,17 @@ void Player::UpdateDodgePercentage()
     float diminishing = 0.0f, nondiminishing = 0.0f;
     GetDodgeFromAgility(diminishing, nondiminishing);
     // Modify value from defense skill (only bonus from defense rating diminishes)
-    nondiminishing += (GetSkillValue(SKILL_DEFENSE) - GetMaxSkillValueForLevel()) * 0.04f;
-    diminishing += (int32(GetRatingBonusValue(CR_DEFENSE_SKILL))) * 0.04f;
+    nondiminishing += (int32(GetSkillValue(SKILL_DEFENSE)) - int32(GetMaxSkillValueForLevel())) * 0.04f;
+    diminishing += (GetRatingBonusValue(CR_DEFENSE_SKILL) * 0.04f);
     // Dodge from SPELL_AURA_MOD_DODGE_PERCENT aura
     nondiminishing += GetTotalAuraModifier(SPELL_AURA_MOD_DODGE_PERCENT);
     // Dodge from rating
     diminishing += GetRatingBonusValue(CR_DODGE);
-    // apply diminishing formula to diminishing dodge chance
-    uint32 pclass = getClass() - 1;
-    m_realDodge = nondiminishing + (diminishing * dodge_cap[pclass] / (diminishing + dodge_cap[pclass] * m_diminishing_k[pclass]));
 
-    m_realDodge = m_realDodge < 0.0f ? 0.0f : m_realDodge;
+    // apply diminishing formula to diminishing dodge chance
     float value = CalculateDiminishingReturns(dodge_cap, getClass(), nondiminishing, diminishing);
 
+    value = value < 0.0f ? 0.0f : value;
     SetStatFloatValue(PLAYER_DODGE_PERCENTAGE, value);
 }
 

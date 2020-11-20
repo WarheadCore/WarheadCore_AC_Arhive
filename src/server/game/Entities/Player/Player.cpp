@@ -2999,32 +2999,18 @@ Creature* Player::GetNPCIfCanInteractWith(uint64 guid, uint32 npcflagmask)
     return creature;
 }
 
-GameObject* Player::GetGameObjectIfCanInteractWith(uint64 const& guid) const
+GameObject* Player::GetGameObjectIfCanInteractWith(uint64 guid, GameobjectTypes type) const
 {
-    if (!guid)
-        return nullptr;
-    if (!IsInWorld())
-        return nullptr;
-    if (IsInFlight())
-        return nullptr;
-    // exist
-    GameObject* go = ObjectAccessor::GetGameObject(*this, guid);
-    if (!go)
-        return nullptr;
-
-    if (!go->IsWithinDistInMap(this))
-        return nullptr;
-
-    return go;
-}
-GameObject* Player::GetGameObjectIfCanInteractWith(uint64 const& guid, GameobjectTypes type) const
-{
-    GameObject* go = GetGameObjectIfCanInteractWith(guid);
-    if (!go)
-        return nullptr;
-    if (go->GetGoType() != type)
-        return nullptr;
-    return go;
+    if (GameObject* go = GetMap()->GetGameObject(guid))
+    {
+        if (go->GetGoType() == type)
+        {
+            if (go->IsWithinDistInMap(this, go->GetInteractionDistance()))
+                return go;
+            LOG_DEBUG("maps", "IsGameObjectOfTypeInRange: GameObject '%s' [GUID: %u] is too far away from player %s [GUID: %u] to be used by him (distance=%f, maximal 10 is allowed)", go->GetGOInfo()->name.c_str(), go->GetGUIDLow(), GetName().c_str(), GetGUIDLow(), go->GetDistance(this));
+        }
+    }
+    return nullptr;
 }
 
 bool Player::IsInWater(bool allowAbove) const
@@ -9102,7 +9088,7 @@ void Player::SendLoot(uint64 guid, LootType loot_type)
 
         // not check distance for GO in case owned GO (fishing bobber case, for example)
         // And permit out of range GO with no owner in case fishing hole
-        if (!go || (loot_type != LOOT_FISHINGHOLE && ((loot_type != LOOT_FISHING && loot_type != LOOT_FISHING_JUNK) || go->GetOwnerGUID() != GetGUID()) && !go->IsWithinDistInMap(this)) || (loot_type == LOOT_CORPSE && go->GetRespawnTime() && go->isSpawnedByDefault()))
+        if (!go || (loot_type != LOOT_FISHINGHOLE && ((loot_type != LOOT_FISHING && loot_type != LOOT_FISHING_JUNK) || go->GetOwnerGUID() != GetGUID()) && !go->IsWithinDistInMap(this, INTERACTION_DISTANCE)) || (loot_type == LOOT_CORPSE && go->GetRespawnTime() && go->isSpawnedByDefault()))
         {
             go->ForceValuesUpdateAtIndex(GAMEOBJECT_BYTES_1);
             SendLootRelease(guid);

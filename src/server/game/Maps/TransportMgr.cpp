@@ -512,12 +512,12 @@ bool TransportAnimation::GetAnimNode(uint32 time, TransportAnimationEntry const*
     return false;
 }
 
-void TransportAnimation::GetAnimRotation(uint32 time, QuaternionData& curr, QuaternionData& next, float& percRot) const
+void TransportAnimation::GetAnimRotation(uint32 time, G3D::Quat& curr, G3D::Quat& next, float& percRot) const
 {
     if (Rotations.empty())
     {
-        curr = QuaternionData(0.0f, 0.0f, 0.0f, 1.0f);
-        next = QuaternionData(0.0f, 0.0f, 0.0f, 1.0f);
+        curr = G3D::Quat(0.0f, 0.0f, 0.0f, 1.0f);
+        next = G3D::Quat(0.0f, 0.0f, 0.0f, 1.0f);
         percRot = 0.0f;
         return;
     }
@@ -526,23 +526,23 @@ void TransportAnimation::GetAnimRotation(uint32 time, QuaternionData& curr, Quat
         if (time >= itr->first)
         {
             uint32 currSeg = itr->second->TimeSeg, nextSeg;
-            curr = QuaternionData(itr->second->X, itr->second->Y, itr->second->Z, itr->second->W);
+            curr = G3D::Quat(itr->second->X, itr->second->Y, itr->second->Z, itr->second->W);
             if (itr != Rotations.rbegin())
             {
                 --itr;
-                next = QuaternionData(itr->second->X, itr->second->Y, itr->second->Z, itr->second->W);
+                next = G3D::Quat(itr->second->X, itr->second->Y, itr->second->Z, itr->second->W);
                 nextSeg = itr->second->TimeSeg;
             }
             else
             {
-                next = QuaternionData(Rotations.begin()->second->X, Rotations.begin()->second->Y, Rotations.begin()->second->Z, Rotations.begin()->second->W);
+                next = G3D::Quat(Rotations.begin()->second->X, Rotations.begin()->second->Y, Rotations.begin()->second->Z, Rotations.begin()->second->W);
                 nextSeg = this->TotalTime;
             }
             percRot = float(time - currSeg) / float(nextSeg - currSeg);
             return;
         }
 
-    curr = QuaternionData(0.0f, 0.0f, 0.0f, 1.0f);
-    next = QuaternionData(0.0f, 0.0f, 0.0f, 1.0f);
+    curr = G3D::Quat(0.0f, 0.0f, 0.0f, 1.0f);
+    next = G3D::Quat(0.0f, 0.0f, 0.0f, 1.0f);
     percRot = 0.0f;
 }
