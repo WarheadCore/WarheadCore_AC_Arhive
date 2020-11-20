@@ -15,8 +15,6 @@
 * with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ItemLevelUp.h"
-#include "Log.h"
 #include "ScriptMgr.h"
 #include "GameConfig.h"
 #include "Player.h"
