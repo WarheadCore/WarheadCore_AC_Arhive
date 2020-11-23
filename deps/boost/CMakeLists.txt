@@ -37,7 +37,7 @@ else()
   set(BOOST_REQUIRED_VERSION 1.67)
 endif()
 
-find_package(Boost ${BOOST_REQUIRED_VERSION} REQUIRED system program_options iostreams regex)
+find_package(Boost ${BOOST_REQUIRED_VERSION} REQUIRED system filesystem program_options iostreams regex)
 
 add_library(boost INTERFACE)
 
@@ -52,7 +52,6 @@ target_include_directories(boost
 target_compile_definitions(boost
   INTERFACE
     -DBOOST_DATE_TIME_NO_LIB
-    -DBOOST_FILESYSTEM_NO_LIB
     -DBOOST_REGEX_NO_LIB
     -DBOOST_CHRONO_NO_LIB
     -DBOOST_SERIALIZATION_NO_LIB
