@@ -699,7 +699,7 @@ public:
             else if (map->IsDungeon())
             {
                 // Allow GM to summon players or only other GM accounts inside instances.
-                if (!sGameConfig->GetIntConfig("Instance.GMSummonPlayer"))
+                if (!sGameConfig->GetBoolConfig("Instance.GMSummonPlayer"))
                 {
                     // pussywizard: prevent unbinding normal player's perm bind by just summoning him >_>
                     if (!target->GetSession()->GetSecurity())
