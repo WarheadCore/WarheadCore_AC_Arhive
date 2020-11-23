@@ -52,6 +52,7 @@ target_include_directories(boost
 target_compile_definitions(boost
   INTERFACE
     -DBOOST_DATE_TIME_NO_LIB
+    -DBOOST_FILESYSTEM_NO_LIB
     -DBOOST_REGEX_NO_LIB
     -DBOOST_CHRONO_NO_LIB
     -DBOOST_SERIALIZATION_NO_LIB

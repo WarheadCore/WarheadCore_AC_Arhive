@@ -226,7 +226,7 @@ namespace Warhead
         /// Tries to terminate the process
         void Terminate() override
         {
-            if (!my_child)
+            if (my_child)
             {
                 was_terminated = true;
                 try
