@@ -88,7 +88,8 @@ namespace Warhead
             if (!input.empty())
             {
                 // With binding stdin
-                return child{
+                return child
+                {
                     exe = std::filesystem::absolute(executable).string(),
                     args = argsVector,
                     env = environment(boost::this_process::environment()),
@@ -100,7 +101,8 @@ namespace Warhead
             else
             {
                 // Without binding stdin
-                return child{
+                return child
+                {
                     exe = boost::filesystem::absolute(executable).string(),
                     args = argsVector,
                     env = environment(boost::this_process::environment()),
@@ -109,14 +111,15 @@ namespace Warhead
                     std_err = errStream
                 };
             }
-        }();
+        }
+        ();
 
-        auto outInfo = MakeTCLogSink([&](std::string const& msg)
+        auto outInfo = MakeTCLogSink([&](std::string const & msg)
         {
             LOG_INFO(logger, "%s", msg.c_str());
         });
 
-        auto outError = MakeTCLogSink([&](std::string const& msg)
+        auto outError = MakeTCLogSink([&](std::string const & msg)
         {
             LOG_ERROR(logger, "%s", msg.c_str());
         });
