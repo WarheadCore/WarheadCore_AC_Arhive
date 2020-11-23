@@ -18,7 +18,6 @@ add_subdirectory(acelite)
 add_subdirectory(fmt)
 add_subdirectory(poco)
 add_subdirectory(boost)
-add_subdirectory(process)
 
 if(SERVERS OR TOOLS)
   add_subdirectory(zlib)
