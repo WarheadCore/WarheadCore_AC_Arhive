@@ -197,8 +197,6 @@ public:
                     break;
                 case EVENT_SUMMON_ZOMBIE:
                 {
-                    uint8 rand = urand(0, 2);
-
                     for (int32 i = 0; i < RAID_MODE(1, 2, 2, 3); ++i)
                     {
                         // In 10 man raid, normal mode - should spawn only from mid gate
@@ -206,13 +204,16 @@ public:
                         // In 25 man raid - should spawn from all 3 gates
                         if (me->GetMap()->GetDifficulty() == RAID_DIFFICULTY_10MAN_NORMAL)
                             me->SummonCreature(NPC_ZOMBIE_CHOW, zombiePos[0]);
-                        else
+                        else if (me->GetMap()->GetDifficulty() == RAID_DIFFICULTY_10MAN_HEROIC)
+                            me->SummonCreature(NPC_ZOMBIE_CHOW, zombiePos[urand(1, 2)]);
+                        else // 25 man raid normal and heroic
                             me->SummonCreature(NPC_ZOMBIE_CHOW, zombiePos[urand(0, 2)]);
-
-                        rand == 2 ? rand = 0 : rand++;
                     }
 
-                    events.RepeatEvent(10s);
+                    if (me->GetMap()->GetDifficulty() == RAID_DIFFICULTY_10MAN_HEROIC)
+                        events.RepeatEvent(15s);
+                    else
+                        events.RepeatEvent(10s);
                     break;
                 }
                 case EVENT_CAN_EAT_ZOMBIE:
