@@ -21,17 +21,10 @@
 #include "Define.h"
 #include "DatabaseEnv.h"
 #include <string>
+#include <filesystem>
 
 template <class T>
 class DatabaseWorkerPool;
-
-namespace boost
-{
-    namespace filesystem
-    {
-        class path;
-    }
-}
 
 class WH_DATABASE_API UpdateException : public std::exception
 {
@@ -66,7 +59,7 @@ template <class T>
 class WH_DATABASE_API DBUpdater
 {
 public:
-    using Path = boost::filesystem::path;
+    using Path = std::filesystem::path;
 
     static inline std::string GetConfigEntry();
     static inline std::string GetTableName();

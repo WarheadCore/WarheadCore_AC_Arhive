@@ -25,7 +25,7 @@
 #include "QueryResult.h"
 #include "StartProcess.h"
 #include "UpdateFetcher.h"
-#include <boost/filesystem/operations.hpp>
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 
@@ -39,7 +39,8 @@ std::string DBUpdaterUtil::GetCorrectedMySQLExecutable()
 
 bool DBUpdaterUtil::CheckExecutable()
 {
-    boost::filesystem::path exe(GetCorrectedMySQLExecutable());
+    std::filesystem::path exe(GetCorrectedMySQLExecutable());
+
     if (!exists(exe))
     {
         exe = Warhead::SearchExecutableInPath("mysql");
@@ -55,6 +56,7 @@ bool DBUpdaterUtil::CheckExecutable()
 
         return false;
     }
+
     return true;
 }
 
@@ -175,6 +177,7 @@ bool DBUpdater<T>::Create(DatabaseWorkerPool<T>& pool)
 
     std::string answer;
     std::getline(std::cin, answer);
+
     if (!sConfigMgr->isDryRun() && !answer.empty() && !(answer.substr(0, 1) == "y"))
         return false;
 
@@ -203,13 +206,13 @@ bool DBUpdater<T>::Create(DatabaseWorkerPool<T>& pool)
     catch (UpdateException&)
     {
         LOG_FATAL("sql.updates", "Failed to create database %s! Does the user (named in *.conf) have `CREATE`, `ALTER`, `DROP`, `INSERT` and `DELETE` privileges on the MySQL server?", pool.GetConnectionInfo()->database.c_str());
-        boost::filesystem::remove(temp);
+        std::filesystem::remove(temp);
         return false;
     }
 
     LOG_INFO("sql.updates", "Done.");
     LOG_INFO("sql.updates", "");
-    boost::filesystem::remove(temp);
+    std::filesystem::remove(temp);
     return true;
 }
 
@@ -278,7 +281,7 @@ bool DBUpdater<T>::Populate(DatabaseWorkerPool<T>& pool)
     std::string const DirPathStr = DBUpdater<T>::GetBaseFilesDirectory();
 
     Path const DirPath(DirPathStr);
-    if (!boost::filesystem::is_directory(DirPath))
+    if (!std::filesystem::is_directory(DirPath))
     {
         LOG_ERROR("sql.updates", ">> Directory \"%s\" not exist", DirPath.generic_string().c_str());
         return false;
@@ -290,10 +293,10 @@ bool DBUpdater<T>::Populate(DatabaseWorkerPool<T>& pool)
         return false;
     }
 
-    boost::filesystem::directory_iterator const DirItr;
+    std::filesystem::directory_iterator const DirItr;
     uint32 FilesCount = 0;
 
-    for (boost::filesystem::directory_iterator itr(DirPath); itr != DirItr; ++itr)
+    for (std::filesystem::directory_iterator itr(DirPath); itr != DirItr; ++itr)
     {
         if (itr->path().extension() == ".sql")
             FilesCount++;
@@ -305,7 +308,7 @@ bool DBUpdater<T>::Populate(DatabaseWorkerPool<T>& pool)
         return false;
     }
 
-    for (boost::filesystem::directory_iterator itr(DirPath); itr != DirItr; ++itr)
+    for (std::filesystem::directory_iterator itr(DirPath); itr != DirItr; ++itr)
     {
         if (itr->path().extension() != ".sql")
             continue;
@@ -395,12 +398,7 @@ void DBUpdater<T>::ApplyFile(DatabaseWorkerPool<T>& pool, std::string const& hos
 
     if (ret != EXIT_SUCCESS)
     {
-        LOG_FATAL("sql.updates", "Applying of file \'%s\' to database \'%s\' failed!" \
-                  /*" If you are a user, please pull the latest revision from the repository. "
-                  "Also make sure you have not applied any of the databases with your sql client. "
-                  "You cannot use auto-update system and import sql files from TrinityCore repository with your sql client. "
-                  "If you are a developer, please fix your sql query."*/,
-                  path.generic_string().c_str(), pool.GetConnectionInfo()->database.c_str());
+        LOG_FATAL("sql.updates", "Applying of file \'%s\' to database \'%s\' failed!", path.generic_string().c_str(), pool.GetConnectionInfo()->database.c_str());
 
         throw UpdateException("update failed");
     }

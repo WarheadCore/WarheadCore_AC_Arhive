@@ -23,11 +23,10 @@
 #include "QueryResult.h"
 #include "Tokenize.h"
 #include "SHA1.h"
-#include <boost/filesystem/operations.hpp>
 #include <fstream>
 #include <sstream>
 
-using namespace boost::filesystem;
+using namespace std::filesystem;
 
 struct UpdateFetcher::DirectoryEntry
 {
@@ -54,6 +53,7 @@ UpdateFetcher::LocaleFileStorage UpdateFetcher::GetFileList() const
 {
     LocaleFileStorage files;
     DirectoryStorage directories = ReceiveIncludedDirectories();
+
     for (auto const& entry : directories)
         FillFileListRecursively(entry.path, files, entry.state, 1);
 
