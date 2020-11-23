@@ -37,7 +37,7 @@ else()
   set(BOOST_REQUIRED_VERSION 1.67)
 endif()
 
-find_package(Boost ${BOOST_REQUIRED_VERSION} REQUIRED system filesystem program_options iostreams regex)
+find_package(Boost ${BOOST_REQUIRED_VERSION} REQUIRED system program_options iostreams regex)
 
 add_library(boost INTERFACE)
 
@@ -58,13 +58,3 @@ target_compile_definitions(boost
     -DBOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE
     -DBOOST_ASIO_NO_DEPRECATED
     -DBOOST_SYSTEM_USE_UTF8)
-
-if (NOT boost_filesystem_copy_links_without_NO_SCOPED_ENUM)
-  target_compile_definitions(boost
-    INTERFACE
-      -DBOOST_NO_CXX11_SCOPED_ENUMS)
-endif()
-
-target_compile_definitions(boost
-  INTERFACE
-    -DTC_HAS_BROKEN_WSTRING_REGEX)

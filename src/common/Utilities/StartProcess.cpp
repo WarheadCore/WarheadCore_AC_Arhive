@@ -22,6 +22,7 @@
 #include <boost/iostreams/copy.hpp>
 #include <boost/process.hpp>
 #include <optional>
+#include <filesystem>
 
 using namespace boost::process;
 using namespace boost::process::initializers;
@@ -29,7 +30,6 @@ using namespace boost::iostreams;
 
 namespace Warhead
 {
-
     template<typename T>
     class TCLogSink
     {
@@ -82,7 +82,7 @@ namespace Warhead
                 inputSource = file_descriptor_source(input);
 
                 // With binding stdin
-                return execute(run_exe(boost::filesystem::absolute(executable)),
+                return execute(run_exe(std::filesystem::absolute(executable).generic_string()),
                                set_args(args),
                                inherit_env(),
                                bind_stdin(*inputSource),
@@ -92,7 +92,7 @@ namespace Warhead
             else
             {
                 // Without binding stdin
-                return execute(run_exe(boost::filesystem::absolute(executable)),
+                return execute(run_exe(std::filesystem::absolute(executable).generic_string()),
                                set_args(args),
                                inherit_env(),
                                bind_stdout(file_descriptor_sink(outPipe.sink, close_handle)),
