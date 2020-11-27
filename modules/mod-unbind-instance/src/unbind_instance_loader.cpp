@@ -24,7 +24,7 @@ void AddSC_UnbindInstance();
 // Add all
 void AddUnbindInstanceScripts()
 {
-   AddSC_UnbindInstance();
+    AddSC_UnbindInstance();
 }
 
 #endif /* _UNBIND_INSTANCE_LOADER_H_ */

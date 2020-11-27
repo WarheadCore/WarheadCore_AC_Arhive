@@ -42,28 +42,28 @@ namespace
         {
             switch (diff)
             {
-            case RAID_DIFFICULTY_10MAN_NORMAL:
-                return "10 об.";
-            case RAID_DIFFICULTY_25MAN_NORMAL:
-                return "25 об.";
-            case RAID_DIFFICULTY_10MAN_HEROIC:
-                return "10 гер.";
-            case RAID_DIFFICULTY_25MAN_HEROIC:
-                return "25 гер.";
-            default:
-                break;
+                case RAID_DIFFICULTY_10MAN_NORMAL:
+                    return "10 об.";
+                case RAID_DIFFICULTY_25MAN_NORMAL:
+                    return "25 об.";
+                case RAID_DIFFICULTY_10MAN_HEROIC:
+                    return "10 гер.";
+                case RAID_DIFFICULTY_25MAN_HEROIC:
+                    return "25 гер.";
+                default:
+                    break;
             }
         }
         else // if dungeon
         {
             switch (diff)
             {
-            case DUNGEON_DIFFICULTY_NORMAL:
-                return "5 об.";
-            case DUNGEON_DIFFICULTY_HEROIC:
-                return "5 гер.";
-            default:
-                break;
+                case DUNGEON_DIFFICULTY_NORMAL:
+                    return "5 об.";
+                case DUNGEON_DIFFICULTY_HEROIC:
+                    return "5 гер.";
+                default:
+                    break;
             }
         }
 
@@ -146,30 +146,30 @@ namespace
 
         switch (itemTemplate->Quality)
         {
-        case 0:
-            color = "cff9d9d9d";
-            break;
-        case 1:
-            color = "cffffffff";
-            break;
-        case 2:
-            color = "cff1eff00";
-            break;
-        case 3:
-            color = "cff0070dd";
-            break;
-        case 4:
-            color = "cffa335ee";
-            break;
-        case 5:
-            color = "cffff8000";
-            break;
-        case 6:
-        case 7:
-            color = "cffe6cc80";
-            break;
-        default:
-            break;
+            case 0:
+                color = "cff9d9d9d";
+                break;
+            case 1:
+                color = "cffffffff";
+                break;
+            case 2:
+                color = "cff1eff00";
+                break;
+            case 3:
+                color = "cff0070dd";
+                break;
+            case 4:
+                color = "cffa335ee";
+                break;
+            case 5:
+                color = "cffff8000";
+                break;
+            case 6:
+            case 7:
+                color = "cffe6cc80";
+                break;
+            default:
+                break;
         }
 
         return Warhead::StringFormat("|%s|Hitem:%u:0:0:0:0:0:0:0:0|h[%s]|h|r", color.c_str(), itemID, name.c_str());
@@ -198,13 +198,13 @@ void UnbindInstance::LoadCostData()
         return;
 
     QueryResult result = CharacterDatabase.Query("SELECT "
-        "`ItemID`,"                 // 0
-        "`CountForDungeonHeroic`,"  // 1
-        "`CountForRaid10Normal`,"   // 2
-        "`CountForRaid25Normal`,"   // 3
-        "`CountForRaid10Heroic`, "  // 4
-        "`CountForRaid25Heroic` "   // 5
-        "FROM `unbind_instance_cost`");
+                         "`ItemID`,"                 // 0
+                         "`CountForDungeonHeroic`,"  // 1
+                         "`CountForRaid10Normal`,"   // 2
+                         "`CountForRaid25Normal`,"   // 3
+                         "`CountForRaid10Heroic`, "  // 4
+                         "`CountForRaid25Heroic` "   // 5
+                         "FROM `unbind_instance_cost`");
 
     if (!result)
     {
@@ -228,7 +228,7 @@ void UnbindInstance::LoadCostData()
     {
         for (auto const& count : listCount)
             return count ? true : false;
-       
+
         return false;
     };
 
@@ -327,9 +327,9 @@ void UnbindInstance::BindInfo(Player* player, Creature* creature, uint32 sender,
     ClearGossipMenuFor(player);
 
     uint32 mapID = action;
-    
+
     auto diff = static_cast<Difficulty>(sender - GOSSIP_SENDER_DIFFICULTY);
-    
+
     auto const save = sInstanceSaveMgr->PlayerGetInstanceSave(player->GetGUIDLow(), mapID, diff);
     if (!save)
     {
@@ -347,7 +347,7 @@ void UnbindInstance::BindInfo(Player* player, Creature* creature, uint32 sender,
     AddGossipItemFor(player, GOSSIP_ICON_CHAT, Warhead::StringFormat("- %s (%s)", mapName.c_str(), diffName.c_str()), sender, action);
     AddGossipItemFor(player, GOSSIP_ICON_CHAT, "--", sender, action);
     AddGossipItemFor(player, GOSSIP_ICON_CHAT, Warhead::StringFormat("# Варианты сброса сохранения"), sender, action);
-    
+
     auto GetCostCount = [&](uint32 itemID) -> uint32
     {
         auto const& itr = _costStore.find(itemID);
@@ -360,28 +360,28 @@ void UnbindInstance::BindInfo(Player* player, Creature* creature, uint32 sender,
         {
             switch (diff)
             {
-            case RAID_DIFFICULTY_10MAN_NORMAL:
-                return uiCostsStore.CountForRaid10Normal;
-            case RAID_DIFFICULTY_25MAN_NORMAL:
-                return uiCostsStore.CountForRaid25Normal;
-            case RAID_DIFFICULTY_10MAN_HEROIC:
-                return uiCostsStore.CountForRaid10Heroic;
-            case RAID_DIFFICULTY_25MAN_HEROIC:
-                return uiCostsStore.CountForRaid25Heroic;
-            default:
-                LOG_FATAL("module.unbind", "> UI: Incorrect diff for raid (%d)", sender - GOSSIP_SENDER_DIFFICULTY);
-                break;
+                case RAID_DIFFICULTY_10MAN_NORMAL:
+                    return uiCostsStore.CountForRaid10Normal;
+                case RAID_DIFFICULTY_25MAN_NORMAL:
+                    return uiCostsStore.CountForRaid25Normal;
+                case RAID_DIFFICULTY_10MAN_HEROIC:
+                    return uiCostsStore.CountForRaid10Heroic;
+                case RAID_DIFFICULTY_25MAN_HEROIC:
+                    return uiCostsStore.CountForRaid25Heroic;
+                default:
+                    LOG_FATAL("module.unbind", "> UI: Incorrect diff for raid (%d)", sender - GOSSIP_SENDER_DIFFICULTY);
+                    break;
             }
         }
         else // if dungeon
         {
             switch (diff)
             {
-            case DUNGEON_DIFFICULTY_HEROIC:
-                return uiCostsStore.CountForDungeonHeroic;
-            default:
-                LOG_FATAL("module.unbind", "> UI: Incorrect diff for dungeon (%d)", sender - GOSSIP_SENDER_DIFFICULTY);
-                break;
+                case DUNGEON_DIFFICULTY_HEROIC:
+                    return uiCostsStore.CountForDungeonHeroic;
+                default:
+                    LOG_FATAL("module.unbind", "> UI: Incorrect diff for dungeon (%d)", sender - GOSSIP_SENDER_DIFFICULTY);
+                    break;
             }
         }
 
@@ -427,28 +427,28 @@ void UnbindInstance::Unbind(Player* player, Creature* creature, uint32 sender, u
         {
             switch (diff)
             {
-            case RAID_DIFFICULTY_10MAN_NORMAL:
-                return uiCostsStore.CountForRaid10Normal;
-            case RAID_DIFFICULTY_25MAN_NORMAL:
-                return uiCostsStore.CountForRaid25Normal;
-            case RAID_DIFFICULTY_10MAN_HEROIC:
-                return uiCostsStore.CountForRaid10Heroic;
-            case RAID_DIFFICULTY_25MAN_HEROIC:
-                return uiCostsStore.CountForRaid25Heroic;
-            default:
-                LOG_FATAL("module.unbind", "> UI: Incorrect diff for raid (%d)", sender - GOSSIP_SENDER_DIFFICULTY);
-                break;
+                case RAID_DIFFICULTY_10MAN_NORMAL:
+                    return uiCostsStore.CountForRaid10Normal;
+                case RAID_DIFFICULTY_25MAN_NORMAL:
+                    return uiCostsStore.CountForRaid25Normal;
+                case RAID_DIFFICULTY_10MAN_HEROIC:
+                    return uiCostsStore.CountForRaid10Heroic;
+                case RAID_DIFFICULTY_25MAN_HEROIC:
+                    return uiCostsStore.CountForRaid25Heroic;
+                default:
+                    LOG_FATAL("module.unbind", "> UI: Incorrect diff for raid (%d)", sender - GOSSIP_SENDER_DIFFICULTY);
+                    break;
             }
         }
         else // if dungeon
         {
             switch (diff)
             {
-            case DUNGEON_DIFFICULTY_HEROIC:
-                return uiCostsStore.CountForDungeonHeroic;
-            default:
-                LOG_FATAL("module.unbind", "> UI: Incorrect diff for dungeon (%d)", sender - GOSSIP_SENDER_DIFFICULTY);
-                break;
+                case DUNGEON_DIFFICULTY_HEROIC:
+                    return uiCostsStore.CountForDungeonHeroic;
+                default:
+                    LOG_FATAL("module.unbind", "> UI: Incorrect diff for dungeon (%d)", sender - GOSSIP_SENDER_DIFFICULTY);
+                    break;
             }
         }
 
