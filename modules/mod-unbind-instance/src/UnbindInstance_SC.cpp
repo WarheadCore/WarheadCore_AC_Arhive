@@ -70,32 +70,7 @@ public:
             break;
         default:
             break;
-        }        
-
-        /*uint32 diff = 2;
-        if (action == GOSSIP_ACTION_INFO_DEF + 1)
-        {
-            if (!sConfigMgr->GetBoolDefault("instanceReset.NormalModeOnly", false))
-                diff = MAX_DIFFICULTY;
-
-            for (uint8 i = 0; i < diff; ++i)
-            {
-                BoundInstancesMap const& m_boundInstances = sInstanceSaveMgr->PlayerGetBoundInstances(player->GetGUIDLow(), Difficulty(i));
-                for (BoundInstancesMap::const_iterator itr = m_boundInstances.begin(); itr != m_boundInstances.end();)
-                {
-                    if (itr->first != player->GetMapId())
-                    {
-                        sInstanceSaveMgr->PlayerUnbindInstance(player->GetGUIDLow(), itr->first, Difficulty(i), true, player);
-                        itr = m_boundInstances.begin();
-                    }
-                    else
-                        ++itr;
-                }
-            }
-
-            creature->MonsterWhisper("Your instances have been reset.", player);
-            CloseGossipMenuFor(player);
-        }*/
+        }
 
         return true;
     }
