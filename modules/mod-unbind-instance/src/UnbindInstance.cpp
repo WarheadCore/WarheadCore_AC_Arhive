@@ -252,7 +252,6 @@ void UnbindInstance::LoadCostData()
             continue;
 
         _costStore.insert(std::make_pair(_UIData.ItemID, _UIData));
-
     } while (result->NextRow());
 
     LOG_INFO("module.unbind", ">> Загружено %u вариантов за %u мс", static_cast<uint32>(_costStore.size()), GetMSTimeDiffToNow(oldMSTime));
