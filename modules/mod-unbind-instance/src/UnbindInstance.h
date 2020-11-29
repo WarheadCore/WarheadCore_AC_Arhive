@@ -43,6 +43,7 @@ public:
     void SendBindList(Player* player, Creature* creature, uint8 diff, bool isRaid = true);
     void BindInfo(Player* player, Creature* creature, uint32 sender, uint32 action);
     void Unbind(Player* player, Creature* creature, uint32 sender, uint32 action, uint32 itemID);
+    void SaveLogUnbind(Player* player, uint32 mapID, uint8 diff, uint32 itemID, bool isRaid = true);
 
 private:
     struct UnbindCost

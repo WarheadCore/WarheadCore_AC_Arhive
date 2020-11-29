@@ -295,7 +295,6 @@ void UnbindInstance::SendBindList(Player* player, Creature* creature, uint8 diff
     if (boundMap.empty())
     {
         SendGossipHello(player, creature);
-        LOG_INFO("server", "SendBindList()");
         return;
     }
 
@@ -333,7 +332,6 @@ void UnbindInstance::BindInfo(Player* player, Creature* creature, uint32 sender,
     if (!save)
     {
         SendGossipHello(player, creature);
-        LOG_INFO("server", "BindInfo()");
         return;
     }
 
@@ -392,9 +390,10 @@ void UnbindInstance::BindInfo(Player* player, Creature* creature, uint32 sender,
         uint32 itemID = uiCost.first;
         std::string itemlink = ::GetItemLink(itemID, localeIndex);
         uint32 itemCount = GetCostCount(itemID);
-        AddGossipItemFor(player, GOSSIP_ICON_CHAT, Warhead::StringFormat("%u. %s (%u) шт.", itemID, itemlink.c_str(), itemCount), sender, action, "Введите номер предмета", 0, true);
+        AddGossipItemFor(player, GOSSIP_ICON_CHAT, Warhead::StringFormat("%u. %s (%u) шт.", itemID, itemlink.c_str(), itemCount), sender, action);
     }
 
+    AddGossipItemFor(player, GOSSIP_ICON_CHAT, "-- Удалить сохранение (выбрать предмет)", sender, action, "Введите номер предмета", 0, true);
     AddGossipItemFor(player, GOSSIP_ICON_CHAT, "<< В главное меню", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_MAIN_MENU);
     SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, creature);
 }
@@ -462,6 +461,13 @@ void UnbindInstance::Unbind(Player* player, Creature* creature, uint32 sender, u
     std::string const& mapName = ::GetMapName(mapID, localeIndex);
     std::string const& diffName = ::GetDiffName(diff, isRaidDiff);
 
+    if (!itemCount)
+    {
+        handler.PSendSysMessage("|cFFFF0000#|cff6C8CD5 Вы не можете удалить сохранение за|r %s", itemLink.c_str());
+        BindInfo(player, creature, sender, action);
+        return;
+    }
+
     if (player->GetMapId() == mapID)
     {
         handler.PSendSysMessage("|cFFFF0000#|cff6C8CD5 Вы не можете удалить сохранение находясь здесь|r %s (%s)", mapName.c_str(), diffName.c_str());
@@ -479,6 +485,20 @@ void UnbindInstance::Unbind(Player* player, Creature* creature, uint32 sender, u
     player->DestroyItemCount(itemID, itemCount, true);
     handler.PSendSysMessage("|cFFFF0000#|cff6C8CD5 Удалено сохранение:|r %s (%s)", mapName.c_str(), diffName.c_str());
     sInstanceSaveMgr->PlayerUnbindInstance(player->GetGUIDLow(), mapID, diff, true, player);
+    SaveLogUnbind(player, mapID, sender - GOSSIP_SENDER_DIFFICULTY, itemID, isRaidDiff);
 
     SendGossipHello(player, creature);
+}
+
+void UnbindInstance::SaveLogUnbind(Player* player, uint32 mapID, uint8 diff, uint32 itemID, bool isRaid /*= true*/)
+{
+    uint32 lowGuid = player->GetGUIDLow();
+    std::string const& itemName = ::GetItemLocale(itemID, 8);
+    std::string const& mapName = ::GetMapName(mapID, 8);
+    std::string const& diffName = ::GetDiffName(static_cast<Difficulty>(diff), isRaid);
+
+    std::string const& info = Warhead::StringFormat("%s (%s). %s. %s", mapName.c_str(), diffName.c_str(), player->GetName().c_str(), itemName.c_str());
+
+    CharacterDatabase.PExecute("INSERT INTO `unbind_instance_logs`(`Info`, `PlayerGuid`, `MapID`, `Difficulty`, `ItemID`) VALUES ('%s', %u, %u, %u, %u)",
+        info.c_str(), lowGuid, mapID, diff, itemID);
 }
