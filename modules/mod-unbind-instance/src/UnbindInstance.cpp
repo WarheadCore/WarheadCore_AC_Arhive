@@ -271,16 +271,16 @@ void UnbindInstance::SendGossipHello(Player* player, Creature* creature)
         AddGossipItemFor(player, GOSSIP_ICON_CHAT, Warhead::StringFormat("[%u] Героические подземелья", ::GetCountInstanceBind(guidLow, DUNGEON_DIFFICULTY_HEROIC, false)), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DUNGEON_HEROIC);
 
     if (::IsExistBindDifficulty(guidLow, RAID_DIFFICULTY_10MAN_NORMAL))
-        AddGossipItemFor(player, GOSSIP_ICON_CHAT, Warhead::StringFormat("[%u] Рейды 10 об", ::GetCountInstanceBind(guidLow, RAID_DIFFICULTY_10MAN_NORMAL)), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_RAID_10_NORMAL);
+        AddGossipItemFor(player, GOSSIP_ICON_CHAT, Warhead::StringFormat("[%u] Рейды 10 об.", ::GetCountInstanceBind(guidLow, RAID_DIFFICULTY_10MAN_NORMAL)), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_RAID_10_NORMAL);
 
     if (::IsExistBindDifficulty(guidLow, RAID_DIFFICULTY_25MAN_NORMAL))
-        AddGossipItemFor(player, GOSSIP_ICON_CHAT, Warhead::StringFormat("[%u] Рейды 25 об", ::GetCountInstanceBind(guidLow, RAID_DIFFICULTY_25MAN_NORMAL)), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_RAID_25_NORMAL);
+        AddGossipItemFor(player, GOSSIP_ICON_CHAT, Warhead::StringFormat("[%u] Рейды 25 об.", ::GetCountInstanceBind(guidLow, RAID_DIFFICULTY_25MAN_NORMAL)), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_RAID_25_NORMAL);
 
     if (::IsExistBindDifficulty(guidLow, RAID_DIFFICULTY_10MAN_HEROIC))
-        AddGossipItemFor(player, GOSSIP_ICON_CHAT, Warhead::StringFormat("[%u] Рейды 10 об", ::GetCountInstanceBind(guidLow, RAID_DIFFICULTY_10MAN_HEROIC)), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_RAID_10_HEROIC);
+        AddGossipItemFor(player, GOSSIP_ICON_CHAT, Warhead::StringFormat("[%u] Рейды 10 гер.", ::GetCountInstanceBind(guidLow, RAID_DIFFICULTY_10MAN_HEROIC)), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_RAID_10_HEROIC);
 
     if (::IsExistBindDifficulty(guidLow, RAID_DIFFICULTY_25MAN_HEROIC))
-        AddGossipItemFor(player, GOSSIP_ICON_CHAT, Warhead::StringFormat("[%u] Рейды 25 об", ::GetCountInstanceBind(guidLow, RAID_DIFFICULTY_25MAN_HEROIC)), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_RAID_25_HEROIC);
+        AddGossipItemFor(player, GOSSIP_ICON_CHAT, Warhead::StringFormat("[%u] Рейды 25 гер.", ::GetCountInstanceBind(guidLow, RAID_DIFFICULTY_25MAN_HEROIC)), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_RAID_25_HEROIC);
 
     SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, creature->GetGUID());
 }
