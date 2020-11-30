@@ -580,31 +580,6 @@ void WorldSession::HandleCharacterAuraFrozen(PreparedQueryResult result)
     } while (result->NextRow());
 }
 
-void WorldSession::HandleDelIgnoreOpcode(WorldPacket& recv_data)
-{
-    uint64 IgnoreGUID;
-
-    LOG_DEBUG("network", "WORLD: Received CMSG_DEL_IGNORE");
-
-    recv_data >> IgnoreGUID;
-
-    _player->GetSocial()->RemoveFromSocialList(GUID_LOPART(IgnoreGUID), SOCIAL_FLAG_IGNORED);
-
-    sSocialMgr->SendFriendStatus(GetPlayer(), FRIEND_IGNORE_REMOVED, GUID_LOPART(IgnoreGUID), false);
-
-    LOG_DEBUG("network", "WORLD: Sent motd (SMSG_FRIEND_STATUS)");
-}
-
-void WorldSession::HandleSetContactNotesOpcode(WorldPacket& recv_data)
-{
-    LOG_DEBUG("network", "CMSG_SET_CONTACT_NOTES");
-
-    uint64 guid;
-    std::string note;
-    recv_data >> guid >> note;
-    _player->GetSocial()->SetFriendNote(GUID_LOPART(guid), note);
-}
-
 void WorldSession::HandleBugOpcode(WorldPacket& recv_data)
 {
     uint32 suggestion, contentlen, typelen;

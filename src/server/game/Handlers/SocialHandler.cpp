@@ -144,3 +144,20 @@ void WorldSession::HandleAddIgnoreOpcode(WorldPacket& recv_data)
 
     LOG_DEBUG("network", "WORLD: Sent (SMSG_FRIEND_STATUS)");
 }
+
+void WorldSession::HandleDelIgnoreOpcode(WorldPacket& recv_data)
+{
+    uint64 IgnoreGUID;
+    recv_data >> IgnoreGUID;
+
+    _player->GetSocial()->RemoveFromSocialList(GUID_LOPART(IgnoreGUID), SOCIAL_FLAG_IGNORED);
+    sSocialMgr->SendFriendStatus(GetPlayer(), FRIEND_IGNORE_REMOVED, GUID_LOPART(IgnoreGUID), false);
+}
+
+void WorldSession::HandleSetContactNotesOpcode(WorldPacket& recv_data)
+{
+    uint64 guid;
+    std::string note;
+    recv_data >> guid >> note;
+    _player->GetSocial()->SetFriendNote(GUID_LOPART(guid), note);
+}
