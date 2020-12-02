@@ -43,20 +43,21 @@ public:
             return false;
 
         uint8 playerLevel = player->getLevel();
-        if (playerLevel >= CONF_GET_INT("MaxPlayerLevel"))
-        {
+        uint32 maxLevel = CONF_GET_INT("MaxPlayerLevel");
+
+        if (playerLevel >= maxLevel)
             sModuleLocale->SendPlayerMessage(player, MODULE_NAME, ILU_LOCALE_MAX_LEVEL, playerLevel);
-            return false;
+        else if (playerLevel < maxLevel)
+        {
+            uint8 configLevel = static_cast<uint8>(CONF_GET_INT("ILU.LevelUP"));
+            uint8 newLevel = !configLevel ? CONF_GET_INT("MaxPlayerLevel") : configLevel;
+
+            player->GiveLevel(newLevel);
+            player->SetUInt32Value(PLAYER_XP, 0);
+            player->DestroyItemCount(item->GetEntry(), 1, true);
+
+            sModuleLocale->SendPlayerMessage(player, MODULE_NAME, ILU_LOCALE_GET_LEVEL, newLevel);
         }
-
-        uint8 configLevel = static_cast<uint8>(CONF_GET_INT("ILU.LevelUP"));
-        uint8 newLevel = !configLevel ? CONF_GET_INT("MaxPlayerLevel") : configLevel;
-
-        player->GiveLevel(newLevel);
-        player->SetUInt32Value(PLAYER_XP, 0);
-        player->DestroyItemCount(item->GetEntry(), 1, true);
-
-        sModuleLocale->SendPlayerMessage(player, MODULE_NAME, ILU_LOCALE_GET_LEVEL, newLevel);
 
         if (CONF_GET_BOOL("ILU.SetMaxSkills.Enable"))
             SetMaxWeaponSkills(player);
