@@ -50,3 +50,12 @@ ILU.LevelUP = 0
 
 ILU.Teleport.Enable = 1
 ILU.Teleport.Location = "571 5811.411 646.514 647.422 0.962198"
+
+#
+#    ILU.SetMaxSkills.Enable
+#        Enable set skills to max level
+#        Default: 0 (disabled)
+#                 1 (enabled)
+#
+
+ILU.SetMaxSkills.Enable = 1

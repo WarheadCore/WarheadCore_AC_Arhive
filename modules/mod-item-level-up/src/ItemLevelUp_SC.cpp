@@ -58,6 +58,9 @@ public:
 
         sModuleLocale->SendPlayerMessage(player, MODULE_NAME, ILU_LOCALE_GET_LEVEL, newLevel);
 
+        if (CONF_GET_BOOL("ILU.SetMaxSkills.Enable"))
+            SetMaxWeaponSkills(player);
+
         if (CONF_GET_BOOL("ILU.Teleport.Enable"))
             PlayerTeleport(player);
 
@@ -84,9 +87,60 @@ private:
         float posZ = *Warhead::StringTo<float>(tokens[3]);
         float orientation = *Warhead::StringTo<float>(tokens[4]);
 
-        LOG_INFO("server", "%u, %f, %f, %f, %f", mapID, posX, posY, posZ, orientation);
-
         player->TeleportTo(WorldLocation(mapID, posX, posY, posZ, orientation));
+    }
+
+    void SetMaxWeaponSkills(Player* player)
+    {
+        auto LearnWeaponSkill = [&](std::initializer_list<uint32> spellList)
+        {
+            for (auto const& spellID : spellList)
+            {
+                if (player->HasSpell(spellID))
+                    continue;
+
+                player->learnSpell(spellID);
+            }
+        };
+
+        switch (player->getClass())
+        {
+        case CLASS_WARRIOR:
+            LearnWeaponSkill({ 1180, 196, 201, 198, 197, 202, 199, 200, 227, 2567, 5011, 264 });
+            break;
+        case CLASS_PALADIN:
+            LearnWeaponSkill({ 196, 201, 198, 197, 202, 199, 200 });
+            break;
+        case CLASS_HUNTER:
+            LearnWeaponSkill({ 1180, 196, 201, 197, 202, 200, 227, 2567, 5011, 264 });
+            break;
+        case CLASS_ROGUE:
+            LearnWeaponSkill({ 196, 201, 198, 2567, 5011, 264 });
+            break;
+        case CLASS_PRIEST:
+            LearnWeaponSkill({ 1180, 198, 227, 5009 });
+            break;
+        case CLASS_DEATH_KNIGHT:
+            LearnWeaponSkill({ 196, 201, 198, 197, 202, 199, 200 });
+            break;
+        case CLASS_SHAMAN:
+            LearnWeaponSkill({ 1180, 196, 198, 197, 199, 227 });
+            break;
+        case CLASS_MAGE:
+            LearnWeaponSkill({ 1180, 201, 227, 5009 });
+            break;
+        case CLASS_WARLOCK:
+            LearnWeaponSkill({ 1180, 201, 227, 5009 });
+            break;
+        case CLASS_DRUID:
+            LearnWeaponSkill({ 198, 199, 200, 227 });
+            break;
+        default:
+            break;
+        }
+
+        player->SaveToDB(false, false);
+        player->UpdateSkillsToMaxSkillsForLevel();
     }
 };
 
@@ -99,6 +153,7 @@ public:
     {
         sGameConfig->AddBoolConfig("ILU.Enable");
         sGameConfig->AddBoolConfig("ILU.Teleport.Enable");
+        sGameConfig->AddBoolConfig("ILU.SetMaxSkills.Enable");
         sGameConfig->AddIntConfig("ILU.LevelUP");
         sGameConfig->AddStringConfig("ILU.Teleport.Location");
     }
