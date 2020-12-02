@@ -19,6 +19,8 @@
 #include "GameConfig.h"
 #include "Player.h"
 #include "ModuleLocale.h"
+#include "Tokenize.h"
+#include "StringConvert.h"
 
 enum StringLocales : uint8
 {
@@ -56,7 +58,35 @@ public:
 
         sModuleLocale->SendPlayerMessage(player, MODULE_NAME, ILU_LOCALE_GET_LEVEL, newLevel);
 
+        if (CONF_GET_BOOL("ILU.Teleport.Enable"))
+            PlayerTeleport(player);
+
         return true;
+    }
+
+private:
+    void PlayerTeleport(Player* player)
+    {
+        if (!player)
+            return;
+
+        std::string const& locationInfo = CONF_GET_STR("ILU.Teleport.Location");
+
+        std::vector<std::string_view> tokens = Warhead::Tokenize(locationInfo, ' ', false);
+
+        // If invalid - skip
+        if (tokens.size() != 5)
+            return;
+
+        uint32 mapID = *Warhead::StringTo<uint32>(tokens[0]);
+        float posX = *Warhead::StringTo<float>(tokens[1]);
+        float posY = *Warhead::StringTo<float>(tokens[2]);
+        float posZ = *Warhead::StringTo<float>(tokens[3]);
+        float orientation = *Warhead::StringTo<float>(tokens[4]);
+
+        LOG_INFO("server", "%u, %f, %f, %f, %f", mapID, posX, posY, posZ, orientation);
+
+        player->TeleportTo(WorldLocation(mapID, posX, posY, posZ, orientation));
     }
 };
 
@@ -68,7 +98,9 @@ public:
     void OnAfterConfigLoad(bool /*reload*/) override
     {
         sGameConfig->AddBoolConfig("ILU.Enable");
+        sGameConfig->AddBoolConfig("ILU.Teleport.Enable");
         sGameConfig->AddIntConfig("ILU.LevelUP");
+        sGameConfig->AddStringConfig("ILU.Teleport.Location");
     }
 
     void OnStartup() override
