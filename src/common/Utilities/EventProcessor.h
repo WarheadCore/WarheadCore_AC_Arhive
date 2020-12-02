@@ -19,7 +19,7 @@
 #define __EVENTPROCESSOR_H
 
 #include "Define.h"
-
+#include "Duration.h"
 #include <map>
 
 class EventProcessor;

@@ -1,0 +1,67 @@
+#
+# This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+#
+# This file is free software; as a special exception the author gives
+# unlimited permission to copy and/or distribute it, with or without
+# modifications, as long as this notice is preserved.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# User has manually chosen to ignore the git-tests, so throw them a warning.
+# This is done EACH compile so they can be alerted about the consequences.
+#
+
+########################################
+# ArenaReward module configuration
+########################################
+[worldserver]
+
+#
+#    ArenaReward.Enable
+#        Description: Enable system arena reward.
+#        Default: 0
+#
+
+ArenaReward.Enable = 0
+
+#
+#    ArenaReward.Reward.Rating.ItemID
+#        Description: Item for reward rating arena
+#        Default: 37711
+#
+#
+#    ArenaReward.Reward.Rating.ItemCount.WinnerTeam
+#        Description: Item count for reward rating arena
+#        Default: 3
+#
+#
+#    ArenaReward.Reward.Rating.ItemCount.LoserTeam
+#        Description: Item count for reward rating arena
+#        Default: 1
+#
+
+ArenaReward.Reward.Rating.ItemID = 37711
+ArenaReward.Reward.Rating.ItemCount.WinnerTeam = 3
+ArenaReward.Reward.Rating.ItemCount.LoserTeam = 1
+
+#
+#    ArenaReward.Reward.Skirmish.ItemID
+#        Description: Item for reward skirmish arena
+#        Default: 37711
+#
+#
+#    ArenaReward.Reward.Skirmish.ItemCount.WinnerTeam
+#        Description: Item count for reward skirmish arena
+#        Default: 3
+#
+#
+#    ArenaReward.Reward.Skirmish.ItemCount.LoserTeam
+#        Description: Item count for reward skirmish arena
+#        Default: 1
+#
+
+ArenaReward.Reward.Skirmish.ItemID = 37711
+ArenaReward.Reward.Skirmish.ItemCount.WinnerTeam = 3
+ArenaReward.Reward.Skirmish.ItemCount.LoserTeam = 1

@@ -99,6 +99,7 @@ local.properties
 # Add default WarheadCore modules
 !modules/mod-anti-ad
 !modules/mod-anticheat
+!modules/mod-arena-reward
 !modules/mod-bg-reward
 !modules/mod-boss-announcer
 !modules/mod-buff-command

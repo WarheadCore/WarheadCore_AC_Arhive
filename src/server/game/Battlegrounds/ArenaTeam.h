@@ -148,6 +148,7 @@ public:
     bool   Empty() const                  { return Members.empty(); }
     MemberList::iterator m_membersBegin() { return Members.begin(); }
     MemberList::iterator m_membersEnd()   { return Members.end(); }
+    MemberList& GetMembers()              { return Members; }
     bool IsMember(uint64 guid) const;
 
     ArenaTeamMember* GetMember(uint64 guid);

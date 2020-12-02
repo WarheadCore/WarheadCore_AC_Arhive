@@ -992,7 +992,7 @@ void BattlegroundQueue::SendMessageQueue(Player* leader, Battleground* bg, PvPDi
     uint32 qAlliance = GetPlayersCountInGroupsQueue(bracketId, BG_QUEUE_NORMAL_ALLIANCE);
 
     // Show queue status to player only (when joining battleground queue or Arena and arena world announcer is disabled)
-    if (sGameConfig->GetBoolConfig("QueueAnnouncer.PlayerOnly") || (bg->isArena() && !sGameConfig->GetBoolConfig("Arena.QueueAnnouncer.Enable")))
+    if (sGameConfig->GetBoolConfig("Battleground.QueueAnnouncer.PlayerOnly") || (bg->isArena() && !sGameConfig->GetBoolConfig("Arena.QueueAnnouncer.Enable")))
     {
         ChatHandler(leader->GetSession()).PSendSysMessage(LANG_BG_QUEUE_ANNOUNCE_SELF, bgName, q_min_level, q_max_level,
                 qAlliance, (MinPlayers > qAlliance) ? MinPlayers - qAlliance : (uint32)0, qHorde, (MinPlayers > qHorde) ? MinPlayers - qHorde : (uint32)0);
