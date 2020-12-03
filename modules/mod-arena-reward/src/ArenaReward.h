@@ -28,6 +28,12 @@ public:
     static ArenaReward* instance();
 
     void SendRewardArena(Battleground* bg, TeamId winnerTeamId);
+    
+private:
+    bool IsPossibleFarm(Battleground* bg, TeamId winnerTeamId);
+    bool CheckIP(Battleground* bg, TeamId winnerTeamId);
+    bool CheckEqipment(Battleground* bg, TeamId winnerTeamId);
+    bool CheckHealth(Battleground* bg, TeamId winnerTeamId);
 };
 
 #define sAR ArenaReward::instance()
