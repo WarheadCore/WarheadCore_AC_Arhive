@@ -47,6 +47,9 @@ public:
         if (!CONF_GET_BOOL("BossAnnouncer.Enable"))
             return;
 
+        if (creature->GetMaxHealth() <= 1000000)
+            return;
+
         if (!creature->isWorldBoss())
             return;
 
