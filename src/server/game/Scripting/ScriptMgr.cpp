@@ -317,7 +317,7 @@ void ScriptMgr::CreateAuraScripts(uint32 spellId, std::list<AuraScript*>& script
     }
 }
 
-void ScriptMgr::CreateSpellScriptLoaders(uint32 spellId, std::vector<std::pair<SpellScriptLoader*, SpellScriptsContainer::iterator> >& scriptVector)
+void ScriptMgr::CreateSpellScriptLoaders(uint32 spellId, std::vector<std::pair<SpellScriptLoader*, SpellScriptsContainer::iterator>>& scriptVector)
 {
     SpellScriptsBounds bounds = sObjectMgr->GetSpellScriptsBounds(spellId);
     scriptVector.reserve(std::distance(bounds.first, bounds.second));
@@ -2101,4 +2101,3 @@ template class ScriptRegistry<BGScript>;
 template class ScriptRegistry<SpellSC>;
 template class ScriptRegistry<AccountScript>;
 template class ScriptRegistry<GameEventScript>;
-

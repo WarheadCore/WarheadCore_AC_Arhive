@@ -1283,7 +1283,7 @@ public: /* SpellScriptLoader */
 
     void CreateSpellScripts(uint32 spellId, std::list<SpellScript*>& scriptVector);
     void CreateAuraScripts(uint32 spellId, std::list<AuraScript*>& scriptVector);
-    void CreateSpellScriptLoaders(uint32 spellId, std::vector<std::pair<SpellScriptLoader*, std::multimap<uint32, uint32>::iterator> >& scriptVector);
+    void CreateSpellScriptLoaders(uint32 spellId, std::vector<std::pair<SpellScriptLoader*, std::multimap<uint32, uint32>::iterator>>& scriptVector);
 
 public: /* ServerScript */
 

@@ -203,4 +203,3 @@ protected:
     ArenaTeamStats Stats;
 };
 #endif
-

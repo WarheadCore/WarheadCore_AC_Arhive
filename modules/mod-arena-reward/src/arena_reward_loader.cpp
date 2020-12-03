@@ -24,7 +24,7 @@ void AddSC_ArenaReward();
 // Add all
 void AddArenaRewardScripts()
 {
-   AddSC_ArenaReward();
+    AddSC_ArenaReward();
 }
 
 #endif /* _ARENA_REWARD_LOADER_H_ */

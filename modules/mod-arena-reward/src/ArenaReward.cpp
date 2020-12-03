@@ -62,30 +62,30 @@ namespace
 
         switch (itemTemplate->Quality)
         {
-        case 0:
-            color = "cff9d9d9d";
-            break;
-        case 1:
-            color = "cffffffff";
-            break;
-        case 2:
-            color = "cff1eff00";
-            break;
-        case 3:
-            color = "cff0070dd";
-            break;
-        case 4:
-            color = "cffa335ee";
-            break;
-        case 5:
-            color = "cffff8000";
-            break;
-        case 6:
-        case 7:
-            color = "cffe6cc80";
-            break;
-        default:
-            break;
+            case 0:
+                color = "cff9d9d9d";
+                break;
+            case 1:
+                color = "cffffffff";
+                break;
+            case 2:
+                color = "cff1eff00";
+                break;
+            case 3:
+                color = "cff0070dd";
+                break;
+            case 4:
+                color = "cffa335ee";
+                break;
+            case 5:
+                color = "cffff8000";
+                break;
+            case 6:
+            case 7:
+                color = "cffe6cc80";
+                break;
+            default:
+                break;
         }
 
         return Warhead::StringFormat("|%s|Hitem:%u:0:0:0:0:0:0:0:0|h[%s]|h|r", color.c_str(), itemID, name.c_str());
@@ -316,7 +316,7 @@ bool ArenaReward::CheckIP(Battleground* bg, TeamId winnerTeamId)
         }
     }
 
-    auto IsSameIPInDifferentTeams = [&](std::string const& targetIP)
+    auto IsSameIPInDifferentTeams = [&](std::string const & targetIP)
     {
         uint8 countWin = 0;
         uint8 countLose = 0;
@@ -377,7 +377,7 @@ bool ArenaReward::CheckEqipment(Battleground* bg, TeamId winnerTeamId)
 
     bool isRated = bg->isRated();
 
-    auto IsFullEquipment = [](Player* player)
+    auto IsFullEquipment = [](Player * player)
     {
         for (uint8 slot = EQUIPMENT_SLOT_START; slot < EQUIPMENT_SLOT_END; ++slot)
         {
@@ -445,7 +445,7 @@ bool ArenaReward::CheckHealth(Battleground* bg, TeamId winnerTeamId)
 
     bool isRated = bg->isRated();
 
-    auto IsLowHealth = [](Player* player)
+    auto IsLowHealth = [](Player * player)
     {
         if (player->GetMaxHealth() <= 10000)
         {
