@@ -36,61 +36,6 @@ namespace
 
     std::unordered_map<uint32, uint32> _paralysePlayer;
 
-    std::string const GetItemLocale(uint32 itemID, int8 index_loc)
-    {
-        ItemTemplate const* itemTemplate = sObjectMgr->GetItemTemplate(itemID);
-        ItemLocale const* itemLocale = sGameLocale->GetItemLocale(itemID);
-        std::string name;
-
-        if (itemLocale)
-            name = itemLocale->Name[index_loc];
-
-        if (name.empty() && itemTemplate)
-            name = itemTemplate->Name1;
-
-        return name;
-    }
-
-    std::string const GetItemLink(uint32 itemID, int8 index_loc = 8)
-    {
-        ItemTemplate const* itemTemplate = sObjectMgr->GetItemTemplate(itemID);
-        if (!itemTemplate)
-            return "";
-
-        std::string name = GetItemLocale(itemID, index_loc);
-        std::string color = "cffffffff";
-
-        switch (itemTemplate->Quality)
-        {
-            case 0:
-                color = "cff9d9d9d";
-                break;
-            case 1:
-                color = "cffffffff";
-                break;
-            case 2:
-                color = "cff1eff00";
-                break;
-            case 3:
-                color = "cff0070dd";
-                break;
-            case 4:
-                color = "cffa335ee";
-                break;
-            case 5:
-                color = "cffff8000";
-                break;
-            case 6:
-            case 7:
-                color = "cffe6cc80";
-                break;
-            default:
-                break;
-        }
-
-        return Warhead::StringFormat("|%s|Hitem:%u:0:0:0:0:0:0:0:0|h[%s]|h|r", color.c_str(), itemID, name.c_str());
-    }
-
     void ParalysePlayer(Player* player)
     {
         if (CONF_GET_BOOL("ArenaReward.AntiFarm.Teleport.Enable"))
@@ -155,7 +100,7 @@ void ArenaReward::SendRewardArena(Battleground* bg, TeamId winnerTeamId)
                     continue;
 
                 player->AddItem(itemID, itemCountWinner);
-                ChatHandler(player->GetSession()).PSendSysMessage("|cFFFF0000#|r |cff6C8CD5Вы выйграли матч и получили|r %s x%u", ::GetItemLink(itemID).c_str(), itemCountWinner);
+                ChatHandler(player->GetSession()).PSendSysMessage("|cFFFF0000#|r |cff6C8CD5Вы выйграли матч и получили|r %s x%u", sGameLocale->GetItemLink(itemID).c_str(), itemCountWinner);
             }
 
             for (auto const& member : loserArenaTeam->GetMembers())
@@ -165,7 +110,7 @@ void ArenaReward::SendRewardArena(Battleground* bg, TeamId winnerTeamId)
                     continue;
 
                 player->AddItem(itemID, itemCountLoser);
-                ChatHandler(player->GetSession()).PSendSysMessage("|cFFFF0000#|r |cff6C8CD5Вы проиграли матч и получили|r %s x%u", ::GetItemLink(itemID).c_str(), itemCountLoser);
+                ChatHandler(player->GetSession()).PSendSysMessage("|cFFFF0000#|r |cff6C8CD5Вы проиграли матч и получили|r %s x%u", sGameLocale->GetItemLink(itemID).c_str(), itemCountLoser);
             }
         }
         else if (CONF_GET_BOOL("ArenaReward.Reward.Skirmish.Enable")) // !isRated
@@ -183,7 +128,7 @@ void ArenaReward::SendRewardArena(Battleground* bg, TeamId winnerTeamId)
                     count = itemCountWinner;
 
                 player->AddItem(itemID, count);
-                ChatHandler(player->GetSession()).PSendSysMessage("|cFFFF0000#|r |cff6C8CD5Вы %s матч и получили|r %s x%u", isWinner ? "выйграли" : "проиграли", ::GetItemLink(itemID).c_str(), count);
+                ChatHandler(player->GetSession()).PSendSysMessage("|cFFFF0000#|r |cff6C8CD5Вы %s матч и получили|r %s x%u", isWinner ? "выйграли" : "проиграли", sGameLocale->GetItemLink(itemID).c_str(), count);
             }
         }
     };

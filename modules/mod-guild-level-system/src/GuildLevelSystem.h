@@ -144,11 +144,6 @@ public:
         SendGuildMessage(guildID, Warhead::StringFormat(std::forward<Format>(fmt), std::forward<Args>(args)...));
     }
 
-    std::string const GetItemLocale(uint32 ItemID, int8 index_loc = 8);
-    std::string const GetItemLink(uint32 itemID, int8 index_loc = 8);
-    std::string const GetSpellLink(uint32 spellID, int8 index_loc = 8);
-    std::string const GetSpelllocale(uint32 spellID, int8 index_loc = 8);
-
 private:
     // Criteria
     GuildCriteriaBase _guildCriteriaBase;
