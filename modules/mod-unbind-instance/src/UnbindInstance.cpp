@@ -119,61 +119,6 @@ namespace
 
         return false;
     }
-
-    std::string const GetItemLocale(uint32 itemID, int8 index_loc)
-    {
-        ItemTemplate const* itemTemplate = sObjectMgr->GetItemTemplate(itemID);
-        ItemLocale const* itemLocale = sGameLocale->GetItemLocale(itemID);
-        std::string name;
-
-        if (itemLocale)
-            name = itemLocale->Name[index_loc];
-
-        if (name.empty() && itemTemplate)
-            name = itemTemplate->Name1;
-
-        return name;
-    }
-
-    std::string const GetItemLink(uint32 itemID, int8 index_loc)
-    {
-        ItemTemplate const* itemTemplate = sObjectMgr->GetItemTemplate(itemID);
-        if (!itemTemplate)
-            return "";
-
-        std::string name = GetItemLocale(itemID, index_loc);
-        std::string color = "cffffffff";
-
-        switch (itemTemplate->Quality)
-        {
-            case 0:
-                color = "cff9d9d9d";
-                break;
-            case 1:
-                color = "cffffffff";
-                break;
-            case 2:
-                color = "cff1eff00";
-                break;
-            case 3:
-                color = "cff0070dd";
-                break;
-            case 4:
-                color = "cffa335ee";
-                break;
-            case 5:
-                color = "cffff8000";
-                break;
-            case 6:
-            case 7:
-                color = "cffe6cc80";
-                break;
-            default:
-                break;
-        }
-
-        return Warhead::StringFormat("|%s|Hitem:%u:0:0:0:0:0:0:0:0|h[%s]|h|r", color.c_str(), itemID, name.c_str());
-    }
 }
 
 /*static*/ UnbindInstance* UnbindInstance::instance()
@@ -388,7 +333,7 @@ void UnbindInstance::BindInfo(Player* player, Creature* creature, uint32 sender,
     for (auto const& uiCost : _costStore)
     {
         uint32 itemID = uiCost.first;
-        std::string itemlink = ::GetItemLink(itemID, localeIndex);
+        std::string itemlink = sGameLocale->GetItemLink(itemID, localeIndex);
         uint32 itemCount = GetCostCount(itemID);
         AddGossipItemFor(player, GOSSIP_ICON_CHAT, Warhead::StringFormat("%u. %s (%u) шт.", itemID, itemlink.c_str(), itemCount), sender, action);
     }
@@ -457,7 +402,7 @@ void UnbindInstance::Unbind(Player* player, Creature* creature, uint32 sender, u
     uint32 itemCount = GetCostCount();
     uint32 hasItemCount = player->GetItemCount(itemID);
     uint8 localeIndex = static_cast<uint8>(player->GetSession()->GetSessionDbLocaleIndex());
-    std::string const& itemLink = ::GetItemLink(itemID, localeIndex);
+    std::string const& itemLink = sGameLocale->GetItemLink(itemID, localeIndex);
     std::string const& mapName = ::GetMapName(mapID, localeIndex);
     std::string const& diffName = ::GetDiffName(diff, isRaidDiff);
 
@@ -493,12 +438,12 @@ void UnbindInstance::Unbind(Player* player, Creature* creature, uint32 sender, u
 void UnbindInstance::SaveLogUnbind(Player* player, uint32 mapID, uint8 diff, uint32 itemID, bool isRaid /*= true*/)
 {
     uint32 lowGuid = player->GetGUIDLow();
-    std::string const& itemName = ::GetItemLocale(itemID, 8);
+    std::string const& itemName = sGameLocale->GetItemNameLocale(itemID, 8);
     std::string const& mapName = ::GetMapName(mapID, 8);
     std::string const& diffName = ::GetDiffName(static_cast<Difficulty>(diff), isRaid);
 
     std::string const& info = Warhead::StringFormat("%s (%s). %s. %s", mapName.c_str(), diffName.c_str(), player->GetName().c_str(), itemName.c_str());
 
     CharacterDatabase.PExecute("INSERT INTO `unbind_instance_logs`(`Info`, `PlayerGuid`, `MapID`, `Difficulty`, `ItemID`) VALUES ('%s', %u, %u, %u, %u)",
-        info.c_str(), lowGuid, mapID, diff, itemID);
+                               info.c_str(), lowGuid, mapID, diff, itemID);
 }

@@ -23,6 +23,8 @@
 #include "DatabaseEnv.h"
 #include "DBCStores.h"
 #include "Player.h"
+#include "SpellMgr.h"
+#include "SpellInfo.h"
 #include "World.h"
 
 GameLocale::GameLocale()
@@ -837,4 +839,77 @@ ClassString const* GameLocale::GetClassString(uint32 id) const
         return &itr->second;
 
     return nullptr;
+}
+
+std::string const GameLocale::GetItemNameLocale(uint32 ItemID, int8 index_loc /*= DEFAULT_LOCALE*/)
+{
+    ItemTemplate const* itemTemplate = sObjectMgr->GetItemTemplate(ItemID);
+    ItemLocale const* itemLocale = GetItemLocale(ItemID);
+    std::string name;
+
+    if (itemLocale)
+        name = itemLocale->Name[index_loc];
+
+    if (name.empty() && itemTemplate)
+        name = itemTemplate->Name1;
+
+    return name;
+}
+
+std::string const GameLocale::GetItemLink(uint32 itemID, int8 index_loc /*= DEFAULT_LOCALE*/)
+{
+    ItemTemplate const* itemTemplate = sObjectMgr->GetItemTemplate(itemID);
+    if (!itemTemplate)
+        return "";
+
+    std::string name = GetItemNameLocale(itemID, index_loc);
+    std::string color = "cffffffff";
+
+    switch (itemTemplate->Quality)
+    {
+        case 0:
+            color = "cff9d9d9d";
+            break;
+        case 1:
+            color = "cffffffff";
+            break;
+        case 2:
+            color = "cff1eff00";
+            break;
+        case 3:
+            color = "cff0070dd";
+            break;
+        case 4:
+            color = "cffa335ee";
+            break;
+        case 5:
+            color = "cffff8000";
+            break;
+        case 6:
+        case 7:
+            color = "cffe6cc80";
+            break;
+        default:
+            break;
+    }
+
+    return Warhead::StringFormat("|%s|Hitem:%u:0:0:0:0:0:0:0:0|h[%s]|h|r", color.c_str(), itemID, name.c_str());
+}
+
+std::string const GameLocale::GetSpellLink(uint32 spellID, int8 index_loc /*= DEFAULT_LOCALE*/)
+{
+    auto const& spell = sSpellMgr->GetSpellInfo(spellID);
+    if (!spell)
+        return "";
+
+    return Warhead::StringFormat("|cffffffff|Hspell:%u|h[%s]|h|r", spell->Id, spell->SpellName[index_loc]);
+}
+
+std::string const GameLocale::GetSpellNamelocale(uint32 spellID, int8 index_loc /*= DEFAULT_LOCALE*/)
+{
+    auto const& spell = sSpellMgr->GetSpellInfo(spellID);
+    if (!spell)
+        return "";
+
+    return spell->SpellName[index_loc];
 }
