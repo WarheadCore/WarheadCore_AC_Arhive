@@ -20,6 +20,15 @@
 #include "Object.h"
 #include "Log.h"
 #include "World.h"
+#include <unordered_map>
+
+namespace
+{
+    std::unordered_map<std::string, bool> _boolConfigs;
+    std::unordered_map<std::string, std::string> _stringConfigs;
+    std::unordered_map<std::string, int32> _intConfigs;
+    std::unordered_map<std::string, float> _floatConfigs;
+}
 
 GameConfig* GameConfig::instance()
 {
@@ -39,109 +48,152 @@ void GameConfig::Load(bool reload)
     LOG_INFO("config", "");
 }
 
-// Add's options
-void GameConfig::AddBoolConfig(std::string const& optionName, bool const& def /*= false*/)
+template<class T>
+void GameConfig::AddOption<T>(std::string const& optionName, std::optional<T> const& def /*= std::nullopt*/) const
+{
+    static_assert(false, "Unsupported config type option");
+}
+
+template<>
+void GameConfig::AddOption<bool>(std::string const& optionName, std::optional<bool> const& def /*= std::nullopt*/) const
 {
     // Check exist option
     auto itr = _boolConfigs.find(optionName);
     if (itr != _boolConfigs.end())
     {
-        LOG_ERROR("config", "> Option (%s) is already exists", optionName.c_str());
+        LOG_ERROR("config", "> GameConfig: option (%s) is already exists", optionName.c_str());
         return;
     }
 
-    _boolConfigs.insert(std::make_pair(optionName, sConfigMgr->GetBoolDefault(optionName, def)));
+    _boolConfigs.emplace(optionName, sConfigMgr->GetBoolDefault(optionName, def == std::nullopt ? false : *def));
 }
 
-void GameConfig::AddStringConfig(std::string const& optionName, std::string const& def /*= ""*/)
+template<>
+void GameConfig::AddOption<std::string>(std::string const& optionName, std::optional<std::string> const& def /*= std::nullopt*/) const
 {
     // Check exist option
     auto itr = _stringConfigs.find(optionName);
     if (itr != _stringConfigs.end())
     {
-        LOG_ERROR("config", "> Option (%s) is already exists", optionName.c_str());
+        LOG_ERROR("config", "> GameConfig: option (%s) is already exists", optionName.c_str());
         return;
     }
 
-    _stringConfigs.insert(std::make_pair(optionName, sConfigMgr->GetStringDefault(optionName, def)));
+    _stringConfigs.emplace(std::make_pair(optionName, sConfigMgr->GetStringDefault(optionName, def == std::nullopt ? "" : *def)));
 }
 
-void GameConfig::AddIntConfig(std::string const& optionName, int32 const& def /*= 0*/)
+template<>
+void GameConfig::AddOption<int32>(std::string const& optionName, std::optional<int32> const& def /*= std::nullopt*/) const
 {
     // Check exist option
     auto itr = _intConfigs.find(optionName);
     if (itr != _intConfigs.end())
     {
-        LOG_ERROR("config", "> Option (%s) is already exists", optionName.c_str());
+        LOG_ERROR("config", "> GameConfig: option (%s) is already exists", optionName.c_str());
         return;
     }
 
-    _intConfigs.insert(std::make_pair(optionName, sConfigMgr->GetIntDefault(optionName, def)));
+    _intConfigs.emplace(std::make_pair(optionName, sConfigMgr->GetIntDefault(optionName, def == std::nullopt ? 0 : *def)));
 }
 
-void GameConfig::AddFloatConfig(std::string const& optionName, float const& def /*= 1.0f*/)
+template<>
+void GameConfig::AddOption<float>(std::string const& optionName, std::optional<float> const& def /*= std::nulloptf*/) const
 {
     // Check exist option
     auto itr = _floatConfigs.find(optionName);
     if (itr != _floatConfigs.end())
     {
-        LOG_ERROR("config", "> Option (%s) is already exists", optionName.c_str());
+        LOG_ERROR("config", "> GameConfig: option (%s) is already exists", optionName.c_str());
         return;
     }
 
-    _floatConfigs.insert(std::make_pair(optionName, sConfigMgr->GetFloatDefault(optionName, def)));
+    _floatConfigs.emplace(std::make_pair(optionName, sConfigMgr->GetFloatDefault(optionName, def == std::nullopt ? 1.0f : *def)));
 }
 
-bool GameConfig::GetBoolConfig(std::string const& optionName)
+template<>
+void GameConfig::AddOption<uint32>(std::string const& optionName, std::optional<uint32> const& def /*= std::nullopt*/) const
+{
+    AddOption<int32>(optionName, def);
+}
+
+template<>
+void GameConfig::AddOption<double>(std::string const& optionName, std::optional<double> const& def /*= std::nullopt*/) const
+{
+    AddOption<float>(optionName, def);
+}
+
+template<class T>
+T GameConfig::GetOption<T>(std::string const& optionName, std::optional<T> const& def /*= std::nullopt*/) const
+{
+    static_assert(false, "Unsupported config type option");
+}
+
+template<>
+bool GameConfig::GetOption<bool>(std::string const& optionName, std::optional<bool> const& def /*= std::nullopt*/) const
 {
     // Check exist option
     auto itr = _boolConfigs.find(optionName);
     if (itr == _boolConfigs.end())
     {
-        LOG_ERROR("config", "> Option (%s) is not exists", optionName.c_str());
+        LOG_ERROR("config", "> GameConfig: option (%s) is not exists", optionName.c_str());
         return false;
     }
 
-    return _boolConfigs[optionName];
+    return _boolConfigs.at(optionName);
 }
 
-std::string GameConfig::GetStringConfig(std::string const& optionName)
+template<>
+std::string GameConfig::GetOption<std::string>(std::string const& optionName, std::optional<std::string> const& def /*= std::nullopt*/) const
 {
     // Check exist option
     auto itr = _stringConfigs.find(optionName);
     if (itr == _stringConfigs.end())
     {
-        LOG_ERROR("config", "> Option (%s) is not exists", optionName.c_str());
+        LOG_ERROR("config", "> GameConfig: option (%s) is not exists", optionName.c_str());
         return "";
     }
 
-    return _stringConfigs[optionName];
+    return _stringConfigs.at(optionName);
 }
 
-int32 GameConfig::GetIntConfig(std::string const& optionName)
+template<>
+int32 GameConfig::GetOption<int32>(std::string const& optionName, std::optional<int32> const& def /*= std::nullopt*/) const
 {
     // Check exist option
     auto itr = _intConfigs.find(optionName);
     if (itr == _intConfigs.end())
     {
-        LOG_ERROR("config", "> Option (%s) is not exists", optionName.c_str());
+        LOG_ERROR("config", "> GameConfig: option (%s) is not exists", optionName.c_str());
         return 0;
     }
 
-    return _intConfigs[optionName];
+    return _intConfigs.at(optionName);
 }
 
-float GameConfig::GetFloatConfig(std::string const& optionName)
+template<>
+float GameConfig::GetOption<float>(std::string const& optionName, std::optional<float> const& def /*= std::nulloptf*/) const
 {
     // Check exist option
     auto itr = _floatConfigs.find(optionName);
     if (itr == _floatConfigs.end())
     {
-        LOG_ERROR("config", "> Option (%s) is not exists", optionName.c_str());
+        LOG_ERROR("config", "> GameConfig: option (%s) is not exists", optionName.c_str());
         return 1.0f;
     }
 
-    return _floatConfigs[optionName];
+    return _floatConfigs.at(optionName);
+}
+
+template<>
+uint32 GameConfig::GetOption<uint32>(std::string const& optionName, std::optional<uint32> const& def /*= std::nullopt*/) const
+{
+    return GetOption<int32>(optionName, def);
+}
+
+template<>
+double GameConfig::GetOption<double>(std::string const& optionName, std::optional<double> const& def /*= std::nulloptf*/) const
+{
+    return GetOption<float>(optionName, def);
 }
 
 // Sets
@@ -151,7 +203,7 @@ void GameConfig::SetBool(std::string const& optionName, bool const& value)
     auto itr = _boolConfigs.find(optionName);
     if (itr == _boolConfigs.end())
     {
-        LOG_ERROR("config", "> Option (%s) is not exists", optionName.c_str());
+        LOG_ERROR("config", "> GameConfig: option (%s) is not exists", optionName.c_str());
         return;
     }
 
@@ -164,7 +216,7 @@ void GameConfig::SetString(std::string const& optionName, std::string const& val
     auto itr = _stringConfigs.find(optionName);
     if (itr == _stringConfigs.end())
     {
-        LOG_ERROR("config", "> Option (%s) is not exists", optionName.c_str());
+        LOG_ERROR("config", "> GameConfig: option (%s) is not exists", optionName.c_str());
         return;
     }
 
@@ -177,7 +229,7 @@ void GameConfig::SetInt(std::string const& optionName, int32 const& value)
     auto itr = _intConfigs.find(optionName);
     if (itr == _intConfigs.end())
     {
-        LOG_ERROR("config", "> Option (%s) is not exists", optionName.c_str());
+        LOG_ERROR("config", "> GameConfig: option (%s) is not exists", optionName.c_str());
         return;
     }
 
@@ -190,7 +242,7 @@ void GameConfig::SetFloat(std::string const& optionName, float const& value)
     auto itr = _floatConfigs.find(optionName);
     if (itr == _floatConfigs.end())
     {
-        LOG_ERROR("config", "> Option (%s) is not exists", optionName.c_str());
+        LOG_ERROR("config", "> GameConfig: option (%s) is not exists", optionName.c_str());
         return;
     }
 
