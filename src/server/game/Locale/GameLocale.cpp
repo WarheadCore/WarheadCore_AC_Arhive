@@ -867,30 +867,30 @@ std::string const GameLocale::GetItemLink(uint32 itemID, int8 index_loc /*= DEFA
 
     switch (itemTemplate->Quality)
     {
-    case 0:
-        color = "cff9d9d9d";
-        break;
-    case 1:
-        color = "cffffffff";
-        break;
-    case 2:
-        color = "cff1eff00";
-        break;
-    case 3:
-        color = "cff0070dd";
-        break;
-    case 4:
-        color = "cffa335ee";
-        break;
-    case 5:
-        color = "cffff8000";
-        break;
-    case 6:
-    case 7:
-        color = "cffe6cc80";
-        break;
-    default:
-        break;
+        case 0:
+            color = "cff9d9d9d";
+            break;
+        case 1:
+            color = "cffffffff";
+            break;
+        case 2:
+            color = "cff1eff00";
+            break;
+        case 3:
+            color = "cff0070dd";
+            break;
+        case 4:
+            color = "cffa335ee";
+            break;
+        case 5:
+            color = "cffff8000";
+            break;
+        case 6:
+        case 7:
+            color = "cffe6cc80";
+            break;
+        default:
+            break;
     }
 
     return Warhead::StringFormat("|%s|Hitem:%u:0:0:0:0:0:0:0:0|h[%s]|h|r", color.c_str(), itemID, name.c_str());
