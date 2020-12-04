@@ -445,5 +445,5 @@ void UnbindInstance::SaveLogUnbind(Player* player, uint32 mapID, uint8 diff, uin
     std::string const& info = Warhead::StringFormat("%s (%s). %s. %s", mapName.c_str(), diffName.c_str(), player->GetName().c_str(), itemName.c_str());
 
     CharacterDatabase.PExecute("INSERT INTO `unbind_instance_logs`(`Info`, `PlayerGuid`, `MapID`, `Difficulty`, `ItemID`) VALUES ('%s', %u, %u, %u, %u)",
-        info.c_str(), lowGuid, mapID, diff, itemID);
+                               info.c_str(), lowGuid, mapID, diff, itemID);
 }
