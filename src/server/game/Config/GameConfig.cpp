@@ -22,6 +22,7 @@
 #include "Player.h"
 #include "ServerMotd.h"
 #include "World.h"
+#include "Types.h"
 #include <unordered_map>
 
 namespace
@@ -55,7 +56,7 @@ void GameConfig::Load(bool reload)
 template<typename T>
 void GameConfig::AddOption(std::string const& optionName, std::optional<T> const& def /*= std::nullopt*/) const
 {
-    static_assert(false, "Unsupported config type option");
+    static_assert(Warhead::dependant_false_v<T>, "Unsupported config type option");
 }
 
 template<>
@@ -129,7 +130,7 @@ void GameConfig::AddOption<double>(std::string const& optionName, std::optional<
 template<typename T>
 T GameConfig::GetOption(std::string const& optionName, std::optional<T> const& def /*= std::nullopt*/) const
 {
-    static_assert(false, "Unsupported config type option");
+    static_assert(Warhead::dependant_false_v<T>, "Unsupported config type option");
 }
 
 template<>
@@ -208,7 +209,7 @@ double GameConfig::GetOption<double>(std::string const& optionName, std::optiona
 template<typename T>
 void GameConfig::SetOption(std::string const& optionName, T const& value) const
 {
-    static_assert(false, "Unsupported config type option");
+    static_assert(Warhead::dependant_false_v<T>, "Unsupported config type option");
 }
 
 template<>
