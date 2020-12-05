@@ -86,7 +86,7 @@ void WorldSession::HandleAddFriendOpcode(WorldPacket& recv_data)
                 if (GetPlayer()->GetSocial()->AddToSocialList(friendGuid, SOCIAL_FLAG_FRIEND))
                     GetPlayer()->GetSocial()->SetFriendNote(friendGuid, friendNote);
                 else
-                friendResult = FRIEND_LIST_FULL;
+                    friendResult = FRIEND_LIST_FULL;
             }
             GetPlayer()->GetSocial()->SetFriendNote(guidLow, friendNote);
         }

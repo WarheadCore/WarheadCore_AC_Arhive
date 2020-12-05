@@ -849,7 +849,7 @@ void GameConfig::CheckOptions(bool reload /*= false*/)
     sWorld->SetNewCharString(CONF_GET_STR("PlayerStart.String"));
 
     ///- Read all rates from the config file
-    auto CheckRate = [](std::string const& optionName)
+    auto CheckRate = [](std::string const & optionName)
     {
         if (CONF_GET_FLOAT(optionName) < 0.0f)
         {
@@ -876,14 +876,14 @@ void GameConfig::CheckOptions(bool reload /*= false*/)
     if (tempFloatOption < CONTACT_DISTANCE)
     {
         LOG_ERROR("config", "TargetPosRecalculateRange (%f) must be >= %f. Using %f instead.",
-            tempFloatOption, CONTACT_DISTANCE, CONTACT_DISTANCE);
+                  tempFloatOption, CONTACT_DISTANCE, CONTACT_DISTANCE);
 
         sGameConfig->SetOption<float>("TargetPosRecalculateRange", CONTACT_DISTANCE);
     }
     else if (tempFloatOption > NOMINAL_MELEE_RANGE)
     {
         LOG_ERROR("config", "TargetPosRecalculateRange (%f) must be <= %f. Using %f instead",
-            tempFloatOption, NOMINAL_MELEE_RANGE, NOMINAL_MELEE_RANGE);
+                  tempFloatOption, NOMINAL_MELEE_RANGE, NOMINAL_MELEE_RANGE);
 
         sGameConfig->SetOption<float>("TargetPosRecalculateRange", NOMINAL_MELEE_RANGE);
     }
@@ -903,7 +903,7 @@ void GameConfig::CheckOptions(bool reload /*= false*/)
     // ???
     sGameConfig->SetOption<float>("DurabilityLoss.OnDeath", tempFloatOption / 100.0f);
 
-    auto CheckDurabilityLossChance = [&tempFloatOption](std::string const& optionName)
+    auto CheckDurabilityLossChance = [&tempFloatOption](std::string const & optionName)
     {
         tempFloatOption = CONF_GET_FLOAT(optionName);
         if (tempFloatOption < 0.0f)
@@ -943,7 +943,7 @@ void GameConfig::CheckOptions(bool reload /*= false*/)
     if (reload)
         sMapMgr->SetMapUpdateInterval(tempIntOption);
 
-    auto CheckMinName = [](std::string const& optionName, int32 const& maxNameSymols)
+    auto CheckMinName = [](std::string const & optionName, int32 const & maxNameSymols)
     {
         int32 confSymbols = CONF_GET_INT(optionName);
         if (confSymbols < 1 || confSymbols > maxNameSymols)
@@ -1029,7 +1029,7 @@ void GameConfig::CheckOptions(bool reload /*= false*/)
         sGameConfig->SetOption<int32>("StartPlayerMoney", MAX_MONEY_AMOUNT);
     }
 
-    auto CheckPoints = [](std::string const& startPointsOptionName, std::string const& maxPointsOptionName)
+    auto CheckPoints = [](std::string const & startPointsOptionName, std::string const & maxPointsOptionName)
     {
         int32 maxPoints = CONF_GET_INT(maxPointsOptionName);
         if (maxPoints < 0)
@@ -1058,7 +1058,7 @@ void GameConfig::CheckOptions(bool reload /*= false*/)
     if (tempIntOption > maxPlayerLevel)
     {
         LOG_ERROR("config", "RecruitAFriend.MaxLevel (%i) must be in the range 0..MaxLevel(%u). Set to %u.",
-            tempIntOption, maxPlayerLevel, 60);
+                  tempIntOption, maxPlayerLevel, 60);
 
         sGameConfig->SetOption<int32>("RecruitAFriend.MaxLevel", 60);
     }
@@ -1098,7 +1098,7 @@ void GameConfig::CheckOptions(bool reload /*= false*/)
     }
 
     LOG_TRACE("server.loading", "Will clear `logs` table of entries older than %i seconds every %u minutes.",
-        CONF_GET_INT("LogDB.Opt.ClearTime"), CONF_GET_INT("LogDB.Opt.ClearInterval"));
+              CONF_GET_INT("LogDB.Opt.ClearTime"), CONF_GET_INT("LogDB.Opt.ClearInterval"));
 
     tempIntOption = CONF_GET_INT("MaxOverspeedPings");
     if (tempIntOption != 0 && tempIntOption < 2)
@@ -1107,7 +1107,7 @@ void GameConfig::CheckOptions(bool reload /*= false*/)
         sGameConfig->SetOption<int32>("MaxOverspeedPings", 2);
     }
 
-    auto CheckResetTime = [](std::string const& optionName)
+    auto CheckResetTime = [](std::string const & optionName)
     {
         int32 hours = CONF_GET_INT(optionName);
         if (hours > 23)
@@ -1135,7 +1135,7 @@ void GameConfig::CheckOptions(bool reload /*= false*/)
             LOG_ERROR("config", "ClientCacheVersion can't be negative %d, ignored.", clientCacheId);
     }
 
-    auto CheckLogRecordsCount = [](std::string const& optionName, int32 const& maxRecords)
+    auto CheckLogRecordsCount = [](std::string const & optionName, int32 const & maxRecords)
     {
         int32 records = CONF_GET_INT(optionName);
         if (records > maxRecords)

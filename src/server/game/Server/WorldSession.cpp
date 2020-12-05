@@ -510,7 +510,7 @@ void WorldSession::LogoutPlayer(bool save)
                 _player->RemoveBattlegroundQueueId(bgQueueTypeId);
                 sBattlegroundMgr->GetBattlegroundQueue(bgQueueTypeId).RemovePlayer(_player->GetGUID(), false, i);
                 // track if player logs out after invited to join BG
-                if(_player->IsInvitedForBattlegroundInstance() && CONF_GET_BOOL("Battleground.TrackDeserters.Enable"))
+                if (_player->IsInvitedForBattlegroundInstance() && CONF_GET_BOOL("Battleground.TrackDeserters.Enable"))
                 {
                     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_DESERTER_TRACK);
                     stmt->setUInt32(0, _player->GetGUIDLow());
@@ -1397,36 +1397,36 @@ bool WorldSession::DosProtection::EvaluateOpcode(WorldPacket& p, time_t time) co
         case POLICY_LOG:
             return true;
         case POLICY_KICK:
-            {
-                LOG_ERROR("network", "AntiDOS: Player kicked!");
-                Session->KickPlayer();
-                return false;
-            }
+        {
+            LOG_ERROR("network", "AntiDOS: Player kicked!");
+            Session->KickPlayer();
+            return false;
+        }
         case POLICY_BAN:
+        {
+            uint32 bm = CONF_GET_INT("PacketSpoof.BanMode");
+            int64 duration = CONF_GET_INT("PacketSpoof.BanDuration"); // in seconds
+            std::string nameOrIp = "";
+            switch (bm)
             {
-                uint32 bm = CONF_GET_INT("PacketSpoof.BanMode");
-                int64 duration = CONF_GET_INT("PacketSpoof.BanDuration"); // in seconds
-                std::string nameOrIp = "";
-                switch (bm)
+                case 0:
                 {
-                    case 0:
-                        {
-                            AccountMgr::GetName(Session->GetAccountId(), nameOrIp);
-                            sBan->BanAccount(nameOrIp, std::to_string(duration), "DOS (Packet Flooding/Spoofing", "Server: AutiDOS");
-                            break;
-                        }
-                    case 2:
-                        {
-                            nameOrIp = Session->GetRemoteAddress();
-                            sBan->BanIP(nameOrIp, std::to_string(duration), "DOS (Packet Flooding/Spoofing", "Server: AutiDOS");
-                            break;
-                        }
+                    AccountMgr::GetName(Session->GetAccountId(), nameOrIp);
+                    sBan->BanAccount(nameOrIp, std::to_string(duration), "DOS (Packet Flooding/Spoofing", "Server: AutiDOS");
+                    break;
                 }
-
-                LOG_WARN("network", "AntiDOS: Player automatically banned for %u seconds.", static_cast<uint32>(duration));
-                Session->KickPlayer();
-                return false;
+                case 2:
+                {
+                    nameOrIp = Session->GetRemoteAddress();
+                    sBan->BanIP(nameOrIp, std::to_string(duration), "DOS (Packet Flooding/Spoofing", "Server: AutiDOS");
+                    break;
+                }
             }
+
+            LOG_WARN("network", "AntiDOS: Player automatically banned for %u seconds.", static_cast<uint32>(duration));
+            Session->KickPlayer();
+            return false;
+        }
         default: // invalid policy
             return true;
     }
@@ -1528,12 +1528,12 @@ uint32 WorldSession::DosProtection::GetMaxPacketCounterAllowed(uint16 opcode) co
         case CMSG_FORCE_WALK_SPEED_CHANGE_ACK:          // not profiled
         case CMSG_FORCE_TURN_RATE_CHANGE_ACK:           // not profiled
         case CMSG_FORCE_PITCH_RATE_CHANGE_ACK:          // not profiled
-            {
-                // "0" is a magic number meaning there's no limit for the opcode.
-                // All the opcodes above must cause little CPU usage and no sync/async database queries at all
-                maxPacketCounterAllowed = 0;
-                break;
-            }
+        {
+            // "0" is a magic number meaning there's no limit for the opcode.
+            // All the opcodes above must cause little CPU usage and no sync/async database queries at all
+            maxPacketCounterAllowed = 0;
+            break;
+        }
 
         case CMSG_QUESTGIVER_ACCEPT_QUEST:              //   0               4
         case CMSG_QUESTLOG_REMOVE_QUEST:                //   0               4
@@ -1546,10 +1546,10 @@ uint32 WorldSession::DosProtection::GetMaxPacketCounterAllowed(uint16 opcode) co
         case CMSG_PLAYER_VEHICLE_ENTER:                 //   0               8
         case CMSG_LEARN_PREVIEW_TALENTS_PET:            // not profiled
         case MSG_MOVE_HEARTBEAT:
-            {
-                maxPacketCounterAllowed = 200;
-                break;
-            }
+        {
+            maxPacketCounterAllowed = 200;
+            break;
+        }
 
         case CMSG_GUILD_SET_PUBLIC_NOTE:                //   1               2         1 async db query
         case CMSG_GUILD_SET_OFFICER_NOTE:               //   1               2         1 async db query
@@ -1560,25 +1560,25 @@ uint32 WorldSession::DosProtection::GetMaxPacketCounterAllowed(uint16 opcode) co
         case CMSG_GAMEOBJ_REPORT_USE:                   // not profiled
         case CMSG_GAMEOBJ_USE:                          // not profiled
         case MSG_PETITION_DECLINE:                      // not profiled
-            {
-                maxPacketCounterAllowed = 50;
-                break;
-            }
+        {
+            maxPacketCounterAllowed = 50;
+            break;
+        }
 
         case CMSG_QUEST_POI_QUERY:                      //   0              25         very high upload bandwidth usage
-            {
-                maxPacketCounterAllowed = MAX_QUEST_LOG_SIZE;
-                break;
-            }
+        {
+            maxPacketCounterAllowed = MAX_QUEST_LOG_SIZE;
+            break;
+        }
 
         case CMSG_GM_REPORT_LAG:                        //   1               3         1 async db query
         case CMSG_SPELLCLICK:                           // not profiled
         case CMSG_REMOVE_GLYPH:                         // not profiled
         case CMSG_DISMISS_CONTROLLED_VEHICLE:           // not profiled
-            {
-                maxPacketCounterAllowed = 20;
-                break;
-            }
+        {
+            maxPacketCounterAllowed = 20;
+            break;
+        }
 
         case CMSG_PETITION_SIGN:                        //   9               4         2 sync 1 async db queries
         case CMSG_TURN_IN_PETITION:                     //   8               5.5       2 sync db query
@@ -1615,10 +1615,10 @@ uint32 WorldSession::DosProtection::GetMaxPacketCounterAllowed(uint16 opcode) co
         case CMSG_AUCTION_PLACE_BID:
         case CMSG_AUCTION_REMOVE_ITEM:
         case CMSG_AUCTION_SELL_ITEM:
-            {
-                maxPacketCounterAllowed = 10;
-                break;
-            }
+        {
+            maxPacketCounterAllowed = 10;
+            break;
+        }
 
         case CMSG_CHAR_CREATE:                          //   7               5         3 async db queries
         case CMSG_CHAR_ENUM:                            //  22               3         2 async db queries
@@ -1666,21 +1666,21 @@ uint32 WorldSession::DosProtection::GetMaxPacketCounterAllowed(uint16 opcode) co
         case MSG_PARTY_ASSIGNMENT:                      // not profiled
         case MSG_RAID_READY_CHECK:                      // not profiled
         case CMSG_OFFER_PETITION:
-            {
-                maxPacketCounterAllowed = 3;
-                break;
-            }
+        {
+            maxPacketCounterAllowed = 3;
+            break;
+        }
 
         case CMSG_ITEM_REFUND_INFO:                     // not profiled
-            {
-                maxPacketCounterAllowed = PLAYER_SLOTS_COUNT;
-                break;
-            }
+        {
+            maxPacketCounterAllowed = PLAYER_SLOTS_COUNT;
+            break;
+        }
         default:
-            {
-                maxPacketCounterAllowed = 100;
-                break;
-            }
+        {
+            maxPacketCounterAllowed = 100;
+            break;
+        }
     }
 
     return maxPacketCounterAllowed;

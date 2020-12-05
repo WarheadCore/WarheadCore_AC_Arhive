@@ -2460,14 +2460,14 @@ void Map::RemoveAllObjectsInRemoveList()
         switch (obj->GetTypeId())
         {
             case TYPEID_CORPSE:
-                {
-                    Corpse* corpse = ObjectAccessor::GetCorpse(*obj, obj->GetGUID());
-                    if (!corpse)
-                        LOG_ERROR("maps", "Tried to delete corpse/bones %u that is not in map.", obj->GetGUIDLow());
-                    else
-                        RemoveFromMap(corpse, true);
-                    break;
-                }
+            {
+                Corpse* corpse = ObjectAccessor::GetCorpse(*obj, obj->GetGUID());
+                if (!corpse)
+                    LOG_ERROR("maps", "Tried to delete corpse/bones %u that is not in map.", obj->GetGUIDLow());
+                else
+                    RemoveFromMap(corpse, true);
+                break;
+            }
             case TYPEID_DYNAMICOBJECT:
                 RemoveFromMap((DynamicObject*)obj, true);
                 break;

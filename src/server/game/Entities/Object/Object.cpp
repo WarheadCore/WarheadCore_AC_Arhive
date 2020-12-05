@@ -535,20 +535,20 @@ uint32 Object::GetUpdateFieldData(Player const* target, uint32*& flags) const
             break;
         case TYPEID_UNIT:
         case TYPEID_PLAYER:
-            {
-                Player* plr = ToUnit()->GetCharmerOrOwnerPlayerOrPlayerItself();
-                flags = UnitUpdateFieldFlags;
-                if (ToUnit()->GetOwnerGUID() == target->GetGUID())
-                    visibleFlag |= UF_FLAG_OWNER;
+        {
+            Player* plr = ToUnit()->GetCharmerOrOwnerPlayerOrPlayerItself();
+            flags = UnitUpdateFieldFlags;
+            if (ToUnit()->GetOwnerGUID() == target->GetGUID())
+                visibleFlag |= UF_FLAG_OWNER;
 
-                if (HasFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_SPECIALINFO))
-                    if (ToUnit()->HasAuraTypeWithCaster(SPELL_AURA_EMPATHY, target->GetGUID()))
-                        visibleFlag |= UF_FLAG_SPECIAL_INFO;
+            if (HasFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_SPECIALINFO))
+                if (ToUnit()->HasAuraTypeWithCaster(SPELL_AURA_EMPATHY, target->GetGUID()))
+                    visibleFlag |= UF_FLAG_SPECIAL_INFO;
 
-                if (plr && plr->IsInSameRaidWith(target))
-                    visibleFlag |= UF_FLAG_PARTY_MEMBER;
-                break;
-            }
+            if (plr && plr->IsInSameRaidWith(target))
+                visibleFlag |= UF_FLAG_PARTY_MEMBER;
+            break;
+        }
         case TYPEID_GAMEOBJECT:
             flags = GameObjectUpdateFieldFlags;
             if (ToGameObject()->GetOwnerGUID() == target->GetGUID())
@@ -1283,62 +1283,62 @@ void WorldObject::UpdateAllowedPositionZ(float x, float y, float& z) const
     switch (GetTypeId())
     {
         case TYPEID_UNIT:
+        {
+            // non fly unit don't must be in air
+            // non swim unit must be at ground (mostly speedup, because it don't must be in water and water level check less fast
+            if (!ToCreature()->CanFly())
             {
-                // non fly unit don't must be in air
-                // non swim unit must be at ground (mostly speedup, because it don't must be in water and water level check less fast
-                if (!ToCreature()->CanFly())
+                bool canSwim = ToCreature()->CanSwim();
+                float ground_z = z;
+                float max_z = canSwim
+                              ? GetMap()->GetWaterOrGroundLevel(GetPhaseMask(), x, y, z, &ground_z, !ToUnit()->HasAuraType(SPELL_AURA_WATER_WALK))
+                              : ((ground_z = GetMap()->GetHeight(GetPhaseMask(), x, y, z, true)));
+                if (max_z > INVALID_HEIGHT)
                 {
-                    bool canSwim = ToCreature()->CanSwim();
-                    float ground_z = z;
-                    float max_z = canSwim
-                                  ? GetMap()->GetWaterOrGroundLevel(GetPhaseMask(), x, y, z, &ground_z, !ToUnit()->HasAuraType(SPELL_AURA_WATER_WALK))
-                                  : ((ground_z = GetMap()->GetHeight(GetPhaseMask(), x, y, z, true)));
-                    if (max_z > INVALID_HEIGHT)
-                    {
-                        if (z > max_z)
-                            z = max_z;
-                        else if (z < ground_z)
-                            z = ground_z;
-                    }
-                }
-                else
-                {
-                    float ground_z = GetMap()->GetHeight(GetPhaseMask(), x, y, z, true);
-                    if (z < ground_z)
+                    if (z > max_z)
+                        z = max_z;
+                    else if (z < ground_z)
                         z = ground_z;
                 }
-                break;
             }
-        case TYPEID_PLAYER:
-            {
-                // for server controlled moves playr work same as creature (but it can always swim)
-                if (!ToPlayer()->CanFly())
-                {
-                    float ground_z = z;
-                    float max_z = GetMap()->GetWaterOrGroundLevel(GetPhaseMask(), x, y, z, &ground_z, !ToUnit()->HasAuraType(SPELL_AURA_WATER_WALK));
-                    if (max_z > INVALID_HEIGHT)
-                    {
-                        if (z > max_z)
-                            z = max_z;
-                        else if (z < ground_z)
-                            z = ground_z;
-                    }
-                }
-                else
-                {
-                    float ground_z = GetMap()->GetHeight(GetPhaseMask(), x, y, z, true);
-                    if (z < ground_z)
-                        z = ground_z;
-                }
-                break;
-            }
-        default:
+            else
             {
                 float ground_z = GetMap()->GetHeight(GetPhaseMask(), x, y, z, true);
-                if (ground_z > INVALID_HEIGHT)
+                if (z < ground_z)
                     z = ground_z;
-                break;
             }
+            break;
+        }
+        case TYPEID_PLAYER:
+        {
+            // for server controlled moves playr work same as creature (but it can always swim)
+            if (!ToPlayer()->CanFly())
+            {
+                float ground_z = z;
+                float max_z = GetMap()->GetWaterOrGroundLevel(GetPhaseMask(), x, y, z, &ground_z, !ToUnit()->HasAuraType(SPELL_AURA_WATER_WALK));
+                if (max_z > INVALID_HEIGHT)
+                {
+                    if (z > max_z)
+                        z = max_z;
+                    else if (z < ground_z)
+                        z = ground_z;
+                }
+            }
+            else
+            {
+                float ground_z = GetMap()->GetHeight(GetPhaseMask(), x, y, z, true);
+                if (z < ground_z)
+                    z = ground_z;
+            }
+            break;
+        }
+        default:
+        {
+            float ground_z = GetMap()->GetHeight(GetPhaseMask(), x, y, z, true);
+            if (ground_z > INVALID_HEIGHT)
+                z = ground_z;
+            break;
+        }
     }
 }
 
@@ -1787,33 +1787,33 @@ TempSummon* Map::SummonCreature(uint32 entry, Position const& pos, SummonPropert
             case SUMMON_CATEGORY_WILD:
             case SUMMON_CATEGORY_ALLY:
             case SUMMON_CATEGORY_UNK:
+            {
+                switch (properties->Type)
                 {
-                    switch (properties->Type)
-                    {
-                        case SUMMON_TYPE_MINION:
-                        case SUMMON_TYPE_GUARDIAN:
-                        case SUMMON_TYPE_GUARDIAN2:
+                    case SUMMON_TYPE_MINION:
+                    case SUMMON_TYPE_GUARDIAN:
+                    case SUMMON_TYPE_GUARDIAN2:
+                        mask = UNIT_MASK_GUARDIAN;
+                        break;
+                    case SUMMON_TYPE_TOTEM:
+                    case SUMMON_TYPE_LIGHTWELL:
+                        mask = UNIT_MASK_TOTEM;
+                        break;
+                    case SUMMON_TYPE_VEHICLE:
+                    case SUMMON_TYPE_VEHICLE2:
+                        mask = UNIT_MASK_SUMMON;
+                        break;
+                    case SUMMON_TYPE_MINIPET:
+                    case SUMMON_TYPE_JEEVES:
+                        mask = UNIT_MASK_MINION;
+                        break;
+                    default:
+                        if (properties->Flags & 512) // Mirror Image, Summon Gargoyle
                             mask = UNIT_MASK_GUARDIAN;
-                            break;
-                        case SUMMON_TYPE_TOTEM:
-                        case SUMMON_TYPE_LIGHTWELL:
-                            mask = UNIT_MASK_TOTEM;
-                            break;
-                        case SUMMON_TYPE_VEHICLE:
-                        case SUMMON_TYPE_VEHICLE2:
-                            mask = UNIT_MASK_SUMMON;
-                            break;
-                        case SUMMON_TYPE_MINIPET:
-                        case SUMMON_TYPE_JEEVES:
-                            mask = UNIT_MASK_MINION;
-                            break;
-                        default:
-                            if (properties->Flags & 512) // Mirror Image, Summon Gargoyle
-                                mask = UNIT_MASK_GUARDIAN;
-                            break;
-                    }
-                    break;
+                        break;
                 }
+                break;
+            }
             default:
                 return nullptr;
         }
