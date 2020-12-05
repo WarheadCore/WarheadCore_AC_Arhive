@@ -152,11 +152,11 @@ public:
 
     void OnAfterConfigLoad(bool /*reload*/) override
     {
-        sGameConfig->AddBoolConfig("ILU.Enable");
-        sGameConfig->AddBoolConfig("ILU.Teleport.Enable");
-        sGameConfig->AddBoolConfig("ILU.SetMaxSkills.Enable");
-        sGameConfig->AddIntConfig("ILU.LevelUP");
-        sGameConfig->AddStringConfig("ILU.Teleport.Location");
+        sGameConfig->AddOption<bool>("ILU.Enable");
+        sGameConfig->AddOption<bool>("ILU.Teleport.Enable");
+        sGameConfig->AddOption<bool>("ILU.SetMaxSkills.Enable");
+        sGameConfig->AddOption<int32>("ILU.LevelUP");
+        sGameConfig->AddOption<std::string>("ILU.Teleport.Location");
     }
 
     void OnStartup() override

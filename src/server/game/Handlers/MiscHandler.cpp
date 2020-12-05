@@ -268,8 +268,8 @@ void WorldSession::HandleWhoOpcode(WorldPacket& recvData)
 
     uint32 team = _player->GetTeamId();
     uint32 security = GetSecurity();
-    bool allowTwoSideWhoList = sGameConfig->GetBoolConfig("AllowTwoSide.WhoList");
-    uint32 gmLevelInWhoList = sGameConfig->GetIntConfig("GM.InWhoList.Level");
+    bool allowTwoSideWhoList = CONF_GET_BOOL("AllowTwoSide.WhoList");
+    uint32 gmLevelInWhoList = CONF_GET_INT("GM.InWhoList.Level");
     uint32 displaycount = 0;
 
     WorldPacket data(SMSG_WHO, 50);                       // guess size
@@ -374,7 +374,7 @@ void WorldSession::HandleWhoOpcode(WorldPacket& recvData)
 
         // 49 is maximum player count sent to client - can be overridden
         // through config, but is unstable
-        if ((matchcount++) >= sGameConfig->GetIntConfig("MaxWhoListReturns"))
+        if ((matchcount++) >= CONF_GET_INT("MaxWhoListReturns"))
             continue;
 
         data << pname;                                    // player name
@@ -402,13 +402,13 @@ void WorldSession::HandleLogoutRequestOpcode(WorldPacket& /*recv_data*/)
     if (uint64 lguid = GetPlayer()->GetLootGUID())
         DoLootRelease(lguid);
 
-    bool instantLogout = ((GetSecurity() >= 0 && uint32(GetSecurity()) >= sGameConfig->GetIntConfig("InstantLogout"))
+    bool instantLogout = ((GetSecurity() >= 0 && uint32(GetSecurity()) >= CONF_GET_INT("InstantLogout"))
                           || (GetPlayer()->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING) && !GetPlayer()->IsInCombat())) || GetPlayer()->IsInFlight();
 
-    bool preventAfkSanctuaryLogout = sGameConfig->GetIntConfig("PreventAFKLogout") == 1
+    bool preventAfkSanctuaryLogout = CONF_GET_INT("PreventAFKLogout") == 1
                                      && GetPlayer()->isAFK() && sAreaTableStore.LookupEntry(GetPlayer()->GetAreaId())->IsSanctuary();
 
-    bool preventAfkLogout = sGameConfig->GetIntConfig("PreventAFKLogout") == 2
+    bool preventAfkLogout = CONF_GET_INT("PreventAFKLogout") == 2
                             && GetPlayer()->isAFK();
 
     /// TODO: Possibly add RBAC permission to log out in combat
@@ -1017,7 +1017,7 @@ void WorldSession::HandleInspectOpcode(WorldPacket& recv_data)
     WorldPacket data(SMSG_INSPECT_TALENT, guid_size + 4 + talent_points);
     data.append(player->GetPackGUID());
 
-    if (sGameConfig->GetBoolConfig("TalentsInspecting") || _player->IsGameMaster())
+    if (CONF_GET_BOOL("TalentsInspecting") || _player->IsGameMaster())
         player->BuildPlayerTalentsInfoData(&data);
     else
     {

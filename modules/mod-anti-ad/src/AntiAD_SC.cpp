@@ -218,15 +218,15 @@ public:
 
     void OnAfterConfigLoad(bool /*reload*/) override
     {
-        sGameConfig->AddBoolConfig("AntiAD.Enable");
-        sGameConfig->AddBoolConfig("AntiAD.MessageGMsInWorld.Enable");
-        sGameConfig->AddBoolConfig("AntiAD.FullMessageGMsInWorld.Enable");
-        sGameConfig->AddBoolConfig("AntiAD.SelfMessage.Enable");
-        sGameConfig->AddBoolConfig("AntiAD.Mute.Enable");
-        sGameConfig->AddBoolConfig("AntiAD.MuteGM.Enable");
+        sGameConfig->AddOption<bool>("AntiAD.Enable");
+        sGameConfig->AddOption<bool>("AntiAD.MessageGMsInWorld.Enable");
+        sGameConfig->AddOption<bool>("AntiAD.FullMessageGMsInWorld.Enable");
+        sGameConfig->AddOption<bool>("AntiAD.SelfMessage.Enable");
+        sGameConfig->AddOption<bool>("AntiAD.Mute.Enable");
+        sGameConfig->AddOption<bool>("AntiAD.MuteGM.Enable");
 
-        sGameConfig->AddIntConfig("AntiAD.Mute.Time", 5);
-        sGameConfig->AddIntConfig("AntiAD.CheckChannels", 8);
+        sGameConfig->AddOption<int32>("AntiAD.Mute.Time", 5);
+        sGameConfig->AddOption<int32>("AntiAD.CheckChannels", 8);
     }
 
     void OnStartup() override

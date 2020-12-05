@@ -409,7 +409,7 @@ void WorldSession::HandleQuestLogRemoveQuest(WorldPacket& recvData)
             LOG_INFO("network.opcode", "Player %u abandoned quest %u", _player->GetGUIDLow(), questId);
 
             // check if Quest Tracker is enabled
-            if (sGameConfig->GetBoolConfig("Quests.EnableQuestTracker"))
+            if (CONF_GET_BOOL("Quests.EnableQuestTracker"))
             {
                 // prepare Quest Tracker datas
                 PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_QUEST_TRACK_ABANDON_TIME);
@@ -560,7 +560,7 @@ void WorldSession::HandlePushQuestToParty(WorldPacket& recvPacket)
                 }
 
                 // Check if Quest Share in BG is enabled
-                if (sGameConfig->GetBoolConfig("Battleground.DisableQuestShareInBG") && _player->InBattleground())
+                if (CONF_GET_BOOL("Battleground.DisableQuestShareInBG") && _player->InBattleground())
                 {
                     _player->GetSession()->SendNotification(LANG_BG_SHARE_QUEST_ERROR);
                     continue;

@@ -1074,7 +1074,7 @@ uint32 GameEventMgr::StartSystem()                           // return the next 
 
 void GameEventMgr::StartArenaSeason()
 {
-    uint8 season = sGameConfig->GetIntConfig("Arena.ArenaSeason.ID");
+    uint8 season = CONF_GET_INT("Arena.ArenaSeason.ID");
     QueryResult result = WorldDatabase.PQuery("SELECT eventEntry FROM game_event_arena_seasons WHERE season = '%i'", season);
 
     if (!result)
@@ -1202,7 +1202,7 @@ void GameEventMgr::UnApplyEvent(uint16 event_id)
 void GameEventMgr::ApplyNewEvent(uint16 event_id)
 {
     uint8 announce = mGameEvent[event_id].announce;
-    if (announce == 1 || (announce == 2 && sGameConfig->GetIntConfig("Event.Announce")))
+    if (announce == 1 || (announce == 2 && CONF_GET_INT("Event.Announce")))
         sWorld->SendWorldText(LANG_EVENTMESSAGE, mGameEvent[event_id].description.c_str());
 
     //! Run SAI scripts with SMART_EVENT_GAME_EVENT_END

@@ -265,7 +265,7 @@ void World::AddSession_(WorldSession* s)
     {
         WorldSession* oldSession = old->second;
 
-        if (!RemoveQueuedPlayer(oldSession) && sGameConfig->GetIntConfig("DisconnectToleranceInterval"))
+        if (!RemoveQueuedPlayer(oldSession) && CONF_GET_INT("DisconnectToleranceInterval"))
             m_disconnects[s->GetAccountId()] = GameTime::GetGameTime();
 
         // pussywizard:
@@ -307,7 +307,7 @@ void World::AddSession_(WorldSession* s)
 
     s->SendAuthResponse(AUTH_OK, true);
     s->SendAddonsInfo();
-    s->SendClientCacheVersion(sGameConfig->GetIntConfig("ClientCacheVersion"));
+    s->SendClientCacheVersion(CONF_GET_INT("ClientCacheVersion"));
     s->SendTutorialsData();
 
     UpdateMaxSessionCounters();
@@ -318,7 +318,7 @@ bool World::HasRecentlyDisconnected(WorldSession* session)
     if (!session)
         return false;
 
-    if (uint32 tolerance = sGameConfig->GetIntConfig("DisconnectToleranceInterval"))
+    if (uint32 tolerance = CONF_GET_INT("DisconnectToleranceInterval"))
     {
         for (DisconnectMap::iterator i = m_disconnects.begin(); i != m_disconnects.end();)
         {
@@ -393,7 +393,7 @@ bool World::RemoveQueuedPlayer(WorldSession* sess)
         pop_sess->SendAuthWaitQue(0);
         pop_sess->SendAddonsInfo();
 
-        pop_sess->SendClientCacheVersion(sGameConfig->GetIntConfig("ClientCacheVersion"));
+        pop_sess->SendClientCacheVersion(CONF_GET_INT("ClientCacheVersion"));
         pop_sess->SendAccountDataTimes(GLOBAL_CACHE_MASK);
         pop_sess->SendTutorialsData();
 
@@ -429,332 +429,26 @@ void World::LoadConfigSettings(bool reload)
 
     sGameConfig->Load(reload);
 
-    ///- Read the player limit and the Message of the day from the config file
-    if (!reload)
-        SetPlayerAmountLimit(sGameConfig->GetIntConfig("PlayerLimit"));
-
-    Motd::SetMotd(sGameConfig->GetStringConfig("Motd"));
-
-    ///- Get string for new logins (newly created characters)
-    SetNewCharString(sGameConfig->GetStringConfig("PlayerStart.String"));
-
-    ///- Read all rates from the config file
-    auto CheckRate = [](std::string const & optionName)
-    {
-        if (sGameConfig->GetFloatConfig(optionName) < 0.0f)
-        {
-            LOG_ERROR("config", "%s (%f) must be > 0. Using 1 instead.", optionName.c_str(), sGameConfig->GetFloatConfig(optionName));
-            sGameConfig->SetFloat(optionName, 1.0f);
-        }
-    };
-
-    CheckRate("Rate.Health");
-    CheckRate("Rate.Mana");
-    CheckRate("Rate.Rage.Loss");
-    CheckRate("Rate.RunicPower.Loss");
-    CheckRate("Rate.RepairCost");
-    CheckRate("Rate.Talent");
-    CheckRate("Rate.MoveSpeed");
-
-    int32 tempIntOption = 0;
-    float tempFloatOption = 1.0f;
-
-    for (uint8 i = 0; i < MAX_MOVE_TYPE; ++i)
-        playerBaseMoveSpeed[i] = baseMoveSpeed[i] * sGameConfig->GetFloatConfig("Rate.MoveSpeed");
-
-    tempFloatOption = sGameConfig->GetFloatConfig("TargetPosRecalculateRange");
-    if (tempFloatOption < CONTACT_DISTANCE)
-    {
-        LOG_ERROR("config", "TargetPosRecalculateRange (%f) must be >= %f. Using %f instead.",
-                  tempFloatOption, CONTACT_DISTANCE, CONTACT_DISTANCE);
-
-        sGameConfig->SetFloat("TargetPosRecalculateRange", CONTACT_DISTANCE);
-    }
-    else if (tempFloatOption > NOMINAL_MELEE_RANGE)
-    {
-        LOG_ERROR("config", "TargetPosRecalculateRange (%f) must be <= %f. Using %f instead",
-                  tempFloatOption, NOMINAL_MELEE_RANGE, NOMINAL_MELEE_RANGE);
-
-        sGameConfig->SetFloat("TargetPosRecalculateRange", NOMINAL_MELEE_RANGE);
-    }
-
-    tempFloatOption = sGameConfig->GetFloatConfig("DurabilityLoss.OnDeath");
-    if (tempFloatOption < 0.0f)
-    {
-        LOG_ERROR("config", "DurabilityLoss.OnDeath (%f) must be >= 0. Using 0.0 instead", tempFloatOption);
-        sGameConfig->SetFloat("DurabilityLoss.OnDeath", 0.0f);
-    }
-    else if (tempFloatOption > 100.0f)
-    {
-        LOG_ERROR("config", "DurabilityLoss.OnDeath (%f) must be <= 100. Using 100.0 instead", tempFloatOption);
-        sGameConfig->SetFloat("DurabilityLoss.OnDeath", 0.0f);
-    }
-
-    // ???
-    sGameConfig->SetFloat("DurabilityLoss.OnDeath", tempFloatOption / 100.0f);
-
-    auto CheckDurabilityLossChance = [&tempFloatOption](std::string const & optionName)
-    {
-        tempFloatOption = sGameConfig->GetFloatConfig(optionName);
-        if (tempFloatOption < 0.0f)
-        {
-            LOG_ERROR("config", "%s (%f) must be >= 0. Using 0.0 instead", optionName.c_str(), tempFloatOption);
-            sGameConfig->SetFloat(optionName, 1.0f);
-        }
-    };
-
-    CheckDurabilityLossChance("DurabilityLossChance.Damage");
-    CheckDurabilityLossChance("DurabilityLossChance.Absorb");
-    CheckDurabilityLossChance("DurabilityLossChance.Parry");
-    CheckDurabilityLossChance("DurabilityLossChance.Block");
-
-    ///- Read other configuration items from the config file
-    tempIntOption = sGameConfig->GetIntConfig("Compression");
-    if (tempIntOption < 1 || tempIntOption > 9)
-    {
-        LOG_ERROR("config", "Compression level (%i) must be in range 1..9. Using default compression level (1).", tempIntOption);
-        sGameConfig->SetInt("Compression", 1);
-    }
-
-    tempIntOption = sGameConfig->GetIntConfig("PlayerSave.Stats.MinLevel");
-    if (tempIntOption > MAX_LEVEL)
-    {
-        LOG_ERROR("game.config", "PlayerSave.Stats.MinLevel (%i) must be in range 0..80. Using default, do not save character stats (0).", tempIntOption);
-        sGameConfig->SetInt("PlayerSave.Stats.MinLevel", 0);
-    }
-
-    tempIntOption = sGameConfig->GetIntConfig("MapUpdateInterval");
-    if (tempIntOption < MIN_MAP_UPDATE_DELAY)
-    {
-        LOG_ERROR("config", "MapUpdateInterval (%i) must be greater %u. Use this minimal value.", tempIntOption, MIN_MAP_UPDATE_DELAY);
-        sGameConfig->SetInt("MapUpdateInterval", MIN_MAP_UPDATE_DELAY);
-    }
-
-    if (reload)
-        sMapMgr->SetMapUpdateInterval(tempIntOption);
-
-    auto CheckMinName = [](std::string const & optionName, int32 const & maxNameSymols)
-    {
-        int32 confSymbols = sGameConfig->GetIntConfig(optionName);
-        if (confSymbols < 1 || confSymbols > maxNameSymols)
-        {
-            LOG_ERROR("config", "%s (%u) must be in range 1..%u. Set to 2.", optionName.c_str(), confSymbols, maxNameSymols);
-            sGameConfig->SetInt(optionName, 2);
-        }
-    };
-
-    CheckMinName("MinPlayerName", MAX_PLAYER_NAME);
-    CheckMinName("MinCharterName", MAX_CHARTER_NAME);
-    CheckMinName("MinPetName", MAX_PET_NAME);
-
-    int32 charactersPerRealm = sGameConfig->GetIntConfig("CharactersPerRealm");
-    if (charactersPerRealm < 1 || charactersPerRealm > 10)
-    {
-        LOG_ERROR("config", "CharactersPerRealm (%i) must be in range 1..10. Set to 10.", charactersPerRealm);
-        sGameConfig->SetInt("CharactersPerRealm", 10);
-    }
-
-    // must be after "CharactersPerRealm"
-    tempIntOption = sGameConfig->GetIntConfig("CharactersPerAccount");
-    if (tempIntOption < charactersPerRealm)
-    {
-        LOG_ERROR("config", "CharactersPerAccount (%i) can't be less than CharactersPerRealm (%i).", tempIntOption, charactersPerRealm);
-        sGameConfig->SetInt("CharactersPerAccount", charactersPerRealm);
-    }
-
-    tempIntOption = sGameConfig->GetIntConfig("HeroicCharactersPerRealm");
-    if (tempIntOption < 0 || tempIntOption > 10)
-    {
-        LOG_ERROR("config", "HeroicCharactersPerRealm (%i) must be in range 0..10. Set to 1.", tempIntOption);
-        sGameConfig->SetInt("HeroicCharactersPerRealm", 1);
-    }
-
-    tempIntOption = sGameConfig->GetIntConfig("SkipCinematics");
-    if (tempIntOption < 0 || tempIntOption > 2)
-    {
-        LOG_ERROR("config", "SkipCinematics (%i) must be in range 0..2. Set to 0.", tempIntOption);
-        sGameConfig->SetInt("SkipCinematics", 0);
-    }
-
-    int32 maxPlayerLevel = sGameConfig->GetIntConfig("MaxPlayerLevel");
-    if (maxPlayerLevel > MAX_LEVEL)
-    {
-        LOG_ERROR("config", "MaxPlayerLevel (%i) must be in range 1..%u. Set to %u.", maxPlayerLevel, MAX_LEVEL, MAX_LEVEL);
-        sGameConfig->SetInt("MaxPlayerLevel", MAX_LEVEL);
-    }
-
-    int32 startPlayerLevel = sGameConfig->GetIntConfig("StartPlayerLevel");
-    if (startPlayerLevel < 1)
-    {
-        LOG_ERROR("config", "StartPlayerLevel (%i) must be in range 1..MaxPlayerLevel(%u). Set to 1.", startPlayerLevel, maxPlayerLevel);
-        sGameConfig->SetInt("StartPlayerLevel", 1);
-    }
-    else if (startPlayerLevel > maxPlayerLevel)
-    {
-        LOG_ERROR("config", "StartPlayerLevel (%i) must be in range 1..MaxPlayerLevel(%u). Set to %u.", tempIntOption, maxPlayerLevel, maxPlayerLevel);
-        sGameConfig->SetInt("StartPlayerLevel", maxPlayerLevel);
-    }
-
-    tempIntOption = sGameConfig->GetIntConfig("StartHeroicPlayerLevel");
-    if (tempIntOption < 1)
-    {
-        LOG_ERROR("config", "StartHeroicPlayerLevel (%i) must be in range 1..MaxPlayerLevel(%u). Set to 55.", tempIntOption, maxPlayerLevel);
-        sGameConfig->SetInt("StartHeroicPlayerLevel", 55);
-    }
-    else if (tempIntOption > maxPlayerLevel)
-    {
-        LOG_ERROR("config", "StartHeroicPlayerLevel (%i) must be in range 1..MaxPlayerLevel(%u). Set to %u.", tempIntOption, maxPlayerLevel, maxPlayerLevel);
-        sGameConfig->SetInt("StartHeroicPlayerLevel", maxPlayerLevel);
-    }
-
-    tempIntOption = sGameConfig->GetIntConfig("StartPlayerMoney");
-    if (tempIntOption < 0)
-    {
-        LOG_ERROR("config", "StartPlayerMoney (%i) must be in range 0..%u. Set to %u.", tempIntOption, MAX_MONEY_AMOUNT, 0);
-        sGameConfig->SetInt("StartPlayerMoney", 0);
-    }
-    else if (tempIntOption > MAX_MONEY_AMOUNT)
-    {
-        LOG_ERROR("config", "StartPlayerMoney (%i) must be in range 0..%u. Set to %u.", tempIntOption, MAX_MONEY_AMOUNT, MAX_MONEY_AMOUNT);
-        sGameConfig->SetInt("StartPlayerMoney", MAX_MONEY_AMOUNT);
-    }
-
-    auto CheckPoints = [](std::string const & startPointsOptionName, std::string const & maxPointsOptionName)
-    {
-        int32 maxPoints = sGameConfig->GetIntConfig(maxPointsOptionName);
-        if (maxPoints < 0)
-        {
-            LOG_ERROR("config", "%s (%i) can't be negative. Set to 0.", maxPointsOptionName.c_str(), maxPoints);
-            sGameConfig->SetInt(maxPointsOptionName, 0);
-        }
-
-        int32 startPoints = sGameConfig->GetIntConfig(startPointsOptionName);
-        if (startPoints < 0)
-        {
-            LOG_ERROR("config", "%s (%i) must be in range 0..%s(%u). Set to %u.", startPointsOptionName.c_str(), startPoints, maxPointsOptionName.c_str(), maxPoints, 0);
-            sGameConfig->SetInt(startPointsOptionName, 0);
-        }
-        else if (startPoints > maxPoints)
-        {
-            LOG_ERROR("config", "%s (%i) must be in range 0..%s(%u). Set to %u.", startPointsOptionName.c_str(), startPoints, maxPointsOptionName.c_str(), maxPoints, maxPoints);
-            sGameConfig->SetInt(startPointsOptionName, maxPoints);
-        }
-    };
-
-    CheckPoints("StartHonorPoints", "MaxHonorPoints");
-    CheckPoints("StartArenaPoints", "MaxArenaPoints");
-
-    tempIntOption = sGameConfig->GetIntConfig("RecruitAFriend.MaxLevel");
-    if (tempIntOption > maxPlayerLevel)
-    {
-        LOG_ERROR("config", "RecruitAFriend.MaxLevel (%i) must be in the range 0..MaxLevel(%u). Set to %u.",
-                  tempIntOption, maxPlayerLevel, 60);
-
-        sGameConfig->SetInt("RecruitAFriend.MaxLevel", 60);
-    }
-
-    tempIntOption = sGameConfig->GetIntConfig("MinPetitionSigns");
-    if (tempIntOption > 9)
-    {
-        LOG_ERROR("config", "MinPetitionSigns (%i) must be in range 0..9. Set to 9.", tempIntOption);
-        sGameConfig->SetInt("MinPetitionSigns", 9);
-    }
-
-    tempIntOption = sGameConfig->GetIntConfig("GM.StartLevel");
-    if (tempIntOption < startPlayerLevel)
-    {
-        LOG_ERROR("config", "GM.StartLevel (%i) must be in range StartPlayerLevel(%u)..%u. Set to %u.", tempIntOption, tempIntOption, MAX_LEVEL, tempIntOption);
-        sGameConfig->SetInt("GM.StartLevel", startPlayerLevel);
-    }
-    else if (tempIntOption > MAX_LEVEL)
-    {
-        LOG_ERROR("config", "GM.StartLevel (%i) must be in range 1..%u. Set to %u.", tempIntOption, MAX_LEVEL, MAX_LEVEL);
-        sGameConfig->SetInt("GM.StartLevel", MAX_LEVEL);
-    }
-
-    tempIntOption = sGameConfig->GetIntConfig("UpdateUptimeInterval");
-    if (tempIntOption <= 0)
-    {
-        LOG_ERROR("config", "UpdateUptimeInterval (%i) must be > 0, set to default 10.", tempIntOption);
-        sGameConfig->SetInt("UpdateUptimeInterval", 10); // 10
-    }
-
     if (reload)
     {
-        m_timers[WUPDATE_UPTIME].SetInterval(tempIntOption * MINUTE * IN_MILLISECONDS);
+        m_timers[WUPDATE_UPTIME].SetInterval(CONF_GET_INT("UpdateUptimeInterval") * MINUTE * IN_MILLISECONDS);
         m_timers[WUPDATE_UPTIME].Reset();
     }
 
-    // log db cleanup interval
-    tempIntOption = sGameConfig->GetIntConfig("LogDB.Opt.ClearInterval");
-    if (tempIntOption <= 0)
-    {
-        LOG_ERROR("config", "LogDB.Opt.ClearInterval (%i) must be > 0, set to default 10.", tempIntOption);
-        sGameConfig->SetInt("LogDB.Opt.ClearInterval", 10);
-    }
-
     if (reload)
     {
-        m_timers[WUPDATE_CLEANDB].SetInterval(tempIntOption * MINUTE * IN_MILLISECONDS);
+        m_timers[WUPDATE_CLEANDB].SetInterval(CONF_GET_INT("LogDB.Opt.ClearInterval") * MINUTE * IN_MILLISECONDS);
         m_timers[WUPDATE_CLEANDB].Reset();
     }
 
-    LOG_TRACE("server.loading", "Will clear `logs` table of entries older than %i seconds every %u minutes.",
-              sGameConfig->GetIntConfig("LogDB.Opt.ClearTime"), sGameConfig->GetIntConfig("LogDB.Opt.ClearInterval"));
-
-    tempIntOption = sGameConfig->GetIntConfig("MaxOverspeedPings");
-    if (tempIntOption != 0 && tempIntOption < 2)
-    {
-        LOG_ERROR("config", "MaxOverspeedPings (%i) must be in range 2..infinity (or 0 to disable check). Set to 2.", tempIntOption);
-        sGameConfig->SetInt("MaxOverspeedPings", 2);
-    }
-
-    auto CheckResetTime = [](std::string const & optionName)
-    {
-        int32 hours = sGameConfig->GetIntConfig(optionName);
-        if (hours > 23)
-        {
-            LOG_ERROR("config", "%s (%i) can't be load. Set to 6.", optionName.c_str(), hours);
-            sGameConfig->SetInt(optionName, 6);
-        }
-    };
-
-    CheckResetTime("Battleground.Random.ResetHour");
-    CheckResetTime("Guild.ResetHour");
-
-    // always use declined names in the russian client
-    sGameConfig->SetBool("DeclinedNames", sGameConfig->GetIntConfig("RealmZone") == REALM_ZONE_RUSSIAN ? true : sGameConfig->GetBoolConfig("DeclinedNames"));
-
-    if (int32 clientCacheId = sGameConfig->GetIntConfig("ClientCacheVersion"))
-    {
-        // overwrite DB/old value
-        if (clientCacheId)
-        {
-            sGameConfig->SetInt("ClientCacheVersion", clientCacheId);
-            LOG_INFO("server.loading", "Client cache version set to: %u", clientCacheId);
-        }
-        else
-            LOG_ERROR("config", "ClientCacheVersion can't be negative %d, ignored.", clientCacheId);
-    }
-
-    auto CheckLogRecordsCount = [](std::string const & optionName, int32 const & maxRecords)
-    {
-        int32 records = sGameConfig->GetIntConfig(optionName);
-        if (records > maxRecords)
-            sGameConfig->SetInt(optionName, maxRecords);
-    };
-
-    CheckLogRecordsCount("Guild.EventLogRecordsCount", GUILD_EVENTLOG_MAX_RECORDS);
-    CheckLogRecordsCount("Guild.BankEventLogRecordsCount", GUILD_BANKLOG_MAX_RECORDS);
-
-    tempFloatOption = sGameConfig->GetFloatConfig("Rate.Creature.Aggro");
+    auto rateAggro = CONF_GET_FLOAT("Rate.Creature.Aggro");
 
     // Visibility on continents
-    m_MaxVisibleDistanceOnContinents = sGameConfig->GetFloatConfig("Visibility.Distance.Continents");
-    if (m_MaxVisibleDistanceOnContinents < 45 * tempFloatOption)
+    m_MaxVisibleDistanceOnContinents = CONF_GET_FLOAT("Visibility.Distance.Continents");
+    if (m_MaxVisibleDistanceOnContinents < 45 * rateAggro)
     {
-        LOG_ERROR("config", "Visibility.Distance.Continents can't be less max aggro radius %f", 45 * tempFloatOption);
-        m_MaxVisibleDistanceOnContinents = 45 * tempFloatOption;
+        LOG_ERROR("config", "Visibility.Distance.Continents can't be less max aggro radius %f", 45 * rateAggro);
+        m_MaxVisibleDistanceOnContinents = 45 * rateAggro;
     }
     else if (m_MaxVisibleDistanceOnContinents > MAX_VISIBILITY_DISTANCE)
     {
@@ -763,11 +457,11 @@ void World::LoadConfigSettings(bool reload)
     }
 
     // Visibility in instances
-    m_MaxVisibleDistanceInInstances = sGameConfig->GetFloatConfig("Visibility.Distance.Instances");
-    if (m_MaxVisibleDistanceInInstances < 45 * tempFloatOption)
+    m_MaxVisibleDistanceInInstances = CONF_GET_FLOAT("Visibility.Distance.Instances");
+    if (m_MaxVisibleDistanceInInstances < 45 * rateAggro)
     {
-        LOG_ERROR("config", "Visibility.Distance.Instances can't be less max aggro radius %f", 45 * tempFloatOption);
-        m_MaxVisibleDistanceInInstances = 45 * tempFloatOption;
+        LOG_ERROR("config", "Visibility.Distance.Instances can't be less max aggro radius %f", 45 * rateAggro);
+        m_MaxVisibleDistanceInInstances = 45 * rateAggro;
     }
     else if (m_MaxVisibleDistanceInInstances > MAX_VISIBILITY_DISTANCE)
     {
@@ -776,11 +470,11 @@ void World::LoadConfigSettings(bool reload)
     }
 
     // Visibility in BG/Arenas
-    m_MaxVisibleDistanceInBGArenas = sGameConfig->GetFloatConfig("Visibility.Distance.BGArenas");
-    if (m_MaxVisibleDistanceInBGArenas < 45 * tempFloatOption)
+    m_MaxVisibleDistanceInBGArenas = CONF_GET_FLOAT("Visibility.Distance.BGArenas");
+    if (m_MaxVisibleDistanceInBGArenas < 45 * rateAggro)
     {
-        LOG_ERROR("config", "Visibility.Distance.BGArenas can't be less max aggro radius %f", 45 * tempFloatOption);
-        m_MaxVisibleDistanceInBGArenas = 45 * tempFloatOption;
+        LOG_ERROR("config", "Visibility.Distance.BGArenas can't be less max aggro radius %f", 45 * rateAggro);
+        m_MaxVisibleDistanceInBGArenas = 45 * rateAggro;
     }
     else if (m_MaxVisibleDistanceInBGArenas > MAX_VISIBILITY_DISTANCE)
     {
@@ -789,7 +483,7 @@ void World::LoadConfigSettings(bool reload)
     }
 
     ///- Read the "Data" directory from the config file
-    std::string dataPath = sGameConfig->GetStringConfig("DataDir");
+    std::string dataPath = CONF_GET_STR("DataDir");
     if (dataPath.empty() || (dataPath.at(dataPath.length() - 1) != '/' && dataPath.at(dataPath.length() - 1) != '\\'))
         dataPath.push_back('/');
 
@@ -807,10 +501,10 @@ void World::LoadConfigSettings(bool reload)
     else
         m_dataPath = dataPath;
 
-    bool enableIndoor   = sGameConfig->GetBoolConfig("vmap.enableIndoorCheck");
-    bool enableLOS      = sGameConfig->GetBoolConfig("vmap.enableLOS");
-    bool enableHeight   = sGameConfig->GetBoolConfig("vmap.enableHeight");
-    bool enablePetLOS   = sGameConfig->GetBoolConfig("vmap.petLOS");
+    bool enableIndoor = CONF_GET_BOOL("vmap.enableIndoorCheck");
+    bool enableLOS = CONF_GET_BOOL("vmap.enableLOS");
+    bool enableHeight = CONF_GET_BOOL("vmap.enableHeight");
+    bool enablePetLOS = CONF_GET_BOOL("vmap.petLOS");
 
     if (!enableHeight)
         LOG_ERROR("config", "VMap height checking disabled! Creatures movements and other various things WILL be broken! Expect no support.");
@@ -820,48 +514,24 @@ void World::LoadConfigSettings(bool reload)
 
     if (!reload)
     {
-        auto VMAPBoolToString = [](bool value) -> std::string
+        auto VMAPBoolToString = [](bool value)
         {
-            if (value)
-                return "Enable";
-
-            return "Disable";
+            return value ? "Enable" : "Disable";
         };
 
         LOG_INFO("server.loading", "Loading data configurations...");
         LOG_INFO("server.loading", "> Using DataDir:        %s", m_dataPath.c_str());
         LOG_INFO("server.loading", "");
         LOG_INFO("server.loading", "Loading VMap configurations...");
-        LOG_INFO("server.loading", "> Line Of Sight:        %s", VMAPBoolToString(enableLOS).c_str());
-        LOG_INFO("server.loading", "> Get Height:           %s", VMAPBoolToString(enableHeight).c_str());
-        LOG_INFO("server.loading", "> Indoor Check:         %s", VMAPBoolToString(enableIndoor).c_str());
-        LOG_INFO("server.loading", "> Pet LOS:              %s", VMAPBoolToString(enablePetLOS).c_str());
-    }
-
-    if (sGameConfig->GetBoolConfig("PlayerStart.AllSpells"))
-        LOG_INFO("server.loading", "WORLD: WARNING: PlayerStart.AllSpells enabled - may not function as intended!");
-
-    tempIntOption = sGameConfig->GetIntConfig("PvPToken.ItemCount");
-    if (tempIntOption < 1)
-        sGameConfig->SetInt("PvPToken.ItemCount", 1);
-
-    tempIntOption = sGameConfig->GetIntConfig("PacketSpoof.BanMode");
-    if (tempIntOption == 1 || tempIntOption > 2)
-    {
-        LOG_ERROR("config", "> AntiDOS: Invalid ban mode %u. Set 0", tempIntOption);
-        sGameConfig->SetInt("PacketSpoof.BanMode", 0);
-    }
-
-    tempIntOption = sGameConfig->GetIntConfig("Calendar.DeleteOldEventsHour");
-    if (tempIntOption > 23)
-    {
-        LOG_ERROR("config", "Calendar.DeleteOldEventsHour (%i) can't be load. Set to 6.", tempIntOption);
-        sGameConfig->SetInt("Calendar.DeleteOldEventsHour", 6);
+        LOG_INFO("server.loading", "> Line Of Sight:        %s", VMAPBoolToString(enableLOS));
+        LOG_INFO("server.loading", "> Get Height:           %s", VMAPBoolToString(enableHeight));
+        LOG_INFO("server.loading", "> Indoor Check:         %s", VMAPBoolToString(enableIndoor));
+        LOG_INFO("server.loading", "> Pet LOS:              %s", VMAPBoolToString(enablePetLOS));
     }
 
     if (reload)
     {
-        m_timers[WUPDATE_AUTOBROADCAST].SetInterval(sGameConfig->GetIntConfig("AutoBroadcast.Timer"));
+        m_timers[WUPDATE_AUTOBROADCAST].SetInterval(CONF_GET_INT("AutoBroadcast.Timer"));
         m_timers[WUPDATE_AUTOBROADCAST].Reset();
     }
 
@@ -911,7 +581,7 @@ void World::SetInitialWorldSettings()
                 || !MapManager::ExistMapAndVMap(0, 1676.35f, 1677.45f)
                 || !MapManager::ExistMapAndVMap(1, 10311.3f, 832.463f)
                 || !MapManager::ExistMapAndVMap(1, -2917.58f, -257.98f)
-                || (sGameConfig->GetIntConfig("Expansion") && (
+                || (CONF_GET_INT("Expansion") && (
                         !MapManager::ExistMapAndVMap(530, 10349.6f, -6357.29f) ||
                         !MapManager::ExistMapAndVMap(530, -3961.64f, -13931.2f))))
             exit(1);
@@ -937,9 +607,9 @@ void World::SetInitialWorldSettings()
     if (IsFFAPvPRealm())
         server_type = REALM_TYPE_PVP;
     else
-        server_type = sGameConfig->GetIntConfig("GameType");
+        server_type = CONF_GET_INT("GameType");
 
-    uint32 realm_zone = sGameConfig->GetIntConfig("RealmZone");
+    uint32 realm_zone = CONF_GET_INT("RealmZone");
 
     LoginDatabase.PExecute("UPDATE realmlist SET icon = %u, timezone = %u WHERE id = '%d'", server_type, realm_zone, realmID);      // One-time query
 
@@ -1390,19 +1060,19 @@ void World::SetInitialWorldSettings()
     m_timers[WUPDATE_WEATHERS].SetInterval(1 * IN_MILLISECONDS);
     m_timers[WUPDATE_AUCTIONS].SetInterval(MINUTE * IN_MILLISECONDS);
     m_timers[WUPDATE_AUCTIONS].SetCurrent(MINUTE * IN_MILLISECONDS);
-    m_timers[WUPDATE_UPTIME].SetInterval(sGameConfig->GetIntConfig("UpdateUptimeInterval") * MINUTE * IN_MILLISECONDS);
+    m_timers[WUPDATE_UPTIME].SetInterval(CONF_GET_INT("UpdateUptimeInterval") * MINUTE * IN_MILLISECONDS);
 
     //Update "uptime" table based on configuration entry in minutes.
     m_timers[WUPDATE_CORPSES].SetInterval(20 * MINUTE * IN_MILLISECONDS);
 
     //erase corpses every 20 minutes
-    m_timers[WUPDATE_CLEANDB].SetInterval(sGameConfig->GetIntConfig("LogDB.Opt.ClearInterval") * MINUTE * IN_MILLISECONDS);
+    m_timers[WUPDATE_CLEANDB].SetInterval(CONF_GET_INT("LogDB.Opt.ClearInterval") * MINUTE * IN_MILLISECONDS);
 
     // clean logs table every 14 days by default
-    m_timers[WUPDATE_AUTOBROADCAST].SetInterval(sGameConfig->GetIntConfig("AutoBroadcast.Timer"));
+    m_timers[WUPDATE_AUTOBROADCAST].SetInterval(CONF_GET_INT("AutoBroadcast.Timer"));
 
     // Mysql ping time in minutes
-    m_timers[WUPDATE_PINGDB].SetInterval(sGameConfig->GetIntConfig("MaxPingTime") * MINUTE * IN_MILLISECONDS);
+    m_timers[WUPDATE_PINGDB].SetInterval(CONF_GET_INT("MaxPingTime") * MINUTE * IN_MILLISECONDS);
 
     // our speed up
     m_timers[WUPDATE_5_SECS].SetInterval(5 * IN_MILLISECONDS);
@@ -1494,7 +1164,7 @@ void World::SetInitialWorldSettings()
     mgr = ChannelMgr::forTeam(TEAM_HORDE);
     mgr->LoadChannels();
 
-    if (sGameConfig->GetBoolConfig("PreloadAllNonInstancedMapGrids"))
+    if (CONF_GET_BOOL("PreloadAllNonInstancedMapGrids"))
     {
         LOG_INFO("server.loading", "Loading all grids for all non-instanced maps...");
 
@@ -1532,7 +1202,7 @@ void World::SetInitialWorldSettings()
 
 void World::DetectDBCLang()
 {
-    uint8 m_lang_confid = sGameConfig->GetIntConfig("DBC.Locale");
+    uint8 m_lang_confid = CONF_GET_INT("DBC.Locale");
 
     if (m_lang_confid != 255 && m_lang_confid >= TOTAL_LOCALES)
     {
@@ -1579,7 +1249,7 @@ void World::LoadAutobroadcasts()
     m_AutobroadcastsWeights.clear();
 
     PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_AUTOBROADCAST);
-    stmt->setInt32(0, sGameConfig->GetIntConfig("RealmID"));
+    stmt->setInt32(0, CONF_GET_INT("RealmID"));
     PreparedQueryResult result = LoginDatabase.Query(stmt);
 
     if (!result)
@@ -1724,7 +1394,7 @@ void World::Update(uint32 diff)
     }
 
     /// <li> Clean logs table
-    if (sGameConfig->GetIntConfig("LogDB.Opt.ClearTime") > 0) // if not enabled, ignore the timer
+    if (CONF_GET_INT("LogDB.Opt.ClearTime") > 0) // if not enabled, ignore the timer
     {
         if (m_timers[WUPDATE_CLEANDB].Passed())
         {
@@ -1732,7 +1402,7 @@ void World::Update(uint32 diff)
 
             PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_DEL_OLD_LOGS);
 
-            stmt->setUInt32(0, sGameConfig->GetIntConfig("LogDB.Opt.ClearTime"));
+            stmt->setUInt32(0, CONF_GET_INT("LogDB.Opt.ClearTime"));
             stmt->setUInt32(1, uint32(time(0)));
 
             LoginDatabase.Execute(stmt);
@@ -1749,7 +1419,7 @@ void World::Update(uint32 diff)
         sMapMgr->Update(diff);
     }
 
-    if (sGameConfig->GetBoolConfig("AutoBroadcast.On"))
+    if (CONF_GET_BOOL("AutoBroadcast.On"))
     {
         if (m_timers[WUPDATE_AUTOBROADCAST].Passed())
         {
@@ -2203,7 +1873,7 @@ void World::UpdateSessions(uint32 diff)
         // pussywizard:
         if (pSession->HandleSocketClosed())
         {
-            if (!RemoveQueuedPlayer(pSession) && sGameConfig->GetIntConfig("DisconnectToleranceInterval"))
+            if (!RemoveQueuedPlayer(pSession) && CONF_GET_INT("DisconnectToleranceInterval"))
                 m_disconnects[pSession->GetAccountId()] = GameTime::GetGameTime();
             m_sessions.erase(itr);
             // there should be no offline session if current one is logged onto a character
@@ -2222,7 +1892,7 @@ void World::UpdateSessions(uint32 diff)
 
         if (!pSession->Update(diff, updater))
         {
-            if (!RemoveQueuedPlayer(pSession) && sGameConfig->GetIntConfig("DisconnectToleranceInterval"))
+            if (!RemoveQueuedPlayer(pSession) && CONF_GET_INT("DisconnectToleranceInterval"))
                 m_disconnects[pSession->GetAccountId()] = GameTime::GetGameTime();
             m_sessions.erase(itr);
             if (m_offlineSessions.find(pSession->GetAccountId()) != m_offlineSessions.end()) // pussywizard: don't set offline in db because offline session for that acc is present (character is in world)
@@ -2308,7 +1978,7 @@ void World::SendAutoBroadcast()
     else
         msg = m_Autobroadcasts[urand(0, m_Autobroadcasts.size())];
 
-    uint32 abcenter = sGameConfig->GetIntConfig("AutoBroadcast.Center");
+    uint32 abcenter = CONF_GET_INT("AutoBroadcast.Center");
 
     if (abcenter == 0)
         sWorld->SendWorldText(LANG_AUTO_BROADCAST, msg.c_str());
@@ -2447,7 +2117,7 @@ void World::InitCalendarOldEventsDeletionTime()
 {
     time_t now = GameTime::GetGameTime();
     time_t currentDeletionTime = getWorldState(WS_DAILY_CALENDAR_DELETION_OLD_EVENTS_TIME);
-    time_t nextDeletionTime = currentDeletionTime ? currentDeletionTime : GetNextTimeWithDayAndHour(-1, sGameConfig->GetIntConfig("Calendar.DeleteOldEventsHour"));
+    time_t nextDeletionTime = currentDeletionTime ? currentDeletionTime : GetNextTimeWithDayAndHour(-1, CONF_GET_INT("Calendar.DeleteOldEventsHour"));
 
     // If the reset time saved in the worldstate is before now it means the server was offline when the reset was supposed to occur.
     // In this case we set the reset time in the past and next world update will do the reset and schedule next one in the future.
@@ -2595,7 +2265,7 @@ void World::LoadDBVersion()
         m_DBVersion              = fields[0].GetString();
 
         // will be overwrite by config values if different and non-0
-        sGameConfig->AddIntConfig("ClientCacheVersion", fields[1].GetUInt32());
+        sGameConfig->AddOption<int32>("ClientCacheVersion", fields[1].GetUInt32());
     }
 
     if (m_DBVersion.empty())
@@ -2947,16 +2617,16 @@ uint32 World::GetGlobalPlayerGUID(std::string const& name) const
 
 uint16 World::GetConfigMaxSkillValue() const
 {
-    uint16 lvl = uint16(sGameConfig->GetIntConfig("MaxPlayerLevel"));
+    uint16 lvl = uint16(CONF_GET_INT("MaxPlayerLevel"));
     return lvl > 60 ? 300 + ((lvl - 60) * 75) / 10 : lvl * 5;
 }
 
 bool World::IsPvPRealm() const
 {
-    return (sGameConfig->GetIntConfig("GameType") == REALM_TYPE_PVP || sGameConfig->GetIntConfig("GameType") == REALM_TYPE_RPPVP || sGameConfig->GetIntConfig("GameType") == REALM_TYPE_FFA_PVP);
+    return (CONF_GET_INT("GameType") == REALM_TYPE_PVP || CONF_GET_INT("GameType") == REALM_TYPE_RPPVP || CONF_GET_INT("GameType") == REALM_TYPE_FFA_PVP);
 }
 
 bool World::IsFFAPvPRealm() const
 {
-    return sGameConfig->GetIntConfig("GameType") == REALM_TYPE_FFA_PVP;
+    return CONF_GET_INT("GameType") == REALM_TYPE_FFA_PVP;
 }

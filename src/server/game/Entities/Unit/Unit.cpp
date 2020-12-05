@@ -906,7 +906,7 @@ uint32 Unit::DealDamage(Unit* attacker, Unit* victim, uint32 damage, CleanDamage
         else                                                // victim is a player
         {
             // random durability for items (HIT TAKEN)
-            if (roll_chance_f(sGameConfig->GetFloatConfig("DurabilityLossChance.Damage")))
+            if (roll_chance_f(CONF_GET_FLOAT("DurabilityLossChance.Damage")))
             {
                 EquipmentSlots slot = EquipmentSlots(urand(0, EQUIPMENT_SLOT_END - 1));
                 victim->ToPlayer()->DurabilityPointLossForEquipSlot(slot);
@@ -923,7 +923,7 @@ uint32 Unit::DealDamage(Unit* attacker, Unit* victim, uint32 damage, CleanDamage
         if (attacker && attacker->GetTypeId() == TYPEID_PLAYER)
         {
             // random durability for items (HIT DONE)
-            if (roll_chance_f(sGameConfig->GetFloatConfig("DurabilityLossChance.Damage")))
+            if (roll_chance_f(CONF_GET_FLOAT("DurabilityLossChance.Damage")))
             {
                 EquipmentSlots slot = EquipmentSlots(urand(0, EQUIPMENT_SLOT_END - 1));
                 attacker->ToPlayer()->DurabilityPointLossForEquipSlot(slot);
@@ -16732,11 +16732,11 @@ void Unit::Kill(Unit* killer, Unit* victim, bool durabilityLoss, WeaponAttackTyp
         plrVictim->SetPvPDeath(player != nullptr);
 
         // only if not player and not controlled by player pet. And not at BG
-        if ((durabilityLoss && !player && !plrVictim->InBattleground()) || (player && sGameConfig->GetBoolConfig("DurabilityLoss.InPvP")))
+        if ((durabilityLoss && !player && !plrVictim->InBattleground()) || (player && CONF_GET_BOOL("DurabilityLoss.InPvP")))
         {
-            LOG_DEBUG("entities.unit", "We are dead, losing %f percent durability", sGameConfig->GetFloatConfig("DurabilityLoss.OnDeath"));
+            LOG_DEBUG("entities.unit", "We are dead, losing %f percent durability", CONF_GET_FLOAT("DurabilityLoss.OnDeath"));
 
-            plrVictim->DurabilityLossAll(sGameConfig->GetFloatConfig("DurabilityLoss.OnDeath"), false);
+            plrVictim->DurabilityLossAll(CONF_GET_FLOAT("DurabilityLoss.OnDeath"), false);
             // durability lost message
             WorldPacket data(SMSG_DURABILITY_DAMAGE_DEATH, 0);
             plrVictim->GetSession()->SendPacket(&data);
@@ -17092,7 +17092,7 @@ void Unit::SetFeared(bool apply)
             caster = ObjectAccessor::GetUnit(*this, fearAuras.front()->GetCasterGUID());
         if (!caster)
             caster = getAttackerForHelper();
-        GetMotionMaster()->MoveFleeing(caster, fearAuras.empty() ? sGameConfig->GetIntConfig("CreatureFamilyFleeDelay") : 0);             // caster == NULL processed in MoveFleeing
+        GetMotionMaster()->MoveFleeing(caster, fearAuras.empty() ? CONF_GET_INT("CreatureFamilyFleeDelay") : 0);             // caster == NULL processed in MoveFleeing
     }
     else
     {
@@ -18847,7 +18847,7 @@ void Unit::RewardRage(uint32 damage, uint32 weaponSpeedHitFactor, bool attacker)
             addRage *= 3.0f;
     }
 
-    addRage *= sGameConfig->GetFloatConfig("Rate.Rage.Income");
+    addRage *= CONF_GET_FLOAT("Rate.Rage.Income");
 
     ModifyPower(POWER_RAGE, uint32(addRage * 10));
 }
@@ -19524,7 +19524,7 @@ void Unit::BuildValuesUpdate(uint8 updateType, ByteBuffer* data, Player* target)
 
                 if (creature)
                 {
-                    if (sGameConfig->GetIntConfig("InstantFlightPaths") == 2 && appendValue & UNIT_NPC_FLAG_FLIGHTMASTER)
+                    if (CONF_GET_INT("InstantFlightPaths") == 2 && appendValue & UNIT_NPC_FLAG_FLIGHTMASTER)
                         appendValue |= UNIT_NPC_FLAG_GOSSIP; // flight masters need NPC gossip flag to show instant flight toggle option
 
                     if (!target->CanSeeSpellClickOn(creature))
@@ -19626,7 +19626,7 @@ void Unit::BuildValuesUpdate(uint8 updateType, ByteBuffer* data, Player* target)
             // FG: pretend that OTHER players in own group are friendly ("blue")
             else if (index == UNIT_FIELD_BYTES_2 || index == UNIT_FIELD_FACTIONTEMPLATE)
             {
-                if (IsControlledByPlayer() && target != this && sGameConfig->GetBoolConfig("AllowTwoSide.Interaction.Group") && IsInRaidWith(target))
+                if (IsControlledByPlayer() && target != this && CONF_GET_BOOL("AllowTwoSide.Interaction.Group") && IsInRaidWith(target))
                 {
                     FactionTemplateEntry const* ft1 = GetFactionTemplateEntry();
                     FactionTemplateEntry const* ft2 = target->GetFactionTemplateEntry();
@@ -19733,17 +19733,17 @@ void Unit::Talk(std::string_view text, ChatMsg msgType, Language language, float
 
 void Unit::Say(std::string_view text, Language language, WorldObject const* target /*= nullptr*/)
 {
-    Talk(text, CHAT_MSG_MONSTER_SAY, language, sGameConfig->GetFloatConfig("ListenRange.Say"), target);
+    Talk(text, CHAT_MSG_MONSTER_SAY, language, CONF_GET_FLOAT("ListenRange.Say"), target);
 }
 
 void Unit::Yell(std::string_view text, Language language, WorldObject const* target /*= nullptr*/)
 {
-    Talk(text, CHAT_MSG_MONSTER_YELL, language, sGameConfig->GetFloatConfig("ListenRange.Yell"), target);
+    Talk(text, CHAT_MSG_MONSTER_YELL, language, CONF_GET_FLOAT("ListenRange.Yell"), target);
 }
 
 void Unit::TextEmote(std::string_view text, WorldObject const* target /*= nullptr*/, bool isBossEmote /*= false*/)
 {
-    Talk(text, isBossEmote ? CHAT_MSG_RAID_BOSS_EMOTE : CHAT_MSG_MONSTER_EMOTE, LANG_UNIVERSAL, sGameConfig->GetFloatConfig("ListenRange.TextEmote"), target);
+    Talk(text, isBossEmote ? CHAT_MSG_RAID_BOSS_EMOTE : CHAT_MSG_MONSTER_EMOTE, LANG_UNIVERSAL, CONF_GET_FLOAT("ListenRange.TextEmote"), target);
 }
 
 void Unit::Whisper(std::string_view text, Language language, Player* target, bool isBossWhisper /*= false*/)
@@ -19773,17 +19773,17 @@ void Unit::Talk(uint32 textId, ChatMsg msgType, float textRange, WorldObject con
 
 void Unit::Say(uint32 textId, WorldObject const* target /*= nullptr*/)
 {
-    Talk(textId, CHAT_MSG_MONSTER_SAY, sGameConfig->GetFloatConfig("ListenRange.Say"), target);
+    Talk(textId, CHAT_MSG_MONSTER_SAY, CONF_GET_FLOAT("ListenRange.Say"), target);
 }
 
 void Unit::Yell(uint32 textId, WorldObject const* target /*= nullptr*/)
 {
-    Talk(textId, CHAT_MSG_MONSTER_YELL, sGameConfig->GetFloatConfig("ListenRange.Yell"), target);
+    Talk(textId, CHAT_MSG_MONSTER_YELL, CONF_GET_FLOAT("ListenRange.Yell"), target);
 }
 
 void Unit::TextEmote(uint32 textId, WorldObject const* target /*= nullptr*/, bool isBossEmote /*= false*/)
 {
-    Talk(textId, isBossEmote ? CHAT_MSG_RAID_BOSS_EMOTE : CHAT_MSG_MONSTER_EMOTE, sGameConfig->GetFloatConfig("ListenRange.TextEmote"), target);
+    Talk(textId, isBossEmote ? CHAT_MSG_RAID_BOSS_EMOTE : CHAT_MSG_MONSTER_EMOTE, CONF_GET_FLOAT("ListenRange.TextEmote"), target);
 }
 
 void Unit::Whisper(uint32 textId, Player* target, bool isBossWhisper /*= false*/)

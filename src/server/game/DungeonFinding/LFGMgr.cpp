@@ -40,7 +40,7 @@
 namespace lfg
 {
 
-    LFGMgr::LFGMgr(): m_lfgProposalId(1), m_options(sGameConfig->GetIntConfig("DungeonFinder.OptionsMask"))
+    LFGMgr::LFGMgr(): m_lfgProposalId(1), m_options(CONF_GET_INT("DungeonFinder.OptionsMask"))
     {
         new LFGPlayerScript();
         new LFGGroupScript();
@@ -141,10 +141,10 @@ namespace lfg
                 continue;
             }
 
-            if (!maxLevel || maxLevel > sGameConfig->GetIntConfig("MaxPlayerLevel"))
+            if (!maxLevel || maxLevel > CONF_GET_INT("MaxPlayerLevel"))
             {
                 LOG_ERROR("lfg", "Level %u specified for dungeon %u in table `lfg_dungeon_rewards` can never be reached!", maxLevel, dungeonId);
-                maxLevel = sGameConfig->GetIntConfig("MaxPlayerLevel");
+                maxLevel = CONF_GET_INT("MaxPlayerLevel");
             }
 
             if (!firstQuestId || !sObjectMgr->GetQuestTemplate(firstQuestId))
@@ -2403,7 +2403,7 @@ namespace lfg
 
     void LFGMgr::SetTeam(uint64 guid, TeamId teamId)
     {
-        if (sGameConfig->GetBoolConfig("AllowTwoSide.Interaction.Group"))
+        if (CONF_GET_BOOL("AllowTwoSide.Interaction.Group"))
             teamId = TEAM_ALLIANCE; // @Not Sure About That TeamId is supposed to be uint8 Team = 0(@TrinityCore)
 
         PlayersStore[guid].SetTeam(teamId);

@@ -271,7 +271,7 @@ TicketMgr* TicketMgr::instance()
     return &instance;
 }
 
-void TicketMgr::Initialize() { SetStatus(sGameConfig->GetBoolConfig("AllowTickets")); }
+void TicketMgr::Initialize() { SetStatus(CONF_GET_BOOL("AllowTickets")); }
 
 void TicketMgr::ResetTickets()
 {

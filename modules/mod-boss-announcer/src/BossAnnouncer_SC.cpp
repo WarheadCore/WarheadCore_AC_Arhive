@@ -121,7 +121,7 @@ public:
 
     void OnAfterConfigLoad(bool /*reload*/) override
     {
-        sGameConfig->AddBoolConfig("BossAnnouncer.Enable");
+        sGameConfig->AddOption<bool>("BossAnnouncer.Enable");
     }
 
     void OnStartup() override

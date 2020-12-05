@@ -181,8 +181,8 @@ public:
 
     void OnAfterConfigLoad(bool /*reload*/) override
     {
-        sGameConfig->AddBoolConfig("LevelReward.Enable");
-        sGameConfig->AddIntConfig("LevelReward.NpcID", 37688);
+        sGameConfig->AddOption<bool>("LevelReward.Enable");
+        sGameConfig->AddOption<int32>("LevelReward.NpcID", 37688);
     }
 
     void OnStartup() override

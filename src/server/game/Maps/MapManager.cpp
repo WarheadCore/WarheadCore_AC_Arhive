@@ -42,7 +42,7 @@
 MapManager::MapManager()
     : _nextInstanceId(0), _scheduledScripts(0)
 {
-    i_timer[3].SetInterval(sGameConfig->GetIntConfig("MapUpdateInterval"));
+    i_timer[3].SetInterval(CONF_GET_INT("MapUpdateInterval"));
     mapUpdateStep = 0;
 }
 
@@ -58,7 +58,7 @@ MapManager* MapManager::instance()
 
 void MapManager::Initialize()
 {
-    int num_threads(sGameConfig->GetIntConfig("MapUpdate.Threads"));
+    int num_threads(CONF_GET_INT("MapUpdate.Threads"));
 
     // Start mtmaps if needed
     if (num_threads > 0)
@@ -162,7 +162,7 @@ bool MapManager::CanPlayerEnter(uint32 mapid, Player* player, bool loginCheck)
     if (entry->IsRaid())
     {
         // can only enter in a raid group
-        if ((!group || !group->isRaidGroup()) && !sGameConfig->GetBoolConfig("Instance.IgnoreRaid"))
+        if ((!group || !group->isRaidGroup()) && !CONF_GET_BOOL("Instance.IgnoreRaid"))
         {
             // probably there must be special opcode, because client has this string constant in GlobalStrings.lua
             // TODO: this is not a good place to send the message

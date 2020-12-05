@@ -660,7 +660,7 @@ public:
      */
     static bool HandleCharacterDeletedPurgeCommand(ChatHandler* /*handler*/, char const* args)
     {
-        int32 keepDays = sGameConfig->GetIntConfig("CharDelete.KeepDays");
+        int32 keepDays = CONF_GET_INT("CharDelete.KeepDays");
 
         char* daysStr = strtok((char*)args, " ");
         if (daysStr)

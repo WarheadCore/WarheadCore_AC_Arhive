@@ -80,7 +80,7 @@ public:
 
     void OnAfterConfigLoad(bool /*reload*/) override
     {
-        sGameConfig->AddBoolConfig("PlayerInfoAtLogin.Enable");
+        sGameConfig->AddOption<bool>("PlayerInfoAtLogin.Enable");
     }
 
     void OnStartup() override

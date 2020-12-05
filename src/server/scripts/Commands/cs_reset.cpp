@@ -131,8 +131,8 @@ public:
 
         // set starting level
         uint32 startLevel = target->getClass() != CLASS_DEATH_KNIGHT
-                            ? sGameConfig->GetIntConfig("StartPlayerLevel")
-                            : sGameConfig->GetIntConfig("StartHeroicPlayerLevel");
+                            ? CONF_GET_INT("StartPlayerLevel")
+                            : CONF_GET_INT("StartHeroicPlayerLevel");
 
         target->_ApplyAllLevelScaleItemMods(false);
         target->SetLevel(startLevel);

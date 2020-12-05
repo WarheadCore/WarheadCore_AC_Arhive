@@ -91,14 +91,14 @@ void WorldSession::HandleGroupInviteOpcode(WorldPacket& recvData)
     }
 
     // restrict invite to GMs
-    if (!sGameConfig->GetBoolConfig("GM.AllowInvite") && !GetPlayer()->IsGameMaster() && player->IsGameMaster())
+    if (!CONF_GET_BOOL("GM.AllowInvite") && !GetPlayer()->IsGameMaster() && player->IsGameMaster())
     {
         SendPartyResult(PARTY_OP_INVITE, membername, ERR_BAD_PLAYER_NAME_S);
         return;
     }
 
     // can't group with
-    if (!GetPlayer()->IsGameMaster() && !sGameConfig->GetBoolConfig("AllowTwoSide.Interaction.Group") && GetPlayer()->GetTeamId() != player->GetTeamId())
+    if (!GetPlayer()->IsGameMaster() && !CONF_GET_BOOL("AllowTwoSide.Interaction.Group") && GetPlayer()->GetTeamId() != player->GetTeamId())
     {
         SendPartyResult(PARTY_OP_INVITE, membername, ERR_PLAYER_WRONG_FACTION);
         return;
@@ -121,7 +121,7 @@ void WorldSession::HandleGroupInviteOpcode(WorldPacket& recvData)
         return;
     }
 
-    if (!player->GetSocial()->HasFriend(GetPlayer()->GetGUID()) && GetPlayer()->getLevel() < sGameConfig->GetIntConfig("PartyLevelReq"))
+    if (!player->GetSocial()->HasFriend(GetPlayer()->GetGUID()) && GetPlayer()->getLevel() < CONF_GET_INT("PartyLevelReq"))
     {
         SendPartyResult(PARTY_OP_INVITE, player->GetName(), ERR_INVITE_RESTRICTED);
         return;
@@ -718,7 +718,7 @@ void WorldSession::HandleRaidReadyCheckOpcode(WorldPacket& recvData)
         /********************/
 
         // Check if Ready Check in BG is enabled
-        if (sGameConfig->GetBoolConfig("Battleground.DisableReadyCheckInBG") && _player->InBattleground())
+        if (CONF_GET_BOOL("Battleground.DisableReadyCheckInBG") && _player->InBattleground())
         {
             _player->GetSession()->SendNotification(LANG_BG_READY_CHECK_ERROR);
             return;

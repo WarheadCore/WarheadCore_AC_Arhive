@@ -28,36 +28,34 @@ public:
 
     void Load(bool reload);
 
-    // Add config options
-    template<class T>
+    // Add config option
+    template<typename T>
     void AddOption(std::string const& optionName, std::optional<T> const& def = std::nullopt) const;
 
     // Get config options
-    template<class T>
+    template<typename T>
     T GetOption(std::string const& optionName, std::optional<T> const& def = std::nullopt) const;
 
-    bool GetBoolConfig(std::string const& optionName);
-    std::string GetStringConfig(std::string const& optionName);
-    int32 GetIntConfig(std::string const& optionName);
-    float GetFloatConfig(std::string const& optionName);
-
-    void SetBool(std::string const& optionName, bool const& value);
-    void SetString(std::string const& optionName, std::string const& value);
-    void SetInt(std::string const& optionName, int32 const& value);
-    void SetFloat(std::string const& optionName, float const& value);
+    // Set config option
+    template<typename T>
+    void SetOption(std::string const& optionName, T const& value) const;
 
 private:
     void LoadBoolConfigs(bool reload = false);
     void LoadStringConfigs(bool reload = false);
     void LoadIntConfigs(bool reload = false);
     void LoadFloatConfigs(bool reload = false);
+
+    void CheckOptions(bool reload = false);
 };
 
 #define sGameConfig GameConfig::instance()
 
-#define CONF_GET_BOOL(__oprionName) sGameConfig->GetBoolConfig(__oprionName)
-#define CONF_GET_STR(__oprionName) sGameConfig->GetStringConfig(__oprionName)
-#define CONF_GET_INT(__oprionName) sGameConfig->GetIntConfig(__oprionName)
-#define CONF_GET_FLOAT(__oprionName) sGameConfig->GetFloatConfig(__oprionName)
+#define CONF_GET_BOOL(__optionName) sGameConfig->GetOption<bool>(__optionName)
+#define CONF_GET_STR(__optionName) sGameConfig->GetOption<std::string>(__optionName)
+#define CONF_GET_INT(__optionName) sGameConfig->GetOption<int32>(__optionName)
+#define CONF_GET_UINT(__optionName) sGameConfig->GetOption<uint32>(__optionName)
+#define CONF_GET_FLOAT(__optionName) sGameConfig->GetOption<float>(__optionName)
+#define CONF_GET_DOUBLE(__optionName) sGameConfig->GetOption<double>(__optionName)
 
 #endif // __GAME_CONFIG

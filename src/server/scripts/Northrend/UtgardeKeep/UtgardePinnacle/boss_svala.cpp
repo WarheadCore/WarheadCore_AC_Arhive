@@ -249,7 +249,7 @@ public:
                     {
                         me->CastSpell(me, SPELL_SVALA_TRANSFORMING1, true);
                         me->UpdateEntry(NPC_SVALA_SORROWGRAVE);
-                        me->SetCorpseDelay(sGameConfig->GetIntConfig("Corpse.Decay.ELITE"));
+                        me->SetCorpseDelay(CONF_GET_INT("Corpse.Decay.ELITE"));
                         me->SetFloatValue(UNIT_FIELD_HOVERHEIGHT, 6.0f);
                         me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_IMMUNE_TO_NPC);
                         if (Creature* Arthas = ObjectAccessor::GetCreature(*me, ArthasGUID))

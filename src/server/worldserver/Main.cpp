@@ -503,7 +503,7 @@ extern int main(int argc, char** argv)
     }
 
     ///- Launch the world listener socket
-    uint16 worldPort = uint16(sGameConfig->GetIntConfig("WorldServerPort"));
+    uint16 worldPort = uint16(CONF_GET_INT("WorldServerPort"));
     std::string bindIp = sConfigMgr->GetStringDefault("BindIP", "0.0.0.0");
     if (sWorldSocketMgr->StartNetwork(worldPort, bindIp.c_str()) == -1)
     {

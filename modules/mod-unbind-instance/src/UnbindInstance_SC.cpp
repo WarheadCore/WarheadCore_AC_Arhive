@@ -91,7 +91,7 @@ public:
 
     void OnAfterConfigLoad(bool /*reload*/) override
     {
-        sGameConfig->AddBoolConfig("UnbindInsance.Enable");
+        sGameConfig->AddOption<bool>("UnbindInsance.Enable");
     }
 
     void OnStartup() override

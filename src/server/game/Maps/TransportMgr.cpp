@@ -426,7 +426,7 @@ void TransportMgr::SpawnContinentTransports()
     oldMSTime = getMSTime();
     QueryResult result;
 
-    if (sGameConfig->GetBoolConfig("IsContinentTransport.Enabled"))
+    if (CONF_GET_BOOL("IsContinentTransport.Enabled"))
     {
         result = WorldDatabase.Query("SELECT guid, entry FROM transports");
         if (result)
@@ -447,7 +447,7 @@ void TransportMgr::SpawnContinentTransports()
 
         LOG_INFO("transport", ">> Spawned %u continent motion transports in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
 
-        if (sGameConfig->GetBoolConfig("IsPreloadedContinentTransport.Enabled"))
+        if (CONF_GET_BOOL("IsPreloadedContinentTransport.Enabled"))
         {
             // pussywizard: preload grids for continent static transports
             oldMSTime = getMSTime();

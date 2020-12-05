@@ -171,8 +171,8 @@ public:
 
     void OnAfterConfigLoad(bool /*reload*/) override
     {
-        sGameConfig->AddBoolConfig("GLS.Enable");
-        sGameConfig->AddBoolConfig("GLS.Criteria.ShowItems.Enable");
+        sGameConfig->AddOption<bool>("GLS.Enable");
+        sGameConfig->AddOption<bool>("GLS.Criteria.ShowItems.Enable");
     }
 
     void OnStartup() override

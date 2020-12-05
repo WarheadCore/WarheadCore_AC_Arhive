@@ -361,7 +361,7 @@ Corpse* ObjectAccessor::ConvertCorpseForPlayer(uint64 player_guid, bool insignia
     // ignore bones creating option in case insignia
 
     if (map && corpse->IsPositionValid() && inWorld && (insignia ||
-            (map->IsBattlegroundOrArena() ? sGameConfig->GetBoolConfig("Death.Bones.BattlegroundOrArena") : sGameConfig->GetBoolConfig("Death.Bones.World"))) &&
+            (map->IsBattlegroundOrArena() ? CONF_GET_BOOL("Death.Bones.BattlegroundOrArena") : CONF_GET_BOOL("Death.Bones.World"))) &&
             !map->IsRemovalGrid(corpse->GetPositionX(), corpse->GetPositionY()))
     {
         // Create bones, don't change Corpse

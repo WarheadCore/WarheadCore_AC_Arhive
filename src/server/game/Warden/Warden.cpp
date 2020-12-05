@@ -103,7 +103,7 @@ void Warden::Update()
 
         if (_dataSent)
         {
-            uint32 maxClientResponseDelay = sGameConfig->GetIntConfig("Warden.ClientResponseDelay");
+            uint32 maxClientResponseDelay = CONF_GET_INT("Warden.ClientResponseDelay");
             if (maxClientResponseDelay > 0)
             {
                 if (_clientResponseTimer > maxClientResponseDelay * IN_MILLISECONDS)
@@ -182,7 +182,7 @@ std::string Warden::Penalty(WardenCheck* check /*= NULL*/, uint16 checkFailed /*
     if (check)
         action = check->Action;
     else
-        action = WardenActions(sGameConfig->GetIntConfig("Warden.ClientCheckFailAction"));
+        action = WardenActions(CONF_GET_INT("Warden.ClientCheckFailAction"));
 
     std::string banReason = "Anticheat violation";
     bool longBan = false; // 14d = 1209600s
@@ -289,7 +289,7 @@ std::string Warden::Penalty(WardenCheck* check /*= NULL*/, uint16 checkFailed /*
         case WARDEN_ACTION_BAN:
             {
                 std::stringstream duration;
-                duration << sGameConfig->GetIntConfig("Warden.BanDuration") << "s";
+                duration << CONF_GET_INT("Warden.BanDuration") << "s";
                 std::string accountName;
                 AccountMgr::GetName(_session->GetAccountId(), accountName);
                 sBan->BanAccount(accountName, ((longBan && false /*ZOMG!*/) ? "1209600s" : duration.str()), banReason, "Server");

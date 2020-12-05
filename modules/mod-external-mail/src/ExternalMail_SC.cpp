@@ -28,7 +28,7 @@ public:
 
     void OnAfterConfigLoad(bool /*reload*/) override
     {
-        sGameConfig->AddBoolConfig("External.Mail.Enable");
+        sGameConfig->AddOption<bool>("External.Mail.Enable");
     }
 
     void OnStartup() override

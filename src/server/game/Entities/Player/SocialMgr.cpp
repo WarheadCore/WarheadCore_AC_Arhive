@@ -227,8 +227,8 @@ void SocialMgr::GetFriendInfo(Player* player, uint64 friendGUID, FriendInfo& fri
 
     TeamId teamId = player->GetTeamId();
     AccountTypes security = player->GetSession()->GetSecurity();
-    bool allowTwoSideWhoList = sGameConfig->GetBoolConfig("AllowTwoSide.WhoList");
-    AccountTypes gmLevelInWhoList = AccountTypes(sGameConfig->GetIntConfig("GM.InWhoList.Level"));
+    bool allowTwoSideWhoList = CONF_GET_BOOL("AllowTwoSide.WhoList");
+    AccountTypes gmLevelInWhoList = AccountTypes(CONF_GET_INT("GM.InWhoList.Level"));
 
     auto const& itr = player->GetSocial()->m_playerSocialMap.find(friendGUID);
     if (itr != player->GetSocial()->m_playerSocialMap.end())
@@ -301,8 +301,8 @@ void SocialMgr::BroadcastToFriendListers(Player* player, WorldPacket* packet)
     TeamId teamId = player->GetTeamId();
     AccountTypes security = player->GetSession()->GetSecurity();
     uint32 guid = player->GetGUIDLow();
-    bool allowTwoSideWhoList = sGameConfig->GetBoolConfig("AllowTwoSide.WhoList");
-    AccountTypes gmLevelInWhoList = AccountTypes(sGameConfig->GetIntConfig("GM.InWhoList.Level"));
+    bool allowTwoSideWhoList = CONF_GET_BOOL("AllowTwoSide.WhoList");
+    AccountTypes gmLevelInWhoList = AccountTypes(CONF_GET_INT("GM.InWhoList.Level"));
 
     for (auto const& itr : m_socialMap)
     {

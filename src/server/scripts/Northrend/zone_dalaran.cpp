@@ -564,7 +564,7 @@ public:
 
         void UpdateAI(uint32 diff)
         {
-            if (!sGameConfig->GetBoolConfig("Minigob.Manabonk.Enable"))
+            if (!CONF_GET_BOOL("Minigob.Manabonk.Enable"))
                 return;
 
             events.Update(diff);

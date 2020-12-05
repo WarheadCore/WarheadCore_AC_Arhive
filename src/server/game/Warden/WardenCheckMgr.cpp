@@ -47,7 +47,7 @@ WardenCheckMgr* WardenCheckMgr::instance()
 void WardenCheckMgr::LoadWardenChecks()
 {
     // Check if Warden is enabled by config before loading anything
-    if (!sGameConfig->GetBoolConfig("Warden.Enabled"))
+    if (!CONF_GET_BOOL("Warden.Enabled"))
     {
         LOG_INFO("warden", ">> Warden disabled, loading checks skipped.");
         LOG_INFO("warden", "");
@@ -91,7 +91,7 @@ void WardenCheckMgr::LoadWardenChecks()
         wardenCheck->CheckId = id;
 
         // Initialize action with default action from config
-        wardenCheck->Action = WardenActions(sGameConfig->GetIntConfig("Warden.ClientCheckFailAction"));
+        wardenCheck->Action = WardenActions(CONF_GET_INT("Warden.ClientCheckFailAction"));
 
         if (checkType == PAGE_CHECK_A || checkType == PAGE_CHECK_B || checkType == DRIVER_CHECK)
         {
@@ -157,7 +157,7 @@ void WardenCheckMgr::LoadWardenChecks()
 void WardenCheckMgr::LoadWardenOverrides()
 {
     // Check if Warden is enabled by config before loading anything
-    if (!sGameConfig->GetBoolConfig("Warden.Enabled"))
+    if (!CONF_GET_BOOL("Warden.Enabled"))
     {
         LOG_INFO("warden", ">> Warden disabled, loading check overrides skipped.");
         LOG_INFO("warden", "");
