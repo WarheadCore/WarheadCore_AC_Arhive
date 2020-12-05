@@ -156,7 +156,7 @@ std::string GameConfig::GetOption<std::string>(std::string const& optionName, st
     if (itr == _stringConfigs.end())
     {
         auto retValue = def == std::nullopt ? "" : *def;
-        LOG_ERROR("config", "> GameConfig: option (%s) is not exists. Returned (%s)", optionName.c_str(), retValue);
+        LOG_ERROR("config", "> GameConfig: option (%s) is not exists. Returned (%s)", optionName.c_str(), retValue.c_str());
         return retValue;
     }
 
