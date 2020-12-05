@@ -1516,7 +1516,7 @@ void Guild::HandleInviteMember(WorldSession* session, std::string const& name)
     if (pInvitee->GetSocial()->HasIgnore(player->GetGUIDLow()))
         return;
 
-    if (!sGameConfig->GetBoolConfig("AllowTwoSide.Interaction.Guild") && pInvitee->GetTeamId() != player->GetTeamId())
+    if (!CONF_GET_BOOL("AllowTwoSide.Interaction.Guild") && pInvitee->GetTeamId() != player->GetTeamId())
     {
         SendCommandResult(session, GUILD_COMMAND_INVITE, ERR_GUILD_NOT_ALLIED, name);
         return;
@@ -1563,7 +1563,7 @@ void Guild::HandleInviteMember(WorldSession* session, std::string const& name)
 void Guild::HandleAcceptMember(WorldSession* session)
 {
     Player* player = session->GetPlayer();
-    if (!sGameConfig->GetBoolConfig("AllowTwoSide.Interaction.Guild") &&
+    if (!CONF_GET_BOOL("AllowTwoSide.Interaction.Guild") &&
             player->GetTeamId() != sObjectMgr->GetPlayerTeamIdByGUID(GetLeaderGUID()))
         return;
 
@@ -2396,9 +2396,9 @@ void Guild::SetBankTabText(uint8 tabId, std::string const& text)
 // Private methods
 void Guild::_CreateLogHolders()
 {
-    m_eventLog = new LogHolder(m_id, sGameConfig->GetIntConfig("Guild.EventLogRecordsCount"));
+    m_eventLog = new LogHolder(m_id, CONF_GET_INT("Guild.EventLogRecordsCount"));
     for (uint8 tabId = 0; tabId <= GUILD_BANK_MAX_TABS; ++tabId)
-        m_bankEventLog[tabId] = new LogHolder(m_id, sGameConfig->GetIntConfig("Guild.BankEventLogRecordsCount"));
+        m_bankEventLog[tabId] = new LogHolder(m_id, CONF_GET_INT("Guild.BankEventLogRecordsCount"));
 }
 
 void Guild::_CreateNewBankTab()

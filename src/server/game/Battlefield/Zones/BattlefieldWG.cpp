@@ -49,13 +49,13 @@ bool BattlefieldWG::SetupBattlefield()
     // init stalker AFTER setting map id... we spawn it at map=random memory value?...
     InitStalker(BATTLEFIELD_WG_NPC_STALKER, WintergraspStalkerPos[0], WintergraspStalkerPos[1], WintergraspStalkerPos[2], WintergraspStalkerPos[3]);
 
-    m_MaxPlayer = sGameConfig->GetIntConfig("Wintergrasp.PlayerMax");
-    m_IsEnabled = sGameConfig->GetBoolConfig("Wintergrasp.Enable");
-    m_MinPlayer = sGameConfig->GetIntConfig("Wintergrasp.PlayerMin");
-    m_MinLevel = sGameConfig->GetIntConfig("Wintergrasp.PlayerMinLvl");
-    m_BattleTime = sGameConfig->GetIntConfig("Wintergrasp.BattleTimer") * MINUTE * IN_MILLISECONDS;
-    m_NoWarBattleTime = sGameConfig->GetIntConfig("Wintergrasp.NoBattleTimer") * MINUTE * IN_MILLISECONDS;
-    m_RestartAfterCrash = sGameConfig->GetIntConfig("Wintergrasp.CrashRestartTimer") * MINUTE * IN_MILLISECONDS;
+    m_MaxPlayer = CONF_GET_INT("Wintergrasp.PlayerMax");
+    m_IsEnabled = CONF_GET_BOOL("Wintergrasp.Enable");
+    m_MinPlayer = CONF_GET_INT("Wintergrasp.PlayerMin");
+    m_MinLevel = CONF_GET_INT("Wintergrasp.PlayerMinLvl");
+    m_BattleTime = CONF_GET_INT("Wintergrasp.BattleTimer") * MINUTE * IN_MILLISECONDS;
+    m_NoWarBattleTime = CONF_GET_INT("Wintergrasp.NoBattleTimer") * MINUTE * IN_MILLISECONDS;
+    m_RestartAfterCrash = CONF_GET_INT("Wintergrasp.CrashRestartTimer") * MINUTE * IN_MILLISECONDS;
 
     m_TimeForAcceptInvite = 20;
     m_StartGroupingTimer = 15 * MINUTE * IN_MILLISECONDS;
@@ -290,7 +290,7 @@ void BattlefieldWG::OnBattleStart()
     m_tenacityStack = 0;
     m_tenacityUpdateTimer = 20000;
 
-    if (sGameConfig->GetBoolConfig("Battleground.QueueAnnouncer.Enable"))
+    if (CONF_GET_BOOL("Battleground.QueueAnnouncer.Enable"))
         sWorld->SendWorldText(BATTLEFIELD_WG_WORLD_START_MESSAGE);
 }
 

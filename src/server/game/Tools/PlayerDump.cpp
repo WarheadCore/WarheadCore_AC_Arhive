@@ -377,10 +377,10 @@ bool PlayerDumpWriter::GetDump(uint32 guid, std::string& dump)
 
 DumpReturn PlayerDumpWriter::WriteDump(const std::string& file, uint32 guid)
 {
-    if (sGameConfig->GetBoolConfig("PlayerDump.DisallowPaths"))
+    if (CONF_GET_BOOL("PlayerDump.DisallowPaths"))
         if (strstr(file.c_str(), "\\") || strstr(file.c_str(), "/"))
             return DUMP_FILE_OPEN_ERROR;
-    if (sGameConfig->GetBoolConfig("PlayerDump.DisallowOverwrite"))
+    if (CONF_GET_BOOL("PlayerDump.DisallowOverwrite"))
         if (FILE* f = fopen(file.c_str(), "r"))
         {
             fclose(f);

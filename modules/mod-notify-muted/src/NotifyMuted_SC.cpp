@@ -64,7 +64,7 @@ public:
 
     void OnAfterConfigLoad(bool /*reload*/) override
     {
-        sGameConfig->AddBoolConfig("NotCanSpeakMsg.Enable");
+        sGameConfig->AddOption<bool>("NotCanSpeakMsg.Enable");
     }
 
     void OnStartup() override

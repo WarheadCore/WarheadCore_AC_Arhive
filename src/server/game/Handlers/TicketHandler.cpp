@@ -36,9 +36,9 @@ void WorldSession::HandleGMTicketCreateOpcode(WorldPacket& recvData)
     if (sTicketMgr->GetStatus() == GMTICKET_QUEUE_STATUS_DISABLED)
         return;
 
-    if (GetPlayer()->getLevel() < sGameConfig->GetIntConfig("LevelReq.Ticket"))
+    if (GetPlayer()->getLevel() < CONF_GET_INT("LevelReq.Ticket"))
     {
-        SendNotification(GetAcoreString(LANG_TICKET_REQ), sGameConfig->GetIntConfig("LevelReq.Ticket"));
+        SendNotification(GetAcoreString(LANG_TICKET_REQ), CONF_GET_INT("LevelReq.Ticket"));
         return;
     }
 
@@ -276,7 +276,7 @@ void WorldSession::HandleGMResponseResolve(WorldPacket& /*recvPacket*/)
     if (GmTicket* ticket = sTicketMgr->GetTicketByPlayer(GetPlayer()->GetGUID()))
     {
         uint8 getSurvey = 0;
-        if (float(rand_chance()) < sGameConfig->GetFloatConfig("GM.TicketSystem.ChanceOfGMSurvey"))
+        if (float(rand_chance()) < CONF_GET_FLOAT("GM.TicketSystem.ChanceOfGMSurvey"))
             getSurvey = 1;
 
         WorldPacket data(SMSG_GMRESPONSE_STATUS_UPDATE, 4);

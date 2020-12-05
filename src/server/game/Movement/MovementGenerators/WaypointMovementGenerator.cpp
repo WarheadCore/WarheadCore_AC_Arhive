@@ -246,7 +246,7 @@ bool WaypointMovementGenerator<Creature>::DoUpdate(Creature* creature, uint32 di
     else
     {
         if (creature->IsStopped())
-            Stop(sGameConfig->GetIntConfig("WaypointMovementStopTimeForPlayer") * IN_MILLISECONDS);
+            Stop(CONF_GET_INT("WaypointMovementStopTimeForPlayer") * IN_MILLISECONDS);
         else
         {
             // xinef: code to detect pre-empetively if we should start movement to next waypoint

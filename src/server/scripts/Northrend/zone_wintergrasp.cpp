@@ -280,7 +280,7 @@ public:
 
     bool OnGossipHello(Player* player, Creature* creature) override
     {
-        if (!sGameConfig->GetBoolConfig("Minigob.Manabonk.Enable"))
+        if (!CONF_GET_BOOL("Minigob.Manabonk.Enable"))
             return false;
 
         if (creature->IsQuestGiver())
@@ -345,7 +345,7 @@ public:
 
         void UpdateAI(uint32 diff) override
         {
-            if (!sGameConfig->GetBoolConfig("Wintergrasp.Enable"))
+            if (!CONF_GET_BOOL("Wintergrasp.Enable"))
                 return;
 
             ScriptedAI::UpdateAI(diff);
@@ -665,7 +665,7 @@ public:
                     {
                         if (quest->IsAutoComplete())
                             result2 = DIALOG_STATUS_REWARD_REP;
-                        else if (player->getLevel() <= (player->GetQuestLevel(quest) + sGameConfig->GetIntConfig("Quests.LowLevelHideDiff")))
+                        else if (player->getLevel() <= (player->GetQuestLevel(quest) + CONF_GET_INT("Quests.LowLevelHideDiff")))
                         {
                             if (quest->IsDaily())
                                 result2 = DIALOG_STATUS_AVAILABLE_REP;

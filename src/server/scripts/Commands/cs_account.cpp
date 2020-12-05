@@ -79,7 +79,7 @@ public:
         uint32 accountId = handler->GetSession()->GetAccountId();
 
         int expansion = atoi(exp); //get int anyway (0 if error)
-        if (expansion < 0 || uint8(expansion) > sGameConfig->GetIntConfig("Expansion"))
+        if (expansion < 0 || uint8(expansion) > CONF_GET_INT("Expansion"))
         {
             handler->SendSysMessage(LANG_IMPROPER_VALUE);
             handler->SetSentErrorMessage(true);
@@ -454,7 +454,7 @@ public:
             return false;
 
         int expansion = atoi(exp); //get int anyway (0 if error)
-        if (expansion < 0 || uint8(expansion) > sGameConfig->GetIntConfig("Expansion"))
+        if (expansion < 0 || uint8(expansion) > CONF_GET_INT("Expansion"))
             return false;
 
         PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPD_EXPANSION);

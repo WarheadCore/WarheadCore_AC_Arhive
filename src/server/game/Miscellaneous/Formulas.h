@@ -186,7 +186,7 @@ namespace Warhead
                     // xpMod *= creature->GetCreatureTemplate()->ModExperience;
                 }
 
-                xpMod *= isBattleGround ? sGameConfig->GetFloatConfig("Rate.XP.BattlegroundKill") : sGameConfig->GetFloatConfig("Rate.XP.Kill");
+                xpMod *= isBattleGround ? CONF_GET_FLOAT("Rate.XP.BattlegroundKill") : CONF_GET_FLOAT("Rate.XP.Kill");
                 gain = uint32(gain * xpMod);
             }
 

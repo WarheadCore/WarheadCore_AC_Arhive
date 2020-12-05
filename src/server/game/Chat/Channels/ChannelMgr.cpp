@@ -34,7 +34,7 @@ ChannelMgr* ChannelMgr::forTeam(TeamId teamId)
     static ChannelMgr allianceChannelMgr(TEAM_ALLIANCE);
     static ChannelMgr hordeChannelMgr(TEAM_HORDE);
 
-    if (sGameConfig->GetBoolConfig("AllowTwoSide.Interaction.Channel"))
+    if (CONF_GET_BOOL("AllowTwoSide.Interaction.Channel"))
         return &allianceChannelMgr;        // cross-faction
 
     if (teamId == TEAM_ALLIANCE)

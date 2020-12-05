@@ -61,8 +61,8 @@ public:
 
     void OnAfterConfigLoad(bool /*reload*/) override
     {
-        sGameConfig->AddBoolConfig("PCGE.Enable");
-        sGameConfig->AddIntConfig("PCGE.MaxLevelDiff", 10);
+        sGameConfig->AddOption<bool>("PCGE.Enable");
+        sGameConfig->AddOption<int32>("PCGE.MaxLevelDiff", 10);
     }
 };
 

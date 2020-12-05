@@ -391,7 +391,7 @@ namespace DisableMgr
         if (!map)
             return false;
 
-        return !MMAP::MMapFactory::forbiddenMaps[map->GetId()] && (sGameConfig->GetBoolConfig("MoveMaps.Enable") ? true : map->IsBattlegroundOrArena());
+        return !MMAP::MMapFactory::forbiddenMaps[map->GetId()] && (CONF_GET_BOOL("MoveMaps.Enable") ? true : map->IsBattlegroundOrArena());
     }
 
 } // Namespace

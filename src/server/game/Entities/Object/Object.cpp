@@ -2176,7 +2176,7 @@ void WorldObject::GetNearPoint(WorldObject const* searcher, float& x, float& y, 
         UpdateAllowedPositionZ(x, y, z);
 
     // if detection disabled, return first point
-    if (!sGameConfig->GetBoolConfig("DetectPosCollision"))
+    if (!CONF_GET_BOOL("DetectPosCollision"))
         return;
 
     // return if the point is already in LoS

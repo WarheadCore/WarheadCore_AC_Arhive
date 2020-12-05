@@ -436,7 +436,7 @@ public:
             return false;
 
         uint8 lvl = (uint8) atoi((char*)args);
-        if (lvl < 1 || lvl > sGameConfig->GetIntConfig("MaxPlayerLevel") + 3)
+        if (lvl < 1 || lvl > CONF_GET_INT("MaxPlayerLevel") + 3)
         {
             handler->SendSysMessage(LANG_BAD_VALUE);
             handler->SetSentErrorMessage(true);

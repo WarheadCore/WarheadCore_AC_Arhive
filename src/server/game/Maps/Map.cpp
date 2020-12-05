@@ -936,7 +936,7 @@ void Map::RemoveFromMap(MotionTransport* obj, bool remove)
     if (remove)
     {
         // if option set then object already saved at this moment
-        if (!sGameConfig->GetBoolConfig("SaveRespawnTimeImmediately"))
+        if (!CONF_GET_BOOL("SaveRespawnTimeImmediately"))
             obj->SaveRespawnTime();
 
         DeleteFromWorld(obj);
@@ -2261,7 +2261,7 @@ bool Map::isInLineOfSight(float x1, float y1, float z1, float x2, float y2, floa
     if ((checks & LINEOFSIGHT_CHECK_VMAP) && !VMAP::VMapFactory::createOrGetVMapManager()->isInLineOfSight(GetId(), x1, y1, z1, x2, y2, z2))
         return false;
 
-    if (sGameConfig->GetBoolConfig("CheckGameObjectLoS") && (checks & LINEOFSIGHT_CHECK_GOBJECT)
+    if (CONF_GET_BOOL("CheckGameObjectLoS") && (checks & LINEOFSIGHT_CHECK_GOBJECT)
             && !_dynamicTree.isInLineOfSight(x1, y1, z1, x2, y2, z2, phasemask))
         return false;
 
@@ -2578,7 +2578,7 @@ InstanceMap::InstanceMap(uint32 id, uint32 InstanceId, uint8 SpawnMode, Map* _pa
 
     // the timer is started by default, and stopped when the first player joins
     // this make sure it gets unloaded if for some reason no player joins
-    m_unloadTimer = std::max(sGameConfig->GetIntConfig("Instance.UnloadDelay"), MIN_UNLOAD_DELAY);
+    m_unloadTimer = std::max(CONF_GET_INT("Instance.UnloadDelay"), MIN_UNLOAD_DELAY);
 
     // pussywizard:
     if (IsRaid())
@@ -2782,14 +2782,14 @@ void InstanceMap::RemovePlayerFromMap(Player* player, bool remove)
 {
     // pussywizard: moved m_unloadTimer to InstanceMap::AfterPlayerUnlinkFromMap(), in this function if 2 players run out at the same time the instance won't close
     //if (!m_unloadTimer && m_mapRefManager.getSize() == 1)
-    //    m_unloadTimer = m_unloadWhenEmpty ? MIN_UNLOAD_DELAY : std::max(sGameConfig->GetIntConfig("Instance.UnloadDelay"), (uint32)MIN_UNLOAD_DELAY);
+    //    m_unloadTimer = m_unloadWhenEmpty ? MIN_UNLOAD_DELAY : std::max(CONF_GET_INT("Instance.UnloadDelay"), (uint32)MIN_UNLOAD_DELAY);
     Map::RemovePlayerFromMap(player, remove);
 }
 
 void InstanceMap::AfterPlayerUnlinkFromMap()
 {
     if (!m_unloadTimer && !HavePlayers())
-        m_unloadTimer = m_unloadWhenEmpty ? MIN_UNLOAD_DELAY : std::max(sGameConfig->GetIntConfig("Instance.UnloadDelay"), MIN_UNLOAD_DELAY);
+        m_unloadTimer = m_unloadWhenEmpty ? MIN_UNLOAD_DELAY : std::max(CONF_GET_INT("Instance.UnloadDelay"), MIN_UNLOAD_DELAY);
 
     Map::AfterPlayerUnlinkFromMap();
 }

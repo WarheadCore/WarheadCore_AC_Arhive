@@ -306,11 +306,11 @@ bool LootStoreItem::Roll(bool rate, Player const* player, Loot& loot, LootStore 
         return true;
 
     if (reference > 0)                                   // reference case
-        return roll_chance_f(_chance * (rate ? sGameConfig->GetFloatConfig("Rate.Drop.Item.Referenced") : 1.0f));
+        return roll_chance_f(_chance * (rate ? CONF_GET_FLOAT("Rate.Drop.Item.Referenced") : 1.0f));
 
     ItemTemplate const* pProto = sObjectMgr->GetItemTemplate(itemid);
 
-    float qualityModifier = pProto && rate ? sGameConfig->GetFloatConfig(qualityToRate[pProto->Quality]) : 1.0f;
+    float qualityModifier = pProto && rate ? CONF_GET_FLOAT(qualityToRate[pProto->Quality]) : 1.0f;
 
     return roll_chance_f(_chance * qualityModifier);
 }
@@ -713,11 +713,11 @@ void Loot::generateMoneyLoot(uint32 minAmount, uint32 maxAmount)
     if (maxAmount > 0)
     {
         if (maxAmount <= minAmount)
-            gold = uint32(maxAmount * sGameConfig->GetFloatConfig("Rate.Drop.Money"));
+            gold = uint32(maxAmount * CONF_GET_FLOAT("Rate.Drop.Money"));
         else if ((maxAmount - minAmount) < 32700)
-            gold = uint32(urand(minAmount, maxAmount) * sGameConfig->GetFloatConfig("Rate.Drop.Money"));
+            gold = uint32(urand(minAmount, maxAmount) * CONF_GET_FLOAT("Rate.Drop.Money"));
         else
-            gold = uint32(urand(minAmount >> 8, maxAmount >> 8) * sGameConfig->GetFloatConfig("Rate.Drop.Money")) << 8;
+            gold = uint32(urand(minAmount >> 8, maxAmount >> 8) * CONF_GET_FLOAT("Rate.Drop.Money")) << 8;
     }
 }
 
@@ -1350,7 +1350,7 @@ void LootTemplate::Process(Loot& loot, LootStore const& store, uint16 lootMode, 
             if (!Referenced)
                 continue;                                       // Error message already printed at loading stage
 
-            uint32 maxcount = uint32(float(item->maxcount) * sGameConfig->GetFloatConfig("Rate.Drop.Item.ReferencedAmount"));
+            uint32 maxcount = uint32(float(item->maxcount) * CONF_GET_FLOAT("Rate.Drop.Item.ReferencedAmount"));
             sScriptMgr->OnAfterRefCount(player, loot, rate, lootMode, item, maxcount, store);
             for (uint32 loop = 0; loop < maxcount; ++loop)      // Ref multiplicator
                 Referenced->Process(loot, store, lootMode, player, item->groupid);

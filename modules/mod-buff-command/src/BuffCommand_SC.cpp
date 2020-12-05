@@ -152,7 +152,7 @@ public:
 
     void OnAfterConfigLoad(bool /*reload*/) override
     {
-        sGameConfig->AddBoolConfig("BuffCommand.Enable");
+        sGameConfig->AddOption<bool>("BuffCommand.Enable");
     }
 
     void OnStartup() override

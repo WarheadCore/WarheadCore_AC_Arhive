@@ -5180,7 +5180,7 @@ void Spell::TakeRunePower(bool didHit)
 
     // you can gain some runic power when use runes
     if (didHit)
-        if (int32 rp = int32(runeCostData->runePowerGain * sGameConfig->GetFloatConfig("Rate.RunicPower.Income")))
+        if (int32 rp = int32(runeCostData->runePowerGain * CONF_GET_FLOAT("Rate.RunicPower.Income")))
             player->ModifyPower(POWER_RUNIC_POWER, int32(rp));
 }
 
@@ -7495,7 +7495,7 @@ bool Spell::CheckEffectTarget(Unit const* target, uint32 eff) const
                 return false;
             if (m_caster->ToPlayer()->GetSession()->GetRecruiterId() != target->ToPlayer()->GetSession()->GetAccountId() && target->ToPlayer()->GetSession()->IsARecruiter())
                 return false;
-            if (target->ToPlayer()->getLevel() >= sGameConfig->GetIntConfig("RecruitAFriend.MaxLevel"))
+            if (target->ToPlayer()->getLevel() >= CONF_GET_INT("RecruitAFriend.MaxLevel"))
                 return false;
             break;
 

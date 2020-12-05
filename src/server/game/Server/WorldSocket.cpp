@@ -756,7 +756,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     WorldPacket packet, SendAddonPacked;
 
     BigNumber k;
-    bool wardenActive = sGameConfig->GetBoolConfig("Warden.Enabled");
+    bool wardenActive = CONF_GET_BOOL("Warden.Enabled");
 
     if (sWorld->IsClosed())
     {
@@ -806,7 +806,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     Field* fields = result->Fetch();
 
     uint8 expansion = fields[5].GetUInt8();
-    uint32 world_expansion = sGameConfig->GetIntConfig("Expansion");
+    uint32 world_expansion = CONF_GET_INT("Expansion");
     if (expansion > world_expansion)
         expansion = world_expansion;
 
@@ -1002,7 +1002,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
         m_Session->InitWarden(&k, os);
 
     // Sleep this Network thread for
-    uint32 sleepTime = sGameConfig->GetIntConfig("SessionAddDelay");
+    uint32 sleepTime = CONF_GET_INT("SessionAddDelay");
     std::this_thread::sleep_for(Microseconds(sleepTime));
 
     sWorld->AddSession(m_Session);
@@ -1034,7 +1034,7 @@ int WorldSocket::HandlePing(WorldPacket& recvPacket)
         {
             ++m_OverSpeedPings;
 
-            uint32 max_count = sGameConfig->GetIntConfig("MaxOverspeedPings");
+            uint32 max_count = CONF_GET_INT("MaxOverspeedPings");
 
             if (max_count && m_OverSpeedPings > max_count)
             {

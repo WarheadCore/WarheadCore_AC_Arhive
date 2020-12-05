@@ -267,7 +267,7 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
 
         /// If necessary, kick the player because the client didn't send anything for too long
         /// (or they've been idling in character select)
-        if (sGameConfig->GetBoolConfig("CloseIdleConnections") && IsConnectionIdle() && m_Socket)
+        if (CONF_GET_BOOL("CloseIdleConnections") && IsConnectionIdle() && m_Socket)
             m_Socket->CloseSocket("Client didn't send anything for too long");
     }
 
@@ -434,13 +434,13 @@ void WorldSession::HandleTeleportTimeout(bool updateInSessions)
         time_t currTime = GameTime::GetGameTime();
         if (updateInSessions) // session update from World::UpdateSessions
         {
-            if (GetPlayer()->IsBeingTeleportedFar() && GetPlayer()->GetSemaphoreTeleportFar() + sGameConfig->GetIntConfig("TeleportTimeoutFar") < currTime)
+            if (GetPlayer()->IsBeingTeleportedFar() && GetPlayer()->GetSemaphoreTeleportFar() + CONF_GET_INT("TeleportTimeoutFar") < currTime)
                 while (GetPlayer() && GetPlayer()->IsBeingTeleportedFar())
                     HandleMoveWorldportAckOpcode();
         }
         else // session update from Map::Update
         {
-            if (GetPlayer()->IsBeingTeleportedNear() && GetPlayer()->GetSemaphoreTeleportNear() + sGameConfig->GetIntConfig("TeleportTimeoutNear") < currTime)
+            if (GetPlayer()->IsBeingTeleportedNear() && GetPlayer()->GetSemaphoreTeleportNear() + CONF_GET_INT("TeleportTimeoutNear") < currTime)
                 while (GetPlayer() && GetPlayer()->IsInWorld() && GetPlayer()->IsBeingTeleportedNear())
                 {
                     Player* plMover = GetPlayer()->m_mover->ToPlayer();
@@ -510,7 +510,7 @@ void WorldSession::LogoutPlayer(bool save)
                 _player->RemoveBattlegroundQueueId(bgQueueTypeId);
                 sBattlegroundMgr->GetBattlegroundQueue(bgQueueTypeId).RemovePlayer(_player->GetGUID(), false, i);
                 // track if player logs out after invited to join BG
-                if(_player->IsInvitedForBattlegroundInstance() && sGameConfig->GetBoolConfig("Battleground.TrackDeserters.Enable"))
+                if(_player->IsInvitedForBattlegroundInstance() && CONF_GET_BOOL("Battleground.TrackDeserters.Enable"))
                 {
                     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_DESERTER_TRACK);
                     stmt->setUInt32(0, _player->GetGUIDLow());
@@ -640,7 +640,7 @@ bool WorldSession::ValidateHyperlinksAndMaybeKick(std::string const& str)
     LOG_ERROR("network", "Player %s (GUID: %u) sent a message with an invalid link:\n%s", GetPlayer()->GetName().c_str(),
               GetPlayer()->GetGUID(), str.c_str());
 
-    if (sGameConfig->GetIntConfig("ChatStrictLinkChecking.Kick"))
+    if (CONF_GET_INT("ChatStrictLinkChecking.Kick"))
         KickPlayer();
 
     return false;
@@ -1359,9 +1359,9 @@ void WorldSession::UpdateTimeOutTime(uint32 diff)
 void WorldSession::ResetTimeOutTime(bool onlyActive)
 {
     if (GetPlayer())
-        m_timeOutTime = int32(sGameConfig->GetIntConfig("SocketTimeOutTimeActive"));
+        m_timeOutTime = int32(CONF_GET_INT("SocketTimeOutTimeActive"));
     else if (!onlyActive)
-        m_timeOutTime = int32(sGameConfig->GetIntConfig("SocketTimeOutTime"));
+        m_timeOutTime = int32(CONF_GET_INT("SocketTimeOutTime"));
 }
 
 bool WorldSession::IsConnectionIdle() const
@@ -1404,8 +1404,8 @@ bool WorldSession::DosProtection::EvaluateOpcode(WorldPacket& p, time_t time) co
             }
         case POLICY_BAN:
             {
-                uint32 bm = sGameConfig->GetIntConfig("PacketSpoof.BanMode");
-                int64 duration = sGameConfig->GetIntConfig("PacketSpoof.BanDuration"); // in seconds
+                uint32 bm = CONF_GET_INT("PacketSpoof.BanMode");
+                int64 duration = CONF_GET_INT("PacketSpoof.BanDuration"); // in seconds
                 std::string nameOrIp = "";
                 switch (bm)
                 {
@@ -1688,7 +1688,7 @@ uint32 WorldSession::DosProtection::GetMaxPacketCounterAllowed(uint16 opcode) co
 
 WorldSession::DosProtection::DosProtection(WorldSession* s) :
     Session(s),
-    _policy((Policy)sGameConfig->GetIntConfig("PacketSpoof.Policy"))
+    _policy((Policy)CONF_GET_INT("PacketSpoof.Policy"))
 {
 
 }
