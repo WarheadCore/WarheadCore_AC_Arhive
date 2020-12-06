@@ -614,7 +614,7 @@ void WorldSession::HandleInitiateTradeOpcode(WorldPacket& recvPacket)
         return;
     }
 
-    if (!CONF_GET_BOOL("AllowTwoSide.trade") && pOther->GetTeamId() != _player->GetTeamId())
+    if (!CONF_GET_BOOL("AllowTwoSide.Trade") && pOther->GetTeamId() != _player->GetTeamId())
     {
         SendTradeStatus(TRADE_STATUS_WRONG_FACTION);
         return;
