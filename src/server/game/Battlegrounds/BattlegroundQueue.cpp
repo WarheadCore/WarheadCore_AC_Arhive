@@ -31,8 +31,6 @@
 #include "GameConfig.h"
 #include <unordered_map>
 
-std::unordered_map<uint64, uint32> BGSpamProtection;
-
 /*********************************************************/
 /***            BATTLEGROUND QUEUE SYSTEM              ***/
 /*********************************************************/
@@ -993,23 +991,10 @@ void BattlegroundQueue::SendMessageQueue(Player* leader, Battleground* bg, PvPDi
 
     // Show queue status to player only (when joining battleground queue or Arena and arena world announcer is disabled)
     if (CONF_GET_BOOL("Battleground.QueueAnnouncer.PlayerOnly") || (bg->isArena() && !CONF_GET_BOOL("Arena.QueueAnnouncer.Enable")))
-    {
         ChatHandler(leader->GetSession()).PSendSysMessage(LANG_BG_QUEUE_ANNOUNCE_SELF, bgName, q_min_level, q_max_level,
                 qAlliance, (MinPlayers > qAlliance) ? MinPlayers - qAlliance : (uint32)0, qHorde, (MinPlayers > qHorde) ? MinPlayers - qHorde : (uint32)0);
-    }
     else if (!bg->isArena()) // Show queue status to server (when joining battleground queue)
-    {
-        auto searchGUID = BGSpamProtection.find(leader->GetGUID());
-
-        if (searchGUID == BGSpamProtection.end())
-            BGSpamProtection[leader->GetGUID()] = 0; // Leader GUID not found, initialize with 0
-
-        if (GameTime::GetGameTime() - BGSpamProtection[leader->GetGUID()] >= 30)
-        {
-            BGSpamProtection[leader->GetGUID()] = GameTime::GetGameTime();
-            sWorld->SendWorldText(LANG_BG_QUEUE_ANNOUNCE_WORLD, bgName, q_min_level, q_max_level, qAlliance + qHorde, MaxPlayers);
-        }
-    }
+        sWorld->SendWorldText(LANG_BG_QUEUE_ANNOUNCE_WORLD, bgName, q_min_level, q_max_level, qAlliance + qHorde, MaxPlayers);
 }
 
 /*********************************************************/
