@@ -580,10 +580,11 @@ void GameConfig::LoadIntConfigs(bool reload /*= false*/)
     AddOption<int32>("Battleground.ReportAFK", 3);
     AddOption<int32>("Battleground.PremadeGroupWaitForMatch", 30 * MINUTE * IN_MILLISECONDS);
 
-    AddOption<int32>("Arena.MaxRatingDifference", 150);
+    // AddOption<int32>("Arena.MaxRatingDifference", 150);
     AddOption<int32>("Arena.RatingDiscardTimer", 10 * MINUTE * IN_MILLISECONDS);
     AddOption<int32>("Arena.AutoDistributeInterval", 7);
     AddOption<int32>("Arena.ArenaSeason.ID", 1);
+    AddOption<int32>("Arena.ArenaSeason.InProgress", 1);
     AddOption<int32>("Arena.ArenaStartRating");
     AddOption<int32>("Arena.ArenaStartPersonalRating", 1000);
     AddOption<int32>("Arena.ArenaStartMatchmakerRating", 1500);
@@ -783,7 +784,7 @@ void GameConfig::LoadFloatConfigs(bool reload /*= false*/)
     AddOption<float>("Rate.Talent");
     AddOption<float>("Rate.MoveSpeed");
     AddOption<float>("Rate.Corpse.Decay.Looted", 0.5f);
-    AddOption<float>("TargetPosRecalculateRange", 1.5f);
+    AddOption<float>("TargetPosRecalculateRange", 1.5f); // unused
 
     // DurabilityLoss rates
     AddOption<float>("DurabilityLoss.OnDeath", 10.0f);
@@ -800,7 +801,7 @@ void GameConfig::LoadFloatConfigs(bool reload /*= false*/)
     AddOption<float>("CreatureFamilyFleeAssistanceRadius", 30.0f);
     AddOption<float>("CreatureFamilyAssistanceRadius", 10.0f);
 
-    AddOption<float>("ListenRange.Say", 25.0f);
+    AddOption<float>("ListenRange.Say", 40.0f);
     AddOption<float>("ListenRange.TextEmote", 25.0f);
     AddOption<float>("ListenRange.Yell", 300.0f);
 
@@ -851,16 +852,20 @@ void GameConfig::CheckOptions(bool reload /*= false*/)
     ///- Read all rates from the config file
     auto CheckRate = [](std::string const& optionName)
     {
-        if (CONF_GET_FLOAT(optionName) < 0.0f)
+        auto _rate = CONF_GET_FLOAT(optionName);
+        
+        if (_rate < 0.0f)
         {
-            LOG_ERROR("config", "%s (%f) must be > 0. Using 1 instead.", optionName.c_str(), CONF_GET_FLOAT(optionName));
+            LOG_ERROR("config", "%s (%f) must be > 0. Using 1 instead.", optionName.c_str(), _rate);
             sGameConfig->SetOption<float>(optionName, 1.0f);
         }
     };
 
     CheckRate("Rate.Health");
     CheckRate("Rate.Mana");
+    CheckRate("Rate.Rage.Income");
     CheckRate("Rate.Rage.Loss");
+    CheckRate("Rate.RunicPower.Income");
     CheckRate("Rate.RunicPower.Loss");
     CheckRate("Rate.RepairCost");
     CheckRate("Rate.Talent");
