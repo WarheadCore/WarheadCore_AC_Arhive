@@ -298,7 +298,7 @@ void GameConfig::LoadBoolConfigs(bool reload /*= false*/)
     AddOption<bool>("AllowTwoSide.Interaction.Mail");
     AddOption<bool>("AllowTwoSide.WhoList");
     AddOption<bool>("AllowTwoSide.AddFriend");
-    AddOption<bool>("AllowTwoSide.trade");
+    AddOption<bool>("AllowTwoSide.Trade");
     AddOption<bool>("AllowTwoSide.Interaction.Emote");
 
     AddOption<bool>("AllFlightPaths");
