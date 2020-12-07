@@ -853,7 +853,7 @@ void GameConfig::CheckOptions(bool reload /*= false*/)
     auto CheckRate = [](std::string const& optionName)
     {
         auto _rate = CONF_GET_FLOAT(optionName);
-        
+
         if (_rate < 0.0f)
         {
             LOG_ERROR("config", "%s (%f) must be > 0. Using 1 instead.", optionName.c_str(), _rate);
