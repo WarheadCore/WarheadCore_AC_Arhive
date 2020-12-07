@@ -24,31 +24,43 @@
 #        Description: Enable system forbidden words.
 #        Default: 0
 #
-#    AntiAD.MessageGMsInWorld.Enable
+
+AntiAD.Enable = 0
+
+#
+#    AntiAD.Send.GMMessage.Enable
 #        Description: Enable notify all GMs.
 #        Default: 1
 #
-#    AntiAD.FullMessageGMsInWorld.Enable
-#        Description: Enable notify full message all GMs.
-#        Default: 1
 #
-#    AntiAD.SelfMessage.Enable
+#    AntiAD.Send.SelfMessage.Enable
 #        Description: Show forbidden word message self.
 #        Default: 1
 #
-#    AntiAD.Mute.Enable
+
+AntiAD.Send.GMMessage.Enable = 1
+AntiAD.Send.SelfMessage.Enable = 1
+
+#
+#    AntiAD.Mute.Player.Enable
 #        Description: Enable mute at writing forbidden word.
 #        Default: 1
 #
-#    AntiAD.MuteGM.Enable
+#    AntiAD.Mute.GM.Enable
 #        Description: Enable mute for GMs.
 #        Default: 0
 #
 #    AntiAD.Mute.Time
 #        Description: Mute time in minutes.
-#        Default: 5
+#        Default: 1
 #
-#    AntiAD.CheckChannels
+
+AntiAD.Mute.Player.Enable = 1
+AntiAD.Mute.GM.Enable = 0
+AntiAD.Mute.Count = 1
+
+#
+#    AntiAD.Check.Channels
 #        Description: A mask that describes which channels checks
 #
 #          Following flags are available
@@ -61,11 +73,4 @@
 #        Default: 8
 #
 
-AntiAD.Enable = 0
-AntiAD.MessageGMsInWorld.Enable = 1
-AntiAD.FullMessageGMsInWorld.Enable = 1
-AntiAD.SelfMessage.Enable = 1
-AntiAD.Mute.Enable = 1
-AntiAD.MuteGM.Enable = 1
-AntiAD.Mute.Time = 1
-AntiAD.CheckChannels = 8
+AntiAD.Check.Channels = 8
