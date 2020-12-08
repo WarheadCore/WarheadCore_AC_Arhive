@@ -71,7 +71,7 @@ public:
             BossAI::JustDied(killer);
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             Talk(SAY_AGGRO);
             BossAI::EnterCombat(who);

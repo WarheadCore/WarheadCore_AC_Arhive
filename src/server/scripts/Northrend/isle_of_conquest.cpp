@@ -253,7 +253,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             events.ScheduleEvent(EVENT_CHECK_RAGE, 2s);
             events.ScheduleEvent(EVENT_BRUTAL_STRIKE, 6s);

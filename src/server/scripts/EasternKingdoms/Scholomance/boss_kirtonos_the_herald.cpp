@@ -83,7 +83,7 @@ public:
         EventMap events2;
         InstanceScript* instance;
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             events.Reset();
             events.ScheduleEvent(EVENT_SHADOW_BOLT_VOLLEY, 2s);

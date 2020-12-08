@@ -68,7 +68,7 @@ public:
                 instance->SetData(TYPE_WARLORD_KALITHRESH, NOT_STARTED);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             Talk(SAY_AGGRO);
             events.ScheduleEvent(EVENT_SPELL_REFLECTION, 10s);

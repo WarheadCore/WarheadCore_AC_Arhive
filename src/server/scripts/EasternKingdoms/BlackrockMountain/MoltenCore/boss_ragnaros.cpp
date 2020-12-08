@@ -97,7 +97,7 @@ public:
             me->SetUInt32Value(UNIT_NPC_EMOTESTATE, 0);
         }
 
-        void EnterCombat(Unit* victim) override
+        void JustEngagedWith(Unit* victim) override
         {
             BossAI::EnterCombat(victim);
             events.ScheduleEvent(EVENT_ERUPTION, 15s);

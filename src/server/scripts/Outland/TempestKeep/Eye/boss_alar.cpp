@@ -118,7 +118,7 @@ public:
             me->SetReactState(REACT_AGGRESSIVE);
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             BossAI::EnterCombat(who);
             events.ScheduleEvent(EVENT_SWITCH_PLATFORM, 0s);

@@ -123,7 +123,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             BossAI::EnterCombat(who);
             if (Creature* alythess = ObjectAccessor::GetCreature(*me, instance->GetData64(NPC_GRAND_WARLOCK_ALYTHESS)))
@@ -271,7 +271,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             BossAI::EnterCombat(who);
             if (Creature* scorlash = ObjectAccessor::GetCreature(*me, instance->GetData64(NPC_LADY_SACROLASH)))

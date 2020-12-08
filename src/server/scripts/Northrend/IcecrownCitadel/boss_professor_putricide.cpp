@@ -292,7 +292,7 @@ public:
                 BossAI::MoveInLineOfSight(who);
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             Position homePos = me->GetHomePosition();
             if (!instance->CheckRequiredBosses(DATA_PROFESSOR_PUTRICIDE, who->ToPlayer()) || me->GetExactDist2d(&homePos) > 10.0f || !me->IsVisible()) // check home position because during festergut/rotface fight, trigger missile after their death can trigger putricide combat

@@ -126,7 +126,7 @@ public:
                 c->DespawnOrUnsummon();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             me->setActive(true);
             events.Reset();

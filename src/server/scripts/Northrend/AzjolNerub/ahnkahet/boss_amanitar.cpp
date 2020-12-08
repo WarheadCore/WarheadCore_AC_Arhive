@@ -86,7 +86,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             if (pInstance)
                 pInstance->SetData(DATA_AMANITAR_EVENT, IN_PROGRESS);
@@ -224,7 +224,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*who*/) {}
+        void JustEngagedWith(Unit* /*who*/) {}
         void AttackStart(Unit* /*victim*/) {}
 
         void UpdateAI(uint32 diff)

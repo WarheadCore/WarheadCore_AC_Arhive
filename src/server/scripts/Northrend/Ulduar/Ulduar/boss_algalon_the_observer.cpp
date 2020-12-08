@@ -463,7 +463,7 @@ public:
             me->setActive(false);
         }
 
-        void EnterCombat(Unit*)
+        void JustEngagedWith(Unit*)
         {
             if (_fightWon)
                 return;

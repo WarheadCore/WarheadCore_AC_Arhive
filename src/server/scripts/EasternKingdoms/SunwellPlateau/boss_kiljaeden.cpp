@@ -364,7 +364,7 @@ public:
                 Talk(SAY_KJ_SLAY);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             events2.ScheduleEvent(EVENT_TEXT_SPEACH11, 26s, EVENT_GROUP_SPEACH);
             Talk(SAY_KJ_EMERGE);

@@ -69,7 +69,7 @@ public:
             DoCast(me, SPELL_MAGMA_SPIT, true);
         }
 
-        void EnterCombat(Unit* victim)
+        void JustEngagedWith(Unit* victim)
         {
             BossAI::EnterCombat(victim);
             events.ScheduleEvent(EVENT_FRENZY, 30s);
@@ -183,7 +183,7 @@ public:
             removeFeignDeath();
         }
 
-        void EnterCombat(Unit* /*victim*/)
+        void JustEngagedWith(Unit* /*victim*/)
         {
             events.ScheduleEvent(EVENT_SERRATED_BITE, 10s); // timer may be wrong
         }

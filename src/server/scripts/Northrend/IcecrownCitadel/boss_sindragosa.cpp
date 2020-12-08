@@ -325,7 +325,7 @@ public:
             instance->DoRemoveAurasDueToSpellOnPlayers(SPELL_ASPHYXIATION);
         }
 
-        void EnterCombat(Unit* victim)
+        void JustEngagedWith(Unit* victim)
         {
             if (!instance->CheckRequiredBosses(DATA_SINDRAGOSA, victim->ToPlayer()) || !me->IsVisible())
             {
@@ -1629,7 +1629,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*victim*/)
+        void JustEngagedWith(Unit* /*victim*/)
         {
             me->CastSpell(me, SPELL_FROST_AURA_RIMEFANG, true);
         }
@@ -1825,7 +1825,7 @@ public:
                 _events.ScheduleEvent(EVENT_WHELP_FROST_BLAST, 3s, 6s);
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             if (me->GetEntry() == NPC_FROSTWARDEN_HANDLER)
             {

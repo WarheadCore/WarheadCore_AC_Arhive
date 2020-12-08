@@ -80,7 +80,7 @@ public:
             PlayerGUID = 0;
         }
 
-        void EnterCombat(Unit* /*who*/) { }
+        void JustEngagedWith(Unit* /*who*/) { }
 
         void UpdateAI(uint32 diff)
         {
@@ -223,7 +223,7 @@ public:
             ShockTimer = 8000;
         }
 
-        void EnterCombat(Unit* /*who*/) override { }
+        void JustEngagedWith(Unit* /*who*/) override { }
 
         void UpdateAI(uint32 diff) override
         {

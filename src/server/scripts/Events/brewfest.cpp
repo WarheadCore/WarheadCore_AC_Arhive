@@ -315,7 +315,7 @@ public:
         }
 
 
-        void EnterCombat(Unit*  /*who*/)
+        void JustEngagedWith(Unit*  /*who*/)
         {
             if (me->GetEntry() == NPC_URSULA_DIREBREW)
                 events.ScheduleEvent(EVENT_SISTERS_BARREL, 18s);
@@ -697,7 +697,7 @@ public:
 
         // DARK IRON ATTACK EVENT
         void MoveInLineOfSight(Unit*  /*who*/) {}
-        void EnterCombat(Unit*) {}
+        void JustEngagedWith(Unit*) {}
 
         void SpellHit(Unit* caster, const SpellInfo* spellInfo)
         {
@@ -904,7 +904,7 @@ public:
         {
         }
 
-        void EnterCombat(Unit*) {}
+        void JustEngagedWith(Unit*) {}
         void MoveInLineOfSight(Unit*) {}
         void AttackStart(Unit*) {}
 
@@ -970,7 +970,7 @@ public:
 
         uint32 timer;
         uint64 targetGUID;
-        void EnterCombat(Unit*) {}
+        void JustEngagedWith(Unit*) {}
         void MoveInLineOfSight(Unit*) {}
         void AttackStart(Unit*) {}
 
@@ -1107,7 +1107,7 @@ public:
         }
 
         uint32 timer;
-        void EnterCombat(Unit*) {}
+        void JustEngagedWith(Unit*) {}
         void MoveInLineOfSight(Unit*  /*who*/)
         {
         }

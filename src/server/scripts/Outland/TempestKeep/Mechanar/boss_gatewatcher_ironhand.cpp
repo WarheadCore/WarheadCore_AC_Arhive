@@ -51,9 +51,9 @@ public:
     {
         boss_gatewatcher_iron_handAI(Creature* creature) : BossAI(creature, DATA_GATEWATCHER_IRON_HAND) { }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
-            _EnterCombat();
+            _JustEngagedWith();
             events.ScheduleEvent(EVENT_STREAM_OF_MACHINE_FLUID, 15s);
             events.ScheduleEvent(EVENT_JACKHAMMER, 35s);
             events.ScheduleEvent(EVENT_SHADOW_POWER, 25s);

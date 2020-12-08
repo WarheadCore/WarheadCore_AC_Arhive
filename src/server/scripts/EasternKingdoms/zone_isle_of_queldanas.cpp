@@ -661,7 +661,7 @@ public:
     {
         npc_greengill_slaveAI(Creature* creature) : ScriptedAI(creature) { }
 
-        void EnterCombat(Unit* /*who*/) { }
+        void JustEngagedWith(Unit* /*who*/) { }
 
         void SpellHit(Unit* caster, SpellInfo const* spellInfo)
         {

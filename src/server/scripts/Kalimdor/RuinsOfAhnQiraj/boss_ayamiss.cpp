@@ -128,7 +128,7 @@ public:
             BossAI::EnterEvadeMode();
         }
 
-        void EnterCombat(Unit* attacker)
+        void JustEngagedWith(Unit* attacker)
         {
             BossAI::EnterCombat(attacker);
 

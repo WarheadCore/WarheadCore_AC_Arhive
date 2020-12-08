@@ -129,7 +129,7 @@ public:
                 damaged = false;
         }
 
-        void EnterCombat(Unit*)
+        void JustEngagedWith(Unit*)
         {
             switch (changeEntry)
             {

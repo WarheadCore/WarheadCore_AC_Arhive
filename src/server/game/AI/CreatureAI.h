@@ -97,7 +97,7 @@ public:
     virtual void EnterEvadeMode();
 
     // Called for reaction at enter to combat if not in combat yet (enemy can be nullptr)
-    virtual void EnterCombat(Unit* /*victim*/) {}
+    virtual void JustEngagedWith(Unit* /*victim*/) {}
 
     // Called when the creature is killed
     virtual void JustDied(Unit* /*killer*/) {}

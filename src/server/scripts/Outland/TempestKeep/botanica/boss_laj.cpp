@@ -99,9 +99,9 @@ public:
             me->CastSpell(me, _lastTransform, true);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
-            _EnterCombat();
+            _JustEngagedWith();
 
             events.ScheduleEvent(EVENT_ALERGIC_REACTION, 5s);
             events.ScheduleEvent(EVENT_TRANSFORM, 30s);

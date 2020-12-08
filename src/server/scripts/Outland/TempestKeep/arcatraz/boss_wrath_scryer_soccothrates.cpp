@@ -107,9 +107,9 @@ public:
                     dalliah->AI()->SetData(1, 1);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
-            _EnterCombat();
+            _JustEngagedWith();
             events2.Reset();
             events.ScheduleEvent(EVENT_FELFIRE_SHOCK, 12s, 14s);
             events.ScheduleEvent(EVENT_KNOCK_AWAY, 11s, 12s);

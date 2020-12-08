@@ -119,7 +119,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             // ### TODO Check combat timing ###
             events.ScheduleEvent(EVENT_FIRENOVA, 6s);
@@ -357,7 +357,7 @@ public:
                 _events.ScheduleEvent(EVENT_ENCAGED_EMBERSEER, 1s);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             // Used to close doors
             if (Creature* Emberseer = me->FindNearestCreature(NPC_PYROGAURD_EMBERSEER, 30.0f, true))

@@ -73,7 +73,7 @@ public:
             me->SaveRespawnTime();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             if (pInstance)
             {

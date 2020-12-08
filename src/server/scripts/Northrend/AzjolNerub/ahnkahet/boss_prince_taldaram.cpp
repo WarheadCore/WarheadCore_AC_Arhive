@@ -122,7 +122,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             if (pInstance)
                 pInstance->SetData(DATA_PRINCE_TALDARAM_EVENT, IN_PROGRESS);
@@ -313,7 +313,7 @@ public:
             uiDespawnTimer = 13 * IN_MILLISECONDS;
         }
 
-        void EnterCombat(Unit* /*who*/) {}
+        void JustEngagedWith(Unit* /*who*/) {}
         void MoveInLineOfSight(Unit* /*who*/) {}
 
         void JustDied(Unit* /*who*/)

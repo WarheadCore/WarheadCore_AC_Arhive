@@ -94,7 +94,7 @@ public:
             Talk(SAY_DEATH);
         }
 
-        void EnterCombat(Unit* who) override
+        void JustEngagedWith(Unit* who) override
         {
             BossAI::EnterCombat(who);
             Talk(SAY_AGGRO);

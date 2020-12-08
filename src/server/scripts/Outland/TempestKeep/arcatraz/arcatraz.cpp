@@ -120,7 +120,7 @@ public:
             Talk(SAY_DEATH);
         }
 
-        void EnterCombat(Unit*)
+        void JustEngagedWith(Unit*)
         {
             events.ScheduleEvent(EVENT_MILL_CHECK_HEALTH, 1s);
             events.ScheduleEvent(EVENT_MILL_PYROBLAST, 30s);
@@ -357,7 +357,7 @@ public:
 
         void MoveInLineOfSight(Unit*) { }
         void AttackStart(Unit*) { }
-        void EnterCombat(Unit*) { }
+        void JustEngagedWith(Unit*) { }
 
         void JustDied(Unit*)
         {

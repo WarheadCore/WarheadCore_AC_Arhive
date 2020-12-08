@@ -74,7 +74,7 @@ public:
             lTarget = 0;
         }
 
-        void EnterCombat(Unit*)
+        void JustEngagedWith(Unit*)
         {
             events.ScheduleEvent(EVENT_LEVITATE, 12s);
             events.ScheduleEvent(EVENT_SPELL_CHAIN, 6s);

@@ -103,7 +103,7 @@ public:
             events.ScheduleEvent(EVENT_SPELL_FIRE_BOMB, 10s, 30s);
         }
 
-        void EnterCombat(Unit*  /*who*/)
+        void JustEngagedWith(Unit*  /*who*/)
         {
             events.Reset();
             events.ScheduleEvent(EVENT_SPELL_SNOBOLLED, 1500ms);
@@ -256,7 +256,7 @@ public:
             PlayerGUID = 0;
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             me->setActive(true);
             events.Reset();
@@ -528,7 +528,7 @@ struct boss_jormungarAI : public ScriptedAI
             events.RescheduleEvent(EVENT_SUBMERGE, 45s, 50s);
     }
 
-    void EnterCombat(Unit* /*who*/)
+    void JustEngagedWith(Unit* /*who*/)
     {
         me->setActive(true);
         ScheduleEvents();
@@ -800,7 +800,7 @@ public:
                 ScriptedAI::AttackStart(who);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             me->setActive(true);
             events.Reset();

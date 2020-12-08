@@ -166,7 +166,7 @@ public:
             me->DespawnOrUnsummon(1);
         }
 
-        void EnterCombat(Unit*)
+        void JustEngagedWith(Unit*)
         {
             events.ScheduleEvent(EVENT_CHANGE_POS, 0s);
             events.ScheduleEvent(EVENT_SPELL_FIREBALL, 5s);
@@ -273,7 +273,7 @@ public:
             me->DespawnOrUnsummon(1);
         }
 
-        void EnterCombat(Unit*)
+        void JustEngagedWith(Unit*)
         {
             events.ScheduleEvent(EVENT_AGGRO_TALK, 5s);
             events.ScheduleEvent(EVENT_SPELL_REVENGE, 4s);

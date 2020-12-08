@@ -77,9 +77,9 @@ public:
         }
 
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
-            _EnterCombat();
+            _JustEngagedWith();
             Talk(SAY_AGGRO);
             events.ScheduleEvent(EVENT_SACRIFICE, 6s);
             events.ScheduleEvent(EVENT_HELLFIRE, 18s);

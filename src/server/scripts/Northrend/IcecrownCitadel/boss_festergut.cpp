@@ -108,7 +108,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             if (!instance->CheckRequiredBosses(DATA_FESTERGUT, who->ToPlayer()))
             {
@@ -440,7 +440,7 @@ public:
             events.Reset();
         }
 
-        void EnterCombat(Unit* /*target*/)
+        void JustEngagedWith(Unit* /*target*/)
         {
             me->setActive(true);
             me->CastSpell(me, SPELL_PLAGUE_STENCH, true);

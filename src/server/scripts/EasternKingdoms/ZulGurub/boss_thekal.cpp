@@ -102,9 +102,9 @@ public:
             Talk(SAY_DEATH);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
-            _EnterCombat();
+            _JustEngagedWith();
             events.ScheduleEvent(EVENT_MORTALCLEAVE, 4s, 0, PHASE_ONE);     // Phase 1
             events.ScheduleEvent(EVENT_SILENCE, 9s, 0, PHASE_ONE);          // Phase 1
             events.ScheduleEvent(EVENT_CHECK_TIMER, 10s, 0, PHASE_ONE);     // Phase 1
@@ -293,7 +293,7 @@ public:
             me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
         }
 
@@ -452,7 +452,7 @@ public:
             me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
         }
 

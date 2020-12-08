@@ -87,7 +87,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit*)
+        void JustEngagedWith(Unit*)
         {
             if (isBanished)
                 return;

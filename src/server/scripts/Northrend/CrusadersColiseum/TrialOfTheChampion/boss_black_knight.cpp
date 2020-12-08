@@ -403,7 +403,7 @@ public:
             events.Reset();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             events.Reset();
 

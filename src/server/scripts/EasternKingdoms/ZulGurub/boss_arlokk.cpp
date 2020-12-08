@@ -114,9 +114,9 @@ public:
             Talk(SAY_DEATH);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
-            _EnterCombat();
+            _JustEngagedWith();
             events.ScheduleEvent(EVENT_SHADOW_WORD_PAIN, 7s, 9s, 0, PHASE_ONE);
             events.ScheduleEvent(EVENT_GOUGE, 12s, 15s, 0, PHASE_ONE);
             events.ScheduleEvent(EVENT_SUMMON_PROWLERS, 6s);
@@ -351,7 +351,7 @@ public:
             _events.ScheduleEvent(EVENT_ATTACK, 6s);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             me->GetMotionMaster()->Clear(false);
             me->RemoveAura(SPELL_SNEAK_RANK_1_1);

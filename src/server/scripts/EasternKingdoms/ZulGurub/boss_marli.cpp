@@ -85,9 +85,9 @@ public:
             Talk(SAY_DEATH);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
-            _EnterCombat();
+            _JustEngagedWith();
             events.ScheduleEvent(EVENT_SPAWN_START_SPIDERS, 1s, 0, PHASE_ONE);
             Talk(SAY_AGGRO);
         }
@@ -236,7 +236,7 @@ public:
             LevelUp_Timer = 3000;
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
         }
 

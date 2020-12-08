@@ -81,7 +81,7 @@ public:
             events2.ScheduleEvent(EVENT_PHANTOM, 21s);
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             Talk(SAY_AGGRO);
             BossAI::EnterCombat(who);

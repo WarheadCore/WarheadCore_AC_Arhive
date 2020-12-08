@@ -99,7 +99,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             Talk(AGGRO_YELL_AQUE, who);
         }
@@ -270,7 +270,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*who*/) { }
+        void JustEngagedWith(Unit* /*who*/) { }
         void Reset() { }
 
         void UpdateAI(uint32 diff)
@@ -469,7 +469,7 @@ public:
 
         void Reset() { }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             Talk(SAY_OOX_AGGRO);
         }

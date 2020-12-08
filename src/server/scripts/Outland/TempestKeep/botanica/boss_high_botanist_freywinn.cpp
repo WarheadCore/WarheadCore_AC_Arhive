@@ -67,9 +67,9 @@ public:
             _Reset();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
-            _EnterCombat();
+            _JustEngagedWith();
             Talk(SAY_AGGRO);
 
             events.ScheduleEvent(EVENT_SUMMON_SEEDLING, 6s);

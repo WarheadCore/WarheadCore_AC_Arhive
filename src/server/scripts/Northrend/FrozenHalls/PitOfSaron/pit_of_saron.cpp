@@ -426,7 +426,7 @@ public:
                 me->SetFacingTo(M_PI);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             // TODO This spell check is invalid
             me->RemoveAura(SPELL_NECROLYTE_CHANNELING);

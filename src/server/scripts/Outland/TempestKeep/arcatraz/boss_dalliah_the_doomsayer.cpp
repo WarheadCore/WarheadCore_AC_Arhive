@@ -86,9 +86,9 @@ public:
                     soccothrates->AI()->SetData(1, 1);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
-            _EnterCombat();
+            _JustEngagedWith();
             Talk(SAY_AGGRO);
 
             events.ScheduleEvent(EVENT_GIFT_OF_THE_DOOMSAYER, 1s, 4s);

@@ -769,7 +769,7 @@ public:
             hasTarget = false;
         }
 
-        void EnterCombat(Unit* /*who*/) { }
+        void JustEngagedWith(Unit* /*who*/) { }
         void JustDied(Unit* /*slayer*/);
 
         void UpdateAI(uint32 diff)

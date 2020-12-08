@@ -721,7 +721,7 @@ public:
             events.Reset();
         }
 
-        void EnterCombat(Unit*)
+        void JustEngagedWith(Unit*)
         {
             events.ScheduleEvent(EVENT_DRP_CHARGE, 10s);
             events.ScheduleEvent(EVENT_DRP_CLEAVE, 7s);
@@ -779,7 +779,7 @@ public:
             events.Reset();
         }
 
-        void EnterCombat(Unit*)
+        void JustEngagedWith(Unit*)
         {
             events.ScheduleEvent(EVENT_DRS_LIGHTNING_BOLD, 5s);
             events.ScheduleEvent(EVENT_DRS_SHADOW_WORD_PAIN, 12s);
@@ -834,7 +834,7 @@ public:
             events.Reset();
         }
 
-        void EnterCombat(Unit*)
+        void JustEngagedWith(Unit*)
         {
             events.ScheduleEvent(EVENT_IGC_CRUSH, 6s);
             events.ScheduleEvent(EVENT_IGC_GROUND_SMASH, 4s);

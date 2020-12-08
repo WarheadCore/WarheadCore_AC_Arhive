@@ -86,7 +86,7 @@ public:
             me->SetVisible(true);
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             BossAI::EnterCombat(who);
             me->CastSpell(me, SPELL_NEGATIVE_ENERGY, true);
@@ -186,7 +186,7 @@ public:
             me->DespawnOrUnsummon();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             events.ScheduleEvent(EVENT_SPAWN_BLACK_HOLE, 15s);
             events.ScheduleEvent(EVENT_SPAWN_DARKNESS, 10s);

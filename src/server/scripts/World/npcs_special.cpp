@@ -722,7 +722,7 @@ public:
             me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
         }
 
-        void EnterCombat(Unit* /*who*/) override { }
+        void JustEngagedWith(Unit* /*who*/) override { }
 
         void UpdateAI(uint32 diff) override
         {
@@ -838,7 +838,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*who*/) { }
+        void JustEngagedWith(Unit* /*who*/) { }
 
         void ReceiveEmote(Player* player, uint32 emote)
         {
@@ -1067,7 +1067,7 @@ public:
 
         void UpdateAI(uint32 diff);
 
-        void EnterCombat(Unit* /*who*/) { }
+        void JustEngagedWith(Unit* /*who*/) { }
     };
 
     bool OnQuestAccept(Player* player, Creature* creature, Quest const* quest)
@@ -1134,7 +1134,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*who*/) { }
+        void JustEngagedWith(Unit* /*who*/) { }
 
         void SpellHit(Unit* caster, SpellInfo const* spell)
         {
@@ -1318,7 +1318,7 @@ public:
             me->SetHealth(me->CountPctFromMaxHealth(70));
         }
 
-        void EnterCombat(Unit* /*who*/) { }
+        void JustEngagedWith(Unit* /*who*/) { }
 
         void SpellHit(Unit* caster, SpellInfo const* spell)
         {
@@ -1498,7 +1498,7 @@ public:
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
         }
 
@@ -1694,7 +1694,7 @@ public:
         npc_steam_tonkAI(Creature* creature) : ScriptedAI(creature) { }
 
         void Reset() { }
-        void EnterCombat(Unit* /*who*/) { }
+        void JustEngagedWith(Unit* /*who*/) { }
 
         void OnPossess(bool apply)
         {
@@ -2394,7 +2394,7 @@ public:
                 me->GetMotionMaster()->MoveFollow(owner, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
         }
 
-        void EnterCombat(Unit* /*who*/) { }
+        void JustEngagedWith(Unit* /*who*/) { }
 
         void DoAction(int32 /*param*/)
         {

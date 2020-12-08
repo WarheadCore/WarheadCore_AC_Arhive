@@ -159,7 +159,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             events.Reset();
             // schedule Phase 1 abilities

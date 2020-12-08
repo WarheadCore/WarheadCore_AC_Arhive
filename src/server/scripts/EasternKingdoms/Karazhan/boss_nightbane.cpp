@@ -158,7 +158,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             if (instance)
                 instance->SetData64(DATA_NIGHTBANE, IN_PROGRESS);

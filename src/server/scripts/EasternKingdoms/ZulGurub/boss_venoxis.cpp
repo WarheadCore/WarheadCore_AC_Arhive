@@ -111,9 +111,9 @@ public:
             me->RemoveAllAuras();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
-            _EnterCombat();
+            _JustEngagedWith();
             me->SetReactState(REACT_AGGRESSIVE);
             // Always running events
             events.ScheduleEvent(EVENT_THRASH, 5s);

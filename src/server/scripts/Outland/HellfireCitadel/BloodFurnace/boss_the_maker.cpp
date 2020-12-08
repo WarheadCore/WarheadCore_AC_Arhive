@@ -64,7 +64,7 @@ public:
             instance->HandleGameObject(instance->GetData64(DATA_DOOR2), true);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             Talk(SAY_AGGRO);
             events.ScheduleEvent(EVENT_SPELL_ACID, 15s);

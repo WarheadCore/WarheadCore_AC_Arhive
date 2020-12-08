@@ -50,9 +50,9 @@ public:
             _Reset();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
-            _EnterCombat();
+            _JustEngagedWith();
             events.ScheduleEvent(EVENT_FRENZY, 20s);
             events.ScheduleEvent(EVENT_KNOCK_AWAY, 18s);
         }

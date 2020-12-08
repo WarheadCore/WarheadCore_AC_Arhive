@@ -1760,7 +1760,7 @@ public:
             events.ScheduleEvent(EVENT_SPAWN, 3s);
         }
 
-        void EnterCombat(Unit* /*who*/) { }
+        void JustEngagedWith(Unit* /*who*/) { }
 
         void MoveInLineOfSight(Unit* /*who*/) { }
 

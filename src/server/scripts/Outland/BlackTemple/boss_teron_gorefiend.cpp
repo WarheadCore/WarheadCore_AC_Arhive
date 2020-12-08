@@ -107,7 +107,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             BossAI::EnterCombat(who);
             events.ScheduleEvent(EVENT_SPELL_INCINERATE, 24s);

@@ -138,7 +138,7 @@ public:
             blockList.clear();
         }
 
-        void EnterCombatSelfFunction()
+        void JustEngagedWithSelfFunction()
         {
             Map::PlayerList const& PlList = me->GetMap()->GetPlayers();
             if (PlList.isEmpty())
@@ -161,7 +161,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* who) override
+        void JustEngagedWith(Unit* who) override
         {
             BossAI::EnterCombat(who);
             EnterCombatSelfFunction();

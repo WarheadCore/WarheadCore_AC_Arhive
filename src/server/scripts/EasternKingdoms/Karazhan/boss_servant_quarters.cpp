@@ -72,7 +72,7 @@ public:
                 me->DespawnOrUnsummon(1);
         }
 
-        void EnterCombat(Unit*  /*who*/)
+        void JustEngagedWith(Unit*  /*who*/)
         {
             me->setActive(true);
             if (me->GetEntry() == NPC_HYAKISS_THE_LURKER)

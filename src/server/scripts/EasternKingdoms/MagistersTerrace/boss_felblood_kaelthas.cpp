@@ -129,7 +129,7 @@ public:
             instance->SetData(DATA_KAELTHAS_EVENT, DONE);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             instance->SetData(DATA_KAELTHAS_EVENT, IN_PROGRESS);
             me->SetInCombatWithZone();

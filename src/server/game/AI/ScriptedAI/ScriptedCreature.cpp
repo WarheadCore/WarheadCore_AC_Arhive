@@ -527,7 +527,7 @@ void BossAI::_JustDied()
     }
 }
 
-void BossAI::_EnterCombat()
+void BossAI::_JustEngagedWith()
 {
     me->setActive(true);
     DoZoneInCombat();
@@ -656,7 +656,7 @@ void WorldBossAI::_JustDied()
     summons.DespawnAll();
 }
 
-void WorldBossAI::_EnterCombat()
+void WorldBossAI::_JustEngagedWith()
 {
     Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true);
     if (target)

@@ -201,7 +201,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             me->setActive(true);
             events.Reset();
@@ -483,7 +483,7 @@ public:
                 }
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             DoZoneInCombat();
         }

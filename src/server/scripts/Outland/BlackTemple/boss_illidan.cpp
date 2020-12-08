@@ -321,7 +321,7 @@ public:
                 events.ScheduleEvent(EVENT_SPELL_FRENZY, 40s);
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             summons.DespawnAll();
             BossAI::EnterCombat(who);

@@ -1889,7 +1889,7 @@ public:
             _playerGUID  = 0;
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             _events.ScheduleEvent(EVENT_HEMORRHAGE, 5s, 8s);
             _events.ScheduleEvent(EVENT_KIDNEY_SHOT, 12s, 15s);

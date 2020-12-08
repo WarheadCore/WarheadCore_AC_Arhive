@@ -232,7 +232,7 @@ public:
             me->CastSpell(me, SPELL_LIGHTNING_BOLTS, true);
         }
 
-        void EnterCombat(Unit*  /*who*/)
+        void JustEngagedWith(Unit*  /*who*/)
         {
             if (pInstance)
                 pInstance->SetData(DATA_JEDOGA_SHADOWSEEKER_EVENT, IN_PROGRESS);

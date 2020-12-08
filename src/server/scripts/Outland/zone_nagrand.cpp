@@ -107,7 +107,7 @@ public:
             FrostShockTimer = 6000;
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             DoCast(me, SPELL_EARTHBIND_TOTEM, false);
         }
@@ -236,7 +236,7 @@ public:
 
         void Reset() { }
 
-        void EnterCombat(Unit* /*who*/) { }
+        void JustEngagedWith(Unit* /*who*/) { }
 
         void MoveInLineOfSight(Unit* who)
 
@@ -454,7 +454,7 @@ public:
             FrostShockTimer = 6000;
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             DoCast(me, SPELL_KUR_EARTHBIND_TOTEM, false);
         }

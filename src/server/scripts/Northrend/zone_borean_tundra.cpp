@@ -582,7 +582,7 @@ public:
             bEnslaved = false;
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             if (me->IsValidAttackTarget(who))
                 AttackStart(who);
@@ -690,7 +690,7 @@ public:
             DoMeleeAttackIfReady();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
         }
 
@@ -995,7 +995,7 @@ public:
             m_uiTimer = 0;
         }
 
-        void EnterCombat(Unit* /*who*/) { }
+        void JustEngagedWith(Unit* /*who*/) { }
 
         void AttackStart(Unit* /*who*/) { }
 

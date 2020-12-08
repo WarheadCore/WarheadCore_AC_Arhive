@@ -45,7 +45,7 @@ public:
         npc_riding_the_red_rocketAI(Creature* creature) : VehicleAI(creature) {}
 
         void AttackStart(Unit* /*who*/) {}
-        void EnterCombat(Unit* /*who*/) {}
+        void JustEngagedWith(Unit* /*who*/) {}
         void EnterEvadeMode() {}
 
         void UpdateAI(uint32  /*diff*/)
@@ -242,7 +242,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*Who*/)
+        void JustEngagedWith(Unit* /*Who*/)
         {
             Talk(SAY_RANDOMAGGRO);
         }
@@ -290,7 +290,7 @@ public:
 
         void Reset() { }
 
-        void EnterCombat(Unit* Who)
+        void JustEngagedWith(Unit* Who)
         {
             if (Creature* Emily = GetClosestCreatureWithEntry(me, NPC_EMILY, 50.0f))
             {

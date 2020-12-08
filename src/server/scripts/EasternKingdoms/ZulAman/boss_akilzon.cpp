@@ -107,7 +107,7 @@ public:
             SetWeather(WEATHER_STATE_FINE, 0.0f);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             events.ScheduleEvent(EVENT_STATIC_DISRUPTION, 10s, 20s); // 10 to 20 seconds (bosskillers)
             events.ScheduleEvent(EVENT_GUST_OF_WIND, 20s, 30s);      // 20 to 30 seconds(bosskillers)
@@ -399,7 +399,7 @@ public:
             me->SetDisableGravity(true);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             DoZoneInCombat();
         }

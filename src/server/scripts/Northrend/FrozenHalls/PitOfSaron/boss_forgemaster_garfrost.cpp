@@ -109,7 +109,7 @@ public:
                 pInstance->SetData(DATA_ACHIEV_ELEVEN, 0);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             me->CastSpell(me, SPELL_PERMAFROST, true);
 

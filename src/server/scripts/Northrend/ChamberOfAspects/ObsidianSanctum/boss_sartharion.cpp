@@ -354,7 +354,7 @@ public:
                 me->CastSpell(me, SPELL_SARTHARION_TWILIGHT_REVENGE, true);
         }
 
-        void EnterCombat(Unit*  /*pWho*/)
+        void JustEngagedWith(Unit*  /*pWho*/)
         {
             me->CastSpell(me, SPELL_SARTHARION_PYROBUFFET, true);
             me->SetInCombatWithZone();
@@ -662,7 +662,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* )
+        void JustEngagedWith(Unit* )
         {
             Talk(SAY_TENEBRON_AGGRO);
             me->SetInCombatWithZone();
@@ -915,7 +915,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* )
+        void JustEngagedWith(Unit* )
         {
             Talk(SAY_SHADRON_AGGRO);
             me->SetInCombatWithZone();
@@ -1147,7 +1147,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* )
+        void JustEngagedWith(Unit* )
         {
             Talk(SAY_VESPERON_AGGRO);
             me->SetInCombatWithZone();

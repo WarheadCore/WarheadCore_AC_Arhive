@@ -58,7 +58,7 @@ public:
         {
         }
 
-        void EnterCombat(Unit* victim)
+        void JustEngagedWith(Unit* victim)
         {
             BossAI::EnterCombat(victim);
             events.ScheduleEvent(EVENT_INFERNO, 45s);

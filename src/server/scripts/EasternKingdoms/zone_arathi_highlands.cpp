@@ -108,7 +108,7 @@ public:
             summoned->AI()->AttackStart(me);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             Talk(SAY_AGGRO);
         }

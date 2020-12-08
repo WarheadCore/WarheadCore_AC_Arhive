@@ -165,7 +165,7 @@ public:
             ScriptedAI::EnterEvadeMode();
         }
 
-        void EnterCombat(Unit*  /*pWho*/)
+        void JustEngagedWith(Unit*  /*pWho*/)
         {
             Talk(SAY_AGGRO);
             if(pInstance)

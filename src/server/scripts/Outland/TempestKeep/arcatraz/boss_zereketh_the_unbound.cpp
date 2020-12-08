@@ -57,9 +57,9 @@ public:
             Talk(SAY_DEATH);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
-            _EnterCombat();
+            _JustEngagedWith();
             events.ScheduleEvent(EVENT_VOID_ZONE, 6s);
             events.ScheduleEvent(EVENT_SHADOW_NOVA, 10s);
             events.ScheduleEvent(EVENT_SEED_OF_CORRUPTION, 16s);

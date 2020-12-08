@@ -124,7 +124,7 @@ public:
             events.RescheduleEvent(EVENT_SPELL_SUMMON_COLDWAVE, 5s);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             DoZoneInCombat();
             events.Reset();

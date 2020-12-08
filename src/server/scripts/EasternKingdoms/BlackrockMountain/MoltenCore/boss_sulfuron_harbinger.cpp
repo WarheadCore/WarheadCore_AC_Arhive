@@ -66,7 +66,7 @@ public:
         {
         }
 
-        void EnterCombat(Unit* victim)
+        void JustEngagedWith(Unit* victim)
         {
             BossAI::EnterCombat(victim);
             events.ScheduleEvent(EVENT_DARK_STRIKE, 10s);
@@ -153,7 +153,7 @@ public:
             events.Reset();
         }
 
-        void EnterCombat(Unit* victim)
+        void JustEngagedWith(Unit* victim)
         {
             ScriptedAI::EnterCombat(victim);
             events.ScheduleEvent(EVENT_HEAL, 15s, 30s);

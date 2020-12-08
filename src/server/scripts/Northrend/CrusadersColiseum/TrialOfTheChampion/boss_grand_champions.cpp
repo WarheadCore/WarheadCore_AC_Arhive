@@ -212,7 +212,7 @@ public:
                 m_ConditionsTimer -= diff;
         }
         void AttackStart(Unit*  /*who*/) {}
-        void EnterCombat(Unit*  /*who*/) {}
+        void JustEngagedWith(Unit*  /*who*/) {}
     };
 };
 
@@ -243,7 +243,7 @@ public:
             events.Reset();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             events.Reset();
             events.ScheduleEvent(EVENT_MOUNT_CHARGE, 2500ms, 4s);
@@ -407,7 +407,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             if( pInstance && pInstance->GetData(DATA_INSTANCE_PROGRESS) == INSTANCE_PROGRESS_CHAMPIONS_UNMOUNTED )
                 me->CallForHelp(100.0f);

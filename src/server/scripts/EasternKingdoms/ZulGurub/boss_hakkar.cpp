@@ -83,9 +83,9 @@ public:
             _JustDied();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
-            _EnterCombat();
+            _JustEngagedWith();
             events.ScheduleEvent(EVENT_BLOOD_SIPHON, 90s);
             events.ScheduleEvent(EVENT_CORRUPTED_BLOOD, 25s);
             events.ScheduleEvent(EVENT_CAUSE_INSANITY, 17s);

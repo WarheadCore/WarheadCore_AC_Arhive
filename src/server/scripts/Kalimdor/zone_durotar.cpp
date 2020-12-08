@@ -155,7 +155,7 @@ public:
         {
         }
 
-        void EnterCombat(Unit* /*target*/)
+        void JustEngagedWith(Unit* /*target*/)
         {
             _events.Reset();
             _events.ScheduleEvent(EVENT_POUNCE, 100ms);

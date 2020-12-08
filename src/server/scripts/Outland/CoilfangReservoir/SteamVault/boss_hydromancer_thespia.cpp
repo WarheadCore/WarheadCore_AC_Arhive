@@ -75,7 +75,7 @@ public:
                 Talk(SAY_SLAY);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             Talk(SAY_AGGRO);
             events.ScheduleEvent(EVENT_SPELL_LIGHTNING, 15s);

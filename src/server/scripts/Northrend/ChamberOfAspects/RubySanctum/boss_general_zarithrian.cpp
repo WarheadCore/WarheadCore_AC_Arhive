@@ -108,7 +108,7 @@ public:
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_NOT_SELECTABLE);
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             BossAI::EnterCombat(who);
             Talk(SAY_AGGRO);
@@ -212,7 +212,7 @@ public:
             Start(true, true);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             _events.Reset();
             _events.ScheduleEvent(EVENT_BLAST_NOVA, 20s, 30s);

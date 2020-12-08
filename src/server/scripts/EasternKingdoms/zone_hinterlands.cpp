@@ -61,7 +61,7 @@ public:
 
         void Reset() { }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             if (who->GetEntry() == NPC_MARAUDING_OWL || who->GetEntry() == NPC_VILE_AMBUSHER)
                 return;
@@ -198,7 +198,7 @@ public:
             npc_escortAI::JustRespawned();
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             if (HasEscortState(STATE_ESCORT_ESCORTING))
             {

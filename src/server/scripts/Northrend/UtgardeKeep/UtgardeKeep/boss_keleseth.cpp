@@ -157,7 +157,7 @@ public:
                 pInstance->SetData(DATA_KELESETH, DONE);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             events.Reset();
             events.RescheduleEvent(EVENT_SPELL_SHADOWBOLT, 0s);

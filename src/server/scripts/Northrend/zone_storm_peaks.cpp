@@ -44,7 +44,7 @@ public:
         npc_frosthoundAI(Creature* creature) : npc_escortAI(creature) {}
 
         void AttackStart(Unit* /*who*/) {}
-        void EnterCombat(Unit* /*who*/) {}
+        void JustEngagedWith(Unit* /*who*/) {}
         void EnterEvadeMode() {}
 
         void PassengerBoarded(Unit* who, int8 /*seatId*/, bool apply)
@@ -251,7 +251,7 @@ public:
 
         void WaypointReached(uint32  /*pointId*/) { }
 
-        void EnterCombat(Unit*)
+        void JustEngagedWith(Unit*)
         {
             events.Reset();
             if (me->GetEntry() == NPC_TIME_LOST_PROTO_DRAKE)
@@ -924,7 +924,7 @@ public:
         npc_icefangAI(Creature* creature) : npc_escortAI(creature) { }
 
         void AttackStart(Unit* /*who*/) { }
-        void EnterCombat(Unit* /*who*/) { }
+        void JustEngagedWith(Unit* /*who*/) { }
         void EnterEvadeMode() { }
 
         void PassengerBoarded(Unit* who, int8 /*seatId*/, bool apply)

@@ -140,7 +140,7 @@ public:
             me->CastSpell(me, SPELL_FREEZE_ANIM, true);
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             BossAI::EnterCombat(who);
             events.ScheduleEvent(EVENT_COLOSSUS_MIGHTY_BLOW, 10s);
@@ -276,7 +276,7 @@ public:
             Talk(EMOTE_ALTAR);
         }
 
-        void EnterCombat(Unit*)
+        void JustEngagedWith(Unit*)
         {
         }
 

@@ -158,7 +158,7 @@ public:
                     me->CastSpell(plr, spellId, triggered);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             bIsExploded = false;
             bIsFrenzy = false;

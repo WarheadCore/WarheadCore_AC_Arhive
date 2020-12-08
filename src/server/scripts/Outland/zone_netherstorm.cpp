@@ -316,7 +316,7 @@ public:
                 }
         }
 
-        void EnterCombat(Unit* /*who*/) override
+        void JustEngagedWith(Unit* /*who*/) override
         {
             _events.ScheduleEvent(EVENT_CRUSADER_STRIKE, 3s);
             _events.ScheduleEvent(EVENT_HAMMER_OF_JUSTICE, 6s);
@@ -418,7 +418,7 @@ public:
                     me->SetHomePosition(me->GetPosition());
         }
 
-        void EnterCombat(Unit* who) override
+        void JustEngagedWith(Unit* who) override
         {
             AttackStart(who);
             _events.ScheduleEvent(EVENT_SPELL_HOLY_SMITE, 1s);
@@ -501,7 +501,7 @@ public:
                     me->SetHomePosition(me->GetPosition());
         }
 
-        void EnterCombat(Unit* /*who*/) override
+        void JustEngagedWith(Unit* /*who*/) override
         {
             _events.ScheduleEvent(EVENT_SPELL_DEMORALIZING_SHOUT, 1s);
             _events.ScheduleEvent(EVENT_SPELL_HEROIC_STRIKE, 2500ms, 4s);
@@ -660,7 +660,7 @@ public:
                 karja->GetAI()->DoAction(RESET_DEATHBLOW_EVENT);
         }
 
-        void EnterCombat(Unit* /*who*/) override
+        void JustEngagedWith(Unit* /*who*/) override
         {
             combatEvents.ScheduleEvent(EVENT_SPELL_ANTI_MAGIC_SHIELD, 20s);
             combatEvents.ScheduleEvent(EVENT_SPELL_BACKLASH, 4s);
@@ -953,7 +953,7 @@ public:
         bool second_waypath_done = false;
         bool adyen_dead = false, karja_dead = false, orelis_dead = false;
 
-        void EnterCombat(Unit* /*who*/) override
+        void JustEngagedWith(Unit* /*who*/) override
         {
             _events.ScheduleEvent(EVENT_SPELL_BURNING_LIGHT, 2s);
             _events.ScheduleEvent(EVENT_SPELL_CONSECRATION, 3s);
@@ -1225,7 +1225,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* who) override
+        void JustEngagedWith(Unit* who) override
         {
             SummonsAction(who);
         }
@@ -1394,7 +1394,7 @@ public:
             isEvent = false;
         }
 
-        void EnterCombat(Unit* /*who*/) { }
+        void JustEngagedWith(Unit* /*who*/) { }
 
         void JustSummoned(Creature* summoned)
         {
@@ -1726,7 +1726,7 @@ public:
                 me->UpdateEntry(NPC_PHASE_HUNTER_ENTRY);
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             if (who->GetTypeId() == TYPEID_PLAYER)
                 PlayerGUID = who->GetGUID();

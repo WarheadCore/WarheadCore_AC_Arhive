@@ -161,7 +161,7 @@ public:
             instance->DoRemoveAurasDueToSpellOnPlayers(SPELL_FOG_OF_CORRUPTION_CHARM);
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             BossAI::EnterCombat(who);
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);

@@ -613,7 +613,7 @@ public:
             Tapped = false;
         }
 
-        void EnterCombat(Unit* /*who*/) override
+        void JustEngagedWith(Unit* /*who*/) override
         {
             events.ScheduleEvent(EVENT_KICK, 5s, 10s);
             events.ScheduleEvent(EVENT_SUNDER, 5s, 10s);
@@ -951,7 +951,7 @@ public:
             DoSummon(NPC_COILSKAR_ASSASSIN, me, 15.0f, 5000, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT);
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             //don't always use
             if (rand() % 5)
@@ -1120,7 +1120,7 @@ public:
             me->SetTarget(0);
         }
 
-        void EnterCombat(Unit* /*who*/) { }
+        void JustEngagedWith(Unit* /*who*/) { }
 
         void HandleAnimation()
         {
@@ -1282,7 +1282,7 @@ public:
             me->SetVisible(false);
         }
 
-        void EnterCombat(Unit* /*who*/) { }
+        void JustEngagedWith(Unit* /*who*/) { }
         void MoveInLineOfSight(Unit* /*who*/) { }
 
         void AttackStart(Unit* /*who*/) { }
@@ -1403,7 +1403,7 @@ public:
             Timers = false;
         }
 
-        void EnterCombat(Unit* /*who*/) { }
+        void JustEngagedWith(Unit* /*who*/) { }
 
         void JustDied(Unit* /*killer*/)
         {
@@ -1653,7 +1653,7 @@ public:
 
         void Reset() { }
 
-        void EnterCombat(Unit* /*who*/) { }
+        void JustEngagedWith(Unit* /*who*/) { }
 
         void JustDied(Unit* /*killer*/)
         {

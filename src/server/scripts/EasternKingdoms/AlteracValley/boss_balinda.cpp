@@ -125,7 +125,7 @@ public:
             summons.DespawnAll();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             Talk(YELL_AGGRO);
         }

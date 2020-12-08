@@ -81,7 +81,7 @@ public:
                 ++_raptorCount;
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             BossAI::EnterCombat(who);
             _raptorCount = 0;

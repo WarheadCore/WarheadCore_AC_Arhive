@@ -159,7 +159,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             events.ScheduleEvent(EVENT_HERALD_MIND_FLAY, 8s);
             events.ScheduleEvent(EVENT_HERALD_SHADOW, 5s);

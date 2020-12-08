@@ -58,9 +58,9 @@ public:
             _Reset();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
-            _EnterCombat();
+            _JustEngagedWith();
             Talk(SAY_AGGRO);
 
             events.ScheduleEvent(EVENT_ARCANE_VOLLEY, 8s);

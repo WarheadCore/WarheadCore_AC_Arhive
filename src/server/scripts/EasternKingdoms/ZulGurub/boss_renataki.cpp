@@ -73,9 +73,9 @@ public:
             _JustDied();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
-            _EnterCombat();
+            _JustEngagedWith();
         }
 
         void UpdateAI(uint32 diff)

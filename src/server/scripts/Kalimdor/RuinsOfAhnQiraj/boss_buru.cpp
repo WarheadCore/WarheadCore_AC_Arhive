@@ -81,9 +81,9 @@ public:
             Eggs.clear();
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
-            _EnterCombat();
+            _JustEngagedWith();
             Talk(EMOTE_TARGET, who);
             DoCast(me, SPELL_THORNS);
 
@@ -204,7 +204,7 @@ public:
             SetCombatMovement(false);
         }
 
-        void EnterCombat(Unit* attacker)
+        void JustEngagedWith(Unit* attacker)
         {
             if (Creature* buru = me->GetMap()->GetCreature(_instance->GetData64(DATA_BURU)))
                 if (!buru->IsInCombat())

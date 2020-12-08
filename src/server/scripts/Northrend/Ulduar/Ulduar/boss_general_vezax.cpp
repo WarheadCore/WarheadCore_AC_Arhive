@@ -153,7 +153,7 @@ public:
             me->setActive(false);
         }
 
-        void EnterCombat(Unit*  /*pWho*/)
+        void JustEngagedWith(Unit*  /*pWho*/)
         {
             me->setActive(true);
             me->SetInCombatWithZone();

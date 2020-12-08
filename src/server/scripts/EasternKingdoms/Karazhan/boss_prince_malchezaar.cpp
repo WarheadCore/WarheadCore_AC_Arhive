@@ -106,7 +106,7 @@ public:
         InfernalPoint* point;
 
         void Reset() { }
-        void EnterCombat(Unit* /*who*/) { }
+        void JustEngagedWith(Unit* /*who*/) { }
         void MoveInLineOfSight(Unit* /*who*/) { }
 
 
@@ -233,7 +233,7 @@ public:
                 Axe->DespawnOrUnsummon();
         }
 
-        void EnterCombat(Unit* /*who*/) override
+        void JustEngagedWith(Unit* /*who*/) override
         {
             Talk(SAY_AGGRO);
             DoZoneInCombat();
@@ -480,7 +480,7 @@ public:
         {
         }
 
-        void EnterCombat(Unit* /*who*/) override
+        void JustEngagedWith(Unit* /*who*/) override
         {
             DoZoneInCombat();
         }

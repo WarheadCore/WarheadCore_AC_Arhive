@@ -166,7 +166,7 @@ public:
                 m_pInstance->SetData(TYPE_BJARNGRIM, NOT_STARTED);
         }
 
-        void EnterCombat(Unit*)
+        void JustEngagedWith(Unit*)
         {
             me->SetInCombatWithZone();
             Talk(SAY_AGGRO);
@@ -395,7 +395,7 @@ public:
                 BjarngrimGUID = 0;
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             events.ScheduleEvent(EVENT_ARC_WELD, 2s);
             events.ScheduleEvent(EVENT_RENEW_STEEL, 10s, 11s);

@@ -51,7 +51,7 @@ struct boss_faction_championsAI : public ScriptedAI
     uint32 threatTimer;
     uint32 powerTimer;
 
-    void EnterCombat(Unit* /*who*/)
+    void JustEngagedWith(Unit* /*who*/)
     {
         me->SetInCombatWithZone();
         RecalculateThreat();

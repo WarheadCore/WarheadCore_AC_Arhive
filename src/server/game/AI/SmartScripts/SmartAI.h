@@ -78,7 +78,7 @@ public:
     void JustReachedHome();
 
     // Called for reaction at enter to combat if not in combat yet (enemy can be nullptr)
-    void EnterCombat(Unit* enemy);
+    void JustEngagedWith(Unit* enemy);
 
     // Called for reaction at stopping attack at no attackers or targets
     void EnterEvadeMode();

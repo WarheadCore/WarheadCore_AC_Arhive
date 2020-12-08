@@ -518,7 +518,7 @@ public:
 
         void JustReachedHome() { me->setActive(false); }
 
-        void EnterCombat(Unit*)
+        void JustEngagedWith(Unit*)
         {
             if (m_pInstance && !_encounterFinished)
                 m_pInstance->SetData(TYPE_THORIM, IN_PROGRESS);
@@ -1043,7 +1043,7 @@ public:
         }
 
         void MoveInLineOfSight(Unit* /*who*/) {}
-        void EnterCombat(Unit* /*who*/) {}
+        void JustEngagedWith(Unit* /*who*/) {}
         void AttackStart(Unit* /*who*/) {}
 
         void InitWaypoint()
@@ -1172,7 +1172,7 @@ public:
                     thorim->AI()->DoAction(ACTION_START_TRASH_DIED);
         }
 
-        void EnterCombat(Unit*  /*who*/)
+        void JustEngagedWith(Unit*  /*who*/)
         {
             if (me->GetEntry() == NPC_DARK_RUNE_ACOLYTE_I)
             {
@@ -1291,7 +1291,7 @@ public:
             _isCaster = (me->GetEntry() == NPC_DARK_RUNE_ACOLYTE_G);
         }
 
-        void EnterCombat(Unit*  /*who*/)
+        void JustEngagedWith(Unit*  /*who*/)
         {
             if (me->GetEntry() == NPC_IRON_RING_GUARD)
             {
@@ -1422,7 +1422,7 @@ public:
                     go->SetGoState(GO_STATE_ACTIVE);
         }
 
-        void EnterCombat(Unit*)
+        void JustEngagedWith(Unit*)
         {
             events.CancelEvent(EVENT_RC_RUNIC_SMASH);
             events.ScheduleEvent(EVENT_RC_RUNIC_BARRIER, 10s);
@@ -1532,7 +1532,7 @@ public:
             events.Reset();
         }
 
-        void EnterCombat(Unit*)
+        void JustEngagedWith(Unit*)
         {
             _isInCombat = true;
             events.CancelEvent(EVENT_ARG_SPAWN);
@@ -1619,7 +1619,7 @@ public:
                 me->CastSpell(me, SPELL_AURA_OF_CELERITY, true);
         }
 
-        void EnterCombat(Unit*)
+        void JustEngagedWith(Unit*)
         {
             if (me->GetEntry() == NPC_DARK_RUNE_WARBRINGER)
                 events.ScheduleEvent(EVENT_DR_WARBRINGER_RS, 8s);

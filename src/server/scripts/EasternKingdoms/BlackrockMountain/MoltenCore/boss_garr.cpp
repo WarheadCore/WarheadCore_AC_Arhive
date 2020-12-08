@@ -56,7 +56,7 @@ public:
         {
         }
 
-        void EnterCombat(Unit* victim)
+        void JustEngagedWith(Unit* victim)
         {
             BossAI::EnterCombat(victim);
             events.ScheduleEvent(EVENT_ANTIMAGIC_PULSE, 25s);

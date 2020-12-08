@@ -59,9 +59,9 @@ public:
             _JustDied();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
-            _EnterCombat();
+            _JustEngagedWith();
             events.ScheduleEvent(EVENT_FROSTBREATH, 8s);
             events.ScheduleEvent(EVENT_MASSIVEGEYSER, 25s);
             events.ScheduleEvent(EVENT_SLAM, 17s);

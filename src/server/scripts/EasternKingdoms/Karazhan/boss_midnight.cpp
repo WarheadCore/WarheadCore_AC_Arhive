@@ -95,7 +95,7 @@ public:
             _healthPct = 100.0f;
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             BossAI::EnterCombat(who);
             events.ScheduleEvent(EVENT_CHECK_HEALTH_95, 0s);
@@ -219,7 +219,7 @@ public:
             _events.Reset();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             Talk(SAY_ATTUMEN1_APPEAR);
             _events.ScheduleEvent(EVENT_CHECK_HEALTH_25, 0s);
@@ -330,7 +330,7 @@ public:
             _events.Reset();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             _events.ScheduleEvent(EVENT_SPELL_SHADOW_CLEAVE, 6s);
             _events.ScheduleEvent(EVENT_SPELL_INTANGIBLE_PRESENCE, 15s);

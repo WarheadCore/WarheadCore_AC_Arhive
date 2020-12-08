@@ -100,7 +100,7 @@ public:
                 pInstance->SetData(DATA_IMMORTAL_FAIL, 0);
         }
 
-        void EnterCombat(Unit* who) override
+        void JustEngagedWith(Unit* who) override
         {
             BossAI::EnterCombat(who);
 

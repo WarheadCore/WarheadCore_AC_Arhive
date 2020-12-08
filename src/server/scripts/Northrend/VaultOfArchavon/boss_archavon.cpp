@@ -88,7 +88,7 @@ public:
             ScriptedAI::AttackStart(who);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             events.ScheduleEvent(EVENT_ROCK_SHARDS, 15s);
             events.ScheduleEvent(EVENT_CHOKING_CLOUD, 30s);

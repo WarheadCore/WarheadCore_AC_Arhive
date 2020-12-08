@@ -116,7 +116,7 @@ public:
             return 0;
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             Talk(SAY_FACE_AGGRO);
             DoZoneInCombat();

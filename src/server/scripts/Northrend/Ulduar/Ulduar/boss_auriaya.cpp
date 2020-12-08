@@ -172,7 +172,7 @@ public:
 
         void JustReachedHome() { me->setActive(false); }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             if (m_pInstance)
                 m_pInstance->SetData(TYPE_AURIAYA, IN_PROGRESS);
@@ -301,7 +301,7 @@ public:
         uint32 _savagePounceTimer;
         uint32 _ripFleshTimer;
 
-        void EnterCombat(Unit*)
+        void JustEngagedWith(Unit*)
         {
             if (me->GetInstanceScript())
                 if (Creature* cr = ObjectAccessor::GetCreature(*me, me->GetInstanceScript()->GetData64(TYPE_AURIAYA)))

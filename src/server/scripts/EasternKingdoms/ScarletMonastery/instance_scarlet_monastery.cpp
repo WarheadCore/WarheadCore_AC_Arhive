@@ -390,7 +390,7 @@ public:
             ScriptedAI::MoveInLineOfSight(who);
         }
 
-        void EnterCombat(Unit* /*who*/) override
+        void JustEngagedWith(Unit* /*who*/) override
         {
             Talk(SAY_MO_AGGRO);
             me->CallForHelp(150.0f);
@@ -544,7 +544,7 @@ public:
             instance->SetData(TYPE_MOGRAINE_AND_WHITE_EVENT, FAIL);
         }
 
-        void EnterCombat(Unit* /*who*/) override
+        void JustEngagedWith(Unit* /*who*/) override
         {
             Talk(SAY_WH_INTRO);
             events.ScheduleEvent(EVENT_SPELL_HOLY_SMITE, 1s, 3s);

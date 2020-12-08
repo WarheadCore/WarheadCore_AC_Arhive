@@ -70,7 +70,7 @@ public:
             me->SetReactState(REACT_AGGRESSIVE);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             events.ScheduleEvent(EVENT_CHECK_HEALTH1, 500ms);
             events.ScheduleEvent(EVENT_CHECK_HEALTH2, 500ms);

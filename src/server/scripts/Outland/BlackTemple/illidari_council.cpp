@@ -269,7 +269,7 @@ struct boss_illidari_council_memberAI : public ScriptedAI
             council->GetAI()->DoAction(ACTION_END_ENCOUNTER);
     }
 
-    void EnterCombat(Unit*  /*who*/)
+    void JustEngagedWith(Unit*  /*who*/)
     {
         if (Creature* council = ObjectAccessor::GetCreature(*me, instance->GetData64(NPC_ILLIDARI_COUNCIL)))
             council->GetAI()->DoAction(ACTION_START_ENCOUNTER);
@@ -303,7 +303,7 @@ public:
             return ObjectAccessor::GetCreature(*me, instance->GetData64(RAND(NPC_GATHIOS_THE_SHATTERER, NPC_HIGH_NETHERMANCER_ZEREVOR)));
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             boss_illidari_council_memberAI::EnterCombat(who);
             events.ScheduleEvent(EVENT_SPELL_BLESSING, 10s);
@@ -384,7 +384,7 @@ public:
                 me->GetMotionMaster()->MoveChase(who, 20.0f);
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             boss_illidari_council_memberAI::EnterCombat(who);
             events.ScheduleEvent(EVENT_SPELL_FLAMESTRIKE, 25s);
@@ -457,7 +457,7 @@ public:
                 me->GetMotionMaster()->MoveChase(who, 20.0f);
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             boss_illidari_council_memberAI::EnterCombat(who);
             events.ScheduleEvent(EVENT_SPELL_REFLECTIVE_SHIELD, 10s);
@@ -515,7 +515,7 @@ public:
     {
         boss_veras_darkshadowAI(Creature* creature) : boss_illidari_council_memberAI(creature) { }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             me->SetCanDualWield(true);
             boss_illidari_council_memberAI::EnterCombat(who);

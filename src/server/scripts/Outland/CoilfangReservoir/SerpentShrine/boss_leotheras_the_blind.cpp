@@ -172,7 +172,7 @@ public:
             BossAI::JustDied(killer);
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             BossAI::EnterCombat(who);
             me->SetStandState(UNIT_STAND_STATE_KNEEL);

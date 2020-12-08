@@ -224,9 +224,9 @@ public:
                 Reset();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
-            _EnterCombat();
+            _JustEngagedWith();
             events.ScheduleEvent(EVENT_WHIRLWIND, 13s, 15s);
             events.ScheduleEvent(EVENT_CLEAVE, 15s, 17s);
             events.ScheduleEvent(EVENT_MORTAL_STRIKE, 17s, 19s);

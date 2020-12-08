@@ -143,7 +143,7 @@ public:
             events.Reset();
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             if (!instance->CheckRequiredBosses(DATA_ROTFACE, who->ToPlayer()))
             {
@@ -886,7 +886,7 @@ public:
             summons.DespawnAll();
         }
 
-        void EnterCombat(Unit* /*target*/)
+        void JustEngagedWith(Unit* /*target*/)
         {
             me->setActive(true);
             events.ScheduleEvent(EVENT_DECIMATE, 20s, 25s);

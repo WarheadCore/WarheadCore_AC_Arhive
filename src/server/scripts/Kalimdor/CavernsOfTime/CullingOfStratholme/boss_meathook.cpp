@@ -63,7 +63,7 @@ public:
         EventMap events;
         void Reset() { events.Reset(); }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             Talk(SAY_AGGRO);
             events.RescheduleEvent(EVENT_SPELL_CONSTRICTING_CHAINS, 15s);

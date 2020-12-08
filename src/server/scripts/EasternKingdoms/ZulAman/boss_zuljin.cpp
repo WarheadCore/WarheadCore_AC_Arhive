@@ -202,7 +202,7 @@ public:
             //me->SetByteValue(UNIT_FIELD_BYTES_2, 0, SHEATH_STATE_MELEE);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             instance->SetData(DATA_ZULJINEVENT, IN_PROGRESS);
 
@@ -583,7 +583,7 @@ public:
 
         void Reset() { }
 
-        void EnterCombat(Unit* /*target*/) { }
+        void JustEngagedWith(Unit* /*target*/) { }
 
         void SpellHit(Unit* caster, const SpellInfo* spell)
         {

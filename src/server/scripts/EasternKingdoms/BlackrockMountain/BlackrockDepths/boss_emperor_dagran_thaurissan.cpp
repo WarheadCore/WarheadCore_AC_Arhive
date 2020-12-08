@@ -60,7 +60,7 @@ public:
             //Counter= 0;
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             Talk(SAY_AGGRO);
             me->CallForHelp(VISIBLE_RANGE);

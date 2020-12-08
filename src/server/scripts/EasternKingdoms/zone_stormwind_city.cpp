@@ -167,7 +167,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             if (Creature* pMarzon = ObjectAccessor::GetCreature(*me, MarzonGUID))
             {
@@ -304,7 +304,7 @@ public:
             me->RestoreFaction();
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             Talk(SAY_MARZON_2);
 

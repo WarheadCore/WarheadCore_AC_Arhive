@@ -157,7 +157,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             //not always use
             if (rand() % 4)
@@ -239,7 +239,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*who*/) { }
+        void JustEngagedWith(Unit* /*who*/) { }
 
         void UpdateAI(uint32 diff)
         {
@@ -345,7 +345,7 @@ public:
             BigWill = 0;
         }
 
-        void EnterCombat(Unit* /*who*/) { }
+        void JustEngagedWith(Unit* /*who*/) { }
 
         void EnterEvadeMode()
         {

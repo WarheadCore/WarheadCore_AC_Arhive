@@ -153,7 +153,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             BossAI::EnterCombat(who);
         }
@@ -325,7 +325,7 @@ public:
                 shade->AI()->DoAction(ACTION_AKAMA_DIED);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             events.ScheduleEvent(EVENT_SPELL_CHAIN_LIGHTNING, 2s);
             events.ScheduleEvent(EVENT_SPELL_DESTRUCTIVE_POISON, 5s);

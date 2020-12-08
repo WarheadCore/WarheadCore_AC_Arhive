@@ -361,7 +361,7 @@ public:
             ScriptedAI::JustReachedHome();
         }
 
-        void EnterCombat(Unit*  /*who*/)
+        void JustEngagedWith(Unit*  /*who*/)
         {
             me->setActive(true);
             DoZoneInCombat();

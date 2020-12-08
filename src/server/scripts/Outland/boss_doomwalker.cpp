@@ -84,7 +84,7 @@ public:
             Talk(SAY_DEATH);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             Talk(SAY_AGGRO);
         }

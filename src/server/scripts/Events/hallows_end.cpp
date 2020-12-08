@@ -621,7 +621,7 @@ public:
         uint32 counter;
         std::list<uint64> unitList;
         int32 pos;
-        void EnterCombat(Unit*) {}
+        void JustEngagedWith(Unit*) {}
         void MoveInLineOfSight(Unit*  /*who*/) {}
 
         void DoAction(int32 param)
@@ -1053,7 +1053,7 @@ public:
 
         Player* GetRhymePlayer() { return playerGUID ? ObjectAccessor::GetPlayer(*me, playerGUID) : nullptr; }
 
-        void EnterCombat(Unit*) { me->SetInCombatWithZone(); }
+        void JustEngagedWith(Unit*) { me->SetInCombatWithZone(); }
         void MoveInLineOfSight(Unit*  /*who*/) {}
 
         void DamageTaken(Unit*, uint32& damage, DamageEffectType, SpellSchoolMask)

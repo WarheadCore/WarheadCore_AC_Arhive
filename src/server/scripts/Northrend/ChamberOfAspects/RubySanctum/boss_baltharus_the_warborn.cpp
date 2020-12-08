@@ -158,7 +158,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             Talk(SAY_AGGRO);
             BossAI::EnterCombat(who);
@@ -282,7 +282,7 @@ public:
         {
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             _events.Reset();
             _events.ScheduleEvent(EVENT_CLEAVE, 5s, 10s);

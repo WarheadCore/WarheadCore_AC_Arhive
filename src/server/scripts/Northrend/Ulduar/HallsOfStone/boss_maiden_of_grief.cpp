@@ -77,7 +77,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             events.ScheduleEvent(EVENT_STORM, 5s);
             events.ScheduleEvent(EVENT_SHOCK, 26s, 32s);

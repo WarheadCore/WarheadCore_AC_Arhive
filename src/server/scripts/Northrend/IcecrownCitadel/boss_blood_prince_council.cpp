@@ -266,7 +266,7 @@ public:
             me->SetReactState(REACT_AGGRESSIVE);
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             bool valid = true;
             if (Creature* keleseth = instance->instance->GetCreature(instance->GetData64(DATA_PRINCE_KELESETH_GUID)))
@@ -525,7 +525,7 @@ public:
             me->SetReactState(REACT_AGGRESSIVE);
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             bool valid = true;
             if (Creature* keleseth = instance->instance->GetCreature(instance->GetData64(DATA_PRINCE_KELESETH_GUID)))
@@ -811,7 +811,7 @@ public:
             instance->SetBossState(DATA_BLOOD_PRINCE_COUNCIL, NOT_STARTED);
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             bool valid = true;
             if (Creature* keleseth = instance->instance->GetCreature(instance->GetData64(DATA_PRINCE_KELESETH_GUID)))

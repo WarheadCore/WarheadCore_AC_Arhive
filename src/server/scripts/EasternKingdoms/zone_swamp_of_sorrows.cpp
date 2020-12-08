@@ -54,7 +54,7 @@ public:
             periodicSay = 6000;
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             if (HasEscortState(STATE_ESCORT_ESCORTING))
                 Talk(SAY_ATTACKED, who);

@@ -81,7 +81,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             if (who->GetEntry() == NPC_MADRIGOSA)
                 return;

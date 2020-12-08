@@ -78,7 +78,7 @@ public:
             me->SetControlled(false, UNIT_STATE_ROOT);
         }
 
-        void EnterCombat(Unit*)
+        void JustEngagedWith(Unit*)
         {
             events.ScheduleEvent(EVENT_SPELL_INHIBIT_MAGIC, 0s);
             events.ScheduleEvent(EVENT_SPELL_ATTRACT_MAGIC, 28s);

@@ -232,7 +232,7 @@ public:
                 AttackStart(who);
         }
 
-        void EnterCombat(Unit* who) override
+        void JustEngagedWith(Unit* who) override
         {
             BossAI::EnterCombat(who);
             Talk(SAY_SUMMON_MINIONS);
@@ -509,7 +509,7 @@ public:
                 me->AddThreat(who, 1000000.0f);
         }
 
-        void EnterCombat(Unit* /*who*/) override
+        void JustEngagedWith(Unit* /*who*/) override
         {
             me->SetInCombatWithZone();
 

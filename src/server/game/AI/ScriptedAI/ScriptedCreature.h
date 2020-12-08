@@ -226,7 +226,7 @@ struct ScriptedAI : public CreatureAI
     void Reset() {}
 
     //Called at creature aggro either by MoveInLOS or Attack Start
-    void EnterCombat(Unit* /*victim*/) {}
+    void JustEngagedWith(Unit* /*victim*/) {}
 
     // Called before EnterCombat even before the creature is in combat.
     void AttackStart(Unit* /*target*/);
@@ -412,13 +412,13 @@ public:
     virtual void ExecuteEvent(uint32 /*eventId*/) { }
 
     void Reset() { _Reset(); }
-    void EnterCombat(Unit* /*who*/) { _EnterCombat(); }
+    void JustEngagedWith(Unit* /*who*/) { _JustEngagedWith(); }
     void JustDied(Unit* /*killer*/) { _JustDied(); }
     void JustReachedHome() { _JustReachedHome(); }
 
 protected:
     void _Reset();
-    void _EnterCombat();
+    void _JustEngagedWith();
     void _JustDied();
     void _JustReachedHome() { me->setActive(false); }
 
@@ -460,12 +460,12 @@ public:
     virtual void ExecuteEvent(uint32 /*eventId*/) { }
 
     void Reset() { _Reset(); }
-    void EnterCombat(Unit* /*who*/) { _EnterCombat(); }
+    void JustEngagedWith(Unit* /*who*/) { _JustEngagedWith(); }
     void JustDied(Unit* /*killer*/) { _JustDied(); }
 
 protected:
     void _Reset();
-    void _EnterCombat();
+    void _JustEngagedWith();
     void _JustDied();
 
     EventMap events;

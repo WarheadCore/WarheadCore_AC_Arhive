@@ -68,9 +68,9 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
-            _EnterCombat();
+            _JustEngagedWith();
 
             events.ScheduleEvent(EVENT_CORROSIVE_ACID, 8s, 16s);
             events.ScheduleEvent(EVENT_FREEZE, 8s, 16s);

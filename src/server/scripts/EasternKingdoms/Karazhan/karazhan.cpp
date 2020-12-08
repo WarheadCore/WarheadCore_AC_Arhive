@@ -171,7 +171,7 @@ public:
             Start(false, false);
         }
 
-        void EnterCombat(Unit* /*who*/) override { }
+        void JustEngagedWith(Unit* /*who*/) override { }
 
         void WaypointReached(uint32 waypointId) override
         {
@@ -485,7 +485,7 @@ public:
                 me->DespawnOrUnsummon();
         }
 
-        void EnterCombat(Unit* /*who*/) {}
+        void JustEngagedWith(Unit* /*who*/) {}
 
         uint32 NextStep(uint32 Step)
         {

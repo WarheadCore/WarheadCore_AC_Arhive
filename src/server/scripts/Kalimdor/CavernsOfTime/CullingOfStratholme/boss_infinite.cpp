@@ -75,7 +75,7 @@ public:
 
         void JustSummoned(Creature* cr) { summons.Summon(cr); }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             me->InterruptNonMeleeSpells(false);
             events.ScheduleEvent(EVENT_SPELL_VOID_STRIKE, 8s);

@@ -93,7 +93,7 @@ public:
                 itr->AI()->AttackStart(me->GetVictim());
         }
 
-        void EnterCombat(Unit* who) override
+        void JustEngagedWith(Unit* who) override
         {
             BossAI::EnterCombat(who);
             PullChamberAdds();

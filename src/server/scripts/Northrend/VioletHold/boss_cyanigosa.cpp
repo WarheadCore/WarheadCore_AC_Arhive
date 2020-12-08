@@ -82,7 +82,7 @@ public:
             events.Reset();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             DoZoneInCombat();
             Talk(SAY_AGGRO);

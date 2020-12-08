@@ -126,7 +126,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit*  /*who*/)
+        void JustEngagedWith(Unit*  /*who*/)
         {
             events.Reset();
             events.ScheduleEvent(EVENT_SPELL_RADIANCE, 16s);
@@ -257,7 +257,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             events.Reset();
             events.ScheduleEvent(EVENT_SPELL_HOLY_FIRE, 9s, 12s);
@@ -625,7 +625,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             switch( me->GetEntry() )
             {

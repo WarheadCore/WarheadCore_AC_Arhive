@@ -59,7 +59,7 @@ public:
             YellTimer = urand(20 * IN_MILLISECONDS, 30 * IN_MILLISECONDS);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             Talk(YELL_AGGRO);
         }

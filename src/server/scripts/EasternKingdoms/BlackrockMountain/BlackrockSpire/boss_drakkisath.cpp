@@ -66,9 +66,9 @@ public:
             _Reset();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
-            _EnterCombat();
+            _JustEngagedWith();
             CallForHelp();
             events.ScheduleEvent(EVENT_FIRE_NOVA, 6s);
             events.ScheduleEvent(EVENT_CLEAVE, 8s);
@@ -146,7 +146,7 @@ public:
 
         EventMap _events;
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             _events.ScheduleEvent(EVENT_MORTAL_STRIKE, 5s, 12800ms);
             _events.ScheduleEvent(EVENT_KNOCKDOWN, 5600ms, 15400ms);

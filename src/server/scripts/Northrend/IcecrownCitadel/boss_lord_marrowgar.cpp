@@ -130,7 +130,7 @@ public:
             instance->SetData(DATA_BONED_ACHIEVEMENT, uint32(true));
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             Talk(SAY_AGGRO);
             me->setActive(true);

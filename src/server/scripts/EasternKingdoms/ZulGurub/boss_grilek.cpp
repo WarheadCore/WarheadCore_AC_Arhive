@@ -57,9 +57,9 @@ public:
             _JustDied();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
-            _EnterCombat();
+            _JustEngagedWith();
             events.ScheduleEvent(EVENT_AVATAR, 15s, 25s);
             events.ScheduleEvent(EVENT_GROUND_TREMOR, 15s, 25s);
         }

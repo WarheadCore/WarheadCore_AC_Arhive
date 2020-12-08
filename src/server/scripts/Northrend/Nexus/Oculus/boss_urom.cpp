@@ -141,7 +141,7 @@ public:
             me->ApplySpellImmune(0, IMMUNITY_ID, 49838, true);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             if( lock )
                 return;

@@ -265,7 +265,7 @@ public:
 
         void Reset() { }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             if (HasEscortState(STATE_ESCORT_ESCORTING))
                 Talk(SAY_ELF_AGGRO);

@@ -111,7 +111,7 @@ public:
             me->SetPower(POWER_MANA, 0);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             Talk(SAY_AGGRO);
             instance->SetData(DATA_SELIN_EVENT, IN_PROGRESS);

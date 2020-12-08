@@ -71,7 +71,7 @@ public:
             ScriptedAI::InitializeAI();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             events.ScheduleEvent(EVENT_ARCANE_BLAST, 10s);
             events.ScheduleEvent(EVENT_TIME_LAPSE, 15s);

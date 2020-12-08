@@ -70,9 +70,9 @@ public:
             _caveInTimer = 29s;
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
-            _EnterCombat();
+            _JustEngagedWith();
             Talk(SAY_AGGRO);
 
             events.ScheduleEvent(EVENT_GROWTH, 30s);

@@ -764,7 +764,7 @@ public:
             _events.ScheduleEvent(EVENT_INTRO_H_4, 39200ms);
         }
 
-        void EnterCombat(Unit* /*target*/)
+        void JustEngagedWith(Unit* /*target*/)
         {
             if (_instance->GetData(DATA_TEAMID_IN_INSTANCE) == TEAM_HORDE && !me->HasAura(SPELL_FRIENDLY_BOSS_DAMAGE_MOD))
                 me->CastSpell(me, SPELL_FRIENDLY_BOSS_DAMAGE_MOD, true);
@@ -1100,7 +1100,7 @@ public:
             _events.ScheduleEvent(EVENT_INTRO_A_5, 45s);
         }
 
-        void EnterCombat(Unit* /*target*/)
+        void JustEngagedWith(Unit* /*target*/)
         {
             if (_instance->GetData(DATA_TEAMID_IN_INSTANCE) == TEAM_ALLIANCE && !me->HasAura(SPELL_FRIENDLY_BOSS_DAMAGE_MOD))
                 me->CastSpell(me, SPELL_FRIENDLY_BOSS_DAMAGE_MOD, true);
@@ -1652,7 +1652,7 @@ public:
         {
         }
 
-        void EnterCombat(Unit* /*target*/)
+        void JustEngagedWith(Unit* /*target*/)
         {
             _events.Reset();
             _events.ScheduleEvent(EVENT_BLADESTORM, 13s, 18s);

@@ -83,7 +83,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             events.ScheduleEvent(EVENT_CLEAVE, 5s);
             events.ScheduleEvent(EVENT_SANDBREATH, 20s);

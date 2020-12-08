@@ -275,7 +275,7 @@ struct violet_hold_trashAI : public npc_escortAI
                 c->RemoveAura(SPELL_DESTROY_DOOR_SEAL, me->GetGUID());
     }
 
-    void EnterCombat(Unit* who)
+    void JustEngagedWith(Unit* who)
     {
         if (!who->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE))
         {

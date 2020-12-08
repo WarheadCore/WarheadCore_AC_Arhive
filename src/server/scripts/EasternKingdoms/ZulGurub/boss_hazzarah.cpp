@@ -58,9 +58,9 @@ public:
             _JustDied();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
-            _EnterCombat();
+            _JustEngagedWith();
             events.ScheduleEvent(EVENT_MANABURN, 4s, 10s);
             events.ScheduleEvent(EVENT_SLEEP, 10s, 18s);
             events.ScheduleEvent(EVENT_ILLUSIONS, 10s, 18s);

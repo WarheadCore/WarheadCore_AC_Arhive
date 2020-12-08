@@ -70,7 +70,7 @@ public:
                 Cage->SetGoState(GO_STATE_READY);
         }
 
-        void EnterCombat(Unit* /*who*/) { }
+        void JustEngagedWith(Unit* /*who*/) { }
 
         void JustSummoned(Creature* summoned)
         {
@@ -188,7 +188,7 @@ public:
             _isBrazierExtinguished = false;
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             if (Player* player = GetPlayerForEscort())
                 if (HasEscortState(STATE_ESCORT_PAUSED))

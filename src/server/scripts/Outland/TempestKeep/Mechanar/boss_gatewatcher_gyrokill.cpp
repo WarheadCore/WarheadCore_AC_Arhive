@@ -56,9 +56,9 @@ public:
             Talk(SAY_DEATH);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
-            _EnterCombat();
+            _JustEngagedWith();
             events.ScheduleEvent(EVENT_STREAM_OF_MACHINE_FLUID, 10s);
             events.ScheduleEvent(EVENT_SAW_BLADE, 20s);
             events.ScheduleEvent(EVENT_SHADOW_POWER, 30s);

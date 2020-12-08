@@ -52,7 +52,7 @@ public:
         npc_pet_shaman_earth_elementalAI(Creature* creature) : ScriptedAI(creature), _initAttack(true) { }
 
 
-        void EnterCombat(Unit*)
+        void JustEngagedWith(Unit*)
         {
             _events.Reset();
             _events.ScheduleEvent(EVENT_SHAMAN_ANGEREDEARTH, 0s);
@@ -114,7 +114,7 @@ public:
             me->ApplySpellImmune(0, IMMUNITY_SCHOOL, SPELL_SCHOOL_MASK_FIRE, true);
         }
 
-        void EnterCombat(Unit*)
+        void JustEngagedWith(Unit*)
         {
             _events.Reset();
             _events.ScheduleEvent(EVENT_SHAMAN_FIRENOVA, 5s, 20s);

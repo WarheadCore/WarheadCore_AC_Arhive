@@ -125,9 +125,9 @@ public:
                         Trigger->CastSpell(Trigger, SpellWeakness[urand(0, 4)], false);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
-            _EnterCombat();
+            _JustEngagedWith();
             events.Reset();
             events.ScheduleEvent(EVENT_SILENCE, 30s);
             events.ScheduleEvent(EVENT_CYCLONE, 20s);

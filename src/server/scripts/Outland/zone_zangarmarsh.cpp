@@ -106,7 +106,7 @@ public:
             ScriptedAI::MoveInLineOfSight(who);
         }
 
-        void EnterCombat(Unit*) override
+        void JustEngagedWith(Unit*) override
         {
             _spoken = 2;
         }
@@ -277,7 +277,7 @@ public:
                 me->setFaction(m_uiNormFaction);
         }
 
-        void EnterCombat(Unit* /*who*/) override { }
+        void JustEngagedWith(Unit* /*who*/) override { }
 
         void UpdateAI(uint32 diff) override
         {

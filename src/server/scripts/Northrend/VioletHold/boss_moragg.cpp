@@ -70,7 +70,7 @@ public:
             events.Reset();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             DoZoneInCombat();
             me->CastSpell(me, SPELL_RAY_OF_SUFFERING, true);

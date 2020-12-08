@@ -98,7 +98,7 @@ public:
             return pInstance && pInstance->GetData(DATA_INSTANCE_PROGRESS) >= INSTANCE_PROGRESS_FINISHED_INTRO;
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             if (Creature* k = GetKrick())
                 k->AI()->Talk(SAY_AGGRO);

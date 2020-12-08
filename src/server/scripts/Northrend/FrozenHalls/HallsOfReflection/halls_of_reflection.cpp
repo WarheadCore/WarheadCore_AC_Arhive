@@ -684,7 +684,7 @@ public:
             events.Reset();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             events.ScheduleEvent(EVENT_SHADOW_WORD_PAIN, 5s);
             events.ScheduleEvent(EVENT_CIRCLE_OF_DESTRUCTION, 8s);
@@ -780,7 +780,7 @@ public:
             events.Reset();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             events.ScheduleEvent(EVENT_FIREBALL, 3s);
             events.ScheduleEvent(EVENT_FLAMESTRIKE, 6s);
@@ -925,7 +925,7 @@ public:
             events.Reset();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             events.ScheduleEvent(EVENT_SHADOW_STEP, 4s);
             events.ScheduleEvent(EVENT_DEADLY_POISON, 6s);
@@ -1020,7 +1020,7 @@ public:
             events.Reset();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             events.ScheduleEvent(EVENT_SPECTRAL_STRIKE, 5s);
             events.ScheduleEvent(EVENT_SHIELD_BASH, 6s);
@@ -1103,7 +1103,7 @@ public:
             events.Reset();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             events.ScheduleEvent(EVENT_CURSED_ARROW, 10s);
             events.ScheduleEvent(EVENT_FROST_TRAP, 15s);
@@ -1176,7 +1176,7 @@ public:
             events.Reset();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             Talk(SAY_FROSTSWORN_GENERAL_AGGRO);
             events.ScheduleEvent(EVENT_ACTIVATE_REFLECTIONS, 8s);
@@ -1255,7 +1255,7 @@ public:
             events.Reset();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             events.ScheduleEvent(EVENT_BALEFUL_STRIKE, 4s, 7s);
         }
@@ -1861,7 +1861,7 @@ public:
             events.Reset();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             events.ScheduleEvent(1, 10s);
             events.ScheduleEvent(2, 4500ms);
@@ -1930,7 +1930,7 @@ public:
             events.Reset();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             events.ScheduleEvent(1, 5s);
         }

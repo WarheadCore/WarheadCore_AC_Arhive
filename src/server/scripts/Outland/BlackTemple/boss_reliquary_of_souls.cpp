@@ -183,7 +183,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             BossAI::EnterCombat(who);
         }
@@ -330,7 +330,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             Talk(SUFF_SAY_FREED);
             me->CastSpell(me, SPELL_AURA_OF_SUFFERING, true);
@@ -440,7 +440,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             Talk(DESI_SAY_FREED);
             me->CastSpell(me, SPELL_AURA_OF_DESIRE, true);
@@ -532,7 +532,7 @@ public:
                     Unit::Kill(summoner, summoner);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             Talk(ANGER_SAY_FREED);
             me->CastSpell(me, SPELL_AURA_OF_ANGER, true);

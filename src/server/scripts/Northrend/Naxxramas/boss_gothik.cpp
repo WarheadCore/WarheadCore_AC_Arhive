@@ -252,7 +252,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* who) override
+        void JustEngagedWith(Unit* who) override
         {
             BossAI::EnterCombat(who);
             me->SetInCombatWithZone();
@@ -534,7 +534,7 @@ public:
         bool CanAIAttack(Unit const* target) const override { return gateOpened || IsOnSameSide(target); }
 
         void Reset() override { events.Reset(); }
-        void EnterCombat(Unit*  /*who*/) override
+        void JustEngagedWith(Unit*  /*who*/) override
         {
             me->SetInCombatWithZone();
 

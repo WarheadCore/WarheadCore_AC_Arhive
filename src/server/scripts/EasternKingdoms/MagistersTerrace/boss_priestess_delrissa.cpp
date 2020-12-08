@@ -147,7 +147,7 @@ public:
             ++HelpersKilled;
         }
 
-        void EnterCombat(Unit*  /*who*/)
+        void JustEngagedWith(Unit*  /*who*/)
         {
             Talk(SAY_AGGRO);
             summons.DoZoneInCombat();
@@ -336,7 +336,7 @@ struct boss_priestess_lackey_commonAI : public ScriptedAI
         ScriptedAI::EnterEvadeMode();
     }
 
-    void EnterCombat(Unit* who)
+    void JustEngagedWith(Unit* who)
     {
         if (Creature* delrissa = ObjectAccessor::GetCreature(*me, instance->GetData64(NPC_DELRISSA)))
             if (delrissa->IsAlive() && !delrissa->IsInCombat())
@@ -435,7 +435,7 @@ public:
     {
         boss_kagani_nightstrikeAI(Creature* creature) : boss_priestess_lackey_commonAI(creature, AI_TYPE_MELEE) { }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             boss_priestess_lackey_commonAI::EnterCombat(who);
 
@@ -536,7 +536,7 @@ public:
 
         boss_ellris_duskhallowAI(Creature* creature) : boss_priestess_lackey_commonAI(creature, AI_TYPE_RANGED) { }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             me->CastSpell(me, SPELL_SUMMON_IMP, false);
             boss_priestess_lackey_commonAI::EnterCombat(who);
@@ -614,7 +614,7 @@ public:
     {
         boss_eramas_brightblazeAI(Creature* creature) : boss_priestess_lackey_commonAI(creature, AI_TYPE_MELEE) { }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             boss_priestess_lackey_commonAI::EnterCombat(who);
 
@@ -688,7 +688,7 @@ public:
     {
         boss_yazzaiAI(Creature* creature) : boss_priestess_lackey_commonAI(creature, AI_TYPE_RANGED) { }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             boss_priestess_lackey_commonAI::EnterCombat(who);
 
@@ -797,7 +797,7 @@ public:
     {
         boss_warlord_salarisAI(Creature* creature) : boss_priestess_lackey_commonAI(creature, AI_TYPE_MELEE) { }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             boss_priestess_lackey_commonAI::EnterCombat(who);
             me->CastSpell(me, SPELL_BATTLE_SHOUT, false);
@@ -889,7 +889,7 @@ public:
             me->SummonCreature(NPC_SLIVER, 0.0f, 0.0f, 0.0f, 0.0f, TEMPSUMMON_CORPSE_DESPAWN, 0);
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             boss_priestess_lackey_commonAI::EnterCombat(who);
             me->CastSpell(me, SPELL_FREEZING_TRAP, true);
@@ -979,7 +979,7 @@ public:
         uint32 Healing_Wave_Timer;
         uint32 Frost_Shock_Timer;
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             boss_priestess_lackey_commonAI::EnterCombat(who);
 
@@ -1070,7 +1070,7 @@ public:
     {
         boss_zelfanAI(Creature* creature) : boss_priestess_lackey_commonAI(creature, AI_TYPE_RANGED) { }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             boss_priestess_lackey_commonAI::EnterCombat(who);
 

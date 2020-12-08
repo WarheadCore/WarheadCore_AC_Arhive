@@ -88,7 +88,7 @@ public:
             ScriptedAI::MoveInLineOfSight(who);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             Talk(YELL_TWILIGHTCORRUPTOR_AGGRO);
             _events.Reset();

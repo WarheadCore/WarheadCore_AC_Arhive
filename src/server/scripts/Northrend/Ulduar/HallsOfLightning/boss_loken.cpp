@@ -112,7 +112,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit*)
+        void JustEngagedWith(Unit*)
         {
             me->SetInCombatWithZone();
             Talk(SAY_AGGRO);

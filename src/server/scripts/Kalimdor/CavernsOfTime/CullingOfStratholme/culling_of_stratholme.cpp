@@ -393,7 +393,7 @@ public:
         void ScheduleNextEvent(uint32 currentEvent, uint32 time);
         void SummonNextWave();
         void ReorderInstance(uint32 data);
-        void EnterCombat(Unit* /*who*/) override ;
+        void JustEngagedWith(Unit* /*who*/) override ;
         void SendNextWave(uint32 entry);
         void SpawnTimeRift();
 

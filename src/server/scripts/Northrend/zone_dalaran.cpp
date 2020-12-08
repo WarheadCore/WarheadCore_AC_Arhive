@@ -442,7 +442,7 @@ public:
 
         void Reset() {}
 
-        void EnterCombat(Unit* /*who*/) {}
+        void JustEngagedWith(Unit* /*who*/) {}
 
         void AttackStart(Unit* /*who*/) {}
 
@@ -656,7 +656,7 @@ public:
             me->AddAura(1908, me);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
         }
         void UpdateAI(uint32 diff)
@@ -757,7 +757,7 @@ public:
             Initialize();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             me->AddAura(1908, me);
             Battleshout_timer = 1000;

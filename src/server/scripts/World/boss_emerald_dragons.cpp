@@ -256,7 +256,7 @@ public:
             events.ScheduleEvent(EVENT_LIGHTNING_WAVE, 12s);
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             Talk(SAY_YSONDRE_AGGRO);
             WorldBossAI::EnterCombat(who);
@@ -344,7 +344,7 @@ public:
             events.ScheduleEvent(EVENT_SHADOW_BOLT_WHIRL, 10s);
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             Talk(SAY_LETHON_AGGRO);
             WorldBossAI::EnterCombat(who);
@@ -477,7 +477,7 @@ public:
             emerald_dragonAI::KilledUnit(who);
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             Talk(SAY_EMERISS_AGGRO);
             WorldBossAI::EnterCombat(who);
@@ -569,7 +569,7 @@ public:
             events.ScheduleEvent(EVENT_BELLOWING_ROAR, 30s);
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             Talk(SAY_TAERAR_AGGRO);
             emerald_dragonAI::EnterCombat(who);

@@ -78,9 +78,9 @@ public:
             Talk(SAY_APPEAR);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
-            _EnterCombat();
+            _JustEngagedWith();
             events.ScheduleEvent(EVENT_SUMMON, 30s);
             events.ScheduleEvent(EVENT_MANA_TAP, 12s);
             events.ScheduleEvent(EVENT_ARCANE_TORRENT, 16s);

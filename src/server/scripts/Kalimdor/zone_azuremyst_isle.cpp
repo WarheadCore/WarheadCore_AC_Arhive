@@ -88,7 +88,7 @@ public:
             me->SetStandState(UNIT_STAND_STATE_SLEEP);
         }
 
-        void EnterCombat(Unit* /*who*/) { }
+        void JustEngagedWith(Unit* /*who*/) { }
 
         void MoveInLineOfSight(Unit* who)
         {
@@ -212,7 +212,7 @@ public:
             IsTreeEvent = false;
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             Talk(ATTACK_YELL, who);
         }
@@ -295,7 +295,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*who*/) { }
+        void JustEngagedWith(Unit* /*who*/) { }
 
         void MoveInLineOfSight(Unit* /*who*/) { }
 
@@ -335,7 +335,7 @@ public:
 
         void Reset() { }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             Talk(SAY_AGGRO, who);
         }
@@ -429,7 +429,7 @@ public:
             StartEvent();
         }
 
-        void EnterCombat(Unit* /*who*/) { }
+        void JustEngagedWith(Unit* /*who*/) { }
 
         void StartEvent()
         {

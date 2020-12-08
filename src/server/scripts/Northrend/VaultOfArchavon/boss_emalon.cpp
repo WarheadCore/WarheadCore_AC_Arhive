@@ -132,7 +132,7 @@ public:
                 target->SetFullHealth();
         }
 
-        void EnterCombat(Unit*  /*who*/)
+        void JustEngagedWith(Unit*  /*who*/)
         {
             events.Reset();
             if (summons.size() < 4)

@@ -89,7 +89,7 @@ public:
                 pInstance->SetData(DATA_BRONJAHM, NOT_STARTED);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             Talk(SAY_AGGRO);
             me->RemoveAurasDueToSpell(SPELL_SOULSTORM_CHANNEL_OOC);

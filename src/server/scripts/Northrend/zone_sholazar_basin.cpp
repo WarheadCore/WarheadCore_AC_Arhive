@@ -156,7 +156,7 @@ public:
             ScriptedAI::MoveInLineOfSight(who);
         }
 
-        void EnterCombat(Unit*  /*who*/)
+        void JustEngagedWith(Unit*  /*who*/)
         {
             me->Yell("Ah, the heroes. Your little friends said you would come. This certainly saves me the trouble of hunting you down myself.", LANG_UNIVERSAL);
             me->CastSpell(me, SPELL_ARTRUIS_ICY_VEINS, true);

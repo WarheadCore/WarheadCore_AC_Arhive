@@ -247,7 +247,7 @@ public:
                 go->SetGoState(GO_STATE_ACTIVE);
         }
 
-        void EnterCombat(Unit*  /*pWho*/)
+        void JustEngagedWith(Unit*  /*pWho*/)
         {
             if (summons.size() != uint32(RAID_MODE(8, 16)))
             {

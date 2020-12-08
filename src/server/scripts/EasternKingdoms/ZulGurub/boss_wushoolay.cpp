@@ -57,9 +57,9 @@ public:
             _JustDied();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
-            _EnterCombat();
+            _JustEngagedWith();
             events.ScheduleEvent(EVENT_LIGHTNINGCLOUD, 5s, 10s);
             events.ScheduleEvent(EVENT_LIGHTNINGWAVE, 8s, 16s);
         }

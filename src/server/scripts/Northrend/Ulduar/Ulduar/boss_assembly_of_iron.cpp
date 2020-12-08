@@ -231,7 +231,7 @@ public:
             me->RemoveAllAuras();
         }
 
-        void EnterCombat(Unit* who) override
+        void JustEngagedWith(Unit* who) override
         {
             if (pInstance)
                 pInstance->SetData(TYPE_ASSEMBLY, IN_PROGRESS);
@@ -427,7 +427,7 @@ public:
             me->RemoveAllAuras();
         }
 
-        void EnterCombat(Unit* who) override
+        void JustEngagedWith(Unit* who) override
         {
             me->InterruptNonMeleeSpells(false);
             me->setActive(true);
@@ -648,7 +648,7 @@ public:
             me->RemoveAllAuras();
         }
 
-        void EnterCombat(Unit* who) override
+        void JustEngagedWith(Unit* who) override
         {
             me->InterruptNonMeleeSpells(false);
             me->setActive(true);

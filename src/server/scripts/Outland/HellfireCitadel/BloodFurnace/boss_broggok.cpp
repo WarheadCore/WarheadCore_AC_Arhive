@@ -66,7 +66,7 @@ public:
                 instance->SetData(DATA_BROGGOK, NOT_STARTED);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             Talk(SAY_AGGRO);
         }

@@ -161,7 +161,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             Talk(SAY_AGGRO);
 
@@ -430,7 +430,7 @@ public:
             events.Reset();
         }
 
-        void EnterCombat(Unit*)
+        void JustEngagedWith(Unit*)
         {
             events.ScheduleEvent(EVENT_TOXIC_VOLLEY, 5s);
         }
@@ -488,7 +488,7 @@ public:
                 events.RescheduleEvent(EVENT_MALFORMED_OOZE_CHECK, 1s);
         }
 
-        void EnterCombat(Unit*) { }
+        void JustEngagedWith(Unit*) { }
         void MoveInLineOfSight(Unit*) { }
 
         void UpdateAI(uint32 diff)

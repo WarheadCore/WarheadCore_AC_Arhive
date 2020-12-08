@@ -173,7 +173,7 @@ public:
                 me->GetMotionMaster()->MoveChase(who);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             me->SetInCombatWithZone();
             events.Reset();

@@ -84,9 +84,9 @@ public:
             HasYelled = false;
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
-            _EnterCombat();
+            _JustEngagedWith();
 
             DoCast(me, SPELL_ESSENCEOFTHERED);
             me->SetHealth(me->CountPctFromMaxHealth(30));

@@ -60,9 +60,9 @@ public:
             BossAI::InitializeAI();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
-            _EnterCombat();
+            _JustEngagedWith();
             events.ScheduleEvent(SPELL_REND, 17s, 20s);
             events.ScheduleEvent(SPELL_STRIKE, 10s, 12s);
             Talk(SAY_AGGRO);

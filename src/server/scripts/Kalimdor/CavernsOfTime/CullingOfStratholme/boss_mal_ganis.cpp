@@ -84,7 +84,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             Talk(SAY_AGGRO);
             events.ScheduleEvent(EVENT_SPELL_CARRION_SWARM, 6s);

@@ -70,7 +70,7 @@ public:
             ScriptedAI::InitializeAI();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             events.ScheduleEvent(EVENT_HASTEN, 12s);
             events.ScheduleEvent(EVENT_MORTAL_WOUND, 5s);

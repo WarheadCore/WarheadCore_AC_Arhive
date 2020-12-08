@@ -78,7 +78,7 @@ public:
             Enraged = false;
         }
 
-        void EnterCombat(Unit* /*who*/) { }
+        void JustEngagedWith(Unit* /*who*/) { }
 
         void UpdateAI(uint32 diff)
         {

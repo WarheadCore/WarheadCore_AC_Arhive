@@ -292,7 +292,7 @@ public:
             BossAI::JustReachedHome();
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             BossAI::EnterCombat(who);
             Talk(SAY_AGGRO);
@@ -457,7 +457,7 @@ public:
             me->SetReactState(REACT_DEFENSIVE);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             _events.Reset();
             _events.ScheduleEvent(EVENT_CLEAVE, 8s, 10s);

@@ -160,7 +160,7 @@ public:
             Initialize();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             Talk(SAY_DOROTHEE_AGGRO);
             DoZoneInCombat();
@@ -264,7 +264,7 @@ public:
             YipTimer = 10000;
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             DoZoneInCombat();
         }
@@ -359,7 +359,7 @@ public:
             ScriptedAI::MoveInLineOfSight(who);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             Talk(SAY_STRAWMAN_AGGRO);
             DoZoneInCombat();
@@ -467,7 +467,7 @@ public:
             RustCount   = 0;
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             Talk(SAY_TINHEAD_AGGRO);
             DoZoneInCombat();
@@ -598,7 +598,7 @@ public:
             ScriptedAI::AttackStart(who);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             Talk(SAY_ROAR_AGGRO);
             DoZoneInCombat();
@@ -705,7 +705,7 @@ public:
             Talk(SAY_CRONE_SLAY);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             Talk(SAY_CRONE_AGGRO);
             DoZoneInCombat();
@@ -766,7 +766,7 @@ public:
             MoveTimer = 1000;
         }
 
-        void EnterCombat(Unit* /*who*/) { }
+        void JustEngagedWith(Unit* /*who*/) { }
 
         void MoveInLineOfSight(Unit* /*who*/)
 
@@ -881,7 +881,7 @@ public:
             IsChasing = false;
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             Talk(SAY_WOLF_AGGRO);
             DoZoneInCombat();
@@ -1107,7 +1107,7 @@ public:
             RomuloDead = false;
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             DoZoneInCombat();
         }
@@ -1270,7 +1270,7 @@ public:
             //TC_LOG_ERROR("scripts", "boss_romuloAI: DamageTaken reach end of code, that should not happen.");
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             DoZoneInCombat();
             Talk(SAY_ROMULO_AGGRO);

@@ -132,7 +132,7 @@ public:
             me->CastSpell(me, SPELL_DUAL_WIELD, true);
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             BossAI::EnterCombat(who);
             Talk(SAY_AGGRO);

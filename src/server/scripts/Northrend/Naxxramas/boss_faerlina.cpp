@@ -103,7 +103,7 @@ public:
             SummonHelpers();
         }
 
-        void EnterCombat(Unit* who) override
+        void JustEngagedWith(Unit* who) override
         {
             BossAI::EnterCombat(who);
             me->CallForHelp(VISIBLE_RANGE);

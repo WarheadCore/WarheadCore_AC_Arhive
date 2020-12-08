@@ -76,7 +76,7 @@ public:
             BossAI::Reset();
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             BossAI::EnterCombat(who);
             events.ScheduleEvent(EVENT_ECK_BERSERK, 1min, 90s);

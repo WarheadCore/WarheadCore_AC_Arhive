@@ -135,7 +135,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             me->CastSpell(me, SPELL_DEVOTION_AURA, true);
 

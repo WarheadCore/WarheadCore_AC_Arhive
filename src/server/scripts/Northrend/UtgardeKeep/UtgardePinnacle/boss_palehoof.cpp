@@ -210,7 +210,7 @@ public:
                     events.RescheduleEvent(EVENT_UNFREEZE_MONSTER, 3s);
             }
         }
-        void EnterCombat(Unit*  /*pWho*/)
+        void JustEngagedWith(Unit*  /*pWho*/)
         {
             if (m_pInstance)
                 m_pInstance->SetData(DATA_GORTOK_PALEHOOF, IN_PROGRESS);
@@ -368,7 +368,7 @@ public:
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
         }
 
-        void EnterCombat(Unit*) {}
+        void JustEngagedWith(Unit*) {}
 
         void DoAction(int32 param)
         {
@@ -492,7 +492,7 @@ public:
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
         }
 
-        void EnterCombat(Unit*) {}
+        void JustEngagedWith(Unit*) {}
 
         void DoAction(int32 param)
         {
@@ -600,7 +600,7 @@ public:
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
         }
 
-        void EnterCombat(Unit*) {}
+        void JustEngagedWith(Unit*) {}
 
         void DoAction(int32 param)
         {
@@ -706,7 +706,7 @@ public:
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
         }
 
-        void EnterCombat(Unit*) {}
+        void JustEngagedWith(Unit*) {}
 
         void DoAction(int32 param)
         {

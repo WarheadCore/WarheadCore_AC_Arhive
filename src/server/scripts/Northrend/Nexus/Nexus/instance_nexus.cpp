@@ -221,7 +221,7 @@ public:
             me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
         }
 
-        void EnterCombat(Unit*)
+        void JustEngagedWith(Unit*)
         {
             _allowDeath = me->GetInstanceScript()->GetBossState(DATA_ORMOROK_EVENT) == DONE;
         }

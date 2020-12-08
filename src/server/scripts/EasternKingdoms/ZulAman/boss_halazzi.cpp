@@ -106,7 +106,7 @@ public:
             EnterPhase(PHASE_LYNX);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             instance->SetData(DATA_HALAZZIEVENT, IN_PROGRESS);
             Talk(SAY_AGGRO);
@@ -351,7 +351,7 @@ public:
                 ScriptedAI::AttackStart(who);
         }
 
-        void EnterCombat(Unit* /*who*/) {/*DoZoneInCombat();*/ }
+        void JustEngagedWith(Unit* /*who*/) {/*DoZoneInCombat();*/ }
 
         void UpdateAI(uint32 diff)
         {

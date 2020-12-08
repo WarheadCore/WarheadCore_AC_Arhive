@@ -73,7 +73,7 @@ public:
                 instance->SetData(DATA_RAGEWINTERCHILLEVENT, NOT_STARTED);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             if (IsEvent)
                 instance->SetData(DATA_RAGEWINTERCHILLEVENT, IN_PROGRESS);

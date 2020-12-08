@@ -158,7 +158,7 @@ public:
 
         Creature* GetGrauf() { return ObjectAccessor::GetCreature(*me, GraufGUID); }
 
-        void EnterCombat(Unit*  /*pWho*/)
+        void JustEngagedWith(Unit*  /*pWho*/)
         {
             if (!EventStarted)
             {
@@ -388,7 +388,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit*)
+        void JustEngagedWith(Unit*)
         {
             me->SetInCombatWithZone();
         }

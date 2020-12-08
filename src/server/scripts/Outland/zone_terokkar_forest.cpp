@@ -369,7 +369,7 @@ public:
             me->setFaction(FACTION_HOSTILE);
         }
 
-        void EnterCombat(Unit* /*who*/) { }
+        void JustEngagedWith(Unit* /*who*/) { }
 
         void DoNice()
         {
@@ -468,7 +468,7 @@ public:
         npc_infested_root_walkerAI(Creature* creature) : ScriptedAI(creature) { }
 
         void Reset() { }
-        void EnterCombat(Unit* /*who*/) { }
+        void JustEngagedWith(Unit* /*who*/) { }
 
         void DamageTaken(Unit* done_by, uint32& damage, DamageEffectType, SpellSchoolMask)
         {
@@ -500,7 +500,7 @@ public:
         npc_rotting_forest_ragerAI(Creature* creature) : ScriptedAI(creature) { }
 
         void Reset() { }
-        void EnterCombat(Unit* /*who*/) { }
+        void JustEngagedWith(Unit* /*who*/) { }
 
         void DamageTaken(Unit* done_by, uint32& damage, DamageEffectType, SpellSchoolMask)
         {
@@ -590,7 +590,7 @@ public:
                 me->setFaction(m_uiNormFaction);
         }
 
-        void EnterCombat(Unit* /*who*/) override { }
+        void JustEngagedWith(Unit* /*who*/) override { }
 
         void UpdateAI(uint32 diff) override
         {
@@ -711,7 +711,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit*)
+        void JustEngagedWith(Unit*)
         {
             events.Reset();
             events.ScheduleEvent(EVENT_SPELL_WRATH, 0s);

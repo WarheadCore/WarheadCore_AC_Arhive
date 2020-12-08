@@ -202,7 +202,7 @@ public:
             BossAI::JustDied(who);
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             BossAI::EnterCombat(who);
             events.ScheduleEvent(EVENT_ARCANE_BUFFET, 6s);
@@ -410,7 +410,7 @@ public:
                 damage = 0;
         }
 
-        void EnterCombat(Unit*)
+        void JustEngagedWith(Unit*)
         {
             events.ScheduleEvent(EVENT_CHECK_HEALTH, 1s);
             events.ScheduleEvent(EVENT_CHECK_HEALTH2, 1s);
@@ -524,7 +524,7 @@ public:
             events.ScheduleEvent(EVENT_CHECK_HEALTH2, 1s);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             Talk(SAY_SATH_AGGRO);
         }

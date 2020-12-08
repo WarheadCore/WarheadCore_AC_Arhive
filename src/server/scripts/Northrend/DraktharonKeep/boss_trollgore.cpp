@@ -72,7 +72,7 @@ public:
             events2.ScheduleEvent(EVENT_SPAWN_INVADERS, 30s);
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             events.ScheduleEvent(EVENT_SPELL_INFECTED_WOUND, 6s, 10s);
             events.ScheduleEvent(EVENT_SPELL_CRUSH, 3s, 5s);

@@ -68,7 +68,7 @@ public:
             DoCast(me, SPELL_MAGMASPLASH, true);
         }
 
-        void EnterCombat(Unit* victim)
+        void JustEngagedWith(Unit* victim)
         {
             BossAI::EnterCombat(victim);
             events.ScheduleEvent(EVENT_PYROBLAST, 7s);

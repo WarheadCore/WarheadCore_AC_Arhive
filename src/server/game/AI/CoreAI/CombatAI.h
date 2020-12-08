@@ -42,7 +42,7 @@ public:
 
     void InitializeAI();
     void Reset();
-    void EnterCombat(Unit* who);
+    void JustEngagedWith(Unit* who);
     void JustDied(Unit* killer);
     void UpdateAI(uint32 diff);
 
@@ -60,7 +60,7 @@ public:
     void InitializeAI();
     void AttackStart(Unit* victim) { AttackStartCaster(victim, m_attackDist); }
     void UpdateAI(uint32 diff);
-    void EnterCombat(Unit* /*who*/);
+    void JustEngagedWith(Unit* /*who*/);
 private:
     float m_attackDist;
 };

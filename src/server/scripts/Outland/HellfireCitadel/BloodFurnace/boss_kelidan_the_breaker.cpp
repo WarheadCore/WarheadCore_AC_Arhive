@@ -100,7 +100,7 @@ public:
                 instance->SetData(DATA_KELIDAN, NOT_STARTED);
         }
 
-        void EnterCombat(Unit*  /*who*/)
+        void JustEngagedWith(Unit*  /*who*/)
         {
             events.ScheduleEvent(EVENT_SPELL_VOLLEY, 1s);
             events.ScheduleEvent(EVENT_SPELL_CORRUPTION, 5s);
@@ -307,7 +307,7 @@ public:
             return nullptr;
         }
 
-        void EnterCombat(Unit*  /*who*/)
+        void JustEngagedWith(Unit*  /*who*/)
         {
             if (Creature* kelidan = GetKelidan())
                 kelidan->AI()->DoAction(ACTION_CHANNELER_ENGAGED);

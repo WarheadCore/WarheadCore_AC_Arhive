@@ -55,9 +55,9 @@ public:
             frenzy15 = false;
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
-            _EnterCombat();
+            _JustEngagedWith();
             events.ScheduleEvent(EVENT_SUMMON_SPECTRAL_ASSASSIN, 6s, 8s);
             events.ScheduleEvent(EVENT_SHADOW_WRATH, 9s, 18s);
         }

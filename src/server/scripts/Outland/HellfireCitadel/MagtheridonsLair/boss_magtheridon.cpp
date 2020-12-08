@@ -136,10 +136,10 @@ public:
 
         void MoveInLineOfSight(Unit* /*who*/) { }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             events2.Reset();
-            _EnterCombat();
+            _JustEngagedWith();
             events.ScheduleEvent(EVENT_EMOTE1, 0s);
             events.ScheduleEvent(EVENT_EMOTE2, 1min);
             events.ScheduleEvent(EVENT_EMOTE3, 2min);

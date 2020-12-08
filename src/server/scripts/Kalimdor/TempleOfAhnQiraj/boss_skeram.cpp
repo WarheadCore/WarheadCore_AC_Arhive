@@ -120,9 +120,9 @@ public:
                 me->RemoveCorpse();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
-            _EnterCombat();
+            _JustEngagedWith();
             events.Reset();
 
             events.ScheduleEvent(EVENT_ARCANE_EXPLOSION, 6s, 12s);

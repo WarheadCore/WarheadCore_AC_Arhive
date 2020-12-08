@@ -531,7 +531,7 @@ public:
 
         void Reset() { }
 
-        void EnterCombat(Unit* /*who*/) { }
+        void JustEngagedWith(Unit* /*who*/) { }
 
         void JustDied(Unit* /*killer*/)
         {

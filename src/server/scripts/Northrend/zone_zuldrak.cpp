@@ -459,7 +459,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit*)
+        void JustEngagedWith(Unit*)
         {
             Talk(SAY_DRAKURU_3);
             events.ScheduleEvent(EVENT_BETRAYAL_SHADOW_BOLT, 2s);

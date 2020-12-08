@@ -138,9 +138,9 @@ public:
             instance->SaveToDB();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
-            _EnterCombat();
+            _JustEngagedWith();
             events.ScheduleEvent(EVENT_OVERPOWER, 7s, 9s);
             events.ScheduleEvent(EVENT_MORTAL_STRIKE, 12s, 18s);
             events.ScheduleEvent(EVENT_WHIRLWIND, 24s, 30s);
@@ -304,7 +304,7 @@ public:
             SunderArmor_Timer = 5000;
         }
 
-        void EnterCombat(Unit* /*who*/) { }
+        void JustEngagedWith(Unit* /*who*/) { }
 
         void JustDied(Unit* /*killer*/)
         {
@@ -359,7 +359,7 @@ public:
             cleave_Timer = urand(5000, 8000);
         }
 
-        void EnterCombat(Unit* /*who*/) { }
+        void JustEngagedWith(Unit* /*who*/) { }
 
         void JustDied(Unit* /*killer*/)
         {

@@ -49,7 +49,7 @@ public:
     {
         boss_shazzrahAI(Creature* creature) : BossAI(creature, BOSS_SHAZZRAH) { }
 
-        void EnterCombat(Unit* target)
+        void JustEngagedWith(Unit* target)
         {
             BossAI::EnterCombat(target);
             events.ScheduleEvent(EVENT_ARCANE_EXPLOSION, 6s);

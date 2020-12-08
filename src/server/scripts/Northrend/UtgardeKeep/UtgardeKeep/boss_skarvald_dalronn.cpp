@@ -113,7 +113,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             events.Reset();
             events.RescheduleEvent(EVENT_SPELL_CHARGE, 5s);
@@ -260,7 +260,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* who)
+        void JustEngagedWith(Unit* who)
         {
             events.Reset();
             events.RescheduleEvent(EVENT_SPELL_SHADOW_BOLT, 1s);

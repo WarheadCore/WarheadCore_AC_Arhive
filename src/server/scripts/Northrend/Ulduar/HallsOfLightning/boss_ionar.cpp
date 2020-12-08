@@ -112,7 +112,7 @@ public:
             events.RescheduleEvent(EVENT_STATIC_OVERLOAD, 5s, 0, 1);
         }
 
-        void EnterCombat(Unit*)
+        void JustEngagedWith(Unit*)
         {
             me->SetInCombatWithZone();
             Talk(SAY_AGGRO);

@@ -211,7 +211,7 @@ struct boss_twin_valkyrAI : public ScriptedAI
             me->GetMotionMaster()->MoveChase(victim, 0.0f, 0.0f, 6.0f);
     }*/
 
-    void EnterCombat(Unit* /*who*/)
+    void JustEngagedWith(Unit* /*who*/)
     {
         me->setActive(true);
         me->LowerPlayerDamageReq(me->GetMaxHealth());

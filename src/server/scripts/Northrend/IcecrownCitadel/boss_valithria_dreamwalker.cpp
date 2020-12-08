@@ -514,7 +514,7 @@ public:
             checkTimer = 5000;
         }
 
-        void EnterCombat(Unit* target)
+        void JustEngagedWith(Unit* target)
         {
             if (!instance->CheckRequiredBosses(DATA_VALITHRIA_DREAMWALKER, target->ToPlayer()))
             {
@@ -722,7 +722,7 @@ public:
             _events.ScheduleEvent(EVENT_COLUMN_OF_FROST, 10s, 20s);
         }
 
-        void EnterCombat(Unit* /*target*/)
+        void JustEngagedWith(Unit* /*target*/)
         {
             me->FinishSpell(CURRENT_CHANNELED_SPELL, false);
             me->SetInCombatWithZone();

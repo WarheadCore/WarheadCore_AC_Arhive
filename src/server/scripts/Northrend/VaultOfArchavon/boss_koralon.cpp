@@ -85,7 +85,7 @@ public:
             ScriptedAI::AttackStart(who);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             me->CastSpell(me, SPELL_BURNING_FURY, true);
 

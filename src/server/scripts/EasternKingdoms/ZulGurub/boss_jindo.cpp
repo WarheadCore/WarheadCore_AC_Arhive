@@ -75,9 +75,9 @@ public:
             _JustDied();
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
-            _EnterCombat();
+            _JustEngagedWith();
             events.ScheduleEvent(EVENT_BRAINWASHTOTEM, 20s);
             events.ScheduleEvent(EVENT_POWERFULLHEALINGWARD, 16s);
             events.ScheduleEvent(EVENT_HEX, 8s);
@@ -208,7 +208,7 @@ public:
             Heal_Timer = 2000;
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
         }
 
@@ -256,7 +256,7 @@ public:
             DoCast(me, SPELL_INVISIBLE, true);
         }
 
-        void EnterCombat(Unit* /*who*/) { }
+        void JustEngagedWith(Unit* /*who*/) { }
 
         void UpdateAI(uint32 diff)
         {

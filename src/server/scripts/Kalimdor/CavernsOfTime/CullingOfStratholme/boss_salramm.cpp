@@ -80,7 +80,7 @@ public:
 
         void JustSummoned(Creature* cr) { summons.Summon(cr); }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             Talk(SAY_AGGRO);
             events.ScheduleEvent(EVENT_SPELL_SHADOW_BOLT, 7s);

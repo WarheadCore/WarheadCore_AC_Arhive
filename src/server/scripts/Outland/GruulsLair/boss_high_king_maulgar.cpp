@@ -123,9 +123,9 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
-            _EnterCombat();
+            _JustEngagedWith();
             Talk(SAY_AGGRO);
 
             events.ScheduleEvent(EVENT_ARCING_SMASH, 6s);
@@ -223,7 +223,7 @@ public:
                 me->GetMotionMaster()->MoveChase(who, 25.0f);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             me->SetInCombatWithZone();
             instance->SetBossState(DATA_MAULGAR, IN_PROGRESS);
@@ -300,7 +300,7 @@ public:
             instance->SetBossState(DATA_MAULGAR, NOT_STARTED);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             me->SetInCombatWithZone();
             instance->SetBossState(DATA_MAULGAR, IN_PROGRESS);
@@ -378,7 +378,7 @@ public:
             instance->SetBossState(DATA_MAULGAR, NOT_STARTED);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             me->SetInCombatWithZone();
             instance->SetBossState(DATA_MAULGAR, IN_PROGRESS);
@@ -459,7 +459,7 @@ public:
                 me->GetMotionMaster()->MoveChase(who, 25.0f);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             me->SetInCombatWithZone();
             instance->SetBossState(DATA_MAULGAR, IN_PROGRESS);

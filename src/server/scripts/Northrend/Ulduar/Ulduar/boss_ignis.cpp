@@ -231,7 +231,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit*  /*who*/)
+        void JustEngagedWith(Unit*  /*who*/)
         {
             me->setActive(true);
 

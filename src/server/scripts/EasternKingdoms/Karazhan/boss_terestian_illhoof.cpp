@@ -92,7 +92,7 @@ public:
             AmplifyTimer = 2000;
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
         }
 
@@ -149,7 +149,7 @@ public:
             SacrificeGUID = 0;
         }
 
-        void EnterCombat(Unit* /*who*/) { }
+        void JustEngagedWith(Unit* /*who*/) { }
         void AttackStart(Unit* /*who*/) { }
         void MoveInLineOfSight(Unit* /*who*/) { }
 
@@ -223,7 +223,7 @@ public:
             me->ApplySpellImmune(0, IMMUNITY_SCHOOL, SPELL_SCHOOL_MASK_FIRE, true);
         }
 
-        void EnterCombat(Unit* /*who*/) { }
+        void JustEngagedWith(Unit* /*who*/) { }
 
         void UpdateAI(uint32 diff)
         {
@@ -319,7 +319,7 @@ public:
                 DoCast(me, SPELL_SUMMON_IMP, true);
         }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
             Talk(SAY_AGGRO);
             DoZoneInCombat();

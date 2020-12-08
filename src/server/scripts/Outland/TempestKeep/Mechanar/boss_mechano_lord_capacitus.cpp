@@ -63,9 +63,9 @@ public:
     {
         boss_mechano_lord_capacitusAI(Creature* creature) : BossAI(creature, DATA_MECHANOLORD_CAPACITUS) { }
 
-        void EnterCombat(Unit* /*who*/)
+        void JustEngagedWith(Unit* /*who*/)
         {
-            _EnterCombat();
+            _JustEngagedWith();
             Talk(YELL_AGGRO);
             events.ScheduleEvent(EVENT_HEADCRACK, 6s);
             events.ScheduleEvent(EVENT_SUMMON_NETHER_CHARGE, 10s);

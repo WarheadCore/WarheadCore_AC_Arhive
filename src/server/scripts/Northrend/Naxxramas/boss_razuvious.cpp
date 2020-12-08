@@ -130,7 +130,7 @@ public:
             me->CastSpell(me, SPELL_HOPELESS, true);
         }
 
-        void EnterCombat(Unit* who) override
+        void JustEngagedWith(Unit* who) override
         {
             BossAI::EnterCombat(who);
             Talk(SAY_AGGRO);
@@ -210,7 +210,7 @@ public:
                 me->GetInstanceScript()->SetData(DATA_IMMORTAL_FAIL, 0);
         }
 
-        void EnterCombat(Unit* who) override
+        void JustEngagedWith(Unit* who) override
         {
             if (Creature* cr = me->FindNearestCreature(NPC_RAZUVIOUS, 100.0f))
             {

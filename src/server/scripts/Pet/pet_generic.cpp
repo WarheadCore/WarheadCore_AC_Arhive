@@ -56,7 +56,7 @@ public:
                 me->GetMotionMaster()->MoveFollow(owner, 0.0f, 0.0f);
         }
 
-        void EnterCombat(Unit* /*who*/) { }
+        void JustEngagedWith(Unit* /*who*/) { }
         void UpdateAI(uint32 /*diff*/) { }
 
         void ReceiveEmote(Player* player, uint32 emote)
