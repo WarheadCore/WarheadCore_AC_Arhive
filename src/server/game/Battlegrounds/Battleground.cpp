@@ -946,11 +946,9 @@ void Battleground::EndBattleground(TeamId winnerTeamId)
             player->SpawnCorpseBones();
         }
         else
-        {
             //needed cause else in av some creatures will kill the players at the end
             player->CombatStop();
-            player->getHostileRefManager().deleteReferences();
-        }
+
 
         // per player calculation
         if (isArena() && isRated() && winnerArenaTeam && loserArenaTeam && winnerArenaTeam != loserArenaTeam)

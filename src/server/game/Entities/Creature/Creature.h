@@ -452,10 +452,22 @@ public:
     bool CanSwim() const override { return (GetCreatureTemplate()->InhabitType & INHABIT_WATER) || IS_PLAYER_GUID(GetOwnerGUID()); }
     bool CanFly()  const override { return GetCreatureTemplate()->InhabitType & INHABIT_AIR; }
 
+    Unit* SelectVictim();
+
     void SetReactState(ReactStates st) { m_reactState = st; }
     ReactStates GetReactState() const { return m_reactState; }
     bool HasReactState(ReactStates state) const { return (m_reactState == state); }
     void InitializeReactState();
+
+    using Unit::IsImmuneToAll;
+    using Unit::SetImmuneToAll;
+    void SetImmuneToAll(bool apply) override { Unit::SetImmuneToAll(apply, HasReactState(REACT_PASSIVE)); }
+    using Unit::IsImmuneToPC;
+    using Unit::SetImmuneToPC;
+    void SetImmuneToPC(bool apply) override { Unit::SetImmuneToPC(apply, HasReactState(REACT_PASSIVE)); }
+    using Unit::IsImmuneToNPC;
+    using Unit::SetImmuneToNPC;
+    void SetImmuneToNPC(bool apply) override { Unit::SetImmuneToNPC(apply, HasReactState(REACT_PASSIVE)); }
 
     ///// TODO RENAME THIS!!!!!
     bool isCanInteractWithBattleMaster(Player* player, bool msg) const;
@@ -679,8 +691,6 @@ public:
     CreatureGroup* GetFormation() const { return m_formation; }
     void SetFormation(CreatureGroup* formation) { m_formation = formation; }
 
-    Unit* SelectVictim();
-
     void SetDisableReputationGain(bool disable) { DisableReputationGain = disable; }
     bool IsReputationGainDisabled() const { return DisableReputationGain; }
     bool IsDamageEnoughForLootingAndReward() const { return m_PlayerDamageReq == 0; }
@@ -709,6 +719,9 @@ public:
     // Part of Evade mechanics
     time_t GetLastDamagedTime() const { return _lastDamagedTime; }
     void SetLastDamagedTime(time_t val) { _lastDamagedTime = val; }
+
+    void AtEnterCombat() override;
+    void AtExitCombat() override;
 
 protected:
     bool CreateFromProto(uint32 guidlow, uint32 Entry, uint32 vehId, const CreatureData* data = nullptr);

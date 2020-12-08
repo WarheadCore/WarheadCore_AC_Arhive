@@ -21,7 +21,7 @@
 #include "EventProcessor.h"
 #include "FollowerReference.h"
 #include "FollowerRefManager.h"
-#include "HostileRefManager.h"
+#include "CombatManager.h"
 #include "MotionMaster.h"
 #include "Object.h"
 #include "SpellAuraDefines.h"
@@ -1429,16 +1429,7 @@ public:
     {
         m_attackers.erase(pAttacker);
     }
-    Unit* getAttackerForHelper() const                 // If someone wants to help, who to give them
-    {
-        if (GetVictim() != nullptr)
-            return GetVictim();
-
-        if (!m_attackers.empty())
-            return *(m_attackers.begin());
-
-        return nullptr;
-    }
+    Unit* getAttackerForHelper() const;
     bool Attack(Unit* victim, bool meleeAttack);
     void CastStop(uint32 except_spellid = 0, bool withInstant = true);
     bool AttackStop();

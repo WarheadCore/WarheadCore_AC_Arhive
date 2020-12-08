@@ -1282,6 +1282,7 @@ bool Player::Create(uint32 guidlow, CharacterCreateInfo* createInfo)
     }
     // all item positions resolved
 
+    GetThreatManager().Initialize();
     CheckAllAchievementCriteria();
 
     return true;
@@ -1911,9 +1912,9 @@ void Player::Update(uint32 p_time)
 
     if (!_instanceResetTimes.empty())
     {
-        for (InstanceTimeMap::iterator itr = _instanceResetTimes.begin(); itr != _instanceResetTimes.end();)
+        for (auto& itr : _instanceResetTimes)
         {
-            if (itr->second < now)
+            if (itr.second < now)
                 _instanceResetTimes.erase(itr++);
             else
                 ++itr;
@@ -1933,7 +1934,7 @@ void Player::Update(uint32 p_time)
     {
         m_hostileReferenceCheckTimer = 15000;
         if (!GetMap()->IsDungeon())
-            getHostileRefManager().deleteReferencesOutOfRange(GetVisibilityRange());
+            GetCombatManager().EndCombatBeyondRange(GetVisibilityRange(), true);
     }
     else
         m_hostileReferenceCheckTimer -= p_time;
@@ -3058,8 +3059,6 @@ void Player::SetInWater(bool apply)
 
     // remove auras that need water/land
     RemoveAurasWithInterruptFlags(apply ? AURA_INTERRUPT_FLAG_NOT_ABOVEWATER : AURA_INTERRUPT_FLAG_NOT_UNDERWATER);
-
-    getHostileRefManager().updateThreatTables();
 }
 
 bool Player::IsInAreaTriggerRadius(const AreaTrigger* trigger) const
@@ -3095,16 +3094,12 @@ void Player::SetGameMaster(bool on)
         SetFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_ALLOW_CHEAT_SPELLS);
 
         if (Pet* pet = GetPet())
-        {
             if (AccountMgr::IsGMAccount(GetSession()->GetSecurity()))
                 pet->setFaction(35);
-            pet->getHostileRefManager().setOnlineOfflineState(false);
-        }
 
         RemoveByteFlag(UNIT_FIELD_BYTES_2, 1, UNIT_BYTE2_FLAG_FFA_PVP);
         ResetContestedPvP();
 
-        getHostileRefManager().setOnlineOfflineState(false);
         CombatStopWithPets();
 
         SetPhaseMask(uint32(PHASEMASK_ANYWHERE), false);    // see and visible in all phases
@@ -3128,7 +3123,7 @@ void Player::SetGameMaster(bool on)
         if (Pet* pet = GetPet())
         {
             pet->setFaction(getFaction());
-            pet->getHostileRefManager().setOnlineOfflineState(true);
+            pet->GetThreatManager().UpdateOnlineStates();
         }
 
         // restore FFA PvP Server state
@@ -3138,7 +3133,6 @@ void Player::SetGameMaster(bool on)
         // restore FFA PvP area state, remove not allowed for GM mounts
         UpdateArea(m_areaUpdateId);
 
-        getHostileRefManager().setOnlineOfflineState(true);
         m_serverSideVisibilityDetect.SetValue(SERVERSIDE_VISIBILITY_GM, SEC_PLAYER);
     }
 
@@ -21706,7 +21700,6 @@ void Player::CleanupAfterTaxiFlight()
     m_taxi.ClearTaxiDestinations();        // not destinations, clear source node
     Dismount();
     RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE | UNIT_FLAG_TAXI_FLIGHT);
-    getHostileRefManager().setOnlineOfflineState(true);
 }
 
 void Player::ContinueTaxiFlight()
@@ -24533,6 +24526,19 @@ void Player::UpdateUnderwaterState(Map* m, float x, float y, float z)
         else
             m_MirrorTimerFlags &= ~UNDERWATER_INSLIME;
     }
+}
+
+void Player::AtExitCombat()
+{
+    Unit::AtExitCombat();
+    UpdatePotionCooldown();
+
+    if (getClass() == CLASS_DEATH_KNIGHT)
+        for (uint8 i = 0; i < MAX_RUNES; ++i)
+        {
+            SetRuneTimer(i, 0xFFFFFFFF);
+            SetLastRuneGraceTimer(i, 0);
+        }
 }
 
 void Player::SetCanParry(bool value)

@@ -47,37 +47,38 @@ void CreatureAI::DoZoneInCombat(Creature* creature /*= NULL*/, float maxRangeToN
     if (!creature)
         creature = me;
 
-    if (!creature->CanHaveThreatList() || creature->IsInEvadeMode())
-        return;
-
     Map* map = creature->GetMap();
-    if (!map->IsDungeon())                                  //use IsDungeon instead of Instanceable, in case battlegrounds will be instantiated
+    if (creature->CanHaveThreatList())
     {
-        LOG_ERROR("entities.unit.ai", "DoZoneInCombat call for map that isn't an instance (creature entry = %d)", creature->GetTypeId() == TYPEID_UNIT ? creature->ToCreature()->GetEntry() : 0);
-        return;
-    }
-
-    if (!creature->HasReactState(REACT_PASSIVE) && !creature->GetVictim())
-    {
-        if (Unit* nearTarget = creature->SelectNearestTarget(maxRangeToNearestTarget))
-            creature->AI()->AttackStart(nearTarget);
-        else if (creature->IsSummon())
+        if (!map->IsDungeon())                                  //use IsDungeon instead of Instanceable, in case battlegrounds will be instantiated
         {
-            if (Unit* summoner = creature->ToTempSummon()->GetSummoner())
+            LOG_ERROR("entities.unit.ai", "DoZoneInCombat call for map that isn't an instance (creature entry = %d)", creature->GetTypeId() == TYPEID_UNIT ? creature->ToCreature()->GetEntry() : 0);
+            return;
+        }
+
+        if (!creature->HasReactState(REACT_PASSIVE) && !creature->GetVictim())
+        {
+            if (Unit* nearTarget = creature->SelectNearestTarget(maxRangeToNearestTarget))
+                creature->AI()->AttackStart(nearTarget);
+            else if (creature->IsSummon())
             {
-                Unit* target = summoner->getAttackerForHelper();
-                if (!target && summoner->CanHaveThreatList() && !summoner->getThreatManager().isThreatListEmpty())
-                    target = summoner->getThreatManager().getHostilTarget();
-                if (target && (creature->IsFriendlyTo(summoner) || creature->IsHostileTo(target)))
-                    creature->AI()->AttackStart(target);
+                if (Unit* summoner = creature->ToTempSummon()->GetSummoner())
+                {
+                    Unit* target = summoner->getAttackerForHelper();
+                    if (!target && !summoner->GetThreatManager().IsThreatListEmpty())
+                        target = summoner->GetThreatManager().GetAnyTarget();
+                    if (target && (creature->IsFriendlyTo(summoner) || creature->IsHostileTo(target)))
+                        creature->AI()->AttackStart(target);
+                }
             }
         }
-    }
 
-    if (!creature->HasReactState(REACT_PASSIVE) && !creature->GetVictim())
-    {
-        LOG_ERROR("entities.unit.ai", "DoZoneInCombat called for creature that has empty threat list (creature entry = %u)", creature->GetEntry());
-        return;
+
+        if (!creature->HasReactState(REACT_PASSIVE) && !creature->GetVictim())
+        {
+            LOG_ERROR("entities.unit.ai", "DoZoneInCombat called for creature that has empty threat list (creature entry = %u)", creature->GetEntry());
+            return;
+        }
     }
 
     Map::PlayerList const& playerList = map->GetPlayers();
@@ -85,29 +86,10 @@ void CreatureAI::DoZoneInCombat(Creature* creature /*= NULL*/, float maxRangeToN
     if (playerList.isEmpty())
         return;
 
-    for (Map::PlayerList::const_iterator itr = playerList.begin(); itr != playerList.end(); ++itr)
-    {
-        if (Player* player = itr->GetSource())
-        {
-            if (player->IsGameMaster())
-                continue;
-
+    for (const auto& itr : playerList)
+        if (Player* player = itr.GetSource())
             if (player->IsAlive())
-            {
                 creature->SetInCombatWith(player);
-                player->SetInCombatWith(creature);
-                creature->AddThreat(player, 0.0f);
-            }
-
-            /* Causes certain things to never leave the threat list (Priest Lightwell, etc):
-            for (Unit::ControlSet::const_iterator itr = player->m_Controlled.begin(); itr != player->m_Controlled.end(); ++itr)
-            {
-                creature->SetInCombatWith(*itr);
-                (*itr)->SetInCombatWith(creature);
-                creature->AddThreat(*itr, 0.0f);
-            }*/
-        }
-    }
 }
 
 // scripts does not take care about MoveInLineOfSight loops
@@ -234,11 +216,13 @@ bool CreatureAI::UpdateVictim()
     // xinef: if we have any victim, just return true
     else if (me->GetVictim() && me->GetExactDist(me->GetVictim()) < 30.0f)
         return true;
-    else if (me->getThreatManager().isThreatListEmpty())
+    else if (me->getThreatManager().isThreatListEmpty(true))
     {
         EnterEvadeMode();
         return false;
     }
+    else
+        me->AttackStop();
 
     return true;
 }

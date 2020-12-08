@@ -149,7 +149,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 Unit* talkTarget = nullptr;
                 if (targets)
                 {
-                    for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                    for (const auto& itr : targets)
                     {
                         if (IsCreature((*itr)) && !(*itr)->ToCreature()->IsPet()) // Prevented sending text to pets.
                         {
@@ -201,7 +201,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 ObjectList* targets = GetTargets(e, unit);
                 if (targets)
                 {
-                    for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                    for (const auto& itr : targets)
                     {
                         if (IsCreature(*itr))
                             sCreatureTextMgr->SendChat((*itr)->ToCreature(), uint8(e.action.talk.textGroupID), IsPlayer(GetLastInvoker()) ? GetLastInvoker() : 0);
@@ -224,7 +224,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 ObjectList* targets = GetTargets(e, unit);
                 if (targets)
                 {
-                    for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                    for (const auto& itr : targets)
                     {
                         if (IsUnit(*itr))
                         {
@@ -244,7 +244,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 ObjectList* targets = GetTargets(e, unit);
                 if (targets)
                 {
-                    for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                    for (const auto& itr : targets)
                     {
                         if (IsUnit(*itr))
                         {
@@ -287,7 +287,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                     break;
                 }
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                 {
                     if (IsUnit(*itr))
                     {
@@ -337,7 +337,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
 
                 if (targets)
                 {
-                    for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                    for (const auto& itr : targets)
                     {
                         if (IsUnit(*itr))
                         {
@@ -410,7 +410,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                     break;
                 }
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                 {
                     if (IsUnit(*itr))
                     {
@@ -431,7 +431,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 ObjectList* targets = GetTargets(e, unit);
                 if (targets)
                 {
-                    for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                    for (const auto& itr : targets)
                     {
                         if (IsCreature(*itr))
                         {
@@ -470,7 +470,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                 {
                     if (!IsCreature(*itr))
                         continue;
@@ -519,7 +519,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                 {
                     if (IsPlayer(*itr))
                     {
@@ -540,7 +540,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                 {
                     if (Player* pTarget = (*itr)->ToPlayer())
                     {
@@ -579,7 +579,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                 {
                     if (!IsCreature(*itr))
                         continue;
@@ -620,7 +620,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                     break;
                 }
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                 {
                     if (IsUnit(*itr))
                     {
@@ -663,7 +663,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                 {
                     if (IsUnit(*itr))
                     {
@@ -684,7 +684,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                 {
                     // Special handling for vehicles
                     if (IsUnit(*itr))
@@ -722,7 +722,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (e.action.cast.targetsLimit > 0 && targets->size() > e.action.cast.targetsLimit)
                     Warhead::Containers::RandomResizeList(*targets, e.action.cast.targetsLimit);
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                 {
                     if (go)
                     {
@@ -779,7 +779,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (e.action.cast.targetsLimit > 0 && targets->size() > e.action.cast.targetsLimit)
                     Warhead::Containers::RandomResizeList(*targets, e.action.cast.targetsLimit);
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                 {
                     if (!IsUnit(*itr))
                         continue;
@@ -802,7 +802,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                 {
                     if (IsUnit(*itr))
                     {
@@ -823,7 +823,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                 {
                     if (IsGameObject(*itr))
                     {
@@ -846,7 +846,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                 {
                     if (IsGameObject(*itr))
                     {
@@ -866,7 +866,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                 {
                     if (IsUnit(*itr))
                     {
@@ -886,7 +886,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                 {
                     if (IsUnit(*itr))
                     {
@@ -914,7 +914,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                 {
                     if (IsUnit(*itr))
                     {
@@ -1002,7 +1002,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                     if (IsCreature((*itr)))
                         if ((*itr)->ToCreature()->IsAIEnabled)
                             (*itr)->ToCreature()->AI()->EnterEvadeMode();
@@ -1045,7 +1045,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                 {
                     if (IsUnit((*itr)))
                     {
@@ -1067,7 +1067,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                 {
                     if (!IsUnit((*itr)))
                         continue;
@@ -1104,7 +1104,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                     break;
                 }
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                 {
                     if (IsUnit((*itr)))
                     {
@@ -1195,7 +1195,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                     if (!targets)
                         break;
 
-                    for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                    for (const auto& itr : targets)
                     {
                         if (!IsUnit(*itr))
                             continue;
@@ -1272,7 +1272,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                     if (IsCreature(*itr))
                         (*itr)->ToCreature()->UpdateEntry(e.action.updateTemplate.creature, NULL, e.action.updateTemplate.updateLevel != 0);
 
@@ -1308,7 +1308,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 }
                 else
                 {
-                    for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                    for (const auto& itr : targets)
                         if (IsCreature(*itr))
                             (*itr)->ToCreature()->SetInCombatWithZone();
                 }
@@ -1322,7 +1322,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                     if (IsCreature(*itr))
                     {
                         (*itr)->ToCreature()->CallForHelp((float)e.action.callHelp.range);
@@ -1355,7 +1355,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                 {
                     if (IsCreature(*itr))
                         (*itr)->ToCreature()->DespawnOrUnsummon(e.action.forceDespawn.delay + 1);
@@ -1372,7 +1372,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                 {
                     if (IsUnit(*itr))
                         (*itr)->ToUnit()->SetPhaseMask(e.action.ingamePhaseMask.mask, true);
@@ -1389,7 +1389,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                 {
                     if (!IsUnit(*itr))
                         continue;
@@ -1417,7 +1417,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                 {
                     if (IsCreature(*itr))
                     {
@@ -1441,7 +1441,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                 {
                     if (IsCreature(*itr))
                         (*itr)->ToCreature()->AI()->SetData(e.action.setData.field, e.action.setData.data);
@@ -1476,7 +1476,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                     if (IsUnit(*itr))
                         (*itr)->ToUnit()->SetVisible(!!e.action.visibility.state);
 
@@ -1489,7 +1489,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                     (*itr)->setActive(!!e.action.setActive.state);
 
                 delete targets;
@@ -1543,7 +1543,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (targets)
                 {
                     float x, y, z, o;
-                    for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                    for (const auto& itr : targets)
                     {
                         (*itr)->GetPosition(x, y, z, o);
                         x += e.target.x;
@@ -1585,7 +1585,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (targets)
                 {
                     float x, y, z, o;
-                    for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                    for (const auto& itr : targets)
                     {
                         // xinef: allow gameobjects to summon gameobjects!
                         //if(!IsUnit((*itr)))
@@ -1617,7 +1617,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                 {
                     if (!IsUnit(*itr))
                         continue;
@@ -1639,7 +1639,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                 {
                     if (!IsPlayer(*itr))
                         continue;
@@ -1656,7 +1656,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                 {
                     if (!IsPlayer(*itr))
                         continue;
@@ -1679,7 +1679,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                 {
                     if (IsPlayer(*itr))
                         (*itr)->ToPlayer()->TeleportTo(e.action.teleport.mapID, e.target.x, e.target.y, e.target.z, e.target.o);
@@ -1710,7 +1710,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                 {
                     if (IsCreature(*itr))
                     {
@@ -1736,7 +1736,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
             {
                 if (ObjectList* targets = GetTargets(e, unit))
                 {
-                    for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                    for (const auto& itr : targets)
                     {
                         if (IsCreature(*itr))
                         {
@@ -1775,7 +1775,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 ObjectList* targets = GetTargets(e, unit);
                 if (targets)
                 {
-                    for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                    for (const auto& itr : targets)
                     {
                         if (IsPlayer(*itr))
                         {
@@ -1871,7 +1871,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                 {
                     if (!IsPlayer(*itr))
                         continue;
@@ -1952,7 +1952,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     return;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                 {
                     if (IsCreature(*itr))
                     {
@@ -1970,7 +1970,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                 {
                     if (IsCreature(*itr))
                         (*itr)->ToCreature()->Respawn(e.action.RespawnTarget.goRespawnTime);
@@ -1993,7 +1993,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                     if (IsPlayer(*itr))
                         (*itr)->ToPlayer()->PlayerTalkClass->SendCloseGossip();
 
@@ -2006,7 +2006,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                 {
                     if (Creature* npc = (*itr)->ToCreature())
                     {
@@ -2176,7 +2176,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                     if (IsCreature(*itr))
                         (*itr)->ToUnit()->SetUInt32Value(UNIT_NPC_FLAGS, e.action.unitFlag.flag);
 
@@ -2189,7 +2189,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                     if (IsCreature(*itr))
                         (*itr)->ToUnit()->SetFlag(UNIT_NPC_FLAGS, e.action.unitFlag.flag);
 
@@ -2202,7 +2202,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                     if (IsCreature(*itr))
                         (*itr)->ToUnit()->RemoveFlag(UNIT_NPC_FLAGS, e.action.unitFlag.flag);
 
@@ -2340,7 +2340,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                     if (IsPlayer(*itr))
                         (*itr)->ToPlayer()->ActivateTaxiPathTo(e.action.taxi.id);
 
@@ -2355,7 +2355,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
 
                 bool foundTarget = false;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                 {
                     if (IsCreature((*itr)))
                     {
@@ -2384,7 +2384,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 ObjectList* targets = GetTargets(e, unit);
                 if (!targets)
                     break;
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                     if (IsUnit(*itr))
                         (*itr)->ToUnit()->SetByteFlag(UNIT_FIELD_BYTES_1, e.action.setunitByte.type, e.action.setunitByte.byte1);
 
@@ -2397,7 +2397,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                     if (IsUnit(*itr))
                         (*itr)->ToUnit()->RemoveByteFlag(UNIT_FIELD_BYTES_1, e.action.delunitByte.type, e.action.delunitByte.byte1);
 
@@ -2410,7 +2410,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                     if (IsUnit(*itr))
                         (*itr)->ToUnit()->InterruptNonMeleeSpells(e.action.interruptSpellCasting.withDelayed, e.action.interruptSpellCasting.spell_id, e.action.interruptSpellCasting.withInstant);
 
@@ -2423,7 +2423,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                     if (IsGameObject(*itr))
                         (*itr)->ToGameObject()->SendCustomAnim(e.action.sendGoCustomAnim.anim);
 
@@ -2436,7 +2436,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                     if (IsUnit(*itr))
                         (*itr)->ToUnit()->SetUInt32Value(UNIT_DYNAMIC_FLAGS, e.action.unitFlag.flag);
 
@@ -2449,7 +2449,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                     if (IsUnit(*itr))
                         (*itr)->ToUnit()->SetFlag(UNIT_DYNAMIC_FLAGS, e.action.unitFlag.flag);
 
@@ -2462,7 +2462,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                     if (IsUnit(*itr))
                         (*itr)->ToUnit()->RemoveFlag(UNIT_DYNAMIC_FLAGS, e.action.unitFlag.flag);
 
@@ -2498,7 +2498,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 }
                 else
                 {
-                    for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                    for (const auto& itr : targets)
                         if (WorldObject* obj = (*itr))
                         {
                             if (Creature* creature = obj->ToCreature())
@@ -2515,7 +2515,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                     if (IsGameObject(*itr))
                         (*itr)->ToGameObject()->SetLootState((LootState)e.action.setGoLootState.state);
 
@@ -2535,7 +2535,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                     break;
                 }
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                 {
                     if (IsCreature(*itr))
                     {
@@ -2568,7 +2568,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                     if (Player* player = (*itr)->ToPlayer())
                     {
                         if (e.action.sendGossipMenu.gossipMenuId)
@@ -2588,7 +2588,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (targets)
                 {
                     float x, y, z, o;
-                    for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                    for (const auto& itr : targets)
                         if (IsCreature(*itr))
                         {
                             if (e.action.setHomePos.spawnPos)
@@ -2645,7 +2645,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                     if (IsCreature(*itr))
                         (*itr)->ToCreature()->SetRegeneratingHealth(e.action.setHealthRegen.regenHealth);
 
@@ -2658,7 +2658,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                     if (IsCreature(*itr))
                         (*itr)->ToCreature()->SetControlled(e.action.setRoot.root, UNIT_STATE_ROOT);
 
@@ -2671,7 +2671,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                     if (IsGameObject(*itr))
                         (*itr)->ToGameObject()->SetUInt32Value(GAMEOBJECT_FLAGS, e.action.goFlag.flag);
 
@@ -2684,7 +2684,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                     if (IsGameObject(*itr))
                         (*itr)->ToGameObject()->SetFlag(GAMEOBJECT_FLAGS, e.action.goFlag.flag);
 
@@ -2697,7 +2697,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                     if (IsGameObject(*itr))
                         (*itr)->ToGameObject()->RemoveFlag(GAMEOBJECT_FLAGS, e.action.goFlag.flag);
 
@@ -2724,7 +2724,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 ObjectList* targets = GetTargets(e, unit);
 
                 if (targets)
-                    for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                    for (const auto& itr : targets)
                         if (IsUnit(*itr))
                             (*itr)->ToUnit()->SetPower(Powers(e.action.power.powerType), e.action.power.newPower);
 
@@ -2736,7 +2736,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 ObjectList* targets = GetTargets(e, unit);
 
                 if (targets)
-                    for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                    for (const auto& itr : targets)
                         if (IsUnit(*itr))
                             (*itr)->ToUnit()->SetPower(Powers(e.action.power.powerType), (*itr)->ToUnit()->GetPower(Powers(e.action.power.powerType)) + e.action.power.newPower);
 
@@ -2748,7 +2748,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 ObjectList* targets = GetTargets(e, unit);
 
                 if (targets)
-                    for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                    for (const auto& itr : targets)
                         if (IsUnit(*itr))
                             (*itr)->ToUnit()->SetPower(Powers(e.action.power.powerType), (*itr)->ToUnit()->GetPower(Powers(e.action.power.powerType)) - e.action.power.newPower);
 
@@ -2841,7 +2841,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                     if (IsGameObject(*itr))
                         (*itr)->ToGameObject()->SetGoState((GOState)e.action.goState.state);
 
@@ -2854,7 +2854,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                     if (IsUnit(*itr))
                         (*itr)->ToUnit()->ExitVehicle();
 
@@ -2867,7 +2867,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                     if (IsUnit(*itr))
                     {
                         (*itr)->ToUnit()->SetUnitMovementFlags(e.action.movementFlag.flag);
@@ -2883,7 +2883,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                     if (IsCreature(*itr))
                         (*itr)->ToCreature()->m_CombatDistance = e.action.combatDistance.dist;
 
@@ -2907,7 +2907,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                     if (IsCreature(*itr))
                         (*itr)->ToCreature()->m_SightDistance = e.action.sightDistance.dist;
 
@@ -2920,7 +2920,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                     if (IsCreature(*itr))
                         (*itr)->ToCreature()->GetMotionMaster()->MoveFleeing(me, e.action.flee.withEmote);
 
@@ -2929,11 +2929,14 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
             }
         case SMART_ACTION_ADD_THREAT:
             {
+                if (!me->CanHaveThreatList())
+                    break;
+        
                 ObjectList* targets = GetTargets(e, unit);
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                     if (IsUnit(*itr))
                         me->AddThreat((*itr)->ToUnit(), (float)e.action.threatPCT.threatINC - (float)e.action.threatPCT.threatDEC);
 
@@ -2946,7 +2949,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                     if (IsCreature(*itr))
                         (*itr)->ToCreature()->LoadEquipment(e.action.loadEquipment.id, e.action.loadEquipment.force);
 
@@ -2965,7 +2968,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                     if (IsUnit(*itr))
                         (*itr)->ToUnit()->SetHover(e.action.setHover.state);
 
@@ -2978,7 +2981,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                     if (IsUnit(*itr))
                         (*itr)->ToUnit()->ApplySpellImmune(e.action.immunity.id, e.action.immunity.type, e.action.immunity.value, true);
 
@@ -2991,7 +2994,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                     if (IsUnit(*itr))
                         (*itr)->ToUnit()->ApplySpellImmune(e.action.immunity.id, e.action.immunity.type, e.action.immunity.value, false);
 
@@ -3004,7 +3007,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                     if (IsUnit(*itr))
                         (*itr)->ToUnit()->GetMotionMaster()->MoveFall();
 
@@ -3022,7 +3025,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                     if (IsUnit(*itr))
                         (*itr)->ToUnit()->RemoveAllGameObjects();
 
@@ -3035,7 +3038,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                     if (IsUnit(*itr))
                     {
                         if (e.action.stopMotion.stopMovement)
@@ -3053,7 +3056,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                     if (IsUnit(*itr))
                         (*itr)->ToUnit()->AddUnitState(UNIT_STATE_NO_ENVIRONMENT_UPD);
 
@@ -3066,7 +3069,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                     if (IsUnit(*itr))
                         if (Player* player = (*itr)->ToUnit()->GetCharmerOrOwnerPlayerOrPlayerItself())
                         {
@@ -3089,7 +3092,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 char const* text = sGameLocale->GetAcoreString(e.action.playerTalk.textId, DEFAULT_LOCALE);
 
                 if (targets)
-                    for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                    for (const auto& itr : targets)
                         if (IsPlayer(*itr))
                             !e.action.playerTalk.flag ? (*itr)->ToPlayer()->Say(text, LANG_UNIVERSAL) : (*itr)->ToPlayer()->Yell(text, LANG_UNIVERSAL);
 
@@ -3105,7 +3108,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                 {
                     if (IsUnit(*itr))
                     {
@@ -3171,7 +3174,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 // r(0) = a * e ^ (k * 0) = a * e ^ 0 = a * 1 = a
                 float summonRadius = a;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                 {
                     // Offset by orientation, should not count into radius calculation,
                     // but is needed for vortex direction (polar coordinates)
@@ -3240,7 +3243,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!targets)
                     break;
 
-                for (ObjectList::const_iterator itr = targets->begin(); itr != targets->end(); ++itr)
+                for (const auto& itr : targets)
                 {
                     if (Player* playerTarget = (*itr)->ToPlayer())
                     {
