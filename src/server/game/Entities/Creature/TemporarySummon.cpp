@@ -32,7 +32,7 @@ TempSummon::TempSummon(SummonPropertiesEntry const* properties, uint64 owner, bo
     m_unitTypeMask |= UNIT_MASK_SUMMON;
 }
 
-Unit* TempSummon::GetSummoner() const
+WorldObject* TempSummon::GetSummoner() const
 {
     return m_summonerGUID ? ObjectAccessor::GetWorldObject(*this, m_summonerGUID) : nullptr;
 }
@@ -178,7 +178,7 @@ void TempSummon::InitStats(uint32 duration)
 {
     ASSERT(!IsPet());
 
-    Unit* owner = GetSummoner();
+    Unit* owner = GetSummonerUnit();
     if (owner)
         if (Player* player = owner->ToPlayer())
             sScriptMgr->OnBeforeTempSummonInitStats(player, this, duration);
@@ -228,7 +228,7 @@ void TempSummon::InitStats(uint32 duration)
 
 void TempSummon::InitSummon()
 {
-    Unit* owner = GetSummoner();
+    Unit* owner = GetSummonerUnit();
     if (owner)
     {
         if (owner->GetTypeId() == TYPEID_UNIT && owner->ToCreature()->IsAIEnabled)
@@ -268,7 +268,7 @@ void TempSummon::UnSummon(uint32 msTime)
         return;
     }
 
-    Unit* owner = GetSummoner();
+    Unit* owner = GetSummonerUnit();
     if (owner && owner->GetTypeId() == TYPEID_UNIT && owner->ToCreature()->IsAIEnabled)
         owner->ToCreature()->AI()->SummonedCreatureDespawn(this);
 
@@ -288,7 +288,7 @@ void TempSummon::RemoveFromWorld()
 
     if (m_Properties)
         if (uint32 slot = m_Properties->Slot)
-            if (Unit* owner = GetSummoner())
+            if (Unit* owner = GetSummonerUnit())
                 if (owner->m_SummonSlot[slot] == GetGUID())
                     owner->m_SummonSlot[slot] = 0;
 

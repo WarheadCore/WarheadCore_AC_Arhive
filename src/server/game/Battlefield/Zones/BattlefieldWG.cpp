@@ -623,7 +623,7 @@ void BattlefieldWG::OnCreatureCreate(Creature* creature)
                     if (!creature->IsSummon() || !creature->ToTempSummon()->GetSummonerGUID())
                         return;
 
-                    if (Unit* owner = creature->ToTempSummon()->GetSummoner())
+                    if (Unit* owner = creature->ToTempSummon()->GetSummonerUnit())
                         creature->setFaction(owner->getFaction());
                     break;
                 }

@@ -309,7 +309,7 @@ public:
                 case SPELL_VISUAL_THROW_CRANBERRY:
                 case SPELL_VISUAL_THROW_SWEET_POTATO:
                     if (TempSummon* ts = me->ToTempSummon())
-                        if (Unit* owner = ts->GetSummoner())
+                        if (Unit* owner = ts->GetSummonerUnit())
                             owner->ToCreature()->AI()->DoAction(spellInfo->Id);
                     break;
             }
@@ -391,7 +391,7 @@ public:
                 else
                 {
                     if (TempSummon* ts = target->ToTempSummon())
-                        if (Unit* owner = ts->GetSummoner())
+                        if (Unit* owner = ts->GetSummonerUnit())
                             if (owner->GetEntry() == GetCaster()->GetEntry())
                                 return;
 

@@ -63,7 +63,7 @@ void CreatureAI::DoZoneInCombat(Creature* creature /*= NULL*/, float maxRangeToN
             creature->AI()->AttackStart(nearTarget);
         else if (creature->IsSummon())
         {
-            if (Unit* summoner = creature->ToTempSummon()->GetSummoner())
+            if (Unit* summoner = creature->ToTempSummon()->GetSummonerUnit())
             {
                 Unit* target = summoner->getAttackerForHelper();
                 if (!target && summoner->CanHaveThreatList() && !summoner->getThreatManager().isThreatListEmpty())
