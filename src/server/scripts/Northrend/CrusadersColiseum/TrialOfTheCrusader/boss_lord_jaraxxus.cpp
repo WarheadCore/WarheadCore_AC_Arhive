@@ -116,13 +116,13 @@ public:
         void Reset()
         {
             events.Reset();
-            if( pInstance )
+            if ( pInstance )
                 pInstance->SetData(TYPE_JARAXXUS, NOT_STARTED);
 
             // checked for safety
-            while( Creature* c = me->FindNearestCreature(NPC_INFERNAL_VOLCANO, 500.0f, true) )
+            while ( Creature* c = me->FindNearestCreature(NPC_INFERNAL_VOLCANO, 500.0f, true) )
                 c->DespawnOrUnsummon();
-            while( Creature* c = me->FindNearestCreature(NPC_NETHER_PORTAL, 500.0f, true) )
+            while ( Creature* c = me->FindNearestCreature(NPC_NETHER_PORTAL, 500.0f, true) )
                 c->DespawnOrUnsummon();
         }
 
@@ -142,51 +142,51 @@ public:
             me->RemoveAura(SPELL_CHAINS);
             Talk(SAY_AGGRO);
             DoZoneInCombat();
-            if( pInstance )
+            if ( pInstance )
                 pInstance->SetData(TYPE_JARAXXUS, IN_PROGRESS);
         }
 
         void SpellHit(Unit* caster, const SpellInfo* spell)
         {
-            switch( spell->Id )
+            switch ( spell->Id )
             {
                 case 66228:
                 case 67106:
                 case 67107:
                 case 67108:
-                    if( Aura* a = me->GetAura(spell->Id) )
+                    if ( Aura* a = me->GetAura(spell->Id) )
                         a->SetStackAmount(spell->StackAmount);
                     break;
                 case 30449:
+                {
+                    if ( !caster )
+                        return;
+                    uint32 id = 0;
+                    switch ( me->GetMap()->GetDifficulty() )
                     {
-                        if( !caster )
-                            return;
-                        uint32 id = 0;
-                        switch( me->GetMap()->GetDifficulty() )
-                        {
-                            case 0:
-                                id = 66228;
-                                break;
-                            case 1:
-                                id = 67106;
-                                break;
-                            case 2:
-                                id = 67107;
-                                break;
-                            case 3:
-                                id = 67108;
-                                break;
-                        }
-                        if( Aura* a = me->GetAura(id) )
-                        {
-                            if( a->GetStackAmount() > 1 )
-                                a->ModStackAmount(-1);
-                            else
-                                a->Remove();
-                            caster->CastSpell(caster, SPELL_NETHER_POWER, true);
-                        }
+                        case 0:
+                            id = 66228;
+                            break;
+                        case 1:
+                            id = 67106;
+                            break;
+                        case 2:
+                            id = 67107;
+                            break;
+                        case 3:
+                            id = 67108;
+                            break;
                     }
-                    break;
+                    if ( Aura* a = me->GetAura(id) )
+                    {
+                        if ( a->GetStackAmount() > 1 )
+                            a->ModStackAmount(-1);
+                        else
+                            a->Remove();
+                        caster->CastSpell(caster, SPELL_NETHER_POWER, true);
+                    }
+                }
+                break;
                 default:
                     break;
             }
@@ -194,30 +194,30 @@ public:
 
         void UpdateAI(uint32 diff)
         {
-            if( !UpdateVictim() )
+            if ( !UpdateVictim() )
                 return;
 
             events.Update(diff);
 
-            if( me->HasUnitState(UNIT_STATE_CASTING) )
+            if ( me->HasUnitState(UNIT_STATE_CASTING) )
                 return;
 
-            switch( events.ExecuteEvent() )
+            switch ( events.ExecuteEvent() )
             {
                 case 0:
                     break;
                 case EVENT_SPELL_FEL_FIREBALL:
-                    if( me->GetVictim() )
+                    if ( me->GetVictim() )
                         me->CastSpell(me->GetVictim(), SPELL_FEL_FIREBALL, false);
                     events.RepeatEvent(10s, 15s);
                     break;
                 case EVENT_SPELL_FEL_LIGHTNING:
-                    if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true) )
+                    if ( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true) )
                         me->CastSpell(target, SPELL_FEL_LIGHTNING, false);
                     events.RepeatEvent(10s, 15s);
                     break;
                 case EVENT_SPELL_INCINERATE_FLESH:
-                    if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true) )
+                    if ( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true) )
                     {
                         Talk(EMOTE_INCINERATE, target);
                         Talk(SAY_INCINERATE);
@@ -231,7 +231,7 @@ public:
                     events.RepeatEvent(25s, 45s);
                     break;
                 case EVENT_SPELL_LEGION_FLAME:
-                    if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true) )
+                    if ( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true) )
                     {
                         Talk(EMOTE_LEGION_FLAME, target);
                         me->CastSpell(target, SPELL_LEGION_FLAME, false);
@@ -239,7 +239,7 @@ public:
                     events.RepeatEvent(30s);
                     break;
                 case EVENT_SPELL_TOUCH_OF_JARAXXUS:
-                    if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true) )
+                    if ( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true) )
                         me->CastSpell(target, SPELL_TOUCH_OF_JARAXXUS, false);
                     events.RepeatEvent(10s, 15s);
                     break;
@@ -264,7 +264,7 @@ public:
         {
             summons.DespawnAll();
             Talk(SAY_DEATH);
-            if( pInstance )
+            if ( pInstance )
                 pInstance->SetData(TYPE_JARAXXUS, DONE);
         }
 
@@ -283,7 +283,7 @@ public:
             events.Reset();
             summons.DespawnAll();
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-            if( pInstance )
+            if ( pInstance )
                 pInstance->SetData(TYPE_FAILED, 1);
         }
 
@@ -309,7 +309,7 @@ public:
 
         void Reset()
         {
-            if( Unit* target = me->SelectNearestTarget(200.0f) )
+            if ( Unit* target = me->SelectNearestTarget(200.0f) )
             {
                 AttackStart(target);
                 DoZoneInCombat();
@@ -320,20 +320,20 @@ public:
 
         void UpdateAI(uint32 diff)
         {
-            if( !UpdateVictim() )
+            if ( !UpdateVictim() )
                 return;
 
             events.Update(diff);
 
-            if( me->HasUnitState(UNIT_STATE_CASTING) )
+            if ( me->HasUnitState(UNIT_STATE_CASTING) )
                 return;
 
-            switch( events.ExecuteEvent() )
+            switch ( events.ExecuteEvent() )
             {
                 case 0:
                     break;
                 case EVENT_SPELL_FEL_STEAK:
-                    if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 44.0f, true) )
+                    if ( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 44.0f, true) )
                     {
                         DoResetThreat();
                         me->AddThreat(target, 50000.0f);
@@ -380,7 +380,7 @@ public:
 
         void Reset()
         {
-            if( Unit* target = me->SelectNearestTarget(200.0f) )
+            if ( Unit* target = me->SelectNearestTarget(200.0f) )
             {
                 AttackStart(target);
                 DoZoneInCombat();
@@ -390,7 +390,7 @@ public:
             events.RescheduleEvent(EVENT_SPELL_SHIVAN_SLASH, 10s, 20s);
             events.RescheduleEvent(EVENT_SPELL_SPINNING_PAIN_SPIKE, 22s, 30s);
 
-            if(IsHeroic())
+            if (IsHeroic())
                 events.RescheduleEvent(EVENT_SPELL_MISTRESS_KISS, 10s, 15s);
         }
 
@@ -402,25 +402,25 @@ public:
 
         void UpdateAI(uint32 diff)
         {
-            if( !UpdateVictim() )
+            if ( !UpdateVictim() )
                 return;
 
             events.Update(diff);
 
-            if( me->HasUnitState(UNIT_STATE_CASTING) )
+            if ( me->HasUnitState(UNIT_STATE_CASTING) )
                 return;
 
-            switch( events.ExecuteEvent() )
+            switch ( events.ExecuteEvent() )
             {
                 case 0:
                     break;
                 case EVENT_SPELL_SHIVAN_SLASH:
-                    if( me->GetVictim() )
+                    if ( me->GetVictim() )
                         me->CastSpell(me->GetVictim(), SPELL_SHIVAN_SLASH, false);
                     events.RepeatEvent(15s, 25s);
                     break;
                 case EVENT_SPELL_SPINNING_PAIN_SPIKE:
-                    if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 140.0f, true) )
+                    if ( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 140.0f, true) )
                         me->CastSpell(target, SPELL_SPINNING_PAIN_SPIKE, false);
                     events.RepeatEvent(25s, 30s);
                     break;
@@ -459,7 +459,7 @@ public:
         {
             if (Unit* caster = GetCaster())
                 if (Unit* target = GetTarget())
-                    if( target->HasUnitState(UNIT_STATE_CASTING) )
+                    if ( target->HasUnitState(UNIT_STATE_CASTING) )
                     {
                         caster->CastSpell(target, 66359, true);
                         SetDuration(0);

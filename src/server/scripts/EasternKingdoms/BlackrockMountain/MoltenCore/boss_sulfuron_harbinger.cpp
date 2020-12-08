@@ -99,15 +99,15 @@ public:
                         events.ScheduleEvent(EVENT_DEMORALIZING_SHOUT, 15s, 20s);
                         break;
                     case EVENT_INSPIRE:
-                        {
-                            std::list<Creature*> healers = DoFindFriendlyMissingBuff(45.0f, SPELL_INSPIRE);
-                            if (!healers.empty())
-                                DoCast(Warhead::Containers::SelectRandomContainerElement(healers), SPELL_INSPIRE);
+                    {
+                        std::list<Creature*> healers = DoFindFriendlyMissingBuff(45.0f, SPELL_INSPIRE);
+                        if (!healers.empty())
+                            DoCast(Warhead::Containers::SelectRandomContainerElement(healers), SPELL_INSPIRE);
 
-                            DoCast(me, SPELL_INSPIRE);
-                            events.ScheduleEvent(EVENT_INSPIRE, 20s, 26s);
-                            break;
-                        }
+                        DoCast(me, SPELL_INSPIRE);
+                        events.ScheduleEvent(EVENT_INSPIRE, 20s, 26s);
+                        break;
+                    }
                     case EVENT_KNOCKDOWN:
                         DoCastVictim(SPELL_KNOCKDOWN);
                         events.ScheduleEvent(EVENT_KNOCKDOWN, 12s, 15s);

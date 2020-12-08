@@ -185,22 +185,22 @@ public:
                     events.RepeatEvent(HealthBelowPct(20) ? 5s : 10s);
                     break;
                 case EVENT_SPELL_DRAWSHADOWS:
-                    {
-                        Map* map = me->GetMap();
-                        Map::PlayerList const& PlayerList = map->GetPlayers();
-                        for (Map::PlayerList::const_iterator i = PlayerList.begin(); i != PlayerList.end(); ++i)
-                            if (Player* player = i->GetSource())
-                                if (player->IsAlive() && !player->HasAura(SPELL_BANISH))
-                                    player->TeleportTo(me->GetMapId(), VorpilPosition[0], VorpilPosition[1], VorpilPosition[2], 0, TELE_TO_NOT_LEAVE_COMBAT);
+                {
+                    Map* map = me->GetMap();
+                    Map::PlayerList const& PlayerList = map->GetPlayers();
+                    for (Map::PlayerList::const_iterator i = PlayerList.begin(); i != PlayerList.end(); ++i)
+                        if (Player* player = i->GetSource())
+                            if (player->IsAlive() && !player->HasAura(SPELL_BANISH))
+                                player->TeleportTo(me->GetMapId(), VorpilPosition[0], VorpilPosition[1], VorpilPosition[2], 0, TELE_TO_NOT_LEAVE_COMBAT);
 
-                        me->NearTeleportTo(VorpilPosition[0], VorpilPosition[1], VorpilPosition[2], 0.0f);
-                        me->CastSpell(me, SPELL_DRAW_SHADOWS, true);
-                        me->CastSpell(me, SPELL_RAIN_OF_FIRE_N);
+                    me->NearTeleportTo(VorpilPosition[0], VorpilPosition[1], VorpilPosition[2], 0.0f);
+                    me->CastSpell(me, SPELL_DRAW_SHADOWS, true);
+                    me->CastSpell(me, SPELL_RAIN_OF_FIRE_N);
 
-                        events.RepeatEvent(24s);
-                        events.DelayEvents(6s);
-                        break;
-                    }
+                    events.RepeatEvent(24s);
+                    events.DelayEvents(6s);
+                    break;
+                }
             }
 
             DoMeleeAttackIfReady();

@@ -45,12 +45,14 @@
     if (a->HasUnitState(UNIT_STATE_IN_FLIGHT) || b->HasUnitState(UNIT_STATE_IN_FLIGHT))
         return false;
     if (a->IsControlledByPlayer() || b->IsControlledByPlayer())
-    { // PvSomething, only block friendly fire
+    {
+        // PvSomething, only block friendly fire
         if (a->IsFriendlyTo(b) || b->IsFriendlyTo(a))
             return false;
     }
     else
-    { // CvC, need hostile reaction to start a fight
+    {
+        // CvC, need hostile reaction to start a fight
         if (!a->IsHostileTo(b) && !b->IsHostileTo(a))
             return false;
     }
@@ -218,7 +220,7 @@ void CombatManager::InheritCombatStatesFrom(Unit const* who)
         {
             Unit* target = ref.second->GetOther(who);
             if ((_owner->IsImmuneToPC() && target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE)) ||
-                (_owner->IsImmuneToNPC() && !target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE)))
+                    (_owner->IsImmuneToNPC() && !target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE)))
                 continue;
             SetInCombatWith(target);
         }
@@ -229,7 +231,7 @@ void CombatManager::InheritCombatStatesFrom(Unit const* who)
         {
             Unit* target = ref.second->GetOther(who);
             if ((_owner->IsImmuneToPC() && target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE)) ||
-                (_owner->IsImmuneToNPC() && !target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE)))
+                    (_owner->IsImmuneToNPC() && !target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE)))
                 continue;
             SetInCombatWith(target);
         }

@@ -80,7 +80,7 @@ public:
         if (sender != GOSSIP_SENDER_MAIN || !player->getAttackers().empty())
             return true;
 
-        switch(action)
+        switch (action)
         {
             case BASE_CAMP:
                 player->TeleportTo(603, -706.122f, -92.6024f, 429.876f, 0);
@@ -433,17 +433,17 @@ public:
                         events.RepeatEvent(10s, 15s);
                         break;
                     case 3:
+                    {
+                        float dist = me->GetDistance(me->GetVictim());
+                        if (dist > 10.0f && dist < 40.0f)
                         {
-                            float dist = me->GetDistance(me->GetVictim());
-                            if (dist > 10.0f && dist < 40.0f)
-                            {
-                                me->CastSpell(me->GetVictim(), 64779, false);
-                                events.RepeatEvent(25s);
-                            }
-                            else
-                                events.RepeatEvent(3s);
+                            me->CastSpell(me->GetVictim(), 64779, false);
+                            events.RepeatEvent(25s);
                         }
-                        break;
+                        else
+                            events.RepeatEvent(3s);
+                    }
+                    break;
                 }
 
                 DoMeleeAttackIfReady();
@@ -510,7 +510,7 @@ public:
         if (!pInstance)
             return false;
 
-        switch(go->GetEntry())
+        switch (go->GetEntry())
         {
             case 194914:
             case 194438:

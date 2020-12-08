@@ -161,58 +161,58 @@ public:
                             events.ScheduleEvent(EVENT_IDOL_ROOM_SPAWNER, 35s);
                         break;
                     case EVENT_PROGRESS:
+                    {
+                        switch (eventProgress)
                         {
-                            switch (eventProgress)
-                            {
-                                case 0:
-                                    Talk(SAY_EVENT_THREE_MIN_LEFT);
-                                    ++eventProgress;
-                                    events.ScheduleEvent(EVENT_PROGRESS, 1min);
-                                    break;
-                                case 1:
-                                    Talk(SAY_EVENT_TWO_MIN_LEFT);
-                                    ++eventProgress;
-                                    events.ScheduleEvent(EVENT_PROGRESS, 1min);
-                                    break;
-                                case 2:
-                                    Talk(SAY_EVENT_ONE_MIN_LEFT);
-                                    ++eventProgress;
-                                    events.ScheduleEvent(EVENT_PROGRESS, 1min);
-                                    break;
-                                case 3:
-                                    events.CancelEvent(EVENT_IDOL_ROOM_SPAWNER);
-                                    me->InterruptSpell(CURRENT_CHANNELED_SPELL);
-                                    Talk(SAY_EVENT_END);
-                                    events.ScheduleEvent(EVENT_COMPLETE, 3s);
-                                    break;
-                            }
-                            break;
+                            case 0:
+                                Talk(SAY_EVENT_THREE_MIN_LEFT);
+                                ++eventProgress;
+                                events.ScheduleEvent(EVENT_PROGRESS, 1min);
+                                break;
+                            case 1:
+                                Talk(SAY_EVENT_TWO_MIN_LEFT);
+                                ++eventProgress;
+                                events.ScheduleEvent(EVENT_PROGRESS, 1min);
+                                break;
+                            case 2:
+                                Talk(SAY_EVENT_ONE_MIN_LEFT);
+                                ++eventProgress;
+                                events.ScheduleEvent(EVENT_PROGRESS, 1min);
+                                break;
+                            case 3:
+                                events.CancelEvent(EVENT_IDOL_ROOM_SPAWNER);
+                                me->InterruptSpell(CURRENT_CHANNELED_SPELL);
+                                Talk(SAY_EVENT_END);
+                                events.ScheduleEvent(EVENT_COMPLETE, 3s);
+                                break;
                         }
+                        break;
+                    }
                     case EVENT_COMPLETE:
+                    {
+                        DoCast(me, SPELL_IDOM_ROOM_CAMERA_SHAKE);
+                        me->SummonGameObject(GO_BELNISTRASZS_BRAZIER, 2577.196f, 947.0781f, 53.16757f, 2.356195f, 0, 0, 0.9238796f, 0.3826832f, 3600);
+                        std::list<WorldObject*> ClusterList;
+                        Warhead::AllWorldObjectsInRange objects(me, 50.0f);
+                        Warhead::WorldObjectListSearcher<Warhead::AllWorldObjectsInRange> searcher(me, ClusterList, objects);
+                        me->VisitNearbyObject(50.0f, searcher);
+                        for (std::list<WorldObject*>::const_iterator itr = ClusterList.begin(); itr != ClusterList.end(); ++itr)
                         {
-                            DoCast(me, SPELL_IDOM_ROOM_CAMERA_SHAKE);
-                            me->SummonGameObject(GO_BELNISTRASZS_BRAZIER, 2577.196f, 947.0781f, 53.16757f, 2.356195f, 0, 0, 0.9238796f, 0.3826832f, 3600);
-                            std::list<WorldObject*> ClusterList;
-                            Warhead::AllWorldObjectsInRange objects(me, 50.0f);
-                            Warhead::WorldObjectListSearcher<Warhead::AllWorldObjectsInRange> searcher(me, ClusterList, objects);
-                            me->VisitNearbyObject(50.0f, searcher);
-                            for (std::list<WorldObject*>::const_iterator itr = ClusterList.begin(); itr != ClusterList.end(); ++itr)
+                            if (Player* player = (*itr)->ToPlayer())
                             {
-                                if (Player* player = (*itr)->ToPlayer())
-                                {
-                                    if (player->GetQuestStatus(QUEST_EXTINGUISHING_THE_IDOL) == QUEST_STATUS_INCOMPLETE)
-                                        player->CompleteQuest(QUEST_EXTINGUISHING_THE_IDOL);
-                                }
-                                else if (GameObject* go = (*itr)->ToGameObject())
-                                {
-                                    if (go->GetEntry() == GO_IDOL_OVEN_FIRE || go->GetEntry() == GO_IDOL_CUP_FIRE || go->GetEntry() == GO_IDOL_MOUTH_FIRE)
-                                        go->Delete();
-                                }
+                                if (player->GetQuestStatus(QUEST_EXTINGUISHING_THE_IDOL) == QUEST_STATUS_INCOMPLETE)
+                                    player->CompleteQuest(QUEST_EXTINGUISHING_THE_IDOL);
                             }
-                            instance->SetData(GO_BELNISTRASZS_BRAZIER, DONE);
-                            me->DespawnOrUnsummon();
-                            break;
+                            else if (GameObject* go = (*itr)->ToGameObject())
+                            {
+                                if (go->GetEntry() == GO_IDOL_OVEN_FIRE || go->GetEntry() == GO_IDOL_CUP_FIRE || go->GetEntry() == GO_IDOL_MOUTH_FIRE)
+                                    go->Delete();
+                            }
                         }
+                        instance->SetData(GO_BELNISTRASZS_BRAZIER, DONE);
+                        me->DespawnOrUnsummon();
+                        break;
+                    }
                     case EVENT_FIREBALL:
                         if (me->HasUnitState(UNIT_STATE_CASTING) || !UpdateVictim())
                             return;

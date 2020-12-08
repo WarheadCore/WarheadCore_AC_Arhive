@@ -171,13 +171,13 @@ public:
                 }
 
                 // Reset mini bosses
-                for(uint8 i = 0; i < 4; ++i)
+                for (uint8 i = 0; i < 4; ++i)
                 {
-                    if(Creature* Animal = ObjectAccessor::GetCreature(*me, m_pInstance->GetData64(DATA_NPC_FRENZIED_WORGEN + i)))
+                    if (Creature* Animal = ObjectAccessor::GetCreature(*me, m_pInstance->GetData64(DATA_NPC_FRENZIED_WORGEN + i)))
                     {
                         Animal->SetPosition(Animal->GetHomePosition());
                         Animal->StopMovingOnCurrentPos();
-                        if(Animal->isDead())
+                        if (Animal->isDead())
                             Animal->Respawn(true);
 
                         Animal->CastSpell(Animal, SPELL_FREEZE, true);
@@ -238,81 +238,81 @@ public:
             switch (events.ExecuteEvent())
             {
                 case EVENT_UNFREEZE_MONSTER:
+                {
+                    if (Creature* orb = ObjectAccessor::GetCreature(*me, OrbGUID))
                     {
-                        if (Creature* orb = ObjectAccessor::GetCreature(*me, OrbGUID))
+                        if (Creature* miniBoss = ObjectAccessor::GetCreature(*me, m_pInstance->GetData64(DATA_NPC_FRENZIED_WORGEN + RandomUnfreeze[Counter])))
                         {
-                            if (Creature* miniBoss = ObjectAccessor::GetCreature(*me, m_pInstance->GetData64(DATA_NPC_FRENZIED_WORGEN + RandomUnfreeze[Counter])))
-                            {
-                                Counter++;
-                                miniBoss->AI()->DoAction(ACTION_UNFREEZE);
-                                orb->CastSpell(miniBoss, SPELL_AWAKEN_SUBBOSS, true);
-                                events.ScheduleEvent(EVENT_UNFREEZE_MONSTER2, 6s);
-                            }
-                            else
-                                EnterEvadeMode();
+                            Counter++;
+                            miniBoss->AI()->DoAction(ACTION_UNFREEZE);
+                            orb->CastSpell(miniBoss, SPELL_AWAKEN_SUBBOSS, true);
+                            events.ScheduleEvent(EVENT_UNFREEZE_MONSTER2, 6s);
                         }
-                        break;
+                        else
+                            EnterEvadeMode();
                     }
+                    break;
+                }
                 case EVENT_UNFREEZE_MONSTER2:
+                {
+                    if (Creature* orb = ObjectAccessor::GetCreature(*me, OrbGUID))
                     {
-                        if (Creature* orb = ObjectAccessor::GetCreature(*me, OrbGUID))
+                        if (Creature* miniBoss = ObjectAccessor::GetCreature(*me, m_pInstance->GetData64(DATA_NPC_FRENZIED_WORGEN + RandomUnfreeze[Counter - 1])))
                         {
-                            if (Creature* miniBoss = ObjectAccessor::GetCreature(*me, m_pInstance->GetData64(DATA_NPC_FRENZIED_WORGEN + RandomUnfreeze[Counter - 1])))
-                            {
-                                miniBoss->AI()->DoAction(ACTION_UNFREEZE2);
-                                orb->RemoveAurasDueToSpell(SPELL_AWAKEN_SUBBOSS);
-                            }
-                            else
-                                EnterEvadeMode();
-                        }
-                        break;
-                    }
-                case EVENT_PALEHOOF_START:
-                    {
-                        if (Creature* orb = ObjectAccessor::GetCreature(*me, OrbGUID))
-                        {
-                            orb->CastSpell(me, SPELL_AWAKEN_SUBBOSS, true);
-                            events.ScheduleEvent(EVENT_PALEHOOF_START2, 6s);
-                        }
-                        break;
-                    }
-                case EVENT_PALEHOOF_START2:
-                    {
-                        Talk(SAY_AGGRO);
-                        if (Creature* orb = ObjectAccessor::GetCreature(*me, OrbGUID))
+                            miniBoss->AI()->DoAction(ACTION_UNFREEZE2);
                             orb->RemoveAurasDueToSpell(SPELL_AWAKEN_SUBBOSS);
-
-                        me->RemoveAurasDueToSpell(SPELL_FREEZE);
-                        me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
-                        me->SetControlled(false, UNIT_STATE_STUNNED);
-                        // SETINCOMBATWITHZONE
-
-                        // schedule combat events
-                        events.ScheduleEvent(EVENT_PALEHOOF_WITHERING_ROAR, 10s);
-                        events.ScheduleEvent(EVENT_PALEHOOF_IMPALE, 12s);
-                        events.ScheduleEvent(EVENT_PALEHOOF_ARCING_SMASH, 15s);
-                        break;
+                        }
+                        else
+                            EnterEvadeMode();
                     }
+                    break;
+                }
+                case EVENT_PALEHOOF_START:
+                {
+                    if (Creature* orb = ObjectAccessor::GetCreature(*me, OrbGUID))
+                    {
+                        orb->CastSpell(me, SPELL_AWAKEN_SUBBOSS, true);
+                        events.ScheduleEvent(EVENT_PALEHOOF_START2, 6s);
+                    }
+                    break;
+                }
+                case EVENT_PALEHOOF_START2:
+                {
+                    Talk(SAY_AGGRO);
+                    if (Creature* orb = ObjectAccessor::GetCreature(*me, OrbGUID))
+                        orb->RemoveAurasDueToSpell(SPELL_AWAKEN_SUBBOSS);
+
+                    me->RemoveAurasDueToSpell(SPELL_FREEZE);
+                    me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
+                    me->SetControlled(false, UNIT_STATE_STUNNED);
+                    // SETINCOMBATWITHZONE
+
+                    // schedule combat events
+                    events.ScheduleEvent(EVENT_PALEHOOF_WITHERING_ROAR, 10s);
+                    events.ScheduleEvent(EVENT_PALEHOOF_IMPALE, 12s);
+                    events.ScheduleEvent(EVENT_PALEHOOF_ARCING_SMASH, 15s);
+                    break;
+                }
                 case EVENT_PALEHOOF_WITHERING_ROAR:
-                    {
-                        me->CastSpell(me, IsHeroic() ? SPELL_WITHERING_ROAR_H : SPELL_WITHERING_ROAR_N, false);
-                        events.RepeatEvent(8s, 12s);
-                        break;
-                    }
+                {
+                    me->CastSpell(me, IsHeroic() ? SPELL_WITHERING_ROAR_H : SPELL_WITHERING_ROAR_N, false);
+                    events.RepeatEvent(8s, 12s);
+                    break;
+                }
                 case EVENT_PALEHOOF_IMPALE:
-                    {
-                        if (Unit* tgt = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                            me->CastSpell(tgt, IsHeroic() ? SPELL_IMPALE_H : SPELL_IMPALE_N, false);
+                {
+                    if (Unit* tgt = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                        me->CastSpell(tgt, IsHeroic() ? SPELL_IMPALE_H : SPELL_IMPALE_N, false);
 
-                        events.RepeatEvent(8s, 12s);
-                        break;
-                    }
+                    events.RepeatEvent(8s, 12s);
+                    break;
+                }
                 case EVENT_PALEHOOF_ARCING_SMASH:
-                    {
-                        me->CastSpell(me->GetVictim(), SPELL_ARCING_SMASH, false);
-                        events.RepeatEvent(13s, 17s);
-                        break;
-                    }
+                {
+                    me->CastSpell(me->GetVictim(), SPELL_ARCING_SMASH, false);
+                    events.RepeatEvent(13s, 17s);
+                    break;
+                }
             }
 
             DoMeleeAttackIfReady();
@@ -413,39 +413,39 @@ public:
             switch (events.ExecuteEvent())
             {
                 case EVENT_JORMUNGAR_ACID_SPIT:
-                    {
-                        if (Unit* tgt = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                            me->CastSpell(tgt, SPELL_ACID_SPIT, false);
+                {
+                    if (Unit* tgt = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                        me->CastSpell(tgt, SPELL_ACID_SPIT, false);
 
-                        events.RepeatEvent(2s, 4s);
-                        break;
-                    }
+                    events.RepeatEvent(2s, 4s);
+                    break;
+                }
                 case EVENT_JORMUNGAR_ACID_SPLATTER:
-                    {
-                        me->CastSpell(me, IsHeroic() ? SPELL_ACID_SPLATTER_H : SPELL_ACID_SPLATTER_N, false);
+                {
+                    me->CastSpell(me, IsHeroic() ? SPELL_ACID_SPLATTER_H : SPELL_ACID_SPLATTER_N, false);
 
-                        // Aura summon wont work because of duration
-                        float x, y, z;
-                        me->GetPosition(x, y, z);
-                        for (uint8 i = 0; i < 6; ++i)
+                    // Aura summon wont work because of duration
+                    float x, y, z;
+                    me->GetPosition(x, y, z);
+                    for (uint8 i = 0; i < 6; ++i)
+                    {
+                        if (Creature* pJormungarWorm = me->SummonCreature(NPC_JORMUNGAR_WORM, x + rand() % 10, y + rand() % 10, z, 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 360000))
                         {
-                            if (Creature* pJormungarWorm = me->SummonCreature(NPC_JORMUNGAR_WORM, x + rand() % 10, y + rand() % 10, z, 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 360000))
-                            {
-                                summons.Summon(pJormungarWorm);
-                                pJormungarWorm->SetInCombatWithZone();
-                            }
+                            summons.Summon(pJormungarWorm);
+                            pJormungarWorm->SetInCombatWithZone();
                         }
-                        events.RepeatEvent(10s, 14s);
-                        break;
                     }
+                    events.RepeatEvent(10s, 14s);
+                    break;
+                }
                 case EVENT_JORMUNGAR_POISON_BREATH:
-                    {
-                        if (Unit* tgt = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                            me->CastSpell(tgt, IsHeroic() ? SPELL_POISON_BREATH_H : SPELL_POISON_BREATH_N, false);
+                {
+                    if (Unit* tgt = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                        me->CastSpell(tgt, IsHeroic() ? SPELL_POISON_BREATH_H : SPELL_POISON_BREATH_N, false);
 
-                        events.RepeatEvent(8s, 12s);
-                        break;
-                    }
+                    events.RepeatEvent(8s, 12s);
+                    break;
+                }
             }
 
             DoMeleeAttackIfReady();
@@ -535,25 +535,25 @@ public:
             switch (events.ExecuteEvent())
             {
                 case EVENT_RHINO_STOMP:
-                    {
-                        me->CastSpell(me->GetVictim(), SPELL_STOMP, false);
-                        events.RepeatEvent(8s, 12s);
-                        break;
-                    }
+                {
+                    me->CastSpell(me->GetVictim(), SPELL_STOMP, false);
+                    events.RepeatEvent(8s, 12s);
+                    break;
+                }
                 case EVENT_RHINO_GORE:
-                    {
-                        me->CastSpell(me->GetVictim(), IsHeroic() ? SPELL_GORE_H : SPELL_GORE_N, false);
-                        events.RepeatEvent(13s, 17s);
-                        break;
-                    }
+                {
+                    me->CastSpell(me->GetVictim(), IsHeroic() ? SPELL_GORE_H : SPELL_GORE_N, false);
+                    events.RepeatEvent(13s, 17s);
+                    break;
+                }
                 case EVENT_RHINO_WOUND:
-                    {
-                        if (Unit* tgt = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                            me->CastSpell(tgt, IsHeroic() ? SPELL_GRIEVOUS_WOUND_H : SPELL_GRIEVOUS_WOUND_N, false);
+                {
+                    if (Unit* tgt = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                        me->CastSpell(tgt, IsHeroic() ? SPELL_GRIEVOUS_WOUND_H : SPELL_GRIEVOUS_WOUND_N, false);
 
-                        events.RepeatEvent(18s, 22s);
-                        break;
-                    }
+                    events.RepeatEvent(18s, 22s);
+                    break;
+                }
             }
 
             DoMeleeAttackIfReady();
@@ -643,23 +643,23 @@ public:
             switch (events.ExecuteEvent())
             {
                 case EVENT_FURBOLG_CHAIN:
-                    {
-                        me->CastSpell(me->GetVictim(), IsHeroic() ? SPELL_CHAIN_LIGHTING_H : SPELL_CHAIN_LIGHTING_N, false);
-                        events.RepeatEvent(4s, 7s);
-                        break;
-                    }
+                {
+                    me->CastSpell(me->GetVictim(), IsHeroic() ? SPELL_CHAIN_LIGHTING_H : SPELL_CHAIN_LIGHTING_N, false);
+                    events.RepeatEvent(4s, 7s);
+                    break;
+                }
                 case EVENT_FURBOLG_CRAZED:
-                    {
-                        me->CastSpell(me, SPELL_CRAZED, false);
-                        events.RepeatEvent(8s, 12s);
-                        break;
-                    }
+                {
+                    me->CastSpell(me, SPELL_CRAZED, false);
+                    events.RepeatEvent(8s, 12s);
+                    break;
+                }
                 case EVENT_FURBOLG_ROAR:
-                    {
-                        me->CastSpell(me, SPELL_TERRIFYING_ROAR, false);
-                        events.RepeatEvent(10s, 15s);
-                        break;
-                    }
+                {
+                    me->CastSpell(me, SPELL_TERRIFYING_ROAR, false);
+                    events.RepeatEvent(10s, 15s);
+                    break;
+                }
             }
 
             DoMeleeAttackIfReady();
@@ -749,23 +749,23 @@ public:
             switch (events.ExecuteEvent())
             {
                 case EVENT_WORGEN_MORTAL:
-                    {
-                        me->CastSpell(me->GetVictim(), IsHeroic() ? SPELL_MORTAL_WOUND_H : SPELL_MORTAL_WOUND_N, false);
-                        events.RepeatEvent(4s, 7s);
-                        break;
-                    }
+                {
+                    me->CastSpell(me->GetVictim(), IsHeroic() ? SPELL_MORTAL_WOUND_H : SPELL_MORTAL_WOUND_N, false);
+                    events.RepeatEvent(4s, 7s);
+                    break;
+                }
                 case EVENT_WORGEN_ENRAGE1:
-                    {
-                        me->CastSpell(me, SPELL_ENRAGE_1, false);
-                        events.RepeatEvent(15s);
-                        break;
-                    }
+                {
+                    me->CastSpell(me, SPELL_ENRAGE_1, false);
+                    events.RepeatEvent(15s);
+                    break;
+                }
                 case EVENT_WORGEN_ENRAGE2:
-                    {
-                        me->CastSpell(me, SPELL_ENRAGE_2, false);
-                        events.RepeatEvent(10s);
-                        break;
-                    }
+                {
+                    me->CastSpell(me, SPELL_ENRAGE_2, false);
+                    events.RepeatEvent(10s);
+                    break;
+                }
             }
 
             DoMeleeAttackIfReady();

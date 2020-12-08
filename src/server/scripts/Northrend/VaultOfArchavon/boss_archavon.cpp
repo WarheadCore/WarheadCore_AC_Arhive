@@ -130,15 +130,15 @@ public:
                     events.RepeatEvent(30s);
                     break;
                 case EVENT_STOMP:
-                    {
-                        char buffer[100];
-                        sprintf(buffer, "Archavon the Stone Watcher lunges for %s!", me->GetVictim()->GetName().c_str());
-                        me->TextEmote(buffer);
-                        me->CastSpell(me->GetVictim(), RAID_MODE_HEROIC(SPELL_STOMP_10, SPELL_STOMP_25), false);
-                        events.RepeatEvent(45s);
-                        events.ScheduleEvent(EVENT_IMPALE, 3s);
-                        break;
-                    }
+                {
+                    char buffer[100];
+                    sprintf(buffer, "Archavon the Stone Watcher lunges for %s!", me->GetVictim()->GetName().c_str());
+                    me->TextEmote(buffer);
+                    me->CastSpell(me->GetVictim(), RAID_MODE_HEROIC(SPELL_STOMP_10, SPELL_STOMP_25), false);
+                    events.RepeatEvent(45s);
+                    events.ScheduleEvent(EVENT_IMPALE, 3s);
+                    break;
+                }
                 case EVENT_IMPALE:
                     me->CastSpell(me->GetVictim(), RAID_MODE_HEROIC(SPELL_IMPALE_10, SPELL_IMPALE_25), false);
                     break;

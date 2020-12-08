@@ -160,15 +160,15 @@ public:
                     events.ScheduleEvent(EVENT_HEALTH_CHECK, 1s);
                     break;
                 case EVENT_ACHIEVEMENT_CHECK:
-                    {
-                        Map::PlayerList const& pList = me->GetMap()->GetPlayers();
-                        for(Map::PlayerList::const_iterator itr = pList.begin(); itr != pList.end(); ++itr)
-                            if (Aura* aur = itr->GetSource()->GetAura(SPELL_INTENSE_COLD_TRIGGER))
-                                if (aur->GetStackAmount() > 2)
-                                    aGuids.insert(itr->GetSource()->GetGUIDLow());
-                        events.ScheduleEvent(EVENT_ACHIEVEMENT_CHECK, 500ms);
-                        break;
-                    }
+                {
+                    Map::PlayerList const& pList = me->GetMap()->GetPlayers();
+                    for (Map::PlayerList::const_iterator itr = pList.begin(); itr != pList.end(); ++itr)
+                        if (Aura* aur = itr->GetSource()->GetAura(SPELL_INTENSE_COLD_TRIGGER))
+                            if (aur->GetStackAmount() > 2)
+                                aGuids.insert(itr->GetSource()->GetGUIDLow());
+                    events.ScheduleEvent(EVENT_ACHIEVEMENT_CHECK, 500ms);
+                    break;
+                }
                 case EVENT_CRYSTALFIRE_BREATH:
                     me->CastSpell(me->GetVictim(), SPELL_CRYSTALFIRE_BREATH, false);
                     events.ScheduleEvent(EVENT_CRYSTALFIRE_BREATH, 14s);

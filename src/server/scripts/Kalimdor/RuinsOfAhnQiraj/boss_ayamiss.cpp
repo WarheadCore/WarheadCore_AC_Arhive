@@ -205,13 +205,13 @@ public:
                         events.ScheduleEvent(EVENT_SWARMER_ATTACK, 1min);
                         break;
                     case EVENT_SUMMON_SWARMER:
-                        {
-                            Position Pos;
-                            me->GetRandomPoint(SwarmerPos, 80.0f, Pos);
-                            me->SummonCreature(NPC_SWARMER, Pos);
-                            events.ScheduleEvent(EVENT_SUMMON_SWARMER, 5s);
-                            break;
-                        }
+                    {
+                        Position Pos;
+                        me->GetRandomPoint(SwarmerPos, 80.0f, Pos);
+                        me->SummonCreature(NPC_SWARMER, Pos);
+                        events.ScheduleEvent(EVENT_SUMMON_SWARMER, 5s);
+                        break;
+                    }
                     case EVENT_TRASH:
                         DoCastVictim(SPELL_TRASH);
                         events.ScheduleEvent(EVENT_TRASH, 5s, 7s);

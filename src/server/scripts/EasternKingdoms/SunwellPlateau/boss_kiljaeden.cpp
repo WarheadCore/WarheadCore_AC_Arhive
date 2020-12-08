@@ -254,19 +254,19 @@ public:
                     events.ScheduleEvent(EVENT_RANDOM_TALK, 90s, 3min);
                     break;
                 case EVENT_CHECK_PLAYERS:
-                    {
-                        Map::PlayerList const& players = me->GetMap()->GetPlayers();
-                        for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-                            if (Player* player = itr->GetSource())
-                                if (!player->IsGameMaster() && me->GetDistance2d(player) < 60.0f && player->IsAlive())
-                                {
-                                    events.ScheduleEvent(EVENT_CHECK_PLAYERS, 1s);
-                                    return;
-                                }
+                {
+                    Map::PlayerList const& players = me->GetMap()->GetPlayers();
+                    for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
+                        if (Player* player = itr->GetSource())
+                            if (!player->IsGameMaster() && me->GetDistance2d(player) < 60.0f && player->IsAlive())
+                            {
+                                events.ScheduleEvent(EVENT_CHECK_PLAYERS, 1s);
+                                return;
+                            }
 
-                        CreatureAI::EnterEvadeMode();
-                        break;
-                    }
+                    CreatureAI::EnterEvadeMode();
+                    break;
+                }
             }
         }
     };

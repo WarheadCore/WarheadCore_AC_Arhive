@@ -1349,13 +1349,13 @@ public:
                     Events.ScheduleEvent(EVENT_ARNATH_FLASH_HEAL, 6s, 9s);
                     break;
                 case EVENT_ARNATH_PW_SHIELD:
-                    {
-                        std::list<Creature*> targets = DoFindFriendlyMissingBuff(40.0f, SPELL_POWER_WORD_SHIELD);
-                        if (!targets.empty())
-                            DoCast(Warhead::Containers::SelectRandomContainerElement(targets), SPELL_POWER_WORD_SHIELD);
-                        Events.ScheduleEvent(EVENT_ARNATH_PW_SHIELD, 15s, 20s);
-                        break;
-                    }
+                {
+                    std::list<Creature*> targets = DoFindFriendlyMissingBuff(40.0f, SPELL_POWER_WORD_SHIELD);
+                    if (!targets.empty())
+                        DoCast(Warhead::Containers::SelectRandomContainerElement(targets), SPELL_POWER_WORD_SHIELD);
+                    Events.ScheduleEvent(EVENT_ARNATH_PW_SHIELD, 15s, 20s);
+                    break;
+                }
                 case EVENT_ARNATH_SMITE:
                     DoCastVictim(SPELL_SMITE);
                     Events.ScheduleEvent(EVENT_ARNATH_SMITE, 4s, 7s);
@@ -1714,17 +1714,17 @@ public:
                     events.RepeatEvent(25s, 30s);
                     break;
                 case 3: // Volley
+                {
+                    Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 35.0f, true);
+                    if (target && me->GetDistance(target) > 10.0f)
                     {
-                        Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 35.0f, true);
-                        if (target && me->GetDistance(target) > 10.0f)
-                        {
-                            me->CastSpell(target, 71252, false);
-                            events.RepeatEvent(25s, 35s);
-                        }
-                        else
-                            events.RepeatEvent(2500ms);
+                        me->CastSpell(target, 71252, false);
+                        events.RepeatEvent(25s, 35s);
                     }
-                    break;
+                    else
+                        events.RepeatEvent(2500ms);
+                }
+                break;
                 case 4: // Summon Warhawk
                     me->CastSpell(me, 71705, false);
                     break;
@@ -2901,18 +2901,18 @@ public:
                 case 0:
                     break;
                 case 1:
-                    {
-                        uint8 count = me->GetMap()->Is25ManRaid() ? 4 : 2;
-                        bool casted = false;
-                        for (uint8 i = 0; i < count; ++i)
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 37.5f, true))
-                            {
-                                casted = true;
-                                me->CastSpell(target, 71906, true); // Severed Essence
-                            }
-                        events.RepeatEvent(casted ? 25s : 5s);
-                    }
-                    break;
+                {
+                    uint8 count = me->GetMap()->Is25ManRaid() ? 4 : 2;
+                    bool casted = false;
+                    for (uint8 i = 0; i < count; ++i)
+                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 37.5f, true))
+                        {
+                            casted = true;
+                            me->CastSpell(target, 71906, true); // Severed Essence
+                        }
+                    events.RepeatEvent(casted ? 25s : 5s);
+                }
+                break;
             }
 
             DoMeleeAttackIfReady();
@@ -3588,20 +3588,20 @@ public:
             switch (events.ExecuteEvent())
             {
                 case EVENT_CHECK_FIGHT:
+                {
+                    Map::PlayerList const& pList = me->GetMap()->GetPlayers();
+                    for (Map::PlayerList::const_iterator itr = pList.begin(); itr != pList.end(); ++itr)
                     {
-                        Map::PlayerList const& pList = me->GetMap()->GetPlayers();
-                        for (Map::PlayerList::const_iterator itr = pList.begin(); itr != pList.end(); ++itr)
-                        {
-                            if (me->GetDistance(itr->GetSource()) > 100.0f || !itr->GetSource()->IsAlive() || itr->GetSource()->IsGameMaster())
-                                continue;
+                        if (me->GetDistance(itr->GetSource()) > 100.0f || !itr->GetSource()->IsAlive() || itr->GetSource()->IsGameMaster())
+                            continue;
 
-                            events.ScheduleEvent(EVENT_CHECK_FIGHT, 1s);
-                            return;
-                        }
-
-                        CreatureAI::EnterEvadeMode();
+                        events.ScheduleEvent(EVENT_CHECK_FIGHT, 1s);
                         return;
                     }
+
+                    CreatureAI::EnterEvadeMode();
+                    return;
+                }
                 case EVENT_GAUNTLET_PHASE1:
                     ScheduleBroodlings();
                     SpidersMoveDown();
@@ -3690,29 +3690,29 @@ public:
             switch (events.ExecuteEvent())
             {
                 case EVENT_CHECK_FIGHT:
+                {
+                    Map::PlayerList const& pList = me->GetMap()->GetPlayers();
+                    for (Map::PlayerList::const_iterator itr = pList.begin(); itr != pList.end(); ++itr)
                     {
-                        Map::PlayerList const& pList = me->GetMap()->GetPlayers();
-                        for (Map::PlayerList::const_iterator itr = pList.begin(); itr != pList.end(); ++itr)
-                        {
-                            if (me->GetDistance(itr->GetSource()) > 100.0f || !itr->GetSource()->IsAlive() || itr->GetSource()->IsGameMaster())
-                                continue;
+                        if (me->GetDistance(itr->GetSource()) > 100.0f || !itr->GetSource()->IsAlive() || itr->GetSource()->IsGameMaster())
+                            continue;
 
-                            events.ScheduleEvent(EVENT_CHECK_FIGHT, 1s);
-                            return;
-                        }
-
-                        CreatureAI::EnterEvadeMode();
+                        events.ScheduleEvent(EVENT_CHECK_FIGHT, 1s);
                         return;
                     }
+
+                    CreatureAI::EnterEvadeMode();
+                    return;
+                }
                 case EVENT_GAUNTLET_PHASE1:
-                    {
-                        std::list<Creature*> clist;
-                        me->GetCreaturesWithEntryInRange(clist, 80.0f, NPC_INVISIBLE_STALKER);
-                        // xinef: spell: 70484, some hack would be required, skip
-                        for (std::list<Creature*>::const_iterator itr = clist.begin(); itr != clist.end(); ++itr)
-                            me->SummonCreature(NPC_FLASH_EATING_INSECT, **itr, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15000);
-                        break;
-                    }
+                {
+                    std::list<Creature*> clist;
+                    me->GetCreaturesWithEntryInRange(clist, 80.0f, NPC_INVISIBLE_STALKER);
+                    // xinef: spell: 70484, some hack would be required, skip
+                    for (std::list<Creature*>::const_iterator itr = clist.begin(); itr != clist.end(); ++itr)
+                        me->SummonCreature(NPC_FLASH_EATING_INSECT, **itr, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15000);
+                    break;
+                }
                 case EVENT_GAUNTLET_PHASE2:
                     instance->SetData(DATA_PUTRICIDE_TRAP_STATE, DONE);
                     me->RemoveAllAuras();

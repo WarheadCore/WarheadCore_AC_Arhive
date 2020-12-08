@@ -103,7 +103,7 @@ public:
             if (map->IsDungeon())
             {
                 Map::PlayerList const& players = map->GetPlayers();
-                for(Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
+                for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
                     if (itr->GetSource()->IsAlive())
                         itr->GetSource()->RemoveAura(GROUND_SLAM_STONED_EFFECT);
             }
@@ -122,45 +122,45 @@ public:
             switch (events.ExecuteEvent())
             {
                 case EVENT_BOULDER:
-                    {
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true, 0))
-                            me->CastSpell(target, DUNGEON_MODE(BOULDER_TOSS, BOULDER_TOSS_H), false);
+                {
+                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true, 0))
+                        me->CastSpell(target, DUNGEON_MODE(BOULDER_TOSS, BOULDER_TOSS_H), false);
 
-                        events.RepeatEvent(5s, 7s);
-                        break;
-                    }
+                    events.RepeatEvent(5s, 7s);
+                    break;
+                }
                 case EVENT_GROUND_SPIKE:
-                    {
-                        me->CastSpell(me->GetVictim(), GROUND_SPIKE_H, false); // current enemy target
-                        events.RepeatEvent(8s, 11s);
-                        break;
-                    }
+                {
+                    me->CastSpell(me->GetVictim(), GROUND_SPIKE_H, false); // current enemy target
+                    events.RepeatEvent(8s, 11s);
+                    break;
+                }
                 case EVENT_STOMP:
-                    {
-                        me->CastSpell(me, DUNGEON_MODE(STOMP, STOMP_H), false);
-                        events.RepeatEvent(13s, 18s);
-                        break;
-                    }
+                {
+                    me->CastSpell(me, DUNGEON_MODE(STOMP, STOMP_H), false);
+                    events.RepeatEvent(13s, 18s);
+                    break;
+                }
                 case EVENT_GROUND_SLAM:
-                    {
-                        events.RepeatEvent(10s, 13s);
-                        me->CastSpell(me->GetVictim(), GROUND_SLAM, true);
-                        events.DelayEvents(10s);
-                        events.RescheduleEvent(EVENT_SHATTER, 8s);
-                        break;
-                    }
+                {
+                    events.RepeatEvent(10s, 13s);
+                    me->CastSpell(me->GetVictim(), GROUND_SLAM, true);
+                    events.DelayEvents(10s);
+                    events.RescheduleEvent(EVENT_SHATTER, 8s);
+                    break;
+                }
                 case EVENT_SHATTER:
-                    {
-                        me->CastSpell((Unit*)NULL, DUNGEON_MODE(SHATTER, SHATTER_H), false);
-                        Talk(SAY_SHATTER);
-                        events.RescheduleEvent(EVENT_REMOVE_STONED, 1500ms);
-                        break;
-                    }
+                {
+                    me->CastSpell((Unit*)NULL, DUNGEON_MODE(SHATTER, SHATTER_H), false);
+                    Talk(SAY_SHATTER);
+                    events.RescheduleEvent(EVENT_REMOVE_STONED, 1500ms);
+                    break;
+                }
                 case EVENT_REMOVE_STONED:
-                    {
-                        RemoveStonedEffect();
-                        break;
-                    }
+                {
+                    RemoveStonedEffect();
+                    break;
+                }
             }
 
             DoMeleeAttackIfReady();

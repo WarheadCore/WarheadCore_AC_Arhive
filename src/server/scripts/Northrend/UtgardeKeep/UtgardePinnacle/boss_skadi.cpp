@@ -146,7 +146,7 @@ public:
             me->UpdatePosition(343.02f, -507.325f, 104.567f, M_PI, true);
             me->StopMovingOnCurrentPos();
 
-            if(m_pInstance)
+            if (m_pInstance)
             {
                 m_pInstance->DoStopTimedAchievement(ACHIEVEMENT_TIMED_TYPE_EVENT, ACHIEV_TIMED_LODI_DODI);
                 m_pInstance->SetData(DATA_SKADI_THE_RUTHLESS, NOT_STARTED);
@@ -207,39 +207,39 @@ public:
             switch (events.ExecuteEvent())
             {
                 case EVENT_SKADI_START:
+                {
+                    me->SetControlled(false, UNIT_STATE_ROOT);
+                    if (Creature* cr = GetGrauf())
                     {
-                        me->SetControlled(false, UNIT_STATE_ROOT);
-                        if (Creature* cr = GetGrauf())
-                        {
-                            me->EnterVehicleUnattackable(cr, 0);
-                            cr->AI()->DoAction(ACTION_START_EVENT);
-                        }
-                        else
-                            EnterEvadeMode();
-
-                        break;
+                        me->EnterVehicleUnattackable(cr, 0);
+                        cr->AI()->DoAction(ACTION_START_EVENT);
                     }
+                    else
+                        EnterEvadeMode();
+
+                    break;
+                }
                 case EVENT_SKADI_CRUSH:
-                    {
-                        me->CastSpell(me->GetVictim(), IsHeroic() ? SPELL_CRUSH_H : SPELL_CRUSH_N, false);
-                        events.RepeatEvent(8s);
-                        break;
-                    }
+                {
+                    me->CastSpell(me->GetVictim(), IsHeroic() ? SPELL_CRUSH_H : SPELL_CRUSH_N, false);
+                    events.RepeatEvent(8s);
+                    break;
+                }
                 case EVENT_SKADI_SPEAR:
-                    {
-                        if (Unit* tgt = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                            me->CastSpell(tgt, IsHeroic() ? SPELL_POISONED_SPEAR_H : SPELL_POISONED_SPEAR_N, false);
+                {
+                    if (Unit* tgt = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                        me->CastSpell(tgt, IsHeroic() ? SPELL_POISONED_SPEAR_H : SPELL_POISONED_SPEAR_N, false);
 
-                        events.RepeatEvent(10s);
-                        break;
-                    }
+                    events.RepeatEvent(10s);
+                    break;
+                }
                 case EVENT_SKADI_WHIRLWIND:
-                    {
-                        me->CastSpell(me, IsHeroic() ? SPELL_WHIRLWIND_H : SPELL_WHIRLWIND_N, false);
-                        events.RepeatEvent(15s, 20s);
-                        events.DelayEvents(10s);
-                        break;
-                    }
+                {
+                    me->CastSpell(me, IsHeroic() ? SPELL_WHIRLWIND_H : SPELL_WHIRLWIND_N, false);
+                    events.RepeatEvent(15s, 20s);
+                    events.DelayEvents(10s);
+                    break;
+                }
             }
 
             DoMeleeAttackIfReady();
@@ -331,7 +331,7 @@ public:
 
         void SpawnFlameTriggers(uint8 point)
         {
-            for(uint8 j = 0; j < 50; ++j)
+            for (uint8 j = 0; j < 50; ++j)
             {
                 if (point == 1)
                     me->SummonCreature(NPC_BREATH_TRIGGER, 480.0f - (j * 3), -518.0f + (j / 16.0f), 105.0f, 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 30000);
@@ -355,7 +355,7 @@ public:
 
         void MovementInform(uint32  /*uiType*/, uint32 Id)
         {
-            switch(Id)
+            switch (Id)
             {
                 case 0:
                 case 1:
@@ -414,7 +414,7 @@ public:
         void CheckPlayers()
         {
             Map::PlayerList const& pList = me->GetMap()->GetPlayers();
-            for(Map::PlayerList::const_iterator itr = pList.begin(); itr != pList.end(); ++itr)
+            for (Map::PlayerList::const_iterator itr = pList.begin(); itr != pList.end(); ++itr)
             {
                 if (itr->GetSource()->GetPositionX() < 320.0f || itr->GetSource()->IsGameMaster() || !itr->GetSource()->IsAlive())
                     continue;
@@ -445,52 +445,52 @@ public:
             switch (events.ExecuteEvent())
             {
                 case EVENT_GRAUF_CHECK:
-                    {
-                        CheckPlayers();
-                        events.RepeatEvent(2s);
-                        break;
-                    }
+                {
+                    CheckPlayers();
+                    events.RepeatEvent(2s);
+                    break;
+                }
                 case EVENT_GRAUF_START:
-                    {
-                        me->GetMotionMaster()->Clear(true);
-                        me->GetMotionMaster()->MoveTakeoff(10, SkadiPosition[0].GetPositionX(), SkadiPosition[0].GetPositionY(), SkadiPosition[0].GetPositionZ(), 3.0f);
+                {
+                    me->GetMotionMaster()->Clear(true);
+                    me->GetMotionMaster()->MoveTakeoff(10, SkadiPosition[0].GetPositionX(), SkadiPosition[0].GetPositionY(), SkadiPosition[0].GetPositionZ(), 3.0f);
 
-                        SpawnHelpers(0);
-                        SpawnHelpers(0);
-                        events.ScheduleEvent(EVENT_GRAUF_MOVE, 15s);
-                        events.ScheduleEvent(EVENT_GRAUF_SUMMON_HELPERS, 20s);
-                        break;
-                    }
+                    SpawnHelpers(0);
+                    SpawnHelpers(0);
+                    events.ScheduleEvent(EVENT_GRAUF_MOVE, 15s);
+                    events.ScheduleEvent(EVENT_GRAUF_SUMMON_HELPERS, 20s);
+                    break;
+                }
                 case EVENT_GRAUF_MOVE:
+                {
+                    AchievementHitCount = 0;
+                    uint8 targetPoint = SelectNextPos(currentPos);
+                    me->GetMotionMaster()->MovePoint(targetPoint, SkadiPosition[targetPoint].GetPositionX(), SkadiPosition[targetPoint].GetPositionY(), SkadiPosition[targetPoint].GetPositionZ());
+                    if (targetPoint <= 1)
                     {
-                        AchievementHitCount = 0;
-                        uint8 targetPoint = SelectNextPos(currentPos);
-                        me->GetMotionMaster()->MovePoint(targetPoint, SkadiPosition[targetPoint].GetPositionX(), SkadiPosition[targetPoint].GetPositionY(), SkadiPosition[targetPoint].GetPositionZ());
-                        if (targetPoint <= 1)
-                        {
-                            SpawnFlameTriggers(targetPoint);
-                            me->CastSpell(me, SPELL_FLAME_VISUAL, false);
-                        }
-
-                        if (m_pInstance)
-                            m_pInstance->SetData(SKADI_IN_RANGE, 0);
-
-                        currentPos = targetPoint;
-                        events.RepeatEvent(25s);
-                        break;
+                        SpawnFlameTriggers(targetPoint);
+                        me->CastSpell(me, SPELL_FLAME_VISUAL, false);
                     }
+
+                    if (m_pInstance)
+                        m_pInstance->SetData(SKADI_IN_RANGE, 0);
+
+                    currentPos = targetPoint;
+                    events.RepeatEvent(25s);
+                    break;
+                }
                 case EVENT_GRAUF_SUMMON_HELPERS:
-                    {
-                        SpawnHelpers(1);
-                        events.RepeatEvent(15s);
-                        break;
-                    }
+                {
+                    SpawnHelpers(1);
+                    events.RepeatEvent(15s);
+                    break;
+                }
                 case EVENT_GRAUF_REMOVE_SKADI:
-                    {
-                        RemoveSkadi(false);
-                        me->DespawnOrUnsummon();
-                        break;
-                    }
+                {
+                    RemoveSkadi(false);
+                    me->DespawnOrUnsummon();
+                    break;
+                }
             }
         }
     };

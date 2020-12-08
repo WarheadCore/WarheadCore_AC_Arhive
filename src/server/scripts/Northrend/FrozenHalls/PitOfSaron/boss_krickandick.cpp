@@ -181,7 +181,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING | UNIT_STATE_STUNNED))
                 return;
 
-            switch(events.ExecuteEvent())
+            switch (events.ExecuteEvent())
             {
                 case 0:
                     break;
@@ -218,7 +218,7 @@ public:
 
                     break;
                 case EVENT_SPECIAL:
-                    switch(urand(0, 2))
+                    switch (urand(0, 2))
                     {
                         case 0: // Pursuit
                             if (Creature* k = GetKrick())
@@ -311,7 +311,7 @@ public:
         void UpdateAI(uint32 diff)
         {
             events.Update(diff);
-            switch(events.ExecuteEvent())
+            switch (events.ExecuteEvent())
             {
                 case 0:
                     break;

@@ -388,17 +388,17 @@ public:
             switch (events.ExecuteEvent())
             {
                 case EVENT_MOJO_MOJO_PUDDLE:
-                    {
-                        me->CastSpell(me, SPELL_MOJO_PUDDLE, false);
-                        events.ScheduleEvent(EVENT_MOJO_MOJO_PUDDLE, 13s);
-                        break;
-                    }
+                {
+                    me->CastSpell(me, SPELL_MOJO_PUDDLE, false);
+                    events.ScheduleEvent(EVENT_MOJO_MOJO_PUDDLE, 13s);
+                    break;
+                }
                 case EVENT_MOJO_MOJO_WAVE:
-                    {
-                        me->CastSpell(me->GetVictim(), SPELL_MOJO_WAVE, false);
-                        events.ScheduleEvent(EVENT_MOJO_MOJO_WAVE, 15s);
-                        break;
-                    }
+                {
+                    me->CastSpell(me->GetVictim(), SPELL_MOJO_WAVE, false);
+                    events.ScheduleEvent(EVENT_MOJO_MOJO_WAVE, 15s);
+                    break;
+                }
             }
 
             DoMeleeAttackIfReady();

@@ -117,13 +117,13 @@ public:
                     events.ScheduleEvent(EVENT_REFLECTIVE_DAMAGE_SHIELD, 20s);
                     break;
                 case EVENT_SUMMON_NETHER_CHARGE:
-                    {
-                        Position pos;
-                        me->GetRandomNearPosition(pos, 8.0f);
-                        me->SummonCreature(NPC_NETHER_CHARGE, pos, TEMPSUMMON_TIMED_DESPAWN, 18000);
-                        events.ScheduleEvent(EVENT_SUMMON_NETHER_CHARGE, 5s);
-                        break;
-                    }
+                {
+                    Position pos;
+                    me->GetRandomNearPosition(pos, 8.0f);
+                    me->SummonCreature(NPC_NETHER_CHARGE, pos, TEMPSUMMON_TIMED_DESPAWN, 18000);
+                    events.ScheduleEvent(EVENT_SUMMON_NETHER_CHARGE, 5s);
+                    break;
+                }
                 case EVENT_POSITIVE_SHIFT:
                     me->CastSpell(me, SPELL_POLARITY_SHIFT, true);
                     events.ScheduleEvent(EVENT_POSITIVE_SHIFT, 30s);

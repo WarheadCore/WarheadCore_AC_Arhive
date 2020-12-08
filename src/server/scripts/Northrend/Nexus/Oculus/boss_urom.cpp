@@ -125,7 +125,7 @@ public:
             if (pInstance)
             {
                 pInstance->SetData(DATA_UROM, NOT_STARTED);
-                if( pInstance->GetData(DATA_VAROS) != DONE )
+                if ( pInstance->GetData(DATA_VAROS) != DONE )
                     me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                 else
                     me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
@@ -143,20 +143,20 @@ public:
 
         void JustEngagedWith(Unit* /*who*/)
         {
-            if( lock )
+            if ( lock )
                 return;
 
             uint8 phase = GetPhaseByCurrentPosition();
-            if( phase == 3 )
+            if ( phase == 3 )
             {
                 Talk(SAY_AGGRO);
 
-                if( pInstance )
+                if ( pInstance )
                     pInstance->SetData(DATA_UROM, IN_PROGRESS);
 
                 me->SetInCombatWithZone();
                 me->SetHomePosition(cords[0][0], cords[0][1], cords[0][2], cords[0][3]);
-                if( me->FindCurrentSpellBySpellId(SPELL_EVOCATION) )
+                if ( me->FindCurrentSpellBySpellId(SPELL_EVOCATION) )
                     me->InterruptNonMeleeSpells(false);
 
                 events.RescheduleEvent(EVENT_FROSTBOMB, 7s, 11s);
@@ -167,7 +167,7 @@ public:
             {
                 lock = true;
 
-                switch( phase )
+                switch ( phase )
                 {
                     case 0:
                         Talk(SAY_SUMMON_1);
@@ -190,7 +190,7 @@ public:
 
         void AttackStart(Unit* who)
         {
-            if( lock )
+            if ( lock )
                 return;
 
             if (me->GetDistance(1103.0f, 1049.0f, 510.0f) < 55.0f)
@@ -200,8 +200,8 @@ public:
         void JustSummoned(Creature* pSummon)
         {
             pSummon->SetInCombatWithZone();
-            if( Unit* v = pSummon->SelectVictim() )
-                if( pSummon->AI() )
+            if ( Unit* v = pSummon->SelectVictim() )
+                if ( pSummon->AI() )
                     pSummon->AI()->AttackStart(v);
         }
 
@@ -230,44 +230,44 @@ public:
 
         void SpellHit(Unit* /*caster*/, const SpellInfo* spell)
         {
-            switch( spell->Id )
+            switch ( spell->Id )
             {
                 case SPELL_SUMMON_MENAGERIE_1:
-                    {
-                        for( uint8 i = 0; i < 4; ++i )
-                            me->SummonCreature(summons[0][i], cords[0][0] + ((i % 2) ? 4.0f : -4.0f), cords[0][1] + (i < 2 ? 4.0f : -4.0f), cords[0][2], 0.0f, TEMPSUMMON_TIMED_DESPAWN, 300000);
-                        uint8 phase = GetPhaseByCurrentPosition();
-                        me->SetHomePosition(cords[phase + 1][0], cords[phase + 1][1], cords[phase + 1][2], cords[phase + 1][3]);
-                        me->DestroyForNearbyPlayers();
-                        LeaveCombat();
-                        me->CastSpell(me, SPELL_EVOCATION, true);
-                        releaseLockTimer = 1;
-                    }
-                    break;
+                {
+                    for ( uint8 i = 0; i < 4; ++i )
+                        me->SummonCreature(summons[0][i], cords[0][0] + ((i % 2) ? 4.0f : -4.0f), cords[0][1] + (i < 2 ? 4.0f : -4.0f), cords[0][2], 0.0f, TEMPSUMMON_TIMED_DESPAWN, 300000);
+                    uint8 phase = GetPhaseByCurrentPosition();
+                    me->SetHomePosition(cords[phase + 1][0], cords[phase + 1][1], cords[phase + 1][2], cords[phase + 1][3]);
+                    me->DestroyForNearbyPlayers();
+                    LeaveCombat();
+                    me->CastSpell(me, SPELL_EVOCATION, true);
+                    releaseLockTimer = 1;
+                }
+                break;
                 case SPELL_SUMMON_MENAGERIE_2:
-                    {
-                        for( uint8 i = 0; i < 4; ++i )
-                            me->SummonCreature(summons[1][i], cords[1][0] + ((i % 2) ? 4.0f : -4.0f), cords[1][1] + (i < 2 ? 4.0f : -4.0f), cords[1][2], 0.0f, TEMPSUMMON_TIMED_DESPAWN, 300000);
-                        uint8 phase = GetPhaseByCurrentPosition();
-                        me->SetHomePosition(cords[phase + 1][0], cords[phase + 1][1], cords[phase + 1][2], cords[phase + 1][3]);
-                        me->DestroyForNearbyPlayers();
-                        LeaveCombat();
-                        me->CastSpell(me, SPELL_EVOCATION, true);
-                        releaseLockTimer = 1;
-                    }
-                    break;
+                {
+                    for ( uint8 i = 0; i < 4; ++i )
+                        me->SummonCreature(summons[1][i], cords[1][0] + ((i % 2) ? 4.0f : -4.0f), cords[1][1] + (i < 2 ? 4.0f : -4.0f), cords[1][2], 0.0f, TEMPSUMMON_TIMED_DESPAWN, 300000);
+                    uint8 phase = GetPhaseByCurrentPosition();
+                    me->SetHomePosition(cords[phase + 1][0], cords[phase + 1][1], cords[phase + 1][2], cords[phase + 1][3]);
+                    me->DestroyForNearbyPlayers();
+                    LeaveCombat();
+                    me->CastSpell(me, SPELL_EVOCATION, true);
+                    releaseLockTimer = 1;
+                }
+                break;
                 case SPELL_SUMMON_MENAGERIE_3:
-                    {
-                        for( uint8 i = 0; i < 4; ++i )
-                            me->SummonCreature(summons[2][i], cords[2][0] + ((i % 2) ? 4.0f : -4.0f), cords[2][1] + (i < 2 ? 4.0f : -4.0f), cords[2][2], 0.0f, TEMPSUMMON_TIMED_DESPAWN, 300000);
-                        uint8 phase = GetPhaseByCurrentPosition();
-                        me->SetHomePosition(cords[phase + 1][0], cords[phase + 1][1], cords[phase + 1][2], cords[phase + 1][3]);
-                        me->DestroyForNearbyPlayers();
-                        LeaveCombat();
-                        me->CastSpell(me, SPELL_EVOCATION, true);
-                        releaseLockTimer = 1;
-                    }
-                    break;
+                {
+                    for ( uint8 i = 0; i < 4; ++i )
+                        me->SummonCreature(summons[2][i], cords[2][0] + ((i % 2) ? 4.0f : -4.0f), cords[2][1] + (i < 2 ? 4.0f : -4.0f), cords[2][2], 0.0f, TEMPSUMMON_TIMED_DESPAWN, 300000);
+                    uint8 phase = GetPhaseByCurrentPosition();
+                    me->SetHomePosition(cords[phase + 1][0], cords[phase + 1][1], cords[phase + 1][2], cords[phase + 1][3]);
+                    me->DestroyForNearbyPlayers();
+                    LeaveCombat();
+                    me->CastSpell(me, SPELL_EVOCATION, true);
+                    releaseLockTimer = 1;
+                }
+                break;
                 case SPELL_TELEPORT:
                     me->GetMotionMaster()->Clear();
                     me->GetMotionMaster()->MoveIdle();
@@ -295,9 +295,9 @@ public:
 
         void UpdateAI(uint32 diff)
         {
-            if( releaseLockTimer )
+            if ( releaseLockTimer )
             {
-                if( releaseLockTimer >= 5000 )
+                if ( releaseLockTimer >= 5000 )
                 {
                     lock = false;
                     if (me->IsInCombat())
@@ -311,27 +311,27 @@ public:
                     releaseLockTimer += diff;
             }
 
-            if( !UpdateVictim() )
+            if ( !UpdateVictim() )
                 return;
 
             events.Update(diff);
 
-            if( me->HasUnitState(UNIT_STATE_CASTING) )
+            if ( me->HasUnitState(UNIT_STATE_CASTING) )
                 return;
 
             DoMeleeAttackIfReady();
 
-            switch( events.ExecuteEvent() )
+            switch ( events.ExecuteEvent() )
             {
                 case 0:
                     break;
                 case EVENT_FROSTBOMB:
-                    if( Unit* v = me->GetVictim() )
+                    if ( Unit* v = me->GetVictim() )
                         me->CastSpell(v, SPELL_FROSTBOMB, false);
                     events.RepeatEvent(7s, 11s);
                     break;
                 case EVENT_TIME_BOMB:
-                    if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true) )
+                    if ( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true) )
                         DoCast(target, DUNGEON_MODE(SPELL_TIME_BOMB_N, SPELL_TIME_BOMB_H));
                     events.RepeatEvent(20s, 25s);
                     break;

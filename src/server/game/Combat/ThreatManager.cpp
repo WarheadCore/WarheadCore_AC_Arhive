@@ -111,7 +111,7 @@ void ThreatReference::UpdateTauntState(bool victimIsTaunting)
         HeapNotifyIncreased();
         return;
     }
-    
+
     // Check for SPELL_AURA_MOD_DETAUNT (applied from owner to victim)
     for (AuraEffect const* eff : _victim->GetAuraEffectsByType(SPELL_AURA_MOD_DETAUNT))
         if (eff->GetCasterGUID() == _owner->GetGUID())
@@ -350,7 +350,7 @@ void ThreatManager::AddThreat(Unit* target, float amount, SpellInfo const* spell
     // otherwise, ensure we're in combat (threat implies combat!)
     if (!_owner->GetCombatManager().SetInCombatWith(target)) // if this returns false, we're not actually in combat, and thus cannot have threat!
         return;                                              // typical causes: bad scripts trying to add threat to GMs, dead targets etc
-    
+
     // ok, we're now in combat - create the threat list reference and push it to the respective managers
     ThreatReference* ref = new ThreatReference(this, target, amount);
     PutThreatListRef(target->GetGUID(), ref);
@@ -371,7 +371,7 @@ void ThreatManager::ScaleThreat(Unit* target, float factor)
 {
     auto it = _myThreatListEntries.find(target->GetGUID());
     if (it != _myThreatListEntries.end())
-        it->second->ScaleThreat(std::max<float>(factor,0.0f));
+        it->second->ScaleThreat(std::max<float>(factor, 0.0f));
 }
 
 void ThreatManager::MatchUnitThreatToHighestThreat(Unit* target)
@@ -501,7 +501,7 @@ ThreatReference const* ThreatManager::ReselectVictim()
         return a->_online < b->_online;
     if (a->_taunted != b->_taunted) // taunt state precedence (TAUNT > NONE > DETAUNT)
         return a->_taunted < b->_taunted;
-    return (a->GetThreat()*aWeight < b->GetThreat());
+    return (a->GetThreat() * aWeight < b->GetThreat());
 }
 
 /*static*/ float ThreatManager::CalculateModifiedThreat(float threat, Unit const* victim, SpellInfo const* spell)
@@ -694,7 +694,7 @@ void ThreatManager::PurgeThreatListRef(ObjectGuid const& guid, bool sendRemove)
 
     if (_currentVictimRef == ref)
         _currentVictimRef = nullptr;
-    
+
     _sortedThreatList.erase(ref->_handle);
     if (sendRemove && ref->IsOnline())
         SendRemoveToClients(ref->_victim);

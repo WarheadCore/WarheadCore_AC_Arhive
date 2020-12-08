@@ -178,11 +178,11 @@ public:
             me->SetStandState(UNIT_STAND_STATE_SUBMERGED);
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
             summons.DespawnAll();
-            for( uint8 i = 0; i < 10; ++i )
+            for ( uint8 i = 0; i < 10; ++i )
             {
                 float angle = rand_norm() * 2 * M_PI;
                 float dist = rand_norm() * 40.0f;
-                if( Creature* c = me->SummonCreature(NPC_SCARAB, AnubLocs[0].GetPositionX() + cos(angle) * dist, AnubLocs[0].GetPositionY() + sin(angle) * dist, AnubLocs[0].GetPositionZ(), 0.0f, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 5000) )
+                if ( Creature* c = me->SummonCreature(NPC_SCARAB, AnubLocs[0].GetPositionX() + cos(angle) * dist, AnubLocs[0].GetPositionY() + sin(angle) * dist, AnubLocs[0].GetPositionZ(), 0.0f, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 5000) )
                 {
                     c->setFaction(31);
                     c->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
@@ -193,7 +193,7 @@ public:
 
         void DoAction(int32 param)
         {
-            switch( param )
+            switch ( param )
             {
                 case -1:
                     summons.DespawnAll();
@@ -211,12 +211,12 @@ public:
             events.RescheduleEvent(EVENT_SUMMON_NERUBIAN, 5s, 8s);
             events.RescheduleEvent(EVENT_SUBMERGE, SUBMERGE_INTERVAL);
 
-            if(!IsHeroic())
+            if (!IsHeroic())
                 events.RescheduleEvent(EVENT_RESPAWN_SPHERE, 4s);
 
-            for( std::list<uint64>::iterator itr = summons.begin(); itr != summons.end(); ++itr )
+            for ( std::list<uint64>::iterator itr = summons.begin(); itr != summons.end(); ++itr )
                 if (pInstance)
-                    if(Creature* c = pInstance->instance->GetCreature(*itr) )
+                    if (Creature* c = pInstance->instance->GetCreature(*itr) )
                     {
                         c->GetMotionMaster()->MoveIdle();
                         c->StopMoving();
@@ -224,16 +224,16 @@ public:
                         c->AI()->DoAction(1);
                     }
             summons.clear();
-            for( uint8 i = 0; i < 4; ++i )
-                if( Creature* c = me->SummonCreature(NPC_BURROW, AnubLocs[i + 1]) )
+            for ( uint8 i = 0; i < 4; ++i )
+                if ( Creature* c = me->SummonCreature(NPC_BURROW, AnubLocs[i + 1]) )
                     BurrowGUID[i] = c->GetGUID();
-            for( uint8 i = 0; i < 6; ++i )
-                if( Creature* c = me->SummonCreature(NPC_FROST_SPHERE, AnubLocs[i + 5]) )
+            for ( uint8 i = 0; i < 6; ++i )
+                if ( Creature* c = me->SummonCreature(NPC_FROST_SPHERE, AnubLocs[i + 5]) )
                     SphereGUID[i] = c->GetGUID();
 
             Talk(SAY_AGGRO);
             DoZoneInCombat();
-            if( pInstance )
+            if ( pInstance )
                 pInstance->SetData(TYPE_ANUBARAK, IN_PROGRESS);
         }
 
@@ -244,21 +244,21 @@ public:
 
         void UpdateAI(uint32 diff)
         {
-            if( !UpdateVictim() )
+            if ( !UpdateVictim() )
                 return;
 
             events.Update(diff);
 
-            if( me->HasUnitState(UNIT_STATE_CASTING) )
+            if ( me->HasUnitState(UNIT_STATE_CASTING) )
                 return;
 
-            if( !bPhase3 && HealthBelowPct(30) && !me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE) && !me->HasAura(SPELL_SUBMERGE) && !me->HasAura(SPELL_EMERGE) )
+            if ( !bPhase3 && HealthBelowPct(30) && !me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE) && !me->HasAura(SPELL_SUBMERGE) && !me->HasAura(SPELL_EMERGE) )
             {
                 bPhase3 = true;
                 events.CancelEvent(EVENT_SUBMERGE);
                 events.CancelEvent(EVENT_EMERGE);
                 events.CancelEvent(EVENT_EMERGE_2);
-                if( !IsHeroic() )
+                if ( !IsHeroic() )
                     events.CancelEvent(EVENT_SUMMON_NERUBIAN);
                 me->CastSpell((Unit*)NULL, SPELL_LEECHING_SWARM, false);
                 Talk(EMOTE_LEECHING_SWARM);
@@ -266,99 +266,99 @@ public:
                 return;
             }
 
-            switch( events.ExecuteEvent() )
+            switch ( events.ExecuteEvent() )
             {
                 case 0:
                     break;
                 case EVENT_ENRAGE:
-                    {
-                        me->CastSpell(me, SPELL_BERSERK, true);
-                    }
-                    break;
+                {
+                    me->CastSpell(me, SPELL_BERSERK, true);
+                }
+                break;
                 case EVENT_RESPAWN_SPHERE:
+                {
+                    uint8 StartAt = urand(0, 5);
+                    uint8 i = StartAt;
+                    do
                     {
-                        uint8 StartAt = urand(0, 5);
-                        uint8 i = StartAt;
-                        do
-                        {
-                            if( Creature* c = ObjectAccessor::GetCreature(*me, SphereGUID[i]) )
-                                if( !c->HasAura(SPELL_FROST_SPHERE) )
-                                {
-                                    if( Creature* c = me->SummonCreature(NPC_FROST_SPHERE, AnubLocs[i + 5]) )
-                                        SphereGUID[i] = c->GetGUID();
-                                    break;
-                                }
-                            i = (i + 1) % 6;
-                        } while( i != StartAt );
-                        events.RepeatEvent(4s);
-                    }
-                    break;
+                        if ( Creature* c = ObjectAccessor::GetCreature(*me, SphereGUID[i]) )
+                            if ( !c->HasAura(SPELL_FROST_SPHERE) )
+                            {
+                                if ( Creature* c = me->SummonCreature(NPC_FROST_SPHERE, AnubLocs[i + 5]) )
+                                    SphereGUID[i] = c->GetGUID();
+                                break;
+                            }
+                        i = (i + 1) % 6;
+                    } while ( i != StartAt );
+                    events.RepeatEvent(4s);
+                }
+                break;
                 case EVENT_SPELL_FREEZING_SLASH:
-                    {
-                        if( me->GetVictim() )
-                            me->CastSpell(me->GetVictim(), SPELL_FREEZING_SLASH, false);
-                        events.RepeatEvent(15s, 20s);
-                    }
-                    break;
+                {
+                    if ( me->GetVictim() )
+                        me->CastSpell(me->GetVictim(), SPELL_FREEZING_SLASH, false);
+                    events.RepeatEvent(15s, 20s);
+                }
+                break;
                 case EVENT_SPELL_PENETRATING_COLD:
-                    {
-                        me->CastCustomSpell(SPELL_PENETRATING_COLD, SPELLVALUE_MAX_TARGETS, RAID_MODE(2, 5, 2, 5));
-                        events.RepeatEvent(18s);
-                    }
-                    break;
+                {
+                    me->CastCustomSpell(SPELL_PENETRATING_COLD, SPELLVALUE_MAX_TARGETS, RAID_MODE(2, 5, 2, 5));
+                    events.RepeatEvent(18s);
+                }
+                break;
                 case EVENT_SUMMON_NERUBIAN:
-                    {
-                        me->CastCustomSpell(SPELL_SUMMON_BURROWER, SPELLVALUE_MAX_TARGETS, RAID_MODE(1, 2, 2, 4));
-                        events.RepeatEvent(45s);
-                    }
-                    break;
+                {
+                    me->CastCustomSpell(SPELL_SUMMON_BURROWER, SPELLVALUE_MAX_TARGETS, RAID_MODE(1, 2, 2, 4));
+                    events.RepeatEvent(45s);
+                }
+                break;
                 case EVENT_SUBMERGE:
-                    {
-                        me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                        bool berserk = me->HasAura(SPELL_BERSERK);
-                        me->RemoveAllAuras();
-                        if (berserk)
-                            me->CastSpell(me, SPELL_BERSERK, true);
-                        Talk(EMOTE_SUBMERGE);
-                        Talk(EMOTE_BURROWER);
-                        me->CastSpell(me, SPELL_SUBMERGE, false);
-                        events.CancelEvent(EVENT_SUMMON_NERUBIAN);
-                        events.CancelEvent(EVENT_SPELL_FREEZING_SLASH);
-                        events.CancelEvent(EVENT_SPELL_PENETRATING_COLD);
-                        events.RescheduleEvent(EVENT_EMERGE, EMERGE_INTERVAL);
-                        events.RescheduleEvent(EVENT_SPELL_SUMMON_SPIKE, 2500ms);
-                        events.RescheduleEvent(EVENT_SUMMON_SCARAB, 3s);
-                    }
-                    break;
+                {
+                    me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                    bool berserk = me->HasAura(SPELL_BERSERK);
+                    me->RemoveAllAuras();
+                    if (berserk)
+                        me->CastSpell(me, SPELL_BERSERK, true);
+                    Talk(EMOTE_SUBMERGE);
+                    Talk(EMOTE_BURROWER);
+                    me->CastSpell(me, SPELL_SUBMERGE, false);
+                    events.CancelEvent(EVENT_SUMMON_NERUBIAN);
+                    events.CancelEvent(EVENT_SPELL_FREEZING_SLASH);
+                    events.CancelEvent(EVENT_SPELL_PENETRATING_COLD);
+                    events.RescheduleEvent(EVENT_EMERGE, EMERGE_INTERVAL);
+                    events.RescheduleEvent(EVENT_SPELL_SUMMON_SPIKE, 2500ms);
+                    events.RescheduleEvent(EVENT_SUMMON_SCARAB, 3s);
+                }
+                break;
                 case EVENT_SUMMON_SCARAB:
-                    {
-                        uint8 i = urand(0, 3);
-                        if( Creature* c = ObjectAccessor::GetCreature(*me, BurrowGUID[i]) )
-                            me->CastSpell(c, SPELL_SUMMON_SCARAB, true);
-                        events.RepeatEvent(4s);
-                    }
-                    break;
+                {
+                    uint8 i = urand(0, 3);
+                    if ( Creature* c = ObjectAccessor::GetCreature(*me, BurrowGUID[i]) )
+                        me->CastSpell(c, SPELL_SUMMON_SCARAB, true);
+                    events.RepeatEvent(4s);
+                }
+                break;
                 case EVENT_EMERGE:
-                    {
-                        me->CastSpell(me, SPELL_SPIKE_TELE, true);
-                        summons.DespawnEntry(NPC_SPIKE);
-                        events.CancelEvent(EVENT_SUMMON_SCARAB);
-                        events.RescheduleEvent(EVENT_EMERGE_2, 2s);
-                    }
-                    break;
+                {
+                    me->CastSpell(me, SPELL_SPIKE_TELE, true);
+                    summons.DespawnEntry(NPC_SPIKE);
+                    events.CancelEvent(EVENT_SUMMON_SCARAB);
+                    events.RescheduleEvent(EVENT_EMERGE_2, 2s);
+                }
+                break;
                 case EVENT_EMERGE_2:
-                    {
-                        Talk(SAY_EMERGE);
-                        me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                        me->setAttackTimer(BASE_ATTACK, 3000);
-                        me->RemoveAura(SPELL_SUBMERGE);
-                        me->CastSpell(me, SPELL_EMERGE, false);
-                        events.RescheduleEvent(EVENT_SUMMON_NERUBIAN, 5s, 8s);
-                        events.RescheduleEvent(EVENT_SPELL_FREEZING_SLASH, 7s, 15s);
-                        events.RescheduleEvent(EVENT_SPELL_PENETRATING_COLD, 15s, 20s);
-                        events.RescheduleEvent(EVENT_SUBMERGE, SUBMERGE_INTERVAL);
-                    }
-                    break;
+                {
+                    Talk(SAY_EMERGE);
+                    me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                    me->setAttackTimer(BASE_ATTACK, 3000);
+                    me->RemoveAura(SPELL_SUBMERGE);
+                    me->CastSpell(me, SPELL_EMERGE, false);
+                    events.RescheduleEvent(EVENT_SUMMON_NERUBIAN, 5s, 8s);
+                    events.RescheduleEvent(EVENT_SPELL_FREEZING_SLASH, 7s, 15s);
+                    events.RescheduleEvent(EVENT_SPELL_PENETRATING_COLD, 15s, 20s);
+                    events.RescheduleEvent(EVENT_SUBMERGE, SUBMERGE_INTERVAL);
+                }
+                break;
                 case EVENT_SPELL_SUMMON_SPIKE:
                     me->CastSpell(me, SPELL_SUMMON_SPIKE, true);
                     break;
@@ -369,7 +369,7 @@ public:
 
         void JustSummoned(Creature* summon)
         {
-            if( !summon )
+            if ( !summon )
                 return;
 
             summons.Summon(summon);
@@ -380,20 +380,20 @@ public:
             events.Reset();
             summons.DespawnAll();
             Talk(SAY_DEATH);
-            if( pInstance )
+            if ( pInstance )
                 pInstance->SetData(TYPE_ANUBARAK, DONE);
 
             Player* plr = nullptr;
-            if( !pInstance->instance->GetPlayers().isEmpty() )
+            if ( !pInstance->instance->GetPlayers().isEmpty() )
                 plr = pInstance->instance->GetPlayers().begin()->GetSource();
 
-            if( !plr )
+            if ( !plr )
                 return;
 
             // remove loot for the other faction (items are invisible for players, done in conditions), so corpse can be skinned
-            for( std::vector<LootItem>::iterator itr = me->loot.items.begin(); itr != me->loot.items.end(); ++itr )
-                if( ItemTemplate const* iProto = sObjectMgr->GetItemTemplate((*itr).itemid) )
-                    if( ((iProto->Flags2 & ITEM_FLAGS_EXTRA_HORDE_ONLY) && plr->GetTeamId() != TEAM_HORDE) || ((iProto->Flags2 & ITEM_FLAGS_EXTRA_ALLIANCE_ONLY) && plr->GetTeamId() != TEAM_ALLIANCE) )
+            for ( std::vector<LootItem>::iterator itr = me->loot.items.begin(); itr != me->loot.items.end(); ++itr )
+                if ( ItemTemplate const* iProto = sObjectMgr->GetItemTemplate((*itr).itemid) )
+                    if ( ((iProto->Flags2 & ITEM_FLAGS_EXTRA_HORDE_ONLY) && plr->GetTeamId() != TEAM_HORDE) || ((iProto->Flags2 & ITEM_FLAGS_EXTRA_ALLIANCE_ONLY) && plr->GetTeamId() != TEAM_ALLIANCE) )
                     {
                         (*itr).count = 0;
                         (*itr).is_looted = true;
@@ -403,7 +403,7 @@ public:
 
         void KilledUnit(Unit* who)
         {
-            if( who->GetTypeId() == TYPEID_PLAYER )
+            if ( who->GetTypeId() == TYPEID_PLAYER )
                 Talk(SAY_KILL_PLAYER);
         }
 
@@ -412,7 +412,7 @@ public:
             events.Reset();
             summons.DespawnAll();
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-            if( pInstance )
+            if ( pInstance )
                 pInstance->SetData(TYPE_FAILED, 1);
         }
 
@@ -427,7 +427,7 @@ public:
             if (!bIntro)
             {
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-                if( !me->IsInCombat() )
+                if ( !me->IsInCombat() )
                     Talk(SAY_INTRO);
                 bIntro = true;
             }
@@ -460,7 +460,7 @@ public:
 
         void DoAction(int32 param)
         {
-            if( param == 1 )
+            if ( param == 1 )
                 despawnTimer = 2000;
         }
 
@@ -470,12 +470,12 @@ public:
             me->CastSpell(me, SPELL_ACID_MANDIBLE, true);
             determinationTimer = urand(10000, 50000);
             despawnTimer = 0;
-            if( me->getFaction() == 16 ) // hostile - it's phase 2
-                if( Unit* target = me->SelectNearestTarget(250.0f) )
+            if ( me->getFaction() == 16 ) // hostile - it's phase 2
+                if ( Unit* target = me->SelectNearestTarget(250.0f) )
                 {
                     AttackStart(target);
                     DoZoneInCombat();
-                    if( Unit* t = SelectTarget(SELECT_TARGET_RANDOM, 0, 250.0f, true) )
+                    if ( Unit* t = SelectTarget(SELECT_TARGET_RANDOM, 0, 250.0f, true) )
                     {
                         me->AddThreat(t, 20000.0f);
                         AttackStart(t);
@@ -490,9 +490,9 @@ public:
 
         void UpdateAI(uint32 diff)
         {
-            if( despawnTimer )
+            if ( despawnTimer )
             {
-                if( despawnTimer <= (int32)diff )
+                if ( despawnTimer <= (int32)diff )
                 {
                     despawnTimer = 0;
                     me->DisappearAndDie();
@@ -503,10 +503,10 @@ public:
                 return;
             }
 
-            if( !UpdateVictim() )
+            if ( !UpdateVictim() )
                 return;
 
-            if( determinationTimer <= (int32)diff )
+            if ( determinationTimer <= (int32)diff )
             {
                 me->CastSpell(me, SPELL_DETERMINATION, false);
                 determinationTimer = urand(20000, 60000);
@@ -574,10 +574,10 @@ public:
 
         void DamageTaken(Unit*, uint32& damage, DamageEffectType, SpellSchoolMask)
         {
-            if( me->GetHealth() <= damage )
+            if ( me->GetHealth() <= damage )
             {
                 damage = 0;
-                if( !me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE) )
+                if ( !me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE) )
                 {
                     me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                     me->GetMotionMaster()->MoveIdle();
@@ -589,7 +589,7 @@ public:
 
         void SpellHit(Unit*  /*caster*/, const SpellInfo* spell)
         {
-            if( spell->Id == SPELL_SPIKE_FAIL )
+            if ( spell->Id == SPELL_SPIKE_FAIL )
             {
                 me->RemoveAllAuras();
                 me->DespawnOrUnsummon(1500);
@@ -598,9 +598,9 @@ public:
 
         void UpdateAI(uint32 diff)
         {
-            if( permafrostTimer )
+            if ( permafrostTimer )
             {
-                if( permafrostTimer <= diff )
+                if ( permafrostTimer <= diff )
                 {
                     permafrostTimer = 0;
                     me->RemoveAurasDueToSpell(SPELL_FROST_SPHERE);
@@ -651,10 +651,10 @@ public:
             events.Reset();
             events.RescheduleEvent(EVENT_SUBMERGE, 30s);
 
-            if(IsHeroic())
+            if (IsHeroic())
                 events.RescheduleEvent(EVENT_SPELL_SHADOW_STRIKE, 30s, 45s);
 
-            if(Unit* target = me->SelectNearestTarget(250.0f))
+            if (Unit* target = me->SelectNearestTarget(250.0f))
             {
                 AttackStart(target);
                 DoZoneInCombat();
@@ -663,13 +663,13 @@ public:
 
         void SpellHitTarget(Unit* target, const SpellInfo* spell)
         {
-            if( !target || !spell )
+            if ( !target || !spell )
                 return;
 
-            if( spell->Id == SPELL_SHADOW_STRIKE )
+            if ( spell->Id == SPELL_SHADOW_STRIKE )
             {
                 float o = target->GetOrientation();
-                if( o >= M_PI )
+                if ( o >= M_PI )
                     o -= M_PI;
                 else
                     o += M_PI;
@@ -682,25 +682,25 @@ public:
 
         void UpdateAI(uint32 diff)
         {
-            if( !UpdateVictim() )
+            if ( !UpdateVictim() )
                 return;
 
             events.Update(diff);
 
-            if( me->HasUnitState(UNIT_STATE_CASTING) )
+            if ( me->HasUnitState(UNIT_STATE_CASTING) )
                 return;
 
-            switch( events.ExecuteEvent() )
+            switch ( events.ExecuteEvent() )
             {
                 case 0:
                     break;
                 case EVENT_SPELL_SHADOW_STRIKE:
-                    if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 250.0f, true) )
+                    if ( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 250.0f, true) )
                         me->CastSpell(target, SPELL_SHADOW_STRIKE, false);
                     events.RepeatEvent(30s, 45s);
                     break;
                 case EVENT_SUBMERGE:
-                    if( HealthBelowPct(80) && !me->HasAura(RAID_MODE(66193, 67855, 67856, 67857)) ) // not having permafrost - allow submerge
+                    if ( HealthBelowPct(80) && !me->HasAura(RAID_MODE(66193, 67855, 67856, 67857)) ) // not having permafrost - allow submerge
                     {
                         me->GetMotionMaster()->MoveIdle();
                         me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
@@ -762,9 +762,9 @@ public:
 
         void DoAction(int32 param)
         {
-            if( param == -1 )
+            if ( param == -1 )
             {
-                if( Unit* target = ObjectAccessor::GetPlayer(*me, TargetGUID) )
+                if ( Unit* target = ObjectAccessor::GetPlayer(*me, TargetGUID) )
                     target->RemoveAura(SPELL_MARK);
                 TargetGUID = 0;
                 me->RemoveAllAuras();
@@ -777,7 +777,7 @@ public:
         void SelectNewTarget(bool next)
         {
             if (TargetGUID)
-                if( Unit* target = ObjectAccessor::GetPlayer(*me, TargetGUID) )
+                if ( Unit* target = ObjectAccessor::GetPlayer(*me, TargetGUID) )
                     target->RemoveAura(SPELL_MARK);
             TargetGUID = 0;
             if (!next)
@@ -787,7 +787,7 @@ public:
             }
             DoZoneInCombat();
             DoResetThreat();
-            if( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 250.0f, true) )
+            if ( Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 250.0f, true) )
             {
                 if (!next)
                 {
@@ -810,10 +810,10 @@ public:
 
         void UpdateAI(uint32 diff)
         {
-            if( TargetGUID )
+            if ( TargetGUID )
             {
                 Unit* target = ObjectAccessor::GetPlayer(*me, TargetGUID);
-                if( !target || !target->HasAura(SPELL_MARK) || !me->IsValidAttackTarget(target) || me->GetMotionMaster()->GetCurrentMovementGeneratorType() != CHASE_MOTION_TYPE || !me->HasUnitState(UNIT_STATE_CHASE_MOVE) )
+                if ( !target || !target->HasAura(SPELL_MARK) || !me->IsValidAttackTarget(target) || me->GetMotionMaster()->GetCurrentMovementGeneratorType() != CHASE_MOTION_TYPE || !me->HasUnitState(UNIT_STATE_CHASE_MOVE) )
                 {
                     SelectNewTarget(true);
                     return;
@@ -822,7 +822,7 @@ public:
 
             events.Update(diff);
 
-            switch( events.ExecuteEvent() )
+            switch ( events.ExecuteEvent() )
             {
                 case 0:
                     break;
@@ -858,13 +858,13 @@ public:
 
         void HandleEffectPeriodic(AuraEffect const*   /*aurEff*/)
         {
-            if( Unit* target = GetTarget() )
+            if ( Unit* target = GetTarget() )
             {
-                if( Creature* c = target->FindNearestCreature(NPC_FROST_SPHERE, 8.0f, true) )
+                if ( Creature* c = target->FindNearestCreature(NPC_FROST_SPHERE, 8.0f, true) )
                 {
                     target->UpdatePosition(*c, false);
                     target->CastCustomSpell(SPELL_SPIKE_FAIL, SPELLVALUE_MAX_TARGETS, 1);
-                    if( target->GetTypeId() == TYPEID_UNIT )
+                    if ( target->GetTypeId() == TYPEID_UNIT )
                         target->ToCreature()->AI()->DoAction(-1);
                     Remove();
                     return;
