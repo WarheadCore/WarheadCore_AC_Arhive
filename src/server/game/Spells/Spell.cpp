@@ -5269,13 +5269,16 @@ void Spell::HandleThreatSpells()
         if (!target)
             continue;
 
-        bool IsFriendly = m_caster->IsFriendlyTo(target);
         // positive spells distribute threat among all units that are in combat with target, like healing
-        if (m_spellInfo->_IsPositiveSpell() && IsFriendly)
+        if (m_spellInfo->_IsPositiveSpell())
             target->getHostileRefManager().threatAssist(m_caster, threatToAdd, m_spellInfo);
         // for negative spells threat gets distributed among affected targets
-        else if (!m_spellInfo->_IsPositiveSpell() && !IsFriendly && target->CanHaveThreatList())
+        else if(!m_spellInfo->_IsPositiveSpell())
+        {
+            if (!target->CanHaveThreatList())
+                continue;
             target->AddThreat(m_caster, threatToAdd, m_spellInfo->GetSchoolMask(), m_spellInfo);
+        }
     }
 
     LOG_DEBUG("spells.aura", "Spell %u, added an additional %f threat for %s %u target(s)",
