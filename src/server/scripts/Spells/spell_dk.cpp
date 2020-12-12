@@ -1189,9 +1189,8 @@ public:
         {
             SpellInfo const* talentSpell = sSpellMgr->GetSpellInfo(SPELL_DK_ANTI_MAGIC_SHELL_TALENT);
             amount = talentSpell->Effects[EFFECT_0].CalcValue(GetCaster());
-            if (Unit* totem = GetCaster())
-                if (Unit* owner = totem->ToTotem()->GetSummonerUnit())
-                    amount += int32(2 * owner->GetTotalAttackPowerValue(BASE_ATTACK));
+            if (Player* player = GetCaster()->ToPlayer())
+                amount += int32(2 * player->GetTotalAttackPowerValue(BASE_ATTACK));
             canBeRecalculated = false;
         }
 
