@@ -584,7 +584,7 @@ typedef std::vector<bool> EnchantCustomAttribute;
 
 typedef std::vector<SpellInfo*> SpellInfoMap;
 
-typedef std::unordered_map<int32, std::vector<int32> > SpellLinkedMap;
+typedef std::map<int32, std::vector<int32> > SpellLinkedMap;
 
 bool IsPrimaryProfessionSkill(uint32 skill);
 
@@ -683,7 +683,7 @@ public:
     SpellEnchantProcEntry const* GetSpellEnchantProcEvent(uint32 enchId) const;
     bool IsArenaAllowedEnchancment(uint32 ench_id) const;
 
-    std::vector<int32> const* GetSpellLinked(int32 spell_id) const;
+    const std::vector<int32>* GetSpellLinked(int32 spell_id) const;
 
     PetLevelupSpellSet const* GetPetLevelupSpellList(uint32 petFamily) const;
     PetDefaultSpellsEntry const* GetPetDefaultSpellsEntry(int32 id) const;
