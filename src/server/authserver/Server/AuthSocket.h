@@ -21,6 +21,7 @@
 #include "Common.h"
 #include "BigNumber.h"
 #include "RealmSocket.h"
+#include "SRP6/SRP6.h"
 #include <mutex>
 
 class ACE_INET_Addr;
@@ -62,8 +63,6 @@ public:
     bool _HandleXferCancel();
     bool _HandleXferAccept();
 
-    void _SetVSFields(const std::string& rI);
-
     FILE* pPatch;
     std::mutex patcherLock;
 
@@ -71,9 +70,7 @@ private:
     RealmSocket& socket_;
     RealmSocket& socket(void) { return socket_; }
 
-    BigNumber N, s, g, v;
-    BigNumber b, B;
-    BigNumber K;
+    SRP6 srp;
     BigNumber _reconnectProof;
 
     eStatus _status;

@@ -30,6 +30,7 @@
 #include "SHA1.h"
 #include "openssl/crypto.h"
 #include "Util.h"
+#include "SRP6/SRP6.h"
 
 #define ChunkSize 2048
 
@@ -193,11 +194,7 @@ Patcher PatchesCache;
 // Constructor - set the N and g values for SRP6
 AuthSocket::AuthSocket(RealmSocket& socket) :
     pPatch(nullptr), socket_(socket), _status(STATUS_CHALLENGE), _build(0),
-    _expversion(0), _accountSecurityLevel(SEC_PLAYER)
-{
-    N.SetHexStr("894B645E89E1535BBDAD5B8B290650530801B18EBFBF5E8FAB3C82872A3E9BB7");
-    g.SetDword(7);
-}
+    _expversion(0), _accountSecurityLevel(SEC_PLAYER) { }
 
 // Close patch file descriptor before leaving
 AuthSocket::~AuthSocket(void) { }
@@ -276,45 +273,6 @@ void AuthSocket::OnRead()
             return;
         }
     }
-}
-
-// Make the SRP6 calculation from hash in dB
-void AuthSocket::_SetVSFields(const std::string& rI)
-{
-    s.SetRand(s_BYTE_SIZE * 8);
-
-    BigNumber I;
-    I.SetHexStr(rI.c_str());
-
-    // In case of leading zeros in the rI hash, restore them
-    uint8 mDigest[SHA_DIGEST_LENGTH];
-    memset(mDigest, 0, SHA_DIGEST_LENGTH);
-    if (I.GetNumBytes() <= SHA_DIGEST_LENGTH)
-        memcpy(mDigest, I.AsByteArray().get(), I.GetNumBytes());
-
-    std::reverse(mDigest, mDigest + SHA_DIGEST_LENGTH);
-
-    SHA1Hash sha;
-    sha.UpdateData(s.AsByteArray().get(), s.GetNumBytes());
-    sha.UpdateData(mDigest, SHA_DIGEST_LENGTH);
-    sha.Finalize();
-    BigNumber x;
-    x.SetBinary(sha.GetDigest(), sha.GetLength());
-    v = g.ModExp(x, N);
-
-    // No SQL injection (username escaped)
-    char* v_hex, *s_hex;
-    v_hex = v.AsHexStr();
-    s_hex = s.AsHexStr();
-
-    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPD_VS);
-    stmt->setString(0, v_hex);
-    stmt->setString(1, s_hex);
-    stmt->setString(2, _login);
-    LoginDatabase.Execute(stmt);
-
-    OPENSSL_free(v_hex);
-    OPENSSL_free(s_hex);
 }
 
 std::map<std::string, uint32> LastLoginAttemptTimeForIP;
