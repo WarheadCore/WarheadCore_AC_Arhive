@@ -54,7 +54,6 @@ public:
 
             player->GiveLevel(newLevel);
             player->SetUInt32Value(PLAYER_XP, 0);
-            player->DestroyItemCount(item->GetEntry(), 1, true);
 
             sModuleLocale->SendPlayerMessage(player, MODULE_NAME, ILU_LOCALE_GET_LEVEL, newLevel);
         }
@@ -64,6 +63,8 @@ public:
 
         if (CONF_GET_BOOL("ILU.Teleport.Enable"))
             PlayerTeleport(player);
+
+        player->DestroyItemCount(item->GetEntry(), 1, true);
 
         return true;
     }
