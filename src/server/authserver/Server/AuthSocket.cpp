@@ -19,6 +19,9 @@
 #include <openssl/md5.h>
 
 #include "Common.h"
+#include "CryptoGenerics.h"
+#include "CryptoRandom.h"
+#include "CryptoHash.h"
 #include "DatabaseEnv.h"
 #include "ByteBuffer.h"
 #include "Config.h"
@@ -27,10 +30,8 @@
 #include "AuthSocket.h"
 #include "AuthCodes.h"
 #include "TOTP.h"
-#include "SHA1.h"
 #include "openssl/crypto.h"
 #include "Util.h"
-#include "SRP6/SRP6.h"
 
 #define ChunkSize 2048
 
@@ -78,8 +79,7 @@ typedef struct AUTH_LOGON_PROOF_C
 {
     uint8   cmd;
     uint8   A[32];
-    uint8   M1[20];
-    uint8   crc_hash[20];
+    Crypto::SHA1::Digest M1, crc_hash;
     uint8   number_of_keys;
     uint8   securityFlags;                                  // 0x00-0x04
 } sAuthLogonProof_C;
@@ -88,7 +88,7 @@ typedef struct AUTH_LOGON_PROOF_S
 {
     uint8   cmd;
     uint8   error;
-    uint8   M2[20];
+    Crypto::SHA1::Digest M2;
     uint32  unk1;
     uint32  unk2;
     uint16  unk3;
@@ -98,7 +98,7 @@ typedef struct AUTH_LOGON_PROOF_S_OLD
 {
     uint8   cmd;
     uint8   error;
-    uint8   M2[20];
+    Crypto::SHA1::Digest M2;
     uint32  unk2;
 } sAuthLogonProof_S_Old;
 
@@ -106,8 +106,7 @@ typedef struct AUTH_RECONNECT_PROOF_C
 {
     uint8   cmd;
     uint8   R1[16];
-    uint8   R2[20];
-    uint8   R3[20];
+    Crypto::SHA1::Digest R2, R3;
     uint8   number_of_keys;
 } sAuthReconnectProof_C;
 
@@ -133,6 +132,16 @@ typedef struct AuthHandler
     uint32 status;
     bool (AuthSocket::*handler)(void);
 } AuthHandler;
+
+struct BufferSizes
+{
+    static constexpr size_t SRP_6_V = 0x20;
+    static constexpr size_t SRP_6_S = 0x20;
+};
+
+#define MAX_ACCEPTED_CHALLENGE_SIZE (sizeof(AUTH_LOGON_CHALLENGE_C) + 16)
+#define AUTH_LOGON_CHALLENGE_INITIAL_SIZE 4
+#define REALM_LIST_PACKET_SIZE 5
 
 // GCC have alternative #pragma pack() syntax and old gcc version not support pack(pop), also any gcc version not support it at some paltform
 #if defined(__GNUC__)

@@ -335,7 +335,9 @@ WH_COMMON_API std::string GetAddressString(ACE_INET_Addr const& addr);
 WH_COMMON_API uint32 CreatePIDFile(const std::string& filename);
 WH_COMMON_API uint32 GetPID();
 
-WH_COMMON_API std::string ByteArrayToHexStr(uint8 const* bytes, uint32 length, bool reverse = false);
+WH_COMMON_API std::string ByteArrayToHexStr(uint8 const* bytes, size_t length, bool reverse = false);
+template <typename Container>
+std::string ByteArrayToHexStr(Container const& c, bool reverse = false) { return ByteArrayToHexStr(std::data(c), std::size(c), reverse); }
 WH_COMMON_API void HexStrToByteArray(std::string_view str, uint8* out, bool reverse = false);
 WH_COMMON_API bool StringEqualI(std::string_view str1, std::string_view str2);
 WH_COMMON_API bool StringStartsWith(std::string_view haystack, std::string_view needle);
