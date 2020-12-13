@@ -14,9 +14,9 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
- 
-#ifndef _CRYPTOHASH_H
-#define _CRYPTOHASH_H
+
+#ifndef _HMAC_H
+#define _HMAC_H
 
 #include "CryptoConstants.h"
 #include "Define.h"
@@ -24,66 +24,79 @@
 #include <array>
 #include <string>
 #include <string_view>
-#include <openssl/evp.h>
+#include <openssl/hmac.h>
 
 class BigNumber;
 
 namespace Impl
 {
-    struct GenericHashImpl
+    struct HMACImpl
     {
         typedef EVP_MD const* (*HashCreator)();
 
 #if defined(OPENSSL_VERSION_NUMBER) && OPENSSL_VERSION_NUMBER < 0x10100000L
-        static EVP_MD_CTX* MakeCTX() { return EVP_MD_CTX_create(); }
-        static void DestroyCTX(EVP_MD_CTX* ctx) { EVP_MD_CTX_destroy(ctx); }
+        static HMAC_CTX* MakeCTX()
+        {
+            HMAC_CTX* ctx = new HMAC_CTX();
+            HMAC_CTX_init(ctx);
+            return ctx;
+        }
+
+        static void DestroyCTX(HMAC_CTX* ctx)
+        {
+            HMAC_CTX_cleanup(ctx);
+            delete ctx;
+        }
 #else
-        static EVP_MD_CTX* MakeCTX() { return EVP_MD_CTX_new(); }
-        static void DestroyCTX(EVP_MD_CTX* ctx) { EVP_MD_CTX_free(ctx); }
+        static HMAC_CTX* MakeCTX() { return HMAC_CTX_new(); }
+        static void DestroyCTX(HMAC_CTX* ctx) { HMAC_CTX_free(ctx); }
 #endif
     };
 
-    template <GenericHashImpl::HashCreator HashCreator, size_t DigestLength>
-    class GenericHash
+    template <HMACImpl::HashCreator HashCreator, size_t DigestLength>
+    class GenericHMAC
     {
         public:
             static constexpr size_t DIGEST_LENGTH = DigestLength;
             using Digest = std::array<uint8, DIGEST_LENGTH>;
 
-            static Digest GetDigestOf(uint8 const* data, size_t len)
+            template <typename Container>
+            static Digest GetDigestOf(Container const& seed, uint8 const* data, size_t len)
             {
-                GenericHash hash;
+                GenericHMAC hash(seed);
                 hash.UpdateData(data, len);
                 hash.Finalize();
                 return hash.GetDigest();
             }
 
-            template <typename... Ts>
-            static auto GetDigestOf(Ts&&... pack) -> std::enable_if_t<!(std::is_integral_v<std::decay_t<Ts>> || ...), Digest>
+            template <typename Container, typename... Ts>
+            static auto GetDigestOf(Container const& seed, Ts&&... pack) -> std::enable_if_t<!(std::is_integral_v<std::decay_t<Ts>> || ...), Digest>
             {
-                GenericHash hash;
+                GenericHMAC hash(seed);
                 (hash.UpdateData(std::forward<Ts>(pack)), ...);
                 hash.Finalize();
                 return hash.GetDigest();
             }
 
-            GenericHash() : _ctx(GenericHashImpl::MakeCTX())
+            GenericHMAC(uint8 const* seed, size_t len) : _ctx(HMACImpl::MakeCTX())
             {
-                int result = EVP_DigestInit_ex(_ctx, HashCreator(), nullptr);
+                int result = HMAC_Init_ex(_ctx, seed, len, HashCreator(), nullptr);
                 ASSERT(result == 1);
             }
+            template <typename Container>
+            GenericHMAC(Container const& container) : GenericHMAC(std::data(container), std::size(container)) {}
 
-            ~GenericHash()
+            ~GenericHMAC()
             {
                 if (!_ctx)
                     return;
-                GenericHashImpl::DestroyCTX(_ctx);
+                HMACImpl::DestroyCTX(_ctx);
                 _ctx = nullptr;
             }
 
             void UpdateData(uint8 const* data, size_t len)
             {
-                int result = EVP_DigestUpdate(_ctx, data, len);
+                int result = HMAC_Update(_ctx, data, len);
                 ASSERT(result == 1);
             }
             void UpdateData(std::string_view str) { UpdateData(reinterpret_cast<uint8 const*>(str.data()), str.size()); }
@@ -94,26 +107,24 @@ namespace Impl
 
             void Finalize()
             {
-                uint32 length;
-                int result = EVP_DigestFinal_ex(_ctx, _digest.data(), &length);
+                uint32 length = 0;
+                int result = HMAC_Final(_ctx, _digest.data(), &length);
                 ASSERT(result == 1);
                 ASSERT(length == DIGEST_LENGTH);
-                GenericHashImpl::DestroyCTX(_ctx);
+                HMACImpl::DestroyCTX(_ctx);
                 _ctx = nullptr;
             }
 
             Digest const& GetDigest() const { return _digest; }
-
         private:
-            EVP_MD_CTX* _ctx;
-            Digest _digest = { };
+            HMAC_CTX* _ctx;
+            Digest _digest;
     };
 }
 
 namespace Crypto
 {
-    using SHA1 = Impl::GenericHash<EVP_sha1, Constants::SHA1_DIGEST_LENGTH_BYTES>;
-    using SHA256 = Impl::GenericHash<EVP_sha256, Constants::SHA256_DIGEST_LENGTH_BYTES>;
+    using HMAC_SHA1 = Impl::GenericHMAC<EVP_sha1, Constants::SHA1_DIGEST_LENGTH_BYTES>;
+    using HMAC_SHA256 = Impl::GenericHMAC<EVP_sha256, Constants::SHA256_DIGEST_LENGTH_BYTES>;
 }
-
 #endif
