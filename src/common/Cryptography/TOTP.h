@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #ifndef _TOTP_H
 #define _TOTP_H
 
@@ -24,7 +24,7 @@
 
 namespace Crypto
 {
-    struct TC_COMMON_API TOTP
+    struct TOTP
     {
         static constexpr size_t RECOMMENDED_SECRET_LENGTH = 20;
         using Secret = std::vector<uint8>;
