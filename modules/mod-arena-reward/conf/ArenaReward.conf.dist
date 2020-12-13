@@ -1,0 +1,142 @@
+#
+# This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+#
+# This file is free software; as a special exception the author gives
+# unlimited permission to copy and/or distribute it, with or without
+# modifications, as long as this notice is preserved.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# User has manually chosen to ignore the git-tests, so throw them a warning.
+# This is done EACH compile so they can be alerted about the consequences.
+#
+
+########################################
+# ArenaReward module configuration
+########################################
+[worldserver]
+
+#
+#    ArenaReward.Enable
+#        Description: Enable system arena reward.
+#        Default: 0
+#
+
+ArenaReward.Enable = 0
+
+#
+#    ArenaReward.Reward.Rating.ItemID
+#        Description: Enable add item after win/lose arena
+#        Default: 1
+#
+#    ArenaReward.Reward.Rating.ItemID
+#        Description: Item for reward rating arena
+#        Default: 37711
+#
+#
+#    ArenaReward.Reward.Rating.ItemCount.WinnerTeam
+#        Description: Item count for reward rating arena
+#        Default: 3
+#
+#
+#    ArenaReward.Reward.Rating.ItemCount.LoserTeam
+#        Description: Item count for reward rating arena
+#        Default: 1
+#
+
+ArenaReward.Reward.Rating.Enable = 1
+ArenaReward.Reward.Rating.ItemID = 37711
+ArenaReward.Reward.Rating.ItemCount.WinnerTeam = 3
+ArenaReward.Reward.Rating.ItemCount.LoserTeam = 1
+
+#
+#    ArenaReward.Reward.Skirmish.Enable
+#        Description: Enable add item after win/lose arena
+#        Default: 1
+#
+#    ArenaReward.Reward.Skirmish.ItemID
+#        Description: Item for reward skirmish arena
+#        Default: 37711
+#
+#
+#    ArenaReward.Reward.Skirmish.ItemCount.WinnerTeam
+#        Description: Item count for reward skirmish arena
+#        Default: 3
+#
+#
+#    ArenaReward.Reward.Skirmish.ItemCount.LoserTeam
+#        Description: Item count for reward skirmish arena
+#        Default: 1
+#
+
+ArenaReward.Reward.Skirmish.Enable = 1
+ArenaReward.Reward.Skirmish.ItemID = 37711
+ArenaReward.Reward.Skirmish.ItemCount.WinnerTeam = 3
+ArenaReward.Reward.Skirmish.ItemCount.LoserTeam = 1
+
+#
+#    ArenaReward.AntiFarm.Enable
+#        Description: Enable antifarm system
+#        Default: 0
+#
+#
+#    ArenaReward.AntiFarm.Check.IP.Enable
+#        Description: Enable check players IP
+#        Default: 1
+#
+#
+#    ArenaReward.AntiFarm.Check.Equipment.Enable
+#        Description: Enable check players equipment
+#        Default: 1
+#
+#
+#    ArenaReward.AntiFarm.Check.Health.Enable
+#        Description: Enable check players equipment
+#        Default: 1
+#
+
+ArenaReward.AntiFarm.Enable = 1
+ArenaReward.AntiFarm.Check.IP.Enable = 1
+ArenaReward.AntiFarm.Check.Equipment.Enable = 1
+ArenaReward.AntiFarm.Check.Health.Enable = 1
+
+#
+#    ArenaReward.AntiFarm.Teleport.Enable
+#        Enable teleport after update level
+#        Default: 0 (disabled)
+#                 1 (enabled)
+#
+#
+#    ArenaReward.AntiFarm.Teleport.Location
+#        World location for teleport
+#        Default: "571 5811.411 646.514 647.422 0.962198" - Dalaran
+#
+#
+
+ArenaReward.AntiFarm.Teleport.Enable = 1
+ArenaReward.AntiFarm.Teleport.Location = "571 5811.411 646.514 647.422 0.962198"
+
+#
+#    ArenaReward.AntiFarm.SpellApply.Enable
+#        Enable apply spell if player farmer. Work if enable ArenaReward.AntiFarm.Teleport.Enable!!!
+#        Default: 0 (disabled)
+#                 1 (enabled)
+#
+
+ArenaReward.AntiFarm.SpellApply.Enable = 1
+
+#
+#    ArenaReward.AntiFarm.Ban.Enable
+#        Add ban if player possible farmer
+#        Default: 0 (disabled)
+#                 1 (enabled)
+#
+#    ArenaReward.AntiFarm.Ban.Duration
+#        Add ban if player possible farmer
+#        Default: 1d (default)
+#
+
+ArenaReward.AntiFarm.Ban.Enable = 0
+ArenaReward.AntiFarm.Ban.Duration = "1d"

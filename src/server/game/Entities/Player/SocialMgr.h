@@ -20,9 +20,8 @@
 
 #include "Common.h"
 #include "DatabaseEnv.h"
+#include <map>
 
-class SocialMgr;
-class PlayerSocial;
 class Player;
 class WorldPacket;
 
@@ -40,7 +39,7 @@ enum SocialFlag
     SOCIAL_FLAG_FRIEND      = 0x01,
     SOCIAL_FLAG_IGNORED     = 0x02,
     SOCIAL_FLAG_MUTED       = 0x04,                          // guessed
-    SOCIAL_FLAG_UNK         = 0x08,                           // Unknown - does not appear to be RaF
+    SOCIAL_FLAG_UNK         = 0x08,                          // Unknown - does not appear to be RaF
 
     SOCIAL_FLAG_ALL         = SOCIAL_FLAG_FRIEND | SOCIAL_FLAG_IGNORED | SOCIAL_FLAG_MUTED
 };
@@ -60,9 +59,6 @@ struct FriendInfo
     FriendInfo(uint8 flags, std::string const& note) : Status(FRIEND_STATUS_OFFLINE), Flags(flags), Area(0), Level(0), Class(0), Note(note)
     { }
 };
-
-typedef std::map<uint32, FriendInfo> PlayerSocialMap;
-typedef std::map<uint32, PlayerSocial> SocialMap;
 
 /// Results of friend related commands
 enum FriendsResult : uint8
@@ -92,12 +88,14 @@ enum FriendsResult : uint8
     FRIEND_MUTE_ADDED       = 0x16,
     FRIEND_MUTE_REMOVED     = 0x17,
     FRIEND_MUTE_AMBIGUOUS   = 0x18,                         // That name is ambiguous, type more of the player's server name
-    FRIEND_UNK7             = 0x19,                         // no message at client
-    FRIEND_UNKNOWN          = 0x1A                          // Unknown friend response from server
+    FRIEND_UNK1             = 0x19,                         // no message at client
+    FRIEND_UNK2             = 0x1A,
+    FRIEND_UNK3             = 0x1B,
+    FRIEND_UNKNOWN          = 0x1C                          // Unknown friend response from server
 };
 
-#define SOCIALMGR_FRIEND_LIMIT  50
-#define SOCIALMGR_IGNORE_LIMIT  50
+#define SOCIALMGR_FRIEND_LIMIT  50u
+#define SOCIALMGR_IGNORE_LIMIT  50u
 
 class PlayerSocial
 {
@@ -106,13 +104,12 @@ class PlayerSocial
 public:
 
     PlayerSocial();
-    ~PlayerSocial();
     // adding/removing
-    bool AddToSocialList(uint64 friend_guid, bool ignore);
-    void RemoveFromSocialList(uint64 friend_guid, bool ignore);
+    bool AddToSocialList(uint64 friend_guid, SocialFlag flag);
+    void RemoveFromSocialList(uint64 friend_guid, SocialFlag flag);
     void SetFriendNote(uint64 friendGuid, std::string note);
     // Packet send's
-    void SendSocialList(Player* player);
+    void SendSocialList(Player* player, uint32 flags);
     // Misc
     bool HasFriend(uint64 friend_guid) const;
     bool HasIgnore(uint64 ignore_guid) const;
@@ -122,6 +119,7 @@ public:
 
 private:
     bool _checkContact(uint64 guid, SocialFlag flags) const;
+    typedef std::map<uint32, FriendInfo> PlayerSocialMap;
     PlayerSocialMap m_playerSocialMap;
     uint64 m_playerGUID;
 };
@@ -137,15 +135,16 @@ public:
 
     // Misc
     void RemovePlayerSocial(uint64 guid) { m_socialMap.erase(guid); }
-
-    void GetFriendInfo(Player* player, uint64 friendGUID, FriendInfo& friendInfo);
+    static void GetFriendInfo(Player* player, uint64 friendGUID, FriendInfo& friendInfo);
     // Packet management
     void MakeFriendStatusPacket(FriendsResult result, uint64 friend_guid, WorldPacket* data);
     void SendFriendStatus(Player* player, FriendsResult result, uint64 friend_guid, bool broadcast);
     void BroadcastToFriendListers(Player* player, WorldPacket* packet);
     // Loading
     PlayerSocial* LoadFromDB(PreparedQueryResult result, uint64 guid);
+
 private:
+    typedef std::map<uint32, PlayerSocial> SocialMap;
     SocialMap m_socialMap;
 };
 

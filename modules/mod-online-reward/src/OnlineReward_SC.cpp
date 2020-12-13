@@ -52,12 +52,12 @@ public:
 
     void OnAfterConfigLoad(bool /*reload*/) override
     {
-        sGameConfig->AddBoolConfig("OnlineReward.Enable");
-        sGameConfig->AddBoolConfig("OnlineReward.PerOnline.Enable");
-        sGameConfig->AddBoolConfig("OnlineReward.PerTime.Enable");
-        sGameConfig->AddIntConfig("OnlineReward.PerTime.Time", 3600);
-        sGameConfig->AddIntConfig("OnlineReward.PerTime.ItemID", 47241);
-        sGameConfig->AddIntConfig("OnlineReward.PerTime.ItemCount", 1);
+        sGameConfig->AddOption<bool>("OnlineReward.Enable");
+        sGameConfig->AddOption<bool>("OnlineReward.PerOnline.Enable");
+        sGameConfig->AddOption<bool>("OnlineReward.PerTime.Enable");
+        sGameConfig->AddOption<int32>("OnlineReward.PerTime.Time", 3600);
+        sGameConfig->AddOption<int32>("OnlineReward.PerTime.ItemID", 47241);
+        sGameConfig->AddOption<int32>("OnlineReward.PerTime.ItemCount", 1);
     }
 
     void OnStartup() override

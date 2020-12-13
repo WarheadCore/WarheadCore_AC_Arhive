@@ -34,7 +34,7 @@ ArenaTeam::ArenaTeam()
     Stats.WeekGames   = 0;
     Stats.SeasonGames = 0;
     Stats.Rank        = 0;
-    Stats.Rating      = sGameConfig->GetIntConfig("Arena.ArenaStartRating");
+    Stats.Rating      = CONF_GET_INT("Arena.ArenaStartRating");
     Stats.WeekWins    = 0;
     Stats.SeasonWins  = 0;
 }
@@ -122,8 +122,8 @@ bool ArenaTeam::AddMember(uint64 playerGuid)
     // Set player's personal rating
     uint32 personalRating = 0;
 
-    if (sGameConfig->GetIntConfig("Arena.ArenaStartPersonalRating") > 0)
-        personalRating = sGameConfig->GetIntConfig("Arena.ArenaStartPersonalRating");
+    if (CONF_GET_INT("Arena.ArenaStartPersonalRating") > 0)
+        personalRating = CONF_GET_INT("Arena.ArenaStartPersonalRating");
     else if (GetRating() >= 1000)
         personalRating = 1000;
 
@@ -144,7 +144,7 @@ bool ArenaTeam::AddMember(uint64 playerGuid)
     }
     else
     {
-        matchMakerRating = sGameConfig->GetIntConfig("Arena.ArenaStartMatchmakerRating");
+        matchMakerRating = CONF_GET_INT("Arena.ArenaStartMatchmakerRating");
         maxMMR = matchMakerRating;
     }
 
@@ -244,7 +244,7 @@ bool ArenaTeam::LoadMembersFromDB(QueryResult result)
         //newMember.Name             = fields[6].GetString();
         newMember.Class            = fields[7].GetUInt8();
         newMember.PersonalRating   = fields[8].GetUInt16();
-        newMember.MatchMakerRating = fields[9].GetUInt16() > 0 ? fields[9].GetUInt16() : sGameConfig->GetIntConfig("Arena.ArenaStartMatchmakerRating");;
+        newMember.MatchMakerRating = fields[9].GetUInt16() > 0 ? fields[9].GetUInt16() : CONF_GET_INT("Arena.ArenaStartMatchmakerRating");;
         newMember.MaxMMR           = std::max(fields[10].GetUInt16(), newMember.MatchMakerRating);
 
         // Delete member if character information is missing
@@ -514,7 +514,7 @@ void ArenaTeamMember::ModifyMatchmakerRating(int32 mod, uint32 /*slot*/)
     if (mod < 0)
     {
         // pussywizard: prevent lowering MMR too much from max achieved MMR
-        int32 maxAllowedDrop = (int32)sGameConfig->GetIntConfig("MaxAllowedMMRDrop");
+        int32 maxAllowedDrop = (int32)CONF_GET_INT("MaxAllowedMMRDrop");
         mod = std::min<int32>(std::max<int32>(-((int32)MatchMakerRating - (int32)MaxMMR + maxAllowedDrop), mod), 0);
     }
 
@@ -617,7 +617,7 @@ uint32 ArenaTeam::GetPoints(uint32 memberRating)
 
     if (rating <= 1500)
     {
-        if (sGameConfig->GetIntConfig("Arena.ArenaSeason.ID") < 6)
+        if (CONF_GET_INT("Arena.ArenaSeason.ID") < 6)
             points = (float)rating * 0.22f + 14.0f;
         else
             points = 344;
@@ -631,7 +631,7 @@ uint32 ArenaTeam::GetPoints(uint32 memberRating)
     else if (Type == ARENA_TEAM_3v3)
         points *= 0.88f;
 
-    points *= sGameConfig->GetFloatConfig("Rate.ArenaPoints");
+    points *= CONF_GET_FLOAT("Rate.ArenaPoints");
 
     return (uint32) points;
 }
@@ -694,7 +694,7 @@ int32 ArenaTeam::GetMatchmakerRatingMod(uint32 ownRating, uint32 opponentRating,
     */
 
     // Real rating modification
-    mod *= sGameConfig->GetFloatConfig("Arena.ArenaMatchmakerRatingModifier");
+    mod *= CONF_GET_FLOAT("Arena.ArenaMatchmakerRatingModifier");
 
     return (int32)ceil(mod);
 }
@@ -713,7 +713,7 @@ int32 ArenaTeam::GetRatingMod(uint32 ownRating, uint32 opponentRating, bool won 
     {
         if (ownRating < 1300)
         {
-            float win_rating_modifier1 = sGameConfig->GetFloatConfig("Arena.ArenaWinRatingModifier1");
+            float win_rating_modifier1 = CONF_GET_FLOAT("Arena.ArenaWinRatingModifier1");
 
             if (ownRating < 1000)
                 mod =  win_rating_modifier1 * (1.0f - chance);
@@ -721,10 +721,10 @@ int32 ArenaTeam::GetRatingMod(uint32 ownRating, uint32 opponentRating, bool won 
                 mod = ((win_rating_modifier1 / 2.0f) + ((win_rating_modifier1 / 2.0f) * (1300.0f - float(ownRating)) / 300.0f)) * (1.0f - chance);
         }
         else
-            mod = sGameConfig->GetFloatConfig("Arena.ArenaWinRatingModifier2") * (1.0f - chance);
+            mod = CONF_GET_FLOAT("Arena.ArenaWinRatingModifier2") * (1.0f - chance);
     }
     else
-        mod = sGameConfig->GetFloatConfig("Arena.ArenaLoseRatingModifier") * (-chance);
+        mod = CONF_GET_FLOAT("Arena.ArenaLoseRatingModifier") * (-chance);
 
     return (int32)ceil(mod);
 }

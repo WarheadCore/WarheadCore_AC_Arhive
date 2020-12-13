@@ -32,9 +32,9 @@ CFBG* CFBG::instance()
 
 void CFBG::LoadConfig()
 {
-    sGameConfig->AddBoolConfig("CFBG.Enable");
-    sGameConfig->AddBoolConfig("CFBG.IncludeAvgIlvl.Enable");
-    sGameConfig->AddIntConfig("CFBG.PlayersCountInGroup", 3);
+    sGameConfig->AddOption<bool>("CFBG.Enable");
+    sGameConfig->AddOption<bool>("CFBG.IncludeAvgIlvl.Enable");
+    sGameConfig->AddOption<int32>("CFBG.PlayersCountInGroup", 3);
 
     _IsEnableSystem = CONF_GET_BOOL("CFBG.Enable");
     _IsEnableAvgIlvl = CONF_GET_BOOL("CFBG.IncludeAvgIlvl.Enable");

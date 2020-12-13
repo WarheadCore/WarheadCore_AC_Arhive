@@ -317,7 +317,7 @@ void ScriptMgr::CreateAuraScripts(uint32 spellId, std::list<AuraScript*>& script
     }
 }
 
-void ScriptMgr::CreateSpellScriptLoaders(uint32 spellId, std::vector<std::pair<SpellScriptLoader*, SpellScriptsContainer::iterator> >& scriptVector)
+void ScriptMgr::CreateSpellScriptLoaders(uint32 spellId, std::vector<std::pair<SpellScriptLoader*, SpellScriptsContainer::iterator>>& scriptVector)
 {
     SpellScriptsBounds bounds = sObjectMgr->GetSpellScriptsBounds(spellId);
     scriptVector.reserve(std::distance(bounds.first, bounds.second));
@@ -1765,6 +1765,11 @@ void ScriptMgr::OnBattlegroundStart(Battleground* bg)
     FOREACH_SCRIPT(BGScript)->OnBattlegroundStart(bg);
 }
 
+void ScriptMgr::OnBattlegroundEnd(Battleground* bg, TeamId winnerTeamId)
+{
+    FOREACH_SCRIPT(BGScript)->OnBattlegroundEnd(bg, winnerTeamId);
+}
+
 void ScriptMgr::OnBattlegroundEndReward(Battleground* bg, Player* player, TeamId winnerTeamId)
 {
     FOREACH_SCRIPT(BGScript)->OnBattlegroundEndReward(bg, player, winnerTeamId);
@@ -2096,4 +2101,3 @@ template class ScriptRegistry<BGScript>;
 template class ScriptRegistry<SpellSC>;
 template class ScriptRegistry<AccountScript>;
 template class ScriptRegistry<GameEventScript>;
-

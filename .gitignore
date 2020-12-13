@@ -31,7 +31,7 @@ apps/joiner
 !.gitkeep
 
 #
-#Generic
+# Generic
 #
 
 .directory
@@ -54,6 +54,7 @@ CMakeLists.txt.user
 #
 # IDE & other software
 #
+
 /.settings/
 /.externalToolBuilders/*
 # exclude in all levels
@@ -70,6 +71,7 @@ coverage-report/
 #
 # Eclipse
 #
+
 *.pydevproject
 .metadata
 .gradle
@@ -99,6 +101,7 @@ local.properties
 # Add default WarheadCore modules
 !modules/mod-anti-ad
 !modules/mod-anticheat
+!modules/mod-arena-reward
 !modules/mod-bg-reward
 !modules/mod-boss-announcer
 !modules/mod-buff-command
@@ -108,9 +111,11 @@ local.properties
 !modules/mod-factions-icons-channel
 !modules/mod-gm-chat-color
 !modules/mod-guild-level-system
+!modules/mod-item-level-up
 !modules/mod-level-reward
 !modules/mod-notify-muted
 !modules/mod-online-reward
 !modules/mod-player-can-get-exp
 !modules/mod-player-info-at-login
 !modules/mod-transmogrification
+!modules/mod-unbind-instance

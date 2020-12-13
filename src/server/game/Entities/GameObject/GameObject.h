@@ -671,18 +671,6 @@ union GameObjectValue
     } Building;
 };
 
-struct QuaternionData
-{
-    float x, y, z, w;
-
-    QuaternionData() : x(0.0f), y(0.0f), z(0.0f), w(1.0f) { }
-    QuaternionData(float X, float Y, float Z, float W) : x(X), y(Y), z(Z), w(W) { }
-
-    bool isUnit() const;
-    void toEulerAnglesZYX(float& Z, float& Y, float& X) const;
-    static QuaternionData fromEulerAnglesZYX(float Z, float Y, float X);
-};
-
 // `gameobject_addon` table
 struct GameObjectAddon
 {
@@ -714,7 +702,7 @@ struct GameObjectData
     float posY;
     float posZ;
     float orientation;
-    QuaternionData rotation;
+    G3D::Quat rotation;
     int32  spawntimesecs;
     uint32 animprogress;
     GOState go_state;
@@ -756,7 +744,7 @@ public:
     void RemoveFromWorld() override;
     void CleanupsBeforeDelete(bool finalCleanup = true) override;
 
-    virtual bool Create(uint32 guidlow, uint32 name_id, Map* map, uint32 phaseMask, float x, float y, float z, float ang, QuaternionData const& rotation, uint32 animprogress, GOState go_state, uint32 artKit = 0);
+    virtual bool Create(uint32 guidlow, uint32 name_id, Map* map, uint32 phaseMask, float x, float y, float z, float ang, G3D::Quat const& rotation, uint32 animprogress, GOState go_state, uint32 artKit = 0);
     void Update(uint32 p_time) override;
     GameObjectTemplate const* GetGOInfo() const { return m_goInfo; }
     GameObjectTemplateAddon const* GetTemplateAddon() const;
@@ -769,13 +757,10 @@ public:
     uint32 GetDBTableGUIDLow() const { return m_DBTableGuid; }
 
     // z_rot, y_rot, x_rot - rotation angles around z, y and x axes
-    void SetLocalRotationAngles(float z_rot, float y_rot, float x_rot);
-    void SetLocalRotation(float qx, float qy, float qz, float qw);
+    void SetWorldRotationAngles(float z_rot, float y_rot, float x_rot);
+    void SetWorldRotation(G3D::Quat const& rot);
     void SetTransportPathRotation(float qx, float qy, float qz, float qw);
-    QuaternionData const& GetLocalRotation() const { return m_localRotation; }
-    int64 GetPackedLocalRotation() const { return m_packedRotation; }
-
-    QuaternionData GetWorldRotation() const;
+    int64 GetPackedWorldRotation() const { return m_packedRotation; }
 
     // overwrite WorldObject function for proper name localization
     std::string const& GetNameForLocaleIdx(LocaleConstant locale_idx) const override;
@@ -957,12 +942,6 @@ public:
 
     void UpdateModelPosition();
 
-    bool IsAtInteractDistance(Position const& pos, float radius) const;
-    bool IsAtInteractDistance(Player const* player, SpellInfo const* spell = nullptr) const;
-
-    bool IsWithinDistInMap(Player const* player) const;
-    using WorldObject::IsWithinDistInMap;
-
     SpellInfo const* GetSpellForLock(Player const* player) const;
 
     static std::unordered_map<int, goEventFlag> gameObjectToEventFlag; // Gameobject -> event flag
@@ -994,7 +973,7 @@ protected:
     bool m_allowModifyDestructibleBuilding;
 
     int64 m_packedRotation;
-    QuaternionData m_localRotation;
+    G3D::Quat m_worldRotation;
     Position m_stationaryPosition;
 
     uint64 m_lootRecipient;

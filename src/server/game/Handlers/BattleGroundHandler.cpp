@@ -114,25 +114,6 @@ void WorldSession::HandleBattlemasterJoinOpcode(WorldPacket& recvData)
     if (!bracketEntry)
         return;
 
-    // pussywizard: if trying to queue for already queued
-    // just remove from queue and it will requeue!
-    uint32 qSlot = _player->GetBattlegroundQueueIndex(bgQueueTypeId);
-    if (qSlot < PLAYER_MAX_BATTLEGROUND_QUEUES)
-    {
-        BattlegroundQueue& bgQueue = sBattlegroundMgr->GetBattlegroundQueue(bgQueueTypeId);
-
-        if (bgQueue.IsPlayerInvitedToRatedArena(_player->GetGUID()))
-        {
-            WorldPacket data;
-            sBattlegroundMgr->BuildGroupJoinedBattlegroundPacket(&data, ERR_BATTLEGROUND_JOIN_FAILED);
-            SendPacket(&data);
-            return;
-        }
-
-        bgQueue.RemovePlayer(_player->GetGUID(), false, qSlot);
-        _player->RemoveBattlegroundQueueId(bgQueueTypeId);
-    }
-
     // must have free queue slot
     if (!_player->HasFreeBattlegroundQueueId())
     {
@@ -173,6 +154,8 @@ void WorldSession::HandleBattlemasterJoinOpcode(WorldPacket& recvData)
         // don't let Death Knights join BG queues when they are not allowed to be teleported yet
         else if (_player->getClass() == CLASS_DEATH_KNIGHT && _player->GetMapId() == 609 && !_player->IsGameMaster() && !_player->HasSpell(50977))
             err = ERR_BATTLEGROUND_NONE;
+        else if (_player->GetBattlegroundQueueIndex(bgQueueTypeId) < PLAYER_MAX_BATTLEGROUND_QUEUES) // check if already in queue
+            err = ERR_IN_RANDOM_BG;
 
         if (err <= 0)
         {
@@ -476,7 +459,7 @@ void WorldSession::HandleBattleFieldPortOpcode(WorldPacket& recvData)
                 bgQueue.RemovePlayer(_player->GetGUID(), false, queueSlot);
                 _player->RemoveBattlegroundQueueId(bgQueueTypeId);
                 // track if player refuses to join the BG after being invited
-                if (bg->isBattleground() && sGameConfig->GetBoolConfig("Battleground.TrackDeserters.Enable") &&
+                if (bg->isBattleground() && CONF_GET_BOOL("Battleground.TrackDeserters.Enable") &&
                         (bg->GetStatus() == STATUS_IN_PROGRESS || bg->GetStatus() == STATUS_WAIT_JOIN))
                 {
                     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_DESERTER_TRACK);
@@ -726,7 +709,7 @@ void WorldSession::HandleBattlemasterJoinArena(WorldPacket& recvData)
         if (isRated)
         {
             // pussywizard: for rated matches check if season is in progress!
-            if (!sGameConfig->GetBoolConfig("Arena.ArenaSeason.InProgress"))
+            if (!CONF_GET_BOOL("Arena.ArenaSeason.InProgress"))
                 return;
 
             ateamId = _player->GetArenaTeamId(arenaslot);

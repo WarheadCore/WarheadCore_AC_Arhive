@@ -344,79 +344,6 @@ void GuildLevelSystem::SendGuildMessage(uint32 guildID, std::string&& message)
     }
 }
 
-std::string const GuildLevelSystem::GetItemLocale(uint32 ItemID, int8 index_loc)
-{
-    ItemTemplate const* itemTemplate = sObjectMgr->GetItemTemplate(ItemID);
-    ItemLocale const* itemLocale = sGameLocale->GetItemLocale(ItemID);
-    std::string name;
-
-    if (itemLocale)
-        name = itemLocale->Name[index_loc];
-
-    if (name.empty() && itemTemplate)
-        name = itemTemplate->Name1;
-
-    return name;
-}
-
-std::string const GuildLevelSystem::GetItemLink(uint32 itemID, int8 index_loc)
-{
-    ItemTemplate const* itemTemplate = sObjectMgr->GetItemTemplate(itemID);
-    if (!itemTemplate)
-        return "";
-
-    std::string name = GetItemLocale(itemID, index_loc);
-    std::string color = "cffffffff";
-
-    switch (itemTemplate->Quality)
-    {
-        case 0:
-            color = "cff9d9d9d";
-            break;
-        case 1:
-            color = "cffffffff";
-            break;
-        case 2:
-            color = "cff1eff00";
-            break;
-        case 3:
-            color = "cff0070dd";
-            break;
-        case 4:
-            color = "cffa335ee";
-            break;
-        case 5:
-            color = "cffff8000";
-            break;
-        case 6:
-        case 7:
-            color = "cffe6cc80";
-            break;
-        default:
-            break;
-    }
-
-    return Warhead::StringFormat("|%s|Hitem:%u:0:0:0:0:0:0:0:0|h[%s]|h|r", color.c_str(), itemID, name.c_str());
-}
-
-std::string const GuildLevelSystem::GetSpellLink(uint32 spellID, int8 index_loc)
-{
-    auto const& spell = sSpellMgr->GetSpellInfo(spellID);
-    if (!spell)
-        return "";
-
-    return Warhead::StringFormat("|cffffffff|Hspell:%u|h[%s]|h|r", spell->Id, spell->SpellName[index_loc]);
-}
-
-std::string const GuildLevelSystem::GetSpelllocale(uint32 spellID, int8 index_loc)
-{
-    auto const& spell = sSpellMgr->GetSpellInfo(spellID);
-    if (!spell)
-        return "";
-
-    return spell->SpellName[index_loc];
-}
-
 // Load data from DB
 void GuildLevelSystem::LoadBaseCriteria()
 {
@@ -737,7 +664,7 @@ void GuildLevelSystem::InvestItem(Player* player, Creature* creature, uint32 sen
     }
 
     int8 Locale_index = handler.GetSessionDbLocaleIndex();
-    std::string const& ItemLink = GetItemLink(itemID, Locale_index);
+    std::string const& ItemLink = sGameLocale->GetItemLink(itemID, Locale_index);
     uint32 hasItemCount = player->GetItemCount(itemID);
 
     if (!player->HasItemCount(itemID, itemCount))
@@ -799,7 +726,7 @@ void GuildLevelSystem::InvestItemFull(Player* player, Creature* creature, uint32
         handler.PSendSysMessage("> Неверный номер предмета (%u-%u)", criteriaID, itemType);
     }
 
-    auto ItemLink = GetItemLink(itemID, handler.GetSessionDbLocaleIndex());
+    auto ItemLink = sGameLocale->GetItemLink(itemID, handler.GetSessionDbLocaleIndex());
     uint32 hasItemCount = player->GetItemCount(itemID);
     uint32 itemCount = hasItemCount;
 
@@ -907,7 +834,7 @@ void GuildLevelSystem::ShowAllCriteriaInfo(Player* player, Creature* creature)
                     if (!itemID)
                         continue;
 
-                    auto itemLink = GetItemLink(itemID);
+                    auto itemLink = sGameLocale->GetItemLink(itemID);
                     auto currentItems = criteriaProgress->GetItemCountProgress(criteriaID, i);
                     auto maxItems = criteriaProgress->GetMaxCriteriaItemCount(criteriaID, i);
                     float persents = float(currentItems) / float(maxItems) * 100.0f;
@@ -949,7 +876,7 @@ void GuildLevelSystem::ShowCriteriaInfo(Player* player, Creature* creature, uint
         if (!itemID)
             continue;
 
-        auto itemLink = GetItemLink(itemID);
+        auto itemLink = sGameLocale->GetItemLink(itemID);
         auto currentItems = criteriaProgress->GetItemCountProgress(criteriaID, i);
         auto maxItems = criteriaProgress->GetMaxCriteriaItemCount(criteriaID, i);
         float persents = float(currentItems) / float(maxItems) * 100.0f;
@@ -967,7 +894,7 @@ void GuildLevelSystem::ShowCriteriaInfo(Player* player, Creature* creature, uint
         if (!spellID)
             continue;
 
-        AddGossipItemFor(player, 10, Warhead::StringFormat("# %u. %s", i + 1, GetSpelllocale(spellID).c_str()), sender, action);
+        AddGossipItemFor(player, 10, Warhead::StringFormat("# %u. %s", i + 1, sGameLocale->GetSpellNamelocale(spellID).c_str()), sender, action);
     }
 
     AddGossipItemFor(player, 10, "#", sender, action);
@@ -1031,7 +958,7 @@ void GuildLevelSystem::ShowRewardInfo(Player* player, Creature* creature, uint32
             return "";
         };
 
-        auto spellLink = GetSpelllocale(spellID);
+        auto spellLink = sGameLocale->GetSpellNamelocale(spellID);
 
         AddGossipItemFor(player, 10, Warhead::StringFormat("# %u. %s%s", i + 1, stringSelect(selectShoose, i).c_str(), spellLink.c_str()), GLS_GOSSIP_GET_REWARDS_SENDER + i, action,
                          Warhead::StringFormat("Вы уверены, что хотите выбрать %s?", spellLink.c_str()), 0, false);
@@ -1119,7 +1046,7 @@ void GuildLevelSystem::GetAllLink(Player* player, Creature* creature, uint32 sen
         if (!itemID)
             continue;
 
-        auto itemLink = GetItemLink(itemID);
+        auto itemLink = sGameLocale->GetItemLink(itemID);
         auto currentItems = criteriaProgress->GetItemCountProgress(criteriaID, i);
         auto maxItems = criteriaProgress->GetMaxCriteriaItemCount(criteriaID, i);
         float persents = float(currentItems) / float(maxItems) * 100.0f;
@@ -1137,7 +1064,7 @@ void GuildLevelSystem::GetAllLink(Player* player, Creature* creature, uint32 sen
         if (!spellID)
             continue;
 
-        handler.PSendSysMessage("# %u. %s", i + 1, GetSpellLink(spellID).c_str());
+        handler.PSendSysMessage("# %u. %s", i + 1, sGameLocale->GetSpellLink(spellID).c_str());
     }
 
     ShowCriteriaInfo(player, creature, GLS_GOSSIP_SHOW_CRITERIA_SENDER, action);
@@ -1196,7 +1123,7 @@ void GuildLevelSystem::ShowInvestedMenu(Player* player, Creature* creature, uint
     if (!itemID)
         return;
 
-    auto itemLink = GetItemLink(itemID, player->GetSession()->GetSessionDbLocaleIndex());
+    auto itemLink = sGameLocale->GetItemLink(itemID, player->GetSession()->GetSessionDbLocaleIndex());
     uint32 currentItems = criteriaProgress->GetItemCountProgress(criteriaID, sender);
     uint32 maxItems = criteriaProgress->GetMaxCriteriaItemCount(criteriaID, sender);
     uint32 playerItemCount = player->GetItemCount(itemID);

@@ -169,7 +169,7 @@ void AssistanceMovementGenerator::Finalize(Unit* unit)
     unit->ToCreature()->SetNoCallAssistance(false);
     unit->ToCreature()->CallAssistance();
     if (unit->IsAlive())
-        unit->GetMotionMaster()->MoveSeekAssistanceDistract(sGameConfig->GetIntConfig("CreatureFamilyAssistanceDelay"));
+        unit->GetMotionMaster()->MoveSeekAssistanceDistract(CONF_GET_INT("CreatureFamilyAssistanceDelay"));
 }
 
 bool EffectMovementGenerator::Update(Unit* unit, uint32)

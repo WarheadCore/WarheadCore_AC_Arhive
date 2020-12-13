@@ -244,7 +244,7 @@ public:
             player->ModifyMoney(-ReqOrRewMoney);
 
         // check if Quest Tracker is enabled
-        if (sGameConfig->GetBoolConfig("Quests.EnableQuestTracker"))
+        if (CONF_GET_BOOL("Quests.EnableQuestTracker"))
         {
             // prepare Quest Tracker datas
             PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_QUEST_TRACK_GM_COMPLETE);

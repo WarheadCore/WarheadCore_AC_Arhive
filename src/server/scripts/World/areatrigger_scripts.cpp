@@ -355,7 +355,7 @@ public:
 
         if (!player->FindNearestCreature(NPC_TERVOSH, 100.0f))
         {
-            if(Creature* tervosh = player->SummonCreature(NPC_TERVOSH, -3476.51f, -4105.94f, 17.1f, 5.3816f, TEMPSUMMON_TIMED_DESPAWN, 60000))
+            if (Creature* tervosh = player->SummonCreature(NPC_TERVOSH, -3476.51f, -4105.94f, 17.1f, 5.3816f, TEMPSUMMON_TIMED_DESPAWN, 60000))
                 tervosh->CastSpell(tervosh, SPELL_TELEPORT_VISUAL, true);
         }
 
@@ -488,34 +488,6 @@ private:
     std::map<uint32, time_t> _triggerTimes;
 };
 
-class AreaTrigger_nax_frostwyrm_lair : public AreaTriggerScript
-{
-public:
-    AreaTrigger_nax_frostwyrm_lair() : AreaTriggerScript("nax_frostwyrm_lair") { }
-
-    bool OnTrigger(Player* player, AreaTrigger const* /*trigger*/)
-    {
-        if (!player)
-            return true;
-
-        auto instanceScript = player->GetInstanceScript();
-        if (instanceScript->GetBossState(BOSS_LOATHEB) != EncounterState::DONE ||
-                instanceScript->GetBossState(BOSS_MAEXXNA) != EncounterState::DONE ||
-                instanceScript->GetBossState(BOSS_THADDIUS) != EncounterState::DONE ||
-                instanceScript->GetBossState(BOSS_HORSEMAN) != EncounterState::DONE)
-            return true;
-
-        return false;
-    }
-private:
-    enum NaxBosses
-    {
-        BOSS_LOATHEB   = 5,
-        BOSS_MAEXXNA   = 8,
-        BOSS_THADDIUS  = 9,
-        BOSS_HORSEMAN  = 12
-    };
-};
 
 void AddSC_areatrigger_scripts()
 {
@@ -533,6 +505,4 @@ void AddSC_areatrigger_scripts()
     new AreaTrigger_at_sentry_point();
     new AreaTrigger_at_brewfest();
     new AreaTrigger_at_area_52_entrance();
-
-    new AreaTrigger_nax_frostwyrm_lair();
 }

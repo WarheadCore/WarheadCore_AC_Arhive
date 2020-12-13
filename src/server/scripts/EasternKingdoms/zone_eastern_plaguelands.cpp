@@ -276,7 +276,7 @@ public:
                 return;
 
             if (TempSummon* summon = me->ToTempSummon())
-                if (Unit* creature = summon->GetSummoner())
+                if (Unit* creature = summon->GetSummonerUnit())
                     creature->GetAI()->DoAction(1);
 
             me->DespawnOrUnsummon(1);
@@ -285,7 +285,7 @@ public:
         void JustDied(Unit*)
         {
             if (TempSummon* summon = me->ToTempSummon())
-                if (Unit* creature = summon->GetSummoner())
+                if (Unit* creature = summon->GetSummonerUnit())
                     creature->GetAI()->DoAction(2);
         }
 

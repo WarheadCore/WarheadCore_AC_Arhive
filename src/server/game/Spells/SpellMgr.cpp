@@ -2626,12 +2626,12 @@ void SpellMgr::LoadSpellAreas()
         ++count;
     } while (result->NextRow());
 
-    if (sGameConfig->GetIntConfig("ICC.Buff.Horde"))
+    if (CONF_GET_INT("ICC.Buff.Horde"))
     {
-        LOG_INFO("spells", ">> Using ICC buff Horde: %u", sGameConfig->GetIntConfig("ICC.Buff.Horde"));
+        LOG_INFO("spells", ">> Using ICC buff Horde: %u", CONF_GET_INT("ICC.Buff.Horde"));
 
-        SpellArea spellAreaICCBuffHorde = { static_cast<uint32>(sGameConfig->GetIntConfig("ICC.Buff.Horde")), ICC_AREA, 0, 0, 0, ICC_RACEMASK_HORDE, Gender(2), 64, 11, 1 };
-        SpellArea const* saICCBuffHorde = &mSpellAreaMap.insert(SpellAreaMap::value_type(sGameConfig->GetIntConfig("ICC.Buff.Horde"), spellAreaICCBuffHorde))->second;
+        SpellArea spellAreaICCBuffHorde = { static_cast<uint32>(CONF_GET_INT("ICC.Buff.Horde")), ICC_AREA, 0, 0, 0, ICC_RACEMASK_HORDE, Gender(2), 64, 11, 1 };
+        SpellArea const* saICCBuffHorde = &mSpellAreaMap.insert(SpellAreaMap::value_type(CONF_GET_INT("ICC.Buff.Horde"), spellAreaICCBuffHorde))->second;
 
         mSpellAreaForAreaMap.insert(SpellAreaForAreaMap::value_type(ICC_AREA, saICCBuffHorde));
         ++count;
@@ -2639,12 +2639,12 @@ void SpellMgr::LoadSpellAreas()
     else
         LOG_INFO("spells", ">> ICC buff Horde: disabled");
 
-    if (sGameConfig->GetIntConfig("ICC.Buff.Alliance"))
+    if (CONF_GET_INT("ICC.Buff.Alliance"))
     {
-        LOG_INFO("spells", ">> Using ICC buff Alliance: %u", sGameConfig->GetIntConfig("ICC.Buff.Alliance"));
+        LOG_INFO("spells", ">> Using ICC buff Alliance: %u", CONF_GET_INT("ICC.Buff.Alliance"));
 
-        SpellArea spellAreaICCBuffAlliance = { static_cast<uint32>(sGameConfig->GetIntConfig("ICC.Buff.Alliance")), ICC_AREA, 0, 0, 0, ICC_RACEMASK_ALLIANCE, Gender(2), 64, 11, 1 };
-        SpellArea const* saICCBuffAlliance = &mSpellAreaMap.insert(SpellAreaMap::value_type(sGameConfig->GetIntConfig("ICC.Buff.Alliance"), spellAreaICCBuffAlliance))->second;
+        SpellArea spellAreaICCBuffAlliance = { static_cast<uint32>(CONF_GET_INT("ICC.Buff.Alliance")), ICC_AREA, 0, 0, 0, ICC_RACEMASK_ALLIANCE, Gender(2), 64, 11, 1 };
+        SpellArea const* saICCBuffAlliance = &mSpellAreaMap.insert(SpellAreaMap::value_type(CONF_GET_INT("ICC.Buff.Alliance"), spellAreaICCBuffAlliance))->second;
 
         mSpellAreaForAreaMap.insert(SpellAreaForAreaMap::value_type(ICC_AREA, saICCBuffAlliance));
         ++count;
@@ -2694,21 +2694,15 @@ void SpellMgr::LoadSpellInfoStore()
 void SpellMgr::UnloadSpellInfoStore()
 {
     for (uint32 i = 0; i < GetSpellInfoStoreSize(); ++i)
-    {
-        if (mSpellInfoMap[i])
-            delete mSpellInfoMap[i];
-    }
-
+        delete mSpellInfoMap[i];
     mSpellInfoMap.clear();
 }
 
 void SpellMgr::UnloadSpellInfoImplicitTargetConditionLists()
 {
     for (uint32 i = 0; i < GetSpellInfoStoreSize(); ++i)
-    {
         if (mSpellInfoMap[i])
             mSpellInfoMap[i]->_UnloadImplicitTargetConditionLists();
-    }
 }
 
 void SpellMgr::LoadSpellSpecificAndAuraState()
@@ -3245,6 +3239,7 @@ void SpellMgr::LoadSpellInfoCustomAttributes()
                 spellInfo->Effects[EFFECT_0].MiscValue = 127;
                 break;
         }
+        spellInfo->_InitializeExplicitTargetMask();
     }
 
     // Xinef: addition for binary spells, ommit spells triggering other spells

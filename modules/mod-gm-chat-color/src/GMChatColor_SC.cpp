@@ -77,10 +77,10 @@ public:
 
     void OnAfterConfigLoad(bool /*reload*/) override
     {
-        sGameConfig->AddBoolConfig("GMChatColor.Enable");
-        sGameConfig->AddStringConfig("GMChatColor.Level.1", "|cff0000ff");
-        sGameConfig->AddStringConfig("GMChatColor.Level.2", "|cff0000ff");
-        sGameConfig->AddStringConfig("GMChatColor.Level.3", "|cffff0000");
+        sGameConfig->AddOption<bool>("GMChatColor.Enable");
+        sGameConfig->AddOption<std::string>("GMChatColor.Level.1", "|cff0000ff");
+        sGameConfig->AddOption<std::string>("GMChatColor.Level.2", "|cff0000ff");
+        sGameConfig->AddOption<std::string>("GMChatColor.Level.3", "|cffff0000");
     }
 };
 

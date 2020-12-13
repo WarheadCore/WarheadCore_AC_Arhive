@@ -228,7 +228,7 @@ void ObjectGridUnloader::Visit(GridRefManager<T>& m)
     {
         T* obj = m.getFirst()->GetSource();
         // if option set then object already saved at this moment
-        //if (!sGameConfig->GetBoolConfig("SaveRespawnTimeImmediately"))
+        //if (!CONF_GET_BOOL("SaveRespawnTimeImmediately"))
         //    obj->SaveRespawnTime();
         //Some creatures may summon other temp summons in CleanupsBeforeDelete()
         //So we need this even after cleaner (maybe we can remove cleaner)

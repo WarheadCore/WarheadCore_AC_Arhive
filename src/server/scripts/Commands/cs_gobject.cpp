@@ -151,8 +151,7 @@ public:
         GameObject* object = sObjectMgr->IsGameObjectStaticTransport(objectInfo->entry) ? new StaticTransport() : new GameObject();
         uint32 guidLow = sObjectMgr->GenerateRecycledLowGuid(HIGHGUID_GAMEOBJECT);
 
-        QuaternionData rot = QuaternionData::fromEulerAnglesZYX(player->GetOrientation(), 0.f, 0.f);
-        if (!object->Create(guidLow, objectInfo->entry, map, player->GetPhaseMaskForSpawn(), x, y, z, o, rot, 0, GO_STATE_READY))
+        if (!object->Create(guidLow, objectInfo->entry, map, player->GetPhaseMaskForSpawn(), x, y, z, o, G3D::Quat(), 0, GO_STATE_READY))
         {
             delete object;
             return false;
@@ -429,7 +428,7 @@ public:
             oz = player->GetOrientation();
         }
 
-        object->SetLocalRotationAngles(oz, oy, ox);
+        object->SetWorldRotationAngles(oz, oy, ox);
         object->DestroyForNearbyPlayers();
         object->UpdateObjectVisibility();
 

@@ -1272,7 +1272,7 @@ public:
         Unit* GetSummoner()
         {
             if (TempSummon* tempSummon = me->ToTempSummon())
-                return tempSummon->GetSummoner();
+                return tempSummon->GetSummonerUnit();
             return nullptr;
         }
 
@@ -2060,7 +2060,7 @@ public:
 
             if (id == POINT_GRAB_DECOY)
                 if (TempSummon* summon = me->ToTempSummon())
-                    if (Unit* summoner = summon->GetSummoner())
+                    if (Unit* summoner = summon->GetSummonerUnit())
                         DoCast(summoner, SPELL_GRAB);
         }
 

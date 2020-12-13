@@ -699,7 +699,7 @@ public:
             else if (map->IsDungeon())
             {
                 // Allow GM to summon players or only other GM accounts inside instances.
-                if (!sGameConfig->GetIntConfig("Instance.GMSummonPlayer"))
+                if (!CONF_GET_BOOL("Instance.GMSummonPlayer"))
                 {
                     // pussywizard: prevent unbinding normal player's perm bind by just summoning him >_>
                     if (!target->GetSession()->GetSecurity())
@@ -886,7 +886,7 @@ public:
 
         if (target->IsAlive())
         {
-            if (sGameConfig->GetBoolConfig("Die.Command.Mode"))
+            if (CONF_GET_BOOL("Die.Command.Mode"))
             {
                 if (target->GetTypeId() == TYPEID_UNIT && handler->GetSession()->GetSecurity() == SEC_CONSOLE) // pussywizard
                     target->ToCreature()->LowerPlayerDamageReq(target->GetMaxHealth());
@@ -1122,7 +1122,7 @@ public:
         }
 
         // save if the player has last been saved over 20 seconds ago
-        uint32 saveInterval = sGameConfig->GetIntConfig("PlayerSaveInterval");
+        uint32 saveInterval = CONF_GET_INT("PlayerSaveInterval");
         if (saveInterval == 0 || (saveInterval > 20 * IN_MILLISECONDS && player->GetSaveTimer() <= saveInterval - 20 * IN_MILLISECONDS))
             player->SaveToDB(true, false);
 
@@ -1164,7 +1164,7 @@ public:
                 kickReasonStr = kickReason;
         }
 
-        if (sGameConfig->GetBoolConfig("ShowKickInWorld"))
+        if (CONF_GET_BOOL("ShowKickInWorld"))
             sWorld->SendWorldText(LANG_COMMAND_KICKMESSAGE_WORLD, (handler->GetSession() ? handler->GetSession()->GetPlayerName().c_str() : "Server"), playerName.c_str(), kickReasonStr.c_str());
         else
             handler->PSendSysMessage(LANG_COMMAND_KICKMESSAGE, playerName.c_str());
@@ -1628,7 +1628,7 @@ public:
             return false;
 
         // Weather is OFF
-        if (!sGameConfig->GetBoolConfig("ActivateWeather"))
+        if (!CONF_GET_BOOL("ActivateWeather"))
         {
             handler->SendSysMessage(LANG_WEATHER_DISABLED);
             handler->SetSentErrorMessage(true);
@@ -2027,7 +2027,7 @@ public:
         handler->PSendSysMessage(LANG_PINFO_ACC_IP, lastIp.c_str(), locked ? handler->GetAcoreString(LANG_YES) : handler->GetAcoreString(LANG_NO));
 
         // Output X. LANG_PINFO_CHR_LEVEL
-        if (level != sGameConfig->GetIntConfig("MaxPlayerLevel"))
+        if (level != CONF_GET_INT("MaxPlayerLevel"))
             handler->PSendSysMessage(LANG_PINFO_CHR_LEVEL_LOW, level, xp, xptotal, (xptotal - xp));
         else
             handler->PSendSysMessage(LANG_PINFO_CHR_LEVEL_HIGH, level);

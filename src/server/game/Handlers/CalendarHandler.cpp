@@ -121,7 +121,7 @@ void WorldSession::HandleCalendarGetCalendar(WorldPacket& /*recvData*/)
     data.append(dataBuffer);
 
     // pussywizard
-    uint32 relationTime = sGameConfig->GetIntConfig("Instance.ResetTimeRelativeTimestamp") + sGameConfig->GetIntConfig("Instance.ResetTimeHour") * HOUR; // set point in time (default 29.12.2005) + X hours
+    uint32 relationTime = CONF_GET_INT("Instance.ResetTimeRelativeTimestamp") + CONF_GET_INT("Instance.ResetTimeHour") * HOUR; // set point in time (default 29.12.2005) + X hours
     data << uint32(relationTime);
 
     // Reuse variables
@@ -564,7 +564,7 @@ void WorldSession::HandleCalendarEventInvite(WorldPacket& recvData)
         return;
     }
 
-    if (_player->GetTeamId() != inviteeTeamId && !sGameConfig->GetBoolConfig("AllowTwoSide.Interaction.Calendar"))
+    if (_player->GetTeamId() != inviteeTeamId && !CONF_GET_BOOL("AllowTwoSide.Interaction.Calendar"))
     {
         sCalendarMgr->SendCalendarCommandResult(playerGuid, CALENDAR_ERROR_NOT_ALLIED);
         return;

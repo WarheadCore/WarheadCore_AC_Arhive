@@ -89,7 +89,7 @@ public:
                     break;
                 case 19:
                     me->TextEmote("The frosthound has located the thief's hiding place. Confront him!", nullptr, true);
-                    if (Unit* summoner = me->ToTempSummon()->GetSummoner())
+                    if (Unit* summoner = me->ToTempSummon()->GetSummonerUnit())
                         summoner->ToPlayer()->KilledMonsterCredit(29677, 0);
                     break;
             }

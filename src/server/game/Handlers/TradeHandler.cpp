@@ -561,9 +561,9 @@ void WorldSession::HandleInitiateTradeOpcode(WorldPacket& recvPacket)
         return;
     }
 
-    if (GetPlayer()->getLevel() < sGameConfig->GetIntConfig("LevelReq.Trade"))
+    if (GetPlayer()->getLevel() < CONF_GET_INT("LevelReq.Trade"))
     {
-        SendNotification(GetAcoreString(LANG_TRADE_REQ), sGameConfig->GetIntConfig("LevelReq.Trade"));
+        SendNotification(GetAcoreString(LANG_TRADE_REQ), CONF_GET_INT("LevelReq.Trade"));
         return;
     }
 
@@ -614,7 +614,7 @@ void WorldSession::HandleInitiateTradeOpcode(WorldPacket& recvPacket)
         return;
     }
 
-    if (!sGameConfig->GetBoolConfig("AllowTwoSide.trade") && pOther->GetTeamId() != _player->GetTeamId())
+    if (!CONF_GET_BOOL("AllowTwoSide.Trade") && pOther->GetTeamId() != _player->GetTeamId())
     {
         SendTradeStatus(TRADE_STATUS_WRONG_FACTION);
         return;
@@ -626,9 +626,9 @@ void WorldSession::HandleInitiateTradeOpcode(WorldPacket& recvPacket)
         return;
     }
 
-    if (pOther->getLevel() < sGameConfig->GetIntConfig("LevelReq.Trade"))
+    if (pOther->getLevel() < CONF_GET_INT("LevelReq.Trade"))
     {
-        SendNotification(GetAcoreString(LANG_TRADE_OTHER_REQ), sGameConfig->GetIntConfig("LevelReq.Trade"));
+        SendNotification(GetAcoreString(LANG_TRADE_OTHER_REQ), CONF_GET_INT("LevelReq.Trade"));
         return;
     }
 

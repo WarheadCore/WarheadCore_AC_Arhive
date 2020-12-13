@@ -323,7 +323,7 @@ public:
         void InitializeAI()
         {
             if (me->ToTempSummon())
-                if (Unit* summoner = me->ToTempSummon()->GetSummoner())
+                if (Unit* summoner = me->ToTempSummon()->GetSummonerUnit())
                 {
                     summonerGUID = summoner->GetGUID();
                     float x, y, z;
@@ -493,7 +493,7 @@ public:
         void Reset()
         {
             if (me->ToTempSummon() && me->ToTempSummon()->GetSummoner())
-                me->setFaction(me->ToTempSummon()->GetSummoner()->getFaction());
+                me->setFaction(me->ToTempSummon()->GetSummonerUnit()->getFaction());
         }
 
         void MoveInLineOfSight(Unit* who)
@@ -582,7 +582,7 @@ public:
                 me->RemoveAllAuras();
                 me->DespawnOrUnsummon(1000);
                 if (TempSummon* summon = me->ToTempSummon())
-                    if (Unit* owner = summon->GetSummoner())
+                    if (Unit* owner = summon->GetSummonerUnit())
                         if (Player* player = owner->ToPlayer())
                             player->KilledMonsterCredit(me->GetEntry(), 0);
             }

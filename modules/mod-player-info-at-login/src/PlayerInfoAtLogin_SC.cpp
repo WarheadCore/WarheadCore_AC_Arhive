@@ -21,6 +21,21 @@
 #include "Chat.h"
 #include "Player.h"
 #include "GameTime.h"
+#include "ModuleLocale.h"
+
+enum StringLocales : uint8
+{
+    PIAL_LOCALE_MSG_PREFIX = 1,
+    PIAL_LOCALE_MSG_HI,
+    PIAL_LOCALE_MSG_GM_LEVEL,
+    PIAL_LOCALE_MSG_IP,
+    PIAL_LOCALE_MSG_ONLINE,
+    PIAL_LOCALE_MSG_UPTIME,
+
+    PIAL_LOCALE_MAX
+};
+
+#define MODULE_NAME "mod-player-info-at-login"
 
 class PlayerInfoAtLogin_Player : public PlayerScript
 {
@@ -32,26 +47,29 @@ public:
         if (!CONF_GET_BOOL("PlayerInfoAtLogin.Enable"))
             return;
 
-        ChatHandler handler(player->GetSession());
+        uint8 accountLevel = static_cast<uint8>(player->GetSession()->GetSecurity());
 
-        std::string NameLink = handler.GetNameLink(player);
-        std::string PlayerName = player->GetName();
-        uint32 PlayerOnlineCount = sWorld->GetPlayerCount();
-        std::string ServerUptime = secsToTimeString(GameTime::GetUptime());
-        std::string PlayerIP = player->GetSession()->GetRemoteAddress();
-        uint32 GMLevel = player->GetSession()->GetSecurity();
-        uint32 connPeak = sWorld->GetMaxActiveSessionCount();
+        // #1. Prefix
+        sModuleLocale->SendPlayerMessage(player, MODULE_NAME, PIAL_LOCALE_MSG_PREFIX);
 
-        handler.PSendSysMessage("|cffff0000##############################|r");
-        handler.PSendSysMessage("|cffff0000# |cff00ff00Hi,|r %s", PlayerName.c_str());
+        // #2. Welcome msg
+        sModuleLocale->SendPlayerMessage(player, MODULE_NAME, PIAL_LOCALE_MSG_HI, player->GetName().c_str());
 
-        if (GMLevel)
-            handler.PSendSysMessage("|cffff0000# |cff00ff00You account level:|r %u", GMLevel);
+        // #3. Account level if > 0
+        if (accountLevel)
+            sModuleLocale->SendPlayerMessage(player, MODULE_NAME, PIAL_LOCALE_MSG_GM_LEVEL, accountLevel);
 
-        handler.PSendSysMessage("|cffff0000# |cff00ff00You IP:|r %s", PlayerIP.c_str());
-        handler.PSendSysMessage("|cffff0000# |cff00ff00Now|r %u |cff00ff00players online|r |cff00ff00(max:|r %u|cff00ff00)|r", PlayerOnlineCount, connPeak);
-        handler.PSendSysMessage("|cffff0000# |cff00ff00Server uptime:|r %s", ServerUptime.c_str());
-        handler.PSendSysMessage("|cffff0000##############################|r");
+        // #4. IP address
+        sModuleLocale->SendPlayerMessage(player, MODULE_NAME, PIAL_LOCALE_MSG_IP, player->GetSession()->GetRemoteAddress().c_str());
+
+        // #5. World online
+        sModuleLocale->SendPlayerMessage(player, MODULE_NAME, PIAL_LOCALE_MSG_ONLINE, sWorld->GetPlayerCount(), sWorld->GetMaxActiveSessionCount());
+
+        // #6. World uptime
+        sModuleLocale->SendPlayerMessage(player, MODULE_NAME, PIAL_LOCALE_MSG_UPTIME, secsToTimeString(GameTime::GetUptime()).c_str());
+
+        // #7. Prefix again
+        sModuleLocale->SendPlayerMessage(player, MODULE_NAME, PIAL_LOCALE_MSG_PREFIX);
     }
 };
 
@@ -62,7 +80,12 @@ public:
 
     void OnAfterConfigLoad(bool /*reload*/) override
     {
-        sGameConfig->AddBoolConfig("PlayerInfoAtLogin.Enable");
+        sGameConfig->AddOption<bool>("PlayerInfoAtLogin.Enable");
+    }
+
+    void OnStartup() override
+    {
+        sModuleLocale->CheckStrings(MODULE_NAME, PIAL_LOCALE_MAX);
     }
 };
 

@@ -418,7 +418,7 @@ bool AchievementCriteriaData::Meets(uint32 criteria_id, Player const* source, Un
             return source->GetMapId() == map_id.mapId;
         case ACHIEVEMENT_CRITERIA_DATA_TYPE_NTH_BIRTHDAY:
             {
-                time_t birthday_start = time_t(sGameConfig->GetIntConfig("BirthdayTime"));
+                time_t birthday_start = time_t(CONF_GET_INT("BirthdayTime"));
                 tm birthday_tm;
                 localtime_r(&birthday_start, &birthday_tm);
 
@@ -682,7 +682,7 @@ void AchievementMgr::SendAchievementEarned(AchievementEntry const* achievement) 
     // if player is in world he can tell his friends about new achievement
     else if (GetPlayer()->IsInWorld())
     {
-        float sayRange = sGameConfig->GetFloatConfig("ListenRange.Say");
+        float sayRange = CONF_GET_FLOAT("ListenRange.Say");
 
         Warhead::BroadcastTextBuilder _builder(GetPlayer(), CHAT_MSG_ACHIEVEMENT, BROADCAST_TEXT_ACHIEVEMENT_EARNED, GetPlayer()->getGender(), GetPlayer(), achievement->ID);
         Warhead::LocalizedPacketDo<Warhead::BroadcastTextBuilder> _localizer(_builder);
@@ -695,7 +695,7 @@ void AchievementMgr::SendAchievementEarned(AchievementEntry const* achievement) 
     data << uint32(achievement->ID);
     data.AppendPackedTime(GameTime::GetGameTime());
     data << uint32(0);
-    GetPlayer()->SendMessageToSetInRange(&data, sGameConfig->GetFloatConfig("ListenRange.Say"), true);
+    GetPlayer()->SendMessageToSetInRange(&data, CONF_GET_FLOAT("ListenRange.Say"), true);
 }
 
 void AchievementMgr::SendCriteriaUpdate(AchievementCriteriaEntry const* entry, CriteriaProgress const* progress, uint32 timeElapsed, bool timedCompleted) const

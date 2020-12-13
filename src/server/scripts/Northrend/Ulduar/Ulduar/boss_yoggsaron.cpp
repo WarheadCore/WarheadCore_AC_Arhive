@@ -1753,7 +1753,7 @@ public:
         void JustDied(Unit*)
         {
             if (me->IsSummon())
-                if (Unit* sara = me->ToTempSummon()->GetSummoner())
+                if (Unit* sara = me->ToTempSummon()->GetSummonerUnit())
                     sara->GetAI()->DoAction(ACTION_INFLUENCE_TENTACLE_DIED);
         }
     };

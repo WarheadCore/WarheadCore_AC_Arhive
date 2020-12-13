@@ -242,7 +242,7 @@ public:
                 checkTimer = 5000;
                 bool good = false;
                 if (me->IsSummon())
-                    if (Unit* s = me->ToTempSummon()->GetSummoner())
+                    if (Unit* s = me->ToTempSummon()->GetSummonerUnit())
                         if (s->IsAlive())
                             good = true;
                 if (!good)

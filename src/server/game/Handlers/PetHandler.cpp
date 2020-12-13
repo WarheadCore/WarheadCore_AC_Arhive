@@ -1165,7 +1165,7 @@ void WorldSession::HandlePetRename(WorldPacket& recvData)
     SQLTransaction trans = CharacterDatabase.BeginTransaction();
     if (isdeclined)
     {
-        if (sGameConfig->GetBoolConfig("DeclinedNames"))
+        if (CONF_GET_BOOL("DeclinedNames"))
         {
             PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_PET_DECLINEDNAME);
             stmt->setUInt32(0, pet->GetCharmInfo()->GetPetNumber());

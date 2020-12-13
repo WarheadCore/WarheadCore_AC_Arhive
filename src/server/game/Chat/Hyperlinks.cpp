@@ -307,7 +307,7 @@ struct LinkValidator<LinkTags::trade>
             return false;                                                                               \
         if (!LinkValidator<LinkTags::tagname>::IsColorValid(t, info.color))                             \
             return false;                                                                               \
-        if (sGameConfig->GetIntConfig("ChatStrictLinkChecking.Severity"))                               \
+        if (CONF_GET_INT("ChatStrictLinkChecking.Severity"))                                            \
             if (!LinkValidator<LinkTags::tagname>::IsTextValid(t, info.text.first, info.text.second))   \
                 return false;                                                                           \
         return true;                                                                                    \
