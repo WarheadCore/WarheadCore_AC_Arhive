@@ -317,15 +317,15 @@ uint32 CreatureTextMgr::SendChat(Creature* source, uint8 textGroup, WorldObject 
 
 float CreatureTextMgr::GetRangeForChatType(ChatMsg msgType) const
 {
-    float dist = sGameConfig->GetFloatConfig("ListenRange.Say");
+    float dist = CONF_GET_FLOAT("ListenRange.Say");
     switch (msgType)
     {
         case CHAT_MSG_MONSTER_YELL:
-            dist = sGameConfig->GetFloatConfig("ListenRange.Yell");
+            dist = CONF_GET_FLOAT("ListenRange.Yell");
             break;
         case CHAT_MSG_MONSTER_EMOTE:
         case CHAT_MSG_RAID_BOSS_EMOTE:
-            dist = sGameConfig->GetFloatConfig("ListenRange.TextEmote");
+            dist = CONF_GET_FLOAT("ListenRange.TextEmote");
             break;
         default:
             break;

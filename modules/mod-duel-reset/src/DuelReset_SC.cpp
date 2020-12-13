@@ -93,8 +93,8 @@ public:
 
     void OnAfterConfigLoad(bool /*reload*/) override
     {
-        sGameConfig->AddBoolConfig("DuelResetCooldowns");
-        sGameConfig->AddBoolConfig("DuelResetHealthMana");
+        sGameConfig->AddOption<bool>("DuelResetCooldowns");
+        sGameConfig->AddOption<bool>("DuelResetHealthMana");
     }
 };
 

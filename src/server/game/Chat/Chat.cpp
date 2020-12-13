@@ -116,7 +116,7 @@ bool ChatHandler::HasLowerSecurityAccount(WorldSession* target, uint32 target_ac
         return false;
 
     // ignore only for non-players for non strong checks (when allow apply command at least to same sec level)
-    if (!AccountMgr::IsPlayerAccount(m_session->GetSecurity()) && !strong && !sGameConfig->GetBoolConfig("GM.LowerSecurity"))
+    if (!AccountMgr::IsPlayerAccount(m_session->GetSecurity()) && !strong && !CONF_GET_BOOL("GM.LowerSecurity"))
         return false;
 
     if (target)
@@ -407,7 +407,7 @@ bool ChatHandler::ParseCommands(char const* text)
 
     std::string fullcmd = text;
 
-    if (m_session && AccountMgr::IsPlayerAccount(m_session->GetSecurity()) && !sGameConfig->GetBoolConfig("AllowPlayerCommands"))
+    if (m_session && AccountMgr::IsPlayerAccount(m_session->GetSecurity()) && !CONF_GET_BOOL("AllowPlayerCommands"))
         return false;
 
     /// chat case (.command or !command format)

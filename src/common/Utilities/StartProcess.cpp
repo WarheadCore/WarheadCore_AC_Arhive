@@ -223,7 +223,7 @@ namespace Warhead
                 {
                     terminate(my_child->get());
                 }
-                catch(...)
+                catch (...)
                 {
                     // Do nothing
                 }
@@ -231,9 +231,8 @@ namespace Warhead
         }
     };
 
-    std::shared_ptr<AsyncProcessResult>
-    StartAsyncProcess(std::string executable, std::vector<std::string> args,
-                      std::string logger, std::string input_file, bool secure)
+    std::shared_ptr<AsyncProcessResult> StartAsyncProcess(std::string executable, std::vector<std::string> args,
+            std::string logger, std::string input_file, bool secure)
     {
         auto handle = std::make_shared<AsyncProcessResultImplementation>(
                           std::move(executable), std::move(args), std::move(logger), std::move(input_file), secure);

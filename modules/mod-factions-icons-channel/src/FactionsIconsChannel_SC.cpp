@@ -58,9 +58,9 @@ public:
 
     void OnAfterConfigLoad(bool /*reload*/) override
     {
-        sGameConfig->AddBoolConfig("ChannelIconFaction.Enable");
-        sGameConfig->AddBoolConfig("ChannelIconFaction.OnlyLFG");
-        sGameConfig->AddBoolConfig("ChannelIconFaction.GM");
+        sGameConfig->AddOption<bool>("ChannelIconFaction.Enable");
+        sGameConfig->AddOption<bool>("ChannelIconFaction.OnlyLFG");
+        sGameConfig->AddOption<bool>("ChannelIconFaction.GM");
     }
 };
 

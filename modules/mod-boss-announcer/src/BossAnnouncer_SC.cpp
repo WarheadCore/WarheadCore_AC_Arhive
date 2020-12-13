@@ -47,6 +47,9 @@ public:
         if (!CONF_GET_BOOL("BossAnnouncer.Enable"))
             return;
 
+        if (creature->GetMaxHealth() <= 1000000)
+            return;
+
         if (!creature->isWorldBoss())
             return;
 
@@ -118,7 +121,7 @@ public:
 
     void OnAfterConfigLoad(bool /*reload*/) override
     {
-        sGameConfig->AddBoolConfig("BossAnnouncer.Enable");
+        sGameConfig->AddOption<bool>("BossAnnouncer.Enable");
     }
 
     void OnStartup() override

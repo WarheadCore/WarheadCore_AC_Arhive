@@ -110,9 +110,9 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
             case CHAT_MSG_PARTY_LEADER:
                 break;
             default:
-                if (sGameConfig->GetBoolConfig("Chat.MuteFirstLogin"))
+                if (CONF_GET_BOOL("Chat.MuteFirstLogin"))
                 {
-                    uint32 minutes = sGameConfig->GetIntConfig("Chat.MuteTimeFirstLogin");
+                    uint32 minutes = CONF_GET_INT("Chat.MuteTimeFirstLogin");
 
                     if (sender->GetTotalPlayedTime() < minutes * MINUTE)
                     {
@@ -189,7 +189,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
             case CHAT_MSG_BATTLEGROUND:
             case CHAT_MSG_WHISPER:
                 // check if addon messages are disabled
-                if (!sGameConfig->GetBoolConfig("AddonChannel"))
+                if (!CONF_GET_BOOL("AddonChannel"))
                 {
                     recvData.rfinish();
                     return;
@@ -212,7 +212,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
         else
         {
             // send in universal language in two side iteration allowed mode
-            if (sGameConfig->GetBoolConfig("AllowTwoSide.Interaction.Chat"))
+            if (CONF_GET_BOOL("AllowTwoSide.Interaction.Chat"))
                 lang = LANG_UNIVERSAL;
             else
             {
@@ -224,7 +224,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
                     case CHAT_MSG_RAID_LEADER:
                     case CHAT_MSG_RAID_WARNING:
                         // allow two side chat at group channel if two side group allowed
-                        if (sGameConfig->GetBoolConfig("AllowTwoSide.Interaction.Group"))
+                        if (CONF_GET_BOOL("AllowTwoSide.Interaction.Group"))
                             lang = LANG_UNIVERSAL;
 
                         specialMessageLimit = 35;
@@ -232,7 +232,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
                     case CHAT_MSG_GUILD:
                     case CHAT_MSG_OFFICER:
                         // allow two side chat at guild channel if two side guild allowed
-                        if (sGameConfig->GetBoolConfig("AllowTwoSide.Interaction.Guild"))
+                        if (CONF_GET_BOOL("AllowTwoSide.Interaction.Guild"))
                             lang = LANG_UNIVERSAL;
 
                         specialMessageLimit = 15;
@@ -306,7 +306,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
         return;
 
     // Strip invisible characters for non-addon messages
-    if (lang != LANG_ADDON && sGameConfig->GetBoolConfig("ChatFakeMessagePreventing"))
+    if (lang != LANG_ADDON && CONF_GET_BOOL("ChatFakeMessagePreventing"))
         StripInvisibleChars(msg);
 
     // pussywizard:
@@ -362,9 +362,9 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
                 if (!sender->IsAlive())
                     return;
 
-                if (sender->getLevel() < sGameConfig->GetIntConfig("ChatLevelReq.Say"))
+                if (sender->getLevel() < CONF_GET_INT("ChatLevelReq.Say"))
                 {
-                    SendNotification(GetAcoreString(LANG_SAY_REQ), sGameConfig->GetIntConfig("ChatLevelReq.Say"));
+                    SendNotification(GetAcoreString(LANG_SAY_REQ), CONF_GET_INT("ChatLevelReq.Say"));
                     return;
                 }
 
@@ -378,9 +378,9 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
             break;
         case CHAT_MSG_WHISPER:
             {
-                if (sender->getLevel() < sGameConfig->GetIntConfig("ChatLevelReq.Whisper"))
+                if (sender->getLevel() < CONF_GET_INT("ChatLevelReq.Whisper"))
                 {
-                    SendNotification(GetAcoreString(LANG_WHISPER_REQ), sGameConfig->GetIntConfig("ChatLevelReq.Whisper"));
+                    SendNotification(GetAcoreString(LANG_WHISPER_REQ), CONF_GET_INT("ChatLevelReq.Whisper"));
                     return;
                 }
 
@@ -399,7 +399,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
                     return;
                 }
 
-                if (!sGameConfig->GetBoolConfig("AllowTwoSide.Interaction.Chat") && senderIsPlayer && receiverIsPlayer)
+                if (!CONF_GET_BOOL("AllowTwoSide.Interaction.Chat") && senderIsPlayer && receiverIsPlayer)
                     if (GetPlayer()->GetTeamId() != receiver->GetTeamId())
                     {
                         SendWrongFactionNotice();
@@ -550,9 +550,9 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
             {
                 if (AccountMgr::IsPlayerAccount(GetSecurity()))
                 {
-                    if (sender->getLevel() < sGameConfig->GetIntConfig("ChatLevelReq.Channel"))
+                    if (sender->getLevel() < CONF_GET_INT("ChatLevelReq.Channel"))
                     {
-                        SendNotification(GetAcoreString(LANG_CHANNEL_REQ), sGameConfig->GetIntConfig("ChatLevelReq.Channel"));
+                        SendNotification(GetAcoreString(LANG_CHANNEL_REQ), CONF_GET_INT("ChatLevelReq.Channel"));
                         return;
                     }
                 }
@@ -726,9 +726,9 @@ void WorldSession::HandleTextEmoteOpcode(WorldPacket& recvData)
 
     Warhead::EmoteChatBuilder emote_builder(*GetPlayer(), text_emote, emoteNum, unit);
     Warhead::LocalizedPacketDo<Warhead::EmoteChatBuilder > emote_do(emote_builder);
-    Warhead::PlayerDistWorker<Warhead::LocalizedPacketDo<Warhead::EmoteChatBuilder > > emote_worker(GetPlayer(), sGameConfig->GetFloatConfig("ListenRange.TextEmote"), emote_do);
+    Warhead::PlayerDistWorker<Warhead::LocalizedPacketDo<Warhead::EmoteChatBuilder > > emote_worker(GetPlayer(), CONF_GET_FLOAT("ListenRange.TextEmote"), emote_do);
     TypeContainerVisitor<Warhead::PlayerDistWorker<Warhead::LocalizedPacketDo<Warhead::EmoteChatBuilder> >, WorldTypeMapContainer> message(emote_worker);
-    cell.Visit(p, message, *GetPlayer()->GetMap(), *GetPlayer(), sGameConfig->GetFloatConfig("ListenRange.TextEmote"));
+    cell.Visit(p, message, *GetPlayer()->GetMap(), *GetPlayer(), CONF_GET_FLOAT("ListenRange.TextEmote"));
 
     GetPlayer()->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_DO_EMOTE, text_emote, 0, unit);
 

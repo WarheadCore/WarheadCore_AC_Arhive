@@ -1286,7 +1286,7 @@ public:
         Unit* GetOwner()
         {
             if (me->ToTempSummon())
-                return me->ToTempSummon()->GetSummoner();
+                return me->ToTempSummon()->GetSummonerUnit();
 
             return nullptr;
         }

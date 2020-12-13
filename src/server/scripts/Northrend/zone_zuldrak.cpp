@@ -306,7 +306,7 @@ public:
                             ghoul->GetMotionMaster()->MoveTargetedHome();
                         }
 
-                        if (Unit* owner = me->ToTempSummon()->GetSummoner())
+                        if (Unit* owner = me->ToTempSummon()->GetSummonerUnit())
                             if (Player* player = owner->ToPlayer())
                                 player->KilledMonsterCredit(me->GetEntry(), 0);
 

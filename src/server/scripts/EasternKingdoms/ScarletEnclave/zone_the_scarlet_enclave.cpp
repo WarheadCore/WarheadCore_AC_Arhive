@@ -75,7 +75,7 @@ public:
             {
                 Player* player = nullptr;
                 if (me->IsSummon())
-                    if (Unit* summoner = me->ToTempSummon()->GetSummoner())
+                    if (Unit* summoner = me->ToTempSummon()->GetSummonerUnit())
                         player = summoner->ToPlayer();
 
                 if (!player)

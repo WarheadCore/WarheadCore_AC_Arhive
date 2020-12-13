@@ -474,5 +474,5 @@ std::string InstanceScript::GetBossStateName(uint8 state)
 
 bool InstanceScript::ServerAllowsTwoSideGroups() const
 {
-    return sGameConfig->GetBoolConfig("AllowTwoSide.Interaction.Group");
+    return CONF_GET_BOOL("AllowTwoSide.Interaction.Group");
 }

@@ -74,15 +74,15 @@ public:
 
     void OnAfterConfigLoad(bool /*reload*/) override
     {
-        sGameConfig->AddBoolConfig("BGReward.Enable");
-        sGameConfig->AddIntConfig("BGReward.ItemID.WSG", ITEM_WS_MARK_OF_HONOR);
-        sGameConfig->AddIntConfig("BGReward.ItemID.Arathi", ITEM_AB_MARK_OF_HONOR);
-        sGameConfig->AddIntConfig("BGReward.ItemID.Alterac", ITEM_AV_MARK_OF_HONOR);
-        sGameConfig->AddIntConfig("BGReward.ItemID.Isle", ITEM_IC_MARK_OF_HONOR);
-        sGameConfig->AddIntConfig("BGReward.ItemID.Ancients", ITEM_SA_MARK_OF_HONOR);
-        sGameConfig->AddIntConfig("BGReward.ItemID.Eye", ITEM_EY_MARK_OF_HONOR);
-        sGameConfig->AddIntConfig("BGReward.WinnerTeam.Count", 3);
-        sGameConfig->AddIntConfig("BGReward.LoserTeam.Count", 1);
+        sGameConfig->AddOption<bool>("BGReward.Enable");
+        sGameConfig->AddOption<int32>("BGReward.ItemID.WSG", ITEM_WS_MARK_OF_HONOR);
+        sGameConfig->AddOption<int32>("BGReward.ItemID.Arathi", ITEM_AB_MARK_OF_HONOR);
+        sGameConfig->AddOption<int32>("BGReward.ItemID.Alterac", ITEM_AV_MARK_OF_HONOR);
+        sGameConfig->AddOption<int32>("BGReward.ItemID.Isle", ITEM_IC_MARK_OF_HONOR);
+        sGameConfig->AddOption<int32>("BGReward.ItemID.Ancients", ITEM_SA_MARK_OF_HONOR);
+        sGameConfig->AddOption<int32>("BGReward.ItemID.Eye", ITEM_EY_MARK_OF_HONOR);
+        sGameConfig->AddOption<int32>("BGReward.WinnerTeam.Count", 3);
+        sGameConfig->AddOption<int32>("BGReward.LoserTeam.Count", 1);
     }
 };
 

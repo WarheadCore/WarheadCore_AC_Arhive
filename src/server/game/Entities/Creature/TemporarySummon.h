@@ -48,7 +48,10 @@ public:
     void RemoveFromWorld();
     void SetTempSummonType(TempSummonType type);
     void SaveToDB(uint32 /*mapid*/, uint8 /*spawnMask*/, uint32 /*phaseMask*/) {}
-    Unit* GetSummoner() const;
+    WorldObject* GetSummoner() const;
+    Unit* GetSummonerUnit() const;
+    Creature* GetSummonerCreatureBase() const;
+    GameObject* GetSummonerGameObject() const;
     uint64 GetSummonerGUID() { return m_summonerGUID; }
     TempSummonType const& GetSummonType() { return m_type; }
     uint32 GetTimer() { return m_timer; }

@@ -140,7 +140,7 @@ bool LoginQueryHolder::Initialize()
     stmt->setUInt32(0, lowGuid);
     res &= SetPreparedQuery(PLAYER_LOGIN_QUERY_LOAD_SPELL_COOLDOWNS, stmt);
 
-    if (sGameConfig->GetBoolConfig("DeclinedNames"))
+    if (CONF_GET_BOOL("DeclinedNames"))
     {
         stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CHARACTER_DECLINEDNAMES);
         stmt->setUInt32(0, lowGuid);
@@ -250,7 +250,7 @@ void WorldSession::HandleCharEnumOpcode(WorldPacket& /*recvData*/)
 
     /// get all the data necessary for loading all characters (along with their pets) on the account
 
-    if (sGameConfig->GetBoolConfig("DeclinedNames"))
+    if (CONF_GET_BOOL("DeclinedNames"))
         stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_ENUM_DECLINED_NAME);
     else
         stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_ENUM);
@@ -280,7 +280,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket& recvData)
 
     if (AccountMgr::IsPlayerAccount(GetSecurity()))
     {
-        if (uint32 mask = sGameConfig->GetIntConfig("CharacterCreating.Disabled"))
+        if (uint32 mask = CONF_GET_INT("CharacterCreating.Disabled"))
         {
             if (mask & (1 << Player::TeamIdForRace(race_)))
             {
@@ -329,7 +329,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket& recvData)
 
     if (AccountMgr::IsPlayerAccount(GetSecurity()))
     {
-        uint32 raceMaskDisabled = sGameConfig->GetIntConfig("CharacterCreating.Disabled.RaceMask");
+        uint32 raceMaskDisabled = CONF_GET_INT("CharacterCreating.Disabled.RaceMask");
         if ((1 << (race_ - 1)) & raceMaskDisabled)
         {
             data << uint8(CHAR_CREATE_DISABLED);
@@ -337,7 +337,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket& recvData)
             return;
         }
 
-        uint32 classMaskDisabled = sGameConfig->GetIntConfig("CharacterCreating.Disabled.ClassMask");
+        uint32 classMaskDisabled = CONF_GET_INT("CharacterCreating.Disabled.ClassMask");
         if ((1 << (class_ - 1)) & classMaskDisabled)
         {
             data << uint8(CHAR_CREATE_DISABLED);
@@ -372,7 +372,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket& recvData)
     }
 
     // speedup check for heroic class disabled case
-    uint32 heroic_free_slots = sGameConfig->GetIntConfig("HeroicCharactersPerRealm");
+    uint32 heroic_free_slots = CONF_GET_INT("HeroicCharactersPerRealm");
     if (heroic_free_slots == 0 && AccountMgr::IsPlayerAccount(GetSecurity()) && class_ == CLASS_DEATH_KNIGHT)
     {
         data << (uint8)CHAR_CREATE_UNIQUE_CLASS_LIMIT;
@@ -381,8 +381,8 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket& recvData)
     }
 
     // speedup check for heroic class disabled case
-    uint32 req_level_for_heroic = sGameConfig->GetIntConfig("CharacterCreating.MinLevelForHeroicCharacter");
-    if (AccountMgr::IsPlayerAccount(GetSecurity()) && class_ == CLASS_DEATH_KNIGHT && req_level_for_heroic > sGameConfig->GetIntConfig("MaxPlayerLevel"))
+    uint32 req_level_for_heroic = CONF_GET_INT("CharacterCreating.MinLevelForHeroicCharacter");
+    if (AccountMgr::IsPlayerAccount(GetSecurity()) && class_ == CLASS_DEATH_KNIGHT && req_level_for_heroic > CONF_GET_INT("MaxPlayerLevel"))
     {
         data << (uint8)CHAR_CREATE_LEVEL_REQUIREMENT;
         SendPacket(&data);
@@ -438,7 +438,7 @@ void WorldSession::HandleCharCreateCallback(PreparedQueryResult result, Characte
                         acctCharCount = atoi(ch);
                 }
 
-                if (acctCharCount >= sGameConfig->GetIntConfig("CharactersPerAccount"))
+                if (acctCharCount >= CONF_GET_INT("CharactersPerAccount"))
                 {
                     WorldPacket data(SMSG_CHAR_CREATE, 1);
                     data << uint8(CHAR_CREATE_ACCOUNT_LIMIT);
@@ -466,7 +466,7 @@ void WorldSession::HandleCharCreateCallback(PreparedQueryResult result, Characte
                     Field* fields = result->Fetch();
                     createInfo->CharCount = uint8(fields[0].GetUInt64()); // SQL's COUNT() returns uint64 but it will always be less than uint8.Max
 
-                    if (createInfo->CharCount >= sGameConfig->GetIntConfig("CharactersPerRealm"))
+                    if (createInfo->CharCount >= CONF_GET_INT("CharactersPerRealm"))
                     {
                         WorldPacket data(SMSG_CHAR_CREATE, 1);
                         data << uint8(CHAR_CREATE_SERVER_LIMIT);
@@ -477,8 +477,8 @@ void WorldSession::HandleCharCreateCallback(PreparedQueryResult result, Characte
                     }
                 }
 
-                bool allowTwoSideAccounts = !sWorld->IsPvPRealm() || sGameConfig->GetBoolConfig("AllowTwoSide.Accounts") || !AccountMgr::IsPlayerAccount(GetSecurity());
-                uint32 skipCinematics = sGameConfig->GetIntConfig("SkipCinematics");
+                bool allowTwoSideAccounts = !sWorld->IsPvPRealm() || CONF_GET_BOOL("AllowTwoSide.Accounts") || !AccountMgr::IsPlayerAccount(GetSecurity());
+                uint32 skipCinematics = CONF_GET_INT("SkipCinematics");
 
                 _charCreateCallback.FreeResult();
 
@@ -499,15 +499,15 @@ void WorldSession::HandleCharCreateCallback(PreparedQueryResult result, Characte
         case 3:
             {
                 bool haveSameRace = false;
-                uint32 heroicReqLevel = sGameConfig->GetIntConfig("CharacterCreating.MinLevelForHeroicCharacter");
+                uint32 heroicReqLevel = CONF_GET_INT("CharacterCreating.MinLevelForHeroicCharacter");
                 bool hasHeroicReqLevel = (heroicReqLevel == 0);
-                bool allowTwoSideAccounts = !sWorld->IsPvPRealm() || sGameConfig->GetBoolConfig("AllowTwoSide.Accounts") || !AccountMgr::IsPlayerAccount(GetSecurity());
-                uint32 skipCinematics = sGameConfig->GetIntConfig("SkipCinematics");
+                bool allowTwoSideAccounts = !sWorld->IsPvPRealm() || CONF_GET_BOOL("AllowTwoSide.Accounts") || !AccountMgr::IsPlayerAccount(GetSecurity());
+                uint32 skipCinematics = CONF_GET_INT("SkipCinematics");
 
                 if (result)
                 {
                     TeamId teamId = Player::TeamIdForRace(createInfo->Race);
-                    uint32 freeHeroicSlots = sGameConfig->GetIntConfig("HeroicCharactersPerRealm");
+                    uint32 freeHeroicSlots = CONF_GET_INT("HeroicCharactersPerRealm");
 
                     Field* field = result->Fetch();
                     uint8 accRace  = field[1].GetUInt8();
@@ -810,7 +810,7 @@ void WorldSession::HandlePlayerLoginOpcode(WorldPacket& recvData)
         else
         {
             // pussywizard: players stay ingame no matter what (prevent abuse), but allow to turn it off to stop crashing
-            if (!sGameConfig->GetBoolConfig("EnableLoginAfterDC"))
+            if (!CONF_GET_BOOL("EnableLoginAfterDC"))
             {
                 WorldPacket data(SMSG_CHARACTER_LOGIN_FAILED, 1);
                 data << (uint8)CHAR_LOGIN_DUPLICATE_CHARACTER;
@@ -927,7 +927,7 @@ void WorldSession::HandlePlayerLoginFromDB(LoginQueryHolder* holder)
         SendPacket(Motd::GetMotdPacket());
 
         // send server info
-        if (sGameConfig->GetIntConfig("Server.LoginInfo") == 1)
+        if (CONF_GET_INT("Server.LoginInfo") == 1)
             chH.PSendSysMessage("%s", GitRevision::GetFullVersion());
     }
 
@@ -1076,7 +1076,7 @@ void WorldSession::HandlePlayerLoginFromDB(LoginQueryHolder* holder)
     }
 
     // Reputations if "StartAllReputation" is enabled, -- TODO: Fix this in a better way
-    if (sGameConfig->GetBoolConfig("PlayerStart.AllReputation"))
+    if (CONF_GET_BOOL("PlayerStart.AllReputation"))
     {
         ReputationMgr& repMgr = pCurrChar->GetReputationMgr();
         repMgr.SetOneFactionReputation(sFactionStore.LookupEntry(942), 42999, false);
@@ -1123,7 +1123,7 @@ void WorldSession::HandlePlayerLoginFromDB(LoginQueryHolder* holder)
     if (sWorld->IsShuttingDown())
         sWorld->ShutdownMsg(true, pCurrChar);
 
-    if (sGameConfig->GetBoolConfig("AllFlightPaths"))
+    if (CONF_GET_BOOL("AllFlightPaths"))
         pCurrChar->SetTaxiCheater(true);
 
     if (pCurrChar->IsGameMaster())
@@ -1234,7 +1234,7 @@ void WorldSession::HandlePlayerLoginToCharInWorld(Player* pCurrChar)
         SendPacket(Motd::GetMotdPacket());
 
         // send server info
-        if (sGameConfig->GetIntConfig("Server.LoginInfo") == 1)
+        if (CONF_GET_INT("Server.LoginInfo") == 1)
             chH.PSendSysMessage("%s", GitRevision::GetFullVersion());
     }
 
@@ -1504,7 +1504,7 @@ void WorldSession::HandleChangePlayerNameOpcodeCallBack(PreparedQueryResult resu
     CharacterDatabase.Execute(stmt);
 
     // Removed declined name from db
-    if (sGameConfig->GetBoolConfig("DeclinedNames"))
+    if (CONF_GET_BOOL("DeclinedNames"))
     {
         stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_DECLINED_NAME);
 
@@ -1529,7 +1529,7 @@ void WorldSession::HandleChangePlayerNameOpcodeCallBack(PreparedQueryResult resu
 void WorldSession::HandleSetPlayerDeclinedNames(WorldPacket& recvData)
 {
     // pussywizard:
-    if (!sGameConfig->GetBoolConfig("DeclinedNames"))
+    if (!CONF_GET_BOOL("DeclinedNames"))
         return;
 
     uint64 guid;
@@ -1840,7 +1840,7 @@ void WorldSession::HandleCharCustomize(WorldPacket& recvData)
 
     CharacterDatabase.Execute(stmt);
 
-    if (sGameConfig->GetBoolConfig("DeclinedNames"))
+    if (CONF_GET_BOOL("DeclinedNames"))
     {
         stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_DECLINED_NAME);
 
@@ -2066,7 +2066,7 @@ void WorldSession::HandleCharFactionOrRaceChange(WorldPacket& recvData)
     if (recvData.GetOpcode() == CMSG_CHAR_FACTION_CHANGE)
     {
         // if player is in a guild
-        if (playerData->guildId && !sGameConfig->GetBoolConfig("AllowTwoSide.Interaction.Guild"))
+        if (playerData->guildId && !CONF_GET_BOOL("AllowTwoSide.Interaction.Guild"))
         {
             WorldPacket data(SMSG_CHAR_FACTION_CHANGE, 1);
             data << (uint8)CHAR_CREATE_CHARACTER_IN_GUILD;
@@ -2186,7 +2186,7 @@ void WorldSession::HandleCharFactionOrRaceChange(WorldPacket& recvData)
 
     if (AccountMgr::IsPlayerAccount(GetSecurity()))
     {
-        uint32 raceMaskDisabled = sGameConfig->GetIntConfig("CharacterCreating.Disabled.RaceMask");
+        uint32 raceMaskDisabled = CONF_GET_INT("CharacterCreating.Disabled.RaceMask");
         if ((1 << (race - 1)) & raceMaskDisabled)
         {
             WorldPacket data(SMSG_CHAR_FACTION_CHANGE, 1);
@@ -2385,14 +2385,14 @@ void WorldSession::HandleCharFactionOrRaceChange(WorldPacket& recvData)
             }
 
             // Reset guild
-            if (!sGameConfig->GetBoolConfig("AllowTwoSide.Interaction.Guild"))
+            if (!CONF_GET_BOOL("AllowTwoSide.Interaction.Guild"))
             {
                 if (uint32 guildId = playerData->guildId)
                     if (Guild* guild = sGuildMgr->GetGuildById(guildId))
                         guild->DeleteMember(MAKE_NEW_GUID(lowGuid, 0, HIGHGUID_PLAYER), false, false, true);
             }
 
-            if (!sGameConfig->GetBoolConfig("AllowTwoSide.AddFriend"))
+            if (!CONF_GET_BOOL("AllowTwoSide.AddFriend"))
             {
                 // Delete Friend List
                 stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_SOCIAL_BY_GUID);

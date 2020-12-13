@@ -310,7 +310,7 @@ public:
 
             if (me->IsSummon())
             {
-                if (Unit* summoner = me->ToTempSummon()->GetSummoner())
+                if (Unit* summoner = me->ToTempSummon()->GetSummonerUnit())
                 {
                     if (summoner->GetTypeId() == TYPEID_UNIT && summoner->IsAlive() && !summoner->IsInCombat())
                         summoner->ToCreature()->AI()->AttackStart(who);
@@ -324,7 +324,7 @@ public:
 
             if (me->IsSummon())
             {
-                if (Unit* summoner = me->ToTempSummon()->GetSummoner())
+                if (Unit* summoner = me->ToTempSummon()->GetSummonerUnit())
                 {
                     if (summoner->GetTypeId() == TYPEID_UNIT && summoner->IsAlive())
                         summoner->ToCreature()->DisappearAndDie();
@@ -339,7 +339,7 @@ public:
 
             if (me->IsSummon())
             {
-                Unit* summoner = me->ToTempSummon()->GetSummoner();
+                Unit* summoner = me->ToTempSummon()->GetSummonerUnit();
                 if (summoner && summoner->GetTypeId() == TYPEID_UNIT && summoner->IsAIEnabled)
                 {
                     npc_lord_gregor_lescovar::npc_lord_gregor_lescovarAI* ai =

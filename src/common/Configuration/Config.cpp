@@ -312,11 +312,11 @@ bool ConfigMgr::LoadModulesConfigs()
         return false;
 
     // Print modules configurations
-    LOG_INFO("config", "");
-    LOG_INFO("config", "Using modules configuration:");
+    LOG_DEBUG("config", "");
+    LOG_DEBUG("config", "Using modules configuration:");
 
     for (auto const& itr : moduleConfigFiles)
-        LOG_INFO("config", "> Module (%s) using (%s)", itr.first.c_str(), itr.second.c_str());
+        LOG_DEBUG("config", "> Module (%s) using (%s)", itr.first.c_str(), itr.second.c_str());
 
     LOG_INFO("config", "");
 

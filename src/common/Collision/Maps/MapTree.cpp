@@ -217,7 +217,7 @@ namespace VMAP
         float maxDist = maxSearchDist;
         if (getIntersectionTime(ray, maxDist, false))
             height = pPos.z - maxDist;
-        return(height);
+        return (height);
     }
 
     //=========================================================

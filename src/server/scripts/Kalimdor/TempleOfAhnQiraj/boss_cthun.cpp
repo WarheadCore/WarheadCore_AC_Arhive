@@ -1305,7 +1305,7 @@ public:
         void JustDied(Unit* /*killer*/)
         {
             if (TempSummon* summon = me->ToTempSummon())
-                if (Unit* summoner = summon->GetSummoner())
+                if (Unit* summoner = summon->GetSummonerUnit())
                     if (summoner->IsAIEnabled)
                         summoner->GetAI()->DoAction(ACTION_FLESH_TENTACLE_KILLED);
         }

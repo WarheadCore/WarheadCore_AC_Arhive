@@ -56,14 +56,14 @@ public:
 
     void OnAfterConfigLoad(bool /*reload*/) override
     {
-        sGameConfig->AddBoolConfig("AC.Enable");
-        sGameConfig->AddBoolConfig("AC.Info.Enable");
-        sGameConfig->AddBoolConfig("AC.Detect.FlyHack.Enable");
-        sGameConfig->AddBoolConfig("AC.Detect.WaterWalkHack.Enable");
-        sGameConfig->AddBoolConfig("AC.Detect.JumpHack.Enable");
-        sGameConfig->AddBoolConfig("AC.Detect.TelePlaneHack.Enable");
-        sGameConfig->AddBoolConfig("AC.Detect.SpeedHack.Enable");
-        sGameConfig->AddBoolConfig("AC.Detect.ClimbHack.Enable");
+        sGameConfig->AddOption<bool>("AC.Enable");
+        sGameConfig->AddOption<bool>("AC.Info.Enable");
+        sGameConfig->AddOption<bool>("AC.Detect.FlyHack.Enable");
+        sGameConfig->AddOption<bool>("AC.Detect.WaterWalkHack.Enable");
+        sGameConfig->AddOption<bool>("AC.Detect.JumpHack.Enable");
+        sGameConfig->AddOption<bool>("AC.Detect.TelePlaneHack.Enable");
+        sGameConfig->AddOption<bool>("AC.Detect.SpeedHack.Enable");
+        sGameConfig->AddOption<bool>("AC.Detect.ClimbHack.Enable");
     }
 };
 

@@ -48,7 +48,8 @@ namespace AccountMgr
         auto [salt, verifier] = Crypto::SRP6::MakeRegistrationData(username, password);
         stmt->setBinary(1, salt);
         stmt->setBinary(2, verifier);
-        stmt->setInt8(3, uint8(sGameConfig->GetIntConfig("Expansion")));
+        stmt->setInt8(3, uint8(CONF_GET_INT("Expansion")));
+
 
         LoginDatabase.Execute(stmt);
 

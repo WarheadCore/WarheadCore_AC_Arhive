@@ -183,8 +183,7 @@ public:
     TaskScheduler()
         : self_reference(this, [](TaskScheduler const*) { }), _now(clock_t::now()), _predicate(EmptyValidator) { }
 
-    template<typename P>
-    TaskScheduler(P&& predicate)
+    template<typename P> TaskScheduler(P&& predicate)
         : self_reference(this, [](TaskScheduler const*) { }), _now(clock_t::now()), _predicate(std::forward<P>(predicate)) { }
 
     TaskScheduler(TaskScheduler const&) = delete;
@@ -393,9 +392,8 @@ private:
 
     // Returns a random duration between min and max
     template<class _RepLeft, class _PeriodLeft, class _RepRight, class _PeriodRight>
-    static std::chrono::milliseconds
-    RandomDurationBetween(std::chrono::duration<_RepLeft, _PeriodLeft> const& min,
-                          std::chrono::duration<_RepRight, _PeriodRight> const& max)
+    static std::chrono::milliseconds RandomDurationBetween(std::chrono::duration<_RepLeft, _PeriodLeft> const& min,
+            std::chrono::duration<_RepRight, _PeriodRight> const& max)
     {
         auto const milli_min = std::chrono::duration_cast<std::chrono::milliseconds>(min);
         auto const milli_max = std::chrono::duration_cast<std::chrono::milliseconds>(max);

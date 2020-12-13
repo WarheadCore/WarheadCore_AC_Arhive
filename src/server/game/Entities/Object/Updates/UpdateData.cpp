@@ -56,7 +56,7 @@ void UpdateData::Compress(void* dst, uint32* dst_size, void* src, int src_size)
     c_stream.opaque = (voidpf)0;
 
     // default Z_BEST_SPEED (1)
-    int z_res = deflateInit(&c_stream, sGameConfig->GetIntConfig("Compression"));
+    int z_res = deflateInit(&c_stream, CONF_GET_INT("Compression"));
     if (z_res != Z_OK)
     {
         LOG_ERROR("entities.object", "Can't compress update packet (zlib: deflateInit) Error code: %i (%s)", z_res, zError(z_res));

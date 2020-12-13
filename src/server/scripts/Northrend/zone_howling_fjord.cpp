@@ -47,7 +47,7 @@ public:
         {
             me->SetDisableGravity(true);
             if (me->IsSummon())
-                if (Unit* owner = me->ToTempSummon()->GetSummoner())
+                if (Unit* owner = me->ToTempSummon()->GetSummonerUnit())
                     me->GetMotionMaster()->MovePoint(0, *owner);
         }
 
@@ -60,7 +60,7 @@ public:
                 cow->CastSpell(cow, 44460, true);
                 cow->DespawnOrUnsummon(10000);
                 if (me->IsSummon())
-                    if (Unit* owner = me->ToTempSummon()->GetSummoner())
+                    if (Unit* owner = me->ToTempSummon()->GetSummonerUnit())
                         owner->CastSpell(owner, 44463, true);
             }
         }
@@ -112,7 +112,7 @@ public:
 
         void setphase(short phase)
         {
-            Unit* summoner = me->ToTempSummon() ? me->ToTempSummon()->GetSummoner() : nullptr;
+            Unit* summoner = me->ToTempSummon() ? me->ToTempSummon()->GetSummonerUnit() : nullptr;
             if (!summoner || summoner->GetTypeId() != TYPEID_PLAYER)
                 return;
 
@@ -289,7 +289,7 @@ public:
             uint64 summonerGUID = 0;
 
             if (me->IsSummon())
-                if (Unit* summoner = me->ToTempSummon()->GetSummoner())
+                if (Unit* summoner = me->ToTempSummon()->GetSummonerUnit())
                     if (summoner->GetTypeId() == TYPEID_PLAYER)
                         summonerGUID = summoner->GetGUID();
 

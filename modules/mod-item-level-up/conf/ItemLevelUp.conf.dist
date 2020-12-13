@@ -1,0 +1,61 @@
+#
+# This file is part of the WarheadCore Project. See AUTHORS file for Copyright information
+#
+# This file is free software; as a special exception the author gives
+# unlimited permission to copy and/or distribute it, with or without
+# modifications, as long as this notice is preserved.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# User has manually chosen to ignore the git-tests, so throw them a warning.
+# This is done EACH compile so they can be alerted about the consequences.
+#
+
+########################################
+# ItemLevelUp module configuration
+########################################
+[worldserver]
+
+#
+#    ILU.Enable
+#        Enable item level up
+#        Default: 0 (disabled)
+#                 1 (enabled)
+#
+
+ILU.Enable = 0
+
+#
+#    ILU.Enable
+#        Enable item level up
+#        Default: 0 (max server player level)
+#                 1-255 (optional level)
+#
+
+ILU.LevelUP = 0
+
+#
+#    ILU.Teleport.Enable
+#        Enable teleport after update level
+#        Default: 0 (disabled)
+#                 1 (enabled)
+#
+#
+#    ILU.Teleport.Location
+#        World location for teleport
+#        Default: "571 5811.411 646.514 647.422 0.962198" - Dalaran
+#
+
+ILU.Teleport.Enable = 1
+ILU.Teleport.Location = "571 5811.411 646.514 647.422 0.962198"
+
+#
+#    ILU.SetMaxSkills.Enable
+#        Enable set skills to max level
+#        Default: 0 (disabled)
+#                 1 (enabled)
+#
+
+ILU.SetMaxSkills.Enable = 1

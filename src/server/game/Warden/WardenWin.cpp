@@ -207,7 +207,7 @@ void WardenWin::RequestData()
     _currentChecks.clear();
 
     // Build check request
-    for (int32 i = 0; i < sGameConfig->GetIntConfig("Warden.NumMemChecks"); ++i)
+    for (int32 i = 0; i < CONF_GET_INT("Warden.NumMemChecks"); ++i)
     {
         // If todo list is done break loop (will be filled on next Update() run)
         if (_memChecksTodo.empty())
@@ -229,7 +229,7 @@ void WardenWin::RequestData()
 
     ACE_READ_GUARD(ACE_RW_Mutex, g, sWardenCheckMgr->_checkStoreLock);
 
-    for (int32 i = 0; i < sGameConfig->GetIntConfig("Warden.NumOtherChecks"); ++i)
+    for (int32 i = 0; i < CONF_GET_INT("Warden.NumOtherChecks"); ++i)
     {
         // If todo list is done break loop (will be filled on next Update() run)
         if (_otherChecksTodo.empty())
@@ -523,6 +523,6 @@ void WardenWin::HandleData(ByteBuffer& buff)
     }
 
     // Set hold off timer, minimum timer should at least be 1 second
-    uint32 holdOff = sGameConfig->GetIntConfig("Warden.ClientCheckHoldOff");
+    uint32 holdOff = CONF_GET_INT("Warden.ClientCheckHoldOff");
     _checkTimer = (holdOff < 1 ? 1 : holdOff) * IN_MILLISECONDS;
 }

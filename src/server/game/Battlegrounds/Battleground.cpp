@@ -332,7 +332,7 @@ inline void Battleground::_ProcessResurrect(uint32 diff)
     {
         if (GetReviveQueueSize())
         {
-            for (std::map<uint64, std::vector<uint64> >::iterator itr = m_ReviveQueue.begin(); itr != m_ReviveQueue.end(); ++itr)
+            for (std::map<uint64, std::vector<uint64>>::iterator itr = m_ReviveQueue.begin(); itr != m_ReviveQueue.end(); ++itr)
             {
                 Creature* sh = nullptr;
                 for (std::vector<uint64>::const_iterator itr2 = (itr->second).begin(); itr2 != (itr->second).end(); ++itr2)
@@ -585,7 +585,7 @@ inline void Battleground::_ProcessJoin(uint32 diff)
             }
 
             // Announce BG starting
-            if (sGameConfig->GetBoolConfig("Battleground.QueueAnnouncer.Enable"))
+            if (CONF_GET_BOOL("Battleground.QueueAnnouncer.Enable"))
                 sWorld->SendWorldText(LANG_BG_STARTED_ANNOUNCE_WORLD, GetName(), std::min(GetMinLevel(), (uint32)80), std::min(GetMaxLevel(), (uint32)80));
 
             sScriptMgr->OnBattlegroundStart(this);
@@ -773,7 +773,7 @@ void Battleground::EndBattleground(TeamId winnerTeamId)
 
     PreparedStatement* stmt = nullptr;
     uint64 battlegroundId = 1;
-    if (isBattleground() && sGameConfig->GetBoolConfig("Battleground.StoreStatistics.Enable"))
+    if (isBattleground() && CONF_GET_BOOL("Battleground.StoreStatistics.Enable"))
     {
         stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_PVPSTATS_MAXID);
         PreparedQueryResult result = CharacterDatabase.Query(stmt);
@@ -978,9 +978,9 @@ void Battleground::EndBattleground(TeamId winnerTeamId)
             player->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_PLAY_ARENA, GetMapId());
         }
 
-        uint32 winner_kills = player->GetRandomWinner() ? sGameConfig->GetIntConfig("Battleground.RewardWinnerHonorLast") : sGameConfig->GetIntConfig("Battleground.RewardWinnerHonorFirst");
-        uint32 loser_kills = player->GetRandomWinner() ? sGameConfig->GetIntConfig("Battleground.RewardLoserHonorLast") : sGameConfig->GetIntConfig("Battleground.RewardLoserHonorFirst");
-        uint32 winner_arena = player->GetRandomWinner() ? sGameConfig->GetIntConfig("Battleground.RewardWinnerArenaLast") : sGameConfig->GetIntConfig("Battleground.RewardWinnerArenaFirst");
+        uint32 winner_kills = player->GetRandomWinner() ? CONF_GET_INT("Battleground.RewardWinnerHonorLast") : CONF_GET_INT("Battleground.RewardWinnerHonorFirst");
+        uint32 loser_kills = player->GetRandomWinner() ? CONF_GET_INT("Battleground.RewardLoserHonorLast") : CONF_GET_INT("Battleground.RewardLoserHonorFirst");
+        uint32 winner_arena = player->GetRandomWinner() ? CONF_GET_INT("Battleground.RewardWinnerArenaLast") : CONF_GET_INT("Battleground.RewardWinnerArenaFirst");
 
         sScriptMgr->OnBattlegroundEndReward(this, player, winnerTeamId);
 
@@ -1014,7 +1014,7 @@ void Battleground::EndBattleground(TeamId winnerTeamId)
 
         player->GetSession()->SendPacket(&pvpLogData);
 
-        if (isBattleground() && sGameConfig->GetBoolConfig("Battleground.StoreStatistics.Enable"))
+        if (isBattleground() && CONF_GET_BOOL("Battleground.StoreStatistics.Enable"))
         {
             stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_PVPSTATS_PLAYER);
             BattlegroundScoreMap::const_iterator score = PlayerScores.find(player->GetGUID());
@@ -1054,6 +1054,8 @@ void Battleground::EndBattleground(TeamId winnerTeamId)
         if (bValidArena) winnerArenaTeam->NotifyStatsChanged();
         loserArenaTeam->NotifyStatsChanged();
     }
+
+    sScriptMgr->OnBattlegroundEnd(this, winnerTeamId);
 
     if (winmsg_id)
         SendMessageToAll(winmsg_id, CHAT_MSG_BG_SYSTEM_NEUTRAL);
@@ -1137,7 +1139,7 @@ void Battleground::RemovePlayerAtLeave(Player* player)
         SendPacketToTeam(teamId, &data, player, false);
 
         // cast deserter
-        if (isBattleground() && !player->IsGameMaster() && sGameConfig->GetBoolConfig("Battleground.CastDeserter"))
+        if (isBattleground() && !player->IsGameMaster() && CONF_GET_BOOL("Battleground.CastDeserter"))
             if (GetStatus() == STATUS_IN_PROGRESS || GetStatus() == STATUS_WAIT_JOIN)
                 player->ScheduleDelayedOperation(DELAYED_SPELL_CAST_DESERTER);
     }
@@ -1309,7 +1311,7 @@ uint32 Battleground::GetFreeSlotsForTeam(TeamId teamId) const
         return 0;
 
     // if CONFIG_BATTLEGROUND_INVITATION_TYPE == BG_QUEUE_INVITATION_TYPE_NO_BALANCE, invite everyone unless the BG is full
-    if (sGameConfig->GetIntConfig("Battleground.InvitationType") == BG_QUEUE_INVITATION_TYPE_NO_BALANCE)
+    if (CONF_GET_INT("Battleground.InvitationType") == BG_QUEUE_INVITATION_TYPE_NO_BALANCE)
         return (GetInvitedCount(teamId) < GetMaxPlayersPerTeam()) ? GetMaxPlayersPerTeam() - GetInvitedCount(teamId) : 0;
 
     // if BG is already started or "Battleground.InvitationType" != BG_QUEUE_INVITATION_TYPE_NO_BALANCE, do not allow to join too many players of one faction
@@ -1461,7 +1463,7 @@ void Battleground::AddPlayerToResurrectQueue(uint64 npc_guid, uint64 player_guid
 
 void Battleground::RemovePlayerFromResurrectQueue(Player* player)
 {
-    for (std::map<uint64, std::vector<uint64> >::iterator itr = m_ReviveQueue.begin(); itr != m_ReviveQueue.end(); ++itr)
+    for (std::map<uint64, std::vector<uint64>>::iterator itr = m_ReviveQueue.begin(); itr != m_ReviveQueue.end(); ++itr)
         for (std::vector<uint64>::iterator itr2 = (itr->second).begin(); itr2 != (itr->second).end(); ++itr2)
             if (*itr2 == player->GetGUID())
             {
@@ -1507,7 +1509,7 @@ bool Battleground::AddObject(uint32 type, uint32 entry, float x, float y, float 
     // So we must create it specific for this instance
     GameObject* go = sObjectMgr->IsGameObjectStaticTransport(entry) ? new StaticTransport() : new GameObject();
     if (!go->Create(sObjectMgr->GenerateLowGuid(HIGHGUID_GAMEOBJECT), entry, GetBgMap(),
-                    PHASEMASK_NORMAL, x, y, z, o, QuaternionData(rotation0, rotation1, rotation2, rotation3), 100, goState))
+                    PHASEMASK_NORMAL, x, y, z, o, G3D::Quat(rotation0, rotation1, rotation2, rotation3), 100, goState))
     {
         LOG_ERROR("sql.sql", "Battleground::AddObject: cannot create gameobject (entry: %u) for BG (map: %u, instance id: %u)!",
                   entry, m_MapId, m_InstanceID);
@@ -1986,7 +1988,7 @@ uint32 Battleground::GetTeamScore(TeamId teamId) const
 
 void Battleground::RewardXPAtKill(Player* killer, Player* victim)
 {
-    if (sGameConfig->GetBoolConfig("Battleground.GiveXPForKills") && killer && victim)
+    if (CONF_GET_BOOL("Battleground.GiveXPForKills") && killer && victim)
         killer->RewardPlayerAndGroupAtKill(victim, true);
 }
 

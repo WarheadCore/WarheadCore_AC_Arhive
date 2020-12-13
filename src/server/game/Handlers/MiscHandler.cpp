@@ -268,8 +268,8 @@ void WorldSession::HandleWhoOpcode(WorldPacket& recvData)
 
     uint32 team = _player->GetTeamId();
     uint32 security = GetSecurity();
-    bool allowTwoSideWhoList = sGameConfig->GetBoolConfig("AllowTwoSide.WhoList");
-    uint32 gmLevelInWhoList = sGameConfig->GetIntConfig("GM.InWhoList.Level");
+    bool allowTwoSideWhoList = CONF_GET_BOOL("AllowTwoSide.WhoList");
+    uint32 gmLevelInWhoList = CONF_GET_INT("GM.InWhoList.Level");
     uint32 displaycount = 0;
 
     WorldPacket data(SMSG_WHO, 50);                       // guess size
@@ -374,7 +374,7 @@ void WorldSession::HandleWhoOpcode(WorldPacket& recvData)
 
         // 49 is maximum player count sent to client - can be overridden
         // through config, but is unstable
-        if ((matchcount++) >= sGameConfig->GetIntConfig("MaxWhoListReturns"))
+        if ((matchcount++) >= CONF_GET_INT("MaxWhoListReturns"))
             continue;
 
         data << pname;                                    // player name
@@ -402,13 +402,13 @@ void WorldSession::HandleLogoutRequestOpcode(WorldPacket& /*recv_data*/)
     if (uint64 lguid = GetPlayer()->GetLootGUID())
         DoLootRelease(lguid);
 
-    bool instantLogout = ((GetSecurity() >= 0 && uint32(GetSecurity()) >= sGameConfig->GetIntConfig("InstantLogout"))
+    bool instantLogout = ((GetSecurity() >= 0 && uint32(GetSecurity()) >= CONF_GET_INT("InstantLogout"))
                           || (GetPlayer()->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING) && !GetPlayer()->IsInCombat())) || GetPlayer()->IsInFlight();
 
-    bool preventAfkSanctuaryLogout = sGameConfig->GetIntConfig("PreventAFKLogout") == 1
+    bool preventAfkSanctuaryLogout = CONF_GET_INT("PreventAFKLogout") == 1
                                      && GetPlayer()->isAFK() && sAreaTableStore.LookupEntry(GetPlayer()->GetAreaId())->IsSanctuary();
 
-    bool preventAfkLogout = sGameConfig->GetIntConfig("PreventAFKLogout") == 2
+    bool preventAfkLogout = CONF_GET_INT("PreventAFKLogout") == 2
                             && GetPlayer()->isAFK();
 
     /// TODO: Possibly add RBAC permission to log out in combat
@@ -543,131 +543,6 @@ void WorldSession::HandleStandStateChangeOpcode(WorldPacket& recv_data)
     _player->SetStandState(animstate);
 }
 
-void WorldSession::HandleContactListOpcode(WorldPacket& recv_data)
-{
-    uint32 unk;
-    recv_data >> unk;
-
-    LOG_DEBUG("network", "WORLD: Received CMSG_CONTACT_LIST - Unk: %d", unk);
-
-    _player->GetSocial()->SendSocialList(_player);
-}
-
-void WorldSession::HandleAddFriendOpcode(WorldPacket& recv_data)
-{
-    LOG_DEBUG("network", "WORLD: Received CMSG_ADD_FRIEND");
-
-    std::string friendName = GetAcoreString(LANG_FRIEND_IGNORE_UNKNOWN);
-    std::string friendNote;
-
-    recv_data >> friendName;
-
-    recv_data >> friendNote;
-
-    if (!normalizePlayerName(friendName))
-        return;
-
-    LOG_DEBUG("network", "WORLD: %s asked to add friend : '%s'", GetPlayer()->GetName().c_str(), friendName.c_str());
-
-    // xinef: Get Data From global storage
-    uint32 guidLow = sWorld->GetGlobalPlayerGUID(friendName);
-    if (!guidLow)
-        return;
-
-    GlobalPlayerData const* playerData = sWorld->GetGlobalPlayerData(guidLow);
-    if (!playerData)
-        return;
-
-    uint64 friendGuid = MAKE_NEW_GUID(guidLow, 0, HIGHGUID_PLAYER);
-    uint32 friendAccountId = playerData->accountId;
-    TeamId teamId = Player::TeamIdForRace(playerData->race);
-    FriendsResult friendResult = FRIEND_NOT_FOUND;
-
-    if (!AccountMgr::IsPlayerAccount(GetSecurity()) || sGameConfig->GetBoolConfig("GM.AllowFriend") || AccountMgr::IsPlayerAccount(AccountMgr::GetSecurity(friendAccountId, realmID)))
-    {
-        if (friendGuid)
-        {
-            if (friendGuid == GetPlayer()->GetGUID())
-                friendResult = FRIEND_SELF;
-            else if (GetPlayer()->GetTeamId() != teamId && !sGameConfig->GetBoolConfig("AllowTwoSide.AddFriend")  && AccountMgr::IsPlayerAccount(GetSecurity()))
-                friendResult = FRIEND_ENEMY;
-            else if (GetPlayer()->GetSocial()->HasFriend(guidLow))
-                friendResult = FRIEND_ALREADY;
-            else
-            {
-                Player* pFriend = ObjectAccessor::FindPlayerInOrOutOfWorld(friendGuid);
-                if (pFriend && pFriend->IsVisibleGloballyFor(GetPlayer()) && !AccountMgr::IsGMAccount(pFriend->GetSession()->GetSecurity()))
-                    friendResult = FRIEND_ADDED_ONLINE;
-                else
-                    friendResult = FRIEND_ADDED_OFFLINE;
-                if (!GetPlayer()->GetSocial()->AddToSocialList(guidLow, false))
-                {
-                    friendResult = FRIEND_LIST_FULL;
-                    LOG_DEBUG("network", "WORLD: %s's friend list is full.", GetPlayer()->GetName().c_str());
-                }
-            }
-            GetPlayer()->GetSocial()->SetFriendNote(guidLow, friendNote);
-        }
-    }
-
-    sSocialMgr->SendFriendStatus(GetPlayer(), friendResult, guidLow, false);
-
-    LOG_DEBUG("network", "WORLD: Sent (SMSG_FRIEND_STATUS)");
-}
-
-void WorldSession::HandleDelFriendOpcode(WorldPacket& recv_data)
-{
-    uint64 FriendGUID;
-
-    LOG_DEBUG("network", "WORLD: Received CMSG_DEL_FRIEND");
-
-    recv_data >> FriendGUID;
-
-    _player->GetSocial()->RemoveFromSocialList(GUID_LOPART(FriendGUID), false);
-
-    sSocialMgr->SendFriendStatus(GetPlayer(), FRIEND_REMOVED, GUID_LOPART(FriendGUID), false);
-
-    LOG_DEBUG("network", "WORLD: Sent motd (SMSG_FRIEND_STATUS)");
-}
-
-void WorldSession::HandleAddIgnoreOpcode(WorldPacket& recv_data)
-{
-    LOG_DEBUG("network", "WORLD: Received CMSG_ADD_IGNORE");
-
-    std::string ignoreName = GetAcoreString(LANG_FRIEND_IGNORE_UNKNOWN);
-
-    recv_data >> ignoreName;
-
-    if (!normalizePlayerName(ignoreName))
-        return;
-
-    LOG_DEBUG("network", "WORLD: %s asked to Ignore: '%s'", GetPlayer()->GetName().c_str(), ignoreName.c_str());
-
-    uint32 lowGuid = sWorld->GetGlobalPlayerGUID(ignoreName);
-    if (!lowGuid)
-        return;
-
-    uint64 IgnoreGuid = MAKE_NEW_GUID(lowGuid, 0, HIGHGUID_PLAYER);
-    FriendsResult ignoreResult = FRIEND_IGNORE_NOT_FOUND;
-
-    if (IgnoreGuid == GetPlayer()->GetGUID())              //not add yourself
-        ignoreResult = FRIEND_IGNORE_SELF;
-    else if (GetPlayer()->GetSocial()->HasIgnore(lowGuid))
-        ignoreResult = FRIEND_IGNORE_ALREADY;
-    else
-    {
-        ignoreResult = FRIEND_IGNORE_ADDED;
-
-        // ignore list full
-        if (!GetPlayer()->GetSocial()->AddToSocialList(lowGuid, true))
-            ignoreResult = FRIEND_IGNORE_FULL;
-    }
-
-    sSocialMgr->SendFriendStatus(GetPlayer(), ignoreResult, lowGuid, false);
-
-    LOG_DEBUG("network", "WORLD: Sent (SMSG_FRIEND_STATUS)");
-}
-
 void WorldSession::HandleLoadActionsSwitchSpec(PreparedQueryResult result)
 {
     if (!GetPlayer())
@@ -703,31 +578,6 @@ void WorldSession::HandleCharacterAuraFrozen(PreparedQueryResult result)
         std::string player = fields[0].GetString();
         handler.PSendSysMessage(LANG_COMMAND_FROZEN_PLAYERS, player.c_str());
     } while (result->NextRow());
-}
-
-void WorldSession::HandleDelIgnoreOpcode(WorldPacket& recv_data)
-{
-    uint64 IgnoreGUID;
-
-    LOG_DEBUG("network", "WORLD: Received CMSG_DEL_IGNORE");
-
-    recv_data >> IgnoreGUID;
-
-    _player->GetSocial()->RemoveFromSocialList(GUID_LOPART(IgnoreGUID), true);
-
-    sSocialMgr->SendFriendStatus(GetPlayer(), FRIEND_IGNORE_REMOVED, GUID_LOPART(IgnoreGUID), false);
-
-    LOG_DEBUG("network", "WORLD: Sent motd (SMSG_FRIEND_STATUS)");
-}
-
-void WorldSession::HandleSetContactNotesOpcode(WorldPacket& recv_data)
-{
-    LOG_DEBUG("network", "CMSG_SET_CONTACT_NOTES");
-
-    uint64 guid;
-    std::string note;
-    recv_data >> guid >> note;
-    _player->GetSocial()->SetFriendNote(GUID_LOPART(guid), note);
 }
 
 void WorldSession::HandleBugOpcode(WorldPacket& recv_data)
@@ -1167,7 +1017,7 @@ void WorldSession::HandleInspectOpcode(WorldPacket& recv_data)
     WorldPacket data(SMSG_INSPECT_TALENT, guid_size + 4 + talent_points);
     data.append(player->GetPackGUID());
 
-    if (sGameConfig->GetBoolConfig("TalentsInspecting") || _player->IsGameMaster())
+    if (CONF_GET_BOOL("TalentsInspecting") || _player->IsGameMaster())
         player->BuildPlayerTalentsInfoData(&data);
     else
     {

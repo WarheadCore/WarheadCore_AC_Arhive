@@ -100,6 +100,7 @@ public:
             Talk(SAY_AGGRO);
 
             me->SetInCombatWithZone();
+
             events.ScheduleEvent(EVENT_SPELL_HATEFUL_STRIKE, 1200ms);
             events.ScheduleEvent(EVENT_SPELL_BERSERK, 6min);
             events.ScheduleEvent(EVENT_HEALTH_CHECK, 1s);
@@ -120,50 +121,51 @@ public:
             switch (events.ExecuteEvent())
             {
                 case EVENT_SPELL_HATEFUL_STRIKE:
+                {
+                    //Cast Hateful strike on the player with the highest
+                    //amount of HP within melee distance, and second threat amount
+                    std::list<Unit*> meleeRangeTargets;
+                    Unit* finalTarget = nullptr;
+                    uint8 counter = 0;
+
+                    auto i = me->getThreatManager().getThreatList().begin();
+                    for (; i != me->getThreatManager().getThreatList().end(); ++i, ++counter)
                     {
-                        //Cast Hateful strike on the player with the highest
-                        //amount of HP within melee distance, and second threat amount
-                        std::list<Unit*> meleeRangeTargets;
-                        Unit* finalTarget = nullptr;
-                        uint8 counter = 0;
+                        // Gather all units with melee range
+                        Unit* target = (*i)->getTarget();
+                        if (me->IsWithinMeleeRange(target))
+                            meleeRangeTargets.push_back(target);
 
-                        auto i = me->getThreatManager().getThreatList().begin();
-                        for (; i != me->getThreatManager().getThreatList().end(); ++i, ++counter)
-                        {
-                            // Gather all units with melee range
-                            Unit* target = (*i)->getTarget();
-                            if (me->IsWithinMeleeRange(target))
-                                meleeRangeTargets.push_back(target);
-
-                            // and add threat to most hated
-                            if (counter < RAID_MODE(2, 3, 2, 3))
-                                me->AddThreat(target, 500.0f);
-                        }
-
-                        counter = 0;
-                        list<Unit*, std::allocator<Unit*>>::iterator itr;
-                        for (itr = meleeRangeTargets.begin(); itr != meleeRangeTargets.end(); ++itr, ++counter)
-                        {
-                            // if there is only one target available
-                            if (meleeRangeTargets.size() == 1)
-                                finalTarget = (*itr);
-                            else if (counter > 0) // skip first target
-                            {
-                                if (!finalTarget || (*itr)->GetHealth() > finalTarget->GetHealth())
-                                    finalTarget = (*itr);
-
-                                // third loop
-                                if (counter >= 2)
-                                    break;
-                            }
-                        }
-
-                        if (finalTarget)
-                            me->CastSpell(finalTarget, RAID_MODE_HEROIC(SPELL_HATEFUL_STRIKE_10, SPELL_HATEFUL_STRIKE_25), false);
-
-                        events.RepeatEvent(1s);
-                        break;
+                        // and add threat to most hated
+                        if (counter < RAID_MODE(2, 3, 2, 3))
+                            me->AddThreat(target, 500.0f);
                     }
+
+                    counter = 0;
+                    list<Unit*, std::allocator<Unit*>>::iterator itr;
+
+                    for (itr = meleeRangeTargets.begin(); itr != meleeRangeTargets.end(); ++itr, ++counter)
+                    {
+                        // if there is only one target available
+                        if (meleeRangeTargets.size() == 1)
+                            finalTarget = (*itr);
+                        else if (counter > 0) // skip first target
+                        {
+                            if (!finalTarget || (*itr)->GetHealth() > finalTarget->GetHealth())
+                                finalTarget = (*itr);
+
+                            // third loop
+                            if (counter >= 2)
+                                break;
+                        }
+                    }
+
+                    if (finalTarget)
+                        me->CastSpell(finalTarget, RAID_MODE_HEROIC(SPELL_HATEFUL_STRIKE_10, SPELL_HATEFUL_STRIKE_25), false);
+
+                    events.RepeatEvent(1s);
+                    break;
+                }
                 case EVENT_SPELL_BERSERK:
                     Talk(EMOTE_BERSERK);
                     me->CastSpell(me, SPELL_BERSERK, true);
@@ -180,6 +182,7 @@ public:
                         me->CastSpell(me, SPELL_FRENZY, true);
                         break;
                     }
+
                     events.RepeatEvent(1s);
                     break;
             }
