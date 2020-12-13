@@ -35,6 +35,21 @@
 
 #define ChunkSize 2048
 
+enum AccountFlags
+{
+    ACCOUNT_FLAG_GM         = 0x00000001,
+    ACCOUNT_FLAG_TRIAL      = 0x00000008,
+    ACCOUNT_FLAG_PROPASS    = 0x00800000,
+};
+
+enum SecurityFlags
+{
+    SECURITY_FLAG_NONE          = 0x00,
+    SECURITY_FLAG_PIN           = 0x01,
+    SECURITY_FLAG_UNK           = 0x02,
+    SECURITY_FLAG_AUTHENTICATOR = 0x04
+};
+
 enum eAuthCmd
 {
     AUTH_LOGON_CHALLENGE                         = 0x00,
@@ -299,43 +314,14 @@ bool AuthSocket::_HandleLogonChallenge()
     ///- Session is closed unless overriden
     _status = STATUS_CLOSED;
 
-    // pussywizard: logon flood protection:
-    {
-        std::lock_guard<std::mutex> guard(LastLoginAttemptMutex);
-
-        std::string ipaddr = socket().getRemoteAddress();
-        uint32 currTime = time(nullptr);
-        std::map<std::string, uint32>::iterator itr = LastLoginAttemptTimeForIP.find(ipaddr);
-        if (itr != LastLoginAttemptTimeForIP.end() && itr->second >= currTime)
-        {
-            ByteBuffer pkt;
-            pkt << uint8(AUTH_LOGON_CHALLENGE);
-            pkt << uint8(0x00);
-            pkt << uint8(WOW_FAIL_UNKNOWN_ACCOUNT);
-            socket().send((char const*)pkt.contents(), pkt.size());
-            return true;
-        }
-        if (LastLoginAttemptCleanTime + 60 < currTime)
-        {
-            LastLoginAttemptTimeForIP.clear();
-            LastLoginAttemptCleanTime = currTime;
-        }
-        else
-            LastLoginAttemptTimeForIP[ipaddr] = currTime;
-    }
-
     // Read the first 4 bytes (header) to get the length of the remaining of the packet
     std::vector<uint8> buf;
     buf.resize(4);
 
     socket().recv((char*)&buf[0], 4);
-
     EndianConvertPtr<uint16>(&buf[0]);
-
     uint16 remaining = ((sAuthLogonChallenge_C*)&buf[0])->size;
-
     LOG_DEBUG("network", "[AuthChallenge] got header, body is %#04x bytes", remaining);
-
     if ((remaining < sizeof(sAuthLogonChallenge_C) - buf.size()) || (socket().recv_len() < remaining))
         return false;
 
@@ -522,13 +508,14 @@ bool AuthSocket::_HandleLogonChallenge()
 
                     pkt << uint8(securityFlags);            // security flags (0x0...0x04)
 
-                    if (securityFlags & 0x01)               // PIN input
+                    if (securityFlags & SECURITY_FLAG_PIN)          // PIN input
                     {
                         pkt << uint32(0);
-                        pkt << uint64(0) << uint64(0);      // 16 bytes hash?
+                        pkt << uint64(0);
+                        pkt << uint64(0);
                     }
 
-                    if (securityFlags & 0x02)               // Matrix input
+                    if (securityFlags & SECURITY_FLAG_UNK)          // Matrix input
                     {
                         pkt << uint8(0);
                         pkt << uint8(0);
@@ -537,8 +524,8 @@ bool AuthSocket::_HandleLogonChallenge()
                         pkt << uint64(0);
                     }
 
-                    if (securityFlags & 0x04)               // Security token input
-                        pkt << uint8(1);
+                    if (securityFlags & SECURITY_FLAG_AUTHENTICATOR)    // Authenticator input
+                        pkt << uint8(1);s
 
                     uint8 secLevel = fields[5].GetUInt8();
                     _accountSecurityLevel = secLevel <= SEC_ADMINISTRATOR ? AccountTypes(secLevel) : SEC_ADMINISTRATOR;
@@ -980,9 +967,9 @@ bool AuthSocket::_HandleRealmList()
     ByteBuffer pkt;
 
     size_t RealmListSize = 0;
-    for (RealmList::RealmMap::const_iterator i = sRealmList->begin(); i != sRealmList->end(); ++i)
+    for (const auto& i : sRealmList)
     {
-        const Realm& realm = i->second;
+        const Realm& realm = i.second;
         // don't work with realms which not compatible with the client
         bool okBuild = ((_expversion & POST_BC_EXP_FLAG) && realm.gamebuild == _build) || ((_expversion & PRE_BC_EXP_FLAG) && !AuthHelper::IsPreBCAcceptedClientBuild(realm.gamebuild));
 
@@ -1000,7 +987,7 @@ bool AuthSocket::_HandleRealmList()
         if (!buildInfo)
             flag &= ~REALM_FLAG_SPECIFYBUILD;
 
-        std::string name = i->first;
+        std::string name = i.first;
         if (_expversion & PRE_BC_EXP_FLAG && flag & REALM_FLAG_SPECIFYBUILD)
         {
             std::ostringstream ss;
