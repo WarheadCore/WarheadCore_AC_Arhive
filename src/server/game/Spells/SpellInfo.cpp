@@ -2788,7 +2788,7 @@ bool SpellInfo::_IsPositiveSpell() const
     return true;
 }
 
-bool SpellInfo::_IsPositiveTarget(uint32 targetA, uint32 targetB)
+inline bool _isPositiveTarget(SpellInfo const* spellInfo, uint8 effIndex)
 {
     if (!spellInfo->Effects[effIndex].IsEffect())
         return true;

@@ -1000,7 +1000,7 @@ bool AuthSocket::_HandleRealmList()
     ByteBuffer pkt;
 
     size_t RealmListSize = 0;
-    for (const auto& i : RealmMap)
+    for (const auto& i : RealmList::RealmMap)
     {
         const Realm& realm = i.second;
         // don't work with realms which not compatible with the client
