@@ -524,7 +524,7 @@ bool AuthSocket::_HandleLogonChallenge()
                     }
 
                     if (securityFlags & SECURITY_FLAG_AUTHENTICATOR)    // Authenticator input
-                        pkt << uint8(1);s
+                        pkt << uint8(1);
 
                     uint8 secLevel = fields[5].GetUInt8();
                     _accountSecurityLevel = secLevel <= SEC_ADMINISTRATOR ? AccountTypes(secLevel) : SEC_ADMINISTRATOR;
@@ -932,7 +932,8 @@ bool AuthSocket::_HandleRealmList()
     ByteBuffer pkt;
 
     size_t RealmListSize = 0;
-    for (const auto& i : sRealmList)
+
+    for (const auto& i : RealmMap)
     {
         const Realm& realm = i.second;
         // don't work with realms which not compatible with the client

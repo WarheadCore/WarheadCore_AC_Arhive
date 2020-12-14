@@ -1268,6 +1268,11 @@ bool SpellInfo::IsAutoRepeatRangedSpell() const
     return AttributesEx2 & SPELL_ATTR2_AUTOREPEAT_FLAG;
 }
 
+bool SpellInfo::HasInitialAggro() const
+{
+    return !(HasAttribute(SPELL_ATTR1_NO_THREAT) || HasAttribute(SPELL_ATTR3_NO_INITIAL_AGGRO));
+}
+
 bool SpellInfo::IsAffectedBySpellMods() const
 {
     return !(AttributesEx3 & SPELL_ATTR3_NO_DONE_BONUS);
@@ -2785,25 +2790,10 @@ bool SpellInfo::_IsPositiveSpell() const
 
 bool SpellInfo::_IsPositiveTarget(uint32 targetA, uint32 targetB)
 {
-    // non-positive targets
-    switch (targetA)
-    {
-        case TARGET_UNIT_NEARBY_ENEMY:
-        case TARGET_UNIT_TARGET_ENEMY:
-        case TARGET_UNIT_SRC_AREA_ENEMY:
-        case TARGET_UNIT_DEST_AREA_ENEMY:
-        case TARGET_UNIT_CONE_ENEMY_24:
-        case TARGET_UNIT_CONE_ENEMY_54:
-        case TARGET_UNIT_CONE_ENEMY_104:
-        case TARGET_DEST_DYNOBJ_ENEMY:
-        case TARGET_DEST_TARGET_ENEMY:
-            return false;
-        default:
-            break;
-    }
-    if (targetB)
-        return _IsPositiveTarget(targetB, 0);
-    return true;
+    if (!spellInfo->Effects[effIndex].IsEffect())
+        return true;
+
+    return (spellInfo->Effects[effIndex].TargetA.GetCheckType() != TARGET_CHECK_ENEMY && spellInfo->Effects[effIndex].TargetB.GetCheckType() != TARGET_CHECK_ENEMY);
 }
 
 void SpellInfo::_UnloadImplicitTargetConditionLists()
