@@ -71,8 +71,8 @@ private:
     RealmSocket& socket_;
     RealmSocket& socket(void) { return socket_; }
 
-    SRP6 srp;
-    BigNumber _reconnectProof;
+    std::array<uint8, 40> sessionKey;
+    std::array<uint8, 16> _reconnectProof;
 
     eStatus _status;
 

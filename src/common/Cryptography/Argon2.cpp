@@ -18,7 +18,7 @@
 #include "Argon2.h"
 #include <argon2/argon2.h>
 
-/*static*/ Optional<std::string> Crypto::Argon2::Hash(std::string const& password, BigNumber const& salt, uint32 nIterations, uint32 kibMemoryCost)
+/*static*/ std::optional<std::string> Crypto::Argon2::Hash(std::string const& password, BigNumber const& salt, uint32 nIterations, uint32 kibMemoryCost)
 {
     char buf[ENCODED_HASH_LEN];
     std::vector<uint8> saltBytes = salt.ToByteVector();

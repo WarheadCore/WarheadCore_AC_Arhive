@@ -20,7 +20,7 @@
 
 #include "BigNumber.h"
 #include "Define.h"
-#include "Optional.h"
+#include <optional>
 #include <string>
 
 namespace Crypto
