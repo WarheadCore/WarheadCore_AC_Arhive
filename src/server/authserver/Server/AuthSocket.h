@@ -57,6 +57,7 @@ public:
     bool _HandleReconnectChallenge();
     bool _HandleReconnectProof();
     bool _HandleRealmList();
+    void SetVSFields(const std::string& rI);
 
     //data transfer handle for patch
     bool _HandleXferResume();

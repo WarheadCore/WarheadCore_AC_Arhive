@@ -148,6 +148,8 @@ typedef struct AuthHandler
     bool (AuthSocket::*handler)(void);
 } AuthHandler;
 
+std::array<uint8, 16> VersionChallenge = { { 0xBA, 0xA3, 0x1E, 0x99, 0xA0, 0x0B, 0x21, 0x57, 0xFC, 0x37, 0x3F, 0xB3, 0x69, 0xCD, 0xD2, 0xF1 } };
+
 struct BufferSizes
 {
     static constexpr size_t SRP_6_V = 0x20;
@@ -468,8 +470,8 @@ bool AuthSocket::_HandleLogonChallenge()
                     LOG_DEBUG("network", "database authentication values: v='%s' s='%s'", databaseV.c_str(), databaseS.c_str());
 
                     // multiply with 2 since bytes are stored as hexstring
-                    if (databaseV.size() != s_BYTE_SIZE * 2 || databaseS.size() != s_BYTE_SIZE * 2)
-                        _SetVSFields(rI);
+                    if (databaseV.size() != size_t(BufferSizes::SRP_6_V) * 2 || databaseS.size() != size_t(BufferSizes::SRP_6_S) * 2)
+                        SetVSFields(rI);
                     else
                     {
                         s.SetHexStr(databaseS.c_str());
@@ -482,9 +484,6 @@ bool AuthSocket::_HandleLogonChallenge()
 
                     ASSERT(gmod.GetNumBytes() <= 32);
 
-                    BigNumber unk3;
-                    unk3.SetRand(16 * 8);
-
                     // Fill the response packet with the result
                     if (AuthHelper::IsAcceptedClientBuild(_build))
                         pkt << uint8(WOW_SUCCESS);
@@ -492,13 +491,13 @@ bool AuthSocket::_HandleLogonChallenge()
                         pkt << uint8(WOW_FAIL_VERSION_INVALID);
 
                     // B may be calculated < 32B so we force minimal length to 32B
-                    pkt.append(B.AsByteArray(32).get(), 32);      // 32 bytes
+                    pkt.append(B.ToByteArray<32>());      // 32 bytes
                     pkt << uint8(1);
-                    pkt.append(g.AsByteArray().get(), 1);
+                    pkt.append(g.ToByteArray<1>());
                     pkt << uint8(32);
-                    pkt.append(N.AsByteArray(32).get(), 32);
-                    pkt.append(s.AsByteArray().get(), s.GetNumBytes());   // 32 bytes
-                    pkt.append(unk3.AsByteArray(16).get(), 16);
+                    pkt.append(N.ToByteArray<32>());
+                    pkt.append(s.ToByteArray<BufferSizes::SRP_6_S>());   // 32 bytes
+                    pkt.append(VersionChallenge.data(), VersionChallenge.size());
                     uint8 securityFlags = 0;
 
                     // Check if token is used
@@ -584,93 +583,58 @@ bool AuthSocket::_HandleLogonProof()
         return true;
     }
 
-    SHA1Hash sha;
-    sha.UpdateBigNumbers(&A, &B, nullptr);
-    sha.Finalize();
-    BigNumber u;
-    u.SetBinary(sha.GetDigest(), 20);
+    BigNumber u(Crypto::SHA1::GetDigestOf(A.ToByteArray<32>(), B.ToByteArray<32>()));
     BigNumber S = (A * (v.ModExp(u, N))).ModExp(b, N);
 
-    uint8 t[32];
-    uint8 t1[16];
-    uint8 vK[40];
-    memcpy(t, S.AsByteArray(32).get(), 32);
+    std::array<uint8, 32> t = S.ToByteArray<32>();
+    std::array<uint8, 16> buf;
+    Crypto::SHA1::Digest part;
+    std::array<uint8, 40> sessionKey;
 
-    for (int i = 0; i < 16; ++i)
-        t1[i] = t[i * 2];
+    for (size_t i = 0; i < 16; ++i)
+        buf[i] = t[i * 2];
+    part = Crypto::SHA1::GetDigestOf(buf);
+    for (size_t i = 0; i < Crypto::SHA1::DIGEST_LENGTH; ++i)
+        sessionKey[i * 2] = part[i];
 
-    sha.Initialize();
-    sha.UpdateData(t1, 16);
+    for (size_t i = 0; i < 16; ++i)
+        buf[i] = t[i * 2 + 1];
+    part = Crypto::SHA1::GetDigestOf(buf);
+    for (size_t i = 0; i < Crypto::SHA1::DIGEST_LENGTH; ++i)
+        sessionKey[i * 2 + 1] = part[i];
+
+    Crypto::SHA1::Digest hash = Crypto::SHA1::GetDigestOf(N.ToByteArray<32>());
+    Crypto::SHA1::Digest hash2 = Crypto::SHA1::GetDigestOf(g.ToByteArray<1>());
+    std::transform(hash.begin(), hash.end(), hash2.begin(), hash.begin(), std::bit_xor<>()); // hash = H(N) xor H(g)
+
+    Crypto::SHA1 sha;
+    sha.UpdateData(hash);
+    sha.UpdateData(Crypto::SHA1::GetDigestOf(_accountInfo.Login));
+    sha.UpdateData(s.ToByteArray<BufferSizes::SRP_6_S>());
+    sha.UpdateData(A.ToByteArray<32>());
+    sha.UpdateData(B.ToByteArray<32>());
+    sha.UpdateData(sessionKey);
     sha.Finalize();
 
-    for (int i = 0; i < 20; ++i)
-        vK[i * 2] = sha.GetDigest()[i];
-
-    for (int i = 0; i < 16; ++i)
-        t1[i] = t[i * 2 + 1];
-
-    sha.Initialize();
-    sha.UpdateData(t1, 16);
-    sha.Finalize();
-
-    for (int i = 0; i < 20; ++i)
-        vK[i * 2 + 1] = sha.GetDigest()[i];
-
-    K.SetBinary(vK, 40);
-
-    uint8 hash[20];
-
-    sha.Initialize();
-    sha.UpdateBigNumbers(&N, nullptr);
-    sha.Finalize();
-    memcpy(hash, sha.GetDigest(), 20);
-    sha.Initialize();
-    sha.UpdateBigNumbers(&g, nullptr);
-    sha.Finalize();
-
-    for (int i = 0; i < 20; ++i)
-        hash[i] ^= sha.GetDigest()[i];
-
-    BigNumber t3;
-    t3.SetBinary(hash, 20);
-
-    sha.Initialize();
-    sha.UpdateData(_login);
-    sha.Finalize();
-    uint8 t4[SHA_DIGEST_LENGTH];
-    memcpy(t4, sha.GetDigest(), SHA_DIGEST_LENGTH);
-
-    sha.Initialize();
-    sha.UpdateBigNumbers(&t3, nullptr);
-    sha.UpdateData(t4, SHA_DIGEST_LENGTH);
-    sha.UpdateBigNumbers(&s, &A, &B, &K, nullptr);
-    sha.Finalize();
-    BigNumber M;
-    M.SetBinary(sha.GetDigest(), 20);
+    Crypto::SHA1::Digest M = sha.GetDigest();
 
     // Check if SRP6 results match (password is correct), else send an error
-    if (!memcmp(M.AsByteArray().get(), lp.M1, 20))
+    if (M == lp.M1)
     {
         LOG_DEBUG("network", "'%s:%d' User '%s' successfully authenticated", socket().getRemoteAddress().c_str(), socket().getRemotePort(), _login.c_str());
 
         // Update the sessionkey, last_ip, last login time and reset number of failed logins in the account table for this account
         // No SQL injection (escaped user name) and IP address as received by socket
-        const char* K_hex = K.AsHexStr();
-
         PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPD_LOGONPROOF);
-        stmt->setString(0, K_hex);
+        stmt->setString(0, ByteArrayToHexStr(sessionKey));
         stmt->setString(1, socket().getRemoteAddress().c_str());
         stmt->setUInt32(2, GetLocaleByName(_localizationName));
         stmt->setString(3, _os);
         stmt->setString(4, _login);
         LoginDatabase.DirectExecute(stmt);
 
-        OPENSSL_free((void*)K_hex);
-
         // Finish SRP6 and send the final result to the client
-        sha.Initialize();
-        sha.UpdateBigNumbers(&A, &M, &K, nullptr);
-        sha.Finalize();
+        Crypto::SHA1::Digest M2 = Crypto::SHA1::GetDigestOf(A.ToByteArray<32>(), M, sessionKey);
 
         // Check auth token
         if ((lp.securityFlags & 0x04) || !_tokenKey.empty())
@@ -694,7 +658,7 @@ bool AuthSocket::_HandleLogonProof()
         if (_expversion & POST_BC_EXP_FLAG)                 // 2.x and 3.x clients
         {
             sAuthLogonProof_S proof;
-            memcpy(proof.M2, sha.GetDigest(), 20);
+            proof.M2 = M2;
             proof.cmd = AUTH_LOGON_PROOF;
             proof.error = 0;
             proof.unk1 = 0x00800000;    // Accountflags. 0x01 = GM, 0x08 = Trial, 0x00800000 = Pro pass (arena tournament)
@@ -705,7 +669,7 @@ bool AuthSocket::_HandleLogonProof()
         else
         {
             sAuthLogonProof_S_Old proof;
-            memcpy(proof.M2, sha.GetDigest(), 20);
+            proof.M2 = M2;
             proof.cmd = AUTH_LOGON_PROOF;
             proof.error = 0;
             proof.unk2 = 0x00;
@@ -848,7 +812,7 @@ bool AuthSocket::_HandleReconnectChallenge()
     uint8 secLevel = fields[2].GetUInt8();
     _accountSecurityLevel = secLevel <= SEC_ADMINISTRATOR ? AccountTypes(secLevel) : SEC_ADMINISTRATOR;
 
-    K.SetHexStr ((*result)[0].GetCString());
+    HexStrToByteArray((*result)[0].GetCString(), sessionKey.data());
 
     ///- All good, await client's proof
     _status = STATUS_RECON_PROOF;
@@ -857,9 +821,9 @@ bool AuthSocket::_HandleReconnectChallenge()
     ByteBuffer pkt;
     pkt << uint8(AUTH_RECONNECT_CHALLENGE);
     pkt << uint8(0x00);
-    _reconnectProof.SetRand(16 * 8);
-    pkt.append(_reconnectProof.AsByteArray(16).get(), 16);        // 16 bytes random
-    pkt << uint64(0x00) << uint64(0x00);                    // 16 bytes zeros
+    Crypto::GetRandomBytes(_reconnectProof);    // 16 bytes random
+    pkt.append(_reconnectProof);
+    pkt << uint64(0x00) << uint64(0x00);        // 16 bytes zeros
     socket().send((char const*)pkt.contents(), pkt.size());
     return true;
 }
@@ -876,19 +840,20 @@ bool AuthSocket::_HandleReconnectProof()
 
     _status = STATUS_CLOSED;
 
-    if (_login.empty() || !_reconnectProof.GetNumBytes() || !K.GetNumBytes())
+    if (_login.empty())
         return false;
 
     BigNumber t1;
     t1.SetBinary(lp.R1, 16);
 
-    SHA1Hash sha;
-    sha.Initialize();
+    Crypto::SHA1 sha;
     sha.UpdateData(_login);
-    sha.UpdateBigNumbers(&t1, &_reconnectProof, &K, nullptr);
+    sha.UpdateData(t1.ToByteArray<16>());
+    sha.UpdateData(_reconnectProof);
+    sha.UpdateData(sessionKey);
     sha.Finalize();
 
-    if (!memcmp(sha.GetDigest(), lp.R2, SHA_DIGEST_LENGTH))
+    if (sha.GetDigest() == reconnectProof->R2)
     {
         // Sending response
         ByteBuffer pkt;
@@ -1115,6 +1080,33 @@ bool AuthSocket::_HandleXferAccept()
 
     Warhead::Thread u(new PatcherRunnable(this));
     return true;
+}
+
+// Make the SRP6 calculation from hash in dB
+void AuthSocket::SetVSFields(const std::string& rI)
+{
+    s.SetRand(int32(BufferSizes::SRP_6_S) * 8);
+
+    BigNumber I;
+    I.SetHexStr(rI.c_str());
+
+    // In case of leading zeros in the rI hash, restore them
+    std::array<uint8, Crypto::SHA1::DIGEST_LENGTH> mDigest = I.ToByteArray<Crypto::SHA1::DIGEST_LENGTH>(false);
+
+    Crypto::SHA1 sha;
+    sha.UpdateData(s.ToByteArray<BufferSizes::SRP_6_S>());
+    sha.UpdateData(mDigest);
+    sha.Finalize();
+    BigNumber x;
+    x.SetBinary(sha.GetDigest());
+    v = g.ModExp(x, N);
+
+    // No SQL injection (username escaped)
+    LoginDatabasePreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPD_VS);
+    stmt->setString(0, v.AsHexStr());
+    stmt->setString(1, s.AsHexStr());
+    stmt->setString(2, _accountInfo.Login);
+    LoginDatabase.Execute(stmt);
 }
 
 PatcherRunnable::PatcherRunnable(class AuthSocket* as)
