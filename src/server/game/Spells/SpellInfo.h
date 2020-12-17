@@ -516,6 +516,7 @@ public:
     void _InitializeExplicitTargetMask();
     bool _IsPositiveEffect(uint8 effIndex, bool deep) const;
     bool _IsPositiveSpell() const;
+    static bool _IsPositiveTarget(uint32 targetA, uint32 targetB);
     AuraStateType LoadAuraState() const;
     SpellSpecificType LoadSpellSpecific() const;
     // unloading helpers

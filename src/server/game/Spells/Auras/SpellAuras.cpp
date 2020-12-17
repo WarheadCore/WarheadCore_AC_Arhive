@@ -849,12 +849,29 @@ void Aura::SetDuration(int32 duration, bool withMods)
     SetNeedClientUpdateForTargets();
 }
 
-void Aura::RefreshDuration()
+void Aura::RefreshDuration(bool withMods)
 {
-    SetDuration(GetMaxDuration());
+    Unit* caster = GetCaster();
+    if (withMods && caster)
+    {
+        int32 duration = m_spellInfo->GetMaxDuration();
+        // Calculate duration of periodics affected by haste.
+        if (caster->HasAuraTypeWithAffectMask(SPELL_AURA_PERIODIC_HASTE, m_spellInfo) || m_spellInfo->HasAttribute(SPELL_ATTR5_HASTE_AFFECT_DURATION))
+            duration = int32(duration * caster->GetFloatValue(UNIT_MOD_CAST_SPEED));
+
+        SetMaxDuration(duration);
+        SetDuration(duration);
+    }
+    else
+        SetDuration(GetMaxDuration());
 
     if ((m_spellInfo->ManaPerSecond || m_spellInfo->ManaPerSecondPerLevel) && !m_spellInfo->HasAttribute(SPELL_ATTR2_HEALTH_FUNNEL))
         m_timeCla = 1 * IN_MILLISECONDS;
+
+    // also reset periodic counters
+    for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
+        if (AuraEffect* aurEff = m_effects[i])
+            aurEff->ResetTicks();
 }
 
 void Aura::RefreshTimers(bool periodicReset /*= false*/)
