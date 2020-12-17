@@ -553,14 +553,6 @@ bool Transmogrification::CanTransmogrifyItemWithItem(Player* player, ItemTemplat
             return false;
     }
 
-    if (!CONF_GET_BOOL("Transmogrification.AllowMixedArmorTypes") && source->InventoryType != target->InventoryType)
-    {
-        if (source->Class == ITEM_CLASS_ARMOR &&
-                !((source->InventoryType == INVTYPE_CHEST || source->InventoryType == INVTYPE_ROBE) &&
-                  (target->InventoryType == INVTYPE_CHEST || target->InventoryType == INVTYPE_ROBE)))
-            return false;
-    }
-
     if (!CONF_GET_BOOL("Transmogrification.AllowMixedWeaponTypes") && source->InventoryType != target->InventoryType)
     {
         if (target->Class != ITEM_CLASS_WEAPON || source->Class != ITEM_CLASS_WEAPON)
@@ -570,7 +562,7 @@ bool Transmogrification::CanTransmogrifyItemWithItem(Player* player, ItemTemplat
             return false;
     }
 
-    if (CONF_GET_BOOL("Transmogrification.AllowMixedWeaponTypes") && source->InventoryType != target->InventoryType)
+    if (source->InventoryType != target->InventoryType)
     {
         if (source->Class == ITEM_CLASS_WEAPON && !(IsRangedWeapon(target->Class, target->SubClass) ||
                 (
@@ -585,6 +577,11 @@ bool Transmogrification::CanTransmogrifyItemWithItem(Player* player, ItemTemplat
                      source->InventoryType == INVTYPE_WEAPONMAINHAND ||
                      source->InventoryType == INVTYPE_WEAPONOFFHAND))
                                                    ))
+            return false;
+
+        if (source->Class == ITEM_CLASS_ARMOR &&
+            !((source->InventoryType == INVTYPE_CHEST || source->InventoryType == INVTYPE_ROBE) &&
+                (target->InventoryType == INVTYPE_CHEST || target->InventoryType == INVTYPE_ROBE)))
             return false;
     }
 
