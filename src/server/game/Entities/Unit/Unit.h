@@ -1521,7 +1521,7 @@ public:
     void SetPower(Powers power, uint32 val, bool withPowerUpdate = true);
     void SetMaxPower(Powers power, uint32 val);
     // returns the change in power
-    int32 ModifyPower(Powers power, uint32 val, bool withPowerUpdate = true);
+    int32 ModifyPower(Powers power, int32 val, bool withPowerUpdate = true);
     int32 ModifyPowerPct(Powers power, float pct, bool apply = true);
 
     uint32 GetAttackTime(WeaponAttackType att) const

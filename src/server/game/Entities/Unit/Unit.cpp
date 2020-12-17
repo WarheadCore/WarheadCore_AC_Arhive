@@ -13017,7 +13017,7 @@ int32 Unit::GetHealthGain(int32 dVal)
 }
 
 // returns negative amount on power reduction
-int32 Unit::ModifyPower(Powers power, int32 dVal, bool withPowerUpdate /*= true*/)
+int32 Unit::ModifyPower(Powers power, int32 dVal, bool withPowerUpdate)
 {
     if (dVal == 0)
         return 0;
@@ -13029,7 +13029,7 @@ int32 Unit::ModifyPower(Powers power, int32 dVal, bool withPowerUpdate /*= true*
     int32 val = dVal + curPower;
     if (val <= 0)
     {
-        SetPower(power, 0, withPowerUpdate);ы
+        SetPower(power, 0, withPowerUpdate);
         return -curPower;
     }
 
