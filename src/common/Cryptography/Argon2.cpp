@@ -23,13 +23,13 @@
     char buf[ENCODED_HASH_LEN];
     std::vector<uint8> saltBytes = salt.ToByteVector();
     int status = argon2id_hash_encoded(
-        nIterations,
-        kibMemoryCost,
-        PARALLELISM,
-        password.c_str(), password.length(),
-        saltBytes.data(), saltBytes.size(),
-        HASH_LEN, buf, ENCODED_HASH_LEN
-    );
+                     nIterations,
+                     kibMemoryCost,
+                     PARALLELISM,
+                     password.c_str(), password.length(),
+                     saltBytes.data(), saltBytes.size(),
+                     HASH_LEN, buf, ENCODED_HASH_LEN
+                 );
 
     if (status == ARGON2_OK)
         return std::string(buf);

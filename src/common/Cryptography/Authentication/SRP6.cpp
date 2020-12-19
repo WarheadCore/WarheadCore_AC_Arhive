@@ -41,18 +41,18 @@ using SRP6 = Crypto::SRP6;
 {
     // v = g ^ H(s || H(u || ':' || p)) mod N
     return _g.ModExp(
-        SHA1::GetDigestOf(
-            salt,
-            SHA1::GetDigestOf(username, ":", password)
-        )
-    ,_N).ToByteArray<32>();
+               SHA1::GetDigestOf(
+                   salt,
+                   SHA1::GetDigestOf(username, ":", password)
+               )
+               , _N).ToByteArray<32>();
 }
 
 /*static*/ SessionKey SRP6::SHA1Interleave(SRP6::EphemeralKey const& S)
 {
     // split S into two buffers
-    std::array<uint8, EPHEMERAL_KEY_LENGTH/2> buf0, buf1;
-    for (size_t i = 0; i < EPHEMERAL_KEY_LENGTH/2; ++i)
+    std::array < uint8, EPHEMERAL_KEY_LENGTH / 2 > buf0, buf1;
+    for (size_t i = 0; i < EPHEMERAL_KEY_LENGTH / 2; ++i)
     {
         buf0[i] = S[2 * i + 0];
         buf1[i] = S[2 * i + 1];
@@ -65,8 +65,8 @@ using SRP6 = Crypto::SRP6;
     p /= 2; // offset into buffers
 
     // hash each of the halves, starting at the first nonzero byte
-    SHA1::Digest const hash0 = SHA1::GetDigestOf(buf0.data() + p, EPHEMERAL_KEY_LENGTH/2 - p);
-    SHA1::Digest const hash1 = SHA1::GetDigestOf(buf1.data() + p, EPHEMERAL_KEY_LENGTH/2 - p);
+    SHA1::Digest const hash0 = SHA1::GetDigestOf(buf0.data() + p, EPHEMERAL_KEY_LENGTH / 2 - p);
+    SHA1::Digest const hash1 = SHA1::GetDigestOf(buf1.data() + p, EPHEMERAL_KEY_LENGTH / 2 - p);
 
     // stick the two hashes back together
     SessionKey K;

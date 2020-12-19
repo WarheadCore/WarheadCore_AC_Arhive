@@ -47,7 +47,7 @@ AccountOpResult AccountMgr::CreateAccount(std::string username, std::string pass
 
     if (utf8length(password) > MAX_PASS_STR)
         return AOR_PASS_TOO_LONG;                           // password's too long
-    
+
     Utf8ToUpperOnlyLatin(username);
     Utf8ToUpperOnlyLatin(password);
 

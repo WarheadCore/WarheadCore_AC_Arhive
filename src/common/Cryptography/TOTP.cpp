@@ -44,8 +44,8 @@ static constexpr uint32 HMAC_RESULT_SIZE = 20;
 {
     time_t now = time(nullptr);
     return (
-        (token == GenerateToken(secret, now - TOTP_INTERVAL)) ||
-        (token == GenerateToken(secret, now)) ||
-        (token == GenerateToken(secret, now + TOTP_INTERVAL))
-    );
+               (token == GenerateToken(secret, now - TOTP_INTERVAL)) ||
+               (token == GenerateToken(secret, now)) ||
+               (token == GenerateToken(secret, now + TOTP_INTERVAL))
+           );
 }

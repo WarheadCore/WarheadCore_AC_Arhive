@@ -23,18 +23,18 @@
 
 class AuthCrypt
 {
-    public:
-        AuthCrypt();
+public:
+    AuthCrypt();
 
-        void Init(std::array<uint8, 40> const& K);
-        void DecryptRecv(uint8* data, size_t len);
-        void EncryptSend(uint8* data, size_t len);
+    void Init(std::array<uint8, 40> const& K);
+    void DecryptRecv(uint8* data, size_t len);
+    void EncryptSend(uint8* data, size_t len);
 
-        bool IsInitialized() const { return _initialized; }
+    bool IsInitialized() const { return _initialized; }
 
-    private:
-        Crypto::ARC4 _clientDecrypt;
-        Crypto::ARC4 _serverEncrypt;
-        bool _initialized;
+private:
+    Crypto::ARC4 _clientDecrypt;
+    Crypto::ARC4 _serverEncrypt;
+    bool _initialized;
 };
 #endif

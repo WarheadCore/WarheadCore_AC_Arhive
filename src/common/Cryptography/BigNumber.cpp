@@ -93,7 +93,7 @@ BigNumber& BigNumber::operator-=(BigNumber const& bn)
 
 BigNumber& BigNumber::operator*=(BigNumber const& bn)
 {
-    BN_CTX *bnctx;
+    BN_CTX* bnctx;
 
     bnctx = BN_CTX_new();
     BN_mul(_bn, _bn, bn._bn, bnctx);
@@ -104,7 +104,7 @@ BigNumber& BigNumber::operator*=(BigNumber const& bn)
 
 BigNumber& BigNumber::operator/=(BigNumber const& bn)
 {
-    BN_CTX *bnctx;
+    BN_CTX* bnctx;
 
     bnctx = BN_CTX_new();
     BN_div(_bn, nullptr, _bn, bn._bn, bnctx);
@@ -115,7 +115,7 @@ BigNumber& BigNumber::operator/=(BigNumber const& bn)
 
 BigNumber& BigNumber::operator%=(BigNumber const& bn)
 {
-    BN_CTX *bnctx;
+    BN_CTX* bnctx;
 
     bnctx = BN_CTX_new();
     BN_mod(_bn, _bn, bn._bn, bnctx);
@@ -138,7 +138,7 @@ int BigNumber::CompareTo(BigNumber const& bn) const
 BigNumber BigNumber::Exp(BigNumber const& bn) const
 {
     BigNumber ret;
-    BN_CTX *bnctx;
+    BN_CTX* bnctx;
 
     bnctx = BN_CTX_new();
     BN_exp(ret._bn, _bn, bn._bn, bnctx);
@@ -150,7 +150,7 @@ BigNumber BigNumber::Exp(BigNumber const& bn) const
 BigNumber BigNumber::ModExp(BigNumber const& bn1, BigNumber const& bn2) const
 {
     BigNumber ret;
-    BN_CTX *bnctx;
+    BN_CTX* bnctx;
 
     bnctx = BN_CTX_new();
     BN_mod_exp(ret._bn, _bn, bn1._bn, bn2._bn, bnctx);
