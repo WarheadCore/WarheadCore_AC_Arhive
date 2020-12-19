@@ -9,6 +9,7 @@
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 file(GLOB_RECURSE sources *.c)
+file(GLOB_RECURSE headers *.h)
 
 if(CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
   list(REMOVE_ITEM sources

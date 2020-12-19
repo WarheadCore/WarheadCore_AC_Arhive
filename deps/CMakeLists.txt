@@ -15,6 +15,7 @@
 
 add_subdirectory(threads)
 add_subdirectory(acelite)
+add_subdirectory(argon2)
 add_subdirectory(fmt)
 add_subdirectory(poco)
 add_subdirectory(boost)
@@ -27,7 +28,6 @@ if(SERVERS OR TOOLS)
   add_subdirectory(SFMT)
   add_subdirectory(utf8cpp)
   add_subdirectory(openssl)
-  add_subdirectory(argon2)
 endif()
 
 if(SERVERS)
