@@ -16,7 +16,7 @@
  */
 
 #include "Argon2.h"
-#include <argon2/argon2.h>
+#include "../../../deps/argon2/argon2/argon2.h"
 
 /*static*/ std::optional<std::string> Crypto::Argon2::Hash(std::string const& password, BigNumber const& salt, uint32 nIterations, uint32 kibMemoryCost)
 {

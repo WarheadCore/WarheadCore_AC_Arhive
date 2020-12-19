@@ -28,7 +28,7 @@
 
 namespace Crypto
 {
-    class TC_COMMON_API SRP6
+    class SRP6
     {
         public:
             static constexpr size_t SALT_LENGTH = 32;
