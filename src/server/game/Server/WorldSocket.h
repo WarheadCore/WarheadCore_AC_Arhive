@@ -92,8 +92,8 @@ public:
     friend class WorldSocketMgr;
 
     /// Mutex type used for various synchronizations.
-    typedef ACE_Thread_Mutex LockType;
-    typedef ACE_Guard<LockType> GuardType;
+    typedef std::mutex LockType;
+    typedef std::lock_guard<LockType> GuardType;
 
     /// Check if socket is closed.
     bool IsClosed (void) const;
@@ -171,7 +171,7 @@ private:
     std::string m_Address;
 
     /// Class used for managing encryption of the headers
-    AuthCrypt m_Crypt;
+    AuthCrypt _authCrypt;
 
     /// Mutex lock to protect m_Session
     LockType m_SessionLock;
@@ -202,8 +202,7 @@ private:
     /// True if the socket is registered with the reactor for output
     bool m_OutActive;
 
-    uint32 m_Seed;
-
+    std::array<uint8, 4> _authSeed;
 };
 
 #endif  /* _WORLDSOCKET_H */

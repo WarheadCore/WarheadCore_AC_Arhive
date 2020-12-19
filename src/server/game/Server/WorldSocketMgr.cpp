@@ -135,7 +135,7 @@ protected:
         if (m_NewSockets.empty())
             return;
 
-        for (SocketSet::const_iterator i = m_NewSockets.begin(); i != m_NewSockets.end(); ++i)
+        for (const auto& i = m_NewSockets.begin(); i != m_NewSockets.end(); ++i)
         {
             WorldSocket* sock = (*i);
 
@@ -159,7 +159,7 @@ protected:
 
         ACE_ASSERT (m_Reactor);
 
-        SocketSet::iterator i, t;
+        auto& i, t;
 
         while (!m_Reactor->reactor_event_loop_done())
         {
@@ -172,7 +172,7 @@ protected:
 
             AddNewSockets();
 
-            for (i = m_Sockets.begin(); i != m_Sockets.end();)
+            for (auto& i = m_Sockets.begin(); i != m_Sockets.end();)
             {
                 if ((*i)->Update() == -1)
                 {

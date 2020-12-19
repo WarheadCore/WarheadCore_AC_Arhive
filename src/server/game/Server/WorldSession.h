@@ -30,7 +30,6 @@
 #include "Opcodes.h"
 #include "WorldPacket.h"
 #include "GossipDef.h"
-#include "Cryptography/BigNumber.h"
 #include "AccountMgr.h"
 #include "BanManager.h"
 #include "Log.h"
@@ -251,7 +250,7 @@ public:
     void SetTotalTime(uint32 TotalTime) { m_total_time = TotalTime; }
     uint32 GetTotalTime() const { return m_total_time; }
 
-    void InitWarden(BigNumber* k, std::string const& os);
+    void InitWarden(std::array<uint8, 40> const& k, std::string const& os);
 
     /// Session in auth.queue currently
     void SetInQueue(bool state) { m_inQueue = state; }

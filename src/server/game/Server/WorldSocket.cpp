@@ -36,7 +36,8 @@
 #include "Opcodes.h"
 #include "DatabaseEnv.h"
 #include "BigNumber.h"
-#include "SHA1.h"
+#include "CryptoHash.h"
+#include "CryptoRandom.h"
 #include "WorldSession.h"
 #include "WorldSocketMgr.h"
 #include "Log.h"
@@ -103,9 +104,9 @@ struct ClientPktHeader
 WorldSocket::WorldSocket(void): WorldHandler(),
     m_LastPingTime(SystemTimePoint::min()), m_OverSpeedPings(0), m_Session(0),
     m_RecvWPct(0), m_RecvPct(), m_Header(sizeof (ClientPktHeader)),
-    m_OutBuffer(0), m_OutBufferSize(65536), m_OutActive(false),
-    m_Seed(static_cast<uint32> (rand32()))
+    m_OutBuffer(0), m_OutBufferSize(65536), m_OutActive(false)
 {
+    Crypto::GetRandomBytes(_authSeed);
     reference_counting_policy().value (ACE_Event_Handler::Reference_Counting_Policy::ENABLED);
 
     msg_queue()->high_water_mark(8 * 1024 * 1024);
@@ -135,7 +136,7 @@ void WorldSocket::CloseSocket(std::string const& reason)
         LOG_DEBUG("network", "Socket closed because of: %s", reason.c_str());
 
     {
-        ACE_GUARD (LockType, Guard, m_OutBufferLock);
+        RETURN_GUARD(m_OutBufferLock);
 
         if (closing_)
             return;
@@ -145,7 +146,7 @@ void WorldSocket::CloseSocket(std::string const& reason)
     }
 
     {
-        ACE_GUARD (LockType, Guard, m_SessionLock);
+        RETURN_GUARD(m_SessionLock);
 
         m_Session = nullptr;
     }
@@ -158,7 +159,7 @@ const std::string& WorldSocket::GetRemoteAddress(void) const
 
 int WorldSocket::SendPacket(WorldPacket const& pct)
 {
-    ACE_GUARD_RETURN (LockType, Guard, m_OutBufferLock, -1);
+    RETURN_GUARD(m_OutBufferLock, -1);
 
     if (closing_)
         return -1;
@@ -246,15 +247,8 @@ int WorldSocket::open(void* a)
     // Send startup packet.
     WorldPacket packet (SMSG_AUTH_CHALLENGE, 24);
     packet << uint32(1);                                    // 1...31
-    packet << m_Seed;
-
-    BigNumber seed1;
-    seed1.SetRand(16 * 8);
-    packet.append(seed1.AsByteArray(16).get(), 16);               // new encryption seeds
-
-    BigNumber seed2;
-    seed2.SetRand(16 * 8);
-    packet.append(seed2.AsByteArray(16).get(), 16);               // new encryption seeds
+    packet << _authSeed;
+    packet.append(Crypto::GetRandomBytes<32>());               // new encryption seeds
 
     if (SendPacket(packet) == -1)
         return -1;
@@ -321,7 +315,7 @@ int WorldSocket::handle_input(ACE_HANDLE)
 
 int WorldSocket::handle_output(ACE_HANDLE)
 {
-    ACE_GUARD_RETURN (LockType, Guard, m_OutBufferLock, -1);
+    RETURN_GUARD(m_OutBufferLock, -1);
 
     if (closing_)
         return -1;
@@ -430,7 +424,7 @@ int WorldSocket::handle_close(ACE_HANDLE h, ACE_Reactor_Mask)
 {
     // Critical section
     {
-        ACE_GUARD_RETURN (LockType, Guard, m_OutBufferLock, -1);
+        RETURN_GUARD(m_OutBufferLock, -1);
 
         closing_ = true;
 
@@ -440,7 +434,7 @@ int WorldSocket::handle_close(ACE_HANDLE h, ACE_Reactor_Mask)
 
     // Critical section
     {
-        ACE_GUARD_RETURN (LockType, Guard, m_SessionLock, -1);
+        RETURN_GUARD(m_SessionLock, -1);
 
         m_Session = nullptr;
     }
@@ -458,7 +452,7 @@ int WorldSocket::Update(void)
         return 0;
 
     {
-        ACE_GUARD_RETURN (LockType, Guard, m_OutBufferLock, 0);
+        RETURN_GUARD(m_OutBufferLock, 0);
         if (m_OutBuffer->length() == 0 && msg_queue()->is_empty())
             return 0;
     }
@@ -476,8 +470,8 @@ int WorldSocket::handle_input_header(void)
     ACE_ASSERT (m_RecvWPct == nullptr);
 
     ACE_ASSERT (m_Header.length() == sizeof(ClientPktHeader));
-
-    m_Crypt.DecryptRecv ((uint8*) m_Header.rd_ptr(), sizeof(ClientPktHeader));
+    if (_authCrypt.IsInitialized())
+        _authCrypt.DecryptRecv((uint8*) m_Header.rd_ptr(), sizeof(ClientPktHeader));
 
     ClientPktHeader& header = *((ClientPktHeader*) m_Header.rd_ptr());
 
@@ -702,7 +696,7 @@ int WorldSocket::ProcessIncoming(WorldPacket* new_pct)
                 return 0;
             default:
                 {
-                    ACE_GUARD_RETURN (LockType, Guard, m_SessionLock, -1);
+                    RETURN_GUARD(m_SessionLock, -1);
 
                     if (m_Session != nullptr)
                     {
@@ -741,8 +735,8 @@ int WorldSocket::ProcessIncoming(WorldPacket* new_pct)
 int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
 {
     // NOTE: ATM the socket is singlethread, have this in mind ...
-    uint8 digest[20];
-    uint32 clientSeed;
+    Crypto::SHA1::Digest Digest;
+    std::array<uint8, 4> clientSeed;
     uint32 loginServerID, loginServerType, regionID, battlegroupID, realm;
     uint64 DosResponse;
     uint32 BuiltNumberClient;
@@ -752,10 +746,10 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     //uint8 expansion = 0;
     LocaleConstant locale;
     std::string account;
-    SHA1Hash sha;
+    Crypto::SHA1 sha;
     WorldPacket packet, SendAddonPacked;
 
-    BigNumber k;
+    std::array<uint8, 40> SessionKey;
     bool wardenActive = CONF_GET_BOOL("Warden.Enabled");
 
     if (sWorld->IsClosed())
@@ -773,12 +767,12 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     recvPacket >> loginServerID;
     recvPacket >> account;
     recvPacket >> loginServerType;
-    recvPacket >> clientSeed;
+    recvPacket.read(clientSeed);
     recvPacket >> regionID;
     recvPacket >> battlegroupID;
     recvPacket >> realm;
     recvPacket >> DosResponse;
-    recvPacket.read(digest, 20);
+    recvPacket.read(Digest);
 
     LOG_DEBUG("network", "WorldSocket::HandleAuthSession: client %u, loginServerID %u, account %s, loginServerType %u, clientseed %u", BuiltNumberClient, loginServerID, account.c_str(), loginServerType, clientSeed);
     // Get the account information from the realmd database
@@ -846,7 +840,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
         security = SEC_ADMINISTRATOR;
         */
 
-    k.SetHexStr(fields[1].GetCString());
+    HexStrToByteArray(fields[1].GetCString(), SessionKey.data());
 
     locale = LocaleConstant(fields[6].GetUInt8());
     if (locale >= TOTAL_LOCALES)
@@ -922,17 +916,16 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     }
 
     // Check that Key and account name are the same on client and server
-    uint32 t = 0;
-    uint32 seed = m_Seed;
+    uint8 t[4] = { 0 };
 
     sha.UpdateData (account);
-    sha.UpdateData ((uint8*) & t, 4);
-    sha.UpdateData ((uint8*) & clientSeed, 4);
-    sha.UpdateData ((uint8*) & seed, 4);
-    sha.UpdateBigNumbers (&k, nullptr);
+    sha.UpdateData(t);
+    sha.UpdateData(clientSeed);
+    sha.UpdateData(_authSeed);
+    sha.UpdateBigNumbers(SessionKey);
     sha.Finalize();
 
-    if (memcmp (sha.GetDigest(), digest, 20))
+    if (sha.GetDigest() != Digest)
     {
         packet.Initialize (SMSG_AUTH_RESPONSE, 1);
         packet << uint8 (AUTH_FAILED);
@@ -967,7 +960,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     // NOTE ATM the socket is single-threaded, have this in mind ...
     ACE_NEW_RETURN(m_Session, WorldSession(id, this, AccountTypes(security), expansion, locale, recruiter, isRecruiter, skipQueue, TotalTime), -1);
 
-    m_Crypt.Init(&k);
+    _authCrypt.Init(SessionKey);
 
     // First reject the connection if packet contains invalid data or realm state doesn't allow logging in
     if (sWorld->IsClosed())
@@ -999,7 +992,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
 
     // Initialize Warden system only if it is enabled by config
     if (wardenActive)
-        m_Session->InitWarden(&k, os);
+        m_Session->InitWarden(SessionKey, os);
 
     // Sleep this Network thread for
     uint32 sleepTime = CONF_GET_INT("SessionAddDelay");
@@ -1038,7 +1031,7 @@ int WorldSocket::HandlePing(WorldPacket& recvPacket)
 
             if (max_count && m_OverSpeedPings > max_count)
             {
-                ACE_GUARD_RETURN(LockType, Guard, m_SessionLock, -1);
+                RETURN_GUARD(m_SessionLock, -1);
 
                 if (m_Session && AccountMgr::IsPlayerAccount(m_Session->GetSecurity()))
                 {
@@ -1059,7 +1052,7 @@ int WorldSocket::HandlePing(WorldPacket& recvPacket)
 
     // critical section
     {
-        ACE_GUARD_RETURN(LockType, Guard, m_SessionLock, -1);
+        RETURN_GUARD(m_SessionLock, -1);
 
         if (m_Session)
         {

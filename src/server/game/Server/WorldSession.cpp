@@ -1333,7 +1333,7 @@ void WorldSession::ProcessQueryCallbackLogin()
     }
 }
 
-void WorldSession::InitWarden(BigNumber* k, std::string const& os)
+void WorldSession::InitWarden(std::array<uint8, 40> const& k, std::string const& os)
 {
     if (os == "Win")
     {
