@@ -60,6 +60,7 @@ target_link_libraries(common
     warhead-core-interface
   PUBLIC
     ace
+    argon2
     boost
     Poco::Foundation
     mysql

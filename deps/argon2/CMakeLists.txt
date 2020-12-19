@@ -1,3 +1,4 @@
+#
 # This file is part of the TrinityCore Project. See AUTHORS file for Copyright information
 #
 # This file is free software; as a special exception the author gives
@@ -9,7 +10,6 @@
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 file(GLOB_RECURSE sources *.c)
-file(GLOB_RECURSE headers *.h)
 
 if(CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
   list(REMOVE_ITEM sources
