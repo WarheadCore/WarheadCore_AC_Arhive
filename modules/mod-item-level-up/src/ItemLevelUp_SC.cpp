@@ -89,7 +89,12 @@ private:
         float posZ = *Warhead::StringTo<float>(tokens[3]);
         float orientation = *Warhead::StringTo<float>(tokens[4]);
 
-        player->TeleportTo(WorldLocation(mapID, posX, posY, posZ, orientation));
+        uint32 options = 0;
+
+        if (player->getClass() == CLASS_DEATH_KNIGHT)
+            options = TELE_TO_SKIP_START_ZONE_DK;
+
+        player->TeleportTo(WorldLocation(mapID, posX, posY, posZ, orientation), options);
     }
 
     void SetMaxWeaponSkills(Player* player)

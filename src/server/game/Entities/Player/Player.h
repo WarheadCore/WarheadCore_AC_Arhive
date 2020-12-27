@@ -784,7 +784,8 @@ enum TeleportToOptions
     TELE_TO_SPELL               = 0x10,
     TELE_TO_NOT_LEAVE_VEHICLE   = 0x20,
     TELE_TO_WITH_PET            = 0x40,
-    TELE_TO_NOT_LEAVE_TAXI      = 0x80
+    TELE_TO_NOT_LEAVE_TAXI      = 0x80,
+    TELE_TO_SKIP_START_ZONE_DK  = 0x100
 };
 
 /// Type of environmental damages
