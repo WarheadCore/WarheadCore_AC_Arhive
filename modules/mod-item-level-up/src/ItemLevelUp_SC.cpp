@@ -113,16 +113,16 @@ private:
         switch (player->getClass())
         {
         case CLASS_WARRIOR:
-            LearnWeaponSkill({ 1180, 196, 201, 198, 197, 202, 199, 200, 227, 2567, 5011, 264 });
+            LearnWeaponSkill({ 1180, 196, 201, 198, 197, 202, 199, 200, 227, 2567, 5011, 264, 266, 15590 });
             break;
         case CLASS_PALADIN:
             LearnWeaponSkill({ 196, 201, 198, 197, 202, 199, 200 });
             break;
         case CLASS_HUNTER:
-            LearnWeaponSkill({ 1180, 196, 201, 197, 202, 200, 227, 2567, 5011, 264 });
+            LearnWeaponSkill({ 1180, 196, 201, 197, 202, 200, 227, 2567, 5011, 264, 266, 15590 });
             break;
         case CLASS_ROGUE:
-            LearnWeaponSkill({ 196, 201, 198, 2567, 5011, 264 });
+            LearnWeaponSkill({ 196, 201, 198, 2567, 5011, 264, 266, 15590 });
             break;
         case CLASS_PRIEST:
             LearnWeaponSkill({ 1180, 198, 227, 5009 });
@@ -131,7 +131,7 @@ private:
             LearnWeaponSkill({ 196, 201, 198, 197, 202, 199, 200 });
             break;
         case CLASS_SHAMAN:
-            LearnWeaponSkill({ 1180, 196, 198, 197, 199, 227 });
+            LearnWeaponSkill({ 1180, 196, 198, 197, 199, 227, 15590 });
             break;
         case CLASS_MAGE:
             LearnWeaponSkill({ 1180, 201, 227, 5009 });
@@ -140,7 +140,7 @@ private:
             LearnWeaponSkill({ 1180, 201, 227, 5009 });
             break;
         case CLASS_DRUID:
-            LearnWeaponSkill({ 198, 199, 200, 227 });
+            LearnWeaponSkill({ 198, 199, 200, 227, 15590 });
             break;
         default:
             break;
