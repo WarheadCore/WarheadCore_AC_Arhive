@@ -929,12 +929,10 @@ uint8 Aura::CalcMaxCharges(Unit* caster) const
     if (SpellProcEntry const* procEntry = sSpellMgr->GetSpellProcEntry(GetId()))
         maxProcCharges = procEntry->charges;
 
-    if(!caster)
-        return;
-
     if (caster)
         if (Player* modOwner = caster->GetSpellModOwner())
             modOwner->ApplySpellMod(GetId(), SPELLMOD_CHARGES, maxProcCharges);
+
     return maxProcCharges;
 }
 
