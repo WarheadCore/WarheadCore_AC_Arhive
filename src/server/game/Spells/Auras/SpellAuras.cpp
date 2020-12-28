@@ -852,6 +852,10 @@ void Aura::SetDuration(int32 duration, bool withMods)
 void Aura::RefreshDuration(bool withMods)
 {
     Unit* caster = GetCaster();
+
+    if(!caster)
+        return;
+
     if (withMods && caster)
     {
         int32 duration = m_spellInfo->GetMaxDuration();
@@ -879,6 +883,10 @@ void Aura::RefreshTimers(bool periodicReset /*= false*/)
     m_maxDuration = CalcMaxDuration();
     RefreshDuration();
     Unit* caster = GetCaster();
+
+    if(!caster)
+        return;
+
     for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
         if (HasEffect(i))
         {
@@ -892,6 +900,10 @@ void Aura::RefreshTimersWithMods()
 {
     Unit* caster = GetCaster();
     m_maxDuration = CalcMaxDuration();
+
+    if(!caster)
+        return;
+
     if ((caster && caster->HasAuraTypeWithAffectMask(SPELL_AURA_PERIODIC_HASTE, m_spellInfo)) || m_spellInfo->HasAttribute(SPELL_ATTR5_HASTE_AFFECT_DURATION))
         m_maxDuration = int32(m_maxDuration * caster->GetFloatValue(UNIT_MOD_CAST_SPEED));
 
@@ -916,6 +928,9 @@ uint8 Aura::CalcMaxCharges(Unit* caster) const
     uint32 maxProcCharges = m_spellInfo->ProcCharges;
     if (SpellProcEntry const* procEntry = sSpellMgr->GetSpellProcEntry(GetId()))
         maxProcCharges = procEntry->charges;
+
+    if(!caster)
+        return;
 
     if (caster)
         if (Player* modOwner = caster->GetSpellModOwner())
@@ -949,6 +964,9 @@ void Aura::SetStackAmount(uint8 stackAmount)
 {
     m_stackAmount = stackAmount;
     Unit* caster = GetCaster();
+
+    if(!caster)
+        return;
 
     std::list<AuraApplication*> applications;
     GetApplicationList(applications);
