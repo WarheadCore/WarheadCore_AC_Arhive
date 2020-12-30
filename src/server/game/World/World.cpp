@@ -93,6 +93,7 @@
 #include "GameConfig.h"
 #include "GameLocale.h"
 #include "Metric.h"
+#include "QuestTracker.h"
 #include <VMapManager2.h>
 
 std::atomic_long World::m_stopEvent = false;
@@ -1525,6 +1526,12 @@ void World::Update(uint32 diff)
     {
         WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Update saving system"));
         SavingSystemMgr::Update(diff);
+    }
+
+    {
+        WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Update quest tracker"));
+        sQuestTracker->Update(diff);
+        WH_METRIC_VALUE("update_time_diff", diff);
     }
 
     {

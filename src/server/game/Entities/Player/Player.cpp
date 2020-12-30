@@ -92,6 +92,7 @@
 #include "GameTime.h"
 #include "GameLocale.h"
 #include "MuteManager.h"
+#include "QuestTracker.h"
 
 #define ZONE_UPDATE_INTERVAL (2*IN_MILLISECONDS)
 
@@ -15709,17 +15710,7 @@ void Player::AddQuest(Quest const* quest, Object* questGiver)
 
     // check if Quest Tracker is enabled
     if (CONF_GET_BOOL("Quests.EnableQuestTracker"))
-    {
-        // prepare Quest Tracker datas
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_QUEST_TRACK);
-        stmt->setUInt32(0, quest_id);
-        stmt->setUInt32(1, GetGUIDLow());
-        stmt->setString(2, GitRevision::GetHash());
-        stmt->setString(3, GitRevision::GetDate());
-
-        // add to Quest Tracker
-        CharacterDatabase.Execute(stmt);
-    }
+        sQuestTracker->Add(quest_id, GetGUIDLow(), GitRevision::GetHash(), GitRevision::GetDate());
 
     // Xinef: area auras may change on quest accept!
     UpdateZoneDependentAuras(GetZoneId());
@@ -15748,15 +15739,7 @@ void Player::CompleteQuest(uint32 quest_id)
 
     // check if Quest Tracker is enabled
     if (CONF_GET_BOOL("Quests.EnableQuestTracker"))
-    {
-        // prepare Quest Tracker datas
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_QUEST_TRACK_COMPLETE_TIME);
-        stmt->setUInt32(0, quest_id);
-        stmt->setUInt32(1, GetGUIDLow());
-
-        // add to Quest Tracker
-        CharacterDatabase.Execute(stmt);
-    }
+        sQuestTracker->UpdateCompleteTime(quest_id, GetGUIDLow());
 }
 
 void Player::IncompleteQuest(uint32 quest_id)
