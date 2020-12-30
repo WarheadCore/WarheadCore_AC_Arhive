@@ -67,6 +67,7 @@ public:
 
     RealmMap::const_iterator begin() const { return m_realms.begin(); }
     RealmMap::const_iterator end() const { return m_realms.end(); }
+    RealmMap const& GetRealms() { return m_realms; }
     uint32 size() const { return m_realms.size(); }
 
 private:

@@ -1000,9 +1000,8 @@ bool AuthSocket::_HandleRealmList()
     ByteBuffer pkt;
 
     size_t RealmListSize = 0;
-    for (const auto& i = sRealmList->begin(); i != sRealmList->end();)
+    for (const auto& [realmname, realm] : sRealmList->GetRealms())
     {
-        const Realm& realm = i->second;
         // don't work with realms which not compatible with the client
         bool okBuild = ((_expversion & POST_BC_EXP_FLAG) && realm.gamebuild == _build) || ((_expversion & PRE_BC_EXP_FLAG) && !AuthHelper::IsPreBCAcceptedClientBuild(realm.gamebuild));
 
@@ -1020,7 +1019,7 @@ bool AuthSocket::_HandleRealmList()
         if (!buildInfo)
             flag &= ~REALM_FLAG_SPECIFYBUILD;
 
-        std::string name = i->first;
+        std::string name = realmname;
         if (_expversion & PRE_BC_EXP_FLAG && flag & REALM_FLAG_SPECIFYBUILD)
         {
             std::ostringstream ss;
