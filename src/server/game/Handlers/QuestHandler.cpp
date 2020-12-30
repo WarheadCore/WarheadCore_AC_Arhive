@@ -32,6 +32,7 @@
 #include "GameObjectAI.h"
 #include "Language.h"
 #include "GameConfig.h"
+#include "QuestTracker.h"
 
 void WorldSession::HandleQuestgiverStatusQueryOpcode(WorldPacket& recvData)
 {
@@ -410,15 +411,7 @@ void WorldSession::HandleQuestLogRemoveQuest(WorldPacket& recvData)
 
             // check if Quest Tracker is enabled
             if (CONF_GET_BOOL("Quests.EnableQuestTracker"))
-            {
-                // prepare Quest Tracker datas
-                PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_QUEST_TRACK_ABANDON_TIME);
-                stmt->setUInt32(0, questId);
-                stmt->setUInt32(1, _player->GetGUIDLow());
-
-                // add to Quest Tracker
-                CharacterDatabase.Execute(stmt);
-            }
+                sQuestTracker->UpdateAbandonTime(questId, _player->GetGUIDLow());
         }
 
         _player->SetQuestSlot(slot, 0);
