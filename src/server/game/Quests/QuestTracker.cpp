@@ -38,7 +38,10 @@ QuestTracker* QuestTracker::instance()
 void QuestTracker::InitSystem()
 {
     if (!CONF_GET_BOOL("Quests.EnableQuestTracker"))
+    {
+        LOG_INFO("server.loading", ">> System disabled");
         return;
+    }
 
     scheduler.Schedule(30s, [this](TaskContext context)
     {
@@ -46,6 +49,8 @@ void QuestTracker::InitSystem()
 
         context.Repeat();
     });
+
+    LOG_INFO("server.loading", ">> System loading");
 }
 
 void QuestTracker::Update(uint32 diff)
@@ -58,6 +63,8 @@ void QuestTracker::Update(uint32 diff)
 
 void QuestTracker::Execute()
 {
+    //LOG_DEBUG("server", "> QuestTracker::Execute");
+
     auto trans = CharacterDatabase.BeginTransaction();
 
     for (auto const& [ID, CharacterLowGuid, Hash, Revision] : _questTrackStore)

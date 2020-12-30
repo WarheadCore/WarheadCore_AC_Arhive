@@ -1165,6 +1165,9 @@ void World::SetInitialWorldSettings()
     mgr = ChannelMgr::forTeam(TEAM_HORDE);
     mgr->LoadChannels();
 
+    LOG_INFO("server.loading", "Start QuestTracker system...");
+    sQuestTracker->InitSystem();
+
     if (CONF_GET_BOOL("PreloadAllNonInstancedMapGrids"))
     {
         LOG_INFO("server.loading", "Loading all grids for all non-instanced maps...");
