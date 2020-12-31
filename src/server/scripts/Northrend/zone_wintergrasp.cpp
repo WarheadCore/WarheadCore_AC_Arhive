@@ -588,8 +588,7 @@ public:
             if (!quest)
                 continue;
 
-            ConditionList conditions = sConditionMgr->GetConditionsForNotGroupedEntry(CONDITION_SOURCE_TYPE_QUEST_AVAILABLE, quest->GetQuestId());
-            if (!sConditionMgr->IsObjectMeetToConditions(player, conditions))
+            if (!sConditionMgr->IsObjectMeetingNotGroupedConditions(CONDITION_SOURCE_TYPE_QUEST_ACCEPT, quest->GetQuestId(), this))
                 continue;
 
             QuestStatus status = player->GetQuestStatus(questId);
@@ -616,8 +615,7 @@ public:
             if (!quest)
                 continue;
 
-            ConditionList conditions = sConditionMgr->GetConditionsForNotGroupedEntry(CONDITION_SOURCE_TYPE_QUEST_AVAILABLE, quest->GetQuestId());
-            if (!sConditionMgr->IsObjectMeetToConditions(player, conditions))
+            if (!sConditionMgr->IsObjectMeetingNotGroupedConditions(CONDITION_SOURCE_TYPE_QUEST_ACCEPT, quest->GetQuestId(), this))
                 continue;
 
             switch (questId)

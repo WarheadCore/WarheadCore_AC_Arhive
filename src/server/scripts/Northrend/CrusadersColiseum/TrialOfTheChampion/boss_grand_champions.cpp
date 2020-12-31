@@ -149,12 +149,12 @@ public:
     {
         npc_toc5_player_vehicleAI(Creature* pCreature) : NullCreatureAI(pCreature)
         {
-            conditions = sConditionMgr->GetConditionsForNotGroupedEntry(CONDITION_SOURCE_TYPE_CREATURE_TEMPLATE_VEHICLE, me->GetEntry());
+            m_HasConditions = sConditionMgr->HasConditionsForNotGroupedEntry(CONDITION_SOURCE_TYPE_CREATURE_TEMPLATE_VEHICLE, me->GetEntry());
             m_ConditionsTimer = 1000;
         }
 
-        ConditionList conditions;
         uint16 m_ConditionsTimer;
+        bool m_HasConditions;
 
         void Reset()
         {
@@ -202,9 +202,9 @@ public:
         {
             if (m_ConditionsTimer <= diff)
             {
-                if (!conditions.empty())
+                if (m_HasConditions)
                     if (Unit* passenger = me->GetVehicleKit()->GetPassenger(0))
-                        if (!sConditionMgr->IsObjectMeetToConditions(passenger, me, conditions))
+                        if (!sConditionMgr->IsObjectMeetingNotGroupedConditions(CONDITION_SOURCE_TYPE_CREATURE_TEMPLATE_VEHICLE, me->GetEntry(), passenger, me))
                             passenger->ExitVehicle();
                 m_ConditionsTimer = VEHICLE_CONDITION_CHECK_TIME;
             }

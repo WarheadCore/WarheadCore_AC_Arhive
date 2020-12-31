@@ -1025,7 +1025,7 @@ void ScriptMgr::OnBeforeAuctionHouseMgrUpdate()
     FOREACH_SCRIPT(AuctionHouseScript)->OnBeforeAuctionHouseMgrUpdate();
 }
 
-bool ScriptMgr::OnConditionCheck(Condition* condition, ConditionSourceInfo& sourceInfo)
+bool ScriptMgr::OnConditionCheck(Condition* condition, ConditionSourceInfo& sourceInfo) const
 {
     ASSERT(condition);
 

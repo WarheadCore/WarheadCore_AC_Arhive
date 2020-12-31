@@ -542,7 +542,7 @@ struct GossipMenuItems
     bool            BoxCoded;
     uint32          BoxMoney;
     std::string     BoxText;
-    ConditionList   Conditions;
+    ConditionContainer Conditions;
     uint32          BoxBroadcastTextID;
 };
 
@@ -550,7 +550,7 @@ struct GossipMenus
 {
     uint32          MenuID;
     uint32          TextID;
-    ConditionList   Conditions;
+    ConditionContainer Conditions;
 };
 
 typedef std::multimap<uint32, GossipMenus> GossipMenusContainer;
