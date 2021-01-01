@@ -20,6 +20,7 @@
 
 #include "Define.h"
 #include "Errors.h"
+#include <array>
 #include <list>
 #include <map>
 
