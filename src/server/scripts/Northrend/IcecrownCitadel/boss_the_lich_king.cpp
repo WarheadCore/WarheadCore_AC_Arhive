@@ -643,7 +643,6 @@ private:
     bool _reverse;
 };
 
-
 class boss_the_lich_king : public CreatureScript
 {
 public:
@@ -1489,7 +1488,6 @@ public:
                     }
                     break;
 
-
                 case EVENT_OUTRO_LK_TALK_1:
                     if (Creature* theLichKing = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_THE_LICH_KING)))
                     {
@@ -1656,7 +1654,6 @@ public:
                 case EVENT_OUTRO_FORDRING_JUMP:
                     me->CastSpell((Unit*)nullptr, SPELL_JUMP, false);
                     break;
-
 
                 default:
                     break;

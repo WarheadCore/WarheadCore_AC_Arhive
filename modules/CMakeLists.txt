@@ -34,12 +34,12 @@ if (NOT DISABLED_ALL_MODULES AND MODULES_EXIST)
 CU_SUBDIRLIST(sub_DIRS  "${CMAKE_SOURCE_DIR}/modules" FALSE FALSE)
 FOREACH(subdir ${sub_DIRS})
   get_filename_component(MODULENAME ${subdir} NAME)
-    
+
   if (";${DISABLED_WH_MODULES};" MATCHES ";${MODULENAME};")
     continue()
   endif()
 
-  STRING(REGEX REPLACE "^${CMAKE_SOURCE_DIR}/" "" subdir_rel ${subdir}) 
+  STRING(REGEX REPLACE "^${CMAKE_SOURCE_DIR}/" "" subdir_rel ${subdir})
   CollectSourceFiles(
     ${CMAKE_SOURCE_DIR}/${subdir_rel}/
     PRIVATE_SOURCES)

@@ -525,7 +525,6 @@ public:
     }
 };
 
-
 void AddSC_ulduar()
 {
     new go_ulduar_teleporter();

@@ -366,7 +366,6 @@ public:
             }
         }
 
-
         void UpdateAI(uint32 diff)
         {
             if (addSpawnTimer <= diff)

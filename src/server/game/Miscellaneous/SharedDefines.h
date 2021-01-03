@@ -3604,6 +3604,4 @@ enum PartyResult
     ERR_PARTY_LFG_TELEPORT_IN_COMBAT    = 30
 };
 
-
-
 #endif

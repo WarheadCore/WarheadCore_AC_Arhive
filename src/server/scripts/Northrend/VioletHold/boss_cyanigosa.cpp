@@ -108,7 +108,6 @@ public:
             }
         }
 
-
         void UpdateAI(uint32 diff)
         {
             if (!UpdateVictim())

@@ -108,7 +108,6 @@ public:
 
         EventMap events2;
 
-
         void Reset()
         {
             events2.Reset();
@@ -166,7 +165,6 @@ public:
                     events2.ScheduleEvent(EVENT_CHECK_GRASP, 0s);
                     break;
             }
-
 
             if (!UpdateVictim() || !CheckInRoom())
                 return;

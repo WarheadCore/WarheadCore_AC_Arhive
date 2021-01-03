@@ -421,7 +421,6 @@ public:
     };
 };
 
-
 // Theirs
 enum DyingKodo
 {

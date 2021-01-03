@@ -63,7 +63,6 @@ public:
     }
 };
 
-
 // Theirs
 /*######
 ## at_coilfang_waterfall
@@ -363,7 +362,6 @@ public:
     }
 };
 
-
 /*######
 ## at_brewfest
 ######*/
@@ -487,7 +485,6 @@ public:
 private:
     std::map<uint32, time_t> _triggerTimes;
 };
-
 
 void AddSC_areatrigger_scripts()
 {

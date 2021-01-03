@@ -49,4 +49,3 @@ private:
 /// Returns the SHA1 hash of the given content as hex string.
 WH_COMMON_API std::string CalculateSHA1Hash(std::string const& content);
 #endif
-

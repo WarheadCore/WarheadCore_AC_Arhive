@@ -8293,7 +8293,6 @@ void Player::_ApplyItemBonuses(ItemTemplate const* proto, uint8 slot, bool apply
     if (CanUseAttackType(attType))
         _ApplyWeaponDamage(slot, proto, ssv, apply);
 
-
     // Druids get feral AP bonus from weapon dps (also use DPS from ScalingStatValue)
     if (getClass() == CLASS_DRUID)
     {
@@ -12606,7 +12605,6 @@ Item* Player::StoreNewItem(ItemPosCountVec const& dest, uint32 item, bool update
         UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_RECEIVE_EPIC_ITEM, item, count);
         UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_OWN_ITEM, item, count);
         pItem = StoreItem(dest, pItem, update);
-
 
         if (allowedLooters.size() > 1 && pItem->GetTemplate()->GetMaxStackSize() == 1 && pItem->IsSoulBound())
         {
@@ -22994,7 +22992,6 @@ void Player::AddComboPoints(Unit* target, int8 count)
     else if (*comboPoints < 0)
         *comboPoints = 0;
 
-
     SendComboPoints();
 }
 
@@ -24484,7 +24481,6 @@ void Player::UpdateUnderwaterState(Map* m, float x, float y, float z)
         _lastLiquid = nullptr;
     }
 
-
     // All liquids type - check under water position
     if (liquid_status.type_flags & (MAP_LIQUID_TYPE_WATER | MAP_LIQUID_TYPE_OCEAN | MAP_LIQUID_TYPE_MAGMA | MAP_LIQUID_TYPE_SLIME))
     {
@@ -25313,7 +25309,6 @@ uint32 Player::GetPhaseMaskForSpawn() const
 
     if (!phase)
         phase = PHASEMASK_NORMAL;
-
 
     // some aura phases include 1 normal map in addition to phase itself
     uint32 n_phase = phase & ~PHASEMASK_NORMAL;

@@ -771,7 +771,6 @@ public:
                     else if (pInstance)
                         pInstance->SetData(DATA_ADD_PORTAL, 0);
 
-
                     events.ScheduleEvent(EVENT_MINIBOSS_SPAWN_HELPERS, 2s);
                     events.RepeatEvent(1min);
                     break;

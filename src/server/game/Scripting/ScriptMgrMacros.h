@@ -43,4 +43,3 @@
     T* V = ScriptRegistry<T>::GetScriptById(I); \
     if (!V) \
         return R;
-

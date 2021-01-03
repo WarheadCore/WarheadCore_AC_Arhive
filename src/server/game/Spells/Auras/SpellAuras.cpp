@@ -2790,4 +2790,3 @@ void DynObjAura::FillTargetMap(std::map<Unit*, uint8>& targets, Unit* /*caster*/
         }
     }
 }
-

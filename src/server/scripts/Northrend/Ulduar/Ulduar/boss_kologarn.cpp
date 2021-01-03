@@ -649,7 +649,6 @@ public:
     };
 };
 
-
 // predicate function to select non main tank target
 class StoneGripTargetSelector : public Warhead::unary_function<Unit*, bool>
 {

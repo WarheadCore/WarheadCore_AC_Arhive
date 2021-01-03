@@ -722,7 +722,6 @@ protected:
     uint32 m_spellState;
     int32 m_timer;
 
-
     SpellEvent* _spellEvent;
     TriggerCastFlags _triggeredCastFlags;
 

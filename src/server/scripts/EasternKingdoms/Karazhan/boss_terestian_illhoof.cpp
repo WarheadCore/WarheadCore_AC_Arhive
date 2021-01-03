@@ -62,7 +62,6 @@ enum Creatures
     NPC_PORTAL                  = 17265
 };
 
-
 class npc_kilrek : public CreatureScript
 {
 public:
@@ -152,7 +151,6 @@ public:
         void EnterCombat(Unit* /*who*/) { }
         void AttackStart(Unit* /*who*/) { }
         void MoveInLineOfSight(Unit* /*who*/) { }
-
 
         void JustDied(Unit* /*killer*/)
         {
@@ -375,7 +373,6 @@ public:
                     SummonKilrekTimer = 45000;
                 }
             }
-
 
             if (SummonKilrekTimer <= diff)
             {

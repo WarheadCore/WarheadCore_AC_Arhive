@@ -36,7 +36,6 @@ enum Data
     DATA_STONED             = 5,
 };
 
-
 enum AchievementCriteriaIds
 {
     CRITERIA_EARTH_WIND_FIRE_10 = 12018,

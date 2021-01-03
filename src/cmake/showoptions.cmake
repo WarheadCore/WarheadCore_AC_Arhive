@@ -132,4 +132,3 @@ if (BUILD_SHARED_LIBS)
 endif()
 
 message("")
-

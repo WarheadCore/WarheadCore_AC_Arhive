@@ -128,7 +128,6 @@ private:
     // xinef: channel information for channel triggering
     ChannelTargetData* m_channelData;
 
-
     SpellModifier* m_spellmod;
 
     int32 m_periodicTimer;

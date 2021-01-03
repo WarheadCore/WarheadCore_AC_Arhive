@@ -109,7 +109,6 @@ bool BattlefieldWG::SetupBattlefield()
         m_GraveyardList[i] = graveyard;
     }
 
-
     // Spawn workshop creatures and gameobjects
     for (uint8 i = 0; i < WG_MAX_WORKSHOP; i++)
     {

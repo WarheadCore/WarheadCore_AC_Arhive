@@ -304,8 +304,6 @@ public:
     };
 };
 
-
-
 class npc_ichor_globule : public CreatureScript
 {
 public:

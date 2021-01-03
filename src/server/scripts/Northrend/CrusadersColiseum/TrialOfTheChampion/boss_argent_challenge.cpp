@@ -473,7 +473,6 @@ public:
     }
 };
 
-
 enum ArgentSoldierSpells
 {
     // monk

@@ -1127,7 +1127,6 @@ void WorldSession::HandleAutoStoreBankItemOpcode(WorldPacket& recvPacket)
 
     LOG_DEBUG("network", "STORAGE: receive srcbag = %u, srcslot = %u", srcbag, srcslot);
 
-
     if (!CanUseBank())
     {
         //TC_LOG_DEBUG("network", "WORLD: HandleAutoStoreBankItemOpcode - Unit (GUID: %u) not found or you can't interact with him.", uint32(GUID_LOPART(m_currentBankerGUID)));

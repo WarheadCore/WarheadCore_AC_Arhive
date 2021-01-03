@@ -193,7 +193,6 @@ public:
             return saveStream.str();
         }
 
-
         void Load(const char* in)
         {
             if (!in)

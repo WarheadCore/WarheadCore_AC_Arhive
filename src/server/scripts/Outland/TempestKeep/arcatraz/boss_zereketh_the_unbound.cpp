@@ -50,7 +50,6 @@ public:
     {
         boss_zereketh_the_unboundAI(Creature* creature) : BossAI(creature, DATA_ZEREKETH) { }
 
-
         void JustDied(Unit* /*killer*/)
         {
             _JustDied();

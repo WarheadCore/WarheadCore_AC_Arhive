@@ -76,7 +76,6 @@ public:
             BossAI::MoveInLineOfSight(who);
         }
 
-
         void EnterCombat(Unit* /*who*/)
         {
             _EnterCombat();

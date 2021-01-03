@@ -376,7 +376,6 @@ void ScriptMgr::OnPacketSend(WorldSession* session, WorldPacket const& packet)
     FOREACH_SCRIPT(ServerScript)->OnPacketSend(session, copy);
 }
 
-
 void ScriptMgr::OnOpenStateChange(bool open)
 {
     FOREACH_SCRIPT(WorldScript)->OnOpenStateChange(open);

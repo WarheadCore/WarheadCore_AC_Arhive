@@ -330,7 +330,6 @@ PlayerSave.Stats.SaveOnlyOnLogout = 1
 vmap.enableLOS    = 1
 vmap.enableHeight = 1
 
-
 #
 #    vmap.petLOS
 #        Description: Check line of sight for pets, to avoid them attacking through walls.
@@ -2353,7 +2352,6 @@ Battleground.QueueAnnouncer.Enable = 0
 
 Battleground.QueueAnnouncer.PlayerOnly = 0
 
-
 #
 #    Battleground.PrematureFinishTimer
 #        Description: Time (in milliseconds) before battleground will end prematurely if there are
@@ -2620,7 +2618,6 @@ Arena.ArenaWinRatingModifier1 = 48
 #        Default:     24
 
 Arena.ArenaWinRatingModifier2 = 24
-
 
 #
 #    Arena.ArenaLoseRatingModifier

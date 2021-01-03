@@ -160,7 +160,6 @@ struct Position
 
     bool IsPositionValid() const;
 
-
     float GetExactDist2dSq(const float x, const float y) const
     {
         float dx = x - m_positionX;

@@ -45,7 +45,6 @@ WorldModelDefinition WorldModelDefinition::Read( FILE* file )
     return ret;
 }
 
-
 WorldModelHandler::WorldModelHandler( ADT* adt ) : ObjectDataHandler(adt), _definitions(nullptr), _paths(nullptr)
 {
     ReadModelPaths();

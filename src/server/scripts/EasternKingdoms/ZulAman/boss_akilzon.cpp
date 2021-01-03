@@ -406,7 +406,6 @@ public:
 
         void MoveInLineOfSight(Unit* /*who*/) { }
 
-
         void MovementInform(uint32, uint32)
         {
             arrived = true;

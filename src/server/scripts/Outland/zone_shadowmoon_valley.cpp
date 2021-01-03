@@ -137,7 +137,6 @@ public:
     }
 };
 
-
 // Theirs
 /*#####
 # npc_invis_infernal_caster

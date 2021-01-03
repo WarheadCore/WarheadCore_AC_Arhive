@@ -141,7 +141,6 @@ public:
             if (!UpdateVictim())
                 return;
 
-
             switch (eventId)
             {
                 case EVENT_SPELL_ATTRACT_MAGIC:

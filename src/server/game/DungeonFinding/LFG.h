@@ -185,7 +185,6 @@ namespace lfg
                 if (guid[1])
                     guid[2] = guid[1];
 
-
                 guid[1] = guid[0];
                 guid[0] = g;
 
@@ -431,7 +430,6 @@ namespace lfg
     std::string ConcatenateDungeons(LfgDungeonSet const& dungeons);
     std::string GetRolesString(uint8 roles);
     std::string GetStateString(LfgState state);
-
 
 } // namespace lfg
 

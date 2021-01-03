@@ -52,4 +52,3 @@ enum GoIds
 };
 
 #endif
-

@@ -28,7 +28,7 @@
 #        Description: Reward item on battleground Warsong Gulch.
 #        Default: 20558
 #
-#    BGReward.ItemID.Arathi 
+#    BGReward.ItemID.Arathi
 #        Description: Reward item on battleground Arathi Basin.
 #        Default: 20559
 #

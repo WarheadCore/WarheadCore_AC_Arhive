@@ -1628,7 +1628,6 @@ namespace Warhead
             }
         }
 
-
         uint32 i_textId;
         va_list* i_args;
     };

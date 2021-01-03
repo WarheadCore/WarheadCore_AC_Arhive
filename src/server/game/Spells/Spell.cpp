@@ -270,7 +270,6 @@ GameObject* SpellCastTargets::GetGOTarget() const
     return nullptr;
 }
 
-
 void SpellCastTargets::SetGOTarget(GameObject* target)
 {
     if (!target)
@@ -1840,7 +1839,6 @@ void Spell::SelectImplicitTrajTargets(SpellEffIndex effIndex, SpellImplicitTarge
 
     float srcToDestDelta = m_targets.GetDstPos()->m_positionZ - m_targets.GetSrcPos()->m_positionZ;
 
-
     // xinef: supply correct target type, DEST_DEST and similar are ALWAYS undefined
     // xinef: correct target is stored in TRIGGERED SPELL, however as far as i noticed, all checks are ENTRY, ENEMY
     std::list<WorldObject*> targets;
@@ -3356,7 +3354,6 @@ bool Spell::UpdateChanneledTargetList()
     // is all effects from m_needAliveTargetMask have alive targets
     return channelTargetEffectMask == 0;
 }
-
 
 void Spell::prepare(SpellCastTargets const* targets, AuraEffect const* triggeredByAura)
 {
@@ -5342,7 +5339,6 @@ SpellCastResult Spell::CheckCast(bool strict)
             return SPELL_FAILED_NOT_READY;
     }
 
-
     if (m_spellInfo->HasAttribute(SPELL_ATTR7_IS_CHEAT_SPELL) && !m_caster->HasFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_ALLOW_CHEAT_SPELLS))
     {
         m_customError = SPELL_CUSTOM_ERROR_GM_ONLY;
@@ -5466,7 +5462,6 @@ SpellCastResult Spell::CheckCast(bool strict)
                 (IsAutoRepeat() || (m_spellInfo->AuraInterruptFlags & AURA_INTERRUPT_FLAG_NOT_SEATED) != 0))
             return SPELL_FAILED_MOVING;
     }
-
 
     Vehicle* vehicle = m_caster->GetVehicle();
     if (vehicle && !(_triggeredCastFlags & TRIGGERED_IGNORE_CASTER_MOUNTED_OR_ON_VEHICLE))
@@ -8546,4 +8541,3 @@ namespace Warhead
     }
 
 } //namespace Warhead
-

@@ -147,7 +147,6 @@ public:
     }
 };
 
-
 // Theirs
 /*######
 ## npc_apothecary_hanes

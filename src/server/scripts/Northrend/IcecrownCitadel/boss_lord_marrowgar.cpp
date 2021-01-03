@@ -56,7 +56,6 @@ enum Spells
     SPELL_COLDFLAME_SUMMON      = 69147,
 };
 
-
 enum Events
 {
     EVENT_ENABLE_BONE_SLICE = 1,

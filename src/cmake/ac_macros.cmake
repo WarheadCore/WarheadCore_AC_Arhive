@@ -46,7 +46,6 @@ MACRO(WH_ADD_SCRIPT_LOADER script_dec include)
         CU_ADD_GLOBAL("WH_ADD_SCRIPTS_LIST" "Add${script_dec}Scripts()\;")
     endif()
 
-
     if (NOT ${include} STREQUAL "")
         CU_GET_GLOBAL("WH_ADD_SCRIPTS_INCLUDE")
         if (NOT ";${WH_ADD_SCRIPTS_INCLUDE};" MATCHES ";${include};")

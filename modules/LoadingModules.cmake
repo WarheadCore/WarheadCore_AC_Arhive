@@ -29,15 +29,15 @@ FOREACH(subdir ${sub_DIRS})
   get_filename_component(MODULENAME ${subdir} NAME)
 
   # Display disabled modules in Windows
-  if(WIN32 AND DISPLAY_CMAKE_GUI_OPTION AND NOT ";${DISABLED_MODULES};" MATCHES ";${MODULENAME};")  
+  if(WIN32 AND DISPLAY_CMAKE_GUI_OPTION AND NOT ";${DISABLED_MODULES};" MATCHES ";${MODULENAME};")
     option(MODULE_${MODULENAME} "Enable module:${MODULENAME}" 1)
 
     if (NOT MODULE_${MODULENAME})
       set(DISABLED_WH_MODULES ${DISABLED_WH_MODULES} ${MODULENAME})
     endif()
   endif()
-  
-  if (";${DISABLED_WH_MODULES};" MATCHES ";${MODULENAME};")    
+
+  if (";${DISABLED_WH_MODULES};" MATCHES ";${MODULENAME};")
     continue()
   endif()
 

@@ -401,7 +401,6 @@ void Map::DeleteFromWorld(Player* player)
     delete player;
 }
 
-
 void Map::EnsureGridCreated(const GridCoord& p)
 {
     if (getNGrid(p.x_coord, p.y_coord)) // pussywizard

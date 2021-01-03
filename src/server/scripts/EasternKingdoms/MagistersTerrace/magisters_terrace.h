@@ -31,7 +31,6 @@ enum MTData
     MAX_ENCOUNTER               = 4
 };
 
-
 enum MTCreatures
 {
     NPC_DELRISSA                = 24560,
@@ -50,6 +49,5 @@ enum MTGameObjects
     GO_KAEL_DOOR                = 188064,
     GO_ESCAPE_ORB               = 188173
 };
-
 
 #endif
