@@ -99,7 +99,7 @@ public:
     {
         static std::vector<ChatCommand> commandTable = // .commands
         {
-            { "buff",				SEC_PLAYER,			false, &HandleBuffCommand,	""}
+            { "buff",    SEC_PLAYER,   false, &HandleBuffCommand, ""}
         };
 
         return commandTable;
