@@ -94,7 +94,7 @@ enum QuestTradeSkill
     QUEST_TRSKILL_JEWELCRAFTING  = 14,
 };
 
-enum QuestStatus
+ enum QuestStatus : uint8
 {
     QUEST_STATUS_NONE           = 0,
     QUEST_STATUS_COMPLETE       = 1,
