@@ -10,5 +10,8 @@
 - We are currently working on moving the scripts to the repository - [**Warhead**](https://github.com/WarheadCore/Warhead)
 - This information is current as of ***December 20, 2020***
 
+# Repo changed name
+- `git remote set-url origin https://github.com/WarheadCore/WarheadCore_AC_Arhive`
+
 ## Links
 - Discord https://discord.gg/EakzBBB
