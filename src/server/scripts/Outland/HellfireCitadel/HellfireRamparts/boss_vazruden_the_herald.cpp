@@ -362,11 +362,10 @@ public:
 
         void HandleScriptEffect(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* target = GetHitUnit())
-                if (!target)
-                    return;
-                else
-                    target->GetAI()->DoAction(ACTION_FLY_DOWN);
+            Unit* target = GetHitUnit();
+
+            if (target && target->GetAI())
+                target->GetAI()->DoAction(ACTION_FLY_DOWN);
         }
 
         void Register()
