@@ -2,7 +2,7 @@
 ![WarheadCore.png](https://user-images.githubusercontent.com/2656715/56915466-3f037600-6abf-11e9-8965-d79328e40953.jpg)
 
 # Info about repo
-- **We are transitioning to a kernel that is based on** [*TrinityCore 3.3.5*](https://github.com/TrinityCore/TrinityCore/tree/3.3.5)
+- **We are transitioning to a core that is based on** [*TrinityCore 3.3.5*](https://github.com/TrinityCore/TrinityCore/tree/3.3.5)
 - This repository is deprecated and will no longer be supported.
 - This repository will be archived and renamed on ***January 11, 2021*** to `WarheadCore_AC_Arhive`
 - This repository will not merge with official based repo [*AzerothCore*](https://github.com/azerothcore/azerothcore-wotlk)
