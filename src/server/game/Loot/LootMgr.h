@@ -133,7 +133,7 @@ struct LootStoreItem
     uint8   groupid     : 7;
     uint8   mincount;                                       // mincount for drop items
     uint8   maxcount;                                       // max drop count for the item mincount or Ref multiplicator
-    ConditionContainer conditions;                               // additional loot condition
+    ConditionList conditions;                               // additional loot condition
 
     // Constructor
     // displayid is filled in IsValid() which must be called after
@@ -154,7 +154,7 @@ struct LootItem
     uint32  itemid;
     uint32  randomSuffix;
     int32   randomPropertyId;
-    ConditionContainer conditions;                               // additional loot condition
+    ConditionList conditions;                               // additional loot condition
     AllowedLooterSet allowedGUIDs;
     uint64  rollWinnerGUID;                                 // Stores the guid of person who won loot, if his bags are full only he can see the item in loot list!
     uint8   count             : 8;
@@ -251,7 +251,7 @@ public:
     void AddEntry(LootStoreItem* item);
     // Rolls for every item in the template and adds the rolled items the the loot
     void Process(Loot& loot, LootStore const& store, uint16 lootMode, Player const* player, uint8 groupId = 0) const;
-    void CopyConditions(ConditionContainer conditions);
+    void CopyConditions(ConditionList conditions);
     void CopyConditions(LootItem* li) const;
 
     // True if template includes at least 1 quest drop entry

@@ -2816,7 +2816,7 @@ void SpellInfo::_UnloadImplicitTargetConditionLists()
     // find the same instances of ConditionList and delete them.
     for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
     {
-        ConditionContainer* cur = Effects[i].ImplicitTargetConditions;
+        ConditionList* cur = Effects[i].ImplicitTargetConditions;
         if (!cur)
             continue;
         for (uint8 j = i; j < MAX_SPELL_EFFECTS; ++j)

@@ -109,7 +109,7 @@ public:
 private:
     void LoadConditions();
     void CheckConditions(uint32 diff);
-    bool m_HasConditions;
+    ConditionList conditions;
     uint32 m_ConditionsTimer;
     bool m_DoDismiss;
     uint32 m_DismissTimer;

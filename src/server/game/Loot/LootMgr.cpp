@@ -104,7 +104,7 @@ public:
     void CheckLootRefs(LootTemplateMap const& store, LootIdSet* ref_set) const;
     LootStoreItemList* GetExplicitlyChancedItemList() { return &ExplicitlyChanced; }
     LootStoreItemList* GetEqualChancedItemList() { return &EqualChanced; }
-    void CopyConditions(ConditionContainer conditions);
+    void CopyConditions(ConditionList conditions);
 private:
     LootStoreItemList ExplicitlyChanced;                // Entries with chances defined in DB
     LootStoreItemList EqualChanced;                     // Zero chances - every entry takes the same chance
@@ -232,7 +232,7 @@ void LootStore::ResetConditions()
 {
     for (LootTemplateMap::iterator itr = m_LootTemplates.begin(); itr != m_LootTemplates.end(); ++itr)
     {
-        ConditionContainer empty;
+        ConditionList empty;
         itr->second->CopyConditions(empty);
     }
 }
@@ -1184,7 +1184,7 @@ bool LootTemplate::LootGroup::HasQuestDropForPlayer(Player const* player) const
     return false;
 }
 
-void LootTemplate::LootGroup::CopyConditions(ConditionContainer /*conditions*/)
+void LootTemplate::LootGroup::CopyConditions(ConditionList /*conditions*/)
 {
     for (LootStoreItemList::iterator i = ExplicitlyChanced.begin(); i != ExplicitlyChanced.end(); ++i)
         (*i)->conditions.clear();
@@ -1293,7 +1293,7 @@ void LootTemplate::AddEntry(LootStoreItem* item)
         Entries.push_back(item);
 }
 
-void LootTemplate::CopyConditions(ConditionContainer conditions)
+void LootTemplate::CopyConditions(ConditionList conditions)
 {
     for (LootStoreItemList::iterator i = Entries.begin(); i != Entries.end(); ++i)
         (*i)->conditions.clear();

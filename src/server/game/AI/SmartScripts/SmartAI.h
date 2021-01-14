@@ -239,7 +239,7 @@ private:
 
     // Xinef: Vehicle conditions
     void CheckConditions(const uint32 diff);
-    ConditionContainer conditions;
+    ConditionList conditions;
     uint32 m_ConditionsTimer;
 };
 

@@ -732,7 +732,7 @@ public:
     bool IsDatabaseBound() const { return true; }
 
     // Called when a single condition is checked for a player.
-    virtual bool OnConditionCheck(Condition const* /*condition*/, ConditionSourceInfo& /*sourceInfo*/) { return true; }
+    virtual bool OnConditionCheck(Condition* /*condition*/, ConditionSourceInfo& /*sourceInfo*/) { return true; }
 };
 
 class VehicleScript : public ScriptObject
@@ -1402,7 +1402,7 @@ public: /* AuctionHouseScript */
 
 public: /* ConditionScript */
 
-    bool OnConditionCheck(Condition const* condition, ConditionSourceInfo& sourceInfo);
+    bool OnConditionCheck(Condition* condition, ConditionSourceInfo& sourceInfo);
 
 public: /* VehicleScript */
 
