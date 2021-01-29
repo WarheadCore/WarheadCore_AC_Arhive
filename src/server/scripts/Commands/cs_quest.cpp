@@ -245,7 +245,7 @@ public:
             player->ModifyMoney(-ReqOrRewMoney);
 
         // check if Quest Tracker is enabled
-        if (CONF_GET_BOOL("Quests.EnableQuestTracker"))
+        if (CONF_GET_BOOL("QuestTracker.Enable"))
             sQuestTracker->UpdateGMComplete(quest->GetQuestId(), player->GetGUIDLow());
 
         player->CompleteQuest(entry);

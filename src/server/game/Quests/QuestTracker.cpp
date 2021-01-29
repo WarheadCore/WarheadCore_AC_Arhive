@@ -19,13 +19,22 @@
 #include "DatabaseEnv.h"
 #include "GameConfig.h"
 #include "TaskScheduler.h"
+#include "StringFormat.h"
 #include <tuple>
 #include <vector>
 
 namespace
 {
-    std::vector<std::tuple<uint32 /*ID*/, uint32 /*CharLowGuid*/, std::string /*Hash*/, std::string /*Rev*/>> _questTrackStore;
-    std::vector<PreparedStatement*> _queueStmt;
+    // Typdefs
+    using QuestTrackInsert = std::vector<std::tuple<uint32 /*ID*/, uint32 /*CharLowGuid*/, std::string /*Hash*/, std::string /*Rev*/>>;
+    using QuestTrackUpdate = std::vector<std::tuple<uint32 /*ID*/, uint32 /*CharLowGuid*/>>;
+
+    QuestTrackInsert _questTrackStore;
+    QuestTrackUpdate _questCompleteStore;
+    QuestTrackUpdate _questAbandonStore;
+    QuestTrackUpdate _questGMCompleteStore;
+
+    // Scheduler - for update queue
     TaskScheduler scheduler;
 }
 
@@ -37,83 +46,157 @@ QuestTracker* QuestTracker::instance()
 
 void QuestTracker::InitSystem()
 {
-    if (!CONF_GET_BOOL("Quests.EnableQuestTracker"))
+    if (!CONF_GET_BOOL("QuestTracker.Enable"))
     {
         LOG_INFO("server.loading", ">> System disabled");
         return;
     }
 
-    scheduler.Schedule(30s, [this](TaskContext context)
-    {
-        Execute();
-
-        context.Repeat();
-    });
+    SetExecuteDelay();
 
     LOG_INFO("server.loading", ">> System loading");
 }
 
 void QuestTracker::Update(uint32 diff)
 {
-    if (!CONF_GET_BOOL("Quests.EnableQuestTracker"))
+    if (!CONF_GET_BOOL("QuestTracker.Enable"))
         return;
 
     scheduler.Update(diff);
 }
 
-void QuestTracker::Execute()
+void QuestTracker::SetExecuteDelay()
 {
-    //LOG_DEBUG("server", "> QuestTracker::Execute");
+    if (!CONF_GET_BOOL("QuestTracker.Enable") || !CONF_GET_BOOL("QuestTracker.Queue.Enable"))
+        return;
 
-    auto trans = CharacterDatabase.BeginTransaction();
-
-    for (auto const& [ID, CharacterLowGuid, Hash, Revision] : _questTrackStore)
+    Seconds updateSecs = Seconds(CONF_GET_UINT("QuestTracker.Queue.Delay"));
+    if (updateSecs < 1s)
     {
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_QUEST_TRACK);
-        stmt->setUInt32(0, ID);
-        stmt->setUInt32(1, CharacterLowGuid);
-        stmt->setString(2, Hash);
-        stmt->setString(3, Revision);
-        trans->Append(stmt);
+        LOG_ERROR("server", "> QuestTracker: ExecuteDelay < 1 second. Set 10 seconds");
+        updateSecs = 10s;
+        return;
     }
 
-    for (auto const& stmt : _queueStmt)
-        trans->Append(stmt);
+    scheduler.CancelAll();
 
-    CharacterDatabase.CommitTransaction(trans);
+    scheduler.Schedule(updateSecs, [this](TaskContext context)
+    {
+        Execute();
 
-    _questTrackStore.clear();
-    _queueStmt.clear();
+        context.Repeat();
+    });
+}
+
+void QuestTracker::Execute()
+{
+    if (_questTrackStore.empty() &&
+        _questCompleteStore.empty() &&
+        _questAbandonStore.empty() &&
+        _questGMCompleteStore.empty())
+        return;
+
+    LOG_INFO("server", "> QuestTracker: Start Execute...");
+
+    uint32 msTimeStart = getMSTime();
+
+    /// Insert section
+    if (!_questTrackStore.empty())
+    {
+        for (auto const& [ID, CharacterLowGuid, Hash, Revision] : _questTrackStore)
+        {
+            PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_QUEST_TRACK);
+            stmt->setUInt32(0, ID);
+            stmt->setUInt32(1, CharacterLowGuid);
+            stmt->setString(2, Hash);
+            stmt->setString(3, Revision);
+            CharacterDatabase.Execute(stmt);
+        }
+
+        LOG_INFO("server", "> QuestTracker: Execute 'CHAR_INS_QUEST_TRACK' (%u)", static_cast<uint32>(_questTrackStore.size()));
+
+        _questTrackStore.clear();
+    }
+
+    /// Update section
+    auto SendUpdate = [&](QuestTrackUpdate& updateStore, CharacterDatabaseStatements stmtIndex, std::string const& updateType)
+    {
+        if (updateStore.empty())
+            return;
+
+        auto SendUpdateQuestTracker = [&](uint32 questID, uint32 characterLowGuid)
+        {
+            PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(stmtIndex);
+            stmt->setUInt32(0, questID);
+            stmt->setUInt32(1, characterLowGuid);
+            CharacterDatabase.Execute(stmt);
+        };
+
+        for (auto const& [questID, characterLowGuid] : updateStore)
+            SendUpdateQuestTracker(questID, characterLowGuid);
+
+        LOG_INFO("server", "> QuestTracker: Execute '%s' (%u)", updateType.c_str(), static_cast<uint32>(updateStore.size()));
+
+        updateStore.clear();
+    };
+
+    SendUpdate(_questCompleteStore, CHAR_UPD_QUEST_TRACK_COMPLETE_TIME, "CHAR_UPD_QUEST_TRACK_COMPLETE_TIME");
+    SendUpdate(_questAbandonStore, CHAR_UPD_QUEST_TRACK_ABANDON_TIME, "CHAR_UPD_QUEST_TRACK_ABANDON_TIME");
+    SendUpdate(_questGMCompleteStore, CHAR_UPD_QUEST_TRACK_GM_COMPLETE, "CHAR_UPD_QUEST_TRACK_GM_COMPLETE");
+
+    LOG_INFO("server", "> QuestTracker: Execute end in %u ms", GetMSTimeDiffToNow(msTimeStart));
 }
 
 void QuestTracker::Add(uint32 questID, uint32 characterLowGuid, std::string const& coreHash, std::string const& coreRevision)
 {
-    _questTrackStore.emplace_back(std::make_tuple(questID, characterLowGuid, coreHash, coreRevision));
+    if (CONF_GET_BOOL("QuestTracker.Queue.Enable"))
+        _questTrackStore.emplace_back(questID, characterLowGuid, coreHash, coreRevision);
+    else
+    {
+        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_QUEST_TRACK);
+        stmt->setUInt32(0, questID);
+        stmt->setUInt32(1, characterLowGuid);
+        stmt->setString(2, coreHash);
+        stmt->setString(3, coreRevision);
+        CharacterDatabase.Execute(stmt);
+    }
 }
 
 void QuestTracker::UpdateCompleteTime(uint32 questID, uint32 characterLowGuid)
 {
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_QUEST_TRACK_COMPLETE_TIME);
-    stmt->setUInt32(0, questID);
-    stmt->setUInt32(1, characterLowGuid);
-
-    _queueStmt.emplace_back(stmt);
+    if (CONF_GET_BOOL("QuestTracker.Queue.Enable"))
+        _questCompleteStore.emplace_back(questID, characterLowGuid);
+    else
+    {
+        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_QUEST_TRACK_COMPLETE_TIME);
+        stmt->setUInt32(0, questID);
+        stmt->setUInt32(1, characterLowGuid);
+        CharacterDatabase.Execute(stmt);
+    }
 }
 
 void QuestTracker::UpdateAbandonTime(uint32 questID, uint32 characterLowGuid)
 {
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_QUEST_TRACK_ABANDON_TIME);
-    stmt->setUInt32(0, questID);
-    stmt->setUInt32(1, characterLowGuid);
-
-    _queueStmt.emplace_back(stmt);
+    if (CONF_GET_BOOL("QuestTracker.Queue.Enable"))
+        _questAbandonStore.emplace_back(questID, characterLowGuid);
+    else
+    {
+        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_QUEST_TRACK_ABANDON_TIME);
+        stmt->setUInt32(0, questID);
+        stmt->setUInt32(1, characterLowGuid);
+        CharacterDatabase.Execute(stmt);
+    }
 }
 
 void QuestTracker::UpdateGMComplete(uint32 questID, uint32 characterLowGuid)
 {
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_QUEST_TRACK_GM_COMPLETE);
-    stmt->setUInt32(0, questID);
-    stmt->setUInt32(1, characterLowGuid);
-
-    _queueStmt.emplace_back(stmt);
+    if (CONF_GET_BOOL("QuestTracker.Queue.Enable"))
+        _questGMCompleteStore.emplace_back(questID, characterLowGuid);
+    else
+    {
+        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_QUEST_TRACK_GM_COMPLETE);
+        stmt->setUInt32(0, questID);
+        stmt->setUInt32(1, characterLowGuid);
+        CharacterDatabase.Execute(stmt);
+    }
 }

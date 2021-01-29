@@ -410,7 +410,7 @@ void WorldSession::HandleQuestLogRemoveQuest(WorldPacket& recvData)
             LOG_INFO("network.opcode", "Player %u abandoned quest %u", _player->GetGUIDLow(), questId);
 
             // check if Quest Tracker is enabled
-            if (CONF_GET_BOOL("Quests.EnableQuestTracker"))
+            if (CONF_GET_BOOL("QuestTracker.Enable"))
                 sQuestTracker->UpdateAbandonTime(questId, _player->GetGUIDLow());
         }
 

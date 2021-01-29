@@ -15712,7 +15712,7 @@ void Player::AddQuest(Quest const* quest, Object* questGiver)
     SendQuestUpdate(quest_id);
 
     // check if Quest Tracker is enabled
-    if (CONF_GET_BOOL("Quests.EnableQuestTracker"))
+    if (CONF_GET_BOOL("QuestTracker.Enable"))
         sQuestTracker->Add(quest_id, GetGUIDLow(), GitRevision::GetHash(), GitRevision::GetDate());
 
     // Xinef: area auras may change on quest accept!
@@ -15741,7 +15741,7 @@ void Player::CompleteQuest(uint32 quest_id)
     }
 
     // check if Quest Tracker is enabled
-    if (CONF_GET_BOOL("Quests.EnableQuestTracker"))
+    if (CONF_GET_BOOL("QuestTracker.Enable"))
         sQuestTracker->UpdateCompleteTime(quest_id, GetGUIDLow());
 }
 

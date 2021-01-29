@@ -538,6 +538,9 @@ void World::LoadConfigSettings(bool reload)
 
     MMAP::MMapFactory::InitializeDisabledMaps();
 
+    // Set execute delay for Quest tracker
+    sQuestTracker->SetExecuteDelay();
+
     // call ScriptMgr if we're reloading the configuration
     sScriptMgr->OnAfterConfigLoad(reload);
 }
