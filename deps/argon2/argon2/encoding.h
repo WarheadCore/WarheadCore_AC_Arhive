@@ -31,7 +31,7 @@
 *
 * on success, ARGON2_OK is returned.
 */
-int encode_string(char *dst, size_t dst_len, argon2_context *ctx,
+int encode_string(char* dst, size_t dst_len, argon2_context* ctx,
                   argon2_type type);
 
 /*
@@ -46,7 +46,7 @@ int encode_string(char *dst, size_t dst_len, argon2_context *ctx,
 *
 * Returned value is ARGON2_OK on success, other ARGON2_ codes on error.
 */
-int decode_string(argon2_context *ctx, const char *str, argon2_type type);
+int decode_string(argon2_context* ctx, const char* str, argon2_type type);
 
 /* Returns the length of the encoded byte stream with length len */
 size_t b64len(uint32_t len);

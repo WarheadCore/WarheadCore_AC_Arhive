@@ -23,7 +23,7 @@
 #if _MSC_VER > 1700
 
 inline static __m128i __vectorcall mm_recursion(__m128i a, __m128i b,
-                                                __m128i c, __m128i d);
+        __m128i c, __m128i d);
 
 /**
  * This function represents the recursion formula.
@@ -34,7 +34,7 @@ inline static __m128i __vectorcall mm_recursion(__m128i a, __m128i b,
  * @return new value
  */
 inline static __m128i __vectorcall mm_recursion(__m128i a, __m128i b,
-                                                __m128i c, __m128i d)
+        __m128i c, __m128i d)
 {
     __m128i v, x, y, z;
 
@@ -54,20 +54,23 @@ inline static __m128i __vectorcall mm_recursion(__m128i a, __m128i b,
  * integers.
  * @param sfmt SFMT internal state
  */
-void sfmt_gen_rand_all(sfmt_t * sfmt) {
+void sfmt_gen_rand_all(sfmt_t* sfmt)
+{
     int i;
     __m128i r1, r2;
-    w128_t * pstate = sfmt->state;
+    w128_t* pstate = sfmt->state;
 
     r1 = pstate[SFMT_N - 2].si;
     r2 = pstate[SFMT_N - 1].si;
-    for (i = 0; i < SFMT_N - SFMT_POS1; i++) {
+    for (i = 0; i < SFMT_N - SFMT_POS1; i++)
+    {
         pstate[i].si = mm_recursion(pstate[i].si,
                                     pstate[i + SFMT_POS1].si, r1, r2);
         r1 = r2;
         r2 = pstate[i].si;
     }
-    for (; i < SFMT_N; i++) {
+    for (; i < SFMT_N; i++)
+    {
         pstate[i].si = mm_recursion(pstate[i].si,
                                     pstate[i + SFMT_POS1 - SFMT_N].si,
                                     r1, r2);
@@ -83,36 +86,39 @@ void sfmt_gen_rand_all(sfmt_t * sfmt) {
  * @param array an 128-bit array to be filled by pseudorandom numbers.
  * @param size number of 128-bit pseudorandom numbers to be generated.
  */
-static void gen_rand_array(sfmt_t * sfmt, w128_t * array, int size)
+static void gen_rand_array(sfmt_t* sfmt, w128_t* array, int size)
 {
     int i, j;
     __m128i r1, r2;
-    w128_t * pstate = sfmt->state;
+    w128_t* pstate = sfmt->state;
 
     r1 = pstate[SFMT_N - 2].si;
     r2 = pstate[SFMT_N - 1].si;
-    for (i = 0; i < SFMT_N - SFMT_POS1; i++) {
+    for (i = 0; i < SFMT_N - SFMT_POS1; i++)
+    {
         array[i].si = mm_recursion(pstate[i].si,
                                    pstate[i + SFMT_POS1].si, r1, r2);
         r1 = r2;
         r2 = array[i].si;
     }
-    for (; i < SFMT_N; i++) {
+    for (; i < SFMT_N; i++)
+    {
         array[i].si = mm_recursion(pstate[i].si,
                                    array[i + SFMT_POS1 - SFMT_N].si, r1, r2);
         r1 = r2;
         r2 = array[i].si;
     }
-    for (; i < size - SFMT_N; i++) {
+    for (; i < size - SFMT_N; i++)
+    {
         array[i].si = mm_recursion(array[i - SFMT_N].si,
                                    array[i + SFMT_POS1 - SFMT_N].si, r1, r2);
         r1 = r2;
         r2 = array[i].si;
     }
-    for (j = 0; j < 2 * SFMT_N - size; j++) {
+    for (j = 0; j < 2 * SFMT_N - size; j++)
         pstate[j] = array[j + size - SFMT_N];
-    }
-    for (; i < size; i++, j++) {
+    for (; i < size; i++, j++)
+    {
         array[i].si = mm_recursion(array[i - SFMT_N].si,
                                    array[i + SFMT_POS1 - SFMT_N].si, r1, r2);
         r1 = r2;
@@ -150,20 +156,23 @@ do {                                          \
  * integers.
  * @param sfmt SFMT internal state
  */
-void sfmt_gen_rand_all(sfmt_t * sfmt) {
+void sfmt_gen_rand_all(sfmt_t* sfmt)
+{
     int i;
     __m128i r1, r2;
-    w128_t * pstate = sfmt->state;
+    w128_t* pstate = sfmt->state;
 
     r1 = pstate[SFMT_N - 2].si;
     r2 = pstate[SFMT_N - 1].si;
-    for (i = 0; i < SFMT_N - SFMT_POS1; i++) {
+    for (i = 0; i < SFMT_N - SFMT_POS1; i++)
+    {
         mm_recursion(pstate[i].si, pstate[i].si,
                      pstate[i + SFMT_POS1].si, r1, r2);
         r1 = r2;
         r2 = pstate[i].si;
     }
-    for (; i < SFMT_N; i++) {
+    for (; i < SFMT_N; i++)
+    {
         mm_recursion(pstate[i].si, pstate[i].si,
                      pstate[i + SFMT_POS1 - SFMT_N].si,
                      r1, r2);
@@ -179,36 +188,39 @@ void sfmt_gen_rand_all(sfmt_t * sfmt) {
  * @param array an 128-bit array to be filled by pseudorandom numbers.
  * @param size number of 128-bit pseudorandom numbers to be generated.
  */
-static void gen_rand_array(sfmt_t * sfmt, w128_t * array, int size)
+static void gen_rand_array(sfmt_t* sfmt, w128_t* array, int size)
 {
     int i, j;
     __m128i r1, r2;
-    w128_t * pstate = sfmt->state;
+    w128_t* pstate = sfmt->state;
 
     r1 = pstate[SFMT_N - 2].si;
     r2 = pstate[SFMT_N - 1].si;
-    for (i = 0; i < SFMT_N - SFMT_POS1; i++) {
+    for (i = 0; i < SFMT_N - SFMT_POS1; i++)
+    {
         mm_recursion(array[i].si, pstate[i].si,
                      pstate[i + SFMT_POS1].si, r1, r2);
         r1 = r2;
         r2 = array[i].si;
     }
-    for (; i < SFMT_N; i++) {
+    for (; i < SFMT_N; i++)
+    {
         mm_recursion(array[i].si, pstate[i].si,
                      array[i + SFMT_POS1 - SFMT_N].si, r1, r2);
         r1 = r2;
         r2 = array[i].si;
     }
-    for (; i < size - SFMT_N; i++) {
+    for (; i < size - SFMT_N; i++)
+    {
         mm_recursion(array[i].si, array[i - SFMT_N].si,
                      array[i + SFMT_POS1 - SFMT_N].si, r1, r2);
         r1 = r2;
         r2 = array[i].si;
     }
-    for (j = 0; j < 2 * SFMT_N - size; j++) {
+    for (j = 0; j < 2 * SFMT_N - size; j++)
         pstate[j] = array[j + size - SFMT_N];
-    }
-    for (; i < size; i++, j++) {
+    for (; i < size; i++, j++)
+    {
         mm_recursion(array[i].si, array[i - SFMT_N].si,
                      array[i + SFMT_POS1 - SFMT_N].si, r1, r2);
         r1 = r2;
@@ -217,8 +229,8 @@ static void gen_rand_array(sfmt_t * sfmt, w128_t * array, int size)
     }
 }
 #else
-inline static void mm_recursion(__m128i * r, __m128i a, __m128i b,
-                                __m128i c, __m128i * d);
+inline static void mm_recursion(__m128i* r, __m128i a, __m128i b,
+                                __m128i c, __m128i* d);
 
 /**
  * This function represents the recursion formula.
@@ -228,8 +240,8 @@ inline static void mm_recursion(__m128i * r, __m128i a, __m128i b,
  * @param c a 128-bit part of the interal state array
  * @param d a 128-bit part of the interal state array
  */
-inline static void mm_recursion(__m128i * r, __m128i a, __m128i b,
-                                __m128i c, __m128i * d)
+inline static void mm_recursion(__m128i* r, __m128i a, __m128i b,
+                                __m128i c, __m128i* d)
 {
     __m128i v, x, y, z;
 
@@ -250,20 +262,23 @@ inline static void mm_recursion(__m128i * r, __m128i a, __m128i b,
  * integers.
  * @param sfmt SFMT internal state
  */
-void sfmt_gen_rand_all(sfmt_t * sfmt) {
+void sfmt_gen_rand_all(sfmt_t* sfmt)
+{
     int i;
     __m128i r1, r2;
-    w128_t * pstate = sfmt->state;
+    w128_t* pstate = sfmt->state;
 
     r1 = pstate[SFMT_N - 2].si;
     r2 = pstate[SFMT_N - 1].si;
-    for (i = 0; i < SFMT_N - SFMT_POS1; i++) {
+    for (i = 0; i < SFMT_N - SFMT_POS1; i++)
+    {
         mm_recursion(&pstate[i].si, pstate[i].si,
                      pstate[i + SFMT_POS1].si, r1, &r2);
         r1 = r2;
         r2 = pstate[i].si;
     }
-    for (; i < SFMT_N; i++) {
+    for (; i < SFMT_N; i++)
+    {
         mm_recursion(&pstate[i].si, pstate[i].si,
                      pstate[i + SFMT_POS1 - SFMT_N].si,
                      r1, &r2);
@@ -279,36 +294,39 @@ void sfmt_gen_rand_all(sfmt_t * sfmt) {
  * @param array an 128-bit array to be filled by pseudorandom numbers.
  * @param size number of 128-bit pseudorandom numbers to be generated.
  */
-static void gen_rand_array(sfmt_t * sfmt, w128_t * array, int size)
+static void gen_rand_array(sfmt_t* sfmt, w128_t* array, int size)
 {
     int i, j;
     __m128i r1, r2;
-    w128_t * pstate = sfmt->state;
+    w128_t* pstate = sfmt->state;
 
     r1 = pstate[SFMT_N - 2].si;
     r2 = pstate[SFMT_N - 1].si;
-    for (i = 0; i < SFMT_N - SFMT_POS1; i++) {
+    for (i = 0; i < SFMT_N - SFMT_POS1; i++)
+    {
         mm_recursion(&array[i].si, pstate[i].si,
                      pstate[i + SFMT_POS1].si, r1, &r2);
         r1 = r2;
         r2 = array[i].si;
     }
-    for (; i < SFMT_N; i++) {
+    for (; i < SFMT_N; i++)
+    {
         mm_recursion(&array[i].si, pstate[i].si,
                      array[i + SFMT_POS1 - SFMT_N].si, r1, &r2);
         r1 = r2;
         r2 = array[i].si;
     }
-    for (; i < size - SFMT_N; i++) {
+    for (; i < size - SFMT_N; i++)
+    {
         mm_recursion(&array[i].si, array[i - SFMT_N].si,
                      array[i + SFMT_POS1 - SFMT_N].si, r1, &r2);
         r1 = r2;
         r2 = array[i].si;
     }
-    for (j = 0; j < 2 * SFMT_N - size; j++) {
+    for (j = 0; j < 2 * SFMT_N - size; j++)
         pstate[j] = array[j + size - SFMT_N];
-    }
-    for (; i < size; i++, j++) {
+    for (; i < size; i++, j++)
+    {
         mm_recursion(&array[i].si, array[i - SFMT_N].si,
                      array[i + SFMT_POS1 - SFMT_N].si, r1, &r2);
         r1 = r2;

@@ -27,11 +27,11 @@ extern "C" {
 
 #include "SFMT.h"
 
-inline static void do_recursion(w128_t * r, w128_t * a, w128_t * b,
-                                w128_t * c, w128_t * d);
+inline static void do_recursion(w128_t* r, w128_t* a, w128_t* b,
+                                w128_t* c, w128_t* d);
 
-inline static void rshift128(w128_t *out,  w128_t const *in, int shift);
-inline static void lshift128(w128_t *out,  w128_t const *in, int shift);
+inline static void rshift128(w128_t* out,  w128_t const* in, int shift);
+inline static void lshift128(w128_t* out,  w128_t const* in, int shift);
 
 /**
  * This function simulates SIMD 128-bit right shift by the standard C.
@@ -42,7 +42,8 @@ inline static void lshift128(w128_t *out,  w128_t const *in, int shift);
  * @param shift the shift value
  */
 #ifdef ONLY64
-inline static void rshift128(w128_t *out, w128_t const *in, int shift) {
+inline static void rshift128(w128_t* out, w128_t const* in, int shift)
+{
     uint64_t th, tl, oh, ol;
 
     th = ((uint64_t)in->u[2] << 32) | ((uint64_t)in->u[3]);
@@ -57,7 +58,7 @@ inline static void rshift128(w128_t *out, w128_t const *in, int shift) {
     out->u[3] = (uint32_t)oh;
 }
 #else
-inline static void rshift128(w128_t *out, w128_t const *in, int shift)
+inline static void rshift128(w128_t* out, w128_t const* in, int shift)
 {
     uint64_t th, tl, oh, ol;
 
@@ -82,7 +83,8 @@ inline static void rshift128(w128_t *out, w128_t const *in, int shift)
  * @param shift the shift value
  */
 #ifdef ONLY64
-inline static void lshift128(w128_t *out, w128_t const *in, int shift) {
+inline static void lshift128(w128_t* out, w128_t const* in, int shift)
+{
     uint64_t th, tl, oh, ol;
 
     th = ((uint64_t)in->u[2] << 32) | ((uint64_t)in->u[3]);
@@ -97,7 +99,7 @@ inline static void lshift128(w128_t *out, w128_t const *in, int shift) {
     out->u[3] = (uint32_t)oh;
 }
 #else
-inline static void lshift128(w128_t *out, w128_t const *in, int shift)
+inline static void lshift128(w128_t* out, w128_t const* in, int shift)
 {
     uint64_t th, tl, oh, ol;
 
@@ -122,25 +124,26 @@ inline static void lshift128(w128_t *out, w128_t const *in, int shift)
  * @param d a 128-bit part of the internal state array
  */
 #ifdef ONLY64
-inline static void do_recursion(w128_t *r, w128_t *a, w128_t *b, w128_t *c,
-                                w128_t *d) {
+inline static void do_recursion(w128_t* r, w128_t* a, w128_t* b, w128_t* c,
+                                w128_t* d)
+{
     w128_t x;
     w128_t y;
 
     lshift128(&x, a, SFMT_SL2);
     rshift128(&y, c, SFMT_SR2);
     r->u[0] = a->u[0] ^ x.u[0] ^ ((b->u[0] >> SFMT_SR1) & SFMT_MSK2) ^ y.u[0]
-        ^ (d->u[0] << SFMT_SL1);
+              ^ (d->u[0] << SFMT_SL1);
     r->u[1] = a->u[1] ^ x.u[1] ^ ((b->u[1] >> SFMT_SR1) & SFMT_MSK1) ^ y.u[1]
-        ^ (d->u[1] << SFMT_SL1);
+              ^ (d->u[1] << SFMT_SL1);
     r->u[2] = a->u[2] ^ x.u[2] ^ ((b->u[2] >> SFMT_SR1) & SFMT_MSK4) ^ y.u[2]
-        ^ (d->u[2] << SFMT_SL1);
+              ^ (d->u[2] << SFMT_SL1);
     r->u[3] = a->u[3] ^ x.u[3] ^ ((b->u[3] >> SFMT_SR1) & SFMT_MSK3) ^ y.u[3]
-        ^ (d->u[3] << SFMT_SL1);
+              ^ (d->u[3] << SFMT_SL1);
 }
 #else
-inline static void do_recursion(w128_t *r, w128_t *a, w128_t *b,
-                                w128_t *c, w128_t *d)
+inline static void do_recursion(w128_t* r, w128_t* a, w128_t* b,
+                                w128_t* c, w128_t* d)
 {
     w128_t x;
     w128_t y;
@@ -148,13 +151,13 @@ inline static void do_recursion(w128_t *r, w128_t *a, w128_t *b,
     lshift128(&x, a, SFMT_SL2);
     rshift128(&y, c, SFMT_SR2);
     r->u[0] = a->u[0] ^ x.u[0] ^ ((b->u[0] >> SFMT_SR1) & SFMT_MSK1)
-        ^ y.u[0] ^ (d->u[0] << SFMT_SL1);
+              ^ y.u[0] ^ (d->u[0] << SFMT_SL1);
     r->u[1] = a->u[1] ^ x.u[1] ^ ((b->u[1] >> SFMT_SR1) & SFMT_MSK2)
-        ^ y.u[1] ^ (d->u[1] << SFMT_SL1);
+              ^ y.u[1] ^ (d->u[1] << SFMT_SL1);
     r->u[2] = a->u[2] ^ x.u[2] ^ ((b->u[2] >> SFMT_SR1) & SFMT_MSK3)
-        ^ y.u[2] ^ (d->u[2] << SFMT_SL1);
+              ^ y.u[2] ^ (d->u[2] << SFMT_SL1);
     r->u[3] = a->u[3] ^ x.u[3] ^ ((b->u[3] >> SFMT_SR1) & SFMT_MSK4)
-        ^ y.u[3] ^ (d->u[3] << SFMT_SL1);
+              ^ y.u[3] ^ (d->u[3] << SFMT_SL1);
 }
 #endif
 #if defined(__cplusplus)
