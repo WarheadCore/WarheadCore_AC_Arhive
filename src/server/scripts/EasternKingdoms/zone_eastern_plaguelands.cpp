@@ -313,7 +313,6 @@ public:
     };
 };
 
-
 // Theirs
 class npc_ghoul_flayer : public CreatureScript
 {

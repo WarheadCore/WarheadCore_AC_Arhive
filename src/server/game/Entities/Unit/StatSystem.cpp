@@ -717,7 +717,6 @@ float const miss_cap[MAX_CLASSES] =
     16.00f      // Druid   //?
 };
 
-
 float Player::GetMissPercentageFromDefense() const
 {
     float diminishing = 0.0f, nondiminishing = 0.0f;
@@ -1128,8 +1127,6 @@ void Creature::CalculateMinMaxDamage(WeaponAttackType attType, bool normalized, 
 ########    PETS STAT SYSTEM     ########
 ########                         ########
 #######################################*/
-
-
 
 bool Guardian::UpdateStats(Stats stat)
 {

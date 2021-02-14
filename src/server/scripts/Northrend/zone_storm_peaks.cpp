@@ -695,7 +695,6 @@ public:
     };
 };
 
-
 // Theirs
 /*######
 ## npc_roxi_ramrocket

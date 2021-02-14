@@ -260,8 +260,6 @@ public:
                     }
                     break;
 
-
-
             }
         }
 
@@ -279,7 +277,6 @@ public:
         }
     };
 };
-
 
 enum timeRift
 {

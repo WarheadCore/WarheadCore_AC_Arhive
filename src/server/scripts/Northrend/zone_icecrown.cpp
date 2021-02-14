@@ -1044,7 +1044,6 @@ enum infraGreenBomberQuests
     SPELL_WAITING_FOR_A_BOMBER  = 59563,
     SPELL_FLIGHT_ORDERS         = 61281,
 
-
     EVENT_TAKE_PASSENGER        = 1,
     EVENT_START_FLIGHT          = 2,
     EVENT_CHECK_PATH_REGEN_HEALTH_BURN_DAMAGE           = 3,
@@ -1763,7 +1762,6 @@ public:
         void EnterCombat(Unit* /*who*/) { }
 
         void MoveInLineOfSight(Unit* /*who*/) { }
-
 
         void JustSummoned(Creature* Summoned)
         {

@@ -93,6 +93,7 @@
 #include "GameConfig.h"
 #include "GameLocale.h"
 #include "Metric.h"
+#include "QuestTracker.h"
 #include <VMapManager2.h>
 
 std::atomic_long World::m_stopEvent = false;
@@ -536,6 +537,9 @@ void World::LoadConfigSettings(bool reload)
     }
 
     MMAP::MMapFactory::InitializeDisabledMaps();
+
+    // Set execute delay for Quest tracker
+    sQuestTracker->SetExecuteDelay();
 
     // call ScriptMgr if we're reloading the configuration
     sScriptMgr->OnAfterConfigLoad(reload);
@@ -1164,6 +1168,9 @@ void World::SetInitialWorldSettings()
     mgr = ChannelMgr::forTeam(TEAM_HORDE);
     mgr->LoadChannels();
 
+    LOG_INFO("server.loading", "Start QuestTracker system...");
+    sQuestTracker->InitSystem();
+
     if (CONF_GET_BOOL("PreloadAllNonInstancedMapGrids"))
     {
         LOG_INFO("server.loading", "Loading all grids for all non-instanced maps...");
@@ -1528,6 +1535,12 @@ void World::Update(uint32 diff)
     }
 
     {
+        WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Update quest tracker"));
+        sQuestTracker->Update(diff);
+        WH_METRIC_VALUE("update_time_diff", diff);
+    }
+
+    {
         WH_METRIC_TIMER("world_update_time", WH_METRIC_TAG("type", "Update metrics"));
         // Stats logger update
         sMetric->Update();
@@ -1617,7 +1630,6 @@ namespace Warhead
                 data_list.push_back(data);
             }
         }
-
 
         uint32 i_textId;
         va_list* i_args;

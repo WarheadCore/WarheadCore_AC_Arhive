@@ -92,6 +92,7 @@
 #include "GameTime.h"
 #include "GameLocale.h"
 #include "MuteManager.h"
+#include "QuestTracker.h"
 
 #define ZONE_UPDATE_INTERVAL (2*IN_MILLISECONDS)
 
@@ -2394,7 +2395,7 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
     }
     else
     {
-        if (getClass() == CLASS_DEATH_KNIGHT && GetMapId() == 609 && !IsGameMaster() && !HasSpell(50977))
+        if (!(options & TELE_TO_SKIP_START_ZONE_DK) && getClass() == CLASS_DEATH_KNIGHT && GetMapId() == 609 && !IsGameMaster() && !HasSpell(50977))
             return false;
 
         // far teleport to another map
@@ -6583,6 +6584,7 @@ void Player::UpdateSkillsToMaxSkillsForLevel()
         uint32 pskill = itr->first;
         if (IsProfessionOrRidingSkill(pskill))
             continue;
+
         uint32 valueIndex = PLAYER_SKILL_VALUE_INDEX(itr->second.pos);
         uint32 data = GetUInt32Value(valueIndex);
         uint32 max = SKILL_MAX(data);
@@ -6593,8 +6595,12 @@ void Player::UpdateSkillsToMaxSkillsForLevel()
             if (itr->second.uState != SKILL_NEW)
                 itr->second.uState = SKILL_CHANGED;
         }
+
         if (pskill == SKILL_DEFENSE)
             UpdateDefenseBonusesMod();
+
+        UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_REACH_SKILL_LEVEL, pskill);
+        UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_LEARN_SKILL_LEVEL, pskill);
     }
 }
 
@@ -8286,7 +8292,6 @@ void Player::_ApplyItemBonuses(ItemTemplate const* proto, uint8 slot, bool apply
 
     if (CanUseAttackType(attType))
         _ApplyWeaponDamage(slot, proto, ssv, apply);
-
 
     // Druids get feral AP bonus from weapon dps (also use DPS from ScalingStatValue)
     if (getClass() == CLASS_DRUID)
@@ -12601,7 +12606,6 @@ Item* Player::StoreNewItem(ItemPosCountVec const& dest, uint32 item, bool update
         UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_OWN_ITEM, item, count);
         pItem = StoreItem(dest, pItem, update);
 
-
         if (allowedLooters.size() > 1 && pItem->GetTemplate()->GetMaxStackSize() == 1 && pItem->IsSoulBound())
         {
             pItem->SetSoulboundTradeable(allowedLooters);
@@ -15708,18 +15712,8 @@ void Player::AddQuest(Quest const* quest, Object* questGiver)
     SendQuestUpdate(quest_id);
 
     // check if Quest Tracker is enabled
-    if (CONF_GET_BOOL("Quests.EnableQuestTracker"))
-    {
-        // prepare Quest Tracker datas
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_QUEST_TRACK);
-        stmt->setUInt32(0, quest_id);
-        stmt->setUInt32(1, GetGUIDLow());
-        stmt->setString(2, GitRevision::GetHash());
-        stmt->setString(3, GitRevision::GetDate());
-
-        // add to Quest Tracker
-        CharacterDatabase.Execute(stmt);
-    }
+    if (CONF_GET_BOOL("QuestTracker.Enable"))
+        sQuestTracker->Add(quest_id, GetGUIDLow(), GitRevision::GetHash(), GitRevision::GetDate());
 
     // Xinef: area auras may change on quest accept!
     UpdateZoneDependentAuras(GetZoneId());
@@ -15747,16 +15741,8 @@ void Player::CompleteQuest(uint32 quest_id)
     }
 
     // check if Quest Tracker is enabled
-    if (CONF_GET_BOOL("Quests.EnableQuestTracker"))
-    {
-        // prepare Quest Tracker datas
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_QUEST_TRACK_COMPLETE_TIME);
-        stmt->setUInt32(0, quest_id);
-        stmt->setUInt32(1, GetGUIDLow());
-
-        // add to Quest Tracker
-        CharacterDatabase.Execute(stmt);
-    }
+    if (CONF_GET_BOOL("QuestTracker.Enable"))
+        sQuestTracker->UpdateCompleteTime(quest_id, GetGUIDLow());
 }
 
 void Player::IncompleteQuest(uint32 quest_id)
@@ -23011,7 +22997,6 @@ void Player::AddComboPoints(Unit* target, int8 count)
     else if (*comboPoints < 0)
         *comboPoints = 0;
 
-
     SendComboPoints();
 }
 
@@ -24501,7 +24486,6 @@ void Player::UpdateUnderwaterState(Map* m, float x, float y, float z)
         _lastLiquid = nullptr;
     }
 
-
     // All liquids type - check under water position
     if (liquid_status.type_flags & (MAP_LIQUID_TYPE_WATER | MAP_LIQUID_TYPE_OCEAN | MAP_LIQUID_TYPE_MAGMA | MAP_LIQUID_TYPE_SLIME))
     {
@@ -25330,7 +25314,6 @@ uint32 Player::GetPhaseMaskForSpawn() const
 
     if (!phase)
         phase = PHASEMASK_NORMAL;
-
 
     // some aura phases include 1 normal map in addition to phase itself
     uint32 n_phase = phase & ~PHASEMASK_NORMAL;

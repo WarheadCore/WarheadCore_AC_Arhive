@@ -159,7 +159,6 @@ public:
         bool isValid() const { return x >= 0 && x < CELL_NUMBER && y >= 0 && y < CELL_NUMBER;}
     };
 
-
     Node& getGridFor(float fx, float fy)
     {
         Cell c = Cell::ComputeCell(fx, fy);

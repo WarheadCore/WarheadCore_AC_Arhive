@@ -145,7 +145,6 @@ public:
     }
 };
 
-
 // Theirs
 // -34861 - Circle of Healing
 class spell_pri_circle_of_healing : public SpellScriptLoader

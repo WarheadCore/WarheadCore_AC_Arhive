@@ -32,7 +32,6 @@ struct PetSpell
     PetSpellType type;
 };
 
-
 class AsynchPetSummon
 {
 public:

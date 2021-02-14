@@ -1026,7 +1026,6 @@ public:
     }
 };
 
-
 // Theirs
 class spell_generic_quest_update_entry_SpellScript : public SpellScript
 {
@@ -2848,7 +2847,6 @@ public:
     }
 };
 
-
 enum DeathComesFromOnHigh
 {
     SPELL_FORGE_CREDIT                  = 51974,
@@ -3085,7 +3083,6 @@ public:
         return new spell_q9718_crow_transform_AuraScript();
     }
 };
-
 
 void AddSC_quest_spell_scripts()
 {

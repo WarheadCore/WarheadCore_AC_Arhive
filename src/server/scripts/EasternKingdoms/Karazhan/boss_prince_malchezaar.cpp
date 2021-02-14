@@ -83,7 +83,6 @@ struct InfernalPoint
     { -10935.7f, -1996.0f }
 };*/
 
-
 //---------Infernal code first
 class netherspite_infernal : public CreatureScript
 {
@@ -108,7 +107,6 @@ public:
         void Reset() { }
         void EnterCombat(Unit* /*who*/) { }
         void MoveInLineOfSight(Unit* /*who*/) { }
-
 
         void UpdateAI(uint32 diff)
         {
@@ -157,7 +155,6 @@ public:
         }
     };
 };
-
 
 class boss_malchezaar : public CreatureScript
 {
@@ -467,7 +464,6 @@ public:
 
         uint32 AxesTargetSwitchTimer;
         InstanceScript* instance;
-
 
         void Initialize()
         {

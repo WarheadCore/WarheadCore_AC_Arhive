@@ -379,7 +379,6 @@ public:
         void UpdateAI(uint32 diff)
         {
 
-
             if (!UpdateVictim())
             {
                 _events.Update(diff);

@@ -58,7 +58,6 @@ private:
     MYSQL_FIELD* _fields;
 };
 
-
 typedef std::shared_ptr<ResultSet> QueryResult;
 
 class WH_DATABASE_API PreparedResultSet
@@ -107,4 +106,3 @@ private:
 typedef std::shared_ptr<PreparedResultSet> PreparedQueryResult;
 
 #endif
-

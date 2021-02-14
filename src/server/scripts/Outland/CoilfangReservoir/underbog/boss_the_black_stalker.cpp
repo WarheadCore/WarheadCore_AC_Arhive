@@ -85,7 +85,6 @@ public:
                 events.ScheduleEvent(EVENT_SPELL_SPORES, 10s, 15s);
         }
 
-
         void JustSummoned(Creature* summon)
         {
             summons.Summon(summon);

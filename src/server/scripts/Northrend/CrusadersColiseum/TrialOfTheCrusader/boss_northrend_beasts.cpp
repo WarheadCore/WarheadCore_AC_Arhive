@@ -413,7 +413,6 @@ public:
     };
 };
 
-
 /***********
 ** ACIDMAW AND DREADSCALE
 ***********/
@@ -696,7 +695,6 @@ public:
         }
     };
 
-
     CreatureAI* GetAI(Creature* creature) const
     {
         return new boss_acidmawAI(creature);
@@ -727,7 +725,6 @@ public:
         return new boss_dreadscaleAI(pCreature);
     }
 };
-
 
 /***********
 ** ICEHOWL
@@ -1033,7 +1030,6 @@ public:
         }
     };
 };
-
 
 void AddSC_boss_northrend_beasts()
 {

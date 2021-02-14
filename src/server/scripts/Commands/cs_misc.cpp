@@ -1664,7 +1664,6 @@ public:
         return true;
     }
 
-
     static bool HandleMaxSkillCommand(ChatHandler* handler, char const* /*args*/)
     {
         Player* SelectedPlayer = handler->getSelectedPlayer();

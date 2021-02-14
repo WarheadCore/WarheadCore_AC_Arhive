@@ -72,7 +72,6 @@ public:
     void AttackStart(Unit* who);
     void UpdateAI(uint32 diff);
 
-
     static int Permissible(Creature const* /*creature*/) { return PERMIT_BASE_NO; }
 
 protected:

@@ -72,7 +72,6 @@ enum Events
     EVENT_INTRO_5               = 12
 };
 
-
 class boss_ragnaros : public CreatureScript
 {
 public:

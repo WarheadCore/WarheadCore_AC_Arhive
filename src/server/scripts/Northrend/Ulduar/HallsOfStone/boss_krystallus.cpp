@@ -180,7 +180,6 @@ public:
     };
 };
 
-
 class spell_krystallus_shatter : public SpellScriptLoader
 {
 public:

@@ -231,8 +231,6 @@ enum SpecializationQuests
     Q_MASTER_POTION         = 10897,
 };
 
-
-
 /*###
 # formulas to calculate unlearning cost
 ###*/
@@ -1281,7 +1279,6 @@ public:
         return true;
     }
 };
-
 
 void AddSC_npc_professions()
 {

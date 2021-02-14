@@ -763,7 +763,6 @@ public:
                     (go->GetUInt32Value(GAMEOBJECT_FACTION) == WintergraspFaction[TEAM_ALLIANCE] && passenger->getRaceMask() & RACEMASK_ALLIANCE));
         }
 
-
         Creature* IsValidVehicle(Creature* cVeh)
         {
             if (!cVeh->HasAura(SPELL_VEHICLE_TELEPORT))
@@ -1039,7 +1038,6 @@ public:
         return new spell_wg_reduce_damage_by_distance_SpellScript();
     }
 };
-
 
 ////////////////////////////////////////////////
 /////// ACHIEVEMENTs

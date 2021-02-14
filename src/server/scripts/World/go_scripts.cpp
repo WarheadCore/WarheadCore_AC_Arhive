@@ -432,7 +432,6 @@ public:
     }
 };
 
-
 // Theirs
 /*####
 ## go_brewfest_music

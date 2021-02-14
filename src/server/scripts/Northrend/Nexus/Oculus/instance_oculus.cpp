@@ -234,7 +234,6 @@ public:
             return 0;
         }
 
-
         std::string GetSaveData()
         {
             OUT_SAVE_INST_DATA;

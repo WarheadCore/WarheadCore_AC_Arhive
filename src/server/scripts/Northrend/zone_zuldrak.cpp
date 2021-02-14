@@ -42,7 +42,6 @@ const char*  AA_ITEM_NAME[24]  = {"Crystallized Hogsnot", "Ghoul Drool", "Trollb
                                   "Frozen Spider Ichor", "Prismatic Mojo", "Raptor Claw"
                                  };
 
-
 class npc_finklestein : public CreatureScript
 {
 public:
@@ -755,7 +754,6 @@ public:
     }
 };
 
-
 // Theirs
 /*####
 ## npc_released_offspring_harkoa
@@ -904,8 +902,6 @@ public:
         return true;
     }
 };
-
-
 
 enum StormCloud
 {

@@ -113,7 +113,6 @@ public:
         uint64 m_keepersgateGUID;
         uint64 m_keepersGossipGUID[4];
 
-
         void Initialize()
         {
             // Bosses
@@ -1002,7 +1001,6 @@ public:
             OUT_LOAD_INST_DATA_COMPLETE;
         }
 
-
         void Update(uint32 diff)
         {
             if (_events.Empty())
@@ -1121,7 +1119,6 @@ const Position vehiclePositions[30] =
     {119.8f, -102.37f, 409.803f, 0.0f},
     {119.8f, -112.37f, 409.803f, 0.0f},
 };
-
 
 void instance_ulduar::instance_ulduar_InstanceMapScript::SpawnLeviathanEncounterVehicles(uint8 mode)
 {

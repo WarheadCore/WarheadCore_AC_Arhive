@@ -734,7 +734,6 @@ void Creature::RegenerateHealth()
             addvalue = uint32(Spirit * 0.80 * HealthIncreaseRate);
     }
 
-
     // Apply modifiers (if any).
     AuraEffectList const& ModPowerRegenPCTAuras = GetAuraEffectsByType(SPELL_AURA_MOD_HEALTH_REGEN_PERCENT);
     for (AuraEffectList::const_iterator i = ModPowerRegenPCTAuras.begin(); i != ModPowerRegenPCTAuras.end(); ++i)
@@ -1305,7 +1304,6 @@ bool Creature::CreateFromProto(uint32 guidlow, uint32 Entry, uint32 vehId, const
     }
     else
         CreateVehicleKit(vehId, Entry);
-
 
     if (!UpdateEntry(Entry, data))
         return false;

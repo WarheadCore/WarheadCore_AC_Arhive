@@ -206,7 +206,6 @@ public:
 
         void AttackStart(Unit*) { }
 
-
         void JustDied(Unit* killer)
         {
             summons.clear();

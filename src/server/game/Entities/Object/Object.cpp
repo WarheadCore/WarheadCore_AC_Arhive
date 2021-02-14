@@ -1659,7 +1659,6 @@ bool WorldObject::CanDetectStealthOf(WorldObject const* obj, bool checkAlert) co
         if (checkAlert)
             visibilityRange += (visibilityRange * 0.08f) + 1.5f;
 
-
         Unit const* targetUnit = obj->ToUnit();
 
         // If checking for alert, and creature's visibility range is greater than aggro distance, No alert
@@ -2255,7 +2254,6 @@ void WorldObject::GetContactPoint(const WorldObject* obj, float& x, float& y, fl
         obj->UpdateAllowedPositionZ(x, y, z);
     }
 }
-
 
 void WorldObject::GetChargeContactPoint(const WorldObject* obj, float& x, float& y, float& z, float distance2d) const
 {

@@ -1276,7 +1276,6 @@ public:
                 }
             }
 
-
             targets.remove_if(Warhead::UnitAuraCheck(true, sSpellMgr->GetSpellIdForDifficulty(SPELL_UNBOUND_PLAGUE, GetCaster())));
             Warhead::Containers::RandomResizeList(targets, 1);
         }

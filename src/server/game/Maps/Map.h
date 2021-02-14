@@ -196,7 +196,6 @@ class GridMap
     uint8 _liquidWidth;
     uint8 _liquidHeight;
 
-
     bool loadAreaData(FILE* in, uint32 offset, uint32 size);
     bool loadHeightData(FILE* in, uint32 offset, uint32 size);
     bool loadLiquidData(FILE* in, uint32 offset, uint32 size);
@@ -664,7 +663,6 @@ private:
     ZoneDynamicInfoMap _zoneDynamicInfo;
     uint32 _defaultLight;
 };
-
 
 enum InstanceResetMethod
 {

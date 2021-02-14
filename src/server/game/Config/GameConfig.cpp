@@ -323,7 +323,6 @@ void GameConfig::LoadBoolConfigs(bool reload /*= false*/)
     AddOption<bool>("ActivateWeather", true);
     AddOption<bool>("AlwaysMaxSkillForLevel");
     AddOption<bool>("Chat.MuteFirstLogin");
-    AddOption<bool>("Quests.EnableQuestTracker");
     AddOption<bool>("Quests.IgnoreRaid");
     AddOption<bool>("Quests.IgnoreAutoAccept");
     AddOption<bool>("Quests.IgnoreAutoComplete");
@@ -412,6 +411,10 @@ void GameConfig::LoadBoolConfigs(bool reload /*= false*/)
     // Debug
     AddOption<bool>("Debug.Battleground");
     AddOption<bool>("Debug.Arena");
+
+    // Quest Tracker
+    AddOption<bool>("QuestTracker.Enable");
+    AddOption<bool>("QuestTracker.Queue.Enable");
 
     LOG_INFO("config", "> Loaded %u bool configs", static_cast<uint32>(_boolConfigs.size()));
 }
@@ -680,6 +683,9 @@ void GameConfig::LoadIntConfigs(bool reload /*= false*/)
     // Misc
     AddOption<int32>("MaxWhoListReturns", 49);
     AddOption<int32>("PlayerSaveInterval", Milliseconds(15min).count());
+
+    //Quest Tracker
+    AddOption<int32>("QuestTracker.Queue.Delay");
 
     // Check options can't be changed at worldserver.conf reload
     if (reload)

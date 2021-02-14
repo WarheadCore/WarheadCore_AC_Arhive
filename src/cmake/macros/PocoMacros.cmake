@@ -98,7 +98,6 @@ endif(WIN32)
 #    Example: POCO_MESSAGES( HDRS Foundation include/Poco/Foundation.mc )
 #
 
-
 macro(POCO_SOURCES_PLAT out name platform)
     source_group("${name}\\Source Files" FILES ${ARGN})
     list(APPEND ${out} ${ARGN})
@@ -140,7 +139,6 @@ macro(POCO_SOURCES_AUTO_PLAT out platform)
     endforeach()
 endmacro()
 
-
 macro(POCO_HEADERS_AUTO out)
     foreach( f ${ARGN})
 
@@ -164,7 +162,6 @@ macro(POCO_HEADERS out name)
     source_group("${name}\\Header Files" FILES ${ARGN})
     list(APPEND ${out} ${ARGN})
 endmacro()
-
 
 macro(POCO_MESSAGES out name)
     if (WIN32)
@@ -198,7 +195,6 @@ macro(POCO_MESSAGES out name)
 
     endif (WIN32)
 endmacro()
-
 
 #===============================================================================
 # Macros for Package generation

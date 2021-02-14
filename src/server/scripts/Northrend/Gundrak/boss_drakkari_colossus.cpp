@@ -314,7 +314,6 @@ public:
                     break;
             }
 
-
             DoMeleeAttackIfReady();
         }
     };

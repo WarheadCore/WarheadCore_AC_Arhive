@@ -198,7 +198,6 @@ public:
     }
 };
 
-
 void AddSC_boss_archavon()
 {
     new boss_archavon();

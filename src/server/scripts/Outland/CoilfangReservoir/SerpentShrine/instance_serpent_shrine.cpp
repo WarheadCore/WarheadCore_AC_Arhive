@@ -374,7 +374,6 @@ public:
             amplitude = 8 * IN_MILLISECONDS;
         }
 
-
         void HandlePeriodic(AuraEffect const*  /*aurEff*/)
         {
             PreventDefaultAction();

@@ -20,9 +20,9 @@
 
 ###################################################################################################
 #   CFBG
-#   
+#
 #   CFBG.Enable
-#       Description: Enable mixed alliance and horde in one battleground 
+#       Description: Enable mixed alliance and horde in one battleground
 #       Default: 0
 #
 #   CFBG.Include.Avg.Ilvl.Enable

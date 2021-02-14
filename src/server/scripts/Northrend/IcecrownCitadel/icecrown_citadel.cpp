@@ -2356,7 +2356,6 @@ public:
     }
 };
 
-
 // pussywizard below:
 
 class spell_icc_web_wrap : public SpellScriptLoader
@@ -3471,7 +3470,6 @@ public:
             for (uint8 i = 0; i < 30; ++i)
                 events.ScheduleEvent(EVENT_SUMMON_BROODLING, 10s + Milliseconds(i * 350));
         }
-
 
         void SummonBroodling()
         {

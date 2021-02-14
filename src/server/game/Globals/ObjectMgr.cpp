@@ -395,7 +395,6 @@ void ObjectMgr::LoadCreatureTemplates()
 
         uint32 entry = fields[0].GetUInt32();
 
-
         CreatureTemplate& creatureTemplate = _creatureTemplateStore[entry];
 
         creatureTemplate.Entry = entry;
@@ -2181,8 +2180,6 @@ uint32 ObjectMgr::GetPlayerAccountIdByPlayerName(const std::string& name) const
 
     return 0;
 }
-
-
 
 void ObjectMgr::LoadItemTemplates()
 {
@@ -5485,8 +5482,6 @@ void ObjectMgr::LoadQuestAreaTriggers()
     LOG_INFO("server.loading", ">> Loaded %u quest trigger points in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
     LOG_INFO("server.loading", "");
 }
-
-
 
 void ObjectMgr::LoadTavernAreaTriggers()
 {

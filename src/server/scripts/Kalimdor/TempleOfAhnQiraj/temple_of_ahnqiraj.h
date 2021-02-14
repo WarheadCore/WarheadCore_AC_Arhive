@@ -59,4 +59,3 @@ enum Creatures
     NPC_VEKNILASH           = 15275
 };
 #endif
-

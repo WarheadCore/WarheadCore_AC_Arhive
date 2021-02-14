@@ -199,7 +199,6 @@ public:
     {
         PrepareAuraScript(spell_warr_improved_spell_reflection_trigger_AuraScript);
 
-
         void HandleRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes  /*mode*/)
         {
             if (!IsExpired())
@@ -230,7 +229,6 @@ public:
         return new spell_warr_improved_spell_reflection_trigger_AuraScript();
     }
 };
-
 
 // Theirs
 // 12975 - Last Stand
@@ -464,7 +462,6 @@ public:
                 // Glyph of Execution bonus
                 if (AuraEffect* aurEff = caster->GetAuraEffect(SPELL_WARRIOR_GLYPH_OF_EXECUTION, EFFECT_0))
                     rageUsed += aurEff->GetAmount() * 10;
-
 
                 int32 bp = GetEffectValue() + int32(rageUsed * spellInfo->Effects[effIndex].DamageMultiplier + caster->GetTotalAttackPowerValue(BASE_ATTACK) * 0.2f);
                 caster->CastCustomSpell(target, SPELL_WARRIOR_EXECUTE, &bp, nullptr, nullptr, true, nullptr, nullptr, GetOriginalCaster()->GetGUID());

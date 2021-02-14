@@ -132,7 +132,6 @@ public:
             }
         }
 
-
         void OnCreatureCreate(Creature* creature)
         {
             switch(creature->GetEntry())

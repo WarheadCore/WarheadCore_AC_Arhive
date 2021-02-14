@@ -1631,7 +1631,6 @@ void SpellMgr::LoadSpellGroups()
         ++count;
     } while (result->NextRow());
 
-
     LOG_INFO("server.loading", ">> Loaded %u spell group definitions in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
     LOG_INFO("server.loading", "");
 }
@@ -1671,7 +1670,6 @@ void SpellMgr::LoadSpellGroupStackRules()
                 present = true;
                 break;
             }
-
 
         if (!present)
         {
@@ -7524,7 +7522,6 @@ void SpellMgr::LoadSpellInfoCorrections()
     factionEntry->ReputationFlags[0] = 0;
     factionEntry = const_cast<FactionEntry*>(sFactionStore.LookupEntry(1105));
     factionEntry->ReputationFlags[0] = 0;
-
 
     // Various factions, added 14, 16 to hostile mask
     FactionTemplateEntry* factionTemplateEntry = const_cast<FactionTemplateEntry*>(sFactionTemplateStore.LookupEntry(1978)); // Warsong Offensive

@@ -148,7 +148,6 @@ void HostileReference::addThreat(float modThreat)
     ThreatRefStatusChangeEvent event(UEV_THREAT_REF_THREAT_CHANGE, this, modThreat);
     fireStatusChanged(event);
 
-
     if (isValid() && modThreat >= 0.0f)
     {
         Unit* victimOwner = getTarget()->GetCharmerOrOwner();

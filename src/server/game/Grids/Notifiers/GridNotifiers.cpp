@@ -29,7 +29,6 @@
 
 using namespace Warhead;
 
-
 void VisibleNotifier::Visit(GameObjectMapType& m)
 {
     for (GameObjectMapType::iterator iter = m.begin(); iter != m.end(); ++iter)

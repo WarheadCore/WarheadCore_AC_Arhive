@@ -198,7 +198,6 @@ public:
         return true;
     }
 
-
     static bool HandleTaxiCheatCommand(ChatHandler* handler, char const* args)
     {
         std::string argStr = (char*)args;

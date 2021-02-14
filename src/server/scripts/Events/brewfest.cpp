@@ -314,7 +314,6 @@ public:
             }
         }
 
-
         void EnterCombat(Unit*  /*who*/)
         {
             if (me->GetEntry() == NPC_URSULA_DIREBREW)
@@ -368,7 +367,6 @@ public:
         }
     };
 };
-
 
 enum kegThrowers
 {
@@ -1145,7 +1143,6 @@ public:
         return new npc_brewfest_super_brew_triggerAI(creature);
     }
 };
-
 
 ///////////////////////////////////////
 ////// SPELLS

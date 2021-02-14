@@ -169,7 +169,6 @@ public:
                 events2.ScheduleEvent(EVENT_INTRO_2, 3s);
         }
 
-
         void KilledUnit(Unit* victim)
         {
             if (victim->GetTypeId() == TYPEID_PLAYER && roll_chance_i(50))
