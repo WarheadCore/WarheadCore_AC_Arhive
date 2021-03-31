@@ -44,6 +44,7 @@ EndScriptData */
 #include "GameConfig.h"
 #include "GameLocale.h"
 #include "StringConvert.h"
+#include "Tokenize.h"
 
 class reload_commandscript : public CommandScript
 {
@@ -427,10 +428,10 @@ public:
         {
             uint32 entry = Warhead::StringTo<uint32>(entryStr).value_or(0);
 
-            PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_SEL_CREATURE_TEMPLATE);
+            WorldDatabasePreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_SEL_CREATURE_TEMPLATE);
             stmt->setUInt32(0, entry);
-            PreparedQueryResult result = WorldDatabase.Query(stmt);
 
+            PreparedQueryResult result = WorldDatabase.Query(stmt);
             if (!result)
             {
                 handler->PSendSysMessage(LANG_COMMAND_CREATURETEMPLATE_NOTFOUND, entry);

@@ -159,8 +159,7 @@ public:
                 break;
         }
 
-        PreparedStatement* stmt = nullptr;
-        stmt = WorldDatabase.GetPreparedStatement(WORLD_SEL_DISABLES);
+        WorldDatabasePreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_SEL_DISABLES);
         stmt->setUInt32(0, entry);
         stmt->setUInt8(1, disableType);
         PreparedQueryResult result = WorldDatabase.Query(stmt);
@@ -274,8 +273,7 @@ public:
                 break;
         }
 
-        PreparedStatement* stmt = nullptr;
-        stmt = WorldDatabase.GetPreparedStatement(WORLD_SEL_DISABLES);
+        WorldDatabasePreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_SEL_DISABLES);
         stmt->setUInt32(0, entry);
         stmt->setUInt8(1, disableType);
         PreparedQueryResult result = WorldDatabase.Query(stmt);
