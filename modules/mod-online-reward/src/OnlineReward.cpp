@@ -213,7 +213,7 @@ void OnlineReward::RewardPerTime(Player* player)
 
 void OnlineReward::SaveRewardDB()
 {
-    SQLTransaction trans = CharacterDatabase.BeginTransaction();
+    CharacterDatabaseTransaction trans = CharacterDatabase.BeginTransaction();
 
     // Save data for exist history
     for (auto const& itr : _rewardHistoryDB)

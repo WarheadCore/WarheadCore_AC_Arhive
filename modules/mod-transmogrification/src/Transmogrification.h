@@ -37,7 +37,7 @@ public:
     void Init();
     void LoadConfig(bool reload);
 
-    void DeleteFakeFromDB(uint64 itemGUID, SQLTransaction* trans = nullptr);
+    void DeleteFakeFromDB(uint64 itemGUID, CharacterDatabaseTransaction* trans = nullptr);
     void MirrorImageDisplayItem(const Item* item, uint32& display);
     void SetVisibleItemSlot(Player* player, uint8 slot, Item* item);
     void LoadPlayerSets(uint64 pGUID);
@@ -84,7 +84,7 @@ private:
     std::string GetItemLink(Item* item, WorldSession* session) const;
     std::string GetItemLink(uint32 entry, WorldSession* session) const;
     void UpdateItem(Player* player, Item* item) const;
-    void DeleteFakeEntry(Player* player, uint8 slot, Item* itemTransmogrified, SQLTransaction* trans = nullptr);
+    void DeleteFakeEntry(Player* player, uint8 slot, Item* itemTransmogrified, CharacterDatabaseTransaction* trans = nullptr);
     void SetFakeEntry(Player* player, uint32 newEntry, uint8 slot, Item* itemTransmogrified);
     uint32 GetFakeEntry(uint64 itemGUID) const;
 

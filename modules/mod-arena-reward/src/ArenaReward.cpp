@@ -24,6 +24,7 @@
 #include "GameLocale.h"
 #include "ArenaTeamMgr.h"
 #include "ObjectAccessor.h"
+#include "Tokenize.h"
 #include "Chat.h"
 #include <tuple>
 #include <unordered_map>

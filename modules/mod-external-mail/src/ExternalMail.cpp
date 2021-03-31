@@ -141,7 +141,7 @@ void ExternalMail::SendMails()
 
     LOG_TRACE("module.em", "> External Mail: SendMails");
 
-    SQLTransaction trans = CharacterDatabase.BeginTransaction();
+    CharacterDatabaseTransaction trans = CharacterDatabase.BeginTransaction();
 
     for (auto const& itr : _store)
     {

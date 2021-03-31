@@ -131,7 +131,7 @@ class Transmogrification_Global : public GlobalScript
 public:
     Transmogrification_Global() : GlobalScript("Transmogrification_Global") { }
 
-    void OnItemDelFromDB(SQLTransaction& trans, uint32 itemGuid) override
+    void OnItemDelFromDB(CharacterDatabaseTransaction trans, uint32 itemGuid) override
     {
         sTransmog->DeleteFakeFromDB(itemGuid, &trans);
     }

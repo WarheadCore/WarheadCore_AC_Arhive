@@ -384,7 +384,7 @@ void Transmogrification::UpdateItem(Player* player, Item* item) const
     }
 }
 
-void Transmogrification::DeleteFakeEntry(Player* player, uint8 /*slot*/, Item* itemTransmogrified, SQLTransaction* trans)
+void Transmogrification::DeleteFakeEntry(Player* player, uint8 /*slot*/, Item* itemTransmogrified, CharacterDatabaseTransaction* trans)
 {
     DeleteFakeFromDB(itemTransmogrified->GetGUID(), trans);
     UpdateItem(player, itemTransmogrified);
@@ -785,7 +785,7 @@ void Transmogrification::Init()
     }
 }
 
-void Transmogrification::DeleteFakeFromDB(uint64 itemGUID, SQLTransaction* trans)
+void Transmogrification::DeleteFakeFromDB(uint64 itemGUID, CharacterDatabaseTransaction* trans)
 {
     if (_dataMapStore.find(itemGUID) != _dataMapStore.end())
     {
@@ -1056,7 +1056,7 @@ void Transmogrification::GossipRemoveAllTransmogrifications(Player* player)
     bool removed = false;
     auto session = player->GetSession();
 
-    SQLTransaction trans = CharacterDatabase.BeginTransaction();
+    CharacterDatabaseTransaction trans = CharacterDatabase.BeginTransaction();
 
     for (uint8 slot = EQUIPMENT_SLOT_START; slot < EQUIPMENT_SLOT_END; ++slot)
     {
