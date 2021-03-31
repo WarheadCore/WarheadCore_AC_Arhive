@@ -18,6 +18,7 @@
 #include "Common.h"
 #include "RealmList.h"
 #include "DatabaseEnv.h"
+#include "Log.h"
 
 RealmList::RealmList() : m_UpdateInterval(0), m_NextUpdateTime(time(nullptr)) { }
 
@@ -75,7 +76,7 @@ void RealmList::UpdateRealms(bool init)
 {
     LOG_DEBUG("network", "Updating Realm List...");
 
-    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_REALMLIST);
+    LoginDatabasePreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_REALMLIST);
     PreparedQueryResult result = LoginDatabase.Query(stmt);
 
     // Circle through results and add them to the realm map
