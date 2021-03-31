@@ -18,91 +18,68 @@
 #ifndef QUERYRESULT_H
 #define QUERYRESULT_H
 
-#include "Errors.h"
-#include "Field.h"
-
-#ifdef _WIN32
-#include <winsock2.h>
-#endif
-
-#include <mysql.h>
-
-#if !defined(MARIADB_VERSION_ID) && MYSQL_VERSION_ID >= 80001
-typedef bool my_bool;
-#endif
+#include "Define.h"
+#include "DatabaseEnvFwd.h"
+#include <vector>
 
 class WH_DATABASE_API ResultSet
 {
-public:
-    ResultSet(MYSQL_RES* result, MYSQL_FIELD* fields, uint64 rowCount, uint32 fieldCount);
-    ~ResultSet();
+    public:
+        ResultSet(MySQLResult* result, MySQLField* fields, uint64 rowCount, uint32 fieldCount);
+        ~ResultSet();
 
-    bool NextRow();
-    uint64 GetRowCount() const { return _rowCount; }
-    uint32 GetFieldCount() const { return _fieldCount; }
-    Field* Fetch() const { return _currentRow; }
-    const Field& operator [] (uint32 index) const
-    {
-        ASSERT(index < _fieldCount);
-        return _currentRow[index];
-    }
+        bool NextRow();
+        uint64 GetRowCount() const { return _rowCount; }
+        uint32 GetFieldCount() const { return _fieldCount; }
 
-protected:
-    uint64 _rowCount;
-    Field* _currentRow;
-    uint32 _fieldCount;
+        Field* Fetch() const { return _currentRow; }
+        Field const& operator[](std::size_t index) const;
 
-private:
-    void CleanUp();
-    MYSQL_RES* _result;
-    MYSQL_FIELD* _fields;
+    protected:
+        std::vector<QueryResultFieldMetadata> _fieldMetadata;
+        uint64 _rowCount;
+        Field* _currentRow;
+        uint32 _fieldCount;
+
+    private:
+        void CleanUp();
+        MySQLResult* _result;
+        MySQLField* _fields;
+
+        ResultSet(ResultSet const& right) = delete;
+        ResultSet& operator=(ResultSet const& right) = delete;
 };
-
-typedef std::shared_ptr<ResultSet> QueryResult;
 
 class WH_DATABASE_API PreparedResultSet
 {
-public:
-    PreparedResultSet(MYSQL_STMT* stmt, MYSQL_RES* result, uint64 rowCount, uint32 fieldCount);
-    ~PreparedResultSet();
+    public:
+        PreparedResultSet(MySQLStmt* stmt, MySQLResult* result, uint64 rowCount, uint32 fieldCount);
+        ~PreparedResultSet();
 
-    bool NextRow();
-    uint64 GetRowCount() const { return m_rowCount; }
-    uint32 GetFieldCount() const { return m_fieldCount; }
+        bool NextRow();
+        uint64 GetRowCount() const { return m_rowCount; }
+        uint32 GetFieldCount() const { return m_fieldCount; }
 
-    Field* Fetch() const
-    {
-        ASSERT(m_rowPosition < m_rowCount);
-        return m_rows[uint32(m_rowPosition)];
-    }
+        Field* Fetch() const;
+        Field const& operator[](std::size_t index) const;
 
-    const Field& operator [] (uint32 index) const
-    {
-        ASSERT(m_rowPosition < m_rowCount);
-        ASSERT(index < m_fieldCount);
-        return m_rows[uint32(m_rowPosition)][index];
-    }
+    protected:
+        std::vector<QueryResultFieldMetadata> m_fieldMetadata;
+        std::vector<Field> m_rows;
+        uint64 m_rowCount;
+        uint64 m_rowPosition;
+        uint32 m_fieldCount;
 
-protected:
-    std::vector<Field*> m_rows;
-    uint64 m_rowCount;
-    uint64 m_rowPosition;
-    uint32 m_fieldCount;
+    private:
+        MySQLBind* m_rBind;
+        MySQLStmt* m_stmt;
+        MySQLResult* m_metadataResult;    ///< Field metadata, returned by mysql_stmt_result_metadata
 
-private:
-    MYSQL_BIND* m_rBind;
-    MYSQL_STMT* m_stmt;
-    MYSQL_RES* m_res;
+        void CleanUp();
+        bool _NextRow();
 
-    my_bool* m_isNull;
-    unsigned long* m_length;
-
-    void FreeBindBuffer();
-    void CleanUp();
-    bool _NextRow();
-
+        PreparedResultSet(PreparedResultSet const& right) = delete;
+        PreparedResultSet& operator=(PreparedResultSet const& right) = delete;
 };
-
-typedef std::shared_ptr<PreparedResultSet> PreparedQueryResult;
 
 #endif

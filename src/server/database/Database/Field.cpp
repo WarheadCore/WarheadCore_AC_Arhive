@@ -16,48 +16,36 @@
  */
 
 #include "Field.h"
+#include "Errors.h"
+#include "Log.h"
+#include "MySQLHacks.h"
 
 Field::Field()
 {
     data.value = nullptr;
-    data.type = MYSQL_TYPE_NULL;
     data.length = 0;
     data.raw = false;
+    meta = nullptr;
 }
 
-Field::~Field()
-{
-    CleanUp();
-}
-
-void Field::CleanUp()
-{
-    delete[]((char*)data.value);
-    data.value = nullptr;
-}
-
-bool Field::GetBool() const // Wrapper, actually gets integer
-{
-    return GetUInt8() == 1 ? true : false;
-}
+Field::~Field() = default;
 
 uint8 Field::GetUInt8() const
 {
     if (!data.value)
         return 0;
 
-#ifdef WARHEAD_DEBUG
-    if (!IsType(MYSQL_TYPE_TINY))
+#ifdef WARHEAD_STRICT_DATABASE_TYPE_CHECKS
+    if (!IsType(DatabaseFieldTypes::Int8))
     {
-        LOG_INFO("sql.driver", "Warning: GetUInt8() on non-tinyint field. Using type: %s.", FieldTypeToString(data.type));
+        LogWrongType(__FUNCTION__);
         return 0;
     }
 #endif
 
     if (data.raw)
-        return *reinterpret_cast<uint8*>(data.value);
-
-    return static_cast<uint8>(atol((char*)data.value));
+        return *reinterpret_cast<uint8 const*>(data.value);
+    return static_cast<uint8>(strtoul(data.value, nullptr, 10));
 }
 
 int8 Field::GetInt8() const
@@ -65,18 +53,17 @@ int8 Field::GetInt8() const
     if (!data.value)
         return 0;
 
-#ifdef WARHEAD_DEBUG
-    if (!IsType(MYSQL_TYPE_TINY))
+#ifdef WARHEAD_STRICT_DATABASE_TYPE_CHECKS
+    if (!IsType(DatabaseFieldTypes::Int8))
     {
-        LOG_INFO("sql.driver", "Warning: GetInt8() on non-tinyint field. Using type: %s.", FieldTypeToString(data.type));
+        LogWrongType(__FUNCTION__);
         return 0;
     }
 #endif
 
     if (data.raw)
-        return *reinterpret_cast<int8*>(data.value);
-
-    return static_cast<int8>(atol((char*)data.value));
+        return *reinterpret_cast<int8 const*>(data.value);
+    return static_cast<int8>(strtol(data.value, nullptr, 10));
 }
 
 uint16 Field::GetUInt16() const
@@ -84,18 +71,17 @@ uint16 Field::GetUInt16() const
     if (!data.value)
         return 0;
 
-#ifdef WARHEAD_DEBUG
-    if (!IsType(MYSQL_TYPE_SHORT) && !IsType(MYSQL_TYPE_YEAR))
+#ifdef WARHEAD_STRICT_DATABASE_TYPE_CHECKS
+    if (!IsType(DatabaseFieldTypes::Int16))
     {
-        LOG_INFO("sql.driver", "Warning: GetUInt16() on non-smallint field. Using type: %s.", FieldTypeToString(data.type));
+        LogWrongType(__FUNCTION__);
         return 0;
     }
 #endif
 
     if (data.raw)
-        return *reinterpret_cast<uint16*>(data.value);
-
-    return static_cast<uint16>(atol((char*)data.value));
+        return *reinterpret_cast<uint16 const*>(data.value);
+    return static_cast<uint16>(strtoul(data.value, nullptr, 10));
 }
 
 int16 Field::GetInt16() const
@@ -103,18 +89,17 @@ int16 Field::GetInt16() const
     if (!data.value)
         return 0;
 
-#ifdef WARHEAD_DEBUG
-    if (!IsType(MYSQL_TYPE_SHORT) && !IsType(MYSQL_TYPE_YEAR))
+#ifdef WARHEAD_STRICT_DATABASE_TYPE_CHECKS
+    if (!IsType(DatabaseFieldTypes::Int16))
     {
-        LOG_INFO("sql.driver", "Warning: GetInt16() on non-smallint field. Using type: %s.", FieldTypeToString(data.type));
+        LogWrongType(__FUNCTION__);
         return 0;
     }
 #endif
 
     if (data.raw)
-        return *reinterpret_cast<int16*>(data.value);
-
-    return static_cast<int16>(atol((char*)data.value));
+        return *reinterpret_cast<int16 const*>(data.value);
+    return static_cast<int16>(strtol(data.value, nullptr, 10));
 }
 
 uint32 Field::GetUInt32() const
@@ -122,18 +107,17 @@ uint32 Field::GetUInt32() const
     if (!data.value)
         return 0;
 
-#ifdef WARHEAD_DEBUG
-    if (!IsType(MYSQL_TYPE_INT24) && !IsType(MYSQL_TYPE_LONG))
+#ifdef WARHEAD_STRICT_DATABASE_TYPE_CHECKS
+    if (!IsType(DatabaseFieldTypes::Int32))
     {
-        LOG_INFO("sql.driver", "Warning: GetUInt32() on non-(medium)int field. Using type: %s.", FieldTypeToString(data.type));
+        LogWrongType(__FUNCTION__);
         return 0;
     }
 #endif
 
     if (data.raw)
-        return *reinterpret_cast<uint32*>(data.value);
-
-    return static_cast<uint32>(atol((char*)data.value));
+        return *reinterpret_cast<uint32 const*>(data.value);
+    return static_cast<uint32>(strtoul(data.value, nullptr, 10));
 }
 
 int32 Field::GetInt32() const
@@ -141,18 +125,17 @@ int32 Field::GetInt32() const
     if (!data.value)
         return 0;
 
-#ifdef WARHEAD_DEBUG
-    if (!IsType(MYSQL_TYPE_INT24) && !IsType(MYSQL_TYPE_LONG))
+#ifdef WARHEAD_STRICT_DATABASE_TYPE_CHECKS
+    if (!IsType(DatabaseFieldTypes::Int32))
     {
-        LOG_INFO("sql.driver", "Warning: GetInt32() on non-(medium)int field. Using type: %s.", FieldTypeToString(data.type));
+        LogWrongType(__FUNCTION__);
         return 0;
     }
 #endif
 
     if (data.raw)
-        return *reinterpret_cast<int32*>(data.value);
-
-    return static_cast<int32>(atol((char*)data.value));
+        return *reinterpret_cast<int32 const*>(data.value);
+    return static_cast<int32>(strtol(data.value, nullptr, 10));
 }
 
 uint64 Field::GetUInt64() const
@@ -160,18 +143,17 @@ uint64 Field::GetUInt64() const
     if (!data.value)
         return 0;
 
-#ifdef WARHEAD_DEBUG
-    if (!IsType(MYSQL_TYPE_LONGLONG) && !IsType(MYSQL_TYPE_BIT))
+#ifdef WARHEAD_STRICT_DATABASE_TYPE_CHECKS
+    if (!IsType(DatabaseFieldTypes::Int64))
     {
-        LOG_INFO("sql.driver", "Warning: GetUInt64() on non-bigint field. Using type: %s.", FieldTypeToString(data.type));
+        LogWrongType(__FUNCTION__);
         return 0;
     }
 #endif
 
     if (data.raw)
-        return *reinterpret_cast<uint64*>(data.value);
-
-    return static_cast<uint64>(atol((char*)data.value));
+        return *reinterpret_cast<uint64 const*>(data.value);
+    return static_cast<uint64>(strtoull(data.value, nullptr, 10));
 }
 
 int64 Field::GetInt64() const
@@ -179,18 +161,17 @@ int64 Field::GetInt64() const
     if (!data.value)
         return 0;
 
-#ifdef WARHEAD_DEBUG
-    if (!IsType(MYSQL_TYPE_LONGLONG) && !IsType(MYSQL_TYPE_BIT))
+#ifdef WARHEAD_STRICT_DATABASE_TYPE_CHECKS
+    if (!IsType(DatabaseFieldTypes::Int64))
     {
-        LOG_INFO("sql.driver", "Warning: GetInt64() on non-bigint field. Using type: %s.", FieldTypeToString(data.type));
+        LogWrongType(__FUNCTION__);
         return 0;
     }
 #endif
 
     if (data.raw)
-        return *reinterpret_cast<int64*>(data.value);
-
-    return static_cast<int64>(strtol((char*)data.value, nullptr, 10));
+        return *reinterpret_cast<int64 const*>(data.value);
+    return static_cast<int64>(strtoll(data.value, nullptr, 10));
 }
 
 float Field::GetFloat() const
@@ -198,17 +179,17 @@ float Field::GetFloat() const
     if (!data.value)
         return 0.0f;
 
-#ifdef WARHEAD_DEBUG
-    if (!IsType(MYSQL_TYPE_FLOAT))
+#ifdef WARHEAD_STRICT_DATABASE_TYPE_CHECKS
+    if (!IsType(DatabaseFieldTypes::Float))
     {
-        LOG_INFO("sql.driver", "Warning: GetFloat() on non-float field. Using type: %s.", FieldTypeToString(data.type));
+        LogWrongType(__FUNCTION__);
         return 0.0f;
     }
 #endif
 
     if (data.raw)
-        return *reinterpret_cast<float*>(data.value);
-    return static_cast<float>(atof((char*)data.value));
+        return *reinterpret_cast<float const*>(data.value);
+    return static_cast<float>(atof(data.value));
 }
 
 double Field::GetDouble() const
@@ -216,17 +197,17 @@ double Field::GetDouble() const
     if (!data.value)
         return 0.0f;
 
-#ifdef WARHEAD_DEBUG
-    if (!IsType(MYSQL_TYPE_DOUBLE))
+#ifdef WARHEAD_STRICT_DATABASE_TYPE_CHECKS
+    if (!IsType(DatabaseFieldTypes::Double) && !IsType(DatabaseFieldTypes::Decimal))
     {
-        LOG_INFO("sql.driver", "Warning: GetDouble() on non-double field. Using type: %s.", FieldTypeToString(data.type));
+        LogWrongType(__FUNCTION__);
         return 0.0f;
     }
 #endif
 
-    if (data.raw)
-        return *reinterpret_cast<double*>(data.value);
-    return static_cast<double>(atof((char*)data.value));
+    if (data.raw && !IsType(DatabaseFieldTypes::Decimal))
+        return *reinterpret_cast<double const*>(data.value);
+    return static_cast<double>(atof(data.value));
 }
 
 char const* Field::GetCString() const
@@ -234,10 +215,10 @@ char const* Field::GetCString() const
     if (!data.value)
         return nullptr;
 
-#ifdef WARHEAD_DEBUG
-    if (IsNumeric())
+#ifdef WARHEAD_STRICT_DATABASE_TYPE_CHECKS
+    if (IsNumeric() && data.raw)
     {
-        LOG_INFO("sql.driver", "Error: GetCString() on numeric field. Using type: %s.", FieldTypeToString(data.type));
+        LogWrongType(__FUNCTION__);
         return nullptr;
     }
 #endif
@@ -249,17 +230,11 @@ std::string Field::GetString() const
     if (!data.value)
         return "";
 
-    if (data.raw)
-    {
-        char const* string = GetCString();
+    char const* string = GetCString();
+    if (!string)
+        return "";
 
-        if (!string)
-            string = "";
-
-        return std::string(string, data.length);
-    }
-
-    return std::string((char*)data.value);
+    return std::string(string, data.length);
 }
 
 std::string_view Field::GetStringView() const
@@ -274,171 +249,61 @@ std::string_view Field::GetStringView() const
     return { string, data.length };
 }
 
-bool Field::IsNull() const
+std::vector<uint8> Field::GetBinary() const
 {
-    return data.value == nullptr;
+    std::vector<uint8> result;
+    if (!data.value || !data.length)
+        return result;
+
+    result.resize(data.length);
+    memcpy(result.data(), data.value, data.length);
+    return result;
 }
 
-void Field::SetByteValue(const void* newValue, const size_t newSize, enum_field_types newType, uint32 length)
+void Field::GetBinarySizeChecked(uint8* buf, size_t length) const
 {
-    if (data.value)
-        CleanUp();
+    ASSERT(data.value && (data.length == length), "Expected %zu-byte binary blob, got %sdata (%u bytes) instead", length, data.value ? "" : "no ", data.length);
+    memcpy(buf, data.value, length);
+}
 
+void Field::SetByteValue(char const* newValue, uint32 length)
+{
     // This value stores raw bytes that have to be explicitly cast later
-    if (newValue)
-    {
-        data.value = new char[newSize];
-        memcpy(data.value, newValue, newSize);
-        data.length = length;
-    }
-
-    data.type = newType;
+    data.value = newValue;
+    data.length = length;
     data.raw = true;
 }
 
-void Field::SetStructuredValue(char* newValue, enum_field_types newType)
+void Field::SetStructuredValue(char const* newValue, uint32 length)
 {
-    if (data.value)
-        CleanUp();
-
     // This value stores somewhat structured data that needs function style casting
-    if (newValue)
-    {
-        size_t size = strlen(newValue);
-        data.value = new char [size + 1];
-        strcpy((char*)data.value, newValue);
-        data.length = size;
-    }
-
-    data.type = newType;
+    data.value = newValue;
+    data.length = length;
     data.raw = false;
 }
 
-/*static*/ size_t Field::SizeForType(MYSQL_FIELD* field)
+bool Field::IsType(DatabaseFieldTypes type) const
 {
-    switch (field->type)
-    {
-        case MYSQL_TYPE_NULL:
-            return 0;
-        case MYSQL_TYPE_TINY:
-            return 1;
-        case MYSQL_TYPE_YEAR:
-        case MYSQL_TYPE_SHORT:
-            return 2;
-        case MYSQL_TYPE_INT24:
-        case MYSQL_TYPE_LONG:
-        case MYSQL_TYPE_FLOAT:
-            return 4;
-        case MYSQL_TYPE_DOUBLE:
-        case MYSQL_TYPE_LONGLONG:
-        case MYSQL_TYPE_BIT:
-            return 8;
-
-        case MYSQL_TYPE_TIMESTAMP:
-        case MYSQL_TYPE_DATE:
-        case MYSQL_TYPE_TIME:
-        case MYSQL_TYPE_DATETIME:
-            return sizeof(MYSQL_TIME);
-
-        case MYSQL_TYPE_TINY_BLOB:
-        case MYSQL_TYPE_MEDIUM_BLOB:
-        case MYSQL_TYPE_LONG_BLOB:
-        case MYSQL_TYPE_BLOB:
-        case MYSQL_TYPE_STRING:
-        case MYSQL_TYPE_VAR_STRING:
-            return field->max_length + 1;
-
-        case MYSQL_TYPE_DECIMAL:
-        case MYSQL_TYPE_NEWDECIMAL:
-            return 64;
-
-        case MYSQL_TYPE_GEOMETRY:
-        /*
-        Following types are not sent over the wire:
-        MYSQL_TYPE_ENUM:
-        MYSQL_TYPE_SET:
-        */
-        default:
-            LOG_INFO("sql.driver", "SQL::SizeForType(): invalid field type %u", uint32(field->type));
-            return 0;
-    }
-}
-
-bool Field::IsType(enum_field_types type) const
-{
-    return data.type == type;
+    return meta->Type == type;
 }
 
 bool Field::IsNumeric() const
 {
-    return (data.type == MYSQL_TYPE_TINY ||
-            data.type == MYSQL_TYPE_SHORT ||
-            data.type == MYSQL_TYPE_INT24 ||
-            data.type == MYSQL_TYPE_LONG ||
-            data.type == MYSQL_TYPE_FLOAT ||
-            data.type == MYSQL_TYPE_DOUBLE ||
-            data.type == MYSQL_TYPE_LONGLONG);
+    return (meta->Type == DatabaseFieldTypes::Int8 ||
+        meta->Type == DatabaseFieldTypes::Int16 ||
+        meta->Type == DatabaseFieldTypes::Int32 ||
+        meta->Type == DatabaseFieldTypes::Int64 ||
+        meta->Type == DatabaseFieldTypes::Float ||
+        meta->Type == DatabaseFieldTypes::Double);
 }
 
-#ifdef WARHEAD_DEBUG
-/*static*/ char const* Field::FieldTypeToString(enum_field_types type)
+void Field::LogWrongType(char const* getter) const
 {
-    switch (type)
-    {
-        case MYSQL_TYPE_BIT:
-            return "BIT";
-        case MYSQL_TYPE_BLOB:
-            return "BLOB";
-        case MYSQL_TYPE_DATE:
-            return "DATE";
-        case MYSQL_TYPE_DATETIME:
-            return "DATETIME";
-        case MYSQL_TYPE_NEWDECIMAL:
-            return "NEWDECIMAL";
-        case MYSQL_TYPE_DECIMAL:
-            return "DECIMAL";
-        case MYSQL_TYPE_DOUBLE:
-            return "DOUBLE";
-        case MYSQL_TYPE_ENUM:
-            return "ENUM";
-        case MYSQL_TYPE_FLOAT:
-            return "FLOAT";
-        case MYSQL_TYPE_GEOMETRY:
-            return "GEOMETRY";
-        case MYSQL_TYPE_INT24:
-            return "INT24";
-        case MYSQL_TYPE_LONG:
-            return "LONG";
-        case MYSQL_TYPE_LONGLONG:
-            return "LONGLONG";
-        case MYSQL_TYPE_LONG_BLOB:
-            return "LONG_BLOB";
-        case MYSQL_TYPE_MEDIUM_BLOB:
-            return "MEDIUM_BLOB";
-        case MYSQL_TYPE_NEWDATE:
-            return "NEWDATE";
-        case MYSQL_TYPE_NULL:
-            return "NULL";
-        case MYSQL_TYPE_SET:
-            return "SET";
-        case MYSQL_TYPE_SHORT:
-            return "SHORT";
-        case MYSQL_TYPE_STRING:
-            return "STRING";
-        case MYSQL_TYPE_TIME:
-            return "TIME";
-        case MYSQL_TYPE_TIMESTAMP:
-            return "TIMESTAMP";
-        case MYSQL_TYPE_TINY:
-            return "TINY";
-        case MYSQL_TYPE_TINY_BLOB:
-            return "TINY_BLOB";
-        case MYSQL_TYPE_VAR_STRING:
-            return "VAR_STRING";
-        case MYSQL_TYPE_YEAR:
-            return "YEAR";
-        default:
-            return "-Unknown-";
-    }
+    LOG_WARN("sql.sql", "Warning: %s on %s field %s.%s (%s.%s) at index %u.",
+        getter, meta->TypeName, meta->TableAlias, meta->Alias, meta->TableName, meta->Name, meta->Index);
 }
-#endif
+
+void Field::SetMetadata(QueryResultFieldMetadata const* fieldMeta)
+{
+    meta = fieldMeta;
+}

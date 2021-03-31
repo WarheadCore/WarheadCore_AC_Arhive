@@ -18,19 +18,14 @@
 #ifndef _SQLOPERATION_H
 #define _SQLOPERATION_H
 
-#include <ace/Method_Request.h>
-#include <ace/Activation_Queue.h>
-
-#include "QueryResult.h"
-
-//- Forward declare (don't include header to prevent circular includes)
-class PreparedStatement;
+#include "Define.h"
+#include "DatabaseEnvFwd.h"
 
 //- Union that holds element data
 union SQLElementUnion
 {
-    PreparedStatement* stmt;
-    const char* query;
+    PreparedStatementBase* stmt;
+    char const* query;
 };
 
 //- Type specifier of our element data
@@ -47,28 +42,27 @@ struct SQLElementData
     SQLElementDataType type;
 };
 
-//- For ambigious resultsets
-union SQLResultSetUnion
-{
-    PreparedResultSet* presult;
-    ResultSet* qresult;
-};
-
 class MySQLConnection;
 
-class WH_DATABASE_API SQLOperation : public ACE_Method_Request
+class WH_DATABASE_API SQLOperation
 {
-public:
-    SQLOperation(): m_conn(NULL) { }
-    virtual int call()
-    {
-        Execute();
-        return 0;
-    }
-    virtual bool Execute() = 0;
-    virtual void SetConnection(MySQLConnection* con) { m_conn = con; }
+    public:
+        SQLOperation(): m_conn(nullptr) { }
+        virtual ~SQLOperation() { }
 
-    MySQLConnection* m_conn;
+        virtual int call()
+        {
+            Execute();
+            return 0;
+        }
+        virtual bool Execute() = 0;
+        virtual void SetConnection(MySQLConnection* con) { m_conn = con; }
+
+        MySQLConnection* m_conn;
+
+    private:
+        SQLOperation(SQLOperation const& right) = delete;
+        SQLOperation& operator=(SQLOperation const& right) = delete;
 };
 
 #endif

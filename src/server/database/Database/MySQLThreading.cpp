@@ -15,16 +15,20 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _MYSQLTHREADING_H
-#define _MYSQLTHREADING_H
+#include "MySQLThreading.h"
+#include "MySQLWorkaround.h"
 
-#include "Define.h"
-
-namespace MySQL
+void MySQL::Library_Init()
 {
-    WH_DATABASE_API void Library_Init();
-    WH_DATABASE_API void Library_End();
-    WH_DATABASE_API uint32 GetLibraryVersion();
+    mysql_library_init(-1, nullptr, nullptr);
 }
 
-#endif
+void MySQL::Library_End()
+{
+    mysql_library_end();
+}
+
+uint32 MySQL::GetLibraryVersion()
+{
+    return MYSQL_VERSION_ID;
+}

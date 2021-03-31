@@ -15,16 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _MYSQLTHREADING_H
-#define _MYSQLTHREADING_H
-
-#include "Define.h"
-
-namespace MySQL
-{
-    WH_DATABASE_API void Library_Init();
-    WH_DATABASE_API void Library_End();
-    WH_DATABASE_API uint32 GetLibraryVersion();
-}
-
+#ifdef _WIN32 // hack for broken mysql.h not including the correct winsock header for SOCKET definition, fixed in 5.7
+#include <winsock2.h>
 #endif
+#include <mysql.h>

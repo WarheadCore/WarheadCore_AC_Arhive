@@ -15,73 +15,133 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef WH_FIELD_H
-#define WH_FIELD_H
+#ifndef _FIELD_H
+#define _FIELD_H
 
-#include "Common.h"
-#include "Log.h"
+#include "Define.h"
+#include "DatabaseEnvFwd.h"
+#include <array>
+#include <string>
 #include <string_view>
-#include <mysql.h>
+#include <vector>
 
+enum class DatabaseFieldTypes : uint8
+{
+    Null,
+    Int8,
+    Int16,
+    Int32,
+    Int64,
+    Float,
+    Double,
+    Decimal,
+    Date,
+    Binary
+};
+
+struct QueryResultFieldMetadata
+{
+    char const* TableName = nullptr;
+    char const* TableAlias = nullptr;
+    char const* Name = nullptr;
+    char const* Alias = nullptr;
+    char const* TypeName = nullptr;
+    uint32 Index = 0;
+    DatabaseFieldTypes Type = DatabaseFieldTypes::Null;
+};
+
+/**
+    @class Field
+
+    @brief Class used to access individual fields of database query result
+
+    Guideline on field type matching:
+
+    |   MySQL type           |  method to use                         |
+    |------------------------|----------------------------------------|
+    | TINYINT                | GetBool, GetInt8, GetUInt8             |
+    | SMALLINT               | GetInt16, GetUInt16                    |
+    | MEDIUMINT, INT         | GetInt32, GetUInt32                    |
+    | BIGINT                 | GetInt64, GetUInt64                    |
+    | FLOAT                  | GetFloat                               |
+    | DOUBLE, DECIMAL        | GetDouble                              |
+    | CHAR, VARCHAR,         | GetCString, GetString                  |
+    | TINYTEXT, MEDIUMTEXT,  | GetCString, GetString                  |
+    | TEXT, LONGTEXT         | GetCString, GetString                  |
+    | TINYBLOB, MEDIUMBLOB,  | GetBinary, GetString                   |
+    | BLOB, LONGBLOB         | GetBinary, GetString                   |
+    | BINARY, VARBINARY      | GetBinary                              |
+
+    Return types of aggregate functions:
+
+    | Function |       Type        |
+    |----------|-------------------|
+    | MIN, MAX | Same as the field |
+    | SUM, AVG | DECIMAL           |
+    | COUNT    | BIGINT            |
+*/
 class WH_DATABASE_API Field
 {
     friend class ResultSet;
     friend class PreparedResultSet;
 
-public:
+    public:
+        Field();
+        ~Field();
 
-    bool GetBool() const;
-    uint8 GetUInt8() const;
-    int8 GetInt8() const;
-    uint16 GetUInt16() const;
-    int16 GetInt16() const;
-    uint32 GetUInt32() const;
-    int32 GetInt32() const;
-    uint64 GetUInt64() const;
-    int64 GetInt64() const;
-    float GetFloat() const;
-    double GetDouble() const;
-    char const* GetCString() const;
-    std::string GetString() const;
-    std::string_view GetStringView() const;
-    bool IsNull() const;
+        bool GetBool() const // Wrapper, actually gets integer
+        {
+            return GetUInt8() == 1 ? true : false;
+        }
 
-protected:
-    Field();
-    ~Field();
+        uint8 GetUInt8() const;
+        int8 GetInt8() const;
+        uint16 GetUInt16() const;
+        int16 GetInt16() const;
+        uint32 GetUInt32() const;
+        int32 GetInt32() const;
+        uint64 GetUInt64() const;
+        int64 GetInt64() const;
+        float GetFloat() const;
+        double GetDouble() const;
+        char const* GetCString() const;
+        std::string GetString() const;
+        std::string_view GetStringView() const;
+        std::vector<uint8> GetBinary() const;
+        template <size_t S>
+        std::array<uint8, S> GetBinary() const
+        {
+            std::array<uint8, S> buf;
+            GetBinarySizeChecked(buf.data(), S);
+            return buf;
+        }
 
-#if defined(__GNUC__)
-#pragma pack(1)
-#else
-#pragma pack(push, 1)
-#endif
-    struct
-    {
-        uint32 length;          // Length (prepared strings only)
-        void* value;            // Actual data in memory
-        enum_field_types type;  // Field type
-        bool raw;               // Raw bytes? (Prepared statement or ad hoc)
-    } data;
-#if defined(__GNUC__)
-#pragma pack()
-#else
-#pragma pack(pop)
-#endif
+        bool IsNull() const
+        {
+            return data.value == nullptr;
+        }
 
-    void SetByteValue(void const* newValue, size_t const newSize, enum_field_types newType, uint32 length);
-    void SetStructuredValue(char* newValue, enum_field_types newType);
+    protected:
+        struct
+        {
+            char const* value;          // Actual data in memory
+            uint32 length;              // Length
+            bool raw;                   // Raw bytes? (Prepared statement or ad hoc)
+         } data;
 
-    void CleanUp();
+        void SetByteValue(char const* newValue, uint32 length);
+        void SetStructuredValue(char const* newValue, uint32 length);
 
-    static size_t SizeForType(MYSQL_FIELD* field);
-    bool IsType(enum_field_types type) const;
-    bool IsNumeric() const;
+        bool IsType(DatabaseFieldTypes type) const;
 
-private:
+        bool IsNumeric() const;
 
-#ifdef WARHEAD_DEBUG
-    static char const* FieldTypeToString(enum_field_types type);
-#endif
+    private:
+        QueryResultFieldMetadata const* meta;
+        void LogWrongType(char const* getter) const;
+        void SetMetadata(QueryResultFieldMetadata const* fieldMeta);
+
+        void GetBinarySizeChecked(uint8* buf, size_t size) const;
 };
 
 #endif

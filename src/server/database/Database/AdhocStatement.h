@@ -18,25 +18,24 @@
 #ifndef _ADHOCSTATEMENT_H
 #define _ADHOCSTATEMENT_H
 
-#include <ace/Future.h>
+#include "Define.h"
+#include "DatabaseEnvFwd.h"
 #include "SQLOperation.h"
-
-typedef ACE_Future<QueryResult> QueryResultFuture;
 
 /*! Raw, ad-hoc query. */
 class WH_DATABASE_API BasicStatementTask : public SQLOperation
 {
-public:
-    BasicStatementTask(const char* sql);
-    BasicStatementTask(const char* sql, QueryResultFuture result);
-    ~BasicStatementTask();
+    public:
+        BasicStatementTask(char const* sql, bool async = false);
+        ~BasicStatementTask();
 
-    bool Execute();
+        bool Execute() override;
+        QueryResultFuture GetFuture() const { return m_result->get_future(); }
 
-private:
-    const char* m_sql;      //- Raw query to be executed
-    bool m_has_result;
-    QueryResultFuture m_result;
+    private:
+        char const* m_sql;      //- Raw query to be executed
+        bool m_has_result;
+        QueryResultPromise* m_result;
 };
 
 #endif

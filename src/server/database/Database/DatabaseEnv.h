@@ -15,35 +15,27 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _DATABASEENV_H_
-#define _DATABASEENV_H_
+#ifndef DATABASEENV_H
+#define DATABASEENV_H
 
-#include "Common.h"
-#include "Errors.h"
-#include "Log.h"
+#include "Define.h"
+#include "DatabaseWorkerPool.h"
+
+#include "Implementation/LoginDatabase.h"
+#include "Implementation/CharacterDatabase.h"
+#include "Implementation/WorldDatabase.h"
 
 #include "Field.h"
+#include "PreparedStatement.h"
+#include "QueryCallback.h"
 #include "QueryResult.h"
-
-#include "MySQLThreading.h"
 #include "Transaction.h"
 
-#define _LIKE_           "LIKE"
-#define _TABLE_SIM_      "`"
-#define _CONCAT3_(A, B, C) "CONCAT( " A ", " B ", " C " )"
-#define _OFFSET_         "LIMIT %d, 1"
-
-#include "LoginDatabase.h"
-#include "CharacterDatabase.h"
-#include "WorldDatabase.h"
-
 /// Accessor to the world database
-WH_DATABASE_API extern WorldDatabaseWorkerPool WorldDatabase;
-
+WH_DATABASE_API extern DatabaseWorkerPool<WorldDatabaseConnection> WorldDatabase;
 /// Accessor to the character database
-WH_DATABASE_API extern CharacterDatabaseWorkerPool CharacterDatabase;
-
+WH_DATABASE_API extern DatabaseWorkerPool<CharacterDatabaseConnection> CharacterDatabase;
 /// Accessor to the realm/login database
-WH_DATABASE_API extern LoginDatabaseWorkerPool LoginDatabase;
+WH_DATABASE_API extern DatabaseWorkerPool<LoginDatabaseConnection> LoginDatabase;
 
 #endif
