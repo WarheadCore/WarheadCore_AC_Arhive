@@ -41,6 +41,7 @@
 #include "RealmAcceptor.h"
 #include "Logo.h"
 #include "DatabaseLoader.h"
+#include "MySQLThreading.h"
 
 #ifdef __linux__
 #include <sched.h>
