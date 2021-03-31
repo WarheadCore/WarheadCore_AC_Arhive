@@ -46,6 +46,7 @@
 #include "ScriptLoader.h"
 #include "GameConfig.h"
 #include "Metric.h"
+#include "MySQLThreading.h"
 #include <ace/Sig_Handler.h>
 
 #if WH_PLATFORM == WH_PLATFORM_WINDOWS
