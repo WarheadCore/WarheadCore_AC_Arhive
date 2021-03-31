@@ -105,7 +105,7 @@ void QuestTracker::Execute()
     {
         for (auto const& [ID, CharacterLowGuid, Hash, Revision] : _questTrackStore)
         {
-            PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_QUEST_TRACK);
+            CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_QUEST_TRACK);
             stmt->setUInt32(0, ID);
             stmt->setUInt32(1, CharacterLowGuid);
             stmt->setString(2, Hash);
@@ -126,7 +126,7 @@ void QuestTracker::Execute()
 
         auto SendUpdateQuestTracker = [&](uint32 questID, uint32 characterLowGuid)
         {
-            PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(stmtIndex);
+            CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(stmtIndex);
             stmt->setUInt32(0, questID);
             stmt->setUInt32(1, characterLowGuid);
             CharacterDatabase.Execute(stmt);
@@ -153,7 +153,7 @@ void QuestTracker::Add(uint32 questID, uint32 characterLowGuid, std::string cons
         _questTrackStore.emplace_back(questID, characterLowGuid, coreHash, coreRevision);
     else
     {
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_QUEST_TRACK);
+        CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_QUEST_TRACK);
         stmt->setUInt32(0, questID);
         stmt->setUInt32(1, characterLowGuid);
         stmt->setString(2, coreHash);
@@ -168,7 +168,7 @@ void QuestTracker::UpdateCompleteTime(uint32 questID, uint32 characterLowGuid)
         _questCompleteStore.emplace_back(questID, characterLowGuid);
     else
     {
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_QUEST_TRACK_COMPLETE_TIME);
+        CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_QUEST_TRACK_COMPLETE_TIME);
         stmt->setUInt32(0, questID);
         stmt->setUInt32(1, characterLowGuid);
         CharacterDatabase.Execute(stmt);
@@ -181,7 +181,7 @@ void QuestTracker::UpdateAbandonTime(uint32 questID, uint32 characterLowGuid)
         _questAbandonStore.emplace_back(questID, characterLowGuid);
     else
     {
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_QUEST_TRACK_ABANDON_TIME);
+        CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_QUEST_TRACK_ABANDON_TIME);
         stmt->setUInt32(0, questID);
         stmt->setUInt32(1, characterLowGuid);
         CharacterDatabase.Execute(stmt);
@@ -194,7 +194,7 @@ void QuestTracker::UpdateGMComplete(uint32 questID, uint32 characterLowGuid)
         _questGMCompleteStore.emplace_back(questID, characterLowGuid);
     else
     {
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_QUEST_TRACK_GM_COMPLETE);
+        CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_QUEST_TRACK_GM_COMPLETE);
         stmt->setUInt32(0, questID);
         stmt->setUInt32(1, characterLowGuid);
         CharacterDatabase.Execute(stmt);

@@ -67,6 +67,7 @@
 #include "AccountMgr.h"
 #include "DisableMgr.h"
 #include "GameLocale.h"
+#include "Tokenize.h"
 #include <math.h>
 
 float baseMoveSpeed[MAX_MOVE_TYPE] =

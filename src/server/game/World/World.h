@@ -23,10 +23,10 @@
 #define __WORLD_H
 
 #include "Common.h"
+#include "AsyncCallbackProcessor.h"
+#include "DatabaseEnvFwd.h"
 #include "Timer.h"
 #include "SharedDefines.h"
-#include "QueryResult.h"
-#include "QueryCallback.h"
 #include <map>
 #include <set>
 #include <list>
@@ -485,7 +485,7 @@ private:
     AutobroadcastsWeightMap m_AutobroadcastsWeights;
 
     void ProcessQueryCallbacks();
-    ACE_Future_Set<PreparedQueryResult> m_realmCharCallbacks;
+    QueryCallbackProcessor _queryProcessor;
 };
 
 #define sWorld World::instance()

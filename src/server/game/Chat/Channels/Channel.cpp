@@ -84,7 +84,7 @@ Channel::Channel(std::string const& name, uint32 channelId, uint32 channelDBId, 
         {
             _channelDBId = ++ChannelMgr::_channelIdMax;
 
-            PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_CHANNEL);
+            CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_CHANNEL);
             stmt->setUInt32(0, _channelDBId);
             stmt->setString(1, name);
             stmt->setUInt32(2, _teamId);
@@ -104,7 +104,7 @@ void Channel::UpdateChannelInDB() const
 {
     if (_IsSaved)
     {
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_CHANNEL);
+        CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_CHANNEL);
         stmt->setBool(0, _announce);
         stmt->setString(1, _password);
         stmt->setUInt32(2, _channelDBId);
@@ -116,14 +116,14 @@ void Channel::UpdateChannelInDB() const
 
 void Channel::UpdateChannelUseageInDB() const
 {
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_CHANNEL_USAGE);
+    CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_CHANNEL_USAGE);
     stmt->setUInt32(0, _channelDBId);
     CharacterDatabase.Execute(stmt);
 }
 
 void Channel::AddChannelBanToDB(uint32 guid, uint32 time) const
 {
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_CHANNEL_BAN);
+    CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_CHANNEL_BAN);
     stmt->setUInt32(0, _channelDBId);
     stmt->setUInt32(1, guid);
     stmt->setUInt32(2, time);
@@ -132,7 +132,7 @@ void Channel::AddChannelBanToDB(uint32 guid, uint32 time) const
 
 void Channel::RemoveChannelBanFromDB(uint32 guid) const
 {
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHANNEL_BAN);
+    CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHANNEL_BAN);
     stmt->setUInt32(0, _channelDBId);
     stmt->setUInt32(1, guid);
     CharacterDatabase.Execute(stmt);
@@ -142,9 +142,9 @@ void Channel::CleanOldChannelsInDB()
 {
     if (CONF_GET_INT("PreserveCustomChannelDuration") > 0)
     {
-        SQLTransaction trans = CharacterDatabase.BeginTransaction();
+        CharacterDatabaseTransaction trans = CharacterDatabase.BeginTransaction();
 
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_OLD_CHANNELS);
+        CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_OLD_CHANNELS);
         stmt->setUInt32(0, CONF_GET_INT("PreserveCustomChannelDuration") * DAY);
         trans->Append(stmt);
 

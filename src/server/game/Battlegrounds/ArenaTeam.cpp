@@ -68,7 +68,7 @@ bool ArenaTeam::Create(uint64 captainGuid, uint8 type, std::string const& teamNa
     uint32 captainLowGuid = GUID_LOPART(captainGuid);
 
     // Save arena team to db
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_ARENA_TEAM);
+    CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_ARENA_TEAM);
     stmt->setUInt32(0, TeamId);
     stmt->setString(1, TeamName);
     stmt->setUInt32(2, captainLowGuid);
@@ -129,7 +129,7 @@ bool ArenaTeam::AddMember(uint64 playerGuid)
 
     // xinef: zomg! sync query
     // Try to get player's match maker rating from db and fall back to config setting if not found
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_MATCH_MAKER_RATING);
+    CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_MATCH_MAKER_RATING);
     stmt->setUInt32(0, GUID_LOPART(playerGuid));
     stmt->setUInt8(1, GetSlot());
     PreparedQueryResult result = CharacterDatabase.Query(stmt);
@@ -281,7 +281,7 @@ bool ArenaTeam::SetName(std::string const& name)
         return false;
 
     TeamName = name;
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_ARENA_TEAM_NAME);
+    CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_ARENA_TEAM_NAME);
     stmt->setString(0, TeamName);
     stmt->setUInt32(1, GetId());
     CharacterDatabase.Execute(stmt);
@@ -299,7 +299,7 @@ void ArenaTeam::SetCaptain(uint64 guid)
     CaptainGuid = guid;
 
     // Update database
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_ARENA_TEAM_CAPTAIN);
+    CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_ARENA_TEAM_CAPTAIN);
     stmt->setUInt32(0, GUID_LOPART(guid));
     stmt->setUInt32(1, GetId());
     CharacterDatabase.Execute(stmt);
@@ -340,7 +340,7 @@ void ArenaTeam::DelMember(uint64 guid, bool cleanDb)
     // Only used for single member deletion, for arena team disband we use a single query for more efficiency
     if (cleanDb)
     {
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_ARENA_TEAM_MEMBER);
+        CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_ARENA_TEAM_MEMBER);
         stmt->setUInt32(0, GetId());
         stmt->setUInt32(1, GUID_LOPART(guid));
         CharacterDatabase.Execute(stmt);
@@ -358,9 +358,9 @@ void ArenaTeam::Disband(WorldSession* session)
         BroadcastEvent(ERR_ARENA_TEAM_DISBANDED_S, 0, 2, session->GetPlayerName(), GetName(), "");
 
     // Update database
-    SQLTransaction trans = CharacterDatabase.BeginTransaction();
+    CharacterDatabaseTransaction trans = CharacterDatabase.BeginTransaction();
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_ARENA_TEAM);
+    CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_ARENA_TEAM);
     stmt->setUInt32(0, TeamId);
     trans->Append(stmt);
 
@@ -381,9 +381,9 @@ void ArenaTeam::Disband()
         DelMember(Members.front().Guid, false);
 
     // Update database
-    SQLTransaction trans = CharacterDatabase.BeginTransaction();
+    CharacterDatabaseTransaction trans = CharacterDatabase.BeginTransaction();
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_ARENA_TEAM);
+    CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_ARENA_TEAM);
     stmt->setUInt32(0, TeamId);
     trans->Append(stmt);
 
@@ -887,9 +887,9 @@ void ArenaTeam::SaveToDB()
     // Save team and member stats to db
     // Called after a match has ended or when calculating arena_points
 
-    SQLTransaction trans = CharacterDatabase.BeginTransaction();
+    CharacterDatabaseTransaction trans = CharacterDatabase.BeginTransaction();
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_ARENA_TEAM_STATS);
+    CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_ARENA_TEAM_STATS);
     stmt->setUInt16(0, Stats.Rating);
     stmt->setUInt16(1, Stats.WeekGames);
     stmt->setUInt16(2, Stats.WeekWins);

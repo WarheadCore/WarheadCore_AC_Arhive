@@ -55,6 +55,7 @@
 #include "GameConfig.h"
 #include "GameLocale.h"
 #include "StringConvert.h"
+#include "Tokenize.h"
 
 uint32 GuidHigh2TypeId(uint32 guid_hi)
 {

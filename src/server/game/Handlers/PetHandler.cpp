@@ -34,60 +34,74 @@
 #include "DisableMgr.h"
 #include "GameTime.h"
 #include "GameConfig.h"
+#include "QueryHolder.h"
 
-class LoadPetFromDBQueryHolder : public SQLQueryHolder
+class LoadPetFromDBQueryHolder : public CharacterDatabaseQueryHolder
 {
-private:
-    const uint32 m_petNumber;
-    const bool   m_current;
-    const uint32 m_diffTime;
-    const std::string m_actionBar;
-    const uint32 m_savedHealth;
-    const uint32 m_savedMana;
-
 public:
     LoadPetFromDBQueryHolder(uint32 petNumber, bool current, uint32 diffTime, std::string actionBar, uint32 health, uint32 mana)
-        : m_petNumber(petNumber), m_current(current), m_diffTime(diffTime), m_actionBar(actionBar),
-          m_savedHealth(health), m_savedMana(mana) { }
+        : _petNumber(petNumber),
+        _current(current),
+        _diffTime(diffTime),
+        _actionBar(actionBar),
+        _savedHealth(health),
+        _savedMana(mana) { }
 
-    uint32 GetPetNumber() const { return m_petNumber; }
-    uint32 GetDiffTime() const { return m_diffTime; }
-    bool  GetCurrent() const { return m_current; }
-    uint32 GetSavedHealth() const { return m_savedHealth; }
-    uint32 GetSavedMana() const { return m_savedMana; }
-    std::string GetActionBar() const { return m_actionBar; }
+    uint32 GetPetNumber() const { return _petNumber; }
+    uint32 GetDiffTime() const { return _diffTime; }
+    bool  GetCurrent() const { return _current; }
+    uint32 GetSavedHealth() const { return _savedHealth; }
+    uint32 GetSavedMana() const { return _savedMana; }
+    std::string GetActionBar() const { return _actionBar; }
+
     bool Initialize();
+private:
+    enum
+    {
+        AURAS,
+        SPELLS,
+        COOLDOWNS,
+
+        MAX
+    };
+
+    const uint32 _petNumber;
+    const bool   _current;
+    const uint32 _diffTime;
+    const std::string _actionBar;
+    const uint32 _savedHealth;
+    const uint32 _savedMana;
 };
 
 bool LoadPetFromDBQueryHolder::Initialize()
 {
-    SetSize(MAX_PET_LOAD_QUERY);
+    SetSize(MAX);
 
     bool res = true;
-    PreparedStatement* stmt = nullptr;
+    CharacterDatabasePreparedStatement* stmt = nullptr;
 
     stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_PET_AURA);
-    stmt->setUInt32(0, m_petNumber);
-    res &= SetPreparedQuery(PET_LOAD_QUERY_LOADAURAS, stmt);
+    stmt->setUInt32(0, _petNumber);
+    res &= SetPreparedQuery(AURAS, stmt);
 
     stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_PET_SPELL);
-    stmt->setUInt32(0, m_petNumber);
-    res &= SetPreparedQuery(PET_LOAD_QUERY_LOADSPELLS, stmt);
+    stmt->setUInt32(0, _petNumber);
+    res &= SetPreparedQuery(SPELLS, stmt);
 
     stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_PET_SPELL_COOLDOWN);
-    stmt->setUInt32(0, m_petNumber);
-    res &= SetPreparedQuery(PET_LOAD_QUERY_LOADSPELLCOOLDOWN, stmt);
+    stmt->setUInt32(0, _petNumber);
+    res &= SetPreparedQuery(COOLDOWNS, stmt);
 
     return res;
 }
 
 uint8 WorldSession::HandleLoadPetFromDBFirstCallback(PreparedQueryResult result, uint8 asynchLoadType)
 {
-    if (!GetPlayer() || GetPlayer()->GetPet() || GetPlayer()->GetVehicle() || GetPlayer()->IsSpectator())
-        return PET_LOAD_ERROR;
-
     if (!result)
         return PET_LOAD_NO_RESULT;
+
+    if (!GetPlayer() || GetPlayer()->GetPet() || GetPlayer()->GetVehicle() || GetPlayer()->IsSpectator())
+        return PET_LOAD_ERROR;
 
     Field* fields = result->Fetch();
 
@@ -141,11 +155,12 @@ uint8 WorldSession::HandleLoadPetFromDBFirstCallback(PreparedQueryResult result,
     Map* map = owner->GetMap();
     uint32 guid = sObjectMgr->GenerateLowGuid(HIGHGUID_PET);
     Pet* pet = new Pet(owner, pet_type);
-    LoadPetFromDBQueryHolder* holder = new LoadPetFromDBQueryHolder(pet_number, current, uint32(GameTime::GetGameTime() - fields[14].GetUInt32()), fields[13].GetString(), savedhealth, savedmana);
+
+    std::shared_ptr<LoadPetFromDBQueryHolder> holder = std::make_shared<LoadPetFromDBQueryHolder>(pet_number, current, uint32(time(nullptr) - fields[14].GetUInt32()), fields[13].GetString(), savedhealth, savedmana);
+
     if (!pet->Create(guid, map, owner->GetPhaseMask(), petentry, pet_number) || !holder->Initialize())
     {
         delete pet;
-        delete holder;
         return PET_LOAD_ERROR;
     }
 
@@ -155,7 +170,6 @@ uint8 WorldSession::HandleLoadPetFromDBFirstCallback(PreparedQueryResult result,
     {
         LOG_ERROR("network.opcode", "Pet (guidlow %d, entry %d) not loaded. Suggested coordinates isn't valid (X: %f Y: %f)", pet->GetGUIDLow(), pet->GetEntry(), pet->GetPositionX(), pet->GetPositionY());
         delete pet;
-        delete holder;
         return PET_LOAD_ERROR;
     }
 
@@ -169,7 +183,6 @@ uint8 WorldSession::HandleLoadPetFromDBFirstCallback(PreparedQueryResult result,
     {
         map->AddToMap(pet->ToCreature(), true);
         pet->SetLoading(false); // xinef, mine
-        delete holder;
         return PET_LOAD_OK;
     }
 
@@ -177,40 +190,42 @@ uint8 WorldSession::HandleLoadPetFromDBFirstCallback(PreparedQueryResult result,
         pet->GetCharmInfo()->SetPetNumber(pet_number, pet->IsPermanentPetFor(owner)); // Show pet details tab (Shift+P) only for hunter pets, demons or undead
     else
         pet->GetCharmInfo()->SetPetNumber(pet_number, false);
+
     pet->SetDisplayId(fields[3].GetUInt32());
     pet->SetNativeDisplayId(fields[3].GetUInt32());
-    uint32 petlevel = fields[4].GetUInt16();
     pet->SetUInt32Value(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_NONE);
     pet->SetName(fields[8].GetString());
 
+    uint32 petlevel = fields[4].GetUInt16();
+
     switch (pet->getPetType())
     {
-        case SUMMON_PET:
-            petlevel = owner->getLevel();
+    case SUMMON_PET:
+        petlevel = owner->getLevel();
 
-            if (pet->IsPetGhoul())
-                pet->SetUInt32Value(UNIT_FIELD_BYTES_0, 0x400); // class = rogue
-            else
-                pet->SetUInt32Value(UNIT_FIELD_BYTES_0, 0x800); // class = mage
+        if (pet->IsPetGhoul())
+            pet->SetUInt32Value(UNIT_FIELD_BYTES_0, 0x400); // class = rogue
+        else
+            pet->SetUInt32Value(UNIT_FIELD_BYTES_0, 0x800); // class = mage
 
-            pet->SetUInt32Value(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE);
-            // this enables popup window (pet dismiss, cancel)
-            break;
-        case HUNTER_PET:
-            pet->SetUInt32Value(UNIT_FIELD_BYTES_0, 0x02020100); // class = warrior, gender = none, power = focus
-            pet->SetSheath(SHEATH_STATE_MELEE);
-            pet->SetByteFlag(UNIT_FIELD_BYTES_2, 2, fields[9].GetBool() ? UNIT_CAN_BE_ABANDONED : UNIT_CAN_BE_RENAMED | UNIT_CAN_BE_ABANDONED);
+        pet->SetUInt32Value(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE);
+        // this enables popup window (pet dismiss, cancel)
+        break;
+    case HUNTER_PET:
+        pet->SetUInt32Value(UNIT_FIELD_BYTES_0, 0x02020100); // class = warrior, gender = none, power = focus
+        pet->SetSheath(SHEATH_STATE_MELEE);
+        pet->SetByteFlag(UNIT_FIELD_BYTES_2, 2, fields[9].GetBool() ? UNIT_CAN_BE_ABANDONED : UNIT_CAN_BE_RENAMED | UNIT_CAN_BE_ABANDONED);
+        pet->SetUInt32Value(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE);
 
-            pet->SetUInt32Value(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE);
-            // this enables popup window (pet abandon, cancel)
-            pet->SetMaxPower(POWER_HAPPINESS, pet->GetCreatePowers(POWER_HAPPINESS));
-            pet->SetPower(POWER_HAPPINESS, fields[12].GetUInt32());
-            pet->setPowerType(POWER_FOCUS);
-            break;
-        default:
-            if (!pet->IsPetGhoul())
-                LOG_ERROR("network.opcode", "Pet have incorrect type (%u) for pet loading.", pet->getPetType());
-            break;
+        // this enables popup window (pet abandon, cancel)
+        pet->SetMaxPower(POWER_HAPPINESS, pet->GetCreatePowers(POWER_HAPPINESS));
+        pet->SetPower(POWER_HAPPINESS, fields[12].GetUInt32());
+        pet->setPowerType(POWER_FOCUS);
+        break;
+    default:
+        if (!pet->IsPetGhoul())
+            LOG_ERROR("network.opcode", "Pet have incorrect type (%u) for pet loading.", pet->getPetType());
+        break;
     }
 
     pet->SetUInt32Value(UNIT_FIELD_PET_NAME_TIMESTAMP, uint32(GameTime::GetGameTime())); // cast can't be helped here
@@ -219,9 +234,7 @@ uint8 WorldSession::HandleLoadPetFromDBFirstCallback(PreparedQueryResult result,
 
     pet->InitStatsForLevel(petlevel);
     pet->SetUInt32Value(UNIT_FIELD_PETEXPERIENCE, fields[5].GetUInt32());
-
     pet->SynchronizeLevelWithOwner();
-
     pet->SetReactState(ReactStates(fields[6].GetUInt8()));
     pet->SetCanModifyStats(true);
 
@@ -231,22 +244,18 @@ uint8 WorldSession::HandleLoadPetFromDBFirstCallback(PreparedQueryResult result,
     // PET_SAVE_NOT_IN_SLOT(100) = not stable slot (summoning))
     if (petSlot)
     {
-        SQLTransaction trans = CharacterDatabase.BeginTransaction();
-
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UDP_CHAR_PET_SLOT_BY_SLOT_EXCLUDE_ID);
+        CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UDP_CHAR_PET_SLOT_BY_SLOT_EXCLUDE_ID);
         stmt->setUInt8(0, uint8(PET_SAVE_NOT_IN_SLOT));
         stmt->setUInt32(1, owner->GetGUIDLow());
         stmt->setUInt8(2, uint8(PET_SAVE_AS_CURRENT));
         stmt->setUInt32(3, pet_number);
-        trans->Append(stmt);
+        CharacterDatabase.Execute(stmt);
 
         stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_CHAR_PET_SLOT_BY_ID);
         stmt->setUInt8(0, uint8(PET_SAVE_AS_CURRENT));
         stmt->setUInt32(1, owner->GetGUIDLow());
         stmt->setUInt32(2, pet_number);
-        trans->Append(stmt);
-
-        CharacterDatabase.CommitTransaction(trans);
+        CharacterDatabase.Execute(stmt);
     }
 
     // Send fake summon spell cast - this is needed for correct cooldown application for spells
@@ -270,6 +279,7 @@ uint8 WorldSession::HandleLoadPetFromDBFirstCallback(PreparedQueryResult result,
         pet->GetCharmInfo()->InitPetActionBar();
 
     map->AddToMap(pet->ToCreature(), true);
+
     if (pet->getPetType() == SUMMON_PET && !current)              //all (?) summon pets come with full health when called, but not when they are current
         pet->SetPower(POWER_MANA, pet->GetMaxPower(POWER_MANA));
     else
@@ -280,20 +290,15 @@ uint8 WorldSession::HandleLoadPetFromDBFirstCallback(PreparedQueryResult result,
 
     pet->SetAsynchLoadType(asynchLoadType);
 
-    // xinef: clear any old result
-    if (_loadPetFromDBSecondCallback.ready())
+    AddQueryHolderCallback(CharacterDatabase.DelayQueryHolder(holder)).AfterComplete([this](SQLQueryHolderBase const& holder)
     {
-        SQLQueryHolder* param;
-        _loadPetFromDBSecondCallback.get(param);
-        delete param;
-    }
-    _loadPetFromDBSecondCallback.cancel();
+        HandleLoadPetFromDBSecondCallback(static_cast<LoadPetFromDBQueryHolder const&>(holder));
+    });
 
-    _loadPetFromDBSecondCallback = CharacterDatabase.DelayQueryHolder((SQLQueryHolder*)holder);
     return PET_LOAD_OK;
 }
 
-void WorldSession::HandleLoadPetFromDBSecondCallback(LoadPetFromDBQueryHolder* holder)
+void WorldSession::HandleLoadPetFromDBSecondCallback(LoadPetFromDBQueryHolder const& holder)
 {
     if (!GetPlayer())
         return;
@@ -303,8 +308,8 @@ void WorldSession::HandleLoadPetFromDBSecondCallback(LoadPetFromDBQueryHolder* h
     if (!pet)
         return;
 
-    pet->_LoadAuras(holder->GetPreparedResult(PET_LOAD_QUERY_LOADAURAS), holder->GetDiffTime());
-    bool current = holder->GetCurrent();
+    pet->_LoadAuras(holder.GetPreparedResult(PET_LOAD_QUERY_LOADAURAS), holder.GetDiffTime());
+    bool current = holder.GetCurrent();
     uint32 summon_spell_id = pet->GetUInt32Value(UNIT_CREATED_BY_SPELL);
     SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(summon_spell_id); // CANT BE NULL
     bool is_temporary_summoned = spellInfo && spellInfo->GetDuration() > 0;
@@ -312,26 +317,26 @@ void WorldSession::HandleLoadPetFromDBSecondCallback(LoadPetFromDBQueryHolder* h
     // load action bar, if data broken will fill later by default spells.
     if (!is_temporary_summoned)
     {
-        pet->_LoadSpells(holder->GetPreparedResult(PET_LOAD_QUERY_LOADSPELLS));
+        pet->_LoadSpells(holder.GetPreparedResult(PET_LOAD_QUERY_LOADSPELLS));
         pet->InitTalentForLevel();                               // re-init to check talent count
-        pet->_LoadSpellCooldowns(holder->GetPreparedResult(PET_LOAD_QUERY_LOADSPELLCOOLDOWN));
+        pet->_LoadSpellCooldowns(holder.GetPreparedResult(PET_LOAD_QUERY_LOADSPELLCOOLDOWN));
         pet->LearnPetPassives();
         pet->InitLevelupSpellsForLevel();
         pet->CastPetAuras(current);
-
-        pet->GetCharmInfo()->LoadPetActionBar(holder->GetActionBar()); // action bar stored in already read string
+        pet->GetCharmInfo()->LoadPetActionBar(holder.GetActionBar()); // action bar stored in already read string
     }
 
     pet->CleanupActionBar();                                     // remove unknown spells from action bar after load
     owner->PetSpellInitialize();
     owner->SendTalentsInfoData(true);
+
     if (owner->GetGroup())
         owner->SetGroupUpdateFlag(GROUP_UPDATE_PET);
 
     //set last used pet number (for use in BG's)
     if (owner->GetTypeId() == TYPEID_PLAYER && pet->isControlled() && !pet->isTemporarySummoned() && (pet->getPetType() == SUMMON_PET || pet->getPetType() == HUNTER_PET))
     {
-        owner->ToPlayer()->SetLastPetNumber(holder->GetPetNumber());
+        owner->ToPlayer()->SetLastPetNumber(holder.GetPetNumber());
         owner->SetLastPetSpell(pet->GetUInt32Value(UNIT_CREATED_BY_SPELL));
     }
 
@@ -342,12 +347,12 @@ void WorldSession::HandleLoadPetFromDBSecondCallback(LoadPetFromDBQueryHolder* h
     }
     else
     {
-        if (!holder->GetSavedHealth() && pet->getPetType() == HUNTER_PET && pet->GetAsynchLoadType() != PET_LOAD_SUMMON_DEAD_PET)
+        if (!holder.GetSavedHealth() && pet->getPetType() == HUNTER_PET && pet->GetAsynchLoadType() != PET_LOAD_SUMMON_DEAD_PET)
             pet->setDeathState(JUST_DIED);
         else
         {
-            pet->SetHealth(holder->GetSavedHealth() > pet->GetMaxHealth() ? pet->GetMaxHealth() : holder->GetSavedHealth());
-            pet->SetPower(POWER_MANA, holder->GetSavedMana() > pet->GetMaxPower(POWER_MANA) ? pet->GetMaxPower(POWER_MANA) : holder->GetSavedMana());
+            pet->SetHealth(holder.GetSavedHealth() > pet->GetMaxHealth() ? pet->GetMaxHealth() : holder.GetSavedHealth());
+            pet->SetPower(POWER_MANA, holder.GetSavedMana() > pet->GetMaxPower(POWER_MANA) ? pet->GetMaxPower(POWER_MANA) : holder.GetSavedMana());
         }
     }
 
@@ -1161,12 +1166,12 @@ void WorldSession::HandlePetRename(WorldPacket& recvData)
         }
     }
 
-    SQLTransaction trans = CharacterDatabase.BeginTransaction();
+    CharacterDatabaseTransaction trans = CharacterDatabase.BeginTransaction();
     if (isdeclined)
     {
         if (CONF_GET_BOOL("DeclinedNames"))
         {
-            PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_PET_DECLINEDNAME);
+            CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHAR_PET_DECLINEDNAME);
             stmt->setUInt32(0, pet->GetCharmInfo()->GetPetNumber());
             trans->Append(stmt);
 
@@ -1180,7 +1185,7 @@ void WorldSession::HandlePetRename(WorldPacket& recvData)
         }
     }
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_CHAR_PET_NAME);
+    CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_CHAR_PET_NAME);
     stmt->setString(0, name);
     stmt->setUInt32(1, _player->GetGUIDLow());
     stmt->setUInt32(2, pet->GetCharmInfo()->GetPetNumber());

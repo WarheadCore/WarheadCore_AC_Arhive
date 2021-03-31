@@ -98,7 +98,7 @@ namespace lfg
         if (!IS_GROUP_GUID(guid))
             return;
 
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_REP_LFG_DATA);
+        CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_REP_LFG_DATA);
         stmt->setUInt32(0, GUID_LOPART(guid));
         stmt->setUInt32(1, GetDungeon(guid));
         stmt->setUInt32(2, GetState(guid));

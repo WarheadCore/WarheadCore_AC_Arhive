@@ -45,6 +45,7 @@
 #include "WardenWin.h"
 #include "WardenMac.h"
 #include "SavingSystem.h"
+#include "QueryHolder.h"
 #include "AccountMgr.h"
 #include "MoveSpline.h"
 #include "GameTime.h"
@@ -146,8 +147,6 @@ WorldSession::WorldSession(uint32 id, WorldSocket* sock, AccountTypes sec, uint8
         ResetTimeOutTime(false);
         LoginDatabase.PExecute("UPDATE account SET online = 1 WHERE id = %u;", GetAccountId());
     }
-
-    InitializeQueryCallbackParameters();
 }
 
 /// WorldSession destructor
@@ -389,8 +388,7 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
         delete movementPacket;
     }
 
-    if (m_Socket && !m_Socket->IsClosed())
-        ProcessQueryCallbacks();
+    ProcessQueryCallbacks();
 
     if (updater.ProcessLogout())
     {
@@ -512,7 +510,7 @@ void WorldSession::LogoutPlayer(bool save)
                 // track if player logs out after invited to join BG
                 if(_player->IsInvitedForBattlegroundInstance() && CONF_GET_BOOL("Battleground.TrackDeserters.Enable"))
                 {
-                    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_DESERTER_TRACK);
+                    CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_DESERTER_TRACK);
                     stmt->setUInt32(0, _player->GetGUIDLow());
                     stmt->setUInt8(1, BG_DESERTION_TYPE_INVITE_LOGOUT);
                     CharacterDatabase.Execute(stmt);
@@ -612,7 +610,7 @@ void WorldSession::LogoutPlayer(bool save)
         LOG_DEBUG("network", "SESSION: Sent SMSG_LOGOUT_COMPLETE Message");
 
         //! Since each account can only have one online character at any given time, ensure all characters for active account are marked as offline
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_ACCOUNT_ONLINE);
+        CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_ACCOUNT_ONLINE);
         stmt->setUInt32(0, GetAccountId());
         CharacterDatabase.Execute(stmt);
     }
@@ -638,7 +636,7 @@ bool WorldSession::ValidateHyperlinksAndMaybeKick(std::string const& str)
         return true;
 
     LOG_ERROR("network", "Player %s (GUID: %u) sent a message with an invalid link:\n%s", GetPlayer()->GetName().c_str(),
-              GetPlayer()->GetGUID(), str.c_str());
+              GetPlayer()->GetGUIDLow(), str.c_str());
 
     if (CONF_GET_INT("ChatStrictLinkChecking.Kick"))
         KickPlayer();
@@ -726,7 +724,7 @@ void WorldSession::SendAuthWaitQue(uint32 position)
 
 void WorldSession::LoadGlobalAccountData()
 {
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_ACCOUNT_DATA);
+    CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_ACCOUNT_DATA);
     stmt->setUInt32(0, GetAccountId());
     LoadAccountData(CharacterDatabase.Query(stmt), GLOBAL_CACHE_MASK);
 }
@@ -764,7 +762,7 @@ void WorldSession::LoadAccountData(PreparedQueryResult result, uint32 mask)
 void WorldSession::SetAccountData(AccountDataType type, time_t tm, std::string const& data)
 {
     uint32 id = 0;
-    uint32 index = 0;
+    CharacterDatabaseStatements index;
     if ((1 << type) & GLOBAL_CACHE_MASK)
     {
         id = GetAccountId();
@@ -780,7 +778,7 @@ void WorldSession::SetAccountData(AccountDataType type, time_t tm, std::string c
         index = CHAR_REP_PLAYER_ACCOUNT_DATA;
     }
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(index);
+    CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(index);
     stmt->setUInt32(0, id);
     stmt->setUInt8(1, type);
     stmt->setUInt32(2, uint32(tm));
@@ -807,7 +805,7 @@ void WorldSession::LoadTutorialsData()
 {
     memset(m_Tutorials, 0, sizeof(uint32) * MAX_ACCOUNT_TUTORIAL_VALUES);
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_TUTORIALS);
+    CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_TUTORIALS);
     stmt->setUInt32(0, GetAccountId());
     if (PreparedQueryResult result = CharacterDatabase.Query(stmt))
         for (uint8 i = 0; i < MAX_ACCOUNT_TUTORIAL_VALUES; ++i)
@@ -824,12 +822,12 @@ void WorldSession::SendTutorialsData()
     SendPacket(&data);
 }
 
-void WorldSession::SaveTutorialsData(SQLTransaction& trans)
+void WorldSession::SaveTutorialsData(CharacterDatabaseTransaction trans)
 {
     if (!m_TutorialsChanged)
         return;
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_HAS_TUTORIALS);
+    CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_HAS_TUTORIALS);
     stmt->setUInt32(0, GetAccountId());
     bool hasTutorials = bool(CharacterDatabase.Query(stmt));
 
@@ -1157,6 +1155,24 @@ void WorldSession::SetPlayer(Player* player)
         m_GUIDLow = _player->GetGUIDLow();
 }
 
+void WorldSession::ProcessQueryCallbacks()
+{
+    _queryProcessor.ProcessReadyCallbacks();
+    _transactionCallbacks.ProcessReadyCallbacks();
+    _queryHolderProcessor.ProcessReadyCallbacks();
+}
+
+TransactionCallback& WorldSession::AddTransactionCallback(TransactionCallback&& callback)
+{
+    return _transactionCallbacks.AddCallback(std::move(callback));
+}
+
+SQLQueryHolderCallback& WorldSession::AddQueryHolderCallback(SQLQueryHolderCallback&& callback)
+{
+    return _queryHolderProcessor.AddCallback(std::move(callback));
+}
+
+/*
 void WorldSession::InitializeQueryCallbackParameters()
 {
     // Callback parameters that have pointers in them should be properly
@@ -1182,7 +1198,7 @@ void WorldSession::ProcessQueryCallbackPlayer()
     {
         std::string param = _charRenameCallback.GetParam();
         _charRenameCallback.GetResult(result);
-        HandleChangePlayerNameOpcodeCallBack(result, param);
+        HandleCharRenameCallback(result, param);
         _charRenameCallback.FreeResult();
     }
 
@@ -1328,6 +1344,7 @@ void WorldSession::ProcessQueryCallbackLogin()
         _charLoginCallback.cancel();
     }
 }
+*/
 
 void WorldSession::InitWarden(BigNumber* k, std::string const& os)
 {

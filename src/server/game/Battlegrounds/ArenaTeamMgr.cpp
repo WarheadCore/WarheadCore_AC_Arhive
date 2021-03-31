@@ -162,19 +162,17 @@ void ArenaTeamMgr::DistributeArenaPoints()
             sScriptMgr->OnBeforeUpdateArenaPoints(at, PlayerPoints);
         }
 
-    SQLTransaction trans = CharacterDatabase.BeginTransaction();
-
-    PreparedStatement* stmt;
+    CharacterDatabaseTransaction trans = CharacterDatabase.BeginTransaction();
 
     // Cycle that gives points to all players
     for (std::map<uint32, uint32>::iterator playerItr = PlayerPoints.begin(); playerItr != PlayerPoints.end(); ++playerItr)
     {
         // Add points to player if online
         if (Player* player = HashMapHolder<Player>::Find(playerItr->first))
-            player->ModifyArenaPoints(playerItr->second, &trans);
+            player->ModifyArenaPoints(playerItr->second, trans);
         else    // Update database
         {
-            stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_CHAR_ARENA_POINTS);
+            CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_CHAR_ARENA_POINTS);
             stmt->setUInt32(0, playerItr->second);
             stmt->setUInt32(1, playerItr->first);
             trans->Append(stmt);
@@ -186,8 +184,8 @@ void ArenaTeamMgr::DistributeArenaPoints()
     PlayerPoints.clear();
 
     sWorld->SendWorldText(LANG_DIST_ARENA_POINTS_ONLINE_END);
-
     sWorld->SendWorldText(LANG_DIST_ARENA_POINTS_TEAM_START);
+
     for (ArenaTeamContainer::iterator titr = GetArenaTeamMapBegin(); titr != GetArenaTeamMapEnd(); ++titr)
     {
         if (ArenaTeam* at = titr->second)
@@ -199,6 +197,5 @@ void ArenaTeamMgr::DistributeArenaPoints()
     }
 
     sWorld->SendWorldText(LANG_DIST_ARENA_POINTS_TEAM_END);
-
     sWorld->SendWorldText(LANG_DIST_ARENA_POINTS_END);
 }

@@ -37,7 +37,7 @@ void MuteManager::MutePlayer(std::string const targetName, uint32 notSpeakTime, 
     uint32 accountId = targetSession ? targetSession->GetAccountId() : sObjectMgr->GetPlayerAccountIdByPlayerName(targetName);
 
     // INSERT INTO `account_muted` (`accountid`, `mutedate`, `mutetime`, `mutedby`, `mutereason`, `active`) VALUES (?, ?, ?, ?, ?, 1)
-    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_INS_ACCOUNT_MUTE);
+    LoginDatabasePreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_INS_ACCOUNT_MUTE);
     stmt->setUInt32(0, accountId);
 
     uint32 muteDate = GameTime::GetGameTime() + notSpeakTime * MINUTE;
@@ -116,7 +116,7 @@ void MuteManager::DeleteMuteTime(uint32 accountID, bool delFromDB /*= true*/)
     if (delFromDB)
     {
         // UPDATE `account_muted` SET `active` = 0 WHERE `active` = 1 AND `accountid` = ?
-        PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_DEL_ACCOUNT_MUTE);
+        LoginDatabasePreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_DEL_ACCOUNT_MUTE);
         stmt->setUInt32(0, accountID);
         LoginDatabase.Execute(stmt);
     }
@@ -159,7 +159,7 @@ void MuteManager::LoginAccount(uint32 accountID)
 {
     // Set inactive if expired
     // UPDATE `account_muted` SET `active` = 0 WHERE `active` = 1 AND `mutetime` > 0 AND `accountid` = ? AND UNIX_TIMESTAMP() >= `mutedate` + `mutetime`
-    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPD_ACCOUNT_MUTE_EXPIRED);
+    LoginDatabasePreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPD_ACCOUNT_MUTE_EXPIRED);
     stmt->setUInt32(0, accountID);
     LoginDatabase.Execute(stmt);
 
@@ -186,7 +186,7 @@ void MuteManager::LoginAccount(uint32 accountID)
 void MuteManager::UpdateMuteAccount(uint32 accountID, uint32 muteDate, int32 muteTime)
 {
     // UPDATE `account_muted` SET `mutedate` = ?, `mutetime` = ? WHERE `accountid` = ?
-    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPD_ACCOUNT_MUTE);
+    LoginDatabasePreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPD_ACCOUNT_MUTE);
     stmt->setUInt32(0, muteDate);
     stmt->setInt32(1, muteTime);
     stmt->setUInt32(2, accountID);

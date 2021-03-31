@@ -24,6 +24,7 @@
 #include "SpellInfo.h"
 #include "GameConfig.h"
 #include "StringConvert.h"
+#include "Tokenize.h"
 
 namespace DisableMgr
 {

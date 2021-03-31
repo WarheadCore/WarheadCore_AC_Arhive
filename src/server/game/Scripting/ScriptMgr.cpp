@@ -1383,12 +1383,12 @@ void ScriptMgr::OnCriteriaProgress(Player* player, AchievementCriteriaEntry cons
     FOREACH_SCRIPT(PlayerScript)->OnCriteriaProgress(player, criteria);
 }
 
-void ScriptMgr::OnAchievementSave(SQLTransaction& trans, Player* player, uint16 achiId, CompletedAchievementData achiData)
+void ScriptMgr::OnAchievementSave(CharacterDatabaseTransaction trans, Player* player, uint16 achiId, CompletedAchievementData achiData)
 {
     FOREACH_SCRIPT(PlayerScript)->OnAchiSave(trans, player, achiId, achiData);
 }
 
-void ScriptMgr::OnCriteriaSave(SQLTransaction& trans, Player* player, uint16 critId, CriteriaProgress criteriaData)
+void ScriptMgr::OnCriteriaSave(CharacterDatabaseTransaction trans, Player* player, uint16 critId, CriteriaProgress criteriaData)
 {
     FOREACH_SCRIPT(PlayerScript)->OnCriteriaSave(trans, player, critId, criteriaData);
 }
@@ -1614,7 +1614,7 @@ void ScriptMgr::OnGroupDisband(Group* group)
 }
 
 // Global
-void ScriptMgr::OnGlobalItemDelFromDB(SQLTransaction& trans, uint32 itemGuid)
+void ScriptMgr::OnGlobalItemDelFromDB(CharacterDatabaseTransaction trans, uint32 itemGuid)
 {
     ASSERT(trans);
     ASSERT(itemGuid);

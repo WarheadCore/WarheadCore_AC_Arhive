@@ -51,11 +51,11 @@ public:
 
     // DB operations
     // overwrite virtual Item::SaveToDB
-    void SaveToDB(SQLTransaction& trans);
+    void SaveToDB(CharacterDatabaseTransaction trans);
     // overwrite virtual Item::LoadFromDB
     bool LoadFromDB(uint32 guid, uint64 owner_guid, Field* fields, uint32 entry);
     // overwrite virtual Item::DeleteFromDB
-    void DeleteFromDB(SQLTransaction& trans);
+    void DeleteFromDB(CharacterDatabaseTransaction trans);
 
     void BuildCreateUpdateBlockForPlayer(UpdateData* data, Player* target) const;
 

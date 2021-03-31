@@ -784,7 +784,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     // Get the account information from the realmd database
     //         0           1        2       3        4            5        6       7       8      9
     // SELECT id, sessionkey, last_ip, locked, lock_country, expansion, locale, recruiter, os, totaltime FROM account WHERE username = ?
-    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_INFO_BY_NAME);
+    LoginDatabasePreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_INFO_BY_NAME);
 
     stmt->setString(0, account);
 

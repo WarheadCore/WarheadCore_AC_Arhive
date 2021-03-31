@@ -19,6 +19,7 @@
 #define SC_SCRIPTMGR_H
 
 #include "Common.h"
+#include "DatabaseEnvFwd.h"
 #include "ObjectMgr.h"
 #include "DBCStores.h"
 #include "QuestDef.h"
@@ -942,10 +943,10 @@ public:
     virtual void OnCriteriaProgress(Player* /*player*/, AchievementCriteriaEntry const* /*criteria*/) { }
 
     // Called when an Achievement is saved to DB
-    virtual void OnAchiSave(SQLTransaction& /*trans*/, Player* /*player*/, uint16 /*achId*/, CompletedAchievementData /*achiData*/) { }
+    virtual void OnAchiSave(CharacterDatabaseTransaction /*trans*/, Player* /*player*/, uint16 /*achId*/, CompletedAchievementData /*achiData*/) { }
 
     // Called when an Criteria is saved to DB
-    virtual void OnCriteriaSave(SQLTransaction& /*trans*/, Player* /*player*/, uint16 /*achId*/, CriteriaProgress /*criteriaData*/) { }
+    virtual void OnCriteriaSave(CharacterDatabaseTransaction /*trans*/, Player* /*player*/, uint16 /*achId*/, CriteriaProgress /*criteriaData*/) { }
 
     // Called when a player selects an option in a player gossip window
     virtual void OnGossipSelect(Player* /*player*/, uint32 /*menu_id*/, uint32 /*sender*/, uint32 /*action*/) { }
@@ -1125,7 +1126,7 @@ protected:
 public:
 
     // items
-    virtual void OnItemDelFromDB(SQLTransaction& /*trans*/, uint32 /*itemGuid*/) { }
+    virtual void OnItemDelFromDB(CharacterDatabaseTransaction /*trans*/, uint32 /*itemGuid*/) { }
     virtual void OnMirrorImageDisplayItem(const Item* /*item*/, uint32& /*display*/) { }
 
     // loot
@@ -1474,8 +1475,8 @@ public: /* PlayerScript */
     void OnPlayerRemoveFromBattleground(Player* player, Battleground* bg);
     void OnAchievementComplete(Player* player, AchievementEntry const* achievement);
     void OnCriteriaProgress(Player* player, AchievementCriteriaEntry const* criteria);
-    void OnAchievementSave(SQLTransaction& trans, Player* player, uint16 achiId, CompletedAchievementData achiData);
-    void OnCriteriaSave(SQLTransaction& trans, Player* player, uint16 critId, CriteriaProgress criteriaData);
+    void OnAchievementSave(CharacterDatabaseTransaction trans, Player* player, uint16 achiId, CompletedAchievementData achiData);
+    void OnCriteriaSave(CharacterDatabaseTransaction trans, Player* player, uint16 critId, CriteriaProgress criteriaData);
     void OnGossipSelect(Player* player, uint32 menu_id, uint32 sender, uint32 action);
     void OnGossipSelectCode(Player* player, uint32 menu_id, uint32 sender, uint32 action, const char* code);
     void OnPlayerBeingCharmed(Player* player, Unit* charmer, uint32 oldFactionId, uint32 newFactionId);
@@ -1539,7 +1540,7 @@ public: /* GroupScript */
 
 public: /* GlobalScript */
 
-    void OnGlobalItemDelFromDB(SQLTransaction& trans, uint32 itemGuid);
+    void OnGlobalItemDelFromDB(CharacterDatabaseTransaction trans, uint32 itemGuid);
     void OnGlobalMirrorImageDisplayItem(const Item* item, uint32& display);
     void OnBeforeUpdateArenaPoints(ArenaTeam* at, std::map<uint32, uint32>& ap);
     void OnAfterRefCount(Player const* player, Loot& loot, bool canRate, uint16 lootMode, LootStoreItem* LootStoreItem, uint32& maxcount, LootStore const& store);
